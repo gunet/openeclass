@@ -207,7 +207,11 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-datepicker') {
             $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.css') .
             js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
-            $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
+            if ($language == 'en') {
+                $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language-GB.min.js";
+            } else {
+                $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
+            }
         } elseif ($file == 'bootstrap-validator') {
             $file = "bootstrap-validator/validator.js";
         } elseif ($file == 'bootstrap-slider') {
@@ -539,7 +543,7 @@ function group_secret($gid) {
 
 /**
  * displays a selection box
- * @param type $entries an array of (value => label)
+ * @param array $entries an array of (value => label)
  * @param type $name the name of the selection element
  * @param type $default if it matches one of the values, specifies the default entry
  * @param type $extra
@@ -899,7 +903,7 @@ function nice_format($date, $time = FALSE, $dont_display_time = FALSE) {
 }
 
 /**
- * @brief remove seoconds from a given datetime
+ * @brief remove seconds from a given datetime
  * @param type $datetime
  * @return datetime without seconds
  */
@@ -1525,6 +1529,46 @@ function add_units_navigation($entry_page = false) {
         return false;
     }
 }
+
+/**
+ * @global type $course_id
+ * @param int $uid
+ * @param type $all_units
+ * @return array
+ */
+function findUserVisibleUnits($uid, $all_units) {
+    global $course_id;
+
+    $user_units = [];
+    $userInBadges = Database::get()->queryArray("SELECT cu.id, cu.title, cu.comments, cu.start_week, cu.finish_week, cu.visible, cu.public, ub.completed
+                                                          FROM course_units cu
+                                                          INNER JOIN badge b ON (b.unit_id = cu.id)
+                                                          INNER JOIN user_badge ub ON (b.id = ub.badge)
+                                                          WHERE ub.user = ?d
+                                                          AND cu.course_id = ?d
+                                                          AND cu.visible = 1
+                                                          AND cu.public = 1
+                                                          AND cu.order >= 0", $uid, $course_id);
+    if ( isset($userInBadges) and $userInBadges ) {
+        foreach ($userInBadges as $userInBadge) {
+            if ($userInBadge->completed == 0) {
+                $userIncompleteUnits[] = $userInBadge->id;
+            }
+        }
+    }
+    foreach ($all_units as $unit) {
+        $unitPrereq = Database::get()->querySingle("SELECT prerequisite_unit FROM unit_prerequisite
+                                                                WHERE unit_id = ?d", $unit->id);
+
+        if ( $unitPrereq and isset($userIncompleteUnits) and in_array($unitPrereq->prerequisite_unit, $userIncompleteUnits) ) {
+            continue;
+        }
+        $user_units[] = $unit;
+    }
+    return $user_units;
+}
+
+
 
 // Cut a string to be no more than $maxlen characters long, appending
 // the $postfix (default: ellipsis "...") if so
@@ -2509,12 +2553,12 @@ function greek_to_latin($string) {
         'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ',
         'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω',
         'ς', 'ά', 'έ', 'ή', 'ί', 'ύ', 'ό', 'ώ', 'Ά', 'Έ', 'Ή', 'Ί', 'Ύ', 'Ό', 'Ώ', 'ϊ',
-        'ΐ', 'ϋ', 'ΰ', 'ϊ', 'Ϋ', '–'), array(
+        'ΐ', 'ϋ', 'ΰ', 'ϊ', 'Ϊ', 'Ϋ', '–'), array(
         'a', 'b', 'g', 'd', 'e', 'z', 'i', 'th', 'i', 'k', 'l', 'm', 'n', 'x', 'o', 'p',
         'r', 's', 't', 'y', 'f', 'x', 'ps', 'o', 'A', 'B', 'G', 'D', 'E', 'Z', 'H', 'Th',
         'I', 'K', 'L', 'M', 'N', 'X', 'O', 'P', 'R', 'S', 'T', 'Y', 'F', 'X', 'Ps', 'O',
         's', 'a', 'e', 'i', 'i', 'y', 'o', 'o', 'A', 'E', 'H', 'I', 'Y', 'O', 'O', 'i',
-        'i', 'y', 'y', 'I', 'Y', '-'), $string);
+        'i', 'y', 'y', 'I', 'I', 'Y', '-'), $string);
 }
 
 // Convert to uppercase and remove accent marks
@@ -2829,7 +2873,6 @@ function active_subdirs($base, $filename) {
 /*
  * Delete a directory and its whole content
  *
- * @author - Hugues Peeters
  * @param  - $dirPath (String) - the path of the directory to delete
  * @return - boolean - true if the delete succeed, false otherwise.
  */
@@ -2843,38 +2886,27 @@ function removeDir($dirPath) {
         return false;
     }
 
-    /* Try to remove the directory. If it can not manage to remove it,
-     * it's probable the directory contains some files or other directories,
-     * and that we must first delete them to remove the original directory.
-     */
-    if (@rmdir($dirPath)) {
+    // Try to remove the directory recursively if it exists
+    if (!file_exists($dirPath)) {
         return true;
-    } else { // if directory couldn't be removed...
-        $ok = true;
-        $cwd = getcwd();
-        chdir($dirPath);
-        $handle = opendir($dirPath);
-
-        while ($element = readdir($handle)) {
-            if ($element == '.' or $element == '..') {
-                continue; // skip current and parent directories
-            } elseif (is_file($element)) {
-                $ok = @unlink($element) && $ok;
-            } elseif (is_dir($element)) {
-                $dirToRemove[] = $dirPath . '/' . $element;
+    } else {
+        $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($dirPath,
+                        RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($files as $file) {
+            $filePath = $file->getRealPath();
+            if ($file->isDir()) {
+                if (!rmdir($filePath)) {
+                    return false;
+                }
+            } else {
+                if (!unlink($filePath)) {
+                    return false;
+                }
             }
         }
-
-        closedir($handle);
-        chdir($cwd);
-
-        if (isset($dirToRemove) and count($dirToRemove)) {
-            foreach ($dirToRemove as $j) {
-                $ok = removeDir($j) && $ok;
-            }
-        }
-
-        return @rmdir($dirPath) && $ok;
+        return rmdir($dirPath);
     }
 }
 
@@ -3142,7 +3174,10 @@ function framebusting_code() {
  * other web pages of the platform in case this functionality is needed.
  */
 function add_framebusting_headers() {
-    header('X-Frame-Options: SAMEORIGIN');
+    require_once 'modules/admin/extconfig/ltipublishapp.php';
+    $ltipublishapp = ExtAppManager::getApp('ltipublish');
+    $framebustheader = $ltipublishapp->getFramebustHeader();
+    header($framebustheader);
 }
 
 /**
@@ -3540,7 +3575,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
  * array('title' => 'Create', 'url' => '/create.php', 'icon' => 'create', 'class' => 'primary danger')
  *
  */
-function action_button($options, $secondary_menu_options = array()) {
+function action_button($options, $secondary_menu_options = array(), $fc=false) {
     global $langConfirmDelete, $langCancel, $langDelete;
     $out_primary = $out_secondary = array();
     $primary_form_begin = $primary_form_end = $primary_icon_class = '';
@@ -3610,7 +3645,12 @@ function action_button($options, $secondary_menu_options = array()) {
     }
     $action_button = "";
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'>.</span>";
-    $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
+
+    if($fc){
+        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-wrench";
+    }else{
+        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
+    }
     $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "btn-default";
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
@@ -3621,11 +3661,11 @@ function action_button($options, $secondary_menu_options = array()) {
     }
 
     return $primary_form_begin .
-         "<div class='btn-group btn-group-sm btn-secondary' role='group'>" .
-         $primary . $secondary .
-         '</div>' . $primary_form_end;
+         "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
+                $primary_buttons
+                $action_button
+          </div>" . $primary_form_end;
 }
-
 
 /**
  * Removes spcific get variable from Query String
@@ -4020,6 +4060,16 @@ function array_value_recursive($key, array $arr){
         if($k == $key) array_push($val, $v);
     });
     return $val;
+}
+
+/**
+ @brief reindex array keys so that they start from 1 (not from 0)
+ * @param $a array
+ * @return array
+ */
+function reindex_array_keys_from_one($a) {
+
+    return array_combine(range(1, count($a)), array_values($a));
 }
 
 /**

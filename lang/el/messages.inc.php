@@ -3822,7 +3822,8 @@ $langUpgContact = "Στοιχεία Επικοινωνίας";
 $langUpgAddress = "Διεύθυνση Ιδρύματος:";
 $langUpgTel = "Τηλ. Επικοινωνίας:";
 $langUpgReg = "Εγγραφή Χρηστών";
-$langUpgForVersion = 'Αναβαθμίσεις έκδοσης: ';
+$langUpgForVersion = 'Αναβαθμίσεις έκδοσης:';
+$langAddDirectoryIndexes = 'Προσθήκη αρχείων index σε υποφακέλους για λόγους ασφαλείας';
 $langTable = "Πίνακας";
 $langToTable = "στον πίνακα";
 $langAddField = "Προσθήκη πεδίου";
@@ -3869,6 +3870,9 @@ $langAddingDirectoryIndex = 'Προσθήκη αρχείων index.html στου
 $langChangeDBEncoding = "Αλλαγή κωδικοποίησης της βάσης δεδομένων σε utf8mb4";
 $langUpgradeDBInfoMessage = "Η αναβάθμιση της βάσης δεδομένων έχει ξεκινήσει.";
 $langUpgradePopUpCloseWarning = "Προσοχή! Μην κλείσετε αυτό το παράθυρο γιατί θα διακοπεί η αναβάθμιση!";
+$langUpgFinished = 'Ολοκληρώθηκε';
+$langUpgUTF8MB4 = 'Μετατροπή πινάκων σε πλήρες εύρος Unicode';
+$langPreviousVersion = 'Προηγούμενη έκδοση';
 
 /* * *****************************************************************
  * course_tools.php

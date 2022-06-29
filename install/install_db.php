@@ -75,30 +75,30 @@ $db->query("CREATE TABLE IF NOT EXISTS `course_activities` (
     `module_id` int(11) NOT NULL,
     PRIMARY KEY  (`id`)) $tbl_options");
 
-$db->query("CREATE TABLE IF NOT EXISTS`course_units_activities` ( 
-	`id` INT NOT NULL AUTO_INCREMENT , 
-	`course_code` VARCHAR(20) NOT NULL , 
-	`activity_id` VARCHAR(5) NOT NULL , 
-	`unit_id` INT NOT NULL , 
-	`tool_ids` TEXT NOT NULL , 
+$db->query("CREATE TABLE IF NOT EXISTS`course_units_activities` (
+	`id` INT NOT NULL AUTO_INCREMENT ,
+	`course_code` VARCHAR(20) NOT NULL ,
+	`activity_id` VARCHAR(5) NOT NULL ,
+	`unit_id` INT NOT NULL ,
+	`tool_ids` TEXT NOT NULL ,
     `activity_type` INT NOT NULL,
     `visible` INT NOT NULL,
 	PRIMARY KEY (`id`)) $tbl_options");
 
-$db->query("CREATE TABLE IF NOT EXISTS `course_class_info` ( 
-    `id` INT NOT NULL AUTO_INCREMENT , 
-    `student_number` VARCHAR(50) NOT NULL , 
-    `lessons_number` INT NOT NULL , 
-    `lesson_hours` INT NOT NULL , 
-    `home_hours` INT NOT NULL , 
-    `total_hours` INT NOT NULL , 
+$db->query("CREATE TABLE IF NOT EXISTS `course_class_info` (
+    `id` INT NOT NULL AUTO_INCREMENT ,
+    `student_number` VARCHAR(50) NOT NULL ,
+    `lessons_number` INT NOT NULL ,
+    `lesson_hours` INT NOT NULL ,
+    `home_hours` INT NOT NULL ,
+    `total_hours` INT NOT NULL ,
     `course_code` VARCHAR(20) NOT NULL,
     PRIMARY KEY (`id`)) $tbl_options");
 
-$db->query("CREATE TABLE `course_learning_objectives` ( 
-    `id` INT NOT NULL AUTO_INCREMENT , 
-    `course_code` VARCHAR(20) NOT NULL , 
-    `title` TEXT NOT NULL , 
+$db->query("CREATE TABLE `course_learning_objectives` (
+    `id` INT NOT NULL AUTO_INCREMENT ,
+    `course_code` VARCHAR(20) NOT NULL ,
+    `title` TEXT NOT NULL ,
     PRIMARY KEY (`id`)) $tbl_options");
 // end of flipped classroom
 
@@ -1162,8 +1162,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
     `type` INT(11) DEFAULT 1,
     `difficulty` INT(1) DEFAULT 0,
     `category` INT(11) DEFAULT 0,
-    `copy_of_qid` INT(11) DEFAULT NULL, 
-     CONSTRAINT FOREIGN KEY (copy_of_qid) 
+    `copy_of_qid` INT(11) DEFAULT NULL,
+     CONSTRAINT FOREIGN KEY (copy_of_qid)
      REFERENCES exercise_question(id) ON DELETE SET NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_question_cats` (
@@ -1461,9 +1461,6 @@ $db->query("CREATE TABLE `user_request_ext_uid` (
 $eclass_stud_reg = intval($eclass_stud_reg);
 $eclass_prof_reg = intval($eclass_prof_reg);
 
-$student_upload_whitelist = 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, odt, ods, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst, pptx, ppsx, zipx, gsp, xml, a3p, ypr, mw2, dtd, aia, hex, mscz, pages, heic, piv, stk';
-$teacher_upload_whitelist = 'htm, html, js, css, xml, xsl, xsd, dtd, cpp, c, java, m, h, tcl, py, sgml, sgm, ini, ds_store, dtd, xsd, woff2, ppsm, aia, hex, jqz, jm, data, jar, glo, jqz, jm, data, jar, mscz, epub, djvu, heic, piv, stk';
-
 $db->query("CREATE TABLE `config` (
     `key` VARCHAR(32) NOT NULL,
     `value` TEXT NOT NULL,
@@ -1540,6 +1537,7 @@ $db->query("INSERT INTO `config` (`key`, `value`) VALUES " .
         implode(', ', array_fill(0, count($default_config) / 2, '(?s, ?s)')), $default_config);
 
 store_mail_config();
+update_upload_whitelists();
 
 // table for cron parameters
 $db->query("CREATE TABLE `cron_params` (
@@ -1572,7 +1570,7 @@ $db->query("CREATE TABLE `unit_resources` (
     `date` DATETIME NOT NULL,
     `fc_type` INT(11) NOT NULL DEFAULT 3,
     `activity_title`  VARCHAR(50) NOT NULL DEFAULT '',
-    `activity_id` VARCHAR(5) NOT NULL DEFAULT 'FC000', 
+    `activity_id` VARCHAR(5) NOT NULL DEFAULT 'FC000',
     UNIQUE KEY `unit_resources_order` (`unit_id`,`order`)) $tbl_options");
 
 $db->query("CREATE TABLE `actions_daily` (
