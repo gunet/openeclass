@@ -12,7 +12,7 @@
                 @if(!$allCoursesAnnouncements)
                         <!-- <script type="text/javascript" src="{{ $urlAppend }}template/modern/js/my_courses_color_header.js"></script> -->
 
-                        <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
+                        <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
                             <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                                 @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                             </div>
@@ -25,8 +25,8 @@
                                         <i class="fas fa-align-left"></i>
                                         <span></span>
                                     </button>
-                                    
-                                
+
+
                                     <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                                         <i class="fas fa-tools"></i>
                                     </a>
@@ -38,7 +38,7 @@
                                         <li class="breadcrumb-item"><a href="{{$urlServer}}courses/{{$course_code}}/index.php">{{$currentCourseName}}</a></li>
                                         <li class="breadcrumb-item active" aria-current="page">{{trans('langAnnouncements')}}</li>
                                     </ol>
-                                    
+
                                 </nav>
 
                                 <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
@@ -49,6 +49,15 @@
                                         @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                                     </div>
                                 </div>
+
+                                @if(Session::has('message'))
+                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                                    <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                                        {{ Session::get('message') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </p>
+                                </div>
+                                @endif
 
 
                                 <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -62,25 +71,36 @@
                                     </legend>
                                 </div>
 
-                                <div class="row p-2"></div><div class="row p-2"></div>
-                                <span class="control-label-notes">{{trans('langTeacher')}}: <small>{{course_id_to_prof($course_id)}}</small></span>
-                                <div class="row p-2"></div><div class="row p-2"></div>
+                                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5">
+                                    <span class="control-label-notes">
+                                        {{trans('langTeacher')}}: <small>{{course_id_to_prof($course_id)}}</small>
+                                    </span>
+                                </div>
 
                                 @if($is_editor)
-                    
+
                                     <div class="col-xl-12 col-md-12 col-sm-12 col-xs-12">
                                         <button class="float-end btn btn-success add_btn_announcements"><i class="fa fa-plus" aria-hidden="true"></i><a class="addAnnouncement_a" href="{{ $urlAppend }}modules/announcements/new.php?course={{$course_code}}">{{trans('langAddAnn')}}</a></button>
                                     </div>
-                                    
+
                                     <div class="row p-2"></div>
                                 @endif
-                                
-                                @include('layouts.partials.announcements',['announcements' => $aaData , 'title_course' => $currentCourseName ,'is_editor' => $is_editor,'announcements_ids' => $announcements_ids, 'course_code' => $course_code])       
-                            </div>      
+
+                                @if(Session::has('message'))
+                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                                    <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                                        {{ Session::get('message') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </p>
+                                </div>
+                                @endif
+
+                                @include('layouts.partials.announcements',['announcements' => $aaData , 'title_course' => $currentCourseName ,'is_editor' => $is_editor,'announcements_ids' => $announcements_ids, 'course_code' => $course_code])
+                            </div>
                         </div>
                 @else
 
-                       
+
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center courses-details">
                             <div class="row p-5">
@@ -106,7 +126,7 @@
                                 </div>
 
                                 <div class='row p-2'></div><div class='row p-2'></div>
-                            
+
                                 <div class='table-responsive'>
                                     <table id='ann_table_my_ann' class='announcements_table'>
                                         <thead>
@@ -144,6 +164,6 @@
             </div>
         </div>
     </div>
-    
+
 
 @endsection

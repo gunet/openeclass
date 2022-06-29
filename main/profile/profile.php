@@ -275,7 +275,7 @@ if (isset($_GET['provider'])) {
 		$_GET['provider'] = 'WindowsLive';
 	    }
 	    $hybridauth = new Hybridauth($config);
-            $allProviders = $hybridauth->getProviders();
+        $allProviders = $hybridauth->getProviders();
 
 	    if (count($allProviders) && in_array($_GET['provider'], $allProviders)) { //check if the provider is existent and valid - it's checked above
                 try {

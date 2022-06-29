@@ -10,8 +10,8 @@
                         <input type="text" class="w-50 input-group-input inputSearch" id="search_terms" name="search_terms" placeholder="{{ trans('langSearch') }}...">
                         <button id="btn-search" class="eclass-nav-link mt-0 me-4 border-0" type="submit" name="quickSearch"><i class="fa fa-search text-white" style='margin-left:-15px;'></i></button>
                         <div class="btn-group d-inline me-2">
-                            <a onclick="changeLang('el')" href="{{$urlAppend}}index.php?localize=el" class="GreekButton btn btn-primary rounded-circle">el</a>
-                            <a onclick="changeLang('en')" href="{{$urlAppend}}index.php?localize=en" class="EnglishButton btn btn-transparent border-primary rounded-circle text-white">en</a>
+                            <a href="{{$urlAppend}}index.php?localize=el" class="GreekButton btn btn-primary border-none rounded-circle text-white fs-5">el</a>
+                            <a href="{{$urlAppend}}index.php?localize=en" class="EnglishButton btn btn-transparent border-none rounded-circle text-white fs-5">en</a>
                         </div>
 
                 </div>
@@ -27,36 +27,6 @@
                     title="{{trans('langAdminTool')}}" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench text-white"></i>
             </a>
         @endif
-
-
-
-        <!-- <div class="dropdown">
-            <a class="mt-0 float-end eclass-nav-link" type="button" href="#dropdownLanguage"
-                    data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"
-                    data-bs-toggle-second="tooltip" data-bs-placement="left" title="{{trans('langLanguage')}}">
-                <i class="fa fa-globe"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-language-ul" aria-labelledby="dropdownLanguage">
-                <li class="language-li">
-                    <a class="language-item" href="{{$urlAppend}}index.php?localize=el"><i class="fas fa-language"></i> {{ trans('langGreek') }}</a>
-                </li>
-                <li class="language-li">
-                    <a class="language-item" href="{{$urlAppend}}index.php?localize=en"><i class="fas fa-language"></i> {{ trans('langEnglish') }}</a>
-                </li>
-                <li class="language-li">
-                    <a class="language-item" href="{{$urlAppend}}index.php?localize=fr"><i class="fas fa-language"></i> {{ trans('langFrench') }}</a>
-                </li>
-                <li class="language-li">
-                    <a class="language-item" href="{{$urlAppend}}index.php?localize=de"><i class="fas fa-language"></i> {{ trans('langGerman') }}</a>
-                </li>
-                <li class="language-li">
-                    <a class="language-item" href="{{$urlAppend}}index.php?localize=it"><i class="fas fa-language"></i> {{ trans('langItalian') }}</a>
-                </li>
-                <li class="language-li">
-                    <a class="language-item" href="{{$urlAppend}}index.php?localize=es"><i class="fas fa-language"></i> {{ trans('langSpanish') }}</a>
-                </li>
-            </ul>
-        </div> -->
 
     </div>
 
@@ -96,50 +66,65 @@
                             (isset($is_power_user) and $is_power_user) or
                             (isset($is_usermanage_user) and ($is_usermanage_user)) or
                             (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                                <ul class="dropdown-menu me-0 mt-5 dropdown-user-menu-ul"
+                                <ul class="dropdown-menu me-0 mt-5 pb-4 pt-4 ps-3 pe-3 dropdown-user-menu-ul"
                                     aria-labelledby="dropdownMenuButton1">
                             @else
-                                <ul class="dropdown-menu me-0 mt-5 dropdown-user-menu-ul" aria-labelledby="dropdownMenuButton1">
+                                <ul class="dropdown-menu me-0 mt-5 pb-4 pt-4 ps-2 pe-2 dropdown-user-menu-ul" aria-labelledby="dropdownMenuButton1">
                             @endif
                                 <li class="user-menu-li">
-                                    <a class="user-item text-white" href="{{ $urlAppend }}main/portfolio.php"><i class="fas fa-home bg-transparent text-white"></i> {{ trans('langMyPortfolio') }}</a>
+                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/portfolio.php"><i class="fas fa-home bg-transparent text-white"></i><span class='ps-2'>{{ trans('langMyPortfolio') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
-                                    <a class="user-item text-white" href="{{ $urlAppend }}main/my_courses.php"><i class="fas fa-graduation-cap"></i> {{trans('mycourses')}}</a>
+                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/my_courses.php"><i class="fas fa-graduation-cap"></i><span class='ps-2'>{{trans('mycourses')}}</span></a>
                                 </li>
                                 <li class="user-menu-li">
-                                    <a class="user-item text-white"
-                                    href="{{ $urlAppend }}modules/announcements/myannouncements.php"><i class="fas fa-bell"></i> {{ trans('langMyAnnouncements') }}</a>
+                                    <a class="user-item text-white ps-3 pe-2"
+                                    href="{{ $urlAppend }}modules/announcements/myannouncements.php"><i class="fas fa-bell"></i><span class='ps-2'>{{ trans('langMyAnnouncements') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
-                                    <a class="user-item text-white" href="{{ $urlAppend }}main/notes/index.php"><i class="fas fa-sticky-note"></i> {{ trans('langNotes') }}</a>
+                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/notes/index.php"><i class="fas fa-sticky-note"></i><span class='ps-2'>{{ trans('langNotes') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
-                                    <a class="user-item text-white"
-                                    href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}"><i class="fas fa-briefcase"></i> {{ trans('langMyePortfolio') }}</a>
+                                    <a class="user-item text-white ps-3 pe-2"
+                                    href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}"><i class="fas fa-briefcase"></i><span class='ps-2'>{{ trans('langMyePortfolio') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
-                                    <a class="user-item text-white" href="{{ $urlAppend }}modules/usage/index.php?t=u"><i class="fas fa-chart-bar"></i> {{ trans('langMyStats') }}</a>
+                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}modules/usage/index.php?t=u"><i class="fas fa-chart-bar"></i><span class='ps-2'>{{ trans('langMyStats') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
-                                    <a class="user-item text-white"
+                                    <a class="user-item text-white ps-3 pe-2"
                                     href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}"><i
-                                                class="fas fa-location-arrow"></i> {{ trans('langMyBlog') }}</a>
+                                                class="fas fa-location-arrow"></i><span class='ps-2'>{{ trans('langMyBlog') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
-                                    <a class="user-item text-white" href="{{ $urlAppend }}modules/message/index.php"><i class="fas fa-envelope"></i> {{ trans('langMyDropBox') }}</a>
+                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}modules/message/index.php"><i class="fas fa-envelope"></i><span class='ps-2'>{{ trans('langMyDropBox') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
-                                    <a class="user-item text-white" href="{{ $urlAppend }}main/personal_calendar/index.php"><i class="fas fa-bell"></i> {{ trans('langMyAgenda') }}</a>
+                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/personal_calendar/index.php"><i class="fas fa-bell"></i><span class='ps-2'>{{ trans('langMyAgenda') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
-                                    <a class="user-item text-white" href="{{ $urlAppend }}main/profile/display_profile.php"><i class="fas fa-user"></i> {{ trans('langMyProfile') }}</a>
+                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/profile/display_profile.php"><i class="fas fa-user"></i><span class='ps-2'>{{ trans('langMyProfile') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
-                                    <a class="user-item text-white" href="{{ $urlAppend }}main/mydocs/index.php"><i class="fas fa-folder"></i> {{ trans('langMyDocs') }}</a>
+                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/my_widgets.php"><i class="fa fa-magic fa-fw"></i><span class='ps-2'>{{ trans('langMyWidgets') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
-                                    <a class="LogoutButton user-item text-white" href="{{ $urlAppend }}?logout=yes"><i class="fas fa-unlock"></i> {{ trans('langLogout') }}</a>
+                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/gradebookUserTotal/index.php"><i class="fa fa-sort-numeric-desc fa-fw"></i><span class='ps-2'>{{ trans('langGradeTotal') }}</span></a>
+                                </li>
+                                <li class="user-menu-li">
+                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/mycertificates.php"><i class="fa fa-trophy fa-fw"></i><span class='ps-2'>{{ trans('langMyCertificates') }}</span></a>
+                                </li>
+                                @if ((isset($is_admin) and $is_admin) or
+                                (isset($is_power_user) and $is_power_user) or
+                                (isset($is_usermanage_user) and ($is_usermanage_user)) or
+                                (isset($is_departmentmanage_user) and $is_departmentmanage_user))
+                                <li class="user-menu-li">
+                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/mydocs/index.php"><i class="fas fa-folder"></i><span class='ps-2'>{{ trans('langMyDocs') }}</span></a>
+                                </li>
+                                @endif
+                                <hr class='text-white'>
+                                <li class="user-menu-li">
+                                    <a class="LogoutButton w-100 btn btn-warning fw-bolder user-item text-secondary ps-1 pe-2" href="{{ $urlAppend }}?logout=yes"><i class="fas fa-unlock"></i><span class='ps-2'>{{ trans('langLogout') }}</span></a>
                                 </li>
                             </ul>
                         </div>

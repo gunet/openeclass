@@ -82,14 +82,7 @@ foreach($toolArr as $tool){
 
 
 
-                    <nav class="navbar_breadcrumb" aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <?php $size_breadcrumb = count($breadcrumbs); $count=0; ?>
-                            <?php for($i=0; $i<$size_breadcrumb; $i++){ ?>
-                                <li class="breadcrumb-item"><a href="{!! $breadcrumbs[$i]['bread_href'] !!}">{!! $breadcrumbs[$i]['bread_text'] !!}</a></li>
-                            <?php } ?>
-                        </ol>
-                    </nav>
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
 
 
@@ -131,6 +124,15 @@ foreach($toolArr as $tool){
                                 {{trans('langTeacher')}}: <small>{{course_id_to_prof($course_id)}}</small>
                             </span>
                         </div>
+                    @endif
+
+                    @if(Session::has('message'))
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                        <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                            {{ Session::get('message') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </p>
+                    </div>
                     @endif
 
                     @if(!$course_code)

@@ -20,7 +20,7 @@
         <div class="row">
 
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active col_maincontent_active_ProfileUser">
-                    
+
                 <div class="row p-5">
 
                     <nav class="navbar navbar-expand-lg navrbar_menu_btn">
@@ -29,16 +29,20 @@
                         </a>
                     </nav>
 
-                    <nav class="navbar_breadcrumb pe-5" aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <?php $size_breadcrumb = count($breadcrumbs); $count=0; ?>
-                            <?php for($i=0; $i<$size_breadcrumb; $i++){ ?>
-                                <li class="breadcrumb-item"><a href="{!! $breadcrumbs[$i]['bread_href'] !!}">{!! $breadcrumbs[$i]['bread_text'] !!}</a></li>
-                            <?php } ?> 
-                        </ol>
-                    </nav>
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => [0 => ['bread_href' => '../../', 'bread_text' => trans('langHome')],
+                                                                          1 => ['bread_text' => trans('langModifyProfile')]]
+                                                       ])
 
                     {!! $action_bar !!}
+
+                    @if(Session::has('message'))
+                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                            <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                                {{ Session::get('message') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </p>
+                        </div>
+                    @endif
 
                     <div class='form-wrapper'>
                         <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='{{ $sec }}' onsubmit='return validateNodePickerForm();'>
@@ -47,36 +51,36 @@
                                 <div class='form-group'>
                                     <label for='givenname_form' class='col-sm-6 control-label-notes'>{{ trans('langName') }}:</label>
                                     <div class='col-sm-12'>
-                                    @if ($allow_name_change)
-                                        <input type='text' class='form-control' name='givenname_form' id='givenname_form' value='{{ $givenname_form }}'>
-                                    @else {
-                                        <p class='form-control-static'>{{$givenname_form}}</p>
-                                        <input type='hidden' name='givenname_form' value='{{ $givenname_form }}'>
-                                    @endif
+                                        @if ($allow_name_change)
+                                            <input type='text' class='form-control' name='givenname_form' id='givenname_form' value='{{ $givenname_form }}'>
+                                        @else {
+                                            <p class='form-control-static'>{{$givenname_form}}</p>
+                                            <input type='hidden' name='givenname_form' value='{{ $givenname_form }}'>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row p-2"></div>
                                 <div class='form-group'>
                                     <label for='surname_form' class='col-sm-6 control-label-notes'>{{ trans('langSurname') }}:</label>
                                     <div class='col-sm-12'>
-                                    @if ($allow_name_change)
-                                        <input type='text' class='form-control' name='surname_form' id='surname_form' value='{{ $surname_form }}'>
-                                    @else
-                                        <p class='form-control-static'>{{ $surname_form }}</p>
-                                        <input type='hidden' name='surname_form' value='{{ $surname_form }}'>
-                                    @endif
+                                        @if ($allow_name_change)
+                                            <input type='text' class='form-control' name='surname_form' id='surname_form' value='{{ $surname_form }}'>
+                                        @else
+                                            <p class='form-control-static'>{{ $surname_form }}</p>
+                                            <input type='hidden' name='surname_form' value='{{ $surname_form }}'>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row p-2"></div>
                                 <div class='form-group'>
                                     <label for='username_form' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}:</label>
                                     <div class='col-sm-12'>
-                                    @if ($allow_username_change)
-                                        <input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='{{ $username_form }}'>
-                                    @else
-                                        [{{ $auth_text }}]
-                                        <p class='form-control-static'>{{ $username_form }}</p>
-                                    @endif
+                                        @if ($allow_username_change)
+                                            <input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='{{ $username_form }}'>
+                                        @else
+                                            [{{ $auth_text }}]
+                                            <p class='form-control-static'>{{ $username_form }}</p>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row p-2"></div>
@@ -169,24 +173,24 @@
                                 <div class='col-sm-12'>{!! $info_text_area !!}</div>
                             </div>
                             {!! render_profile_fields_form(array('origin' => 'edit_profile')) !!}
-                            @if (count($allProviders))
-                            <div class="row p-2"></div>
-                                <div class='form-group'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langProviderConnectWith') }}:</label>
-                                    <div class='col-sm-12'>
-                                        <div class='row'>";
-                                        @foreach ($allProviders as $provider => $settings)
-                                            $lcProvider = strtolower($provider);
-                                            <div class='col-xs-2 text-center'>
-                                                <img src='$themeimg/{{ strtolower($provider) }}.png' alt="{{ trans('langLoginVia') }}"><br>{{ $provider }}<br>";
-                                        @if ($userProviders[strtolower($provider)])
-                                            <img src='{{ $themeimg }}/tick.png' alt='{{ trans('langProviderConnectWith') }} {{ $provider }}'>
-                                            <a href='{{ $data[sec] }}?action=delete&provider={{ $provider }}'>{{ trans('langProviderDeleteConnection') }}</a>";
-                                        @else
-                                            <a href='{{ $data[sec] }}?action=connect&provider={{ $provider }}'>{{ trans('langProviderConnect') }}</a>
-                                        @endif
+                            @if (isset($allProviders))
+                                <div class="row p-2"></div>
+                                    <div class='form-group'>
+                                        <label class='col-sm-6 control-label-notes'>{{ trans('langProviderConnectWith') }}:</label>
+                                        <div class='col-sm-12'>
+                                            <div class='row'>";
+                                                @foreach ($allProviders as $provider => $settings)
+                                                    $lcProvider = strtolower($provider);
+                                                    <div class='col-xs-2 text-center'>
+                                                        <img src='$themeimg/{{ strtolower($provider) }}.png' alt="{{ trans('langLoginVia') }}"><br>{{ $provider }}<br>";
+                                                @if ($userProviders[strtolower($provider)])
+                                                    <img src='{{ $themeimg }}/tick.png' alt='{{ trans('langProviderConnectWith') }} {{ $provider }}'>
+                                                    <a href='{{ $data[sec] }}?action=delete&provider={{ $provider }}'>{{ trans('langProviderDeleteConnection') }}</a>";
+                                                @else
+                                                    <a href='{{ $data[sec] }}?action=connect&provider={{ $provider }}'>{{ trans('langProviderConnect') }}</a>
+                                                @endif
                                             </div>
-                                        @endforeach
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>

@@ -70,7 +70,9 @@ $hits = $idx->multiSearchRaw(CourseIndexer::buildQueries($_POST));
 
 // exit if not results
 if (count($hits) <= 0) {
-    Session::Messages($langNoResult);
+    //Session::Messages($langNoResult);
+    Session::flash('message',$langNoResult);
+    Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page('modules/search/search.php');
 }
 
@@ -130,7 +132,6 @@ $tool_content .= "<th class='text-left'>" . $langCourse . " ($langCode)</th>
       <th class='text-left'>$langKeywords</th>
       <th class='text-left'>$langType</th>
     </tr>";
-
 
 foreach ($courses as $course) {
     $courseHref = "../../courses/" . q($course->code) . "/";
