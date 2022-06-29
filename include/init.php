@@ -59,7 +59,7 @@ if (!session_id()) {
 header('Content-Type: text/html; charset=UTF-8');
 
 // Will add headers to prevent against clickjacking.
-add_framebusting_headers();
+//add_framebusting_headers();
 
 add_xxsfilter_headers();
 

@@ -51,7 +51,7 @@
                             <a class="eclass-nav-link register_class_header" href="{{ $urlAppend }}modules/create_course/create_course.php"><i class="fas fa-plus-circle"></i>{{ trans('langCourseCreate') }}</a>
                         @endif
                     @endif
-                    <a class="eclass-nav-link courses_class_header" href="{{ $urlServer }}modules/auth/courses.php"><i class="fas fa-book"></i> {{ trans('langCourses') }}</a>
+                    <a class="eclass-nav-link courses_class_header" href="{{ $urlServer }}modules/auth/courses.php"><i class="fas fa-book"></i> {{ trans('langMyCoursesSide') }}</a>
                 </div>
 
                 <div class='col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12'>
@@ -75,7 +75,7 @@
                                     <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/portfolio.php"><i class="fas fa-home bg-transparent text-white"></i><span class='ps-2'>{{ trans('langMyPortfolio') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
-                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/my_courses.php"><i class="fas fa-graduation-cap"></i><span class='ps-2'>{{trans('mycourses')}}</span></a>
+                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/my_courses.php"><i class="fas fa-graduation-cap"></i><span class='ps-2'>{{ trans('langMyCoursesSide') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
                                     <a class="user-item text-white ps-3 pe-2"
@@ -84,18 +84,22 @@
                                 <li class="user-menu-li">
                                     <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/notes/index.php"><i class="fas fa-sticky-note"></i><span class='ps-2'>{{ trans('langNotes') }}</span></a>
                                 </li>
-                                <li class="user-menu-li">
-                                    <a class="user-item text-white ps-3 pe-2"
-                                    href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}"><i class="fas fa-briefcase"></i><span class='ps-2'>{{ trans('langMyePortfolio') }}</span></a>
-                                </li>
+                                @if (get_config('eportfolio_enable'))
+                                    <li class="user-menu-li">
+                                        <a class="user-item text-white ps-3 pe-2"
+                                        href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}"><i class="fas fa-briefcase"></i><span class='ps-2'>{{ trans('langMyePortfolio') }}</span></a>
+                                    </li>
+                                @endif
                                 <li class="user-menu-li">
                                     <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}modules/usage/index.php?t=u"><i class="fas fa-chart-bar"></i><span class='ps-2'>{{ trans('langMyStats') }}</span></a>
                                 </li>
-                                <li class="user-menu-li">
-                                    <a class="user-item text-white ps-3 pe-2"
-                                    href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}"><i
-                                                class="fas fa-location-arrow"></i><span class='ps-2'>{{ trans('langMyBlog') }}</span></a>
-                                </li>
+                                @if (get_config('personal_blog'))
+                                    <li class="user-menu-li">
+                                        <a class="user-item text-white ps-3 pe-2"
+                                        href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}"><i
+                                                    class="fas fa-location-arrow"></i><span class='ps-2'>{{ trans('langMyBlog') }}</span></a>
+                                    </li>
+                                @endif
                                 <li class="user-menu-li">
                                     <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}modules/message/index.php"><i class="fas fa-envelope"></i><span class='ps-2'>{{ trans('langMyDropBox') }}</span></a>
                                 </li>
@@ -114,17 +118,17 @@
                                 <li class="user-menu-li">
                                     <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/mycertificates.php"><i class="fa fa-trophy fa-fw"></i><span class='ps-2'>{{ trans('langMyCertificates') }}</span></a>
                                 </li>
-                                @if ((isset($is_admin) and $is_admin) or
-                                (isset($is_power_user) and $is_power_user) or
-                                (isset($is_usermanage_user) and ($is_usermanage_user)) or
-                                (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                                <li class="user-menu-li">
-                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/mydocs/index.php"><i class="fas fa-folder"></i><span class='ps-2'>{{ trans('langMyDocs') }}</span></a>
-                                </li>
+                                @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')))
+                                    <li class="user-menu-li">
+                                        <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/mydocs/index.php"><i class="fas fa-folder"></i><span class='ps-2'>{{ trans('langMyDocs') }}</span></a>
+                                    </li>
                                 @endif
                                 <hr class='text-white'>
                                 <li class="user-menu-li">
-                                    <a class="LogoutButton w-100 btn btn-warning fw-bolder user-item text-secondary ps-1 pe-2" href="{{ $urlAppend }}?logout=yes"><i class="fas fa-unlock"></i><span class='ps-2'>{{ trans('langLogout') }}</span></a>
+                                    <form method='post' action='{{ $urlAppend }}modules/auth/logout.php'>
+                                        <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
+                                        <a class='LogoutButton w-100 btn btn-warning fw-bolder user-item text-secondary ps-1 pe-2' href="{{ $urlAppend }}modules/auth/logout.php"><i class="fas fa-unlock"></i><span class='ps-2'>{{ trans('langLogout') }}</span></a>
+                                    </form>
                                 </li>
                             </ul>
                         </div>
