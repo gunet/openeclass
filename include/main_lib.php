@@ -2872,7 +2872,6 @@ function active_subdirs($base, $filename) {
 /*
  * Delete a directory and its whole content
  *
- * @author - Hugues Peeters
  * @param  - $dirPath (String) - the path of the directory to delete
  * @return - boolean - true if the delete succeed, false otherwise.
  */
@@ -2886,38 +2885,27 @@ function removeDir($dirPath) {
         return false;
     }
 
-    /* Try to remove the directory. If it can not manage to remove it,
-     * it's probable the directory contains some files or other directories,
-     * and that we must first delete them to remove the original directory.
-     */
-    if (@rmdir($dirPath)) {
+    // Try to remove the directory recursively if it exists
+    if (!file_exists($dirPath)) {
         return true;
-    } else { // if directory couldn't be removed...
-        $ok = true;
-        $cwd = getcwd();
-        if (@chdir($dirPath)) {
-            $handle = opendir($dirPath);
-
-            while ($element = readdir($handle)) {
-                if ($element == '.' or $element == '..') {
-                    continue; // skip current and parent directories
-                } elseif (is_file($element)) {
-                    $ok = @unlink($element) && $ok;
-                } elseif (is_dir($element)) {
-                    $dirToRemove[] = $dirPath . '/' . $element;
+    } else {
+        $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($dirPath,
+                        RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($files as $file) {
+            $filePath = $file->getRealPath();
+            if ($file->isDir()) {
+                if (!rmdir($filePath)) {
+                    return false;
                 }
-            }
-
-            closedir($handle);
-            chdir($cwd);
-
-            if (isset($dirToRemove) and count($dirToRemove)) {
-                foreach ($dirToRemove as $j) {
-                    $ok = removeDir($j) && $ok;
+            } else {
+                if (!unlink($filePath)) {
+                    return false;
                 }
             }
         }
-        return @rmdir($dirPath) && $ok;
+        return rmdir($dirPath);
     }
 }
 

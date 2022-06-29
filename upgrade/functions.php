@@ -318,6 +318,9 @@ function installTheme($themesDir, $file_name) {
     global $webDir, $logfile_path;
 
     $tempdir = "$webDir/courses/theme_data/temp";
+    if (file_exists($tempdir)) {
+        removeDir($tempdir);
+    }
     $archive = new ZipArchive;
     if (!$archive->open("$themesDir/$file_name") or !$archive->extractTo($tempdir)) {
         Debug::message("Error extracting theme $file_name: " . $archive->getStatusString(), Debug::CRITICAL);
@@ -2929,7 +2932,6 @@ function addDirectoryIndexFilesHelper($dir) {
 
 function finalize_upgrade(): void
 {
-
     // add new modules to courses by reinserting all modules
     Database::get()->queryFunc("SELECT id, code FROM course", function ($course) {
         global $modules;
@@ -2955,7 +2957,7 @@ function finalize_upgrade(): void
     // Import new themes
     importThemes();
     if (!get_config('theme_options_id')) {
-        set_config('theme_options_id', Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2022 - Default')->id);
+        set_config('theme_options_id', Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2020 - Default')->id);
     }
 
     set_config('version', ECLASS_VERSION);
@@ -2968,357 +2970,413 @@ function finalize_upgrade(): void
  */
 function convert_db_encoding_to_utf8mb4(): void
 {
+    global $mysqlMainDb, $step;
+    if ($step == 3) {
+        // convert database
+        Database::core()->query("ALTER DATABASE `$mysqlMainDb` CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
 
-    global $mysqlMainDb;
-    // convert database
-    Database::core()->query("ALTER DATABASE `$mysqlMainDb` CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-
-    // convert tables
-    $r = Database::core()->queryArray("SHOW TABLES FROM `$mysqlMainDb`");
-    foreach ($r as $tables) {
-        foreach ($tables as $table_name) {
-            Database::get()->query("ALTER TABLE `$table_name` CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+        // convert tables
+        $r = Database::core()->queryArray("SHOW TABLES FROM `$mysqlMainDb`");
+        foreach ($r as $tables) {
+            foreach ($tables as $table_name) {
+                Database::get()->query("ALTER TABLE `$table_name` CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
+            }
         }
+        break_on_step();
     }
 
     // convert table columns
-    Database::get()->query("ALTER TABLE `abuse_report` CHANGE rtype rtype varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `abuse_report` CHANGE reason reason varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `abuse_report` CHANGE message message text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `activity_content` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `activity_heading` CHANGE heading heading text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `admin_announcement` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `admin_announcement` CHANGE body body text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `admin_calendar` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `admin_calendar` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `admin_calendar` CHANGE recursion_period recursion_period varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `agenda` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `agenda` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `agenda` CHANGE duration duration varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `agenda` CHANGE recursion_period recursion_period varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `analytics` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `analytics` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `announcement` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `announcement` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE active active TINYINT NOT NULL DEFAULT 1");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE group_submissions group_submissions TINYINT NOT NULL DEFAULT 0");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE assign_to_specific assign_to_specific TINYINT NOT NULL DEFAULT 0");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE file_path file_path varchar(255) CHARACTER SET utf8mb4");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE file_name file_name varchar(255) CHARACTER SET utf8mb4");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE auto_judge_scenarios auto_judge_scenarios text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE ip_lock ip_lock text CHARACTER SET ascii COLLATE ascii_bin");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE password_lock password_lock varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `assignment` CHANGE tii_exclude_type tii_exclude_type varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment_grading_review` CHANGE file_name file_name varchar(255) CHARACTER SET utf8mb4");
-    Database::get()->query("ALTER TABLE `assignment_grading_review` CHANGE submission_text submission_text mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment_grading_review` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment_grading_review` CHANGE rubric_scales rubric_scales text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment_submit` CHANGE submission_ip submission_ip varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment_submit` CHANGE file_name file_name varchar(255) CHARACTER SET utf8mb4");
-    Database::get()->query("ALTER TABLE `assignment_submit` CHANGE submission_text submission_text mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment_submit` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment_submit` CHANGE grade_rubric grade_rubric text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment_submit` CHANGE grade_comments grade_comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `assignment_submit` CHANGE grade_comments_filename grade_comments_filename varchar(255) CHARACTER SET utf8mb4");
-    Database::get()->query("ALTER TABLE `assignment_submit` CHANGE grade_submission_ip grade_submission_ip varchar(45) CHARACTER SET ascii COLLATE ascii_bin");
-    Database::get()->query("ALTER TABLE `assignment_submit` CHANGE auto_judge_scenarios_output auto_judge_scenarios_output text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `attendance` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `attendance_activities` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `attendance_activities` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `attendance_book` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `auth` CHANGE auth_name auth_name varchar(50) CHARACTER SET ascii COLLATE ascii_bin");
-    Database::get()->query("ALTER TABLE `auth` CHANGE auth_settings auth_settings text CHARACTER SET utf8mb4");
-    Database::get()->query("ALTER TABLE `auth` CHANGE auth_instructions auth_instructions text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `auth` CHANGE auth_title auth_title text CHARACTER SET utf8mb4");
-    Database::get()->query("ALTER TABLE `badge` CHANGE issuer issuer varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `badge` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `badge` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `badge` CHANGE message message text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `badge_criterion` CHANGE activity_type activity_type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `badge_criterion` CHANGE operator operator varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `badge_icon` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `badge_icon` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `badge_icon` CHANGE filename filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `blog_post` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `blog_post` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `category` CHANGE name name text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `category_value` CHANGE name name text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certificate` CHANGE issuer issuer varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certificate` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certificate` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certificate` CHANGE message message text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certificate_criterion` CHANGE activity_type activity_type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certificate_criterion` CHANGE operator operator varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certificate_template` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certificate_template` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certificate_template` CHANGE filename filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certificate_template` CHANGE orientation orientation varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certified_users` CHANGE course_title course_title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certified_users` CHANGE cert_title cert_title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certified_users` CHANGE cert_message cert_message text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certified_users` CHANGE cert_issuer cert_issuer varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certified_users` CHANGE user_fullname user_fullname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `certified_users` CHANGE identifier identifier varchar(255) CHARACTER SET utf8mb4");
-    Database::get()->query("ALTER TABLE `colmooc_user_session` CHANGE session_id session_id text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `colmooc_user_session` CHANGE session_token session_token text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `comments` CHANGE rtype rtype varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `comments` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `conference` CHANGE conf_title conf_title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `conference` CHANGE conf_description conf_description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `conference` CHANGE user_id user_id varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `conference` CHANGE group_id group_id varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `conference` CHANGE `status` `status` enum('active','inactive') CHARACTER SET ascii DEFAULT 'active'");
-    Database::get()->query("ALTER TABLE `config` CHANGE `key` `key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `config` CHANGE `value` `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course` CHANGE code code varchar(20) CHARACTER SET ascii COLLATE ascii_bin");
-    Database::get()->query("ALTER TABLE `course` CHANGE title title varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course` CHANGE keywords keywords text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course` CHANGE prof_names prof_names varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course` CHANGE public_code public_code varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course` CHANGE password password varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `course` CHANGE view_type view_type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course` CHANGE description description mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course` CHANGE course_image course_image varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course_description` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course_description` CHANGE comments comments mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course_description_type` CHANGE title title mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course_description_type` CHANGE icon icon varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course_units` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course_units` CHANGE comments comments mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course_user_request` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `course_learning_objectives` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `cron_params` CHANGE name name varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `custom_profile_fields` CHANGE shortname shortname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `custom_profile_fields` CHANGE name name mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `custom_profile_fields` CHANGE description description mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `custom_profile_fields` CHANGE datatype datatype varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `custom_profile_fields` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `custom_profile_fields_category` CHANGE name name mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `custom_profile_fields_data` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `custom_profile_fields_data_pending` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `document` CHANGE filename filename varchar(255) CHARACTER SET utf8mb4");
-    Database::get()->query("ALTER TABLE `document` CHANGE comment comment text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `document` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `document` CHANGE creator creator text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `document` CHANGE subject subject text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `document` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `document` CHANGE author author varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `document` CHANGE format format varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `dropbox_attachment` CHANGE filename filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `dropbox_attachment` CHANGE real_filename real_filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `dropbox_msg` CHANGE subject subject text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `dropbox_msg` CHANGE body body longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `ebook` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `ebook_section` CHANGE public_id public_id varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `ebook_section` CHANGE file file varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `ebook_section` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `ebook_subsection` CHANGE public_id public_id varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `ebook_subsection` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `eportfolio_fields` CHANGE shortname shortname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `eportfolio_fields` CHANGE name name mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `eportfolio_fields` CHANGE description description mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `eportfolio_fields` CHANGE datatype datatype varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `eportfolio_fields` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `eportfolio_fields_category` CHANGE name name mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `eportfolio_fields_data` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `eportfolio_resource` CHANGE resource_type resource_type varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `eportfolio_resource` CHANGE course_title course_title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `eportfolio_resource` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `exercise` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `exercise` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `exercise` CHANGE ip_lock ip_lock text CHARACTER SET ascii COLLATE ascii_bin");
-    Database::get()->query("ALTER TABLE `exercise` CHANGE password_lock password_lock varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `exercise_answer` CHANGE answer answer text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `exercise_answer` CHANGE comment comment text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `exercise_answer_record` CHANGE answer answer text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `exercise_question` CHANGE question question text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `exercise_question` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `exercise_question_cats` CHANGE question_cat_name question_cat_name varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `exercise_with_questions` CHANGE random_criteria random_criteria text CHARACTER SET utf8mb4");
-    Database::get()->query("ALTER TABLE `faq` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `faq` CHANGE body body text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `forum` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `forum` CHANGE `desc` `desc` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `forum_category` CHANGE cat_title cat_title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `forum_post` CHANGE post_text post_text mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `forum_post` CHANGE poster_ip poster_ip varchar(45) CHARACTER SET ascii COLLATE ascii_bin");
-    Database::get()->query("ALTER TABLE `forum_post` CHANGE topic_filename topic_filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `forum_topic` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `glossary` CHANGE term term varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `glossary` CHANGE definition definition text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `glossary` CHANGE url url text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `glossary` CHANGE notes notes text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `glossary_category` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `glossary_category` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `gradebook` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `gradebook_activities` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `gradebook_activities` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `gradebook_book` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `grading_scale` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `grading_scale` CHANGE scales scales text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `group` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `group` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `group` CHANGE secret_directory secret_directory varchar(30) CHARACTER SET ascii COLLATE ascii_bin");
-    Database::get()->query("ALTER TABLE `group_category` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `group_category` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `group_members` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_content` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_content` CHANGE params params longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_content_dependency` CHANGE dependency_type dependency_type varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_library` CHANGE machine_name machine_name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_library` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_library` CHANGE embed_types embed_types varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_library` CHANGE preloaded_js preloaded_js longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_library` CHANGE preloaded_css preloaded_css longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_library` CHANGE droplibrary_css droplibrary_css longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_library` CHANGE semantics semantics longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_library` CHANGE add_to add_to longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_library` CHANGE metadata_settings metadata_settings longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_library` CHANGE tutorial tutorial longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_library` CHANGE example example longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_library_dependency` CHANGE dependency_type dependency_type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `h5p_library_translation` CHANGE language_json language_json text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `hierarchy` CHANGE code code varchar(20) CHARACTER SET ascii COLLATE ascii_bin");
-    Database::get()->query("ALTER TABLE `hierarchy` CHANGE name name text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `hierarchy` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `idx_queue_async` CHANGE request_type request_type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `idx_queue_async` CHANGE resource_type resource_type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `link` CHANGE url url text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `link` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `link` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `link_category` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `link_category` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `log` CHANGE details details text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `log_archive` CHANGE details details text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `loginout` CHANGE action action enum('LOGIN','LOGOUT') CHARACTER SET ascii COLLATE ascii_bin NOT NULL default 'LOGIN'");
-    Database::get()->query("ALTER TABLE `lp_asset` CHANGE path path varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `lp_asset` CHANGE comment comment varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `lp_learnPath` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `lp_learnPath` CHANGE comment comment text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `lp_learnPath` CHANGE `lock` `lock` enum('OPEN','CLOSE') CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'OPEN'");
-    Database::get()->query("ALTER TABLE `lp_module` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `lp_module` CHANGE comment comment text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `lp_module` CHANGE launch_data launch_data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `lp_module` CHANGE `accessibility` `accessibility` enum('PRIVATE','PUBLIC') CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'PRIVATE'");
-    Database::get()->query("ALTER TABLE `lp_module` CHANGE `contentType` `contentType` enum('CLARODOC', 'DOCUMENT', 'EXERCISE', 'HANDMADE',
-                                                                                                    'SCORM', 'SCORM_ASSET', 'LABEL', 'COURSE_DESCRIPTION', 'LINK',
-                                                                                                    'MEDIA','MEDIALINK') CHARACTER SET ascii COLLATE ascii_bin NOT NULL");
-    Database::get()->query("ALTER TABLE `lp_rel_learnPath_module` CHANGE specificComment specificComment text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `lp_rel_learnPath_module` CHANGE `lock` `lock` enum('OPEN','CLOSE') CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'OPEN'");
-    Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE lesson_location lesson_location varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE total_time total_time varchar(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE session_time session_time varchar(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE suspend_data suspend_data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE `lesson_status` `lesson_status` enum('NOT ATTEMPTED', 'PASSED', 'FAILED', 'COMPLETED',
-                                                                                                                    'BROWSED', 'INCOMPLETE', 'UNKNOWN') CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'NOT ATTEMPTED'");
-    Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE `entry` `entry` enum('AB-INITIO', 'RESUME', '') CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'AB-INITIO'");
-    Database::get()->query("ALTER TABLE `lp_user_module_progress` CHANGE `credit` `credit` enum('CREDIT','NO-CREDIT') CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'NO-CREDIT'");
-    Database::get()->query("ALTER TABLE `lti_apps` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `lti_apps` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `monthly_summary` CHANGE month month varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `monthly_summary` CHANGE details details mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `note` CHANGE title title varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `note` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `note` CHANGE `reference_obj_type` `reference_obj_type` enum('course','personalevent','user',
+    $queries = [
+        "ALTER TABLE `abuse_report` CHANGE rtype rtype varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `abuse_report` CHANGE reason reason varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `abuse_report` CHANGE message message text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `activity_content` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `activity_heading` CHANGE heading heading text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `admin_announcement` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `admin_announcement` CHANGE body body text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `admin_calendar` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `admin_calendar` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `admin_calendar` CHANGE recursion_period recursion_period varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `agenda` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `agenda` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `agenda` CHANGE duration duration varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `agenda` CHANGE recursion_period recursion_period varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `analytics` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `analytics` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `announcement` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `announcement` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment` CHANGE active active TINYINT NOT NULL DEFAULT 1",
+        "ALTER TABLE `assignment` CHANGE group_submissions group_submissions TINYINT NOT NULL DEFAULT 0",
+        "ALTER TABLE `assignment` CHANGE assign_to_specific assign_to_specific TINYINT NOT NULL DEFAULT 0",
+        "ALTER TABLE `assignment` CHANGE file_path file_path varchar(255) CHARACTER SET utf8mb4",
+        "ALTER TABLE `assignment` CHANGE file_name file_name varchar(255) CHARACTER SET utf8mb4",
+        "ALTER TABLE `assignment` CHANGE auto_judge_scenarios auto_judge_scenarios text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment` CHANGE ip_lock ip_lock text CHARACTER SET ascii COLLATE ascii_bin",
+        "ALTER TABLE `assignment` CHANGE password_lock password_lock varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin",
+        "ALTER TABLE `assignment` CHANGE tii_exclude_type tii_exclude_type varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment_grading_review` CHANGE file_name file_name varchar(255) CHARACTER SET utf8mb4",
+        "ALTER TABLE `assignment_grading_review` CHANGE submission_text submission_text mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment_grading_review` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment_grading_review` CHANGE rubric_scales rubric_scales text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment_submit` CHANGE submission_ip submission_ip varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment_submit` CHANGE file_name file_name varchar(255) CHARACTER SET utf8mb4",
+        "ALTER TABLE `assignment_submit` CHANGE submission_text submission_text mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment_submit` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment_submit` CHANGE grade_rubric grade_rubric text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment_submit` CHANGE grade_comments grade_comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `assignment_submit` CHANGE grade_comments_filename grade_comments_filename varchar(255) CHARACTER SET utf8mb4",
+        "ALTER TABLE `assignment_submit` CHANGE grade_submission_ip grade_submission_ip varchar(45) CHARACTER SET ascii COLLATE ascii_bin",
+        "ALTER TABLE `assignment_submit` CHANGE auto_judge_scenarios_output auto_judge_scenarios_output text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `attendance` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `attendance_activities` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `attendance_activities` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `attendance_book` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `auth` CHANGE auth_name auth_name varchar(50) CHARACTER SET ascii COLLATE ascii_bin",
+        "ALTER TABLE `auth` CHANGE auth_settings auth_settings text CHARACTER SET utf8mb4",
+        "ALTER TABLE `auth` CHANGE auth_instructions auth_instructions text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `auth` CHANGE auth_title auth_title text CHARACTER SET utf8mb4",
+        "ALTER TABLE `badge` CHANGE issuer issuer varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `badge` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `badge` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `badge` CHANGE message message text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `badge_criterion` CHANGE activity_type activity_type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `badge_criterion` CHANGE operator operator varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `badge_icon` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `badge_icon` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `badge_icon` CHANGE filename filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `blog_post` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `blog_post` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `category` CHANGE name name text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `category_value` CHANGE name name text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certificate` CHANGE issuer issuer varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certificate` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certificate` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certificate` CHANGE message message text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certificate_criterion` CHANGE activity_type activity_type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certificate_criterion` CHANGE operator operator varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certificate_template` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certificate_template` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certificate_template` CHANGE filename filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certificate_template` CHANGE orientation orientation varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certified_users` CHANGE course_title course_title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certified_users` CHANGE cert_title cert_title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certified_users` CHANGE cert_message cert_message text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certified_users` CHANGE cert_issuer cert_issuer varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certified_users` CHANGE user_fullname user_fullname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `certified_users` CHANGE identifier identifier varchar(255) CHARACTER SET utf8mb4",
+        "ALTER TABLE `colmooc_user_session` CHANGE session_id session_id text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `colmooc_user_session` CHANGE session_token session_token text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `comments` CHANGE rtype rtype varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `comments` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `conference` CHANGE conf_title conf_title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `conference` CHANGE conf_description conf_description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `conference` CHANGE user_id user_id varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `conference` CHANGE group_id group_id varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `conference` CHANGE `status` `status` enum('active','inactive') CHARACTER SET ascii DEFAULT 'active'",
+        "ALTER TABLE `config` CHANGE `key` `key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `config` CHANGE `value` `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course` CHANGE code code varchar(20) CHARACTER SET ascii COLLATE ascii_bin",
+        "ALTER TABLE `course` CHANGE title title varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course` CHANGE keywords keywords text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course` CHANGE prof_names prof_names varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course` CHANGE public_code public_code varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course` CHANGE password password varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin",
+        "ALTER TABLE `course` CHANGE view_type view_type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course` CHANGE description description mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course` CHANGE course_image course_image varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course_description` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course_description` CHANGE comments comments mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course_description_type` CHANGE title title mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course_description_type` CHANGE icon icon varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course_units` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course_units` CHANGE comments comments mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course_user_request` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `course_learning_objectives` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `cron_params` CHANGE name name varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `custom_profile_fields` CHANGE shortname shortname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `custom_profile_fields` CHANGE name name mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `custom_profile_fields` CHANGE description description mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `custom_profile_fields` CHANGE datatype datatype varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `custom_profile_fields` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `custom_profile_fields_category` CHANGE name name mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `custom_profile_fields_data` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `custom_profile_fields_data_pending` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `document` CHANGE filename filename varchar(255) CHARACTER SET utf8mb4",
+        "ALTER TABLE `document` CHANGE comment comment text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `document` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `document` CHANGE creator creator text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `document` CHANGE subject subject text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `document` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `document` CHANGE author author varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `document` CHANGE format format varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `dropbox_attachment` CHANGE filename filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `dropbox_attachment` CHANGE real_filename real_filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `dropbox_msg` CHANGE subject subject text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `dropbox_msg` CHANGE body body longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `ebook` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `ebook_section` CHANGE public_id public_id varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `ebook_section` CHANGE file file varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `ebook_section` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `ebook_subsection` CHANGE public_id public_id varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `ebook_subsection` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `eportfolio_fields` CHANGE shortname shortname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `eportfolio_fields` CHANGE name name mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `eportfolio_fields` CHANGE description description mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `eportfolio_fields` CHANGE datatype datatype varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `eportfolio_fields` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `eportfolio_fields_category` CHANGE name name mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `eportfolio_fields_data` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `eportfolio_resource` CHANGE resource_type resource_type varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `eportfolio_resource` CHANGE course_title course_title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `eportfolio_resource` CHANGE data data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `exercise` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `exercise` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `exercise` CHANGE ip_lock ip_lock text CHARACTER SET ascii COLLATE ascii_bin",
+        "ALTER TABLE `exercise` CHANGE password_lock password_lock varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin",
+        "ALTER TABLE `exercise_answer` CHANGE answer answer text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `exercise_answer` CHANGE comment comment text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `exercise_answer_record` CHANGE answer answer text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `exercise_question` CHANGE question question text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `exercise_question` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `exercise_question_cats` CHANGE question_cat_name question_cat_name varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `exercise_with_questions` CHANGE random_criteria random_criteria text CHARACTER SET utf8mb4",
+        "ALTER TABLE `faq` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `faq` CHANGE body body text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `forum` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `forum` CHANGE `desc` `desc` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `forum_category` CHANGE cat_title cat_title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `forum_post` CHANGE post_text post_text mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `forum_post` CHANGE poster_ip poster_ip varchar(45) CHARACTER SET ascii COLLATE ascii_bin",
+        "ALTER TABLE `forum_post` CHANGE topic_filename topic_filename varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `forum_topic` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `glossary` CHANGE term term varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `glossary` CHANGE definition definition text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `glossary` CHANGE url url text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `glossary` CHANGE notes notes text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `glossary_category` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `glossary_category` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `gradebook` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `gradebook_activities` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `gradebook_activities` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `gradebook_book` CHANGE comments comments text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `grading_scale` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `grading_scale` CHANGE scales scales text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `group` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `group` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `group` CHANGE secret_directory secret_directory varchar(30) CHARACTER SET ascii COLLATE ascii_bin",
+        "ALTER TABLE `group_category` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `group_category` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `group_members` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_content` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_content` CHANGE params params longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_content_dependency` CHANGE dependency_type dependency_type varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_library` CHANGE machine_name machine_name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_library` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_library` CHANGE embed_types embed_types varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_library` CHANGE preloaded_js preloaded_js longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_library` CHANGE preloaded_css preloaded_css longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_library` CHANGE droplibrary_css droplibrary_css longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_library` CHANGE semantics semantics longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_library` CHANGE add_to add_to longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_library` CHANGE metadata_settings metadata_settings longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_library` CHANGE tutorial tutorial longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_library` CHANGE example example longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_library_dependency` CHANGE dependency_type dependency_type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `h5p_library_translation` CHANGE language_json language_json text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `hierarchy` CHANGE code code varchar(20) CHARACTER SET ascii COLLATE ascii_bin",
+        "ALTER TABLE `hierarchy` CHANGE name name text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `hierarchy` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `idx_queue_async` CHANGE request_type request_type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `idx_queue_async` CHANGE resource_type resource_type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `link` CHANGE url url text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `link` CHANGE title title text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `link` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `link_category` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `link_category` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `log` CHANGE details details text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `log_archive` CHANGE details details text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `loginout` CHANGE action action enum('LOGIN','LOGOUT') CHARACTER SET ascii COLLATE ascii_bin NOT NULL default 'LOGIN'",
+        "ALTER TABLE `lp_asset` CHANGE path path varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `lp_asset` CHANGE comment comment varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `lp_learnPath` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `lp_learnPath` CHANGE comment comment text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `lp_learnPath` CHANGE `lock` `lock` enum('OPEN','CLOSE') CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'OPEN'",
+        "ALTER TABLE `lp_module` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `lp_module` CHANGE comment comment text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `lp_module` CHANGE launch_data launch_data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `lp_module` CHANGE `accessibility` `accessibility` enum('PRIVATE','PUBLIC') CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'PRIVATE'",
+        "ALTER TABLE `lp_module` CHANGE `contentType` `contentType` enum('CLARODOC', 'DOCUMENT', 'EXERCISE', 'HANDMADE',
+                                                                        'SCORM', 'SCORM_ASSET', 'LABEL', 'COURSE_DESCRIPTION', 'LINK',
+                                                                        'MEDIA','MEDIALINK') CHARACTER SET ascii COLLATE ascii_bin NOT NULL",
+        "ALTER TABLE `lp_rel_learnPath_module` CHANGE specificComment specificComment text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `lp_rel_learnPath_module` CHANGE `lock` `lock` enum('OPEN','CLOSE') CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'OPEN'",
+        "ALTER TABLE `lp_user_module_progress` CHANGE lesson_location lesson_location varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `lp_user_module_progress` CHANGE total_time total_time varchar(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `lp_user_module_progress` CHANGE session_time session_time varchar(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `lp_user_module_progress` CHANGE suspend_data suspend_data text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `lp_user_module_progress` CHANGE `lesson_status` `lesson_status` enum('NOT ATTEMPTED', 'PASSED', 'FAILED', 'COMPLETED',
+                                                                        'BROWSED', 'INCOMPLETE', 'UNKNOWN') CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'NOT ATTEMPTED'",
+        "ALTER TABLE `lp_user_module_progress` CHANGE `entry` `entry` enum('AB-INITIO', 'RESUME', '') CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'AB-INITIO'",
+        "ALTER TABLE `lp_user_module_progress` CHANGE `credit` `credit` enum('CREDIT','NO-CREDIT') CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'NO-CREDIT'",
+        "ALTER TABLE `lti_apps` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `lti_apps` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `monthly_summary` CHANGE month month varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `monthly_summary` CHANGE details details mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `note` CHANGE title title varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `note` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `note` CHANGE `reference_obj_type` `reference_obj_type` enum('course','personalevent','user',
                                                                 'course_ebook','course_event','course_assignment',
                                                                 'course_document','course_link','course_exercise',
-                                                                'course_learningpath','course_video','course_videolink') CHARACTER SET ascii COLLATE ascii_bin default NULL");
-    Database::get()->query("ALTER TABLE `oai_metadata` CHANGE value value text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `personal_calendar` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `personal_calendar` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `personal_calendar` CHANGE recursion_period recursion_period varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `personal_calendar` CHANGE reference_obj_type reference_obj_type ENUM('course', 'personalevent', 'user',
+                                                                'course_learningpath','course_video','course_videolink') CHARACTER SET ascii COLLATE ascii_bin default NULL",
+        "ALTER TABLE `oai_metadata` CHANGE value value text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `personal_calendar` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `personal_calendar` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `personal_calendar` CHANGE recursion_period recursion_period varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `personal_calendar` CHANGE reference_obj_type reference_obj_type ENUM('course', 'personalevent', 'user',
                                                             'course_ebook', 'course_event', 'course_assignment', 'course_document',
                                                             'course_link', 'course_exercise', 'course_learningpath', 'course_video',
-                                                            'course_videolink') CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL");
-    Database::get()->query("ALTER TABLE `personal_calendar_settings` CHANGE personal_color personal_color varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `personal_calendar_settings` CHANGE course_color course_color varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `personal_calendar_settings` CHANGE deadline_color deadline_color varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `personal_calendar_settings` CHANGE admin_color admin_color varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `personal_calendar_settings` CHANGE `view_type` `view_type` enum('day','month','week') CHARACTER SET ascii COLLATE ascii_bin DEFAULT 'month'");
-    Database::get()->query("ALTER TABLE `poll` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `poll` CHANGE description description mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `poll` CHANGE end_message end_message mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `poll_answer_record` CHANGE answer_text answer_text text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `poll_question` CHANGE question_text question_text text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `poll_question_answer` CHANGE answer_text answer_text text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `poll_user_record` CHANGE email email varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `poll_user_record` CHANGE verification_code verification_code varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `rating` CHANGE rtype rtype varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `rating` CHANGE widget widget varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `rating` CHANGE rating_source rating_source varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `rating_cache` CHANGE rtype rtype varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `rating_cache` CHANGE tag tag varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `recyclebin` CHANGE tablename tablename varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `recyclebin` CHANGE entrydata entrydata varchar(4000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `rubric` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `rubric` CHANGE scales scales text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `rubric` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `tag` CHANGE name name varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `tc_attendance` CHANGE meetingid meetingid varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL");
-    Database::get()->query("ALTER TABLE `tc_attendance` CHANGE bbbuserid bbbuserid varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `tc_log` CHANGE meetingid meetingid varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL");
-    Database::get()->query("ALTER TABLE `tc_log` CHANGE bbbuserid bbbuserid varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `tc_log` CHANGE fullName fullName varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `tc_log` CHANGE type type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `tc_servers` CHANGE webapp webapp varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `tc_servers` CHANGE `enabled` `enabled` enum('true','false') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL");
-    Database::get()->query("ALTER TABLE `tc_servers` CHANGE `enable_recordings` `enable_recordings` enum('true','false') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL");
-    Database::get()->query("ALTER TABLE `tc_session` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `tc_session` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `tc_session` CHANGE external_users external_users text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `tc_session` CHANGE participants participants varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `tc_session` CHANGE options options text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `tc_session` CHANGE meeting_id meeting_id varchar(42) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL");
-    Database::get()->query("ALTER TABLE `tc_session` CHANGE `record` `record` enum('true','false') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT 'false'");
-    Database::get()->query("ALTER TABLE `theme_options` CHANGE name name varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `theme_options` CHANGE styles styles longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `unit_resources` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `unit_resources` CHANGE comments comments mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user` CHANGE surname surname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user` CHANGE givenname givenname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user` CHANGE username username varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `user` CHANGE email email varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user` CHANGE parent_email parent_email varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user` CHANGE phone phone varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user` CHANGE am am varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user` CHANGE whitelist whitelist text CHARACTER SET ascii COLLATE ascii_bin");
-    Database::get()->query("ALTER TABLE `user_ext_uid` CHANGE uid uid varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user_request` CHANGE givenname givenname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user_request` CHANGE surname surname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user_request` CHANGE username username varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin");
-    Database::get()->query("ALTER TABLE `user_request` CHANGE password password varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user_request` CHANGE email email varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user_request` CHANGE phone phone varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user_request` CHANGE am am varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user_request` CHANGE comment comment text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user_request` CHANGE request_ip request_ip varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `user_request_ext_uid` CHANGE uid uid varchar(64) CHARACTER SET ascii COLLATE ascii_bin");
-    Database::get()->query("ALTER TABLE `video` CHANGE url url varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `video` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `video` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `video` CHANGE creator creator varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `video` CHANGE publisher publisher varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `video_category` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `video_category` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `videolink` CHANGE url url varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `videolink` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `videolink` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `videolink` CHANGE creator creator varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `videolink` CHANGE publisher publisher varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `wiki_acls` CHANGE `value` `value` ENUM('false','true') CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL DEFAULT 'false'");
-    Database::get()->query("ALTER TABLE `wall_post` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `wall_post` CHANGE extvideo extvideo varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `wall_post_resources` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `wiki_locks` CHANGE ptitle ptitle varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `wiki_pages` CHANGE title title varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `wiki_pages_content` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `wiki_pages_content` CHANGE changelog changelog varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `wiki_properties` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
-    Database::get()->query("ALTER TABLE `wiki_properties` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci");
+                                                            'course_videolink') CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL",
+        "ALTER TABLE `personal_calendar_settings` CHANGE personal_color personal_color varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `personal_calendar_settings` CHANGE course_color course_color varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `personal_calendar_settings` CHANGE deadline_color deadline_color varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `personal_calendar_settings` CHANGE admin_color admin_color varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `personal_calendar_settings` CHANGE `view_type` `view_type` enum('day','month','week') CHARACTER SET ascii COLLATE ascii_bin DEFAULT 'month'",
+        "ALTER TABLE `poll` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `poll` CHANGE description description mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `poll` CHANGE end_message end_message mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `poll_answer_record` CHANGE answer_text answer_text text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `poll_question` CHANGE question_text question_text text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `poll_question_answer` CHANGE answer_text answer_text text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `poll_user_record` CHANGE email email varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `poll_user_record` CHANGE verification_code verification_code varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `rating` CHANGE rtype rtype varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `rating` CHANGE widget widget varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `rating` CHANGE rating_source rating_source varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `rating_cache` CHANGE rtype rtype varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `rating_cache` CHANGE tag tag varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `recyclebin` CHANGE tablename tablename varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `recyclebin` CHANGE entrydata entrydata varchar(4000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `rubric` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `rubric` CHANGE scales scales text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `rubric` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `tag` CHANGE name name varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `tc_attendance` CHANGE meetingid meetingid varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL",
+        "ALTER TABLE `tc_attendance` CHANGE bbbuserid bbbuserid varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `tc_log` CHANGE meetingid meetingid varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL",
+        "ALTER TABLE `tc_log` CHANGE bbbuserid bbbuserid varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `tc_log` CHANGE fullName fullName varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `tc_log` CHANGE type type varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `tc_servers` CHANGE webapp webapp varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `tc_servers` CHANGE `enabled` `enabled` enum('true','false') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL",
+        "ALTER TABLE `tc_servers` CHANGE `enable_recordings` `enable_recordings` enum('true','false') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL",
+        "ALTER TABLE `tc_session` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `tc_session` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `tc_session` CHANGE external_users external_users text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `tc_session` CHANGE participants participants varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `tc_session` CHANGE options options text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `tc_session` CHANGE meeting_id meeting_id varchar(42) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL",
+        "ALTER TABLE `tc_session` CHANGE `record` `record` enum('true','false') CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT 'false'",
+        "ALTER TABLE `theme_options` CHANGE name name varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `theme_options` CHANGE styles styles longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `unit_resources` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `unit_resources` CHANGE comments comments mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user` CHANGE surname surname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user` CHANGE givenname givenname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user` CHANGE username username varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin",
+        "ALTER TABLE `user` CHANGE email email varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user` CHANGE parent_email parent_email varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user` CHANGE phone phone varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user` CHANGE am am varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user` CHANGE whitelist whitelist text CHARACTER SET ascii COLLATE ascii_bin",
+        "ALTER TABLE `user_ext_uid` CHANGE uid uid varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user_request` CHANGE givenname givenname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user_request` CHANGE surname surname varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user_request` CHANGE username username varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin",
+        "ALTER TABLE `user_request` CHANGE password password varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user_request` CHANGE email email varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user_request` CHANGE phone phone varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user_request` CHANGE am am varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user_request` CHANGE comment comment text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user_request` CHANGE request_ip request_ip varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `user_request_ext_uid` CHANGE uid uid varchar(64) CHARACTER SET ascii COLLATE ascii_bin",
+        "ALTER TABLE `video` CHANGE url url varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `video` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `video` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `video` CHANGE creator creator varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `video` CHANGE publisher publisher varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `video_category` CHANGE name name varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `video_category` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `videolink` CHANGE url url varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `videolink` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `videolink` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `videolink` CHANGE creator creator varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `videolink` CHANGE publisher publisher varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `wiki_acls` CHANGE `value` `value` ENUM('false','true') CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL DEFAULT 'false'",
+        "ALTER TABLE `wall_post` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `wall_post` CHANGE extvideo extvideo varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `wall_post_resources` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `wiki_locks` CHANGE ptitle ptitle varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `wiki_pages` CHANGE title title varchar(190) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `wiki_pages_content` CHANGE content content text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `wiki_pages_content` CHANGE changelog changelog varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `wiki_properties` CHANGE title title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+        "ALTER TABLE `wiki_properties` CHANGE description description text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci",
+    ];
+    foreach ($queries as $index => $query) {
+        if ($index + 4 == $step) {
+            $processes = array_filter(Database::get()->queryArray('SHOW FULL PROCESSLIST'),
+                function ($item) {
+                    return $item->Info && strpos($item->Info, 'ALTER TABLE') !== false;
+                });
+            if ($processes) {
+                message($processes[0]->Info . ' - ' . $processes[0]->Time, 'wait');
+            }
+            Database::get()->query($query);
+            break_on_step();
+        }
+    }
+}
 
+function update_upload_whitelists() {
+    $default_student_upload_whitelist = ['pdf', 'ps', 'eps', 'tex', 'latex',
+        'dvi', 'texinfo', 'texi', 'zip', 'rar', 'tar', 'bz2', 'gz', '7z', 'xz',
+        'lha', 'lzh', 'z', 'doc', 'docx', 'odt', 'ott', 'sxw', 'stw',
+        'fodt', 'txt', 'rtf', 'dot', 'mcw', 'wps', 'xls', 'xlsx', 'xlt', 'ods',
+        'ots', 'sxc', 'stc', 'fods', 'uos', 'csv', 'ppt', 'pps',
+        'pot', 'pptx', 'ppsx', 'odp', 'otp', 'sxi', 'sti', 'fodp', 'uop',
+        'potm', 'odg', 'otg', 'sxd', 'std', 'fodg', 'odb', 'mdb', 'ttf', 'otf',
+        'jpg', 'jpeg', 'jxl', 'png', 'gif', 'bmp', 'tif', 'tiff', 'psd', 'dia',
+        'ppm', 'xbm', 'xpm', 'ico', 'avi', 'asf', 'asx', 'wm', 'wmv', 'wma',
+        'dv', 'mov', 'moov', 'movie', 'mp4', 'mpg', 'mpeg', '3gp', '3g2',
+        'm2v', 'aac', 'm4a', 'flv', 'f4v', 'm4v', 'mp3', 'swf', 'webm', 'ogv',
+        'ogg', 'mid', 'midi', 'aif', 'rm', 'rpm', 'ram', 'wav', 'mp2', 'm3u',
+        'qt', 'vsd', 'vss', 'vst', 'cg3', 'ggb', 'psc', 'dir', 'dcr', 'sb',
+        'sb2', 'sb3', 'sbx', 'kodu', 'html', 'htm', 'wlmp', 'mswmm',
+        'apk', 'py', 'ev3', 'psg', 'glo', 'gsp', 'xml', 'a3p', 'ypr',
+        'mw2', 'dtd', 'aia', 'hex', 'mscz', 'pages', 'heic', 'piv', 'stk',
+        'pptm', 'gfar', 'lab', 'lmsp', 'qrs', 'cpp', 'c', 'h', 'java', 'm'];
+    $default_teacher_upload_whitelist = ['html', 'htm', 'svg', 'js',
+        'css', 'xml', 'xsl', 'tcl', 'sgml', 'sgm', 'ini', 'ds_store', 'dir',
+        'mom', 'gsp', 'kid', 'apk', 'woff', 'xsd', 'cur', 'lxf', 'a3p',
+        'ypr', 'mw2', 'h5p', 'dtd', 'xsd', 'woff2', 'ppsm', 'jqz', 'jm',
+        'data', 'jar'];
+
+    // add default whitelists to current whitelists, remove duplicates
+    $student_upload_whitelist = array_unique(array_merge($default_student_upload_whitelist,
+        explode(',', preg_replace('/\s+/', '', get_config('student_upload_whitelist')))));
+    $teacher_upload_whitelist = array_unique(array_merge($default_teacher_upload_whitelist,
+        explode(',', preg_replace('/\s+/', '', get_config('student_upload_whitelist')))));
+
+    // restrict web files to teachers, remove from student whitelist
+    $student_upload_whitelist = array_diff($student_upload_whitelist, ['svg', 'html', 'htm', 'js', 'css']);
+
+    // remove student whitelist extensions from teacher whitelist
+    $teacher_upload_whitelist = array_diff($teacher_upload_whitelist, $student_upload_whitelist);
+
+    set_config('student_upload_whitelist', implode(', ', $student_upload_whitelist));
+    set_config('teacher_upload_whitelist', implode(', ', $teacher_upload_whitelist));
 }

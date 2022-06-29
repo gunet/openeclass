@@ -38,19 +38,19 @@ if ($language == 'el') {
 }
 
 // check PHP version
-if (version_compare(PHP_VERSION, '7.3') < 0) {
+if (version_compare(PHP_VERSION, '7.4') < 0) {
     $tool_content .= "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
 }
 
-$tool_content .= "    
-  <div class='alert alert-info'>   
+$tool_content .= "
+  <div class='alert alert-info'>
     <p class='margin-bottom-thin'>$langExplUpgrade</p>
     <p class='margin-top-thin margin-bottom-thin text-danger'>$langExpl2Upgrade</p>
     <p class='margin-top-thin margin-bottom-thin'>$langUpgToSee <a href='$link_changes_file' target=_blank>$langHere</a>.
       $langUpgRead <a href='$upgrade_info_file' target='_blank'>$langUpgMan</a> $langUpgLastStep</p>
     <p>$langUpgradeCont</p>
   </div>
-  
+
   <div class='panel panel-default login-page'>
     <div class='panel-heading'><span>$langUpgDetails</span></div>
     <div class='panel-body login-page-option'>

@@ -5524,3 +5524,6 @@ $langOfUnitCompletion = 'Unit completion activities';
 $langQuestionPreview = 'Preview of Question';
 $langDumpPDF = 'Export in PDF format';
 $langQuestionUsedInExercises = 'Used in this exercises';
+$langAddDirectoryIndexes = 'Adding subdirectory index files to hinder directory traversal in misconfigured servers';
+$langUpgFinished = 'Finished';
+$langUpgUTF8MB4 = 'Converting database tables to support full Unicode range';

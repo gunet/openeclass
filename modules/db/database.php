@@ -365,8 +365,11 @@ final class Database {
         }
 
         /* Execute statement */
-        if (!$stm->execute())
+        try {
+            $stm->execute();
+        } catch (PDOException $e) {
             return $this->errorFound($callback_error, $isTransactional, "Unable to execute statement", $stm->errorInfo(), $statement, $init_time, $backtrace_info);
+        }
 
         /* fetch results */
         $result = null;
