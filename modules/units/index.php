@@ -116,12 +116,18 @@ if($q->flipped_flag ==2){
 }else{
     if ($is_editor) {
         $base_url = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
+        $manageUrl = "manage.php?course=$course_code&amp;manage=1&amp;unit_id=$id";
         $tool_content .= "
         <div class='row'>
             <div class='col-md-12'>" .
             action_bar(array(
                 array('title' => $langEdit,
                     'url' => "info.php?course=$course_code&amp;edit=$id&amp;next=1",
+                    'icon' => 'fa fa-edit',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success'),
+                array('title' => $langUnitManage,
+                    'url' => "$manageUrl",
                     'icon' => 'fa fa-edit',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success'),
