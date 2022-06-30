@@ -301,9 +301,9 @@ if ($command_line or $ajax_call) {
     }
 
     finalize_upgrade();
-    message($langUpgFinished, "$version-finished", 'done');
     fwrite($logfile_handle, "<hr><p>End of upgrade log</p></body></html>\n");
     fclose($logfile_handle);
+    message($langUpgFinished, "$version-finished", 'done');
     if ($command_line) {
         message("$langLogOutput: $_SESSION[upgrade_logfile_path]", 'done');
     }
