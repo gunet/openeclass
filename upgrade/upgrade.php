@@ -272,7 +272,7 @@ if ($command_line or $ajax_call) {
                     if (!$hp5_last_update or $date_diff->days > 2) {
                         message($langH5pInstall, "$version-3");
                         $hubUpdater = new H5PHubUpdater();
-                        // $hubUpdater->fetchLatestContentTypes();
+                        $hubUpdater->fetchLatestContentTypes();
                         set_config('h5p_update_content_ts', date('Y-m-d H:i', time()));
                     }
                     steps_finished();
