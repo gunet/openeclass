@@ -483,10 +483,6 @@
       border:2px solid rgba(0,63,135,0.1);
   }
 
-  .lesson_title_a:hover{
-      color:orange;
-  }
-
   .fa.fa-replay.space-after-icon{
       color:white;
   }
@@ -510,11 +506,6 @@
 
   .collapse-menu-button:hover{
     cursor: pointer;
-  }
-
-
-  .mycourses_view_container{
-    width:100%;
   }
 
 
@@ -561,52 +552,6 @@
       color: #0d6efd;
       border-bottom: thin solid #0d6efd;
       margin-bottom: 25px;
-    }
-
-    .col-fdetails {
-      min-width: 180px;
-      height: 180px;
-    }
-
-    .user-detals-photo-2 {
-      width: 300px;
-      height: 300px;
-    }
-
-    .user-detals-photo-2 img {
-      border-radius: 100%;
-    }
-
-    .block-title-3 {
-      height: 25;
-      margin-left: 0;
-      margin-bottom: 15px;
-    }
-
-    .block-title-3 p {
-      font-weight: bold;
-      margin-left: -12px;
-      color: #0d6efd;
-    }
-
-    .block-title-4 {
-      height: 10;
-      margin-left: 0;
-      margin-bottom: 15px;
-    }
-
-    .block-title-4 p {
-      font-weight: bold;
-      margin-left: -12px;
-      color: #0d6efd;
-    }
-
-    .btn-rounded {
-      border-radius: 15px;
-    }
-
-    .min-w180px {
-      min-width: 180px;
     }
 
     .collapse-courses-button {
@@ -1685,6 +1630,8 @@
   .label.label-warning{
     color:orange;
   }
+
+
   /* .sorting_desc{
     width:100% !important;
   } */
@@ -1911,10 +1858,91 @@
 
 
 
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------*/
+  @media (max-width: 320px){
+    .btn-group{
+      max-width:300px;
+      flex-wrap: wrap;
+    }
+    .btn-group .btn.btn-secondary{
+      border:solid 3px white;
+    }
+    .btn-group .btn.btn-success{
+      border:solid 3px white;
+    }
+    .navrbar_menu_btn{
+      margin-left: 0px;
+    }
+    .dropdown-user-menu-ul{
+      width:230px ;
+      margin-left:0px;
+      background-color: #003F87 ;
+    }
+
+    .dropdownLanguage{
+      width:230px ;
+      background-color: #003F87 ;
+    }
+    .dropdown-language-ul{
+      margin-left:-120px ;
+      margin-top:5px !important;
+      background-color: #003F87 ;
+    }
+    .navbar-eclass .btn-group{
+      max-width:300px;
+    }
+  }
 
 
+   /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ------------------------------------------------------- small mobile - portrait-----------------------------------*/
+  @media (min-width:321px) and (max-width: 375px){
+    .btn-group{
+      max-width:355px;
+      flex-wrap: wrap;
+    }
+    .btn-group .btn.btn-secondary{
+      border:solid 3px white;
+    }
+    .btn-group .btn.btn-success{
+      border:solid 3px white;
+    }
+    .navrbar_menu_btn{
+      margin-left: 0px;
+    }
+    .dropdown-user-menu-ul{
+      width:230px ;
+      margin-left:-180px;
+      background-color: #003F87 ;
+    }
 
-
+    .dropdownLanguage{
+      width:230px ;
+      background-color: #003F87 ;
+    }
+    .dropdown-language-ul{
+      margin-left:-60px ;
+      margin-top:5px !important;
+      background-color: #003F87 ;
+    }
+  }
 
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */
@@ -1938,112 +1966,42 @@
             width:320px;
         }
 
-        .row.p-5{
-           padding-left: 5px !important;
-           padding-right: 5px !important;
-        }
-
-        .navbar_breadcrumb{
-            max-width:320px;
-        }
-        .navrbar_menu_btn{
-            margin-left:12px;
-        }
-
-        .float-end.margin-top-thin.margin-bottom-fat.hidden-print .btn-group{
-            display: inline;
-            height: 50px;
-            width: auto;
-            margin-right: 15px;
-        }
-
-        .float-end.margin-top-thin.margin-bottom-fat.hidden-print .btn-group a{
-            display: inline;
-            height: 50px;
-        }
-
-        .float-end.margin-top-thin.margin-bottom-fat.hidden-print .btn-group button{
-            display: inline;
-
-            margin-left:-3px;
-        }
-
-        .login-form{
-            margin-right:-28px;
-        }
-
-        .glossary_btn2{
-        margin-top:15px;
-        }
-        .glossary_btn3{
-        margin-top:15px;
-        }
-
-        .not-front{
-        max-width: 100% ;
-        margin: 0 auto ;
-
-        }
-
-        .user-menu{
-        max-width: 100% ;
-        margin: 0 auto ;
-        padding: 0 40px ;
-        }
-
-        /* body{width: 95% !important;} */
-
-
-    .user-menu-section{
-        width: 350px ;
-
+    .navbar_breadcrumb{
+        max-width:320px;
+    }
+    .navrbar_menu_btn{
+        margin-left:0px;
     }
 
-    .xartofulakio_col{
-        margin-left:-10px ;
+    .btn-group{
+      max-width:400px;
+      flex-wrap: wrap;
     }
 
-    .tamathimatamou_col{
-        margin-left:-15px ;
+    .btn-group .btn.btn-secondary{
+       border:solid 3px white;
+    }
+    .btn-group .btn.btn-success{
+      border:solid 3px white;
     }
 
-
-
-    .shmeiwseis_col{
-        margin-top:-30px ;
-        margin-left:-15px ;
+    .login-form{
+        margin-right:-28px;
     }
 
-    .statistika_col{
-        margin-top:-30px ;
-        margin-left:110px ;
-    }
-
-    .proswpika_Arxeia_col{
-        margin-top:-30px ;
-        margin-left:110px ;
-    }
-
-    .eportfolio_col{
-        margin-left:-15px ;
-    }
-
-    .istologio_col{
-        margin-left:-15px ;
-    }
-
-    .anakoinwseis_col{
-        margin-left:110px ;
-    }
-
-    .user-icon{
-        margin-top:100px;
+    .user-menu{
+      max-width: 100% ;
+      margin: 0 auto ;
+      padding: 0 40px ;
     }
 
     .user-menu{
         margin-top:5px ;
     }
 
+    .user-icon{
+        margin-top:100px;
+    }
 
     .button_collapse_main_section{
         width:50px;
@@ -2055,23 +2013,8 @@
         margin-right:0px;
     }
 
-    .appstore_img{
-        width:150px; height:105px; border-style: none ;
-        margin-left:60px ;
-    }
-
-    .playstore_img{
-        width:150px; height:105px; border-style: none ;
-        margin-left:60px ;
-    }
-
     .login-input{
         background-color: #B0C4DE ;
-    }
-
-    .input_search{
-        width:200px;
-
     }
 
     .fas.fa-pen-nib{
@@ -2215,42 +2158,38 @@
           width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
       }
 
-      .dropdown-user-menu-ul{
-          width:230px ;
-          margin-left:-150px;
-          background-color: #003F87 ;
-      }
+    .dropdown-user-menu-ul{
+      width:230px ;
+      margin-left:-180px;
+      background-color: #003F87 ;
+    }
 
-      .dropdownLanguage{
-        width:230px ;
+    .dropdownLanguage{
+      width:230px ;
+      background-color: #003F87 ;
+    }
 
-        background-color: #003F87 ;
-      }
+    .col-nav-tools{
+      margin-top:-10px ;
+    }
 
-      .col-nav-tools{
-          margin-top:-10px ;
-      }
+    .user-announcements-portfolio{
+      background-color: white;
+      border-radius: 15px;
+      height:auto;
+      margin-top:55px;
+      margin-left:-2px;
+    }
 
-      .container_input_search{
-          display:none ;
-      }
+    .user-messages-portfolio{
+      margin-left:-2px;
+      margin-top:55px;
+    }
 
-      .user-announcements-portfolio{
-          background-color: white;
-          border-radius: 15px;
-          height:auto;
-          margin-top:35px;
-          margin-left:-2px;
-      }
-
-      .user-messages-portfolio{
-          margin-left:0px;
-          margin-top:35px;
-      }
-      .dropdown-language-ul{
-        margin-left:-60px ;
-        margin-top:5px !important;
-        background-color: #003F87 ;
+    .dropdown-language-ul{
+      margin-left:-60px ;
+      margin-top:5px !important;
+      background-color: #003F87 ;
     }
   }
 
@@ -2266,12 +2205,33 @@
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- MOBILE L ------------------------------------------------------- */
   @media (min-width: 426px) and (max-width: 767px){
+
+    .user-detals-photo {
+      min-width: 180px;
+      height: 180px;
+      border-radius: 100%;
+      margin:auto;
+      display:block;
+    }
+
+    textarea{
+      max-width:315px;
+    }
+
+
+    .navrbar_menu_btn{
+      margin-left:0px;
+    }
+
+    .user-detals-fullname{
+      padding-left:35px;
+    }
     .user-icon-filename{
         width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
     }
     .dropdown-language-ul{
         margin-left:-60px ;
-        margin-top:0px !important;
+        margin-top:0px;
         background-color: #003F87 ;
     }
     .dropdown-user-menu-ul{
@@ -2308,257 +2268,86 @@
         width:680px;
     }
 
+    .navrbar_menu_btn{
+      margin-left:0px;
+    }
+
     .button_collapse_main_section{
-        width:50px;
-        height:50px;
-        border-radius: 50%;
-        border: solid 2px white;
-        margin:auto;
-        display:block;
-        margin-right:0px;
-      }
+      width:50px;
+      height:50px;
+      border-radius: 50%;
+      border: solid 2px white;
+      margin:auto;
+      display:block;
+      margin-right:0px;
+    }
 
-        .container_registration{
-          width:35% ;
-          border-top-left-radius: 15px ;
-          border-top-right-radius: 15px ;
-          border-bottom-left-radius: 15px ;
-          border-bottom-right-radius: 15px ;
-          height:260px ;
+    .button_collapse_main_section{
+      width:50px;
+      height:50px;
+      border-radius: 50%;
+      border: solid 2px white;
+      margin:auto;
+      display:block;
+      margin-right:0px;
+    }
 
-        }
+    .login-input{
+      background-color: #B0C4DE ;
+    }
 
-        .back_button_register{
-          border-top-left-radius: 15px ;
-          border-top-right-radius: 15px ;
-          border-bottom-left-radius: 15px ;
-          border-bottom-right-radius: 15px ;
-          border-radius: 50% ;
-        }
+    .fas.fa-pen-nib{
+      transform: rotate(265deg);
+    }
 
-        .row_container_registration{
+    /* modal frame */
+    .modal-dialog.modal-lg .modal-content{
+        width:500px ;
+    }
 
-          border-top-left-radius: 15px ;
-          border-top-right-radius: 15px ;
-          border-bottom-left-radius: 15px ;
-          border-bottom-right-radius: 15px ;
-        }
+    .notes-legend{
+      height:auto ;
+    }
 
-        .content_register{
-          border-top-left-radius: 15px ;
-          border-top-right-radius: 15px ;
-          border-bottom-left-radius: 15px ;
-          border-bottom-right-radius: 15px ;
-        }
+    .user-icon-filename{
+        width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
+    }
 
-        .button_collapse_main_section{
-          width:50px;
-          height:50px;
-          border-radius: 50%;
-          border: solid 2px white;
-          margin:auto;
-          display:block;
-          margin-right:0px;
-        }
+    .dropdown-user-menu-ul{
+      background-color: #003F87 ;
+      width:220px;
+      margin-left:-150px;
+    }
 
-        .appstore_img{
-          width:150px; height:105px; border-style: none ;
-        }
+    .col-nav-tools{
+      margin-top:-10px ;
+    }
 
-        .playstore_img{
-          width:150px; height:105px; border-style: none ;
-        }
+    .eclass-nav-icon{
+        width:90px ;
+        height:90px ;
+        margin-left:-30px ;
+    }
 
-        .login-input{
-          background-color: #B0C4DE ;
-        }
+    .dropdown-language-ul{
+      margin-left:-60px ;
+      margin-top:0px !important;
+      background-color: #003F87 ;
+    }
 
-        .input_search{
-          width:200px;
+    .user-announcements-portfolio{
+      margin-top:35px;
+      margin-left:0px;
+    }
 
-        }
+    .user-messages-portfolio{
+      margin-left:0px;
+      margin-top:35px;
+    }
 
-
-        .fas.fa-pen-nib{
-          transform: rotate(265deg);
-        }
-
-        .input_search{
-
-          outline: 0;
-          border-width: 0 0 1px;
-          border-color: white;
-          background: transparent;
-          margin-left:-100px ;
-
-        }
-
-        .circle_lang{
-          height:30px; width:30px; border-radius:50%; background-color:blue;
-          margin-top:-25px;
-          margin-left:120px;
-        }
-
-        .fontuser {
-          position: relative;
-          float:right;
-          margin-right:30px ;
-        }
-
-        .fontuser i{
-          position: absolute;
-          left: -105px;
-          top: 0px;
-          color: gray;
-        }
-
-        /* modal frame */
-      .modal-dialog.modal-lg .modal-content{
-          width:500px ;
-      }
-
-      .col_notes{
-          margin-left:0px ;
-          width:120% ;
-          border-top-left-radius: 15px ;
-           border-top-right-radius: 15px ;
-           border-bottom-left-radius: 15px ;
-           border-bottom-right-radius: 15px ;
-       }
-
-       .notes_table{
-         width:100% ;
-       }
-
-       .fas.fa-sticky-note.fa-spin{
-         margin-left:-20px ;
-       }
-
-       table {
-         width: 20% ;
-       }
-
-       .addnotes-legend{
-         /* margin-left:-40px; */
-         margin:auto;
-         display: block;
-       }
-
-       .addnotes-legend1{
-         margin-left:-35px;
-       }
-
-       .notes-legend{
-         height:auto ;
-       }
-
-
-      .col_registrationCourse{
-          padding: 0 185px;
-          margin-left:-180px;
-          background-color:#003F87;
-      }
-
-      .registerCourse_container{
-
-          background-color:transparent;
-         width:95%;
-      }
-
-      .fieldset_registerCourse{
-          width:340px;
-          margin-left:-180px;
-
-      }
-
-
-
-      .col_registrationCourse{
-          border-radius: 15px;
-
-          margin-left: auto;
-          margin-right: auto;
-          height:auto ;
-      }
-
-      .registerCourse_container{
-          width:95%;
-          height: auto;
-          background-color: transparent;
-      }
-
-      .register_to_course_comment{
-          float:right ;
-          color:white;
-          margin-top:5px ;
-          margin-left:5px ;
-      }
-
-      .add_course_comment_col{
-          height:22px; margin-left:400px; margin-top:15px;
-          color:white;
-          background-color:transparent ;
-      }
-
-      .add_course_image_col{
-         background-color:transparent ;
-      }
-
-      .span_add_course_a{
-          float:right; margin-right:-16px; margin-top:-50px;
-          color:white; font-size:32px;
-          text-decoration: none ;
-      }
-
-      .courses_fas{
-         float:right; margin-top:-60px ; margin-right:-35px ;
-      }
-
-      .registerToCourseText{
-         margin-left:-30px ;
-      }
-
-      .user-icon-filename{
-          width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
-      }
-
-      .dropdown-user-menu-ul{
-        background-color: #003F87 ;
-        width:220px;
-        margin-left:-150px;
-      }
-
-      .col-nav-tools{
-          margin-top:-10px ;
-      }
-
-      .container_input_search{
-          display:none ;
-      }
-
-      .eclass-nav-icon{
-          width:90px ;
-          height:90px ;
-          margin-left:-30px ;
-      }
-      .dropdown-language-ul{
-        margin-left:-60px ;
-        margin-top:0px !important;
-        background-color: #003F87 ;
-      }
-
-      .user-announcements-portfolio{
-
-          margin-top:35px;
-          margin-left:0px;
-      }
-
-      .user-messages-portfolio{
-          margin-left:0px;
-          margin-top:35px;
-      }
-
-
+    .navbar-eclass .btn-group{
+      max-width:350px;
+    }
   }
 
   /* ---------------------------------------------------------------------------------------------------------------------- */
@@ -2783,20 +2572,8 @@
             margin-left:72px ;
         }
 
-        .login-form-icon{
-            /* margin-top:-280px !important; */
-        }
-        .login-form-body{
-
-        }
-
-        .welcome-intro{
-            /* margin-top: -210px !important; */
-        }
-
         .jumbotron.jumbotron-login{
             height: 85vh;
-            /* padding-top:290px !important; */
         }
 
         .user-calendar{

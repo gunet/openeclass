@@ -3,14 +3,14 @@
 @push('head_scripts')
 <script type='text/javascript' src='{{ $urlAppend }}js/pwstrength.js'></script>
 <script type='text/javascript'>
-    
+
     var lang = {
         pwStrengthTooShort: "{{ js_escape(trans('langPwStrengTooShort')) }}",
         pwStrengthWeak: "{{ js_escape(trans('langPwStrengthWeak')) }}",
-        pwStrengthGood: "{{ js_escape(trans('langPwStrengthGood')) }}", 
+        pwStrengthGood: "{{ js_escape(trans('langPwStrengthGood')) }}",
         pwStrengthStrong: "{{ js_escape(trans('langPwStrengthStrong')) }}"
     }
-    
+
     $(document).ready(function() {
         $('#password_form').keyup(function() {
             $('#result').html(checkStrength($('#password_form').val()))
@@ -28,8 +28,8 @@
         <div class="row">
 
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active col_maincontent_active_ProfileUser">
-                    
-                <div class="row p-5">
+
+                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                     <nav class="navbar navbar-expand-lg navrbar_menu_btn">
                         <a type="button" id="getTopicButton" class="ms-2 btn btn-primary btn btn-primary" href="{{$urlAppend}}modules/help/help.php?language={{$language}}&topic={{$helpTopic}}&subtopic={{$helpSubTopic}}" style='margin-top:-10px'>
@@ -42,11 +42,20 @@
                             <?php $size_breadcrumb = count($breadcrumbs); $count=0; ?>
                             <?php for($i=0; $i<$size_breadcrumb; $i++){ ?>
                                 <li class="breadcrumb-item"><a href="{!! $breadcrumbs[$i]['bread_href'] !!}">{!! $breadcrumbs[$i]['bread_text'] !!}</a></li>
-                            <?php } ?> 
+                            <?php } ?>
                         </ol>
                     </nav>
 
                     {!! $action_bar !!}
+
+                    @if(Session::has('message'))
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                        <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                            {{ Session::get('message') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </p>
+                    </div>
+                    @endif
 
                     <div class='form-wrapper'>
                         <form class='form-horizontal' role='form' method='post' action='{{ $passUrl }}'>

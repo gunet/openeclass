@@ -142,6 +142,9 @@ function load_js($file, $init='') {
         } elseif ($file == 'datatables_bootstrap') {
             $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
             $file = 'datatables/media/js/dataTables.bootstrap.js';
+        } elseif ($file == 'datatables_tabletools') {
+            $head_content .= css_link('datatables/extensions/TableTools/css/dataTables.tableTools.css');
+            $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js';
         } elseif ($file == 'jszip') {
             $file = 'jszip/dist/jszip.min.js';
         } elseif ($file == 'pdfmake') {
@@ -220,7 +223,10 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-colorpicker') {
             $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
             $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
-        }   elseif ($file == 'spectrum') {
+        } elseif ($file == 'bootstrap-combobox') {
+            $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
+            $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
+        } elseif ($file == 'spectrum') {
             $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
         } elseif ($file == 'sortable') {
@@ -543,7 +549,7 @@ function group_secret($gid) {
 
 /**
  * displays a selection box
- * @param array $entries an array of (value => label)
+ * @param type $entries an array of (value => label)
  * @param type $name the name of the selection element
  * @param type $default if it matches one of the values, specifies the default entry
  * @param type $extra
@@ -551,7 +557,7 @@ function group_secret($gid) {
  */
 function selection($entries, $name, $default = '', $extra = '') {
     $retString = "";
-    $retString .= "\n<select class='form-control' name='$name' $extra>\n";
+    $retString .= "\n<select class='form-select' name='$name' $extra>\n";
     foreach ($entries as $value => $label) {
         if (isset($default) && ($value == $default)) {
             $retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
@@ -2372,7 +2378,9 @@ function handle_unit_info_edit() {
     require_once 'modules/course_metadata/CourseXML.php';
     CourseXMLElement::refreshCourse($course_id, $course_code);
 
-    Session::Messages($successmsg, 'alert-success');
+    //Session::Messages($successmsg, 'alert-success');
+    Session::flash('message',$successmsg);
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
 }
 
@@ -3402,7 +3410,7 @@ function form_buttons($btnArray) {
         }
 
         if (isset($btn['href'])) {
-            $class = isset($btn['class']) ? $btn['class'] : 'btn-default';
+            $class = isset($btn['class']) ? $btn['class'] : 'btn-secondary';
             $title = isset($btn['title'])?"title='$btn[title]'": '';
             $text = isset($btn['text'])? $btn['text']: $langCancel;
             $target = isset($btn['target'])?"target='$btn[target]'": '';
@@ -3445,7 +3453,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $i=0;
     $page_title = "";
     if (isset($pageName) and !empty($pageName) and $page_title_flag) {
-        $page_title = "<div class='pull-left' style='padding-top:15px;'><h4>".q($pageName)."</h4></div>";
+        $page_title = "<div class='pull-left'><h4 class='text-secondary pt-2'>".q($pageName)."</h4></div>";
     }
     foreach (array_reverse($options) as $option) {
         // skip items with show=false
@@ -3471,7 +3479,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $href = " href='$url'";
         }
         if (!isset($option['button-class'])) {
-            $button_class = 'btn-default';
+            $button_class = 'btn-secondary';
         } else {
             $button_class = $option['button-class'];
         }
@@ -3549,19 +3557,20 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                   </ul></div>";
     }
     if ($out && $i!=0) {
-        return "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix'><div class='action_bar'>
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix'>
-                        $page_title
-                    </div>   
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix'>
-                        <div class='float-end margin-top-thin margin-bottom-fat hidden-print'>
-                            <div class='btn-group'>
-                            $out
-                            $action_button
+        return "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix mt-3'>
+                    <div class='action_bar'>  
+                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix'>
+                            $page_title
+                            <div class='float-md-end float-start mt-md-0 mt-5 margin-top-thin margin-bottom-fat hidden-print'>
+                                <div class='btn-group'>
+                                $out
+                                $action_button
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div></div><div class='row p-2'></div>";
+                </div>
+                <div class='row p-2'></div>";
     } else {
         return '';
     }
@@ -4143,7 +4152,9 @@ function warnCourseInvalidDepartment($prompt=false) {
         } else {
             $message = $langCourseInvalidDepartment;
         }
-        Session::Messages($message);
+        //Session::Messages($message);
+        Session::flash('message',$message);
+        Session::flash('alert-class', 'alert-warning');
     }
 }
 

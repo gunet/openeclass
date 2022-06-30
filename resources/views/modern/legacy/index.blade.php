@@ -57,7 +57,7 @@ foreach($toolArr as $tool){
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_all">
             @endif
 
-                <div class="row p-5">
+                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                     @if($course_code or (count($toolArr)==3
                     && ($US == 'Διαχείριση χρηστών' or $US == 'Users Management')

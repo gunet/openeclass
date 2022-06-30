@@ -89,7 +89,7 @@
                                         <a class="user-item text-white ps-3 pe-2"
                                         href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}"><i class="fas fa-briefcase"></i><span class='ps-2'>{{ trans('langMyePortfolio') }}</span></a>
                                     </li>
-                                @endif
+                               @endif
                                 <li class="user-menu-li">
                                     <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}modules/usage/index.php?t=u"><i class="fas fa-chart-bar"></i><span class='ps-2'>{{ trans('langMyStats') }}</span></a>
                                 </li>
@@ -99,7 +99,7 @@
                                         href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}"><i
                                                     class="fas fa-location-arrow"></i><span class='ps-2'>{{ trans('langMyBlog') }}</span></a>
                                     </li>
-                                @endif
+                               @endif
                                 <li class="user-menu-li">
                                     <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}modules/message/index.php"><i class="fas fa-envelope"></i><span class='ps-2'>{{ trans('langMyDropBox') }}</span></a>
                                 </li>

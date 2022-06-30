@@ -101,7 +101,7 @@ jQuery(document).ready(function() {
   $modalShow
   jQuery('#portfolio_lessons').DataTable({
     'bLengthChange': false,
-    'iDisplayLength': 5,
+    'iDisplayLength': 10,
     'bSort' : false,
     'fnDrawCallback': function( oSettings ) {
       $('#portfolio_lessons_filter label input').attr({
@@ -128,7 +128,7 @@ jQuery(document).ready(function() {
            }
        }
   });
-  $('div.all_courses').html('<a class=\"btn btn-xs btn-default\" href=\"{$urlServer}main/my_courses.php\">$langAllCourses</a>');
+ // $('div.all_courses').html('<a class=\"btn btn-xs btn-secondary\" href=\"{$urlServer}main/my_courses.php\">$langAllCourses <span class=\"fa fa-arrow-right\"></span></a>');
   jQuery('.panel_title').click(function()
   {
     var mypanel = $(this).next();

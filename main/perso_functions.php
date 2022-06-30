@@ -28,7 +28,6 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/message/class.mailbox.php';
 require_once 'modules/message/class.msg.php';
-
 /**
  * @brief display user courses
  * @param integer $uid
@@ -186,6 +185,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                 ) ORDER BY an_date DESC
                          $sql_append", $lesson_id, $last_month, MODULE_ID_ANNOUNCE, $filter_param, $last_month, $filter_param);
     }
+
     if ($to_ajax) {
         $arr_an = array();
         foreach ($q as $arr_q) {
@@ -193,38 +193,45 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
         }
         return $arr_an;
     } else {
+
+        //Προσθήκη μετρητή ώστε να εμφανίζονται μέχρι 2 ανακοινώσεις σαν pagination
+        // Ολες οι τελευταιες ανακοινωσεις εμφανιζονται οταν πατησει ο χρηστης το κουμπι.
+        $counterAn = 0;
         $ann_content = '';
         foreach ($q as $ann) {
-            if (isset($ann->code) & $ann->code != '') {
-                $course_title = q(ellipsize($ann->course_title, 80));
-                $ann_url = $urlAppend . 'modules/announcements/?course=' . $ann->code . '&amp;an_id=' . $ann->id;
-                $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
-                $ann_content .= "
-                    <li class='list-item'>
+            if ($counterAn <= 1){
+                if (isset($ann->code) & $ann->code != '') {
+                    $course_title = q(ellipsize($ann->course_title, 80));
+                    $ann_url = $urlAppend . 'modules/announcements/index.php?course=' . $ann->code . '&amp;an_id=' . $ann->id;
+                    $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
+                    $ann_content .= "
+                        <li class='list-item ps-3 pe-3'>
+                            <div class='item-wholeline'>
+                                    <div class='text-title'>
+                                        <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                                    </div>
+                                <div class='text-secondary'>$course_title</div>
+                                <div>$ann_date</div>
+                            </div>
+                        </li>";
+                } else {
+                    $ann_url = $urlAppend . 'main/system_announcements.php?an_id=' . $ann->id;
+                    $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
+                    $ann_content .= "
+                    <li class='list-item ps-3 pe-3'>
                         <div class='item-wholeline'>
                                 <div class='text-title'>
                                     <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                                 </div>
-                            <div class='text-grey'>$course_title</div>
+
+                            <div class='text-secondary'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></div>
+
                             <div>$ann_date</div>
                         </div>
                     </li>";
-            } else {
-                $ann_url = $urlAppend . 'main/system_announcements.php?an_id=' . $ann->id;
-                $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
-                $ann_content .= "
-                <li class='list-item'>
-                    <div class='item-wholeline'>
-                            <div class='text-title'>
-                                <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
-                            </div>
-
-                        <div class='text-grey'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></div>
-
-                        <div>$ann_date</div>
-                    </div>
-                </li>";
+                }
             }
+            $counterAn++;
         }
         return $ann_content;
     }
@@ -242,22 +249,26 @@ function getUserMessages() {
 
     $mbox = new Mailbox($uid, 0);
     $msgs = $mbox->getInboxMsgs('', 5);
+    $counterMs = 0;
     foreach ($msgs as $message) {
-        if ($message->course_id > 0) {
-            $course_title = q(ellipsize(course_id_to_title($message->course_id), 30));
-        } else {
-            $course_title = '';
-        }
-        $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
-        $message_content .= "<li class='list-item'>
-                                <div class='item-wholeline'>
-                                    <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
-                                        <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
+        if($counterMs <= 1){
+            if ($message->course_id > 0) {
+                $course_title = q(ellipsize(course_id_to_title($message->course_id), 30));
+            } else {
+                $course_title = '';
+            }
+            $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
+            $message_content .= "<li class='list-item ps-3 pe-3'>
+                                    <div class='item-wholeline'>
+                                        <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
+                                            <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
+                                        </div>
+                                        <div class='text-secondary'>$course_title</div>
+                                        <div>$message_date</div>
                                     </div>
-                                    <div class='text-grey'>$course_title</div>
-                                    <div>$message_date</div>
-                                </div>
-                            </li>";
+                                </li>";
+        }
+        $counterMs++;
     }
     return $message_content;
 }
@@ -279,7 +290,7 @@ function user_has_accepted_policy($uid) {
 }
 
 
-/**
+/*
  * @brief update user consent
  * @param $uid
  * @param bool $accept
@@ -289,4 +300,48 @@ function user_accept_policy($uid, $accept = true) {
     Database::get()->query('INSERT INTO user_consent
         (has_accepted, user_id, ts) VALUES (?d, ?d, NOW())
         ON DUPLICATE KEY UPDATE has_accepted = ?d, ts = NOW()', $accept, $uid, $accept);
+}
+
+
+/*
+ * @DIKH MOY SYNARTHSH GIA NA FTIAKSW TO PAGINATION ME TIS EIKONES TWN MATHIMATWN STO PORTFOLIO BLADE ARXEIO
+*/
+
+function getUserCoursesPic($uid){
+
+    global $session;
+    if ($session->status == USER_TEACHER) {
+        $myCourses = Database::get()->queryArray("SELECT course.id course_id,
+                             course.code code,
+                             course.public_code,
+                             course.course_image course_image,
+                             course.title title,
+                             course.prof_names professor,
+                             course.lang,
+                             course.visible,
+                             course_user.status status
+                       FROM course, course_user, user
+                       WHERE course.id = course_user.course_id AND
+                             course_user.user_id = ?d AND
+                             user.id = ?d
+                       ORDER BY course_user.status, course.visible, course.created DESC", $uid, $uid);
+    } else {
+        $myCourses = Database::get()->queryArray('SELECT course.id course_id,
+                             course.code code,
+                             course.public_code,
+                             course.course_image course_image,
+                             course.title title,
+                             course.prof_names professor,
+                             course.lang,
+                             course.visible,
+                             course_user.status status
+                       FROM course, course_user, user
+                       WHERE course.id = course_user.course_id AND
+                             course_user.user_id = ?d AND
+                             user.id = ?d AND
+                             (course.visible != ' . COURSE_INACTIVE . ' OR course_user.status = ' . USER_TEACHER . ')
+                       ORDER BY course.title, course.prof_names', $uid, $uid);
+    }
+
+    return $myCourses;
 }
