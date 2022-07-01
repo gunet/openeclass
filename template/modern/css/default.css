@@ -24,6 +24,10 @@
     margin-top:-4px;
   }
 
+  .LegendShadow{
+    height:70px;
+  }
+
   .nav-link:hover{
     color:white;
   }
@@ -238,11 +242,6 @@
       color:white; padding-left:15px; padding-top:40px;
   }
 
-  .manage-course-tools{
-      float:right;
-      margin-right:-23px;
-      margin-top:-4px;
-  }
 
   /* --------------------------------------------- Forums ----------------------------------------*/
   /* ---------------------------------------------------------------------------------------------*/
@@ -526,19 +525,13 @@
     }
 
     .user-announcements-portfolio{
-      background-color: white;
       border-radius: 15px;
       height:auto;
-      margin-left:11px;
-      margin-top:15px;
     }
 
     .user-messages-portfolio{
-      background-color: white;
       border-radius: 15px;
       height:auto;
-      margin-left:11px;
-      margin-top:15px;
     }
 
     .user-detals-photo {
@@ -920,6 +913,9 @@
 
   .pos_TitleCourse{
       margin-left:-20px;
+      color:#003F87;
+      font-weight: 600;
+
   }
 
 
@@ -1151,17 +1147,12 @@
       border:solid 2px #003F87;
     }
 
-    .notes-legend {
-      color:#003F87;
-      background-color:white;
-      border-width: thin;
-      border-color: #dee2e6;
-      margin-bottom:0px ;
-      border-bottom:2px solid rgba(0,63,135,0.1) ;
-      height:auto ;
-
-  }
-
+    .notes-legend{
+      -webkit-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
+      -moz-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
+      box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
+      border-radius: 15px;
+    }
   .notes_thead{
       background-color:#003F87;
       height:45px;
@@ -1869,6 +1860,10 @@
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------*/
   @media (max-width: 320px){
+    .LegendShadow{
+      min-height:200px;
+    }
+
     .btn-group{
       max-width:300px;
       flex-wrap: wrap;
@@ -1878,6 +1873,15 @@
     }
     .btn-group .btn.btn-success{
       border:solid 3px white;
+    }
+
+    .breadcrumb-item a{
+      max-width:300px;
+      flex-wrap: wrap;
+    }
+    .breadcrumb-item span{
+      max-width:300px;
+      flex-wrap: wrap;
     }
     .navrbar_menu_btn{
       margin-left: 0px;
@@ -1900,6 +1904,23 @@
     .navbar-eclass .btn-group{
       max-width:300px;
     }
+    .user-detals-photo {
+      min-width: 180px;
+      height: 180px;
+      border-radius: 100%;
+      margin:auto;
+      display:block;
+    }
+    .col_maincontent_active_all{
+      min-height: 80vh;
+    }
+    .col_maincontent_active{
+      min-height: 80vh;
+    }
+
+    .notes_thead{
+      min-height:65px;
+    }
   }
 
 
@@ -1914,6 +1935,11 @@
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- small mobile - portrait-----------------------------------*/
   @media (min-width:321px) and (max-width: 375px){
+
+    .LegendShadow{
+      min-height:180px;
+    }
+
     .btn-group{
       max-width:355px;
       flex-wrap: wrap;
@@ -1923,6 +1949,14 @@
     }
     .btn-group .btn.btn-success{
       border:solid 3px white;
+    }
+    .breadcrumb-item a{
+      max-width:325px;
+      flex-wrap: wrap;
+    }
+    .breadcrumb-item span{
+      max-width:325px;
+      flex-wrap: wrap;
     }
     .navrbar_menu_btn{
       margin-left: 0px;
@@ -1942,6 +1976,23 @@
       margin-top:5px !important;
       background-color: #003F87 ;
     }
+
+    .user-detals-photo {
+      min-width: 180px;
+      height: 180px;
+      border-radius: 100%;
+      margin:auto;
+      display:block;
+    }
+    .col_maincontent_active_all{
+      min-height: 80vh;
+    }
+    .col_maincontent_active{
+      min-height: 80vh;
+    }
+    .notes_thead{
+      min-height:65px;
+    }
   }
 
   /* ---------------------------------------------------------------------------------------------------------------------- */
@@ -1955,16 +2006,47 @@
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* -------------------------------------------------------mobile - portrait-----------------------------------------------*/
 
-  @media (max-width: 425px){
+  @media (min-width:376px) and (max-width: 425px){
 
-        /* html { width:100%; } */
-        .jumbotron.jumbotron-login{
-            width:100% ;
-        }
+    .LegendShadow{
+      min-height:140px;
+    }
 
-        .btnFooter{
-            width:320px;
-        }
+    .col_maincontent_active_all{
+      min-height: 80vh;
+    }
+    .col_maincontent_active{
+      min-height: 80vh;
+    }
+
+    .jumbotron.jumbotron-login{
+        width:100% ;
+    }
+
+    textarea{
+      max-width:285px;
+    }
+
+    .user-detals-photo {
+      min-width: 180px;
+      height: 180px;
+      border-radius: 100%;
+      margin:auto;
+      display:block;
+    }
+
+    .user-detals-fullname{
+      padding-left:35px;
+    }
+
+    .breadcrumb-item a{
+      max-width:400px;
+      flex-wrap: wrap;
+    }
+    .breadcrumb-item span{
+      max-width:400px;
+      flex-wrap: wrap;
+    }
 
     .navbar_breadcrumb{
         max-width:320px;
@@ -2021,142 +2103,18 @@
         transform: rotate(265deg);
     }
 
-    .input_search{
-
-        outline: 0;
-        border-width: 0 0 1px;
-        border-color: white;
-        background: transparent;
-        margin-left:-100px ;
-        opacity: 0;
+    .nav.nav-tabs li a{
+      background-color: #003F87;
     }
 
-    .circle_lang{
-        height:30px; width:30px; border-radius:50%; background-color:blue;
-        margin-top:-25px;
-        margin-left:120px;
-        opacity: 0;
+    /* modal frame */
+    .modal-dialog.modal-lg .modal-content{
+      width:300px ;
     }
 
-    .fontuser {
-        position: relative;
-        float:right;
-        margin-right:30px ;
-        width:50px ;
-        opacity: 0;
+    .user-icon-filename{
+      width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
     }
-
-    .fontuser i{
-        position: absolute;
-        left: -105px;
-        top: 0px;
-        color: gray;
-        opacity: 0;
-    }
-
-    .float-end{
-        margin-top:50px ;
-        margin-right:-15px ;
-    }
-
-
-
-
-
-      .nav.nav-tabs li a{
-          background-color: #003F87;
-
-      }
-
-
-      .myrowP-2{
-          background-color:#f5f5f5;
-      }
-
-
-          /* modal frame */
-      .modal-dialog.modal-lg .modal-content{
-          width:300px ;
-      }
-
-
-      .btn-group{
-          display:block ;
-      }
-
-
-      .notes_table{
-          width:100% ;
-        }
-
-        .title_langobject_input2{
-          margin-top:20px ;
-        }
-
-        .col_notes{
-          background-color:white ;
-        }
-
-        .fieldset_notes{
-          margin-left:0px ;
-          width:350px;
-          margin-top:20px;
-        }
-
-        .form_fieldset_notes{
-          background-color: transparent ;
-          width:100% ;
-          margin-left:-53px ;
-        }
-
-        .add_note_image_col{
-          margin-left:150px ;
-          width:150px ;
-          background-color: transparent ;
-        }
-
-        .notes_container{
-          width:95% ;
-          background-color: white ;
-        }
-
-
-        .col_new_note_comment{
-          background-color: transparent ;
-          width:150px ;
-          margin-left:0px ;
-        }
-
-
-
-
-        .fieldset_addnotes{
-          width:350px ;
-          margin-left:-53px;
-          margin-top:15px;
-        }
-
-        .notes-legend{
-          height:auto ;
-        }
-
-
-      .text-secondary.me-4{
-          margin-top:30px;
-          margin-left:-100px;
-          padding-left:80px;
-      }
-
-      .container_bar_courses_table{
-            /* margin:auto;
-            display:block; */
-            width:310px;
-            margin-left:-40px;
-      }
-
-      .user-icon-filename{
-          width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
-      }
 
     .dropdown-user-menu-ul{
       width:230px ;
@@ -2172,24 +2130,13 @@
     .col-nav-tools{
       margin-top:-10px ;
     }
-
-    .user-announcements-portfolio{
-      background-color: white;
-      border-radius: 15px;
-      height:auto;
-      margin-top:55px;
-      margin-left:-2px;
-    }
-
-    .user-messages-portfolio{
-      margin-left:-2px;
-      margin-top:55px;
-    }
-
     .dropdown-language-ul{
       margin-left:-60px ;
       margin-top:5px !important;
       background-color: #003F87 ;
+    }
+    .notes_thead{
+      min-height:65px;
     }
   }
 
@@ -2205,6 +2152,10 @@
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- MOBILE L ------------------------------------------------------- */
   @media (min-width: 426px) and (max-width: 767px){
+
+    .LegendShadow{
+      min-height:140px;
+    }
 
     .user-detals-photo {
       min-width: 180px;
@@ -2239,9 +2190,6 @@
         background-color: #003F87 ;
         margin-left:-150px;
     }
-    .btnFooter{
-        width:380px;
-    }
 
   }
 
@@ -2260,12 +2208,13 @@
 
   @media (min-width: 768px) and (max-width: 1023px){
 
-    .login-form{
-      margin-top:25px;
+    .LegendShadow{
+      min-height:140px;
     }
 
-    .btnFooter{
-        width:680px;
+
+    .login-form{
+      margin-top:25px;
     }
 
     .navrbar_menu_btn{
@@ -2333,16 +2282,6 @@
       margin-left:-60px ;
       margin-top:0px !important;
       background-color: #003F87 ;
-    }
-
-    .user-announcements-portfolio{
-      margin-top:35px;
-      margin-left:0px;
-    }
-
-    .user-messages-portfolio{
-      margin-left:0px;
-      margin-top:35px;
     }
 
     .navbar-eclass .btn-group{

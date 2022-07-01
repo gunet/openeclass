@@ -360,17 +360,9 @@ text-decoration: none;
 }
 
 .site-footerMobile {
-  /* padding: 15px 10px; */
   background: #001146;
-  width:100%;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
-  /* position: fixed;
-  bottom:0; */
-}
-
-.site-footerMobile button{
-   width:20px;
 }
 
 .site-footer a {
