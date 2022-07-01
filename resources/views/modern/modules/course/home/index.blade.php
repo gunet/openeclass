@@ -1,4 +1,3 @@
-
 @extends('layouts.default')
 
 @section('content')
@@ -7,14 +6,15 @@
     <div class="container-fluid main-container">
         <div class="row">
 
-            <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
+            <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
 
             <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
-                <div class="row p-5">
+
+                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
                     <nav class="navbar navbar-expand-lg navrbar_menu_btn">
                         <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn btn-primary menu_btn_button">
                             <i class="fas fa-align-left"></i>
@@ -25,14 +25,7 @@
                         </a>
                     </nav>
 
-                    <nav class="navbar_breadcrumb" aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ $urlAppend }}main/portfolio.php">{{trans('langPortfolio')}}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ $urlAppend }}main/my_courses.php">{{trans('mycourses')}}</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{$title_course}}</li>
-                        </ol>
-                    </nav>
-
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                     <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
                         <div class="offcanvas-header">
@@ -44,21 +37,12 @@
                     </div>
 
 
-                    <div class="col-xxl-12 col-lx-12 col-lg-12 col-md-10 col-sm-6">
-                        <div class="row p-2"></div><div class="row p-2"></div>
-                        <legend class="float-none w-auto py-2 px-4 notes-legend"><span class="pos_TitleCourse"><i class="fas fa-university" aria-hidden="true"></i> <strong>{{$title_course}} <small>({{$course_code_title}})</small></strong></span>
-                            <div class="manage-course-tools float-end">
-                                @if ($is_course_admin)
-                                    @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code_title])
-                                @endif
-                            </div>
-                        </legend>
-                    </div>
-                    
+                    @include('layouts.partials.legend_view')
+
 
                     <p class='mt-5'>
                         <span class='control-label-notes text-start ps-1'>
-                            {{trans('langTeacher')}}: 
+                            {{ trans('langTeacher') }}:
                             <small>{{course_id_to_prof($course_id)}}</small>
                         </span>
 
@@ -66,6 +50,15 @@
                             <i class='fa fa-arrow-down'></i>
                         </a>
                     </p>
+
+                    @if(Session::has('message'))
+                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                            <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                                {{ Session::get('message') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </p>
+                        </div>
+                    @endif
 
                     <div class="collapse mt-2" id="InfoCourse">
                         <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -76,7 +69,7 @@
                                     </div>
                                     <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
                                         @if($uid)
-                                            
+
                                             @if ($is_course_admin)
                                                 <a class="ps-2 pe-2 float-end" href="{{ $urlAppend }}modules/user/index.php?course={{$course_code}}"><span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span> {{ $numUsers }}&nbsp;{{ trans('langRegistered') }}</a>
                                             @else
@@ -84,25 +77,25 @@
                                                     <a class="ps-2 pe-2 float-end" href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}"><span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span> {{ $numUsers }}&nbsp;{{ trans('langRegistered') }}</a>
                                                 @endif
                                             @endif
-                                            
+
                                         @endif
                                     </div>
                                 </div>
 
-                               
-                                    
+
+
                                     @if(isset($rating_content) || isset($social_content) || isset($comment_content))
                                         <div class='row p-2'>
-                                            <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>        
+                                            <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
                                                 @if(isset($rating_content))
                                                     <li>
                                                         {!! $rating_content !!}
                                                     </li>
                                                 @endif
                                             </div>
-                                        
 
-                                            <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'> 
+
+                                            <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
                                                 @if(isset($social_content) || isset($comment_content))
                                                     <span class='float-end ps-2 pe-2'>
                                                         @if(isset($comment_content))
@@ -115,11 +108,11 @@
                                                             {!! $social_content !!}
                                                         @endif
                                                     </span>
-                                                    
+
                                                 @endif
                                             </div>
                                         </div>
-                
+
                                     @endif
 
                                 @if ($offline_course)
@@ -190,7 +183,7 @@
                                                         <span class='float-end'>{{trans('langCourseDescription')}}</span>
                                                     @else
                                                     <span class='float-end'>{{trans('langAdd')}}</span>
-                                                    @endif 
+                                                    @endif
                                                     <span class='float-end pe-2'>{!! $edit_course_desc_link !!}</span>
                                                 </div>
                                             @endif
@@ -212,7 +205,7 @@
                             @endif
 
                         </div>
-                        
+
                     </div>
                 </div> <!-- end row p-5 -->
 
@@ -243,101 +236,7 @@
                                     <hr>
                                     <!-- <div class='row boxlist no-list' id='boxlistSort'> -->
                                     <div class='' id='boxlistSort'>
-                                        @if ($course_units)
-                                            <?php $count_index = 0;?>
-                                            @foreach ($course_units as $key => $course_unit)
-                                                <?php
-                                                    $not_shown = false;
-                                                    if (!(is_null($course_unit->start_week)) and (date('Y-m-d') < $course_unit->start_week)) {
-                                                        $not_shown = true;
-                                                    }
-                                                ?>
-                                                @if ($course_unit->visible == 1)
-                                                <?php $count_index++; ?>
-                                                @endif
-                                                @if (!$is_editor and $not_shown)
-                                                    @continue;
-                                                @else
-                                                    <div id='unit_{{ getIndirectReference($course_unit->id) }}' class='col-xs-12' data-id='{{ $course_unit->id }}'>
-                                                        <div class='panel clearfix'>
-                                                            <div class='col-12'>
-                                                                <div class='item-content'>
-                                                                    <div class='item-header clearfix'>
-                                                                        <div class='item-title h4'>
-                                                                            <a {!! (!$course_unit->visible or $not_shown)? " class='not_visible'" : "" !!} href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $course_unit->id }}'>
-                                                                                {{ $course_unit->title }}
-                                                                            </a>
-                                                                            <small>
-                                                                                <span class='help-block'>
-                                                                                    <?php
-                                                                                        if (!(is_null($course_unit->start_week))) {
-                                                                                            echo $GLOBALS['langFrom2'];
-                                                                                            echo "&nbsp;";
-                                                                                            echo nice_format($course_unit->start_week);
-                                                                                        }
-                                                                                    ?>
-                                                                                    <?php
-                                                                                        if (!(is_null($course_unit->finish_week))) {
-                                                                                            echo $GLOBALS['langTill'];
-                                                                                            echo "&nbsp;";
-                                                                                            echo nice_format($course_unit->finish_week);
-                                                                                        }
-                                                                                    ?>
-                                                                                </span>
-                                                                            </small>
-                                                                        </div>
-                                                @endif
-                                                                    <div class='item-body'>
-                                                                        {!! $course_unit->comments == ' ' ? '' : standard_text_escape($course_unit->comments) !!}
-                                                                    </div>
-                                                                    @if ($is_editor)
-                                                                        <div class="dropdown float-end">
-                                                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{$course_unit->id}}" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                                <i class="fas fa-cogs"></i>
-                                                                            </button>
-                                                                            <ul class="row p-4 dropdown-menu myuls" aria-labelledby="dropdownMenuButton{{$course_unit->id}}">
-                                                                                <li><a href="{{$urlAppend}}modules/units/info.php?course={{$course_code}}&amp;edit={{$course_unit->id}}"><i class="fas fa-edit"></i> {{ trans('langEditChange') }}</a></li>
-                                                                                <li><a href="{{ $_SERVER['REQUEST_URI'] }}?vis={{$course_unit->id}}"><i class="fas fa-eye"></i>@if($course_unit->visible == 1){{ trans('langViewHide') }}@else{{ trans('langViewShow') }}@endif</a></li>
-                                                                                <li><a href="{{ $_SERVER['REQUEST_URI'] }}?access={{$course_unit->id}}"><i class="fas fa-lock"></i>@if($course_unit->public == 1) {{ trans('langResourceAccessLock') }} @else {{ trans('langResourceAccessUnlock') }} @endif</a></li>
-                                                                                <li><a href="" data-bs-toggle="modal" data-bs-target="#unit{{$course_unit->id}}"><i class="fas fa-trash"></i> {{trans('langDelete')}}</a></li>
-
-                                                                            </ul>
-
-                                                                        </div>
-                                                                        <!-- Modal -->
-                                                                        <div class="modal fade" id="unit{{$course_unit->id}}" tabindex="-1" aria-labelledby="unitLabel{{$course_unit->id}}" aria-hidden="true">
-                                                                            <div class="modal-dialog">
-                                                                                <div class="modal-content">
-                                                                                    <div class="modal-header">
-                                                                                        <h5 class="modal-title" id="unitLabel{{$course_unit->id}}">{{$course_unit->title}}</h5>
-                                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                                    </div>
-                                                                                    <div class="modal-body">
-                                                                                        Είστε σίγουρος/η ότι θέλετε να προχωρήσετε στην συγκεκριμένη διαγραφή?
-                                                                                    </div>
-                                                                                    <div class="modal-footer">
-                                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ακύρωση</button>
-                                                                                        <a type="button" href="{{ $_SERVER['REQUEST_URI'] }}?del={{$course_unit->id}}" class="btn btn-danger">Διαγραφή</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    @endif
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                            @endforeach
-                                        @else
-                                            <div class='col-sm-12'>
-                                                <div class='panel'>
-                                                    <div class='panel-body not_visible'> - {{ trans('langNoUnits') }} - </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                        {!! $cunits_content !!}
                                     </div>
 
                                     {!! $course_home_main_area_widgets !!}
@@ -407,7 +306,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 {!! $course_home_sidebar_widgets !!}
 
                             </div>

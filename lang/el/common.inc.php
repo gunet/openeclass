@@ -33,6 +33,7 @@ $langsTeacher = "εκπαιδευτής";
 $langsOfTeacher = "εκπαιδευτή";
 $langsTeachers = "εκπαιδευτές";
 $langsOfTeachers = "εκπαιδευτών";
+$langCTeacher = "ΕΚΠΑΙΔΕΥΤΗΣ";
 
 $langEditor = "Βοηθός εκπαιδευτή";
 $langOfEditor = "Βοηθού εκπαιδευτή";
@@ -46,6 +47,7 @@ $langStudent = "Εκπαιδευόμενος";
 $langOfStudent = "Εκπαιδευόμενου";
 $langStudents = "Εκπαιδευόμενοι";
 $langOfStudents = "Εκπαιδευόμενων";
+$langCStudent = "ΕΚΠΑΙΔΕΥΟΜΕΝΟΣ";
 
 $langsStudent = "εκπαιδευόμενος";
 $langsOfStudent = "εκπαιδευόμενου";

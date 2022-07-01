@@ -6,43 +6,45 @@
 
         <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form">
             <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}' data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}">
-                <span class="on">{{trans('langCStudent2')}}</span>
-                <span class="off">{{trans('langCTeacher')}}</span>
-                <p class="text-right on2">{{trans('langCStudent2')}}</p>
-                <p class="text-left off2">{{trans('langCTeacher')}}</p>
+                <span class="on">{{ trans('langCStudent') }}</span>
+                <span class="off">{{ trans('langCTeacher') }}</span>
+                <p class="text-right on2">{{ trans('langCStudent') }}</p>
+                <p class="text-left off2">{{ trans('langCTeacher') }}</p>
             </button>
         </form>
     @else
         <div class="row p-2"></div>
         <p class="text-left text-light fs-6 viewPageAs">{{ trans('langViewAs') }}:</p>
-        <a class='w-75 btn btn-primary pe-none text-white text-center'>{{trans('langCStudent2')}}</a>
+        <a class='w-75 btn btn-primary pe-none text-white text-center'>{{trans('langCTeacher')}}</a>
     @endif
 
     <ul class="navbar-nav d-flex flex-column mt-4 w-100 p-2">
         <li class="nav-item w-100">
             @foreach ($toolArr as $key => $tool_group)
                 @if ($key == 0)
-                    <?php
+                    @php
                         $dropdown_id = "Dropdown2";
                         $class_id = "classTwo";
                         $classname = "active_tools_dropdown2";
-                    ?>
+                    @endphp
                 @elseif ($key == 1)
-                    <?php
+                    @php
                         $dropdown_id = "Dropdown3";
                         $class_id = "classThree";
                         $classname = "active_tools_dropdown3";
-                    ?>
+                    @endphp
                 @elseif ($key == 2)
                     @continue  <!-- not displaying admin menu -->
                 @endif
                 <!-- Desktop collapse -->
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
-                    <a role="button" class="{{ $classname }} nav-link text-white">
+                    <a role="button" class="{{ $classname }} nav-link text-white ps-1">
                         {{ $tool_group[0]['text'] }} <i class="{{ $class_id }} text-white pt-1 float-end fa fa-angle-down"></i>
                     </a>
                     <div class="col-lg-12 show" id="{{ $dropdown_id }}">
-                            <?php $i=0; ?>
+                            @php
+                                $i=0
+                            @endphp
                             @foreach ($tool_group[1] as $key2 => $tool)
                                 <a id="{{$dropdown_id}}{{$i}}" class="dropdown-item sidebarTexts pt-2 pb-2 ms-0 me-0 text-white" href="{{ $tool_group[2][$key2] }}">
                                     <div class='row'>
@@ -54,10 +56,10 @@
                                         </div>
                                     </div>
                                 </a>
-
-                                <?php $i++; ?>
+                                @php
+                                    $i++;
+                                @endphp
                             @endforeach
-
                     </div>
                 </div>
                 <!-- Mobile collapse -->

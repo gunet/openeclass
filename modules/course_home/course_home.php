@@ -546,27 +546,57 @@ if ($total_cunits > 0) {
         $cunits_content .= "</div>";
 
         if ($is_editor) {
-            $cunits_content .= "<div class='item-side'>
+            $cunits_content .= "<div class='dropdown float-end'>
                                   <div class='reorder-btn'>
-                                    <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
-                                      </div>" .
-                action_button(array(
-                    array('title' => $langEditChange,
-                          'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
-                          'icon' => 'fa-edit'),
-                    array('title' => $vis == 1? $langViewHide : $langViewShow,
-                          'url' => "$_SERVER[REQUEST_URI]?vis=$cu_indirect",
-                          'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
-                    array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
-                          'url' => "$_SERVER[REQUEST_URI]?access=$cu_indirect",
-                          'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
-                          'show' => $visible == COURSE_OPEN),
-                    array('title' => $langDelete,
-                          'url' => "$_SERVER[REQUEST_URI]?del=$cu_indirect&order=".$cu->order,
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langCourseUnitDeleteConfirm))) .
-                '</div>';
+                                    <span class='fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
+                                      </div>";
+            $cunits_content .= "<div class='dropdown float-end'>
+                            <button class='btn btn-primary dropdown-toggle' type='button' id='dropdownMenuButton$cu->id' data-bs-toggle='dropdown' aria-expanded='false'>
+                                <i class='fa-cogs'></i>
+                            </button>";
+
+            $cunits_content .= "<ul class='row p-4 dropdown-menu myuls' aria-labelledby='dropdownMenuButton$cu->id->id'>
+                <li><a href='{$urlAppend}modules/units/info.php?course=$course_code&amp;edit=$cu->id->id'><i class='fa-edit'></i>&nbsp;&nbsp;$langEditChange</a></li>            
+                <li><a href='$_SERVER[REQUEST_URI]?vis=$cu->id'><i class='fa-eye'></i>";
+
+            if ($cu->visible == 1) {
+                $cunits_content .= "&nbsp;&nbsp;$langViewHide";
+            } else {
+                $cunits_content .= "&nbsp;&nbsp;$langViewShow";
+            }
+            $cunits_content .= "</a></li>";
+            $cunits_content .= "<li><a href='$_SERVER[REQUEST_URI]?access=$cu->id'><i class='fa-lock'></i>";
+            if ($cu->public == 1) {
+                $cunits_content .= "&nbsp;&nbsp;$langResourceAccessLock";
+            } else {
+                 $cunits_content .= "&nbsp;&nbsp;$langResourceAccessUnlock";
+            }
+            $cunits_content .= "</a></li>
+                <li><a href='$_SERVER[REQUEST_URI]?del='" .$cu_indirect . "'&order='.$cu->order' data-bs-toggle='modal' data-bs-target='#unit$cu->id'><i class='fa-trash'></i>&nbsp;&nbsp;$langDelete</a></li>
+            </ul>";
+
+        $cunits_content .= "</div>";
+
+        /* $cunits_content .= action_button(array(
+            array('title' => $langEditChange,
+                  'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
+                  'icon' => 'fa-edit'),
+            array('title' => $vis == 1? $langViewHide : $langViewShow,
+                  'url' => "$_SERVER[REQUEST_URI]?vis=$cu_indirect",
+                  'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+            array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
+                  'url' => "$_SERVER[REQUEST_URI]?access=$cu_indirect",
+                  'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
+                  'show' => $visible == COURSE_OPEN),
+            array('title' => $langDelete,
+                  'url' => "$_SERVER[REQUEST_URI]?del=$cu_indirect&order=".$cu->order,
+                  'icon' => 'fa-trash',
+                  'class' => 'delete',
+                  'confirm' => $langCourseUnitDeleteConfirm)));
+            */
+
+                $cunits_content .= '</div>';
+
         } else {
             $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
             $cunits_content .= $icon;

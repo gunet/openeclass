@@ -1044,6 +1044,7 @@ $titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 /* * ******************************************************
  * course_home.php
  * ******************************************************* */
+$langViewAs = "Προβολή σελίδας σαν";
 $langAdminOnly = "Μόνο για Διαχειριστές";
 $langInLnk = "Απενεργοποιημένοι σύνδεσμοι";
 $langDelLk = "Θέλετε πραγματικά να διαγράψετε αυτό τον σύνδεσμο";
@@ -4615,8 +4616,8 @@ $langAddToCourseHome = "Εμφάνιση στην κεντρική σελίδα 
 $langSeenToCourseHome = "Εμφανίζεται στην κεντρική σελίδα του $langsOfCourse";
 $langRemoveFromCourseHome = "Απόκρυψη από την κεντρική σελίδα του $langsOfCourse";
 $langVia = 'μέσω';
-$langStudentViewEnable = "Αλλαγή σε περιβάλλον $langsOfStudent";
-$langStudentViewDisable = "Αλλαγή σε περιβάλλον $langsOfTeacher";
+$langStudentViewEnable = "Προβολή σελίδας σαν $langsStudent";
+$langStudentViewDisable = "Προβολή σελίδας σαν $langsTeacher";
 $langInactiveModule = "ανενεργό υποσύστημα";
 $langAvailableUnitResources = "Εκπαιδευτικό υλικό";
 $langNoUnits = "Δεν υπάρχουν ενότητες";
