@@ -1,4 +1,8 @@
 {
+  "name": "open-eclass",
+  "version": "3.13",
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://www.openeclass.org/",
   "dependencies": {
     "h5p-standalone": "^3.5.1",
     "mathjax": "3",
