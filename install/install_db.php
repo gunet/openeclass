@@ -1509,8 +1509,6 @@ $default_config = array(
     'account_duration', '126144000',
     'language', $lang,
     'active_ui_languages', $active_ui_languages,
-    'student_upload_whitelist', $student_upload_whitelist,
-    'teacher_upload_whitelist', $teacher_upload_whitelist,
     'theme', 'default',
     'theme_options_id', 0,
     'login_fail_check', 1,
