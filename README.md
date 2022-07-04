@@ -1,4 +1,4 @@
-# The Open eClass Platform 3.12
+# The Open eClass Platform 3.13
 
 http://www.openeclass.org/
 
@@ -22,10 +22,10 @@ instructions as well as other manuals at the following address:
 https://docs.openeclass.org/en/start
 
 GUnet Asychronous e-Learning Group
-October 2021
+July 2022
 
 
-# Πλατφόρμα Open eClass 3.12
+# Πλατφόρμα Open eClass 3.13
 
 http://www.openeclass.org/
 
@@ -65,4 +65,4 @@ PHP >= 7.4 και μια βάση δεδομένων (MySQL or MariaDB). Ανα�
 https://docs.openeclass.org/el/start
 
 Ομάδα Ασύγχρονης Τηλεκπαίδευσης GUnet
-October 2021
+Ιούλιος 2022
