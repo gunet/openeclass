@@ -445,7 +445,7 @@ if (isset($level) && !empty($level)) {
 
     $(document).ready(function() {
 
-        dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{$langCancel}</span></button><div class='modal-title h4' id='modal-label'>{$langCourseMetadata}</div></div><div class='modal-body'>body</div></div></div></div>\");
+        dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-bs-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{$langCancel}</span></button><div class='modal-title h4' id='modal-label'>{$langCourseMetadata}</div></div><div class='modal-body'>body</div></div></div></div>\");
     });
 
 /* ]]> */
@@ -729,7 +729,7 @@ function course_announcements() {
         if ($q) { // if announcements exist
             $ann_content = '';
             foreach ($q as $ann) {
-                $ann_url = $urlAppend . "modules/announcements/?course=$course_code&amp;an_id=" . $ann->id;
+                $ann_url = $urlAppend . "modules/announcements/index.php?course=$course_code&amp;an_id=" . $ann->id;
                 $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
                 $ann_content .= "<li class='list-item'>
                                     <span class='item-wholeline'><div class='text-title'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>$ann_date</span>

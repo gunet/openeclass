@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container-fluid jumbotron jumbotron-login h-auto">
-    <div class="container-fluid intro-row">
+    <div class="container-fluid intro-row homePageCol">
     {!! $warning !!}
         <div class="row pb-5">
             <div class="col-lg-7 col-md-12 col-sm-12 col-12 d-none d-sm-none d-md-none d-lg-block">                

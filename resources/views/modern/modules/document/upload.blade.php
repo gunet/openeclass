@@ -8,42 +8,29 @@
 
             <div class="row">
 
-                @if($course_code)
                 <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                     <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                         @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                     </div>
                 </div>
-                @endif
 
-                @if($course_code)
                 <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
-                @else
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
-                @endif
+                    
                     <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
-                        @if($course_code)
+
                         <nav class="navbar navbar-expand-lg navrbar_menu_btn">
-                            <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn btn-primary menu_btn_button">
-                                <i class="fas fa-align-left"></i>
-                                <span></span>
-                            </button>
+                                <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn btn-primary menu_btn_button">
+                                    <i class="fas fa-align-left"></i>
+                                    <span></span>
+                                </button>
+                                
                             
+                                <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
+                                    <i class="fas fa-tools"></i>
+                                </a>
+                        </nav>
                         
-                            <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
-                                <i class="fas fa-tools"></i>
-                            </a>
-                        </nav>
-                        @else
-                        <nav class="navbar navbar-expand-lg navrbar_menu_btn">
-                            <a type="button" id="getTopicButton" class="d-none d-sm-block d-md-none d-lg-block ms-2 btn btn-primary btn btn-primary" href="{{$urlAppend}}modules/help/help.php?language={{$language}}&topic={{$helpTopic}}&subtopic={{$helpSubTopic}}" style='margin-top:-10px'>
-                                <i class="fas fa-question"></i>
-                            </a>
-                        </nav>
-                        @endif
-
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-
 
                         <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
                             <div class="offcanvas-header">
@@ -53,7 +40,6 @@
                                 @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                             </div>
                         </div>
-                        
 
                         @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
@@ -77,8 +63,7 @@
                             
                                 <div class='col-md-12'>
                                     <div class='form-wrapper'>
-                                        <form class='form-horizontal' role='form' action='/modules/document/index.php' method='post' enctype='multipart/form-data'>
-                                            <input type="hidden" name="courseCodeAfterUpload" value={{$course_code}}>
+                                        <form class='form-horizontal' role='form' action='{{ $upload_target_url }}' method='post' enctype='multipart/form-data'>
                                             <input type='hidden' name='uploadPath' value='{{ $uploadPath }}'>
                                             @if ($externalFile)
                                                 <input type='hidden' name='ext' value='true'>

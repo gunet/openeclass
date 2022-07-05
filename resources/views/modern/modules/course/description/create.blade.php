@@ -47,26 +47,27 @@
                     
 
                     {!! $action_bar !!}
+
                     <div class='form-wrapper'>
                         <form class='form-horizontal' role='form' action='{{$urlServer}}modules/course_description/index.php?course={{ $course_code }}' method='post'>
-                        <input type='hidden' name='course' value='{{ $course_code }}'>
+                            <input type='hidden' name='course' value='{{ $course_code }}'>
                             @if ($editId)
-                            <input type='hidden' name='editId' value='{{ getIndirectReference($editId) }}'>
+                                <input type='hidden' name='editId' value='{{ getIndirectReference($editId) }}'>
                             @endif            
 
-                            <div class="row p-2"></div>
+                           
 
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <label for='editType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}: </label>
                                 <div class='col-sm-12'>
                                     {!! selection($types, 'editType', $defaultType, 'class="form-control" id="typSel"') !!}
                                 </div>
                             </div>
 
-                            <div class="row p-2"></div>
+                            
 
 
-                            <div class='form-group{{ $titleError ? " form-error" : ""}}'>
+                            <div class='form-group{{ $titleError ? " form-error" : ""}} mt-3'>
                                 <label for='titleSel' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
                                 <div class='col-sm-12'>
                                     <input type='text' name='editTitle' class='form-control' value='{{ $cdtitle }}' size='40' id='titleSel'>
@@ -74,27 +75,28 @@
                                 </div>
                             </div>      
                             
-                            <div class="row p-2"></div>
+                           
 
 
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <label for='editComments' class='col-sm-6 control-label-notes'>{{ trans('langContent') }}:</label>
                                 <div class='col-sm-12'>
                                 {!! $text_area_comments !!}
                                 </div>
                             </div>
 
-                            <div class="row p-2"></div>
+                            
 
-                        <div class='form-group'>    
-                            <div class='col-sm-10 col-sm-offset-2'>
-                                {!! $form_buttons !!}
-                            </div>
+                            <div class='form-group mt-3'>    
+                                <div class='col-sm-10 col-sm-offset-2'>
+                                    {!! $form_buttons !!}
+                                </div>
                             </div>
                         {!! generate_csrf_token_form_field() !!}                              
                         </form>
                     </div>  
                 </div>
+            </div>
 
         </div>
     </div>

@@ -1,10 +1,9 @@
 <div class='row'>
     <div class='col-md-12'>
         <div class='form-wrapper'>
-			<form class='form-horizontal' role='form' method='post' action='/modules/document/index.php'>
+			<form class='form-horizontal' role='form' method='post' action='{{ $base_url }}'>
 				<fieldset>
 					<input type='hidden' name='sourceFile' value='{{ $renamePath }}'>
-					<input type='hidden' name='courseCodeAfterRename' value={{$course_code}}>
 					{!! $group_hidden_input !!}
 					<div class='form-group'>
 						<label for='renameTo' class='col-xs-2 control-label' >{{ $filenameLabel }}:</label>

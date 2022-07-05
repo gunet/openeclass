@@ -1,9 +1,8 @@
 <div class='row'>
     <div class='col-md-12'>
         <div class='form-wrapper'>
-			<form class='form-horizontal' role='form' method='post' action='{{$urlAppend}}modules/document/index.php'>
+			<form class='form-horizontal' role='form' method='post' action='{{ $base_url }}'>
                 <input type='hidden' name='commentPath' value='{{$file->path}}'>
-                <input type='hidden' name='courseCodeAfterCommentPath' value='{{$course_code}}'>
                 <fieldset>
                     {!! $group_hidden_input !!}
                     <div class='form-group'>

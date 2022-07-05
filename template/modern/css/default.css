@@ -24,10 +24,6 @@
     margin-top:-4px;
   }
 
-  .LegendShadow{
-    height:70px;
-  }
-
   .nav-link:hover{
     color:white;
   }
@@ -110,15 +106,30 @@
   /* ---------------------------------------------------------------------------------------------*/
   /* ---------------------------------------------------------------------------------------------*/
 
-  .col-nav-tools{
-      margin-top:40px;
-    }
+  .dropdown_menu_user{
+    background-color: #003F87;
+  }
 
-  .eclass-nav-icon{
+  .dropdown_menu_user .dropdown-item:hover{
+    background-color: blue;
+  }
+
+  .user-language-menu{
+    background-color: #003F87;
+  }
+  .user-language-menu .dropdown-item:hover{
+    background-color: blue;
+  }
+
+  /* .col-nav-tools{
+      margin-top:40px;
+    } */
+
+  /* .eclass-nav-icon{
         height:70px;
         width: 130;
         margin-top:-60px;
-    }
+    } */
 
   .fab.fa-facebook-f{
       height: 30px; padding-top:7px;
@@ -144,72 +155,27 @@
       color:white;
   }
   
-  .language-item{
-      padding-left:30px;
-      color:white;
-  }
-  .user-menu-li{
-      margin: 0 0 10px 0;
-  }
-  
-  .language-li{
-      margin: 0 0 10px 0;
-  }
-  .language-item:hover{
-      color:white;
-  }
-  
-  .dropdown_user_menu{
-    border: 0;
-    outline: none;
-    margin-right:25px;
-  }
-  .user-menu-li:hover{
-      background-color: blue;
-  }
-  
-  .language-li:hover{
-      background-color: blue;
-  }
-  .dropdown_user_menu:hover{
-      border: 0;
-  }
-  .dropdown_user_menu:focus{
-      border: 0;
-  }
-  .dropdown_user_menu:active{
-      border: 0 ;
-  }
 
-  .dropdown_language{
-      border-radius: 50%;
-  }
   .inputSearch{
       font-family:Arial;
       font-family:FontAwesome;
+      background-color: #005ed7;
   }
-  .inputSearch:hover,:active,:focus{
-    background-color: transparent;
+  .inputSearch:active{
+    background-color: #005ed7;
+    border:0;
+  }
+  .inputSearch:focus{
+    background-color: #005ed7;
+    border:0;
+  }
+  .inputSearch:hover{
+    background-color: #005ed7;
+    border:0;
   }
   .inputSearch::placeholder { 
       color: white;
-      opacity: 0.5;
-  }
-  .wrech-button{
-      height:41px;
-      background-color: transparent;
-  }
-  .wrech-button:hover{
-      background-color: #003F87;
-  }
-  .wrech-button:focus{
-      background-color: #003F87;
-  }
-  .wrech-button::after{
-      background-color: #003F87;
-  }
-  .wrech-button:active{
-      background-color: #003F87;
+      text-align: center;
   }
   
   /* --------------------------------------------- ManageCourse-Partials ----------------------------------------*/
@@ -1857,6 +1823,14 @@
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------*/
   @media (max-width: 320px){
+    .btnLang{
+      background-color: transparent;
+      border: 0;
+    }
+    .btnLang:focus{
+      background-color: transparent;
+    }
+
     .manage-course-ul{
       background-color: #003F87;
       width:260px;
@@ -1930,6 +1904,14 @@
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- small mobile - portrait-----------------------------------*/
   @media (min-width:321px) and (max-width: 375px){
+
+    .btnLang{
+      background-color: transparent;
+      border: 0;
+    }
+    .btnLang:focus{
+      background-color: transparent;
+    }
 
     .login-form-body{
       width:auto;
@@ -2009,6 +1991,15 @@
   /* -------------------------------------------------------mobile - portrait-----------------------------------------------*/
   
   @media (min-width:376px) and (max-width: 425px){
+
+    .btnLang{
+      background-color: transparent;
+      border: 0;
+    }
+    .btnLang:focus{
+      background-color: transparent;
+    }
+
 
     .login-form-body{
       width:auto;
@@ -2131,9 +2122,9 @@
       background-color: #003F87 ;
     }
   
-    .col-nav-tools{
+    /* .col-nav-tools{
       margin-top:-10px ;
-    }
+    } */
     .dropdown-language-ul{
       margin-left:-60px ;
       margin-top:5px !important;
@@ -2157,9 +2148,14 @@
   /* ------------------------------------------------------- MOBILE L ------------------------------------------------------- */
   @media (min-width: 426px) and (max-width: 767px){ 
 
-    .LegendShadow{
-      min-height:140px;
+    .btnLang{
+      background-color: transparent;
+      border: 0;
     }
+    .btnLang:focus{
+      background-color: transparent;
+    }
+
 
     .jumbotron.jumbotron-login{
       width:100% ;
@@ -2224,6 +2220,14 @@
 
   @media (min-width: 768px) and (max-width: 1023px){
 
+    .btnLang{
+      background-color: transparent;
+      border: 0;
+    }
+    .btnLang:focus{
+      background-color: transparent;
+    }
+
     .jumbotron.jumbotron-login{
       width:100% ;
     }
@@ -2234,11 +2238,6 @@
     .login-form-icon{
       width:auto;
       margin-left: 80px;
-    }
-
-
-    .LegendShadow{
-      min-height:140px;
     }
 
     .navrbar_menu_btn{
@@ -2288,15 +2287,15 @@
       margin-left:-150px;
     }
   
-    .col-nav-tools{
+    /* .col-nav-tools{
       margin-top:-10px ;
-    }
+    } */
   
-    .eclass-nav-icon{
+    /* .eclass-nav-icon{
         width:90px ;
         height:90px ;
         margin-left:-30px ;
-    }
+    } */
 
     .dropdown-language-ul{
       margin-left:-60px ;

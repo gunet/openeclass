@@ -19,6 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+
 $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
 
 if (!isset($require_current_course)) {
@@ -353,6 +354,7 @@ if ($can_upload or $user_upload) {
         $components = explode('/', trim($extra_path, '/'));
         $fileName = end($components);
     } elseif (isset($_POST['file_content'])) {
+
         if ($diskUsed + strlen($_POST['file_content']) > $diskQuotaDocument) {
             Session::Messages($langNoSpace, 'alert-danger');
             redirect_to_current_dir();

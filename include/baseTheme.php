@@ -288,7 +288,7 @@ function view($view_file, $view_data = array()) {
             $rgba_no_alpha = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
             $rgba_no_alpha[3] = '1';
             $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
-            $styles_str .= "#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer{background:$theme_options_styles[leftNavBgColor];} @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
+            $styles_str .= "#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer, #collapseTools{background:$theme_options_styles[leftNavBgColor];} @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
         }
         if (!empty($theme_options_styles['linkColor'])) $styles_str .= "a {color: $theme_options_styles[linkColor];}";
         if (!empty($theme_options_styles['linkHoverColor'])) $styles_str .= "a:hover, a:focus {color: $theme_options_styles[linkHoverColor];}";
@@ -510,19 +510,22 @@ function lang_selections() {
     if (count($session->active_ui_languages) < 2) {
         return ('&nbsp;');
     }
-    $lang_select = "<li class='dropdown'>
-      <a href='#' class='dropdown-toggle' role='button' id='dropdownMenuLang' data-toggle='dropdown'>
-          <span class='fa fa-globe'></span><span class='sr-only'>" . trans('langChooseLang') . "</span>
-      </a>
-      <ul class='dropdown-menu' role='menu' aria-labelledby='dropdownMenuLang'>";
+
+    $lang_select = "
+      <button class='btnLang btn btn-primary' type='button' aria-expanded='false' id='dropdownMenuLang' data-bs-toggle='dropdown'>
+          <span class='fa fa-globe'></span>
+      </button>
+      <ul class='dropdown-menu dropdown-menu-end user-language-menu' role='menu' aria-labelledby='dropdownMenuLang'>";
+
     foreach ($session->active_ui_languages as $code) {
         $class = ($code == $session->language)? ' class="active"': '';
         $lang_select .=
-            "<li role='presentation'$class>
-                <a role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>" .
-                    q($native_language_names_init[$code]) . "</a></li>";
+            "<li class='p-1' role='presentation'$class>
+                <a class='dropdown-item' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
+                    <span class='fa fa-language text-warning' aria-hidden='true'></span><span class='text-white ps-2 pe-2'>" .
+                    q($native_language_names_init[$code]) . "</span></a></li>";
     }
-    $lang_select .= "</ul></li>";
+    $lang_select .= "</ul>";
     return $lang_select;
 }
 

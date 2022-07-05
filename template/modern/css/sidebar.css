@@ -15,12 +15,10 @@ input[type=checkbox].toggles{
   display:none;
 }
 
-.textTool{
-  font-size: 14px;
+.toolSidebarTxt{
+  font-size: 13px;
 }
-.icon_tool{
-  font-size: 12px;
-}
+
 
 input[type=checkbox].toggles + label{
   display:inline-block;
@@ -142,37 +140,6 @@ input[type="checkbox"].toggles + label.rounded::before{
   text-align: center;
 }
 
-.sidebarTexts{
-  font-size: 12.5px;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  padding-left: 20px;
-  padding-right: 20px;
-  border-radius: 6px;
-  display: inline-block;
-  
-}
-/* .sidebarTexts i::after{
-  content: "|\00a0\00a0" !important;
-} */
-
-.sidebarTexts:hover{
-  background-color: blue;
-}
-.sidebarTextsAdmin{
-  font-size: 12.5px;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  padding-left: 20px;
-  padding-right: 20px;
-  border-radius: 6px;
-  display: inline-block;
-}
-.sidebarTextsAdmin:hover{
-  background-color: blue;
-}
-
-
 
 .classOne.fas.fa-angle-up{
   opacity: 0;
@@ -279,16 +246,6 @@ ul {
   -moz-box-shadow: 0 0 3px #ccc;
   -webkit-box-shadow: 0 0 3px #ccc;
   box-shadow: 0 0 3px #ccc;
-}
-
-.col_maincontent_active_PersonalDoc{
-  transition: 0.4s;
-  height:auto;
-  background-color: white; 
-  border-bottom-right-radius: 15px;
-  border-top-right-radius: 15px;
-  border-bottom-left-radius: 15px;
-  border-top-left-radius: 15px;
 }
 
 
@@ -531,14 +488,6 @@ ul {
     font-size:12px !important; 
     margin-top:5px !important;
   }
-  .sidebarTexts{
-    padding-left: 25px !important;
-  }
-
-  .col_maincontent_active_PersonalDoc{
-    width:auto;
-    margin-left: 0px;
-  }
 
   .col_maincontent_active{
     min-height: 60vh;
@@ -601,6 +550,14 @@ ul {
   margin-left:-15px;
  }
 
+ .iconTool{
+  font-size:13px;margin-left:-5px;
+ }
+ .text_Admintool{
+  margin-left:-10px;
+ }
+
+
   .on{
     font-size:10px !important;
   }
@@ -617,10 +574,6 @@ ul {
     padding-top: 4px !important;
   }
 
-  .col_maincontent_active_PersonalDoc{
-    width:auto;
-    margin-left: 0px;
-  }
 
   .col_maincontent_active{
     min-height: 60vh;

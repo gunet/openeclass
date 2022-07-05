@@ -162,23 +162,23 @@
                                     <span class='pull-right' style="margin-top: 15px;">{!! copyright_info($course_id) !!}</span>
                                 @endif
                             @else
-                                <div class='col-12 course-below-wrapper'>
+                                <div class='col-12 course-below-wrapper mt-5'>
                                     <div class='row text-muted course-below-info'>
                                         <div class="row">
-                                            <div class="col-xl-5 col-lg-5 col-md-6 col-sm-6 col-6">
+                                            <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12 d-flex justify-content-md-start justify-content-center">
                                                 <a role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
                                                     <span class='fa fa-chevron-right fa-fw'></span>
-                                                    <span style='padding-left: 5px;'>{{ trans('langCourseDescription') }}</span>
+                                                    <span class='ps-1'>{{ trans('langCourseDescription') }}</span>
                                                 </a>
                                             </div>
                                             @if($is_editor)
-                                                <div class="col-xl-7 col-lg-7 col-md-6 col-sm-6 col-6">
+                                                <div class="col-xl-7 col-lg-7 col-md-6 col-sm-12 col-12 d-flex justify-content-md-end justify-content-center">
                                                     @if($courseDescriptionVisible>0)
-                                                        <span class='float-end'>{{trans('langCourseDescription')}}</span>
+                                                        <span class='float-md-end pe-md-2 mt-md-0 float-start pe-0 mt-5'>{{trans('langCourseDescription')}}</span>
                                                     @else
-                                                    <span class='float-end'>{{trans('langAdd')}}</span>
+                                                        <span class='float-md-end pe-md-2 mt-md-0 float-start pe-0 mt-5'>{{trans('langAdd')}}</span>
                                                     @endif
-                                                    <span class='float-end pe-2'>{!! $edit_course_desc_link !!}</span>
+                                                    <span class='float-md-end pe-md-2 mt-md-0 float-start pe-0 mt-5'>{!! $edit_course_desc_link !!}</span>
                                                 </div>
                                             @endif
                                         </div>
@@ -186,11 +186,14 @@
                                         @if ($course_info->course_license)
                                             <span class="pull-right">{!! copyright_info($course_id) !!}</span>
                                         @endif
-                                        <div class='collapse shadow-lg p-3 mb-5 bg-body rounded bg-primary' id='collapseDescription'>
-                                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                                        <div class='collapse shadow-lg p-3 bg-body rounded bg-primary' id='collapseDescription'>
+                                            <div class='col-12'>
                                                 @foreach ($course_descriptions as $row)
-                                                    <div style='margin-top: 1px;'><strong>{{$row->title}}</strong></div>
-                                                    <div>{!! standard_text_escape($row->comments) !!}</div>
+                                                    <div class='d-flex justify-content-between'>
+                                                        <p class='control-label-notes text-start'>{{$row->title}}</p>
+                                                        {!! standard_text_escape($row->comments) !!}
+                                                        
+                                                    </div>
                                                 @endforeach
                                             </div>
                                         </div>
@@ -203,8 +206,8 @@
                     </div>
                 </div> <!-- end row p-5 -->
 
-                <div class="row pb-3 pt-1 pe-5 ps-5">
-                    <div class="col-xl-8 col-lg-6 col-md-12 mt-3 px-md-5 col_maincontent_active_unit">
+                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
+                    <div class="col-xl-8 col-lg-6 col-md-12 col_maincontent_active_unit">
                         <div class="row p-2 bg-white"></div>
                         <div class="row p-2 bg-white"></div>
                         <div class="pb-5 bg-white">
@@ -245,7 +248,7 @@
                             @endif
                         </div>
                     </div><!-- end col units -->
-                    <div class="col-xl-4 col-lg-6 col-md-12 mt-3 float-end ">
+                    <div class="col-xl-4 col-lg-6 col-md-12 mt-lg-0 mt-4 float-end ">
 
                         <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar">
                             {!! $user_personal_calendar !!}
@@ -279,7 +282,7 @@
                             <div class='row p-2'></div>
                         </div>
 
-                        <div class="col-md-12 px-5 mt-3 announcement-course-page">
+                        <div class="col-md-12 px-5 mt-lg-3 mt-4 announcement-course-page">
 
                             <div class="pb-5 bg-white">
                                 <div class='row p-2'></div>
@@ -287,7 +290,7 @@
                                 <hr>
                                 <div class='panel'>
                                     <div class='panel-body'>
-                                        <ul class='tablelist' style='margin-left:-20px; margin-top:-20px;'>
+                                        <ul class='tablelist'>
                                             {!! course_announcements() !!}
                                         </ul>
                                     </div>
@@ -306,7 +309,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12 px-5 mt-3 col_maincontent_active_CourseComplete">
+                        <div class="col-md-12 px-5 mt-lg-3 mt-4 col_maincontent_active_CourseComplete">
                             <div class="row p-2 bg-white"></div>
                             <div class="row p-2 bg-white"></div>
                             <div class="pb-5 bg-white">
@@ -438,10 +441,6 @@
         });
     </script>
 
-    <!-- Remove localStorage for sidebarCourse And sidebarAdmin -->
-    <script>
-        localStorage.removeItem('getIdSideBarTexts');
-    </script>
 
 @endif
 
