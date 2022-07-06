@@ -19,12 +19,12 @@
 * ======================================================================== */
 
 if (isset($_GET['course'])) { //course blog
-    $require_current_course = true;
+    $require_current_course = TRUE;
     $blog_type = 'course_blog';
 } else { //personal blog
     $require_login = true;
-    $require_valid_uid = true;
-    $require_current_course = false;
+    $require_valid_uid = TRUE;
+    $require_current_course = FALSE;
     $blog_type = 'perso_blog';
 }
 $require_help = TRUE;
@@ -42,22 +42,22 @@ require_once 'modules/analytics/BlogAnalyticsEvent.php';
 
 if ($blog_type == 'course_blog') {
     $user_id = 0;
-
-    define_rss_link();
+    
+    define_rss_link();    
     $toolName = $langBlog;
-
+    
     //check if commenting is enabled for course blogs
     $comments_enabled = setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id);
     //check if rating is enabled for course blogs
     $ratings_enabled = setting_get(SETTING_BLOG_RATING_ENABLE, $course_id);
-
+    
     $sharing_allowed = is_sharing_allowed($course_id);
     $sharing_enabled = setting_get(SETTING_BLOG_SHARING_ENABLE, $course_id);
-
+    
     $url_params = "course=$course_code";
 } elseif ($blog_type == 'perso_blog') {
     if (!get_config('personal_blog')) {
-        $tool_content = "<div class='alert alert-danger'>$langPersoBlogDisabled</div>";
+        $tool_content = "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langPersoBlogDisabled</div></div>";
         draw($tool_content, 1);
         exit;
     }
@@ -77,20 +77,20 @@ if ($blog_type == 'course_blog') {
         $user_id = $_SESSION['uid']; //current user's blog
         $is_blog_editor = true;
     }
-
+    
     $db_user = Database::get()->querySingle("SELECT surname, givenname FROM user WHERE id = ?d", $user_id);
     if (!$db_user) {
-        $tool_content = "<div class='alert alert-danger'>$langBlogUserNotExist</div>";
+        $tool_content = "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langBlogUserNotExist</div></div>";
         draw($tool_content, 1);
         exit;
     }
-
+    
     if ($user_id == $_SESSION['uid']) {
         $toolName = $langMyBlog;
     } else {
         $toolName = $langBlog." - ".$db_user->surname." ".$db_user->givenname;
-    }
-
+    }    
+    
     //check if commenting is enabled for personal blogs
     $comments_enabled = get_config('personal_blog_commenting');
     //check if rating is enabled for personal blogs
@@ -98,7 +98,7 @@ if ($blog_type == 'course_blog') {
     //check if sharing is platform widely allowed and enabled for personal blogs
     $sharing_allowed = get_config('enable_social_sharing_links');
     $sharing_enabled = get_config('personal_blog_sharing');
-
+    
     $url_params = "user_id=$user_id";
 }
 
@@ -109,7 +109,7 @@ $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 		$langEmptyBlogPostTitle . '";</script>';
 
 //define allowed actions
-$allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delPost", "savePost", "settings", "makeVisible", "makeInvisible");
+$allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delPost", "savePost", "settings");
 
 //initialize $_REQUEST vars
 $action = (isset($_REQUEST['action']) && in_array($_REQUEST['action'], $allowed_actions))? $_REQUEST['action'] : "showBlog";
@@ -150,10 +150,12 @@ if ($blog_type == 'course_blog' && $is_editor) {
 		    if (isset($_POST['4_radio'])) {
                 setting_set(SETTING_BLOG_SHARING_ENABLE, $_POST['4_radio'], $course_id);
 		    }
-            Session::Messages($langRegDone, 'alert-success');
+            //Session::Messages($langRegDone, 'alert-success');
+            Session::flash('message',$langRegDone); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/blog/index.php?course='.$course_code);
         }
-
+        
         if (isset($message) && $message) {
         	$tool_content .= $message . "<br/>";
         	unset($message);
@@ -196,7 +198,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
             $sharing_radio_dis = "";
             $sharing_dis_label = "";
         }
-
+		
         if ($sharing_enabled == 1) {
             $checkSharingDis = "";
             $checkSharingEn = "checked";
@@ -204,17 +206,17 @@ if ($blog_type == 'course_blog' && $is_editor) {
             $checkSharingDis = "checked";
             $checkSharingEn = "";
         }
-
-
+        
+        
         $tool_content .= "
-            <div class='row'>
-                <div class='col-sm-12'>
-                    <div class='form-wrapper'>
+            
+                <div class='col-12'>
+                    <div class='form-wrapper shadow-sm p-3 rounded'>
                         <form class='form-horizontal' action='' role='form' method='post'>
-                            <fieldset>
-                                <div class='form-group'>
-                                    <label class='col-sm-3'>$langBlogPerm</label>
-                                    <div class='col-sm-9'>
+                            <fieldset>                               
+                                <div class='form-group mt-3'>
+                                    <label class='col-sm-6 control-label-notes'>$langBlogPerm</label>
+                                    <div class='col-sm-9'> 
                                         <div class='radio'>
                                             <label>
                                                 <input type='radio' value='0' name='1_radio' $checkTeach>$langBlogPermTeacher
@@ -229,8 +231,8 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                 </div>
                             </fieldset>
                             <fieldset>
-                                <div class='form-group'>
-                                    <label class='col-sm-3'>$langBlogCommenting</label>
+                                <div class='form-group mt-3'>
+                                    <label class='col-sm-6 control-label-notes'>$langBlogCommenting</label>
                                     <div class='col-sm-9'>
                                         <div class='radio'>
                                             <label>
@@ -244,8 +246,8 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class='form-group'>
-                                    <label class='col-sm-3'>$langBlogRating:</label>
+                                <div class='form-group mt-3'>
+                                    <label class='col-sm-6 control-label-notes'>$langBlogRating:</label>
                                     <div class='col-sm-9'>
                                         <div class='radio'>
                                             <label>
@@ -259,8 +261,8 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class='form-group'>
-                                    <label class='col-sm-3'>$langBlogSharing:</label>
+                                <div class='form-group mt-3'>
+                                    <label class='col-sm-6 control-label-notes'>$langBlogSharing:</label>
                                     <div class='col-sm-9'>
                                         <div class='radio'>
                                             <label>
@@ -275,7 +277,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                     </div>
                                 </div>
                             </fieldset>
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <div class='col-sm-9 col-sm-offset-3'>".
                                     form_buttons(array(
                                         array(
@@ -291,8 +293,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                             </div>
                         </form>
                     </div>
-                </div>
-            </div>";
+                </div>";
 
 
 
@@ -310,24 +311,6 @@ if ($blog_type == 'course_blog' && $is_editor) {
 //instantiate the object representing this blog
 $blog = new Blog($course_id, $user_id);
 
-// make blog post visible
-if ($action == "makeVisible") {
-    $post = new BlogPost();
-    if ($post->loadFromDB($pId)) {
-        $post->visibility(1);
-    }
-    redirect_to_home_page("modules/blog/index.php?$url_params");
-}
-
-// make blog post invisible
-if ($action == "makeInvisible") {
-    $post = new BlogPost();
-    if ($post->loadFromDB($pId)) {
-        $post->visibility(0);
-    }
-    redirect_to_home_page("modules/blog/index.php?$url_params");
-}
-
 //delete post
 if ($action == "delPost") {
     $post = new BlogPost();
@@ -340,17 +323,25 @@ if ($action == "delPost") {
         }
         if ($allow_to_edit) {
             if($post->delete()) {
-                Session::Messages($langBlogPostDelSucc, 'alert-success');
+                //Session::Messages($langBlogPostDelSucc, 'alert-success');
+                Session::flash('message',$langBlogPostDelSucc); 
+                Session::flash('alert-class', 'alert-success');
                 triggerGame($course_id, $uid, BlogEvent::DELPOST);
                 triggerAnalytics($course_id, $uid, BlogAnalyticsEvent::BLOGEVENT);
             } else {
-                Session::Messages($langBlogPostDelFail);
+                //Session::Messages($langBlogPostDelFail);
+                Session::flash('message',$langBlogPostDelFail); 
+                Session::flash('alert-class', 'alert-danger');
             }
         } else {
-            Session::Messages($langBlogPostNotAllowedDel);
+            //Session::Messages($langBlogPostNotAllowedDel);
+            Session::flash('message',$langBlogPostNotAllowedDel); 
+            Session::flash('alert-class', 'alert-danger');
         }
     } else {
-        Session::Messages($langBlogPostNotFound);
+        //Session::Messages($langBlogPostNotFound);
+        Session::flash('message',$langBlogPostNotFound); 
+        Session::flash('alert-class', 'alert-danger');
     }
     redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
 }
@@ -366,9 +357,9 @@ if ($action == "createPost") {
     if ($allow_to_create) {
         $commenting_setting = '';
         if ($comments_enabled) {
-            $commenting_setting = "<div class='form-group'>
-                                       <label class='col-sm-2 control-label'>$langBlogPostCommenting:</label>
-                                       <div class='col-sm-10'>
+            $commenting_setting = "<div class='form-group mt-3'>
+                                       <label class='col-sm-6 control-label-notes'>$langBlogPostCommenting:</label>
+                                       <div class='col-sm-12'>
                                            <div>
                                                 <input type='radio' value='1' name='commenting' checked>
                                                 $langCommentsEn
@@ -381,22 +372,28 @@ if ($action == "createPost") {
                                    </div>";
         }
         $tool_content .= "
-        <div class='form-wrapper'>
+        <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
             <fieldset>
+                <div class='row p-2'></div>
+
                 <div class='form-group'>
-                    <label for='blogPostTitle' class='col-sm-2 control-label'>$langBlogPostTitle:</label>
-                    <div class='col-sm-10'>
+                    <label for='blogPostTitle' class='col-sm-6 control-label-notes'>$langBlogPostTitle:</label>
+                    <div class='col-sm-12'>
                         <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' placeholder='$langBlogPostTitle'>
                     </div>
                 </div>
+
+                <div class='row p-2'></div>
+
                 <div class='form-group'>
-                    <label for='newContent' class='col-sm-2 control-label'>$langBlogPostBody:</label>
-                    <div class='col-sm-10'>
+                    <label for='newContent' class='col-sm-6 control-label-notes'>$langBlogPostBody:</label>
+                    <div class='col-sm-12'>
                         ".rich_text_editor('newContent', 4, 20, '')."
                     </div>
                 </div>
                 $commenting_setting
+                <div class='row p-2'></div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>".
                         form_buttons(array(
@@ -414,9 +411,11 @@ if ($action == "createPost") {
                 <input type='hidden' name='action' value='savePost' />
             </fieldset>
             </form>
-        </div>";
+        </div></div>";
     } else {
-        Session::Messages($langBlogPostNotAllowedCreate);
+        //Session::Messages($langBlogPostNotAllowedCreate);
+        Session::flash('message',$langBlogPostNotAllowedCreate); 
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/blog/index.php?$url_params");
     }
 
@@ -444,9 +443,11 @@ if ($action == "editPost") {
                     $checkCommentEn = '';
                     $checkCommentDis = 'checked';
                 }
-                $commenting_setting = "<div class='form-group'>
-                                           <label class='col-sm-2 control-label'>$langBlogPostCommenting:</label>
-                                           <div class='col-sm-10'>
+                $commenting_setting = "
+                
+                                        <div class='form-group mt-3'>
+                                           <label class='col-sm-6 control-label-notes'>$langBlogPostCommenting:</label>
+                                           <div class='col-sm-12'>
                                                <div>
                                                    <input type='radio' value='1' name='commenting' $checkCommentEn>
                                                    $langCommentsEn
@@ -459,22 +460,31 @@ if ($action == "editPost") {
                                        </div>";
             }
             $tool_content .= "
-            <div class='form-wrapper'>
+            <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
                 <fieldset>
+
+                <div class='row p-2'></div>
+
                 <div class='form-group'>
-                    <label for='blogPostTitle' class='col-sm-2 control-label'>$langBlogPostTitle:</label>
-                    <div class='col-sm-10'>
+                    <label for='blogPostTitle' class='col-sm-6 control-label-notes'>$langBlogPostTitle:</label>
+                    <div class='col-sm-12'>
                         <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' value='".q($post->getTitle())."' placeholder='$langBlogPostTitle'>
                     </div>
                 </div>
+
+                <div class='row p-2'></div>
+
                 <div class='form-group'>
-                    <label for='newContent' class='col-sm-2 control-label'>$langBlogPostBody:</label>
-                    <div class='col-sm-10'>
+                    <label for='newContent' class='col-sm-6 control-label-notes'>$langBlogPostBody:</label>
+                    <div class='col-sm-12'>
                         ".rich_text_editor('newContent', 4, 20, $post->getContent())."
                     </div>
                 </div>
                 $commenting_setting
+
+                <div class='row p-2'></div>
+
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>".
                         form_buttons(array(
@@ -493,13 +503,17 @@ if ($action == "editPost") {
                 <input type='hidden' name='pId' value='".$post->getId()."'>
                 </fieldset>
             </form>
-        </div>";
+        </div></div>";
         } else {
-            Session::Messages($langBlogPostNotAllowedEdit);
+            //Session::Messages($langBlogPostNotAllowedEdit);
+            Session::flash('message',$langBlogPostNotAllowedEdit); 
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
         }
     } else {
-        Session::Messages($langBlogPostNotFound);
+        //Session::Messages($langBlogPostNotFound);
+        Session::flash('message',$langBlogPostNotFound); 
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
     }
 }
@@ -522,14 +536,20 @@ if ($action == "savePost") {
                 $commenting = NULL;
             }
             if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id, $commenting)) {
-                Session::Messages($langBlogPostSaveSucc, 'alert-success');
+                //Session::Messages($langBlogPostSaveSucc, 'alert-success');
+                Session::flash('message',$langBlogPostSaveSucc); 
+                Session::flash('alert-class', 'alert-success');
                 triggerGame($course_id, $uid, BlogEvent::NEWPOST);
                 triggerAnalytics($course_id, $uid, BlogAnalyticsEvent::BLOGEVENT);
             } else {
-                Session::Messages($langBlogPostSaveFail);
+                //Session::Messages($langBlogPostSaveFail);
+                Session::flash('message',$langBlogPostSaveFail); 
+                Session::flash('alert-class', 'alert-danger');
             }
         } else {
-            Session::Messages($langBlogPostNotAllowedCreate);
+            //Session::Messages($langBlogPostNotAllowedCreate);
+            Session::flash('message',$langBlogPostNotAllowedCreate); 
+            Session::flash('alert-class', 'alert-danger');
         }
     } elseif (isset($_POST['submitBlogPost']) && $_POST['submitBlogPost'] == $langModifBlogPost) {
         $post = new BlogPost();
@@ -547,15 +567,23 @@ if ($action == "savePost") {
                     $commenting = NULL;
                 }
                 if ($post->edit($_POST['blogPostTitle'], purify($_POST['newContent']), $commenting)) {
-                    Session::Messages($langBlogPostSaveSucc, 'alert-success');
+                    //Session::Messages($langBlogPostSaveSucc, 'alert-success');
+                    Session::flash('message',$langBlogPostSaveSucc); 
+                    Session::flash('alert-class', 'alert-success');
                 } else {
-                    Session::Messages($langBlogPostSaveFail);
+                    //Session::Messages($langBlogPostSaveFail);
+                    Session::flash('message',$langBlogPostSaveFail); 
+                    Session::flash('alert-class', 'alert-danger');
                 }
             } else {
-                Session::Messages($langBlogPostNotAllowedEdit);
+                //Session::Messages($langBlogPostNotAllowedEdit);
+                Session::flash('message',$langBlogPostNotAllowedEdit); 
+                Session::flash('alert-class', 'alert-danger');
             }
         } else {
-            Session::Messages($langBlogPostNotFound);
+            //Session::Messages($langBlogPostNotFound);
+            Session::flash('message',$langBlogPostNotFound); 
+            Session::flash('alert-class', 'alert-danger');
         }
     }
     redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
@@ -596,8 +624,10 @@ if ($action == "showPost") {
                 $rating_content = $rating->put(NULL, $uid, $user_id);
             }
         }
-        $tool_content .= "<div class='panel panel-action-btn-default'>
-                            <div class='panel-heading'>
+        $tool_content .= "
+        <div class='row p-2'></div>
+                        <div class='panel panel-action-btn-default'>
+                            <div class='panel-heading notes_thead'>
                                 <div class='pull-right'>
                                     ". action_button(array(
                                         array(
@@ -618,20 +648,19 @@ if ($action == "showPost") {
                                             'title' => $langAddResePortfolio,
                                             'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=blog&amp;rid=".$post->getId(),
                                             'icon' => 'fa-star',
-                                            'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid && $post->getVisible())
+                                            'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid)
                                         ),
                                     ))."
                                 </div>
-                                <h3 class='panel-title'>
+                                <h3 class='panel-title text-white'>
                                     ".q($post->getTitle())."
                                 </h3>
                             </div>
-
-                            <div class='panel-body ps-3 panel-body-blog'><button class='btn btn-success pe-none mt-2'>" . nice_format(datetime_remove_seconds($post->getTime()), true). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
+                            <div class='panel-body ps-3 panel-body-blog'><button class='btn btn-success pe-none mt-2'>" . nice_format($post->getTime(), true). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
                             <div class='panel-footer ps-3 panel-footer-blog'>
                                 <div class='row'>
                                     <div class='col-sm-6'>$rating_content</div>
-                                    <div class='col-sm-6 text-right'>$sharing_content</div>
+                                    <div class='col-sm-6 text-end'>$sharing_content</div>
                                 </div>
                             </div>
                         </div>";
@@ -649,7 +678,9 @@ if ($action == "showPost") {
         }
 
     } else {
-        Session::Messages($langBlogPostNotFound);
+        //Session::Messages($langBlogPostNotFound);
+        Session::flash('message',$langBlogPostNotFound); 
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
     }
 
@@ -678,7 +709,8 @@ if ($action == "showBlog") {
 
     $num_posts = $blog->blogPostsNumber();
     if ($num_posts == 0) {//no blog posts
-        $tool_content .= "<div class='alert alert-warning'>$langBlogEmpty</div>";
+        $tool_content .= "<div class='row p-2'></div>
+            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langBlogEmpty</div></div>";
     } else {//show blog posts
         //if page num was changed at the url and exceeds pages number show the first page
         if ($page > ceil($num_posts/$posts_per_page)-1) {
@@ -687,10 +719,10 @@ if ($action == "showBlog") {
 
         //retrieve blog posts
         $posts = $blog->getBlogPostsDB($page, $posts_per_page);
-        /***blog posts area***/
-        $tool_content .= "<div class='row'>";
-        $tool_content .= "<div class='col-sm-9'>";
 
+        /***blog posts area***/
+        $tool_content .= "<div class='row p-2'></div><div class='row'>";
+        $tool_content .= "<div class='col-sm-9'>";
         foreach ($posts as $post) {
             if ($blog_type == 'course_blog') {
                 $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
@@ -716,36 +748,16 @@ if ($action == "showBlog") {
                 $comm = new Commenting('blogpost', $post->getId());
                 $comment_content = "<a class='btn btn-primary btn-xs pull-right' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
             } else {
-                $comment_content = "<div class='blog_post_empty_space'></div>";
+                $comment_content = "<div class=\"blog_post_empty_space\"></div>";
             }
-            if ($post->getVisible()) {
-                $vis_panel_style = 'panel-action-btn-default';
-                $vis_color = '';
-                $vis_title = $langViewHide;
-                $vis_action = 'makeInvisible';
-                $vis_icon = 'fa fa-eye-slash';
-            } else {
-                $vis_panel_style = '';
-                $vis_color = "style='color: darkgrey;'";
-                $vis_title = $langViewShow;
-                $vis_action = 'makeVisible';
-                $vis_icon = 'fa fa-eye';
-            }
-            $tool_content .= "<div $vis_color>";
-            $tool_content .= "<div class='panel $vis_panel_style'>
-                                <div class='panel-heading'>
+            $tool_content .= "<div class='panel panel-action-btn-default'>
+                                <div class='panel-heading notes_thead'>
                                     <div class='pull-right'>
                                         ". action_button(array(
                                             array(
                                                 'title' => $langEditChange,
                                                 'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".$post->getId(),
                                                 'icon' => 'fa-edit',
-                                                'show' => $allow_to_edit
-                                            ),
-                                            array(
-                                                'title' => $vis_title,
-                                                'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=$vis_action&amp;pId=".$post->getId(),
-                                                'icon' => $vis_icon,
                                                 'show' => $allow_to_edit
                                             ),
                                             array(
@@ -760,31 +772,25 @@ if ($action == "showBlog") {
                                                 'title' => $langAddResePortfolio,
                                                 'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=blog&amp;rid=".$post->getId(),
                                                 'icon' => 'fa-star',
-                                                'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid && $post->getVisible())
+                                                'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid)
                                             ),
                                         ))."
                                     </div>
-                                    <h3 class='panel-title'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
+                                    <h3 class='panel-title text-white'>
+                                        <a class='text-white' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
                                     </h3>
                                 </div>
-<<<<<<< local
-                                <div class='panel-body'>
-                                    <div class='label label-success'>" . nice_format(datetime_remove_seconds($post->getTime()), true). "</div><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
-=======
                                 <div class='panel-body ps-3 panel-body-blog'>
                                     <button class='btn btn-success pe-none mt-2'>" . nice_format($post->getTime(), true). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
->>>>>>> graft
                                     $comment_content
                                 </div>
-                                <div class='panel-footer'>
+                                <div class='panel-footer panel-footer-blog'>
                                     <div class='row'>
                                         <div class='col-sm-6'>$rating_content</div>
                                         <div class='col-sm-6 text-right'>$sharing_content</div>
                                     </div>
                                 </div>
                              </div>";
-            $tool_content .= "</div>";
         }
 
 

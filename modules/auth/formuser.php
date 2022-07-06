@@ -347,8 +347,10 @@ if ($all_set) {
                         'icon' => 'fa-reply',
                         'level' => 'primary-label')), false);
 
-    $tool_content .= "<div class='alert alert-info'>$langUserData</div>";
-    $tool_content .= "<div class='form-wrapper'>
+    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langUserData</div></div>";
+    $tool_content .= "
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?auth=$auth_id' method='post'>
         <input type='hidden' name='p' value='$prof'>
         <div class='form-group'>

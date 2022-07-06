@@ -138,8 +138,9 @@
                     </div>
                     @endif
                       
-
-                        <form class='form-horizontal mt-5' role='form' method='post' name='createform' action="{{ $_SERVER['SCRIPT_NAME'] }}" onsubmit=\"return validateNodePickerForm();\">
+                    <div class='col-12'>
+                      <div class='form-wrapper shadow-sm p-3 rounded'>
+                        <form class='form-horizontal' role='form' method='post' name='createform' action="{{ $_SERVER['SCRIPT_NAME'] }}" onsubmit=\"return validateNodePickerForm();\">
                        
                                   <div class="row">
                                     <div class="col-xl-6 col-md-6 col-sm-6 col-6">
@@ -426,7 +427,7 @@
                               <div class='text-right'><small>{{ trans('langFieldsOptionalNote') }}</small></div>
                      
                           {!! generate_csrf_token_form_field() !!}
-                        </form>
+                        </form></div></div>
                      
                     
 

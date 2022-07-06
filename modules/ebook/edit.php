@@ -62,11 +62,12 @@ if (isset($_GET['delete'])) {
                         ));
         // Form #1 - edit title
         $tool_content .= "
-        <div class='form-wrapper'>
+        <div class='row p-2'></div>
+        <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='id' value='$ebook_id' />
                 <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langTitle:</label>
+                    <label class='col-sm-6 control-label-notes'>$langTitle:</label>
                     <div class='col-sm-9 input-group'>
                         <input class='form-control' type='text' name='ebook_title' value='" . q($info->title) . "' />
                         <span class='input-group-btn'>
@@ -75,18 +76,19 @@ if (isset($_GET['delete'])) {
                     </div>
                 </div>
             </form>
-        </div>";
+        </div></div>";
         // Form #2 - edit sections
         $tool_content .= "
+        <div class='row p-2'></div>
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
-        <h4>$langCourseUnits</h4>
+        <h5 class='control-label-notes'>$langSections</h5>
         <input type='hidden' name='id' value='$ebook_id' />
-          <table class='table-default'>
-          <tr>
-            <th class='text-left'>$langID</th>
-            <th>$langTitle</th>
-            <th width='75' class='text-center'>$langActions</th>
+          <table class='announcements_table'>
+          <tr class='notes_thead'>
+            <th class='text-white text-left'>$langID</th>
+            <th class='text-white'>$langTitle</th>
+            <th width='75' class='text-white text-center'>$langActions</th>
           </tr>";
         $q = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
                            WHERE ebook_id = ?d
@@ -187,7 +189,9 @@ if (isset($_GET['delete'])) {
     if (!empty($ebook_title) and $info->title != $ebook_title) {
         Database::get()->query("UPDATE `ebook` SET title = ?s WHERE id = ?d", $ebook_title, $info->id);
     }
-    Session::Messages($langEBookTitleModified, 'alert-success');
+    //Session::Messages($langEBookTitleModified, 'alert-success');
+    Session::flash('message',$langEBookTitleModified); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/ebook/edit.php?course=' . $course_code . '&id=' . $ebook_id);
 } elseif (isset($_POST['submit'])) {
     $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $ebook_id;
@@ -227,7 +231,9 @@ if (isset($_GET['delete'])) {
             Database::get()->query('DELETE FROM ebook_subsection WHERE id IN (' . implode(', ', $oldssids) . ')');
         }
     }
-    Session::Messages($langEBookSectionsModified, 'alert-success');
+    //Session::Messages($langEBookSectionsModified, 'alert-success');
+    Session::flash('message',$langEBookSectionsModified); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/ebook/edit.php?course=' . $course_code . '&id=' . $ebook_id);
 } else {
     $info = Database::get()->querySingle("SELECT * FROM `ebook` WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
@@ -268,26 +274,27 @@ if (isset($_GET['delete'])) {
                              'level' => 'primary-label')
                         ));
         $tool_content .= "
+        <div class='row p-2'></div>
             <div class='panel panel-default'>
-                <div class='panel-heading'>
-                    <h3 class='panel-title'>$langEBookInfo &nbsp;
+                <div class='panel-heading notes_thead'>
+                    <h3 class='panel-title text-white'>$langEBookInfo &nbsp;
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1'>
                             <i class='fa fa-edit' title='$langEdit' data-toggle='tooltip'></i>
                         </a>
                     </h3>
                 </div>
-                <div class='panel-body'>
-                    <div class='row  margin-bottom-fat'>
+                <div class='panel-body ps-1 pb-1 panel-body-electronicBook'>
+                    <div class='row p-2 margin-bottom-fat'>
                         <div class='col-sm-2'>
-                            <strong>$langTitle:</strong>
+                            <strong class='control-label-notes'>$langTitle:</strong>
                         </div>
                         <div class='col-sm-10'>
                             " . q($info->title) . "
                         </div>
                     </div>
-                    <div class='row  margin-bottom-fat'>
+                    <div class='row p-2 margin-bottom-fat'>
                         <div class='col-sm-2'>
-                            <strong>$langCourseUnits:</strong>
+                            <strong class='control-label-notes'>$langSections:</strong>
                         </div>
                         <div class='col-sm-10'>
                             $sections_table
@@ -333,15 +340,16 @@ if (isset($_GET['delete'])) {
                                           CONVERT(pssid, UNSIGNED), pssid");
         if (count($files) > 0 || count($q) > 0) {
             $tool_content .= "
+            <div class='row p-2'></div>
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='id' value='$ebook_id' />
                 <fieldset>
-                    <table class='table-default'>
-                    <tr class='list-header'>
-                      <th>$langFileName</th>
-                      <th>$langTitle</th>
-                      <th>$langSection</th>
-                      <th>$langSubsection</th>
+                    <table class='announcements_table'>
+                    <tr class='notes_thead'>
+                      <th class='text-white'>$langFileName</th>
+                      <th class='text-white'>$langTitle</th>
+                      <th class='text-white'>$langSection</th>
+                      <th class='text-white'>$langSubsection</th>
                     </tr>";
                    foreach ($q as $r) {
                        $file_id = $r->file_id;
@@ -387,7 +395,8 @@ if (isset($_GET['delete'])) {
                 </fieldset>
              </form>";
         } else {
-            $tool_content .= "<div class='alert alert-warning'>$langEBookNoPages</div>";
+            $tool_content .= "<div class='row p-2'></div>
+            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langEBookNoPages</div></div>";
         }
     }
 }

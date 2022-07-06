@@ -75,7 +75,7 @@ if (isset($_POST['submit'])) {
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/group/group_settings.php?course=$course_code");
 } else {
-    $tool_content .= "<div class='form-wrapper'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                     <div class='form-group'>
                         <div class='col-sm-12'>
@@ -120,7 +120,7 @@ if (isset($_POST['submit'])) {
                     </div>
                 ". generate_csrf_token_form_field() ."
                 </form>
-              </div>";
+              </div></div>";
 }
 
 draw($tool_content, 2);

@@ -224,7 +224,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
               'level' => 'primary-label',)
     ));
 
-    $form .= "<div class='form-wrapper'>
+    $form .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='POST' id='wikiProperties' action='$script'>
                     <fieldset>
                         <input type='hidden' name='wikiId' value='$wikiId'>
@@ -277,7 +277,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
                             </div>
                         </fieldset>
                     </form>
-                </div>";
+                </div></div>";
 
     return $form;
 }

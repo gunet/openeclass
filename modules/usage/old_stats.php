@@ -21,7 +21,7 @@
 
 
 /**
- * @file old_stats.php
+ * @file oldStats.php
  * @brief Show old statistics for the course, taken from table "action_summary" of the course's database.
  */
 $require_current_course = true;
@@ -188,7 +188,7 @@ $tool_content .= action_bar(array(
             ),false);
 
 /****   C3 plot   ****/
-$tool_content .= "<div class='row plotscontainer'>";
+$tool_content .= "<div class='col-12 plotscontainer'>";
 $tool_content .= "<div id='userlogins_container' class='col-lg-12'>";
 $tool_content .= plot_placeholder("old_stats", $langOldStats);
 $tool_content .= "</div></div>";
@@ -264,37 +264,41 @@ foreach ($result as $row) {
     $mod_opts .= "<option value=" . $mid . " $extra>" . $modules[$mid]['title'] . "</option>";
 }
 
-$tool_content .= '<div class="form-wrapper">';
+$tool_content .= '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3"><div class="form-wrapper shadow-sm p-3 rounded">';
 $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
-$tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-2 control-label'>$langStartDate:</label>
-        <div class='col-xs-10 col-sm-9'>
-            <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
-        </div>
-        <div class='col-xs-2 col-sm-1'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>
-        </div>";
-$tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-        <label class='col-sm-2 control-label'>$langEndDate:</label>
-            <div class='col-xs-10 col-sm-9'>
-                <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+$tool_content .= "<div class='input-append date form-group mt-3' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+    <label class='col-sm-6 control-label-notes'>$langStartDate:</label>
+            <div class='row'>
+                <div class='col-11 col-sm-11'>
+                    <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+                </div>
+                <div class='col-1 col-sm-1'>
+                    <span class='add-on'><i class='fa fa-times'></i></span>
+                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                </div>
             </div>
-        <div class='col-xs-2 col-sm-1'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>
         </div>";
-$tool_content .= '<div class="form-group">
-        <label class="col-sm-2 control-label">' . $langModule . ':</label>
-        <div class="col-sm-10"><select name="u_module_id" id="u_module_id" class="form-control">' . $mod_opts . '</select></div>
+$tool_content .= "<div class='input-append date form-group mt-3' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+        <label class='col-sm-6 control-label-notes'>$langEndDate:</label>
+            <div class='row'>
+                <div class='col-11 col-sm-11'>
+                    <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+                </div>
+                <div class='col-1 col-sm-1'>
+                    <span class='add-on'><i class='fa fa-times'></i></span>
+                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                </div>
+            </div>
+        </div>";
+$tool_content .= '<div class="form-group mt-3">
+        <label class="col-sm-6 control-label-notes">' . $langModule . ':</label>
+        <div class="col-sm-12"><select name="u_module_id" id="u_module_id" class="form-control">' . $mod_opts . '</select></div>
   </div>
-  <div class="form-group">
+  <div class="form-group mt-3">
     <div class="col-sm-offset-2 col-sm-10">
       <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
       </div>
   </div>
-</form></div>';
+</form></div></div>';
 
 draw($tool_content, 2, null, $head_content);

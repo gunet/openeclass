@@ -108,31 +108,43 @@ if ($is_editor) {
                                      course_id = ?d", $id, $course_id);
                 $tool_content .= "<div class='alert alert-success'>" . q(sprintf($langEBookDeleted, $title)) . "</div>";
             } else {
-                Session::Messages($langResourceBelongsToCert, "alert-warning");
+                //Session::Messages($langResourceBelongsToCert, "alert-warning");
+                Session::flash('message',$langResourceBelongsToCert); 
+                Session::flash('alert-class', 'alert-warning');
             }
         }
     } elseif (isset($_GET['create'])) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langEBook);
         enableCheckFileSize();
         $tool_content .= "
-        <div class='form-wrapper'>
+        <div class='col-12'>
+        <div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>" .
                 fileSizeHidenInput() . "
                 <div class='form-group'>
-                    <label for='ebook_title' class='col-sm-2 control-label'>$langTitle: </label>
-                    <div class='col-sm-10'>
+                    <label for='ebook_title' class='col-sm-6 control-label-notes'>$langTitle: </label>
+                    <div class='col-sm-12'>
                         <input type='text' class='form-control' id='ebook_title' name='title' placeholder='$langTitle'>
                     </div>
                 </div>
+
+                <div class='row p-2'></div>
+
                 <div class='form-group'>
-                    <label for='fileUpload' class='col-sm-2 control-label'>$langZipFile:</label>
-                    <div class='col-sm-10'>
+                    <label for='fileUpload' class='col-sm-6 control-label-notes'>$langZipFile:</label>
+                    <div class='col-sm-12'>
                       <input type='file' name='file' id='fileUpload'><small class='help-block'>$langOptional</small>
                     </div>
                 </div>
+
+                <div class='row p-2'></div>
+
                 <div class='row'>
                       <div class='infotext col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                 </div>
+
+                <div class='row p-2'></div>
+
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2 '>".
             form_buttons(array(
@@ -149,14 +161,16 @@ if ($is_editor) {
                     </div>
                 </div>
             </form>
-        </div>";
+        </div></div>";
     } elseif (isset($_GET['vis'])) {
         if (!resource_belongs_to_progress_data(MODULE_ID_EBOOK, $_GET['vis'])) {
             Database::get()->query("UPDATE ebook SET visible = NOT visible
                                  WHERE course_id = ?d AND
                                        id = ?d", $course_id, $_GET['vis']);
         } else {
-            Session::Messages($langResourceBelongsToCert, "alert-warning");
+            //Session::Messages($langResourceBelongsToCert, "alert-warning");
+            Session::flash('message',$langResourceBelongsToCert); 
+            Session::flash('alert-class', 'alert-warning');
         }
     }
 }
@@ -175,14 +189,14 @@ $q = Database::get()->queryArray("SELECT ebook.id, ebook.title, visible, MAX(ebo
                       ORDER BY `order`", $course_id);
 
 if (!$q && !isset($_GET['create'])) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
+    $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoEBook</div></div>";
 } else if(!isset($_GET['create'])){
-    $tool_content .= "<div class='table-responsive'>";
-    $tool_content .= "<table class='table-default'><thead>
-     <tr class='list-header'>
-       <th class = 'text-left'>$langEBooks</th>" .
+    $tool_content .= "<div class='row p-2'></div><div class='table-responsive'>";
+    $tool_content .= "<table class='announcements_table'><thead>
+     <tr class='notes_thead'>
+       <th class = 'text-white text-left'>$langEBooks</th>" .
             ($is_editor ?
-                    "<th class='text-center option-btn-cell'>".icon('fa-gears')."</th>" :
+                    "<th class='text-white text-center option-btn-cell'>".icon('fa-cogs')."</th>" :
                     '') . "
      </tr></thead><tbody id='tosort'>";
     foreach ($q as $r) {
@@ -228,8 +242,10 @@ function tools($id, $vis) {
     if (!$is_editor) {
         return '';
     } else {
-        $content = "<td class='option-btn-cell' style='width: 90px;'><div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer;
-                vertical-align: bottom;'><span class='fa fa-arrows' style='cursor: pointer;'></span></div><div class='pull-left'>";
+        $content = "<td class='option-btn-cell' style='width: 90px;'>
+               <div class='reorder-btn pull-left' style='font-size: 16px; cursor: pointer; margin-left:-10px; margin-top:6px;'>
+                    <span class='fa fa-arrows' style='cursor: pointer;'></span>
+               </div><div class='pull-right'>";
         $content .= action_button(array(
                     array('title' => $langEditChange,
                           'url' => "edit.php?course=$course_code&amp;id=$id",

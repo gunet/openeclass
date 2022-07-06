@@ -65,7 +65,7 @@ $group_quantity_value = Session::has('group_quantity') ? Session::get('group_qua
 
 if (isset($_GET['all'])) {
     $tool_content .= "
-    <div class='form-wrapper'>
+    <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
         <div class='form-group".(Session::getError('group_quantity') ? " has-error":"")."'>
@@ -115,7 +115,7 @@ if (isset($_GET['all'])) {
         </div>
         </fieldset>
         </form>
-    </div>";
+    </div></div>";
 } else {
     if ($is_editor) {
             $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-control'>";
@@ -133,7 +133,7 @@ if (isset($_GET['all'])) {
     } else {
             $tool_content_tutor = display_user($tutors);
     }
-    $tool_content .= "<div class='form-wrapper'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
         <div class='form-group".(Session::getError('group_name') ? " has-error" : "")."'>
@@ -329,6 +329,6 @@ if (isset($_GET['all'])) {
         </div>
         </fieldset>
         </form>
-    </div>";
+    </div></div>";
 }
 draw($tool_content, 2, null, $head_content);

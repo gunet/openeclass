@@ -49,7 +49,7 @@
                     
 
 
-                    {!! isset($action_bar) ?  $action_bar : '' !!}<div class="row p-2"></div>
+                    
 
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
@@ -60,70 +60,76 @@
                     </div>
                     @endif
                     
-                    <div class='form-wrapper'>
-                        <form class='form-horizontal' role='form' method='post' action='index.php?course={{ $course_code }}&amp;urlview={{ $urlview }}'>
-                            @if ($action == 'editlink')
-                                <input type='hidden' name='id' value='{{ getIndirectReference($id) }}'>
-                            @endif
-                            <fieldset>
-                                <div class="row p-2"></div>
-                                <div class='form-group{{ $urlLinkError ? " has-error" : "" }}'>
-                                    <label for='urllink' class='col-sm-6 control-label-notes'>URL:</label>
-                                        <div class='col-sm-12'>
-                                            <input class='form-control' type='text' id='urllink' name='urllink' value="{{ isset($link) ? $link->url : "" }}">
-                                            {!! Session::getError('urllink', "<span class='help-block'>:message</span>") !!}
+                    {!! isset($action_bar) ?  $action_bar : '' !!}
+                    
+                    <div class='col-12'>
+                        
+                        <div class='form-wrapper shadow-sm p-3 mt-1 rounded'>
+                            
+                            <form class='form-horizontal' role='form' method='post' action='index.php?course={{ $course_code }}&amp;urlview={{ $urlview }}'>
+                                @if ($action == 'editlink')
+                                    <input type='hidden' name='id' value='{{ getIndirectReference($id) }}'>
+                                @endif
+                                <fieldset>
+                                    
+                                    <div class='form-group{{ $urlLinkError ? " has-error" : "" }} mt-3'>
+                                        <label for='urllink' class='col-sm-6 control-label-notes'>URL:</label>
+                                            <div class='col-sm-12'>
+                                                <input class='form-control' type='text' id='urllink' name='urllink' value="{{ isset($link) ? $link->url : "" }}">
+                                                {!! Session::getError('urllink', "<span class='help-block'>:message</span>") !!}
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row p-2"></div>
+                                       
 
-                                    <div class='form-group'>
-                                        <label for='title' class='col-sm-6 control-label-notes'>{{ trans('langLinkName') }}:</label>
-                                        <div class='col-sm-12'>
-                                            <input class='form-control' type='text' id='title' name='title' value="{{ isset($link) ? $link->title : "" }}">
+                                        <div class='form-group mt-3'>
+                                            <label for='title' class='col-sm-6 control-label-notes'>{{ trans('langLinkName') }}:</label>
+                                            <div class='col-sm-12'>
+                                                <input class='form-control' type='text' id='title' name='title' value="{{ isset($link) ? $link->title : "" }}">
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row p-2"></div>
+                                       
 
 
-                                    <div class='form-group'>
-                                        <label for='description' class='col-sm-6 control-label-notes'>{{ trans('langInfoabout') }}:</label>
-                                        <div class='col-sm-12'>{!! $description_textarea !!}</div>
-                                    </div>
-
-                                    <div class="row p-2"></div>
-
-                                    <div class='form-group'>
-                                        <label for='selectcategory' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}:</label>
-                                        <div class='col-sm-3'>
-                                            <select class='form-select' name='selectcategory' id='selectcategory'>
-                                                @if ($is_editor)
-                                                    <option value='{{ getIndirectReference(0) }}'>--</option>
-                                                @endif
-                                                @if ($social_bookmarks_enabled)
-                                                    <option value='{{ getIndirectReference(-2) }}'{{ isset($category) && $category == -2 ? " selected": "" }}>{{ trans('langSocialCategory') }}</option>
-                                                @endif
-                                                @if ($is_editor)
-                                                    @foreach ($categories as $row)
-                                                        <option value='{{ getIndirectReference($row->id) }}'{{ isset($category) && $category == $row->id ? " selected": "" }}>{{ $row->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
+                                        <div class='form-group mt-3'>
+                                            <label for='description' class='col-sm-6 control-label-notes'>{{ trans('langInfoabout') }}:</label>
+                                            <div class='col-sm-12'>{!! $description_textarea !!}</div>
                                         </div>
-                                    </div>
 
-                                    <div class="row p-2"></div>
+                                        
 
-                                    <div class='form-group'>
-                                        <div class='col-sm-10 col-sm-offset-2'>
-                                            <input type='submit' class='btn btn-primary' name='submitLink' value='{{ $submit_label }}' />
-                                            <a href='index.php?course={{ $course_code }}' class='btn btn-secondary'>{{ trans('langCancel') }}</a>
+                                        <div class='form-group mt-3'>
+                                            <label for='selectcategory' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}:</label>
+                                            <div class='col-sm-3'>
+                                                <select class='form-select' name='selectcategory' id='selectcategory'>
+                                                    @if ($is_editor)
+                                                        <option value='{{ getIndirectReference(0) }}'>--</option>
+                                                    @endif
+                                                    @if ($social_bookmarks_enabled)
+                                                        <option value='{{ getIndirectReference(-2) }}'{{ isset($category) && $category == -2 ? " selected": "" }}>{{ trans('langSocialCategory') }}</option>
+                                                    @endif
+                                                    @if ($is_editor)
+                                                        @foreach ($categories as $row)
+                                                            <option value='{{ getIndirectReference($row->id) }}'{{ isset($category) && $category == $row->id ? " selected": "" }}>{{ $row->name }}</option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                            </fieldset>
-                            {!! generate_csrf_token_form_field() !!}
-                        </form>
+
+                                       
+
+                                        <div class='form-group mt-3'>
+                                            <div class='col-sm-10 col-sm-offset-2'>
+                                                <input type='submit' class='btn btn-primary' name='submitLink' value='{{ $submit_label }}' />
+                                                <a href='index.php?course={{ $course_code }}' class='btn btn-secondary'>{{ trans('langCancel') }}</a>
+                                            </div>
+                                        </div>
+                                </fieldset>
+                                {!! generate_csrf_token_form_field() !!}
+                            </form>
+                        </div>
                     </div>
                 
                 </div>

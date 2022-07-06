@@ -25,13 +25,6 @@ define('LTI_LAUNCHCONTAINER_NEWWINDOW', 2);
 define('LTI_LAUNCHCONTAINER_EXISTINGWINDOW', 3);
 define('LTI_DESCRIPTION_MAX_LENGTH', 999);
 
-const TURNITIN_LTI_TYPE = "turnitin";
-const LIMESURVEY_LTI_TYPE = "limesurvey";
-
-const RESOURCE_LINK_TYPE_ASSIGNMENT = "assignment";
-const RESOURCE_LINK_TYPE_LTI_TOOL = "lti_tool";
-const RESOURCE_LINK_TYPE_POLL = "poll";
-
 /**
  * @brief new lti app (display form)
  * @param bool $is_template
@@ -39,7 +32,7 @@ const RESOURCE_LINK_TYPE_POLL = "poll";
  * @param string $lti_url_default
  */
 function new_lti_app($is_template = false, $course_code, $lti_url_default = '') {
-    global $tool_content, $langAdd, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderSecret,
+    global $tool_content, $langAdd, $langNewBBBSessionDesc, $langLTIProviderUrl, $langLTIProviderSecret,
            $langLTIProviderKey, $langNewLTIAppActive, $langNewLTIAppInActive, $langNewLTIAppStatus, $langTitle,
            $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer, $langUseOfApp,
            $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $course_id;
@@ -49,47 +42,68 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
 
     $textarea = rich_text_editor('desc', 4, 20, '');
     $tool_content .= "
-        <div class='form-wrapper'>
+    <div class='row p-2'></div>
+
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]$urlext' method='post' >
         <fieldset>
         <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
-            <div class='col-sm-10'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
+            <div class='col-sm-12'>
                 <input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />
             </div>
         </div>
+
+        <div class='row p-2'></div>
+
         <div class='form-group'>
-            <label for='desc' class='col-sm-2 control-label'>$langUnitDescr:</label>
-            <div class='col-sm-10'>
+            <label for='desc' class='col-sm-6 control-label-notes'>$langNewBBBSessionDesc:</label>
+            <div class='col-sm-12'>
                 $textarea
             </div>
         </div>        
+
+        <div class='row p-2'></div>
+
         <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langLTIProviderUrl:</label>
-            <div class='col-sm-10'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderUrl:</label>
+            <div class='col-sm-12'>
                 <input class='form-control' type='text' name='lti_url' id='lti_url' placeholder='$langLTIProviderUrl' size='50' $urldefault />
             </div>
         </div>
+
+        <div class='row p-2'></div>
+
         <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langLTIProviderKey:</label>
-            <div class='col-sm-10'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderKey:</label>
+            <div class='col-sm-12'>
                 <input class='form-control' type='text' name='lti_key' id='lti_key' placeholder='$langLTIProviderKey' size='50' />
             </div>
         </div>
+
+        <div class='row p-2'></div>
+
         <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langLTIProviderSecret:</label>
-            <div class='col-sm-10'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderSecret:</label>
+            <div class='col-sm-12'>
                 <input class='form-control' type='text' name='lti_secret' id='lti_secret' placeholder='$langLTIProviderSecret' size='50' />
             </div>
         </div>";
 
-        $tool_content .= "<div class='form-group'>
-                <label for='lti_launchcontainer' class='col-sm-2 control-label'>$langLTILaunchContainer:</label>
-                <div class='col-sm-10'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer',  LTI_LAUNCHCONTAINER_EMBED) . "</div>
+        $tool_content .= "
+        <div class='row p-2'></div>
+
+        <div class='form-group'>
+                <label for='lti_launchcontainer' class='col-sm-6 control-label-notes'>$langLTILaunchContainer:</label>
+                <div class='col-sm-12'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer',  LTI_LAUNCHCONTAINER_EMBED) . "</div>
             </div>
+
+            <div class='row p-2'></div>
+
             <div class='form-group'>
-                <label for='active_button' class='col-sm-2 control-label'>$langNewLTIAppStatus:</label>
-                <div class='col-sm-10'>
+                <label for='active_button' class='col-sm-6 control-label-notes'>$langNewLTIAppStatus:</label>
+                <div class='col-sm-12'>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='active_button' name='status' value='1' checked>
@@ -105,11 +119,14 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
                 </div>
             </div>";
             if (!isset($course_code)) {
-                $tool_content .= "<div class='form-group' id='courses-list'>
-                    <label class='col-sm-3 control-label'>$langUseOfApp:&nbsp;&nbsp;
-                    <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfAppInfo'></span></label>                    
+                $tool_content .= "
+                <div class='row p-2'></div>
+
+                <div class='form-group' id='courses-list'>
+                    <label class='col-sm-3 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
+                    <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langUseOfAppInfo'></span></label>                    
                     <div class='col-sm-9'>                                
-                        <select id='select-courses' class='form-control' name='lti_courses[]' multiple>";
+                        <select class='form-select' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
                     $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                             WHERE id NOT IN (SELECT course_id FROM course_lti_app)
                                                             AND visible != " . COURSE_INACTIVE . "
@@ -126,14 +143,17 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
                 $tool_content .= "<input type='hidden' name='lti_courses[]' value='$course_id'>";
             }
 
-        $tool_content .= "<div class='form-group'>
+        $tool_content .= "
+        <div class='row p-2'></div>
+
+        <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='new_lti_app' value='$langAdd'>
             </div>
         </div>
         </fieldset>
          ". generate_csrf_token_form_field() ."
-        </form></div>";
+        </form></div></div>";
 
         $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
@@ -156,20 +176,18 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
  * @param bool $is_template
  * @param bool $update
  * @param string $session_id
- * @param string $type
  * @brief add / update lti app settings
  */
-function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $lti_courses, $course_id = null,
-                            $is_template = false, $update = false, $session_id = null, $type)  {
+function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $lti_courses, $course_id = null, $is_template = false, $update = false, $session_id = '')  {
     if (in_array(0, $lti_courses)) {
         $all_courses = 1; // lti app is assigned to all courses
     } else {
         $all_courses = 0; // lti app is assigned to specific courses
     }
     if ($update == true) {
-        Database::get()->querySingle("UPDATE lti_apps SET title = ?s, description = ?s, lti_provider_url = ?s, lti_provider_key = ?s,
-                                        lti_provider_secret = ?s, launchcontainer = ?d, enabled = ?s, all_courses = ?d, type = ?s WHERE id = ?d",
-                                        $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses, $type, $session_id);
+        Database::get()->querySingle("UPDATE lti_apps SET title = ?s, description = ?s, lti_provider_url = ?s,
+                                        lti_provider_key = ?s, lti_provider_secret = ?s, launchcontainer = ?d, enabled = ?s, all_courses = ?d WHERE id = ?d",
+                                        $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses, $session_id);
         Database::get()->query("DELETE FROM course_lti_app WHERE lti_app = ?d", $session_id);
         if ($all_courses == 0) {
             foreach ($lti_courses as $data) {
@@ -182,9 +200,9 @@ function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer
 
         $q = Database::get()->query("INSERT INTO lti_apps (" . $firstparam . ", title, description,
                                                             lti_provider_url, lti_provider_key, lti_provider_secret,
-                                                            launchcontainer, enabled, all_courses, type)
-                                                        VALUES (?d,?s,?s,?s,?s,?s,?d,?s,?d,?s)",
-                                            $firstarg, $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses, $type);
+                                                            launchcontainer, enabled, all_courses)
+                                                        VALUES (?d,?s,?s,?s,?s,?s,?d,?s,?d)",
+                                            $firstarg, $title, $desc, $url, $key, $secret, $launchcontainer, $status, $all_courses);
         $lti_app_id = $q->lastInsertID;
         if ($all_courses == 0) {
             foreach ($lti_courses as $data) {
@@ -199,7 +217,7 @@ function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer
  * @param $session_id
  */
 function edit_lti_app($session_id) {
-    global $tool_content, $langModify, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
+    global $tool_content, $langModify, $langNewLTIAppSessionDesc, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
            $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive, $langTitle, $langLTIAPPlertTitle, $langLTIAPPlertURL,
            $langLTILaunchContainer, $langUseOfApp, $course_id,
            $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses;;
@@ -210,47 +228,68 @@ function edit_lti_app($session_id) {
 
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
     $tool_content .= "
-                <div class='form-wrapper'>
+
+    <div class='col-12'>
+
+                <div class='form-wrapper shadow-sm p-3 rounded'>
                     <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=" . getIndirectReference($session_id) . "' method='post'>
                     <fieldset>
                     <div class='form-group'>
-                        <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
-                        <div class='col-sm-10'>
+                        <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
+                        <div class='col-sm-12'>
                             <input class='form-control' type='text' name='title' id='title' value='".q($row->title)."'>
                         </div>
                     </div>
+
+                    <div class='row p-2'></div>
+
                     <div class='form-group'>
-                        <label for='desc' class='col-sm-2 control-label'>$langUnitDescr:</label>
-                        <div class='col-sm-10'>
+                        <label for='desc' class='col-sm-6 control-label-notes'>$langNewLTIAppSessionDesc:</label>
+                        <div class='col-sm-12'>
                             $textarea
                         </div>
                     </div>";
-        $tool_content .="<div class='form-group'>
-            <label for='lti_url' class='col-sm-2 control-label'>$langLTIProviderUrl:</label>
-            <div class='col-sm-10'>
+        $tool_content .="
+        <div class='row p-2'></div>
+
+        <div class='form-group'>
+            <label for='lti_url' class='col-sm-6 control-label-notes'>$langLTIProviderUrl:</label>
+            <div class='col-sm-12'>
                 <input class='form-control' type='text' name='lti_url' id='lti_url' value='$row->lti_provider_url' size='50' />
             </div>
         </div>
+
+        <div class='row p-2'></div>
+
         <div class='form-group'>
-            <label for='lti_key' class='col-sm-2 control-label'>$langLTIProviderKey:</label>
-            <div class='col-sm-10'>
+            <label for='lti_key' class='col-sm-6 control-label-notes'>$langLTIProviderKey:</label>
+            <div class='col-sm-12'>
                 <input class='form-control' type='text' name='lti_key' id='lti_key' value='$row->lti_provider_key' size='50' />
             </div>
         </div>
+
+        <div class='row p-2'></div>
+
         <div class='form-group'>
-            <label for='lti_secret' class='col-sm-2 control-label'>$langLTIProviderSecret:</label>
+            <label for='lti_secret' class='col-sm-6 control-label-notes'>$langLTIProviderSecret:</label>
             <div class='col-sm-10'>
                 <input class='form-control' type='text' name='lti_secret' id='lti_secret' value='$row->lti_provider_secret' size='50' />
             </div>
         </div>";
 
-    $tool_content .= "<div class='form-group'>
-                        <label for='lti_launchcontainer' class='col-sm-2 control-label'>$langLTILaunchContainer:</label>
-                        <div class='col-sm-10'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer',  intval($row->launchcontainer)) . "</div>
+    $tool_content .= "
+    <div class='row p-2'></div>
+
+    <div class='form-group'>
+                        <label for='lti_launchcontainer' class='col-sm-6 control-label-notes'>$langLTILaunchContainer:</label>
+                        <div class='col-sm-12'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer',  intval($row->launchcontainer)) . "</div>
                     </div>
+
+                    <div class='row p-2'></div>
+
                     <div class='form-group'>
-                        <label for='active_button' class='col-sm-2 control-label'>$langNewLTIAppStatus:</label>
-                        <div class='col-sm-10'>
+                        <label for='active_button' class='col-sm-6 control-label-notes'>$langNewLTIAppStatus:</label>
+                        <div class='col-sm-12'>
                                 <div class='radio'>
                                   <label>
                                     <input type='radio' id='active_button' name='status' value='1' ".(($status==1) ? "checked" : "").">
@@ -267,11 +306,15 @@ function edit_lti_app($session_id) {
                     </div>";
 
                     if (!isset($course_id)) {
-                        $tool_content .= "<div class='form-group' id='courses-list'>
-                            <label class='col-sm-3 control-label'>$langUseOfApp:&nbsp;&nbsp;
-                            <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfAppInfo'></span></label>                    
+                        $tool_content .= "
+                        
+                        <div class='row p-2'></div>
+                        
+                        <div class='form-group' id='courses-list'>
+                            <label class='col-sm-3 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
+                            <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langUseOfAppInfo'></span></label>                    
                             <div class='col-sm-9'>                                
-                                <select class='form-control' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
+                                <select class='form-select' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
                                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                     WHERE id NOT IN (SELECT course_id FROM course_lti_app)
                                                                     AND visible != " . COURSE_INACTIVE . "
@@ -299,14 +342,18 @@ function edit_lti_app($session_id) {
                         $tool_content .= "<input type='hidden' name='lti_courses[]' value='$course_id'>";
                     }
 
-                    $tool_content .= "<div class='form-group'>
+                    $tool_content .= "
+                    
+                    <div class='row p-2'></div>
+                    
+                    <div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>
                             <input class='btn btn-primary' type='submit' name='update_lti_app' value='$langModify'>
                         </div>
                     </div>
                     </fieldset>
                      ". generate_csrf_token_form_field() ."
-                    </form></div>";
+                    </form></div></div>";
                 $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[
                     var chkValidator  = new Validator("sessionForm");
@@ -320,7 +367,7 @@ function edit_lti_app($session_id) {
  */
 function lti_app_details() {
     global $course_id, $tool_content, $is_editor, $course_code, $head_content,
-        $langConfirmDelete, $langUnitDescr, $langNote,
+        $langConfirmDelete, $langNewLTIAppSessionDesc, $langNote,
         $langTitle,$langActivate, $langDeactivate, $langLTIAppActions,
         $langEditChange, $langDelete, $langNoLTIApps, $m;
 
@@ -331,16 +378,15 @@ function lti_app_details() {
         WHERE course_id = ?s $activeClause AND is_template = 0 ORDER BY title ASC", $course_id);
     if ($result) {
         $headingsSent = false;
-        $headings = "<div class='row'>
-                       <div class='col-md-12'>
+        $headings = "<div class='row p-2'></div>
                          <div class='table-responsive'>
-                           <table class='table-default'>
-                             <tr class='list-header'>
-                               <th style='width:30%'>$langTitle</th>
-                               <th class='text-center'>$langUnitDescr</th>
-                               <th class='text-center'>$langLTIAppActions</th>";
+                           <table class='announcements_table'>
+                             <tr class='notes_thead'>
+                               <th class='text-white' style='width:30%'>$langTitle</th>
+                               <th class='text-white text-center'>$langNewLTIAppSessionDesc</th>
+                               <th class='text-white text-center'>$langLTIAppActions</th>";
         if ($is_editor) {
-            $headings .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
+            $headings .= "<th class='text-white text-center'>" . icon('fa-cogs') . "</th>";
         }
         $headings .= "</tr>";
 
@@ -407,14 +453,16 @@ function lti_app_details() {
             }
         }
         if ($headingsSent) {
-            $tool_content .= "</table></div></div></div>";
+            $tool_content .= "</table></div>";
         }
 
         if (!$is_editor and !$headingsSent) {
-            $tool_content .= "<div class='alert alert-warning'>$langNoLTIApps</div>";
+            $tool_content .= "<div class='row p-2'></div>
+            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoLTIApps</div></div>";
         }
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoLTIApps</div>";
+        $tool_content .= "<div class='row p-2'></div>
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoLTIApps</div></div>";
     }
 }
 
@@ -545,7 +593,7 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
         //$launch_data['custom_institutioncheck'] = intval($extraobj->tii_institutioncheck);
         //$launch_data['custom_submit_papers_to'] = intval($extraobj->tii_submit_papers_to);
 
-        if ($resource_link_type == RESOURCE_LINK_TYPE_ASSIGNMENT) {
+        if ($resource_link_type == "assignment") {
             $assignment_secret = Database::get()->querySingle("SELECT secret_directory FROM assignment WHERE id = ?d", $resource_link_id)->secret_directory;
             $token = token_generate($assignment_secret, true);
             $launch_data['lis_result_sourcedid'] = $token . "-" . $resource_link_id . "-" . $uid;
@@ -553,10 +601,6 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
             $launch_data['lis_outcome_service_url'] = $urlServer . "modules/work/tii_outcome.php";
         }
     }
-
-    /*if ($resource_link_type == RESOURCE_LINK_TYPE_POLL) {
-        $launch_data['lis_outcome_service_url'] = $urlServer . "modules/questionnaire/poll_outcome.php";
-    }*/
 
     return $launch_data;
 }
@@ -612,7 +656,7 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
     $button .= $extrabutton . '<button class="btn btn-primary" type="submit">' . $langLogIn . '</button>';
     $button .='</form>';
 
-    return $button;
+    return $button;  
 }
 
 function lti_prepare_oauth_only_data($url, $oauth_consumer_key, $secret) {
@@ -737,22 +781,27 @@ function getLTILinksForTools() {
     }
 }
 
-function is_active_external_lti_app($externalapp, $lti_type, $course_id) {
-    if ($externalapp->isEnabled()) {
-        $q = Database::get()->querySingle("SELECT id, course_id, all_courses FROM lti_apps WHERE `type` = ?s", $lti_type);
+
+function is_active_lti_app($turnitinapp, $course_id) {
+
+    if ($turnitinapp->isEnabled()) {
+        $q = Database::get()->querySingle("SELECT id, course_id, all_courses FROM lti_apps WHERE `type` = 'turnitin'");
         if (!is_null($q->course_id)) {
             return true;
         } else {
-            if ($q->all_courses == 1) { // external app is enabled for all courses
+            if ($q->all_courses == 1) { // turnitin is enabled for all courses
                 return true;
-            } else { // otherwise check if external app is enabled for specific course
-                $s = Database::get()->querySingle("SELECT * FROM course_lti_app WHERE course_id = ?d AND lti_app = $q->id", $course_id);
+            } else { // otherwise check if turnitin is enabled for specific course
+                $s = Database::get()->querySingle("SELECT * FROM course_lti_app
+                            WHERE course_id = ?d AND lti_app = $q->id", $course_id);
                 if ($s) {
                     return true;
                 }
             }
         }
+
     } else {
         return false;
     }
+
 }

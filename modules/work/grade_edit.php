@@ -27,38 +27,26 @@ $helpSubTopic = 'grades';
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
-require_once 'include/lib/modalboxhelper.class.php';
-require_once 'include/lib/multimediahelper.class.php';
 
 $toolName = $langScore;
 
 load_js('tools.js');
-
 // delete confirmation student review
-$head_content .= "
-<script type='text/javascript'>
-    $(function () {
-        $(document).on('click', '.linkdelete', function(e) {
-            var link = $(this).attr('href');
-            e.preventDefault();
-            bootbox.confirm('" . js_escape($langConfirmDeleteStudentReview) . "', function(result) {
-                if (result) {
-                    document.location.href = link;
-                }
+$head_content .= "<script type='text/javascript'>";
+$head_content .= '
+        $(function () {
+            $(document).on("click", ".linkdelete", function(e) {
+                var link = $(this).attr("href");
+                e.preventDefault();
+                bootbox.confirm("'.$langConfirmDeleteStudentReview.'", function(result) {
+                    if (result) {
+                        document.location.href = link;
+                    }
+                });
             });
         });
-
-        initialize_filemodal({
-            download: '" . js_escape($langDownload) . "',
-            print: '" . js_escape($langPrint) . "',
-            fullScreen: '" . js_escape($langFullScreen) . "',
-            newTab: '" . js_escape($langNewTab) . "',
-            cancel: '" . js_escape($langCancel) . "'
-        });
-
-    });
-</script>";
-ModalBoxHelper::loadModalBox();
+    ';
+$head_content .= "</script>";
 
 if (isset($_GET['ass_id']) ) { // delete student review
     $ass_id = intval($_GET['ass_id']);
@@ -146,21 +134,21 @@ function show_edit_form($id, $sid, $assign) {
     ///$reviews_per_ass = Database::get()->querySingle("SELECT reviews_per_assignment FROM assignment WHERE id = ?d",$id)->reviews_per_assignment;
     $reviews_per_ass = Database::get()->querySingle('SELECT reviews_per_assignment FROM assignment WHERE id = ?d ', $id)->reviews_per_assignment;
     if ($sub) {
-        if ($grading_type == 3) {
+        if ($grading_type == 3 ) {
             $cdate = date('Y-m-d H:i:s');
-            if ($cdate < $assign->start_date_review) {
+            if($cdate < $assign->start_date_review){
                 $tool_content .= "
                     <p class='sub_title1'></p>
                     <div class='alert alert-warning'>$langPeerReviewNoAssignments</div>";
-            }
-            /*if ($cdate > $ass->deadline && $cdate > $ass->start_date_review){
-                $tool_content .= "<div class='form-group'>
-                        <div class='col-sm-9 col-sm-offset-3'>
-                            <input class='btn btn-primary' type='submit' name='ass_review' value='Ανάθεση'>
+			}
+			/*if ($cdate > $ass->deadline && $cdate > $ass->start_date_review){
+				$tool_content .= "<div class='form-group'>
+						<div class='col-sm-9 col-sm-offset-3'>
+							<input class='btn btn-primary' type='submit' name='ass_review' value='Ανάθεση'>
 
-                        </div>
-                    </div>";
-            }*/
+						</div>
+					</div>";
+			}*/
             if ($cdate > $assign->start_date_review){
                 //tha emfanistoun oi ergasies
                 //$tool_content .= "<input type='' name='assign' value='$id'>";
@@ -223,7 +211,7 @@ function show_edit_form($id, $sid, $assign) {
                         }
 
                         $tool_content .= "
-						    <div class='form-wrapper'>
+						    <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
                                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data'>
                                     <input type='hidden' name='assignment' value='$id' />
                                     <input type='hidden' name='submission' value='$row->id' />
@@ -261,7 +249,7 @@ function show_edit_form($id, $sid, $assign) {
                                         </div>
                                     </div>
                                 </form>
-                            </div>";
+                            </div></div>";
                     }
                     $tool_content.= "
                             <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
@@ -280,7 +268,7 @@ function show_edit_form($id, $sid, $assign) {
                                 <div class='form-group'>
                                     <div class='col-sm-9 col-sm-offset-3'>
                                         <input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'>
-                                        <a class='btn btn-default' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
+                                        <a class='btn btn-secondary' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
                                     </div>
                                 </div>
                             </form>";
@@ -322,8 +310,8 @@ function show_edit_form($id, $sid, $assign) {
                     ORDER BY id', $sub->assignment_id, $sub->uid, $sub->group_id);
                 $links = implode('<br>', array_map(function ($file) {
                     global $urlAppend, $course_code;
-                    $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$file->id";
-                    return MultimediaHelper::chooseMediaAhrefRaw($url, $url, $file->file_name, $file->file_name);
+                    return "<a href='{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$file->id'>" .
+                        q($file->file_name) . "</a>";
                 }, $files));
                 $submission = "
                         <div class='form-group'>
@@ -332,13 +320,12 @@ function show_edit_form($id, $sid, $assign) {
 						</div>";
             } else {
                 // single file
-                $url = "index.php?course=$course_code&amp;get=$sub->id";
                 $submission = "
                         <div class='form-group'>
 							<label class='col-sm-3 control-label'>$m[filename]:</label>
 							<div class='col-sm-9'>
-                                <p class='form-control-static'>" .
-                                    MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name) . "
+                                <p class='form-control-static'>
+                                    <a href='index.php?course=$course_code&amp;get=$sub->id'>".q($sub->file_name)."</a>
                                 </p>
 							</div>
 						</div>";
@@ -359,11 +346,11 @@ function show_edit_form($id, $sid, $assign) {
 				} elseif ($grading_type == ASSIGNMENT_RUBRIC_GRADE) {
 					$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
 					$criteria = unserialize($rubric->scales);
-					$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a
-                                                                                JOIN assignment as b
-                                                                              WHERE course_id = ?d
-                                                                              AND a.assignment_id = b.id
-                                                                              AND b.id = ?d
+					$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a 
+                                                                                JOIN assignment as b 
+                                                                              WHERE course_id = ?d 
+                                                                              AND a.assignment_id = b.id 
+                                                                              AND b.id = ?d 
                                                                               AND a.id = ?d", $course_id, $id, $sid);
 					if (!empty($submitted_grade->grade_rubric)) {
                         $sel_criteria = unserialize($submitted_grade->grade_rubric);
@@ -415,42 +402,64 @@ function show_edit_form($id, $sid, $assign) {
 						'level' => 'primary-label'
 					)
 				))."
-			<div class='form-wrapper'>
-				<form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
+            <div class='col-12'>
+			<div class='form-wrapper shadow-sm p-3 rounded'>
+				<form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data' style='border:2px solid #003F87; background-color:#FFFAF0'>
 				<input type='hidden' name='assignment' value='$id'>
 				<input type='hidden' name='submission' value='$sid'>
-				<fieldset>
+				<fieldset style='padding-left:15px'>
+               
+                    <div class='row p-2'></div>
+
 					<div class='form-group'>
-						<label class='col-sm-3 control-label'>$m[username]:</label>
+						<label class='col-sm-3 control-label-notes'>$m[username]:</label>
 						<div class='col-sm-9'>
 						$uid_2_name $group_submission
 						</div>
 					</div>
+
+                    <div class='row p-2'></div>
+
 					<div class='form-group'>
-						<label class='col-sm-3 control-label'>$m[sub_date]:</label>
+						<label class='col-sm-3 control-label-notes'>$m[sub_date]:</label>
 						<div class='col-sm-9'>
 							<span>".q($sub->submission_date)."</span>
 						</div>
 					</div>
+
+                    <div class='row p-2'></div>
 					$submission
+
+                    
+
 					<div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
-						<label for='grade' class='col-sm-3 control-label'>$langGradebookGrade:</label>
+						<label for='grade' class='col-sm-3 control-label-notes'>$langGradebookGrade:</label>
 							$grade_field
 							<span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
 					</div>
+
+                    <div class='row p-2'></div>
+
 					<div class='form-group'>
-						<label for='comments' class='col-sm-3 control-label'>$m[gradecomments]:</label>
+						<label for='comments' class='col-sm-3 control-label-notes'>$m[gradecomments]:</label>
 						<div class='col-sm-9'>
 							<textarea class='form-control' rows='3' name='comments'  id='comments'>$comments</textarea>
 						</div>
 					</div>
+
+                    <div class='row p-2'></div>
+
+
 					<div class='form-group'>
-						<label for='comments_file' class='col-sm-3 control-label'>$langCommentsFile:</label>
+						<label for='comments_file' class='col-sm-3 control-label-notes'>$langCommentsFile:</label>
 						<div class='col-sm-9'>
 							<input type='file' name='comments_file' id='comments_file' size='35'>
 							" . fileSizeHidenInput() . "
 						</div>
 					</div>
+
+                    <div class='row p-2'></div>
+
 					<div class='form-group'>
 						<div class='col-sm-9 col-sm-offset-3'>
 							<div class='checkbox'>
@@ -461,15 +470,22 @@ function show_edit_form($id, $sid, $assign) {
 							</div>
 						</div>
 					</div>
+
+                    <div class='row p-2'></div>
+
+
 					<div class='form-group'>
 						<div class='col-sm-9 col-sm-offset-3'>
 							<input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'>
 							<a class='btn btn-default' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
 						</div>
 					</div>
+
+                    <div class='row p-2'></div>
+                    
 				</fieldset>
 				</form>
-			</div>";
+			</div></div>";
 		}
     } else {
         //Session::Messages($m['WorkNoSubmission'], 'alert-danger');

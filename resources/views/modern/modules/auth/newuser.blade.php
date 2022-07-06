@@ -50,7 +50,7 @@
                         </div>
                     </div>
 
-                    {!! $action_bar !!}
+                   
 
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
@@ -60,7 +60,7 @@
                         </p>
                     </div>
                     @endif
-
+                    {!! $action_bar !!}
                     @if (!$user_registration or $eclass_stud_reg != 2)
                         <div class='alert alert-info'>
                             {{ trans('langStudentCannotRegister') }}
@@ -82,7 +82,8 @@
                             @endif
                         @else
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                            <div class='form-wrapper shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                            <div class='form-wrapper shadow-sm p-3 rounded'>
+                           
                             <form class='form-horizontal' role='form' action='newuser.php' method='post' onsubmit='return validateNodePickerForm();'>
                             <fieldset>
                             <div class='form-group'>

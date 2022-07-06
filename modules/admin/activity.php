@@ -33,7 +33,9 @@ if (isset($_POST['toReorder'])) {
         $id = getDirectReference($_GET['delete']);
         if ($id) {
             Database::get()->query('DELETE FROM activity_heading WHERE id = ?d', $id);
-            Session::Messages($langGlossaryDeleted, 'alert-success');
+            //Session::Messages($langGlossaryDeleted, 'alert-success');
+            Session::flash('message',$langGlossaryDeleted); 
+            Session::flash('alert-class', 'alert-success');
         }
     }
     redirect_to_home_page('modules/admin/activity.php');
@@ -55,7 +57,9 @@ if (isset($_POST['toReorder'])) {
         Database::get()->query('INSERT INTO activity_heading SET required = ?d, heading = ?s, `order` = ?d',
             intval(!!$_POST['required']), serialize($headings), $maxOrder + 1);
     }
-    Session::Messages($langFaqEditSuccess, 'alert-success');
+    //Session::Messages($langFaqEditSuccess, 'alert-success');
+    Session::flash('message',$langFaqEditSuccess); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/activity.php');
 } elseif (isset($_GET['add']) or isset($_GET['edit'])) {
     $idInput = '';
@@ -66,7 +70,9 @@ if (isset($_POST['toReorder'])) {
         $idInput = "<input type='hidden' name='id' value='$_GET[edit]'>";
         $item = Database::get()->querySingle('SELECT * FROM activity_heading WHERE id = ?d', $id);
         if (!$item) {
-            Session::Messages($langGeneralError, 'alert-danger');
+            //Session::Messages($langGeneralError, 'alert-danger');
+            Session::flash('message',$langGeneralError); 
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/activity.php');
         }
         $headings = unserialize($item->heading);
@@ -79,7 +85,8 @@ if (isset($_POST['toReorder'])) {
               'url' => 'activity.php',
               'icon' => 'fa-reply',
               'level' => 'primary-label'))) . "
-      <div class='form-wrapper'>
+       <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='form-wrapper shadow-sm p-3 rounded'>
         <form role='form' class='form-horizontal' method='post' action='activity.php'>
           $idInput
           <fieldset>";
@@ -92,14 +99,15 @@ if (isset($_POST['toReorder'])) {
         }
         $tool_content .= "
             <div class='form-group'>
-              <label class='col-sm-3 control-label' for='heading-$langcode'>$langTitle (" . $langNameOfLang[langcode_to_name($langcode)] . "):</label>
-              <div class='col-sm-9'>
+              <label class='col-sm-6 control-label-notes' for='heading-$langcode'>$langTitle (" . $langNameOfLang[langcode_to_name($langcode)] . "):</label>
+              <div class='col-sm-12'>
                 <input class='form-control' type='text' name='heading[$langcode]' id='heading-$langcode' value='$value'>
               </div>
             </div>";
     }
 
     $tool_content .= "
+    <div class='row p-2'></div>
             <div class='form-group'>
               <div class='col-sm-9 col-sm-offset-3 checkbox'>
                 <label>
@@ -108,16 +116,19 @@ if (isset($_POST['toReorder'])) {
                 </label>
               </div>
             </div>
+
+            <div class='row p-2'></div>
+
             <div class='form-group'>
                <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                <a href='activity.php' class='btn btn-default'>$langCancel</a>
+                <a href='activity.php' class='btn btn-secondary'>$langCancel</a>
               </div>
             </div>
           </fieldset>
           ". generate_csrf_token_form_field() ."
         </form>
-      </div>";
+      </div></div>";
 } else {
     load_js('sortable/Sortable.min.js');
     $head_content .= "
@@ -200,23 +211,23 @@ $(function() {
             $indirectId = getIndirectReference($item->id);
             $tool_content .= "
       <div class='panel panel-default' data-id='$indirectId'>
-        <div class='panel-heading'>
-          $heading
-          <div class='pull-right'>$type " .
+        <div class='panel-heading notes_thead pt-2 pe-3 ps-3'>
+          <span class='text-white'>$heading</span>
+          <div class='pull-right text-white'>$type " .
             icon('fa-edit', $langEdit, 'activity.php?edit=' . $indirectId) . "
-            <a class='confirm-delete' href='activity.php?delete=$indirectId' title='$langDelete' data-toggle='tooltip'>
+            <a class='confirm-delete' href='activity.php?delete=$indirectId' title='$langDelete' data-bs-toggle='tooltip'>
                 <span class='fa fa-times delete_btn text-danger'></span><span class='sr-only'>$langDelete</span></a>
-            <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
+            <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
           </div>
         </div>
-        <div class='panel-body'>";
+        <div class='panel-body panel-body-admin pe-3 ps-3'>";
             foreach ($headings as $lang => $msg) {
                 $tool_content .= "
           <div class='row'>
-            <div class='col-xs-2 text-right'>
+            <div class='col-2 text-right'>
               <strong>" . $langNameOfLang[langcode_to_name($lang)] . ":</strong>
             </div>
-            <div class='col-xs-10'>" . q($msg) . "</div>
+            <div class='col-10'>" . q($msg) . "</div>
           </div>";
             }
             $tool_content .= "
@@ -226,7 +237,8 @@ $(function() {
         $tool_content .= "</div>";
 
     } else {
-        $tool_content .= "<div class='alert alert-warning text-center'>$langNoActivityHeadings</div>";
+        $tool_content .= "<div class='row p-2'></div>
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning text-center'>$langNoActivityHeadings</div></div>";
     }
 }
 

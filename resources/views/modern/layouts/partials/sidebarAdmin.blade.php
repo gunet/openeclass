@@ -23,10 +23,10 @@
                 <span class='text-uppercase'>{{ trans('langManageUser') }}</span>
                 @elseif($session->status == USER_DEPARTMENTMANAGER)
                 <span class='text-uppercase'>{{ trans('langManageDepartment') }}</span>
-                @elseif($session->status == USER_GUEST)
-                <span class='text-uppercase'>{{ trans('langVisitor') }}</span>
-                @else
+                @elseif($session->status == ADMIN_USER)
                 <span class='text-uppercase'>{{ trans('langAdministrator') }}</span>
+                @else
+                <span class='text-uppercase'>{{ trans('langVisitor') }}</span>
                 @endif
             </a>
         </div>

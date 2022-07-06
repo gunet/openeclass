@@ -69,7 +69,7 @@ $(function() {
 
                     
 
-                    {!! $action_bar !!}
+                    
 
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
@@ -79,113 +79,118 @@ $(function() {
                         </p>
                     </div>
                     @endif
-
-                    <div class='form-wrapper'>
+                    
+                     {!! $action_bar !!}
+                    <div class='col-12'>
+                    <div class='form-wrapper shadow-sm p-3 rounded'>
+                       
                         @if (!isset($_GET['from_user']))
                             <div class='alert alert-info'>
                                 {{ trans('langRefreshInfo') }} {{ trans('langRefreshInfo_A') }}
                             </div>
+                             
                             <form class='form-horizontal' role='form' action='{{ $form_url }}' method='post'>
-                        @else
-                            <form class='form-horizontal' role='form' action='{{ $form_url_from_user }}' method='post'>
-                        @endif
-                    <fieldset>
+                                @else
+                                    <form class='form-horizontal' role='form' action='{{ $form_url_from_user }}' method='post'>
+                                @endif
+                                <fieldset>
 
-                    <div class='row p-2'></div>
+                                <div class='row p-2'></div>
 
-                        <div class='form-group'>
-                            <label for='delusers' class='col-sm-6 control-label-notes'>{{ trans('langUsers') }}</label>
-                            <div class='col-sm-4 checkbox'>
-                                <label><input type='checkbox' name='delusers'> {{ trans('langUserDelCourse') }}:</label>
-                            </div>
-                            <div class='col-sm-3'>
-                                {!! $selection_date !!}
-                            </div>
-                            <div class='col-sm-3'>
-                                <input type='text' name='reg_date' id='reg_date' value='{{ $date_format }}'>
-                            </div>                
+                                    <div class='form-group'>
+                                        <label for='delusers' class='col-sm-6 control-label-notes'>{{ trans('langUsers') }}</label>
+                                        <div class='col-sm-12 checkbox'>
+                                            <label><input type='checkbox' name='delusers'> {{ trans('langUserDelCourse') }}:</label>
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            {!! $selection_date !!}
+                                        </div>
+                                        <div class='col-sm-12 mt-3'>
+                                            <input type='text' name='reg_date' id='reg_date' value='{{ $date_format }}'>
+                                        </div>                
+                                    </div>
+                                @if (!isset($_GET['from_user']))
+
+                                <div class='row p-2'></div>
+
+                                    <div class='form-group'>
+                                        <label for='delannounces' class='col-sm-6 control-label-notes'>{{ trans('langAnnouncements') }}</label>
+                                        <div class='col-sm-12 checkbox'>
+                                            <label><input type='checkbox' name='delannounces'> {{ trans('langAnnouncesDel') }}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class='row p-2'></div>
+
+                                    <div class='form-group'>
+                                    <label for='delagenda' class='col-sm-6 control-label-notes'>{{ trans('langAgenda') }}</label>
+                                    <div class='col-sm-12 checkbox'>
+                                        <label><input type='checkbox' name='delagenda'> {{ trans('langAgendaDel') }}</label>
+                                    </div>
+                                    </div>
+
+                                    <div class='row p-2'></div>
+
+                                    <div class='form-group'>
+                                    <label for='hideworks' class='col-sm-6 control-label-notes'>{{ trans('langWorks') }}</label>
+                                        <div class='col-sm-12 checkbox'>
+                                            <label><input type='checkbox' name='hideworks'> {{ trans('langHideWork') }}</label>
+                                        </div>
+                                        <div class='col-sm-offset-2 col-sm-10 checkbox'>
+                                            <label><input type='checkbox' name='delworkssubs'> {{ trans('langDelAllWorkSubs') }}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class='row p-2'></div>
+
+                                    <div class='form-group'>
+                                    <label for='purgeexercises' class='col-sm-6 control-label-notes'>{{ trans('langExercises') }}</label>
+                                    <div class='col-sm-12 checkbox'>
+                                        <label><input type='checkbox' name='purgeexercises'> {{ trans('langPurgeExercisesResults') }}</label>
+                                    </div>
+                                    </div>
+
+                                    <div class='row p-2'></div>
+
+                                    <div class='form-group'>
+                                    <label for='clearstats' class='col-sm-6 control-label-notes'>{{ trans('langUsage') }}</label>
+                                    <div class='col-sm-12 checkbox'>
+                                        <label><input type='checkbox' name='clearstats'> {{ trans('langClearStats') }}</label>
+                                    </div>
+                                    </div>
+
+                                    <div class='row p-2'></div>
+
+                                    <div class='form-group'>
+                                    <label for='delblogposts' class='col-sm-6 control-label-notes'>{{ trans('langBlog') }}</label>
+                                    <div class='col-sm-12 checkbox'>
+                                        <label><input type='checkbox' name='delblogposts'> {{ trans('langDelBlogPosts') }}</label>
+                                    </div>
+                                    </div>
+
+                                    <div class='row p-2'></div>
+
+                                    <div class='form-group'>
+                                    <label for='delwallposts' class='col-sm-6 control-label-notes'>{{ trans('langWall') }}</label>
+                                    <div class='col-sm-12 checkbox'>
+                                        <label><input type='checkbox' name='delwallposts'> {{ trans('langDelWallPosts') }}</label>
+                                    </div>
+                                    </div>
+                                @endif
+
+                                <div class='row p-2'></div>
+
+                                    {{ showSecondFactorChallenge() }}
+
+                                    <div class='row p-2'></div>
+
+                                <div class='col-sm-offset-2 col-sm-10'>
+                                    <input class='btn btn-primary' type='submit' value='{{ trans('langSubmitActions') }}' name='submit'>
+                                </div>
+                                </fieldset>
+                                {!! generate_csrf_token_form_field() !!}
+                            </form>
                         </div>
-                    @if (!isset($_GET['from_user']))
-
-                    <div class='row p-2'></div>
-
-                        <div class='form-group'>
-                            <label for='delannounces' class='col-sm-6 control-label-notes'>{{ trans('langAnnouncements') }}</label>
-                            <div class='col-sm-12 checkbox'>
-                                <label><input type='checkbox' name='delannounces'> {{ trans('langAnnouncesDel') }}</label>
-                            </div>
-                        </div>
-
-                        <div class='row p-2'></div>
-
-                        <div class='form-group'>
-                        <label for='delagenda' class='col-sm-6 control-label-notes'>{{ trans('langAgenda') }}</label>
-                        <div class='col-sm-12 checkbox'>
-                            <label><input type='checkbox' name='delagenda'> {{ trans('langAgendaDel') }}</label>
-                        </div>
-                        </div>
-
-                        <div class='row p-2'></div>
-
-                        <div class='form-group'>
-                        <label for='hideworks' class='col-sm-6 control-label-notes'>{{ trans('langWorks') }}</label>
-                            <div class='col-sm-12 checkbox'>
-                                <label><input type='checkbox' name='hideworks'> {{ trans('langHideWork') }}</label>
-                            </div>
-                            <div class='col-sm-offset-2 col-sm-10 checkbox'>
-                                <label><input type='checkbox' name='delworkssubs'> {{ trans('langDelAllWorkSubs') }}</label>
-                            </div>
-                        </div>
-
-                        <div class='row p-2'></div>
-
-                        <div class='form-group'>
-                        <label for='purgeexercises' class='col-sm-6 control-label-notes'>{{ trans('langExercises') }}</label>
-                        <div class='col-sm-12 checkbox'>
-                            <label><input type='checkbox' name='purgeexercises'> {{ trans('langPurgeExercisesResults') }}</label>
-                        </div>
-                        </div>
-
-                        <div class='row p-2'></div>
-
-                        <div class='form-group'>
-                        <label for='clearstats' class='col-sm-6 control-label-notes'>{{ trans('langUsage') }}</label>
-                        <div class='col-sm-12 checkbox'>
-                            <label><input type='checkbox' name='clearstats'> {{ trans('langClearStats') }}</label>
-                        </div>
-                        </div>
-
-                        <div class='row p-2'></div>
-
-                        <div class='form-group'>
-                        <label for='delblogposts' class='col-sm-6 control-label-notes'>{{ trans('langBlog') }}</label>
-                        <div class='col-sm-12 checkbox'>
-                            <label><input type='checkbox' name='delblogposts'> {{ trans('langDelBlogPosts') }}</label>
-                        </div>
-                        </div>
-
-                        <div class='row p-2'></div>
-
-                        <div class='form-group'>
-                        <label for='delwallposts' class='col-sm-6 control-label-notes'>{{ trans('langWall') }}</label>
-                        <div class='col-sm-12 checkbox'>
-                            <label><input type='checkbox' name='delwallposts'> {{ trans('langDelWallPosts') }}</label>
-                        </div>
-                        </div>
-                    @endif
-
-                    <div class='row p-2'></div>
-
-                        {{ showSecondFactorChallenge() }}
-
-                        <div class='row p-2'></div>
-
-                    <div class='col-sm-offset-2 col-sm-10'>
-                        <input class='btn btn-primary' type='submit' value='{{ trans('langSubmitActions') }}' name='submit'>
-                    </div>
-                    </fieldset>
-                    {!! generate_csrf_token_form_field() !!}
-                    </form>
                     </div>    
                 </div>
             </div>

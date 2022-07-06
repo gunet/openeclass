@@ -36,7 +36,7 @@ if (!isset($_POST['doit'])) {
                 'url' => "profile/display_profile.php",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
-        $tool_content .= "<div class='alert alert-danger'>$langAdminNo</div>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langAdminNo</div></div>";
         draw($tool_content, 1);
         exit;
     } else {
@@ -46,34 +46,42 @@ if (!isset($_POST['doit'])) {
                 AND user_id = ?d LIMIT 1", $uid);
         if (!$q) {
             $tool_content .= "
-              <div class='form-wrapper'>
+            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+            <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
+                <div class='row p-2'></div>
                   <div class='form-group'>
                     <div class='col-sm-12'>
                       $langConfirm
                     </div>
                   </div>
+
+                  <div class='row p-2'></div>
+
                   <div class='form-group'>
-                    <label class='col-sm-2'>$langYes:</label>
-                    <div class='col-sm-10'>
+                    <label class='col-sm-6 control-label-notes'>$langYes:</label>
+                    <div class='col-sm-12'>
                       <button class='btn btn-danger' name='doit'><i class='fa fa-times'></i> $langUnregUser</button>
                     </div>
                   </div>
+
+                  <div class='row p-2'></div>
+
                   <div class='form-group'>
-                    <label class='col-sm-2'>$langNo:</label>
-                    <div class='col-sm-10'>
-                      <a href='{$urlAppend}main/profile/display_profile.php' class='btn btn-default'><i class='fa fa-reply'></i> $langCancel</a>
+                    <label class='col-sm-6 control-label-notes'>$langNo:</label>
+                    <div class='col-sm-12'>
+                      <a href='{$urlAppend}main/profile/display_profile.php' class='btn btn-secondary'><i class='fa fa-reply'></i> $langCancel</a>
                     </div>
                   </div>
                 </form>
-              </div>";
+              </div></div>";
         } else {
             $tool_content .= action_bar(array(
                 array('title' => $langBack,
                     'url' => "profile/profile.php",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')));
-            $tool_content .= "<div class='alert alert-danger'>$langNote:</br>$langExplain</div>";
+            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langNotice:</br>$langExplain</div></div>";
         }
     }  //endif is admin
 } else {
@@ -94,7 +102,7 @@ if (!isset($_POST['doit'])) {
 
         $tool_content .= action_bar(array(
             array('title' => $langLogout,
-                'url' => $urlAppend . 'modules/auth/logout.php',
+                'url' => "../index.php?logout=yes",
                 'icon' => 'fa-sign-out',
                 'level' => 'primary-label')));
         $tool_content .= "<div class='alert alert-success'>$langDelSuccess</br>$langThanks</div>";

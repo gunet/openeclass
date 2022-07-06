@@ -2134,7 +2134,7 @@ function certificate_settings($element, $element_id = 0) {
         $check_certdeadline = '';
         $statuscertdeadline = '';
     }
-    $tool_content .= "<div class='form-wrapper'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <div class='form-group'>
                     <label for='title' class='col-sm-2 control-label'>$langTitle</label>
@@ -2194,7 +2194,7 @@ function certificate_settings($element, $element_id = 0) {
                         ))."</div>
                 </div>
             </form>
-        </div>";
+        </div></div>";
 }
 
 

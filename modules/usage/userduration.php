@@ -355,9 +355,9 @@ function selection_course_modules() {
         $mod_opts .= "<option value=" . $mid . " $extra>" . $modules[$mid]['title'] . "</option>";
     }
 
-    $content = "<div class='row'>
-        <div class='col-md-12'>
-            <div class='form-wrapper'>
+    $content = "
+        <div class='col-12'>
+            <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' name='module_select' action='$_SERVER[SCRIPT_NAME]' method='get'>
                 <input type='hidden' name='course' value='$course_code'>
                     <div class='form-group'>
@@ -370,8 +370,7 @@ function selection_course_modules() {
                     </div>
                 </form>
             </div>
-        </div>
-    </div>";
+        </div>";
 
     return $content;
 }

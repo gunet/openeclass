@@ -1,5 +1,5 @@
 .list-group-item.bg-transparent.active{
-    background-color: #000000 !important;
+    background-color: #4682B4 !important;
 }
 .list-group-item.bg-transparent.active span{
   color: white !important;

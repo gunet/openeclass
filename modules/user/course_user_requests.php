@@ -103,7 +103,7 @@ if (isset($_GET['rid'])) {
             $tool_content .= "<div class='alert alert-danger'>$langCourseUserRegError</div>";
         }
     } else {
-        $tool_content .= "<div class='form-wrapper'>";
+        $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>";
         $tool_content .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
         <div class='col-sm-12'><label>$langReasonReject</label></div>
@@ -122,7 +122,7 @@ if (isset($_GET['rid'])) {
         ". generate_csrf_token_form_field() ."
         <input type='hidden' name='rejected_req_id' value='$_GET[rid]'>
             <input type='hidden' name='rejected_uid' value='$_GET[u]'>
-    </fieldset></form></div>";
+    </fieldset></form></div></div>";
     }
 } else { // display course user requests
     $sql = Database::get()->queryArray("SELECT id, uid, course_id, comments, ts FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id);

@@ -32,12 +32,12 @@ $statsIntervalOptions = '<option value="1" >' . $langPerDay . "</option>" .
 
 if($stats_type == 'course'){
     if (isset($_GET['id'])) { // get specific user
-        $u = Database::get()->querySingle("SELECT u.id, CONCAT(surname,' ',givenname,' (',username,')') name FROM course_user cu
+        $u = Database::get()->querySingle("SELECT u.id, CONCAT(givenname,' ',surname,' (',username,')') name FROM course_user cu
                                                                 JOIN user u ON cu.user_id=u.id
                                                             WHERE course_id=?d AND cu.user_id=?d", $course_id, $_GET['id']);
         $statsUserOptions = '<option value="'.$u->id.'" >' . $u->name . "</option>";
     } else { /**Get users of course**/
-        $result = Database::get()->queryArray("SELECT u.id, CONCAT(surname,' ',givenname,' (',username,')') name FROM course_user cu
+        $result = Database::get()->queryArray("SELECT u.id, CONCAT(givenname,' ',surname,' (',username,')') name FROM course_user cu
                                                                 JOIN user u ON cu.user_id=u.id
                                                             WHERE course_id=?d
                                                             ORDER BY surname, givenname", $course_id);
@@ -52,7 +52,8 @@ if($stats_type == 'course'){
     foreach($result as $m){
        $mod_opts .= '<option value="'.$m->id.'" >' . which_module($m->id) . "</option>";
     }
-}  elseif ($stats_type == 'admin') {
+}
+elseif($stats_type == 'admin'){
     /**Get course departments/categories**/
     $result = Database::get()->queryArray("SELECT chid id, chname name, IF(parent=-1,0,pars) depth  FROM "
             . "(SELECT chid, chname, chlft, COUNT(DISTINCT parid) pars, MAX(parid) parent FROM (SELECT IFNULL(h1.id,-1) parid, h1.name parname, h2.name chname, h2.id chid, h1.lft parlft, h2.lft chlft from hierarchy h1 right "
@@ -67,7 +68,8 @@ if($stats_type == 'course'){
        }
        $statsDepOptions .= '<option value="'.$d->id.'" >' . $indentation.hierarchy::unserializeLangField($d->name) . "</option>\n";
     }
-} else {
+}
+else{
     /**Get courses of user**/
     if (isset($_GET['u'])) {
         $result = Database::get()->queryArray("SELECT c.id, c.code, c.title FROM course_user cu JOIN course c ON cu.course_id=c.id WHERE user_id=?d", $_GET['u']);
@@ -80,7 +82,9 @@ if($stats_type == 'course'){
     }
 }
 
-$tool_content .= '<div class="form-wrapper" data-placement="top">';
+
+$tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>";
+$tool_content .= '<div class="form-wrapper shadow-sm p-3 rounded" data-placement="top">';
 $tool_content .= '<div class="form-group" data-placement="top">';
 
 $endDate_obj = new DateTime();
@@ -90,32 +94,43 @@ $startDate_obj = $endDate_obj->sub(new DateInterval('P6M'));
 $startdate = $startDate_obj->format('d-m-Y');
 $showFrom = q($startdate);
 
-$tool_content .= "<label class='pull-left control-label'>$langFrom</label>
-        <div class='col-xs-2 col-sm-2'>
-            <input class='form-control' name='startdate' id='startdate' type='text' value = '$showFrom'>
+$tool_content .= "<label class='pull-left control-label-notes'>$langFrom</label>
+        <div class='col-12 col-sm-12'>
+            <input class='form-control flex-fill' name='startdate' id='startdate' type='text' value = '$showFrom'>
         </div>";
-$tool_content .= "<label class='pull-left control-label'>$langUntil</label>
-            <div class='col-xs-2 col-sm-2'>
+$tool_content .= "<label class='pull-left control-label-notes pt-3'>$langUntil</label>
+            <div class='col-12 col-sm-12'>
                 <input class='form-control' name='enddate' id='enddate' type='text' value = '$showUntil'>
             </div>";
-$tool_content .= '<div class="col-sm-2 col-xs-2"><select name="interval" id="interval" class="form-control">' . $statsIntervalOptions . '</select></div>';
+$tool_content .= '<div class="col-sm-12 col-12 pt-4"><select name="interval" id="interval" class="form-control">' . $statsIntervalOptions . '</select></div>';
 
-if ($stats_type == 'course') {
-    $tool_content .= '<div class="col-sm-3 col-xs-3" style="display:none;"><select name="module" id="module" class="form-control">' . $mod_opts . '</select></div>';
-    $tool_content .= '<div class="col-sm-2 col-xs-2"><select name="user" id="user" class="form-control">' . $statsUserOptions . '</select></div>';
-} elseif ($stats_type == 'admin') {
-    $tool_content .= '<div class="col-sm-3 col-xs-3"><select name="department" id="department" class="form-control">' . $statsDepOptions . '</select></div>';
-} elseif ($stats_type == 'user') {
-    $tool_content .= '<div class="col-sm-3 col-xs-3"><select name="course" id="course" class="form-control">' . $statsCourseOptions . '</select></div>';
+//$tool_content .= "<a id='toggle-view'><i class='fa fa-list' data-toggle='tooltip' data-placement='top' title data-original-title='lala'></i></a>";
+
+if($stats_type == 'course'){
+
+    $tool_content .= '
+    <div class="col-sm-12 col-12 pt-4" style="display:none;"><select name="module" id="module" class="form-control">' . $mod_opts . '</select></div>';
+
+    $tool_content .= '
+    <div class="col-sm-12 col-12 pt-4"><select name="user" id="user" class="form-control">' . $statsUserOptions . '</select></div>';
 }
+elseif($stats_type == 'admin'){
+    $tool_content .= '
+    <div class="col-sm-12 col-12 pt-4"><select name="department" id="department" class="form-control">' . $statsDepOptions . '</select></div>';
+}
+elseif($stats_type == 'user'){
+    $tool_content .= '
+    <div class="col-sm-12 col-12 pt-4"><select name="course" id="course" class="form-control">' . $statsCourseOptions . '</select></div>';
+}
+//<a id="list-view" class="btn btn-default"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><span class="fa fa-list"  data-toggle="tooltip" data-placement="top"></span></a>
 
-$tool_content .= '<div class="pull-right">
+$tool_content .= '<div class="pull-right pt-4">
     <div id="toggle-view" class="btn-group">
-        <a id="plots-view" class="btn btn-info active"  data-placement="top" title="'.$langPlots.'" data-toggle="tooltip" data-original-title="'.$langPlots.'"><span class="fa fa-bar-chart"  data-toggle="tooltip" data-placement="top"></span></a>
-        <a id="list-view" class="btn btn-info"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><span class="fa fa-list"  data-toggle="tooltip" data-placement="top"></span></a>';
-$tool_content .= ($stats_type == 'course')? '<a id="logs-view" class="btn btn-primary"  data-placement="top" title="'.$langUsersLog.'" data-toggle="tooltip" data-original-title="'.$langUsersLog.'"><span class="fa fa-list-alt"  data-toggle="tooltip" data-placement="top"></span></a>':'';
+        <a id="plots-view" class="btn btn-info active"  data-bs-placement="top" title="'.$langPlots.'" data-bs-toggle="tooltip" data-original-title="'.$langPlots.'"><span class="fa fa-bar-chart"  data-bs-toggle="tooltip" data-bs-placement="top"></span></a>
+        <a id="list-view" class="btn btn-info"  data-bs-placement="top" title="'.$langDetails.'" data-bs-toggle="tooltip" data-original-title="'.$langDetails.'"><span class="fa fa-list"  data-bs-toggle="tooltip" data-bs-placement="top"></span></a>';
+$tool_content .= ($stats_type == 'course')? '<a id="logs-view" class="btn btn-primary"  data-bs-placement="top" title="'.$langUsersLog.'" data-bs-toggle="tooltip" data-original-title="'.$langUsersLog.'"><span class="fa fa-list-alt"  data-bs-toggle="tooltip" data-bs-placement="top"></span></a>':'';
 
 $tool_content .= '</div>
 </div>';
 
-$tool_content .= '</div><div style="clear:both;"></div></div>';
+$tool_content .= '</div><div style="clear:both;"></div></div></div>';

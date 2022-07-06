@@ -56,16 +56,23 @@
 
     
 
-                    {!! $action_bar !!}
-                    <div class='row p-2'></div>
-                    <div class='form-wrapper'>
-                        <form class='form-horizontal' role='form' action='save.php' method='post' enctype='multipart/form-data'>
-                            <label for='userFile' class='col-sm-6 control-label-notes'>Αρχείο : </label>
-                                            <div class='col-sm-12'>
-                                                <input type='file' id='userFile' name='userFile'>
-                                            </div>
-                            <button class='btn btn-primary' type='submit'>Εισαγωγή</button>
-                        </form>
+                    
+
+                    <div class='col-12 mt-4'>
+                        <div class='alert alert-info'>{{ trans('langImportH5P') }}</div>
+                    </div>
+
+                    <div class='col-12 mt-4'>
+                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                            {!! $action_bar !!}
+                            <form class='form-horizontal' role='form' action='save.php' method='post' enctype='multipart/form-data'>
+                                <label for='userFile' class='col-sm-6 control-label-notes'>Αρχείο : </label>
+                                                <div class='col-sm-12'>
+                                                    <input type='file' id='userFile' name='userFile'>
+                                                </div>
+                                <button class='btn btn-primary mt-3' type='submit'>Εισαγωγή</button>
+                            </form>
+                        </div>
                     </div>
                         
 

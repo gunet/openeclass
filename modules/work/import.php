@@ -120,9 +120,9 @@ $tool_content .= action_bar([
 
 enableCheckFileSize();
 $tool_content .= "
-    <div class='row'>
-        <div class='col-sm-12'>
-            <div class='form-wrapper'>
+
+        <div class='col-12'>
+            <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' enctype='multipart/form-data' method='post' action='import.php?course=$course_code&amp;id=$id'>
                     <fieldset>
                         <div class='form-group'>
@@ -148,7 +148,6 @@ $tool_content .= "
                     </fieldset>
                 </form>
             </div>
-        </div>
-    </div>";
+        </div>";
 
 draw($tool_content, 2, null, $head_content);

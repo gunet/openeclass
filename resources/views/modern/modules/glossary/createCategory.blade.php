@@ -49,46 +49,46 @@
                                             </div>
                                         </div>
                                         
-                                            
-                                        <form class='form-horizontal' role='form' action='{{ $cat_url }}' method='post'>
+                                        @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                                            <!-- <input type="hidden" name="checkStudentView" value={{$is_editor}}> -->
+                                        <div class='col-12'>
+                                            <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
 
-                                            @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-                                            
+                                                <form class='form-horizontal' role='form' action='{{ $cat_url }}' method='post'>
 
+                                                    @if(isset($glossary_cat))
+                                                        <input type='hidden' name='category_id' value='{{ getIndirectReference($glossary_cat->id) }}'>
+                                                    @endif
 
-                                            @if(isset($glossary_cat))
-                                                <input type='hidden' name='category_id' value='{{ getIndirectReference($glossary_cat->id) }}'>
-                                            @endif
+                                                    <div class='form-group{{ Session::getError('name') ? " has-error" : "" }} mt-3'>
+                                                        <label for='name' class='col-sm-4 control-label-notes'>{{ trans('langCategoryName') }}: </label>
+                                                        <div class='col-sm-12'>
+                                                            <input type='text' class='form-control' id='term' name='name' placeholder='{{ trans('langCategoryName') }}' value='{{ $name }}'>
+                                                            <span class='help-block'>{{ Session::getError('name') }}</span>    
+                                                        </div>
+                                                    </div>
 
-                                            <div class='form-group{{ Session::getError('name') ? " has-error" : "" }}'>
-                                                <label for='name' class='col-sm-4 control-label-notes'>{{ trans('langCategoryName') }}: </label>
-                                                <div class='col-sm-12'>
-                                                    <input type='text' class='form-control' id='term' name='name' placeholder='{{ trans('langCategoryName') }}' value='{{ $name }}'>
-                                                    <span class='help-block'>{{ Session::getError('name') }}</span>    
-                                                </div>
+                                                    
+
+                                                    <div class='form-group mt-3'>
+                                                        <label for='description' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}</label>
+                                                        <div class='col-sm-12'>
+                                                            {!! $description_rich !!}
+                                                        </div>
+                                                    </div>
+
+                                                    
+
+                                                    <div class='form-group mt-3'>    
+                                                        <div class='col-sm-12 col-sm-offset-2'>
+                                                            {!! $form_buttons !!}
+                                                        </div>
+                                                    </div>
+                                                    {!! generate_csrf_token_form_field() !!}   
+                                                                
+                                                </form>
                                             </div>
-
-                                            <div class="row p-2"></div>
-
-                                            <div class='form-group'>
-                                                <label for='description' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}</label>
-                                                <div class='col-sm-12'>
-                                                    {!! $description_rich !!}
-                                                </div>
-                                            </div>
-
-                                            <div class="row p-2"></div>
-
-                                            <div class='form-group'>    
-                                                <div class='col-sm-12 col-sm-offset-2'>
-                                                    {!! $form_buttons !!}
-                                                </div>
-                                            </div>
-                                            {!! generate_csrf_token_form_field() !!}   
-                                                           
-                                        </form>
+                                        </div>
                                             
                                         
                                 

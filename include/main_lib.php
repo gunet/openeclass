@@ -3558,8 +3558,8 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                   </ul></div>";
     }
     if ($out && $i!=0) {
-        return "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix mt-3'>
-                    <div class='action_bar'>  
+        return "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix'>
+                    <div class='action_bar shadow-sm p-3 mt-2 rounded'>  
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix'>
                             $page_title
                             <div class='float-md-end float-start mt-md-0 mt-2 margin-top-thin margin-bottom-fat hidden-print'>

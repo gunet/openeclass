@@ -152,7 +152,7 @@ if (isset($_POST['submit'])) {
 
 
     $tool_content .= "
-        <div class='form-wrapper'>
+        <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                 <input type='hidden' name='post_id' value='$post_id'>
                 <input type='hidden' name='topic' value='$topic_id'>
@@ -172,6 +172,6 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
             </form>
-        </div>";
+        </div></div>";
 }
 draw($tool_content, 2, null, $head_content);

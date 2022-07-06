@@ -54,8 +54,8 @@
                         @endif
 
 
-
-                        <div class='form-wrapper'>
+                        <div class='col-12'>
+                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
                           <form class='form-horizontal' role='form' action='{{ $base_url }}' method='post'>
                               <div class='form-group'>
                                   <div class='col-sm-12'>            
@@ -82,6 +82,7 @@
                               </div>   
                               {!! generate_csrf_token_form_field() !!}                
                           </form>
+                        </div>
                         </div>
 
                   </div>

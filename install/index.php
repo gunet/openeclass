@@ -365,7 +365,7 @@ elseif (isset($_POST['install5'])) {
                    'smtp_username', 'smtp_password', 'sendmail_command') as $name) {
        $GLOBALS['input_fields'][$name] = true;
     }
-    $tool_content .= "<div class='form-wrapper'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>";
     mail_settings_form();
@@ -378,7 +378,7 @@ elseif (isset($_POST['install5'])) {
            </div>
          </fieldset>" .
          hidden_vars($all_vars) . "
-       </form></div>
+       </form></div></div>
        <script>$(function () {" . $mail_form_js . '});</script>';
     draw($tool_content);
 }

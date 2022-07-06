@@ -89,11 +89,16 @@ if (!isset($_REQUEST['course_code'])) {
     $course_code = course_id_to_code($course_id);
 }
 
+
 if (isset($_GET['from_other'])) {
     $toolName = $langSystemActions;
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
     $navigation[] = array('url' => '../admin/otheractions.php', 'name' => $langRecordLog);
     $tool_content .= action_bar(array(
+        array('title' => $langRecordLog,
+            'url' => "../admin/otheractions.php",
+            'icon' => 'fa-bar-chart',
+            'level' => 'primary-label'),
         array('title' => $langBack,
             'url' => "../admin/index.php",
             'icon' => 'fa-reply',
@@ -145,7 +150,7 @@ if (isset($_REQUEST['submit'])) {
     exit();
 }
 
-// if we haven't chosen 'system actions'
+// if we haven't choose 'system actions'
 if (!isset($_GET['from_other'])) {
     $letterlinks = '';
     $result = Database::get()->queryArray("SELECT LEFT(a.surname, 1) AS first_letter
@@ -179,22 +184,22 @@ if (!isset($_GET['from_other'])) {
             $selected = '';
         }
         $user_opts .= '<option ' . $selected . ' value="' . $row->id . '">' .
-                q($row->surname . ' ' . $row->givenname) . "</option>";
+                q($row->givenname . ' ' . $row->surname) . "</option>";
     }
 }
 
-$tool_content .= '<div class="form-wrapper">';
+$tool_content .= '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><div class="form-wrapper shadow-sm p-3 rounded">';
 if (isset($_GET['from_other'])) {
     $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?from_other=TRUE">';
 } else {
     $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
 }
 
-// if we haven't chosen 'system actions'
+// if we haven't choose 'system actions'
 if (!isset($_GET['from_other'])) {
-    $tool_content .= '<div class="form-group">
-            <label class="col-sm-2 control-label">' . $langLogModules . ':</label>
-            <div class="col-sm-10"><select name="u_module_id" class="form-control">';
+    $tool_content .= '<div class="form-group mt-3">
+            <label class="col-sm-6 control-label-notes">' . $langLogModules . ':</label>
+            <div class="col-sm-12"><select name="u_module_id" class="form-control">';
     $tool_content .= "<option value='-1'>$langAllModules</option>";
     foreach ($modules as $m => $mid) {
         $extra = '';
@@ -219,9 +224,9 @@ if (!isset($_GET['from_other'])) {
     $tool_content .= "</select></div></div>";
 }
 
-$tool_content .= '<div class="form-group">
-        <label class="col-sm-2 control-label">' . $langLogTypes . ':</label>        
-         <div class="col-sm-10">';
+$tool_content .= '<div class="form-group mt-3">
+        <label class="col-sm-6 control-label-notes">' . $langLogTypes . ':</label>        
+         <div class="col-sm-12">';
 
 if (isset($_GET['from_other'])) {   // system actions
     $log_types = array(LOG_CREATE_COURSE => $langCourseCreate,
@@ -233,43 +238,47 @@ if (isset($_GET['from_other'])) {   // system actions
                     LOG_DELETE => $langDelete);
 }
 
-$tool_content .= selection($log_types, 'logtype', $logtype, "class='form-control'");
+$tool_content .= selection($log_types, 'logtype', $logtype, "class='form-control mt-3'");
 $tool_content .= "</div></div>";
-$tool_content .= "<div class='input-append date form-group' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-<label class='col-sm-2 control-label' for='user_date_start'>$langStartDate:</label>
-<div class='col-xs-10 col-sm-9'>               
-    <input class='form-control' id='user_date_start' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
-</div>
-<div class='col-xs-2 col-sm-1'>
-    <span class='add-on'><i class='fa fa-times'></i></span>
-    <span class='add-on'><i class='fa fa-calendar'></i></span>
-</div>
-</div>";
-$tool_content .= "<div class='input-append date form-group' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-        <label class='col-sm-2 control-label' for='user_date_end'>$langEndDate:</label>
-            <div class='col-xs-10 col-sm-9'>
-                <input class='form-control' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
-            </div>
-        <div class='col-xs-2 col-sm-1'>
+$tool_content .= "<div class='input-append date form-group mt-3' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+    <div class='row'>
+        <label class='col-sm-6 control-label-notes' for='user_date_start'>$langStartDate:</label>
+        <div class='col-11 col-sm-11'>               
+            <input class='form-control' id='user_date_start' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+        </div>
+        <div class='col-1 col-sm-1'>
             <span class='add-on'><i class='fa fa-times'></i></span>
             <span class='add-on'><i class='fa fa-calendar'></i></span>
         </div>
-        </div>";
+    </div>
+</div>";
+$tool_content .= "<div class='input-append date form-group mt-3' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+    <div class='row'>
+        <label class='col-sm-6 control-label-notes' for='user_date_end'>$langEndDate:</label>
+            <div class='col-11 col-sm-11'>
+                <input class='form-control' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+            </div>
+        <div class='col-1 col-sm-1'>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>
+    </div>
+</div>";
 
 
-// if we haven't chosen 'system actions'
+// if we haven't choose 'system actions'
 if (!isset($_GET['from_other'])) {
-    $tool_content .= '<div class="form-group">  
-    <label class="col-sm-2 control-label">' . $langFirstLetterUser . ':</label>
-        <div class="col-sm-10">' . $letterlinks . '</div>
+    $tool_content .= '<div class="form-group mt-3">  
+    <label class="col-sm-6 control-label-notes">' . $langFirstLetterUser . ':</label>
+        <div class="col-sm-12">' . $letterlinks . '</div>
       </div>
-      <div class="form-group">  
-        <label class="col-sm-2 control-label">' . $langUser . ':</label>
-         <div class="col-sm-10"><select name="u_user_id" class="form-control">' . $user_opts . '</select></div>
+      <div class="form-group mt-3">  
+        <label class="col-sm-6 control-label-notes">' . $langUser . ':</label>
+         <div class="col-sm-12"><select name="u_user_id" class="form-control">' . $user_opts . '</select></div>
       </div>';
 }
 
-$tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
+$tool_content .= "<div class='form-group mt-3'><div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
                 array(
                     'text' => $langSubmit,
                     'name' => 'submit',
@@ -278,7 +287,7 @@ $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'
                 array(
                     'href' => "index.php?course=$course_code",
                 )
-            ))."</div></div></form></div>";
+            ))."</div></div></form></div></div>";
 
 if (isset($_GET['from_admin']) or isset($_GET['from_other'])) {
     draw($tool_content, 3, null, $head_content);

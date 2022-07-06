@@ -89,23 +89,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
       UPLOAD FORM
       -------------------------------------- */
     $tool_content .= 
-        "<div class='form-wrapper'>
+        "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&importIMSQTI=yes' method='post'>
                 <input type='hidden' name='qtiFormId' value='" . uniqid('') . "' >
                     <h4>$langImport</h4>
-                    <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langIMSQTIUploadFile:</label>
-                        <div class='col-sm-9'>
+                    <div class='form-group mt-3'>
+                        <label class='col-sm-6 control-label-notes'>$langIMSQTIUploadFile:</label>
+                        <div class='col-sm-12'>
                             <input type='file' name='uploadedPackage'>                            
                         </div>
                     </div>
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <div class='col-sm-offset-3 col-sm-9'>
                         <input type='submit' value='" . $langImport . "'>
                         <span class='help-block'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small>
                     </div>
                 </div>
             </form>
-        </div>";
+        </div></div>";
 }
 chdir($pwd);

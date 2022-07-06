@@ -98,7 +98,7 @@ if (isset($_POST['submit'])) {
         $guest_info->username = $default_guest_username;
         $submit_label = $langAdd;
     }
-    $tool_content .= "<div class='form-wrapper'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
         <div class='form-group'>
@@ -133,7 +133,7 @@ if (isset($_POST['submit'])) {
         </fieldset>
         ". generate_csrf_token_form_field() ."
         </form>
-        </div>";
+        </div></div>";
 }
 draw($tool_content, 2, null, $head_content);
 

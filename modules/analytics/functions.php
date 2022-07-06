@@ -8,7 +8,7 @@ require_once 'ElementTypes.php';
  */
 function display_learning_analytics() {
     global $course_id, $course_code, $tool_content, $langAnalyticsNoAnalytics, $langActive, $langInactive,
-    $langAnalyticsTotalAnalytics, $langAnalyticsViewPerUserGeneral, $langModify, $langCriteria, $langDeactivate,
+    $langAnalyticsTotalAnalytics, $langAnalyticsViewPerUserGeneral, $langModify, $langAnalyticsEditElements, $langDeactivate,
     $langActivate, $langDelete, $langAnalyticsConfirm, $langLearningAnalytics, $langAdd;
 
     $sql_data = Database::get()->queryArray("SELECT id, title, description, active, start_date, end_date, created, periodType FROM analytics WHERE courseID= ?d", $course_id);
@@ -23,7 +23,7 @@ function display_learning_analytics() {
             $active_msg = $data->active ? $langActive : $langInactive;
             $title = $data->title;
             $description = $data->description;
-
+            
             $results .= "
             <div class='row res-table-row'>
                 <div class='col-sm-3'>
@@ -40,11 +40,11 @@ function display_learning_analytics() {
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=perUser",
                         'icon' => 'fa-users',
                         'level' => 'primary-label'),
-                    array('title' => $langCriteria,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showElements",
-                        'icon' => 'fa-edit'),
                     array('title' => $langModify,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;edit_analytics=1",
+                            'icon' => 'fa-edit'),
+                    array('title' => $langAnalyticsEditElements,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showElements",
                             'icon' => 'fa-edit'),
                     array('title' => $active ? $langDeactivate : $langActivate,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;activate=" .
@@ -62,11 +62,11 @@ function display_learning_analytics() {
     }
 
     $tool_content .= "
-        <div class='row'>
-            <div class='col-xs-12'>
-                <div class='panel panel-default'>
-                    <div class='panel-body'>
-                        <div class='inner-heading'>
+
+            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                    <div class='panel-body ps-3 pe-3 pt-3 pb-3'>
+                        <div class='inner-heading notes_thead'>
                             <div class='row'>
                                 <div class='col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12'>
                                     <strong>$langLearningAnalytics</strong>
@@ -76,13 +76,12 @@ function display_learning_analytics() {
                                 </div>
                             </div>
                         </div>
-                        <div class='res-table-wrapper'>
+                        <div class='res-table-wrapper panel-body-admin ps-3 pb-3 pt-3 pe-3'>
                             $results
                         </div>  
                     </div>
                 </div>
-            </div>
-        </div>";
+            </div>";         
 }
 
 
@@ -125,7 +124,7 @@ function display_general_lists($analytics_id) {
             $message_critical = $langAnalyticsCriticalLevel;
             foreach ($critical as $crit) {
                 $userid = $crit['id'];
-                $bad_results .="<div class='row res-table-row'>
+                $bad_results .="<div class='row res-table-row panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                     <div class='col-sm-5'>". display_user($userid) ."</div>
                     <div class='col-sm-7'>".
                 action_bar(
@@ -149,7 +148,7 @@ function display_general_lists($analytics_id) {
             $message_advanced = $langAnalyticsAdvancedLevel;
             foreach ($advanced as $adv) {
                 $userid = $adv['id'];
-                $good_results .= "<div class='row res-table-row'>
+                $good_results .= "<div class='row res-table-row panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                     <div class='col-sm-5'>". display_user($userid) ."</div>
                         <div class='col-sm-7'>".
                         action_bar(
@@ -171,34 +170,32 @@ function display_general_lists($analytics_id) {
         }
 
         $tool_content .= "
-            <div class='row'>
-                <div class='col-xs-12'>
-                    <div class='panel panel-default'>
+                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                    <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
                         <div class='panel-body'>
                             <div class='inner-heading'>
                                 <div class='row'>
                                     <div class='col-sm-12'>
                                         <strong>
-                                            <a data-toggle='collapse' href='#LearnAnalyticsResource$module_id' aria-expanded='false' aria-controls='LearnAnalyticsResource$module_id'>
+                                            <a class='ps-3' data-bs-toggle='collapse' href='#LearnAnalyticsResource$module_id' aria-expanded='false' aria-controls='LearnAnalyticsResource$module_id'>
                                             <i class='fa fa-arrow-down'>" . get_resource_info($resource, $module_id) . "</a></i>
                                         </strong>
                                     </div>
                                 </div>
                             </div>                        
-                            <div class='col-sm-12 collapse' id='LearnAnalyticsResource$module_id'>
-                                <h4 class='text-success'>$message_advanced</h4>
+                            <div class='col-sm-12 collapse ps-4 pe-4 pt-3 pb-3 mt-4' id='LearnAnalyticsResource$module_id'>
+                                <h6 class='text-success'>$message_advanced</h6>
                                 <div class='res-table-wrapper'>
                                     $good_results
                                 </div>                                                        
-                                <h4 class='text-danger'>$message_critical</h4>
+                                <h6 class='text-danger mt-4'>$message_critical</h6>
                                 <div class='res-table-wrapper'>
                                     $bad_results
                                 </div>                            
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>";
+                </div>";
     }
 }
 
@@ -210,15 +207,15 @@ function display_general_lists($analytics_id) {
 function display_analytics_elements($analytics_id) {
 
     global $tool_content, $course_code, $langAdd, $langAnalyticsNoElements,
-           $langType, $langAnalyticsGradeLimits, $langAnalyticsThresholds,
+           $langAnalyticsType, $langAnalyticsGradeLimits, $langAnalyticsThresholds,
            $langAnalyticsWeight, $langAnalyticsCriticalLevel, $langAnalyticsAdvancedLevel,
            $langModify, $langDelete, $langAnalyticsConfirmDeletion,
-           $langCriteria;
+           $langAnalyticsParameters;
 
     $buttons = array();
     foreach (ElementTypes::elements as $elementType) {
         $type = $elementType['link'];
-        array_push( $buttons,
+        array_push( $buttons,   
                 array('title' => $elementType['title'],
                     'url' => "$_SERVER[SCRIPT_NAME]?analytics_id=$analytics_id&amp;edit_analytics_element=true&amp;elementType=$type",
                     'icon' => $elementType['icon'],
@@ -230,7 +227,7 @@ function display_analytics_elements($analytics_id) {
             'secondary_title' => $langAdd,
             'secondary_icon' => '',
             'secondary_btn_class' => 'btn-success btn-sm'
-
+        
     ));
 
     $sql_data = Database::get()->queryArray("SELECT id, upper_threshold, lower_threshold, min_value, max_value, weight, resource, module_id FROM analytics_element WHERE analytics_id=?d", $analytics_id);
@@ -239,19 +236,19 @@ function display_analytics_elements($analytics_id) {
     } else {
         $results ="<div class='row p-2 res-table-header panel-body-admin'>
                         <div class='col-sm-2'>
-                            $langType
+                            <span class='control-label-notes'>$langAnalyticsType</span>
                         </div>
                         <div class='col-sm-3'>
-                            $langAnalyticsGradeLimits
+                        <span class='control-label-notes'>$langAnalyticsGradeLimits</span>
                         </div>
                         <div class='col-sm-4'>
-                            $langAnalyticsThresholds 
+                        <span class='control-label-notes'>$langAnalyticsThresholds</span>
                         </div>
                         <div class='col-sm-2'>
-                            $langAnalyticsWeight 
+                        <span class='control-label-notes'>$langAnalyticsWeight</span>
                         </div>
                         <div class='col-sm-1 text-center'>
-                            <i class='fa fa-cogs'></i>
+                            <span class='control-label-notes'><i class='fa fa-cogs'></i></span>
                         </div>
                     </div>";
         foreach ($sql_data as $result) {
@@ -264,15 +261,15 @@ function display_analytics_elements($analytics_id) {
             $resource = $result->resource;
             $module_id = $result->module_id;
             $results .= "
-                <div class='row res-table-row'>
-                    <div class='col-sm-12'><em>
+                <div class='row p-2 res-table-row panel-body-admin'>
+                    <div class='col-sm-3'><em>
                         " . get_resource_info($resource, $module_id) . "</em>
                         </div>
-                    <div class='col-sm-3 col-sm-offset-2'><span class='text-danger'>$min_value</span> - <span class='text-success'>$max_value</span></div>
-                        <div class='col-sm-4'>
-                            <span class='text-danger'>$langAnalyticsCriticalLevel: $min_value - $lower_threshold</span><br/>
-                            <span class='text-success'>$langAnalyticsAdvancedLevel: $upper_threshold - $max_value</span>
-                        </div>
+                    <div class='col-sm-2 col-sm-offset-2'><span class='text-danger'>$min_value</span> - <span class='text-success'>$max_value</span></div>
+                    <div class='col-sm-4'>
+                        <span class='text-danger'>$langAnalyticsCriticalLevel: $min_value - $lower_threshold</span><br/>
+                        <span class='text-success'>$langAnalyticsAdvancedLevel: $upper_threshold - $max_value</span>
+                    </div>
                     <div class='col-sm-2'>$weight</div>
                     <div class='col-sm-1 text-center'>".
                         action_button(array(
@@ -292,31 +289,25 @@ function display_analytics_elements($analytics_id) {
     }
 
     $tool_content .= "
-    <div class='row'>
-        <div class='col-xs-12'>
-            <div class='panel panel-default'>
-                <div class='panel-body'>
-                    <div class='inner-heading'>
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+            <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                <div class='panel-body ps-3 pt-3 pb-3 pe-3'>
+                    <div class='inner-heading notes_thead'>
                         <div class='row'>
-
                             <div class='col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12'>
-                                <strong>$langCriteria</strong>
-
+                                <strong>$langAnalyticsParameters</strong>
                             </div>
-
                             <div class='col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12'>
                                 <div class='float-end pe-3' style='margin-top:-3px;'>$addParametersBtn</div>
-
                             </div>
                         </div>
                     </div>
-                    <div class='res-table-wrapper'>
+                    <div class='res-table-wrapper panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                         $results
                     </div>  
                 </div>
             </div>
-        </div>
-    </div>";
+        </div>";
 }
 
 
@@ -329,7 +320,7 @@ function display_analytics_information($analytics_id) {
     $langAnalyticsTimeFrame, $langFrom, $langTill, $langAnalyticsCalculation;
 
     $sql_data = Database::get()->querySingle("SELECT a.id as id, a.title as title, a.description as description, a.active as active, a.start_date as start_date, a.end_date as end_date, a.created as created, a.periodtype as periodType FROM analytics as a WHERE a.courseID= ?d AND a.id = ?d", $course_id, $analytics_id);
-
+    
     $title = $sql_data->title;
     $description = $sql_data->description;
     $active_vis = $sql_data->active ? "text-success" : "text-danger";
@@ -339,11 +330,10 @@ function display_analytics_information($analytics_id) {
     $periodType = periodType::periodType[$sql_data->periodType]['title'];
 
     $tool_content .= "
-    <div class='row'>
-        <div class='col-xs-12'>
-            <div class='panel panel-default'>
-                <div class='panel-body'>
-                    <div class='inner-heading'>
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+            <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                <div class='panel-body ps-3 pt-3 pb-3 pe-3'>
+                    <div class='inner-heading notes_thead'>
                         <div class='row'>
                             <div class='col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12'>
                                 <strong>$title</strong> <span class='$active_vis'>($active_msg)</span>
@@ -355,23 +345,23 @@ function display_analytics_information($analytics_id) {
                             </div>
                         </div>
                     </div>
-                    <div class='row'>
-                        <div class='col-sm-7'>
-                            <div class='pn-info-title-sct'>$langDescription</div>
-                            <div class='pn-info-text-sct'>$description</div>
-                        </div>
-                        <div class='col-sm-5'>
-                            <div class='pn-info-title-sct'>$langAnalyticsTimeFrame</div>
-                            <div class='pn-info-text-sct'>$langFrom $start_date $langTill $end_date</div>
-                            <div class='pn-info-title-sct'>$langAnalyticsCalculation</div>
-                            <div class='pn-info-text-sct'>$periodType</div>
+                    <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                        <div class='row'>
+                            <div class='col-sm-7'>
+                                <div class='control-label-notes pn-info-title-sct'>$langDescription</div>
+                                <div class='pn-info-text-sct'>$description</div>
+                            </div>
+                            <div class='col-sm-5'>
+                                <div class='control-label-notes pn-info-title-sct'>$langAnalyticsTimeFrame</div>
+                                <div class='pn-info-text-sct'>$langFrom $start_date $langTill $end_date</div>
+                                <div class='mt-4 control-label-notes pn-info-title-sct'>$langAnalyticsCalculation</div>
+                                <div class='pn-info-text-sct'>$periodType</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-";
+        </div>";
 }
 
 /**
@@ -387,7 +377,7 @@ function display_analytics_information($analytics_id) {
  * @param $download
  */
 function display_analytics_peruser($analytics_id, $startdate, $enddate, $previous, $next, $orderby, $reverse, $period, $download) {
-    global $tool_content, $course_id, $course_code, $langAnalyticsNoUsersToDisplay, $langSurnameName, $langPercentage,
+    global $tool_content, $course_id, $course_code, $langAnalyticsNoUsersToDisplay, $langSurnameName, $langPercentage, $langAnalyticsStatus,
     $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel, $langAnalyticsDetails, $langMessage;
 
     $sql_data = Database::get()->queryArray("SELECT u.givenname AS givenname, 
@@ -396,43 +386,56 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                                 WHERE course_id = ?d 
                                 AND cu.status = " . USER_STUDENT . "", $course_id);
 
-    if (count($sql_data) == 0) {
+    if(count($sql_data) == 0) {
         $results = "<div><p class='text-center text-muted'>$langAnalyticsNoUsersToDisplay</p>";
     } else {
-        $backclass = $nextclass = '';
+        $backclass = '';
         if (is_null($previous)) {
             $backclass = 'style="display:none"';
         }
+        $nextclass = '';
         if (is_null($next)) {
             $nextclass = 'style="display:none"';
         }
+        //translation until here
+        $arrowdirection = 'down';
+        $arrowdirectionName = 'down';
+        $arrowdirectionPercentage = 'down';
+        $reverse_op = 'true';
+
+        if($reverse=='true') {
+            $arrowdirection = 'up';
+            $reverse_op = 'false'; 
+        }
+
+        if($orderby == 'surname') {
+            $arrowdirectionName = $arrowdirection;
+        } else if($orderby == 'percentage') {
+            $arrowdirectionPercentage = $arrowdirection;
+        }
 
         $results = "
-<<<<<<< local
-                <div class='inner-heading'>
-                    <div class='row res-table-header'>
-                        <div class='col-sm-4'>
-                            <h5>$langSurnameName</h5>
-=======
                 <div class='inner-heading notes_thead'>
                     <div class='row p-2 res-table-header'>
                         <div class='col-sm-3'>
                             <h6>$langSurnameName <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=surname&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionName fa-fw' aria-hidden='true'></i></a></h6>
->>>>>>> graft
                         </div>
-                        <div class='col-sm-5'>
-                            <h5>$langPercentage</h5>
-                        </div>                        
-                        <div class='col-sm-3' >
-                            <h5>
+                        <div class='col-sm-3'>
+                            <h6>$langPercentage <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=percentage&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionPercentage fa-fw' aria-hidden='true'></i></a></h6>
+                        </div>
+                        <div class='col-sm-2'>
+                            <h6>$langAnalyticsStatus</h6> 
+                        </div>
+                        <div class='col-sm-4' >
+                            <h6>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
                                 " . nice_format($startdate) . " &mdash; " . nice_format($enddate) . "
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$next&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
-                            </h5>
+                            </h6>
                         </div>
                     </div>
                 </div>
-                <div class='res-table-wrapper'>";
+                <div class='res-table-wrapper panel-body-admin pt-3 pb-3 pe-3 pe-3'>";
 
         $peruserarray = array();
 
@@ -440,14 +443,24 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
             $userid = $data->userid;
             $values = compute_general_analytics_foruser($userid, $analytics_id, $startdate, $enddate);
             $percentage = $values['percentage'];
-            $userdata['surname'] = uid_to_name($userid, 'surname');
-            $userdata['givenname'] = uid_to_name($userid, 'givenname');
-            $userdata['percentage'] = $percentage;
-            $userdata['values'] = $values;
 
-            $results .="<div class='row res-table-row'>
-            <div class='col-sm-4'>
-                ". display_user($userid). "
+            /*if ($orderby == 'percentage'){
+                $peruserarray[(string)$percentage + (string)$userid] = array('givenname' => $givenname, 'surname' => $surname, 'userid' => $userid, 'percentage'=>$percentage, 'values' =>$values);
+            }  else {
+                $peruserarray[$surname] = array('givenname' => $givenname, 'surname' => $surname, 'userid' => $userid, 'percentage'=>$percentage, 'values' =>$values);
+            } */
+        //}
+        /*
+        if($reverse == 'false') {
+            ksort($peruserarray);
+        } else {
+            krsort($peruserarray);
+        }
+        */
+        //foreach ($peruserarray as $peruser) {
+            $results .="<div class='row p-2 res-table-row'>
+            <div class='col-sm-3'>
+                <div >". display_user($userid). "</div>
             </div>
             <div class='col-sm-3'>
                 <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
@@ -456,30 +469,29 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                     </div>
                 </div>
             </div>
-            <div class='col-sm-2'>"
-                 . $values['text-success'] . "&nbsp;<i class='fa fa-arrow-up' data-toggle='tooltip' data-placement='top' title='$langAnalyticsAdvancedLevel'></i>&nbsp;&nbsp;"
-                 . $values['text-warning'] . "&nbsp;<i class='fa fa-minus' data-toggle='tooltip' data-placement='top' title='$langAnalyticsMiddleLevel'></i>&nbsp;&nbsp;"
-                 . $values['text-danger'] . "&nbsp;<i class='fa fa-arrow-down' data-toggle='tooltip' data-placement='top' title='$langAnalyticsCriticalLevel'></i>                
+            <div class='col-sm-2'>
+                <div>
+                <span class='text-success'>$langAnalyticsAdvancedLevel: " . $values['text-success'] . "</span><br/>
+                <span class='text-warning'>$langAnalyticsMiddleLevel: " . $values['text-warning'] . "</span><br/>
+                <span class='text-danger'>$langAnalyticsCriticalLevel: " . $values['text-danger'] . "</span>
+                </div>
             </div>
-            <div class='col-sm-3'>" . action_bar(
-                array(
+            <div class='col-sm-4'>" . action_bar(
+                array(                  
                     array('title' => $langAnalyticsDetails,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$period",
-                            'icon' => 'fa-area-chart',
-                            'level' => 'primary'
+                            'icon' => 'fa-user-o',
+                            'level' => 'primary-label'
                         ),
                     array('title' => $langMessage,
                         'url' => "../message/index.php?course=$course_code&upload=1&type=cm&user_id=$userid",
                         'icon' => 'fa-envelope',
-                        'level' => 'primary')
+                        'level' => 'primary-label')
                 )
             ) . "</div>
             </div>";
-            $peruserarray[] = $userdata;
         }
-
     }
-
     $analytics_title = Database::get()->querySingle("SELECT title FROM analytics WHERE id=?d", $analytics_id);
 
     if ($download) {
@@ -487,12 +499,12 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
     }
 
     $tool_content .= "
-         <div class='row'>                        
-            <div class='panel panel-default'>
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>                 
+            <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
                 <div class='panel-heading'>             
-                    $analytics_title->title
+                    <div class='control-label-notes text-center'>$analytics_title->title</div>
                 </div>
-                <div class='panel-body'>
+                <div class='panel-body pt-3 pb-3 pe-3 pe-3'>
                      $results
                 </div>
             </div>
@@ -510,17 +522,17 @@ function generate_analytics_csv($peruserarray, $title) {
 
     require_once 'include/lib/csv.class.php';
 
-    global $langSurname, $langName, $langPercentage, $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel;
+    global $langSurnameName, $langPercentage, $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel;
 
     $csv = new CSV();
     $csv->setEncoding('UTF-8');
 
     $csv->filename =   $title . '_learning_analytics.csv';
 
-    $csv->outputRecord($langSurname, $langName, $langPercentage, $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel);
+    $csv->outputRecord($langSurnameName, $langPercentage, $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel);
 
     foreach($peruserarray as $array) {
-        $csv->outputRecord($array['surname'], $array['givenname'], $array['percentage'], $array['values']['text-success'], $array['values']['text-warning'], $array['values']['text-danger']);
+        $csv->outputRecord($array['givenname'] . ' ' . $array['surname'], $array['percentage'], $array['values']['text-success'], $array['values']['text-warning'], $array['values']['text-danger']);
     }
     exit;
 }
@@ -537,7 +549,7 @@ function generate_analytics_csv($peruserarray, $title) {
  */
 function display_analytics_user($userid, $analytics_id, $start, $end, $previous, $next) {
 
-    global $tool_content, $course_code, $langType, $langPercentage;
+    global $tool_content, $course_code, $langAnalyticsType, $langPercentage;
 
     $backclass = '';
     if (is_null($previous)) {
@@ -549,17 +561,11 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
         $nextclass = 'style="display:none"';
     }
     $results = "
-<<<<<<< local
-        <div class='inner-heading'>
-            <h5>
-                <div class='row res-table-header'>
-=======
         <div class='inner-heading notes_thead mt-3'>
             <h6>
                 <div class='row p-2 res-table-header'>
->>>>>>> graft
                     <div class='col-sm-5'>
-                        $langType 
+                        $langAnalyticsType 
                     </div>
                     <div class='col-sm-3'>
                         $langPercentage
@@ -570,9 +576,9 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
                             "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$next'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
                     </div>
                 </div>
-            </h5>
+            </h6>
         </div>
-    <div class='res-table-wrapper'>";
+    <div class='res-table-wrapper panel-body-admin pt-3 pb-3 pe-3 pe-3'>";
 
     $elements_data = Database::get()->queryArray("SELECT id, module_id, resource, upper_threshold, lower_threshold, max_value, min_value 
                                             FROM analytics_element
@@ -587,20 +593,24 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
         $max_value = $element_data->max_value;
         $min_value = $element_data->min_value;
 
+        $start = $start ." 00:00";
+        $end = $end ." 23:59";
+
         $elements_data = Database::get()->queryArray("SELECT value, updated 
                                                         FROM user_analytics
                                                         WHERE user_id = ?d
                                                         AND analytics_element_id = ?d
                                                         AND updated >= ?t
                                                         AND updated <= ?t", $userid, $element_id, $start, $end);
-
+        
+        $percentage_value = 0;
         $total_value = 0;
 
         if(count($elements_data) > 0) {
             foreach ($elements_data as $element_data) {
                 $total_value = $total_value + $element_data->value;
             }
-        }
+        } 
 
         if($max_value < $total_value) {
             $total_value = $max_value;
@@ -619,7 +629,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
         $percentage_value = (($total_value - $min_value) * 100) / ($max_value - $min_value);
         $percentage_value = number_format($percentage_value , 2, '.', '') + 0;
 
-        $results .="<div class='row res-table-row'>
+        $results .="<div class='row p-2 res-table-row'>
                         <div class='col-sm-5'>
                             <div >". ElementTypes::elements[$module_id]['title'] . "</div>
                         </div>
@@ -630,75 +640,68 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
 
     }
     $analytics_title = Database::get()->querySingle("SELECT title FROM analytics WHERE id=?d", $analytics_id);
-
+    
     $tool_content .= "
-        <div class='row'>
-            <div class='col-xs-12'>
-                <h4>$analytics_title->title</h4>
-                    <div class='panel panel-default'>
+            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3 col-12'>
+                    <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                        <h4 class='control-label-notes text-center'>$analytics_title->title</h4>
                         <div class='panel-body'>
                         $results
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>";
+            </div>";
 }
 
 
 
 function display_user_info($user_id) {
     global $tool_content, $langAnalyticsNotAvailable, $langEmail, $langAm, $langPhone;
-
     $user_data = Database::get()->querySingle("SELECT givenname, surname, email, am, phone FROM user WHERE id=?d", $user_id);
 
     $givenname = $user_data->givenname;
     $surname = $user_data->surname;
 
     $email = $user_data->email;
-    if ($email == '') {
-        $email = '<span class="tag-value not_visible"> - ' . $langAnalyticsNotAvailable . ' - </span>';
-    }
+    if($email == '')
+        $email = '<span class="tag-value not_visible"> - ' . $langAnalyticsNotAvailable . ' - </span>'; 
 
     $am = $user_data->am;
-    if ($am == '') {
-        $am = '<span class="tag-value not_visible"> - ' . $langAnalyticsNotAvailable . ' - </span>';
-    }
-
+    if($am == '')
+        $am = '<span class="tag-value not_visible"> - ' . $langAnalyticsNotAvailable . ' - </span>'; 
     $phone = $user_data->phone;
-    if ($phone == '') {
-        $phone = '<span class="tag-value not_visible"> - ' . $langAnalyticsNotAvailable . ' - </span>';
-    }
-
+    if($phone == '')
+        $phone = '<span class="tag-value not_visible"> - ' . $langAnalyticsNotAvailable . ' - </span>'; 
+    
     $tool_content .= "
-    <div class='row'>
-        <div class='col-xs-12'>
-            <div class='panel panel-default'>
-                <div class='panel-body'>
-                    <div class='inner-heading'>
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+            <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                <div class='panel-body ps-3 pt-3 pb-3 pe-3'>
+                    <div class='inner-heading notes_thead'>
                         <div class='row'>
                             <div class='col-sm-12'>
                                 <strong>$givenname $surname</strong>
                             </div>
                         </div>
                     </div>
-                    <div class='row'>
-                        <div class='col-sm-7'>
-                            <div class='pn-info-title-sct'>$langEmail</div>
-                            $email
-                        </div>
-                        <div class='col-sm-5'>
-                            <div class='pn-info-title-sct'>$langAm</div>
-                            $am
-                            <div class='pn-info-title-sct'>$langPhone</div>
-                            $phone
+                    <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                        <div class='row p-2'>
+                            <div class='col-sm-7'>
+                                <div class='pn-info-title-sct control-label-notes'>$langEmail</div>
+                                $email
+                            </div>
+                            <div class='col-sm-5'>
+                                <div class='pn-info-title-sct control-label-notes'>$langAm</div>
+                                $am
+                                <div class='mt-4 pn-info-title-sct control-label-notes'>$langPhone</div>
+                                $phone
 
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>";
+        </div>";
 }
 
 /**
@@ -719,7 +722,7 @@ function compute_general_analytics_foruser($userid, $analytics_id, $start, $end)
     $sql_elements = Database::get()->queryArray("SELECT id, upper_threshold, lower_threshold, weight, min_value, max_value 
                                         FROM analytics_element 
                                         WHERE analytics_id = ?d", $analytics_id);
-
+    
     foreach ($sql_elements as $sql_element) {
         $element_id = $sql_element->id;
         $element_upper_threshold = $sql_element->upper_threshold;
@@ -734,7 +737,7 @@ function compute_general_analytics_foruser($userid, $analytics_id, $start, $end)
                                                             AND updated <= ?t
                                                             and analytics_element_id = ?d
                                                             AND user_id = ?d", $start, $end, $element_id, $userid);
-
+        
         if($element_upper_threshold <= $element_result->total) {
             $status = "text-success";
         } else if ($element_lower_threshold >= $element_result->total) {
@@ -767,7 +770,7 @@ function compute_general_analytics_foruser($userid, $analytics_id, $start, $end)
         $toreturn['percentage'] = number_format($sum_percentage/$sum_weight, 2, '.', '') + 0;
     else
         $toreturn['percentage'] = 0;
-
+    
     return $toreturn;
 }
 
@@ -822,53 +825,55 @@ function edit_analytics_settings ($analytics_id = 0)
         $id_input = '';
     }
     //<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
-
-    $tool_content .= "<div class='form-wrapper'>
+    
+    $tool_content .= "
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='form-wrapper shadow-sm p-3 rounded'>
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-        <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langTitle</label>
-            <div class='col-sm-10'>
+        <div class='form-group mt-3'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
+            <div class='col-sm-12'>
                 <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
             </div>
         </div>
-        <div class='form-group'>
-            <label for='description' class='col-sm-2 control-label'>$langDescription</label>
-            <div class='col-sm-10'>
+        <div class='form-group mt-3'>
+            <label for='description' class='col-sm-6 control-label-notes'>$langDescription</label>
+            <div class='col-sm-12'>
                 <textarea class='form-control' placeholder='$langDescription' name='description' rows='6'>$description</textarea>
             </div>
         </div>
-        <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langActivate</label>
-                <div class='col-sm-10'>";
+        <div class='form-group mt-3'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langActivate</label>
+                <div class='col-sm-12'>";
                     $tool_content .= selection(get_activation_status(), 'active', $active);
                 $tool_content .= "</div>
         </div>
-        <div class='form-group'>
-        <label for='title' class='col-sm-2 control-label'>$langAnalyticsCalculation</label>
-            <div class='col-sm-10'>";
+        <div class='form-group mt-3'>
+        <label for='title' class='col-sm-6 control-label-notes'>$langAnalyticsCalculation</label>
+            <div class='col-sm-12'>";
                 $tool_content .= selection(get_period_types_array () , 'periodType', $periodType);
             $tool_content .= "</div>
         </div>
-        <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langStart:</label>
-            <div class='col-sm-10'>
+        <div class='form-group mt-3'>
+            <label class='col-sm-6 control-label-notes'>$langStart:</label>
+            <div class='col-sm-12'>
                 <div class='input'>
                     <input class='form-control' name='start_date' id='start_date' type='text' value='$start_date'>
                 </div>
                 <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsStartDescription</span>
             </div>
         </div>
-        <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langFinish:</label>
-            <div class='col-sm-10'>
+        <div class='form-group mt-3'>
+            <label class='col-sm-6 control-label-notes'>$langFinish:</label>
+            <div class='col-sm-12'>
                 <div class='input'>
                     <input class='form-control' name='end_date' id='end_date' type='text' value='$end_date'>
                 </div>
                 <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsEndDescription</span>
             </div>
         </div> $id_input
-        <div class='form-group'>
-            <div class='col-xs-10 col-xs-offset-2'>".form_buttons(array(
+        <div class='form-group mt-3'>
+            <div class='col-10 col-offset-2'>".form_buttons(array(
                 array(
                         'text' => $langSave,
                         'name' => $action,
@@ -880,7 +885,7 @@ function edit_analytics_settings ($analytics_id = 0)
                 ))."</div>
         </div>
     </form>
-</div>";
+</div></div>";
 }
 
 /**
@@ -913,7 +918,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
         $action = 'update_analytics_element';
         $module_id = $result->module_id;
     }
-
+    
     if ($type == null) {
         $elementTypeTitle = ElementTypes::elements[$module_id]['title'];
     } else {
@@ -924,42 +929,48 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
         }
     }
 
-    $tool_content .="<h4>" . $elementTypeTitle ."</h4>
-    <div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+    $tool_content .="
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+    <h4 class='fs-4 control-label-notes text-center'>$elementTypeTitle</h4>
         <input type='hidden' name='analytics_id' value='$analytics_id'>
         <input type='hidden' name='analytics_element_id' value='$analytics_element_id'>
-        <div class='form-group'>
-            <label for='title' class='col-sm-4 control-label' style='text-align:left'>$langAnalyticsCriticalLevel:</label>
-            <label for='title' class='col-sm-2 control-label'>$langAnalyticsMinValue</label>
-            <div class='col-sm-2'>
-                <input class='form-control' type='number' name='min_value' value='$min_value'>
-            </div>
-            <label for='title' class='col-sm-2 control-label'>$langAnalyticsMaxValue</label>
-            <div class='col-sm-2'>
-                <input class='form-control' type='number' name='lower_threshold' value='$lower_threshold'>
-            </div>
-        </div>
-        <div class='form-group'>
-            <label for='title' class='col-sm-4 control-label' style='text-align:left'>$langAnalyticsAdvancedLevel:</label>
-            <label for='title' class='col-sm-2 control-label'>$langAnalyticsMinValue</label>
-            <div class='col-sm-2'>
-                <input class='form-control' type='number' name='upper_threshold' value='$upper_threshold'>
-            </div>
-            <label for='title' class='col-sm-2 control-label'>$langAnalyticsMaxValue</label>
-            <div class='col-sm-2'>
-                <input class='form-control' type='number' name='max_value' value='$max_value'>
+        <div class='form-group mt-4'>
+            <div class='row'>
+                <label for='title' class='col-sm-4 control-label-notes' style='text-align:left'>$langAnalyticsCriticalLevel:</label>
+                <label for='title' class='col-sm-2 control-label'>$langAnalyticsMinValue</label>
+                <div class='col-sm-2'>
+                    <input class='form-control' type='number' name='min_value' value='$min_value'>
+                </div>
+                <label for='title' class='col-sm-2 control-label'>$langAnalyticsMaxValue</label>
+                <div class='col-sm-2'>
+                    <input class='form-control' type='number' name='lower_threshold' value='$lower_threshold'>
+                </div>
             </div>
         </div>
-        <div class='form-group'>   
-            <label for='title' class='col-sm-2 control-label'  style='text-align:left'>$langAnalyticsWeight:</label>
-            <div class='col-sm-2'>
+        <div class='form-group mt-3'>
+            <div class='row'>
+                <label for='title' class='col-sm-4 control-label-notes' style='text-align:left'>$langAnalyticsAdvancedLevel:</label>
+                <label for='title' class='col-sm-2 control-label'>$langAnalyticsMinValue</label>
+                <div class='col-sm-2'>
+                    <input class='form-control' type='number' name='upper_threshold' value='$upper_threshold'>
+                </div>
+                <label for='title' class='col-sm-2 control-label'>$langAnalyticsMaxValue</label>
+                <div class='col-sm-2'>
+                    <input class='form-control' type='number' name='max_value' value='$max_value'>
+                </div>
+            </div>
+        </div>
+        <div class='form-group mt-3'>   
+            <label for='title' class='col-sm-6 control-label-notes'  style='text-align:left'>$langAnalyticsWeight:</label>
+            <div class='col-sm-12'>
                 <input class='form-control' type='number' placeholder='' name='weight' value='$weight'>
             </div>
         </div>";
 
         $tool_content .= get_available_resources($type, $analytics_element_id);
-        $tool_content .= "<div class='form-group'>
-            <div class='col-xs-10 col-xs-offset-2'>".form_buttons(array(
+        $tool_content .= "<div class='form-group mt-3'>
+            <div class='col-10 col-offset-2'>".form_buttons(array(
                 array(
                         'text' => $langSave,
                         'name' => $action,
@@ -970,7 +981,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
                     )
                 ))."</div>
         </div>
-    </form></div>";
+    </form></div></div>";
 }
 
 
@@ -983,19 +994,19 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
 function get_available_resources($type, $analytics_element_id) {
 
     global $course_id, $analytics_id, $langAnalyticsResourceNotAvailable, $langAnalyticsResource;
-
+    
     $resource_id = 0;
     $resource_type_id = 0;
     $resource = array();
     $resource_field = "";
 
     if ($analytics_element_id) {
-
+        
         $result = Database::get()->querySingle("SELECT resource, module_id FROM analytics_element WHERE id = ?d", $analytics_element_id);
-
+    
         $resource_id = $result->resource;
         $resource_type_id = $result->module_id;
-
+        
         switch ($resource_type_id) {
             case ANALYTICS_EXERCISEGRADE:
                 $result = Database::get()->queryArray("SELECT id, title FROM exercise WHERE course_id = ?d
@@ -1053,7 +1064,7 @@ function get_available_resources($type, $analytics_element_id) {
                 $resource_type_id = ANALYTICS_BLOGPOSTS;
                 $resource_field = "<input type='hidden' name='resource' value='null'>
                 <input type='hidden' name='module_id' value='$resource_type_id'>";
-                return $resource_field;
+                return $resource_field;     
             case 'blog-comments':
                 $resource_type_id = ANALYTICS_BLOGCOMMENTS;
                 $resource_field = "<input type='hidden' name='resource' value='null'>
@@ -1093,12 +1104,12 @@ function get_available_resources($type, $analytics_element_id) {
                 $resource_type_id = ANALYTICS_HITS;
                 $resource_field = "<input type='hidden' name='resource' value='null'>
                 <input type='hidden' name='module_id' value='$resource_type_id'>";
-                return $resource_field;
+                return $resource_field;   
             case 'duration':
                 $resource_type_id = ANALYTICS_DURATION;
                 $resource_field = "<input type='hidden' name='resource' value='null'>
                 <input type='hidden' name='module_id' value='$resource_type_id'>";
-                return $resource_field;
+                return $resource_field;   
             case 'exercise-grade':
                 $resource_type_id = ANALYTICS_EXERCISEGRADE;
                 $result = Database::get()->queryArray("SELECT id, title FROM exercise WHERE course_id = ?d
@@ -1155,10 +1166,10 @@ function get_available_resources($type, $analytics_element_id) {
         return $resource_field;
     }
 
-    $resource_field =  "<div class='form-group'>
-                            <label for='title' class='col-sm-2 control-label'>$langAnalyticsResource</label>
-                            <div class='col-sm-10'>"
-                            . selection($resource, 'resource', $resource_id) .
+    $resource_field =  "<div class='form-group mt-3'>
+                            <label for='title' class='col-sm-6 control-label-notes'>$langAnalyticsResource</label>
+                            <div class='col-sm-12'>"
+                            . selection($resource, 'resource', $resource_id) . 
                             "</div>
                         </div>
                         <input type='hidden' name='module_id' value='$resource_type_id'>";
@@ -1194,7 +1205,7 @@ function get_period_types_array () {
 
 function insert_analytics($title, $description, $active, $periodType, $start_date, $end_date, $created) {
     global $course_id;
-
+    
     $new_id = Database::get()->query("INSERT INTO analytics SET 
                                         courseID = ?d,
                                         title = ?s,
@@ -1210,7 +1221,7 @@ function insert_analytics($title, $description, $active, $periodType, $start_dat
 
 function update_analytics($analytics_id, $title, $description, $active, $periodType, $start_date, $end_date) {
     global $course_id;
-
+    
     Database::get()->query("UPDATE analytics SET 
                                         title = ?s,
                                         description = ?s,
@@ -1227,7 +1238,7 @@ function delete_analytics($analytics_id) {
     Database::get()->query("DELETE FROM user_analytics WHERE analytics_element_id IN (SELECT id FROM analytics_element WHERE analytics_id = ?d)", $analytics_id);
     Database::get()->query("DELETE FROM analytics_element WHERE analytics_id = ?d", $analytics_id);
     Database::get()->query("DELETE FROM analytics WHERE id = ?d AND courseID = ?d", $analytics_id, $course_id);
-
+    
     return TRUE;
 }
 
@@ -1285,10 +1296,10 @@ function get_resource_info($resource, $module_id) {
         case ANALYTICS_FILEVIEW:
             $result = Database::get()->querySingle("SELECT  (CASE WHEN title IS NULL OR title=' ' THEN filename ELSE title END) as title FROM document WHERE id = ?d", $resource);
             $resource_title = ' (' . $result->title. ') ';
-            break;
-
+            break;  
+         
     }
-
+    
     return '' . $module_title .  $resource_title ;
 }
 
@@ -1306,7 +1317,7 @@ function get_resource_info($resource, $module_id) {
  */
 function insert_analytics_element($analytics_id, $resource, $module_id, $min_value, $max_value, $lower_threshold, $upper_threshold, $weight) {
     global $course_id;
-
+    
     $new_id = Database::get()->query("INSERT INTO analytics_element SET 
                                         analytics_id = ?d,
                                         resource = ?d,
@@ -1335,7 +1346,7 @@ function insert_analytics_element($analytics_id, $resource, $module_id, $min_val
  */
 function update_analytics_element($analytics_id, $analytics_element_id, $resource, $module_id, $min_value, $max_value, $lower_threshold, $upper_threshold, $weight) {
     global $course_id;
-
+    
     Database::get()->query("UPDATE analytics_element SET 
                                         analytics_id = ?d,
                                         resource = ?d,

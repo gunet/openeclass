@@ -1,20 +1,19 @@
 
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-        <div class='form-wrapper shadow-sm p-3 mt-2 mb-3 rounded'>
+    <div class='col-12'>
+        <div class='form-wrapper shadow-sm p-3 mt-2 rounded'>
             <form action='{{ $base_url }}' method='post' class='form-horizontal' role='form'>
                 {!! $group_hidden_input !!}
                 <input type='hidden' name='newDirPath' value='{{ $curDirPath }}'>
                 <div class='form-group'>
-                    <label for='newDirName' class='col-sm-6 control-label-notes'>{{ trans('langNameDir') }}:</label>
-                    <div class='col-12'>
+                    <label for='newDirName' class='col-sm-2 control-label'>{{ trans('langNameDir') }}:</label>
+                    <div class='col-xs-10'>
                         <input type='text' class='form-control' id='newDirName' name='newDirName'>
                     </div>
                 </div>
-                <div class="row p-2"></div>
                 <div class='form-group'>
-                    <div class='col-offset-2 col-10'>
+                    <div class='col-xs-offset-2 col-xs-10'>
                         <button class='btn btn-primary' type='submit'>{{ trans('langCreate') }}</button>
-                        <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                        <a class='btn btn-default' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                     </div>
                 </div>
                 {!! generate_csrf_token_form_field() !!}

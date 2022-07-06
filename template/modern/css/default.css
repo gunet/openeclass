@@ -11,6 +11,10 @@
     font-size: 18px;
   }
 
+  .form-wrapper.shadow-sm{
+    background-color:#F5F5F5
+  }
+
   .modal-header .close{
     background-color: transparent;
     border-radius: 50%;
@@ -1806,7 +1810,7 @@
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
 .courseMetadataContentTab{
-   background-color:#DCDCDC;
+   background-color:#f5f5f5;
 }
 
   

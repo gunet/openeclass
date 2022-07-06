@@ -145,7 +145,7 @@ function show_form($id, $sid, $assign) {
 					)
 			));
 
-		$tool_content .= "<div class='form-wrapper'>
+		$tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
 			<form class='form-horizontal' role='form' method='post' action='$form_link'>
                 <input type='hidden' name='assignment' value='$id'>
                 <input type='hidden' name='submission' value='$sid'>			
@@ -204,7 +204,7 @@ function show_form($id, $sid, $assign) {
                     }
 			$tool_content .= "
 			</form>
-		</div>";
+		</div></div>";
 	} else {
 		//an den uparxoun ergasies pou eginan submit
 		//Session::Messages($m['WorkNoSubmission'], 'alert-danger');

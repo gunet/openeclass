@@ -63,15 +63,6 @@
 
 
 
-                        {!!
-                        action_bar(array(
-                            array('title' => $GLOBALS['langBack'],
-                                'url' => $backPath,
-                                'icon' => 'fa-reply',
-                                'level' => 'primary-label')
-                            )
-                        )
-                        !!}<div class="row p-2"></div>
 
                         @if(Session::has('message'))
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
@@ -82,53 +73,62 @@
                         </div>
                         @endif
                         
-                        <div class='row'>
-                            <div class='col-sm-12'>
-                                <div class='form-wrapper'>
-                                    <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code }}'>
-                                        @if (isset($_GET['id']))
-                                        <input type='hidden' name='id' value='{{ $_GET["id"] }}' />
-                                        @endif
-                                        <fieldset>
-                                            <div class='row p-2'></div>
-                                            <div class='form-group{{ Session::getError("categoryname") ? " has-error" : "" }}'>
-                                                <label for='CatName' class='col-sm-6 control-label-notes'>{{ trans('langCategoryName') }}:</label>
-                                                <div class='col-sm-12'>
-                                                    <input class='form-control' type='text' name='categoryname' size='53'{!! $form_name !!} />
-                                                    <span class='help-block'>{{ Session::getError('categoryname') }}</span>
-                                                </div>
+                        {!!
+                        action_bar(array(
+                            array('title' => $GLOBALS['langBack'],
+                                'url' => $backPath,
+                                'icon' => 'fa-reply',
+                                'level' => 'primary-label')
+                            )
+                        )
+                        !!}
+                        <div class='col-12'>
+                            <div class='form-wrapper shadow-sm p-3 mt-5 rounded'> 
+                                
+                                <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code }}'>
+                                    @if (isset($_GET['id']))
+                                    <input type='hidden' name='id' value='{{ $_GET["id"] }}' />
+                                    @endif
+                                    <fieldset>
+                                        <div class='row p-2'></div>
+                                        <div class='form-group{{ Session::getError("categoryname") ? " has-error" : "" }}'>
+                                            <label for='CatName' class='col-sm-6 control-label-notes'>{{ trans('langCategoryName') }}:</label>
+                                            <div class='col-sm-12'>
+                                                <input class='form-control' type='text' name='categoryname' size='53'{!! $form_name !!} />
+                                                <span class='help-block'>{{ Session::getError('categoryname') }}</span>
                                             </div>
+                                        </div>
 
-                                            <div class='row p-2'></div>
+                                        <div class='row p-2'></div>
 
-                                            <div class='form-group'>
-                                                <label for='CatDesc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
-                                                <div class='col-sm-12'><textarea class='form-control' rows='5' name='description'>{{ $form_description }}</textarea></div>
+                                        <div class='form-group'>
+                                            <label for='CatDesc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
+                                            <div class='col-sm-12'><textarea class='form-control' rows='5' name='description'>{{ $form_description }}</textarea></div>
+                                        </div>
+
+                                        <div class='row p-2'></div>
+                                        
+                                        <div class='form-group'>
+                                            <div class='col-sm-offset-2 col-sm-10'>
+                                                {!!
+                                                form_buttons(array(
+                                                    array(
+                                                        'text'  =>  $GLOBALS['langSave'],
+                                                        'name'  =>  'submitCategory',
+                                                        'value' =>  $form_legend
+                                                    ),
+                                                    array(
+                                                        'href'  =>  $backPath
+                                                    )
+                                                ))
+                                                !!}
                                             </div>
-
-                                            <div class='row p-2'></div>
-                                            
-                                            <div class='form-group'>
-                                                <div class='col-sm-offset-2 col-sm-10'>
-                                                    {!!
-                                                    form_buttons(array(
-                                                        array(
-                                                            'text'  =>  $GLOBALS['langSave'],
-                                                            'name'  =>  'submitCategory',
-                                                            'value' =>  $form_legend
-                                                        ),
-                                                        array(
-                                                            'href'  =>  $backPath
-                                                        )
-                                                    ))
-                                                    !!}
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                    </form>
-                                </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
                             </div>
                         </div>
+                        
 
                     </div>
                 </div>

@@ -129,16 +129,16 @@ if (!empty($_POST['submit'])) {
 }
 
 if (empty($_POST['email']) or !valid_email($_POST['email'])) {
-    $tool_content .= "<div class='form-wrapper'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
-            <div class='form-group'>
-                <label class='col-sm-2'>$lang_email:</label>
-                <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+                <label class='col-sm-6 control-label-notes'>$lang_email:</label>
+                <div class='col-sm-12'>
                     <input class='form-control' type='text' name='email' size='30' maxlength='40' value='" . q($_SESSION['email']) . "' placeholder='$langMailVerificationAddrChange'>
                 </div>
             </div>
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='submit' value='$langMailVerificationNewCode'>" .
                     (isset($_GET['from_profile']) || get_config('email_required')? '':
@@ -149,7 +149,7 @@ if (empty($_POST['email']) or !valid_email($_POST['email'])) {
             </div>
         </fieldset>
     </form>
-    </div>";
+    </div></div>";
 }
 
 draw($tool_content, $uid? 1: 0);

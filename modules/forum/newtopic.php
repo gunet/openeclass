@@ -175,7 +175,7 @@ if (isset($_POST['submit'])) {
         $action .= "&amp;res_type=forum_new_topic";
     }
     $tool_content .= "
-    <div class='form-wrapper'>
+    <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' action='$action' method='post' enctype='multipart/form-data'>
         <fieldset>
             <div class='form-group'>
@@ -205,6 +205,6 @@ if (isset($_POST['submit'])) {
             </div>
 	</fieldset>
 	</form>
-    </div>";
+    </div></div>";
 }
 draw($tool_content, 2, null, $head_content);

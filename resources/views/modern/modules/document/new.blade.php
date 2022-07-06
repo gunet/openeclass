@@ -55,7 +55,7 @@
                     
                    
 
-                    {!! $backButton !!}
+                    
 
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
@@ -67,70 +67,77 @@
                     @endif
 
 
+                    {!! $backButton !!}
+                    
                     @if ($can_upload == 1)
-                        <div class='form-wrapper'>
-                            <form class='form-horizontal' role='form' action='{{ $upload_target_url }}' method='post'>
-                                <input type='hidden' name='{{ $pathName }}' value='{{ $pathValue }}'>
-                                {!! $group_hidden_input !!}
-                                @if ($back)
-                                    <input type='hidden' name='back' value='{{ $back }}'>
-                                @endif
-                                @if ($sections)
-                                    <div class='form-group'>
-                                        <label for='section' class='col-sm-2 control-label-notes'>{{ trans('langSection') }}:</label>
-                                        <div class='col-sm-12'>
-                                            {!! selection($sections, 'section_id', $section_id) !!}
-                                        </div>
-                                    </div>
-                                @endif
-
-                                <div class="row p-2"></div>
-
-                                @if ($filename)
-                                    <div class='form-group'>
-                                        <label for='file_name' class='col-sm-6 control-label-notes'>{{ trans('langFileName') }}:</label>
-                                        <div class='col-sm-12'>
-                                            <p class='form-control-static'>{{ $filename }}</p>
-                                        </div>
-                                    </div>
-                                @endif
-
-                                <div class="row p-2"></div>
-
-                                <div class='form-group{{ Session::getError('file_title') ? ' has-error' : '' }}'>
-                                    <label for='file_title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
-                                    <div class='col-sm-12'>
-                                        <input type='text' class='form-control' id='file_title' name='file_title' value='{{ $title }}'>
-                                        <span class='help-block'>{{ Session::getError('file_title') }}</span>
-                                    </div>
-                                </div>
-
-                                <div class="row p-2"></div>
-
-                                <div class='form-group'>
-                                    <label for='file_title' class='col-sm-6 control-label-notes'>{{ trans('langContent') }}:</label>
-                                    <div class='col-sm-12'>
-                                        {!! $rich_text_editor !!}
-                                    </div>
-                                </div>
-
-                                <div class="row p-2"></div>
-
-                                <div class='form-group'>
-                                    <div class='col-xs-offset-2 col-xs-10'>
+                        <div class='col-12'>
+                            <div class='form-wrapper shadow-sm p-3 mt-2 rounded'>
+                               
+                                <form class='form-horizontal' role='form' action='{{ $upload_target_url }}' method='post'>
+                                    <input type='hidden' name='{{ $pathName }}' value='{{ $pathValue }}'>
+                                    {!! $group_hidden_input !!}
+                                    @if ($back)
+                                        <input type='hidden' name='back' value='{{ $back }}'>
+                                    @endif
+                                    @if ($sections)
                                         <div class='form-group'>
-                                            <div class='col-xs-offset-2 col-xs-10'>
-                                                <button class='btn btn-primary' type='submit'>{{ trans('langSave') }}</button>
-                                                <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                            <label for='section' class='col-sm-2 control-label-notes'>{{ trans('langSection') }}:</label>
+                                            <div class='col-sm-12'>
+                                                {!! selection($sections, 'section_id', $section_id) !!}
                                             </div>
                                         </div>
-                                        {!! generate_csrf_token_form_field() !!}
+                                    @endif
+
+                                    <div class="row p-2"></div>
+
+                                    @if ($filename)
+                                        <div class='form-group'>
+                                            <label for='file_name' class='col-sm-6 control-label-notes'>{{ trans('langFileName') }}:</label>
+                                            <div class='col-sm-12'>
+                                                <p class='form-control-static'>{{ $filename }}</p>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <div class="row p-2"></div>
+
+                                    <div class='form-group{{ Session::getError('file_title') ? ' has-error' : '' }}'>
+                                        <label for='file_title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
+                                        <div class='col-sm-12'>
+                                            <input type='text' class='form-control' id='file_title' name='file_title' value='{{ $title }}'>
+                                            <span class='help-block'>{{ Session::getError('file_title') }}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+
+                                    <div class="row p-2"></div>
+
+                                    <div class='form-group'>
+                                        <label for='file_title' class='col-sm-6 control-label-notes'>{{ trans('langContent') }}:</label>
+                                        <div class='col-sm-12'>
+                                            {!! $rich_text_editor !!}
+                                        </div>
+                                    </div>
+
+                                    <div class="row p-2"></div>
+
+                                    <div class='form-group'>
+                                        <div class='col-xs-offset-2 col-xs-10'>
+                                            <div class='form-group'>
+                                                <div class='col-xs-offset-2 col-xs-10'>
+                                                    <button class='btn btn-primary' type='submit'>{{ trans('langSave') }}</button>
+                                                    <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                                </div>
+                                            </div>
+                                            {!! generate_csrf_token_form_field() !!}
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     @else
+                    <div class='col-12'>
                         <div class='alert alert-warning'>{{ trans('langNotAllowed') }}</div>
+                    </div>
                     @endif
                 </div>
             </div>

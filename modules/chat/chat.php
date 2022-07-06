@@ -147,13 +147,13 @@ if (!$conference_activity) {
         $action_form = "messageList.php";
         $iframe_file = "messageList.php?course=$course_code&amp;conference_id=$conference_id";
     }
-    $tool_content .= "<div class='alert alert-info'>$langTypeMessage</div>
-       <div class='row'><div class='col-sm-12'><div class='form-wrapper'>
+    $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langTypeMessage</div></div>
+       <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
        <form name='chatForm' action='$action_form' method='POST' target='messageList' onSubmit='return prepare_message();'>
        <input type='hidden' name='course' value='$course_code'>
        <input type='hidden' name='conference_id' value='$conference_id'>
        <fieldset>
-        <div class='col-xs-12'>
+        <div class='col-12'>
             <div class='input-group'>
               <input type='text' name='msg' size='80' class='form-control'>
               <input type='hidden' name='chatLine'>
@@ -167,7 +167,7 @@ if (!$conference_activity) {
         </div>   
        </fieldset>
        " . generate_csrf_token_form_field() . "
-       </form></div></div></div>";
+       </form></div></div>";
 } else {
     if ($is_editor && isset($_GET['create_agent'])) {
         $agent_id = colmooc_create_agent($conference_id);

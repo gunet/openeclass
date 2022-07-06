@@ -192,8 +192,11 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     }
     enableCheckFileSize();
     $tool_content .= "
-        <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>            
+
+    <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+        <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>
+            <div class='row p-2'></div>            
+            
             <div class='form-group ".(Session::getError('questionName') ? "has-error" : "")."'>
                 <label for='questionName' class='col-sm-2 control-label'>$langQuestion:</label>
                 <div class='col-sm-10'>
@@ -325,8 +328,9 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     <input type='submit' class='btn btn-primary' name='submitQuestion' value='$langCreate'>
                     <a href='$link_back' class='btn btn-default'>$langCancel</a>
                 </div>
-            </div>          
-        </form>
-    </div>
-    ";
+
+            </div>
+          </fieldset>
+    </form>
+    </div></div>";
 }

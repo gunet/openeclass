@@ -48,7 +48,7 @@ $head_content .= "<script type='text/javascript'>
 $group_id = intval($_REQUEST['group_id']);
 
 if (isset($_GET['module']) and $_GET['module'] == 'usage') {
-    $navigation[] = array('url' => '../usage/?course=' . $course_code, 'name' => $langUsage);
+    $navigation[] = array('url' => '../usage/index.php?course=' . $course_code, 'name' => $langUsage);
     $navigation[] = array('url' => '../usage/group.php?course=' . $course_code, 'name' => $langGroupUsage);
     $module = 'module=usage&amp;';
 } else {
@@ -120,10 +120,13 @@ if ($type == 'duration') {
         $u_date_end = $date_end->format('Y-m-d');
         $user_date_end = $date_end->format('d-m-Y');        
     }    
-    $tool_content .= "<div class='form-wrapper'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+
+
+
             <form class='form-horizontal' role='form' method='post' action='$base&amp;type=$type'>
             <div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-            <label class='col-sm-2 control-label'>$langStartDate:</label>
+            <label class='col-sm-6 control-label-notes'>$langStartDate:</label>
                 <div class='col-xs-10 col-sm-9'>               
                     <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
                 </div>
@@ -133,7 +136,7 @@ if ($type == 'duration') {
                 </div>
                 </div>";        
     $tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-        <label class='col-sm-2 control-label'>$langEndDate:</label>
+        <label class='col-sm-6 control-label-notes'>$langEndDate:</label>
             <div class='col-xs-10 col-sm-9'>
                 <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
             </div>
@@ -145,7 +148,7 @@ if ($type == 'duration') {
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
             <input class='btn btn-primary' type='submit' name='btnUsage' value='$langSubmit'>
             </div>";
-    $tool_content .= "</form></div>";
+    $tool_content .= "</form></div></div>";
 } elseif ($type == 'lp') {
     $label = $langProgress;
     // list available learning paths
@@ -154,12 +157,12 @@ if ($type == 'duration') {
     $label = '?';
 }
 
-$tool_content .= "<div class='table-responsive'><table class='table-default'>
-	<tr>
-	<th class='text-left'>$langSurname $langName</th>
-	<th>$langAm</th>
-	<th>$langGroup</th>
-	<th>$label</th>
+$tool_content .= "<div class='table-responsive'><table class='announcements_table'>
+	<tr class='notes_thead'>
+	<th class='text-white text-left'>$langSurname $langName</th>
+	<th class='text-white'>$langAm</th>
+	<th class='text-white'>$langGroup</th>
+	<th class='text-white'>$label</th>
 	</tr>";
 
 if ($type == 'duration') {    

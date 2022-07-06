@@ -24,7 +24,7 @@
 function visibility_select($current) {
     global $langOpenCourse, $langRegCourse, $langClosedCourse, $langInactiveCourse;
 
-    $ret = "<select class='form-control' name='course_vis'>\n";
+    $ret = "<select class='form-select' name='course_vis'>\n";
     foreach (array($langOpenCourse => COURSE_OPEN,
             $langRegCourse => COURSE_REGISTRATION,
             $langClosedCourse => COURSE_CLOSED,
@@ -39,7 +39,7 @@ function visibility_select($current) {
 
 // Unzip backup file
 function unpack_zip_inner($zipfile, $clone) {
-    global $webDir, $uid, $langGeneralError;
+    global $webDir, $uid;
     require_once 'include/lib/fileUploadLib.inc.php';
 
     $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
@@ -49,32 +49,12 @@ function unpack_zip_inner($zipfile, $clone) {
 
     $zip = new ZipArchive;
     if (!$zip->open($zipfile) or !$zip->extractTo($destdir)) {
-        Session::Messages($langGeneralError, 'alert-danger');
+        //Session::Messages($langGeneralError, 'alert-danger');
+        Session::flash('message',$langGeneralError); 
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/course_info/restore_course.php');
     }
-    // see if any files use backslash as directory separator
-    $filesToMove = [];
-    for ($i = 0; $i < $zip->numFiles; $i++) {
-        $filename = $zip->getNameIndex($i);
-        if (strpos($filename, '\\') !== false) {
-            $filesToMove[] = $filename;
-        }
-    }
     $zip->close();
-
-    foreach ($filesToMove as $filename) {
-        $filename = $destdir . '/' . $filename;
-        $newname = str_replace('\\', '/', $filename);
-        $parentdir = my_dirname($newname);
-        if (!is_dir($parentdir)) {
-            mkdir($parentdir, 0700, true);
-        }
-        if (!is_dir($filename)) {
-            rename($filename, $newname);
-        } else {
-            rmdir($filename);
-        }
-    }
 
     $retArr = array();
     foreach (find_backup_folders($destdir) as $folder) {
@@ -214,8 +194,6 @@ function restore_table($basedir, $table, $options, $url_prefix_map, $backupData,
                 if (!is_null($data[$newField])) {
                     if (isset($data[$newField]) && isset($map[$data[$newField]])) { // map needs reverse resolution
                         $data[$newField] = $map[$data[$newField]];
-                    } else {
-                        continue 2;
                     }
                 }
             }
@@ -319,7 +297,8 @@ function get_option($options, $name) {
 function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $faculty) {
     global $langInfo1, $langInfo2, $langCourseCode, $langLanguage, $langTitle,
     $langCourseDescription, $langFaculty, $langCourseVis,
-    $langTeacher, $langUsersWillAdd, $langSubmit, $langAll, $langsTeachers, $langMultiRegType,
+    $langTeacher, $langUsersWillAdd,
+    $langOk, $langAll, $langsTeachers, $langMultiRegType,
     $langNone, $langOldValue, $treeObj, $langBack, $course_code;
 
     list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
@@ -349,57 +328,60 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
               'url' => "index.php?course=$course_code",
               'icon' => 'fa-reply',
               'level' => 'primary-label'))) . "
-        <div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>
-                <div class='row'>
-                <div class='col-md-12'>
-                <div class='form-wrapper' >
+
+                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                    <div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>
+                </div>
+                
+                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
 
-                    <div class='form-group'>
-                        <label for='course_code' class='col-sm-3 control-label'>$langCourseCode:</label>
-                        <div class='col-sm-9'>
+                    <div class='form-group mt-3'>
+                        <label for='course_code' class='col-sm-6 control-label-notes'>$langCourseCode:</label>
+                        <div class='col-sm-12'>
                             <input type='text' class='form-control' id='course_code' name='course_code' value='" . q($code) . "'>
                         </div>
                     </div>
-                    <div class='form-group'>
-                        <label for='course_code' class='col-sm-3 control-label'>$langLanguage:</label>
-                        <div class='col-sm-9'>
+                    <div class='form-group mt-3'>
+                        <label for='course_code' class='col-sm-6 control-label-notes'>$langLanguage:</label>
+                        <div class='col-sm-12'>
                             " . lang_select_options('course_lang') . "
                         </div>
                     </div>
-                    <div class='form-group'>
-                        <label for='course_title' class='col-sm-3 control-label'>$langTitle:</label>
-                        <div class='col-sm-9'>
+                    <div class='form-group mt-3'>
+                        <label for='course_title' class='col-sm-6 control-label-notes'>$langTitle:</label>
+                        <div class='col-sm-12'>
                             <input class='form-control' type='text' id='course_title' name='course_title' value='" . q($title) . "' />
                         </div>
                     </div>
 
-                    <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langCourseDescription:</label>
-                        <div class='col-sm-9'>
+                    <div class='form-group mt-3'>
+                        <label class='col-sm-6 control-label-notes'>$langCourseDescription:</label>
+                        <div class='col-sm-12'>
                             " . rich_text_editor('course_desc', 10, 40, purify($desc)) . "
                         </div>
                     </div>
-                    <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langFaculty:</label>
-                        <div class='col-sm-9'>
+                    <div class='form-group mt-3'>
+                        <label class='col-sm-6 control-label-notes'>$langFaculty:</label>
+                        <div class='col-sm-12'>
                             " . $tree_html . "<br>$langOldValue: <i>$old_faculty</i>
                         </div>
                     </div>
-                    <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langCourseVis:</label>
-                        <div class='col-sm-9'>
+                    <div class='form-group mt-3'>
+                        <label class='col-sm-6 control-label-notes'>$langCourseVis:</label>
+                        <div class='col-sm-12'>
                             " . visibility_select($vis) . "
                         </div>
                     </div>
-                    <div class='form-group'>
-                        <label for='course_prof' class='col-sm-3 control-label'>$langTeacher:</label>
-                        <div class='col-sm-9'>
+                    <div class='form-group mt-3'>
+                        <label for='course_prof' class='col-sm-6 control-label-notes'>$langTeacher:</label>
+                        <div class='col-sm-12'>
                             <input class='form-control' type='text' id='course_prof' name='course_prof' value='" . q($prof) . "' size='50' />
                         </div>
                     </div>
-                    <div class='form-group'>
-                    <label class='col-sm-3 control-label'>$langUsersWillAdd:</label>
+                    <div class='form-group mt-3'>
+                    <label class='col-sm-6 control-label-notes'>$langUsersWillAdd:</label>
 
                         <div class='col-sm-9'>
                             <input type='radio' name='add_users' value='all' id='add_users_all' checked='checked'>
@@ -412,15 +394,15 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                     </div>" .
                     // Hide "Create accounts" option if in course (i.e. clone mode)
                     (isset($GLOBALS['course_code'])? '': "
-                    <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langMultiRegType:</label>
-                        <div class='col-sm-9'>
+                    <div class='form-group mt-3'>
+                        <label class='col-sm-6 control-label-notes'>$langMultiRegType:</label>
+                        <div class='col-sm-12'>
                             <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
                         </div>
                     </div>") . "
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                         <div class='col-sm-offset-3 col-sm-9'>
-                        <input class='btn btn-primary' type='submit' name='create_restored_course' value='$langSubmit' />
+                        <input class='btn btn-primary' type='submit' name='create_restored_course' value='$langOk' />
                       <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' />
                           </div>
                     </div>
@@ -428,7 +410,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                 </form>
                 </div>
                 </div>
-                </div>
+               
     ";
 }
 
@@ -456,7 +438,9 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         list($new_course_code, $new_course_id) = create_course($course_code, $course_lang, $course_title, $course_desc, $departments, $course_vis, $course_prof);
         if (!$new_course_code) {
-            Session::Messages($GLOBALS['langGeneralError'], 'alert-danger');
+            //Session::Messages($GLOBALS['langGeneralError'], 'alert-danger');
+            Session::flash('message',$GLOBALS['langGeneralError']); 
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/course_info/restore_course.php');
         }
 
@@ -561,7 +545,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         }
 
         course_index($new_course_code);
-        $tool_content .= "<div class='alert alert-info'>" . $GLOBALS['langCopyFiles'] . "</div>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>" . $GLOBALS['langCopyFiles'] . "</div></div>";
 
         require_once 'upgrade/functions.php';
         load_global_messages();
@@ -696,10 +680,9 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         $config_data = unserialize(file_get_contents($restoreThis . '/group_properties'));
         if (isset($config_data[0]['group_id'])) { // version >= 3.2
-            restore_table($restoreThis, 'group_properties', [
-                    'set' => ['course_id' => $new_course_id],
-                    'map' => ['group_id' => $group_map],
-                    'delete' => ['multiple_registration']],
+            restore_table($restoreThis, 'group_properties',
+                array('set' => array('course_id' => $new_course_id),
+                      'map' => array('group_id' => $group_map)),
                 $url_prefix_map, $backupData, $restoreHelper);
         } else {
             $num = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $new_course_id);
@@ -936,13 +919,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $files = [];
         $baseDir = "$webDir/courses/$new_course_code/work";
         foreach ($assignments_map as $old_id => $new_id) {
-            Database::get()->queryFunc('SELECT file_path FROM assignment
-                WHERE id = ?d',
-                function ($item) use (&$files, $baseDir) {
-                    if ($item->file_path) {
-                        $files[] = $baseDir . '/admin_files/' . $item->file_path;
-                    }
-                }, $new_id);
             Database::get()->queryFunc('SELECT file_path, grade_comments_filepath
                 FROM assignment_submit WHERE assignment_id = ?d',
                 function ($item) use (&$files, $baseDir) {
@@ -1124,7 +1100,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'map' => array('badge' => $badge_map),
             'map_function' => 'badge_criterion_map_function',
             'map_function_data' => array($document_map, $video_map, $videolink_map,
-                                         $blog_map, $comment_map, $forum_map, $forum_topic_map,
+                                         $blog_map, $forum_map, $forum_topic_map,
                                          $lp_learnPath_map, $ebook_map, $poll_map,
                                          $wiki_map, $assignments_map, $exercise_map),
             'delete' => array('id')
@@ -1172,7 +1148,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     $ebook_subsection_map,
                     $video_map,
                     $videolink_map,
-                    $videocat_map,
                     $lp_learnPath_map,
                     $wiki_map,
                     $assignments_map,
@@ -1213,7 +1188,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     $ebook_subsection_map,
                     $video_map,
                     $videolink_map,
-                    $videocat_map,
                     $lp_learnPath_map,
                     $wiki_map,
                     $assignments_map,
@@ -1245,8 +1219,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 'delete' => array('id')
                 ), $url_prefix_map, $backupData, $restoreHelper);
         }
-
-        fix_media_links($course_data['code'], $new_course_code, $new_course_id, $video_map);
 
         removeDir($restoreThis);
 
@@ -1290,70 +1262,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')), false);
 
-    }
-}
-
-
-function getid($map, $old_id) {
-    if (isset($map[$old_id])) {
-        return $map[$old_id];
-    } else {
-        return null;
-    }
-}
-
-function fix_media_links($oldcode, $newcode, $new_course_id, $video_map) {
-    $fixes = [
-      [ 'table' => 'course',
-        'field' => 'description',
-        'query' => 'SELECT id, description FROM course
-                       WHERE id = ?d' ],
-      [ 'table' => 'course_units',
-        'field' => 'comments',
-        'query' => 'SELECT id, comments FROM course_units
-                       WHERE course_id = ?d' ],
-      [ 'table' => 'unit_resources',
-        'field' => 'comments',
-        'query' => 'SELECT id, comments FROM unit_resources
-                       WHERE unit_id IN (SELECT id FROM course_units WHERE course_id = ?d)' ],
-      [ 'table' => 'assignment',
-        'field' => 'description',
-        'query' => 'SELECT id, description FROM assignment
-                       WHERE course_id = ?d' ],
-      [ 'table' => 'exercise_question',
-        'field' => 'description',
-        'query' => 'SELECT id, description FROM exercise_question
-                       WHERE course_id = ?d' ],
-      [ 'table' => 'exercise_answer',
-        'field' => 'answer',
-        'query' => 'SELECT id, answer FROM exercise_answer
-                       WHERE question_id IN (SELECT id FROM exercise_question
-                           WHERE course_id = ?d)' ],
-    ];
-
-    foreach ($fixes as $fix) {
-        $all = Database::get()->queryArray($fix['query'], $new_course_id);
-        foreach ($all as $entry) {
-            $field = $fix['field'];
-            $table = $fix['table'];
-            $newcontents = preg_replace_callback('<(/video/(?:file|play).php\?course=\w+&amp;id=)(\d+)>',
-                function ($match) use ($video_map, $oldcode, $newcode) {
-                    $new_id = getid($video_map, $match[2]);
-                    if ($new_id) {
-                        // $fix[table]: $match[2] => $new_id
-                        $base = str_replace("course=$oldcode", "course=$newcode", $match[1]);
-                        return $base . $new_id;
-                    } else {
-                        // $fix[table]: $match[2] not found
-                        return $match[1] . $match[2];
-                    }
-                }, $entry->$field);
-            if ($entry->$field != $newcontents) {
-                Database::get()->query("UPDATE `$table`
-                    SET `$field` = ?s WHERE id = ?d",
-                    $newcontents, $entry->id);
-            }
-        }
     }
 }
 
@@ -1410,13 +1318,13 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
         $u = Database::get()->querySingle("SELECT * FROM user WHERE BINARY username = ?s", $data['username']);
         if ($u) {
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $u->id;
-            $tool_content .= "<div class='alert alert-info'>" .
+            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>" .
                 sprintf($langRestoreUserExists,
                     '<b>' . q($data['username']) . '</b>',
                     '<i>' . q(trim($u->givenname . ' ' . $u->surname)) . '</i>',
                     '<i>' . q(trim($data[$restoreHelper->getField('user', 'givenname')] .
                         ' ' . $data[$restoreHelper->getField('user', 'surname')])) . '</i>') .
-                "</div>\n";
+                "</div></div>\n";
         } elseif (isset($_POST['create_users'])) {
             $now = date('Y-m-d H:i:s', time());
             $user_id = Database::get()->query("INSERT INTO user SET surname = ?s, "
@@ -1438,12 +1346,12 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
             $user = new User();
             $user->refresh($user_id, $departments);
             user_hook($user_id);
-            $tool_content .= "<div class='alert alert-info'>" .
+            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>" .
                 sprintf($langRestoreUserNew,
                     '<b>' . q($data['username']) . '</b>',
                     '<i>' . q($data[$restoreHelper->getField('user', 'givenname')] .
                         ' ' . $data[$restoreHelper->getField('user', 'surname')]) . '</i>') .
-                "</div>\n";
+                "</div></div>\n";
         }
     }
     return $userid_map;
@@ -1712,7 +1620,7 @@ function unit_map_function(&$data, $maps) {
     // opoy yparxei if isset, isxyei h:
     // idia symbash/paradoxh me to attendance_gradebook_activities_map_function()
     // des to ekei comment gia ta spasmena FKs
-    list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $video_category_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map, $forum_map, $forum_topic_map) = $maps;
+    list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map, $forum_map, $forum_topic_map) = $maps;
     if ($data['type'] == 'videolinks') {
         $data['type'] == 'videolink';
     }
@@ -1739,8 +1647,6 @@ function unit_map_function(&$data, $maps) {
         $data['res_id'] = @$video_map[$data['res_id']];
     } elseif ($type == 'videolink') {
         $data['res_id'] = @$videolink_map[$data['res_id']];
-    } elseif ($type == 'videolinkcategory') {
-        $data['res_id'] = @$video_category_map[$data['res_id']];
     } elseif ($type == 'lp') {
         $data['res_id'] = @$lp_learnPath_map[$data['res_id']];
     } elseif ($type == 'wiki') {

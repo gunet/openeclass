@@ -150,7 +150,7 @@ function bbb_session_form($session_id = 0) {
                                                 AND enabled = 'true' ORDER BY FIELD(enable_recordings, 'true', 'false'), weight ASC LIMIT 1")->id;
 
     $tool_content .= "
-        <div class='form-wrapper'>
+        <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
         <fieldset>
         <div class='form-group'>
@@ -423,7 +423,7 @@ function bbb_session_form($session_id = 0) {
         </div>
         </fieldset>
          ". generate_csrf_token_form_field() ."
-        </form></div>";
+        </form></div></div>";
         $tool_content .= "<script language='javaScript' type='text/javascript'>
         //<![CDATA[
             var chkValidator  = new Validator('sessionForm');

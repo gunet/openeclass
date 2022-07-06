@@ -52,40 +52,40 @@ $statsIntervalOptions = '<option value="daily"   ' . (($u_interval == 'daily') ?
         '<option value="yearly"  ' . (($u_interval == 'yearly') ? ('selected') : ('')) . '>' . $langYearly . "</option>" .
         '<option value="summary" ' . (($u_interval == 'summary') ? ('selected') : ('')) . '>' . $langSummary . "</option>";
 
-$tool_content .= '<div class="form-wrapper"><form class="form-horizontal" role="form" method="post">';   
+$tool_content .= '<div class="col-12"><div class="form-wrapper shadow-sm p-3 rounded"><form class="form-horizontal" role="form" method="post">';   
 $tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-2 control-label'>$langStartDate:</label>
-        <div class='col-xs-10 col-sm-9'>               
+    <label class='col-sm-6 control-label-notes'>$langStartDate:</label>
+        <div class='col-10 col-sm-9'>               
             <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
         </div>
-        <div class='col-xs-2 col-sm-1'>
+        <div class='col-2 col-sm-1'>
             <span class='add-on'><i class='fa fa-times'></i></span>
             <span class='add-on'><i class='fa fa-calendar'></i></span>
         </div>
         </div>";        
 $tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-        <label class='col-sm-2 control-label'>$langEndDate:</label>
-            <div class='col-xs-10 col-sm-9'>
+        <label class='col-sm-6 control-label-notes'>$langEndDate:</label>
+            <div class='col-10 col-sm-9'>
                 <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
             </div>
-        <div class='col-xs-2 col-sm-1'>
+        <div class='col-2 col-sm-1'>
             <span class='add-on'><i class='fa fa-times'></i></span>
             <span class='add-on'><i class='fa fa-calendar'></i></span>
         </div>
         </div>";
-$tool_content .= '<div class="form-group">  
-    <label class="col-sm-2 control-label">' . $langFirstLetterUser . ':</label>
-    <div class="col-sm-10">' . $letterlinks . '</div>
+$tool_content .= '<div class="form-group mt-3">  
+    <label class="col-sm-6 control-label-notes">' . $langFirstLetterUser . ':</label>
+    <div class="col-sm-12">' . $letterlinks . '</div>
   </div>
-  <div class="form-group">  
-    <label class="col-sm-2 control-label">' . $langUser . ':</label>
-     <div class="col-sm-10"><select name="u_user_id" class="form-control">' . $user_opts . '</select></div>
+  <div class="form-group mt-3">  
+    <label class="col-sm-6 control-label-notes">' . $langUser . ':</label>
+     <div class="col-sm-12"><select name="u_user_id" class="form-control">' . $user_opts . '</select></div>
   </div>
-  <div class="form-group">  
-    <label class="col-sm-2 control-label">' . $langInterval . ':</label>
-     <div class="col-sm-10"><select name="u_interval" class="form-control">' . $statsIntervalOptions . '</select></div>
+  <div class="form-group mt-3">  
+    <label class="col-sm-6 control-label-notes">' . $langInterval . ':</label>
+     <div class="col-sm-12"><select name="u_interval" class="form-control">' . $statsIntervalOptions . '</select></div>
   </div>
   <div class="col-sm-offset-2 col-sm-10">    
     <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
     </div>  
-</form></div>';
+</form></div></div>';

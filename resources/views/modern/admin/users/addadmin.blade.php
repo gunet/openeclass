@@ -43,10 +43,21 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                    {!! isset($action_bar) ?  $action_bar : '' !!}
+                    
 
+                    @if(Session::has('message'))
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                        <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                            {{ Session::get('message') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </p>
+                    </div>
+                    @endif
+
+                    {!! isset($action_bar) ?  $action_bar : '' !!}
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='form-wrapper shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                        
                         <form class='form-horizontal' role='form' method='post' name='makeadmin' action='{{ $_SERVER['SCRIPT_NAME']  }}'>
                         <fieldset>
                                 <div class='form-group'>
@@ -101,46 +112,48 @@
                         </form>
                     </div></div>  
 
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <table class='announcements_table'>
-                            <tr class='notes_thead'>
-                                <th class='text-white center'>ID</th>
-                                <th class='text-white'>{{ trans('langSurnameName') }}</th>
-                                <th class='text-white'>{{ trans('langUsername') }}</th>
-                                <th class='text-white text-center'>{{ trans('langRole') }}</th>
-                                <th class='text-white text-center'>{!! icon('fa-gears') !!}</th>
-                            </tr>
-                            @foreach ($admins as $admin)
-                                <tr>
-                                    <td>{{ $admin->id }}</td>
-                                    <td>{{ $admin->givenname }} {{ $admin->surname }}</td>
-                                    <td>{{ $admin->username }}</td>
-                                    <td>
-                                    @if ($admin->privilege == 0)
-                                        {{ trans('langAdministrator') }}
-                                    @elseif ($admin->privilege == 1)
-                                        {{ trans('langPowerUser') }}
-                                    @elseif ($admin->privilege == 2)
-                                        {{ trans('langManageUser') }}
-                                    @elseif ($admin->privilege == 3)
-                                        {{ trans('langManageDepartment') }}
-                                    @endif
-                                    </td>
-                                    <td class='text-center'>
-                                    @if ($admin->id != 1)
-                                        {!! action_button([
-                                                [
-                                                    'title' => trans('langDelete'),
-                                                    'url' => "$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=" . getIndirectReference($admin->id),
-                                                    'class' => 'delete',
-                                                    'icon' => 'fa-times'
-                                                ]
-                                            ]) !!}
-                                    @endif
-                                    </td>
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                        <div class='table-responsive'>
+                            <table class='announcements_table'>
+                                <tr class='notes_thead'>
+                                    <th class='text-white center'>ID</th>
+                                    <th class='text-white'>{{ trans('langSurnameName') }}</th>
+                                    <th class='text-white'>{{ trans('langUsername') }}</th>
+                                    <th class='text-white text-center'>{{ trans('langRole') }}</th>
+                                    <th class='text-white text-center'>{!! icon('fa-gears') !!}</th>
                                 </tr>
-                            @endforeach
-                        </table>
+                                @foreach ($admins as $admin)
+                                    <tr>
+                                        <td>{{ $admin->id }}</td>
+                                        <td>{{ $admin->givenname }} {{ $admin->surname }}</td>
+                                        <td>{{ $admin->username }}</td>
+                                        <td>
+                                        @if ($admin->privilege == 0)
+                                            {{ trans('langAdministrator') }}
+                                        @elseif ($admin->privilege == 1)
+                                            {{ trans('langPowerUser') }}
+                                        @elseif ($admin->privilege == 2)
+                                            {{ trans('langManageUser') }}
+                                        @elseif ($admin->privilege == 3)
+                                            {{ trans('langManageDepartment') }}
+                                        @endif
+                                        </td>
+                                        <td class='text-center'>
+                                        @if ($admin->id != 1)
+                                            {!! action_button([
+                                                    [
+                                                        'title' => trans('langDelete'),
+                                                        'url' => "$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=" . getIndirectReference($admin->id),
+                                                        'class' => 'delete',
+                                                        'icon' => 'fa-times'
+                                                    ]
+                                                ]) !!}
+                                        @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

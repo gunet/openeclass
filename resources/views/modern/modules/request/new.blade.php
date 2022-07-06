@@ -48,7 +48,7 @@
 
 
 
-                    {!! $action_bar !!}
+                    
 
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
@@ -59,115 +59,117 @@
                     </div>
                     @endif
 
-                    <div class="row p-2"></div>
-                    
-                    <div class='form-wrapper'>
-                        <form class='form-horizontal' action='{{ $targetUrl }}' method='post'>
-                            <div class='form-group'>
-                                <div class='col-sm-12'>
-                                    <label class='control-label-notes'>{{ trans('langcreator') }}: 
-                                        <span class="text-black-50 form-control-static">{{ $creatorName }}</span>
-
-                                    </label>
-                                    <!-- <p class='form-control-static'>{{ $creatorName }}</p>  -->
-                                </div>
-                            </div>
-
-                            <div class="row p-2"></div>
-
-                            @if ($request_types)
+                     {!! $action_bar !!}
+                    <div class='col-12'>
+                        <div class='form-wrapper shadow-sm p-3 rounded'>
+                           
+                            <form class='form-horizontal' action='{{ $targetUrl }}' method='post'>
                                 <div class='form-group'>
-                                    <label for='requestType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}:</label>
                                     <div class='col-sm-12'>
-                                        <select class='form-select' name='requestType' id='requestType'>
-                                            <option value='0'>{{ trans('langRequestBasicType') }}</option>
-                                            @foreach ($request_types as $type)
-                                                <option value='{{ $type->id }}'>{{ getSerializedMessage($type->name) }}</option>
+                                        <label class='control-label-notes'>{{ trans('langcreator') }}: 
+                                            <span class="text-black-50 form-control-static">{{ $creatorName }}</span>
+
+                                        </label>
+                                        <!-- <p class='form-control-static'>{{ $creatorName }}</p>  -->
+                                    </div>
+                                </div>
+
+                                <div class="row p-2"></div>
+
+                                @if ($request_types)
+                                    <div class='form-group'>
+                                        <label for='requestType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}:</label>
+                                        <div class='col-sm-12'>
+                                            <select class='form-select' name='requestType' id='requestType'>
+                                                <option value='0'>{{ trans('langRequestBasicType') }}</option>
+                                                @foreach ($request_types as $type)
+                                                    <option value='{{ $type->id }}'>{{ getSerializedMessage($type->name) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="row p-2"></div>
+
+                                <div class='form-group'>
+                                    <label for='requestTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
+                                    <div class='col-sm-12'>
+                                        <input type='text' class='form-control' id='requestTitle' name='requestTitle' required>
+                                    </div>
+                                </div>
+
+                                <div class="row p-2"></div>
+
+                                <div class='form-group'>
+                                    <label for='requestDescription' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
+                                    <div class='col-sm-12'>
+                                        {!! $descriptionEditor !!}
+                                    </div>
+                                </div>
+
+                                <div class="row p-2"></div>
+
+                                <div class='form-group'>
+                                    <label for='assignTo' class='col-sm-6 control-label-notes'>{{ trans("m['WorkAssignTo']") }}:</label>
+                                    <div class='col-sm-12'>
+                                        <select class='form-select' name='assignTo[]' multiple id='assignTo'>
+                                            @foreach ($course_users as $cu)
+                                                <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
-                            @endif
 
-                            <div class="row p-2"></div>
-
-                            <div class='form-group'>
-                                <label for='requestTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
-                                <div class='col-sm-12'>
-                                    <input type='text' class='form-control' id='requestTitle' name='requestTitle' required>
-                                </div>
-                            </div>
-
-                            <div class="row p-2"></div>
-
-                            <div class='form-group'>
-                                <label for='requestDescription' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
-                                <div class='col-sm-12'>
-                                    {!! $descriptionEditor !!}
-                                </div>
-                            </div>
-
-                            <div class="row p-2"></div>
-
-                            <div class='form-group'>
-                                <label for='assignTo' class='col-sm-6 control-label-notes'>{{ trans("m['WorkAssignTo']") }}:</label>
-                                <div class='col-sm-12'>
-                                    <select class='form-select' name='assignTo[]' multiple id='assignTo'>
-                                        @foreach ($course_users as $cu)
-                                            <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row p-2"></div>
-
-                            <div class='form-group'>
-                                <label for='requestWatchers' class='col-sm-6 control-label-notes'>{{ trans('langWatchers') }}:</label>
-                                <div class='col-sm-12'>
-                                    <select class='form-select' name='requestWatchers[]' multiple id='requestWatchers'>
-                                        @foreach ($course_users as $cu)
-                                            @if ($uid != $cu->user_id)
-                                                <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            @if ($request_types)
                                 <div class="row p-2"></div>
-                                @foreach ($request_types as $type)
-                                    @include('modules.request.extra_fields',
-                                        ['type_name' => $type->name,
-                                        'type_id' => $type->id,
-                                        'fields_info' => $request_fields[$type->id]])
-                                @endforeach
-                            @endif
 
-                            <div class="row p-2"></div>
-
-                            <div class='form-group'>
-                                <div class='col-sm-10 col-sm-offset-2'>
-                                    <div class='checkbox'>
-                                        <label>
-                                            <input type='checkbox' name='send_mail' value='on' checked> {{ trans('langSendInfoMail') }}
-                                        </label>
+                                <div class='form-group'>
+                                    <label for='requestWatchers' class='col-sm-6 control-label-notes'>{{ trans('langWatchers') }}:</label>
+                                    <div class='col-sm-12'>
+                                        <select class='form-select' name='requestWatchers[]' multiple id='requestWatchers'>
+                                            @foreach ($course_users as $cu)
+                                                @if ($uid != $cu->user_id)
+                                                    <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="row p-2"></div>
+                                @if ($request_types)
+                                    <div class="row p-2"></div>
+                                    @foreach ($request_types as $type)
+                                        @include('modules.request.extra_fields',
+                                            ['type_name' => $type->name,
+                                            'type_id' => $type->id,
+                                            'fields_info' => $request_fields[$type->id]])
+                                    @endforeach
+                                @endif
 
-                            <div class='form-group'>
-                                <div class='col-xs-offset-2 col-xs-10'>
-                                    <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
-                                    <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                <div class="row p-2"></div>
+
+                                <div class='form-group'>
+                                    <div class='col-sm-10 col-sm-offset-2'>
+                                        <div class='checkbox'>
+                                            <label>
+                                                <input type='checkbox' name='send_mail' value='on' checked> {{ trans('langSendInfoMail') }}
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            {!! generate_csrf_token_form_field() !!}
-                        </form>
+                                <div class="row p-2"></div>
+
+                                <div class='form-group'>
+                                    <div class='col-xs-offset-2 col-xs-10'>
+                                        <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
+                                        <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                    </div>
+                                </div>
+
+                                {!! generate_csrf_token_form_field() !!}
+                            </form>
+                        </div>
                     </div>
                         
 

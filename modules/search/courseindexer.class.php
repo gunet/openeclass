@@ -183,36 +183,38 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
         $langInstructor_Descr, $langCourseCode, $langCourseCode_Descr, $langDoSearch,
         $langNewSearch;
 
-        return "<div class='form-wrapper'>
+        return "
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
-            <div class='form-group'>
-                <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
-                <div class='col-sm-10'><input id='title' class='form-control' name='search_terms_title' type='text' placeholder='$langTitle_Descr'></div>
+            <div class='form-group mt-3'>
+                <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
+                <div class='col-sm-12'><input id='title' class='form-control' name='search_terms_title' type='text' placeholder='$langTitle_Descr'></div>
             </div>
-            <div class='form-group'>
-                <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
-                <div class='col-sm-10'><input id='description' class='form-control' name='search_terms_description' type='text' placeholder='$langDescription_Descr'></div>
+            <div class='form-group mt-3'>
+                <label for='description' class='col-sm-6 control-label-notes'>$langDescription:</label>
+                <div class='col-sm-12'><input id='description' class='form-control' name='search_terms_description' type='text' placeholder='$langDescription_Descr'></div>
             </div>
-            <div class='form-group'>
-                <label for='keywords' class='col-sm-2 control-label'>$langKeywords:</label>
-                <div class='col-sm-10'><input id='keywords' class='form-control' name='search_terms_keywords' type='text' placeholder='$langKeywords_Descr'></div>
+            <div class='form-group mt-3'>
+                <label for='keywords' class='col-sm-6 control-label-notes'>$langKeywords:</label>
+                <div class='col-sm-12'><input id='keywords' class='form-control' name='search_terms_keywords' type='text' placeholder='$langKeywords_Descr'></div>
             </div>
-            <div class='form-group'>
-                <label for='teacher' class='col-sm-2 control-label'>$langTeacher:</label>
-                <div class='col-sm-10'><input id='teacher' class='form-control' name='search_terms_instructor' type='text' placeholder='$langInstructor_Descr'></div>
+            <div class='form-group mt-3'>
+                <label for='teacher' class='col-sm-6 control-label-notes'>$langTeacher:</label>
+                <div class='col-sm-12'><input id='teacher' class='form-control' name='search_terms_instructor' type='text' placeholder='$langInstructor_Descr'></div>
             </div>
-            <div class='form-group'>
-                <label for='code' class='col-sm-2 control-label'>$langCourseCode:</label>
-                <div class='col-sm-10'><input id='code' class='form-control' name='search_terms_coursecode' type='text' placeholder='$langCourseCode_Descr'></div>
+            <div class='form-group mt-3'>
+                <label for='code' class='col-sm-6 control-label-notes'>$langCourseCode:</label>
+                <div class='col-sm-12'><input id='code' class='form-control' name='search_terms_coursecode' type='text' placeholder='$langCourseCode_Descr'></div>
             </div>
-            <div class='col-sm-offset-2 col-sm-10'>
+            <div class='col-sm-offset-2 col-sm-10 mt-3'>
                 <input class='btn btn-primary' type='submit' name='submit' value='$langDoSearch'>
-                <input class='btn btn-default' type='reset' name='reset' value='$langNewSearch'>
+                <input class='btn btn-secondary' type='reset' name='reset' value='$langNewSearch'>
             </div>
             </fieldset>
             </form>
-        </div>";
+        </div></div>";
     }
 
     /**

@@ -71,7 +71,8 @@
                     </div>
                     @endif
 
-                    <div class='form-wrapper'>
+                    <div class='col-12'>
+                    <div class='form-wrapper shadow-sm p-3 rounded'>
                         <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='{{ $sec }}' onsubmit='return validateNodePickerForm();'>
                             <fieldset>
                                 <div class="row p-2"></div>
@@ -233,7 +234,7 @@
                         </fieldset>
                             {!! generate_csrf_token_form_field() !!}
                         </form>
-                    </div>
+                    </div></div>
                 </div>
             </div>
         </div>

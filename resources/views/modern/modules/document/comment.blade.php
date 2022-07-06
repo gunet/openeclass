@@ -1,6 +1,6 @@
-<div class='row'>
-    <div class='col-md-12'>
-        <div class='form-wrapper'>
+
+    <div class='col-12'>
+        <div class='form-wrapper shadow-sm p-3 mt-2 rounded'>
 			<form class='form-horizontal' role='form' method='post' action='{{ $base_url }}'>
                 <input type='hidden' name='commentPath' value='{{$file->path}}'>
                 <fieldset>
@@ -116,4 +116,4 @@
 			</form>
         </div>
     </div>
-</div>
+

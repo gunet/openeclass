@@ -59,7 +59,7 @@
 
 
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='list-group shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                        <div class='list-group shadow-sm p-3 mb-5 bg-body rounded'>
                             <li class='list-group-item list-header notes_thead text-white'>{{ $general_tutorials['title'] }}</li>
                             @foreach ($general_tutorials['links'] as $gt)
                                 <a href='{{ $gt['url'] }}' target='_blank' class='mainpage list-group-item'>{!! $gt['desc'] !!}</a>
@@ -68,7 +68,7 @@
                     </div>
 
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='list-group shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                        <div class='list-group shadow-sm p-3 mb-5 bg-body rounded'>
                             <li class='list-group-item list-header notes_thead text-white'>{{ $teacher_tutorials['title'] }}</li>
                             @foreach ($teacher_tutorials['links'] as $tt)
                                 <a href='{{ $tt['url'] }}' target='_blank' class='mainpage list-group-item'>{!! $tt['desc'] !!}</a>
@@ -77,7 +77,7 @@
                     </div>
 
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='list-group shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                        <div class='list-group shadow-sm p-3 mb-5 bg-body rounded'>
                             <li class='list-group-item list-header notes_thead text-white'>{{ $student_tutorials['title'] }}</li>
                             @foreach ($student_tutorials['links'] as $st)
                                 <a href='{{ $st['url'] }}' target='_blank' class='mainpage list-group-item'>{!! $st['desc'] !!}</a>

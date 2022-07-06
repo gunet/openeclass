@@ -7,8 +7,8 @@
  */
 
 // ------------ feel free to change it ----------
-define ('INTRO_SSO_MESSAGE', 'Η διαδικασία μετάβασης των λογαριασμών των χρηστών έχει ξεκινήσει!
-                            Κάντε κλικ στο `Μετάβαση`. Θα μεταφερθείτε στην κεντρική σελίδα Πιστοποίησης Λογαριασμού
+define ('INTRO_SSO_MESSAGE', 'Η διαδικασία μετάβασης των λογαριασμών των χρηστών έχει ξεκινήσει! 
+                            Κάντε κλικ στο `Μετάβαση`. Θα μεταφερθείτε στην κεντρική σελίδα Πιστοποίησης Λογαριασμού 
                             όπου θα δώσετε τα στοιχεία σας έτσι ώστε ο λογαριασμός σας στην πλατφόρμα να ενημερωθεί.');
 // ----------------------------------------------
 $require_login = true;
@@ -18,25 +18,25 @@ require_once 'modules/auth/transition/Transition.class.php';
 $pageName = "Μετάβαση";
 
 if (!get_config('sso_transition')) {
-    redirect("{$urlAppend}modules/auth/logout.php");
+    redirect("{$urlServer}index.php?logout=yes");
 }
 
 $_SESSION['SSO_USER_TRANSITION'] = true;
 
 $tool_content .= action_bar(array(
     array('title' => $langBack,
-        'url' => "{$urlAppend}modules/auth/logout.php",
+        'url' => "{$urlAppend}index.php?logout=yes",
         'icon' => 'fa-reply',
         'level' => 'primary-label')
 ),false);
 
 $auth_transition = new Transition($uid);
 if ($auth_transition->get_sso_exception_status() == SSO_TRANSITION_EXCEPTION_BLOCKED) {
-    $tool_content .= "<div class='alert alert-danger'>Η πρόσβαση στην πλατφόρμα έχει αποκλειστεί.
+    $tool_content .= "<div class='alert alert-danger'>Η πρόσβαση στην πλατφόρμα έχει αποκλειστεί. 
                     Μπορείτε να επικοινωνήσετε με τους διαχειριστές της πλατφόρμας στο <strong>" . get_config('email_helpdesk') . "</strong>.</div>";
 } else if ($auth_transition->get_sso_exception_status() == SSO_TRANSITION_EXCEPTION_PENDING) { // sso exception pending
-    $tool_content .= "<div class='alert alert-warning'>Έχετε ήδη υποβάλλει αίτημα εξαίρεσης το οποίο ακόμα δεν έχει διεκπεραιωθεί.
-                       Η πρόσβαση στην πλατφόρμα προσωρινά δεν είναι δυνατή.
+    $tool_content .= "<div class='alert alert-warning'>Έχετε ήδη υποβάλλει αίτημα εξαίρεσης το οποίο ακόμα δεν έχει διεκπεραιωθεί. 
+                       Η πρόσβαση στην πλατφόρμα προσωρινά δεν είναι δυνατή. 
                        Μπορείτε να επικοινωνήσετε με τους διαχειριστές της πλατφόρμας στο <strong>" . get_config('email_helpdesk') . "</strong>.</div>";
 } else if (isset($_GET['exception'])) {
     $auth_transition->add_sso_exception($_POST['comments']);
@@ -71,23 +71,23 @@ function display_sso_exception_form($uid) {
 
     $firstname = uid_to_name($uid);
     $tool_content .= "
-        <div class='alert alert-info'>Παρακαλώ αναφέρατε τους λόγους εξαίρεσης.</div>
-        <div class='form-wrapper'>
+        <div class='col-12'><div class='alert alert-info'>Παρακαλώ αναφέρατε τους λόγους εξαίρεσης.</div></div>
+        <div class='col-12 mt-3'><div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?exception=TRUE' method='post'>
             <fieldset>
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langName:</label>
-                    <div class='col-sm-10'>
+                <div class='form-group mt-3'>
+                    <label class='col-sm-6 control-label-notes'>$langName:</label>
+                    <div class='col-sm-12'>
                         <input class='form-control' type='text' name='$langName' value='" . q($firstname) . "' disabled  />
                     </div>
-                </div>
-                <div class='form-group'>
-                    <label for='$langComments' class='col-sm-2 control-label'>$langComments:</label>
-                    <div class='col-sm-10'>
+                </div>                          
+                <div class='form-group mt-3'>
+                    <label for='$langComments' class='col-sm-6 control-label-notes'>$langComments:</label>
+                    <div class='col-sm-12'>
                         <textarea class='form-control' rows='6' name='comments'></textarea>
                     </div>
                 </div>
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                 <div class='col-sm-10 col-sm-offset-2'>".
                     form_buttons(array(
                         array(
@@ -103,5 +103,5 @@ function display_sso_exception_form($uid) {
                 </div>
                 </fieldset>
             </form>
-        </div>";
+        </div></div>";
 }

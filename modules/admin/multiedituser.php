@@ -98,8 +98,14 @@ if (isset($_POST['submit'])) {
             $line = strtok("\n");
         }
     }
-    if (isset($success_mgs)) Session::Messages($success_mgs, 'alert-success');
-    if (isset($error_mgs)) Session::Messages($error_mgs, 'alert-danger');
+    if (isset($success_mgs)) { 
+        //Session::Messages($success_mgs, 'alert-success');
+        Session::flash('message',$success_mgs); 
+        Session::flash('alert-class', 'alert-success'); }
+    if (isset($error_mgs)) {
+        //Session::Messages($error_mgs, 'alert-danger');
+        Session::flash('message',$error_mgs); 
+        Session::flash('alert-class', 'alert-danger');}
     redirect_to_home_page('modules/admin/multiedituser.php');
 } else {
 
@@ -258,9 +264,10 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['activate_submit'])) {
         $infoText = $langActivateUserInfo;
         $monthsField = "
+        <div class='row p-2'></div>
                 <div class='form-group'>
-                    <label class='col-sm-2 control-label' for='months-id'>$langActivateMonths:</label>
-                    <div class='col-sm-9'>
+                    <label class='col-sm-6 control-label-notes' for='months-id'>$langActivateMonths:</label>
+                    <div class='col-sm-12'>
                         <input name='months' id='months-id' class='form-control' type='number' min='1' step='1' value='6'>
                     </div>
                 </div>";
@@ -278,9 +285,10 @@ if (isset($_POST['submit'])) {
         $infoText = sprintf($langMoveUserInfo, '<b>' . q($tree->getNodeName($dep)) . '</b>');
         $monthsField = "
                 <input type='hidden' name='old_dep' value='$dep'>
+                <div class='row p-2'></div>
                 <div class='form-group'>
-                    <label class='col-sm-2 control-label' for='dialog-set-value'>$langFaculty:</label>
-                    <div class='col-sm-9 '>$html</div>
+                    <label class='col-sm-6 control-label-notes' for='dialog-set-value'>$langFaculty:</label>
+                    <div class='col-sm-12'>$html</div>
                 </div>";
         $confirm = '';
     } else {
@@ -289,27 +297,30 @@ if (isset($_POST['submit'])) {
         $confirm = " onclick='return confirmation(\"" . q($langMultiDelUserConfirm) . "\");'";
     }
     $tool_content .= "
-    <div class='alert alert-info'>$infoText</div>
-        <div class='form-wrapper'>
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$infoText</div></div>
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='form-wrapper shadow-sm p-3 rounded'>
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
             <fieldset>
                 $monthsField
+                <div class='row p-2'></div>
                 <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langMultiDelUserData:</label>
-                    <div class='col-sm-9'>
+                    <label class='col-sm-6 control-label-notes'>$langMultiDelUserData:</label>
+                    <div class='col-sm-12'>
                         <textarea class='auth_input form-control' name='user_names' rows='30'>$usernames</textarea>
                     </div>
                 </div>
+                <div class='row p-2'></div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "'$confirm>
-                        <a href='index.php' class='btn btn-default'>$langCancel</a>
+                        <a href='index.php' class='btn btn-secondary'>$langCancel</a>
                     </div>
                 </div>
             </fieldset>
             ". generate_csrf_token_form_field() ."
         </form>
-    </div>";
+    </div></div>";
 }
 draw($tool_content, 3, '', $head_content);
 

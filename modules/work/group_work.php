@@ -118,7 +118,8 @@ function show_assignments() {
         $table_content .= "</td>\n    </tr>";
     }
     $tool_content .= "
-            <div class='form-wrapper'>
+    <div class='col-12'>
+            <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                 <fieldset>
                     <input type='hidden' name='file' value='" . q($_GET['submit']) . "'>
@@ -151,7 +152,7 @@ function show_assignments() {
                     </div>
                 </fieldset>
             </form>
-        </div>";
+        </div></div>";
 }
 
 // Insert a group work submitted by user uid to assignment id

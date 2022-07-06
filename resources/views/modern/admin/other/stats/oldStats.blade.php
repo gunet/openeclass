@@ -43,7 +43,7 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                    {!! isset($action_bar) ?  $action_bar : '' !!}
+                    
 
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                         <div class="alert alert-info">
@@ -58,8 +58,10 @@
                         </div>
                     </div>   
 
+                    {!! isset($action_bar) ?  $action_bar : '' !!}
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class="form-wrapper shadow-lg p-3 mb-5 bg-body rounded bg-primary">
+                        <div class="form-wrapper shadow-sm p-3 mt-5 rounded">
+                            
                             <form class="form-horizontal" role="form" method="post">
                                 <div class='input-append date form-group mt-3' data-date='{{ $user_date_start }}' data-date-format='dd-mm-yyyy'>
                                     <label class='col-sm-6 control-label-notes' for='user_date_start'>{{ trans('langStartDate') }}:</label>

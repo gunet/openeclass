@@ -157,7 +157,7 @@ if (isset($_GET['mid'])) {
         if ($msg->course_id == 0 && !$personal_msgs_allowed) {
             //do not show reply form when personal messages are not allowed
         } else {
-            $out .= "<div class='form-wrapper' id='replyBox' style='display:none;'>";
+            $out .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded' id='replyBox' style='display:none;'>";
             if ($course_id == 0) {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
                 if ($msg->course_id != 0) {//thread belonging to a course viewed from the central ui
@@ -247,10 +247,10 @@ if (isset($_GET['mid'])) {
 
             $out .= "
                 <div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
-               </form></div>";
+               </form></div></div>";
 
             // forward form
-            $out .= "<div class='form-wrapper' id='forwardBox' style='display:none;'>";
+            $out .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded' id='forwardBox' style='display:none;'>";
             if ($course_id == 0) {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
                 if ($msg->course_id != 0) { // thread belonging to a course viewed from the central ui
@@ -350,7 +350,7 @@ if (isset($_GET['mid'])) {
                 </fieldset>";
 
             $out .= "<div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
-               </form></div>";
+               </form></div></div>";
 
             // ************* End of forward form ******************
 

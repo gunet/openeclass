@@ -76,20 +76,21 @@ if (empty($search_terms)) {
     // display form
     $langSearchCriteria;
     $tool_content .= "
-    <div class='form-wrapper'>
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
-        <div class='form-group'>
-            <label for='search_terms' class='col-sm-2 control-label'>$langOR:</label>
-            <div class='col-sm-10'>
+        <div class='form-group mt-3'>
+            <label for='search_terms' class='col-sm-6 control-label-notes'>$langOR:</label>
+            <div class='col-sm-12'>
                 <input name='search_terms' type='text' class='form-control'>
             </div>
         </div>
-        <div class='form-group'>
-            <label for='search_terms' class='col-sm-2 control-label'>$langSearchIn:</label>
+        <div class='form-group mt-3'>
+            <label for='search_terms' class='col-sm-6 control-label-notes'>$langSearchIn:</label>
             <div class='col-sm-10'>
                 <div class='row'>
-                    <div class='col-xs-6 col-sm-4'>
+                    <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='announcements' checked>
@@ -97,7 +98,7 @@ if (empty($search_terms)) {
                           </label>
                         </div>
                     </div>
-                    <div class='col-xs-6 col-sm-4'>
+                    <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='agenda' checked>
@@ -105,7 +106,7 @@ if (empty($search_terms)) {
                           </label>
                         </div>
                     </div>
-                    <div class='col-xs-6 col-sm-4'>
+                    <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='course_units' checked>
@@ -113,7 +114,7 @@ if (empty($search_terms)) {
                           </label>
                         </div>
                     </div>
-                    <div class='col-xs-6 col-sm-4'>
+                    <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='documents' checked>
@@ -121,7 +122,7 @@ if (empty($search_terms)) {
                           </label>
                         </div>
                     </div>
-                    <div class='col-xs-6 col-sm-4'>
+                    <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='forums' checked>
@@ -129,7 +130,7 @@ if (empty($search_terms)) {
                           </label>
                         </div>
                     </div>
-                    <div class='col-xs-6 col-sm-4'>
+                    <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='exercises' checked>
@@ -137,7 +138,7 @@ if (empty($search_terms)) {
                           </label>
                         </div>
                     </div>
-                    <div class='col-xs-6 col-sm-4'>
+                    <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='video' checked>
@@ -145,7 +146,7 @@ if (empty($search_terms)) {
                           </label>
                         </div>
                     </div>
-                    <div class='col-xs-6 col-sm-4'>
+                    <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='links' checked>
@@ -156,14 +157,14 @@ if (empty($search_terms)) {
                 </div>
             </div>
         </div>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='submit' value='$langDoSearch'>
             </div>
         </div>
        </fieldset>
        </form>
-    </div>";
+    </div></div>";
 } else {
     // prepare data in POST for feeding Indexer
     $_POST['course_id'] = $course_id;

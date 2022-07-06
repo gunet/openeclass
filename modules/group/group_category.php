@@ -49,7 +49,7 @@ $tool_content .= action_bar(array(
             $categoryname = $_POST['categoryname'];
         }
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langGroups);
-        $tool_content .= "<div class = 'form-wrapper'>";
+        $tool_content .= "<div class='col-12'><div class = 'form-wrapper shadow-sm p-3 rounded'>";
         $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;addcategory=1'>";
 
         $form_name = $form_description = '';
@@ -78,13 +78,13 @@ $tool_content .= action_bar(array(
                         </fieldset>
                      ". generate_csrf_token_form_field() ."
                     </form>
-                </div>";
+                </div></div>";
     } elseif (isset($_GET['editcategory'])) {
         $id = $_GET['id'];        
         category_form_defaults($id);
         $myrow = Database::get()->querySingle("SELECT name,description  FROM group_category WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $form_legend = $langCategoryMod;	
-        $tool_content .= "<div class = 'form-wrapper'>";
+        $tool_content .= "<div class='col-12'><div class = 'form-wrapper'>";
         $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;editcategory=1'>";
         $tool_content .= "<fieldset>
             <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")."'>
@@ -110,7 +110,7 @@ $tool_content .= action_bar(array(
             </fieldset>
          ". generate_csrf_token_form_field() ."
         </form>
-        </div>";
+        </div></div>";
     }
 
 draw($tool_content, 2);

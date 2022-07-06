@@ -54,17 +54,6 @@
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
 
-
-                    {!!
-                    action_bar(array(
-                        array('title' => $GLOBALS['langBack'],
-                            'url' => $backPath,
-                            'icon' => 'fa-reply',
-                            'level' => 'primary-label')
-                        )
-                    )
-                    !!}<div class="row p-2"></div>
-
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
                         <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
@@ -75,8 +64,20 @@
                     @endif
 
                     
-                        <div class='col-sm-12'>
-                            <div class='form-wrapper'>
+                    
+                        {!!
+                        action_bar(array(
+                            array('title' => $GLOBALS['langBack'],
+                                'url' => $backPath,
+                                'icon' => 'fa-reply',
+                                'level' => 'primary-label')
+                            )
+                        )
+                        !!}
+                        
+                        <div class='col-12'>
+                            <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                                
                                 <form class='form-horizontal'
                                     role='form'
                                     method='POST'

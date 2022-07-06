@@ -58,8 +58,8 @@
                             </div>
                             @endif
 
-                            <div class='col-xs-12'>
-                                <div class='form-wrapper'>
+                            <div class='col-12'>
+                                <div class='form-wrapper shadow-sm p-3 rounded'>
                                     <form class='form-horizontal' role='form' method='post' action='editdesc.php?course={{$course_code}}' enctype='multipart/form-data'>
                                         <fieldset>
                                             <div class='form-group'>

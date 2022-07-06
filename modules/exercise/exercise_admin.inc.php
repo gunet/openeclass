@@ -313,8 +313,9 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             'level' => 'primary-label'
         )
     ));
-    $tool_content .= "
-        <div class='form-wrapper'>
+
+   $tool_content .= "
+        <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyExercise']) ? "&amp;exerciseId=$exerciseId" : "&amp;NewExercise=Yes")."'>
              <fieldset>
                  <div class='form-group ".(Session::getError('exerciseTitle') ? "has-error" : "")."'>
@@ -589,7 +590,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  </div>
              </fieldset>
              </form>
-        </div>";
+        </div></div>";
 } else {
     switch ($displayResults) {
         case 0:

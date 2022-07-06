@@ -2045,7 +2045,7 @@ function new_assignment() {
 
     $tool_content .= "
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-md-12 col-sm-12 col-12'>
-        <div class='form-wrapper shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+        <div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
             <div class='form-group " . ($title_error ? "has-error" : "") . "'>
@@ -3082,7 +3082,8 @@ function show_edit_assignment($id) {
     $review_error_rubric = Session::getError('rubric_review');
 
     $tool_content .= "
-    <div class='form-wrapper'>
+    <div class='col-12'>
+    <div class='form-wrapper shadow-sm p-3 rounded'>
     <form class='form-horizontal' enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
     <input type='hidden' name='id' value='$id' />
     <input type='hidden' name='choice' value='do_edit' />
@@ -3690,7 +3691,7 @@ function show_edit_assignment($id) {
                     ."</div>
             </div>
     </fieldset>
-    </form></div>";
+    </form></div></div>";
 }
 
 
@@ -4339,7 +4340,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 )
             ))."
                     $notice
-                    <div class='form-wrapper'>
+                    <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
                      <form class='form-horizontal' enctype='multipart/form-data' action='$form_link' method='post'>
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input $course_unit_hidden_input
                         <fieldset>
@@ -4368,7 +4369,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         </div>
                         </fieldset>
                      </form>
-                     </div>
+                     </div></div>
                      <div class='pull-right'><small>$GLOBALS[langMaxFileSize] " .
                 ini_get('upload_max_filesize') . "</small></div><br>";
     }

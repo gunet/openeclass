@@ -932,7 +932,8 @@ switch ($action) {
     case 'rqSearch':
     {
         $tool_content .= "
-            <div class='form-wrapper'>
+        <div class='col-12'>
+            <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='". htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>
                     <input type='hidden' name='action' value='exSearch'>
                     <div class='form-group'>
@@ -948,7 +949,7 @@ switch ($action) {
                         </div>
                     </div>
                 </form>
-            </div>";
+            </div></div>";
         break;
     }
     default:

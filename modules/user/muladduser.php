@@ -40,6 +40,7 @@ $tool_content .= action_bar(array(
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $ok = array();
     $not_found = array();
     $existing = array();
@@ -60,49 +61,55 @@ if (isset($_POST['submit'])) {
     }
 
     if (count($not_found)) {
-        $tool_content .= "<div class='alert alert-warning'>$langUsersNotExist<br>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langUsersNotExist<br>";
         foreach ($not_found as $uname) {
             $tool_content .= q($uname) . '<br>';
         }
-        $tool_content .= '</div>';
+        $tool_content .= '</div></div>';
     }
 
     if (count($ok)) {
-        $tool_content .= "<div class='alert alert-success'>$langUsersRegistered<br>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-success'>$langUsersRegistered<br>";
         foreach ($ok as $userid) {
             $tool_content .= display_user($userid) . '<br>';
         }
-        $tool_content .= '</div>';
+        $tool_content .= '</div></div>';
     }
 
     if (count($existing)) {
-        $tool_content .= "<div class='alert alert-info'>$langUsersAlreadyRegistered<br>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langUsersAlreadyRegistered<br>";
         foreach ($existing as $userid) {
             $tool_content .= display_user($userid) . '<br>';
         }
-        $tool_content .= '</div>';
+        $tool_content .= '</div></div>';
     }
 }
 
 
-$tool_content .= "<div class='alert alert-info'>$langAskManyUsers</div>
-        <div class='form-wrapper'>
+$tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langAskManyUsers</div></div>
+        
+<div class='col-12'>
+<div class='form-wrapper shadow-sm p-3 rounded'>
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-            <fieldset>           
+            <fieldset>     
+            <div class='row p-2'></div>      
             <div class='form-group'>
-               <div class='col-sm-12 radio'><label><input type='radio' name='type' value='uname' checked>$langUsername</label></div>
-                <div class='col-sm-12 radio'><label><input type='radio' name='type' value='am'>$langAm</label></div>
+               <div class='col-sm-12 radio'><label class='control-label-notes'><input type='radio' name='type' value='uname' checked>$langUsername</label></div>
+                <div class='col-sm-12 radio'><label class='control-label-notes'><input type='radio' name='type' value='am'>$langAm</label></div>
             </div>
+            <div class='row p-2'></div>      
             <div class='form-group'>
                 <textarea class='auth_input' name='user_info' rows='10'></textarea>
             </div>
+            ".showSecondFactorChallenge()." 
+            <div class='row p-2'></div>      
             <div class='col-sm-offset-2 col-sm-10'>
                 <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
             </div>                       
         </fieldset>
         ". generate_csrf_token_form_field() ."  
         </form>
-        </div>";
+        </div></div>";
 
 draw($tool_content, 2);
 

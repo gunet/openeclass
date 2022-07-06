@@ -201,12 +201,12 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
             draw($tool_content, 1, null, $head_content);
             exit;
         }
-        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' id='newmsg' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' id='newmsg' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } elseif ($course_id == 0 && $type == 'cm') {
-        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } else {
         $type = 'cm'; //only course messages are allowed in the context of a course
-        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     }
     $tool_content .= "
         <fieldset>
@@ -465,7 +465,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
         </div>
         </fieldset>
         ". generate_csrf_token_form_field() ."
-        </form></div>";
+        </form></div></div>";
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
         $head_content .= "<script type='text/javascript'>
             $(document).ready(function () {

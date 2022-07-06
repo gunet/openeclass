@@ -145,7 +145,8 @@ if ($is_editor) {
                 if (!resource_belongs_to_progress_data(MODULE_ID_LP, $_GET['del_path_id'])) {
                     $lp_name = deleteLearningPath($_GET['del_path_id']);
                     Log::record($course_id, MODULE_ID_LP, LOG_DELETE, array('name' => $lp_name));
-                    Session::flash('message',$langLearnPathDeleted);
+                    //Session::Messages($langLearnPathDeleted, 'alert-success');
+                    Session::flash('message',$langLearnPathDeleted); 
                     Session::flash('alert-class', 'alert-success');
                     redirect_to_home_page('modules/learnPath/index.php?course=' . $course_code);
                 } else {
@@ -176,8 +177,8 @@ if ($is_editor) {
                 }
                 break;
             // CREATE COMMAND
-            case "create" :
-                // create form sent
+            case "create" :                
+                // create form sent                
                 if (isset($_POST["newPathName"]) && $_POST["newPathName"] != "") {
                     // check if name already exists
                     $num = Database::get()->querySingle("SELECT COUNT(`name`) AS count FROM `lp_learnPath`
@@ -203,21 +204,36 @@ if ($is_editor) {
                             )
                         ));
                         // display error message
-                        $dialogBox .= "<div class='alert alert-warning'>$langErrorNameAlreadyExists</div>";
+                        $dialogBox .= "<div class='row p-2'></div>
+                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                           <div class='alert alert-warning'>$langErrorNameAlreadyExists</div>
+                        </div>";
                         $style = "caution";
-                        $dialogBox .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
+                        $dialogBox .= "
+                        
+                         <div class=col-12>
+                        <div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
+                        
+                       
+
                         <div class='form-group'>
-                            <label for='newPathName' class='col-sm-2 control-label'>$langName:</label>
-                            <div class='col-sm-10'>
+                            <label for='newPathName' class='col-sm-6 control-label-notes'>$langName:</label>
+                            <div class='col-sm-12'>
                               <input name='newPathName' type='text' class='form-control' id='newPathName'>
                             </div>
                         </div>
+
+                        <div class='row p-2'></div>
+
                         <div class='form-group'>
-                            <label for='newComment' class='col-sm-2 control-label'>$langDescription:</label>
-                            <div class='col-sm-10'>
+                            <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription:</label>
+                            <div class='col-sm-12'>
                               <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
                         </div>
+
+                        <div class='row p-2'></div>
+
                         <div class='form-group'>
                             <div class='col-sm-10 col-sm-offset-2'>
                               <input type='hidden' name='cmd' value='create'>".
@@ -232,7 +248,7 @@ if ($is_editor) {
                                     ))
                                     ."</div>
                             </div>
-                        </form></div>";
+                        </form></div></div>";
                     }
                 } else { // create form requested
                     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
@@ -244,19 +260,29 @@ if ($is_editor) {
                             'level' => 'primary-label'
                         )
                     ));
-                    $dialogBox .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
+                    $dialogBox .= "
+                    
+                    <div class='col-12'>
+
+                    <div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                         <div class='form-group'>
-                            <label for='newPathName' class='col-sm-2 control-label'>$langName:</label>
-                            <div class='col-sm-10'>
+                            <label for='newPathName' class='col-sm-6 control-label-notes'>$langName:</label>
+                            <div class='col-sm-12'>
                               <input name='newPathName' type='text' class='form-control' id='newPathName'>
                             </div>
                         </div>
+
+                        <div class='row p-2'></div>
+
                         <div class='form-group'>
-                            <label for='newComment' class='col-sm-2 control-label'>$langDescription:</label>
-                            <div class='col-sm-10'>
+                            <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription:</label>
+                            <div class='col-sm-12'>
                               <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
                         </div>
+
+                        <div class='row p-2'></div>
+
                         <div class='form-group'>
                             <div class='col-sm-10 col-sm-offset-2'>
                               <input type='hidden' name='cmd' value='create'>".
@@ -271,7 +297,7 @@ if ($is_editor) {
                                     ))
                                     ."</div>
                         </div>
-                        </form></div>";
+                        </form></div></div>";
                 }
                 break;
             default:
@@ -317,7 +343,7 @@ if ($is_editor) {
         exit;
     } else {
         $tool_content .= "
-        <div class='row'>
+        <div class='row p-2'></div>
             <div class='col-sm-12'>
                 <div id='operations_container'>" .
                 action_bar(array(
@@ -340,25 +366,28 @@ if ($is_editor) {
                         'icon' => 'fa-book',
                         'level' => 'secondary'))) .
                 "</div>
-            </div>
-        </div>";
+            </div>";
     }
 }
 
 // check if there are learning paths available
 $l = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->count;
 if ($l == 0) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoLearningPath</div>";
+    $tool_content .= "<div class='row p-2'></div>
+                      <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                        <div class='alert alert-warning'>$langNoLearningPath</div>
+                      </div>";
     draw($tool_content, 2, null, $head_content);
     exit();
 }
 
 $tool_content .= "
+<div class='row p-2'></div>
 <div class='table-responsive'>
-    <table class='table-default'>
-    <thead>
-    <tr class='list-header'>
-      <th><div align='left'>$langLearningPaths</div></th>\n";
+    <table class='announcements_table'>
+    <thead class='notes_thead'>
+    <tr>
+      <th class='text-white'><div align='left'>$langLearningPaths</div></th>\n";
 
 if ($is_editor) {
     // Titles for teachers
@@ -476,7 +505,7 @@ foreach ($result as $list) { // while ... learning path list
 
         $tool_content .= "
             <td>
-                <div><strong>$play_url</strong><span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathData'>$play_button</span></div>
+                <div><strong>$play_url</strong><span class='pull-right' style='padding-left: 15px;'  data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathData'>$play_button</span></div>
                 <div style='padding: 15px; 8px; 10px;'>$list->lp_comment</div>
             </td>\n";
 
@@ -533,7 +562,7 @@ foreach ($result as $list) { // while ... learning path list
 
     } else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
         if(!$is_editor){
-            $tool_content .= "<td><a href='javascript:void(0)' class='restrict_learn_path' data-toggle='modal' data-target='#restrictlp'>".htmlspecialchars($list->name)."</a>"/* .$list['minRaw'] */ . "<span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i></span></td>\n";
+            $tool_content .= "<td><a href='javascript:void(0)' class='restrict_learn_path' data-bs-toggle='modal' data-bs-target='#restrictlp'>".htmlspecialchars($list->name)."</a>"/* .$list['minRaw'] */ . "<span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i></span></td>\n";
         } else { // if is editor he can access the learning path even if it is restricted
             $tool_content .=  "<td><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i>&nbsp;&nbsp;$play_button</span></td>\n";
         }
@@ -590,8 +619,10 @@ foreach ($result as $list) { // while ... learning path list
                 'class' => 'delete',
                 'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name) . "\"" : $langDelete);
 
-        $tool_content .= "<td class='option-btn-cell' style='width: 90px;'><div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer;
-                vertical-align: bottom;'><span class='fa fa-arrows' style='cursor: pointer;'></span></div><div class='pull-left'>" .
+        $tool_content .= "<td class='option-btn-cell' style='width: 90px;'>
+                <div class='reorder-btn pull-left' style='margin-left:15px;'>
+                    <span class='fa fa-arrows' style='cursor: pointer;'></span>
+                </div><div class='pull-right' style='margin-top:10px;'>" .
                 action_button($lp_menu) .
                 "</div></td>\n";
     } elseif ($uid) {
@@ -627,7 +658,7 @@ $tool_content .= "<div class='modal fade' id='restrictlp' tabindex='-1' role='di
         $langRestrictedLPath
       ."</div>
       <div class='modal-footer'>
-        <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
       </div>
     </div>
   </div>

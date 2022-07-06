@@ -44,10 +44,21 @@
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
 
-                    {!! isset($action_bar) ?  $action_bar : '' !!}
+                    
 
+                    @if(Session::has('message'))
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                        <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                            {{ Session::get('message') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </p>
+                    </div>
+                    @endif
+                    
+                    {!! isset($action_bar) ?  $action_bar : '' !!}
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='form-wrapper shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                            
                             <form role='form' class='form-horizontal' action='listcours.php?search=yes' method='get'>
                                 <fieldset>      
                                     <div class='form-group mt-3'>
@@ -65,7 +76,7 @@
                                     <div class='form-group mt-3'>
                                         <label for='formsearchtype' class='col-sm-6 control-label-notes'>{{ trans('langCourseVis') }}:</label>
                                         <div class='col-sm-12'>
-                                            <select class='form-control' name='formsearchtype'>
+                                            <select class='form-select' name='formsearchtype'>
                                                 <option value='-1'>{{ trans('langAllTypes') }}</option>
                                                 <option value='2'>{{ trans('langTypeOpen') }}</option>
                                                 <option value='1'>{{ trans('langTypeRegistration') }}</option>

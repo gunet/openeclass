@@ -72,14 +72,7 @@
 
 
                     <?php $url = $urlServer.'courses/'.$course_code.'/index.php';?>
-                    {!! action_bar(array(
-                            array('title' => trans('langBack'),
-                                'button-class' => 'btn-secondary',
-                                'url' => $url,
-                                'icon' => 'fa-reply',
-                                'level' => 'primary-label')), false) 
-                    !!}
-
+                    
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
                         <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
@@ -89,11 +82,19 @@
                     </div>
                     @endif
 
-                    <div class="row p-2"></div>
 
-                    
-                        <div class='col-md-12'>
-                            <div class='form-wrapper'>
+
+                    {!! action_bar(array(
+                                        array('title' => trans('langBack'),
+                                            'button-class' => 'btn-secondary',
+                                            'url' => $url,
+                                            'icon' => 'fa-reply',
+                                            'level' => 'primary-label')), false) 
+                                !!}
+
+                        <div class='col-12'>
+                            <div class='form-wrapper shadow-sm p-3 rounded'>
+                                
                                 <form class='form-horizontal' action='{{ $postUrl }}' method='post' onsubmit="return checkrequired(this, 'unittitle')">
                                     @if ($unitId)
                                         <input type='hidden' name='unit_id' value='{{ $unitId }}'>

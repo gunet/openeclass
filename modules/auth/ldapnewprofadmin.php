@@ -201,36 +201,36 @@ if ($submit) {
         $pdate = nice_format(date('Y-m-d', strtotime($res->date_open)));
     }
 
-    $tool_content .= "<div class='form-wrapper'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
         <fieldset>
-        <div class='form-group'>
-        <label for='Sur' class='col-sm-2 control-label'>$langSurname:</label>
-            <div class='col-sm-10'>" .q($ps) ."
+        <div class='form-group mt-3'>
+        <label for='Sur' class='col-sm-6 control-label-notes'>$langSurname:</label>
+            <div class='col-sm-12'>" .q($ps) ."
                 <input type='hidden' name='ps' value='" . q($ps) . "'>              
             </div>
         </div>
-        <div class='form-group'>
-        <label for='Name' class='col-sm-2 control-label'>$langName:</label>
-            <div class='col-sm-10'>" .q($pn) ."
+        <div class='form-group mt-3'>
+        <label for='Name' class='col-sm-6 control-label-notes'>$langName:</label>
+            <div class='col-sm-12'>" .q($pn) ."
                 <input type='hidden' name='pn' value='" . q($pn) . "'>              
             </div>            
         </div>
-        <div class='form-group'>
-        <label for='Username' class='col-sm-2 control-label'>$langUsername:</label>
-            <div class='col-sm-10'>" . q($pu) . "
+        <div class='form-group mt-3'>
+        <label for='Username' class='col-sm-6 control-label-notes'>$langUsername:</label>
+            <div class='col-sm-12'>" . q($pu) . "
                 <input type='hidden' name='pu' value='" . q($pu) . "'>                
             </div>
         </div>        
-        <div class='form-group'>
-        <label for='email' class='col-sm-2 control-label'>$langEmail:</label>
-            <div class='col-sm-10'>" . q($pe) . "
+        <div class='form-group mt-3'>
+        <label for='email' class='col-sm-6 control-label-notes'>$langEmail:</label>
+            <div class='col-sm-12'>" . q($pe) . "
                 <input type='hidden' name='pe' value='" . q($pe) . "'>
             </div>
         </div>
-	<div class='form-group'>
-          <label for='emailverified' class='col-sm-2 control-label'>$langEmailVerified:</label>
-            <div class='col-sm-10'>";
+	<div class='form-group mt-3'>
+          <label for='emailverified' class='col-sm-6 control-label-notes'>$langEmailVerified:</label>
+            <div class='col-sm-12'>";
         $verified_mail_data = array();        
         $verified_mail_data[0] = $m['pending'];
         $verified_mail_data[1] = $langYes;
@@ -241,31 +241,31 @@ if ($submit) {
             $tool_content .= selection($verified_mail_data, "verified_mail_form", '', "class='form-control'");
         }
         $tool_content .= "</div></div>";          	
-        $tool_content .= "<div class='form-group'>
-        <label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>
-            <div class='col-sm-10'>";           
+        $tool_content .= "<div class='form-group mt-3'>
+        <label for='faculty' class='col-sm-6 control-label-notes'>$langFaculty:</label>
+            <div class='col-sm-12'>";           
         list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $pt, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</div></div>";
-        $tool_content .= "<div class='form-group'>
-            <label for='lang' class='col-sm-2 control-label'>$langLanguage:</label>
-            <div class='col-sm-10'>";
+        $tool_content .= "<div class='form-group mt-3'>
+            <label for='lang' class='col-sm-6 control-label-notes'>$langLanguage:</label>
+            <div class='col-sm-12'>";
         $tool_content .= lang_select_options('language', "class='form-control'", $lang);
         $tool_content .= "</div></div>";            
-        $tool_content .= "<div class='form-group'>
-            <label for='phone' class='col-sm-2 control-label'>$langPhone:</label>
-                <div class='col-sm-10'>            
+        $tool_content .= "<div class='form-group mt-3'>
+            <label for='phone' class='col-sm-6 control-label-notes'>$langPhone:</label>
+                <div class='col-sm-12'>            
                     <input class='form-control' id='phone' type='text' name='phone' value='" . q($pphone) . "' placeholder='$langPhone'>
                 </div>
             </div>
-        <div class='form-group'>
-            <label for='comments' class='col-sm-2 control-label'>$langComments</label>
-                <div class='col-sm-10'>" . q($pcom) . "</div>
+        <div class='form-group mt-3'>
+            <label for='comments' class='col-sm-6 control-label-notes'>$langComments</label>
+                <div class='col-sm-12'>" . q($pcom) . "</div>
             </div>
-	<div class='form-group'><label for='date' class='col-sm-2 control-label'>$langDate</label>
-                                <div class='col-sm-10'>" . q($pdate) . "</div></div>        
-	<div class='col-sm-offset-2 col-sm-10'>
+	<div class='form-group mt-3'><label for='date' class='col-sm-6 control-label-notes'>$langDate</label>
+                                <div class='col-sm-12'>" . q($pdate) . "</div></div>        
+	<div class='col-sm-offset-2 col-sm-10 mt-3'>
             <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
         </div>";
         if (isset($pstatus)) {
@@ -275,6 +275,6 @@ if ($submit) {
 	<input type='hidden' name='rid' value='" . @$id . "'>
       </fieldset>
     </form>
-    </div>";    
+    </div></div>";    
 }
 draw($tool_content, 3, null, $head_content);

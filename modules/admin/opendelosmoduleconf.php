@@ -35,7 +35,6 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 $app = ExtAppManager::getApp('opendelos');
 
-
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if ($_POST['submit'] == 'clear') {
@@ -43,13 +42,19 @@ if (isset($_POST['submit'])) {
             $param->setValue('');
             $param->persistValue();
         }
-        Session::Messages($langFileUpdatedSuccess, 'alert-info');
+        //Session::Messages($langFileUpdatedSuccess, 'alert-info');
+        Session::flash('message',$langFileUpdatedSuccess); 
+        Session::flash('alert-class', 'alert-info');
     } else {
         $result = $app->storeParams();
         if ($result) {
-            Session::Messages($result, 'alert-danger');
+            //Session::Messages($result, 'alert-danger');
+            Session::flash('message',$result); 
+            Session::flash('alert-class', 'alert-danger');
         } else {
-            Session::Messages($langFileUpdatedSuccess, 'alert-success');
+            //Session::Messages($langFileUpdatedSuccess, 'alert-success');
+            Session::flash('message',$langFileUpdatedSuccess); 
+            Session::flash('alert-class', 'alert-success');
         }
     }
 
@@ -58,7 +63,9 @@ if (isset($_POST['submit'])) {
     $delos_https = preg_match('/^https/i', $app->getParam(OpenDelosApp::URL)->value());
 
     if ($server_https && !$delos_https) {
-        Session::Messages($langOpenDelosHttpsError, 'alert-danger');
+        //Session::Messages($langOpenDelosHttpsError, 'alert-danger');
+        Session::flash('message',$langOpenDelosHttpsError); 
+        Session::flash('alert-class', 'alert-danger');
         $app->setEnabled(0);
     }
 
@@ -75,45 +82,39 @@ $tool_content .= action_bar(array(
 
 $boolean_field = "";
 
-$tool_content .= "
-    <div class='row extapp'><div class='col-xs-12'>
-      <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
+$tool_content .= "<div class='extapp'><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>";
+$tool_content .= "<div class='form-wrapper shadow-sm p-3 rounded'>";
+$tool_content .= "<form class='form-horizontal' role='form' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>";
+$tool_content .= "<fieldset>";
 
 foreach ($app->getParams() as $param) {
 
     if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
-        $checked = $param->value() == 1 ? "checked" : "";
-        $boolean_field .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-        $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "</label>";
+        $checked = $param->value() == 1 ? "value='0' checked" : "value='1'";
+        $boolean_field .= "<div class='form-group mt-3'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
+        $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' $checked>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
     } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
-        $tool_content .= "<div class='col-sm-10'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
+        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-6 control-label-notes'>" . $param->display() . "</label>";
+        $tool_content .= "<div class='col-sm-12'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
             q($param->value()) . "</textarea></div>";
         $tool_content .= "</div>";
     } else {
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
-        $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
+        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-6 control-label-notes'>" . $param->display() . "</label>";
+        $tool_content .= "<div class='col-sm-12'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
         $tool_content .= "</div>";
     }
 }
 
 $tool_content .= $boolean_field;
-$tool_content .= "
-            <div class='form-group'>
-              <div class='col-sm-offset-2 col-sm-10'>
-                <button class='btn btn-primary' type='submit' name='submit'>$langSubmit</button>
-                <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>
-                <a href='extapp.php' class='btn btn-default'>$langCancel</a>
-              </div>
-            </div>" .
-          generate_csrf_token_form_field() . "
-        </form>
-      </div>
-    </div>
-  </div>";
+$tool_content .= "<div class='form-group mt-3'>";
+$tool_content .= "<div class='col-sm-offset-2 col-sm-10'>";
+$tool_content .= "<button class='btn btn-primary' type='submit' name='submit' value='$langModify'>$langModify</button> <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>";
+$tool_content .= "</div>";
+$tool_content .= "</div>";
+$tool_content .= "</fieldset>". generate_csrf_token_form_field() ."";
+$tool_content .= "</form></div></div></div>";
 
 draw($tool_content, 3, null);

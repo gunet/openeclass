@@ -144,22 +144,26 @@ if (isset($_GET['scale_id'])) {
         ),
     ));
     $tool_content .= "
-        <div class='row'>
-            <div class='col-sm-12'>
-                <div class='form-wrapper'>
-                    <form class='form-horizontal' role='form' data-toggle='validator' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='scales_form'>
+        
+            <div class='col-12'>
+                <div class='form-wrapper shadow-sm p-3 rounded'>
+                    <form class='form-horizontal' role='form' data-bs-toggle='validator' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='scales_form'>
                     <fieldset>
                         $hidden_input
+                        <div class='row p-2'></div>
                         <div class='form-group".(Session::getError('title') ? " has-error" : "")."'>
-                            <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
-                            <div class='col-sm-10'>
+                            <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
+                            <div class='col-sm-12'>
                               <input name='title' type='text' class='form-control' id='title' value='$title'".($scale_used ? " disabled" : "").">
                               ".(Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "")."
                             </div>
                         </div>
+
+                        <div class='row p-2'></div>
+
                         <div class='form-group'>
-                            <label class='col-sm-2 control-label'>$langScales:</label>
-                            <div class='col-sm-10'>
+                            <label class='col-sm-6 control-label-notes'>$langScales:</label>
+                            <div class='col-sm-12'>
                                 <div class='table-responsive'>
                                     <table class='table-default' id='scale_table'>
                                         <thead>
@@ -183,6 +187,7 @@ if (isset($_GET['scale_id'])) {
     $tool_content .= "</div>";
     if (!$scale_used) {
         $tool_content .= " 
+        <div class='row p-2'></div>
                         <div class='form-group'>
                             <div class='col-sm-offset-2 col-sm-10'>".
                                 form_buttons(array(
@@ -201,8 +206,7 @@ if (isset($_GET['scale_id'])) {
                     </fieldset>
                     </form>
                 </div>
-            </div>
-        </div>";
+            </div>";
 
 } else {
     $tool_content .= action_bar(array(
@@ -232,13 +236,13 @@ if (isset($_GET['scale_id'])) {
             }
             $table_content .= "
                         <tr>
-                            <td>$grading_scale->title</td>
+                            <td style='padding-left:15px'>$grading_scale->title</td>
                             <td>
                                 <ul class='list-unstyled'>
                                     $scales_list
                                 </ul>
                             </td>
-                            <td class='option-btn-cell'>
+                            <td style='float:right' class='option-btn-cell'>
                             ". action_button(array(
                                     array(
                                         'title' => $langEdit,
@@ -258,13 +262,14 @@ if (isset($_GET['scale_id'])) {
                         ";
         }
         $tool_content .= "
+        <div class='row p-2'></div>
             <div class='table-responsive'>
-                <table class='table-default'>
-                    <thead>
+                <table class='announcements_table'>
+                    <thead class='notes_thead' style='height:45px;'>
                         <tr>
-                            <th>$langTitle</th>
-                            <th>$langGradebookMEANS</th>
-                            <th class='text-center'>" . icon('fa-gears') . "</th>
+                            <th style='padding-left:15px;'class='text-white'>$langTitle</th>
+                            <th  class='text-white'>$langGradebookMEANS</th>
+                            <th class='text-white text-end' style='padding-right:15px;'>" . icon('fa-cogs') . "</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -274,7 +279,7 @@ if (isset($_GET['scale_id'])) {
             </div>";
 
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoGradeScales</div>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoGradeScales</div></div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

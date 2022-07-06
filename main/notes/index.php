@@ -155,40 +155,43 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             'url' => $_SERVER['SCRIPT_NAME']
         )
     )). "
-    <div class='form-wrapper'>
-    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
-    <fieldset>
-    <div class='form-group".(Session::getError('newTitle') ? " has-error" : "")."'>
-        <label for='newTitle' class='col-sm-2 control-label'>$langTitle:</label>
-        <div class='col-sm-10'>
-            <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . $titleToModify . "' placeholder='$langTitle'>
-            <span class='help-block'>".Session::getError('newTitle')."</span>
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='form-wrapper shadow-sm p-3 rounded'>
+            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
+                <fieldset>
+                <div class='form-group".(Session::getError('newTitle') ? " has-error" : "")."'>
+                    <label for='newTitle' class='col-sm-2 control-label'>$langTitle:</label>
+                    <div class='col-sm-10'>
+                        <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . $titleToModify . "' placeholder='$langTitle'>
+                        <span class='help-block'>".Session::getError('newTitle')."</span>
+                    </div>
+                </div>
+                <div class='form-group'>
+                  <label for='newContent' class='col-sm-2 control-label'>$langNoteBody:</label>
+                  <div class='col-sm-10'>
+                    " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
+                  </div>
+                </div>
+                <div class='form-group'>
+                  <label for='refobjgentype' class='col-sm-2 control-label'>$langReferencedObject:</label>
+                  <div class='col-sm-10'>
+                    ".References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected). "
+                  </div>
+                </div>
+                <div class='form-group'>
+                  <div class='col-sm-10 col-sm-offset-2'>
+                    <input class='btn btn-primary' type='submit' name='submitNote' value='$langAdd'> 
+                    <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
+                  </div>
+                </div>";
+                if($noteToModify!=""){
+                    $tool_content .="<input type='hidden' name='id' value='" . getIndirectReference($noteToModify)."' />";
+                }
+                $tool_content .= "</fieldset>
+                ". generate_csrf_token_form_field() ."
+            </form>
         </div>
-    </div>
-    <div class='form-group'>
-      <label for='newContent' class='col-sm-2 control-label'>$langNoteBody:</label>
-      <div class='col-sm-10'>
-        " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
-      </div>
-    </div>
-    <div class='form-group'>
-      <label for='refobjgentype' class='col-sm-2 control-label'>$langReferencedObject:</label>
-      <div class='col-sm-10'>
-        ".References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected). "
-      </div>
-    </div>
-    <div class='form-group'>
-      <div class='col-sm-10 col-sm-offset-2'>
-        <input class='btn btn-primary' type='submit' name='submitNote' value='$langAdd'> 
-        <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
-      </div>
     </div>";
-    if($noteToModify!=""){
-        $tool_content .="<input type='hidden' name='id' value='" . getIndirectReference($noteToModify)."' />";
-    }
-    $tool_content .= "</fieldset>
-    ". generate_csrf_token_form_field() ."
-    </form></div>";
 
 } elseif (isset($_GET['nid'])) {
     $tool_content .= action_bar(array(

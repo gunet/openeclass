@@ -70,7 +70,7 @@
                         </div>
                     </div>
 
-                    {!! $action_bar !!}
+                    
 
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
@@ -80,6 +80,8 @@
                         </p>
                     </div>
                     @endif
+                    
+                    {!! $action_bar !!}
 
                     @if(isset($_REQUEST['u']) and isset($_REQUEST['h']))
                         @if(isset($is_valid))
@@ -96,7 +98,8 @@
                             @endif
                             @if(!$change_ok)
                                 <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                                    <div class='form-wrapper shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                                    <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                                        
                                         <form class="form-horizontal" role="form" method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                             <input type='hidden' name='u' value='{{ $userUID }}'>
                                             <input type='hidden' name='h' value='{{ q($_REQUEST['h']) }}'>
@@ -192,7 +195,7 @@
                         
                         
                             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                                <div class='form-wrapper shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                                <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
                                     <form class='form-horizontal' role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
                                         <div class='row'><div class='col-sm-8'><h4>{!! trans('langUserData') !!}</h4></div></div>
                                         <div class='form-group mt-3'>

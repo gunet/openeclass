@@ -123,26 +123,19 @@
                     <div class='panel panel-default mt-3'>
                         <div class='panel-body'>
                             @if ($course_info->home_layout == 1)
-                                <!-- <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
-                                    <div>
-                                        <img class='banner-image img-responsive' src='{{ isset($course_info->course_image) ? "$urlAppendcourses/$course_code/image/" . rawurlencode($course_info->course_image) : "$themeimg/ph1.jpg" }}' alt='Course Banner'/>
-                                    </div>
+                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                                    <figure>
+                                        <picture>
+                                            @if($course_info->course_image)
+                                            <img class='uploadImageCourse' src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_info->course_image}}' alt='Course Banner'/>
+                                            @else
+                                            <img class='uploadImageCourse' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
+                                            @endif
 
-                                </div> -->
-                                @if(!empty($course_info->course_image))
-                                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                        <figure>
-                                            <picture>
-                                                <img class="uploadImageCourse" src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_info->course_image}}'>
-                                            </picture>
-                                        </figure>
-                                    </div>
-                                @else
-                                    <div class="row p-2"></div>
-                                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 uploadImageCourseCol">
-                                        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 NouploadImageCourseCol"></div>
-                                    </div>
-                                @endif
+                                        </picture>
+                                    </figure>
+
+                                </div>
                             @endif
                             <div class='col-12{{ $course_info->home_layout == 1 ? ' col-sm-7' : ''}}'>
                                 <div class='course_info'>

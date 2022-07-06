@@ -142,9 +142,9 @@ function show_post_form() {
                               }
                           </script>';
 
-        $tool_content .= '<div class="row">
-            <div class="col-sm-12">
-                <div class="form-wrapper">
+        $tool_content .= '
+            <div class="col-12">
+                <div class="form-wrapper shadow-sm p-3 rounded">
                     <form id="wall_form" method="post" action="'.$urlServer.'modules/wall/?course='.$course_code.'" enctype="multipart/form-data">
                         <fieldset> 
                             <div class="form-group">
@@ -194,8 +194,7 @@ function show_post_form() {
             .'</div>        
                     </form>
                 </div>
-            </div>
-        </div>';
+            </div>';
 
         //auto-expand textarea while typing
         $tool_content .= "<script>autosize(document.querySelector('textarea'));</script>";

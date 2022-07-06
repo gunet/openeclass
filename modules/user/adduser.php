@@ -106,39 +106,56 @@ if (isset($_GET['add'])) {
                   'level' => 'primary-label'
                  )));
 
-    $tool_content .= "<div class='alert alert-info'>$langAskUser</div>
-                <div class='form-wrapper'>
+    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langAskUser</div></div>
+
+    <div class='col-12'>
+                <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <fieldset>
+
+                <div class='row p-2'></div>
+
                 <div class='form-group'>
-                <label for='surname' class='col-sm-2 control-label'>$langSurname:</label>
-                <div class='col-sm-10'>
+                <label for='surname' class='col-sm-6 control-label-notes'>$langSurname:</label>
+                <div class='col-sm-12'>
                     <input class='form-control' id='surname' type='text' name='search_surname' value='" . q($search_surname) . "' placeholder='$langSurname'></div>
                 </div>
+
+                <div class='row p-2'></div>
+
                 <div class='form-group'>
-                <label for='name' class='col-sm-2 control-label'>$langName:</label>
-                <div class='col-sm-10'>
+                <label for='name' class='col-sm-6 control-label-notes'>$langName:</label>
+                <div class='col-sm-12'>
                     <input class='form-control' id='name' type='text' name='search_givenname' value='" . q($search_givenname) . "' placeholder='$langName'></div>
                 </div>
+
+                <div class='row p-2'></div>
+
                 <div class='form-group'>
-                <label for='username' class='col-sm-2 control-label'>$langUsername:</label>
-                <div class='col-sm-10'>
+                <label for='username' class='col-sm-6 control-label-notes'>$langUsername:</label>
+                <div class='col-sm-12'>
                     <input class='form-control' id='username' type='text' name='search_username' value='" . q($search_username) . "' placeholder='$langUsername'></div>
                 </div>
+
+                <div class='row p-2'></div>
+
                 <div class='form-group'>
-                <label for='am' class='col-sm-2 control-label'>$langAm:</label>
-                <div class='col-sm-10'>
+                <label for='am' class='col-sm-6 control-label-notes'>$langAm:</label>
+                <div class='col-sm-12'>
                     <input class='form-control' id='am' type='text' name='search_am' value='" . q($search_am) . "' placeholder='$langAm'></div>
                 </div>
+
+                <div class='row p-2'></div>
+
                 <div class='form-group'>
                 <div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='search' value='$langSearch'>
-                    <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+                    <a class='btn btn-secondary' href='index.php?course=$course_code'>$langCancel</a>
                 </div>
                 </div>
                 </fieldset>
                 </form>
-                </div>";
+                </div></div>";
 
     $search = array();
     $values = array();
@@ -151,20 +168,20 @@ if (isset($_GET['add'])) {
     }
     $query = join(' AND ', $search);
     if (!empty($query)) {
-        Database::get()->query("CREATE TEMPORARY TABLE register_users_to_course AS
+        Database::get()->query("CREATE TEMPORARY TABLE lala AS
                     SELECT user_id FROM course_user WHERE course_id = ?d", $course_id);
-        $result = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.username, u.am, c.user_id AS registered
-                                                FROM user u LEFT JOIN register_users_to_course c ON u.id = c.user_id
-                                                WHERE u.expires_at >= CURRENT_DATE() AND $query", $values);
+        $result = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.username, u.am FROM
+                                                user u LEFT JOIN lala c ON u.id = c.user_id WHERE
+                                                c.user_id IS NULL AND u.expires_at >= CURRENT_DATE() AND $query", $values);
         if ($result) {
-            $tool_content .= "<table class='table-default'>
-                                <tr>
-                                  <th>$langID</th>
-                                  <th>$langName</th>
-                                  <th>$langSurname</th>
-                                  <th>$langUsername</th>
-                                  <th>$langFaculty</th>
-                                  <th>$langActions</th>
+            $tool_content .= "<table class='announcements_table'>
+                                <tr class='notes_thead'>
+                                  <th class='text-white'>$langID</th>
+                                  <th class='text-white'>$langName</th>
+                                  <th class='text-white'>$langSurname</th>
+                                  <th class='text-white'>$langUsername</th>
+                                  <th class='text-white'>$langFaculty</th>
+                                  <th class='text-white'>$langActions</th>
                                 </tr>";
             $i = 1;
             foreach ($result as $myrow) {
@@ -179,16 +196,14 @@ if (isset($_GET['add'])) {
                 $tool_content .= "<td class='text-right'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
                         q($myrow->surname) . "</td><td>" . q($myrow->username) . "</td><td>" .
                         $dep_content . "</td><td class='text-center'>" .
-                        ($myrow->registered ? "<span class='not_visible'>($langUserAlreadyRegisterd)</span>" :
-                        icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=" . getIndirectReference($myrow->id))) .
-                        "</td></tr>";
+                        icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=" . getIndirectReference($myrow->id)). "</td></tr>";
                 $i++;
             }
             $tool_content .= "</table>";
         } else {
-            $tool_content .= "<div class='alert alert-danger'>$langNoUsersFound</div>";
+            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langNoUsersFound</div></div>";
         }
-        Database::get()->query("DROP TEMPORARY TABLE register_users_to_course");
+        Database::get()->query("DROP TABLE lala");
     }
 }
 draw($tool_content, 2);

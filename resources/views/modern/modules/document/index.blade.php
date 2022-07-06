@@ -66,14 +66,15 @@
                     @endif
 
                     
-                    <div class="row p-2"></div>
-                    @if ($dialogBox)
-                        @include("modules.document.$dialogBox")
-                    @endif
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                        @if ($dialogBox)
+                            @include("modules.document.$dialogBox")
+                        @endif
+                    </div>
                     
                     @if (count($fileInfo) or $curDirName)
                         
-                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                                 <div class='panel'>
                                     <div class='panel-body'>
                                         @if ($curDirName)

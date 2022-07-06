@@ -58,7 +58,7 @@
 
 
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-                        <div class='panel shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                        <div class='panel shadow-sm p-3 mb-5 bg-body rounded'>
                             <div class='panel-body'>
                                 <div><strong class='control-label-notes'>{{ trans('langInstituteShortName') }}:</strong> <a href='{{ $institution_url }}' target='_blank' class='mainpage'>{{ $institution }}</a></div>
                                 <div><strong class='control-label-notes'>{{ trans('langCampusName') }}:</strong> {{ $siteName }}</div>

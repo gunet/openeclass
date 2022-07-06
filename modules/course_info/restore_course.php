@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 /* ========================================================================
  * Open eClass 3.0
@@ -136,9 +136,11 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 // Display restore info form
 // -------------------------------------
     enableCheckFileSize();
-    $tool_content .= "<div class='alert alert-info'><label>$langFirstMethod</label> $langRequest1</div>
-        <div class='form-wrapper'>
-            <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>
+    $tool_content .= "<div class='row p-2'></div>
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'><label>$langFirstMethod</label> $langRequest1</div></div>
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='form-wrapper shadow-sm p-3 rounded'>
+            <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>            
             <div class='form-group'>
                 <div class='col-sm-4'>" .
                     fileSizeHidenInput() . "
@@ -149,12 +151,14 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                     <span class='help-block'><small>$langMaxFileSize " .ini_get('upload_max_filesize') . "</small></span>
                 </div>
             </div>
-            ". generate_csrf_token_form_field() ."
-            </form>
-        </div>
-    <div class='alert alert-info'>
-        <label>$langSecondMethod</label> $langRequest2</div>
-        <div class='form-wrapper'>
+            ". generate_csrf_token_form_field() ."  
+            </form></div>
+        </div> 
+        <div class='row p-2'></div>
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>
+        <label>$langSecondMethod</label> $langRequest2</div></div>      
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='form-wrapper shadow-sm p-3 rounded'>
           <form role='form' class='form-inline' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>
             <div class='form-group'>
                 <input type='text' class='form-control' name='pathToArchive'>

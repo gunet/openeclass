@@ -97,7 +97,7 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langF
 if (isset($_GET['forumgo'])) {
     $ctg = category_name($cat_id);
     $tool_content .= "
-        <div class='form-wrapper'>
+        <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
         <fieldset>
             <div class='form-group'>
@@ -125,7 +125,7 @@ if (isset($_GET['forumgo'])) {
                 </div>
             </div>
         </fieldset>
-        </form></div>";
+        </form></div></div>";
 }
 // forum go edit
 elseif (isset($_GET['forumgoedit'])) {
@@ -138,7 +138,7 @@ elseif (isset($_GET['forumgoedit'])) {
     $forum_desc = $result->desc;
     $cat_id_1 = $result->cat_id;
     $tool_content .= "
-                <div class='form-wrapper'>
+                <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgosave=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
                 <input type='hidden' name='forum_id' value='$forum_id'>
                 <fieldset>
@@ -183,7 +183,7 @@ elseif (isset($_GET['forumgoedit'])) {
             </div>
         </div>
         </fieldset>
-        </form></div>";
+        </form></div></div>";
 }
 
 // edit forum category
@@ -194,7 +194,7 @@ elseif (isset($_GET['forumcatedit'])) {
     $cat_id = $result->id;
     $cat_title = $result->cat_title;
     $tool_content .= "
-        <div class='form-wrapper'>
+        <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatsave=yes' method='post' onsubmit=\"return checkrequired(this,'cat_title');\">
         <input type='hidden' name='cat_id' value='$cat_id'>
         <fieldset>
@@ -211,7 +211,7 @@ elseif (isset($_GET['forumcatedit'])) {
             </div>
         </div>
         </fieldset>
-        </form></div>";
+        </form></div></div>";
 }
 
 // Save forum category
@@ -437,7 +437,7 @@ elseif (isset($_GET['forumgodel'])) {
    if ($result) {
        $current_forum_id = $result->forum_id;
 
-       $tool_content .= "<div class='form-wrapper'>
+       $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumtopicsave=yes&amp;topic_id=$topic_id' method='post'>
        <fieldset>
        <div class='form-group'>
@@ -462,7 +462,7 @@ elseif (isset($_GET['forumgodel'])) {
             </div>
         </div>
        </fieldset>
-       </form></div>";
+       </form></div></div>";
    }
 } elseif (isset($_GET['forumtopicsave'])) {
     $topic_id = intval($_GET['topic_id']);
@@ -518,7 +518,7 @@ elseif (isset($_GET['forumgodel'])) {
         $checkEn = "";
     }
 
-    $tool_content .= "<div class='form-wrapper'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;settings=yes' method='post'>
         <fieldset>
         <div class='form-group'>
@@ -539,10 +539,10 @@ elseif (isset($_GET['forumgodel'])) {
         </div>
         </fieldset>
         </form>
-        </div>";
+        </div></div>";
 } else {
     $tool_content .= "
-        <div class='form-wrapper'>
+        <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">
         <fieldset>
         <div class='form-group'>
@@ -558,6 +558,6 @@ elseif (isset($_GET['forumgodel'])) {
             </div>
         </div>
         </fieldset>
-        </form></div>";
+        </form></div></div>";
 }
 draw($tool_content, 2, null, $head_content);
