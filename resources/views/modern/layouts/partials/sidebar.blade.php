@@ -16,6 +16,7 @@
         <div class="row p-2"></div>
         <p class="text-left text-light fs-6 viewPageAs">{{ trans('langViewAs') }}:</p>
         <a class='w-75 btn btn-primary pe-none text-white text-center'>{{trans('langCTeacher')}}</a>
+
     @endif
 
     <ul class="navbar-nav d-flex flex-column mt-4 w-100 p-2">

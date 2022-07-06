@@ -2044,8 +2044,8 @@ function new_assignment() {
     $fileCount = Session::has('fileCount')? Session::get('fileCount') : 2;
 
     $tool_content .= "
-        <div class='row'><div class='col-sm-12'>
-        <div class='form-wrapper'>
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-md-12 col-sm-12 col-12'>
+        <div class='form-wrapper shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
         <form class='form-horizontal' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
             <div class='form-group " . ($title_error ? "has-error" : "") . "'>
@@ -2586,7 +2586,7 @@ function new_assignment() {
                 ."</div>
             </div>
         </fieldset>
-        </form></div></div></div>";
+        </form></div></div>";
 }
 
 /**
@@ -3965,16 +3965,16 @@ function show_student_assignment($id) {
                 if ($row->reviews_per_assignment < $count_of_assign && $rows) {
                     show_assignment_review($id);
                 } elseif ($row->reviews_per_assignment < $count_of_assign && empty($rows)) {
-                    $tool_content .= "<div class='alert alert-warning'>$langNoPeerReview</div>";
+                    $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoPeerReview</div></div>";
                 } elseif ($row->reviews_per_assignment > $count_of_assign) {
-                    $tool_content .= "<div class='alert alert-warning'>$langNoPeerReview</div>";
+                    $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoPeerReview</div></div>";
                 }
             }
             else
             {
                 //auto to mnm emfanizetai mexri kai thn hmeromhnia kai wra tou start_date_review
                 $start_date_review = nice_format($row->start_date_review, TRUE); //hmeromhnia enarkshs aksiologhshs
-                $tool_content .= "<div class='alert alert-warning'>$langPendingPeerSubmissions</div>";
+                $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langPendingPeerSubmissions</div></div>";
             }
         }
     } else {
@@ -4191,9 +4191,9 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 $group_select_hidden_input = "<input type='hidden' name='group_id' value='$gids[0]' />";
             } elseif ($user_group_info) {
                 $group_select_form = "
-                        <div class='form-group'>
-                            <label for='group_id' class='col-sm-2 control-label'>$langGroupSpaceLink:</label>
-                            <div class='col-sm-10'>
+                        <div class='form-group mt-3'>
+                            <label for='group_id' class='col-sm-6 control-label-notes'>$langGroupSpaceLink:</label>
+                            <div class='col-sm-12'>
                               " . selection($user_group_info, 'group_id') . "
                             </div>
                         </div>";
@@ -4209,9 +4209,9 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
             $groups_with_no_submissions = groups_with_no_submissions($id);
             if (count($groups_with_no_submissions)>0) {
                 $group_select_form = "
-                        <div class='form-group'>
-                            <label for='group_id' class='col-sm-2 control-label'>$langGroupSpaceLink:</label>
-                            <div class='col-sm-10'>
+                        <div class='form-group mt-3'>
+                            <label for='group_id' class='col-sm-6 control-label-notes'>$langGroupSpaceLink:</label>
+                            <div class='col-sm-12'>
                               " . selection($groups_with_no_submissions, 'group_id') . "
                             </div>
                         </div>";
@@ -4224,11 +4224,12 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
         }
     } elseif ($on_behalf_of) {
             $users_with_no_submissions = users_with_no_submissions($id);
-            if (count($users_with_no_submissions) > 0) {
+
+            if (count($users_with_no_submissions)>0) {
                 $group_select_form = "
-                        <div class='form-group'>
-                            <label for='user_id' class='col-sm-2 control-label'>$langOnBehalfOf:</label>
-                            <div class='col-sm-10'>
+                        <div class='form-group mt-3'>
+                            <label for='user_id' class='col-sm-6 control-label-notes'>$langOnBehalfOf:</label>
+                            <div class='col-sm-12'>
                               " .selection($users_with_no_submissions, 'user_id', '', "class='form-control'") . "
                             </div>
                         </div>";
@@ -4241,7 +4242,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     }
     $notice = $submissions_exist > 1? $langNotice3Multiple: $langNotice3;
     $notice = ($submissions_exist)?
-    "<div class='alert alert-info'>" . icon('fa-info-circle') . " $notice</div>": '';
+    "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>" . icon('fa-info-circle') . " $notice</div></div>": '';
     if ($assignment->grading_type == ASSIGNMENT_SCALING_GRADE) {
         $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assignment->grading_scale_id, $course_id)->scales;
         $scales = unserialize($serialized_scale_data);
@@ -4260,14 +4261,14 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
         $grade_field = "<input class='form-control' type='text' name='grade' maxlength='4' size='3'> ($m[max_grade]: $assignment->max_grade)";
     }
     $extra = $on_behalf_of ? "
-                        <div class='form-group'>
-                            <label class='col-sm-2 control-label'>$langGradebookGrade:</label>
-                            <div class='col-sm-10'>
+                        <div class='form-group mt-3'>
+                            <label class='col-sm-6 control-label-notes'>$langGradebookGrade:</label>
+                            <div class='col-sm-12'>
                               $grade_field
                               <input type='hidden' name='on_behalf_of' value='1'>
                             </div>
                         </div>
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
                                   <label>
@@ -4286,9 +4287,9 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
         if ($assignment->submission_type == 1) {
             // Online text submission
             $submission_form = "
-                        <div class='form-group'>
-                            <label for='submission_text' class='col-sm-2 control-label'>$langWorkOnlineText:</label>
-                            <div class='col-sm-10'>
+                        <div class='form-group mt-3'>
+                            <label for='submission_text' class='col-sm-6 control-label-notes'>$langWorkOnlineText:</label>
+                            <div class='col-sm-12'>
                                 ". rich_text_editor('submission_text', 10, 20, '') ."
                             </div>
                         </div>";
@@ -4311,9 +4312,9 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 $moreButton = '';
             }
             $submission_form = "
-                        <div class='form-group'>
-                            <label for='userfile' class='col-sm-2 control-label'>$label:</label>
-                            <div class='col-sm-10'>$moreButton
+                        <div class='form-group mt-3'>
+                            <label for='userfile' class='col-sm-6 control-label-notes'>$label:</label>
+                            <div class='col-sm-12'>$moreButton
                               <input type='file' name='$inputName' id='userfile'>
                             </div>
                         </div>";
@@ -4343,15 +4344,15 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input $course_unit_hidden_input
                         <fieldset>
                         $group_select_form
-                        $submission_form
-                        <div class='form-group'>
-                            <label for='stud_comments' class='col-sm-2 control-label'>$m[comments]:</label>
-                            <div class='col-sm-10'>
+                        $submission_form                        
+                        <div class='form-group mt-3'>
+                            <label for='stud_comments' class='col-sm-6 control-label-notes'>$m[comments]:</label>
+                            <div class='col-sm-12'>
                               <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
                             </div>
                         </div>
                         $extra
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <div class='col-sm-10 col-sm-offset-2'>".
                     form_buttons(array(
                         array(
@@ -5422,7 +5423,7 @@ function show_student_assignments() {
                         $lock_description .= "<li>$langIPUnlock</li>";
                     }
                     $lock_description .= "</ul>";
-                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
+                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-title='$lock_description'></span>";
                 }
             }
 
@@ -5595,7 +5596,7 @@ function show_assignments() {
                     $lock_description .= "<li>$langIPUnlock</li>";
                 }
                 $lock_description .= "</ul>";
-                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
+                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-title='$lock_description'></span>";
             }
 
             // Check if assignment contains submissions

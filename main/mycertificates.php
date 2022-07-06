@@ -45,8 +45,8 @@ $courses = Database::get()->queryArray('SELECT course.id course_id, code, title
 
 if (count($courses) > 0) {
     $table_content .= "<div class = 'table-responsive'>
-            <table class='table-default'>
-            <tr><th>$langCourse</th><th style='text-align:center; width:20%;'>$langResults</th></tr>";
+            <table class='announcements_table'>
+            <tr class='notes_thead'><th class='text-white'>$langCourse</th><th class='text-white' style='text-align:center; width:20%;'>$langResults</th></tr>";
     
     // get completed certificates with public url
     $sql = Database::get()->queryArray("SELECT course_title, cert_title, cert_id, identifier "

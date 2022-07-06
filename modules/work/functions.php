@@ -393,42 +393,43 @@ function show_submission_details($id) {
     }
 
     $tool_content .= "
-    <div class='panel panel-default'>
-        <div class='panel-heading list-header'>
-            <h3 class='panel-title'>$m[SubmissionWorkInfo]</h3>
-        </div>
-        <div class='panel-body'>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>".$m['SubmissionStatusWorkInfo'].":</strong>
-                </div>
-                <div class='col-sm-9'>$notice
-                </div>
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+        <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+            <div class='panel-heading bg-secondary notes_thead'>
+                <h4 class='panel-title text-white'>$m[SubmissionWorkInfo]</h4>
             </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>" . $langGradebookGrade . ":</strong>
+            <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                <div class='row p-2 margin-bottom-fat'>
+                    <div class='col-sm-3'>
+                        <strong class='control-label-notes'>".$m['SubmissionStatusWorkInfo'].":</strong>
+                    </div>
+                    <div class='col-sm-9'>$notice</div>
                 </div>
-               <div class='col-sm-9'>";
+                <div class='row p-2 margin-bottom-fat'>
+                    <div class='col-sm-3'>
+                        <strong class='control-label-notes'>" . $langGradebookGrade . ":</strong>
+                    </div>
+                   <div class='col-sm-9'>";
     if ($preview_rubric == 1 AND $points_to_graded == 1) {
         $tool_content .= "
-            <a role='button' data-toggle='collapse' href='#collapseGrade' aria-expanded='false' aria-controls='collapseGrade'>"
-            . $sub->grade .
-            "</a>
-            <div class='table-responsive  collapse' id='collapseGrade'>
-            <table class='table-default'>
-            <thead>
-                    <th>$langCriteria</th>
-            </thead>
-            <tr>
-                <td>
-                    <ul class='list-unstyled'>
-                        $criteria_list
-                    </ul>
-                </td>
-            </tr>
-            </table>
-        </div>";
+                        <a role='button' data-bs-toggle='collapse' href='#collapseGrade' aria-expanded='false' aria-controls='collapseGrade'>"
+                        . $sub->grade .
+                        "</a>
+                        <div class='table-responsive collapse' id='collapseGrade'>
+                            <table class='announcements_table'>
+                                <thead class='notes_thead'>
+                                        <th class='text-white'>$langCriteria</th>
+                                </thead>
+                                <tr>
+                                    <td>
+                                        <ul class='list-unstyled'>
+                                            $criteria_list
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>";
     } else {
         $tool_content .= $sub->grade;
     }
@@ -445,7 +446,7 @@ function show_submission_details($id) {
     }
     $tool_content .= "</div>
                 </div>
-                <div class='row margin-bottom-fat'>
+                <div class='row p-2 margin-bottom-fat'>
                     <div class='col-sm-3'>
                         <strong>" . $m['gradecomments'] . ":</strong>
                     </div>
@@ -456,8 +457,7 @@ function show_submission_details($id) {
                     <div class='col-sm-3'>
                         <strong>" . $m['sub_date'] . ":</strong>
                     </div>
-                    <div class='col-sm-9'>" . nice_format($sub->submission_date, true) . "
-                    </div>
+                    <div class='col-sm-9'>" . nice_format($sub->submission_date, true) . "</div>
                 </div>";
 
     if ($assignment->submission_type == ASSIGNMENT_RUBRIC_GRADE) {
@@ -518,7 +518,7 @@ function show_submission_details($id) {
 
     table_row($m['comments'], $sub->comments);
 
-    $tool_content .= "</div></div>";
+    $tool_content .= "</div></div></div>";
 }
 
 // Check if a file has been submitted by user uid or group gid
@@ -702,11 +702,11 @@ function send_file_for_plagiarism($assign_id, $file_id, $true_file_path, $true_f
     if (!Plagiarism::get()->isFileSubmitted($file_id)) {
         Plagiarism::get()->submitFile($file_id, $true_file_path, $true_file_name);
        // Session::Messages($langPlagiarismFileSent, 'alert-success');
-        Session::flash('message',$langPlagiarismFileSent); 
+        Session::flash('message',$langPlagiarismFileSent);
         Session::flash('alert-class', 'alert-success');
     } else {
       //  Session::Messages($langPlagiarismAlreadyCheck, 'alert-warning');
-        Session::flash('message',$langPlagiarismAlreadyCheck); 
+        Session::flash('message',$langPlagiarismAlreadyCheck);
         Session::flash('alert-class', 'alert-warning');
     }
     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$assign_id");

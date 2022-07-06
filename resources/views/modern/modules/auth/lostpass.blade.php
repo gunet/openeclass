@@ -39,7 +39,7 @@
                         </a>
                     </nav>
 
-                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => [0 => ['bread_href' => 'about.php', 'bread_text' => trans('lang_remind_pass') ]]])
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="row p-2"></div><div class="row p-2"></div>

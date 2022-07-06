@@ -35,15 +35,7 @@
                                         </a>
                                     </nav>
 
-                                    <nav class="navbar_breadcrumb" aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="{{ $urlAppend }}main/portfolio.php">{{trans('langPortfolio')}}</a></li>
-                                            <li class="breadcrumb-item"><a href="{{ $urlAppend }}main/my_courses.php">{{trans('mycourses')}}</a></li>
-                                            <li class="breadcrumb-item"><a href="{{$urlServer}}courses/{{$course_code}}/index.php">{{$currentCourseName}}</a></li>
-                                            <li class="breadcrumb-item"><a href="{{ $urlAppend }}modules/glossary/index.php?course={{$course_code}}">{{trans('langGlossary')}}</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">{{trans('langGlossaryTerms')}}</li>
-                                        </ol>
-                                    </nav>
+                                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
 
                                     <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
@@ -74,18 +66,7 @@
                                     <div class="row p-2"></div><div class="row p-2"></div>
 
                                     @if($is_editor)
-                                        
-                                            <!-- <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12" >
-                                                <div class="row">
-                                                    <div class="col-xxl-10 col-xl-9 col-lg-9 col-md-12 col-sm-12 col-xs-12">
-                                                        <button class="btn btn-success glossary_btn1"><i class="fas fa-plus" aria-hidden="true"></i><a class="glossary_a" href="categories.php?course={{$course_code}}&add=1">Προσθήκη κατηγορίας</a></button>
-                                                        <button class="btn btn-success glossary_btn2" style="margin-left:-10px"><i class="fas fa-plus" aria-hidden="true"></i><a class="glossary_a" href="index.php?course={{$course_code}}&add=1">Προσθήκη όρου</a></button>
-                                                        <button class="btn btn-secondary glossary_btn3" style="margin-left:-9px"><i class="fas fa-list-alt" aria-hidden="true"></i><a class="glossary_a" href="categories.php?course={{$course_code}}">Κατηγορίες</a></button>
-                                                    </div>
-                                                    
-                                        
-                                                </div>
-                                            </div> -->
+
                                             <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 bg-white">{!! isset($action_bar) ?  $action_bar : '' !!}</div>
                                             <div class="row p-2"></div>
                                         

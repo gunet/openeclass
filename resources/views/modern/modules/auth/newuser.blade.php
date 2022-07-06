@@ -18,9 +18,7 @@
                     </a>
                 </nav>
 
-                @include('layouts.common.breadcrumbs', ['breadcrumbs' => [0 => ['bread_href' => 'registration.php', 'bread_text' => trans('langCreateAccount')],
-                                                                          1 => ['bread_text' => trans('langRegister')]]
-                                                       ])
+                @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                 {!! $action_bar !!}
 

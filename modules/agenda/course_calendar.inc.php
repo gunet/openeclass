@@ -577,7 +577,7 @@ require_once 'include/lib/references.class.php';
         $dateNow = date("j-n-Y / H:i", time());
         $barMonth = '';
         $nowBarShowed = false;
-        $eventlist = "<div class='table-responsive'><table class='table-default'>";
+        $eventlist = "<div class='table-responsive'><table class='announcements_table'>";
         foreach ($events as $myrow) {
             $content = standard_text_escape($myrow->content);
             $d = strtotime($myrow->start);
@@ -586,9 +586,9 @@ require_once 'include/lib/references.class.php';
                 if ((($d > time()) and ($sens == " ASC")) or ( ($d < time()) and ( $sens == " DESC "))) {
                     if ($barMonth != date("m", time())) {
                         $barMonth = date("m", time());
-                        $eventlist .= "<tr>";
+                        $eventlist .= "<tr class='notes_thead'>";
                         // current month
-                        $eventlist .= "<td colspan='2' class='monthLabel list-header'><b>" . ucfirst(claro_format_locale_date("%B %Y", time())) . "</b></td>";
+                        $eventlist .= "<td colspan='2' class='monthLabel list-header text-white'><b>" . ucfirst(claro_format_locale_date("%B %Y", time())) . "</b></td>";
                         $eventlist .= "</tr>";
                     }
                     $nowBarShowed = TRUE;
@@ -600,8 +600,8 @@ require_once 'include/lib/references.class.php';
             if ($barMonth != date("m", $d)) {
                 $barMonth = date("m", $d);
                 // month LABEL
-                $eventlist .= "<tr>";
-                $eventlist .= "<td colspan='2' class='monthLabel list-header'>";
+                $eventlist .= "<tr class='notes_thead'>";
+                $eventlist .= "<td colspan='2' class='monthLabel list-header text-white'>";
                 $eventlist .= "<div align='center'><b>" . ucfirst(claro_format_locale_date("%B %Y", $d)) . "</b></div></td>";
                 $eventlist .= "</tr>";
             }

@@ -44,14 +44,7 @@
                         </a>
                     </nav>
  
-                    <nav class="navbar_breadcrumb pe-5" aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <?php $size_breadcrumb = count($breadcrumbs); $count=0; ?>
-                            <?php for($i=0; $i<$size_breadcrumb; $i++){ ?>
-                                <li class="breadcrumb-item"><a href="{!! $breadcrumbs[$i]['bread_href'] !!}">{!! $breadcrumbs[$i]['bread_text'] !!}</a></li>
-                            <?php } ?> 
-                        </ol>
-                    </nav>
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="row p-2"></div><div class="row p-2"></div>

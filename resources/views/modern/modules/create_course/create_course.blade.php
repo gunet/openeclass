@@ -29,6 +29,8 @@
                         </a>
                     </nav>
 
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+
                     <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
                         <div class="offcanvas-header">
                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>

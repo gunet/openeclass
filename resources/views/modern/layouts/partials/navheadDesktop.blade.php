@@ -76,10 +76,10 @@
                                 </li>
                                 <li class="user-menu-li">
                                     <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/my_courses.php"><i class="fas fa-graduation-cap"></i><span class='ps-2'>{{ trans('langMyCoursesSide') }}</span></a>
+
                                 </li>
                                 <li class="user-menu-li">
-                                    <a class="user-item text-white ps-3 pe-2"
-                                    href="{{ $urlAppend }}modules/announcements/myannouncements.php"><i class="fas fa-bell"></i><span class='ps-2'>{{ trans('langMyAnnouncements') }}</span></a>
+                                    <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}modules/announcements/myannouncements.php"><i class="fas fa-bell"></i><span class='ps-2'>{{ trans('langMyAnnouncements') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
                                     <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/notes/index.php"><i class="fas fa-sticky-note"></i><span class='ps-2'>{{ trans('langNotes') }}</span></a>
@@ -113,6 +113,7 @@
                                     <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/my_widgets.php"><i class="fa fa-magic fa-fw"></i><span class='ps-2'>{{ trans('langMyWidgets') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">
+
                                     <a class="user-item text-white ps-3 pe-2" href="{{ $urlAppend }}main/gradebookUserTotal/index.php"><i class="fa fa-sort-numeric-desc fa-fw"></i><span class='ps-2'>{{ trans('langGradeTotal') }}</span></a>
                                 </li>
                                 <li class="user-menu-li">

@@ -31,15 +31,8 @@
                                         <i class="fas fa-tools"></i>
                                     </a>
                                 </nav>
-                                <nav class="navbar_breadcrumb" aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="{{ $urlAppend }}main/portfolio.php">{{trans('langPortfolio')}}</a></li>
-                                        <li class="breadcrumb-item"><a href="{{ $urlAppend }}main/my_courses.php">{{trans('mycourses')}}</a></li>
-                                        <li class="breadcrumb-item"><a href="{{$urlServer}}courses/{{$course_code}}/index.php">{{$currentCourseName}}</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">{{trans('langAnnouncements')}}</li>
-                                    </ol>
 
-                                </nav>
+                                @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                                 <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
                                     <div class="offcanvas-header">
@@ -110,13 +103,7 @@
                                     </button>
                                 </nav>
 
-                                <nav class="navbar_breadcrumb" aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="{{ $urlAppend }}main/portfolio.php">{{trans('langPortfolio')}}</a></li>
-                                        <li class="breadcrumb-item"><a href="{{ $urlAppend }}main/my_courses.php">{{trans('mycourses')}}</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">{{$toolName}}</li>
-                                    </ol>
-                                </nav>
+                                @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
 
                                 <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">

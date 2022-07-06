@@ -46,25 +46,7 @@
                     @endif
 
 
-                    @if($course_code)
-                    <nav class="navbar_breadcrumb" aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ $urlAppend }}main/portfolio.php">{{trans('langPortfolio')}}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ $urlAppend }}main/my_courses.php">{{trans('mycourses')}}</a></li>
-                            <li class="breadcrumb-item"><a href="{{$urlServer}}courses/{{$course_code}}/index.php">{{$currentCourseName}}</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{$toolName}}</li>
-                        </ol>
-                    </nav>
-                    @else
-                    <nav class="navbar_breadcrumb" aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <?php $size_breadcrumb = count($breadcrumbs); $count=0; ?>
-                            <?php for($i=0; $i<$size_breadcrumb; $i++){ ?>
-                                <li class="breadcrumb-item"><a href="{!! $breadcrumbs[$i]['bread_href'] !!}">{!! $breadcrumbs[$i]['bread_text'] !!}</a></li>
-                            <?php } ?> 
-                        </ol>
-                    </nav>
-                    @endif
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
 
                     <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
@@ -307,7 +289,7 @@
                             </div>
                         
                     @else
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>{{ trans('langNoDocuments') }}</div></div>
+                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-2'><div class='alert alert-warning'>{{ trans('langNoDocuments') }}</div></div>
                     @endif
                 </div>
             </div>

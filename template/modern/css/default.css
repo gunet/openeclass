@@ -2048,11 +2048,9 @@
       flex-wrap: wrap;
     }
 
-    .navbar_breadcrumb{
-        max-width:320px;
-    }
-    .navrbar_menu_btn{
-        margin-left:0px;
+    .shmeiwseis_col{
+        margin-top:-30px ;
+        margin-left:-15px ;
     }
 
     .btn-group{
@@ -2071,14 +2069,8 @@
         margin-right:-28px;
     }
 
-    .user-menu{
-      max-width: 100% ;
-      margin: 0 auto ;
-      padding: 0 40px ;
-    }
-
-    .user-menu{
-        margin-top:5px ;
+    .anakoinwseis_col{
+        margin-left:110px ;
     }
 
     .user-icon{
@@ -2116,27 +2108,137 @@
       width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
     }
 
-    .dropdown-user-menu-ul{
-      width:230px ;
-      margin-left:-180px;
-      background-color: #003F87 ;
-    }
+      .nav.nav-tabs li a{
+          background-color: #003F87;
 
-    .dropdownLanguage{
-      width:230px ;
-      background-color: #003F87 ;
-    }
+      }
 
-    .col-nav-tools{
-      margin-top:-10px ;
-    }
-    .dropdown-language-ul{
-      margin-left:-60px ;
-      margin-top:5px !important;
-      background-color: #003F87 ;
-    }
-    .notes_thead{
-      min-height:65px;
+
+      .myrowP-2{
+          background-color:#f5f5f5;
+      }
+
+
+          /* modal frame */
+      .modal-dialog.modal-lg .modal-content{
+          width:300px ;
+      }
+
+
+      .btn-group{
+          display:block ;
+      }
+
+
+      .notes_table{
+          width:100% ;
+        }
+
+        .title_langobject_input2{
+          margin-top:20px ;
+        }
+
+        .col_notes{
+          background-color:white ;
+        }
+
+        .fieldset_notes{
+          margin-left:0px ;
+          width:350px;
+          margin-top:20px;
+        }
+
+        .form_fieldset_notes{
+          background-color: transparent ;
+          width:100% ;
+          margin-left:-53px ;
+        }
+
+        .add_note_image_col{
+          margin-left:150px ;
+          width:150px ;
+          background-color: transparent ;
+        }
+
+        .notes_container{
+          width:95% ;
+          background-color: white ;
+        }
+
+
+        .col_new_note_comment{
+          background-color: transparent ;
+          width:150px ;
+          margin-left:0px ;
+        }
+
+
+
+
+        .fieldset_addnotes{
+          width:350px ;
+          margin-left:-53px;
+          margin-top:15px;
+        }
+
+        .notes-legend{
+          height:auto ;
+        }
+
+
+      .text-secondary.me-4{
+          margin-top:30px;
+          margin-left:-100px;
+          padding-left:80px;
+      }
+
+      .container_bar_courses_table{
+            /* margin:auto;
+            display:block; */
+            width:310px;
+            margin-left:-40px;
+      }
+
+      .user-icon-filename{
+          width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
+      }
+
+      .dropdown-user-menu-ul{
+          width:230px ;
+          margin-left:-150px;
+          background-color: #003F87 ;
+      }
+
+      .dropdownLanguage{
+        width:230px ;
+
+        background-color: #003F87 ;
+      }
+
+      .col-nav-tools{
+          margin-top:-10px ;
+      }
+
+      .container_input_search{
+          display:none ;
+      }
+
+      .user-announcements-portfolio{
+          background-color: white;
+          border-radius: 15px;
+          height:auto;
+          margin-top:35px;
+          margin-left:-2px;
+      }
+
+      .user-messages-portfolio{
+          margin-left:0px;
+          margin-top:35px;
+      }
+      .dropdown-language-ul{
+        margin-left:-60px ;
+        margin-top:5px !important;
+        background-color: #003F87 ;
     }
   }
 
@@ -2232,61 +2334,254 @@
     }
 
     .button_collapse_main_section{
-      width:50px;
-      height:50px;
-      border-radius: 50%;
-      border: solid 2px white;
-      margin:auto;
-      display:block;
-      margin-right:0px;
-    }
+        width:50px;
+        height:50px;
+        border-radius: 50%;
+        border: solid 2px white;
+        margin:auto;
+        display:block;
+        margin-right:0px;
+      }
 
-    .login-input{
-      background-color: #B0C4DE ;
-    }
+        .container_registration{
+          width:35% ;
+          border-top-left-radius: 15px ;
+          border-top-right-radius: 15px ;
+          border-bottom-left-radius: 15px ;
+          border-bottom-right-radius: 15px ;
+          height:260px ;
 
-    .fas.fa-pen-nib{
-      transform: rotate(265deg);
-    }
+        }
 
-    /* modal frame */
-    .modal-dialog.modal-lg .modal-content{
-        width:500px ;
-    }
+        .back_button_register{
+          border-top-left-radius: 15px ;
+          border-top-right-radius: 15px ;
+          border-bottom-left-radius: 15px ;
+          border-bottom-right-radius: 15px ;
+          border-radius: 50% ;
+        }
 
-    .notes-legend{
-      height:auto ;
-    }
+        .row_container_registration{
 
-    .user-icon-filename{
-        width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
-    }
+          border-top-left-radius: 15px ;
+          border-top-right-radius: 15px ;
+          border-bottom-left-radius: 15px ;
+          border-bottom-right-radius: 15px ;
+        }
 
-    .dropdown-user-menu-ul{
-      background-color: #003F87 ;
-      width:220px;
-      margin-left:-150px;
-    }
+        .content_register{
+          border-top-left-radius: 15px ;
+          border-top-right-radius: 15px ;
+          border-bottom-left-radius: 15px ;
+          border-bottom-right-radius: 15px ;
+        }
 
-    .col-nav-tools{
-      margin-top:-10px ;
-    }
+        .button_collapse_main_section{
+          width:50px;
+          height:50px;
+          border-radius: 50%;
+          border: solid 2px white;
+          margin:auto;
+          display:block;
+          margin-right:0px;
+        }
 
-    .eclass-nav-icon{
-        width:90px ;
-        height:90px ;
-        margin-left:-30px ;
-    }
+        .appstore_img{
+          width:150px; height:105px; border-style: none ;
+        }
 
-    .dropdown-language-ul{
-      margin-left:-60px ;
-      margin-top:0px !important;
-      background-color: #003F87 ;
-    }
+        .playstore_img{
+          width:150px; height:105px; border-style: none ;
+        }
 
-    .navbar-eclass .btn-group{
-      max-width:350px;
-    }
+        .login-input{
+          background-color: #B0C4DE ;
+        }
+
+        .input_search{
+          width:200px;
+
+        }
+
+
+        .fas.fa-pen-nib{
+          transform: rotate(265deg);
+        }
+
+        .input_search{
+
+          outline: 0;
+          border-width: 0 0 1px;
+          border-color: white;
+          background: transparent;
+          margin-left:-100px ;
+
+        }
+
+        .circle_lang{
+          height:30px; width:30px; border-radius:50%; background-color:blue;
+          margin-top:-25px;
+          margin-left:120px;
+        }
+
+        .fontuser {
+          position: relative;
+          float:right;
+          margin-right:30px ;
+        }
+
+        .fontuser i{
+          position: absolute;
+          left: -105px;
+          top: 0px;
+          color: gray;
+        }
+
+        /* modal frame */
+      .modal-dialog.modal-lg .modal-content{
+          width:500px ;
+      }
+
+      .col_notes{
+          margin-left:0px ;
+          width:120% ;
+          border-top-left-radius: 15px ;
+           border-top-right-radius: 15px ;
+           border-bottom-left-radius: 15px ;
+           border-bottom-right-radius: 15px ;
+       }
+
+       .notes_table{
+         width:100% ;
+       }
+
+       .fas.fa-sticky-note.fa-spin{
+         margin-left:-20px ;
+       }
+
+       table {
+         width: 20% ;
+       }
+
+       .addnotes-legend{
+         /* margin-left:-40px; */
+         margin:auto;
+         display: block;
+       }
+
+       .addnotes-legend1{
+         margin-left:-35px;
+       }
+
+       .notes-legend{
+         height:auto ;
+       }
+
+
+      .col_registrationCourse{
+          padding: 0 185px;
+          margin-left:-180px;
+          background-color:#003F87;
+      }
+
+      .registerCourse_container{
+
+          background-color:transparent;
+         width:95%;
+      }
+
+      .fieldset_registerCourse{
+          width:340px;
+          margin-left:-180px;
+
+      }
+
+
+
+      .col_registrationCourse{
+          border-radius: 15px;
+
+          margin-left: auto;
+          margin-right: auto;
+          height:auto ;
+      }
+
+      .registerCourse_container{
+          width:95%;
+          height: auto;
+          background-color: transparent;
+      }
+
+      .register_to_course_comment{
+          float:right ;
+          color:white;
+          margin-top:5px ;
+          margin-left:5px ;
+      }
+
+      .add_course_comment_col{
+          height:22px; margin-left:400px; margin-top:15px;
+          color:white;
+          background-color:transparent ;
+      }
+
+      .add_course_image_col{
+         background-color:transparent ;
+      }
+
+      .span_add_course_a{
+          float:right; margin-right:-16px; margin-top:-50px;
+          color:white; font-size:32px;
+          text-decoration: none ;
+      }
+
+      .courses_fas{
+         float:right; margin-top:-60px ; margin-right:-35px ;
+      }
+
+      .registerToCourseText{
+         margin-left:-30px ;
+      }
+
+      .user-icon-filename{
+          width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
+      }
+
+      .dropdown-user-menu-ul{
+        background-color: #003F87 ;
+        width:220px;
+        margin-left:-150px;
+      }
+
+      .col-nav-tools{
+          margin-top:-10px ;
+      }
+
+      .container_input_search{
+          display:none ;
+      }
+
+      .eclass-nav-icon{
+          width:90px ;
+          height:90px ;
+          margin-left:-30px ;
+      }
+      .dropdown-language-ul{
+        margin-left:-60px ;
+        margin-top:0px !important;
+        background-color: #003F87 ;
+      }
+
+      .user-announcements-portfolio{
+
+          margin-top:35px;
+          margin-left:0px;
+      }
+
+      .user-messages-portfolio{
+          margin-left:0px;
+          margin-top:35px;
+      }
   }
 
   /* ---------------------------------------------------------------------------------------------------------------------- */
@@ -2394,7 +2689,6 @@
         border-bottom-left-radius: 15px;
         border-bottom-right-radius: 15px;
     }
-
 
       .user-calendar{
         float: right;
@@ -2513,6 +2807,7 @@
 
         .jumbotron.jumbotron-login{
             height: 85vh;
+            /* padding-top:290px !important; */
         }
 
         .user-calendar{
@@ -2604,7 +2899,6 @@
           background-color: #003F87 ;
           margin-left:30px;
       }
-
       .dropdown-language-ul{
           margin-left:900px;
           margin-top:40px !important;

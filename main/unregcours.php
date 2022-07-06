@@ -36,27 +36,29 @@ if (!isset($_GET['cid'])) {
 
 if (!isset($_POST['doit'])) {
     $tool_content .= "
-      <div class='form-wrapper'>
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+      <div class='form-wrapper shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
         <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?u=$_SESSION[uid]&amp;cid=$cid'>
-          <div class='form-group'>
+          <div class='form-group mt-3'>
             <div class='col-sm-12'>
               $langConfirmUnregCours: <b>" . q(course_id_to_title($cid)) . "</b>
             </div>
           </div>
-          <div class='form-group'>
-            <label class='col-sm-2'>$langYes:</label>
-            <div class='col-sm-10'>
+          <div class='form-group mt-3'>
+            <label class='col-sm-6'>$langYes:</label>
+            <div class='col-sm-12'>
               <button class='btn btn-danger' name='doit'> $langUnCourse</button>
             </div>
           </div>
-          <div class='form-group'>
-            <label class='col-sm-2'>$langNo:</label>
-            <div class='col-sm-10'>
-              <a href='{$urlAppend}main/portfolio.php' class='btn btn-default'> $langCancel</a>
+          <div class='form-group mt-3'>
+            <label class='col-sm-6'>$langNo:</label>
+            <div class='col-sm-12'>
+              <a href='{$urlAppend}main/portfolio.php' class='btn btn-secondary'> $langCancel</a>
             </div>
           </div>
         </form>
-      </div>";
+      </div>
+    </div>";
 } else {
     if (isset($_SESSION['uid']) and $_GET['u'] == $_SESSION['uid']) {
         $q = Database::get()->query("DELETE from course_user
@@ -88,7 +90,7 @@ if (!isset($_POST['doit'])) {
             Session::Messages($langCoursDelSuccess, 'alert-success');
             redirect_to_home_page('main/portfolio.php');
         } else {
-            $tool_content .= "<div class='alert alert-danger'>$langCoursError</div>";
+            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langCoursError</div></div>";
         }
     }
     $tool_content .= "<br><br><div class='text-right'><a href='../index.php' class=mainpage>$langBack</a></div>";

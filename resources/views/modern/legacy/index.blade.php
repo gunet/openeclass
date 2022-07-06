@@ -81,7 +81,6 @@ foreach($toolArr as $tool){
                     @endif
 
 
-
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
 

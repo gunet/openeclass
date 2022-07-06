@@ -1,66 +1,107 @@
-@extends('layouts.default_old')
+@extends('layouts.default')
 
 @section('content')
 
-<div class="row">
-    <div class="col-xs-4">
-        <h3 class="content-title">{{ trans('langInstalledWidgets') }}</h3>
-        <hr>
-        @if (count($installed_widgets))
-        <div id="widgets">
-            @foreach ($installed_widgets as $key => $installed_widget)
-                    <div class="panel panel-success widget" data-widget-id="{{ $installed_widget->id }}">
-                        <div class="panel-heading">                   
-                            <a style="text-decoration: none; display: block; color: #777;" data-toggle="collapse" data-target="#widget_desc_{{ $key }}" 
-                               href="#widget_desc_{{ $key }}" class="widget_title">
-                                {{ $installed_widget->getName() }} <span></span> <span class="pull-right"></span>
-                            </a>                     
-                        </div>
-                        <div id="widget_desc_{{ $key }}" class="panel-collapse collapse">
-                            <div class="panel-body text-muted">
-                                {{ $installed_widget->getDesc() }}
-                            </div>
-                            <div class="panel-footer clearfix">
-                                <div class="pull-right">
-                                    <form action='{{ $_SERVER['SCRIPT_NAME'] }}' id="uninstallForm{{ $key }}" method="post">
-                                        <input type="hidden" name='widgetClassName' value='{{ get_class($installed_widget) }}'>
-                                        <input type="hidden" name='widgetAction' value='uninstall'>
-                                    </form>
-                                    <a href="#" onclick="$('#uninstallForm{{ $key }}').submit();">
-                                        <small>{{ trans('langWidgetUninstall') }}</small>
-                                    </a>                               
-                                </div>                      
-                            </div>                        
-                        </div>
-                        <div class="panel-collapse collapse in hidden">
-                            <div class="panel-body">
+<div class="pb-3 pt-3">
 
-                            </div>
-                            <div class="panel-footer clearfix">
-                                <a href="#" class="remove">
-                                    <small>{{ trans('langDelete') }}</small>
-                                </a>
-                                <div class="pull-right">
-                                    <a href="#" class="btn btn-xs btn-primary submitOptions">
-                                        {{ trans('langSubmit') }}
-                                    </a>                                
-                                </div>                    
-                            </div>                        
-                        </div>                    
+    <div class="container-fluid main-container">
+
+        <div class="row">
+
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
+
+                <div class="row p-5">
+
+                    <nav class="navbar navbar-expand-lg navrbar_menu_btn">
+                        <a type="button" class="d-none d-sm-block d-md-none d-lg-block ms-2 btn btn-primary btn btn-primary" href="{{$urlAppend}}modules/help/help.php?language={{$language}}&topic=message" style='margin-top:-10px'>
+                            <i class="fas fa-question"></i>
+                        </a>
+                    </nav>
+
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+
+                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="row p-2"></div><div class="row p-2"></div>
+                        <legend class="float-none w-auto py-2 px-0 notes-legend">
+                            <i class='fa fa-magic fa-fw'></i> {{trans('langMyWidgets')}}
+                        </legend> 
                     </div>
-           @endforeach
-        </div>   
-        @else
-        <div class='text-warning margin-bottom-fat'>
-            {{ trans('langNoInstalledWidgets') }}
-        </div>       
-        @endif      
-    </div>    
-    <div class="col-xs-8">
-        @include('admin.widgets.common.portfolioMain')
-        @include('admin.widgets.common.portfolioSide')                   
-    </div>    
-</div>
+
+                    @if(Session::has('message'))
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                        <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                            {{ Session::get('message') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </p>
+                    </div>
+                    @endif
+
+                    <div class='row ps-5 pe-4 pt-5 pb-4'>
+                        <div class="col-4">
+                            <h3 class="control-label-notes">{{ trans('langInstalledWidgets') }}</h3>
+                            <hr>
+                            @if (count($installed_widgets))
+                            <div id="widgets">
+                                @foreach ($installed_widgets as $key => $installed_widget)
+                                        <div class="panel panel-success widget mt-3" data-widget-id="{{ $installed_widget->id }}">
+                                            <div class="panel-heading notes_thead">                   
+                                                <a data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
+                                                href="#widget_desc_{{ $key }}" class="text-white ps-2">
+                                                    {{ $installed_widget->getName() }} <span class='fa fa-arrow-down fs-6 ps-2'></span>
+                                                </a>                     
+                                            </div>
+                                            <div id="widget_desc_{{ $key }}" class="panel-collapse collapse">
+                                                <div class="panel-body ps-3 pt-3 pb-3 pe-3 text-muted">
+                                                    {{ $installed_widget->getDesc() }}
+                                                </div>
+                                                <div class="panel-footer ps-3 pt-3 pb-3 pe-3 clearfix">
+                                                    <div class="pull-right">
+                                                        <form action='{{ $_SERVER['SCRIPT_NAME'] }}' id="uninstallForm{{ $key }}" method="post">
+                                                            <input type="hidden" name='widgetClassName' value='{{ get_class($installed_widget) }}'>
+                                                            <input type="hidden" name='widgetAction' value='uninstall'>
+                                                        </form>
+                                                        <a href="#" onclick="$('#uninstallForm{{ $key }}').submit();">
+                                                            <small>{{ trans('langWidgetUninstall') }}</small>
+                                                        </a>                               
+                                                    </div>                      
+                                                </div>                        
+                                            </div>
+                                            <div class="panel-collapse collapse in hidden">
+                                                <div class="panel-body ps-3 pt-3 pb-3 pe-3">
+
+                                                </div>
+                                                <div class="panel-footer clearfix">
+                                                    <a href="#" class="remove">
+                                                        <small>{{ trans('langDelete') }}</small>
+                                                    </a>
+                                                    <div class="pull-right">
+                                                        <a href="#" class="btn btn-xs btn-primary submitOptions">
+                                                            {{ trans('langSubmit') }}
+                                                        </a>                                
+                                                    </div>                    
+                                                </div>                        
+                                            </div>                    
+                                        </div>
+                            @endforeach
+                            </div>   
+                            @else
+                            <div class='text-warning margin-bottom-fat'>
+                                {{ trans('langNoInstalledWidgets') }}
+                            </div>       
+                            @endif      
+                        </div>    
+                        <div class="col-8">
+                            @include('admin.widgets.common.portfolioMain')
+                            @include('admin.widgets.common.portfolioSide')                   
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+
                             
 
 @endsection

@@ -45,7 +45,7 @@ $courses = Database::get()->queryArray('SELECT course.id course_id, code, title
                       AND user.id = ?d', $uid, $uid);
 if (count($courses) > 0) {
     $grade_content .= "<div class ='table-responsive'>
-            <table class='table-default'><tr><th>$langCourse</th><th>$langGradebookGrade</th></tr>";
+            <table class='announcements_table'><tr class='notes_thead'><th class='text-white'>$langCourse</th><th class='text-white'>$langGradebookGrade</th></tr>";
     foreach ($courses as $course1) {
         $course_id = $course1->course_id;
         $code = $course1->code;
@@ -65,12 +65,13 @@ if (count($courses) > 0) {
     }
     $grade_content .= "</table></div>";
     if (!$content) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoGradebook</div>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='alert alert-warning'>$langNoGradebook</div></div>";
     } else {
         $tool_content .= $grade_content;
     }
 } else {
-    $tool_content .= "<div class='alert alert-warning'>$langNoGradebook</div>";
+    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoGradebook</div></div>";
 }
 
 draw($tool_content, 1, null, $head_content);

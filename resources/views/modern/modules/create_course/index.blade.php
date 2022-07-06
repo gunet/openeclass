@@ -90,14 +90,20 @@
 
               <div class="row p-5">
 
-                <div class="col-xxl-12 col-lx-12 col-lg-12 col-md-12 col-sm-6" style="margin-top:-20px;">
-                    <legend class="float-none w-auto py-2 px-4 notes-legend"><span style="margin-left:-20px;"><i class='fas fa-book-reader'></i> Δημιουργία νέου μαθήματος</span></legend>
-                </div>
+                  <div class='mt-3 ms-0'>
+                      <nav class="navbar navbar-expand-lg navrbar_menu_btn">
+                          <a type="button" id="getTopicButton" class="d-none d-sm-block d-md-none d-lg-block ms-2 btn btn-primary btn btn-primary" href="{{$urlAppend}}modules/help/help.php?language={{$language}}&topic={{$helpTopic}}&subtopic={{$helpSubTopic}}" style='margin-top:-10px'>
+                              <i class="fas fa-question"></i>
+                          </a>
+                      </nav>
+                      @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                  </div>
 
+                  <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+                      <legend class="float-none w-auto py-2 px-4 notes-legend"><span style="margin-left:-20px;"><i class='fas fa-book-reader'></i> Δημιουργία νέου μαθήματος</span></legend>
+                  </div>
 
-                <div class="row p-2"></div>
-                <div class="row p-2"></div>
-
+                  
                  
                    @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
@@ -109,7 +115,7 @@
                     @endif
                       
 
-                        <form class='form-horizontal' role='form' method='post' name='createform' action="{{ $_SERVER['SCRIPT_NAME'] }}" onsubmit=\"return validateNodePickerForm();\">
+                        <form class='form-horizontal mt-5' role='form' method='post' name='createform' action="{{ $_SERVER['SCRIPT_NAME'] }}" onsubmit=\"return validateNodePickerForm();\">
                        
                                   <div class="row">
                                     <div class="col-xl-6 col-md-6 col-sm-6 col-6">

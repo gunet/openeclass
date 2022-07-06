@@ -54,20 +54,21 @@ foreach ($q as $l) {
           <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
             $next
             <div class='form-group'>
-              <div class='col-xs-12'>
+              <div class='col-12 ps-2 pe-2'>
                 <input class='form-control' name='uname' placeholder='$langUsername'$userValue autofocus>
               </div>
             </div>
             <div class='form-group'>
-              <div class='col-xs-12'>
+              <div class='col-12 ps-2 pe-2'>
                 <input class='form-control' name='pass' type='password' placeholder='$langPass'>
               </div>
             </div>
             <div class='form-group'>
-              <div class='col-xs-3'>
+              <div class='col-3 ps-2'>
                 <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
               </div>
-              <div class='col-xs-9 text-right'>
+              <div class='row p-2'></div>
+              <div class='col-9 ps-2 text-right'>
                 <a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
              </div>
            </div>

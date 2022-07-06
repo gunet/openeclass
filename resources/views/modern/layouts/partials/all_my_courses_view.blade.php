@@ -14,17 +14,7 @@
                 </a>
             </nav>
 
-            <nav class="navbar_breadcrumb" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ $urlAppend }}main/portfolio.php">{{trans('langPortfolio')}}</a></li>
-                    <li class="breadcrumb-item"><a href="{{ $urlAppend }}main/my_courses.php">{{trans('mycourses')}}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{$toolName}}</li>
-                </ol>
-            </nav>
-
-            <div class="d-lg-none mr-auto">
-               <div class="row p-2"></div><div class="row p-2"></div><div class="row p-2"></div>
-            </div>
+            @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
             <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="row p-2"></div><div class="row p-2"></div>
@@ -37,7 +27,6 @@
                 </legend> 
             </div>
 
-            <div class="row p-2"></div><div class="row p-2"></div>
 
 
             <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 ColContentCourses">
