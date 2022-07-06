@@ -79,12 +79,16 @@ if ($is_editor) {
     if (isset($_GET['deletecategory'])) { // delete group category
         $id = $_GET['id'];
         delete_group_category($id);
-        Session::Messages($langGroupCategoryDeleted, 'alert-success');
+        //Session::Messages($langGroupCategoryDeleted, 'alert-success');
+        Session::flash('message',$langGroupCategoryDeleted); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/group/index.php");
     } elseif (isset($_GET['deletegroup'])) { // delete group
         $id = $_GET['id'];
         delete_group($id);
-        Session::Messages($langGroupDeleted, 'alert-success');
+        //Session::Messages($langGroupDeleted, 'alert-success');
+        Session::flash('message',$langGroupDeleted); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/group/index.php");
     }
     if (isset($_POST['creation'])) { // groups creation
@@ -256,7 +260,9 @@ if ($is_editor) {
                                                                             'secret_directory' => $secretDirectory));
             }
 
-            Session::Messages($langGroupsAdded2, "alert-success");
+            //Session::Messages($langGroupsAdded2, "alert-success");
+            Session::flash('message',$langGroupsAdded2); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
 
         } else {
@@ -267,7 +273,9 @@ if ($is_editor) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_group_category();
         $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
-        Session::Messages($messsage, 'alert-success');
+        //Session::Messages($messsage, 'alert-success');
+        Session::flash('message',$messsage); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/group/index.php");
     } elseif (isset($_REQUEST['delete_all'])) {
         /*         * ************Delete All Group Wikis********** */
@@ -368,7 +376,9 @@ if ($is_editor) {
         Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('gid' => $id,
             'name' => $myDir? $myDir->name:"[no name]"));
 
-        Session::Messages($langGroupDel, "alert-success");
+        //Session::Messages($langGroupDel, "alert-success");
+        Session::flash('message',$langGroupDel); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/group/index.php?course=$course_code");
     } elseif (isset($_REQUEST['empty'])) {
         Database::get()->query("DELETE FROM group_members

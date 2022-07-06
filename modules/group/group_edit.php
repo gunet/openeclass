@@ -162,7 +162,9 @@ if (isset($_POST['modify'])) {
                 Database::get()->query("DELETE FROM group_members
                                             WHERE group_id = ?d AND is_tutor = 0",$group_id);
             }
-            Session::Messages($langGroupSettingsModified,'alert-success');
+            //Session::Messages($langGroupSettingsModified,'alert-success');
+            Session::flash('message',$langGroupSettingsModified); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         }
         initialize_group_info($group_id);

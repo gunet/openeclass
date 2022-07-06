@@ -93,7 +93,9 @@ foreach ($resultex as $listex) {
             }
         }
         if ($incompatible) {
-            Session::Messages(q($listex->title) . ": " . $langExIncompatibleWithLP, 'alert-warning');
+            //Session::Messages(q($listex->title) . ": " . $langExIncompatibleWithLP, 'alert-warning');
+            Session::flash('message',q($listex->title) . ": " . $langExIncompatibleWithLP); 
+            Session::flash('alert-class', 'alert-warning');
             continue;
         }
 
@@ -129,7 +131,9 @@ foreach ($resultex as $listex) {
                   AND course_id = ?d", $insertedAsset_id, $insertedExercice_id, $course_id);
 
             insertInLearningPath($insertedExercice_id, $order);
-            Session::Messages($langInsertedAsModule, 'alert-info');
+            //Session::Messages($langInsertedAsModule, 'alert-info');
+            Session::flash('message',$langInsertedAsModule); 
+            Session::flash('alert-class', 'alert-info');
         } else {
             // exercise is already used as a module in another learning path , so reuse its reference
             // check if this is this LP that used this exercise as a module
@@ -146,9 +150,13 @@ foreach ($resultex as $listex) {
             if ($num == 0) {
                 // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 insertInLearningPath($thisExerciseModule->module_id, $order);
-                Session::Messages($langInsertedAsModule, 'alert-info');
+                //Session::Messages($langInsertedAsModule, 'alert-info');
+                Session::flash('message',$langInsertedAsModule); 
+                Session::flash('alert-class', 'alert-info');
             } else {
-                Session::Messages($langAlreadyUsed, 'alert-warning');
+                //Session::Messages($langAlreadyUsed, 'alert-warning');
+                Session::flash('message',$langAlreadyUsed); 
+                Session::flash('alert-class', 'alert-warning');
             }
         }
     } // end if request

@@ -136,7 +136,8 @@ if (isset($_POST['submitInsertedDocument'])) {
                 Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
                         VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $langDefaultModuleAddedComment, $order);
-                Session::Messages($langInsertedAsModule, 'alert-info');
+                Session::flash('message',$langInsertedAsModule);
+                Session::flash('alert-class', 'alert-info');
             } else {
                 // check if this is this LP that used this document as a module
                 $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
@@ -160,9 +161,13 @@ if (isset($_POST['submitInsertedDocument'])) {
                             (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
                             VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $thisDocumentModule->module_id, $langDefaultModuleAddedComment, $order);
 
-                    Session::Messages($langInsertedAsModule, 'alert-info');
+                    //Session::Messages($langInsertedAsModule, 'alert-info');
+                    Session::flash('message',$langInsertedAsModule);
+                    Session::flash('alert-class', 'alert-info');
                 } else {
-                    Session::Messages($langAlreadyUsed, 'alert-warning');
+                    //Session::Messages($langAlreadyUsed, 'alert-warning');
+                    Session::flash('message',$langAlreadyUsed);
+                    Session::flash('alert-class', 'alert-warning');
                 }
             }
         }

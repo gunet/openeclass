@@ -190,7 +190,9 @@ abstract class AbstractBaseIndexer {
 
         if (preg_match("/too many open files/i", $e->getMessage())) {
             $errorMessage = $e->getMessage();
-            Session::Messages("$langSearchTooManyFiles $errorMessage");
+            //Session::Messages("$langSearchTooManyFiles $errorMessage");
+            Session::flash('message',"$langSearchTooManyFiles $errorMessage"); 
+            Session::flash('alert-class', 'alert-warning');
         }
     }
     

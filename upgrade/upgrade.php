@@ -320,7 +320,9 @@ $fromadmin = !isset($_POST['submit_upgrade']);
 
 if (isset($_POST['login']) and isset($_POST['password'])) {
     if (!is_admin($_POST['login'], $_POST['password'])) {
-        Session::Messages($langUpgAdminError, 'alert-warning');
+        //Session::Messages($langUpgAdminError, 'alert-warning');
+        Session::flash('message',$langUpgAdminError);
+        Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page('upgrade/');
     }
 }

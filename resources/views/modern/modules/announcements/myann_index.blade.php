@@ -94,7 +94,6 @@
                                     </p>
                                 </div>
                                 @endif
-
                                 @include('layouts.partials.announcements',['announcements' => $aaData , 'title_course' => $currentCourseName ,'is_editor' => $is_editor,'announcements_ids' => $announcements_ids, 'course_code' => $course_code])
                             </div>
                         </div>

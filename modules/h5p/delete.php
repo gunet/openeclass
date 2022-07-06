@@ -24,8 +24,10 @@ $require_current_course = true;
 require_once '../../include/baseTheme.php';
 
 deleteContent($_GET['id']);
-Session::Messages($langH5pDeleteSuccess, 'alert-success');
-redirect($urlAppend . 'modules/h5p/?course=' . $course_code);
+
+Session::flash('message',$langH5pDeleteSuccess);
+Session::flash('alert-class', 'alert-success');
+redirect($urlAppend . 'modules/h5p/index.php?course=' . $course_code);
 
 function deleteContent($contentId): bool {
     global $course_id, $course_code, $webDir;

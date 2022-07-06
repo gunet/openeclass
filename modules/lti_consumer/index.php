@@ -89,7 +89,9 @@ elseif(isset($_POST['update_lti_app']))
     add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
         $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'],null, false,
         true, getDirectReference($_GET['id']), LTI_TYPE);
-    Session::Messages($langLTIAppAddSuccessful, 'alert-success');
+
+    Session::flash('message',$langLTIAppAddSuccessful);
+    Session::flash('alert-class', 'alert-success');
     redirect("../course_tools/index.php?course=$course_code");
 }
 elseif(isset($_GET['choice']))
@@ -102,7 +104,8 @@ elseif(isset($_GET['choice']))
             break;
         case 'do_delete':
             delete_lti_app(getDirectReference($_GET['id']));
-            Session::Messages($langBBBDeleteSuccessful, 'alert-success');
+            Session::flash('message',$langBBBDeleteSuccessful);
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/course_tools/index.php?course=$course_code");
             break;
         case 'do_disable':
@@ -120,7 +123,9 @@ elseif(isset($_GET['choice']))
     add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
         $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], $course_id, false,
         false, null, LTI_TYPE);
-    Session::Messages($langLTIAppAddSuccessful, 'alert-success');
+    Session::flash('message',$langLTIAppAddSuccessful);
+    Session::flash('alert-class', 'alert-success');
+
     redirect("../course_tools/index.php?course=$course_code");
 }
 else {

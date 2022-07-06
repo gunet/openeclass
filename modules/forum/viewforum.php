@@ -232,7 +232,9 @@ if (($is_editor) and isset($_GET['topicdel'])) {
                             WHERE id = ?d
                                 AND course_id = ?d", $num_topics, $forum_id, $course_id);
     Database::get()->query("DELETE FROM forum_notify WHERE topic_id = ?d AND course_id = ?d", $topic_id, $course_id);
-    Session::Messages($langTopicDeleted, 'alert-success');
+    //Session::Messages($langTopicDeleted, 'alert-success');
+    Session::flash('message',$langTopicDeleted); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");
 }
 

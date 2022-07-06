@@ -829,13 +829,14 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     if (resource_usage($element, $activity_id)) { // check if resource has been used by user
-        Session::Messages("$langUsedCertRes", "alert-warning");
-
+        Session::flash('message',$langUsedCertRes);
+        Session::flash('alert-class', 'alert-warning');
         if ($unit_id) {
             redirect(localhostUrl().$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
         } else {
             redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;${element}_id=$element_id");
         }
+
     } else { // otherwise editing is not allowed
         $data = Database::get()->querySingle("SELECT threshold, operator FROM ${element}_criterion
                                             WHERE id = ?d AND $element = ?d", $activity_id, $element_id);

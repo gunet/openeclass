@@ -171,7 +171,9 @@ if (isset($_POST['submit'])) {
     if ($total_posts > POSTS_PER_PAGE) {
         $page .= "&start=" . (POSTS_PER_PAGE * intval(($total_posts - 1) / POSTS_PER_PAGE));
     }
-    Session::Messages($langStored, 'alert-success');
+    //Session::Messages($langStored, 'alert-success');
+    Session::flash('message',$langStored); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page($page);
 } else {
     if (isset($unit)) {

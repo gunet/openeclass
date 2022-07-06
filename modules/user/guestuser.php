@@ -73,9 +73,13 @@ if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $password = $_POST['guestpassword'];
     createguest($default_guest_username, $course_id, $password);
-    Session::Messages($langGuestSuccess, 'alert-success');
+    //Session::Messages($langGuestSuccess, 'alert-success');
+    Session::flash('message',$langGuestSuccess); 
+    Session::flash('alert-class', 'alert-success');
     if ($password === '') {
-        Session::Messages($langGuestWarnEmptyPassword, 'alert-warning');
+        //Session::Messages($langGuestWarnEmptyPassword, 'alert-warning');
+        Session::flash('message',$langGuestWarnEmptyPassword); 
+        Session::flash('alert-class', 'alert-warning');
     }
     redirect_to_home_page("modules/user/?course=$course_code");
 } else {

@@ -113,7 +113,9 @@ $res_type = isset($_GET['res_type']);
 // get attached forum topic file (if any)
 if (isset($_GET['get'])) {
     if (!send_forum_post_file($_GET['get'])) {
-        Session::Messages($langFileNotFound, 'alert-danger');
+        //Session::Messages($langFileNotFound, 'alert-danger');
+        Session::flash('message',$langFileNotFound); 
+        Session::flash('alert-class', 'alert-danger');
     }
 }
 

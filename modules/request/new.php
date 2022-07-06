@@ -181,12 +181,15 @@ if (isset($_POST['requestTitle'])) {
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'],
                     '', $recipients, $emailSubject, $emailBody, $emailContent);
             }
-
-            Session::Messages(trans('langRequestCreated'), 'alert-success');
-            redirect_to_home_page("modules/request/?course=$course_code&id=$rid");
+            //Session::Messages(trans('langRequestCreated'), 'alert-success');
+            Session::flash('message',trans('langRequestCreated'));
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page("modules/request/index.php?course=$course_code&id=$rid");
         }
     } else {
-        Session::Messages(trans('langFieldsRequ'), 'alert-warning');
+        //Session::Messages(trans('langFieldsRequ'), 'alert-warning');
+        Session::flash('message',trans('langFieldsRequ'));
+        Session::flash('alert-class', 'alert-warning');
     }
 }
 

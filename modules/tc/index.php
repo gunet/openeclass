@@ -277,7 +277,8 @@ elseif(isset($_POST['update_bbb_session'])) { // update existing BBB session
 
     // update existing BBB session
     add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $ext_users, $record, $sessionUsers, $options, true, getDirectReference($_POST['id']));
-    Session::Messages($langBBBAddSuccessful, 'alert-success');
+    Session::flash('message',$langBBBAddSuccessful);
+    Session::flash('alert-class', 'alert-success');
     redirect("index.php?course=$course_code");
 }
 elseif(isset($_GET['choice']))
@@ -431,7 +432,8 @@ elseif(isset($_GET['choice']))
 
     // new BBB session
     add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $record, $sessionUsers, $options, false);
-    Session::Messages($langBBBAddSuccessful, 'alert-success');
+    Session::flash('message',$langBBBAddSuccessful);
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
 else { // display list of conferences

@@ -53,7 +53,9 @@ if (isset($_GET['id'])) {
 // handle submitted data
 if (isset($_POST['submitCategory'])) {
     submit_video_category($course_id, $course_code);
-    Session::Messages($langCatVideoDirectoryCreated, "alert-success");
+    //Session::Messages($langCatVideoDirectoryCreated, "alert-success");
+    Session::flash('message',$langCatVideoDirectoryCreated); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/video/index.php?course=" . $course_code);
 }
 

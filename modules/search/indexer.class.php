@@ -183,9 +183,13 @@ class Indexer {
         } catch (Zend_Search_Lucene_Exception $e) {
             $errorMessage = $e->getMessage();
             if ($is_admin) {
-                Session::Messages("$langIdxErrorPermissions $errorMessage");
+                //Session::Messages("$langIdxErrorPermissions $errorMessage");
+                Session::flash('message',"$langIdxErrorPermissions $errorMessage"); 
+                Session::flash('alert-class', 'alert-warning');
             } else {
-                Session::Messages($langSearchDisabled);
+                //Session::Messages($langSearchDisabled);
+                Session::flash('message',$langSearchDisabled); 
+                Session::flash('alert-class', 'alert-warning');
             }
 
             return;

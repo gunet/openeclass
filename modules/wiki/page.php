@@ -735,16 +735,22 @@ switch ($action) {
                  if ($wikiStore->pageExists($wikiId, $wiki_title)) {
                      $wikiPage->loadPage($wiki_title);
                      if ($wikiPage->delete()) {
-                         Session::Messages($langWikiPageDeleted, 'alert-success');
+                         //Session::Messages($langWikiPageDeleted, 'alert-success');
+                         Session::flash('message',$langWikiPageDeleted); 
+                         Session::flash('alert-class', 'alert-success');
                          triggerGame($course_id, $uid, WikiEvent::DELPAGE);
                          triggerAnalytics($course_id, $uid, WikiAnalyticsEvent::WIKIEVENT);
                          redirect_to_home_page("modules/wiki/page.php?course=$course_code&wikiId=$wikiId&action=show");
                      } else {
-                         Session::Messages($langWikiDeletePageError, 'alert-danger');
+                         //Session::Messages($langWikiDeletePageError, 'alert-danger');
+                         Session::flash('message',$langWikiDeletePageError); 
+                         Session::flash('alert-class', 'alert-danger');
                          redirect_to_home_page("modules/wiki/page.php?course=$course_code&action=show&title=".rawurlencode($wiki_title)."&wikiId=$wikiId");
                      }
                  } else {
-                    Session::Messages($langWikiPageNotFound);
+                    //Session::Messages($langWikiPageNotFound);
+                    Session::flash('message',$langWikiPageNotFound); 
+                    Session::flash('alert-class', 'alert-warning');
                     redirect_to_home_page("modules/wiki/page.php?course=$course_code&wikiId=$wikiId&action=show");
                  }
              }

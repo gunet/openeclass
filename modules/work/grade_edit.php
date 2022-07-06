@@ -65,9 +65,13 @@ if (isset($_GET['ass_id']) ) { // delete student review
     $id = intval($_GET['id']);
     $a_id = intval($_GET['a_id']);
     if (delete_review($ass_id)) {
-        Session::Messages($langStudentReviewDeleted, 'alert-success');
+        //Session::Messages($langStudentReviewDeleted, 'alert-success');
+        Session::flash('message',$langStudentReviewDeleted); 
+        Session::flash('alert-class', 'alert-success');
     } else {
-        Session::Messages($langDelError, 'alert-danger');
+        //Session::Messages($langDelError, 'alert-danger');
+        Session::flash('message',$langDelError); 
+        Session::flash('alert-class', 'alert-danger');
     }
     redirect_to_home_page('modules/work/grade_edit.php?course='.$course_code.'&assignment='.$id.'&submission='.$a_id);
 }
@@ -468,7 +472,9 @@ function show_edit_form($id, $sid, $assign) {
 			</div>";
 		}
     } else {
-        Session::Messages($m['WorkNoSubmission'], 'alert-danger');
+        //Session::Messages($m['WorkNoSubmission'], 'alert-danger');
+        Session::flash('message',$m['WorkNoSubmission']); 
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
     }
 }

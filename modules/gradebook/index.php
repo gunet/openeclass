@@ -177,12 +177,16 @@ if ($is_editor) {
         Database::get()->query("UPDATE gradebook SET active = ?d WHERE id = ?d AND course_id = ?d", $_GET['vis'], $grbid, $course_id);
         $log_details = array('id'=>$grbid, 'title'=> get_gradebook_title($grbid), 'action' => 'change gradebook visibility','id' => $_GET['gradebook_id'],  'title' => get_gradebook_title($_GET['gradebook_id']), 'visibility' => $_GET['vis']);
         Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_MODIFY, $log_details);
-        Session::Messages($langGlossaryUpdated, 'alert-success');
+        //Session::Messages($langGlossaryUpdated, 'alert-success');
+        Session::flash('message',$langGlossaryUpdated); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
     }
     if (isset($_GET['dup'])) {
         clone_gradebook($gradebook_id);
-        Session::Messages($langCopySuccess, 'alert-success');
+        //Session::Messages($langCopySuccess, 'alert-success');
+        Session::flash('message',$langCopySuccess); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
     }
     //add a new gradebook
@@ -209,7 +213,9 @@ if ($is_editor) {
             $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, `range` = ?d, active = 1, title = ?s, start_date = ?t, end_date = ?t", $course_id, $gradebook_range, $newTitle, $start_date, $end_date)->lastInsertID;
             $log_details = array('id' => $gradebook_id, 'gradebook_range' => $gradebook_range, 'title' => $newTitle, 'start_date' => $start_date, 'end_date' => $end_date);
             Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_INSERT, $log_details);
-            Session::Messages($langCreateGradebookSuccess, 'alert-success');
+            //Session::Messages($langCreateGradebookSuccess, 'alert-success');
+            Session::flash('message',$langCreateGradebookSuccess); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -340,7 +346,9 @@ if ($is_editor) {
             }
         }
 
-        Session::Messages($langGradebookEdit,"alert-success");
+        //Session::Messages($langGradebookEdit,"alert-success");
+        Session::flash('message',$langGradebookEdit); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/gradebook/index.php?course=' . $course_code . '&gradebook_id=' . getIndirectReference($gradebook_id) . '&gradebookBook=1');
     }
 
@@ -474,7 +482,9 @@ if ($is_editor) {
             Database::get()->querySingle("UPDATE gradebook SET `title` = ?s, `range` = ?d, `start_date` = ?t, `end_date` = ?t WHERE id = ?d ", $gradebook_title, $gradebook_range, $start_date, $end_date, $gradebook_id);
             $log_details = array('id' => $gradebook_id,  'title' => get_gradebook_title($gradebook_id), 'gradebook_range' => $gradebook_range, 'title' => $gradebook_title, 'start_date' => $start_date, 'end_date' => $end_date);
             Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_MODIFY, $log_details);
-            Session::Messages($langGradebookEdit,"alert-success");
+            //Session::Messages($langGradebookEdit,"alert-success");
+            Session::flash('message',$langGradebookEdit); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -494,7 +504,9 @@ if ($is_editor) {
         $ga = add_gradebook_activity($gradebook_id, $id, $type);
         $log_details = array('id'=>$gradebook_id,'title'=>  get_gradebook_title($gradebook_id), 'action' => 'add activity', 'activity_type' => $type, 'activity_id' => $id, 'activity_title' => $ga['act_title'],'activity_date' => $ga['act_date']);
         Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_MODIFY, $log_details);
-        Session::Messages("$langGradebookSucInsert","alert-success");
+        //Session::Messages("$langGradebookSucInsert","alert-success");
+        Session::flash('message',$langGradebookSucInsert); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
         $display = FALSE;
     }
@@ -528,7 +540,9 @@ if ($is_editor) {
                                             WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $weight, $type, $visible, $id);
                 $log_details = array('id'=>$gradebook_id,'title'=>  get_gradebook_title($gradebook_id), 'action' => 'modify activity', 'activity_type' => $type, 'activity_id' => $id, 'activity_title' => $actTitle, 'activity_date' => $actDate, 'auto' => $auto, 'weight' => $weight, 'visible' => $visible);
                 Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_MODIFY, $log_details);
-                Session::Messages("$langGradebookEdit", "alert-success");
+                //Session::Messages("$langGradebookEdit", "alert-success");
+                Session::flash('message',$langGradebookEdit); 
+                Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
             } else {
                 //insert
@@ -537,7 +551,9 @@ if ($is_editor) {
                                                     $gradebook_id, $actTitle, $actDate, $actDesc, $weight, $type, $visible)->lastInsertID;
                 $log_details = array('action' => 'add activity','id' => $gradebook_id,  'title' => get_gradebook_title($gradebook_id), 'activity_type' => $type, 'activity_id' => $insertAct, 'activity_title' => $actTitle, 'activity_date' => $actDate, 'weight' => $weight, 'visible' => $visible);
                 Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_MODIFY, $log_details);
-                Session::Messages("$langGradebookSucInsert","alert-success");
+                //Session::Messages("$langGradebookSucInsert","alert-success");
+                Session::flash('message',$langGradebookSucInsert); 
+                Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
             }
         } else {

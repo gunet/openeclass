@@ -107,7 +107,10 @@ while ($iterator <= $_POST['maxLinkForm']) {
             Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
 				(`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
 				VALUES (?d, ?d, '', ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $order);
-            Session::Messages($langInsertedAsModule, 'alert-info');
+            //Session::Messages($langInsertedAsModule, 'alert-info');
+            Session::flash('message',$langInsertedAsModule);
+            Session::flash('alert-class', 'alert-info');
+            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
         } else {
             // check if this is this LP that used this document as a module
             $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
@@ -130,10 +133,13 @@ while ($iterator <= $_POST['maxLinkForm']) {
                 Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
 					(`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
 					VALUES (?d, ?d, '', ?d,'OPEN', 1)", $_SESSION['path_id'], $thisLinkModule->module_id, $order);
-
-                Session::Messages($langInsertedAsModule, 'alert-info');
+                Session::flash('message',$langInsertedAsModule);
+                Session::flash('alert-class', 'alert-info');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             } else {
-                Session::Messages($langAlreadyUsed, 'alert-warning');
+                Session::flash('message',$langAlreadyUsed);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             }
         }
     }

@@ -128,7 +128,9 @@ if (!$thePoll) {
 }
 $PollType = $thePoll->type;
 if (!$is_editor && !$thePoll->show_results) {
-    Session::Messages($langPollResultsAccess);
+    //Session::Messages($langPollResultsAccess);
+    Session::flash('message',$langPollResultsAccess); 
+    Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
 }
 

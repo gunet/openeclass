@@ -72,7 +72,9 @@ if (isset($_FILES['userfile'])) {
             triggerGame($course_id, $user_id, $id);
             update_gradebook_book($user_id, $id, $grade / $assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
         }
-        Session::Messages($langGradesImported, 'alert-success');
+       // Session::Messages($langGradesImported, 'alert-success');
+        Session::flash('message',$langGradesImported); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
     } else {
         $message = $langImportGradesError;
@@ -98,7 +100,9 @@ if (isset($_FILES['userfile'])) {
                         <tbody>$errorText</tbody>
                     </table></p>";
         }
-        Session::Messages($message, 'alert-danger');
+     //   Session::Messages($message, 'alert-danger');
+        Session::flash('message',$message); 
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/work/import.php?course=$course_code&id=$id");
     }
 }

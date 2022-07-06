@@ -112,7 +112,9 @@ if (!$thisDocumentModule) {
     }
 }
 
-Session::Messages($langInsertedAsModule, 'alert-info');
+//Session::Messages($langInsertedAsModule, 'alert-info');
+Session::flash('message',$langInsertedAsModule); 
+Session::flash('alert-class', 'alert-info');
 redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
 
 draw($tool_content, 2);

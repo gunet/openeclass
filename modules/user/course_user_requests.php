@@ -95,7 +95,9 @@ if (isset($_GET['rid'])) {
             }
             // close user request
             Database::get()->query("UPDATE course_user_request SET status = 2 WHERE id = ?d", $_GET['rid']);
-            Session::Messages($langCourseUserRegDone, 'alert-success');
+            //Session::Messages($langCourseUserRegDone, 'alert-success');
+            Session::flash('message',$langCourseUserRegDone); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/user/course_user_requests.php?course=' . $course_code);
         } else {
             $tool_content .= "<div class='alert alert-danger'>$langCourseUserRegError</div>";

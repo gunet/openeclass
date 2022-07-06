@@ -145,8 +145,9 @@ if ($is_editor) {
                 if (!resource_belongs_to_progress_data(MODULE_ID_LP, $_GET['del_path_id'])) {
                     $lp_name = deleteLearningPath($_GET['del_path_id']);
                     Log::record($course_id, MODULE_ID_LP, LOG_DELETE, array('name' => $lp_name));
-                    Session::Messages($langLearnPathDeleted, 'alert-success');
-                    redirect_to_home_page('modules/learnPath/?course=' . $course_code);
+                    Session::flash('message',$langLearnPathDeleted);
+                    Session::flash('alert-class', 'alert-success');
+                    redirect_to_home_page('modules/learnPath/index.php?course=' . $course_code);
                 } else {
                     $tool_content .= "<div class='alert alert-warning'>$langResourceBelongsToCert</div>";
                 }
@@ -175,8 +176,8 @@ if ($is_editor) {
                 }
                 break;
             // CREATE COMMAND
-            case "create" :                
-                // create form sent                
+            case "create" :
+                // create form sent
                 if (isset($_POST["newPathName"]) && $_POST["newPathName"] != "") {
                     // check if name already exists
                     $num = Database::get()->querySingle("SELECT COUNT(`name`) AS count FROM `lp_learnPath`

@@ -147,9 +147,13 @@ switch ($action) {
     case "exDelete":
             if ($wikiStore->wikiIdExists($wikiId)) {
                 $wiki = $wikiStore->deleteWiki($wikiId);
-                Session::Messages($langWikiDeletionSucceed, 'alert-success');
+              //  Session::Messages($langWikiDeletionSucceed, 'alert-success');
+                Session::flash('message',$langWikiDeletionSucceed); 
+                Session::flash('alert-class', 'alert-success');
             } else {
-                Session::Messages($langWikiInvalidWikiId);
+              //  Session::Messages($langWikiInvalidWikiId);
+                Session::flash('message',$langWikiInvalidWikiId); 
+                Session::flash('alert-class', 'alert-warning');
             }
 
             if ($groupId === 0) {

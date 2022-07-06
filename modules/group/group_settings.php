@@ -68,8 +68,11 @@ if (isset($_POST['submit'])) {
         setting_set(SETTING_GROUP_STUDENT_DESCRIPTION, $_POST['student_desc'], $course_id);
     } else {
         setting_set(SETTING_GROUP_STUDENT_DESCRIPTION, 0, $course_id);
+
     }
-    Session::Messages($langGlossaryUpdated, "alert-success");
+    //Session::Messages($langGlossaryUpdated, "alert-success");
+    Session::flash('message',$langGlossaryUpdated);
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/group/group_settings.php?course=$course_code");
 } else {
     $tool_content .= "<div class='form-wrapper'>

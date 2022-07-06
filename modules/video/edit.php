@@ -101,7 +101,9 @@ if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
         'description' => ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+')));
 
     // navigate
-    Session::Messages($langGlossaryUpdated, "alert-success");
+  //  Session::Messages($langGlossaryUpdated, "alert-success");
+    Session::flash('message',$langGlossaryUpdated); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/video/index.php?course=" . $course_code);
 }
 
@@ -137,7 +139,9 @@ if (isset($_POST['add_submit'])) { // add
         } else if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) { // upload local file
             $file_name = $_FILES['userFile']['name'];
             if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaVideo) {
-                Session::Messages($langNoSpace, "alert-danger");
+               // Session::Messages($langNoSpace, "alert-danger");
+                Session::flash('message',$langNoSpace); 
+                Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page("modules/video/index.php?course=" . $course_code);
             } else {
                 $tmpfile = $_FILES['userFile']['tmp_name'];
@@ -145,7 +149,9 @@ if (isset($_POST['add_submit'])) { // add
         }
 
         if (!isWhitelistAllowed($file_name)) {
-            Session::Messages($langUploadedFileNotAllowed, "alert-danger");
+           // Session::Messages($langUploadedFileNotAllowed, "alert-danger");
+            Session::flash('message',$langUploadedFileNotAllowed); 
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/video/index.php?course=" . $course_code);
         }
 
@@ -160,7 +166,9 @@ if (isset($_POST['add_submit'])) { // add
                 : copy("$tmpfile", "$updir/$safe_filename");
 
         if (!$iscopy) {
-            Session::Messages($langFileNot, "alert-danger");
+          //  Session::Messages($langFileNot, "alert-danger");
+            Session::flash('message',$langFileNot); 
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/video/index.php?course=" . $course_code);
         }
 
@@ -193,7 +201,9 @@ if (isset($_POST['add_submit'])) { // add
     }
 
     // navigate
-    Session::Messages($successAlert, "alert-success");
+  //  Session::Messages($successAlert, "alert-success");
+    Session::flash('message',$successAlert); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/video/index.php?course=" . $course_code);
 }
 
@@ -203,7 +213,9 @@ if (isset($_POST['add_submit_delos'])) {
         list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
         storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth);
     }
-    Session::Messages($langLinksAdded, "alert-success");
+   // Session::Messages($langLinksAdded, "alert-success");
+    Session::flash('message',$langLinksAdded); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/video/index.php?course=" . $course_code);
 }
 

@@ -113,21 +113,27 @@ if ($is_editor) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_link();
         $message = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
-        Session::Messages($message, 'alert-success');
+       // Session::Messages($message, 'alert-success');
+        Session::flash('message',$message); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/link/index.php?course=$course_code");
     }
     if (isset($_POST['submitCategory'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_category();
         $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
-        Session::Messages($messsage, 'alert-success');
+        //Session::Messages($messsage, 'alert-success');
+        Session::flash('message',$message); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/link/index.php?course=$course_code");
     }
     if (isset($_POST['submitSettings'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if (isset($_POST['settings_radio'])) {
             setting_set(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, intval($_POST['settings_radio']));
-            Session::Messages($langLinkSettingsSucc, 'alert-success');
+            //Session::Messages($langLinkSettingsSucc, 'alert-success');
+            Session::flash('message',$langLinkSettingsSucc); 
+            Session::flash('alert-class', 'alert-success');
         }
         redirect_to_home_page("modules/link/index.php?course=$course_code");
     }
@@ -145,11 +151,15 @@ if ($is_editor) {
     switch ($action) {
         case 'deletelink':
             delete_link($id);
-            Session::Messages($langLinkDeleted, 'alert-success');
+            //Session::Messages($langLinkDeleted, 'alert-success');
+            Session::flash('message',$langLinkDeleted); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/link/index.php?course=$course_code");
         case 'deletecategory':
             delete_category($id);
-            Session::Messages($langCategoryDeleted, 'alert-success');
+            //Session::Messages($langCategoryDeleted, 'alert-success');
+            Session::flash('message',$langCategoryDeleted); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/link/index.php?course=$course_code");
     }
 
@@ -228,12 +238,16 @@ if ($is_editor) {
         if ($result->c > 0) {
             if (isset($_POST['submitLink'])) {
                 if (isset($_POST['id']) && !is_link_creator(getDirectReference($_POST['id']))) {
-                    Session::Messages($langLinkNotOwner, 'alert-error');
+                    //Session::Messages($langLinkNotOwner, 'alert-error');
+                    Session::flash('message',$langLinkNotOwner); 
+                    Session::flash('alert-class', 'alert-success');
                 } else {
                     $_POST['selectcategory'] = getIndirectReference(-2); //ensure that simple users cannot change category
                     submit_link();
                     $message = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
-                    Session::Messages($message, 'alert-success');
+                    //Session::Messages($message, 'alert-success');
+                    Session::flash('message',$message); 
+                    Session::flash('alert-class', 'alert-success');
                 }
                 redirect_to_home_page("modules/link/index.php?course=$course_code");
             }
@@ -241,9 +255,13 @@ if ($is_editor) {
                 case 'deletelink':
                     if (is_link_creator($id)) {
                         delete_link($id);
-                        Session::Messages($langLinkDeleted, 'alert-success');
+                        //Session::Messages($langLinkDeleted, 'alert-success');
+                        Session::flash('message',$langLinkDeleted); 
+                        Session::flash('alert-class', 'alert-success');
                     } else {
-                        Session::Messages($langLinkNotOwner, 'alert-danger');
+                        //Session::Messages($langLinkNotOwner, 'alert-danger');
+                        Session::flash('message',$langLinkNotOwner); 
+                        Session::flash('alert-class', 'alert-danger');
                     }
                     redirect_to_home_page("modules/link/index.php?course=$course_code");
             }

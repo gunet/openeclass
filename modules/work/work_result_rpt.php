@@ -52,11 +52,15 @@ if (isset($_GET['assignment']) && isset($_GET['submission'])) {
                 download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output);
             }
         } else {
-            Session::Messages($langAutoJudgeNotEnabledForReport, 'alert-danger');
+          //  Session::Messages($langAutoJudgeNotEnabledForReport, 'alert-danger');
+            Session::flash('message',$langAutoJudgeNotEnabledForReport); 
+            Session::flash('alert-class', 'alert-danger');
             draw($tool_content, 2);
         }
     } else {
-        Session::Messages($m['WorkNoSubmission'], 'alert-danger');
+       // Session::Messages($m['WorkNoSubmission'], 'alert-danger');
+        Session::flash('message',$m['WorkNoSubmission']); 
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
     }
 

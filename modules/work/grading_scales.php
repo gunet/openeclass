@@ -33,7 +33,9 @@ $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langW
 
 if (isset($_GET['delete'])) { // delete scale
     Database::get()->query("DELETE FROM `grading_scale` WHERE id = ?d", $_GET['delete']);
-    Session::Messages($langGradeScalesDeleted, 'alert-success');
+    //Session::Messages($langGradeScalesDeleted, 'alert-success');
+    Session::flash('message',$langGradeScalesDeleted); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/work/grading_scales.php");
 }
 

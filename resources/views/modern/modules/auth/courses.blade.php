@@ -66,12 +66,21 @@
                                     <div class="row p-2"></div>
                             </div>
 
+                            @if(Session::has('message'))
+                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                                <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                                    {{ Session::get('message') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </p>
+                            </div>
+                            @endif
+
                             @if(!$fac)
                                 {!! $tool_content2 !!}
                             @else
                             
                             
-                                <form action='$_SERVER[SCRIPT_NAME]' method='post' style="padding-top:20px;">
+                                <form action='{{$_SERVER[SCRIPT_NAME]}}' method='post' style="padding-top:20px;">
                                     <ul class='list-group list_grouping' style="padding-top:25px; padding-bottom:25px;">
                                         <li class='list-group-item list-header'>
                                             <a name='top'></a>

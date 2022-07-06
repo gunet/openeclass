@@ -167,7 +167,9 @@ if (isset($_POST['submit'])) {
                 }
                 $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
             } else {
-                Session::Messages($errormsg, 'alert-danger');
+                //Session::Messages($errormsg, 'alert-danger');
+                Session::flash('message',$errormsg); 
+                Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page('modules/message/' . ($course_id? "?course=$course_code": ''));
             }
             chdir($cwd);
@@ -295,12 +297,18 @@ if (isset($_POST['submit'])) {
             }
         }
         if (!$errormail) {
-            Session::Messages($langdocAdd, 'alert-success');
+            //Session::Messages($langdocAdd, 'alert-success');
+            Session::flash('message',$langdocAdd); 
+            Session::flash('alert-class', 'alert-success');
         } else {
-            Session::Messages($langUsersEmailWrong, 'alert-warning');
+            //Session::Messages($langUsersEmailWrong, 'alert-warning');
+            Session::flash('message',$langUsersEmailWrong); 
+            Session::flash('alert-class', 'alert-warning');
         }
     } else { //end if(!$error)
-        Session::Messages($errormsg, 'alert-danger');
+        //Session::Messages($errormsg, 'alert-danger');
+        Session::flash('message',$errormsg); 
+        Session::flash('alert-class', 'alert-danger');
     }
     redirect_to_home_page('modules/message/' . ($course_id? "?course=$course_code": ''));
 }

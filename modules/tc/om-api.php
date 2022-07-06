@@ -125,7 +125,9 @@ function om_session_running($meeting_id)
     $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
     
     if (!in_array('getSession', $soapUsers->__getFunctions())) {        
-        Session::Messages($langOMNotSupported, 'alert-danger');
+        //Session::Messages($langOMNotSupported, 'alert-danger');
+        Session::flash('message',$langOMNotSupported); 
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/tc/index.php?course=$course_code");
     }
        
@@ -199,7 +201,9 @@ function create_om_meeting($title, $meeting_id, $record)
     }
         
     if ($run_to == -1) {
-        Session::Messages($langBBBConnectionErrorOverload, 'alert-danger');
+        //Session::Messages($langBBBConnectionErrorOverload, 'alert-danger');
+        Session::flash('message',$langBBBConnectionErrorOverload); 
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/tc/index.php?course=$course_code");
     } else {
         // we find the om server that will serve the session

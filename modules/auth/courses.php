@@ -85,10 +85,11 @@ if (isset($_POST['submit'])) {
     }
 
     if ($errorExists) {
-        $tool_content .= "<div class='alert alert-danger'>$langWrongPassCourse " .
-                q(join(', ', $restrictedCourses)) . "</div><br />";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langWrongPassCourse " .
+                q(join(', ', $restrictedCourses)) . "</div></div><br />";
     } else {
-        $tool_content .= "<div class='alert alert-success'>$langRegDone</div>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='alert alert-success'>$langRegDone</div></div>";
     }
     $tool_content .= "<div><a href='../../index.php'>$langHome</a></div>";
 } else {
@@ -119,7 +120,7 @@ if (isset($_POST['submit'])) {
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
+                                      'button-class' => 'btn-secondary')
                             ),false);
         if (count($roots) > 1) {
             $tool_content .= $tree->buildRootsSelectForm($fc);
@@ -138,7 +139,7 @@ if (isset($_POST['submit'])) {
             $tool_content .= expanded_faculte($fc, $uid);
             $tool_content .= "<br /><div align='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>&nbsp;&nbsp;</div>";
         } else if ($childCount <= 0) {
-            $tool_content .= "<div class='alert alert-warning text-center'>- $langNoCourses -</div>\n";
+            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning text-center'>- $langNoCourses -</div></div>\n";
         }
     } // end of else (department exists)
 }
@@ -225,12 +226,12 @@ function expanded_faculte($facid, $uid) {
         $myCourses[$course->course_id] = $course;
     }, intval($uid));
 
-    $retString .= "<div class='table-responsive'><table class='table-default'>";
-    $retString .= "<tr class='list-header'>";
-    $retString .= "<th width='50' align='center'>$langRegistration</th>";
-    $retString .= "<th>$langCourseCode</th>";
-    $retString .= "<th width='220'>$langTeacher</th>";
-    $retString .= "<th width='30' align='center'>$langType</th>";
+    $retString .= "<div class='table-responsive'><table class='announcements_table'>";
+    $retString .= "<tr class='notes_thead'>";
+    $retString .= "<th class='text-white' width='50' align='center'>$langRegistration</th>";
+    $retString .= "<th class='text-white'>$langCourseCode</th>";
+    $retString .= "<th class='text-white' width='220'>$langTeacher</th>";
+    $retString .= "<th class='text-white' width='30' align='center'>$langType</th>";
     $retString .= "</tr>";
 
     Database::get()->queryFunc("SELECT

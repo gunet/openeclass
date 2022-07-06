@@ -55,7 +55,9 @@ if (isset($_GET['add'])) {
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
                                                                'right' => '+5'));
     if ($result) {
-        Session::Messages($langTheU . ' ' . $langAdded, "alert alert-success");
+      //  Session::Messages($langTheU . ' ' . $langAdded, "alert alert-success");
+        Session::flash('message',$langTheU . ' ' . $langAdded); 
+        Session::flash('alert-class', 'alert-success');
         // notify user via email
         $email = uid_to_email($uid_to_add);
         if (!empty($email) and valid_email($email)) {
@@ -86,7 +88,9 @@ if (isset($_GET['add'])) {
             send_mail_multipart("{$_SESSION['givenname']} ${_SESSION['surname']}",  $_SESSION['email'], '', $email, $emailsubject, $plainemailbody, $emailbody);
         }
     } else {
-        Session::Messages($langAddError, "alert alert-warning");
+      //  Session::Messages($langAddError, "alert alert-warning");
+        Session::flash('message',$langAddError); 
+        Session::flash('alert-class', 'alert-warning');
     }
     redirect_to_home_page("modules/user/index.php?course=$course_code");
 } else {

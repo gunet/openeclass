@@ -43,7 +43,9 @@ load_js('tools.js');
 if (isset($_GET['verification_code'])) {
     $afftected_rows = Database::get()->query("UPDATE poll_user_record SET email_verification = 1, verification_code = NULL WHERE verification_code = ?s", $_GET['verification_code'])->affectedRows;
     if ($afftected_rows > 0) {
-        Session::Messages("$langPollParticipationValid", 'alert-success');
+        //Session::Messages("$langPollParticipationValid", 'alert-success');
+        Session::flash('message',$langPollParticipationValid);
+        Session::flash('alert-class', 'alert-success');
     }
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
@@ -59,14 +61,20 @@ if ($is_editor) {
             switch ($_GET['visibility']) {
                 case 'activate':
                     Database::get()->query("UPDATE poll SET active = 1 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-                    Session::Messages($langPollActivated, 'alert-success');
+                    //Session::Messages($langPollActivated, 'alert-success');
+                    Session::flash('message',$langPollActivated);
+                    Session::flash('alert-class', 'alert-success');
                     break;
                 case 'deactivate':
                     if (!resource_belongs_to_progress_data(MODULE_ID_QUESTIONNAIRE, $pid)) {
                         Database::get()->query("UPDATE poll SET active = 0 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-                        Session::Messages($langPollDeactivated, 'alert-success');
+                        //Session::Messages($langPollDeactivated, 'alert-success');
+                        Session::flash('message',$langPollDeactivated);
+                        Session::flash('alert-class', 'alert-success');
                     } else {
-                        Session::Messages($langResourceBelongsToCert, 'alert-warning');
+                        //Session::Messages($langResourceBelongsToCert, 'alert-warning');
+                        Session::flash('message',$langResourceBelongsToCert);
+                        Session::flash('alert-class', 'alert-warning');
                     }
                     break;
             }
@@ -76,11 +84,15 @@ if ($is_editor) {
             switch ($_GET['access']) {
                 case 'public':
                     Database::get()->query("UPDATE poll SET public = 1 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-                    Session::Messages($langPollUnlocked, 'alert-success');
+                    //Session::Messages($langPollUnlocked, 'alert-success');
+                    Session::flash('message',$langPollUnlocked);
+                    Session::flash('alert-class', 'alert-success');
                     break;
                 case 'limited':
                     Database::get()->query("UPDATE poll SET public = 0 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-                    Session::Messages($langPollLocked, 'alert-success');
+                    //Session::Messages($langPollLocked, 'alert-success');
+                    Session::flash('message',$langPollLocked);
+                    Session::flash('alert-class', 'alert-success');
                     break;
             }
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
@@ -95,21 +107,25 @@ if ($is_editor) {
                 $deleted_rows = Database::get()->query("DELETE FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
                 Database::get()->query("DELETE FROM poll_question WHERE pid = ?d", $pid);
                 Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
+
                 if ($deleted_rows > 0) {
                     Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_DELETE, array('title' => $poll_title));
                 }
-
-                Session::Messages($langPollDeleted, 'alert-success');
+                Session::flash('message',$langPollDeleted);
+                Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
             } else {
-                Session::Messages($langResourceBelongsToCert, "alert-warning");
+                Session::flash('message',$langResourceBelongsToCert);
+                Session::flash('alert-class', 'alert-warning');
             }
         // delete poll results
         } elseif (isset($_GET['delete_results']) && $_GET['delete_results'] == 'yes') {
             Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
             $poll_title = Database::get()->querySingle("SELECT name FROM poll WHERE course_id = ?d", $course_id)->name;
             Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_DELETE, array('title' => $poll_title, 'legend' => 'purge_results'));
-            Session::Messages($langPollResultsDeleted, 'alert-success');
+            Session::flash('message',$langPollResultsDeleted);
+            Session::flash('alert-class', 'alert-success');
+
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         //clone poll
         } elseif (isset($_POST['clone_to_course_id'])) {

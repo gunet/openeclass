@@ -160,13 +160,12 @@ if (isset($_POST['submit'])) {
 
     notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $time);
 
-    Session::Messages($langTopicStored, 'alert-success');
-    $redirectUrl = "modules/forum/viewforum.php?course=$course_code&forum=$forum_id";
-    if ($unit) {
-        $redirectUrl = "modules/units/view.php?course=$course_code&res_type=forum&forum=$forum_id&unit=$unit";
-    } else if ($res_type) {
-        $redirectUrl = "modules/units/view.php?course=$course_code&res_type=forum&forum=$forum_id";
-    }
+    //Session::Messages($langTopicStored, 'alert-success');
+    Session::flash('message',$langTopicStored);
+    Session::flash('alert-class', 'alert-success');
+    $redirectUrl = $unit?
+        "modules/units/view.php?course=$course_code&res_type=forum&forum=$forum_id&unit=$unit":
+        "modules/forum/viewforum.php?course=$course_code&forum=$forum_id";
     redirect_to_home_page($redirectUrl);
 } else {
     $action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id";

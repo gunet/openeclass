@@ -70,7 +70,6 @@ $hits = $idx->multiSearchRaw(CourseIndexer::buildQueries($_POST));
 
 // exit if not results
 if (count($hits) <= 0) {
-    //Session::Messages($langNoResult);
     Session::flash('message',$langNoResult);
     Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page('modules/search/search.php');

@@ -47,7 +47,9 @@ require_once 'offline_imscp.php';
 // security check
 $offline_course = get_config('offline_course') && (setting_get(SETTING_OFFLINE_COURSE, $course_id));
 if (!$offline_course) {
-    Session::Messages($langForbidden, 'aleρτ-warning');
+    //Session::Messages($langForbidden, 'alerτ-warning');
+    Session::flash('message',$langForbidden); 
+    Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page('');
 }
 

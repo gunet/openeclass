@@ -33,7 +33,9 @@ $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langW
 
 if (isset($_GET['delete'])) { // delete rubric
     Database::get()->query("DELETE FROM `rubric` WHERE id = ?d", $_GET['delete']);
-    Session::Messages($langRubricDeleted, 'alert-success');
+    //Session::Messages($langRubricDeleted, 'alert-success');
+    Session::flash('message',$langRubricDeleted);
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/work/rubrics.php");
 }
 
@@ -76,8 +78,9 @@ if (isset($_POST['submitRubric'])) {
                 Database::get()->query("INSERT INTO rubric (name, scales, description, preview_rubric, points_to_graded, course_id) VALUES (?s, ?s, ?s, ?d, ?d, ?d)", $name, $serialized_criteria, $desc, $preview_rubric, $points_to_graded, $course_id);
             }
         }
-        Session::Messages($langRubricCreated, 'alert-success');
-       redirect_to_home_page("modules/work/rubrics.php?course=$course_code");
+        Session::flash('message',$langRubricCreated);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/work/rubrics.php?course=$course_code");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$rubric_id");
@@ -526,7 +529,7 @@ function show_rubric ($rubric_id) {
                 <td>$rubric->name</td>
                 <td>$rubric->description</td>
                 <td>
-                <ul class='list-unstyled'>
+                <ul class='list-unstyled'>//Session::Messages($langRubricCreated, 'alert-success');
                     $criteria_list
                 </ul>
                 </td>

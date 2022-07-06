@@ -144,7 +144,9 @@ if ($is_editor) {
                                            glossary_index = ?d WHERE id = ?d"
                 , $expand_glossary, (isset($_POST['index']) ? 1 : 0), $course_id);
         invalidate_glossary_cache();
-        Session::Messages($langQuotaSuccess, 'alert-success');
+        //Session::Messages($langQuotaSuccess, 'alert-success');
+        Session::flash('message',$langQuotaSuccess); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/glossary/index.php?course=$course_code");
     }
 
@@ -211,7 +213,9 @@ if ($is_editor) {
 
             if ($q and $q->affectedRows) {
                 invalidate_glossary_cache();
-                Session::Messages($success_message, 'alert-success');
+                //Session::Messages($success_message, 'alert-success');
+                Session::flash('message',$success_message); 
+                Session::flash('alert-class', 'alert-success');
             }
             redirect_to_home_page("modules/glossary/index.php?course=$course_code");
         } else {
@@ -229,7 +233,9 @@ if ($is_editor) {
         Log::record($course_id, MODULE_ID_GLOSSARY, LOG_DELETE, array('id' => $id,
                                                                       'term' => $term));
         if ($q and $q->affectedRows) {
-            Session::Messages($langGlossaryDeleted, 'alert-success');
+            //Session::Messages($langGlossaryDeleted, 'alert-success');
+            Session::flash('message',$langGlossaryDeleted); 
+            Session::flash('alert-class', 'alert-success');
         }
         redirect_to_home_page("modules/glossary/index.php?course=$course_code");
     }

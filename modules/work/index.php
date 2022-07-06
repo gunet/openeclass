@@ -174,7 +174,9 @@ if (isset($_GET['get']) or isset($_GET['getcomment'])) {
         $get = $_GET['get'];
     }
     if (!send_file(intval($get), $file_type)) {
-        Session::Messages($langFileNotFound, 'alert-danger');
+       // Session::Messages($langFileNotFound, 'alert-danger');
+        Session::flash('message',$langFileNotFound);
+        Session::flash('alert-class', 'alert-danger');
     }
 }
 
@@ -187,7 +189,9 @@ if (isset($_GET['chk'])) { // plagiarism check
         $secret = work_secret($file_details->assignment_id);
         $true_file_path = $workPath . "/" . $file_details->file_path;
     } else {
-        Session::Messages($langFileNotFound, 'alert-danger');
+       // Session::Messages($langFileNotFound, 'alert-danger');
+        Session::flash('message',$langFileNotFound);
+        Session::flash('alert-class', 'alert-danger');
     }
     send_file_for_plagiarism($assign_id, $file_id, $true_file_path, $true_file_name);
 }
@@ -200,7 +204,9 @@ if ($is_editor) {
         // Allow unlimited time for creating the archive
         set_time_limit(0);
         if (!download_assignments($as_id)) {
-            Session::Messages($langNoAssignmentsExist, 'alert-danger');
+           // Session::Messages($langNoAssignmentsExist, 'alert-danger');
+            Session::flash('message',$langNoAssignmentsExist);
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$as_id);
         }
     }
@@ -561,9 +567,13 @@ if ($is_editor) {
         $as_id = intval($_GET['as_id']);
         $id = intval($_GET['id']);
         if(delete_user_assignment($as_id)){
-            Session::Messages($langDeleted, 'alert-success');
+            //Session::Messages($langDeleted, 'alert-success');
+            Session::flash('message',$langDeleted);
+            Session::flash('alert-class', 'alert-success');
         } else {
-            Session::Messages($langDelError, 'alert-danger');
+           // Session::Messages($langDelError, 'alert-danger');
+            Session::flash('message',$langDelError);
+            Session::flash('alert-class', 'alert-danger');
         }
         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
     } elseif (isset($_POST['grades']) || isset($_POST['grade_rubric']) ) {
@@ -590,42 +600,62 @@ if ($is_editor) {
             if ($choice == 'disable') {
                 if (!resource_belongs_to_progress_data(MODULE_ID_ASSIGN, $id)) {
                     if (Database::get()->query("UPDATE assignment SET active = '0' WHERE id = ?d", $id)->affectedRows > 0) {
-                        Session::Messages($langAssignmentDeactivated, 'alert-success');
+                        //Session::Messages($langAssignmentDeactivated, 'alert-success');
+                        Session::flash('message',$langAssignmentDeactivated);
+                        Session::flash('alert-class', 'alert-success');
                     }
                 } else {
-                    Session::Messages($langResourceBelongsToCert, 'alert-warning');
+                    //Session::Messages($langResourceBelongsToCert, 'alert-warning');
+                    Session::flash('message',$langResourceBelongsToCert);
+                    Session::flash('alert-class', 'alert-warning');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'enable') {
                 if (Database::get()->query("UPDATE assignment SET active = '1' WHERE id = ?d", $id)->affectedRows > 0) {
-                    Session::Messages($langAssignmentActivated, 'alert-success');
+                   // Session::Messages($langAssignmentActivated, 'alert-success');
+                    Session::flash('message',$langAssignmentActivated);
+                    Session::flash('alert-class', 'alert-success');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'do_delete') {
                 if (!resource_belongs_to_progress_data(MODULE_ID_ASSIGN, $id)) {
                     if(delete_assignment($id)) {
-                        Session::Messages($langDeleted, 'alert-success');
+                       // Session::Messages($langDeleted, 'alert-success');
+                        Session::flash('message',$langDeleted);
+                        Session::flash('alert-class', 'alert-success');
                     } else {
-                        Session::Messages($langDelError, 'alert-danger');
+                        //Session::Messages($langDelError, 'alert-danger');
+                        Session::flash('message',$langDelError);
+                        Session::flash('alert-class', 'alert-danger');
                     }
                 } else {
-                    Session::Messages($langResourceBelongsToCert, 'alert-warning');
+                    //Session::Messages($langResourceBelongsToCert, 'alert-warning');
+                    Session::flash('message',$langResourceBelongsToCert);
+                    Session::flash('alert-class', 'alert-warning');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'do_delete_file') {
                 if(delete_teacher_assignment_file($id)){
-                    Session::Messages($langDelF, 'alert-success');
+                    //Session::Messages($langDelF, 'alert-success');
+                    Session::flash('message',$langDelF);
+                    Session::flash('alert-class', 'alert-success');
                 } else {
-                    Session::Messages($langDelF, 'alert-danger');
+                   // Session::Messages($langDelF, 'alert-danger');
+                    Session::flash('message',$langDelF);
+                    Session::flash('alert-class', 'alert-danger');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id.'&choice=edit');
             } elseif ($choice == 'do_purge') {
                 if (!resource_belongs_to_progress_data(MODULE_ID_ASSIGN, $id)) {
                     if (purge_assignment_subs($id)) {
-                        Session::Messages($langAssignmentSubsDeleted, 'alert-success');
+                        //Session::Messages($langAssignmentSubsDeleted, 'alert-success');
+                        Session::flash('message',$langAssignmentSubsDeleted);
+                        Session::flash('alert-class', 'alert-success');
                     }
                 } else {
-                    Session::Messages($langResourceBelongsToCert, 'alert-warning');
+                   // Session::Messages($langResourceBelongsToCert, 'alert-warning');
+                    Session::flash('message',$langResourceBelongsToCert);
+                    Session::flash('alert-class', 'alert-warning');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'edit') {
@@ -930,15 +960,21 @@ function add_assignment() {
                     'deadline' => $deadline,
                     'secret' => $secret,
                     'group' => $group_submissions));
-                Session::Messages($langNewAssignSuccess, 'alert-success');
+                //Session::Messages($langNewAssignSuccess, 'alert-success');
+                Session::flash('message',$langNewAssignSuccess);
+                Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
             } else {
                 @rmdir("$workPath/$secret");
-                Session::Messages($langGeneralError, 'alert-danger');
+               // Session::Messages($langGeneralError, 'alert-danger');
+                Session::flash('message',$langGeneralError);
+                Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
             }
         } else {
-            Session::Messages($langErrorCreatingDirectory);
+           // Session::Messages($langErrorCreatingDirectory);
+            Session::flash('message',$langErrorCreatingDirectory);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
         }
     } else {
@@ -1164,7 +1200,9 @@ function edit_assignment($id) {
                   'deadline' => $deadline,
                   'group' => $group_submissions));
 
-        Session::Messages($langEditSuccess,'alert-success');
+       // Session::Messages($langEditSuccess,'alert-success');
+        Session::flash('message',$langEditSuccess);
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -1256,7 +1294,9 @@ function submit_work($id, $on_behalf_of = null) {
                 $submission_text = purify($_POST['submission_text']);
                 $success_msgs[] = $langUploadSuccess;
             } else {
-                Session::Messages($langEmptyFaculte, 'alert-warning');
+                //Session::Messages($langEmptyFaculte, 'alert-warning');
+                Session::flash('message',$langEmptyFaculte);
+                Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
             }
         } else { // If submission type is one or multiple files
@@ -1288,7 +1328,9 @@ function submit_work($id, $on_behalf_of = null) {
                     foreach ($_FILES['userfile']['name'] as $i => $name) {
                         $status = $_FILES['userfile']['error'][$i];
                         if (!in_array($status, [UPLOAD_ERR_OK, UPLOAD_ERR_NO_FILE])) {
-                            Session::Messages($langUploadError, 'alert-danger');
+                           // Session::Messages($langUploadError, 'alert-danger');
+                            Session::flash('message',$langUploadError);
+                            Session::flash('alert-class', 'alert-danger');
                             redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
                         }
                         if ($status == UPLOAD_ERR_OK) {
@@ -1297,7 +1339,9 @@ function submit_work($id, $on_behalf_of = null) {
                     }
                     $fileCount = count($_FILES['userfile']['name']);
                     if ($totalFiles > $maxFiles) {
-                        Session::Messages($GLOBALS['langWorkFilesCountExceeded'], 'alert-danger');
+                        //Session::Messages($GLOBALS['langWorkFilesCountExceeded'], 'alert-danger');
+                        Session::flash('message',$GLOBALS['langWorkFilesCountExceeded']);
+                        Session::flash('alert-class', 'alert-danger');
                         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
                     }
                     if ($totalFiles == 1) {
@@ -1337,7 +1381,9 @@ function submit_work($id, $on_behalf_of = null) {
                     $files_to_keep = [$filename];
                 }
                 if (!$file_moved) {
-                    Session::Messages($langUploadError, 'alert-danger');
+                    //Session::Messages($langUploadError, 'alert-danger');
+                    Session::flash('message',$langUploadError);
+                    Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
                 }
             }
@@ -1545,7 +1591,9 @@ function submit_work($id, $on_behalf_of = null) {
         }
 
     } else { // not submit_ok
-        Session::Messages($langExerciseNotPermit);
+        //Session::Messages($langExerciseNotPermit);
+        Session::flash('message',$langExerciseNotPermit);
+        Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("modules/work/index.php?course=$course_code");
     }
 }
@@ -3835,8 +3883,10 @@ function show_student_assignment($id) {
         if ($row->ip_lock) {
             $user_ip = Log::get_client_ip();
             if (!match_ip_to_ip_or_cidr($user_ip, explode(',', $row->ip_lock))) {
-                Session::Messages($langIPHasNoAccess);
-                redirect_to_home_page('modules/work/?course=' . $course_code);
+                //Session::Messages($langIPHasNoAccess);
+                Session::flash('message',$langIPHasNoAccess);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page('modules/work/index.php?course=' . $course_code);
             }
         }
 
@@ -3844,7 +3894,8 @@ function show_student_assignment($id) {
         $current_date = new DateTime('NOW');
         $interval = $WorkStart->diff($current_date);
         if ($WorkStart > $current_date) {
-            Session::Messages($langAssignmentWillBeActive . ' ' . $WorkStart->format('d-m-Y H:i'));
+            Session::flash('message',$langAssignmentWillBeActive . ' ' . $WorkStart->format('d-m-Y H:i'));
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("modules/work/index.php?course=$course_code");
         }
 
@@ -4165,7 +4216,9 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                             </div>
                         </div>";
             } else {
-                Session::Messages($m['NoneWorkGroupNoSubmission'], 'alert-danger');
+                //Session::Messages($m['NoneWorkGroupNoSubmission'], 'alert-danger');
+                Session::flash('message',$m['NoneWorkGroupNoSubmission']);
+                Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
             }
         }
@@ -4180,7 +4233,9 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                             </div>
                         </div>";
             } else {
-                Session::Messages($m['NoneWorkUserNoSubmission'], 'alert-danger');
+               // Session::Messages($m['NoneWorkUserNoSubmission'], 'alert-danger');
+                Session::flash('message',$m['NoneWorkUserNoSubmission']);
+                Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
             }
     }
@@ -4772,11 +4827,10 @@ function show_assignment($id, $display_graph_results = false) {
                                </div>
                                </form>";
             } else {
-                Session::Messages($langPeerReviewImpossible, 'alert-warning');
+                Session::flash('message',$langPeerReviewImpossible);
+                Session::flash('alert-class', 'alert-warning');
             }
         }
-
-
     $rev = (@($_REQUEST['rev'] == 1)) ? 'DESC' : 'ASC';
     if (isset($_REQUEST['sort'])) {
         if ($_REQUEST['sort'] == 'date') {
@@ -5733,7 +5787,9 @@ function submit_grade_comments($args) {
         if (isset($args['send_email'])) {
             grade_email_notify($id, $sid, $grade, $comment);
         }
-        Session::Messages($langGrades, 'alert-success');
+        //Session::Messages($langGrades, 'alert-success');
+        Session::flash('message',$langGrades);
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -5786,7 +5842,9 @@ function submit_grade_reviews($args) {
 
 		//edw tha valoume ena if mexri thn hmeromhnia lhkshs review .otan perasei h hmera tha kanoume update ton vathmo pou vghke apo to ms sto pedio bathmos
 		$cdate = date('Y-m-d H:i:s');
-        Session::Messages($langGrades, 'alert-success');
+        //Session::Messages($langGrades, 'alert-success');
+        Session::flash('message',$langGrades);
+        Session::flash('alert-class', 'alert-success');
         if (isset($_REQUEST['unit'])) {
             redirect_to_home_page("modules/units/index.php?course=$course_code&id=$_REQUEST[unit]");
         } else {
@@ -5846,7 +5904,9 @@ function submit_review_per_ass($id) {
 		}
 		$value++;
 	}
-	Session::Messages($success_msgs, 'alert-success');
+	//Session::Messages($success_msgs, 'alert-success');
+    Session::flash('message',$success_msgs);
+    Session::flash('alert-class', 'alert-success');
 	redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
 }
 
@@ -5921,12 +5981,16 @@ function submit_grades($grades_id, $grades, $email = false) {
                         if ($email) {
                             grade_email_notify($grades_id, $sid, $grade, '');
                         }
-                        Session::Messages($langGrades, 'alert-success');
+                       // Session::Messages($langGrades, 'alert-success');
+                        Session::flash('message',$langGrades);
+                        Session::flash('alert-class', 'alert-success');
                 }
             }
         }
 
-        Session::Messages($langGrades, 'alert-success');
+        //Session::Messages($langGrades, 'alert-success');
+        Session::flash('message',$langGrades);
+        Session::flash('alert-class', 'alert-success');
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($errors);
     }
@@ -6360,6 +6424,8 @@ function max_grade_from_rubric($rubric_id) {
     $rubric_data = Database::get()->querySingle("SELECT * FROM rubric WHERE id = ?d AND course_id = ?d", $rubric_id, $course_id);
     $unserialized_scale_items = unserialize($rubric_data->scales);
     //Session::Messages("<pre>".print_r($unserialized_scale_items,true)."</pre>");
+    Session::flash('message',"<pre>".print_r($unserialized_scale_items,true)."</pre>");
+    Session::flash('alert-class', 'alert-secondary');
     $max_grade = 0;
     $max_scale_item_value = 0;
     foreach ($unserialized_scale_items as $CritArrItems) {
@@ -6371,6 +6437,8 @@ function max_grade_from_rubric($rubric_id) {
         $max_grade = $max_grade + $CritArrItems['crit_weight'] * $max_scale_item_value;
     }
     //Session::Messages("<pre>".print_r($unserialized_scale_items,true).print_r($max_grade,true)."</pre>");
+    Session::flash('message',"<pre>".print_r($unserialized_scale_items,true).print_r($max_grade,true)."</pre>");
+    Session::flash('alert-class', 'alert-secondary');
     return $max_grade/100;
 }
 

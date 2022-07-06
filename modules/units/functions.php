@@ -59,8 +59,10 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
         }
-        Session::Messages($langResourceUnitModified, 'alert-success');
-        redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
+        Session::flash('message',$langResourceUnitModified);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page('modules/units/index/php?course=' . $course_code . '&id=' . $id);
+
     } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
         $res_id = intval($_GET['del']);
         if (check_admin_unit_resource($res_id)) {
@@ -69,8 +71,10 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
-            Session::Messages($langResourceCourseUnitDeleted, 'alert-success');
-            redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
+            Session::flash('message',$langResourceCourseUnitDeleted);
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $id);
+
         }
     } elseif (isset($_REQUEST['del_act'])) { // delete resource from course unit
         $res_id = intval($_GET['del_act']);
@@ -92,8 +96,10 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
-            Session::Messages($langViMod, 'alert-success');
-            redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
+            Session::flash('message',$langViMod);
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $id);
+
         }
     } elseif (isset($_REQUEST['vis_act'])) { // modify visibility in text resources only
 

@@ -90,7 +90,9 @@ process_actions();
 $access = Database::get()->querySingle("SELECT public FROM course_units WHERE id = ?d", $id);
 if ($access) {
     if (!resource_access(1, $access->public)) {
-        Session::Messages($langForbidden, 'alert-danger');
+        //Session::Messages($langForbidden, 'alert-danger');
+        Session::flash('message',$langForbidden);
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("courses/$course_code/");
     }
 }
@@ -125,7 +127,8 @@ if (isset($id) and $id !== false) {
 }
 
 if (!isset($info) or !$info) {
-    Session::Messages($langUnknownResType);
+    Session::flash('message',$langUnknownResType);
+    Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page("courses/$course_code/");
 }
 

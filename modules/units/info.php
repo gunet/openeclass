@@ -44,7 +44,9 @@ if (isset($_GET['edit'])) {
                                     FROM course_units WHERE id = ?d AND course_id = ?d",
                                         $id, $course_id);
     if (!$cu) {
-        Session::Messages($langUnknownResType);
+        //Session::Messages($langUnknownResType);
+        Session::flash('message',$langUnknownResType); 
+        Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("courses/$course_code/");
     }
     $unitDescr = $cu->comments;

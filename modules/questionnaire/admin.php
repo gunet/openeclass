@@ -113,7 +113,9 @@ if (isset($_POST['submitPoll'])) {
                             );
             }
             Database::get()->query("DELETE FROM poll_to_specific WHERE poll_id = ?d", $pid);
-            Session::Messages($langPollEdited, 'alert-success');
+            //Session::Messages($langPollEdited, 'alert-success');
+            Session::flash('message',$langPollEdited);
+            Session::flash('alert-class', 'alert-success');
         } else {
             $PollActive = 1;
             $pid = Database::get()->query("INSERT INTO poll
@@ -133,7 +135,9 @@ if (isset($_POST['submitPoll'])) {
             }   elseif($PollSurveyType == POLL_ATTLS) {
                 createattls($pid);
             }
-            Session::Messages($langPollCreated, 'alert-success');
+            //Session::Messages($langPollCreated, 'alert-success');
+            Session::flash('message',$langPollCreated);
+            Session::flash('alert-class', 'alert-success');
         }
         if ($PollAssignToSpecific && !empty($PollAssignees)) {
             if ($PollAssignToSpecific == 1) {
@@ -253,8 +257,9 @@ if (isset($_GET['pid'])) {
     }
     $pageName = $poll->name;
     $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE pid = ?d", $pid)->count;
-    if ($attempt_counter > 0) {
-        Session::Messages($langThereAreParticipants);
+    if ($attempt_counter>0) {
+        Session::flash('message',$langThereAreParticipants);
+        Session::flash('alert-class', 'alert-warning');
     }
 } else {
     if (!isset($_GET['newPoll'])) {

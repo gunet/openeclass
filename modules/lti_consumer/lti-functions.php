@@ -423,7 +423,9 @@ function disable_lti_app($id)
     global $langLTIAppUpdateSuccessful, $course_code;
 
     Database::get()->querySingle("UPDATE lti_apps set enabled = 0 WHERE id = ?d",$id);
-    Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
+    //Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
+    Session::flash('message',$langLTIAppUpdateSuccessful); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/course_tools/index.php?course=$course_code");
 }
 
@@ -432,7 +434,9 @@ function enable_lti_app($id)
     global $langLTIAppUpdateSuccessful, $course_code;
 
     Database::get()->querySingle("UPDATE lti_apps SET enabled = 1 WHERE id = ?d",$id);
-    Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
+    //Session::Messages($langLTIAppUpdateSuccessful, 'alert-success');
+    Session::flash('message',$langLTIAppUpdateSuccessful); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/course_tools/index.php?course=$course_code");
 }
 

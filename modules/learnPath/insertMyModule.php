@@ -97,7 +97,9 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add')) {
             $nb++;
         }
     }
-    Session::Messages($langInsertedAsModule, 'alert-info');
+    //Session::Messages($langInsertedAsModule, 'alert-info');
+    Session::flash('message',$langInsertedAsModule); 
+    Session::flash('alert-class', 'alert-info');
     redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
 } //end if ADD command
 

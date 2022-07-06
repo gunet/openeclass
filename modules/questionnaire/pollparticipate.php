@@ -85,9 +85,11 @@ if ($pollObj && $pollObj->type == POLL_LIMESURVEY) {
     $pollIsLime = true;
 }
 // check poll validity
+
 $pq = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d", $pid);
 if(!$pq && !$pollIsLime) {
-    Session::Messages($langPollNoQuestions);
+    Session::flash('message',$langPollNoQuestions);
+    Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 
@@ -155,7 +157,8 @@ function printPollForm() {
     // check if user has participated
     $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->count;
     if ($uid && $has_participated > 0 && !$is_editor && !$multiple_submissions) {
-        Session::Messages($langPollAlreadyParticipated);
+        Session::flash('message',$langPollAlreadyParticipated);
+        Session::flash('alert-class', 'alert-warning');
         if ($unit_id) {
             redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $unit_id);
         } else if (isset($_REQUEST['res_type'])) {
@@ -389,7 +392,9 @@ function printPollForm() {
             $tool_content .= "</form>";
         }
     } else {
-        Session::Messages($langPollInactive);
+        //Session::Messages($langPollInactive);
+        Session::flash('message',$langPollInactive);
+        Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
 }

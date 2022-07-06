@@ -94,14 +94,20 @@ while ($iterator <= $_POST['maxMediaForm']) {
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 create_new_module($video->title, $video->description, $video->path, CTMEDIA_);
                 //reuse_module($thisLinkModule->module_id);
-                Session::Messages($langInsertedAsModule, 'alert-info');
+                //Session::Messages($langInsertedAsModule, 'alert-info');
+                Session::flash('message',$langInsertedAsModule); 
+                Session::flash('alert-class', 'alert-info');
 
             } else {
-                Session::Messages($langAlreadyUsed, 'alert-warning');
+                //Session::Messages($langAlreadyUsed, 'alert-warning');
+                Session::flash('message',$langAlreadyUsed); 
+                Session::flash('alert-class', 'alert-warning');
             }
         } else {
             create_new_module($video->title, $video->description, $video->path, CTMEDIA_);
-            Session::Messages($langInsertedAsModule, 'alert-info');
+            //Session::Messages($langInsertedAsModule, 'alert-info');
+            Session::flash('message',$langInsertedAsModule); 
+            Session::flash('alert-class', 'alert-info');
         }
     }
 
@@ -134,15 +140,21 @@ while ($iterator <= $_POST['maxMediaForm']) {
                 //reuse_module($thisLinkModule->module_id);
                 // TODO ---- needs improvement //
                 create_new_module($videolink->title, $videolink->description, $videolink->url, CTMEDIALINK_);
-                Session::Messages($langInsertedAsModule, 'alert-info');
+                //Session::Messages($langInsertedAsModule, 'alert-info');
+                Session::flash('message',$langInsertedAsModule); 
+                Session::flash('alert-class', 'alert-info');
                 redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             } else {
-                Session::Messages($langAlreadyUsed);
+                //Session::Messages($langAlreadyUsed);
+                Session::flash('message',$langAlreadyUsed); 
+                Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             }
         } else {
             create_new_module($videolink->title, $videolink->description, $videolink->url, CTMEDIALINK_);
-            Session::Messages($langInsertedAsModule, 'alert-info');
+            //Session::Messages($langInsertedAsModule, 'alert-info');
+            Session::flash('message',$langInsertedAsModule); 
+            Session::flash('alert-class', 'alert-info');
             redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
         }
     }

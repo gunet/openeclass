@@ -27,7 +27,8 @@ $require_user_registration = true;
 require_once '../../include/baseTheme.php';
 
 if (course_status($course_id) != COURSE_CLOSED and !$is_editor) {
-    Session::Messages($langForbidden, 'alert-danger');
+    Session::flash('message',$langForbidden);
+    Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page("courses/$course_code/");
 }
 //Identifying ajax request
