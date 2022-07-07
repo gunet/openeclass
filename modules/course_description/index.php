@@ -38,12 +38,10 @@ $action->record(MODULE_ID_DESCRIPTION);
 $toolName = $langCourseDescription;
 
 ModalBoxHelper::loadModalBox();
-<<<<<<< local
-=======
 
 
 //////////////////////////////////////////////  My changes /////////////////////////////////////////////////////////////////////
-// $course_code = $_GET['course'];                                                                                             
+// $course_code = $_GET['course'];
 // $course_id = course_code_to_id($course_code);
 // $title_course = course_id_to_title($course_id);
 // $course_code_title = course_id_to_code($course_id);
@@ -56,8 +54,6 @@ ModalBoxHelper::loadModalBox();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
->>>>>>> graft
 if ($is_editor) {
     load_js('tools.js');
     $data['action_bar'] = action_bar(array(
