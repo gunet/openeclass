@@ -1344,7 +1344,7 @@ function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, 
         $ebook_id = $data->ebook_id;
         $display_id = $data->sid . ',' . $subsection_id;
     }
-    return show_ebook_resource($title, $comments, $resource_id, $ebook_id, $display_id, $visibility, $deleted);
+    return show_ebook_resource($title, $comments, $resource_id, $ebook_id, $display_id, $visibility, $deleted, $act_name);
 }
 
 /**
