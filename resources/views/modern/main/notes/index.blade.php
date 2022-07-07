@@ -15,18 +15,7 @@ print_a($user_notes);
                     <div class="col-xl-12 col-lg-8 col-md-12 col-sm-12 col-xs-12 justify-content-center courses-details">
 
                         <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">      
-                            <div class="col-xxl-12 col-lx-12 col-lg-12 col-md-12 col-sm-6 LegendCol">
-                                <legend class="float-none w-auto py-2 px-4 notes-legend">
-                                    <form class="formAddNote" action="{{ $urlAppend }}main/notes/index.php" method="post">
-                                        <p class="text-start myNodesText"><i class="fas fa-sticky-note"></i> {{trans('langNotes')}}</p>
-                                        <p class="text-end addNodesText">{{trans('langAddNote')}}: </p>
-                                        <button class="add_note_button" type="submit" name="addNote">
-                                            <i class='fas fa-sticky-note fa-spin fa-3x nodes_fas'></i>
-                                        <p class="text-end AddNotePlus">+</p>
-                                        </button>
-                                    </form>
-                                </legend>
-                            </div>
+                        @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                             <div class="row p-2"></div>
                             <div class="row p-2"></div>

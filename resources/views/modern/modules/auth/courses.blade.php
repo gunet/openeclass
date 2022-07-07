@@ -61,10 +61,7 @@
                    
                         <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
-                            <div class="col-xxl-12 col-lx-12 col-lg-12 col-md-12 col-sm-6">
-                                    <legend class="float-none w-auto py-2 px-4 notes-legend"><span style="margin-left:-25px;"><i class="fas fa-registered"></i> {{$toolName}}</span></legend>
-                                    <div class="row p-2"></div>
-                            </div>
+                           @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                             @if(Session::has('message'))
                             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>

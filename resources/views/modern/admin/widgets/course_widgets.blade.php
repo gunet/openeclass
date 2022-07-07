@@ -47,33 +47,25 @@
                             </div>
 
 
-                            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="row p-2"></div><div class="row p-2"></div>
-                                <legend class="float-none w-auto py-2 px-4 notes-legend"><span class="pos_TitleCourse"><i class="fas fa-folder-open" aria-hidden="true"></i> {{$toolName}} <strong>{{$currentCourseName}} <small>({{$course_code}})</small></strong></span>
-                                    <div class="manage-course-tools"style="float:right">
-                                        @if($is_editor)
-                                            @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code])              
-                                        @endif
-                                    </div>
-                                </legend>
-                            </div>
+                            @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
                             
                             <div class="row p-2"></div><div class="row p-2"></div>
                             <span class="control-label-notes ms-1">{{trans('langTeacher')}}: <small>{{course_id_to_prof($course_id)}}</small></span>
                             <div class="row p-2"></div><div class="row p-2"></div>
                             
                             <div class='row'>
-                                <div class="col-4">
+                                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
                                     <h3 class="control-label-notes">{{ trans('langInstalledWidgets') }}</h3>
                                     <hr>
                                     @if (count($installed_widgets))
                                     <div id="widgets">
                                         @foreach ($installed_widgets as $key => $installed_widget)
                                                 <div class="panel panel-success widget mt-3" data-widget-id="{{ $installed_widget->id }}">
-                                                    <div class="panel-heading notes_thead pt-2 ps-3 pb-3 pe-3 text-center">                   
+                                                    <div class="panel-heading notes_thead pt-2 ps-3 pb-2 pe-3 text-center">                   
                                                         <a data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
                                                         href="#widget_desc_{{ $key }}" class="text-white widget_title">
-                                                            {{ $installed_widget->getName() }} <span></span> <span class="pull-right"></span>
+                                                            {{ $installed_widget->getName() }}
+                                                            <span class="fa fa-arrow-down fs-6"></span>
                                                         </a>                     
                                                     </div>
                                                     <div id="widget_desc_{{ $key }}" class="panel-collapse collapse">
@@ -116,7 +108,7 @@
                                     </div>       
                                     @endif      
                                 </div>    
-                                <div class="col-8">
+                                <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
                                     @include('admin.widgets.common.courseHomeMain')
                                     @include('admin.widgets.common.courseHomeSide')                   
                                 </div>

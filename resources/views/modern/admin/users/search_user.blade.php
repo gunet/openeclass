@@ -1,4 +1,3 @@
-<?php //print_a($breadcrumbs);?>
 @extends('layouts.default')
 
 @section('content')
@@ -42,15 +41,8 @@
                         </div>
                     </div>
 
-                    @if($breadcrumbs && count($breadcrumbs)>2)
-                    <div class='row p-2'></div>
-                    <div class="float-start">
-                        <p class='control-label-notes'>{!! $breadcrumbs[1]['bread_text'] !!}</p>
-                        <small class='text-secondary'>{!! $breadcrumbs[2]['bread_text'] !!}</small>
-                    </div>
-                    <div class='row p-2'></div>
-                    @endif
-
+                    
+                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
                     
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}

@@ -29,9 +29,9 @@
                         </a>
                     </nav>
 
-                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => [0 => ['bread_href' => '../../', 'bread_text' => trans('langHome')],
-                                                                          1 => ['bread_text' => trans('langModifyProfile')]]
-                                                       ])
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+
+                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     {!! $action_bar !!}
 

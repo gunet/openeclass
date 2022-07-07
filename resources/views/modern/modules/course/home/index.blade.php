@@ -37,9 +37,7 @@
                         </div>
                     </div>
 
-
-                    @include('layouts.partials.legend_view')
-
+                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     <p class='mt-5'>
                         <span class='control-label-notes text-start ps-1'>

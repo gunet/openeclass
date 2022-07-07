@@ -15,14 +15,14 @@
 
         <div class="row">
 
-            <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
+            <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
 
             <div class="col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
-                    
+
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                     <nav class="navbar navbar-expand-lg navrbar_menu_btn">
@@ -30,8 +30,8 @@
                             <i class="fas fa-align-left"></i>
                             <span></span>
                         </button>
-                        
-                       
+
+
                         <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                             <i class="fas fa-tools"></i>
                         </a>
@@ -49,19 +49,23 @@
                         </div>
                     </div>
 
+                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                    <div class="col-xxl-12 col-lx-12 col-lg-12 col-md-10 col-sm-6">
-                        <legend class="float-none w-auto py-2 px-4 notes-legend"><span class="pos_TitleCourse"><i class="fas fa-folder-open" aria-hidden="true"></i> {{$toolName}} {{trans('langsOfCourse')}} <<strong>{{$currentCourseName}} <small>({{$course_code}})</small></strong>></span>
-                            <div class="float-end manage-course-tools">
-                                @if($is_editor)
-                                    @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code])              
-                                @endif
-                            </div>
-                        </legend>
+                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5">
+                        <span class="control-label-notes">
+                            {{trans('langTeacher')}}: <small>{{course_id_to_prof($course_id)}}</small>
+                        </span>
                     </div>
-                    <div class="row p-2"></div>
-                    <small>{{trans('langTeacher')}}: {{course_id_to_prof($course_id)}}</small>
-                    <div class="row p-2"></div>
+
+
+                    @if(Session::has('message'))
+                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                            <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                                {{ Session::get('message') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </p>
+                        </div>
+                    @endif
 
                     <div class="panel panel-default panel-action-btn-default">
                         <div class='panel-heading notes_thead'>
@@ -106,10 +110,13 @@
                         </form>
                     </div>
 
-                    <div class='panel panel-default panel-action-btn-default'>
-                        <div class='pull-right pt-1 pb-2 pe-3'>
+                    <div class='panel panel-default panel-action-btn-default mt-5'>
+                        <div class='float-end pt-3 pb-2 pe-3'>
+
                             <div id='operations_container'>
-                                <a class='btn btn-success' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> {{ trans('langAddExtLink') }}</a>
+
+                                <a class='btn btn-success mt-1 ms-md-0 ms-3' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> {{ trans('langAddExtLink') }}</a>
+
                             </div>
                         </div>
                         <div class='panel-heading notes_thead'>
@@ -123,7 +130,7 @@
                                         <strong>{{  $externalLinks->title }}</strong>
                                         <div style='padding-top:8px;'><small class='text-muted'>{{ $externalLinks->url }}</small></div>
                                     </div>
-                                    <div class='pull-right'>
+                                    <div class='float-end'>
                                         <a class='text-danger' href='?course={{ $course_code }}&amp;delete={{ getIndirectReference($externalLinks->id) }}'><span class='fa fa-times'></span></a>
                                     </div>
                                 </td>
@@ -132,11 +139,11 @@
                         </table>
                     </div>
 
-                    <div class='panel panel-default panel-action-btn-default'>
-                        <div class='panel-heading notes_thead'>
-                            <span class='panel-title text-white' style='line-height: 45px;'>{{ trans('langLtiConsumer') }}</span>
-                            <span class='pull-right pt-1 pe-3'>
-                            <a class='btn btn-success' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
+                    <div class='panel panel-default panel-action-btn-default mt-5'>
+                        <div class='h-100 panel-heading shadow-lg p-3 pt-3 mt-1 bg-body rounded bg-primary'>
+                            <span class='panel-title control-label-notes pt-2' style='line-height: 45px;'>{{ trans('langLtiConsumer') }}</span>
+                            <span class='float-end pt-1'>
+                                <a class='btn btn-success' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
                             <span class='fa fa-plus-circle'></span>{{ trans('langNewLTITool') }}</a>
                         </div>
                     </div>

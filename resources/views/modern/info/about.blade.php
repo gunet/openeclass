@@ -19,10 +19,8 @@
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
                     </div>
 
-                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-                        <legend class="float-none w-auto py-2 px-4 notes-legend"><span style="margin-left:-20px;"><i class="fa fa-credit-card fa-fw"></i> {{trans('langPlatformIdentity')}}</span></legend>
-                        <div class="row p-2"></div>
-                    </div>
+                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                         <div class='row'>
                             <div class='text-start text-secondary'>{{trans('langEclass')}} - {{trans('langInfo')}}</div>

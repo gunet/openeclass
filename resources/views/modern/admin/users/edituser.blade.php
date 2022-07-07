@@ -19,6 +19,18 @@
 
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
+            @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+
+            {!! isset($action_bar) ?  $action_bar : '' !!}
+
+            @if(Session::has('message'))
+                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                    <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                        {{ Session::get('message') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </p>
+            @endif
+
             <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
                 <div class="offcanvas-header">
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -26,7 +38,6 @@
                 <div class="offcanvas-body">
                     @include('layouts.partials.sidebarAdmin')
                 </div>
-
 
             <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
 
@@ -41,7 +52,6 @@
                             <input class='form-control' type='text' name='lname' size='50' value='{{ $info->surname }}'>
                         </div>
                     </div>
-
                     <div class='form-group'>
                         <label class='col-sm-2 control-label'>{{ trans('langName') }}</label>
                         <div class='col-sm-10'>
@@ -223,4 +233,5 @@
             </div>
         </div>
     </div>
+</div>
 @endsection

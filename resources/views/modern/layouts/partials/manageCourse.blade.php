@@ -1,6 +1,6 @@
 
 <div class="dropdown dropstart">
-    <button class="btn btn-primary dropdown-toggle mb-3" type="button" id="dropdownManageCourse" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false" data-bs-toggle-second="tooltip" data-bs-placement="left" title="{{ trans('langModifyInfo') }}">
+    <button class="btn btn-primary dropdown-toggle mb-3" type="button" id="dropdownManageCourse" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false" data-bs-toggle-second="tooltip" data-bs-placement="left" title="{{trans('langModifyInfo')}}">
         <i class="fas fa-tasks"></i>
     </button>
     <ul class="dropdown-menu manage-course-ul" aria-labelledby="dropdownManageCourse">

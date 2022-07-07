@@ -5,28 +5,27 @@
                 @if($is_editor)
                     <div class='float-start ps-1 pt-1'>
                         <span class="control-label-notes">
-                            @if($toolName)
-                                <i class="fas fa-tools text-warning" aria-hidden="true"></i>{{$toolName}}
+                            @if($toolName)<i class="fas fa-tools text-warning" aria-hidden="true"></i>
+                                {{$toolName}}
                             @endif
                             <strong class='ps-1'>
-                                <span class='fas fa-folder-open text-warning'></span><span class='ps-1'>{{ course_id_to_title($course_id) }}</span>
-                                <span class="fas fa-code text-warning"></span> <span>({{ $course_code }})</span>
+                                <span class='fas fa-folder-open text-warning'></span><span class='ps-1'>{{$currentCourseName}}</span>
+                                <span class="fas fa-code text-warning"></span> <span>({{$course_code}})</span>
                             </strong>
                         </span>
                     </div>
                     <div class='float-end pe-1'>
-                        @include('layouts.partials.manageCourse')
+                        @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code])
                     </div>
                 @else
                     <div class='float-start ps-1 pt-1'>
                         <span class="control-label-notes">
-                            @if($toolName)
-                                <i class="fas fa-tools text-warning" aria-hidden="true"></i>
-                                {{ $toolName }}
+                            @if($toolName)<i class="fas fa-tools text-warning" aria-hidden="true"></i>
+                                {{$toolName}}
                             @endif
                             <strong class='ps-1'>
-                                <span class='fas fa-folder-open text-warning'></span><span class='ps-1'>{{ course_id_to_title($course_id) }}</span>
-                                <span class="fas fa-code text-warning"></span> <span>({{ $course_code }})</span>
+                                <span class='fas fa-folder-open text-warning'></span><span class='ps-1'>{{$currentCourseName}}</span>
+                                <span class="fas fa-code text-warning"></span> <span>({{$course_code}})</span>
                             </strong>
                         </span>
                     </div>
@@ -35,7 +34,7 @@
                 <div class='d-flex justify-content-center ps-1 pt-1 pb-2'>
                     <span class="control-label-notes">
                         <i class="fas fa-tools text-warning" aria-hidden="true"></i>
-                        {{ $toolName }}
+                        {{$toolName}}
                     </span>
                 </div>
             @endif
@@ -49,24 +48,22 @@
             @if($course_code)
                 <div class='float-start ps-1 pt-1 pb-3'>
                     <span class="control-label-notes">
-                        @if($toolName)
-                            <i class="fas fa-tools text-warning" aria-hidden="true"></i>{{$toolName}} <br>
-                        @endif
+                        @if($toolName)<i class="fas fa-tools text-warning" aria-hidden="true"></i>
+                        {{$toolName}} <br>@endif
                         @if($course_code)
                             <strong class='ps-1'>
-                                <span class='fas fa-folder-open text-warning'></span><span class='ps-1'>{{ course_id_to_title($course_id) }}</span> <br>
-                                <span class="fas fa-code text-warning"></span> <span>({{ $course_code }})</span>
+                                <span class='fas fa-folder-open text-warning'></span><span class='ps-1'>{{$currentCourseName}}</span> <br>
+                                <span class="fas fa-code text-warning"></span> <span>({{$course_code}})</span>
                             </strong>
                         @endif
                     </span>
                 </div>
                 @if($is_editor)
                     <div class='float-end pe-1'>
-                        @include('layouts.partials.manageCourse')
+                        @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code])
                     </div>
                 @endif
             @else
-
             @endif
         </div>
     </div>

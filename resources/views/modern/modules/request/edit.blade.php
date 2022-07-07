@@ -42,16 +42,7 @@
                     </div>
 
 
-                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="row p-2"></div><div class="row p-2"></div>
-                        <legend class="float-none w-auto py-2 px-4 notes-legend"><span class="pos_TitleCourse"><i class="fas fa-folder-open" aria-hidden="true"></i> {{$toolName}} {{trans('langsOfCourse')}} <<strong>{{$currentCourseName}} <small>({{$course_code}})</small></strong>></span>
-                            <div class="float-end manage-course-tools">
-                                @if($is_editor)
-                                    @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code])              
-                                @endif
-                            </div>
-                        </legend>
-                    </div>
+                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
                     
                     <div class="row p-2"></div><div class="row p-2"></div>
                     <span class="control-label-notes ms-1">{{trans('langTeacher')}}: <small>{{course_id_to_prof($course_id)}}</small></span>

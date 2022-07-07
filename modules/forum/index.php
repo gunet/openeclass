@@ -117,6 +117,11 @@ if ($total_categories > 0) {
         $tool_content .= "<div class='table-responsive' style='margin-bottom:30px;'><table class='table-default'>";
         $tool_content .= "<caption><strong>$langCategory :</strong> $cat_title<div class='pull-right'>";
 
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                          <div class='h-100 shadow-lg p-3 bg-body rounded bg-primary'><caption>";
+        $tool_content .= "<strong>$langCategory :</strong> $cat_title";
+        $tool_content .= "<div class='float-sm-end float-start mt-md-0 mt-3'>";
+
         $tool_content .= action_button(
                 array(
                     array(
@@ -152,13 +157,18 @@ if ($total_categories > 0) {
                 )
             );
         $tool_content .= "</div></caption>";
-        $tool_content .= "<tr class='list-header'>
-            <td class='forum_td'>$langForums</td>
-            <td class='text-center forum_td' width='100'>$langTopics</td>
-            <td class='text-center forum_td' width='100'>$langPosts</td>
-            <td class='text-center forum_td'>$langLastPost</td>
-            <th class='text-center option-btn-cell forum_td'>" . icon('fa-gears') . "</th>
+
+        $tool_content .= "<div class='mt-0 table-responsive'><table class='announcements_table'>";
+        $tool_content .= "<thead class='notes_thead text-light' style='height:40px;'>";
+        $tool_content .= "<tr>
+            <th class='text-left'>$toolName</th>
+            <th class='text-left'>$langTopics</th>
+            <th class='text-left'>$langPosts</th>
+            <th class='text-left'>$langLastPost</th>
+            <th class='text-left'>" . icon('fa-cogs') . "</th>
           </tr>";
+        $tool_content .= "</thead>";
+        $tool_content .= "<tbody>";
 
         // display forum topics
         if ($forum_row) {

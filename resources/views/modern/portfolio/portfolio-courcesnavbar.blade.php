@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <div class="col-6 text-primary text-end">    
+    <div class='d-flex justify-content-md-end justify-content-center'>    
         <a class="btn btn-xs btn-primary float-md-end text-center mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
     </div>
 </div>

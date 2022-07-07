@@ -21,12 +21,7 @@
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
-                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="row p-2"></div><div class="row p-2"></div>
-                        <legend class="float-none w-auto py-2 px-0 notes-legend">
-                            <i class='fa fa-magic fa-fw'></i> {{trans('langMyWidgets')}}
-                        </legend> 
-                    </div>
+                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>

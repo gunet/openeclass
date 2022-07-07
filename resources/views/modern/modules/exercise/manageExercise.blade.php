@@ -41,15 +41,8 @@
                                 </nav>
 
 
-                                <div class="col-xxl-12 col-lx-12 col-lg-12 col-md-10 col-sm-6">
-                                    <legend class="float-none w-auto py-2 px-4 notes-legend"><span class="pos_TitleCourse"><i class="fas fa-list" aria-hidden="true"></i> Ασκήσεις του μαθήματος <<strong>{{$title_course}} <small>({{$course_code_title}})</small></strong>></span>
-                                        <div class="manage-course-tools"style="float:right">
-                                            @if($is_editor == 1)
-                                                @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code_title])
-                                            @endif
-                                        </div>
-                                    </legend>
-                                </div>
+                                @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                                
                                 <div class="row p-2"></div>
                                 <small>Καθηγητής: {{$course_Teacher}}</small>
                                 <div class="row p-2"></div>

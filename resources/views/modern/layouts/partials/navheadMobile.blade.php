@@ -1,4 +1,4 @@
-<nav class="navbar h-auto navbar-eclass">
+<nav id="bgr-cheat-header" class="navbar h-auto navbar-eclass">
     <div class="btn-group w-100 ps-4" role="group" aria-label="Basic example">
 
         <a type="button" class="btn btn-transparent ps-2 pe-4 text-white" href="{{ $urlServer }}"><i class="fa fa-home"></i></a>

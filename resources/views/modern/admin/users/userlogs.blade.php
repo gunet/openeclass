@@ -33,6 +33,10 @@
 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
+            {!! $users_login_data !!}
+
+            @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+
             {!! isset($action_bar) ?  $action_bar : '' !!}
 
             @if(Session::has('message'))
@@ -43,8 +47,6 @@
                     </p>
                 </div>
             @endif
-
-            {!! $users_login_data !!}
 
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                 <div class='form-wrapper shadow-lg p-3 mb-5 bg-body rounded bg-primary'>

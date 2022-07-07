@@ -230,16 +230,7 @@
                     </div>
 
 
-                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="row p-2"></div><div class="row p-2"></div>
-                        <legend class="float-none w-auto py-2 px-4 notes-legend"><span class="pos_TitleCourse"><i class="fas fa-folder-open" aria-hidden="true"></i> {{$toolName}} @if($course_code)του μαθήματος <<strong>{{$currentCourseName}} <small>({{$course_code}})</small></strong>></span>@endif
-                            <div class="manage-course-tools"style="float:right">
-                                @if($is_editor == 1)
-                                    @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code])              
-                                @endif
-                            </div>
-                        </legend>
-                    </div>
+                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     
                     @if($course_code)

@@ -41,6 +41,8 @@
                                     </div>
                                 </div>
 
+                                @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+
                                 {!! isset($action_bar) ?  $action_bar : '' !!}
 
                                 @if ($release_info and version_compare($release_info->release, ECLASS_VERSION) > 0)

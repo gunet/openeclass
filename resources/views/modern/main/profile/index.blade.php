@@ -20,9 +20,9 @@
                         </a>
                     </nav>
 
-                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => [0 => ['bread_href' => 'index.php', 'bread_text' => trans('langHome')],
-                                                                          1 => ['bread_text' => trans('langModifyProfile')]]
-                                                       ])
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+
+                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     <div class="row">
                         <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">

@@ -39,7 +39,9 @@
                 @endif
                 <!-- Desktop collapse -->
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
+
                     <a role="button" class="{{ $classname }} nav-link text-white ps-1">
+
                         {{ $tool_group[0]['text'] }} <i class="{{ $class_id }} text-white pt-1 float-end fa fa-angle-down"></i>
                     </a>
                     <div class="col-lg-12 show" id="{{ $dropdown_id }}">

@@ -68,4 +68,5 @@ $data['action_bar']  = action_bar([
 $data['myCourses'] = $myCourses;
 
 $data['menuTypeID'] = 1;
+
 view('main.my_courses.index', $data);

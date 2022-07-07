@@ -36,7 +36,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ps-5">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ps-md-5">
                                     <div class="user-detals-fullname mt-3 ps-3 pe-3">
                                         <h5 class='text-lg-start text-center text-primary'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h5>
                                     </div>
@@ -45,16 +45,16 @@
                             </div>
                         </div>
 
-                        <div class="col-xl-8 col-lg-6 col-md-5 col-sm-12 col-12 pe-0 ps-5">
+                        <div class="col-xl-8 col-lg-6 col-md-5 col-sm-12 col-12 pe-0 ps-md-5">
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                                    <p class='text-secondary mt-3 ps-3 pe-3'>{{ trans('langSumCoursesEnrolled') }}: <strong class='text-primary'>{{ $student_courses_count }}  </strong></p>
-                                    <p class='text-secondary mt-3 ps-3 pe-3'>{{ trans('langSumCoursesSupport') }}:  <strong class='text-primary'>{{ $teacher_courses_count }}</strong></p>
+                                    <p class='text-secondary text-xl-center text-lg-start text-center mt-3 ps-3 pe-3'>{{ trans('langSumCoursesEnrolled') }}: <strong class='text-primary'>{{ $student_courses_count }}  </strong></p>
+                                    <p class='text-secondary text-xl-center text-lg-start text-center mt-3 ps-3 pe-3'>{{ trans('langSumCoursesSupport') }}:  <strong class='text-primary'>{{ $teacher_courses_count }}</strong></p>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                                    <p class='text-secondary mt-3 ps-3 pe-lg-0 pe-3'>{{ trans('langProfileLastVisit') }}:
-                                       <strong class='text-primary'>{{ claro_format_locale_date(trans('dateFormatLong'), strtotime($lastVisit->when)) }}</strong>
 
+                                    <p class='text-secondary text-xl-center text-lg-start text-center mt-3 ps-3 pe-lg-0 pe-3'>{{ trans('langProfileLastVisit') }}:
+                                       <strong class='text-primary text-xl-center text-lg-start text-center'>{{ claro_format_locale_date(trans('dateFormatLong'), strtotime($lastVisit->when)) }}</strong>
                                     </p>
 
                                 </div>
@@ -243,7 +243,9 @@
                     @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'bars', 'cource_pages' => $cource_pages])
                         --}}
 
-                    <a class="btn btn-xs btn-primary float-md-end text-center mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
+                    <div class='d-flex justify-content-md-end justify-content-center'>
+                        <a class="btn btn-xs btn-primary float-md-end text-center mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
+                    </div>
 
                 </div>
 
@@ -287,17 +289,16 @@
         <div class="col-12 col-xl-4">
 
 
-            <div class="container-fluid container_fluid_calendar">
+            <div class="container-fluid container_fluid_calendar bg-white ms-xl-2 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
                 @include('portfolio.portfolio-calendar')
             </div>
 
 
-            <div class="container-fluid user-announcements-portfolio">
-                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
+            <div class="container-fluid user-announcements-portfolio bg-white mt-xl-3 ms-xl-2 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
+                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-3 pb-5">
 
-                    <h5 class="text-primary">{{ trans('langMyPersoAnnouncements') }}</h5>
+                    <h5 class="text-md-start text-center text-primary">{{ trans('langMyPersoAnnouncements') }}</h5><hr class='text-primary'>
                     <div class="container-fluid">
-                        <hr class='text-primary'>
                         {!! $user_announcements !!}
                     </div>
 
@@ -310,14 +311,12 @@
             </div>
 
 
-            <div class="container-fluid user-messages-portfolio">
-                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
+            <div class="container-fluid user-messages-portfolio bg-white mt-xl-3 ms-xl-2 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
+                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-3 pb-5">
 
-                    <h5 class="text-primary">{{ trans('langMyPersoMessages') }}</h5>
-
+                    <h5 class="text-md-start text-center text-primary">{{ trans('langMyPersoMessages') }}</h5><hr class='text-primary'>
                     <div class="container-fluid">
 
-                        <hr class='text-primary'>
                         <ul class='tablelist pt-2 pb-2 ps-2 pe-2'>
                             @if(!empty($user_messages))
                                 {!! $user_messages !!}

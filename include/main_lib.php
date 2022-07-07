@@ -3561,7 +3561,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                     <div class='action_bar'>  
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix'>
                             $page_title
-                            <div class='float-md-end float-start mt-md-0 mt-5 margin-top-thin margin-bottom-fat hidden-print'>
+                            <div class='float-md-end float-start mt-md-0 mt-2 margin-top-thin margin-bottom-fat hidden-print'>
                                 <div class='btn-group'>
                                 $out
                                 $action_button

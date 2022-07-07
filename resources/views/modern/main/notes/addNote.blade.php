@@ -14,16 +14,7 @@
                 <div class="col-xl-12 col-lg-8 col-md-12 col-sm-6 col-xs-6 justify-content-center">
                     <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5" style="margin-top:-20px;">
 
-                        <div class="col-xxl-12 col-lx-12 col-lg-12 col-md-12 col-sm-6">
-                            <legend class="float-none w-auto py-2 px-4 notes-legend"><span style="margin-left:-20px;"><i class="fas fa-sticky-note"></i> Νέα σημείωση</span>
-                                <form action="{{ $urlAppend }}main/notes/index.php">
-                                    <button type="submit" class="btn_back_note">
-                                        <i style="color:#003F87" class="fas fa-arrow-left"></i>
-                                        &nbsp;&nbsp;<span class="back_title">Επιστροφή</span>
-                                    </button>
-                                </form>
-                            </legend>
-                        </div>
+                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
                         
                         <div class="row p-2"></div>     
                         <div class="row p-2"></div> 

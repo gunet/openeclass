@@ -22,10 +22,7 @@
                             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
                         </div>
 
-                        <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-                            <legend class="float-none w-auto py-2 px-4 notes-legend"><span style="margin-left:-20px;"><i class="fas fa-user"></i> Δημιουργία λογαριασμού</span></legend>
-                            <div class="row p-2"></div><div class="row p-2"></div>
-                        </div>
+                        @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                         @if(Session::has('message'))
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>

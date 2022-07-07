@@ -74,7 +74,7 @@ foreach($toolArr as $tool){
                     </nav>
                     @else
                     <nav class="navbar navbar-expand-lg navrbar_menu_btn">
-                        <a type="button" id="getTopicButton" class="d-none d-sm-block d-md-none d-lg-block ms-2 btn btn-primary btn btn-primary" href="{{$urlAppend}}modules/help/help.php?language={{$language}}&topic={{$helpTopic}}&subtopic={{$helpSubTopic}}" style='margin-top:-10px'>
+                        <a type="button" id="getTopicButton" class="btn btn-primary btn btn-primary" href="{{$urlAppend}}modules/help/help.php?language={{$language}}&topic={{$helpTopic}}&subtopic={{$helpSubTopic}}" style='margin-top:-10px'>
                             <i class="fas fa-question"></i>
                         </a>
                     </nav>
@@ -103,19 +103,7 @@ foreach($toolArr as $tool){
                     </div>
                     @endif
 
-
-                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="row p-2"></div><div class="row p-2"></div>
-                        <legend class="float-none w-auto py-2 px-4 notes-legend"><span class="pos_TitleCourse"><i class="fas fa-folder-open" aria-hidden="true"></i> {{$toolName}} @if($course_code) {{trans('langsOfCourse')}} <<strong>{{$currentCourseName}} <small>({{$course_code}})</small></strong>></span>@endif
-                            <div class="manage-course-tools"style="float:right">
-                                @if($is_editor == 1)
-                                    @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code])
-                                @endif
-                            </div>
-                        </legend>
-                    </div>
-
-
+                   @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     @if($course_code)
                         <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5">
@@ -134,10 +122,6 @@ foreach($toolArr as $tool){
                     </div>
                     @endif
 
-                    @if(!$course_code)
-                        <div class="row p-2"></div><div class="row p-2"></div>
-                    @endif
-
                     {!! $tool_content !!}
 
                 </div>
@@ -154,5 +138,3 @@ foreach($toolArr as $tool){
 </div>
 
 @endsection
-
-

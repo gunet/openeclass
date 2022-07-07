@@ -614,7 +614,7 @@ elseif (isset($_POST['install1'])) {
         <img src='welcome.png' alt=''>
         <h1>$langWelcomeWizard</h1>
         <div class='panel panel-info text-left'>
-          <div class='panel-heading'>$langThisWizard</div>
+          <div class='notes_thead'>$langThisWizard</div>
           <div class='panel-body'>
              <ul>
                 <li>$langWizardHelp1</li>
