@@ -243,13 +243,8 @@
                     @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'bars', 'cource_pages' => $cource_pages])
                         --}}
 
-<<<<<<< local
-                    <a class="btn btn-xs btn-primary float-end mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
-
-=======
-                        
                     <a class="btn btn-xs btn-primary float-md-end text-center mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
->>>>>>> graft
+
                 </div>
 
                 <div id="cources-pics" class="container-fluid cources-paging" style="display:none">
@@ -272,11 +267,8 @@
                                     <a class="fs-5" href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
                                     <span class="lesson-id fs-5 text-secondary">({{ $cource->code }})</span>
                                 </h3>
-<<<<<<< local
-                                <div class="lesson-professor fs-5 text-secondary">{{ $cource->prof_names }}</div>
-=======
                                 <div class="lesson-professor fs-5 text-secondary">{{ $cource->professor }}</div>
->>>>>>> graft
+
                             </div>
                             <hr>
                         </div>
@@ -352,7 +344,7 @@
 
 </div>
 
-<script>  
+<script>
     var user_cources = <?php echo json_encode($cources); ?>;
     var user_cource_pages = <?php echo $cource_pages; ?>;
 </script>
