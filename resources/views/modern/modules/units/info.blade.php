@@ -69,11 +69,7 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5">
-                        <span class="control-label-notes">
-                            {{trans('langTeacher')}}: <small>{{course_id_to_prof($course_id)}}</small>
-                        </span>
-                    </div>
+
 
                     <?php $url = $urlServer.'courses/'.$course_code.'/index.php';?>
                     {!! action_bar(array(

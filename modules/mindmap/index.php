@@ -87,7 +87,7 @@ $head_content .= '
     </style>';
 
 $tool_content .= "
-<div id='layout'>
+<div id='layout' class='mt-5'>
 	<div id='jsmiin-nav-horizontal'>
 		<div class='btn-group btn-group-justified' role='group'>
 			<div class='btn-group' role='group'>

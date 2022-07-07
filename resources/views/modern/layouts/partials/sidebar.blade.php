@@ -6,17 +6,16 @@
 
         <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form">
             <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}' data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}">
-                <span class="on">{{ trans('langCStudent') }}</span>
+                <span class="on">{{ trans('langCStudent2') }}</span>
                 <span class="off">{{ trans('langCTeacher') }}</span>
-                <p class="text-right on2">{{ trans('langCStudent') }}</p>
+                <p class="text-right on2">{{ trans('langCStudent2') }}</p>
                 <p class="text-left off2">{{ trans('langCTeacher') }}</p>
             </button>
         </form>
     @else
         <div class="row p-2"></div>
         <p class="text-left text-light fs-6 viewPageAs">{{ trans('langViewAs') }}:</p>
-        <a class='w-75 btn btn-primary pe-none text-white text-center'>{{trans('langCTeacher')}}</a>
-
+        <a class='w-75 btn btn-primary pe-none text-white text-center'>{{trans('langCStudent2')}}</a>
     @endif
 
     <ul class="navbar-nav d-flex flex-column mt-4 w-100 p-2">

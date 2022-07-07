@@ -48,7 +48,7 @@ function show_post_form() {
             $video_div = '<div class="form-group tab-pane fade" id="videos_div" style="padding:10px">
                               '.list_videos().'
                           </div>';
-            $video_li = '<li><a data-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
+            $video_li = '<li><a data-bs-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
         } else {
             $video_div = '';
             $video_li = '';
@@ -59,7 +59,7 @@ function show_post_form() {
                             <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs().'
                           </div>';
-            $docs_li = '<li><a data-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
+            $docs_li = '<li><a data-bs-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
         } else {
             $docs_div = '';
             $docs_li = '';
@@ -70,7 +70,7 @@ function show_post_form() {
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs(NULL,'mydocs').'
                           </div>';
-            $mydocs_li = '<li><a data-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
+            $mydocs_li = '<li><a data-bs-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
         } else {
             $mydocs_div = '';
             $mydocs_li = '';
@@ -80,7 +80,7 @@ function show_post_form() {
             $links_div = '<div class="form-group tab-pane fade" id="links_div" style="padding:10px">
                               '.list_links().'
                           </div>';
-            $links_li = '<li><a data-toggle="tab" href="#links_div">'.$langLinks.'</a></li>';
+            $links_li = '<li><a data-bs-toggle="tab" href="#links_div">'.$langLinks.'</a></li>';
         } else {
             $links_div = '';
             $links_li = '';
@@ -90,7 +90,7 @@ function show_post_form() {
             $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" style="padding:10px">
                               '.list_exercises().'
                           </div>';
-            $exercises_li = '<li><a data-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
+            $exercises_li = '<li><a data-bs-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
         } else {
             $exercises_div = '';
             $exercises_li = '';
@@ -100,7 +100,7 @@ function show_post_form() {
             $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" style="padding:10px">
                               '.list_assignments().'
                           </div>';
-            $assignments_li = '<li><a data-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
+            $assignments_li = '<li><a data-bs-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
         } else {
             $assignments_div = '';
             $assignments_li = '';
@@ -110,7 +110,7 @@ function show_post_form() {
             $chats_div = '<div class="form-group tab-pane fade" id="chats_div" style="padding:10px">
                               '.list_chats().'
                           </div>';
-            $chats_li = '<li><a data-toggle="tab" href="#chats_div">'.$langChat.'</a></li>';
+            $chats_li = '<li><a data-bs-toggle="tab" href="#chats_div">'.$langChat.'</a></li>';
         } else {
             $chats_div = '';
             $chats_li = '';
@@ -120,7 +120,7 @@ function show_post_form() {
             $polls_div = '<div class="form-group tab-pane fade" id="polls_div" style="padding:10px">
                               '.list_polls().'
                           </div>';
-            $polls_li = '<li><a data-toggle="tab" href="#polls_div">'.$langQuestionnaire.'</a></li>';
+            $polls_li = '<li><a data-bs-toggle="tab" href="#polls_div">'.$langQuestionnaire.'</a></li>';
         } else {
             $polls_div = '';
             $polls_li = '';
@@ -130,7 +130,7 @@ function show_post_form() {
             $forums_div = '<div class="form-group tab-pane fade" id="forums_div" style="padding:10px">
                               '.list_forums().'
                           </div>';
-            $forums_li = '<li><a data-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
+            $forums_li = '<li><a data-bs-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
         } else {
             $forums_div = '';
             $forums_li = '';
@@ -154,7 +154,7 @@ function show_post_form() {
                             <div id="resources_panel" class="panel panel-default collapse">
                                 <div class="panel-body">
                                     <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
+                                        <li class="nav-item active"><a class="nav-link" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                         '.$video_li.'
                                         '.$docs_li.'
                                         '.$mydocs_li.'
@@ -210,7 +210,7 @@ function show_wall_posts() {
     //show wall posts
     $posts = Database::get()->queryArray("SELECT id, user_id, content, extvideo, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY pinned DESC, timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
     if (count($posts) == 0) {
-        $tool_content .= '<div class="alert alert-warning">'.$langNoWallPosts.'</div>';
+        $tool_content .= '<div class="col-12 mt-3"><div class="alert alert-warning">'.$langNoWallPosts.'</div></div>';
     } else {
         $tool_content .= generate_infinite_container_html($posts, $posts_per_page, 2);
 

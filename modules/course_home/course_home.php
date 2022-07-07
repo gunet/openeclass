@@ -28,6 +28,7 @@ $guest_allowed = true;
 
 define('HIDE_TOOL_TITLE', 1);
 define('STATIC_MODULE', 1);
+
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
@@ -86,7 +87,9 @@ if ($is_editor) {
             Indexer::queueAsync(Indexer::REQUEST_REMOVEBYUNIT, Indexer::RESOURCE_UNITRESOURCE, $id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
-            Session::Messages($langCourseUnitDeleted, 'alert-success');
+            //Session::Messages($langCourseUnitDeleted, 'alert-success');
+            Session::flash('message',$langCourseUnitDeleted); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("courses/$course_code/");
         }
     } elseif (isset($_REQUEST['vis'])) { // modify visibility
@@ -112,12 +115,14 @@ if ($is_editor) {
         redirect_to_home_page("courses/$course_code/");
     } elseif (isset($_REQUEST['up'])) { // change order up
         $id = intval(getDirectReference($_REQUEST['up']));
+        //$id = intval($_REQUEST['up']);
         if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
             move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
         }
         redirect_to_home_page("courses/$course_code/");
     }
 }
+
 // Student Register to course
 if (isset($_REQUEST['register'])) {
     if ($course_info) {
@@ -127,9 +132,13 @@ if (isset($_REQUEST['register'])) {
             if (empty($course_info->password) || $course_info->password == $_POST['password']) {
                 Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
                                     VALUES (?d, ?d, ?d, NOW())", $course_id, $uid, USER_STUDENT);
-                Session::Messages($langNotifyRegUser1, 'alert-success');
+                //Session::Messages($langNotifyRegUser1, 'alert-success');
+                Session::flash('message',$langNotifyRegUser1); 
+                Session::flash('alert-class', 'alert-success'); 
             } else {
-                Session::Messages($langInvalidCode, 'alert-warning');
+                //Session::Messages($langInvalidCode, 'alert-warning');
+                Session::flash('message',$langInvalidCode); 
+                Session::flash('alert-class', 'alert-warning');
             }
         }
         redirect_to_home_page("courses/$course_code");
@@ -155,7 +164,7 @@ $head_content .= "
     $(document).ready(function() {
         $('#btn-syllabus').click(function () {
             $(this).find('.fa-chevron-right').toggleClass('fa-rotate-90');
-        });";
+    });";
 
 // Units sorting
 if ($is_editor and $course_info->view_type == 'units') {
@@ -183,33 +192,33 @@ if ($is_editor and $course_info->view_type == 'units') {
 
 // Calendar stuff
 $head_content .= 'var calendar = $("#bootstrapcalendar").calendar({
-                    tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
-                    events_source: "'.$urlAppend.'main/calendar_data.php?course='.$course_code.'",
-                    language: "'.$langLanguageCode.'",
-                    views: {year:{enable: 0}, week:{enable: 0}, day:{enable: 0}},
-                    onAfterViewLoad: function(view) {
-                                $("#current-month").text(this.getTitle());
-                                $(".btn-group button").removeClass("active");
-                                $("button[data-calendar-view=\'" + view + "\']").addClass("active");
-                                }
-        });
+    tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
+    events_source: "'.$urlAppend.'main/calendar_data.php?course='.$course_code.'",
+    language: "'.$langLanguageCode.'",
+    views: {year:{enable: 0}, week:{enable: 0}, day:{enable: 0}},
+    onAfterViewLoad: function(view) {
+                $("#current-month").text(this.getTitle());
+                $(".btn-group button").removeClass("active");
+                $("button[data-calendar-view=\'" + view + "\']").addClass("active");
+                }
+});
 
-        $(".btn-group button[data-calendar-nav]").each(function() {
-            var $this = $(this);
-            $this.click(function() {
-                calendar.navigate($this.data("calendar-nav"));
-            });
-        });
+$(".btn-group button[data-calendar-nav]").each(function() {
+var $this = $(this);
+$this.click(function() {
+calendar.navigate($this.data("calendar-nav"));
+});
+});
 
-        $(".btn-group button[data-calendar-view]").each(function() {
-            var $this = $(this);
-            $this.click(function() {
-                calendar.view($this.data("calendar-view"));
-            });
-        });'
+$(".btn-group button[data-calendar-view]").each(function() {
+var $this = $(this);
+$this.click(function() {
+calendar.view($this.data("calendar-view"));
+});
+});'
 
-    ."})
-    </script>";
+."})
+</script>";
 $registerUrl = js_escape($urlAppend . 'modules/course_home/register.php?course=' . $course_code);
 
 // For statistics: record login
@@ -250,34 +259,35 @@ $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type
                                     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 $course_descriptions_modals = "";
 
+
 $head_content .= "
-        <script>
-            $(function() {
-                $('body').keydown(function(e) {
-                    if(e.keyCode == 37 || e.keyCode == 39) {
-                        if ($('.modal.in').length) {
-                            var visible_modal_id = $('.modal.in').attr('id').match(/\d+/);
-                            if (e.keyCode == 37) {
-                                var new_modal_id = parseInt(visible_modal_id) - 1;
-                            } else {
-                                var new_modal_id = parseInt(visible_modal_id) + 1;
-                            }
-                            var new_modal = $('#hidden_'+new_modal_id);
-                            if (new_modal.length) {
-                                hideVisibleModal();
-                                new_modal.modal('show');
-                            }
-                        }
+<script>
+    $(function() {
+        $('body').keydown(function(e) {
+            if(e.keyCode == 37 || e.keyCode == 39) {
+                if ($('.modal.in').length) {
+                    var visible_modal_id = $('.modal.in').attr('id').match(/\d+/);
+                    if (e.keyCode == 37) {
+                        var new_modal_id = parseInt(visible_modal_id) - 1;
+                    } else {
+                        var new_modal_id = parseInt(visible_modal_id) + 1;
                     }
-                });
-            });
-            function hideVisibleModal(){
-                var visible_modal = $('.modal.in');
-                if (visible_modal) { // modal is active
-                    visible_modal.modal('hide'); // close modal
+                    var new_modal = $('#hidden_'+new_modal_id);
+                    if (new_modal.length) {
+                        hideVisibleModal();
+                        new_modal.modal('show');
+                    }
                 }
-            };
-        </script>";
+            }
+        });
+    });
+    function hideVisibleModal(){
+        var visible_modal = $('.modal.in');
+        if (visible_modal) { // modal is active
+            visible_modal.modal('hide'); // close modal
+        }
+    };
+</script>";
 
 if (count($res) > 0) {
     foreach ($res as $key => $row) {
@@ -292,29 +302,30 @@ if (count($res) > 0) {
                                 <div class='modal-dialog'>
                                     <div class='modal-content'>
                                         <div class='modal-header'>
-                                        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                                         <div class='modal-title h4' id='myModalLabel_$key'>" . q($row->title) . "</div>
                                     </div>
                                     <div class='modal-body' style='max-height: calc(100vh - 210px); overflow-y: auto;'>".
-                                      standard_text_escape($row->comments)
+                                        standard_text_escape($row->comments)
                                     ."</div>
                                     <div class='modal-footer'>";
                                         if ($previous_id) {
-                                            $course_descriptions_modals .= "<a id='prev_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><span class='fa fa-arrow-left'></span></a>";
+                                            $course_descriptions_modals .= "<a id='prev_btn' class='btn btn-secondary' data-bs-dismiss='modal' data-bs-toggle='modal' href='#$previous_id'><span class='fa fa-arrow-left'></span></a>";
                                         }
                                         if ($next_id) {
-                                            $course_descriptions_modals .= "<a id='next_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><span class='fa fa-arrow-right'></span></a>";
+                                            $course_descriptions_modals .= "<a id='next_btn' class='btn btn-secondary' data-bs-dismiss='modal' data-bs-toggle='modal' href='#$next_id'><span class='fa fa-arrow-right'></span></a>";
                                         }
         $course_descriptions_modals .=    "
                                     </div>
-                                  </div>
+                                    </div>
                                 </div>
-                              </div>";
-        $course_info_extra .= "<a class='list-group-item' data-modal='syllabus-prof' data-toggle='modal' data-target='#$hidden_id' href='javascript:void(0);'>".q($row->title) ."</a>";
+                                </div>";
+        $course_info_extra .= "<a class='list-group-item' data-bs-modal='syllabus-prof' data-bs-toggle='modal' data-bs-target='#$hidden_id' href='javascript:void(0);'>".q($row->title) ."</a>";
     }
 } else {
     $course_info_extra = "<div class='text-muted'>$langNoInfoAvailable</div>";
 }
+
 $data['course_info_popover'] = "<div class='list-group'>$course_info_extra</div>";
 $data['course_descriptions_modals'] = $course_descriptions_modals;
 
@@ -365,29 +376,31 @@ $data['numUsers'] = Database::get()->querySingle("SELECT COUNT(user_id) AS numUs
                 FROM course_user
                 WHERE course_id = ?d", $course_id)->numUsers;
 
+
 //set the lang var for lessons visibility status
 switch ($visible) {
     case COURSE_CLOSED: {
-        $data['lessonStatus'] = "    <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langClosedCourseShort'></span><span class='hidden'>.</span>";
+        $data['lessonStatus'] = "    <span class='fa fa-lock fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langClosedCourseShort'></span><span class='hidden'>.</span>";
         break;
     }
     case COURSE_REGISTRATION: {
-        $data['lessonStatus'] = "   <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPrivOpen'>
+        $data['lessonStatus'] = "   <span class='fa fa-lock fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPrivOpen'>
                                 <span class='fa fa-pencil text-danger fa-custom-lock'></span>
                             </span><span class='hidden'>.</span>";
         break;
     }
     case COURSE_OPEN: {
-        $data['lessonStatus'] = "    <span class='fa fa-unlock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPublic'></span><span class='hidden'>.</span>";
+        $data['lessonStatus'] = "    <span class='fa fa-unlock fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPublic'></span><span class='hidden'>.</span>";
         break;
     }
     case COURSE_INACTIVE: {
-        $data['lessonStatus'] = "    <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInactiveShort'>
+        $data['lessonStatus'] = "    <span class='fa fa-lock fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langCourseInactiveShort'>
                                 <span class='fa fa-times text-danger fa-custom-lock'></span>
                              </span><span class='hidden'>.</span>";
         break;
     }
 }
+
 
 if ($uid) {
     $data['course_completion_id'] = $course_completion_id = is_course_completion_active(); // is course completion active?
@@ -406,6 +419,8 @@ if ($uid) {
         }
     }
 }
+
+
 
 // display opencourses level in bar
 $level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
@@ -437,10 +452,10 @@ if (isset($level) && !empty($level)) {
 </script>";
     $data['opencourses_level'] = "
         <div class='row'>
-            <div class='col-xs-4'>
+            <div class='col-4'>
                 <img class='img-responsive center-block' src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
             </div>
-            <div class='col-xs-8'>
+            <div class='col-8'>
                 <div style='border-bottom:1px solid #ccc; margin-bottom: 5px;'>${langOpenCoursesLevel}: $level</div>
                 <p class='not_visible'>
                 <small>$langVisitsShort : &nbsp;$visitsopencourses</small>
@@ -451,11 +466,13 @@ if (isset($level) && !empty($level)) {
         </div>";
     $data['opencourses_level_footer'] = "
         <div class='row'>
-            <div class='col-xs-12 text-right'>
+            <div class='col-12 text-right'>
                 <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata</a>".icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");")."</small>
             </div>
         </div>";
 }
+
+
 
 if ($is_editor) {
     warnCourseInvalidDepartment(true);
@@ -476,16 +493,17 @@ if ($is_editor) {
 
 $data['all_units'] = $all_units = Database::get()->queryArray($query, $course_id);
 foreach ($all_units as $unit) {
-    check_unit_progress($unit->id);  // check unit completion - call to Game.php
+    //check_unit_progress($unit->id);  // check unit completion - call to Game.php
 }
 
 $visible_units_id = [];
 if (!$is_editor) {
-    $visible_user_units = findUserVisibleUnits($uid, $all_units);
+    //$visible_user_units = findUserVisibleUnits($uid, $all_units);
     foreach ($visible_user_units as $data) {
         $visible_units_id[] = $data->id;
     }
 }
+
 
 $total_cunits = count($all_units);
 if ($total_cunits > 0) {
@@ -526,14 +544,14 @@ if ($total_cunits > 0) {
         $vis = $cu->visible;
         $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
         $cu_indirect = getIndirectReference($cu->id);
-        $cunits_content .= "<div id='unit_$cu_indirect' class='col-xs-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-xs-12'>
+        $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
             <div class='item-content'>
                 <div class='item-header clearfix'>
-                    <div class='item-title h4 $class_vis'>";
+                    <div class='item-title h4 $class_vis text-primary'>";
         if ($not_shown) {
             $cunits_content .= q($cu->title) ;
         } else {
-            $cunits_content .= "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+            $cunits_content .= "<a class='$class_vis' href='${urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
         }
         $cunits_content .= "<small><span class='help-block'>";
         if (!(is_null($cu->start_week))) {
@@ -545,69 +563,70 @@ if ($total_cunits > 0) {
         $cunits_content .= "</span></small>";
         $cunits_content .= "</div>";
 
-        if ($is_editor) {
-            $cunits_content .= "<div class='dropdown float-end'>
-                                  <div class='reorder-btn'>
-                                    <span class='fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
-                                      </div>";
-            $cunits_content .= "<div class='dropdown float-end'>
-                            <button class='btn btn-primary dropdown-toggle' type='button' id='dropdownMenuButton$cu->id' data-bs-toggle='dropdown' aria-expanded='false'>
-                                <i class='fa-cogs'></i>
-                            </button>";
-
-            $cunits_content .= "<ul class='row p-4 dropdown-menu myuls' aria-labelledby='dropdownMenuButton$cu->id->id'>
-                <li><a href='{$urlAppend}modules/units/info.php?course=$course_code&amp;edit=$cu->id->id'><i class='fa-edit'></i>&nbsp;&nbsp;$langEditChange</a></li>            
-                <li><a href='$_SERVER[REQUEST_URI]?vis=$cu->id'><i class='fa-eye'></i>";
-
-            if ($cu->visible == 1) {
-                $cunits_content .= "&nbsp;&nbsp;$langViewHide";
-            } else {
-                $cunits_content .= "&nbsp;&nbsp;$langViewShow";
-            }
-            $cunits_content .= "</a></li>";
-            $cunits_content .= "<li><a href='$_SERVER[REQUEST_URI]?access=$cu->id'><i class='fa-lock'></i>";
-            if ($cu->public == 1) {
-                $cunits_content .= "&nbsp;&nbsp;$langResourceAccessLock";
-            } else {
-                 $cunits_content .= "&nbsp;&nbsp;$langResourceAccessUnlock";
-            }
-            $cunits_content .= "</a></li>
-                <li><a href='$_SERVER[REQUEST_URI]?del='" .$cu_indirect . "'&order='.$cu->order' data-bs-toggle='modal' data-bs-target='#unit$cu->id'><i class='fa-trash'></i>&nbsp;&nbsp;$langDelete</a></li>
-            </ul>";
-
-        $cunits_content .= "</div>";
-
-        /* $cunits_content .= action_button(array(
-            array('title' => $langEditChange,
-                  'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
-                  'icon' => 'fa-edit'),
-            array('title' => $vis == 1? $langViewHide : $langViewShow,
-                  'url' => "$_SERVER[REQUEST_URI]?vis=$cu_indirect",
-                  'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
-            array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
-                  'url' => "$_SERVER[REQUEST_URI]?access=$cu_indirect",
-                  'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
-                  'show' => $visible == COURSE_OPEN),
-            array('title' => $langDelete,
-                  'url' => "$_SERVER[REQUEST_URI]?del=$cu_indirect&order=".$cu->order,
-                  'icon' => 'fa-trash',
-                  'class' => 'delete',
-                  'confirm' => $langCourseUnitDeleteConfirm)));
-            */
-
-                $cunits_content .= '</div>';
-
-        } else {
-            $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
-            $cunits_content .= $icon;
-            $cunits_content .= "</div>";
-        }
-
         $cunits_content .= "</div>
             <div class='item-body'>";
         $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
-        $cunits_content .= "</div></div>";
-        $cunits_content .= "</div></div></div>";
+        $cunits_content .= "</div>";
+
+        if ($is_editor) {
+            //     $cunits_content .= "<div class='dropdown float-end'>
+            //                           <div class='reorder-btn'>
+            //                             <span class='fa-arrows ms-4' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
+            //                               </div>";
+            //     $cunits_content .= "<div class='dropdown float-end'>
+            //                     <button class='btn btn-primary dropdown-toggle mt-2' type='button' id='dropdownMenuButton$cu->id' data-bs-toggle='dropdown' aria-expanded='false'>
+            //                         <i class='fa-cogs'></i>
+            //                     </button>";
+    
+            //     $cunits_content .= "<ul class='row p-4 dropdown-menu myuls' aria-labelledby='dropdownMenuButton$cu->id->id'>
+            //         <li><a href='{$urlAppend}modules/units/info.php?course=$course_code&amp;edit=$cu->id->id'><i class='fa-edit'></i>&nbsp;&nbsp;$langEditChange</a></li>            
+            //         <li><a href='$_SERVER[REQUEST_URI]?vis=$cu->id'><i class='fa-eye'></i>";
+    
+            //     if ($cu->visible == 1) {
+            //         $cunits_content .= "&nbsp;&nbsp;$langViewHide";
+            //     } else {
+            //         $cunits_content .= "&nbsp;&nbsp;$langViewShow";
+            //     }
+            //     $cunits_content .= "</a></li>";
+            //     $cunits_content .= "<li><a href='$_SERVER[REQUEST_URI]?access=$cu->id'><i class='fa-lock'></i>";
+            //     if ($cu->public == 1) {
+            //         $cunits_content .= "&nbsp;&nbsp;$langResourceAccessLock";
+            //     } else {
+            //          $cunits_content .= "&nbsp;&nbsp;$langResourceAccessUnlock";
+            //     }
+            //     $cunits_content .= "</a></li>
+            //         <li><a href='$_SERVER[REQUEST_URI]?del='" .$cu_indirect . "'&order='.$cu->order' data-bs-toggle='modal' data-bs-target='#unit$cu->id'><i class='fa-trash'></i>&nbsp;&nbsp;$langDelete</a></li>
+            //     </ul>";
+    
+            // $cunits_content .= "</div>";
+    
+            $cunits_content .= "<div class='float-end'>".action_button(array(
+                array('title' => $langEditChange,
+                      'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
+                      'icon' => 'fa-edit'),
+                array('title' => $vis == 1? $langViewHide : $langViewShow,
+                      'url' => "$_SERVER[REQUEST_URI]?vis=$cu_indirect",
+                      'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
+                      'url' => "$_SERVER[REQUEST_URI]?access=$cu_indirect",
+                      'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
+                      'show' => $visible == COURSE_OPEN),
+                array('title' => $langDelete,
+                      'url' => "$_SERVER[REQUEST_URI]?del=$cu_indirect&order=".$cu->order,
+                      'icon' => 'fa-trash',
+                      'class' => 'delete',
+                      'confirm' => $langCourseUnitDeleteConfirm)))."</div>";
+                
+    
+                    //$cunits_content .= '</div>';
+    
+            } else {
+                $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
+                $cunits_content .= $icon;
+                $cunits_content .= "</div>";
+            }
+
+        $cunits_content .= "</div></div></div></div><hr>";
     }
 } else {
     $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible'> - $langNoUnits - </div></div></div>";
@@ -656,7 +675,7 @@ if ($is_editor) {
     warnCourseInvalidDepartment(true);
     $data['edit_link'] =
     "<div class='access access-edit pull-left'><a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code'>
-        <span class='fa fa-pencil' style='line-height:30px;' data-toggle='tooltip' data-placement='top' title='Επεξεργασία Πληροφοριών'></span>
+        <span class='fa fa-pencil' style='line-height:30px;' data-bs-toggle='tooltip' data-bs-placement='top' title='Επεξεργασία Πληροφοριών'></span>
         <span class='hidden'>.</span></a>
     </div>";
 }
@@ -719,3 +738,6 @@ function course_announcements() {
     }
     return "<li class='list-item'><span class='item-wholeline'><div class='text-title not_visible'> - $langNoAnnounce - </div></span></li>";
 }
+
+
+

@@ -1,10 +1,10 @@
-<?php 
-    $course_code = $_GET['course'];                                                                                                 
-    $course_id = course_code_to_id($course_code);
-    $title_course = course_id_to_title($course_id);
-    $course_code_title = course_id_to_code($course_id);
-    $course_Teacher = course_id_to_prof($course_id);
-    $is_editor = check_editor($user_id,$cid);
+<?php
+    // $course_code = $_GET['course'];
+    // $course_id = course_code_to_id($course_code);
+    // $title_course = course_id_to_title($course_id);
+    // $course_code_title = course_id_to_code($course_id);
+    // $course_Teacher = course_id_to_prof($course_id);
+    // $is_editor = check_editor($user_id,$cid);
 ?>
 
 @extends('layouts.default')
@@ -12,14 +12,14 @@
 @section('content')
 
 
-<div class="pb-3 pt-3">   
+<div class="pb-3 pt-3">
 
     <div class="container-fluid main-container">
 
         <div class="row">
 
             @if($course_code)
-            <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
+            <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
@@ -39,8 +39,8 @@
                                 <i class="fas fa-align-left"></i>
                                 <span></span>
                             </button>
-                            
-                        
+
+
                             <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                                 <i class="fas fa-tools"></i>
                             </a>
@@ -65,12 +65,6 @@
                         </div>
 
                         @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-
-                        <div class="row p-2"></div><div class="row p-2"></div>
-                        @if($course_code)
-                        <span class="control-label-notes ms-1">{{trans('langTeacher')}}: <small>{{course_id_to_prof($course_id)}}</small></span>
-                        <div class="row p-2"></div><div class="row p-2"></div>
-                        @endif
 
                         @if(Session::has('message'))
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
@@ -112,7 +106,7 @@
                                             <div class='col-sm-8'>
                                                 <p class='form-control-static'>{{ $quota }}</p>
                                             </div>
-                                        </div>  
+                                        </div>
                                     </form>
                                 </div>
                             </div>

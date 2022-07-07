@@ -96,7 +96,7 @@ if (isset($_POST['submit'])) {
     $fac = getfacfromfc($fc);
     list($roots, $rootSubtrees) = $tree->buildRootsWithSubTreesArray();
     if (!$fac) { // if user does not belong to department
-        $tool_content .= $langAddHereSomeCourses;
+        $tool_content .= "<div class='col-12 mt-3'><div class='shadow-sm p-3 mb-3 bg-body rounded bg-primary'>".$langAddHereSomeCourses."</div></div>";
 
         if (count($roots) <= 0) {
             die("ERROR: no root nodes");

@@ -72,13 +72,15 @@ $head_content .= '<script type="text/javascript">
 
 if ($course_id != 0) {
     if ($status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoUserEmailNotification
-            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+        <div class='alert alert-warning'>$langNoUserEmailNotification
+            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div></div>";
     }
 } else {
     if (!get_mail_ver_status($uid)) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoUserEmailNotification
-            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+        <div class='alert alert-warning'>$langNoUserEmailNotification
+            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div></div>";
     }
 }
 
@@ -167,11 +169,13 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'])
                     break;
                 }
             }
-            $tool_content .= "<div class='alert alert-success'>".sprintf($langDropboxFreeSpaceSuccess, format_file_size($space_released))."</div>";
+            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+            <div class='alert alert-success'>".sprintf($langDropboxFreeSpaceSuccess, format_file_size($space_released))."</div></div>";
         } else { //provide option to free some space
-            $tool_content .= "<div class='alert alert-danger text-center'>                                
+            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+            <div class='alert alert-danger text-center'>                                
                                 <a onclick=\"return confirm('".sprintf($langDropboxFreeSpaceConfirm, $space_to_free)."');\" href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE&amp;free=TRUE'>".sprintf($langDropboxFreeSpace, $space_to_free)."</a>                                
-                              </div>";
+                              </div></div>";
         }
     }
 

@@ -68,7 +68,7 @@ if (isset($_REQUEST['badge_id'])) {
 if ($is_editor) {
 
     // Top menu
-    $tool_content .= "<div class='row'><div class='col-sm-12'>";
+    $tool_content .= "<div class='col-12'>";
     if(isset($_GET['edit'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
         $pageName = $langConfig;
@@ -143,7 +143,7 @@ if ($is_editor) {
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')));
     }
-    $tool_content .= "</div></div>";
+    $tool_content .= "</div>";
     //end of the top menu
 
     if (isset($_GET['vis'])) { // activate or deactivate certificate / badge

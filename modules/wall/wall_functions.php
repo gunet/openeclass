@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 require_once 'modules/rating/class.rating.php';
 require_once 'modules/comments/class.commenting.php';
@@ -76,28 +76,28 @@ function allow_to_edit($post_id, $user_id, $is_editor) {
 
 function links_autodetection($text) {
     $ret_text = '';
-    
+
     $rexProtocol = '(https?://)?';
     $rexDomain   = '((?:[-a-zA-Z0-9]{1,63}\.)+[-a-zA-Z0-9]{2,63}|(?:[0-9]{1,3}\.){3}[0-9]{1,3})';
     $rexPort     = '(:[0-9]{1,5})?';
     $rexPath     = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
     $rexQuery    = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
     $rexFragment = '(#[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
-    
+
     $validTlds = array_fill_keys(explode(" ", ".aero .asia .biz .cat .com .coop .edu .gov .info .int .jobs .mil .mobi .museum .name .net .org .pro .tel .travel .ac .ad .ae .af .ag .ai .al .am .an .ao .aq .ar .as .at .au .aw .ax .az .ba .bb .bd .be .bf .bg .bh .bi .bj .bm .bn .bo .br .bs .bt .bv .bw .by .bz .ca .cc .cd .cf .cg .ch .ci .ck .cl .cm .cn .co .cr .cu .cv .cx .cy .cz .de .dj .dk .dm .do .dz .ec .ee .eg .er .es .et .eu .fi .fj .fk .fm .fo .fr .ga .gb .gd .ge .gf .gg .gh .gi .gl .gm .gn .gp .gq .gr .gs .gt .gu .gw .gy .hk .hm .hn .hr .ht .hu .id .ie .il .im .in .io .iq .ir .is .it .je .jm .jo .jp .ke .kg .kh .ki .km .kn .kp .kr .kw .ky .kz .la .lb .lc .li .lk .lr .ls .lt .lu .lv .ly .ma .mc .md .me .mg .mh .mk .ml .mm .mn .mo .mp .mq .mr .ms .mt .mu .mv .mw .mx .my .mz .na .nc .ne .nf .ng .ni .nl .no .np .nr .nu .nz .om .pa .pe .pf .pg .ph .pk .pl .pm .pn .pr .ps .pt .pw .py .qa .re .ro .rs .ru .rw .sa .sb .sc .sd .se .sg .sh .si .sj .sk .sl .sm .sn .so .sr .st .su .sv .sy .sz .tc .td .tf .tg .th .tj .tk .tl .tm .tn .to .tp .tr .tt .tv .tw .tz .ua .ug .uk .us .uy .uz .va .vc .ve .vg .vi .vn .vu .wf .ws .ye .yt .yu .za .zm .zw .xn--0zwm56d .xn--11b5bs3a9aj6g .xn--80akhbyknj4f .xn--9t4b11yi5a .xn--deba0ad .xn--g6w251d .xn--hgbk6aj7f53bba .xn--hlcj6aya9esc7a .xn--jxalpdlp .xn--kgbechtv .xn--zckzah .arpa"), true);
-    
+
     $position = 0;
     while (preg_match("{\\b$rexProtocol$rexDomain$rexPort$rexPath$rexQuery$rexFragment(?=[?.!,;:\"]?(\s|$))}i", $text, $match, PREG_OFFSET_CAPTURE, $position))
     {
         list($url, $urlPosition) = $match[0];
-    
+
         // Print the text leading up to the URL.
         $ret_text .= htmlspecialchars(substr($text, $position, $urlPosition - $position));
-    
+
         $domain = $match[2][0];
         $port   = $match[3][0];
         $path   = $match[4][0];
-    
+
         // Check if the TLD is valid - or that $domain is an IP address.
         $tld = strtolower(strrchr($domain, '.'));
         if (preg_match('{\.[0-9]{1,3}}', $tld) || isset($validTlds[$tld]))
@@ -113,14 +113,14 @@ function links_autodetection($text) {
             // Not a valid URL.
             $ret_text .= htmlspecialchars($url);
         }
-    
+
         // Continue text parsing from after the URL.
         $position = $urlPosition + strlen($url);
     }
-    
+
     // Print the remainder of the text.
     $ret_text .= htmlspecialchars(substr($text, $position));
-    
+
     return $ret_text;
 }
 
@@ -128,9 +128,9 @@ function generate_single_post_html($post) {
     global $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments,
     $course_code, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm,
     $langWallPinPost, $langWallUnPinPost;
-    
+
     commenting_add_js();
-    
+
     $user_id = $post->user_id;
     $id = $post->id;
     $content = $post->content;
@@ -154,13 +154,13 @@ function generate_single_post_html($post) {
                                </div>';
         }
     }
-    
+
     $rating = new Rating('thumbs_up', 'wallpost', $id);
     $rating_content = $rating->put($is_editor, $uid, $course_id);
-    
+
     $comm = new Commenting('wallpost', $id);
     $comm_content = $comm->put($course_code, $is_editor, $uid, true);
-    
+
     if (allow_to_edit($id, $uid, $is_editor)) {
         $head_content .= '<script>
                           $(document).on("click", ".link", function(e) {
@@ -173,7 +173,7 @@ function generate_single_post_html($post) {
                               });
                           });
                       </script>';
-        
+
         $post_actions = '<div class="action-btns pull-right">';
         $post_actions .= '<a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
                           <span class="fa fa-fw fa-times text-danger pull-right" data-original-title="'.$langDelete.'" title="" data-toggle="tooltip"></span></a>';
@@ -209,9 +209,9 @@ function generate_single_post_html($post) {
         }
         $post_actions .= '</div>';
     }
-    
-    
-    
+
+
+
     $ret = '<div class="row margin-right-thin margin-left-thin margin-top-thin">
                               <div class="col-sm-12">
                                   <div class="media">
@@ -233,7 +233,7 @@ function generate_single_post_html($post) {
                                   </div>
                               </div>
                           </div>';
-    
+
     return $ret;
 }
 
@@ -241,7 +241,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page) {
     global $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments,
            $course_code, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm,
            $langWallPinPost, $langWallUnPinPost;
-    
+
     $head_content .= '<script>
                           $(document).on("click", ".link", function(e) {
                               var link = $(this).attr("href");
@@ -253,7 +253,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page) {
                               });
                           });
                       </script>';
-    
+
     $ret = '<div class="infinite-container">';
     foreach ($posts as $post) {
         $user_id = $post->user_id;
@@ -279,13 +279,13 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page) {
                                    </div>';
             }
         }
-        
+
         $rating = new Rating('thumbs_up', 'wallpost', $id);
         $rating_content = $rating->put($is_editor, $uid, $course_id);
-        
+
         $comm = new Commenting('wallpost', $id);
-        $comm_content = "<a class='btn btn-primary btn-xs pull-right' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
-        
+        $comm_content = "<a style='margin-top:-35px;' class='pe-3 btn btn-primary btn-xs pull-right' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
+
         if (allow_to_edit($id, $uid, $is_editor)) {
             $post_actions = '<div class="action-btns pull-right">';
             $post_actions .= '<a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
@@ -325,11 +325,11 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page) {
             }
             $post_actions .= '</div>';
         }
-        
-        
-        
+
+
+
         $ret .= '<div class="infinite-item">';
-    
+
         $ret .= '<div class="row margin-right-thin margin-left-thin margin-top-thin">
                               <div class="col-sm-12">
                                   <div class="media">
@@ -378,7 +378,7 @@ function insert_video($post_id) {
 
 function insert_docs($post_id, $subsystem = NULL) {
     global $course_id, $uid;
-    
+
     if (is_null($subsystem)) { //main documents
         if (isset($_POST['doc_ids']) and !empty($_POST['doc_ids'])) {
             $docs = explode(',', $_POST['doc_ids']);
@@ -390,7 +390,7 @@ function insert_docs($post_id, $subsystem = NULL) {
         }
         $sql = "subsystem = ".MYDOCS." AND subsystem_id = $uid";
     }
-    
+
     if (isset($docs)) {
         foreach ($docs as $doc) {
             $row = Database::get()->querySingle("SELECT title, filename FROM document WHERE $sql AND id = ?d", $doc);
@@ -484,9 +484,9 @@ function insert_forum($post_id) {
 
 function show_resources($post_id) {
     global $langWallAttachedResources;
-    
+
     $ret_str = '';
-    
+
     $req = Database::get()->queryArray("SELECT * FROM wall_post_resources WHERE post_id = ?d", $post_id);
     if (count($req) > 0) {
         $ret_str .= '<div class="table-responsive">';
@@ -502,7 +502,7 @@ function show_resources($post_id) {
 
 function show_resource($info) {
     global $is_editor;
-    
+
     switch ($info->type) {
         case 'video':
         case 'videolink':
@@ -536,9 +536,9 @@ function show_resource($info) {
 
 function show_document($title, $resource_id, $doc_id) {
     global $is_editor, $langWasDeleted;
-    
+
     $file = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d", $doc_id);
-    
+
     if (!$file) {
         if (!$is_editor) {
             return '';
@@ -739,7 +739,7 @@ function show_forum($type, $title, $resource_id, $ft_id) {
 
 function file_playurl_replacement($path, $filename, $subsystem, $uid) {
     global $urlServer, $group_sql;
-    
+
     if ($subsystem == MYDOCS) {
         $course_code = '';
         $group_sql = "subsystem = $subsystem AND subsystem_id = $uid";
@@ -747,7 +747,7 @@ function file_playurl_replacement($path, $filename, $subsystem, $uid) {
         global $course_code, $course_id;
         $group_sql = "course_id = $course_id AND subsystem = $subsystem";
     }
-    
+
     return htmlspecialchars($urlServer .
             "modules/document/play.php/$course_code" .
             public_file_path($path, $filename), ENT_QUOTES);
@@ -755,7 +755,7 @@ function file_playurl_replacement($path, $filename, $subsystem, $uid) {
 
 function file_url_replacement($path, $filename, $subsystem, $uid) {
     global $urlServer, $group_sql;
-    
+
     if ($subsystem == MYDOCS) {
         $course_code = "user,$uid";
         $group_sql = "subsystem = $subsystem AND subsystem_id = $uid";
@@ -763,7 +763,7 @@ function file_url_replacement($path, $filename, $subsystem, $uid) {
         global $course_code, $course_id;
         $group_sql = "course_id = $course_id AND subsystem = $subsystem";
     }
-    
+
     return htmlspecialchars($urlServer .
             "modules/document/file.php/$course_code" .
             public_file_path($path, $filename), ENT_QUOTES);

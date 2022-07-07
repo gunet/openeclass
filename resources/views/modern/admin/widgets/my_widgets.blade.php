@@ -33,7 +33,7 @@
                     @endif
 
                     <div class='row ps-5 pe-4 pt-5 pb-4'>
-                        <div class="col-4">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
                             <h3 class="control-label-notes">{{ trans('langInstalledWidgets') }}</h3>
                             <hr>
                             @if (count($installed_widgets))
@@ -86,7 +86,7 @@
                             </div>       
                             @endif      
                         </div>    
-                        <div class="col-8">
+                        <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
                             @include('admin.widgets.common.portfolioMain')
                             @include('admin.widgets.common.portfolioSide')                   
                         </div>

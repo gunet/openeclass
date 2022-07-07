@@ -65,17 +65,18 @@ if (isset($_POST['submit'])) {
 }
 
 $tool_content .= "
-<div class='panel panel-default panel-action-btn-default'>
-    <div class='panel-heading list-header'>
-        <h3 class='panel-title'> " . $langCourseCategoryActions . "</h3>
+<div class='panel panel-default panel-action-btn-default mt-3'>
+    <div class='panel-heading shadow-sm p-3 bg-body rounded bg-primary'>
+        <h3 class='panel-title control-label-notes text-center'><span class='fas fa-tools text-warning pe-2'></span>" . $langCourseCategoryActions . "</h3>
+
     </div>
     <form name='courseCategories' action='" . $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "' method='post' enctype='multipart/form-data'>
         <div class='table-responsive'>
-            <table class='table-default'>
-                <tr>
-                    <th width='45%' class='text-center'>" . $langInactiveCourseCategories . "</th>
-                    <th width='10%' class='text-center'>" . $langMove . "</th>
-                    <th width='45%' class='text-center'>" . $langActiveCourseCategories . "</th>
+            <table class='announcements_table'>
+                <tr class='notes_thead'>
+                    <th width='45%' class='text-white text-center'>" . $langInactiveCourseCategories . "</th>
+                    <th width='10%' class='text-white text-center'>" . $langMove . "</th>
+                    <th width='45%' class='text-white text-center'>" . $langActiveCourseCategories . "</th>
                 </tr>";
 
 $submitOnClick = '';

@@ -46,14 +46,14 @@
 
         <div class="row">
 
-            <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
+            <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
 
             <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
-                    
+
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                     <nav class="navbar navbar-expand-lg navrbar_menu_btn">
@@ -61,8 +61,8 @@
                             <i class="fas fa-align-left"></i>
                             <span></span>
                         </button>
-                        
-                       
+
+
                         <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                             <i class="fas fa-tools"></i>
                         </a>
@@ -82,10 +82,6 @@
 
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-
-                    <div class="row p-2"></div><div class="row p-2"></div>
-                    <span class="control-label-notes ms-1">{{trans('langTeacher')}}: <small>{{course_id_to_prof($course_id)}}</small></span>
-                    <div class="row p-2"></div><div class="row p-2"></div>
 
                     {!! isset($action_bar)? $action_bar: '' !!}
 
@@ -113,7 +109,7 @@
                                     @include('modules.video.common.videoList')
                                 </table>
                             </div>
-                                
+
                         @endif
 
                         @if ($num_of_categories > 0)
@@ -178,7 +174,7 @@
                                         @endforeach
                                         </table>
                                     </div>
-                                
+
                         @endif
                     @else
                         <div class='row p-2'></div>

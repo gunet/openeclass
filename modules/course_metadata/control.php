@@ -176,10 +176,10 @@ $tool_content .= action_bar(array(
             'level' => 'primary-label')),false);
 $tool_content .= "
     <div class='row oc-metedata-list'>
-        <div class='col-xs-12'>
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 shadow-lg p-3 mb-5 bg-body rounded bg-primary ms-2 mt-3'>
             <ul class='list-group'>
-                <li class='list-group-item list-header'>
-                    <h4>$langOpenCoursesCharacteristics</h4>
+                <li class='list-group-item list-header notes_thead'>
+                    <h5 class='text-white'>$langOpenCoursesCharacteristics</h5>
                 </li>
                 <li class='list-group-item'>
                     <span class='badge $openAccessImgBadge'><i class='fa $openAccessImg'></i></span>
@@ -219,13 +219,13 @@ $tool_content .= "
         ";
 
 $tool_content .= "<div class='row'>
-                    <div class='col-sm-12'>
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 shadow-lg p-3 mb-5 bg-body rounded bg-primary ms-2 mt-3'>
                         <div class='list-group'>
                             <form class='horizontal-form' role='form' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>";
 $tool_content .= <<<EOF
                             <ul class='list-group'>
-                                <li class='list-group-item list-header'>
-                                    <h4>$langOpenCoursesCharacter</h4>
+                                <li class='list-group-item list-header notes_thead'>
+                                    <h5 class='text-white'>$langOpenCoursesCharacter</h5>
                                 </li>
                                 <li class='list-group-item'>
                                     <label for='check_AMinus'>$langOpenCoursesType <strong>$langOpenCoursesIsAMinusLevel</strong></label>

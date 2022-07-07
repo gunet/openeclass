@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2017  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_admin = true;
@@ -88,7 +88,7 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
                                                         name = ?s,
                                                         description = ?s,
                                                         filename = ?s
-                                                       WHERE id = ?d", 
+                                                       WHERE id = ?d",
                                                     $_POST['name'], $_POST['description'], $_POST['certhtmlfile'], $_POST['cert_id']);
                         Session::Messages($langDownloadEnd, 'alert-success');
                     } else {
@@ -101,7 +101,7 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
                                             name = ?s,
                                             description = ?s,
                                             orientation = ?s
-                                        WHERE id = ?d", 
+                                        WHERE id = ?d",
                                     $_POST['name'], $_POST['description'], $_POST['orientation'], $_POST['cert_id']);
         }
     } else {
@@ -124,7 +124,7 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
         }
     }
 } elseif (isset($_POST['submit_badge_icon'])) { // insert / update badge icon
-    if (isset($_POST['badge_id'])) {        
+    if (isset($_POST['badge_id'])) {
         if ($_FILES['icon']['size'] > 0) { // replace file if needed
             $filename = $_FILES['icon']['name'];
             if (move_uploaded_file($_FILES['icon']['tmp_name'], "$webDir" . BADGE_TEMPLATE_PATH . "$filename")) {
@@ -228,10 +228,10 @@ if (isset($_GET['action'])) {
             $badge_description = $badge_data->description;
             $badge_hidden_id = "<input type='hidden' name='badge_id' value='$badge_id'>";
         }
- 
-        $tool_content .= "<div class='row'>
-                        <div class='col-md-12'>
-                        <div class='form-wrapper'>
+
+        $tool_content .= "
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                    <div class='form-wrapper shadow-sm p-3 mb-5 bg-body rounded bg-primary'>
                         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>";
                         if (isset($_GET['bid'])) {
                             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_data->filename";
@@ -304,9 +304,9 @@ if (isset($_GET['action'])) {
                 }
     $tool_content .= "</table>";
     $tool_content .= "</div></div></div>";
-    
+
     $sql2 = Database::get()->queryArray("SELECT * FROM badge_icon");
-    
+
     $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
                         <table class='table-default'>
                         <tr class='list-header'><th class='text-center' colspan='5'>$langAvailableBadges</th></tr>
@@ -322,7 +322,7 @@ if (isset($_GET['action'])) {
                                       <td>" . ellipsize_html($badge_data->description, 100) . "</td>
                                       <td class='text-center'><img src='$icon_link' width='50' height='50'></td>";
                     $tool_content .= "<td class='text-center option-btn-cell'>".
-                            action_button(array(                                
+                            action_button(array(
                                 array('title' => $langEdit,
                                     'icon' => 'fa-edit',
                                     'url' => "$_SERVER[SCRIPT_NAME]?action=edit_badge&amp;bid=$badge_data->id"

@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 function list_polls($id = NULL) {
@@ -33,7 +33,7 @@ function list_polls($id = NULL) {
             'active' => $row->active);
     }
     if (count($pollinfo) == 0) {
-        $ret_string .= "<div class='alert alert-warning'>$langPollNone</div>";
+        $ret_string .= "<div class='col-12 mt-3'><div class='alert alert-warning'>$langPollNone</div></div>";
     } else {
         $exist_poll = array();
 
@@ -48,7 +48,7 @@ function list_polls($id = NULL) {
                 "<tr class='list-header'>" .
                 "<th class='text-left'>&nbsp;$langQuestionnaire</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "</tr>";        
+                "</tr>";
         foreach ($pollinfo as $entry) {
             $checked = '';
             if (in_array($entry['id'], $exist_poll)) {

@@ -35,9 +35,9 @@ class CourseXMLElement extends SimpleXMLElement {
      * Get element's attribute if exists.
      * Returns string with attribute value or
      * boolean false if it doesn't exists.
-     * 
+     *
      * @param  string $name
-     * @return mixed 
+     * @return mixed
      */
     public function getAttribute($name) {
         $attributes = $this->attributes();
@@ -50,7 +50,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Recursively set a leaf element's attribute.
-     * 
+     *
      * @param string $name
      * @param string $value
      */
@@ -67,14 +67,14 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Returns an HTML Form for editing the XML.
-     * 
+     *
      * @global string $course_code
      * @global string $langSubmit
      * @global string $langRequiredFields
      * @param  array  $data - array containing data to preload the form with
      * @return string
      */
-    
+
     public function asForm($data = null) {
         global $course_code, $langSubmit, $langRequiredFields, $langBack;;
         $out = action_bar(array(
@@ -86,13 +86,13 @@ class CourseXMLElement extends SimpleXMLElement {
         $out .= "
                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
                 <ul class='nav nav-tabs' role='tablist'>
-                   <li class='active'><a href='#tabs-1' role='tab' data-toggle='tab'>" . $GLOBALS['langCMeta']['courseGroup'] . "</a></li>
-                   <li><a href='#tabs-2' role='tab' data-toggle='tab'>" . $GLOBALS['langCMeta']['instructorGroup'] . "</a></li>
-                   <li><a href='#tabs-3' role='tab' data-toggle='tab'>" . $GLOBALS['langCMeta']['curriculumGroup'] . "</a></li>
-                   <li><a href='#tabs-4' role='tab' data-toggle='tab'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
+                   <li class='nav-item active'><a class='nav-link' href='#tabs-1' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['courseGroup'] . "</a></li>
+                   <li class='nav-item'><a class='nav-link' href='#tabs-2' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['instructorGroup'] . "</a></li>
+                   <li class='nav-item'><a class='nav-link' href='#tabs-3' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['curriculumGroup'] . "</a></li>
+                   <li class='nav-item'><a class='nav-link' href='#tabs-4' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
                 </ul>
-                <div class='tab-content'>
-                    <div class='tab-pane fade in active' id='tabs-1' style='padding-top:20px'>";
+                <div class='tab-content courseMetadataContentTab ps-3 pt-3 pb-3 pe-3'>
+                    <div class='tab-pane fade show active' id='tabs-1' style='padding-top:20px'>";
         if ($data != null) {
             $this->populate($data);
         }
@@ -107,19 +107,19 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Returns an HTML Div for viewing the XML.
-     * 
+     *
      * @param  array  $data        - array containing data to preload the form with
      * @return string
      */
     public function asDiv($data = null) {
         $out = "<ul class='nav nav-tabs' role='tablist'>
-                   <li class='active'><a href='#tabs-1' role='tab' data-toggle='tab'>" . $GLOBALS['langCMeta']['courseGroup'] . "</a></li>
-                   <li><a href='#tabs-2' role='tab' data-toggle='tab'>" . $GLOBALS['langCMeta']['instructorGroup'] . "</a></li>
-                   <li><a href='#tabs-3' role='tab' data-toggle='tab'>" . $GLOBALS['langCMeta']['curriculumGroup'] . "</a></li>
-                   <li><a href='#tabs-4' role='tab' data-toggle='tab'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
+                   <li class='nav-item active'><a class='nav-link' href='#tabs-1' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['courseGroup'] . "</a></li>
+                   <li class='nav-item'><a class='nav-link' href='#tabs-2' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['instructorGroup'] . "</a></li>
+                   <li class='nav-item'><a class='nav-link' href='#tabs-3' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['curriculumGroup'] . "</a></li>
+                   <li class='nav-item'><a class='nav-link' href='#tabs-4' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
                 </ul>
                 <div class='tab-content'>
-                    <div class='tab-pane fade in active' id='tabs-1' style='padding-top:20px'>";
+                    <div class='tab-pane fade show active' id='tabs-1' style='padding-top:20px'>";
         if ($data != null) {
             $this->populate($data);
         }
@@ -130,7 +130,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Recursively populate the HTML Form.
-     * 
+     *
      * @param  string           $parentKey
      * @param  CourseXMLElement $parent
      * @return string
@@ -153,7 +153,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Recursively populate the HTML Div.
-     * 
+     *
      * @param  string $parentKey
      * @return string
      */
@@ -175,7 +175,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Populate a single simple HTML Form Field (leaf).
-     * 
+     *
      * @global string           $currentCourseLanguage
      * @param  string           $fullKey
      * @param  CourseXMLElement $parent
@@ -203,18 +203,19 @@ class CourseXMLElement extends SimpleXMLElement {
         // proper divs initializations
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
-            $fieldStart .= "<div class='panel-group'>
+            $fieldStart .= "<div class='panel-group shadow-lg p-3 mb-5 bg-body rounded bg-primary mt-3'>
                 <div class='panel panel-default'>
-                    <div class='panel-heading'>
-                        <h3 class='panel-title'>
-                            <a data-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "</a>
-                        </h3>
+                    <div class='panel-heading notes_thead'>
+                        <div class='panel-title h3 text-white d-flex justify-content-center'>
+                            <a class='metadataCourseCollapseBtn text-white' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
+                            <span class='fas fa-arrow-down'></span></a>
+                        </div>
                     </div>
                     <div id='metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "' class='panel-collapse collapse'>
-                        <div class='panel-body'>";
+                        <div class='panel-body ps-3 pb-3 pt-3 pe-3'>";
         }
         $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0 || in_array($fullKey, CourseXMLConfig::$overrideClass)) ? 'cmetalabel' : 'cmetalabelinaccordion';
-        $fieldStart .= "<div class='form-group'><label $helptitle class='control-label col-sm-3'>";
+        $fieldStart .= "<div class='form-group mt-3'><label $helptitle class='control-label-notes col-sm-6'>";
         if (in_array($fullKeyNoLang, CourseXMLConfig::$linkedFields) && (!$this->getAttribute('lang') || $sameAsCourseLang)) {
             $fieldStart .= "<a href='" . CourseXMLConfig::getLinkedValue($fullKey) . "' target='_blank'>" . q($keyLbl . $lang) . "</a>";
         } else {
@@ -222,8 +223,8 @@ class CourseXMLElement extends SimpleXMLElement {
         }
         if (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || in_array($fullKey, CourseXMLConfig::$asteriskedFields)) {
             $fieldStart .= "(<span style='color:red'>*</span>)";
-        }        
-        $fieldStart .= ":</label><div class='col-sm-9'>";
+        }
+        $fieldStart .= ":</label><div class='col-sm-12'>";
         $fieldEnd = "</div>";
 
         $fieldEnd .= "</div>";
@@ -285,7 +286,7 @@ class CourseXMLElement extends SimpleXMLElement {
             }
             return $fieldStart . "<input class='form-control' type='text' size='2' name='" . q($fullKey) . "' value='" . intval($value) . "' $readonly>" . $fieldEnd;
         }
-        
+
         // float fields
         if (in_array($fullKeyNoLang, CourseXMLConfig::$floatFields)) {
             $value = (string) $this;
@@ -380,7 +381,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Populate a single simple HTML Div Element (leaf).
-     * 
+     *
      * @global string $currentCourseLanguage
      * @param  string $fullKey
      * @return string
@@ -404,15 +405,15 @@ class CourseXMLElement extends SimpleXMLElement {
         // proper divs initializations
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
-            $fieldStart .= "<div class='panel-group'>
+            $fieldStart .= "<div class='panel-group shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
                 <div class='panel panel-default'>
-                    <div class='panel-heading'>
-                        <h3 class='panel-title'>
-                            <a data-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "</a>
-                        </h3>
+                    <div class='panel-heading notes_thead'>
+                        <div class='panel-title h3 text-white d-flex justify-content-center'>
+                            <a class='metadataCourseCollapseBtn' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "</a>
+                        </div>
                     </div>
                     <div id='metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "' class='panel-collapse collapse'>
-                        <div class='panel-body'>";
+                        <div class='panel-body ps-3 pt-3 pb-3 pe-3'>";
         }
         $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel cmetalabel-wd' : 'cmetalabelinaccordion cmetalabelinaccordion-wd';
         $fieldStart .= "<div class='row margin-top-thin margin-bottom-thin'><div class='col-sm-3'><strong>" . q($keyLbl . $lang) . ":</strong></div><div class='col-sm-9'>";
@@ -502,7 +503,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Populate the XML with data.
-     * 
+     *
      * @param array            $data
      * @param string           $parentKey
      * @param CourseXMLElement $parent
@@ -524,7 +525,7 @@ class CourseXMLElement extends SimpleXMLElement {
      * Populate a single simple xml node (leaf).
      * For setting text values of SimpleXMLElement(s), see also: http://stackoverflow.com/questions/3153477/how-can-i-set-text-value-of-simplexmlelement-without-using-its-parent
      * If setting the zero-offset node re-fails, we can use: dom_import_simplexml($this)->nodeValue = 'foo';
-     * 
+     *
      * @param array            $data
      * @param string           $fullKey
      * @param CourseXMLElement $parent
@@ -534,7 +535,7 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($this->getAttribute('lang')) {
             $fullKey .= '_' . $this->getAttribute('lang');
         }
-        
+
         if (isset($data[$fullKey])) {
             if (!is_array($data[$fullKey])) {
                 if (in_array($fullKeyNoLang, CourseXMLConfig::$integerFields)) {
@@ -601,7 +602,7 @@ class CourseXMLElement extends SimpleXMLElement {
                             } else {
                                 $this[0] = $data[$fullKey][$j];
                             }
-                            // mime attribute for mime fields 
+                            // mime attribute for mime fields
                             if (in_array($fullKeyNoLang, CourseXMLConfig::$binaryFields)) {
                                 $this['mime'] = isset($data[$fullKey . '_mime']) ? $data[$fullKey . '_mime'][$j] : '';
                             }
@@ -622,7 +623,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Convert the XML as a flat array (key => value) and do special post-processing.
-     * 
+     *
      * @param  string $parentKey
      * @return array
      */
@@ -645,7 +646,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Convert the XML recursively as a flat array (key => value).
-     * 
+     *
      * @param  string $parentKey
      * @return array
      */
@@ -679,7 +680,7 @@ class CourseXMLElement extends SimpleXMLElement {
      * Adapt the current XML according to the given data array.
      * It ensures the proper number of multiple
      * elements exist in the XML (multiple instructors, units, etc).
-     * 
+     *
      * @param array $data
      */
     public function adapt($data) {
@@ -758,7 +759,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Array key for iterating over XML, POST or array data.
-     * 
+     *
      * @param type $parentKey
      * @return string
      */
@@ -772,7 +773,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Iteratively count all XML elements.
-     * 
+     *
      * @return int
      */
     public function countAll() {
@@ -791,7 +792,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Whether the XML contains all mandatory fields or not.
-     * 
+     *
      * @return boolean
      */
     public function hasMandatoryMetadata() {
@@ -822,7 +823,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Initialize an XML structure for a specific course.
-     * 
+     *
      * @param  int     $courseId
      * @param  string  $courseCode
      * @param  boolean $forceUpdate
@@ -841,7 +842,7 @@ class CourseXMLElement extends SimpleXMLElement {
             $data['course_confirmVideolectures'] = 'false';
         }
         $data['course_videolectures'] = $vnum + $vlnum;
-        
+
         // hits and visits
         $visits = Database::get()->querySingle("select COUNT(id) AS cnt FROM logins WHERE course_id = ?d", $courseId)->cnt;
         $hits = Database::get()->querySingle("select SUM(hits) AS cnt FROM actions_daily WHERE course_id = ?d", $courseId)->cnt;
@@ -879,10 +880,10 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Initialize an XML structure for a specific course only if the metadatafile is present
-     * and without using database queries. This is a lighter version than init, but it 
+     * and without using database queries. This is a lighter version than init, but it
      * should be used for read-only operations. Write operations rely on init's adaption
      * and population with DB data as well.
-     * 
+     *
      * @param  string $courseCode
      * @return CourseXMLElement or false on error
      */
@@ -903,7 +904,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Refresh/update the auto-generated values for a specific course.
-     * 
+     *
      * @param int     $courseId
      * @param string  $courseCode
      * @param boolean $forceUpdate
@@ -917,7 +918,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Save the XML structure for a specific course.
-     * 
+     *
      * @param int              $courseId
      * @param string           $courseCode
      * @param CourseXMLElement $xml
@@ -984,7 +985,7 @@ class CourseXMLElement extends SimpleXMLElement {
                     `deleted` = ?d", intval($courseId), "oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId, $nowdatestamp, $deleted);
             }
         }
-        
+
         if (($exists && intval($exists->exists) == 1) || $is_certified) {
             $oaiRecordId = Database::get()->querySingle("SELECT id FROM oai_record WHERE course_id = ?d", $courseId)->id;
 
@@ -1053,7 +1054,7 @@ class CourseXMLElement extends SimpleXMLElement {
             self::storeMetadata($oaiRecordId, 'dc_unitkeywords', self::serializeMulti($xml->unit, "keywords"));
         }
     }
-    
+
     private static function storeMetadata($oaiRecordId, $field, $value) {
         $exists = Database::get()->querySingle("SELECT 1 AS `exists` FROM oai_metadata WHERE oai_record = ?d AND field = ?s", $oaiRecordId, $field);
         if ($exists && intval($exists->exists) == 1) {
@@ -1065,7 +1066,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Prepare a XML element as an array for serialization, handle multi-lang and multiplicity as needed.
-     * 
+     *
      * @param  CourseXMLElement $ele
      * @return array
      */
@@ -1084,7 +1085,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Serialize a XML element.
-     * 
+     *
      * @param CourseXMLElement $ele
      * return string
      */
@@ -1114,7 +1115,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Serialize a multiple XML element
-     * 
+     *
      * @param  CourseXMLElement $parent
      * @param  string           $childName
      * @return string
@@ -1137,7 +1138,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Serialize a multiple XML element attribute
-     * 
+     *
      * @param  CourseXMLElement $parent
      * @param  string           $childName
      * @return string
@@ -1160,7 +1161,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Turn a non-multiLang field into multiLang.
-     * 
+     *
      * @global string $currentCourseLanguage
      * @global string $webDir
      * @global string $siteName
@@ -1213,7 +1214,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Auto-Generate Data for a specific course.
-     * 
+     *
      * @global string $urlServer
      * @global string $license
      * @global string $webDir
@@ -1227,7 +1228,7 @@ class CourseXMLElement extends SimpleXMLElement {
         global $urlServer, $license, $webDir, $currentCourseLanguage, $language;
         global $siteName, $Institution, $InstitutionUrl; // NOTICE: DO NOT remove these global vars, include of common.inc, etc, below requires them
         $data = array();
-        
+
         if (empty($currentCourseLanguage)) {
             $plang = $language;
         } else {
@@ -1238,7 +1239,7 @@ class CourseXMLElement extends SimpleXMLElement {
         if (!$course) {
             return array();
         }
-        
+
         // course language
         $clang = $course->lang;
         $data['course_language'] = $clang;
@@ -1353,7 +1354,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Returns the path of the skeleton XML file.
-     * 
+     *
      * @global string $webDir
      * @return string
      */
@@ -1364,7 +1365,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Returns whether a course is OpenCourses Certified or not.
-     * 
+     *
      * @param  string  $courseCode
      * @return boolean
      */
@@ -1387,9 +1388,9 @@ class CourseXMLElement extends SimpleXMLElement {
     }
 
     /**
-     * Returns the Certification Level language string by matching a key-value 
+     * Returns the Certification Level language string by matching a key-value
      * (i.e. int field from DB table course_review).
-     * 
+     *
      * @param  int    $key
      * @return string
      */
@@ -1413,7 +1414,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Returns a closure for counting open courses under a subnode.
-     * 
+     *
      * @return function
      */
     public static function getCountCallback() {
@@ -1430,7 +1431,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Debug the contents of an array.
-     * 
+     *
      * @param  array $xmlArr
      * @return string        - HTML preformatted output
      */

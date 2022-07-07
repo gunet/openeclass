@@ -40,11 +40,6 @@
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     <p class='mt-5'>
-                        <span class='control-label-notes text-start ps-1'>
-                            {{ trans('langTeacher') }}:
-                            <small>{{course_id_to_prof($course_id)}}</small>
-                        </span>
-
                         <a class="btn btn-secondary rounded-circle float-end" data-bs-toggle="collapse" href="#InfoCourse" role="button" aria-expanded="false" aria-controls="InfoCourse">
                             <i class='fa fa-arrow-down'></i>
                         </a>
@@ -284,7 +279,7 @@
                             <div class='row p-2'></div>
                         </div>
 
-                        <div class="col-md-12 px-5 mt-3 announcement-course-page" style="margin-left:11px;">
+                        <div class="col-md-12 px-5 mt-3 announcement-course-page">
 
                             <div class="pb-5 bg-white">
                                 <div class='row p-2'></div>
@@ -311,7 +306,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12 px-5 mt-3 col_maincontent_active_CourseComplete" style="margin-left:11px;">
+                        <div class="col-md-12 px-5 mt-3 col_maincontent_active_CourseComplete">
                             <div class="row p-2 bg-white"></div>
                             <div class="row p-2 bg-white"></div>
                             <div class="pb-5 bg-white">
@@ -415,7 +410,7 @@
                         buttons: {
                             cancel: {
                                 label: '{{ js_escape(trans('langCancel')) }}',
-                                className: 'btn-default'
+                                className: 'btn-secondary'
                             },
                             success: {
                                 label: '{{ js_escape(trans('langSubmit')) }}',

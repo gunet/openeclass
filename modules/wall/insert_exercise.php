@@ -33,7 +33,7 @@ function list_exercises($id = NULL) {
             'visibility' => $row->active);
     }
     if (count($quizinfo) == 0) {
-        $ret_string .= "<div class='alert alert-warning'>$langNoExercises</div>";
+        $ret_string .= "<div class='col-12 mt-3'><div class='alert alert-warning'>$langNoExercises</div></div>";
     } else {
         $exist_exercise = array();
 
@@ -44,12 +44,12 @@ function list_exercises($id = NULL) {
             }
         }
 
-        $ret_string .= "<table class='table-default'>" .
-                "<tr class='list-header'>" .
-                "<th width='50%' class='text-left'>$langExercices</th>" .
-                "<th class='text-left'>$langDescription</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "</tr>";        
+        $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
+                "<tr class='notes_thead'>" .
+                "<th width='50%' class='text-left text-white'>$langExercices</th>" .
+                "<th class='text-left text-white'>$langDescription</th>" .
+                "<th style='width:20px;' class='text-center text-white'>$langChoice</th>" .
+                "</tr>";
         foreach ($quizinfo as $entry) {
             if ($entry['visibility'] == '0') {
                 $vis = 'not_visible';
@@ -66,7 +66,7 @@ function list_exercises($id = NULL) {
             $ret_string .= "<td class='text-center'><input type='checkbox' $checked name='exercise[]' value='$entry[id]'></td>";
             $ret_string .= "</tr>";
         }
-        $ret_string .= "</table>";
+        $ret_string .= "</table></div>";
     }
     return $ret_string;
 }

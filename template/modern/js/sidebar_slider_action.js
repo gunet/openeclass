@@ -34,6 +34,15 @@ $(document).ready(function(){
             }
         })
 
+        $('.metadataCourseCollapseBtn').on('click',function(){
+            var elem = document.querySelector(".col_maincontent_active");
+            if(elem) {
+                var rect = elem.getBoundingClientRect();
+                $('.navbar_sidebar').css('min-height', rect.height);
+                
+            }
+        })
+
         //From FAQ 
         $('.expand').on('click',function(){
 

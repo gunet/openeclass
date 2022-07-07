@@ -33,7 +33,7 @@ function list_chats($id = NULL) {
             'visible' => $row->status);
     }
     if (count($chatinfo) == 0) {
-        $ret_string .= "<div class='alert alert-warning'>$langNoChatAvailable</div>";
+        $ret_string .= "<div class='col-12 mt-3'><div class='alert alert-warning'>$langNoChatAvailable</div></div>";
     } else {
         $exist_chat = array();
 
@@ -44,25 +44,25 @@ function list_chats($id = NULL) {
             }
         }
 
-        $ret_string .= "<table class='table-default'>" .
-            "<tr class='list-header'>" .
-            "<th><div align='left'>&nbsp;$langChat</div></th>" .
-            "<th><div align='left'>$langDescription</div></th>" .
-            "<th width='80'>$langChoice</th>" .
+        $ret_string .= "<div class='table-responsive'><table class='announcements_table'>" .
+            "<tr class='notes_thead'>" .
+            "<th class='text-white'><div align='left'>&nbsp;$langChat</div></th>" .
+            "<th class='text-white'><div align='left'>$langDescription</div></th>" .
+            "<th class='text-white' width='80'>$langChoice</th>" .
             "</tr>";
         foreach ($chatinfo as $entry) {
             $checked = '';
             if (in_array($entry['id'], $exist_chat)) {
                 $checked = 'checked';
             }
-
             $ret_string .= "<tr>";
             $ret_string .= "<td>&nbsp;".icon('fa fa-exchange')."&nbsp;&nbsp;<a href='${urlServer}modules/chat/chat.php?conference_id=$entry[id]'>".q($entry['name'])."</a></td>";
             $ret_string .= "<td>".$entry['description']."</td>";
             $ret_string .= "<td class='text-center'><input type='checkbox' $checked name='chat[]' value='$entry[id]'></td>";
             $ret_string .= "</tr>";
         }
-        $ret_string .= "</table>";
+        $ret_string .= "</table></div>";
+
     }
     return $ret_string;
 }
