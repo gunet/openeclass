@@ -12,6 +12,9 @@
                         <span></span>
                     </button>
 
+            <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
+
+                <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                         <i class="fas fa-tools"></i>

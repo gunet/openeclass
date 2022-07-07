@@ -1,6 +1,3 @@
-<?php 
-
-?>
 
 @extends('layouts.default')
 
@@ -14,8 +11,8 @@
    <div class="pb-5">
         <div class="container-fluid notes_container">
             <div class="row">
-                <div class="col-xl-12 col-lg-8 col-md-12 col-sm-6 col-xs-6 justify-content-center col_notes">
-                    <div class="row p-5" style="margin-top:-20px;">
+                <div class="col-xl-12 col-lg-8 col-md-12 col-sm-6 col-xs-6 justify-content-center">
+                    <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5" style="margin-top:-20px;">
 
                         <div class="col-xxl-12 col-lx-12 col-lg-12 col-md-12 col-sm-6">
                             <legend class="float-none w-auto py-2 px-4 notes-legend"><span style="margin-left:-20px;"><i class="fas fa-sticky-note"></i> Νέα σημείωση</span>

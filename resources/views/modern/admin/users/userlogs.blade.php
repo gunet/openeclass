@@ -29,14 +29,9 @@
                 </div>
             </div>
 
-            @if($breadcrumbs && count($breadcrumbs)>2)
-                <div class='row p-2'></div>
-                <div class="float-start">
-                    <p class='control-label-notes'>{!! $breadcrumbs[1]['bread_text'] !!}</p>
-                    <small class='text-secondary'>{!! $breadcrumbs[count($breadcrumbs)-1]['bread_text'] !!}</small>
-                </div>
-                <div class='row p-2'></div>
-            @endif
+            <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
+
+                <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
             {!! isset($action_bar) ?  $action_bar : '' !!}
 

@@ -27,7 +27,10 @@
                     @include('layouts.partials.sidebarAdmin')
                 </div>
 
-            {!! isset($action_bar) ?  $action_bar : '' !!}
+
+            <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
+
+                <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
             <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' name='edituser' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' onsubmit='return validateNodePickerForm();'>

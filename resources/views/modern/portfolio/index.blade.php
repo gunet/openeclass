@@ -31,6 +31,7 @@
                     <div class="row">
 
                         <div class="col-xl-4 col-lg-6 col-md-7 col-sm-12 col-12">
+
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
@@ -53,6 +54,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                     <p class='text-secondary mt-3 ps-3 pe-lg-0 pe-3'>{{ trans('langProfileLastVisit') }}:
                                        <strong class='text-primary'>{{ claro_format_locale_date(trans('dateFormatLong'), strtotime($lastVisit->when)) }}</strong>
+
                                     </p>
 
                                 </div>
@@ -102,7 +104,9 @@
                                                 <p class='text-lg-start text-start text-secondary'>{{ trans('langSumCoursesSupport') }}:  <strong class='text-primary'>{{ $teacher_courses_count }}</strong></p>
                                             </div>
                                             <div class="col-lg-6 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
+
                                                 <p class='text-lg-start text-start text-secondary'>{{ trans('langProfileLastVisit') }}:
+
                                                     <strong class='text-primary'>{{ claro_format_locale_date(trans('dateFormatLong'), strtotime($lastVisit->when)) }}</strong>
                                                 </p>
                                             </div>
@@ -166,7 +170,6 @@
                                     </div>
                                 </div>
 
-
                         </div>
 
                     </div>
@@ -213,8 +216,6 @@
 
                 <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><hr class='text-primary mt-0 fs-1'></div>
 
-
-
                 {{-- Courses List --}}
 
                 <div id="cources-bars" class="container-fluid">
@@ -242,8 +243,8 @@
                     @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'bars', 'cource_pages' => $cource_pages])
                         --}}
 
+                    <a class="btn btn-xs btn-primary float-end mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
 
-                    <a class="btn btn-xs btn-primary float-md-end text-center mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
                 </div>
 
                 <div id="cources-pics" class="container-fluid cources-paging" style="display:none">
@@ -310,7 +311,9 @@
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                     <h5 class="text-primary">{{ trans('langMyPersoMessages') }}</h5>
+
                     <div class="container-fluid">
+
                         <hr class='text-primary'>
                         <ul class='tablelist pt-2 pb-2 ps-2 pe-2'>
                             @if(!empty($user_messages))

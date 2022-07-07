@@ -130,6 +130,7 @@
                                         <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
                                         <a class='LogoutButton w-100 btn btn-warning fw-bolder user-item text-secondary ps-1 pe-2' href="{{ $urlAppend }}modules/auth/logout.php"><i class="fas fa-unlock"></i><span class='ps-2'>{{ trans('langLogout') }}</span></a>
                                     </form>
+
                                 </li>
                             </ul>
                         </div>

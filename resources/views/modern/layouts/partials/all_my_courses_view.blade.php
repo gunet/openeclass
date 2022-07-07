@@ -1,12 +1,7 @@
 
-    <!-- <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/all_my_courses_view.css"/>
-    <script type="text/javascript" src="{{ $urlAppend }}template/modern/js/my_courses_color_header.js"></script> -->
+   <div class="col-xl-12 col-lg-12 col-md-12 col-12 col-12 justify-content-center courses-details">
 
-    <div class="col-xl-12 col-lg-12 col-md-12 col-12 col-12 justify-content-center courses-details">
-
-        <div class="row p-5">
-
-
+        <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
             <nav class="navbar navbar-expand-lg navrbar_menu_btn">
                 <a type="button" class="d-none d-sm-block d-md-none d-lg-block ms-2 btn btn-primary btn btn-primary" href="{{$urlAppend}}modules/help/help.php?language={{$language}}&topic=message" style='margin-top:-10px'>
@@ -16,20 +11,21 @@
 
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
-            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <div class="row p-2"></div><div class="row p-2"></div>
-                <legend class="float-none w-auto py-2 px-4 notes-legend">
-                    <span style="margin-left:-20px;"><i class="fas fa-graduation-cap"></i> {{ trans('langMyCourses') }}</span>
-                    <p class="text-end registerToCourseText">{{ trans('langRegCourses') }}: </p>
-                    <a class="add_course_a" href="{{ $urlAppend }}modules/auth/courses.php"><i class='fas fa-graduation-cap fa-3x courses_fas'></i>
-                        <span class="span_add_course_a">+</span>
-                    </a>
+            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+                <legend class="float-none w-auto notes-legend pb-1">
+                    <span><i class="fas fa-graduation-cap"></i> {{ trans('langMyCourses') }}</span>
+                    <span class='float-end'>
+                        {{ trans('langRegCourses') }}:
+                        <a class='btn btn-primary' href="{{ $urlAppend }}modules/auth/courses.php">
+                            <span class='fa fa-plus'></span>
+                        </a>
+                    </span>
                 </legend> 
             </div>
 
 
 
-            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 ColContentCourses">
+            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3">
                 <div class="table-responsive">
                     <table id="courses_table_pag" class="table_my_courses">
                         <thead class="thead_courses text-light">

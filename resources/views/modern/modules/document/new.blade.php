@@ -21,7 +21,7 @@
             @else
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
             @endif
-                <div class="row p-5">
+                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                   
 

@@ -14,7 +14,7 @@ print_a($user_notes);
             <div class="row">
                     <div class="col-xl-12 col-lg-8 col-md-12 col-sm-12 col-xs-12 justify-content-center courses-details">
 
-                        <div class="row p-5">      
+                        <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">      
                             <div class="col-xxl-12 col-lx-12 col-lg-12 col-md-12 col-sm-6 LegendCol">
                                 <legend class="float-none w-auto py-2 px-4 notes-legend">
                                     <form class="formAddNote" action="{{ $urlAppend }}main/notes/index.php" method="post">

@@ -68,7 +68,7 @@ function getUserLessonInfo($uid) {
     $student_courses_count = 0;
     if ($myCourses) {
         $lesson_content .= "<table id='portfolio_lessons' class='table table-striped'>";
-        $lesson_content .= "<thead><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
+        $lesson_content .= "<thead class='sr-only'><tr class='notes_thead'><th>$langCourse</th><th>$langActions</th></tr></thead>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
             $visclass = '';
@@ -193,7 +193,6 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
         }
         return $arr_an;
     } else {
-
         //Προσθήκη μετρητή ώστε να εμφανίζονται μέχρι 2 ανακοινώσεις σαν pagination
         // Ολες οι τελευταιες ανακοινωσεις εμφανιζονται οταν πατησει ο χρηστης το κουμπι.
         $counterAn = 0;

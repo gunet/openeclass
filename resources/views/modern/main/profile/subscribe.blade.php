@@ -17,7 +17,7 @@
 
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active col_maincontent_active_ProfileUser">
                     
-                <div class="row p-5">
+                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                     <nav class="navbar navbar-expand-lg navrbar_menu_btn">
                         <a type="button" id="getTopicButton" class="btn btn-primary btn btn-primary" href="{{$urlAppend}}modules/help/help.php?language={{$language}}&topic={{$helpTopic}}&subtopic={{$helpSubTopic}}" style='margin-top:-10px'>
