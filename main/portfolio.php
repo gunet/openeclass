@@ -212,5 +212,23 @@ $data['userdata'] = Database::get()->querySingle("SELECT am, phone, registered_a
 $data['teacher_courses_count'] = $teacher_courses_count;
 $data['student_courses_count'] = $student_courses_count;
 
+<<<<<<< local
+=======
+$data['user_messages'] = $user_messages;
+
+
+// For pagination pictures of user-cources
+$cources = getUserCoursesPic($uid);
+$data['cources'] = $cources;
+
+$items_per_page = 4;
+$data['items_per_page'] = $items_per_page;
+
+$cource_pages = ceil(count($cources)/$items_per_page);
+$data['cource_pages'] = $cource_pages;
+
+
+
+>>>>>>> graft
 $data['menuTypeID'] = 1;
 view('portfolio.index', $data);

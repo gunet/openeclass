@@ -28,7 +28,9 @@
             </div>
         </div>
     </div>
-    <div class="col-6 text-primary text-end"><a class="all_courses_a" href="{{ $urlAppend }}main/my_courses.php">ΟΛΑ ΤΑ ΜΑΘΗΜΑΤΑ</a><i class="fas fa-chevron-right"></i></div>
+    <div class="col-6 text-primary text-end">    
+        <a class="btn btn-xs btn-primary float-md-end text-center mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
+    </div>
 </div>
 
 <script>

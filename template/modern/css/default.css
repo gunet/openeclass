@@ -483,10 +483,6 @@
       border:2px solid rgba(0,63,135,0.1);
   }
   
-  .lesson_title_a:hover{
-      color:orange;
-  }
-  
   .fa.fa-replay.space-after-icon{
       color:white;
   }

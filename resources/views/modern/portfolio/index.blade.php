@@ -243,13 +243,19 @@
                     @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'bars', 'cource_pages' => $cource_pages])
                         --}}
 
+<<<<<<< local
                     <a class="btn btn-xs btn-primary float-end mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
 
+=======
+                        
+                    <a class="btn btn-xs btn-primary float-md-end text-center mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
+>>>>>>> graft
                 </div>
 
                 <div id="cources-pics" class="container-fluid cources-paging" style="display:none">
                     <div class="row cources-pics-page" id="cources-pics-page-1">
-                        @foreach($cources as $i => $cource )
+                        <?php $i=0; ?>
+                        @foreach($cources as $cource)
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <div class="lesson">
                                 <figure class="lesson-image">
@@ -266,7 +272,11 @@
                                     <a class="fs-5" href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
                                     <span class="lesson-id fs-5 text-secondary">({{ $cource->code }})</span>
                                 </h3>
+<<<<<<< local
                                 <div class="lesson-professor fs-5 text-secondary">{{ $cource->prof_names }}</div>
+=======
+                                <div class="lesson-professor fs-5 text-secondary">{{ $cource->professor }}</div>
+>>>>>>> graft
                             </div>
                             <hr>
                         </div>
@@ -274,6 +284,7 @@
                     </div>
                     <div class="row cources-pics-page" style="display:none" id="cources-pics-page-{{ceil($i/$items_per_page)+1}}" >
                             @endif
+                            <?php $i++; ?>
                         @endforeach
                     </div>
                     @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'pics', 'cource_pages' => $cource_pages])
@@ -340,4 +351,9 @@
 </div>
 
 </div>
+
+<script>  
+    var user_cources = <?php echo json_encode($cources); ?>;
+    var user_cource_pages = <?php echo $cource_pages; ?>;
+</script>
 @endsection
