@@ -246,9 +246,7 @@ if ($userdata) {
     $tool_content .= $clipboard_link;
     $tool_content .= "$social_share</div>";
     $tool_content .= $ret_str['right_menu'];
-    $tool_content .= "</div>
-                    </div>
-                  </div>";
+    $tool_content .= "";
 }
 if ($uid == $id) {
     draw($tool_content, 1, null, $head_content);

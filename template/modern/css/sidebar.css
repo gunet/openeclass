@@ -1,11 +1,25 @@
-
-
-.ColLegends{
-  border-bottom:solid 1px blue; height:45px
+.list-group-item.bg-transparent.active{
+    background-color: #000000 !important;
+}
+.list-group-item.bg-transparent.active span{
+  color: white !important;
+}
+.list-group-item.bg-transparent:hover{
+  background-color: blue !important;
+}
+.list-group-item.bg-transparent span:hover{
+   color: white !important;
 }
 
 input[type=checkbox].toggles{
   display:none;
+}
+
+.textTool{
+  font-size: 14px;
+}
+.icon_tool{
+  font-size: 12px;
 }
 
 input[type=checkbox].toggles + label{
@@ -95,7 +109,7 @@ input[type=checkbox].toggles:checked + label::after{
   font-size: 11px;
   color: white;
   text-align: left;
-
+ 
 }
 input[type=checkbox].toggles:checked + label::before{
   left:81px;
@@ -136,7 +150,7 @@ input[type="checkbox"].toggles + label.rounded::before{
   padding-right: 20px;
   border-radius: 6px;
   display: inline-block;
-
+  
 }
 /* .sidebarTexts i::after{
   content: "|\00a0\00a0" !important;
@@ -214,17 +228,17 @@ ul {
 .col_maincontent_active{
   transition: 0.4s;
   min-height:auto;
-  background-color: white;
+  background-color: white; 
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
-  border-bottom-left-radius: 15px;
-  border-top-left-radius: 15px;
+  /* border-bottom-left-radius: 15px;
+  border-top-left-radius: 15px; */
 }
 
 .announcement-course-page{
   transition: 0.4s;
   min-height:auto;
-  background-color: white;
+  background-color: white; 
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
@@ -232,22 +246,12 @@ ul {
   -moz-box-shadow: 0 0 3px #ccc;
   -webkit-box-shadow: 0 0 3px #ccc;
   box-shadow: 0 0 3px #ccc;
-}
-
-.col_maincontent_registration{
-  transition: 0.4s;
-  height:60vh;
-  background-color: white;
-  border-bottom-right-radius: 15px;
-  border-top-right-radius: 15px;
-  border-bottom-left-radius: 15px;
-  border-top-left-radius: 15px;
 }
 
 .col_maincontent_active_unit{
   transition: 0.4s;
   height:auto;
-  background-color: white;
+  background-color: white; 
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
@@ -255,7 +259,7 @@ ul {
   -moz-box-shadow: 0 0 3px #ccc;
   -webkit-box-shadow: 0 0 3px #ccc;
   box-shadow: 0 0 3px #ccc;
-
+  
 }
 
 .col_maincontent_active_calendar{
@@ -267,7 +271,7 @@ ul {
 .col_maincontent_active_CourseComplete{
   transition: 0.4s;
   height:auto;
-  background-color: white;
+  background-color: white; 
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
@@ -280,36 +284,21 @@ ul {
 .col_maincontent_active_PersonalDoc{
   transition: 0.4s;
   height:auto;
-  background-color: white;
+  background-color: white; 
   border-bottom-right-radius: 15px;
   border-top-right-radius: 15px;
   border-bottom-left-radius: 15px;
   border-top-left-radius: 15px;
-}
-
-.col_maincontent_active_all{
-  transition: 0.4s;
-  height:auto;
-  background-color: white;
-  border-bottom-right-radius: 15px;
-  border-top-right-radius: 15px;
-  border-bottom-left-radius: 15px;
-  border-top-left-radius: 15px;
-
 }
 
 
 .col_sidebar_active{
   transition: 0.4s;
-  float:right;
-  margin-right:0px;
-  /* background-color:#f5f5f5; */
-}
-.col_sidebar_active2{
-  transition: 0.4s;
-  float:right;
-  margin-right:0px;
-  background-color:#f5f5f5;
+  border-top-left-radius: 15px;
+  /* border-top-right-radius: 15px; */
+  border-bottom-left-radius: 15px;
+  /* border-bottom-right-radius: 15px; */
+  background-color: #003F87;
 }
 
 .navrbar_menu_btn{
@@ -329,7 +318,7 @@ ul {
 }
 
 .breadcrumb li{
-  white-space:nowrap;
+  white-space:nowrap; 
 }
 
 
@@ -337,7 +326,7 @@ ul {
 
 /* /* mobile - portrait * */
 
-@media(max-width: 425px){
+@media(max-width: 425px){ 
 
    .btn-close.text-reset{
      background-color:white;
@@ -401,7 +390,7 @@ ul {
       border-radius: 0.25rem;
       margin-left:5px;
     }
-
+    
     .navbar-toggler-icon {
       display: inline-block;
       width: 1.5em;
@@ -412,13 +401,13 @@ ul {
       background-size: 100% 100%;
       color:blue;
     }
-
+  
 }
 
 
 /* mobile L */
 
-@media (min-width: 426px) and (max-width: 767px){
+@media (min-width: 426px) and (max-width: 767px){ 
   .offcanvas-start.d-lg-none.mr-auto.show{
     width:285px;
     overflow-y: scroll;
@@ -427,11 +416,7 @@ ul {
 }
 
 /* tablet */
-@media (min-width: 768px) and (max-width: 1023px){
-   .col_sidebar_active{
-     opacity: 1;
-     /* filter: brightness(100%); */
-   }
+@media (min-width: 768px) and (max-width: 1023px){ 
 
    .btn-close.text-reset{
     background-color:white;
@@ -459,7 +444,7 @@ ul {
 
   .active-nav{
     opacity:1;
-
+    
   }
 
   .user-menu-section{
@@ -469,7 +454,7 @@ ul {
   .content-class{
     margin-top:0px;
   }
-
+  
   .container_input_search{
     margin-top:-50px;
   }
@@ -490,7 +475,7 @@ ul {
     border-radius: 0.25rem;
     margin-left:5px;
   }
-
+  
   .navbar-toggler-icon {
     display: inline-block;
     width: 1.5em;
@@ -501,10 +486,19 @@ ul {
     background-size: 100% 100%;
   }
 
-
+  
 }
 
 @media(min-width:1024px) and (max-width:1199px){
+
+  .icon_tool{
+     margin-left:-20px;
+  }
+
+  .icon_Admintool{
+     margin-left:-25px;
+ }
+
 
   .on{
     font-size:7px !important;
@@ -524,17 +518,17 @@ ul {
   }
 
   .viewPageAs{
-    font-size:12px !important;
+    font-size:12px !important; 
   }
 
   .active_tools_dropdown2.nav-link.text-white{
-    font-size:12px !important;
+    font-size:12px !important; 
   }
   .active_tools_dropdown3.nav-link.text-white{
-    font-size:12px !important;
+    font-size:12px !important; 
   }
   .sidebarColToolText .text-wrap{
-    font-size:12px !important;
+    font-size:12px !important; 
     margin-top:5px !important;
   }
   .sidebarTexts{
@@ -546,24 +540,12 @@ ul {
     margin-left: 0px;
   }
 
-  .col_maincontent_active_ProfileUser{
-    width:auto;
-    margin-left: 0px;
-  }
-
-  .col_maincontent_registration{
-    width:100%;
-    margin-left: 0px;
-  }
-
   .col_maincontent_active{
     min-height: 60vh;
   }
-  .col_maincontent_active_all{
-    min-height: 60vh;
-  }
 
-  .navbar_sidebar{
+
+  /* .navbar_sidebar{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     border-bottom-left-radius: 15px;
@@ -572,7 +554,7 @@ ul {
     height:auto;
     position:relative;
     background-color: #003F87;
-  }
+  } */
 
   .active-nav{
     margin-left:-450px;
@@ -597,7 +579,7 @@ ul {
     align-items: end;
     margin: 0px 0px 0px auto;
 
-
+    
     background-color: white;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -605,12 +587,19 @@ ul {
     border-bottom-right-radius: 15px;
     /* background-color: red !important; */
   }
-
+  
 
 }
 
 /* laptop */
 @media (min-width: 1200px) and (max-width:1399px){
+
+  .icon_tool{
+    margin-left:-10px;
+ }
+ .icon_Admintool{
+  margin-left:-15px;
+ }
 
   .on{
     font-size:10px !important;
@@ -633,25 +622,12 @@ ul {
     margin-left: 0px;
   }
 
-  .col_maincontent_active_ProfileUser{
-    width:auto;
-    margin-left: 0px;
-  }
-
-
-  .col_maincontent_registration{
-    width:100%;
-    margin-left: 0px;
-  }
-
   .col_maincontent_active{
     min-height: 60vh;
   }
-  .col_maincontent_active_all{
-    min-height: 60vh;
-  }
 
-  .navbar_sidebar{
+
+  /* .navbar_sidebar{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     border-bottom-left-radius: 15px;
@@ -660,7 +636,7 @@ ul {
     min-height:auto;
     position:relative;
     background-color: #003F87;
-  }
+  } */
   .active-nav{
     margin-left:-450px;
   }
@@ -677,7 +653,7 @@ ul {
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
   }
-
+ 
 
   .active-cont-completeCourse{
     width: 100% ;
@@ -694,8 +670,8 @@ ul {
 
 
 /* large desktop */
-@media (min-width: 1400px){
-  .navbar_sidebar{
+@media (min-width: 1400px){ 
+  /* .navbar_sidebar{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     border-bottom-left-radius: 15px;
@@ -704,7 +680,17 @@ ul {
     height:auto;
     position:relative;
     background-color: #003F87;
-  }
+  } */
+
+  .icon_tool{
+    margin-left:-10px;
+ }
+
+ .icon_Admintool{
+  margin-left:-15px;
+ }
+
+
   .active-nav{
     margin-left:-550px;
   }
@@ -734,7 +720,7 @@ ul {
     align-items: end;
     margin: 0px 0px 0px auto;
 
-
+    
     background-color: white;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -742,45 +728,12 @@ ul {
     border-bottom-right-radius: 15px;
   }
 
-  .col_maincontent_active{
-    min-height: 65vh !important;
-  }
-  .registerCourse_container{
-    min-height: 65vh !important;
-  }
-  .courses-register-details{
-    min-height: 65vh !important;
-  }
-  .col_maincontent_active_all{
-    min-height: 65vh !important;
-  }
-  .courses-details{
-    min-height: 65vh !important;
-  }
-
 }
 
 @media (min-width: 2560px){
-
+  
   .active-nav{
     margin-left:-870px;
-  }
-  .col_maincontent_active{
-    min-height: 75vh !important;
-  }
-  .registerCourse_container{
-    min-height: 75vh !important;
-  }
-  .courses-register-details{
-    min-height: 75vh !important;
-  }
-
-  .col_maincontent_active_all{
-    min-height: 75vh !important;
-  }
-
-  .courses-details{
-    min-height: 75vh !important;
   }
 
 }
@@ -798,7 +751,7 @@ ul {
       width: 12rem;
   }
 }
-@media (min-width: 1200px) and (max-width: 1399px){
+@media (min-width: 1200px) and (max-width: 1399px){ 
   .table-responsive{
     overflow: inherit;
   }
@@ -809,7 +762,7 @@ ul {
     margin-left:-85px;
   }
 }
-@media (min-width: 1024px) and (max-width: 1199px){
+@media (min-width: 1024px) and (max-width: 1199px){ 
   .table-responsive{
     overflow: inherit;
   }
@@ -820,7 +773,7 @@ ul {
     margin-left:-85px;
   }
 }
-@media (min-width: 768px) and (max-width: 1023px){
+@media (min-width: 768px) and (max-width: 1023px){ 
   .btn-toggle{
     width: 11rem;
   }
@@ -828,7 +781,7 @@ ul {
     margin-left:-85px;
   }
 }
-@media (min-width: 426px) and (max-width: 767px){
+@media (min-width: 426px) and (max-width: 767px){ 
   .btn-toggle{
     width: 11rem;
   }
@@ -836,7 +789,7 @@ ul {
     margin-left:-85px;
   }
 }
-@media(max-width: 425px){
+@media(max-width: 425px){ 
   .btn-toggle{
     width: 11rem;
   }
@@ -904,3 +857,23 @@ ul {
 .btn-toggle span.off, .btn-toggle.btn-toggle-on span.on {
   display: inline-block;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

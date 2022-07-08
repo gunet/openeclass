@@ -1,4 +1,4 @@
-
+<?php  print_a($_SESSION['messages']); ?>
 @extends('layouts.default')
 
 @push('head_scripts')
@@ -15,14 +15,14 @@
 
         <div class="row">
 
-            <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
 
             <div class="col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
-
+                    
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                     <nav class="navbar navbar-expand-lg navrbar_menu_btn">
@@ -30,8 +30,8 @@
                             <i class="fas fa-align-left"></i>
                             <span></span>
                         </button>
-
-
+                        
+                       
                         <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                             <i class="fas fa-tools"></i>
                         </a>
@@ -49,31 +49,33 @@
                         </div>
                     </div>
 
+                    
+
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     
 
-
+                    
                     @if(Session::has('message'))
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
-                            <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                                {{ Session::get('message') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </p>
-                        </div>
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                        <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                            {{ Session::get('message') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </p>
+                    </div>
                     @endif
 
                     <div class="panel panel-default panel-action-btn-default">
-                        <div class='panel-heading notes_thead'>
-                            <h3 class='panel-title text-white'>{{ trans('langActivateCourseTools') }}</h3>
+                        <div class='panel-heading shadow-lg p-2 pt-3 mt-1 bg-body rounded bg-primary'>
+                            <h3 class='panel-title control-label-notes text-center'>{{ trans('langActivateCourseTools') }}</h3>
                         </div>
                         <form name="courseTools" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method="post" enctype="multipart/form-data">
-                            <div class="table-responsive">
+                            <div class="table-responsive" style='margin-top:-25px;'>
                                 <table class="announcements_table">
-                                    <tr>
-                                    <th width="45%" class="text-center">{{ trans('langInactiveTools') }}</th>
-                                    <th width="10%" class="text-center">{{ trans('langMove') }}</th>
-                                    <th width="45%" class="text-center">{{ trans('langActiveTools') }}</th>
+                                    <tr class='notes_thead'>
+                                    <th width="45%" class="text-white text-center">{{ trans('langInactiveTools') }}</th>
+                                    <th width="10%" class="text-white text-center">{{ trans('langMove') }}</th>
+                                    <th width="45%" class="text-white text-center">{{ trans('langActiveTools') }}</th>
                                     </tr>
                                     <tr>
                                         <td class="text-center">
@@ -108,15 +110,12 @@
 
                     <div class='panel panel-default panel-action-btn-default mt-5'>
                         <div class='float-end pt-3 pb-2 pe-3'>
-
                             <div id='operations_container'>
-
                                 <a class='btn btn-success mt-1 ms-md-0 ms-3' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> {{ trans('langAddExtLink') }}</a>
-
                             </div>
                         </div>
-                        <div class='panel-heading notes_thead'>
-                            <h3 class='panel-title text-white'> {{ trans('langOperations') }}</h3>
+                        <div class='panel-heading shadow-lg p-3 pt-3 mt-1 bg-body rounded bg-primary'>
+                            <h3 class='panel-title control-label-notes pt-2'> {{ trans('langOperations') }}</h3>
                         </div>
                         <table class='announcements_table'>
                         @foreach($q as $externalLinks)

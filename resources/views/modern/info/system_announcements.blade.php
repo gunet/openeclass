@@ -8,7 +8,17 @@
 
         <div class="row">
 
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
+                <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
+                    @if($course_code)
+                        @include('layouts.partials.sidebar',['is_editor' => $is_editor])
+                    @else
+                        @include('layouts.partials.sidebarAdmin')
+                    @endif 
+                </div>
+            </div>
+
+            <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
                     
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
@@ -17,39 +27,27 @@
                             <i class="fas fa-align-left"></i>
                             <span></span>
                         </button>
-                        
-                    
                         <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                             <i class="fas fa-tools"></i>
                         </a>
                     </nav>
 
-                    <nav class="navbar_breadcrumb" aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <?php $size_breadcrumb = count($breadcrumbs); $count=0; ?>
-                            <?php for($i=0; $i<$size_breadcrumb; $i++){ ?>
-                                <li class="breadcrumb-item"><a href="{!! $breadcrumbs[$i]['bread_href'] !!}">{!! $breadcrumbs[$i]['bread_text'] !!}</a></li>
-                            <?php } ?> 
-                        </ol>
-                    </nav>
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+
+                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
                         <div class="offcanvas-header">
                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
                         <div class="offcanvas-body">
-                        @include('layouts.partials.sidebarAdmin')
+                            @if($course_code)
+                                @include('layouts.partials.sidebar',['is_editor' => $is_editor])
+                            @else
+                                @include('layouts.partials.sidebarAdmin')
+                            @endif
                         </div>
                     </div>
-
-                    @if($breadcrumbs && count($breadcrumbs)>2)
-                    <div class='row p-2'></div>
-                    <div class="float-start">
-                        <p class='control-label-notes'>{!! $breadcrumbs[1]['bread_text'] !!}</p>
-                        <small class='text-secondary'>{!! $breadcrumbs[count($breadcrumbs)-1]['bread_text'] !!}</small>
-                    </div>
-                    <div class='row p-2'></div>
-                    @endif
 
                     {!! $action_bar !!}
 
@@ -64,6 +62,24 @@
                     </table>
 
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{trans('langHelp')}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <iframe frameborder="0" width="100%" height="500px" src="https://docs.openeclass.org/el/teacher/portfolio/?do=export_xhtml"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{trans('langClose')}}</button>
             </div>
         </div>
     </div>

@@ -237,7 +237,7 @@ function display_analytics_elements($analytics_id) {
     if (count($sql_data) == 0) {
         $results = "<p class='text-center text-muted'>$langAnalyticsNoElements</p>";
     } else {
-        $results ="<div class='row res-table-header'>
+        $results ="<div class='row p-2 res-table-header panel-body-admin'>
                         <div class='col-sm-2'>
                             $langType
                         </div>
@@ -408,10 +408,17 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
         }
 
         $results = "
+<<<<<<< local
                 <div class='inner-heading'>
                     <div class='row res-table-header'>
                         <div class='col-sm-4'>
                             <h5>$langSurnameName</h5>
+=======
+                <div class='inner-heading notes_thead'>
+                    <div class='row p-2 res-table-header'>
+                        <div class='col-sm-3'>
+                            <h6>$langSurnameName <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=surname&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionName fa-fw' aria-hidden='true'></i></a></h6>
+>>>>>>> graft
                         </div>
                         <div class='col-sm-5'>
                             <h5>$langPercentage</h5>
@@ -542,9 +549,15 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
         $nextclass = 'style="display:none"';
     }
     $results = "
+<<<<<<< local
         <div class='inner-heading'>
             <h5>
                 <div class='row res-table-header'>
+=======
+        <div class='inner-heading notes_thead mt-3'>
+            <h6>
+                <div class='row p-2 res-table-header'>
+>>>>>>> graft
                     <div class='col-sm-5'>
                         $langType 
                     </div>

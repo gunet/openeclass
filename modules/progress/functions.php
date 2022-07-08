@@ -888,7 +888,7 @@ function display_available_assignments($element, $element_id, $unit_id = 0) {
                                     ORDER BY title", $course_id, $element_id);
 
     if (count($result) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoAssign</div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -2542,7 +2542,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
     }
 	$user_data = Database::get()->querySingle($sql3, $element_id, $user_id);
     if (count($sql) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoUserActivity</div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoUserActivity</div></div>";
     }
 
 	$tool_content .= "
@@ -2559,22 +2559,33 @@ function display_user_progress_details($element, $element_id, $user_id) {
                         </div>
                         <div class='row'>
                             <div class='col-sm-12'>
-                            	<div class='pn-info-title-sct'>$langTotalPercentCompleteness</div>";
-                                if ($user_data) {
-                                    $percentage = round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%";
-                                } else {
-                                    $percentage = "0%";
-                                }
-                                $tool_content .= "<div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
-                                            <p class='progress-bar active from-control-static' role='progressbar'
-                                                    aria-valuenow='\".str_replace('%','',$percentage).\"'
-                                                    aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage;'>$percentage
-                                            </p>
-                                        </div>";
-                                $tool_content .= "<div class='pn-info-title-sct'>$langDescription</div>
-                                <div class='pn-info-text-sct'>" . get_cert_desc($element, $element_id) . "</div>
-                                <div class='pn-info-title-sct'>$langpublisher</div>
-                                <div class='pn-info-text-sct'>" . get_cert_issuer($element, $element_id) . "</div>
+                                <div class='row p-2'>
+                                <div class='col-6'>
+                                        <div class='pn-info-title-sct'>$langTotalPercentCompleteness</div></div>";
+                                        $tool_content .= "<div class='col-6'>";
+                                        if ($user_data) {
+                                            $tool_content .= "<div class='pn-info-text-sct text-end'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</div>";
+                                        } else {
+                                            $tool_content .= "<div class='pn-info-text-sct text-end'>0%</div>";
+                                        }
+                                $tool_content .="</div></div>";
+                                $tool_content .= "
+                                <div class='row p-2'>
+                                    <div class='col-6'>
+                                        <div class='pn-info-title-sct'>$langDescription</div>
+                                    </div>
+                                    <div class='col-6'>
+                                        <div class='pn-info-text-sct text-end'>" . get_cert_desc($element, $element_id) . "</div>
+                                    </div>
+                                </div>
+                                <div class='row p-2'>
+                                    <div class='col-6'>
+                                        <div class='pn-info-title-sct'>$langpublisher</div>
+                                    </div>
+                                    <div class='col-6'>
+                                        <div class='pn-info-text-sct text-end'>" . get_cert_issuer($element, $element_id) . "</div>
+                                    </div>
+                                </div>
                                 $cert_public_link
                             </div>
                         </div>
@@ -2597,7 +2608,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                             </div>
                         </div>
                         <div class='res-table-wrapper'>
-                            <div class='row res-table-header'>
+                            <div class='row p-2 res-table-header'>
                                 <div class='col-sm-9'>
                                     $langTitle
                                 </div>
@@ -2627,13 +2638,13 @@ function display_user_progress_details($element, $element_id, $user_id) {
                     $op_content = "&mdash;";
                 }
 		$tool_content .= "
-                <div class='row res-table-row not_visible'>
+                <div class='row p-2 res-table-row not_visible'>
                     <div class='col-sm-9'>$activity</div>
                     <div class='col-sm-3 text-center'>$op_content&nbsp;" . $user_criterion->threshold . "</div>
                 </div>";
 	}
 	$tool_content .= "
-            <div class='row res-table-header'>
+            <div class='row p-2 res-table-header'>
                 <div class='col-sm-9'>$langTotalPercentCompleteness</div>";
                 if ($user_data) {
                     $tool_content .= "<div class='col-sm-3 text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></div>";

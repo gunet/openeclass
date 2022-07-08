@@ -8,14 +8,14 @@
 
         <div class="row">
 
-                <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
+                <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                     <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                         @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                     </div>
                 </div>
 
                 <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
-
+                
                     <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                         <nav class="navbar navbar-expand-lg navrbar_menu_btn">
@@ -23,8 +23,8 @@
                                 <i class="fas fa-align-left"></i>
                                 <span></span>
                             </button>
-
-
+                            
+                        
                             <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                                 <i class="fas fa-tools"></i>
                             </a>
@@ -40,8 +40,11 @@
                                 @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                             </div>
                         </div>
-
+                                
                         @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+
+                        
+
 
                         {!! isset($action_bar) ?  $action_bar : '' !!}
 
@@ -56,11 +59,11 @@
                         <div class="row p-2"></div>
 
                         @if ($course_descs)
-                            @foreach ($course_descs as $key => $course_desc)
-                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                            @foreach ($course_descs as $key => $course_desc)    
+                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>      
                                     <div class='panel panel-action-btn-default mydescriptionPanel ps-3 pt-3 pb-3 pe-3'>
                                         <div class='panel-heading'>
-                                            @if ($is_editor)
+                                            @if ($is_editor) 
                                                 <div class='pull-right'>
                                                 {!! action_button(
                                                         array(
@@ -87,7 +90,7 @@
                                                                 'url' => "index.php?course=$course_code&amp;del=" . getIndirectReference($course_desc->id),
                                                                 'icon' => 'fa-times',
                                                                 'class' => 'delete',
-                                                                'confirm' => trans('langConfirmDelete'))
+                                                                'confirm' => trans('langConfirmDelete'))                            
                                                         )
                                                 ) !!}
 
@@ -110,14 +113,14 @@
                                                         <i class='fa fa-eye'></i>
                                                     </span>
                                                 @endif
-                                            </h3>
+                                            </h3>      
                                         </div>
                                         <div class='panel-body'>
-                                            {!! handleType($course_desc->type) !!}
+                                            {!! handleType($course_desc->type) !!} 
                                             <br>
                                             <br>
-                                            {!! standard_text_escape($course_desc->comments) !!}
-                                        </div>
+                                            {!! standard_text_escape($course_desc->comments) !!} 
+                                        </div>            
                                     </div>
                                 </div>
                             @endforeach

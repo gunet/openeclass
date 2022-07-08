@@ -12,7 +12,7 @@
         <div class="row">
 
             @if($course_code)
-            <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
@@ -32,7 +32,7 @@
                             <i class="fas fa-align-left"></i>
                             <span></span>
                         </button>
-
+                        
                         <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                             <i class="fas fa-tools"></i>
                         </a>
@@ -60,6 +60,10 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
+                    
+                    
+                   
+
                     {!! $actionBar !!}
 
                     @if(Session::has('message'))
@@ -71,14 +75,14 @@
                     </div>
                     @endif
 
-
+                    
                     <div class="row p-2"></div>
                     @if ($dialogBox)
                         @include("modules.document.$dialogBox")
                     @endif
-
+                    
                     @if (count($fileInfo) or $curDirName)
-
+                        
                             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                                 <div class='panel'>
                                     <div class='panel-body'>
@@ -101,11 +105,11 @@
                                     </div>
                                 </div>
                             </div>
-
+                        
 
                         <div class="row p-2"></div>
 
-
+                        
                             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                                 <div class='table-responsive glossary-categories' style="">
                                     <table class='table' id="document_table" style="overflow: inherit">
@@ -127,10 +131,10 @@
                                         <tbody>
 
                                         @forelse ($fileInfo as $file)
-
+            
                                             <tr class="{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}">
-
-
+                                                
+                                                
                                                 <td class='text-left'>
                                                     @if($file->visible == 1)
                                                         <span class='visibleFile fa {{ $file->icon }}'></span>
@@ -138,12 +142,12 @@
                                                         <span class='invisibleFile fa {{ $file->icon }}'></span>
                                                     @endif
                                                 </td>
-
-
+                                               
+                                                
                                                 <td>
                                                     <?php $downloadfile = $base_url . "download=" . getIndirectReference($file->path);?>
                                                     <input type='hidden' value={{$downloadfile}}>
-
+                                                    
                                                     @if ($file->is_dir)
                                                         @if($file->visible == 1)
                                                             <a href='{{ $file->url }}'>{{ $file->filename }}</a>
@@ -187,7 +191,7 @@
                                                 </td>
 
 
-
+                                                
                                                 <td>
                                                     @if($file->updated_message)
                                                         @if($file->visible == 1)
@@ -203,7 +207,7 @@
                                                         @endif
                                                     @endif
                                                 </td>
-
+                                               
 
 
                                                 @if ($file->is_dir)
@@ -213,7 +217,7 @@
                                                     @else
                                                         <td class='center'><span class="opacity-50 text-white-50">{{ $file->date }}</span></td>
                                                     @endif
-
+                                                    
                                                 @elseif ($file->format == '.meta')
                                                     @if($file->visible == 1)
                                                        <td>{{ $file->size }}</td>
@@ -222,7 +226,7 @@
                                                        <td><span class="opacity-50 text-white-50">{{ $file->size }}</span></td>
                                                        <td class='center'><span class="opacity-50 text-white-50">{{ $file->date }}</span></td>
                                                     @endif
-
+                                            
                                                 @else
                                                     @if($file->visible == 1)
                                                        <td>{{ $file->size }}</td>
@@ -231,8 +235,8 @@
                                                        <td><span style="opacity-50 text-white-50">{{ $file->size }}</span></td>
                                                        <td title='{{ nice_format($file->date, true) }}' class='center'><span class="opacity-50 text-white-50">{{ nice_format($file->date, true, true) }}</span></td>
                                                     @endif
-
-
+                                                    
+                                                    
                                                 @endif
                                                 <td>
                                                     @if($file->visible == 1)
@@ -248,7 +252,7 @@
                                                 @endif
                                             </tr>
 
-
+                                           
 
                                         @empty
                                             <tr>
@@ -256,13 +260,13 @@
                                                     <p class='not_visible text-center'> - {{ trans('langNoDocuments') }} - </p>
                                                 </td>
                                             </tr>
-
+                                            
                                         @endforelse
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-
+                        
                     @else
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-2'><div class='alert alert-warning'>{{ trans('langNoDocuments') }}</div></div>
                     @endif

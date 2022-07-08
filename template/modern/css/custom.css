@@ -1,7 +1,7 @@
 
 .login-form-icon {
   width: 350px;
-  height: 75px;
+  height: 70px;
 }
 
 .user-bg {
@@ -423,8 +423,8 @@ text-decoration: none;
 .intro {
   border-top-right-radius: 50px;
   background: #ffffff;
-  padding: 40px;
   color: #001146;
+  width:auto;
 }
 
 /* --- home ------------------------------------------------------------------------------- */

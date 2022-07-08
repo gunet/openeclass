@@ -10,15 +10,15 @@
         <div class="row">
 
 
-                <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
+                <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                     <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                         @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                     </div>
                 </div>
-
+                
 
                 <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
-
+                    
                         <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
 
@@ -27,8 +27,8 @@
                                     <i class="fas fa-align-left"></i>
                                     <span></span>
                                 </button>
-
-
+                                
+                            
                                 <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                                     <i class="fas fa-tools"></i>
                                 </a>
@@ -48,16 +48,17 @@
 
 
                             @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                            
 
                             @if(Session::has('message'))
-                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
-                                    <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                                        {{ Session::get('message') }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </p>
-                                </div>
+                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                                <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                                    {{ Session::get('message') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </p>
+                            </div>
                             @endif
-
+                            
                             <div class='row'>
                                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
                                     <h3 class="control-label-notes">{{ trans('langInstalledWidgets') }}</h3>
@@ -66,12 +67,12 @@
                                     <div id="widgets">
                                         @foreach ($installed_widgets as $key => $installed_widget)
                                                 <div class="panel panel-success widget mt-3" data-widget-id="{{ $installed_widget->id }}">
-                                                    <div class="panel-heading notes_thead pt-2 ps-3 pb-2 pe-3 text-center">
-                                                        <a data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}"
+                                                    <div class="panel-heading notes_thead pt-2 ps-3 pb-2 pe-3 text-center">                   
+                                                        <a data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
                                                         href="#widget_desc_{{ $key }}" class="text-white widget_title">
                                                             {{ $installed_widget->getName() }}
                                                             <span class="fa fa-arrow-down fs-6"></span>
-                                                        </a>
+                                                        </a>                     
                                                     </div>
                                                     <div id="widget_desc_{{ $key }}" class="panel-collapse collapse">
                                                         <div class="panel-body panel-body-admin ps-3 pb-3 pt-3 pe-3 text-muted">
@@ -85,9 +86,9 @@
                                                                 </form>
                                                                 <a class='text-danger' href="#" onclick="$('#uninstallForm{{ $key }}').submit();">
                                                                     <small>{{ trans('langWidgetUninstall') }}</small>
-                                                                </a>
-                                                            </div>
-                                                        </div>
+                                                                </a>                               
+                                                            </div>                      
+                                                        </div>                        
                                                     </div>
                                                     <div class="panel-collapse collapse in hidden">
                                                         <div class="panel-body">
@@ -100,29 +101,31 @@
                                                             <div class="pull-right">
                                                                 <a href="#" class="btn btn-xs btn-primary submitOptions">
                                                                     {{ trans('langSubmit') }}
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                                </a>                                
+                                                            </div>                    
+                                                        </div>                        
+                                                    </div>                    
                                                 </div>
                                     @endforeach
-                                    </div>
+                                    </div>   
                                     @else
                                     <div class='text-warning margin-bottom-fat'>
                                         {{ trans('langNoInstalledWidgets') }}
-                                    </div>
-                                    @endif
-                                </div>
+                                    </div>       
+                                    @endif      
+                                </div>    
                                 <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
                                     @include('admin.widgets.common.courseHomeMain')
-                                    @include('admin.widgets.common.courseHomeSide')
+                                    @include('admin.widgets.common.courseHomeSide')                   
                                 </div>
-                            </div>
-
+                            </div>    
+                            
                 </div>
             </div>
         </div>
     </div>
 </div>
+                            
 
 @endsection
+

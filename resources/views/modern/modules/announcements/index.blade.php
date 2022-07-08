@@ -248,7 +248,7 @@ console.log('{{ $_SERVER['REQUEST_URI'] }}');
 
         <div class="row">
 
-            <div class="col-xl-2 col-lg-4 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-4 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                 <div class="d-none d-sm-block d-md-none d-lg-block">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>

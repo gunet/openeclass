@@ -645,12 +645,6 @@
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   
-  .courses-details {
-      background-color: white;
-      border-radius: 15px;
-      /* min-height:520px; */
-  }
-  
   
   .th_courses_comment{
       color:white;
@@ -1015,10 +1009,7 @@
       margin-left:15px;
       background-image: url(../images/playstore.png);
   }
-  
-  .login-form{
-      margin-top:-100px;
-  }
+
   
   .homes.fas.fa-chevron-up{
       color:white; margin-left:17px; margin-top:15px;
@@ -1866,7 +1857,6 @@
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------*/
   @media (max-width: 320px){
-
     .manage-course-ul{
       background-color: #003F87;
       width:260px;
@@ -1918,9 +1908,7 @@
       margin:auto;
       display:block;
     }
-    .col_maincontent_active_all{
-      min-height: 80vh;
-    }
+
     .col_maincontent_active{
       min-height: 80vh;
     }
@@ -1942,6 +1930,14 @@
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- small mobile - portrait-----------------------------------*/
   @media (min-width:321px) and (max-width: 375px){
+
+    .login-form-body{
+      width:auto;
+    }
+    .login-form-icon{
+      width:auto;
+      margin-left: -40px;
+    }
 
     .manage-course-ul{
       background-color: #003F87;
@@ -1992,9 +1988,7 @@
       margin:auto;
       display:block;
     }
-    .col_maincontent_active_all{
-      min-height: 80vh;
-    }
+
     .col_maincontent_active{
       min-height: 80vh;
     }
@@ -2016,14 +2010,19 @@
   
   @media (min-width:376px) and (max-width: 425px){
 
+    .login-form-body{
+      width:auto;
+    }
+    .login-form-icon{
+      width:auto;
+      margin-left: -40px;
+    }
+
     .manage-course-ul{
       background-color: #003F87;
       width:260px;
     }
 
-    .col_maincontent_active_all{
-      min-height: 80vh;
-    }
     .col_maincontent_active{
       min-height: 80vh;
     }
@@ -2074,10 +2073,6 @@
     }
     .btn-group .btn.btn-success{
       border:solid 3px white;
-    }
-
-    .login-form{
-        margin-right:-28px;
     }
 
     .user-menu{
@@ -2166,6 +2161,18 @@
       min-height:140px;
     }
 
+    .jumbotron.jumbotron-login{
+      width:100% ;
+    }
+
+    .login-form-body{
+      width:auto;
+    }
+    .login-form-icon{
+      width:auto;
+    }
+
+
     .user-detals-photo {
       min-width: 180px;
       height: 180px;
@@ -2214,16 +2221,24 @@
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- tablet ------------------------------------------------------- */
-  
+
   @media (min-width: 768px) and (max-width: 1023px){
 
-    .LegendShadow{
-      min-height:140px;
+    .jumbotron.jumbotron-login{
+      width:100% ;
+    }
+
+    .login-form-body{
+      width:auto;
+    }
+    .login-form-icon{
+      width:auto;
+      margin-left: 80px;
     }
 
 
-    .login-form{
-      margin-top:25px;
+    .LegendShadow{
+      min-height:140px;
     }
 
     .navrbar_menu_btn{
@@ -2633,9 +2648,7 @@
     .welcome {
       font-size: 34px;
     }
-    .login-form{
-      margin-left:40px !important;
-    }
+
   }
   
   @media(max-width: 320px) {

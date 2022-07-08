@@ -493,12 +493,13 @@ if ($is_editor) {
 
 $data['all_units'] = $all_units = Database::get()->queryArray($query, $course_id);
 foreach ($all_units as $unit) {
-    //check_unit_progress($unit->id);  // check unit completion - call to Game.php
+    check_unit_progress($unit->id);  // check unit completion - call to Game.php
 }
 
 $visible_units_id = [];
 if (!$is_editor) {
     //$visible_user_units = findUserVisibleUnits($uid, $all_units);
+    
     foreach ($visible_user_units as $data) {
         $visible_units_id[] = $data->id;
     }
@@ -522,6 +523,7 @@ if ($total_cunits > 0) {
                 $not_shown = true;
                 $icon = icon('fa-minus-circle', $langUnitNotCompleted);
             } else {
+
                 if (in_array($cu->id, $visible_units_id)) {
                     $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
                     if ($sql_badge) {
@@ -620,11 +622,11 @@ if ($total_cunits > 0) {
     
                     //$cunits_content .= '</div>';
     
-            } else {
-                $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
-                $cunits_content .= $icon;
-                $cunits_content .= "</div>";
-            }
+        } else {
+            $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
+            $cunits_content .= $icon;
+            $cunits_content .= "</div>";
+        }
 
         $cunits_content .= "</div></div></div></div><hr>";
     }

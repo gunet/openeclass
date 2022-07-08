@@ -19,13 +19,27 @@
 
         <div class="row">
 
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active col_maincontent_active_ProfileUser">
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
+                <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
+                    @if($course_code)
+                        @include('layouts.partials.sidebar',['is_editor' => $is_editor])
+                    @else
+                        @include('layouts.partials.sidebarAdmin')
+                    @endif 
+                </div>
+            </div>
 
+            <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active col_maincontent_active_ProfileUser">
+                    
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                     <nav class="navbar navbar-expand-lg navrbar_menu_btn">
-                        <a type="button" id="getTopicButton" class="btn-primary btn btn-primary" href="{{$urlAppend}}modules/help/help.php?language={{$language}}&topic={{$helpTopic}}&subtopic={{$helpSubTopic}}" style='margin-top:-10px'>
-                            <i class="fas fa-question"></i>
+                        <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn btn-primary menu_btn_button">
+                            <i class="fas fa-align-left"></i>
+                            <span></span>
+                        </button>
+                        <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
+                            <i class="fas fa-tools"></i>
                         </a>
                     </nav>
 
@@ -33,15 +47,28 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
+                    <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
+                        <div class="offcanvas-header">
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            @if($course_code)
+                                @include('layouts.partials.sidebar',['is_editor' => $is_editor])
+                            @else
+                                @include('layouts.partials.sidebarAdmin')
+                            @endif
+                        </div>
+                    </div>
+
                     {!! $action_bar !!}
 
                     @if(Session::has('message'))
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
-                            <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                                {{ Session::get('message') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </p>
-                        </div>
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                        <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                            {{ Session::get('message') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </p>
+                    </div>
                     @endif
 
                     <div class='form-wrapper'>
@@ -51,36 +78,36 @@
                                 <div class='form-group'>
                                     <label for='givenname_form' class='col-sm-6 control-label-notes'>{{ trans('langName') }}:</label>
                                     <div class='col-sm-12'>
-                                        @if ($allow_name_change)
-                                            <input type='text' class='form-control' name='givenname_form' id='givenname_form' value='{{ $givenname_form }}'>
-                                        @else {
-                                            <p class='form-control-static'>{{$givenname_form}}</p>
-                                            <input type='hidden' name='givenname_form' value='{{ $givenname_form }}'>
-                                        @endif
+                                    @if ($allow_name_change)
+                                        <input type='text' class='form-control' name='givenname_form' id='givenname_form' value='{{ $givenname_form }}'>
+                                    @else {
+                                        <p class='form-control-static'>{{$givenname_form}}</p>
+                                        <input type='hidden' name='givenname_form' value='{{ $givenname_form }}'>
+                                    @endif
                                     </div>
                                 </div>
                                 <div class="row p-2"></div>
                                 <div class='form-group'>
                                     <label for='surname_form' class='col-sm-6 control-label-notes'>{{ trans('langSurname') }}:</label>
                                     <div class='col-sm-12'>
-                                        @if ($allow_name_change)
-                                            <input type='text' class='form-control' name='surname_form' id='surname_form' value='{{ $surname_form }}'>
-                                        @else
-                                            <p class='form-control-static'>{{ $surname_form }}</p>
-                                            <input type='hidden' name='surname_form' value='{{ $surname_form }}'>
-                                        @endif
+                                    @if ($allow_name_change)
+                                        <input type='text' class='form-control' name='surname_form' id='surname_form' value='{{ $surname_form }}'>
+                                    @else
+                                        <p class='form-control-static'>{{ $surname_form }}</p>
+                                        <input type='hidden' name='surname_form' value='{{ $surname_form }}'>
+                                    @endif
                                     </div>
                                 </div>
                                 <div class="row p-2"></div>
                                 <div class='form-group'>
                                     <label for='username_form' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}:</label>
                                     <div class='col-sm-12'>
-                                        @if ($allow_username_change)
-                                            <input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='{{ $username_form }}'>
-                                        @else
-                                            [{{ $auth_text }}]
-                                            <p class='form-control-static'>{{ $username_form }}</p>
-                                        @endif
+                                    @if ($allow_username_change)
+                                        <input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='{{ $username_form }}'>
+                                    @else
+                                        [{{ $auth_text }}]
+                                        <p class='form-control-static'>{{ $username_form }}</p>
+                                    @endif
                                     </div>
                                 </div>
                                 <div class="row p-2"></div>
@@ -173,24 +200,24 @@
                                 <div class='col-sm-12'>{!! $info_text_area !!}</div>
                             </div>
                             {!! render_profile_fields_form(array('origin' => 'edit_profile')) !!}
-                            @if (isset($allProviders))
-                                <div class="row p-2"></div>
-                                    <div class='form-group'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langProviderConnectWith') }}:</label>
-                                        <div class='col-sm-12'>
-                                            <div class='row'>";
-                                                @foreach ($allProviders as $provider => $settings)
-                                                    $lcProvider = strtolower($provider);
-                                                    <div class='col-xs-2 text-center'>
-                                                        <img src='$themeimg/{{ strtolower($provider) }}.png' alt="{{ trans('langLoginVia') }}"><br>{{ $provider }}<br>";
-                                                @if ($userProviders[strtolower($provider)])
-                                                    <img src='{{ $themeimg }}/tick.png' alt='{{ trans('langProviderConnectWith') }} {{ $provider }}'>
-                                                    <a href='{{ $data[sec] }}?action=delete&provider={{ $provider }}'>{{ trans('langProviderDeleteConnection') }}</a>";
-                                                @else
-                                                    <a href='{{ $data[sec] }}?action=connect&provider={{ $provider }}'>{{ trans('langProviderConnect') }}</a>
-                                                @endif
+                            @if (count($allProviders))
+                            <div class="row p-2"></div>
+                                <div class='form-group'>
+                                    <label class='col-sm-6 control-label-notes'>{{ trans('langProviderConnectWith') }}:</label>
+                                    <div class='col-sm-12'>
+                                        <div class='row'>";
+                                        @foreach ($allProviders as $provider => $settings)
+                                            $lcProvider = strtolower($provider);
+                                            <div class='col-xs-2 text-center'>
+                                                <img src='$themeimg/{{ strtolower($provider) }}.png' alt="{{ trans('langLoginVia') }}"><br>{{ $provider }}<br>";
+                                        @if ($userProviders[strtolower($provider)])
+                                            <img src='{{ $themeimg }}/tick.png' alt='{{ trans('langProviderConnectWith') }} {{ $provider }}'>
+                                            <a href='{{ $data[sec] }}?action=delete&provider={{ $provider }}'>{{ trans('langProviderDeleteConnection') }}</a>";
+                                        @else
+                                            <a href='{{ $data[sec] }}?action=connect&provider={{ $provider }}'>{{ trans('langProviderConnect') }}</a>
+                                        @endif
                                             </div>
-                                            @endforeach
+                                        @endforeach
                                         </div>
                                     </div>
                                 </div>

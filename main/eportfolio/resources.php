@@ -366,7 +366,7 @@ if ($userdata) {
                                             <h3 class='panel-title'>".q($data['title'])."</h3>
                                     </div>
                                     <div class='panel-body'>
-                                        <div class='label label-success'>" . nice_format($data['timestamp'], true). "</div><br><br>".standard_text_escape($data['content'])."
+                                        <button class='btn btn-success pe-none mt-2'>" . nice_format($data['timestamp'], true). "</button><br><br>".standard_text_escape($data['content'])."
                                     </div>
                                     <div class='panel-footer'>
                                         <div class='row'>
@@ -467,8 +467,8 @@ if ($userdata) {
                                          </div>
                                             <h3 class='panel-title'>".q($data['title'])."</h3>
                                     </div>
-                                    <div class='panel-body'>
-                                        <div class='label label-success'>" . nice_format($data['timestamp'], true). "</div><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+                                    <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                                        <button class='btn btn-success pe-none'>" . nice_format($data['timestamp'], true). "</button><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                                     </div>
                                                     <div class='panel-footer'>
                                                     <div class='row'>

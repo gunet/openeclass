@@ -116,7 +116,7 @@ print_r($exerciseAssignToSpecific);?>
 
             <div class="row">
 
-                <div class="col-xl-2 col-lg-4 col-md-0 col-sm-6 col-xs-6 justify-content-center col_sidebar_active" >
+                <div id="background-cheat-leftnav" class="col-xl-2 col-lg-4 col-md-0 col-sm-6 col-xs-6 justify-content-center col_sidebar_active" >
                     @include('layouts.partials.sidebar',[$title_course,$title_course])
                 </div>
 

@@ -219,7 +219,7 @@ function generate_single_post_html($post) {
                                         '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
                                       </a>
                                       <div class="media-body bubble">
-                                          <div class="label label-success media-heading">'.$datetime.'</div>
+                                          <button class="btn btn-success pe-none mt-2 media-heading text-white mt-1 ps-3 pe-2">'.$datetime.'</button>
                                           <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                                           '.$post_actions.'
                                           <div class="margin-top-thin" style="padding:20px">
@@ -333,6 +333,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page) {
         $ret .= '<div class="row margin-right-thin margin-left-thin margin-top-thin">
                               <div class="col-sm-12">
                                   <div class="media">
+<<<<<<< local
                                       <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
                                         '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
                                       </a>
@@ -348,6 +349,30 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page) {
                                           '.$rating_content.'
                                           '.$comm_content.'
                                       </div>
+=======
+                                        <div class="row p-2">
+                                            <div class=col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12>
+                                                <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
+                                                    '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
+                                                </a>
+                                            </div>
+                                            
+                                            <div class=col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 >
+                                                <div class="media-body bubble ps-2 pe-2">
+                                                    <button class="btn btn-success pe-none mt-2 media-heading mt-1 text-white ps-3 pe-2">'.$datetime.'</button>
+                                                    <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
+                                                    '.$post_actions.'
+                                                    <div class="margin-top-thin" style="padding:20px">
+                                                        '.$extvideo_block.'
+                                                        <div class="userContent control-label-notes">'.nl2br(standard_text_escape($content)).'</div>
+                                                    </div>
+                                                    '.show_resources($id).'
+                                                    '.$rating_content.'
+                                                    '.$comm_content.'
+                                                </div>
+                                            </div>
+                                        </div>
+>>>>>>> graft
                                   </div>
                               </div>
                           </div>';

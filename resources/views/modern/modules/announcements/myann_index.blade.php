@@ -12,7 +12,7 @@
                 @if(!$allCoursesAnnouncements)
                         <!-- <script type="text/javascript" src="{{ $urlAppend }}template/modern/js/my_courses_color_header.js"></script> -->
 
-                        <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
+                        <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                             <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                                 @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                             </div>
@@ -25,8 +25,8 @@
                                         <i class="fas fa-align-left"></i>
                                         <span></span>
                                     </button>
-
-
+                                    
+                                
                                     <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                                         <i class="fas fa-tools"></i>
                                     </a>
@@ -58,11 +58,11 @@
                                 
 
                                 @if($is_editor)
-
+                    
                                     <div class="col-xl-12 col-md-12 col-sm-12 col-xs-12">
                                         <button class="float-end btn btn-success add_btn_announcements"><i class="fa fa-plus" aria-hidden="true"></i><a class="addAnnouncement_a" href="{{ $urlAppend }}modules/announcements/new.php?course={{$course_code}}">{{trans('langAddAnn')}}</a></button>
                                     </div>
-
+                                    
                                     <div class="row p-2"></div>
                                 @endif
 
@@ -74,20 +74,33 @@
                                     </p>
                                 </div>
                                 @endif
-                                @include('layouts.partials.announcements',['announcements' => $aaData , 'title_course' => $currentCourseName ,'is_editor' => $is_editor,'announcements_ids' => $announcements_ids, 'course_code' => $course_code])
-                            </div>
+                                
+                                @include('layouts.partials.announcements',['announcements' => $aaData , 'title_course' => $currentCourseName ,'is_editor' => $is_editor,'announcements_ids' => $announcements_ids, 'course_code' => $course_code])       
+                            </div>      
                         </div>
                 @else
 
+                        <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
+                            <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
+                            @if($course_code)
+                                @include('layouts.partials.sidebar',['is_editor' => $is_editor])
+                            @else
+                                @include('layouts.partials.sidebarAdmin')
+                            @endif 
+                            </div>
+                        </div>
 
-
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center courses-details">
+                        <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
                             <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                                 <nav class="navbar navbar-expand-lg navrbar_menu_btn">
-                                    <button type="button" class="ms-2 btn btn-primary btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style='margin-top:-10px'>
-                                        <i class="fas fa-question"></i>
+                                    <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn btn-primary menu_btn_button">
+                                        <i class="fas fa-align-left"></i>
+                                        <span></span>
                                     </button>
+                                    <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
+                                        <i class="fas fa-tools"></i>
+                                    </a>
                                 </nav>
 
                                 @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -95,8 +108,19 @@
 
                                 @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                                <div class='row p-2'></div><div class='row p-2'></div>
-
+                                <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
+                                    <div class="offcanvas-header">
+                                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                    </div>
+                                    <div class="offcanvas-body">
+                                        @if($course_code)
+                                        @include('layouts.partials.sidebar',['is_editor' => $is_editor])
+                                        @else
+                                        @include('layouts.partials.sidebarAdmin')
+                                        @endif
+                                    </div>
+                                </div>
+                            
                                 <div class='table-responsive'>
                                     <table id='ann_table_my_ann' class='announcements_table'>
                                         <thead>
@@ -111,29 +135,10 @@
                             </div>
                         </div>
 
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">{{trans('langHelp')}}</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <iframe frameborder="0" width="100%" height="500px" src="https://docs.openeclass.org/el/teacher/portfolio/?do=export_xhtml"></iframe>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{trans('langClose')}}</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-
                 @endif
             </div>
         </div>
     </div>
-
+    
 
 @endsection

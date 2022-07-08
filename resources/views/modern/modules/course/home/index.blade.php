@@ -6,7 +6,7 @@
     <div class="container-fluid main-container">
         <div class="row">
 
-            <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
@@ -204,7 +204,7 @@
                 </div> <!-- end row p-5 -->
 
                 <div class="row pb-3 pt-1 pe-5 ps-5">
-                    <div class="col-xl-8 col-lg-6 col-md-12 mt-3 px-md-5 col_maincontent_active col_maincontent_active_unit">
+                    <div class="col-xl-8 col-lg-6 col-md-12 mt-3 px-md-5 col_maincontent_active_unit">
                         <div class="row p-2 bg-white"></div>
                         <div class="row p-2 bg-white"></div>
                         <div class="pb-5 bg-white">

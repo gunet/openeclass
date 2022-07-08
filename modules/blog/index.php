@@ -626,8 +626,9 @@ if ($action == "showPost") {
                                     ".q($post->getTitle())."
                                 </h3>
                             </div>
-                            <div class='panel-body'><div class='label label-success'>" . nice_format(datetime_remove_seconds($post->getTime()), true). "</div><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
-                            <div class='panel-footer'>
+
+                            <div class='panel-body ps-3 panel-body-blog'><button class='btn btn-success pe-none mt-2'>" . nice_format(datetime_remove_seconds($post->getTime()), true). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
+                            <div class='panel-footer ps-3 panel-footer-blog'>
                                 <div class='row'>
                                     <div class='col-sm-6'>$rating_content</div>
                                     <div class='col-sm-6 text-right'>$sharing_content</div>
@@ -767,8 +768,13 @@ if ($action == "showBlog") {
                                         <a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
                                     </h3>
                                 </div>
+<<<<<<< local
                                 <div class='panel-body'>
                                     <div class='label label-success'>" . nice_format(datetime_remove_seconds($post->getTime()), true). "</div><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+=======
+                                <div class='panel-body ps-3 panel-body-blog'>
+                                    <button class='btn btn-success pe-none mt-2'>" . nice_format($post->getTime(), true). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+>>>>>>> graft
                                     $comment_content
                                 </div>
                                 <div class='panel-footer'>

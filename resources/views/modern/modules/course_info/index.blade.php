@@ -86,14 +86,14 @@
 
             <div class="row">
 
-              <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
+              <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                   <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                       @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                   </div>
               </div>
 
                 <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
-
+                    
                     <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
 
@@ -102,8 +102,8 @@
                                 <i class="fas fa-align-left"></i>
                                 <span></span>
                             </button>
-
-
+                            
+                          
                             <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                                 <i class="fas fa-tools"></i>
                             </a>
@@ -122,6 +122,9 @@
 
 
                           @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+
+
+                          
 
                           <div id='operations_container'>
                               {!! $action_bar !!}
@@ -178,7 +181,7 @@
                                       </div>
                                   </div>
 
-
+                                  
 
 
                                   <div class='form-group'>
@@ -245,7 +248,7 @@
                                       </div>
                                   </div>
 
-
+                                  
 
 
                                   <div class='form-group'>
@@ -260,33 +263,53 @@
                                   <div class='form-group'>
                                       <label class='col-sm-4 control-label-notes'>{{ trans('langConfidentiality') }}:</label>
                                       <div class='col-sm-12'>
-                                          <div class='radio'>
-                                            <label>
-                                              <input id='courseopen' type='radio' name='formvisible' value='2' {{ $course_open }}>
-                                              {!! course_access_icon(COURSE_OPEN) !!}{{ trans('langOpenCourse') }}
-                                              <span class='help-block'><small>{{ trans('langPublic') }}</small></span>
-                                            </label>
+                                          <div class='row mt-2'>
+                                            <div class='col-sm-1'>
+                                              <input class='mt-1' id='courseopen' type='radio' name='formvisible' value='2' {{ $course_open }}>
+                                            </div>
+                                            <div class='col-sm-1'>
+                                              {!! course_access_icon(COURSE_OPEN) !!}
+                                            </div>
+                                            <div class='col-sm-10'>
+                                              {{ trans('langOpenCourse') }}
+                                              <span class='d-inline'><small>{{ trans('langPublic') }}</small></span>
+                                            </div>
                                           </div>
-                                          <div class='radio'>
-                                            <label>
-                                              <input id='coursewithregistration' type='radio' name='formvisible' value='1' {{ $course_registration }}>
-                                              {!! course_access_icon(COURSE_REGISTRATION) !!} {{ trans('langTypeRegistration') }}
-                                              <span class='help-block'><small>{{ trans('langPrivOpen') }}</small></span>
-                                            </label>
+                                          <div class='row mt-2'>
+                                            <div class='col-sm-1'>
+                                              <input class='mt-1' id='coursewithregistration' type='radio' name='formvisible' value='1' {{ $course_registration }}>
+                                            </div>
+                                            <div class='col-sm-1'>
+                                              {!! course_access_icon(COURSE_REGISTRATION) !!} 
+                                            </div>
+                                            <div class='col-sm-10'>
+                                              {{ trans('langTypeRegistration') }}
+                                              <span class='d-inline'><small>{{ trans('langPrivOpen') }}</small></span>
+                                            </div>
                                           </div>
-                                          <div class='radio'>
-                                            <label>
-                                              <input id='courseclose' type='radio' name='formvisible' value='0' {{ $course_closed }} {{ $disable_visibility }}>
-                                              {!! course_access_icon(COURSE_CLOSED) !!} {{ trans('langClosedCourse') }}
-                                              <span class='help-block'><small>{{ trans('langClosedCourseShort') }}</small></span>
-                                            </label>
+                                          <div class='row mt-2'>
+                                            <div class='col-sm-1'>
+                                              <input class='mt-1' id='courseclose' type='radio' name='formvisible' value='0' {{ $course_closed }} {{ $disable_visibility }}>
+                                            </div>
+                                            <div class='col-sm-1'>
+                                              {!! course_access_icon(COURSE_CLOSED) !!}
+                                            </div>
+                                            <div class='col-sm-10'> 
+                                              {{ trans('langClosedCourse') }}
+                                              <span class='d-inline'><small>{{ trans('langClosedCourseShort') }}</small></span>
+                                            </div>
                                           </div>
-                                          <div class='radio'>
-                                            <label>
-                                              <input id='courseinactive' type='radio' name='formvisible' value='3' {{ $course_inactive }} {{ $disable_visibility }}>
-                                                {!! course_access_icon(COURSE_INACTIVE) !!}{!! trans('langInactiveCourse') !!}
-                                              <span class='help-block'><small>{{ trans('langCourseInactive') }}</small></span>
-                                            </label>
+                                          <div class='row mt-2'>
+                                            <div class='col-sm-1'>
+                                              <input class='mt-1' id='courseinactive' type='radio' name='formvisible' value='3' {{ $course_inactive }} {{ $disable_visibility }}>
+                                            </div>
+                                            <div class='col-sm-1'>
+                                                {!! course_access_icon(COURSE_INACTIVE) !!}
+                                            </div>
+                                            <div class='col-sm-10'>
+                                              {!! trans('langInactiveCourse') !!}
+                                              <span class='d-inline'><small>{{ trans('langCourseInactive') }}</small></span>
+                                            </div>
                                           </div>
                                       </div>
                                   </div>
@@ -474,7 +497,7 @@
                                   {!! showSecondFactorChallenge() !!}
 
                                   <div class="row p-2"></div>
-
+                                  
                                   <div class='form-group'>
                                       <div class='col-sm-10 col-sm-offset-2'>
                                           <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSubmit') }}'>

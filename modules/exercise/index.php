@@ -370,7 +370,7 @@ if (!$nbrExercises) {
                     "$countNumOfResults $langExercisesSubmissions");
                 $tool_content .= "<td class='text-center'>"
                         . "<div><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></div>
-                           <span class='label label-success'>
+                           <span class='btn btn-success pe-none mt-2'>
                                 <small>$submissionCount</small>
                            </span>"
                         . "</td>";

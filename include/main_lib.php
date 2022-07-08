@@ -1555,6 +1555,7 @@ function findUserVisibleUnits($uid, $all_units) {
                                                           AND cu.visible = 1
                                                           AND cu.public = 1
                                                           AND cu.order >= 0", $uid, $course_id);
+                                                          
     if ( isset($userInBadges) and $userInBadges ) {
         foreach ($userInBadges as $userInBadge) {
             if ($userInBadge->completed == 0) {

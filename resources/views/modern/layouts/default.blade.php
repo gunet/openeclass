@@ -106,7 +106,9 @@
             @include('layouts.partials.navheadMobile',['logo_img_small' => $logo_img_small])
         </div>
 
+       
         @yield('content')
+        
 
         <!-- Desktop navbar -->
         <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">

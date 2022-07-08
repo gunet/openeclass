@@ -50,7 +50,7 @@ if (get_config('personal_blog_commenting')) {
                                 ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
                             <div class='media-body bubble'>
-                                <div class='label label-success media-heading'>".nice_format($comment->getTime(), true).'</div>'.
+                                <button class='btn btn-success pe-none mt-2 media-heading'>".nice_format($comment->getTime(), true).'</button>'.
                                     "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
                                     $post_actions
                                     ."<div class='margin-top-thin' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>

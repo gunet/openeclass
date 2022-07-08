@@ -65,14 +65,14 @@
 
             <div class="row">
 
-                <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
+                <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                     <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                         @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                     </div>
                 </div>
 
                 <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
-
+                   
                     <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                                 <nav class="navbar navbar-expand-lg navrbar_menu_btn">
@@ -80,8 +80,8 @@
                                         <i class="fas fa-align-left"></i>
                                         <span></span>
                                     </button>
-
-
+                                    
+                                
                                     <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                                         <i class="fas fa-tools"></i>
                                     </a>
@@ -98,11 +98,14 @@
                                         @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                                     </div>
                                 </div>
-
-
+                        
+                            
                                 <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">
-
+                                        
                                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+
+                                        
+
 
                                         <div class="form-group {{ $antitle_error }}">
                                             <label for="AnnTitle" class="col-sm-4 control-label-notes">{{ trans('langAnnTitle') }}:</label>
@@ -124,7 +127,7 @@
                                         <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-12 control-label-notes'>{{ trans('langEmailOption') }}:</label></div>
                                         <div class='form-group'>
                                             <div class='col-sm-offset-2 col-sm-12'>
-                                                <select class='form-control' name='recipients[]' multiple='multiple' id='select-recipients'>
+                                                <select class='form-select' name='recipients[]' multiple='multiple' id='select-recipients'>
                                                     <option value='-1' selected>{{ trans('langAllUsers') }}</option>
                                                     @foreach ($course_users as $cu)
                                                         <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
@@ -147,7 +150,7 @@
                                         <div class='form-group {{ $startdate_error }}'>
                                             <label for='startdate' class='col-sm-4 control-label-notes'>{{ trans('langStartDate') }} :</label>
                                             <div class='col-sm-12'>
-                                                <div class='input-group'>
+                                                <div class='input-group'> 
                                                     <span class='input-group-addon'>
                                                         <input type='checkbox' name='startdate_active' {{ $start_checkbox }}>
                                                     </span>
@@ -191,20 +194,20 @@
                                             <input type='hidden' name='id' value='{{ $announce_id }}'>
                                             <input type='hidden' name='course' value='{{ $course_code }}'>
                                             <input type='hidden' name='editorFromCreateEditAnnouncement' value='{{$is_editor}}'>
-
+                                            
                                             <div class='col-sm-offset-2 col-sm-12'>
                                                 <button type="submit" class="btn btn-primary" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
                                                 <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn btn-secondary">{{ trans('langCancel') }}</a>
                                             </div>
-
+                                            
                                         </div>
-
-
+                                        
+                                    
                                 </form>
-
-
-                    </div>
-
+                            
+                        
+                    </div> 
+                    
                 </div>
             </div>
         </div>
@@ -213,4 +216,4 @@
 @endsection
 
 
-
+    

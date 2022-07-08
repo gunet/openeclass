@@ -9,14 +9,14 @@
 
         <div class="row">
 
-            <div class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
 
             <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
-
+                    
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
 
@@ -25,8 +25,8 @@
                             <i class="fas fa-align-left"></i>
                             <span></span>
                         </button>
-
-
+                        
+                       
                         <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                             <i class="fas fa-tools"></i>
                         </a>
@@ -46,6 +46,8 @@
 
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                    
+
 
                     {!! $action_bar !!}
 
@@ -59,7 +61,7 @@
                     @endif
 
                     <div class='row p-2'></div>
-
+                            
                     <div class='panel panel-default'>
                         <div class='panel-heading notes_thead'>
                             <div class='row'>
@@ -80,9 +82,9 @@
                                     </div>
                                 </div>
                             </div>
-
+                           
                         </div>
-
+                        
                         <div class='panel-body panel-body-request'>
                             <div class='row p-2'></div>
                             <div class='row'>
@@ -152,7 +154,7 @@
                     </div>
 
                     <div class='row p-2'></div>
-
+                            
 
                     @if ($can_modify or $can_assign_to_self)
                         <div class='col-md-12'>
@@ -180,7 +182,7 @@
                                         <div class='form-group'>
                                             <label for='newState' class='col-sm-6 control-label-notes'>{{ trans('langChangeState') }}:</label>
                                             <div class='col-sm-12'>
-                                                <select class='form-control' name='newState' id='newState'>
+                                                <select class='form-select' name='newState' id='newState'>
                                                     @foreach ($states as $stateId => $stateName)
                                                         <option value='{{ $stateId }}'@if ($stateId == $request->state) selected @endif>{{ $stateName }}</option>
                                                     @endforeach
@@ -190,7 +192,7 @@
                                         <div class='row p-2'></div>
                                     @endif
 
-
+                                    
 
                                     <div class='form-group'>
                                         <label for='requestComment' class='col-sm-6 control-label-notes'>{{ trans('langComment') }}:</label>
@@ -281,7 +283,7 @@
                         @endforeach
                     @endif
 
-
+                        
 
                     @if ($can_modify)
                         @include('modules.request.modals')
