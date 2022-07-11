@@ -510,13 +510,11 @@ function lang_selections() {
     if (count($session->active_ui_languages) < 2) {
         return ('&nbsp;');
     }
-
     $lang_select = "
       <button class='btnLang btn btn-primary' type='button' aria-expanded='false' id='dropdownMenuLang' data-bs-toggle='dropdown'>
           <span class='fa fa-globe'></span>
       </button>
       <ul class='dropdown-menu dropdown-menu-end user-language-menu' role='menu' aria-labelledby='dropdownMenuLang'>";
-
     foreach ($session->active_ui_languages as $code) {
         $class = ($code == $session->language)? ' class="active"': '';
         $lang_select .=

@@ -1555,7 +1555,6 @@ function findUserVisibleUnits($uid, $all_units) {
                                                           AND cu.visible = 1
                                                           AND cu.public = 1
                                                           AND cu.order >= 0", $uid, $course_id);
-                                                          
     if ( isset($userInBadges) and $userInBadges ) {
         foreach ($userInBadges as $userInBadge) {
             if ($userInBadge->completed == 0) {
@@ -3553,7 +3552,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-cogs";
     if (count($out_secondary)) {
         $action_button .= "<div class='btn-group'><button type='button' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
-        $action_button .= "  <ul class='row p-4 dropdown-menu dropdown-menu-right myuls' role='menu'>
+        $action_button .= "  <ul class='row p-4 dropdown-menu dropdown-menu-end myuls' role='menu'>
                      ".implode('', $out_secondary)."
                   </ul></div>";
     }
@@ -3603,7 +3602,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         if (isset($option['btn_class'])) {
             $btn_class = ' ' . $option['btn_class'];
         } else {
-            $btn_class = ' btn-default';
+            $btn_class = ' btn-secondary';
         }
         if (isset($option['link-attrs'])) {
             $link_attrs = ' ' . $option['link-attrs'];
@@ -3642,9 +3641,9 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         }
 
         if ($level == 'primary-label') {
-            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon] space-after-icon$primary_icon_class'></span>" . q($option['title']) . "<span class='hidden'>.</span></a>");
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon] space-after-icon$primary_icon_class'></span>" . q($option['title']) . "<span class='hidden'></span></a>");
         } elseif ($level == 'primary') {
-            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'>.</span></a>");
+            array_unshift($out_primary, "<a data-bs-placement='bottom' data-bs-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'></span></a>");
         } else {
             array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
         }
@@ -3654,7 +3653,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         $primary_buttons = implode('', $out_primary);
     }
     $action_button = "";
-    $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'>.</span>";
+    $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "<span class='hidden'></span>";
 
     if($fc){
         $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-wrench";
@@ -3665,7 +3664,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
         $action_button = "
-                <a tabindex='1' class='menu-popover btn $secondary_btn_class' data-container='body' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
+                <a tabindex='1' role='button' class='menu-popover btn btn-secondary dropdown-toggle' data-bs-toogle='popover' data-bs-container='body' data-bs-placement='left' data-bs-html='true' data-bs-trigger='manual' data-bs-content='$action_list'>
                     <span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
                 </a>";
     }
