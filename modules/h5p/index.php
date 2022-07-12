@@ -38,8 +38,8 @@ if ($is_editor) {
     $h5pcontenttypes = $editorAjax->getLatestLibraryVersions();
 
     // custom action bar
-    $tool_content .= "
-        <div class='row action_bar'>
+    $tool_content .= "<div class='col-12 clearfix'>
+        <div class='action_bar shadow-sm p-3 mt-2 rounded'>
             <div class='col-sm-12 clearfix'>
                 <div class='margin-top-thin margin-bottom-fat pull-right'>
                     <div class='btn-group'>";
@@ -49,9 +49,12 @@ if ($is_editor) {
         $tool_content .= "
             <select id='createpicker' class='selectpicker' title='$langCreate' data-style='btn-success' data-width='fit'>
                 <optgroup label='$langH5pInteractiveContent'>";
-
+        $counter = 0;
         foreach ($h5pcontenttypes as $h5pcontenttype) {
             if ($h5pcontenttype->enabled) {
+                if ($counter == 0) {
+                   $tool_content .= "<option selected></option>";
+                }
                 $typeTitle = $h5pcontenttype->title;
                 $typeVal = $h5pcontenttype->machine_name . " " . $h5pcontenttype->major_version . "." . $h5pcontenttype->minor_version;
                 $typeFolder = $h5pcontenttype->machine_name . "-" . $h5pcontenttype->major_version . "." . $h5pcontenttype->minor_version;
@@ -62,6 +65,7 @@ if ($is_editor) {
                 $dataContent = "data-content=\"<img src='$typeIconUrl' alt='$typeTitle' width='24px' height='24px'>$typeTitle\"";
                 $tool_content .= "<option $dataContent>$typeVal</option>\n";
             }
+            $counter++;
         }
 
         $tool_content .= "
@@ -84,29 +88,33 @@ if ($is_editor) {
                     </div>
                 </div>
             </div>
-        </div>";
+        </div></div>";
 
     // Control Flags
     if (isset($_GET['choice']) && isset($_GET['id'])) {
         switch($_GET['choice']) {
             case 'do_disable':
                 Database::get()->querySingle("UPDATE h5p_content set enabled = 0 WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
-                Session::Messages($langH5pSaveSuccess, 'alert-success');
+                Session::flash('message',$langH5pSaveSuccess);
+                Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/h5p/index.php?course=$course_code");
                 break;
             case 'do_enable':
                 Database::get()->querySingle("UPDATE h5p_content set enabled = 1 WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
-                Session::Messages($langH5pSaveSuccess, 'alert-success');
+                Session::flash('message',$langH5pSaveSuccess);
+                Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/h5p/index.php?course=$course_code");
                 break;
             case 'do_reuse_disable':
                 Database::get()->querySingle("UPDATE h5p_content set reuse_enabled = 0 WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
-                Session::Messages($langH5pSaveSuccess, 'alert-success');
+                Session::flash('message',$langH5pSaveSuccess);
+                Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/h5p/index.php?course=$course_code");
                 break;
             case 'do_reuse_enable':
                 Database::get()->querySingle("UPDATE h5p_content set reuse_enabled = 1 WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
-                Session::Messages($langH5pSaveSuccess, 'alert-success');
+                Session::flash('message',$langH5pSaveSuccess);
+                Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/h5p/index.php?course=$course_code");
                 break;
         }
@@ -114,21 +122,21 @@ if ($is_editor) {
 }
 
 if ($content) {
-    $tool_content .= "<table class='table-default'>
+   $tool_content .= "<div class='col-12 mt-4'><div class='table-responsive'><table class='announcements_table'>
         <thead>
-            <tr class='list-header''>
-                <th class='text-left col-sm-8'>$langH5pInteractiveContent</th>
-                <th class='text-center col-sm-3'>$langTypeH5P</th>";
+            <tr class='notes_thead'>
+                <th class='text-white text-left col-sm-8'>$langH5pInteractiveContent</th>
+                <th class='text-white text-center col-sm-3'>$langTypeH5P</th>";
                 if ($is_editor) {
                     $tool_content .= "
-                        <th class='text-center'>
+                        <th class='text-white text-center'>
                         <span class='fa fa-gears'></span>
                     </th>";
                 }
     $tool_content .= "
             </tr>
         </thead>
-        <tbody>";
+        <tbody></div></div>";
 
     foreach ($content as $item) {
         $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version 
@@ -181,7 +189,7 @@ if ($content) {
 // override default bootstrap-select style because we want trully white color (alpha of 1 instead of default 0.5)
 $head_content .= "
     <link rel='stylesheet' href='${urlAppend}js/bootstrap-select/bootstrap-select.min.css'>
-    <script type='text/javascript' src='${urlAppend}js/bootstrap-select/bootstrap-select.min.js'></script>
+    <script type='text/javascript' src='${urlAppend}js/bootstrap-select/bootstrap5-select.min.js'></script>
     <style>
         .bootstrap-select > .dropdown-toggle.bs-placeholder.btn-primary,
         .bootstrap-select > .dropdown-toggle.bs-placeholder.btn-secondary,
@@ -208,6 +216,9 @@ $head_content .= "
         .bootstrap-select > .dropdown-toggle.bs-placeholder.btn-info:active,
         .bootstrap-select > .dropdown-toggle.bs-placeholder.btn-dark:active {
           color: rgba(255, 255, 255, 1);
+        }
+        .dropdown-menu.show {
+            max-height:400px;
         }
     </style>
     <script type='text/javascript'>
