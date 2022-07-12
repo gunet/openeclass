@@ -1,0 +1,21 @@
+tinymce.addI18n('pt_BR', {
+    'Icons': 'Ícones',
+    'Web Application': 'Aplicação Web',
+    'File Type': 'Tipos de Arquivo',
+    'Spinner': 'Carregamento',
+    'Form Control': 'Elementos de Formulário',
+    'Currency': 'Moeda',
+    'Text Editor': 'Editor de Texto',
+    'Directional': 'Direcionais',
+    'Video Player': 'Reprodutor de Vídeo',
+    'Brand': 'Marcas',
+    'Medical': 'Médicos',
+    'Transportation': 'Transportes',
+    'Gender': 'Gêneros',
+    'Payment': 'Formas de Pagamento',
+    'Chart': 'Gráficos',
+    'Hand': 'Mãos',
+    'Accessibility': 'Acessibilidade',
+    'Search': 'Buscar',
+    'No icons matched your search': 'Nenhum ícone correspondeu à sua pesquisa'
+});
