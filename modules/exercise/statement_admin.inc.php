@@ -272,19 +272,31 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                       </label>
                     </div>
                     <div class='row'>
-                        <div class='col-xs-11 col-xs-offset-1'>
+                        <div class='col-xs-11 col-xs-offset-1 d-flex justify-content-center'>
                             <div class='form-group ".(($answerType != FILL_IN_BLANKS && $answerType != FILL_IN_BLANKS_TOLERANT && $answerType != FILL_IN_FROM_PREDEFINED_ANSWERS) ? "hide": "")."' id='fillInBlanksOptions'>
-                                <div class='col-sm-8 col-sm-offest-4'>
+                                <div class='col-12'>
                                     <div class='radio'>
                                         <label>
-                                            <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS."' ". (($answerType != FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
-                                            $langFillBlanksStrict $langFillBlanksStrictExample
+                                            <div class='row p-2'>
+                                                <div class='col-1'>
+                                                    <input class='mt-1' type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS."' ". (($answerType != FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
+                                                </div>
+                                                <div class='col-10'>
+                                                    $langFillBlanksStrict $langFillBlanksStrictExample
+                                                </div>
+                                            </div>
                                         </label>
                                     </div>
                                     <div class='radio'>
                                         <label>
-                                            <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS_TOLERANT."' ". (($answerType == FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
-                                            $langFillBlanksTolerant $langFillBlanksTolerantExample
+                                            <div class='row p-2'>
+                                                <div class='col-1'>
+                                                    <input class='mt-1' type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS_TOLERANT."' ". (($answerType == FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
+                                                </div>
+                                                <div class='col-10'>
+                                                    $langFillBlanksTolerant $langFillBlanksTolerantExample
+                                                </div>
+                                            </div>
                                         </label>
                                     </div>
                                     <div class='radio'>

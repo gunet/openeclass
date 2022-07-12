@@ -217,7 +217,7 @@ $head_content .= "
         .bootstrap-select > .dropdown-toggle.bs-placeholder.btn-dark:active {
           color: rgba(255, 255, 255, 1);
         }
-        .dropdown-menu.show {
+        .dropdown-menu.inner.show{
             max-height:400px;
         }
     </style>
