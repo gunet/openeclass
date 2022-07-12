@@ -62,7 +62,7 @@ $result = null;
 $intervals = array(1=>'day', 7=>'week', 30=>'month', 365=>'year');
 $interval = (isset($_REQUEST['i']) && isset($intervals[$_REQUEST['i']]))? $intervals[$_REQUEST['i']] : 'month';
 $plotuser = (isset($_REQUEST['u']) && is_numeric($_REQUEST['u']) && $_REQUEST['u']>0)? $_REQUEST['u'] : null;
-if (($_REQUEST['u'] != $uid) && !$is_admin) { // security check
+if (!is_null($plotuser) && $plotuser != $uid && !$is_admin) { // security check
     die();
 }
 $plotcourse = (isset($_REQUEST['c']) && is_numeric($_REQUEST['c']) && $_REQUEST['c']>0)? $_REQUEST['c'] : null;
