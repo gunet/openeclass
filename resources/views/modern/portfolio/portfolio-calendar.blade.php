@@ -1,4 +1,4 @@
-<?php 
+<?php
     $today = getdate();
     $day = $today['mday']; $month = $today['mon']; $year = $today['year'];
     if (isset($uid)) { Calendar_Events::get_calendar_settings(); }
@@ -9,7 +9,7 @@
     <!-- <h2> {{ trans('langCalendar') }} </h2> -->
     <div class='content-block-items'>
         <div class='panel-body'>
-            <script src="/js/bootbox/bootbox.min.js?v=4.0-dev"></script>
+            <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js?v=4.0-dev"></script>
             <script src="{{ $urlAppend }}template/default/js/bootstrap.min.js?v=4.0-dev"></script>
             <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/js/language/el-GR.js?v=4.0-dev"></script>
             <link href="{{ $urlAppend }}js/bootstrap-calendar-master/css/calendar_small.css?v=4.0-dev" rel="stylesheet" type="text/css">

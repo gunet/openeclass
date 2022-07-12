@@ -9,7 +9,7 @@
 <div class="row back-navbar-eclass"></div>
 <div class="row back-navbar-eclass2"></div>
 
-    <script type="text/javascript" src="{{ $urlAppend }}template/modern/js/my_courses_color_header.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/my_courses_color_header.js"></script>
     <div class="pb-5">
 
         <div class="container-fluid main-container">
@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="d-flex flex-column align-self-start col-xl-10 col-lg-8 col-md-12 col-sm-6 col-xs-6 justify-content-center col_maincontent_active">
-                    
+
                     <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                                 <nav class="navbar navbar-expand-lg navrbar_menu_btn">
@@ -42,7 +42,7 @@
 
 
                                 @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-                                
+
                                 <div class="row p-2"></div>
                                 <small>Καθηγητής: {{$course_Teacher}}</small>
                                 <div class="row p-2"></div>
@@ -54,7 +54,7 @@
                                                <li>{{$row->title}}<a href='results.php?course={{$course_code}}&exerciseId={{$row->eid}}&status=2'>Εμφάνιση</a></li>
                                             @endforeach
                                         </ul>
-                                    @endif    
+                                    @endif
 
                                     <div class="col-xxl-8 col-xl-8 col-lg-6 col-md-10 col-sm-12 col-12">
                                         <div class="btn-group" role="group" aria-label="Basic example">
@@ -63,7 +63,7 @@
                                             <a type="button" href="{!! $question_bank_button !!}" class="btn btn-secondary"><i class="fas fa-university"></i> Τράπεζα ερωτήσεων</a>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="row p-2"></div>
                                 @endif
 
@@ -74,8 +74,8 @@
                                                 @if($is_editor == 1)
                                                     <tr>
                                                         <th scope="col"><span class="announcement_th_comment">#</span></th>
-                                                        <th scope="col"><span class="announcement_th_comment">Όνομα άσκησης</span></th>                              
-                                                        <th scope="col"><span class="announcement_th_comment">Κατηγορίες ερωτήσεων</span></th>                      
+                                                        <th scope="col"><span class="announcement_th_comment">Όνομα άσκησης</span></th>
+                                                        <th scope="col"><span class="announcement_th_comment">Κατηγορίες ερωτήσεων</span></th>
                                                         <th scope="col"><span class="announcement_th_comment">Ρυθμίσεις άσκησεις</span></th>
                                                         <th scope="col"><span class="announcement_th_comment">Αποτελέσματα άσκησης</span></th>
                                                         <th scope="col"><span class="announcement_th_comment">Επιλογές</span></th>
@@ -83,7 +83,7 @@
                                                 @else
                                                     <tr>
                                                         <th scope="col"><span class="announcement_th_comment">#</span></th>
-                                                        <th scope="col"><span class="announcement_th_comment">Όνομα άσκησης</span></th>                                                   
+                                                        <th scope="col"><span class="announcement_th_comment">Όνομα άσκησης</span></th>
                                                         <th scope="col"><span class="announcement_th_comment">Ρυθμίσεις άσκησεις</span></th>
                                                         <th scope="col"><span class="announcement_th_comment">Αποτελέσματα άσκησης</span></th>
                                                     </tr>
@@ -164,7 +164,7 @@
                                                                 <td>{{$row->title}}{{$array_exercises_student[$row->id][8]}}&nbsp;&nbsp;<span style="color:red">{{ trans('langHasExpiredS') }}</span>
                                                             @endif
                                                             {!! $row->description !!}</td>
-                                                            
+
                                                             <td>
                                                                 <small>
                                                                     @if(isset($row->start_date))
@@ -208,7 +208,7 @@
                                         </table>
                                     </div>
                                 @endif
-                                
+
 
                     </div>
                 </div>

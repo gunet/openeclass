@@ -5,7 +5,7 @@
 <div class="row back-navbar-eclass"></div>
 <div class="row back-navbar-eclass2"></div>
 
-<script type="text/javascript" src="{{ $urlAppend }}template/modern/js/my_courses_color_header.js"></script>
+<script type="text/javascript" src="{{ $urlAppend }}js/my_courses_color_header.js"></script>
 
 <div class="pb-5 mobile_width">
 

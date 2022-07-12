@@ -11,12 +11,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- jQuery -->
-    <script type="text/javascript" src="{{$urlAppend}}template/modern/js/jquery3-6-0.min.js"></script>
+    <script type="text/javascript" src="{{$urlAppend}}js/jquery3-6-0.min.js"></script>
 
 
     <!-- Bootstrap v5 -->
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css"/>
-    <script type="text/javascript" src="{{$urlAppend}}template/modern/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="{{$urlAppend}}js/bootstrap.bundle.min.js"></script>
 
 
     <!-- new link for input icon -->
@@ -83,10 +83,10 @@
     @stack('head_styles')
 
     <!-- Our js modern -->
-    <script type="text/javascript" src="{{ $urlAppend }}template/modern/js/slick.min.js"></script>
-    <script type="text/javascript" src="{{ $urlAppend }}template/modern/js/custom.js"></script>
-    <script type="text/javascript" src="{{ $urlAppend }}template/modern/js/viewStudentTeacher.js"></script>
-    <script type="text/javascript" src="{{ $urlAppend }}template/modern/js/sidebar_slider_action.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/slick.min.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/custom.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/viewStudentTeacher.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/sidebar_slider_action.js"></script>
 
     {!! $head_content !!}
 

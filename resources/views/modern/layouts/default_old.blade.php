@@ -24,7 +24,7 @@
     @stack('head_styles')
 
     <!-- jQuery -->
-    <script type="text/javascript" src="{{ $urlAppend }}js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/jquery-3.6.0.min.js"></script>
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="{{ $template_base }}/js/bootstrap.min.js?v={{ $eclass_version }}"></script>
