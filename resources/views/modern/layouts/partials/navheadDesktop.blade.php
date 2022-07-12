@@ -118,7 +118,7 @@
                                     <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:14px;'>
                                         <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
                                         <li>
-                                            <a type='button' class='btn btn-secondary w-100 mt-3' href="{{ $urlAppend }}modules/auth/logout.php"><i class="fas fa-sign-out-alt"></i><span class='ps-2 fs-6 text-white'>{{ trans('langLogout') }}</span></a>
+                                            <button type='submit' class='btn btn-secondary w-100 mt-3' name='submit'><i class="fas fa-sign-out-alt"></i><span class='ps-2 fs-6 text-white'>{{ trans('langLogout') }}</span></button>
                                         </li>
                                     </form>
 
