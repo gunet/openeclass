@@ -6,7 +6,7 @@
                     <th class='text-white'>{{trans('langAnnouncement')}}</th>
                     <th class='text-white'>{{trans('langDate')}}</th>
                     <th class='text-white'>{{trans('langCourse')}}</th>
-                    
+
                     @if($is_editor == 1)
                         <th class='text-white'>{{trans('langCurrentStatus')}}</th>
                         <th class='text-white text-end'><i class="fas fa-cogs"></i></th>
@@ -18,10 +18,10 @@
                     <?php for($i=0; $i<$size; $i++){?>
                         <tr>
                             <td>{!! $announcements[$i][0] !!}</td>
-                            
+
                             <td>{{$announcements[$i][1]}}</td>
                             <td>{{$title_course}}</td>
-                            
+
                             @if($is_editor == 1)
                             <td>{!! $announcements[$i][2] !!}</td>
                             <td>
@@ -30,7 +30,7 @@
                                             <i class="fas fa-cogs"></i>
                                         </button>
                                         <ul class="row p-4 dropdown-menu myuls" aria-labelledby="dropdownMenuButton1">
-                                            <li><a href="{{$urlAppend}}modules/announcements/edit.php?course={{$course_code}}&modify={{$announcements_ids[$i]}}"><i class="fas fa-edit"></i> {{trans('langElaboration')}}</a></li>
+                                            <li><a class='ps-1' href="{{$urlAppend}}modules/announcements/edit.php?course={{$course_code}}&modify={{$announcements_ids[$i]}}"><i class="fas fa-edit"></i> {{trans('langEditChange')}}</a></li>
                                             <li>
                                                 <form action="{{$urlAppend}}modules/announcements/index.php" method="POST">
                                                     <input type="hidden" name="course-announcement" value="{{$course_code}}">
@@ -38,7 +38,7 @@
                                                     <input type="hidden" name="action" value="visible">
                                                     <input type="hidden" name="value" value="{{$announcements_ids[$i]}}">
                                                     <?php
-                                                        $appear = ''; 
+                                                        $appear = '';
                                                         $an_id = $announcements_ids[$i];
                                                         $annouc = Database::get()->querySingle("SELECT * FROM `announcement` WHERE `announcement`.`id`='{$an_id}' ");
                                                         if($annouc->visible == 0){
@@ -53,12 +53,12 @@
                                                     @else
                                                     <button class="visible-button" type="submit"><i class="fas fa-eye-slash"></i> {{trans('langViewHide')}}</button>
                                                     @endif
-                                                    
+
                                                 </form>
                                             </li>
                                             <li>
                                                 <!-- <a class="announcement-item" href="#"><i class="fas fa-trash"></i> Διαγραφή</a> -->
-                                                <a class='text-white' role="button" data-bs-toggle="modal" data-bs-target="#deleteModal{{$announcements_ids[$i]}}"><i class="fas fa-trash"></i> {{trans('langDelete')}}</a>
+                                                <a class='text-white ps-1' role="button" data-bs-toggle="modal" data-bs-target="#deleteModal{{$announcements_ids[$i]}}"><i class="fas fa-trash"></i> {{trans('langDelete')}}</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -88,7 +88,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                
+
                             </td>
                             @endif
                         </tr>

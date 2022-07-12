@@ -8,7 +8,7 @@
             <div class='form-wrapper'>
                 <form class='form-horizontal' action='{{ $targetUrl }}' method='post'>
                     <div class='form-group'>
-                        <label class='col-sm-2 control-label'>{{ trans('langcreator') }}:</label>
+                        <label class='col-sm-2 control-label'>{{ trans('langCreator') }}:</label>
                         <div class='col-sm-10'>
                             <p class='form-control-static'>{{ $creatorName }}</p>
                         </div>

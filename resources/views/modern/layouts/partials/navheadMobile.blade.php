@@ -53,7 +53,7 @@
                             <a class="dropdown-item text-white" href="{{ $urlAppend }}main/portfolio.php"><i class="fa fa-home fs-6 text-warning pe-2"></i>{{ trans('langMyPortfolio') }}</a>
                         </li>
                         <li>
-                            <a class="dropdown-item text-white" href="{{ $urlAppend }}main/my_courses.php"><i class="fas fa-graduation-cap fs-6 text-warning pe-2"></i>{{trans('mycourses')}}</a>
+                            <a class="dropdown-item text-white" href="{{ $urlAppend }}main/my_courses.php"><i class="fas fa-graduation-cap fs-6 text-warning pe-2"></i>{{trans('langMyCoursesSide')}}</a>
                         </li>
                         <li>
                             <a class="dropdown-item text-white" href="{{ $urlAppend }}modules/announcements/myannouncements.php"><i class="fas fa-bell fs-6 text-warning pe-2"></i>{{ trans('langMyAnnouncements') }}</a>

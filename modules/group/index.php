@@ -80,14 +80,14 @@ if ($is_editor) {
         $id = $_GET['id'];
         delete_group_category($id);
         //Session::Messages($langGroupCategoryDeleted, 'alert-success');
-        Session::flash('message',$langGroupCategoryDeleted); 
+        Session::flash('message',$langGroupCategoryDeleted);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/group/index.php");
     } elseif (isset($_GET['deletegroup'])) { // delete group
         $id = $_GET['id'];
         delete_group($id);
         //Session::Messages($langGroupDeleted, 'alert-success');
-        Session::flash('message',$langGroupDeleted); 
+        Session::flash('message',$langGroupDeleted);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/group/index.php");
     }
@@ -261,7 +261,7 @@ if ($is_editor) {
             }
 
             //Session::Messages($langGroupsAdded2, "alert-success");
-            Session::flash('message',$langGroupsAdded2); 
+            Session::flash('message',$langGroupsAdded2);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
 
@@ -274,7 +274,7 @@ if ($is_editor) {
         submit_group_category();
         $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
         //Session::Messages($messsage, 'alert-success');
-        Session::flash('message',$messsage); 
+        Session::flash('message',$messsage);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/group/index.php");
     } elseif (isset($_REQUEST['delete_all'])) {
@@ -377,7 +377,7 @@ if ($is_editor) {
             'name' => $myDir? $myDir->name:"[no name]"));
 
         //Session::Messages($langGroupDel, "alert-success");
-        Session::flash('message',$langGroupDel); 
+        Session::flash('message',$langGroupDel);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/group/index.php?course=$course_code");
     } elseif (isset($_REQUEST['empty'])) {
@@ -698,19 +698,18 @@ if ($is_editor) {
         $numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
         $cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
         $aantalcategories = count($cat);
-        $tool_content .= "<br><br><div class='row'>
-            <div class='col-sm-12'>
-            <div class='margin-bottom-thin' style='font-weight: bold;'>";
+        $tool_content .= "<br><br><div class='row'>            
+            <div class='col-sm-12 mt-5'><div class='table-responsive'>
+            <div class='margin-bottom-thin notes_thead fs-6 ps-3 pt-2 pb-3 pe-3' style='font-weight: bold;'>";
         if ($aantalcategories > 0) {
-            $tool_content .= "$langCategorisedGroups&nbsp;";
+            $tool_content .= "<span class='text-white'>$langCategorisedGroups</span>&nbsp;";
             if (isset($urlview) and abs(intval($urlview)) == 0) {
-                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-plus-square', $langViewShow)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a class='text-white' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-plus-square', $langViewShow)."</a>";
             } else {
-                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-minus-square', $langViewHide)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a class='text-white' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-minus-square', $langViewHide)."</a>";
             }
         }
-        $tool_content .= "</div>
-            <div class='table-responsive'>
+        $tool_content .= "</div>            
             <table class='table-default category-links'>";
 
     if ($urlview === '') {
