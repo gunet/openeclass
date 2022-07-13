@@ -6425,9 +6425,6 @@ function max_grade_from_rubric($rubric_id) {
     global $course_id;
     $rubric_data = Database::get()->querySingle("SELECT * FROM rubric WHERE id = ?d AND course_id = ?d", $rubric_id, $course_id);
     $unserialized_scale_items = unserialize($rubric_data->scales);
-    //Session::Messages("<pre>".print_r($unserialized_scale_items,true)."</pre>");
-    Session::flash('message',"<pre>".print_r($unserialized_scale_items,true)."</pre>");
-    Session::flash('alert-class', 'alert-secondary');
     $max_grade = 0;
     $max_scale_item_value = 0;
     foreach ($unserialized_scale_items as $CritArrItems) {
@@ -6438,9 +6435,6 @@ function max_grade_from_rubric($rubric_id) {
         }
         $max_grade = $max_grade + $CritArrItems['crit_weight'] * $max_scale_item_value;
     }
-    //Session::Messages("<pre>".print_r($unserialized_scale_items,true).print_r($max_grade,true)."</pre>");
-    Session::flash('message',"<pre>".print_r($unserialized_scale_items,true).print_r($max_grade,true)."</pre>");
-    Session::flash('alert-class', 'alert-secondary');
     return $max_grade/100;
 }
 
