@@ -100,8 +100,8 @@
                                 <table class='table'>
                                     <thead>
                                         @if($toolName)
-                                            <tr>
-                                                <th>
+                                            <tr class='border-0'>
+                                                <th class='border-0'>
                                                     <div class='row'>
                                                         <div class='col-2'>
                                                             <span class='control-label-notes'>
@@ -118,8 +118,8 @@
                                             </tr>
                                         @endif
                                        
-                                        <tr>
-                                            <th>
+                                        <tr class='border-0'>
+                                            <th class='border-0'>
                                                 <div class='row'>
                                                     <div class='col-2'>
                                                         <span class='control-label-notes'>
@@ -136,8 +136,8 @@
                                         </tr>
                                         
                                             
-                                        <tr>
-                                            <th>
+                                        <tr class='border-0'>
+                                            <th class='border-0'>
                                                 <div class='row'>
                                                     <div class='col-2'>
                                                         <span class='control-label-notes'>
@@ -153,8 +153,8 @@
                                             </th>
                                         </tr>
 
-                                        <tr>
-                                            <th>
+                                        <tr class='border-0'>
+                                            <th class='border-0'>
                                                 <div class='row'>
                                                     <div class='col-2'>
                                                         <span class='control-label-notes'>
@@ -188,8 +188,8 @@
                                 <table class='table'>
                                     <thead>
                                         @if($toolName)
-                                            <tr>
-                                                <th>
+                                            <tr class='border-0'>
+                                                <th class='border-0'>
                                                     <div class='row'>
                                                         <div class='col-2'>
                                                             <span class='control-label-notes'>
@@ -206,8 +206,8 @@
                                             </tr>
                                         @endif
                                        
-                                        <tr>
-                                            <th>
+                                        <tr class='border-0'>
+                                            <th class='border-0'>
                                                 <div class='row'>
                                                     <div class='col-2'>
                                                         <span class='control-label-notes'>
@@ -224,8 +224,8 @@
                                         </tr>
                                         
                                             
-                                        <tr>
-                                            <th>
+                                        <tr class='border-0'>
+                                            <th class='border-0'>
                                                 <div class='row'>
                                                     <div class='col-2'>
                                                         <span class='control-label-notes'>
@@ -241,8 +241,8 @@
                                             </th>
                                         </tr>
 
-                                        <tr>
-                                            <th>
+                                        <tr class='border-0'>
+                                            <th class='border-0'>
                                                 <div class='row'>
                                                     <div class='col-2'>
                                                         <span class='control-label-notes'>
