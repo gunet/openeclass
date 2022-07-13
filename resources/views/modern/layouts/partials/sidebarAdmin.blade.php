@@ -15,16 +15,18 @@
         <p class="text-center text-light fs-6 mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
         <div class='d-flex justify-content-center'>
             <a class='w-75 btn btn-primary pe-none text-white text-center'>
-                @if(($session->status == USER_TEACHER))
-                <span class='text-uppercase'>{{trans('langCTeacher')}}</span>
-                @elseif($session->status == USER_STUDENT)
-                <span class='text-uppercase'>{{ trans('langCStudent2') }}</span>
-                @elseif($session->status == USERMANAGE_USER)
-                <span class='text-uppercase'>{{ trans('langManageUser') }}</span>
-                @elseif($session->status == USER_DEPARTMENTMANAGER)
-                <span class='text-uppercase'>{{ trans('langManageDepartment') }}</span>
-                @elseif($session->status == ADMIN_USER)
-                <span class='text-uppercase'>{{ trans('langAdministrator') }}</span>
+                @if (isset($_SESSION['uid']))
+                    @if(($session->status == USER_TEACHER))
+                    <span class='text-uppercase'>{{trans('langCTeacher')}}</span>
+                    @elseif($session->status == USER_STUDENT)
+                    <span class='text-uppercase'>{{ trans('langCStudent2') }}</span>
+                    @elseif($session->status == USERMANAGE_USER)
+                    <span class='text-uppercase'>{{ trans('langManageUser') }}</span>
+                    @elseif($session->status == USER_DEPARTMENTMANAGER)
+                    <span class='text-uppercase'>{{ trans('langManageDepartment') }}</span>
+                    @else
+                    <span class='text-uppercase'>{{ trans('langAdministrator') }}</span>
+                    @endif
                 @else
                 <span class='text-uppercase'>{{ trans('langVisitor') }}</span>
                 @endif
