@@ -108,23 +108,23 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             //checking visible status
             if ($myrow->visible == '0') {
                 $visible = 1;
-                $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsNotVis'><span class='fa fa-eye-slash'></span> $langInvisible</li>";
+                $status_icon_list = "<li data-bs-toggle='tooltip' data-bs-placement='left' title='$langAnnouncementIsNotVis'><span class='fa fa-eye-slash'></span> $langInvisible</li>";
                 $vis_class = 'not_visible';
             } else {
                 $visible = 0;
                 if (isset($myrow->start_display)) {
                     if (isset($myrow->stop_display) && $myrow->stop_display < $now) {
                         $vis_class = 'not_visible';
-                        $status_icon_list = "<li class='text-danger'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillNotBeVis$myrow->stop_display'><span class='fa fa-clock-o'></span> $langHasExpired</li>";
+                        $status_icon_list = "<li class='text-danger'  data-bs-toggle='tooltip' data-bs-placement='left' title='$langAnnouncementWillNotBeVis$myrow->stop_display'><span class='fa fa-clock-o'></span> $langHasExpired</li>";
                     } elseif ($myrow->start_display > $now) {
                         $vis_class = 'not_visible';
-                        $status_icon_list = "<li class='text-success'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillBeVis$myrow->start_display'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
+                        $status_icon_list = "<li class='text-success'  data-bs-toggle='tooltip' data-bs-placement='left' title='$langAnnouncementWillBeVis$myrow->start_display'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
                     } else {
-                        $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langVisible</li>";
+                        $status_icon_list = "<li data-bs-toggle='tooltip' data-bs-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langVisible</li>";
                         $vis_class = 'visible';
                     }
                 }else{
-                    $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langVisible</li>";
+                    $status_icon_list = "<li data-bs-toggle='tooltip' data-bs-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langVisible</li>";
                     $vis_class = 'visible';
                 }
             }
@@ -133,14 +133,14 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             if ($myrow->order != 0) {
                 $pinned_class = "text-danger";
                 $pinned = 0;
-                $tooltip = "data-toggle='tooltip' data-placement='top' title='$langAdminPinnedOff'";
+                $tooltip = "data-bs-toggle='tooltip' data-bs-placement='top' title='$langAdminPinnedOff'";
                 if ($myrow->order != $pinned_greater) {
                     $to_top = "<a class='reorder' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=1'><span class='fa fa-arrow-up  pull-right' data-toggle='tooltip' data-placement='top' title='$langAdminPinnedToTop'></span></a>";
                 }
             } elseif ($myrow->order == 0) {
                 $pinned_class = "not_visible";
                 $pinned = 1;
-                $tooltip = "data-toggle='tooltip' data-placement='top' title='$langAdminPinnedOn'";
+                $tooltip = "data-bs-toggle='tooltip' data-bs-placement='top' title='$langAdminPinnedOn'";
             }
 
             $data['aaData'][] = array(
@@ -179,7 +179,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         foreach ($result as $myrow) {
 
             if ($myrow->order != 0) {
-                $pinned = "<span class='fa fa-thumb-tack pull-right text-danger' data-toggle='tooltip' data-placement='top' title='$langAdminPinned'></span>";
+                $pinned = "<span class='fa fa-thumb-tack pull-right text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='$langAdminPinned'></span>";
             } else {
                 $pinned = "";
             }

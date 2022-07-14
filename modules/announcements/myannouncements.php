@@ -139,4 +139,5 @@ $head_content .= "
 ";
 
 $data['menuTypeID'] = 1;
+
 view('modules.announcements.myann_index', $data);
