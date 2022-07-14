@@ -50,7 +50,7 @@
 
                        
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-                            <div class='panel shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                            <div class='panel shadow-sm p-3 bg-body rounded'>
                                 <div class='panel-body'>
                                     <div class='single_announcement'>
                                         <label class="control-label-notes">{{trans('langHomePageIntroTitle')}}</label>
