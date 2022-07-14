@@ -95,7 +95,7 @@ function getUserLessonInfo($uid) {
                 $lesson_content .= icon('fa-minus-circle', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
                 $student_courses_count++;
             } elseif ($data->status == USER_TEACHER) {
-                $lesson_content .= icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $data->code, '', true, true);
+                $lesson_content .= icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
                 $teacher_courses_count++;
             }
             $lesson_content .= "</td></tr>";

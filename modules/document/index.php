@@ -154,7 +154,7 @@ if (isset($_GET['mindmap'])) {
             $language, $uid);
         Session::Messages($langMindMapSaved,"alert-success");
     }
-    redirect_to_home_page('modules/document/?course=' . $course_code);
+    redirect_to_home_page('modules/document/index.php?course=' . $course_code);
 }
 
 

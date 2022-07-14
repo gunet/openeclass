@@ -36,7 +36,7 @@ $head_content .=
 
 $tool_content .= action_bar(array(
     array('title' => $langBack,
-        'url' => "../usage/?t=a",
+        'url' => "../usage/index.php?t=a",
         'icon' => 'fa-reply',
         'level' => 'primary-label')
 ),false);

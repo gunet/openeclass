@@ -72,7 +72,7 @@ if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
                 $result = Database::get()->querySingle("SELECT url, title FROM `link` WHERE id = ?d", $rid);
                 $content_type = $langLink;
                 $rcontent = $result->url;
-                $url = $urlServer."modules/link/?course=".$course_code;
+                $url = $urlServer."modules/link/index.php?course=".$course_code;
                 $content = "<a href='" . $urlServer . "modules/link/go.php?course=".$course_code."&amp;id=$rid&amp;url=" .
                 urlencode($rcontent) . "'>" . q($result->title) . "</a>";
             } elseif ($rtype == 'wallpost') {
@@ -80,7 +80,7 @@ if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
                 $rcontent = $res->url;
                 $content_type = $langWallPost;
                 $content = nl2br(standard_text_escape($content));
-                $url = $urlServer."modules/wall/?course=".course_id_to_code($cid)."&amp;showPost=".$rid;
+                $url = $urlServer."modules/wall/index.php?course=".course_id_to_code($cid)."&amp;showPost=".$rid;
             }
 
             Log::record($course_id, MODULE_ID_ABUSE_REPORT, LOG_MODIFY,
@@ -238,9 +238,9 @@ if (!$nbrReports) {
             $res = Database::get()->querySingle("SELECT url, title FROM `link` WHERE id = ?d", $report->rid);
             $content = "<a href='" . $urlServer . "modules/link/go.php?course=".$course_code."&amp;id=$report->rid&amp;url=" .
                 urlencode($res->url) . "'>" . q($res->title) . "</a>";
-            $visiturl = $urlServer."modules/link/?course=$course_code&amp;socialview";
-            $editurl = $urlServer."modules/link/?course=$course_code&amp;id=$report->rid&amp;action=editlink";
-            $deleteurl = $urlServer."modules/link/?course=$course_code&amp;id=$report->rid&amp;action=deletelink";
+            $visiturl = $urlServer."modules/link/index.php?course=$course_code&amp;socialview";
+            $editurl = $urlServer."modules/link/index.php?course=$course_code&amp;id=$report->rid&amp;action=editlink";
+            $deleteurl = $urlServer."modules/link/index.php?course=$course_code&amp;id=$report->rid&amp;action=deletelink";
             $options = action_button(array(
                     array('title' => $langAbuseReportClose,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=close&amp;report=$report->id",
@@ -263,9 +263,9 @@ if (!$nbrReports) {
         } elseif ($report->rtype == 'wallpost') {
             $res = Database::get()->querySingle("SELECT content FROM `wall_post` WHERE id = ?d", $report->rid);
             $content = nl2br(standard_text_escape($res->content));
-            $visiturl = $urlServer."modules/wall/?course=$course_code&amp;showPost=$report->rid";
-            $editurl = $urlServer."modules/wall/?course=$course_code&amp;edit=$report->rid";
-            $deleteurl = $urlServer."modules/wall/?course=$course_code&amp;delete=$report->rid";
+            $visiturl = $urlServer."modules/wall/index.php?course=$course_code&amp;showPost=$report->rid";
+            $editurl = $urlServer."modules/wall/index.php?course=$course_code&amp;edit=$report->rid";
+            $deleteurl = $urlServer."modules/wall/index.php?course=$course_code&amp;delete=$report->rid";
             $options = action_button(array(
                     array('title' => $langAbuseReportClose,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=close&amp;report=$report->id",

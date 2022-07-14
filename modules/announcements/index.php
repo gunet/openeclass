@@ -221,7 +221,7 @@ if (isset($_GET['an_id'])) {
     }
     $row = Database::get()->querySingle($sql, $course_id, $_GET['an_id']);
     if (!$row) {
-        redirect_to_home_page('modules/announcements/?course=' . $course_code);
+        redirect_to_home_page('modules/announcements/index.php?course=' . $course_code);
     }
 
     $data['action_bar'] = action_bar([

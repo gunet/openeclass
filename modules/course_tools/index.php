@@ -35,7 +35,7 @@ $toolName = $langToolManagement;
 add_units_navigation(TRUE);
 
 load_js('tools.js');
-$page_url = 'modules/course_tools/?course=' . $course_code;
+$page_url = 'modules/course_tools/index.php?course=' . $course_code;
 
 if (isset($_REQUEST['toolStatus'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();

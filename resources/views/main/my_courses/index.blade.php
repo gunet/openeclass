@@ -37,7 +37,7 @@
                                 @if ($course->status == USER_STUDENT)
                                     {!! icon('fa-minus-circle', trans('langUnregCourse'), "${urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid") !!}
                                 @else ($course->status == USER_TEACHER)
-                                   {!! icon('fa-wrench', trans('langAdm'), "${urlServer}modules/course_info/?from_home=true&amp;course=" . $course->code) !!}
+                                   {!! icon('fa-wrench', trans('langAdm'), "${urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $course->code) !!}
                                 @endif
                             </td>
                     </tr>

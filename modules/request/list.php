@@ -86,7 +86,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         }
 
         $data['data'][] = [
-            '0' => "<a href='{$urlAppend}modules/request/?course=$course_code&amp;id={$request->id}'>" .
+            '0' => "<a href='{$urlAppend}modules/request/index.php?course=$course_code&amp;id={$request->id}'>" .
                 standard_text_escape($request->title) . "</a>",
             '1' => $stateLabels[$request->state],
             '2' => format_ts($request->open_date),

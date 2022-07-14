@@ -332,7 +332,7 @@ function loggedInMenu($rich=true) {
     array_push($sideMenuImg, "fa-user");
 
     array_push($sideMenuText, $GLOBALS['langMyStats']);
-    array_push($sideMenuLink, $urlServer . "modules/usage/?t=u");
+    array_push($sideMenuLink, $urlServer . "modules/usage/index.php?t=u");
     array_push($sideMenuImg, "fa-area-chart");
 
     foreach ($sideMenuLink as $module_link) {
@@ -631,7 +631,7 @@ function adminMenu() {
         array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuText, $GLOBALS['langUsage']);
-        array_push($sideMenuLink, "../../modules/usage/?t=a");
+        array_push($sideMenuLink, "../../modules/usage/index.php?t=a");
         array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuText, $GLOBALS['langAdminAn']);
@@ -786,7 +786,7 @@ function lessonToolsMenu($rich=true) {
                 array_push($sideMenuText, q($modules[$mid]['title']));
             }
             $module_link = $urlAppend . 'modules/' . $modules[$mid]['link'] .
-                            '/?course=' . $course_code;
+                            '/index.php?course=' . $course_code;
             if (module_path($module_link) == $current_module_dir) {
                 $sideMenuSubGroup[0]['class'] = ' in';
             }
@@ -839,7 +839,7 @@ function lessonToolsMenu($rich=true) {
 
         foreach ($admin_modules as $adm_mod) {
             $module_link = $urlAppend . 'modules/' . $adm_mod['link'] .
-                            '/?course=' . $course_code;
+                            '/index.php?course=' . $course_code;
             if (module_path($module_link) == $current_module_dir) {
                 $sideMenuSubGroup[0]['class'] = ' in';
             }

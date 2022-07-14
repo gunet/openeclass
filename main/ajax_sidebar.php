@@ -56,7 +56,7 @@ function getSidebarNotifications() {
                     $t->set_var('sideBarCourseNotifyCount', $n->notcount);
                     $t->set_var('sideBarCourseNotifyTitle', q($modules_array[$n->module_id]['title']));
                     $t->set_var('sideBarCourseNotifyURL', $urlAppend . 'modules/' . $modules_array[$n->module_id]['link'] .
-                                                    '/?course=' . $course_code);
+                                                    '/index.php?course=' . $course_code);
                     $t->parse('sideBarCourseNotify', 'sideBarCourseNotifyBlock', true);
                 }
             }

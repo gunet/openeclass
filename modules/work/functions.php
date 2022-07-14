@@ -439,7 +439,7 @@ function show_submission_details($id) {
             $unit = intval($_GET['unit']);
             $file_comments_url = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;getcomment=$sub->id&amp;id=$unit";
         } else {
-            $file_comments_url = "{$urlAppend}modules/work/?course=$course_code&amp;getcomment=$sub->id";
+            $file_comments_url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;getcomment=$sub->id";
         }
         $file_comments_link = '<br>' . MultimediaHelper::chooseMediaAhrefRaw($file_comments_url, $file_comments_url, $sub->grade_comments_filename, $sub->grade_comments_filename);
     } else {
@@ -469,7 +469,7 @@ function show_submission_details($id) {
                 if (isset($_GET['unit'])) {
                     $url = $urlAppend . "modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$item->id";
                 } else {
-                    $url = $urlAppend . "modules/work/?course=$course_code&amp;get=$item->id";
+                    $url = $urlAppend . "modules/work/index.php?course=$course_code&amp;get=$item->id";
                 }
                 return MultimediaHelper::chooseMediaAhrefRaw($url, $url, $item->file_name, $item->file_name);
             }, Database::get()->queryArray('SELECT id, file_name FROM assignment_submit
@@ -485,7 +485,7 @@ function show_submission_details($id) {
         if (isset($_GET['unit'])) {
             $url = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$sub->id";
         } else {
-            $url = "{$urlAppend}modules/work/?course=$course_code&amp;get=$sub->id";
+            $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$sub->id";
         }
         $filelink = MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name);
         $tool_content .= "<div class='row margin-bottom-fat'>

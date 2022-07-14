@@ -146,7 +146,7 @@ if (isset($_GET['per_course_dur'])) {
     } else {
         $tool_content .= action_bar(array(
             array('title' => $langPersonalStats,
-                'url' => "../usage/?t=u",
+                'url' => "../usage/index.php?t=u",
                 'level' => 'primary-label'),
             array('title' => $langBack,
                 'url' => "../../main/portfolio.php",

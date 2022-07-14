@@ -28,7 +28,7 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'modules/request/functions.php';
 
 $toolName = $langRequests;
-$backUrl = $urlAppend . 'modules/request/?course=' . $course_code;
+$backUrl = $urlAppend . 'modules/request/index.php?course=' . $course_code;
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);

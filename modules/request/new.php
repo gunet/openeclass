@@ -150,7 +150,7 @@ if (isset($_POST['requestTitle'])) {
                       <div id='mail-header'>
                           <br>
                           <div>
-                              <div id='header-title'>" . q($langNewRequest) . ": <a href='{$urlServer}modules/request/?course=$course_code&amp;id=$rid'>" . q($title) . "</a>.</div>
+                              <div id='header-title'>" . q($langNewRequest) . ": <a href='{$urlServer}modules/request/index.php?course=$course_code&amp;id=$rid'>" . q($title) . "</a>.</div>
                               <ul id='forum-category'> <li><span><b>$langSender:</b></span> <span class='left-space'>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "</span></li>
                                   <li><span><b>$langdate:</b></span> <span class='left-space'>$datetime</span></li>
                               </ul>
@@ -193,7 +193,7 @@ if (isset($_POST['requestTitle'])) {
     }
 }
 
-$backUrl = $urlAppend . 'modules/request/?course=' . $course_code;
+$backUrl = $urlAppend . 'modules/request/index.php?course=' . $course_code;
 $navigation[] = array('url' => $backUrl, 'name' => $langRequests);
 
 $data['action_bar'] = action_bar(

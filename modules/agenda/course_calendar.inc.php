@@ -458,8 +458,8 @@ require_once 'include/lib/references.class.php';
        $event_type_url = array(
             'assignment' => 'modules/work/index.php?id=thisid&course=thiscourse',
             'exercise' => 'modules/exercise/exercise_submit.php?course=thiscourse&exerciseId=thisid',
-            'agenda' => 'modules/agenda/?id=thisid&course=thiscourse',
-            'teleconference' => 'modules/tc/?course=thiscourse');
+            'agenda' => 'modules/agenda/index.php?id=thisid&course=thiscourse',
+            'teleconference' => 'modules/tc/index.php?course=thiscourse');
 
        $fromdatetime = date('Y-m-d H:i:s', $from / 1000);
        $todatetime = date('Y-m-d H:i:s', $to / 1000);

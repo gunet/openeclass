@@ -70,15 +70,15 @@ if (isset($_GET['id'])) {
         $data['field_data'] = null;
     }
     $data['request'] = $request;
-    $data['backUrl'] = $urlAppend . "modules/request/?course=$course_code&id=$id";
+    $data['backUrl'] = $urlAppend . "modules/request/index.php?course=$course_code&id=$id";
     $data['targetUrl'] = $urlAppend . "modules/request/edit.php?course=$course_code&id=$id";
     $can_modify = $is_editor || $request->creator_id == $uid ||
         in_array($uid, $data['assigned']);
     if (!$can_modify) {
-        redirect_to_home_page("modules/request/?course=$course_code&id=$id");
+        redirect_to_home_page("modules/request/index.php?course=$course_code&id=$id");
     }
 
-    $navigation[] = array('url' => $urlAppend . "modules/request/?course=$course_code", 'name' => trans('langRequests'));
+    $navigation[] = array('url' => $urlAppend . "modules/request/index.php?course=$course_code", 'name' => trans('langRequests'));
     $navigation[] = array('url' => $data['backUrl'], 'name' => $request->title);
     $toolName = trans('langEditRequest');
 
@@ -176,7 +176,7 @@ if (isset($_GET['id'])) {
                   <div id='mail-header'>
                       <br>
                       <div>
-                          <div id='header-title'>" . q($langEditRequest) . ": <a href='{$urlServer}modules/request/?course=$course_code&amp;id=$rid'>" . q($request->title) . "</a>.</div>
+                          <div id='header-title'>" . q($langEditRequest) . ": <a href='{$urlServer}modules/request/index.php?course=$course_code&amp;id=$rid'>" . q($request->title) . "</a>.</div>
                           <ul id='forum-category'> <li><span><b>$langSender:</b></span> <span class='left-space'>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "</span></li>
                               <li><span><b>$langdate:</b></span> <span class='left-space'>$datetime</span></li>
                           </ul>
@@ -202,7 +202,7 @@ if (isset($_GET['id'])) {
                     '', $recipients, $emailSubject, $emailBody, $emailContent);
             }
 
-            redirect_to_home_page("modules/request/?course=$course_code&id=" . $request->id);
+            redirect_to_home_page("modules/request/index.php?course=$course_code&id=" . $request->id);
         }
     }
 

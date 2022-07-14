@@ -1069,7 +1069,7 @@ function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record, $opt
         $bbb = new BigBlueButton($salt, $bbb_url);
 
         if (isset($course_code) and $course_code) {
-            $logoutUrl = $urlServer . 'modules/tc/?course=' . $course_code;
+            $logoutUrl = $urlServer . 'modules/tc/index.php?course=' . $course_code;
         } else {
             $logoutUrl = '';
         }

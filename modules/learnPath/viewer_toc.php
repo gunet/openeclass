@@ -51,7 +51,7 @@ $action->record(MODULE_ID_LP);
 
 if (isset($_GET['unit'])) {
     $unitParam = "&amp;unit=$_GET[unit]";
-    $returl = $urlAppend . "modules/units/?course=$course_code&amp;id=$_GET[unit]";
+    $returl = $urlAppend . "modules/units/index.php?course=$course_code&amp;id=$_GET[unit]";
 } else {
     $unitParam = '';
     $returl = "navigation/viewModule.php?course=$course_code&amp;go=" .

@@ -91,7 +91,7 @@ function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $mo
     $rs = array();
     $rs = $soapUsers->setUserObjectAndGenerateRoomHash($params);
     
-    return $url.'/'.$res->webapp.'/?secureHash='.$rs->return;
+    return $url.'/'.$res->webapp.'/index.php?secureHash='.$rs->return;
 }
 
 /**

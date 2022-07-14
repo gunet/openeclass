@@ -57,11 +57,11 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
         }
         if ($tag->module_id == MODULE_ID_ANNOUNCE){
             $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $tag->element_id);
-            $link = "<a href='../../modules/announcements/?course=".$course_code."&amp;an_id=".$tag->element_id."'>$announce->title</a><br>";
+            $link = "<a href='../../modules/announcements/index.php?course=".$course_code."&amp;an_id=".$tag->element_id."'>$announce->title</a><br>";
         }
         if ($tag->module_id == MODULE_ID_ASSIGN){
             $work = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d ", $tag->element_id);
-            $link = "<a href='../../modules/work/?course=".$course_code."&amp;id=".$tag->element_id."'>$work->title</a><br>";
+            $link = "<a href='../../modules/work/index.php?course=".$course_code."&amp;id=".$tag->element_id."'>$work->title</a><br>";
         }
         if ($tag->module_id == MODULE_ID_EXERCISE){
             $exe = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d ", $tag->element_id);

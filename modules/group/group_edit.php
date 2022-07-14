@@ -262,7 +262,7 @@ if (!empty($message)) {
 $back_url = isset($_GET['from']) && $_GET['from'] == 'group' ? "group_space.php?course=$course_code&group_id=$group_id" : "index.php?course=$course_code";
 $tool_content .= action_bar(array(
       array('title' => $langAdminUsers,
-            'url' => "../user/?course=$course_code",
+            'url' => "../user/index.php?course=$course_code",
             'icon' => 'fa-users',
             'level' => 'primary-label'),
       array('title' => $langBack,

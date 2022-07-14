@@ -130,7 +130,7 @@ if (isset($_POST['submit'])) {
         // Check if the teacher is allowed to create in the departments he chose
         if ($deps_changed and !$deps_valid) {
             Session::Messages($langCreateCourseNotAllowedNode, 'alert-danger');
-            redirect_to_home_page("modules/course_info/?course=$course_code");
+            redirect_to_home_page("modules/course_info/index.php?course=$course_code");
         } else {
             Database::get()->query("UPDATE course
                             SET title = ?s,

@@ -4148,7 +4148,7 @@ function warnCourseInvalidDepartment($prompt=false) {
             LIMIT 1", $course_id)) {
         if ($prompt) {
             $message = sprintf($langCourseInvalidDepartment . ' ' . $langCourseInvalidDepartmentPrompt,
-                "<a href='{$urlAppend}modules/course_info/?course=$course_code'>", '</a>');
+                "<a href='{$urlAppend}modules/course_info/index.php?course=$course_code'>", '</a>');
         } else {
             $message = $langCourseInvalidDepartment;
         }

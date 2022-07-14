@@ -39,7 +39,7 @@
                         <div class='pull-left h4'>{{ trans('langDescription') }}</div>{!! $edit_link !!}
                         <ul class="course-title-actions clearfix pull-right list-inline">
                             @if ($is_course_admin)
-                                <li class="access pull-right"><a href="{{$urlAppend}}modules/course_info/?course={{$course_code}}" style="color: #23527C;"><span class="fa fa-wrench fa-fw" data-toggle="tooltip" data-placement="top" title='{{trans('langCourseInfo')}}'></span></a></li>
+                                <li class="access pull-right"><a href="{{$urlAppend}}modules/course_info/index.php?course={{$course_code}}" style="color: #23527C;"><span class="fa fa-wrench fa-fw" data-toggle="tooltip" data-placement="top" title='{{trans('langCourseInfo')}}'></span></a></li>
                             @endif
                             <li class="access pull-right">
                                 <a href='javascript:void(0);'>{!! course_access_icon($visible) !!}</a>
@@ -254,7 +254,7 @@
                         </div>
                         <div class='panel-footer clearfix'>
                             <div class='pull-right'>
-                                <a href='{{ $urlAppend }}modules/announcements/?course={{ $course_code}}'>
+                                <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code}}'>
                                     <small>{{ trans('langMore') }}&hellip;</small>
                                 </a>
                             </div>

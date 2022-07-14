@@ -26,7 +26,7 @@ $require_current_course = true;
 require_once '../../include/baseTheme.php';
 require_once 'classes/H5PHubUpdater.php';
 
-$backUrl = $urlAppend . 'modules/h5p/?course=' . $course_code;
+$backUrl = $urlAppend . 'modules/h5p/index.php?course=' . $course_code;
 
 $tool_content .= action_bar(array(
     array('title' => $langBack,

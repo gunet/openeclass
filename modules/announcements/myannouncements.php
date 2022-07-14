@@ -51,7 +51,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $data['aaData'][] = array(
                 '0' => "<div class='table_td'>
                         <div class='table_td_header clearfix'>
-                            <a href='" . $urlAppend . "modules/announcements/?course=" . $myrow->code . "&an_id=" . $myrow->id . "'>" . standard_text_escape($myrow->title) . "</a>
+                            <a href='" . $urlAppend . "modules/announcements/index.php?course=" . $myrow->code . "&an_id=" . $myrow->id . "'>" . standard_text_escape($myrow->title) . "</a>
                         </div>
                         <small class='text-grey'>".q(ellipsize($myrow->course_title, 80))."</small>
                         <div class='table_td_body' data-id='$myrow->id'>" . standard_text_escape($myrow->content) . "</div>

@@ -143,11 +143,11 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
             $content_type = $langLink;
             $content = "<a href='" . $urlServer . "modules/link/go.php?course=".course_id_to_code($cid)."&amp;id=$rid&amp;url=" .
                 urlencode($rcontent) . "'>" . q($link_title) . "</a>";
-            $url = $urlServer."modules/link/?course=".course_id_to_code($cid);
+            $url = $urlServer."modules/link/index.php?course=".course_id_to_code($cid);
         } elseif ($rtype == 'wallpost') {
             $content_type = $langWallPost;
             $content = nl2br(standard_text_escape($rcontent));
-            $url = $urlServer."modules/wall/?course=".course_id_to_code($cid)."&amp;showPost=".$rid;
+            $url = $urlServer."modules/wall/index.php?course=".course_id_to_code($cid)."&amp;showPost=".$rid;
         }
         
         $v = Database::get()->querySingle("SELECT visible FROM course_module

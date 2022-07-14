@@ -202,7 +202,7 @@ function doArchive($course_id, $course_code) {
     $zip = new ZipArchive;
     if ($zip->open($zipfile, ZipArchive::CREATE) !== true) {
         Session::Messages($langGeneralError, 'alert-danger');
-        redirect_to_home_page('modules/course_info/?course=' . $course_code);
+        redirect_to_home_page('modules/course_info/index.php?course=' . $course_code);
     }
     $result = $zip->addGlob($archivedir . '/*', GLOB_NOSORT, [
             'remove_path' => "$webDir/courses/archive/$_SESSION[csrf_token]" ]) &&

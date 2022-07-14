@@ -28,7 +28,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 
 if (get_config('course_guest') == 'off') {
-    redirect_to_home_page('modules/user/?course=' . $course_code);
+    redirect_to_home_page('modules/user/index.php?course=' . $course_code);
 }
 
 $toolName = $langUsers;
@@ -81,7 +81,7 @@ if (isset($_POST['submit'])) {
         Session::flash('message',$langGuestWarnEmptyPassword); 
         Session::flash('alert-class', 'alert-warning');
     }
-    redirect_to_home_page("modules/user/?course=$course_code");
+    redirect_to_home_page("modules/user/index.php?course=$course_code");
 } else {
     $guest_info = guestinfo($course_id);
     if ($guest_info) {

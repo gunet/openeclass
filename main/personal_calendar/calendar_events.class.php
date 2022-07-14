@@ -47,13 +47,13 @@ class Calendar_Events {
     /** @staticvar array of urls to form links from events in calendar
     */
     private static $event_type_url = array(
-            'personal' => 'main/personal_calendar/?id=thisid',
-            'admin' => 'main/personal_calendar/?admin=1&id=thisid',
+            'personal' => 'main/personal_calendar/index.php?id=thisid',
+            'admin' => 'main/personal_calendar/index.php?admin=1&id=thisid',
             'assignment' => 'modules/work/index.php?id=thisid&course=thiscourse',
             'exercise' => 'modules/exercise/exercise_submit.php?course=thiscourse&exerciseId=thisid',
-            'agenda' => 'modules/agenda/?id=thisid&course=thiscourse',
-            'teleconference' => 'modules/tc/?course=thiscourse',
-            'request' => 'modules/request/?course=thiscourse&id=thisid');
+            'agenda' => 'modules/agenda/index.php?id=thisid&course=thiscourse',
+            'teleconference' => 'modules/tc/index.php?course=thiscourse',
+            'request' => 'modules/request/index.php?course=thiscourse&id=thisid');
 
     /** @staticvar object with user calendar settings
     */
