@@ -41,7 +41,7 @@ $tool_content .= action_bar(array(
                                       'button-class' => 'btn-secondary')
                             ),false);
 if ($numOfAnnouncements > 0) {
-    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'><div class='panel shadow-lg p-3 mb-5 bg-body rounded bg-primary'><div class='panel-body'>";
+    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'><div class='panel form-wrapper shadow-sm p-3 rounded'><div class='panel-body'>";
     for ($i = 0; $i < $numOfAnnouncements; $i++) {
         $tool_content .= "<div class='single_announcement'><div class='announcement-title control-label-notes'>" . q($announceArr[$i]->title) . "</div><hr>
 		<span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . " -</span>

@@ -6037,3 +6037,4 @@ $langHourAgo = '%d ώρα πριν';
 $langHoursAgo = '%d ώρες πριν';
 $langShowClosedRequests = 'Εμφάνιση κλειστών αιτημάτων';
 $langChangeDescription = 'Περιγραφή αλλαγών';
+$lang_pass_submit = 'Αποστολή';

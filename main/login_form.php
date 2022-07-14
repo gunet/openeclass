@@ -53,24 +53,25 @@ foreach ($q as $l) {
         $authLink[] = array(true, "
           <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
             $next
-            <div class='form-group'>
+            <div class='form-group mt-3'>
               <div class='col-12 ps-2 pe-2'>
                 <input class='form-control' name='uname' placeholder='$langUsername'$userValue autofocus>
               </div>
             </div>
-            <div class='form-group'>
+            <div class='form-group mt-3'>
               <div class='col-12 ps-2 pe-2'>
                 <input class='form-control' name='pass' type='password' placeholder='$langPass'>
               </div>
             </div>
-            <div class='form-group'>
-              <div class='col-3 ps-2'>
-                <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+            <div class='form-group mt-3'>
+              <div class='row p-2'>
+                <div class='col-3 ps-3'>
+                  <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+                </div>
+                <div class='col-9 text-end pt-3'>
+                  <a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
+                </div>
               </div>
-              <div class='row p-2'></div>
-              <div class='col-9 ps-2 text-right'>
-                <a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
-             </div>
            </div>
             </form>", $authTitle);
     }
@@ -84,14 +85,14 @@ $tool_content .= action_bar(array(
           'url' => "$urlServer",
           'icon' => 'fa-reply',
           'level' => 'primary-label',
-          'button-class' => 'btn-default')), false);
+          'button-class' => 'btn-secondary')), false);
 $tool_content .= "<div class='login-page'>
                     <div class='row'>";
 foreach ($authLink as $authInfo) {
     $tool_content .= "
       <div class='col-sm-$columns'>
-        <div class='panel panel-default '>
-          <div class='panel-heading'><span>" . q($authInfo[2]) . "</span></div>
+        <div class='panel panel-default panel_default'>
+          <div class='panel-heading notes_thead text-white p-3 fs-6'><span>" . q($authInfo[2]) . "</span></div>
             <div class='panel-body login-page-option'>" .
               $authInfo[1];
     if (Session::has('login_error') and $authInfo[0]) {

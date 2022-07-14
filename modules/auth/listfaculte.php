@@ -53,21 +53,18 @@ if (count($roots) <= 0) {
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
+                                      'button-class' => 'btn-secondary')
                             ),false);
     
     $tool_content .= "
-    <div class='row'>
-        <div class='col-xs-12'>
+        <div class='col-sm-12'>
             <div class='list-group'>
                 <a href='#' class='list-group-item list-header'><b>$langFaculty</b></a>
             ";
     $tool_content .= $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true), $subtrees);
     $tool_content .= "
             </div>
-        </div>
-    </div>
-            ";
+        </div>";
 }
 
 

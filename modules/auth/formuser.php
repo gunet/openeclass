@@ -43,18 +43,18 @@ $display_captcha = get_config("display_captcha") && function_exists('imagettfbbo
 
 // security check
 if (!$user_registration) {
-    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langForbidden</div></div>";
     draw($tool_content, 0);
     exit;
 }
 if ($prof and !$eclass_prof_reg) {
-    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langForbidden</div></div>";
     draw($tool_content, 0);
     exit;
 }
 
 if (!$prof and $eclass_stud_reg != 1) {
-    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langForbidden</div></div>";
     draw($tool_content, 0);
     exit;
 }
@@ -193,11 +193,11 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
 
 if (count($registration_errors)) {
         // errors exist (from hybridauth) - show message
-        $tool_content .= "<div class='alert alert-danger'>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>";
         foreach ($registration_errors as $error) {
             $tool_content .= " $error";
         }
-        $tool_content .= "</div>";
+        $tool_content .= "</div></div>";
         $provider_name = '';
         $provider_id ='';
         $_GET['auth'] = '';
@@ -205,7 +205,7 @@ if (count($registration_errors)) {
 
 if (isset($_POST['submit'])) {
     foreach ($errors as $message) {
-        $tool_content .= "<div class='alert alert-warning'>$message</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$message</div></div>";
     }
 }
 
@@ -275,12 +275,12 @@ if ($all_set) {
 
         $emailAdministrator = get_config('email_sender');
         if (!send_mail_multipart($siteName, $emailAdministrator, '', $emailhelpdesk, $subject, $plainMailMessage, $MailMessage)) {
-            $tool_content .= "<div class='alert alert-warning'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div></div>";
         }
 
         // User Message
-        $tool_content .= "<div class='alert alert-success'>$success</div>";
-        $tool_content .= "<div class='alert alert-info'>$infoprof<br /><br />$langClick <a href='$urlServer'>$langHere</a> $langBackPage</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$success</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$infoprof<br /><br />$langClick <a href='$urlServer'>$langHere</a> $langBackPage</div></div>";
     }
     else {
         // email needs verification -> mail user
@@ -319,8 +319,8 @@ if ($all_set) {
         }
 
         // User Message
-        $tool_content .= "<div class='alert alert-success'>$langMailVerificationSuccess $langMailVerificationSuccess2</div>
-                          <div class='alert alert-info'>$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langMailVerificationSuccess $langMailVerificationSuccess2</div></div>
+        <div class='col-sm-12'><div class='alert alert-info'>$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div></div>";
     }
     draw($tool_content, 0);
     exit();
@@ -353,9 +353,9 @@ if ($all_set) {
     <div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?auth=$auth_id' method='post'>
         <input type='hidden' name='p' value='$prof'>
-        <div class='form-group'>
-            <label for='Name' class='col-sm-2 control-label'>$langName:</label>
-            <div class='col-sm-10'>";
+        <div class='form-group mt-3'>
+            <label for='Name' class='col-sm-6 control-label-notes'>$langName:</label>
+            <div class='col-sm-12'>";
 
         if ($user_data) {
             $user_data_first_name = explode(' ', $user_data->firstName);
@@ -367,9 +367,9 @@ if ($all_set) {
         }
         $tool_content .= "</div>
         </div>
-        <div class='form-group'>
-            <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
-            <div class='col-sm-10'>";
+        <div class='form-group mt-3'>
+            <label for='SurName' class='col-sm-6 control-label-notes'>$langSurname:</label>
+            <div class='col-sm-12'>";
         if ($user_data) {
             $user_data_first_name = explode(' ', $user_data->firstName);
             $surname = $user_data_first_name[1];
@@ -381,9 +381,9 @@ if ($all_set) {
 
         $tool_content .= "</div>
         </div>
-        <div class='form-group'>
-            <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>
-            <div class='col-sm-10'>";
+        <div class='form-group mt-3'>
+            <label for='UserName' class='col-sm-6 control-label-notes'>$langUsername:</label>
+            <div class='col-sm-12'>";
         if ($user_data) {
             $username = str_replace(' ', '', $user_data->displayName);
             $tool_content .= "<p class='form-control-static'>" . q($username) . "</p>";
@@ -394,9 +394,9 @@ if ($all_set) {
 
         $tool_content .= "</div>
         </div>
-        <div class='form-group'>
-            <label for='ProfEmail' class='col-sm-2 control-label'>$langProfEmail:</label>
-            <div class='col-sm-10'>";
+        <div class='form-group mt-3'>
+            <label for='ProfEmail' class='col-sm-6 control-label-notes'>$langProfEmail:</label>
+            <div class='col-sm-12'>";
             if ($user_data) {
                 $usermail = q($user_data->email);
             } else {
@@ -405,9 +405,9 @@ if ($all_set) {
             $tool_content .= "<input class='form-control' type='text' name='usermail' value='$usermail' size='30' maxlength='100' placeholder='$langCompulsory'>";
             $tool_content .= "</div>
         </div>
-        <div class='form-group'>
-            <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
-            <div class='col-sm-10'>";
+        <div class='form-group mt-3'>
+            <label for='UserPhone' class='col-sm-6 control-label-notes'>$langPhone:</label>
+            <div class='col-sm-12'>";
             if ($user_data) {
                 $userphone = q($user_data->phone);
             } else {
@@ -417,29 +417,29 @@ if ($all_set) {
             </div>
         </div>";
     if (!$prof) {
-        $tool_content .= "<div class='form-group'>
-                <label for='ProfEmail' class='col-sm-2 control-label'>$langAm:</label>
-                <div class='col-sm-10'>
+        $tool_content .= "<div class='form-group mt-3'>
+                <label for='ProfEmail' class='col-sm-6 control-label-notes'>$langAm:</label>
+                <div class='col-sm-12'>
                     <input class='form-control' type='text' name='am' value='" . q($am) . "' size='20' maxlength='20' placeholder='$am_text'>
                 </div>
             </div>";
     }
-    $tool_content .= "<div class='form-group'>
-            <label for='ProfComments' class='col-sm-2 control-label'>$langComments:</label>
-                <div class='col-sm-10'>
+    $tool_content .= "<div class='form-group mt-3'>
+            <label for='ProfComments' class='col-sm-6 control-label-notes'>$langComments:</label>
+                <div class='col-sm-12'>
                     <textarea class='form-control' name='usercomment' cols='30' rows='4' placeholder='$profreason'>" . q($usercomment) . "</textarea>
                 </div>
             </div>
-            <div class='form-group'>
-                <label for='ProfComments' class='col-sm-2 control-label'>$langFaculty:</label>
-            <div class='col-sm-10'>";
+            <div class='form-group mt-3'>
+                <label for='ProfComments' class='col-sm-6 control-label-notes'>$langFaculty:</label>
+            <div class='col-sm-12'>";
     list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
     $head_content .= $js;
     $tool_content .= $html;
     $tool_content .= "</div></div>";
-    $tool_content .= "<div class='form-group'>
-              <label for='UserLang' class='col-sm-2 control-label'>$langLanguage:</label>
-              <div class='col-sm-10'>";
+    $tool_content .= "<div class='form-group mt-3'>
+              <label for='UserLang' class='col-sm-6 control-label-notes'>$langLanguage:</label>
+              <div class='col-sm-12'>";
     $tool_content .= lang_select_options('localize', "class='form-control'");
     $tool_content .= "</div></div>";
     if ($display_captcha) {
@@ -448,18 +448,18 @@ if ($all_set) {
             'securimage_path' => $urlAppend . 'vendor/dapphp/securimage',
             'input_text' => '',
         ]);
-        $tool_content .= "<div class='form-group'>
-                   <label for='captcha_code' class='col-sm-2 control-label'>$langCaptcha:</label>
-                   <div class='col-sm-10'>$captchaHtml</div>
+        $tool_content .= "<div class='form-group mt-3'>
+                   <label for='captcha_code' class='col-sm-6 control-label-notes'>$langCaptcha:</label>
+                   <div class='col-sm-12'>$captchaHtml</div>
               </div>";
     }
 
     // check if provider_id from an authenticated user and
     // a valid provider name are set so as to show the relevant form
     if ($provider_name and $provider_id) {
-        $tool_content .= "<div class='form-group'>
-          <label for='UserLang' class='col-sm-2 control-label'>$langProviderConnectWith:</label>
-          <div class='col-sm-10'><p class='form-control-static'>
+        $tool_content .= "<div class='form-group mt-3'>
+          <label for='UserLang' class='col-sm-6 control-label-notes'>$langProviderConnectWith:</label>
+          <div class='col-sm-12'><p class='form-control-static'>
             <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "' />&nbsp;" . q($authFullName[$auth_id]) . "<br /><small>$langProviderConnectWithTooltip</small></p>
           </div>
           <div class='col-sm-offset-2 col-sm-10'>
@@ -470,11 +470,11 @@ if ($all_set) {
     }
     // add custom profile fields
     $tool_content .= render_profile_fields_form(array('origin' => 'teacher_register'));
-    $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
+    $tool_content .= "<div class='form-group mt-3'><div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
                     </div></div>
       </form>
-      </div>";
+      </div></div>";
 }
 
 draw($tool_content, 0, null, $head_content);

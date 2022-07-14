@@ -95,19 +95,19 @@ function render_profile_fields_form($context, $valitron = false) {
 
                 if ($valitron) {
                     if (Session::hasError('cpf_'.$f->shortname)) {
-                        $form_class = 'form-group has-error';
+                        $form_class = 'form-group has-error mt-3';
                         $help_block = '<span class="help-block">' . Session::getError('cpf_'.$f->shortname) . '</span>';
                     } else {
-                        $form_class = 'form-group';
+                        $form_class = 'form-group mt-3';
                         $help_block = '';
                     }
                 } else {
-                    $form_class = 'form-group';
+                    $form_class = 'form-group mt-3';
                     $help_block = '';
                 }
                 $return_string .= '<div class="'.$form_class.'">';
-                $return_string .= '<label class="col-sm-2 control-label" for="'.$f->shortname.'">'.q($f->name).'</label>';
-                $return_string .= '<div class="col-sm-10">';
+                $return_string .= '<label class="col-sm-6 control-label-notes" for="'.$f->shortname.'">'.q($f->name).'</label>';
+                $return_string .= '<div class="col-sm-12">';
 
                 //get data to prefill fields
                 if ($context['origin'] == 'edit_profile' || $context['origin'] == 'admin_edit_profile') {

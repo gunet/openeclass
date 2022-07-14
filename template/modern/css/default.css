@@ -1532,6 +1532,9 @@
   .fieldset-eportfolio{
       border:2px solid rgba(0,63,135,0.1) ;
   }
+  .panel_default{
+    border:2px solid rgba(0,63,135,0.1) ;
+  }
   .inner-heading.notes_thead{
      color:white;
      padding-top:10px;

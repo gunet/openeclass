@@ -89,7 +89,7 @@ if (isset($_GET['an_id'])) {
             'url' => $_SERVER['SCRIPT_NAME'],
             'icon' => 'fa-reply',
             'level' => 'primary-label',
-            'button-class' => 'btn-default']
+            'button-class' => 'btn-secondary']
     ],false);
 
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAnnouncements);
@@ -112,7 +112,7 @@ if (isset($_GET['an_id'])) {
             'url' => $urlServer,
             'icon' => 'fa-reply',
             'level' => 'primary-label',
-            'button-class' => 'btn-default']
+            'button-class' => 'btn-secondary']
     ],false);
 
     $head_content .= "<script type='text/javascript'>
