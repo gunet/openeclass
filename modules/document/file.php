@@ -46,6 +46,12 @@ if (isset($_SESSION['FILE_PHP__LP_MODE']) && $_SESSION['FILE_PHP__LP_MODE'] == t
     $is_in_lpmode = true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//na rwtisw an epitrepetai ayto poy ekana poy metetrepsa to file.php? se file.php/ afou allaksa to fileDiplayLib.php
+$_SERVER['REQUEST_URI'] = str_replace("file.php?", "file.php/", $_SERVER['REQUEST_URI']);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 $uri = preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI']);
 
 // If URI contains backslashes, redirect to forward slashes
@@ -57,6 +63,16 @@ if (stripos($uri, '%5c') !== false) {
 
 $uri = (!$is_in_playmode) ? str_replace('//', chr(1), preg_replace('/^.*file\.php\??\//', '', $uri)) : str_replace('//', chr(1), preg_replace('/^.*play\.php\??\//', '', $uri));
 $path_components = explode('/', $uri);
+
+$count = 0;
+foreach($path_components as $p){
+    if($count == 0){
+        $course_code = $p;
+    }
+    $count++;
+}
+
+
 
 // temporary course change
 $cinfo = addslashes(array_shift($path_components));
@@ -105,7 +121,7 @@ if (defined('MY_DOCUMENTS')) {
     // temporary change, uid is used to get the full path in doc_init
     $uid = $mydocs_uid;
 }
-
+$course_id = course_code_to_id($course_code);
 doc_init();
 $uid = $session->user_id;
 

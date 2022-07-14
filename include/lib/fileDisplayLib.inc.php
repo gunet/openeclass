@@ -191,7 +191,7 @@ function file_url($path, $filename = null, $courseCode = null) {
             $gid = '';
         }
         return htmlspecialchars($urlServer .
-                "modules/document/file.php/$courseCode$gid" .
+                "modules/document/file.php?$courseCode$gid" .
                 public_file_path($path, $filename), ENT_QUOTES);
     }
 }
