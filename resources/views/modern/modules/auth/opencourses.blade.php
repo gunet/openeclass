@@ -85,11 +85,11 @@
                     @endif
 
                     @if (isset($buildRoots))
-                        {{ $buildRoots }}
+                        {!! $buildRoots !!}
                     @endif
 
                     
-                    <div class='col-12'>
+                    <div class='col-12 mt-4'>
                         <ul class='list-group'>
                             <li class='list-group-item list-header'>{!! trans('langFaculty') !!}: <strong>{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</strong>
                             {!! $childHTML !!}
