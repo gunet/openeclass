@@ -723,7 +723,7 @@ if ($questionList) {
         showQuestion($question, $exerciseResult, $questionNumber);
     }
 } else {
-    $tool_content .= "<div class='alert alert-warning'>$langNoQuestion</div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoQuestion</div></div>";
     if (isset($_REQUEST['unit'])) {
         $backlink = "index.php?course=$course_code&amp;id=$_REQUEST[unit]";
     } else {

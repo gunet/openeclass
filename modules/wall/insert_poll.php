@@ -46,8 +46,8 @@ function list_polls($id = NULL) {
 
         $ret_string .= "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-left'>&nbsp;$langQuestionnaire</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "<th class='text-white text-left'>&nbsp;$langQuestionnaire</th>" .
+                "<th style='width:20px;' class='text-white text-center'>$langChoice</th>" .
                 "</tr>";
         foreach ($pollinfo as $entry) {
             $checked = '';
