@@ -5,28 +5,6 @@ $(document).ready(function(){
         localStorage.clear();
     })
 
-    /////////////////////////change Gui of selected language////////////////////////
-
-    $(".GreekButton").on('click',function(){
-        localStorage.setItem('GreekLanguage',1);
-        localStorage.setItem('EnglishLanguage',0);
-    })
-    $(".EnglishButton").on('click',function(){
-        localStorage.setItem('EnglishLanguage',1);
-        localStorage.setItem('GreekLanguage',0);
-    })
-    if(localStorage.getItem('GreekLanguage') == 1){
-        $(".GreekButton").css('background-color','blue');
-        $(".GreekButton").css('color','white');
-        $(".EnglishButton").css('background-color','transparent');
-        $(".EnglishButton").css('color','white');
-    }
-    if(localStorage.getItem('EnglishLanguage') == 1){
-        $(".EnglishButton").css('background-color','blue');
-        $(".EnglishButton").css('color','white');
-        $(".GreekButton").css('background-color','transparent');
-        $(".GreekButton").css('color','white');
-    }
     //////////////////////////////////////////////////////////////////////////////
 
     $('#getTopicButton').on('click',function(){
@@ -42,7 +20,7 @@ $(document).ready(function(){
 		html: true,
 		sanitize: false
 	});
-
+	
 	$('.view-style > span').on('click',function(){
 		$('.view-style > span').removeClass('active');
 		if($(this).hasClass('list-style')){
@@ -52,7 +30,7 @@ $(document).ready(function(){
 		}
 		$(this).addClass('active');
 	})
-
+	
 	$('.user-details-trigger a').on('click',function()
 	{
 		var headertext = $('.user-details > h2').text();
@@ -61,7 +39,7 @@ $(document).ready(function(){
 		$(this).text( text == "ΠΕΡΙΣΣΟΤΕΡΕΣ ΠΛΗΡΟΦΟΡΙΕΣ" ? "ΣΥΝΟΠΤΙΚΟ ΠΡΟΦΙΛ" : "ΠΕΡΙΣΣΟΤΕΡΕΣ ΠΛΗΡΟΦΟΡΙΕΣ");
 		$('.user-details').toggleClass('expanded');
 	})
-
+	
 	$('.user-menu-trigger a').on('click',function(){
 		var text = $('.user-menu-trigger a').text();
 		$(this).text( text == "ΠΕΡΙΣΣΟΤΕΡΕΣ ΕΠΙΛΟΓΕΣ" ? "ΛΙΓΟΤΕΡΕΣ ΕΠΙΛΟΓΕΣ" : "ΠΕΡΙΣΣΟΤΕΡΕΣ ΕΠΙΛΟΓΕΣ");
@@ -95,7 +73,7 @@ $(document).ready(function(){
 			$('.button_collapse_main_section .fas.fa-chevron-down').show();
 			$('.button_collapse_main_section .fas.fa-chevron-up').hide();
 		}
-
+        
 	})
 
 
@@ -138,7 +116,7 @@ $(document).ready(function(){
         }
     })
 
-
+    
     /////////////////////////////////////////////////// initial datatable /////////////////////////////////////////////////
 
 	$('#cources-bars-button2').trigger('click');
@@ -158,12 +136,12 @@ $(document).ready(function(){
 	act_confirm();
     tooltip_init();
     popover_init();
-	open_document();
+	//open_document();
     truncate_toggle('.more_less_btn', '#truncated', '#not_truncated', '#descr_content');
     validator_rubric();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    
 
 
 });
@@ -176,8 +154,8 @@ $(document).ready(function(){
 
 
 function switch_user_menu_toggle() {
-
-	if( $('.user-menu-collapse-more').is(":visible") )
+		
+	if( $('.user-menu-collapse-more').is(":visible") ) 
 	{
 		$('.user-menu-collapse-more').hide();
 		$('.user-menu-collapse-less').show();
@@ -188,8 +166,8 @@ function switch_user_menu_toggle() {
 }
 
 function switch_user_details_toggle() {
-
-	if( $('.user-details-collapse-more').is(":visible") )
+		
+	if( $('.user-details-collapse-more').is(":visible") ) 
 	{
 		$('.user-details-collapse-more').hide();
 		$('.user-details-collapse-less').show();
@@ -199,9 +177,9 @@ function switch_user_details_toggle() {
 	}
 }
 
-function switch_cources_toggle(id)
+function switch_cources_toggle(id) 
 {
-	if( $('#bars-active').is(":visible") )
+	if( $('#bars-active').is(":visible") ) 
 	{
 		$('#bars-active').hide();
 		$('#cources-bars').hide();
@@ -217,14 +195,14 @@ function switch_cources_toggle(id)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-// popover and tooltip with bootbox
+// popover and tooltip with bootbox 
 
 function act_confirm() {
     $('.confirmAction').click(function (e) {
-
-
+	
+	
 		var message = $(this).attr('data-message');
-		var title = $(this).attr('data-title');
+		var title = $(this).attr('data-title'); 
 		var cancel_text = $(this).attr('data-cancel-txt');
 		var action_text = $(this).attr('data-action-txt');
 		var action_btn_class = $(this).attr('data-action-class');
@@ -252,7 +230,7 @@ function act_confirm() {
                     label: action_text,
                     className: action_btn_class,
                     callback: function () {
-                        form.submit();
+                        form.submit(); 
 						//location.href = href;
                     }
                 }
@@ -327,86 +305,86 @@ function truncate_toggle(click_elem, truncated, not_truncated, container_elem){
 }
 
 
-function open_document(){
-    $('.fileModal').click(function (e)
-    {
-        e.preventDefault();
-        var fileURL = $(this).attr('href');
-        var downloadURL = $(this).prev('input').val();
-        var fileTitle = $(this).attr('title');
+// function open_document(){
+//     $('.fileModal').click(function (e)
+//     {
+//         e.preventDefault();
+//         var fileURL = $(this).attr('href');
+//         var downloadURL = $(this).prev('input').val();
+//         var fileTitle = $(this).attr('title');
+       
 
 
+//         if(downloadURL == null){
+//             downloadURL = $(this).attr('data-download');
+//         }
 
-        if(downloadURL == null){
-            downloadURL = $(this).attr('data-download');
-        }
+//         console.log('the fileURL:'+fileURL);
+//         console.log('the downloadURL:'+downloadURL);
 
-        console.log('the fileURL:'+fileURL);
-        console.log('the downloadURL:'+downloadURL);
+//         // BUTTONS declare
+//         var bts = {
+//             download: {
+//                 label: '<span class="fa fa-download"></span> Ληψη',
+//                 className: 'btn-success',
+//                 callback: function (d) {
+//                     window.location = downloadURL;
+//                 }
+//             },
+//             print: {
+//                 label: '<span class="fa fa-print"></span> Εκτυπωση',
+//                 className: 'btn-primary',
+//                 callback: function (d) {
+//                     var iframe = document.getElementById('fileFrame');
+//                     iframe.contentWindow.print();
+//                 }
+//             }
+//         };
+//         if (screenfull.enabled) {
+//             bts.fullscreen = {
+//                 label: '<span class="fa fa-arrows-alt"></span> Πληρης οθονη',
+//                 className: 'btn-primary',
+//                 callback: function() {
+//                     screenfull.request(document.getElementById('fileFrame'));
+//                     return false;
+//                 }
+//             };
+//         }
+//         bts.newtab = {
+//             label: '<span class="fa fa-plus"></span> Νεο παραθυρο',
+//             className: 'btn-primary',
+//             callback: function() {
+//                 window.open(fileURL);
+//                 return false;
+//             }
+//         };
+//         bts.cancel = {
+//             label: 'Ακυρωση',
+//             className: 'btn-secondary'
+//         };
 
-        // BUTTONS declare
-        var bts = {
-            download: {
-                label: '<span class="fa fa-download"></span> Ληψη',
-                className: 'btn-success',
-                callback: function (d) {
-                    window.location = downloadURL;
-                }
-            },
-            print: {
-                label: '<span class="fa fa-print"></span> Εκτυπωση',
-                className: 'btn-primary',
-                callback: function (d) {
-                    var iframe = document.getElementById('fileFrame');
-                    iframe.contentWindow.print();
-                }
-            }
-        };
-        if (screenfull.enabled) {
-            bts.fullscreen = {
-                label: '<span class="fa fa-arrows-alt"></span> Πληρης οθονη',
-                className: 'btn-primary',
-                callback: function() {
-                    screenfull.request(document.getElementById('fileFrame'));
-                    return false;
-                }
-            };
-        }
-        bts.newtab = {
-            label: '<span class="fa fa-plus"></span> Νεο παραθυρο',
-            className: 'btn-primary',
-            callback: function() {
-                window.open(fileURL);
-                return false;
-            }
-        };
-        bts.cancel = {
-            label: 'Ακυρωση',
-            className: 'btn-secondary'
-        };
-
-        bootbox.dialog({
-            size: 'large',
-            title: fileTitle,
-            message: '<div class="row">'+
-                        '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">'+
-                            '<div class="iframe-container" style="height:500px;"><iframe id="fileFrame" src="'+fileURL+'" style="width:100%; height:500px;"></iframe></div>'+
-                        '</div>'+
-                    '</div>',
-            buttons: bts
-        });
-    });
-}
+//         bootbox.dialog({
+//             size: 'large',
+//             title: fileTitle,
+//             message: '<div class="row">'+
+//                         '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">'+
+//                             '<div class="iframe-container" style="height:500px;"><iframe id="fileFrame" src="'+fileURL+'" style="width:100%; height:500px;"></iframe></div>'+
+//                         '</div>'+
+//                     '</div>',
+//             buttons: bts
+//         });
+//     });
+// }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // Validator form in rubric work
 
 function validator_rubric(){
     'use strict'
-
+  
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     var forms = document.querySelectorAll('#rubric_form')
-
+  
     // Loop over them and prevent submission
     Array.prototype.slice.call(forms)
       .forEach(function (form) {
@@ -415,7 +393,7 @@ function validator_rubric(){
             event.preventDefault()
             event.stopPropagation()
           }
-
+  
           form.classList.add('was-validated')
         }, false)
       })

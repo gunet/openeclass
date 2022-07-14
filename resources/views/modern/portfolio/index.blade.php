@@ -30,8 +30,7 @@
 
                     <div class="row">
 
-                        <div class="col-xl-4 col-lg-6 col-md-7 col-sm-12 col-12">
-
+                        <div class="col-xl-4 col-lg-6 col-md-7 col-sm-12 col-12">                           
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
@@ -52,11 +51,10 @@
                                     <p class='text-secondary text-xl-center text-lg-start text-center mt-3 ps-3 pe-3'>{{ trans('langSumCoursesSupport') }}:  <strong class='text-primary'>{{ $teacher_courses_count }}</strong></p>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-
                                     <p class='text-secondary text-xl-center text-lg-start text-center mt-3 ps-3 pe-lg-0 pe-3'>{{ trans('langProfileLastVisit') }}:
                                        <strong class='text-primary text-xl-center text-lg-start text-center'>{{ claro_format_locale_date(trans('dateFormatLong'), strtotime($lastVisit->when)) }}</strong>
-                                    </p>
-
+                                    </p> 
+                                    
                                 </div>
                             </div>
                         </div>
@@ -92,7 +90,7 @@
                         </div>
 
                         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
-
+                            
                                 <div class="row">
                                     <div class="container-fluid">
                                         <div class="shadow-sm bg-body rounded bg-primary">
@@ -104,9 +102,7 @@
                                                 <p class='text-lg-start text-start text-secondary'>{{ trans('langSumCoursesSupport') }}:  <strong class='text-primary'>{{ $teacher_courses_count }}</strong></p>
                                             </div>
                                             <div class="col-lg-6 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-
-                                                <p class='text-lg-start text-start text-secondary'>{{ trans('langProfileLastVisit') }}:
-
+                                                <p class='text-lg-start text-start text-secondary'>{{ trans('langProfileLastVisit') }}: 
                                                     <strong class='text-primary'>{{ claro_format_locale_date(trans('dateFormatLong'), strtotime($lastVisit->when)) }}</strong>
                                                 </p>
                                             </div>
@@ -131,12 +127,12 @@
                                             <div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
                                                 <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langFaculty') }}: <span class='text-secondary'>-</span></p>
                                             </div>
-
+                                    
                                             <div class="col-xl-5 col-lg-6 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
                                                 <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{trans('langPhone')}}: <span class='text-secondary'>{{ $userdata->phone }}</span></p>
                                             </div>
                                             <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
-
+                                                
                                                 <p id="info" class="text-lg-start text-start text-primary font-weight-bold">{{ trans('langAm') }}: <span class='text-secondary'>{{ $userdata->am }}</span></p>
                                             </div>
                                             <div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
@@ -170,6 +166,7 @@
                                     </div>
                                 </div>
 
+                            
                         </div>
 
                     </div>
@@ -181,14 +178,14 @@
 
 <div class="container-fluid main-container cources-section mt-3">
     <div class="row">
-        <div class="col-12 col-xl-8 user-details">
+        <div class="col-12 col-lg-8 user-details">
             <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-3 pb-5">
-
-                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-5 col-sm-8 col-8">
+                
+                <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-8 col-8">
                     <span class="text-primary fs-4">{{ trans('langMyCoursesSide') }}</span>
                 </div>
 
-                <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-7 col-sm-4 col-4">
+                <div class="col-xxl-7 col-xl-7 col-lg-7 col-md-7 col-sm-4 col-4">
                     <div id="bars-active" class='float-end mt-0' style="display:flex;">
                         <div id="cources-bars-button"
                             class="collapse-cources-button text-primary" >
@@ -211,10 +208,12 @@
                             <span class="grid-style"><i class="fas fa-custom-size fa-th-large"></i></span>
                         </div>
                     </div>
-
+                    
                 </div>
 
                 <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><hr class='text-primary mt-0 fs-1'></div>
+                    
+                
 
                 {{-- Courses List --}}
 
@@ -243,10 +242,9 @@
                     @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'bars', 'cource_pages' => $cource_pages])
                         --}}
 
-                    <div class='d-flex justify-content-md-end justify-content-center'>
+                    <div class='d-flex justify-content-md-end justify-content-center'> 
                         <a class="btn btn-xs btn-primary float-md-end text-center mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
                     </div>
-
                 </div>
 
                 <div id="cources-pics" class="container-fluid cources-paging" style="display:none">
@@ -259,7 +257,7 @@
                                     <a href="{{$urlServer}}courses/{{$cource->code}}/index.php">
                                     <picture>
                                         @if($cource->course_image == NULL)
-                                            <img class="imageCourse" src="{{ $urlAppend }}template/modern/images/no-image-found-360x250.png" alt="{{ $cource->course_image }}" /></a>
+                                            <img class="imageCourse" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $cource->course_image }}" /></a>
                                         @else
                                             <img class="imageCourse" src="{{$urlAppend}}courses/{{$cource->code}}/image/{{$cource->course_image}}" alt="{{ $cource->course_image }}" /></a>
                                         @endif
@@ -270,7 +268,6 @@
                                     <span class="lesson-id fs-5 text-secondary">({{ $cource->code }})</span>
                                 </h3>
                                 <div class="lesson-professor fs-5 text-secondary">{{ $cource->professor }}</div>
-
                             </div>
                             <hr>
                         </div>
@@ -286,37 +283,36 @@
             </div>
         </div>
 
-        <div class="col-12 col-xl-4">
+        <div class="col-12 col-lg-4 calendar_announce_message_col mt-lg-0 mt-3 ps-lg-2 pe-lg-2 pt-lg-0 pb-lg-0 ps-md-5 pe-md-5 pt-md-3 pb-md-5 ps-3 pe-3 pt-3 pb-5">
 
 
-            <div class="container-fluid container_fluid_calendar bg-white ms-xl-2 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
+            <div class="container-fluid container_fluid_calendar container_fluid_calendar_portfolio bg-white ms-lg-2 mt-lg-0 mt-md-4 mt-4">
                 @include('portfolio.portfolio-calendar')
             </div>
 
 
-            <div class="container-fluid user-announcements-portfolio bg-white mt-xl-3 ms-xl-2 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
-                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-3 pb-5">
+            <div class="container-fluid user-announcements-portfolio bg-white mt-lg-3 ms-lg-2 mt-lg-0 mt-md-4 mt-4">
+                <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-5">
 
-                    <h5 class="text-md-start text-center text-primary">{{ trans('langMyPersoAnnouncements') }}</h5><hr class='text-primary'>
-                    <div class="container-fluid">
+                    <span class="text-center control-label-notes">{{ trans('langMyPersoAnnouncements') }}</span><hr class='text-primary mt-3'>
+                    <div class="container-fluid text-md-center">
                         {!! $user_announcements !!}
                     </div>
 
-                    <div class="container-fluid mt-3">
+                    <div class="container-fluid mt-3 text-center">
                         <hr class='text-primary'>
-                        <a href="{{$urlAppend}}modules/announcements/myannouncements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span></a>
+                        <a class='text-primary fs-6' href="{{$urlAppend}}modules/announcements/myannouncements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span></a>
                     </div>
 
                 </div>
             </div>
 
 
-            <div class="container-fluid user-messages-portfolio bg-white mt-xl-3 ms-xl-2 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
-                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-3 pb-5">
+            <div class="container-fluid user-messages-portfolio bg-white mt-lg-3 ms-lg-2 mt-lg-0 mt-md-4 mt-4">
+                <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-5">
 
-                    <h5 class="text-md-start text-center text-primary">{{ trans('langMyPersoMessages') }}</h5><hr class='text-primary'>
-                    <div class="container-fluid">
-
+                    <span class="text-center control-label-notes">{{ trans('langMyPersoMessages') }}</span><hr class='text-primary mt-3'>
+                    <div class="container-fluid text-md-center"> 
                         <ul class='tablelist pt-2 pb-2 ps-2 pe-2'>
                             @if(!empty($user_messages))
                                 {!! $user_messages !!}
@@ -328,9 +324,9 @@
                         </ul>
                     </div>
 
-                    <div class="container-fluid mt-3">
+                    <div class="container-fluid mt-3 text-center">
                         <hr class='text-primary'>
-                        <a href="{{$urlAppend}}modules/message/index.php">{{ trans('langAllMessages') }} <span class='fa fa-arrow-right'></span></a>
+                        <a class='text-primary fs-6' href="{{$urlAppend}}modules/message/index.php">{{ trans('langAllMessages') }} <span class='fa fa-arrow-right'></span></a>
                     </div>
 
                 </div>
@@ -343,7 +339,7 @@
 
 </div>
 
-<script>
+<script>  
     var user_cources = <?php echo json_encode($cources); ?>;
     var user_cource_pages = <?php echo $cource_pages; ?>;
 </script>

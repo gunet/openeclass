@@ -1,7 +1,3 @@
-<?php //print_a($array_exercises_editor); ?>
-<?php //print_a($array_all_exercises); ?>
-<?php //print_a($array_exercises_student); ?>
-
 @extends('layouts.default')
 
 @section('content')
@@ -9,18 +5,18 @@
 <div class="row back-navbar-eclass"></div>
 <div class="row back-navbar-eclass2"></div>
 
-    <script type="text/javascript" src="{{ $urlAppend }}js/my_courses_color_header.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}template/modern/js/my_courses_color_header.js"></script>
     <div class="pb-5">
 
         <div class="container-fluid main-container">
 
             <div class="row">
 
-                <div id="background-cheat-leftnav" class="col-xl-2 col-lg-4 col-md-0 col-sm-6 col-xs-6 justify-content-center col_sidebar_active" >
+                <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col-md-0 col-sm-6 col-xs-6 justify-content-center col_sidebar_active" >
                     @include('layouts.partials.sidebar',[$title_course,$title_course])
                 </div>
 
-                <div class="d-flex flex-column align-self-start col-xl-10 col-lg-8 col-md-12 col-sm-6 col-xs-6 justify-content-center col_maincontent_active">
+                <div class="d-flex flex-column align-self-start col-xl-10 col-lg-9 col-md-12 col-sm-6 col-xs-6 justify-content-center col_maincontent_active">
 
                     <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 

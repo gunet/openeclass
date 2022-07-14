@@ -6,13 +6,13 @@
     <div class="container-fluid main-container">
         <div class="row">
 
-            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
 
-            <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
+            <div class="col-xl-10 col-lg-9 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
@@ -179,15 +179,17 @@
                                         @if ($course_info->course_license)
                                             <span class="pull-right">{!! copyright_info($course_id) !!}</span>
                                         @endif
-                                        <div class='collapse shadow-lg p-3 bg-body rounded bg-primary' id='collapseDescription'>
-                                            <div class='col-12'>
-                                                @foreach ($course_descriptions as $row)
-                                                    <div class='d-flex justify-content-between'>
-                                                        <p class='control-label-notes text-start'>{{$row->title}}</p>
-                                                        {!! standard_text_escape($row->comments) !!}
-                                                        
-                                                    </div>
-                                                @endforeach
+                                        <div class='col-12'>
+                                            <div class='collapse shadow-sm p-3 bg-body rounded' id='collapseDescription'>
+                                                <div class='col-12'>
+                                                    @foreach ($course_descriptions as $row)
+                                                        <div class='d-flex justify-content-between'>
+                                                            <p class='control-label-notes text-start'>{{$row->title}}</p>
+                                                            {!! standard_text_escape($row->comments) !!}
+                                                            
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -201,9 +203,7 @@
 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
                     <div class="col-xl-8 col-lg-6 col-md-12 col_maincontent_active_unit">
-                        <div class="row p-2 bg-white"></div>
-                        <div class="row p-2 bg-white"></div>
-                        <div class="pb-5 bg-white">
+                        <div class="pt-3 bg-white">
                             @if (!$alter_layout)
                                 <div class='col-md-12 course-units'>
                                     <div class='row'>
@@ -275,31 +275,26 @@
                             <div class='row p-2'></div>
                         </div>
 
-                        <div class="col-md-12 px-5 mt-lg-3 mt-4 announcement-course-page">
-
-                            <div class="pb-5 bg-white">
-                                <div class='row p-2'></div>
-                                <h5 class='content-title'>{{ trans('langAnnouncements') }}</h5>
+                        <div class="col-md-12 pt-4 pb-4 ps-5 pe-5 mt-lg-3 mt-4 announcement-course-page">                            
+                            <h5 class='content-title'>{{ trans('langAnnouncements') }}</h5>
+                            <hr>
+                            <div class='panel'>
+                                <div class='panel-body' style='margin-left:-15px;'>
+                                    <ul class='tablelist'>
+                                        {!! course_announcements() !!}
+                                    </ul>
+                                </div>
                                 <hr>
-                                <div class='panel'>
-                                    <div class='panel-body'>
-                                        <ul class='tablelist'>
-                                            {!! course_announcements() !!}
-                                        </ul>
-                                    </div>
-                                    <hr>
-                                    <div class='panel-footer'>
-                                        <div class='pull-right'>
-                                            <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code}}'>
-                                                <small>{{ trans('langMore') }}&hellip;</small>
-                                            </a>
-                                        </div>
+                                <div class='panel-footer'>
+                                    <div class='pull-right'>
+                                        <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code}}'>
+                                            <small>{{ trans('langMore') }}&hellip;</small>
+                                        </a>
                                     </div>
                                 </div>
-
-                                {!! $course_home_sidebar_widgets !!}
-
                             </div>
+
+                            <div class='pb-4'>{!! $course_home_sidebar_widgets !!}</div>
                         </div>
 
                         <div class="col-md-12 px-5 mt-lg-3 mt-4 col_maincontent_active_CourseComplete">

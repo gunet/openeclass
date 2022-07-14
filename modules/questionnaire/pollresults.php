@@ -151,52 +151,54 @@ $tool_content .= action_bar(array(
             )
         ))."
 $export_box
+<div class='col-12'>
 <div class='panel panel-primary'>
     <div class='panel-heading'>
         <h3 class='panel-title'>$langInfoPoll</h3>
     </div>
     <div class='panel-body'>
-        <div class='row  margin-bottom-fat'>
+        <div class='row p-2 margin-bottom-fat'>
             <div class='col-sm-3'>
-                <strong>$langTitle:</strong>
+                <strong class='control-label-notes'>$langTitle:</strong>
             </div>
             <div class='col-sm-9'>
                 " . q_math($thePoll->name) . "
             </div>
         </div>
-        <div class='row  margin-bottom-fat'>
+        <div class='row p-2 margin-bottom-fat'>
             <div class='col-sm-3'>
-                <strong>$langPollCreation:</strong>
+                <strong class='control-label-notes'>$langPollCreation:</strong>
             </div>
             <div class='col-sm-9'>
                 " . nice_format(date("Y-m-d H:i", strtotime($thePoll->creation_date)), true) . "
             </div>
         </div>
-        <div class='row  margin-bottom-fat'>
+        <div class='row p-2 margin-bottom-fat'>
             <div class='col-sm-3'>
-                <strong>$langStart:</strong>
+                <strong class='control-label-notes'>$langStart:</strong>
             </div>
             <div class='col-sm-9'>
                 " . nice_format(date("Y-m-d H:i", strtotime($thePoll->start_date)), true) . "
             </div>
         </div>
-        <div class='row  margin-bottom-fat'>
+        <div class='row p-2 margin-bottom-fat'>
             <div class='col-sm-3'>
-                <strong>$langPollEnd:</strong>
+                <strong class='control-label-notes'>$langPollEnd:</strong>
             </div>
             <div class='col-sm-9'>
                 " . nice_format(date("Y-m-d H:i", strtotime($thePoll->end_date)), true) . "
             </div>
         </div>
-        <div class='row  margin-bottom-fat'>
+        <div class='row p-2 margin-bottom-fat'>
             <div class='col-sm-3'>
-                <strong>$langPollTotalAnswers:</strong>
+                <strong class='control-label-notes'>$langPollTotalAnswers:</strong>
             </div>
             <div class='col-sm-9'>
                 $total_participants
             </div>
         </div>
     </div>
+</div>
 </div>";
 
 $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position ASC", $pid);
@@ -207,7 +209,7 @@ if ($PollType == POLL_NORMAL) {
     foreach ($questions as $theQuestion) {
         $this_chart_data = array();
         if ($theQuestion->qtype == QTYPE_LABEL) {
-            $tool_content .= "<div class='alert alert-info'>$theQuestion->question_text</div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-info'>$theQuestion->question_text</div></div>";
         } else {
             $tool_content .= "
             <div class='panel panel-success'>
@@ -244,10 +246,10 @@ if ($PollType == POLL_NORMAL) {
                                                                         AND qid= ?d", $theQuestion->pqid)->total;
 
                 $answers_table = "
-                    <table class='table-default'>
-                        <tr>
-                            <th>$langAnswer</th>
-                            <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized) ? '' : '<th>' . $langStudents . '</th>')."</tr>";
+                    <table class='announcements_table'>
+                        <tr class='notes_thead'>
+                            <th class='text-white'>$langAnswer</th>
+                            <th class='text-white'>$langSurveyTotalAnswers</th>".(($thePoll->anonymized) ? '' : '<th>' . $langStudents . '</th>')."</tr>";
                 foreach ($answers as $answer) {
                     $percentage = round(100 * ($answer->count / $answer_total),2);
                     if (isset($answer->answer_text)) {
@@ -323,10 +325,10 @@ if ($PollType == POLL_NORMAL) {
                                                                         AND qid= ?d", $theQuestion->pqid)->total;
 
                 $answers_table = "
-                    <table class='table-default'>
-                        <tr>
-                            <th>$langAnswer</th>
-                            <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";
+                    <table class='announcements_table'>
+                        <tr class='notes_thead'>
+                            <th class='text-white'>$langAnswer</th>
+                            <th class='text-white'>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";
                 foreach ($answers as $answer) {
                     $percentage = round(100 * ($answer->count / $answer_total),2);
                     $this_chart_data['percentage'][array_search($answer->answer_text,$this_chart_data['answer'])] = $percentage;
@@ -396,11 +398,11 @@ if ($PollType == POLL_NORMAL) {
                                             AND a.poll_user_record_id = b.id
                                             AND (b.email_verification = 1 OR b.email_verification IS NULL)
                                             GROUP BY a.answer_text ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid);
-                $tool_content .= "<table class='table-default'>
+                $tool_content .= "<table class='announcements_table'>
                         <tbody>
-                        <tr>
-                                <th>$langAnswer</th>
-                                <th>$langSurveyTotalAnswers</th>
+                        <tr class='notes_thead'>
+                                <th class='text-white'>$langAnswer</th>
+                                <th class='text-white'>$langSurveyTotalAnswers</th>
                                 ".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."
                         </tr>";
                 $k=1;

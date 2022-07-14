@@ -335,7 +335,8 @@ function show_submission_details($id) {
             fullScreen: '$langFullScreen',
             newTab: '$langNewTab',
             cancel: '$langCancel'});
-        });</script>";
+        });
+        </script>";
 
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
     if (!$sub) {
@@ -393,12 +394,12 @@ function show_submission_details($id) {
     }
 
     $tool_content .= "
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
-        <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
-            <div class='panel-heading bg-secondary notes_thead'>
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+        <div class='panel panel-default'>
+            <div class='panel-heading bg-secondary'>
                 <h4 class='panel-title text-white'>$m[SubmissionWorkInfo]</h4>
             </div>
-            <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+            <div class='panel-body panel-body-exercise ps-3 pb-3 pt-3 pe-3' style='margin-top:-10px;'>
                 <div class='row p-2 margin-bottom-fat'>
                     <div class='col-sm-3'>
                         <strong class='control-label-notes'>".$m['SubmissionStatusWorkInfo'].":</strong>

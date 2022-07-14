@@ -11,14 +11,14 @@
         <div class="row">
 
 
-                <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
+                <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                     <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                         @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                     </div>
                 </div>
                 
 
-                <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
+                <div class="col-xl-10 col-lg-9 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
                     
                         <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 

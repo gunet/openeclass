@@ -11,7 +11,7 @@
 
         <div class="row">
 
-            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                     @if($course_code)
                         @include('layouts.partials.sidebar',['is_editor' => $is_editor])
@@ -21,7 +21,7 @@
                 </div>
             </div>
 
-            <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
+            <div class="col-xl-10 col-lg-9 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
                     <nav class="navbar navbar-expand-lg navrbar_menu_btn">
@@ -269,6 +269,76 @@
 
 
 
+<script>
+    $('.fileModal').click(function (e)
+    {
+        e.preventDefault();
+        var fileURL = $(this).attr('href');
+        var downloadURL = $(this).prev('input').val();
+        var fileTitle = $(this).attr('title');
+       
 
+
+        if(downloadURL == null){
+            downloadURL = $(this).attr('data-download');
+        }
+
+        console.log('the fileURL:'+fileURL);
+        console.log('the downloadURL:'+downloadURL);
+
+        // BUTTONS declare
+        var bts = {
+            download: {
+                label: '<span class="fa fa-download"></span> Ληψη',
+                className: 'btn-success',
+                callback: function (d) {
+                    window.location = downloadURL;
+                }
+            },
+            print: {
+                label: '<span class="fa fa-print"></span> Εκτυπωση',
+                className: 'btn-primary',
+                callback: function (d) {
+                    var iframe = document.getElementById('fileFrame');
+                    iframe.contentWindow.print();
+                }
+            }
+        };
+        if (screenfull.enabled) {
+            bts.fullscreen = {
+                label: '<span class="fa fa-arrows-alt"></span> Πληρης οθονη',
+                className: 'btn-primary',
+                callback: function() {
+                    screenfull.request(document.getElementById('fileFrame'));
+                    return false;
+                }
+            };
+        }
+        bts.newtab = {
+            label: '<span class="fa fa-plus"></span> Νεο παραθυρο',
+            className: 'btn-primary',
+            callback: function() {
+                window.open(fileURL);
+                return false;
+            }
+        };
+        bts.cancel = {
+            label: 'Ακυρωση',
+            className: 'btn-secondary'
+        };
+
+        bootbox.dialog({
+            size: 'large',
+            title: fileTitle,
+            message: '<div class="row">'+
+                        '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">'+
+                            '<div class="iframe-container" style="height:500px;"><iframe id="fileFrame" src="'+fileURL+'" style="width:100%; height:500px;"></iframe></div>'+
+                        '</div>'+
+                    '</div>',
+            buttons: bts
+        });
+    });
+
+</script>
 
 @endsection
