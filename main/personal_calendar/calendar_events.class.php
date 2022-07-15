@@ -1467,11 +1467,15 @@ class Calendar_Events {
    public static function small_month_bootstrap_calendar() {
        global $langNextMonth, $langPreviousMonth;
 
-       $calendar = "<div id='cal-header' class='btn-group btn-group-justified btn-group-sm'>
-                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='prev'><span class='fa fa-caret-left'></span><span class='sr-only'>$langPreviousMonth</span></button></div>
-                            <div class='btn-group btn-group-sm' style='width:60%;'><button id='current-month' type='button' class='btn btn-default' disabled='disabled'>&nbsp;</button></div>
-                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='next'><span class='fa fa-caret-right'></span><span class='sr-only'>$langNextMonth</span></button></div>
-                    </div>";
+       $calendar = "<div id='cal-header' class='d-flex btn-group btn-group-justified btn-group-sm'>
+       <div class='container-fluid'>
+           <div class='row'>
+               <div class='col-sm-2 btn-group btn-group-sm' style='display: flex; align-items: center; justify-content: center; width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='prev'><div style='height:40px; width:40px; border-radius:50%; border:solid 1px white;'><i class='fas fa-chevron-left' style='margin-top:12px;'></i></div><span class='sr-only'>$langPreviousMonth</span></button></div>
+               <div class='col-sm-8 btn-group btn-group-sm' style='width:60%;'><button id='current-month' type='button' class='btn btn-default' disabled='disabled'>&nbsp;</button></div>
+               <div class='col-sm-2 btn-group btn-group-sm' style=' display: flex; align-items: center; justify-content: center; width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='next'><div style='height:40px; width:40px; border-radius:50%; border:solid 1px white;'><i class='fas fa-chevron-right' style='margin-top:12px;'></i></div><span class='sr-only'>$langNextMonth</span></button></div>
+           </div>
+       </div>
+</div>";
 
        $calendar .= '<div id="bootstrapcalendar"></div><div class="clearfix"></div>';
 
