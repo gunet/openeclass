@@ -62,8 +62,8 @@
                             <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>  
                                 <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">  
                                     <div class='panel panel-default' id='one'>
-                                        <div class='panel-heading notes_thead'>
-                                            <h2 class='panel-title text-white'>{{ trans('langBasicCfgSetting') }}</h2>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{ trans('langBasicCfgSetting') }}</h2>
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                                             <fieldset>
@@ -206,8 +206,8 @@
 
 
                                     <div class='panel panel-default mt-5' id='two'>
-                                        <div class='panel-heading notes_thead'>
-                                            <h2 class='panel-title text-white'>{{ trans('langUpgReg') }}</h2>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{ trans('langUpgReg') }}</h2>
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                                             <fieldset>
@@ -388,8 +388,8 @@
 
 
                                     <div class='panel panel-default mt-5' id='three'>
-                                        <div class='panel-heading notes_thead'>
-                                            <h2 class='panel-title text-white'>{{ trans('langEclassThemes') }}</h2>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{ trans('langEclassThemes') }}</h2>
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                                             <fieldset>
@@ -440,8 +440,8 @@
                                     {!! mail_settings_form() !!}
 
                                     <div class='panel panel-default mt-5' id='six'>
-                                        <div class='panel-heading notes_thead'>
-                                            <h2 class='panel-title text-white'>{{ trans('langCourseSettings') }}</h2>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{ trans('langCourseSettings') }}</h2>
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                                             <fieldset>
@@ -491,8 +491,8 @@
 
 
                                     <div class='panel panel-default mt-5' id='seven'>
-                                        <div class='panel-heading notes_thead'>
-                                            <h2 class='panel-title text-white'>{{ trans('langMetaCommentary') }}</h2>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{ trans('langMetaCommentary') }}</h2>
                                         </div>
                                         <div class='panel-body panel-body-admin pt-3 ps-3 pb-3 pe-3'>
                                             <fieldset>
@@ -525,8 +525,8 @@
 
 
                                     <div class='panel panel-default mt-5' id='eight'>
-                                        <div class='panel-heading notes_thead'>
-                                            <h2 class='panel-title text-white'>{{ trans('langOtherOptions') }}</h2>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{ trans('langOtherOptions') }}</h2>
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                                             <fieldset>
@@ -672,8 +672,8 @@
                                     </div>
 
                                     <div class='panel panel-default mt-5' id='nine'>
-                                        <div class='panel-heading notes_thead'>
-                                            <h2 class='panel-title text-white'>{{ trans('langDocumentSettings') }}</h2>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{ trans('langDocumentSettings') }}</h2>
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                                             <fieldset>
@@ -736,8 +736,8 @@
                                     </div>
 
                                     <div class='panel panel-default mt-5' id='ten'>
-                                        <div class='panel-heading notes_thead'>
-                                            <h2 class='panel-title text-white'>{{ trans('langDefaultQuota') }}</h2>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{ trans('langDefaultQuota') }}</h2>
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pb-3 pt-3 pe-3'>
                                             <fieldset>
@@ -771,8 +771,8 @@
 
 
                                     <div class='panel panel-default mt-5' id='eleven'>
-                                        <div class='panel-heading notes_thead'>
-                                            <h2 class='panel-title text-white'>{{ trans('langUploadWhitelist') }}</h2>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{ trans('langUploadWhitelist') }}</h2>
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pb-3 pt-3 pe-3'>
                                             <fieldset>
@@ -797,8 +797,8 @@
 
 
                                     <div class='panel panel-default mt-5' id='twelve'>
-                                        <div class='panel-heading notes_thead'>
-                                            <h2 class='panel-title text-white'>{{ trans('langLogActions') }}</h2>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{ trans('langLogActions') }}</h2>
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                                             <fieldset>
@@ -847,8 +847,8 @@
 
 
                                     <div class='panel panel-default mt-5' id='thirteen'>
-                                        <div class='panel-heading notes_thead'>
-                                            <h2 class='panel-title text-white'>{{ trans('langLoginFailCheck') }}</h2>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{ trans('langLoginFailCheck') }}</h2>
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pe-3 pb-3 pt-3'>
                                             <fieldset>
@@ -895,8 +895,8 @@
 
 
                                     <div class='panel panel-default mt-5' id='fourteen'>
-                                        <div class='panel-heading notes_thead'>
-                                            <h2 class='panel-title text-white'>{{ trans('langPrivacyPolicy') }}</h2>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{ trans('langPrivacyPolicy') }}</h2>
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                                             <div class='margin-bottom-fat margin-top-fat pb-3'><strong>{{ trans('langPrivacyPolicyLegend') }}</strong></div>

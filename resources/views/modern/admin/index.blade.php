@@ -49,10 +49,10 @@
                                     <div class='row'>
                                         <div class='col-md-12'>
                                             <div class='panel panel-success'>
-                                                <div class='panel-heading notes_thead'>
+                                                <div class='panel-heading'>
                                                     {{ trans('langNewEclassVersion') }}
                                                 </div>
-                                                <div class='panel-body panel-body-exercise'>
+                                                <div class='panel-body'>
                                                     {!! sprintf( trans('langNewEclassVersionInfo'), "<strong>" . q($release_info->release) . "</strong>",
                                                                 "<a href='https://www.openeclass.org/' target='_blank'>www.openeclass.org</a>") !!}
                                                 </div>
@@ -63,8 +63,8 @@
 
                                 
                                 <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                                    <div class='panel panel-admin'>
-                                        <div class='panel-body panel-body-exercise ps-3 pt-2 pb-2 text-white'>
+                                    <div class='panel panel-default'>
+                                        <div class='panel-body ps-3 pt-2 pb-2 control-label-notes text-center'>
                                         {{ trans('langOnlineUsers') }} : <b>{{ getOnlineUsers() }}</b>
                                         </div>
                                     </div>
@@ -75,8 +75,8 @@
                                     <div class='row p-2'></div>
                                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                                         <div class='panel panel-default'>
-                                            <div class='panel-heading notes_thead'>
-                                                <h3 class='panel-title text-white'>{{ trans('langQuickLinks') }}</h3>
+                                            <div class='panel-heading'>
+                                                <h3 class='panel-title'>{{ trans('langQuickLinks') }}</h3>
                                             </div>
                                             <div class='panel-body panel-body-admin ps-3 pe-3 '>
                                                 <div class='row pt-2 pb-2'>
@@ -102,8 +102,8 @@
                                 
                                 <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                                     <div class='panel panel-default'>
-                                        <div class='panel-heading notes_thead'>
-                                            <div class='panel-title fs-5 text-white ps-3 pt-2 pb-2'>{{ trans('langPlatformIdentity') }}</div>
+                                        <div class='panel-heading'>
+                                            <div class='panel-title fs-5 ps-3 pt-2 pb-2'>{{ trans('langPlatformIdentity') }}</div>
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-2 pb-2'>
                                             <div class='row p-2 margin-bottom-thin'>
@@ -153,8 +153,8 @@
                                     <div class='row p-2'></div>
 
                                     <div class='panel panel-default'>
-                                        <div class='panel-heading notes_thead'>
-                                            <div class='panel-title fs-5 text-white ps-3 pt-2 pb-2'>{{ trans('langInfoAdmin') }}</div>
+                                        <div class='panel-heading'>
+                                            <div class='panel-title fs-5 ps-3 pt-2 pb-2'>{{ trans('langInfoAdmin') }}</div>
                                         </div>
                                         <div class='panel-body panel-body-admin'>
                                             <div class='row p-2 margin-bottom-thin'>
@@ -228,8 +228,8 @@
                                     <div class='row p-2'></div>
 
                                     <div class='panel panel-default'>
-                                        <div class='panel-heading notes_thead'>
-                                            <div class='panel-title fs-5 text-white ps-3 pt-2 pb-2'>{{ trans('langIndexInfo') }}</div>
+                                        <div class='panel-heading'>
+                                            <div class='panel-title fs-5 ps-3 pt-2 pb-2'>{{ trans('langIndexInfo') }}</div>
                                         </div>
                                         <div class='panel-body panel-body-admin'>
                                             <div class='row p-2 margin-bottom-thin'>
@@ -269,8 +269,8 @@
 
                                     @if (count($cronParams) > 0)
                                     <div class='panel panel-default'>
-                                        <div class='panel-heading notes_thead'>
-                                            <div class='panel-title fs-5 text-white ps-3 pt-2 pb-2'>{{ trans('langCronInfo') }}</div>
+                                        <div class='panel-heading'>
+                                            <div class='panel-title fs-5 ps-3 pt-2 pb-2'>{{ trans('langCronInfo') }}</div>
                                         </div>
                                         <div class='panel-body panel-body-admin'>
                                             <div class='row p-2 margin-bottom-thin'>

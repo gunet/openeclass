@@ -37,7 +37,7 @@
         <div class="panel bg-transparent">
             @foreach ($toolArr as $key => $tool_group)
                 <a id="Tool{{$key}}" class="collapsed parent-menu mt-5" data-bs-toggle="collapse" href="#collapse{{ $key }}">
-                    <div class="panel-heading">
+                    <div class="panel-sidebar-heading">
                         <div class="panel-title h3">
                             <div class='row'>
                                 <div class='col-1'>

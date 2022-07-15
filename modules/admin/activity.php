@@ -211,9 +211,9 @@ $(function() {
             $indirectId = getIndirectReference($item->id);
             $tool_content .= "
       <div class='panel panel-default' data-id='$indirectId'>
-        <div class='panel-heading notes_thead pt-2 pe-3 ps-3'>
-          <span class='text-white'>$heading</span>
-          <div class='pull-right text-white'>$type " .
+        <div class='panel-heading pt-2 pe-3 ps-3'>
+          <span class='control-label-notes'>$heading</span>
+          <div class='text-end text-secondary'>$type " .
             icon('fa-edit', $langEdit, 'activity.php?edit=' . $indirectId) . "
             <a class='confirm-delete' href='activity.php?delete=$indirectId' title='$langDelete' data-bs-toggle='tooltip'>
                 <span class='fa fa-times delete_btn text-danger'></span><span class='sr-only'>$langDelete</span></a>

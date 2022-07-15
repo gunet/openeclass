@@ -410,7 +410,7 @@ if ($nbrQuestions) {
 
     $tool_content .= "<div class='col-12'><div id='RandomizationForm' class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId'>
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <div class='col-sm-12'>
                         <div class='checkbox' id='divcheckboxShuffleQuestions'>
                             <label class='form-control-static'>
@@ -428,7 +428,7 @@ if ($nbrQuestions) {
                          </div>
                     </div>
                 </div>
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <div class='col-sm-12'>
                         <input class='btn btn-primary' type='submit' value='$langSubmit' name='shuffleQuestions'>
                     </div>

@@ -62,7 +62,8 @@ if (isset($_GET['eurId'])) {
     $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id, q_position FROM exercise_answer_record WHERE eurid = ?d ORDER BY q_position", $eurid);
     if (!$exercise_user_record) {
         // No record matches with this exercise user record id
-        Session::Messages($langExerciseNotFound);
+        Session::flash('message',$langExerciseNotFound); 
+        Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
     $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
@@ -236,7 +237,7 @@ if (isset($_REQUEST['unit'])) {
     ]);
 }
 
-$tool_content .= "<div class='alert alert-info'>";
+$tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>";
 if ($user) { // user details
     $tool_content .= q($user->surname) . " " . q($user->givenname);
     if ($user->am) {
@@ -258,9 +259,9 @@ $tool_content .= "
     <h5>$langStart: <em>" . nice_format($exercise_user_record->record_start_date, true) . "</em></h5>
     <h5>$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>" .
     ($user && $exerciseAttemptsAllowed ? "<h5>$langAttempt: <em>{$exercise_user_record->attempt}</em></h5>" : '') . "
-  </div>";
+  </div></div>";
 
-$tool_content .= "<div class='panel panel-default'>
+$tool_content .= "<div class='col-sm-12'><div class='panel panel-default'>
                       <div class='panel-heading'>
                             <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>
                       </div>";
@@ -269,7 +270,7 @@ if (!empty($exerciseDescription)) {
     $tool_content .= "<div class='panel-body'>$exerciseDescription</div>";
 }
 
-$tool_content .= "</div>";
+$tool_content .= "</div></div>";
 
 $tool_content .= "<div class='row margin-bottom-fat'>
     <div class='col-md-5 col-md-offset-7'>";
@@ -277,7 +278,7 @@ if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
     $tool_content .= "
             <div class='btn-group btn-group-sm' style='float:right;'>
                 <a class='btn btn-primary' id='all'>$langAllExercises</a>
-                <a class='btn btn-default' id='ungraded'>$langAttemptPending</a>
+                <a class='btn btn-secondary' id='ungraded'>$langAttemptPending</a>
             </div>";
 }
 $tool_content .= "
@@ -298,7 +299,7 @@ if (count($exercise_question_ids) > 0) {
     // for each question
     foreach ($exercise_question_ids as $row) {
         if (!$showResults) {
-            $tool_content .= "<div class='text-center alert alert-info'>$langExerciseCompleted</div>";
+            $tool_content .= "<div class='col-sm-12 mt-3'><div class='text-center alert alert-info'>$langExerciseCompleted</div></div>";
             break;
         }
         // creates a temporary Question object
@@ -694,7 +695,8 @@ if ($regrade) {
         $max_arid = Database::get()->querySingle("SELECT MAX(answer_record_id) AS max_arid FROM exercise_answer_record WHERE eurid=?d AND question_id=?d", $eurid, $d)->max_arid;
         Database::get()->querySingle("DELETE FROM exercise_answer_record WHERE eurid=?d AND question_id=?d AND answer_record_id != ?d", $eurid, $d, $max_arid);
     }
-    Session::Messages($langNewScoreRecorded, 'alert-success');
+    Session::flash('message',$langNewScoreRecorded); 
+    Session::flash('alert-class', 'alert-success');
     if ($ajax_regrade) {
         echo json_encode(['result' => 'ok']);
         exit;
@@ -717,10 +719,16 @@ if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting
             JSON_UNESCAPED_UNICODE);
         exit;
     } else {
-        Session::Messages($langScoreDiffers .
-            "<form action='exercise_result.php?course=$course_code&amp;eurId=$eurid' method='post'>
-                <button class='btn btn-default' type='submit' name='regrade' value='true'>$langRegrade</button>
-             </form>", 'alert-warning');
+        // Session::Messages($langScoreDiffers .
+        //     "<form action='exercise_result.php?course=$course_code&amp;eurId=$eurid' method='post'>
+        //         <button class='btn btn-secondary' type='submit' name='regrade' value='true'>$langRegrade</button>
+        //      </form>", 'alert-warning');
+
+             Session::flash('message',$langScoreDiffers .
+             "<form action='exercise_result.php?course=$course_code&amp;eurId=$eurid' method='post'>
+                 <button class='btn btn-secondary' type='submit' name='regrade' value='true'>$langRegrade</button>
+              </form>"); 
+            Session::flash('alert-class', 'alert-warning');
     }
 }
 

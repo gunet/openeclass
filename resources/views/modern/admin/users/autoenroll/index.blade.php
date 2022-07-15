@@ -50,7 +50,7 @@
                         @foreach ($rules as $key => $rule)
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                             <div class='panel panel-info'>
-                                <div class='panel-heading notes_thead text-white ps-3 pt-2'>
+                                <div class='panel-heading ps-3 pt-2'>
                                     {{ trans('langAutoEnrollRule') }} {{ $key + 1 }}
                                     <div class='pull-right'>
                                     {!! action_button([

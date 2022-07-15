@@ -91,9 +91,9 @@
                                         @else
                                             @foreach ($faqs as $key => $faq)
                                                 <div class='panel list-group-item' data-id='{{ $faq->id }}'>
-                                                    <div class='panel-heading notes_thead' role='tab' id='heading-{{ $faq->id }}'>
-                                                        <h4 class='panel-title text-white pe-3'>
-                                                            <a class='text-white' role='button' data-bs-toggle='collapse' data-bs-parent='#accordion' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
+                                                    <div class='panel-heading' role='tab' id='heading-{{ $faq->id }}'>
+                                                        <h4 class='panel-title pt-1 pe-3'>
+                                                            <a class='control-label-notes' role='button' data-bs-toggle='collapse' data-bs-parent='#accordion' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
                                                                 <span class="indexing">{{ $key+1 }}.</span>{!! $faq->title !!} <span class='caret'></span>
                                                                 <span class='fa fa-arrow-down text-white fs-6 ps-2'></span>
                                                             </a>

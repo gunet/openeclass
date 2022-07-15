@@ -197,16 +197,16 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
         <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>
             <div class='row p-2'></div>            
             
-            <div class='form-group ".(Session::getError('questionName') ? "has-error" : "")."'>
-                <label for='questionName' class='col-sm-2 control-label'>$langQuestion:</label>
-                <div class='col-sm-10'>
+            <div class='form-group ".(Session::getError('questionName') ? "has-error" : "")." mt-3'>
+                <label for='questionName' class='col-sm-6 control-label-notes'>$langQuestion:</label>
+                <div class='col-sm-12'>
                   <input name='questionName' type='text' class='form-control' id='questionName' placeholder='$langQuestion' value='" . q($questionName) . "'>
                   <span class='help-block'>".Session::getError('questionName')."</span>
                 </div>
             </div>
-            <div class='form-group'>
-                <label for='imageUpload' class='col-sm-2 control-label'>".(($okPicture) ? $langReplacePicture : $langAddPicture).":</label>
-                <div class='col-sm-10'>" .
+            <div class='form-group mt-3'>
+                <label for='imageUpload' class='col-sm-6 control-label-notes'>".(($okPicture) ? $langReplacePicture : $langAddPicture).":</label>
+                <div class='col-sm-12'>" .
                 (($okPicture) ? "<img src='../../$picturePath/quiz-$questionId'><br><br>" : "") .
                 fileSizeHidenInput() . "
                   <input type='file' name='imageUpload' id='imageUpload'>
@@ -214,9 +214,9 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             </div>";
             if ($okPicture) {
                 $tool_content .= "
-                    <div class='form-group'>
-                        <label class='col-sm-2 control-label'>$langDeletePicture:</label>
-                        <div class='col-sm-10'>
+                    <div class='form-group mt-3'>
+                        <label class='col-sm-6 control-label-notes'>$langDeletePicture:</label>
+                        <div class='col-sm-12'>
                             <div class='checkbox'>
                               <label>
                                 <input type='checkbox' name='deletePicture' value='1' ".(isset($_POST['deletePicture'])? "checked":"").">
@@ -226,33 +226,35 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     </div>";
             }
             $tool_content .= "
-                <div class='form-group'>
-                    <label for='questionDescription' class='col-sm-2 control-label'>$langQuestionDescription:</label>
-                    <div class='col-sm-10'>
+                <div class='form-group mt-3'>
+                    <label for='questionDescription' class='col-sm-6 control-label-notes'>$langQuestionDescription:</label>
+                    <div class='col-sm-12'>
                       ". rich_text_editor('questionDescription', 4, 50, $questionDescription) ."
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label for='questionCat' class='col-sm-2 control-label'>$langQuestionCat:</label>
-                    <div class='col-sm-10'>
+                <div class='form-group mt-3'>
+                    <label for='questionCat' class='col-sm-6 control-label-notes'>$langQuestionCat:</label>
+                    <div class='col-sm-12'>
                         <select name='category' id='questionCat' class='form-control'>
                             $options
                         </select>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label for='questionDifficulty' class='col-sm-2 control-label'>$langQuestionDiffGrade:</label>
-                    <div class='col-sm-10'>
-                        <input id='questionDifficulty' name='difficulty' data-slider-id='ex1Slider' type='text' data-slider-min='0' data-slider-max='5' data-slider-step='1' data-slider-value='$difficulty'/>
-                    </div>
-                    <div class='col-sm-1'>
-                    <span id='questionDifficultyValue' class='label label-default'></span>
-                    </div>
+                <div class='form-group mt-3'>
+                    <label for='questionDifficulty' class='col-sm-6 control-label-notes'>$langQuestionDiffGrade:</label>
+                    
+                        <div class='col-sm-2'>
+                            <input id='questionDifficulty' name='difficulty' data-slider-id='ex1Slider' type='text' data-slider-min='0' data-slider-max='5' data-slider-step='1' data-slider-value='$difficulty'/>
+                        </div>
+                        <div class='col-sm-10'>
+                            <span id='questionDifficultyValue' class='label label-default'></span>
+                        </div>
+                    
                 </div>
             ";
-        $tool_content .= "<div class='form-group'>
-                <label class='col-sm-2 control-label'>$langAnswerType:</label>
-                <div class='col-sm-10'>
+        $tool_content .= "<div class='form-group mt-3'>
+                <label class='col-sm-6 control-label-notes'>$langAnswerType:</label>
+                <div class='col-sm-12'>
                     <div class='radio'>
                       <label>
                         <input type='radio' name='answerType' value='1' ". (($answerType == UNIQUE_ANSWER) ? "checked" : "") .">
@@ -272,7 +274,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                       </label>
                     </div>
                     <div class='row'>
-                        <div class='col-xs-11 col-xs-offset-1 d-flex justify-content-center'>
+                        <div class='col-11 col-xs-offset-1 d-flex justify-content-center'>
                             <div class='form-group ".(($answerType != FILL_IN_BLANKS && $answerType != FILL_IN_BLANKS_TOLERANT && $answerType != FILL_IN_FROM_PREDEFINED_ANSWERS) ? "hide": "")."' id='fillInBlanksOptions'>
                                 <div class='col-12'>
                                     <div class='radio'>
@@ -329,16 +331,16 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     </div>
                 </div>
             </div>
-            <div class='form-group ".(($answerType != FREE_TEXT) ? "hide": "")."'>
-                <label for='questionGrade' class='col-sm-2 col-sm-offset-1 control-label'>$langGradebookGrade:</label>
-                <div class='col-sm-9'>
+            <div class='form-group ".(($answerType != FREE_TEXT) ? "hide": "")." mt-3'>
+                <label for='questionGrade' class='col-sm-2 col-sm-offset-1 control-label-notes'>$langGradebookGrade:</label>
+                <div class='col-sm-12'>
                   <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$langGradebookGrade' value='$questionWeight'".(($answerType != 6) ? " disabled": "").">
                 </div>
             </div>
             <div class='row'>
-                <div class='col-sm-10 col-sm-offset-2 '>
+                <div class='col-sm-10 col-sm-offset-2 mt-3'>
                     <input type='submit' class='btn btn-primary' name='submitQuestion' value='$langCreate'>
-                    <a href='$link_back' class='btn btn-default'>$langCancel</a>
+                    <a href='$link_back' class='btn btn-secondary'>$langCancel</a>
                 </div>
 
             </div>

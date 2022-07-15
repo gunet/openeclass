@@ -115,17 +115,20 @@ if ($is_editor) {
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->delete();
                         Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_EXERCISE, $exerciseId);
-                        Session::Messages($langPurgeExerciseSuccess, 'alert-success');
+                        Session::flash('message',$langPurgeExerciseSuccess); 
+                        Session::flash('alert-class', 'alert-success');
                         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     } else {
-                        Session::Messages($langResourceBelongsToCert, "alert-warning");
+                        Session::flash('message',$langResourceBelongsToCert); 
+                        Session::flash('alert-class', 'alert-warning');
                     }
                     break;
                 case 'purge': // purge exercise results
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->purge();
                         $objExerciseTmp->save();
-                        Session::Messages($langPurgeExerciseResultsSuccess);
+                        Session::flash('message',$langPurgeExerciseResultsSuccess); 
+                        Session::flash('alert-class', 'alert-success');
                         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     } else {
                         Session::Messages($langResourceBelongsToCert, "alert-warning");
@@ -144,7 +147,8 @@ if ($is_editor) {
                         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
                         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     } else {
-                        Session::Messages($langResourceBelongsToCert, "alert-warning");
+                        Session::flash('message',$langResourceBelongsToCert); 
+                        Session::flash('alert-class', 'alert-warning');
                     }
                     break;
                 case 'public':  // make exercise public
@@ -161,17 +165,20 @@ if ($is_editor) {
                     break;
                 case 'clone':  // make exercise limited
                     $objExerciseTmp->duplicate();
-                    Session::Messages($langCopySuccess, 'alert-success');
+                    Session::flash('message',$langCopySuccess); 
+                    Session::flash('alert-class', 'alert-success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     break;
                 case 'distribution': //distribute answers
                     $objExerciseTmp->distribution($_GET['correction_output']);
-                    Session::Messages($langDistributionSuccess, 'alert-success');
+                    Session::flash('message',$langDistributionSuccess); 
+                    Session::flash('alert-class', 'alert-success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     break;
                 case 'cancelDistribution': //canceling distributed answers
                     $objExerciseTmp->cancelDistribution();
-                    Session::Messages($langCancelDistributionSuccess, 'alert-success');
+                    Session::flash('message',$langCancelDistributionSuccess); 
+                    Session::flash('alert-class', 'alert-success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     break;
             }
@@ -240,7 +247,7 @@ if ($is_editor) {
 }
 
 if (!$nbrExercises) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoExercises</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoExercises</div></div>";
     //For Correction Script
     $cf_result_data = 0;
 } else {
@@ -249,10 +256,10 @@ if (!$nbrExercises) {
     // shows the title bar only for the administrator
     if ($is_editor) {
         $tool_content .= "
-                <th>$langExerciseName</th>
-                <th class='text-center' width='20%'>$langInfoExercise</th>
-                <th class='text-center' width='15%'>$langResults</th>
-                <th class='text-center' width='42'>".icon('fa-gears')."</th>
+                <th class='text-white'>$langExerciseName</th>
+                <th class='text-white text-center' width='20%'>$langInfoExercise</th>
+                <th class='text-white text-center' width='15%'>$langResults</th>
+                <th class='text-white text-center' width='42'>".icon('fa-gears')."</th>
               </tr>";
     } else { // student view
         load_js('tools.js');
@@ -299,7 +306,7 @@ if (!$nbrExercises) {
                 $tr_class = 'not_visible';
             }
             $lock_description .= "</ul>";
-            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-title='$lock_description'></span>";
         }
         if (!$row->public) {
             $lock_icon = "&nbsp;" . icon('fa-lock', $langNonPublicFile);

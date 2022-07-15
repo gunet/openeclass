@@ -55,7 +55,7 @@
         @if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING)
             <div class='btn-group btn-group-sm' style='float:right;'>
                 <a class='btn btn-primary' id='all'>{{ trans('langAllExercises') }}</a>
-                <a class='btn btn-default' id='ungraded'>{{ trans('langAttemptPending') }}</a>
+                <a class='btn btn-secondary' id='ungraded'>{{ trans('langAttemptPending') }}</a>
             </div>
         @endif
         </div>
@@ -91,6 +91,6 @@
         @if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING)
             <a class='btn btn-primary' href='index.php' id='submitButton'>{{ trans('langSubmit') }}</a>
         @endif
-        <a class='btn btn-default' href='index.php?course={{ $course_code }}'>{{ trans('langReturn') }}</a>
+        <a class='btn btn-secondary' href='index.php?course={{ $course_code }}'>{{ trans('langReturn') }}</a>
     </div>
 @endsection

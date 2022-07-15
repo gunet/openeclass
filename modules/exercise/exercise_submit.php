@@ -436,7 +436,7 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
             <div class='text-center'>
                 <form action='$form_next_link' method='post'>
                     <input class='btn btn-primary' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
-                    <a href='$form_cancel_link' class='btn btn-default'>$langCancel</a>
+                    <a href='$form_cancel_link' class='btn btn-secondary'>$langCancel</a>
                 </form>
             </div>";
             unset_exercise_var($exerciseId);
@@ -598,9 +598,9 @@ if (isset($timeleft)) { // time remaining
 }
 
 if (!empty($exerciseDescription)) { // description
-    $tool_content .= "<div class='row margin-bottom-fat form-wrapper' style='margin-top: 10px; margin-bottom: 30px; margin-left:0px; margin-right:0px; border:1px solid #cab4b4; border-radius:5px;'>";
-    $tool_content .= "<div class='col-sm-12'><em>" . standard_text_escape($exerciseDescription) . "</em></div>";
-    $tool_content .= "</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='margin-bottom-fat form-wrapper shadow-sm p-2 mb-5 rounded'>";
+    $tool_content .= "<div class='col-sm-12 p-3'><em>" . standard_text_escape($exerciseDescription) . "</em></div>";
+    $tool_content .= "</div></div>";
 }
 
 if (isset($_REQUEST['unit'])) {
@@ -729,7 +729,7 @@ if ($questionList) {
     } else {
         $backlink = "index.php?course=$course_code";
     }
-    $tool_content .= "<div class='pull-right'><a href='$backlink' class='btn btn-default'>$langBack</a></div>";
+    $tool_content .= "<div class='pull-right'><a href='$backlink' class='btn btn-secondary'>$langBack</a></div>";
 }
 
 // "Temporary save" button

@@ -1,5 +1,5 @@
                     <div class="panel panel-primary mt-3">
-                        <div class="panel-heading notes_thead">
+                        <div class="panel-heading">
                             <h4 class="panel-title text-white">                
                                 {{ trans('langPortfolioSidebarContent') }}
                             </h4>
@@ -7,7 +7,7 @@
                         <div class="panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3" id="portfolio_widget_sidebar" data-widget-area-id="4">
                             @foreach ($portfolio_sidebar_widgets as $key => $portfolio_sidebar_widget)
                             <div class="panel panel-success widget" data-widget-id="{{ $portfolio_sidebar_widget->id }}" data-widget-widget-area-id="{{ $key }}">
-                                <div class="panel-heading notes_thead">                   
+                                <div class="panel-heading">                   
                                     <a class='text-white' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
                                        href="#widget_desc_{{ $key }}" class="widget_title">
                                         {{ $portfolio_sidebar_widget->getName() }} <span></span>

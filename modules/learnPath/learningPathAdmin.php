@@ -379,8 +379,8 @@ $tool_content .= action_bar(array(
             )
         ),false);
 
-$tool_content .= "<div class='panel panel-default'>
-                    <div class='panel-heading list-header'>
+$tool_content .= "<div class='col-sm-12'><div class='panel panel-default'>
+                    <div class='panel-heading'>
                         <h3 class='panel-title'>$langLearningPathData</h3>
                     </div>";
 $tool_content .= "<table class='table-default'>";
@@ -409,12 +409,12 @@ if ($cmd == "updatecomment") {
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .= "</td></tr></table></div>";
+$tool_content .= "</td></tr></table></div</div>";
 
 if (isset($displayChangePosForm) && $displayChangePosForm) {
     $dialogBox = "
-    <div class='row'>
-        <div class='col-xs-12'>
+
+        <div class='col-sm-12'>
             <div class='panel panel-body'>
                 <div class='col-md-2' style='line-height: 32px;'><strong>$langMove:</strong></div>
                 <div class='col-md-10'>
@@ -429,8 +429,7 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
                     </form>
                 </div>
             </div>
-        </div>
-    </div>";
+        </div>";
 }
 
 
@@ -488,7 +487,7 @@ $tool_content .= "<div class='panel panel-default panel-action-btn-default'>
                     <div class='pull-right' style='padding:8px;'>
                         $lp_action_button
                     </div>
-                    <div class='panel-heading list-header'>
+                    <div class='panel-heading'>
                         <h3 class='panel-title'>$langLearningPathStructure</h3>
                     </div>";
 

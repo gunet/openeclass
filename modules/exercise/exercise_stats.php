@@ -30,7 +30,8 @@ $exerciseId = $_GET['exerciseId'];
 $objExercise = new Exercise();
 $found = $objExercise->read($exerciseId);
 if (!$found) { // exercise not found
-    Session::Messages($langExerciseNotFound, 'alert-danger');
+    Session::flash('message',$langExerciseNotFound); 
+    Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
@@ -73,8 +74,8 @@ $tool_content .= "
     <div class='table-responsive'>
         <table class='table-default'>
             <thead>
-                <tr>
-                    <th colspan='4' class='text-center'>$langAttempts</th>
+                <tr class='list-header'>
+                    <th colspan='4' class=' text-white text-center'>$langAttempts</th>
                 </tr>
             </thead>
             <tbody>
@@ -92,9 +93,9 @@ $tool_content .= "
                 </tr>
             </tbody>
             <tfoot>
-                <tr class='active'>
-                    <th colspan='3'>$langTotal:</th>
-                    <th colspan='1'>$total_attempts</th>
+                <tr class='active bg-white'>
+                    <th class='ps-3 text-start control-label-notes' colspan='3'>$langTotal:</th>
+                    <th class='ps-4 text-start fw-bold text-dark' colspan='1'>$total_attempts</th>
                 </tr>            
             </tfoot>
         </table>
@@ -102,8 +103,8 @@ $tool_content .= "
     <div class='table-responsive'>
         <table class='table-default'>
             <thead>
-                <tr>
-                    <th colspan='2' class='text-center'>$langScore</th>
+                <tr class='list-header'>
+                    <th colspan='2' class='text-center text-white'>$langScore</th>
                 </tr>
             </thead>
             <tbody>
@@ -125,8 +126,8 @@ $tool_content .= "
     <div class='table-responsive'>
         <table class='table-default'>
             <thead>
-                <tr>
-                    <th colspan='2' class='text-center'>$langStudents</th>
+                <tr class='list-header'>
+                    <th colspan='2' class='text-center text-white'>$langStudents</th>
                 </tr>
             </thead>
             <tbody>
@@ -144,13 +145,17 @@ $tool_content .= "
 //Questions Table
 $questionList = $objExercise->selectQuestionList();
 $tool_content .= "
-    <h4>$langQuestions</h4>
+    <div class='col-sm-12 mt-4'>
+        <div class='form-wrapper shadow-sm p-2 rounded'>
+            <h4 class='text-center control-label-notes pt-2'>$langQuestions</h4>
+        </div>
+    </div>
     <div class='table-responsive'>
         <table class='table-default'>
             <thead>
-                <tr>
-                    <th>$langTitle</th>
-                    <th>$langSuccessPercentage</th>
+                <tr class='list-header'>
+                    <th class='text-white ps-2'>$langTitle</th>
+                    <th class='text-white ps-2'>$langSuccessPercentage</th>
                 </tr>
             </thead>
             <tbody>";

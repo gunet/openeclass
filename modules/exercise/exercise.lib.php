@@ -213,10 +213,10 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
         $tool_content .= "</div>";
     }
     if (!$nbrAnswers && $answerType != FREE_TEXT) {
-        $tool_content .= "<div class='alert alert-danger'>$langNoAnswer</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langNoAnswer</div></div>";
     }
     if (in_array($answerType, [TRUE_FALSE, UNIQUE_ANSWER])) {
-        $tool_content .= "<button class='pull-right clearSelect btn btn-default btn-sm'><span class='fa fa-times'></span> $langClear</button>";
+        $tool_content .= "<button class='pull-right clearSelect btn btn-secondary btn-sm' style='margin-top:-30px;'><span class='fa fa-times'></span> $langClear</button>";
     }
     $tool_content .= "
                 </div>
@@ -275,7 +275,7 @@ function display_exercise($exercise_id) {
           <div class='modal-dialog'>
             <div class='modal-content'>
               <div class='modal-header'>
-                <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
+                <button type='button' class='close' data-bs-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
               </div>
               <div class='modal-body'>
                 $langUsedInSeveralExercises
@@ -316,16 +316,18 @@ function display_exercise($exercise_id) {
     ]);
 
 
-    $tool_content .= "<div class='panel panel-primary'>
+    $tool_content .= "
+    <div class='col-sm-12'><div class='panel panel-primary'>
             <div class='panel-heading'>
               <h3 class='panel-title'>" . q_math($exercise->selectTitle()) . "
                 <a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes'>
-                  <span class='fa fa-edit' data-toggle='tooltip' data-original-title='$langModify'></span>
+                  <span class='fa fa-edit' data-bs-toggle='tooltip' data-original-title='$langModify'></span>
                 </a>
               </h3>
             </div>
             <div class='panel-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>
-        </div>";
+        </div>
+    </div>";
 
     $i = 1;
     $hasRandomQuestions = false;
@@ -347,12 +349,12 @@ function display_exercise($exercise_id) {
             $colspan = 1;
         }
 
-        $tool_content .= "<table class = 'table-default'>";
+        $tool_content .= "<div class='col-sm-12 mt-3'><table class = 'table-default'>";
         if (is_array($qid)) { // placeholder for random questions (if any)
             $hasRandomQuestions = true;
             $tool_content .= "<tr class='active'>
                                 <td colspan='$colspan'>
-                                    <strong><u>$langQuestion</u>: $i</strong>
+                                    <strong><u class='text-white'>$langQuestion</u>: $i</strong>
                                 </td>
                                </tr>";
             if ($qid['criteria'] == 'difficulty') {
@@ -381,7 +383,7 @@ function display_exercise($exercise_id) {
             }
         } else {
             if ($question->selectNbrExercises() > 1) {
-                $modal_params = "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'";
+                $modal_params = "class='warnLink' data-bs-toggle='modal' data-bs-target='#modalWarning' data-remote='false'";
             } else {
                 $modal_params = '';
             }
@@ -390,7 +392,7 @@ function display_exercise($exercise_id) {
               <td colspan='$colspan'>
                 <strong><u>$langQuestion</u>: $i</strong>
                 <a $modal_params href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid'>
-                  <span class='fa fa-edit' data-toggle='tooltip' data-original-title='$langModify'></span>
+                  <span class='fa fa-edit' data-bs-toggle='tooltip' data-original-title='$langModify'></span>
                 </a>
                 </td>
             </tr>
@@ -492,7 +494,7 @@ function display_exercise($exercise_id) {
             $tool_content .= "<span style='float:right;'>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>";
             $tool_content .= "</th></tr>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
 
         unset($answer);
         // question  numbering

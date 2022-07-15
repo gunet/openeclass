@@ -8,7 +8,7 @@
 <div class="calendar calendar-block">
     <!-- <h2> {{ trans('langCalendar') }} </h2> -->
     <div class='content-block-items'>
-        <div class='panel-body'>
+        <div class='panel-calendar-body'>
             <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js?v=4.0-dev"></script>
             <script src="{{ $urlAppend }}template/default/js/bootstrap.min.js?v=4.0-dev"></script>
             <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/js/language/el-GR.js?v=4.0-dev"></script>

@@ -625,9 +625,9 @@ if ($action == "showPost") {
             }
         }
         $tool_content .= "
-        <div class='row p-2'></div>
+        <div class='col-sm-12'>
                         <div class='panel panel-action-btn-default'>
-                            <div class='panel-heading notes_thead'>
+                            <div class='panel-heading'>
                                 <div class='pull-right'>
                                     ". action_button(array(
                                         array(
@@ -652,7 +652,7 @@ if ($action == "showPost") {
                                         ),
                                     ))."
                                 </div>
-                                <h3 class='panel-title text-white'>
+                                <h3 class='panel-title'>
                                     ".q($post->getTitle())."
                                 </h3>
                             </div>
@@ -663,7 +663,7 @@ if ($action == "showPost") {
                                     <div class='col-sm-6 text-end'>$sharing_content</div>
                                 </div>
                             </div>
-                        </div>";
+                        </div></div>";
 
         if ($comments_enabled) {
             if ($post->getCommenting() == 1) {
@@ -751,7 +751,7 @@ if ($action == "showBlog") {
                 $comment_content = "<div class=\"blog_post_empty_space\"></div>";
             }
             $tool_content .= "<div class='panel panel-action-btn-default'>
-                                <div class='panel-heading notes_thead'>
+                                <div class='panel-heading'>
                                     <div class='pull-right'>
                                         ". action_button(array(
                                             array(
@@ -776,8 +776,8 @@ if ($action == "showBlog") {
                                             ),
                                         ))."
                                     </div>
-                                    <h3 class='panel-title text-white'>
-                                        <a class='text-white' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
+                                    <h3 class='panel-title'>
+                                        <a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
                                     </h3>
                                 </div>
                                 <div class='panel-body ps-3 panel-body-blog'>

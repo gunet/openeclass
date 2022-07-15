@@ -243,7 +243,7 @@ function printPollForm() {
                 <div class=col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12>
                 <div class='row p-2'></div>
                     <div class='panel panel-success'>
-                        <div class='panel-heading panel-heading-questionaire'>
+                        <div class='panel-heading'>
                             $langQuestion $i
                         </div>
                         <div class='panel-body panel-body-questionaire'>

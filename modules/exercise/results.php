@@ -61,7 +61,8 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
 if ($is_editor && isset($_GET['purgeAttempID'])) {
     $eurid = $_GET['purgeAttempID'];
     $objExercise->purgeAttempt($exerciseIdIndirect, $eurid);
-    Session::Messages($langPurgeExerciseResultsSuccess);
+    Session::flash('message',$langPurgeExerciseResultsSuccess); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=" . getIndirectReference($_GET['exerciseId']));
 }
 
@@ -69,7 +70,8 @@ if ($is_editor && isset($_GET['modifyAttempID'])) {
     $eurid = $_GET['modifyAttempID'];
     $status = $_GET['status'];
     $objExercise->modifyAttempt($eurid, $status);
-    Session::Messages($langChangeAttemptStatus);
+    Session::flash('message',$langChangeAttemptStatus); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=" . getIndirectReference($_GET['exerciseId']));
 }
 
@@ -128,23 +130,23 @@ if ($is_editor) {
     ]);
 }
 
-$tool_content .= "<div class='panel panel-primary'>
+$tool_content .= "<div class='col-sm-12'><div class='panel panel-primary'>
     <div class='panel panel-heading'>" . q_math($exerciseTitle) . "</div>";
 if ($exerciseDescription_temp) {
     $tool_content .= "<div class='panel panel-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
 }
-$tool_content .= "</div>";
+$tool_content .= "</div></div>";
 
 
 $status = (isset($_GET['status'])) ? intval($_GET['status']) : '';
-$tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='status_filtering'>
+$tool_content .= "<div class='col-sm-12 mt-3'><select class='form-select' style='margin:0 0 12px 0;' id='status_filtering'>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect'>--- $langCurrentStatus ---</option>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_ACTIVE."' ".(($status === ATTEMPT_ACTIVE)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_ACTIVE) . "</option>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_COMPLETED."' ".(($status === ATTEMPT_COMPLETED)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_COMPLETED) . "</option>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_PENDING."' ".(($status === ATTEMPT_PENDING)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_PENDING) . "</option>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_PAUSED."' ".(($status === ATTEMPT_PAUSED)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_PAUSED) . "</option>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_CANCELED."' ".(($status === ATTEMPT_CANCELED)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_CANCELED) . "</option>
-        </select>";
+        </select></div>";
 
 if ($is_editor) {
     $result = Database::get()->queryArray("(SELECT DISTINCT uid, surname, givenname FROM `exercise_user_record`
@@ -187,7 +189,7 @@ foreach ($result as $row) {
 
     if (count($result2) > 0) { // if users found
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<tr><td colspan='".($is_editor ? 5 : 4)."'>";
+        $tool_content .= "<tr><td class='text-center' style='background:#4682B4' colspan='".($is_editor ? 5 : 4)."'>";
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";
         } else {
@@ -199,16 +201,16 @@ foreach ($result as $row) {
             if (uid_to_am($sid) != '') {
                 $studentam = "$langAmShort: " . uid_to_am($sid);
             }
-            $tool_content .= "<strong>$langUser:</strong> " . uid_to_name($sid,'surname'). " " . uid_to_name($sid, 'givenname') . "
-                            <div><small>$studentam<span style='padding-left: 10px;'>$user_group</span></small></div>";
+            $tool_content .= "<strong class='text-white'>$langUser:</strong> " . uid_to_name($sid,'surname'). " " . uid_to_name($sid, 'givenname') . "
+                            <div><small class='text-white'>$studentam<span style='padding-left: 10px;'>$user_group</span></small></div>";
         }
         $tool_content .= "</td>
                 </tr>
-                <tr>
-                  <th class='text-center'>" . $langStart . "</th>
-                  <th class='text-center'>" . $langExerciseDuration . "</th>
-                  <th class='text-center'>" . $langTotalScore . "</th>
-                  <th class='text-center'>" . $langCurrentStatus. "</th>
+                <tr class='list-header'>
+                  <th class='text-white text-center'>" . $langStart . "</th>
+                  <th class='text-white text-center'>" . $langExerciseDuration . "</th>
+                  <th class='text-white text-center'>" . $langTotalScore . "</th>
+                  <th class='text-white text-center'>" . $langCurrentStatus. "</th>
                   ". ($is_editor ? "<th class='text-center'>" . icon('fa-gears'). "</th>" : "") ."
                 </tr>";
 

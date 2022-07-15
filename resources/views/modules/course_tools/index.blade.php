@@ -9,7 +9,7 @@
 @section('content')
 
     <div class="panel panel-default panel-action-btn-default">
-        <div class='panel-heading list-header'>
+        <div class='panel-heading'>
             <h3 class='panel-title'>{{ trans('langActivateCourseTools') }}</h3>
         </div>
         <form name="courseTools" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method="post" enctype="multipart/form-data">
@@ -57,7 +57,7 @@
                 <a class='btn btn-success' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> {{ trans('langAddExtLink') }}</a>
             </div>
         </div>
-        <div class='panel-heading list-header'>
+        <div class='panel-heading'>
             <h3 class='panel-title'> {{ trans('langOperations') }}</h3>
         </div>
         <table class='table-default'>
@@ -78,7 +78,7 @@
     </div>
 
     <div class='panel panel-default panel-action-btn-default'>
-        <div class='panel-heading list-header'>
+        <div class='panel-heading'>
             <span class='panel-title' style='line-height: 50px;'>{{ trans('langLtiConsumer') }}</span>
             <span class='pull-right' style='padding:8px;'>
             <a class='btn btn-success' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
@@ -90,7 +90,7 @@
 
     @if ($ltiPublishIsEnabledForCurrentCourse)
         <div class='panel panel-default panel-action-btn-default'>
-            <div class='panel-heading list-header'>
+            <div class='panel-heading'>
                 <span class='panel-title' style='line-height: 50px;'>{{ trans('langLtiPublishTool') }}</span>
                 <span class='pull-right' style='padding:8px;'>
                 <a class='btn btn-success' href='editpublish.php?course={{ $course_code }}'>

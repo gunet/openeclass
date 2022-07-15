@@ -353,7 +353,7 @@ if ($is_editor) {
     }
 
     // Top menu
-    $tool_content .= "<div class='row'><div class='col-sm-12'>";
+    $tool_content .= "<div class='col-sm-12'>";
 
     if (isset($_GET['editUsers']) or isset($_GET['gradeBooks'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
@@ -456,7 +456,7 @@ if ($is_editor) {
                       'level' => 'primary-label',
                       'button-class' => 'btn-success')));
     }
-    $tool_content .= "</div></div>";
+    $tool_content .= "</div>";
 
     // update gradebook settings
     if (isset($_POST['submitGradebookSettings'])) {

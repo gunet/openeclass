@@ -49,7 +49,7 @@
                        @foreach($announcementsID as $an)
                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                                 <div class="panel panel-default panel-default-admin mt-3">
-                                    <div class="panel-heading notes_thead ps-3 pb-2 pt-2 pe-3">                   
+                                    <div class="panel-heading ps-3 pb-2 pt-2 pe-3">                   
                                         <span class="text-white">
                                             <span class='text-warning'>{{trans('langTitle')}}:</span> {{$an->title}}
                                         </span>

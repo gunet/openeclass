@@ -82,10 +82,12 @@ if ($_POST && isset($_POST['questionScore'])) {
                     SET total_score = total_score + ?f WHERE eurid = ?d",
                     $data['questionScore'], $data['eurId']);
             }
-            Session::Messages($langUpdateSuccess, 'alert-success');
+            Session::flash('message',$langUpdateSuccess); 
+            Session::flash('alert-class', 'alert-success');
         }
     } else {
-        Session::Messages($langUpdateFailure, 'alert-warning');
+        Session::flash('message',$langUpdateFailure); 
+        Session::flash('alert-class', 'alert-warning');
     }
 }
 
@@ -119,7 +121,8 @@ if (isset($_GET['exerciseId'])) {
     }
     else {
          redirect_to_home_page('modules/exercise/results_by_question.php?course='.$course_code.'&exerciseId='.$exerciseIdIndirect);
-         Session::Messages($langUpdateFailure, 'alert-warning');
+         Session::flash('message',$langUpdateFailure); 
+         Session::flash('alert-class', 'alert-warning');
     }
 }
 
@@ -232,7 +235,7 @@ if (count($exercise_question_ids) > 0) {
 $tool_content .= "<br><div align='center'>";
 //submit button will only appear when the exercise can be graded
 $tool_content .= "<input type='submit' value='$langSubmit' form='grade_form' class='btn btn-primary' id='submitButton'>"
-     ."<a class='btn btn-default' href='results_by_question.php?course=$course_code&exerciseId=$exerciseIdIndirect'>
+     ."<a class='btn btn-secondary' href='results_by_question.php?course=$course_code&exerciseId=$exerciseIdIndirect'>
            $langReturn
        </a>";
 $tool_content .= "</div>";

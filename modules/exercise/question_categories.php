@@ -39,13 +39,15 @@ if (isset($_POST['submitCat'])) {
             $q_cat_id = $_GET['modifyCat'];
             Database::get()->query("UPDATE exercise_question_cats SET question_cat_name = ?s "
                     . "WHERE question_cat_id = ?d", $q_cat_name, $q_cat_id);
-            Session::Messages($langEditCatSuccess, 'alert-success');
+            Session::flash('message',$langEditCatSuccess); 
+            Session::flash('alert-class', 'alert-success');
         } else {
             $PollActive = 1;
             $q_cat_id = Database::get()->query("INSERT INTO exercise_question_cats
                         (question_cat_name, course_id)
                         VALUES (?s, ?d)", $q_cat_name, $course_id)->lastInsertID;
-            Session::Messages($langNewCatSuccess, 'alert-success');
+            Session::flash('message',$langNewCatSuccess); 
+            Session::flash('alert-class', 'alert-success');
         }
         redirect_to_home_page("modules/exercise/question_categories.php?course=$course_code");
     } else {
@@ -81,17 +83,17 @@ if (isset($_POST['submitCat'])) {
     <div class='col-12'>
         <div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' action='$form_action_url' method='post'>
-                <div class='form-group ".(Session::getError('questionCatName') ? "has-error" : "")."'>
-                    <label for='questionCatName' class='col-sm-2 control-label'>$langTitle:</label>
-                    <div class='col-sm-10'>
+                <div class='form-group ".(Session::getError('questionCatName') ? "has-error" : "")." mt-3'>
+                    <label for='questionCatName' class='col-sm-6 control-label-notes'>$langTitle:</label>
+                    <div class='col-sm-12'>
                       <input name='questionCatName' type='text' class='form-control' id='questionCatName' placeholder='$langTitle' value='" . q($questionCatName) . "'>
                       <span class='help-block'>".Session::getError('questionCatName')."</span>
                     </div>
                 </div>
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' name='submitCat' type='submit' value='$langSubmit'>
-                        <a href='question_categories.php?course=$course_code' class='btn btn-default'>$langCancel</a>
+                        <a href='question_categories.php?course=$course_code' class='btn btn-secondary'>$langCancel</a>
                     </div>
                 </div>                
             </form>
@@ -100,7 +102,8 @@ if (isset($_POST['submitCat'])) {
     $q_cat_id = $_GET['deleteCat'];
     if (Database::get()->query("DELETE FROM exercise_question_cats WHERE question_cat_id = ?d AND course_id = ?d", $q_cat_id, $course_id)->affectedRows > 0) {
         Database::get()->query("UPDATE exercise_question SET category = ?d WHERE category = ?d AND course_id = ?d", 0, $q_cat_id, $course_id);
-        Session::Messages($langDelCatSuccess, 'alert-success');
+        Session::flash('message',$langDelCatSuccess); 
+        Session::flash('alert-class', 'alert-success');
     }
     redirect_to_home_page("modules/exercise/question_categories.php?course=$course_code");
 } else {
@@ -130,9 +133,9 @@ if (isset($_POST['submitCat'])) {
             <div class='table-responsive'>
                 <table class='table-default'>
                     <tbody>
-                        <tr>
-                            <th>$langTitle</th>
-                            <th class='text-center'>".icon('fa-gears')."</th>
+                        <tr class='list-header'>
+                            <th class='text-white ps-3'>$langTitle</th>
+                            <th class='text-white text-center'>".icon('fa-gears')."</th>
                         </tr> 
                     ";
         foreach ($q_cats as $q_cat) {
@@ -161,7 +164,7 @@ if (isset($_POST['submitCat'])) {
                 </table>
             </div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoQuestionCats</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoQuestionCats</div></div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

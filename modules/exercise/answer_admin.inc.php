@@ -134,7 +134,9 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $blanksDefined = true;
         }
         if (isset($buttonBack) or isset($blanksDefined)) {
-            Session::Messages($langQuestionUpdated, 'alert-success');
+            Session::flash('message',$langQuestionUpdated); 
+            Session::flash('alert-class', 'alert-success');
+
             if (isset($exerciseId)) {
                 redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
             } else {
@@ -166,14 +168,16 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         }
         if (isset($_POST['match'])) { // check for blank matches
             if ($_POST['match'] != array_filter($_POST['match'],'check_empty')) {
-                Session::Messages($langGiveAnswers, 'alert-warning');
+                Session::flash('message',$langGiveAnswers); 
+                Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
             }
         }
 
         if (isset($_POST['option'])) { // check for blank options
             if ($_POST['option'] != array_filter($_POST['option'], 'check_empty')) {
-                Session::Messages($langGiveAnswers, 'alert-warning');
+                Session::flash('message',$langGiveAnswers); 
+                Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
             }
         }
@@ -247,7 +251,8 @@ if (isset($submitAnswers) || isset($buttonBack)) {
     }
     if (empty($msgErr) and !isset($_POST['setWeighting'])) {
         if (isset($exerciseId)) {
-            Session::Messages($langQuestionReused, 'alert-success');
+            Session::flash('message',$langQuestionReused); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
         } else {
             redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code");
@@ -411,7 +416,7 @@ if (isset($_GET['modifyAnswers'])) {
             }
         }
     }
-    $tool_content .= "<div class='panel panel-primary'>
+    $tool_content .= "<div class='col-sm-12'><div class='panel panel-primary'>
                       <div class='panel-heading'>
                         <h3 class='panel-title'>$langQuestion &nbsp;" .
                             icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code".(isset($exerciseId) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . $questionId)."</h3>
@@ -421,13 +426,13 @@ if (isset($_GET['modifyAnswers'])) {
                                 <p>$questionDescription</p>
                                 ".(($okPicture)? "<div class='text-center'><img src='../../$picturePath/quiz-$questionId'></div>":"")."
                       </div>
-                    </div>";
+                    </div></div>";
 
    if ($answerType != FREE_TEXT) {
 
-        $tool_content .= "<div class='panel panel-info'>
+        $tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-info'>
                            <div class='panel-heading'>
-                             <h3 class='panel-title'>$langQuestionAnswers</h3>";
+                             <h3 class='panel-title text-center control-label-notes fs-5 ps-2 pe-2 pt-2 pb-2'>$langQuestionAnswers</h3>";
                              if ($answerType == MULTIPLE_ANSWER) {
                                  $tool_content .= "<h5>$langNegativeScoreLegend</h5>";
                              }
@@ -713,15 +718,15 @@ if (isset($_GET['modifyAnswers'])) {
      $back_button = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && isset($setWeighting) ? "<input class='btn btn-primary' type='submit' name='buttonBack' value='&lt; $langBack'' />" : "";
      $tool_content .= "
                      <div class='row'>
-                         <div class='col-sm-10 col-sm-offset-2'>
+                         <div class='col-sm-10 col-sm-offset-2 ps-3'>
                              $back_button
                              <input class='btn btn-primary' type='submit' name='submitAnswers' value='$submit_text'>
-                             <a class='btn btn-default' href='$cancel_link'>$langCancel</a>
+                             <a class='btn btn-secondary' href='$cancel_link'>$langCancel</a>
                          </div>
                      </div>
                 </fieldset>
             </form>
          </div>
-     </div>";
+     </div></div>";
    }
 }

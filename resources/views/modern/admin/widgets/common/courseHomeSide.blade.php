@@ -7,7 +7,7 @@
                         <div class="panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3" id="course_home_widget_sidebar" data-widget-area-id="6">
                             @foreach ($course_home_sidebar_widgets as $key => $course_home_sidebar_widget)
                             <div class="panel panel-success widget" data-widget-id="{{ $course_home_sidebar_widget->id }}" data-widget-widget-area-id="{{ $key }}">
-                                <div class="panel-heading notes_thead">                   
+                                <div class="panel-heading">                   
                                     <a class='text-white' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
                                        href="#widget_desc_{{ $key }}" class="widget_title">
                                         {{ $course_home_sidebar_widget->getName() }} <span></span>

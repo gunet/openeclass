@@ -67,16 +67,15 @@
                                         <div class='text-center text-muted'><em>{{ trans('langFaqNoEntries') }}</em> <br><br> <em>{{ trans('langFaqAddNew') }}</em></div>
                                     </div>
                                 @else
-                                    @php $count=0; @endphp
                                     @foreach ($faqs as $key => $faq)
-                                        <div class='panel'>
+                                        <div class='panel panel-default mt-3'>
                                             <div class='panel-heading' role='tab' id='heading{{ $faq->id }}'>
-                                                <h5 class='text-secondary'>
+                                                
                                                     <a class='control-label-notes' role='button' data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
                                                         <span>{{ $key+1 }}.</span>{!! $faq->title !!} <span class='caret'></span>
                                                     </a>
                                                     <span class='fa fa-arrow-down text-warning ps-2 fs-6'></span>
-                                                </h5>
+                                                
                                             </div>
                                             <div id='faq-{{ $faq->id }}' class='panel-collapse accordion-collapse collapse' role='tabpanel' aria-labelledby='heading{{ $faq->id }}' data-bs-parent='#accordion'>
                                                 <div class='panel-body ps-3'>
@@ -85,10 +84,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @if($count<2)
-                                            <hr>
-                                        @endif
-                                    @php $count++; @endphp
                                     @endforeach
                                 @endif
                             </div>

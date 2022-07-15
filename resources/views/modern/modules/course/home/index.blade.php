@@ -120,84 +120,86 @@
                         </div>
                     </div>
 
-                    <div class='panel panel-default mt-3'>
-                        <div class='panel-body'>
-                            @if ($course_info->home_layout == 1)
-                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                                    <figure>
-                                        <picture>
-                                            @if($course_info->course_image)
-                                            <img class='uploadImageCourse' src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_info->course_image}}' alt='Course Banner'/>
-                                            @else
-                                            <img class='uploadImageCourse' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
-                                            @endif
+                    <div class='col-sm-12'>
+                        <div class='panel panel-default mt-3 border-0 col_maincontent_coursePage'>
+                            <div class='panel-body'>
+                                @if ($course_info->home_layout == 1)
+                                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                                        <figure>
+                                            <picture>
+                                                @if($course_info->course_image)
+                                                <img class='uploadImageCourse' src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_info->course_image}}' alt='Course Banner'/>
+                                                @else
+                                                <img class='uploadImageCourse' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
+                                                @endif
 
-                                        </picture>
-                                    </figure>
+                                            </picture>
+                                        </figure>
 
-                                </div>
-                            @endif
-                            <div class='col-12{{ $course_info->home_layout == 1 ? ' col-sm-7' : ''}}'>
-                                <div class='course_info'>
-                                    @if ($course_info->description)
-                                            <div class="control-label-notes">{{ trans('langDescription') }}</div>
-                                            {!! $course_info->description !!}
-                                    @else
-                                        <p class='not_visible'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="row p-2"></div>
-
-                            @if ((!$is_editor) and (!$courseDescriptionVisible))
-                                @if ($course_info->course_license)
-                                    <span class='pull-right' style="margin-top: 15px;">{!! copyright_info($course_id) !!}</span>
+                                    </div>
                                 @endif
-                            @else
-                                <div class='col-12 course-below-wrapper mt-5'>
-                                    <div class='row text-muted course-below-info'>
-                                        <div class="row">
-                                            <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12 d-flex justify-content-md-start justify-content-center">
-                                                <a role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
-                                                    <span class='fa fa-chevron-right fa-fw'></span>
-                                                    <span class='ps-1'>{{ trans('langCourseDescription') }}</span>
-                                                </a>
-                                            </div>
-                                            @if($is_editor)
-                                                <div class="col-xl-7 col-lg-7 col-md-6 col-sm-12 col-12 d-flex justify-content-md-end justify-content-center">
-                                                    @if($courseDescriptionVisible>0)
-                                                        <span class='float-md-end pe-md-2 mt-md-0 float-start pe-0 mt-5'>{{trans('langCourseDescription')}}</span>
-                                                    @else
-                                                        <span class='float-md-end pe-md-2 mt-md-0 float-start pe-0 mt-5'>{{trans('langAdd')}}</span>
-                                                    @endif
-                                                    <span class='float-md-end pe-md-2 mt-md-0 float-start pe-0 mt-5'>{!! $edit_course_desc_link !!}</span>
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        @if ($course_info->course_license)
-                                            <span class="pull-right">{!! copyright_info($course_id) !!}</span>
+                                <div class='col-12{{ $course_info->home_layout == 1 ? ' col-sm-7' : ''}}'>
+                                    <div class='course_info'>
+                                        @if ($course_info->description)
+                                                <div class="control-label-notes">{{ trans('langDescription') }}</div>
+                                                {!! $course_info->description !!}
+                                        @else
+                                            <p class='not_visible'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
                                         @endif
-                                        <div class='col-12'>
-                                            <div class='collapse shadow-sm p-3 bg-body rounded' id='collapseDescription'>
-                                                <div class='col-12'>
-                                                    @foreach ($course_descriptions as $row)
-                                                        <div class='d-flex justify-content-between'>
-                                                            <p class='control-label-notes text-start'>{{$row->title}}</p>
-                                                            {!! standard_text_escape($row->comments) !!}
-                                                            
-                                                        </div>
-                                                    @endforeach
+                                    </div>
+                                </div>
+
+                                <div class="row p-2"></div>
+
+                                @if ((!$is_editor) and (!$courseDescriptionVisible))
+                                    @if ($course_info->course_license)
+                                        <span class='pull-right' style="margin-top: 15px;">{!! copyright_info($course_id) !!}</span>
+                                    @endif
+                                @else
+                                    <div class='col-12 course-below-wrapper mt-5'>
+                                        <div class='row text-muted course-below-info'>
+                                            <div class="row">
+                                                <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12 d-flex justify-content-md-start justify-content-center">
+                                                    <a role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
+                                                        <span class='fa fa-chevron-right fa-fw'></span>
+                                                        <span class='ps-1'>{{ trans('langCourseDescription') }}</span>
+                                                    </a>
+                                                </div>
+                                                @if($is_editor)
+                                                    <div class="col-xl-7 col-lg-7 col-md-6 col-sm-12 col-12 d-flex justify-content-md-end justify-content-center">
+                                                        @if($courseDescriptionVisible>0)
+                                                            <span class='float-md-end pe-md-2 mt-md-0 float-start pe-0 mt-5'>{{trans('langCourseDescription')}}</span>
+                                                        @else
+                                                            <span class='float-md-end pe-md-2 mt-md-0 float-start pe-0 mt-5'>{{trans('langAdd')}}</span>
+                                                        @endif
+                                                        <span class='float-md-end pe-md-2 mt-md-0 float-start pe-0 mt-5'>{!! $edit_course_desc_link !!}</span>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            @if ($course_info->course_license)
+                                                <span class="pull-right">{!! copyright_info($course_id) !!}</span>
+                                            @endif
+                                            <div class='col-12'>
+                                                <div class='collapse shadow-sm p-3 bg-body rounded' id='collapseDescription'>
+                                                    <div class='col-12'>
+                                                        @foreach ($course_descriptions as $row)
+                                                            <div class='d-flex justify-content-between'>
+                                                                <p class='control-label-notes text-start'>{{$row->title}}</p>
+                                                                {!! standard_text_escape($row->comments) !!}
+                                                                
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endif
+                                @endif
+
+                            </div>
 
                         </div>
-
                     </div>
                 </div> <!-- end row p-5 -->
 

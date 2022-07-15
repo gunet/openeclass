@@ -276,7 +276,7 @@ if (isset($_GET['delete'])) {
         $tool_content .= "
         <div class='row p-2'></div>
             <div class='panel panel-default'>
-                <div class='panel-heading notes_thead'>
+                <div class='panel-heading'>
                     <h3 class='panel-title text-white'>$langEBookInfo &nbsp;
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1'>
                             <i class='fa fa-edit' title='$langEdit' data-toggle='tooltip'></i>

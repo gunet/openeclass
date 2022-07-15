@@ -4599,9 +4599,10 @@ function assignment_details($id, $row, $x =false) {
 
     $moduleTag = new ModuleElement($id);
     $tool_content .= "
+    <div class='col-sm-12'>
     <div class='panel panel-action-btn-primary'>
-        <div class='panel-heading list-header'>
-            <h4 class='panel-title text-white'>
+        <div class='panel-heading'>
+            <h4 class='panel-title'>
                 $m[WorkInfo] &nbsp;
                 ". (($is_editor) ?
                 "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit'>
@@ -4609,7 +4610,7 @@ function assignment_details($id, $row, $x =false) {
                 </a>" : "")."
             </h4>
         </div>
-        <div class='panel-body panel-body-exercise ps-3 pb-3 pt-3 pe-3'>
+        <div class='panel-body ps-3 pb-3 pt-3 pe-3'>
             <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langTitle:</strong>
@@ -4755,7 +4756,7 @@ function assignment_details($id, $row, $x =false) {
 		}
     $tool_content .= "
         </div>
-    </div>";
+    </div></div>";
     $cdate = date('Y-m-d H:i:s');
     if ($row->deadline < $cdate && $row->late_submission && !$is_editor) {
         $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langWarnAboutDeadLine</div></div>";
