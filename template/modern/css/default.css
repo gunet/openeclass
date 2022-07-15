@@ -1485,9 +1485,9 @@
     border-top-right-radius: 5px;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
-    -moz-box-shadow: 0 0 3px #ccc;
-    -webkit-box-shadow: 0 0 3px #ccc;
-    box-shadow: 0 0 3px #ccc;
+    -moz-box-shadow: 0 0 3px rgb(101, 102, 133);
+    -webkit-box-shadow: 0 0 3px rgb(118, 119, 146);
+    box-shadow: 0 0 3px rgb(92, 93, 121);
   }
   .panel-heading{
     border-top-right-radius: 5px;
@@ -1505,7 +1505,7 @@
   .panel-title{
      color:#003F87;
      font-weight: 600;
-     font-size: 16px;
+     font-size: 17px;
      padding-top: 10px;
   }
   .panel-title .fa-edit{

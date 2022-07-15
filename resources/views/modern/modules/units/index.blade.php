@@ -155,7 +155,7 @@
 
                             
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-                        <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                        <div class='panel panel-default'>
                             <div class='panel-heading'>
                                 <label class='col-sm-8 control-label-notes'>Τίτλος</label>
                                 <div class='panel-title h5'>{{ $pageName }}
@@ -186,7 +186,7 @@
 
                             
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-                        <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                        <div class='panel panel-default'>
                             <div class='panel-body'>
                                 <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
                                     <input type='hidden' name='course' value='{{ $course_code }}'>

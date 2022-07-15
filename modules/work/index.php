@@ -4881,7 +4881,7 @@ function show_assignment($id, $display_graph_results = false) {
                 <input type='hidden' name='grades_id' value='$id' />
                 <br>
                 <div class='margin-bottom-thin'>
-                    <strong>$langSubmissions:</strong>&nbsp; $count_of_assignments";
+                    <strong class='control-label-notes ps-1'>$langSubmissions:</strong>&nbsp; $count_of_assignments";
                 // button for transferring student peer review grades to teacher grades
                 if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && ($count_of_ass > 0)) {
                     $tool_content .= "<div class='text-right' style='margin-bottom: 15px;'><a class='btn btn-primary' href='$_SERVER[SCRIPT_NAME]?course=$course_code' id='transfer_grades'>$langTransferGrades</a></div>";
