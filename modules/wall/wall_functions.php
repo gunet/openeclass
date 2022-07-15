@@ -214,12 +214,12 @@ function generate_single_post_html($post) {
 
     $ret = '<div class="row margin-right-thin margin-left-thin margin-top-thin">
                               <div class="col-sm-12">
-                                  <div class="media">
-                                      <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
+                                  <div class="media panel-default">
+                                      <a class="media-left mt-2" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
                                         '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
                                       </a>
-                                      <div class="media-body bubble">
-                                          <button class="btn btn-success pe-none mt-2 media-heading text-white mt-1 ps-3 pe-2">'.$datetime.'</button>
+                                      <div class="media-body bubble panel-body">
+                                          <button class="btn btn-success mt-2 media-heading text-white mt-1 ps-3 pe-2">'.$datetime.'</button>
                                           <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                                           '.$post_actions.'
                                           <div class="margin-top-thin" style="padding:20px">

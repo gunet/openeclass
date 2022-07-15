@@ -3083,7 +3083,7 @@ function show_edit_assignment($id) {
     $review_error_rubric = Session::getError('rubric_review');
 
     $tool_content .= "
-    <div class='col-12'>
+    <div class='col-12 mt-3'>
     <div class='form-wrapper shadow-sm p-3 rounded'>
     <form class='form-horizontal' enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
     <input type='hidden' name='id' value='$id' />
@@ -4244,7 +4244,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     }
     $notice = $submissions_exist > 1? $langNotice3Multiple: $langNotice3;
     $notice = ($submissions_exist)?
-    "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>" . icon('fa-info-circle') . " $notice</div></div>": '';
+    "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'><div class='alert alert-info'>" . icon('fa-info-circle') . " $notice</div></div>": '';
     if ($assignment->grading_type == ASSIGNMENT_SCALING_GRADE) {
         $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assignment->grading_scale_id, $course_id)->scales;
         $scales = unserialize($serialized_scale_data);
@@ -4341,7 +4341,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 )
             ))."
                     $notice
-                    <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+                    <div class='col-12 mt-3'><div class='form-wrapper shadow-sm p-3 rounded'>
                      <form class='form-horizontal' enctype='multipart/form-data' action='$form_link' method='post'>
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input $course_unit_hidden_input
                         <fieldset>

@@ -102,7 +102,8 @@ if (isset($_POST['submitNote'])) {
         if (!empty($_POST['id'])) { //existing note
             $id = intval(getDirectReference($_POST['id']));
             Notes::update_note($id, $newTitle, $newContent, $refobjid);
-            Session::Messages($langNoteModify, 'alert-success');
+            Session::flash('message', $langNoteModify);
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('main/notes/index.php');
         } else { // new note
             $id = Notes::add_note($newTitle, $newContent, $refobjid);
@@ -110,7 +111,8 @@ if (isset($_POST['submitNote'])) {
                 echo $langNoteAdd;
                 exit;
             }
-            Session::Messages($langNoteAdd, 'alert-success');
+            Session::flash('message', $langNoteAdd);
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('main/notes/index.php');
         }
     } else {
@@ -124,7 +126,8 @@ if (isset($_POST['submitNote'])) {
 if (isset($_GET['delete'])) {
     $thisNoteId = intval(getDirectReference($_GET['delete']));
     Notes::delete_note($thisNoteId);
-    Session::Messages($langNoteDel, 'alert-success');
+    Session::flash('message', $langNoteDel);
+    Session::flash('alert-class', 'alert-success');
 //    redirect_to_home_page('main/notes/index.php');
 }
 
@@ -159,29 +162,29 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
         <div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <fieldset>
-                <div class='form-group".(Session::getError('newTitle') ? " has-error" : "")."'>
-                    <label for='newTitle' class='col-sm-2 control-label'>$langTitle:</label>
-                    <div class='col-sm-10'>
+                <div class='form-group".(Session::getError('newTitle') ? " has-error" : "")." mt-3'>
+                    <label for='newTitle' class='col-sm-6 control-label-notes'>$langTitle:</label>
+                    <div class='col-sm-12'>
                         <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . $titleToModify . "' placeholder='$langTitle'>
                         <span class='help-block'>".Session::getError('newTitle')."</span>
                     </div>
                 </div>
-                <div class='form-group'>
-                  <label for='newContent' class='col-sm-2 control-label'>$langNoteBody:</label>
-                  <div class='col-sm-10'>
+                <div class='form-group mt-3'>
+                  <label for='newContent' class='col-sm-6 control-label-notes'>$langNoteBody:</label>
+                  <div class='col-sm-12'>
                     " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
                   </div>
                 </div>
-                <div class='form-group'>
-                  <label for='refobjgentype' class='col-sm-2 control-label'>$langReferencedObject:</label>
-                  <div class='col-sm-10'>
+                <div class='form-group mt-3'>
+                  <label for='refobjgentype' class='col-sm-6 control-label-notes'>$langReferencedObject:</label>
+                  <div class='col-sm-12'>
                     ".References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected). "
                   </div>
                 </div>
-                <div class='form-group'>
+                <div class='form-group mt-5'>
                   <div class='col-sm-10 col-sm-offset-2'>
                     <input class='btn btn-primary' type='submit' name='submitNote' value='$langAdd'> 
-                    <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
+                    <a class='btn btn-secondary' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
                   </div>
                 </div>";
                 if($noteToModify!=""){
@@ -207,6 +210,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langNotes);
     $pageName = q($note->title);
     $tool_content .= "
+    <div class='col-sm-12'>
         <div class='panel panel-action-btn-default'>
             <div class='panel-heading'>
                 <div class='pull-right'>".
@@ -224,10 +228,10 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <h3 class='panel-title'>".q($note->title)."</h3>
             </div>
             <div class='panel-body'>
-                <div class='label label-success'>". claro_format_locale_date($dateFormatLong, strtotime($note->date_time)). "</div><br><br>
+                <div class='btn btn-success pe-none'>". claro_format_locale_date($dateFormatLong, strtotime($note->date_time)). "</div><br><br>
                 $note->content
             </div>
-        </div>";
+        </div></div>";
 } else {
     /* display actions toolbar */
     $tool_content .= action_bar(array(
@@ -259,8 +263,8 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <table class='table-default'>";
     if ($noteNumber > 0) {
         $tool_content .= "<tr class='list-header'>";
-        $tool_content .= "<th class='text-left'>$langCategoryNotes</th>";
-        $tool_content .= "<th class='text-center'>".icon('fa-gears')."</th>";
+        $tool_content .= "<th class='text-white text-left ps-2'>$langCategoryNotes</th>";
+        $tool_content .= "<th class='text-white text-center'>".icon('fa-gears')."</th>";
         $tool_content .= "</tr>";
     }
 
@@ -319,7 +323,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             $no_content = false;
         }
         if ($no_content) {
-            $tool_content .= "<p class='alert alert-warning text-center'>$langNoNote</p>\n";
+            $tool_content .= "<div class='col-sm-12'><p class='alert alert-warning text-center'>$langNoNote</p></div>\n";
         }
     }
 }

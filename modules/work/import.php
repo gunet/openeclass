@@ -121,7 +121,7 @@ $tool_content .= action_bar([
 enableCheckFileSize();
 $tool_content .= "
 
-        <div class='col-12'>
+        <div class='col-12 mt-3'>
             <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' enctype='multipart/form-data' method='post' action='import.php?course=$course_code&amp;id=$id'>
                     <fieldset>

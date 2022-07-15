@@ -381,7 +381,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 array(
                     'title' => $langUsage,
                     'icon' => 'fa-pie-chart',
-                    'url' => "../usage/?t=u&u=$myrow->id"
+                    'url' => "../usage/index.php?t=u&u=$myrow->id"
                 ),
                 array(
                     'title' => $langDelete,

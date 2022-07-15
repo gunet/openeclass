@@ -34,14 +34,14 @@
                             </div>
 
                             <div class="login-form-body">
-                                <h3 class="login-form-title">
-                                    <strong>{{ trans('langUserLogin') }}</strong>
-                                </h3>
+                                <h4 class="login-form-title">
+                                    <strong class='fs-4 control-label-notes'>{{ trans('langUserLogin') }}</strong>
+                                </h4>
                                 <form action="{{ $urlAppend }}" method="post">
                                     <div class="login-form-spacing">
-                                        <h4>{{ trans('langUsername') }}</h4>
+                                        <h4 class='control-label-notes'>{{ trans('langUsername') }}</h4>
                                         <input class="login-input" type="text" id="uname" name="uname" >
-                                        <h4 class="password_h4">{{ trans('langPassword') }}</h4>
+                                        <h4 class="control-label-notes mt-3">{{ trans('langPassword') }}</h4>
                                         <input class="login-input" type="password" id="pass" name="pass">
                                     </div>
                                     <div class="login-form-spacing">

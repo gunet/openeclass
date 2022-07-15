@@ -91,14 +91,14 @@ $tool_content .= "
 	<div id='jsmiin-nav-horizontal'>
 		<div class='btn-group btn-group-justified' role='group'>
 			<div class='btn-group' role='group'>
-				<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langOpenMind <span class='caret'></span> </button>
+				<button type='button' class='btn btn-default dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langOpenMind <span class='caret'></span> </button>
 				<ul class='dropdown-menu'>
 					<li><a href='javascript:void(0)' role='button' onclick='open_json();'>$langOpenEx</a></li>
 					<li><input id='file_input' type='file' onchange='open_file();'/></li>
 				</ul>
 			</div>
 			<div class='btn-group' role='group'>
-				<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langEditMind <span class='caret'></span> </button>
+				<button type='button' class='btn btn-default dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langEditMind <span class='caret'></span> </button>
 				<ul class='dropdown-menu'>
 					<li><a href='javascript:void(0)' role='button' onclick='toggle_editable(this);'>$langEditDis</a></li>
             		<li><a href='javascript:void(0)' role='button' onclick='add_node();'>$langAddNode</a></li>
@@ -107,7 +107,7 @@ $tool_content .= "
 				</ul>
 			</div>
 			<div class='btn-group' role='group'>
-				<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langThemes <span class='caret'></span> </button>
+				<button type='button' class='btn btn-default dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langThemes <span class='caret'></span> </button>
 				<ul class='dropdown-menu'>
 					<li><a href='javascript:void(0)' data-theme='' role='button' onclick='set_theme(this);'>Default</a></li>
 					<li><a href='javascript:void(0)' data-theme='primary' role='button' onclick='set_theme(this);'>Primary</a></li>
@@ -128,7 +128,7 @@ $tool_content .= "
 				</ul>
 			</div>
 			<div class='btn-group' role='group'>
-				<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langSave <span class='caret'></span> </button>
+				<button type='button' class='btn btn-default dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langSave <span class='caret'></span> </button>
 				<ul class='dropdown-menu'>
 					<li><a href='javascript:void(0)' role='button'  onclick='screen_shot();'>$langScreenshot</a></li>
             		<li><a href='javascript:void(0)' role='button'  onclick='save_file();'>$langSaveFile</a></li>";

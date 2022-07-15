@@ -192,7 +192,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
   ================================================================ */
 
 // comment
-$tool_content .= "<div class='panel panel-default'>
+$tool_content .= "<div class='col-sm-12'><div class='panel panel-default'>
                     <div class='panel-heading'>
                         <h3 class='panel-title'>$langLearningPathData</h3>
                     </div>";
@@ -205,17 +205,17 @@ if (commentBox(LEARNINGPATH_, DISPLAY_)) {
       ";
     $tool_content .= "<td>". commentBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
 }
-$tool_content .= "</table></div>";
+$tool_content .= "</table></div></div>";
 
 // --------------------------- module table header --------------------------
 $tool_content .= "<div class='table-responsive'>";
 $tool_content .= "<table class='table-default'>";
-$tool_content .= "<tr class='list-header'><th colspan=\"" . ($maxDeep + 2) . "\"><div align=\"left\">&nbsp;&nbsp;<b>" . $langLearningPathStructure . "</b></div></th>\n";
+$tool_content .= "<tr class='list-header'><th class='text-white' colspan=\"" . ($maxDeep + 2) . "\"><div align=\"left\">&nbsp;&nbsp;<b>" . $langLearningPathStructure . "</b></div></th>\n";
 
 
 // show only progress column for authenticated users
 if ($uid) {
-    $tool_content .= '<th><b>' . $langProgress . '</b></th>' . "\n";
+    $tool_content .= '<th class="text-white text-center"><b>' . $langProgress . '</b></th>' . "\n";
 }
 
 $tool_content .= "</tr>\n";

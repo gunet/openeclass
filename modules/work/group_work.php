@@ -46,7 +46,7 @@ if (!file_exists($groupPath)) {
 $pageName = $langGroupSubmit;
 
 if (isset($_GET['submit'])) {
-    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langGroupWorkIntro</div></div>";
+    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'><div class='alert alert-info'>$langGroupWorkIntro</div></div>";
     show_assignments();
     draw($tool_content, 2);
 } elseif (isset($_POST['assign'])) {
@@ -118,7 +118,7 @@ function show_assignments() {
         $table_content .= "</td>\n    </tr>";
     }
     $tool_content .= "
-    <div class='col-12'>
+    <div class='col-12 mt-3'>
             <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                 <fieldset>

@@ -122,7 +122,7 @@ $tool_content .= "<div class='panel panel-primary'>
             . "WHERE eur.eid = ?d AND ear.weight IS NULL AND exq.type = ". FREE_TEXT . " "
             . "GROUP BY exq.id, eur.eid, eur.eurid, ear.weight, exwq.q_position ORDER BY exwq.q_position",$exerciseId);
 
-    $questions_table = "<table id=\'my-grade-table\' class='table-default'><thead class='list-header'><tr><th>$langOpenQuestionTitle</th><th>$langChoice</th></tr></thead><tbody>";
+    $questions_table = "<table id=\'my-grade-table\' class='table-default'><thead class='list-header'><tr><th class='text-white'>$langOpenQuestionTitle</th><th class='text-white'>$langChoice</th></tr></thead><tbody>";
     $i=0;
     foreach ($question_types as $row){
         $question_id = $row->id;

@@ -178,7 +178,7 @@
                                                         <div class='checkbox'>
                                                             <label>
                                                                 <input type='checkbox' name='uncompress' value='1'>
-                                                                <strong>{{ trans('langUncompress') }}</strong>
+                                                                <strong class='text-secondary'>{{ trans('langUncompress') }}</strong>
                                                             </label>
                                                         </div>
                                                     </div>
@@ -192,7 +192,7 @@
                                                     <div class='checkbox'>
                                                         <label>
                                                             <input type='checkbox' name='replace' value='1'>
-                                                            <strong>{{ trans('langReplaceSameName') }}</strong>
+                                                            <strong class='text-secondary'>{{ trans('langReplaceSameName') }}</strong>
                                                         </label>
                                                     </div>
                                                 </div>

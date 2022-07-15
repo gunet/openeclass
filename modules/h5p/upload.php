@@ -37,27 +37,26 @@ $upload_target_url = 'courses/temp/h5p';
 $toolName = $langImport;
 $navigation[] = ['url' => $backUrl, 'name' => $langH5p];
 
-$tool_content .= "<div class='alert alert-info'>$langImportH5P</div>";
+$tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langImportH5P</div></div>";
 
-$tool_content .= "<div class='row'>
-    <div class='col-md-12'>
-        <div class='form-wrapper'>
+$tool_content .= "
+    <div class='col-sm-12'>
+        <div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' action='save.php' method='post' enctype='multipart/form-data'>
-                <div class='form-group'>
-                    <label for='userFile' class='col-sm-2 control-label'>$langPathUploadFile:</label>
-                    <div class='col-sm-10'>
+                <div class='form-group mt-3'>
+                    <label for='userFile' class='col-sm-6 control-label-notes'>$langPathUploadFile:</label>
+                    <div class='col-sm-12'>
                         <input type='file' id='userFile' name='userFile'>
                         <span class='help-block' style='margin-bottom: 0px;'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></span>
                     </div>
                 </div>
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <div class='col-sm-offset-2 col-sm-10'>
                         <button class='btn btn-primary' type='submit'>$langUpload</button>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
-</div>";
+    </div>";
 
 draw($tool_content, 2);

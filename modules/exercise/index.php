@@ -551,8 +551,8 @@ if ($is_editor) {
 
         $courses_options1 = "<table id=\'my-grade-table\' class=\'table-default\'>"
                             . "<thead class=\'list-header\'>"
-                            . "<tr><th>$langTeacher</th>"
-                            . "<th>$langExerciseNumber</th>"
+                            . "<tr><th class='text-white'>$langTeacher</th>"
+                            . "<th class='text-white'>$langExerciseNumber</th>"
                             . "</tr></thead><tbody> " ;
             foreach ($my_courses1 as $row){
                 $courses_options1 .= "<tr>"
@@ -574,7 +574,7 @@ if ($is_editor) {
                 . "GROUP BY exq.id, eur.eid, eur.eurid, ear.q_position");
         $questionsEid = json_encode($question_types, JSON_UNESCAPED_UNICODE);
 
-        $questions_table = "<table id=\'my-grade-table\' class=\'table-default\'><thead class=\'list-header\'><tr><th>$langTitle</th><th>$langChoice</th></tr></thead><tbody> " ;
+        $questions_table = "<table id=\'my-grade-table\' class=\'table-default\'><thead class=\'list-header\'><tr><th class='text-white'>$langTitle</th><th class='text-white'>$langChoice</th></tr></thead><tbody> " ;
         foreach ($question_types as $row){
             $q_position = $row->q_position;
             $questions_table .= "<tr>"

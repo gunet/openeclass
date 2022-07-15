@@ -396,10 +396,10 @@ function show_submission_details($id) {
     $tool_content .= "
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
         <div class='panel panel-default'>
-            <div class='panel-heading bg-secondary'>
-                <h4 class='panel-title text-white'>$m[SubmissionWorkInfo]</h4>
+            <div class='panel-heading'>
+                <h4 class='panel-title'>$m[SubmissionWorkInfo]</h4>
             </div>
-            <div class='panel-body panel-body-exercise ps-3 pb-3 pt-3 pe-3' style='margin-top:-10px;'>
+            <div class='panel-body' style='margin-top:-10px;'>
                 <div class='row p-2 margin-bottom-fat'>
                     <div class='col-sm-3'>
                         <strong class='control-label-notes'>".$m['SubmissionStatusWorkInfo'].":</strong>
@@ -449,14 +449,14 @@ function show_submission_details($id) {
                 </div>
                 <div class='row p-2 margin-bottom-fat'>
                     <div class='col-sm-3'>
-                        <strong>" . $m['gradecomments'] . ":</strong>
+                        <strong class='control-label-notes'>" . $m['gradecomments'] . ":</strong>
                     </div>
                     <div class='col-sm-9' style='white-space: pre-wrap'>" . q($sub->grade_comments) . $file_comments_link . "
                     </div>
                 </div>
                 <div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
-                        <strong>" . $m['sub_date'] . ":</strong>
+                        <strong class='control-label-notes'>" . $m['sub_date'] . ":</strong>
                     </div>
                     <div class='col-sm-9'>" . nice_format($sub->submission_date, true) . "</div>
                 </div>";
@@ -477,7 +477,7 @@ function show_submission_details($id) {
                     $sub->assignment_id, $sub->uid, $sub->group_id)));
         $tool_content .= "<div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
-                    <strong>$langOpenCoursesFiles:</strong>
+                    <strong class='control-label-notes'>$langOpenCoursesFiles:</strong>
                 </div>
                 <div class='col-sm-9'>$links</div>";
     } elseif ($assignment->submission_type == ASSIGNMENT_STANDARD_GRADE) {
@@ -490,17 +490,17 @@ function show_submission_details($id) {
         $filelink = MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name);
         $tool_content .= "<div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
-                        <strong>$langFileName:</strong>
+                        <strong class='control-label-notes'>$langFileName:</strong>
                     </div>
                     <div class='col-sm-9'>$filelink</div>";
     } else {
         // online text
         $tool_content .= "<div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
-                        <strong>$langWorkOnlineText:</strong>
+                        <strong class='control-label-notes'>$langWorkOnlineText:</strong>
                     </div>
                     <div class='col-sm-9'>
-                        <a href='#' class='onlineText btn btn-xs btn-default' data-id='$sub->id'>$langQuestionView</a>
+                        <a href='#' class='onlineText btn btn-xs btn-secondary' data-id='$sub->id'>$langQuestionView</a>
                     </div>";
     }
     $tool_content .= "</div>";
@@ -510,7 +510,7 @@ function show_submission_details($id) {
         $tool_content .= "
                     <div class='row margin-bottom-fat'>
                         <div class='col-sm-3'>
-                            <strong>" . $langAutoJudgeEnable . ":</strong>
+                            <strong class='control-label-notes'>" . $langAutoJudgeEnable . ":</strong>
                         </div>
                         <div class='col-sm-9'><a href='$reportlink'> $langAutoJudgeShowWorkResultRpt</a>
                         </div>

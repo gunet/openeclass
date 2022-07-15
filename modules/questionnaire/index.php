@@ -271,15 +271,15 @@ function printPolls() {
                     <div class='table-responsive'>
               <table class='table-default'>
                 <tr class='list-header'>
-                    <th style='min-width: 55%;'><div align='left'>&nbsp;$langTitle</div></th>
-                    <th class='text-center'>$langDate</th>";
+                    <th class='text-white ps-2' style='min-width: 55%;'><div align='left'>&nbsp;$langTitle</div></th>
+                    <th class='text-white text-center'>$langDate</th>";
 
         if ($is_editor) {
-            $tool_content .= "<th class='text-center' width='16'>$langAnswers</th>";
+            $tool_content .= "<th class='text-white text-center' width='16'>$langAnswers</th>";
         } else {
-            $tool_content .= "<th class='text-center'>$langParticipate</th>";
+            $tool_content .= "<th class='text-white text-center'>$langParticipate</th>";
         }
-        $tool_content .= "<th class='text-center'>".icon('fa-cogs')."</th>";
+        $tool_content .= "<th class='text-white text-center'>".icon('fa-cogs')."</th>";
         $tool_content .= "</tr>";
         $k = 0;
         foreach ($result as $thepoll) {

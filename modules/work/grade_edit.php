@@ -211,7 +211,7 @@ function show_edit_form($id, $sid, $assign) {
                         }
 
                         $tool_content .= "
-						    <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+						    <div class='col-12 mt-3'><div class='form-wrapper shadow-sm p-3 rounded'>
                                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data'>
                                     <input type='hidden' name='assignment' value='$id' />
                                     <input type='hidden' name='submission' value='$row->id' />

@@ -187,13 +187,13 @@ if (!$conference_activity) {
         list($laSessionId, $laSessionToken) = colmooc_add_teacher_lasession();
         if ($laSessionId && $laSessionToken) {
             // Redirect teacher to colMOOC learning analytics
-            $colmooc_teacher_la_url = $colmoocapp->getParam(ColmoocApp::ANALYTICS_URL)->value() . "/?lasession_id=" . $laSessionId . "&lasession_token=" . $laSessionToken;
+            $colmooc_teacher_la_url = $colmoocapp->getParam(ColmoocApp::ANALYTICS_URL)->value() . "/index.php?lasession_id=" . $laSessionId . "&lasession_token=" . $laSessionToken;
         }
     } else if (!$is_editor && $conference_agent && $agent_id) {
         list($laSessionId, $laSessionToken) = colmooc_add_student_lasession();
         if ($laSessionId && $laSessionToken) {
             // Redirect student to colMOOC learning analytics
-            $colmooc_student_la_url = $colmoocapp->getParam(ColmoocApp::ANALYTICS_URL)->value() . "/?lasession_id=" . $laSessionId . "&lasession_token=" . $laSessionToken;
+            $colmooc_student_la_url = $colmoocapp->getParam(ColmoocApp::ANALYTICS_URL)->value() . "/index.php?lasession_id=" . $laSessionId . "&lasession_token=" . $laSessionToken;
         }
     }
 
@@ -244,11 +244,11 @@ if (!$conference_activity) {
 
     if ($is_editor && isset($_GET['create_agent']) && $agent_id) {
         // Redirect teacher to colMOOC editor with agent_id & teacher_id parameters
-        $colmooc_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/editor/?agent_id=" . $agent_id . '&teacher_id=' . $uid;
+        $colmooc_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/editor/index.php?agent_id=" . $agent_id . '&teacher_id=' . $uid;
         redirect_to_home_page($colmooc_url, true);
     } else if ($is_editor && isset($_GET['edit_agent']) && $agent_id) {
         // Redirect teacher to colMOOC editor with agent_id & teacher_id parameters
-        $colmooc_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/editor/?agent_id=" . $agent_id . '&teacher_id=' . $uid;
+        $colmooc_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/editor/index.php?agent_id=" . $agent_id . '&teacher_id=' . $uid;
         redirect_to_home_page($colmooc_url, true);
     } else if ($is_editor && isset($_GET['create_agent']) && !$agent_id) {
         $tool_content .= "<div class='alert alert-danger'>" . $langColmoocCreateAgentFailed . "</div>";
@@ -335,9 +335,9 @@ if (!$conference_activity) {
     if (!$is_editor) {
         if ($sessionId && $sessionToken) {
             // Redirect student to colMOOC chat
-            $colmooc_url = $colmoocapp->getParam(ColmoocApp::CHAT_URL)->value() . "/?session_id=" . $sessionId . "&session_token=" . $sessionToken;
+            $colmooc_url = $colmoocapp->getParam(ColmoocApp::CHAT_URL)->value() . "/index.php?session_id=" . $sessionId . "&session_token=" . $sessionToken;
             if (isset($_REQUEST['unit'])) {
-                $chatindex_url = $urlAppend . "modules/units/?course=" . $course_code . "&id=" . intval($_REQUEST['unit']);
+                $chatindex_url = $urlAppend . "modules/units/index.php?course=" . $course_code . "&id=" . intval($_REQUEST['unit']);
             } else {
                 $chatindex_url = $urlAppend . "modules/chat/index.php";
             }

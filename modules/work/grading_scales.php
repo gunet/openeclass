@@ -133,7 +133,7 @@ if (isset($_GET['scale_id'])) {
     $pageName = $langNewGradeScale;
     $navigation[] = array("url" => "grading_scales.php?course=$course_code", "name" => $langGradeScales);
     if ($scale_used) {
-        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langGradeScaleNotEditable</div></div>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'><div class='alert alert-info'>$langGradeScaleNotEditable</div></div>";
     }
     $tool_content .= action_bar(array(
         array(
@@ -145,7 +145,7 @@ if (isset($_GET['scale_id'])) {
     ));
     $tool_content .= "
         
-            <div class='col-12'>
+            <div class='col-12 mt-3'>
                 <div class='form-wrapper shadow-sm p-3 rounded'>
                     <form class='form-horizontal' role='form' data-bs-toggle='validator' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='scales_form'>
                     <fieldset>
