@@ -310,7 +310,7 @@ if (isset($_POST['submit'])) {
         Session::flash('message',$errormsg); 
         Session::flash('alert-class', 'alert-danger');
     }
-    redirect_to_home_page('modules/message/' . ($course_id? "?course=$course_code": ''));
+    redirect_to_home_page('modules/message/index.php' . ($course_id? "?course=$course_code": ''));
 }
 
 if ($course_id == 0) {

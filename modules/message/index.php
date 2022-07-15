@@ -197,7 +197,9 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
 
     if ($course_id == 0 && $type == 'pm') {
         if (!$personal_msgs_allowed) {
-            $tool_content .= "<div class='alert alert-warning'>$langGeneralError</div>";
+            $tool_content .= "<div class='row p-2'></div>
+                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                    <div class='alert alert-warning'>$langGeneralError</div></div>";
             draw($tool_content, 1, null, $head_content);
             exit;
         }
@@ -209,10 +211,11 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
         $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     }
     $tool_content .= "
+    <div class='row p-2'></div>
         <fieldset>
             <div class='form-group'>
-                <label for='title' class='col-sm-2 control-label'>$langSender:</label>
-                <div class='col-sm-10'>
+                <label for='title' class='col-sm-6 control-label-notes'>$langSender:</label>
+                <div class='col-sm-12'>
                   <input type='text' class='form-control' value='" . q(uid_to_name($uid)) . "' disabled>
                 </div>
             </div>";
@@ -254,9 +257,10 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                           </script>";
 
         $tool_content .= "
+        <div class='row p-2'></div>
             <div class='form-group'>
-                <label for='title' class='col-sm-2 control-label'>$langCourse:</label>
-                <div class='col-sm-10'>
+                <label for='title' class='col-sm-6 control-label-notes'>$langCourse:</label>
+                <div class='col-sm-12'>
                     <select id='courseselect' class='form-control' name='course'>
                         <option value='-1'>&nbsp;</option>";
         foreach ($res as $course) {
@@ -269,9 +273,10 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
 
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
         $tool_content .= "
+        <div class='row p-2'></div>
         <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langSendTo:</label>
-            <div class='col-sm-10'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
+            <div class='col-sm-12'>
                 <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
 
         if ($course_id != 0) {//course messages
@@ -394,17 +399,19 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                 $u_name = $q->name;
             }
             $tool_content .= "<input type='hidden' name='recipients' value='$_GET[id]'>
+            <div class='row p-2'></div>
                             <div class='form-group'>
-                                <label for='title' class='col-sm-2 control-label'>$langSendTo:</label>
-                                <div class='col-sm-10'>
+                                <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
+                                <div class='col-sm-12'>
                                     <label>$u_name</label>
                                 </div>
                             </div>";
         } else {
             $tool_content .= "
+            <div class='row p-2'></div>
                             <div class='form-group'>
-                                <label for='title' class='col-sm-2 control-label'>$langSendTo:</label>
-                                <div class='col-sm-10'>
+                                <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
+                                <div class='col-sm-12'>
                                     <select name='recipients' class='form-control' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
                                 </div>
                             </div>";
@@ -412,25 +419,29 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     }
 
     $tool_content .= "
+    <div class='row p-2'></div>
         <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langSubject:</label>
-            <div class='col-sm-10'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langSubject:</label>
+            <div class='col-sm-12'>
                 <input type='text' class='form-control' name='message_title'>
             </div>
         </div>";
 
-    $tool_content .= "<div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langMessage:</label>
-            <div class='col-sm-10'>
+    $tool_content .= "
+    <div class='row p-2'></div>
+        <div class='form-group'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langMessage:</label>
+            <div class='col-sm-12'>
                 ".rich_text_editor('body', 4, 20, '')."
             </div>
         </div>";
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
         enableCheckFileSize();
         $tool_content .= "
+        <div class='row p-2'></div>
         <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langAttachedFile:</label>
-            <div class='col-sm-10'>" .
+            <label for='title' class='col-sm-6 control-label-notes'>$langAttachedFile:</label>
+            <div class='col-sm-12'>" .
                 fileSizeHidenInput() . "
                 <input type='file' name='file'><span class='help-block' style='margin-bottom: 0px;'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></span>
             </div>
@@ -438,6 +449,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     }
 
     $tool_content .= "
+    <div class='row p-2'></div>
         <div class='form-group'>
             <div class='col-xs-10 col-xs-offset-2'>
                 <div class='checkbox'>
@@ -448,6 +460,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                 </div>
             </div>
         </div>
+        <div class='row p-2'></div>
         <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>".
                 form_buttons(array(
@@ -496,8 +509,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                         $(document).ready(function() {
 
                             // bootstrap tabs load external content via AJAX
-                            $('a[data-toggle=\"tab\"]').on('show.bs.tab', function (e) {
-                                var contentID = $(e.target).attr('data-target');
+                            $('a[data-bs-toggle=\"tab\"]').on('show.bs.tab', function (e) {
+                                var contentID = $(e.target).attr('data-bs-target');
                                 var contentURL = $(e.target).attr('href');
                                 $(contentID).load(contentURL);
 
@@ -537,14 +550,15 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
 
                     </script>";
 
-    $tool_content .= "<div id='dropboxTabs'>
+    $tool_content .= "<div class='row p-2'></div>
+                      <div id='dropboxTabs'>
                         <ul class='nav nav-tabs' role='tablist'>
-                            <li role='presentation'><a data-target='#inbox' role='tab' data-toggle='tab' href= 'inbox.php" . $courseParam . $msg_id_param . "'><strong>$langDropBoxInbox</strong></a></li>
-                            <li role='presentation'><a data-target='#outbox' role='tab' data-toggle='tab' href='outbox.php" . $courseParam . "'><strong>$langDropBoxOutbox</strong></a></li>
+                            <li role='presentation'><a class='btn btn-secondary' id='inboxA' data-bs-target='#inbox' role='tab' data-bs-toggle='tab' href= 'inbox.php" . $courseParam . $msg_id_param . "'><strong>$langDropBoxInbox</strong></a></li>
+                            <li role='presentation'><a class='btn btn-secondary' id='outboxA' data-bs-target='#outbox' role='tab' data-bs-toggle='tab' href='outbox.php" . $courseParam . "'><strong>$langDropBoxOutbox</strong></a></li>
                         </ul>
                         <div class='tab-content'>
-                            <div role='tabpanel' class='tab-pane fade in active' id='inbox'></div>
-                            <div role='tabpanel' class='tab-pane fade' id='outbox'></div>
+                            <div role='tabpanel' class='tab-pane fade in active' id='inbox' aria-labelledby='inboxA'></div>
+                            <div role='tabpanel' class='tab-pane fade' id='outbox' aria-labelledby='outboxA'></div>
                         </div>
                       </div>";
 }

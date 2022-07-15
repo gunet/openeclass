@@ -54,7 +54,7 @@ if (isset($_GET['mid'])) {
                             array('title' => $langBack,
                                   'url' => "outbox.php".$urlstr,
                                   'icon' => 'fa-reply',
-                                  'button-class' => 'back_index btn-default',
+                                  'button-class' => 'back_index btn-secondary',
                                   'level' => 'primary-label'),
                             array('title' => $langDelete,
                                     'url' => 'javascript:void(0)',
@@ -69,22 +69,24 @@ if (isset($_GET['mid'])) {
             }
         }
         $recipients = rtrim($recipients, ',&nbsp;'); // remove the last comma
-        $out .= "<div id='out_del_msg'></div>
+        $out .= "
+        <div id='out_del_msg'></div>
                 <div id='out_msg_area'>
                     <div class='panel panel-primary'>
                         <div class='panel-body'>
-                            <div class='row  margin-bottom-thin'>
+                            <div class='row p-2 margin-bottom-thin'>
                                 <div class='col-sm-2'>
-                                    <strong>$langSubject:</strong>
+                                    <strong class='control-label-notes'>$langSubject:</strong>
                                 </div>
                                 <div class='col-sm-10'>
                                     ".q($msg->subject)."
                                 </div>                
                             </div>";
         if ($msg->course_id != 0 && $course_id == 0) {
-            $out .= "       <div class='row  margin-bottom-thin'>
+            $out .= "      
+            <div class='row p-2 margin-bottom-thin'>
                                 <div class='col-sm-2'>
-                                    <strong>$langCourse:</strong>
+                                    <strong class='control-label-notes'>$langCourse:</strong>
                                 </div>
                                 <div class='col-sm-10'>
                                     <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>
@@ -92,43 +94,44 @@ if (isset($_GET['mid'])) {
                             </div>";
         }
         $out .= "       
-                            <div class='row  margin-bottom-thin'>
+                            <div class='row p-2 margin-bottom-thin'>
                                 <div class='col-sm-2'>
-                                    <strong>$langDate:</strong>
+                                    <strong class='control-label-notes'>$langDate:</strong>
                                 </div>
                                 <div class='col-sm-10'>
                                     ".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."
                                 </div>                
                             </div>
-                            <div class='row  margin-bottom-thin'>
+                            <div class='row p-2 margin-bottom-thin'>
                                 <div class='col-sm-2'>
-                                    <strong>$langSender:</strong>
+                                    <strong class='control-label-notes'>$langSender:</strong>
                                 </div>
                                 <div class='col-sm-10'>
                                     ".display_user($msg->author_id, false, false, "outtabs")."
                                 </div>                
                             </div>
-                            <div class='row  margin-bottom-thin'>
+                            <div class='row p-2 margin-bottom-thin'>
                                 <div class='col-sm-2'>
-                                    <strong>$langRecipients:</strong>
+                                    <strong class='control-label-notes'>$langRecipients:</strong>
                                 </div>
                                 <div class='col-sm-10'>
                                     $recipients
                                 </div>                
-                            </div>                            
+                            </div>                        
                         </div>
                     </div>
+                    <div class='col-sm-12 mt-3'>
                     <div class='panel panel-default'>
                         <div class='panel-heading'>$langMessage</div>
                         <div class='panel-body'>
-                            <div class='row  margin-bottom-thin'>
+                            <div class='row p-2 margin-bottom-thin'>
                                 <div class='col-xs-12'>
                                     ".standard_text_escape($msg->body)."
                                 </div>
                             </div>";
                 if ($msg->filename != '') {
                    $out .= "<hr>
-                            <div class='row  margin-top-thin'>
+                            <div class='row p-2 margin-top-thin'>
                                 <div class='col-sm-2'>
                                     $langAttachedFile
                                 </div>
@@ -139,7 +142,7 @@ if (isset($_GET['mid'])) {
                             </div>";
                }
                $out .= "</div>
-                    </div>";
+                    </div></div>";
 
         $out .= '<script>
             
@@ -202,16 +205,16 @@ if (isset($_GET['mid'])) {
 } else {
 
     $out = "<div id='out_del_msg'></div><div id='outbox' class='table-responsive'>";
-    $out .= "<table id='outbox_table' class='table-default'>
+    $out .= "<table id='outbox_table' class='table-default announcements_table'>
                <thead>
-                 <tr class='list-header'>
-                    <th>$langSubject</th>";
+                 <tr class='notes_thead'>
+                    <th class='text-white'>$langSubject</th>";
     if ($course_id == 0) {
-        $out .= "<th>$langCourse</th>";
+        $out .= "<th class='text-white'>$langCourse</th>";
     }
-    $out .= "      <th>$langRecipients</th>
-                   <th>$langDate</th>
-                   <th class='option-btn-cell text-center'><i class='fa fa-cogs'></i></th>
+    $out .= "      <th class='text-white'>$langRecipients</th>
+                   <th class='text-white'>$langDate</th>
+                   <th class='text-white option-btn-cell text-center'><i class='fa fa-cogs'></i></th>
                  </tr>
                </thead>
                <tbody>
