@@ -61,7 +61,9 @@ if (isset($_POST['submit'])) {
 
         process_eportfolio_fields_data();
     
-        Session::Messages($langePortfolioChangeSucc, 'alert-success');
+        //Session::Messages($langePortfolioChangeSucc, 'alert-success');
+        Session::flash('message', $langePortfolioChangeSucc); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("main/eportfolio/index.php?id=$uid&token=$token");
     }
 }
@@ -103,16 +105,18 @@ $head_content .= "
 
 $head_content .= "
         <script>
-        $(function() {
-            $('#floatMenu').affix({
-              offset: {
-                top: 230,
-                bottom: function () {
-                  return (this.bottom = $('.footer').outerHeight(true))
-                }
-              }
-            })
-        });
+        
+                $(function() {
+                    // $('#floatMenu').affix({
+                    //     offset: {
+                    //         top: 230,
+                    //         bottom: function () {
+                    //         return (this.bottom = $('.footer').outerHeight(true))
+                    //         }
+                    //     }
+                    // })
+                });
+        
         </script>";
 
 $sec = $urlServer . 'main/eportfolio/edit_eportfolio.php';
@@ -126,7 +130,8 @@ $tool_content .=
         $tool_content .=
             "<div class='row'>
                 <div class='col-sm-9'>
-                    <form class='form-horizontal' role='form' action='$sec' method='post'>";
+                    <form class='form-horizontal' role='form' action='$sec' method='post'>
+                    <div data-bs-spy='scroll' data-bs-target='#navbar-examplePortfolioEdit' data-bs-offset='0' tabindex='0'>  ";
                     
 
 
@@ -134,14 +139,16 @@ $tool_content .=
 $ret_str = render_eportfolio_fields_form();
 $tool_content .= $ret_str['panels'];
 
-$tool_content .= "<div class='form-group'>
+$tool_content .= "
+<div class='row p-2'></div>
+<div class='form-group'>
                       <div class='col-sm-12'>
                           <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-                          <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn btn-default'>$langCancel</a>
+                          <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn btn-secondary'>$langCancel</a>
                       </div>
                   </div>
       ". generate_csrf_token_form_field() ."  
-      </form>
+      </div></form>
       </div>
       ".$ret_str['right_menu']."
       </div>";

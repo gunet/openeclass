@@ -78,7 +78,7 @@ if ($userdata) {
         }
         
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning</div>";
+            $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langePortfolioDisableWarning</div></div>";
         } elseif ($userdata->eportfolio_enable == 1) {
             load_js('clipboard.js');
             $clipboard_link = "
@@ -87,15 +87,15 @@ if ($userdata) {
                                 <div class='input-group'>
                                     <input class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?id=$id&token=$token'>
                                     <span class='input-group-btn'>
-                                        <button class='btn btn-primary' id='copy-btn' data-toggle='tooltip' data-placement='bottom' data-clipboard-target='#page-link'>
+                                        <button class='btn btn-primary' id='copy-btn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-clipboard-target='#page-link'>
                                             <span class='fa fa-clipboard'></span>&nbsp;&nbsp;&nbsp;$langCopy
                                         </button>
                                     </span>
                                 </div>                              
                             </div>";
             $tool_content .= "<script type='text/javascript'>
-                                $('#copy-btn').tooltip({
-                                });
+                                // $('#copy-btn').tooltip({
+                                // });
                     
                                 $(function() {
                                   var clipboard = new Clipboard('#copy-btn');
@@ -138,7 +138,7 @@ if ($userdata) {
                                     ));    
     } else {
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content = "<div class='alert alert-danger'>$langUserePortfolioDisabled</div>";
+            $tool_content = "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langUserePortfolioDisabled</div></div>";
             if ($session->status == 0) {
                 draw($tool_content, 0);
             } else {
@@ -169,10 +169,10 @@ if ($userdata) {
         }
     }
     
-    $tool_content .= "
-        <div class='row'>
-            <div class='col-sm-12'>
-                   ";
+    // $tool_content .= "
+    //     <div class='row p-2'>
+    //         <div class='col-sm-12'>
+    //                ";
 
     $head_content .= "<script type='text/javascript'>
     $(document).ready(function() {
@@ -203,40 +203,45 @@ if ($userdata) {
     
     $head_content .= "
         <script>
-        $(function() {
-            $('body').scrollspy({ target: '#affixedSideNav' });
-        });
+        // $(function() {
+        //     $('body').scrollspy({ target: '#affixedSideNav' });
+        // });
         </script>
     ";
     
     $head_content .= "
         <script>
-        $(function() {
-            $('#floatMenu').affix({
-              offset: {
-                top: 230,
-                bottom: function () {
-                  return (this.bottom = $('.footer').outerHeight(true))
-                }
-              }
-            })
-        });
+        
+            $(function() {
+                // $('#floatMenu').affix({
+                // offset: {
+                //     top: 230,
+                //     bottom: function () {
+                //       return (this.bottom = $('.footer').outerHeight(true))
+                //     }
+                // }
+                // })
+            });
+        
         </script>";
     
     $ret_str = render_eportfolio_fields_content($id);
 
     if ($ret_str['panels'] == ""){
         $tool_content .= "
-                        <div class='row'>
+                        <div class='row p-2'>
                             <div class='col-sm-12'>
                                 <div class='panel panel-default'>
                                     <div class='text-center text-muted panel-body'>".$langNoInfoAvailable."</div>
                                 </div>";
     } else {
         $tool_content .= "
-                        <div class='row'>
-                            <div class='col-sm-9'>".$ret_str['panels'];
+                        <div class='row p-2'></div>
+                            <div class='col-sm-12'>
+                            <div data-bs-spy='scroll' data-bs-target='#navbar-exampleIndexPortfolio' data-bs-offset='0' tabindex='0'>".$ret_str['panels']."</div>";
     }
+
+    
     if ($userdata->eportfolio_enable == 1 AND $ret_str['panels'] != "") {
         $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/eportfolio/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
     } else {
