@@ -231,8 +231,8 @@
 
 
                     @if ($uid == $id)
-                        <div class="row">
-                            <div class="col-12">
+                       
+                            <div class="col-12 mt-4">
                                 <div class="panel panel-default">
                                     <div class="panel-body">
                                         <div class="row">
@@ -251,7 +251,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                       
                     @endif
                 </div>
             </div>

@@ -79,7 +79,7 @@
                                             </div>
                                             <div id='faq-{{ $faq->id }}' class='panel-collapse accordion-collapse collapse' role='tabpanel' aria-labelledby='heading{{ $faq->id }}' data-bs-parent='#accordion'>
                                                 <div class='panel-body ps-3'>
-                                                    <p><strong><u>{{ trans('langFaqAnswer') }}:</u></strong></p>
+                                                    <p><strong><u class='text-dark'>{{ trans('langFaqAnswer') }}:</u></strong></p>
                                                     {!! $faq->body !!}
                                                 </div>
                                             </div>

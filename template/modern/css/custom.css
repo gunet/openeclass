@@ -38,8 +38,9 @@
   width: 350px;
   height: 360px;
   background-color: white;
-  border-radius: 30px;
+  border-radius: 15px;
 }
+
 
 .login-form-title {
   text-align: center;
@@ -67,8 +68,8 @@
   background-color: lightgrey;
   border: none;
   border-radius: 15px;
-  width: 250px;
-  height: 35px;
+  /* width: 250px;
+  height: 35px; */
 
 }
 
@@ -76,8 +77,6 @@
   border: solid thin;
   border-radius: 15px;
   border-color: #003e87;
-  width: 250px;
-  height: 35px;
   background-color: white;
   color: #003e87;
   font-size: 18px;
@@ -515,8 +514,9 @@ text-decoration: none;
 }
 
 .user-icon {
-  width: 240px;
-  height: 75px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 
 .user-icon-bg {
@@ -547,13 +547,13 @@ text-decoration: none;
 
 
 .button_collapse_main_section{
-  width:50px;
-  height:50px;
+  width:220px;
+  height:220px;
   border-radius: 50%;
-  border: solid 2px white;
+  border: solid 2px #001146;
+  background-color: #f5f5f5;
   margin:auto;
   display:block;
-  margin-right:0px;
 }
 
 

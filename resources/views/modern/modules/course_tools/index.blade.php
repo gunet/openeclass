@@ -65,81 +65,87 @@
                     </div>
                     @endif
 
-                    <div class="panel panel-default panel-action-btn-default">
-                        <div class='panel-heading shadow-lg p-2 pt-3 mt-1 bg-body rounded bg-primary'>
-                            <h3 class='panel-title control-label-notes text-center'>{{ trans('langActivateCourseTools') }}</h3>
-                        </div>
-                        <form name="courseTools" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method="post" enctype="multipart/form-data">
-                            <div class="table-responsive" style='margin-top:-25px;'>
-                                <table class="announcements_table">
-                                    <tr class='notes_thead'>
-                                    <th width="45%" class="text-white text-center">{{ trans('langInactiveTools') }}</th>
-                                    <th width="10%" class="text-white text-center">{{ trans('langMove') }}</th>
-                                    <th width="45%" class="text-white text-center">{{ trans('langActiveTools') }}</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">
-                                            <select class="form-control" name="toolStatInactive[]" id='inactive_box' size='17' multiple>
-                                                @foreach($toolSelection[0] as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->title }}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td class="text-center" style="vertical-align: middle;">
-                                            <button type="button" class="btn btn-secondary" onClick="move('inactive_box','active_box')"><span class="fa fa-arrow-right"></span></button><br><br>
-                                            <button type="button" class="btn btn-secondary" onClick="move('active_box','inactive_box')"><span class="fa fa-arrow-left"></span></button>
-                                        </td>
-                                        <td class="text-center">
-                                            <select class="form-control" name="toolStatActive[]" id='active_box' size='17' multiple>
-                                                @foreach($toolSelection[1] as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->title }}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" class="text-center">
-                                            <input type="submit" class="btn btn-primary" value="{{ trans('langSubmit') }}" name="toolStatus" onClick="selectAll('active_box',true)" />
-                                        </td>
-                                    </tr>
-                                </table>
+                    <div class='col-sm-12'>
+                        <div class="panel panel-default">
+                            <div class='p-2 bg-light'>
+                                <h3 class='panel-title text-center'>{{ trans('langActivateCourseTools') }}</h3>
                             </div>
-                            {!! $csrf !!}
-                        </form>
+                            <form name="courseTools" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method="post" enctype="multipart/form-data">
+                                <div class="table-responsive" style='margin-top:-25px;'>
+                                    <table class="announcements_table">
+                                        <tr class='notes_thead'>
+                                        <th width="45%" class="text-white text-center">{{ trans('langInactiveTools') }}</th>
+                                        <th width="10%" class="text-white text-center">{{ trans('langMove') }}</th>
+                                        <th width="45%" class="text-white text-center">{{ trans('langActiveTools') }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">
+                                                <select class="form-control" name="toolStatInactive[]" id='inactive_box' size='17' multiple>
+                                                    @foreach($toolSelection[0] as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->title }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <button type="button" class="btn btn-secondary" onClick="move('inactive_box','active_box')"><span class="fa fa-arrow-right"></span></button><br><br>
+                                                <button type="button" class="btn btn-secondary" onClick="move('active_box','inactive_box')"><span class="fa fa-arrow-left"></span></button>
+                                            </td>
+                                            <td class="text-center">
+                                                <select class="form-control" name="toolStatActive[]" id='active_box' size='17' multiple>
+                                                    @foreach($toolSelection[1] as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->title }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-center">
+                                                <input type="submit" class="btn btn-primary" value="{{ trans('langSubmit') }}" name="toolStatus" onClick="selectAll('active_box',true)" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                {!! $csrf !!}
+                            </form>
+                        </div>
                     </div>
 
-                    <div class='panel panel-default panel-action-btn-default mt-5'>
-                        <div class='float-end pt-3 pb-2 pe-3'>
-                            <div id='operations_container'>
-                                <a class='btn btn-success mt-1 ms-md-0 ms-3' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> {{ trans('langAddExtLink') }}</a>
+                    <div class='col-sm-12 mt-3'>
+                        <div class='panel panel-default panel-action-btn-default'>
+                            <div class='float-end pt-3 pb-2 pe-3'>
+                                <div id='operations_container'>
+                                    <a class='btn btn-success mt-1 ms-md-0 ms-3' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> {{ trans('langAddExtLink') }}</a>
+                                </div>
                             </div>
+                            <div class='bg-light p-3'>
+                                <h3 class='panel-title control-label-notes pt-2'> {{ trans('langOperations') }}</h3>
+                            </div>
+                            <table class='announcements_table'>
+                            @foreach($q as $externalLinks)
+                                <tr>
+                                    <td class='text-left'>
+                                        <div style='display:inline-block; width: 80%;'>
+                                            <strong>{{  $externalLinks->title }}</strong>
+                                            <div style='padding-top:8px;'><small class='text-muted'>{{ $externalLinks->url }}</small></div>
+                                        </div>
+                                        <div class='float-end'>
+                                            <a class='text-danger' href='?course={{ $course_code }}&amp;delete={{ getIndirectReference($externalLinks->id) }}'><span class='fa fa-times'></span></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </table>
                         </div>
-                        <div class='panel-heading shadow-lg p-3 pt-3 mt-1 bg-body rounded bg-primary'>
-                            <h3 class='panel-title control-label-notes pt-2'> {{ trans('langOperations') }}</h3>
-                        </div>
-                        <table class='announcements_table'>
-                        @foreach($q as $externalLinks)
-                            <tr>
-                                <td class='text-left'>
-                                    <div style='display:inline-block; width: 80%;'>
-                                        <strong>{{  $externalLinks->title }}</strong>
-                                        <div style='padding-top:8px;'><small class='text-muted'>{{ $externalLinks->url }}</small></div>
-                                    </div>
-                                    <div class='float-end'>
-                                        <a class='text-danger' href='?course={{ $course_code }}&amp;delete={{ getIndirectReference($externalLinks->id) }}'><span class='fa fa-times'></span></a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </table>
                     </div>
 
-                    <div class='panel panel-default panel-action-btn-default mt-5'>
-                        <div class='h-100 panel-heading shadow-lg p-3 pt-3 mt-1 bg-body rounded bg-primary'>
-                            <span class='panel-title control-label-notes pt-2' style='line-height: 45px;'>{{ trans('langLtiConsumer') }}</span>
-                            <span class='float-end pt-1'>
-                                <a class='btn btn-success' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
-                            <span class='fa fa-plus-circle'></span>{{ trans('langNewLTITool') }}</a>
+                    <div class='col-sm-12 mt-3'>
+                        <div class='panel panel-default'>
+                            <div class='bg-light p-3'>
+                                <span class='panel-title control-label-notes pt-2' style='line-height: 45px;'>{{ trans('langLtiConsumer') }}</span>
+                                <span class='float-end pt-1'>
+                                    <a class='btn btn-success' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
+                                <span class='fa fa-plus-circle'></span>{{ trans('langNewLTITool') }}</a>
+                            </div>
                         </div>
                     </div>
 

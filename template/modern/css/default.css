@@ -1047,11 +1047,18 @@
   .jumbotron.jumbotron-login{
       background-repeat: no-repeat; background-size: cover;
       background-image: url(../images/books.jpeg);
-      width:auto ;
-      margin-top:-169px;
       /* background-image: url('/courses/theme_data/7/dhmiourgia-e-class-psd.jpg'), radial-gradient(closest-corner at 30% 60%, rgb(0, 11, 255), rgb(139, 131, 169)) */
   }
-  
+
+  .borderHeadingPanel{
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+  }
+  .borderBodyPanel{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
   .appstore_img{
       background-image: url(../images/appstore.png);
   }
@@ -1924,6 +1931,24 @@
   /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------*/
   @media (max-width: 320px){
 
+    .login-form-body{
+      width:270px;
+    }
+
+    .WelcomeEclassPanelDefault{
+      border-radius: 15px;
+    }
+
+    .WelcomeEclassHeading{
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+  
+    .WelcomeEclassBody{
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+    }
+
     .calendar_announce_message_col{
       background-color: white;
       border-radius: 15px;
@@ -2039,6 +2064,20 @@
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- small mobile - portrait-----------------------------------*/
   @media (min-width:321px) and (max-width: 375px){
+
+    .WelcomeEclassPanelDefault{
+      border-radius: 15px;
+    }
+
+    .WelcomeEclassHeading{
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+  
+    .WelcomeEclassBody{
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+    }
 
     .calendar_announce_message_col{
       background-color: white;
@@ -2162,6 +2201,20 @@
   
   @media (min-width:376px) and (max-width: 425px){
 
+    .WelcomeEclassPanelDefault{
+      border-radius: 15px;
+    }
+
+    .WelcomeEclassHeading{
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+  
+    .WelcomeEclassBody{
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+    }
+
     .calendar_announce_message_col{
       background-color: white;
       border-radius: 15px;
@@ -2225,10 +2278,6 @@
     .col_maincontent_active{
       min-height: 80vh;
     }
-  
-    .jumbotron.jumbotron-login{
-        width:100% ;
-    }
 
     textarea{
       max-width:285px;
@@ -2288,20 +2337,6 @@
         margin-top:100px;
     }
 
-    .button_collapse_main_section{
-        width:50px;
-        height:50px;
-        border-radius: 50%;
-        border: solid 2px white;
-        margin:auto;
-        display:block;
-        margin-right:0px;
-    }
-
-    .login-input{
-        background-color: #B0C4DE ;
-    }
-    
     .fas.fa-pen-nib{
         transform: rotate(265deg);
     }
@@ -2353,6 +2388,20 @@
   /* ------------------------------------------------------- MOBILE L ------------------------------------------------------- */
   @media (min-width: 426px) and (max-width: 767px){ 
 
+    .WelcomeEclassPanelDefault{
+      border-radius: 15px;
+    }
+
+    .WelcomeEclassHeading{
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+  
+    .WelcomeEclassBody{
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+    }
+
     .calendar_announce_message_col{
       background-color: white;
       border-radius: 15px;
@@ -2397,11 +2446,6 @@
     }
     .btnLang:focus{
       background-color: transparent;
-    }
-
-
-    .jumbotron.jumbotron-login{
-      width:100% ;
     }
 
     .login-form-body{
@@ -2463,6 +2507,20 @@
 
   @media (min-width: 768px) and (max-width: 1023px){
 
+    .WelcomeEclassPanelDefault{
+      border-radius: 15px;
+    }
+
+    .WelcomeEclassHeading{
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+  
+    .WelcomeEclassBody{
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
+    }
+
     .calendar_announce_message_col{
       background-color: white;
       border-radius: 15px;
@@ -2508,11 +2566,6 @@
     .btnLang:focus{
       background-color: transparent;
     }
-
-    .jumbotron.jumbotron-login{
-      width:100% ;
-    }
-
     .login-form-body{
       width:auto;
     }
@@ -2525,30 +2578,6 @@
       margin-left:0px;
     }
 
-    .button_collapse_main_section{
-      width:50px;
-      height:50px;
-      border-radius: 50%;
-      border: solid 2px white;
-      margin:auto;
-      display:block;
-      margin-right:0px;
-    }
-
-    .button_collapse_main_section{
-      width:50px;
-      height:50px;
-      border-radius: 50%;
-      border: solid 2px white;
-      margin:auto;
-      display:block;
-      margin-right:0px;
-    }
-      
-    .login-input{
-      background-color: #B0C4DE ;
-    }
-        
     .fas.fa-pen-nib{
       transform: rotate(265deg);
     }
@@ -2842,10 +2871,6 @@
         .col_maincontent_active_completeCourse{
             width:648px ;
             margin-left:72px ;
-        }
-
-        .jumbotron.jumbotron-login{
-            height: 85vh;
         }
 
         .user-calendar{
