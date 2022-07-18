@@ -66,16 +66,16 @@ if (isset($_GET['delete'])) {
     <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <input type='hidden' name='group_id' value='$group_id'>
-            <div class='form-group'>
-                <div class='col-xs-12'>$langGroupDescInfo</div>
+            <div class='form-group mt-3'>
+                <div class='col-sm-12'>$langGroupDescInfo</div>
             </div>
-            <div class='form-group'>
-              <label for='group_desc' class='col-sm-2 control-label'>$langDescription:</label>
-              <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+              <label for='group_desc' class='col-sm-6 control-label-notes'>$langDescription:</label>
+              <div class='col-sm-12'>
                 <textarea class='form-control' name='group_desc' id='group_desc' rows='10'>" . @$description . "</textarea>
               </div>
             </div>
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <input class='btn btn-primary' type='submit' name='submit' value='" . q($langAddModify) . "'>
                     <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>

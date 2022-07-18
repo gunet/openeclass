@@ -56,20 +56,20 @@ $tool_content .= action_bar(array(
         $form_legend = $langCategoryAdd;
 
         $tool_content .= "<fieldset>
-                        <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")."'>
-                            <label for='CatName' class='col-sm-2 control-label'>$langCategoryName:</label>
-                            <div class='col-sm-10'>
+                        <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")." mt-3'>
+                            <label for='CatName' class='col-sm-6 control-label-notes'>$langCategoryName:</label>
+                            <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='categoryname' size='53' placeholder='$langCategoryName'>
                                 <span class='help-block'>".Session::getError('categoryname')."</span>
                             </div>
                         </div>
-                        <div class='form-group'>
-                            <label for='CatDesc' class='col-sm-2 control-label'>$langDescription:</label>
-                            <div class='col-sm-10'>
+                        <div class='form-group mt-3'>
+                            <label for='CatDesc' class='col-sm-6 control-label-notes'>$langDescription:</label>
+                            <div class='col-sm-12'>
                                 <textarea class='form-control' rows='5' name='description'></textarea>
                             </div>
                         </div>
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <div class='col-sm-10 col-sm-offset-2'>
                                 <input type='submit' class='btn btn-primary' name='submitCategory' value='$form_legend' />
                                 <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>
@@ -84,24 +84,24 @@ $tool_content .= action_bar(array(
         category_form_defaults($id);
         $myrow = Database::get()->querySingle("SELECT name,description  FROM group_category WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $form_legend = $langCategoryMod;	
-        $tool_content .= "<div class='col-12'><div class = 'form-wrapper'>";
+        $tool_content .= "<div class='col-12'><div class = 'form-wrapper shadow-sm p-3 rounded'>";
         $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;editcategory=1'>";
         $tool_content .= "<fieldset>
-            <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")."'>
-                <label for='CatName' class='col-sm-2 control-label'>$langCategoryName:</label>
-                <div class='col-sm-10'>
+            <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")." mt-3'>
+                <label for='CatName' class='col-sm-6 control-label-notes'>$langCategoryName:</label>
+                <div class='col-sm-12'>
                     <input class='form-control' type='text' name='categoryname' size='53' placeholder='$langCategoryName' $form_name>
                                                     <span class='help-block'>".Session::getError('categoryname')."</span>
                 </div>
             </div>
-            <div class='form-group'>
-                <label for='CatDesc' class='col-sm-2 control-label'>$langDescription:</label>
-                <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+                <label for='CatDesc' class='col-sm-6 control-label-notes'>$langDescription:</label>
+                <div class='col-sm-12'>
                     <textarea class='form-control' rows='5' name='description'>$form_description</textarea>
                 </div>
             </div>
             <input type='hidden' name='id' value='" . getIndirectReference($id) . "' />
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <input type='submit' class='btn btn-primary' name='submitCategory' value='$form_legend' />
                     <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>

@@ -105,7 +105,7 @@ if (isset($_POST['modify'])) {
         $student_members = $member_count - count($tutors);
         if ($maxStudent != 0 and $student_members > $maxStudent) {
             $maxStudent = $student_members;
-            $message .= "<div class='alert alert-warning'>$langGroupMembersUnchanged</div>";
+            $message .= "<div class='col-sm-12'><div class='alert alert-warning'>$langGroupMembersUnchanged</div></div>";
         }
         $category_id = intval($_POST['selectcategory']);
         Database::get()->query("UPDATE `group`
@@ -273,41 +273,41 @@ $tool_content .= action_bar(array(
 $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id'>
         <fieldset>
-        <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
-            <label class='col-sm-2 control-label'>$langGroupName:</label>
-            <div class='col-sm-10'>
+        <div class='form-group".(Session::getError('name') ? " has-error" : "")." mt-3'>
+            <label class='col-sm-6 control-label-notes'>$langGroupName:</label>
+            <div class='col-sm-12'>
                 <input class='form-control' type=text name='name' size='40' value='$tool_content_group_name'>
                 <span class='help-block'>".Session::getError('name')."</span>
             </div>
         </div>
-        <div class='form-group'>
-          <label class='col-sm-2 control-label'>$langDescription $langOptional:</label>
-          <div class='col-sm-10'><textarea class='form-control' name='description' rows='2' cols='60'>$tool_content_group_description</textarea></div>
+        <div class='form-group mt-3'>
+          <label class='col-sm-6 control-label-notes'>$langDescription $langOptional:</label>
+          <div class='col-sm-12'><textarea class='form-control' name='description' rows='2' cols='60'>$tool_content_group_description</textarea></div>
         </div>
-        <div class='form-group".(Session::getError('maxStudent') ? " has-error" : "")."'>
-            <label class='col-sm-2 control-label'>$langMax $langGroupPlacesThis:</label>
-            <div class='col-sm-10'>
+        <div class='form-group".(Session::getError('maxStudent') ? " has-error" : "")." mt-3'>
+            <label class='col-sm-6 control-label-notes'>$langMax $langGroupPlacesThis:</label>
+            <div class='col-sm-12'>
                 <input class='form-control' type=text name='maxStudent' size=2 value='$max_members'>
                 <span class='help-block'>".Session::getError('maxStudent')."</span>
             </div>
 
         </div>
-        <div class='form-group'>
-          <label class='col-sm-2 control-label'>$langGroupTutor:</label>
-          <div class='col-sm-10'>
+        <div class='form-group mt-3'>
+          <label class='col-sm-6 control-label-notes'>$langGroupTutor:</label>
+          <div class='col-sm-12'>
              $tool_content_tutor
           </div>
         </div>
-        <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langGroupMembers:</label>
-        <div class='col-sm-10'>
+        <div class='form-group mt-3'>
+            <label class='col-sm-6 control-label-notes'>$langGroupMembers:</label>
+        <div class='col-sm-12'>
             <div class='table-responsive'>
                 <table class='table-default'>
                     <thead>
-                        <tr class='title1'>
-                          <th>$langNoGroupStudents</th>
-                          <th width='100' class='text-center'>$langMove</th>
-                          <th class='right'>$langGroupMembers</th>
+                        <tr class='title1 notes_thead'>
+                          <th class='text-white'>$langNoGroupStudents</th>
+                          <th width='100' class='text-white text-center'>$langMove</th>
+                          <th class='right text-white'>$langGroupMembers</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -336,9 +336,9 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
             </div>
       </div>
     </div>
-    <div class='form-group'>
-            <label for='selectcategory' class='col-sm-2 control-label'>$langCategory:</label>
-            <div class='col-sm-3'>
+    <div class='form-group mt-3'>
+            <label for='selectcategory' class='col-sm-6 control-label-notes'>$langCategory:</label>
+            <div class='col-sm-12'>
                 <select class='form-control' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
         $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
@@ -356,9 +356,9 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
     </div>";
 
     $tool_content .= "
-            <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langGroupStudentRegistrationType:</label>
-                <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+            <label class='col-sm-6 control-label-notes'>$langGroupStudentRegistrationType:</label>
+                <div class='col-sm-12'>
                     <div class='checkbox'>
                     <label>
                      <input type='checkbox' name='self_reg' $checked[self_reg]>
@@ -367,9 +367,9 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
                         </div>
                 </div>
             </div>
-            <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langGroupAllowUnregister:</label>
-                <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+            <label class='col-sm-6 control-label-notes'>$langGroupAllowUnregister:</label>
+                <div class='col-sm-12'>
                     <div class='checkbox'>
                     <label>
                      <input type='checkbox' name='allow_unreg' $checked[allow_unreg]>
@@ -378,9 +378,9 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
                         </div>
                 </div>
             </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langPrivate_1:</label>
-                <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+                <label class='col-sm-6 control-label-notes'>$langPrivate_1:</label>
+                <div class='col-sm-12'>
                     <div class='radio'>
                       <label>
                         <input type='radio' name='private_forum' value='1' checked=''  $checked[private_forum_yes]>
@@ -395,9 +395,9 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
                     </div>
                 </div>
             </div>
-            <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langGroupForum:</label>
-                <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+            <label class='col-sm-6 control-label-notes'>$langGroupForum:</label>
+                <div class='col-sm-12'>
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='forum' $checked[has_forum]>
@@ -405,9 +405,9 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
                     </div>
                 </div>
             </div>
-            <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langDoc:</label>
-                <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+            <label class='col-sm-6 control-label-notes'>$langDoc:</label>
+                <div class='col-sm-12'>
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='documents' $checked[documents]>
@@ -415,9 +415,9 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
                     </div>
                 </div>
             </div>
-            <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langWiki:</label>
-                <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+            <label class='col-sm-6 control-label-notes'>$langWiki:</label>
+                <div class='col-sm-12'>
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='wiki' $checked[wiki]>
@@ -426,7 +426,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
                 </div>
             </div>
             <input type='hidden' name='group_id' value=$group_id></input>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
         <div class='col-sm-10 col-sm-offset-2'>".
             form_buttons(array(
                 array(

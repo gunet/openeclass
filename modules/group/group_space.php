@@ -131,10 +131,10 @@ if (isset($_GET['group_as'])) {
                 <div class='table-responsive'>
                 <table class='table-default'>
                 <tr class='list-header'>
-                  <th style='width:45%;'>$langTitle</th>
-                  <th class='text-center'>$m[subm]</th>
-                  <th class='text-center'>$m[nogr]</th>
-                  <th class='text-center'>$langGroupWorkDeadline_of_Submission</th>
+                  <th class='text-white' style='width:45%;'>$langTitle</th>
+                  <th class='text-white text-center'>$m[subm]</th>
+                  <th class='text-white text-center'>$m[nogr]</th>
+                  <th class='text-white text-center'>$langGroupWorkDeadline_of_Submission</th>
                 </tr>";
         foreach ($result as $row) {
             // Check if assignment contains submissions
@@ -166,7 +166,7 @@ if (isset($_GET['group_as'])) {
         }
         $tool_content .= '</table></div></div></div>';
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoAssign</div></div>";
     }
 } else {
     $student_to_student_allow = get_config('dropbox_allow_student_to_student');
@@ -248,6 +248,7 @@ if (isset($_GET['group_as'])) {
     }
 
     $tool_content .= "
+    <div class='col-sm-12'>
         <div class='panel panel-action-btn-primary'>
             <div class='panel-heading'>
                 <h3 class='panel-title'>$langGroupInfo</h3>
@@ -262,21 +263,22 @@ if (isset($_GET['group_as'])) {
                     <div class='col-sm-9'>$tool_content_description</div>
                 </div>
             </div>
-        </div>";
+        </div>
+    </div>";
 
     // members
     if (count($members) > 0) {
-        $tool_content .= "<div class='row'>
-                        <div class='col-xs-12'>
+        $tool_content .= "
+                        <div class='col-sm-12 mt-3'>
                           <ul class='list-group'>
                               <li class='list-group-item list-header'>
                                   <div class='row'>";
         if ($is_editor or $is_tutor) {
-            $tool_content .= "        <div class='col-xs-6'>$langSurnameName</div>
-                                      <div class='col-xs-3'>$langAm</div>
-                                      <div class='col-xs-3'>$langEmail</div>";
+            $tool_content .= "        <div class='col-6'>$langSurnameName</div>
+                                      <div class='col-3'>$langAm</div>
+                                      <div class='col-3'>$langEmail</div>";
         } else {
-            $tool_content .= "        <div class='col-xs-12'>$langSurnameName</div>";
+            $tool_content .= "        <div class='col-12'>$langSurnameName</div>";
         }
         $tool_content .= "
                                   </div>
@@ -288,30 +290,30 @@ if (isset($_GET['group_as'])) {
                                   <div class='row'>";
             if ($is_editor or $is_tutor) {
                 $email = q($member->email);
-                $tool_content .= "    <div class='col-xs-6'>" .
+                $tool_content .= "    <div class='col-6'>" .
                                            display_user($member->id, false, true) .
                                            ($user_group_description?
                                             ("<br>" . $user_group_description): '') . "
                                       </div>
-                                      <div class='col-xs-3'>" .
+                                      <div class='col-3'>" .
                                            ($member->am? q($member->am): '-') . "
                                       </div>
-                                      <div class='col-xs-3'>" .
+                                      <div class='col-3'>" .
                                            ($email? "<a href='mailto:$email'>$email</a>": '-') . "
                                       </div>
                                  </div>
                               </li>";
             } else {
-                $tool_content .= "    <div class='col-xs-12'>" .
+                $tool_content .= "    <div class='col-12'>" .
                                            display_user($member->id, false, true) .
                                            ($user_group_description?
                                             ("<br>" . $user_group_description): '') . "
                                       </div>";
             }
         }
-        $tool_content .= "</ul></div></div>";
+        $tool_content .= "</ul></div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langGroupNoneMasc</div>";
+        $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-warning'>$langGroupNoneMasc</div></div>";
     }
 }
 draw($tool_content, 2);

@@ -77,7 +77,7 @@ if (isset($_POST['submit'])) {
 } else {
     $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                         <div class='col-sm-12'>
                             <div class='radio'>
                                   <label>
@@ -96,7 +96,7 @@ if (isset($_POST['submit'])) {
                              </div>
                          </div>
                      </div>
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                          <div class='col-sm-12'>
                             <div class='checkbox'>
                                   <label>
@@ -105,7 +105,7 @@ if (isset($_POST['submit'])) {
                              </div>
                          </div>
                      </div>                    
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                         <div class='col-sm-12'>".form_buttons(array(
                                 array(
                                     'text' => $langSave,

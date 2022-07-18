@@ -517,7 +517,7 @@ if ($is_editor) {
             $tool_content .= "<div class='table-responsive'>
                 <table class='table-default'>
                 <tr class='list-header'>
-                  <th>$langGroupTeam</th>
+                  <th class='ps-3'>$langGroupTeam</th>
                   <th width='250'>$langGroupTutor</th>
                   <th width='50'>$langGroupMembersNum</th>
                   <th width='50'>$langMax</th>
@@ -698,9 +698,12 @@ if ($is_editor) {
         $numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
         $cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
         $aantalcategories = count($cat);
-        $tool_content .= "<br><br><div class='row'>            
-            <div class='col-sm-12 mt-5'><div class='table-responsive'>
-            <div class='margin-bottom-thin notes_thead fs-6 ps-3 pt-2 pb-3 pe-3' style='font-weight: bold;'>";
+        $tool_content .= "<div class='col-sm-12 mt-5'><div class='table-responsive'>";
+        if($cat){
+           $tool_content .= "<div class='margin-bottom-thin notes_thead fs-6 ps-3 pt-2 pb-3 pe-3' style='font-weight: bold;'>";
+        }else{
+            $tool_content .= "<div class='margin-bottom-thin fs-6 ps-3 pt-2 pb-3 pe-3' style='font-weight: bold;'>";
+        }
         if ($aantalcategories > 0) {
             $tool_content .= "<span class='text-white'>$langCategorisedGroups</span>&nbsp;";
             if (isset($urlview) and abs(intval($urlview)) == 0) {
@@ -734,7 +737,7 @@ if ($is_editor) {
                                     <th class = 'text-left category-link' colspan='4'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>".icon('fa-minus-square-o', $langViewHide)."&nbsp;&nbsp;". q($myrow->name) . "</a>";
                 if (!empty($description)) {
-                    $tool_content .= "<br><span class='link-description'>$description</span></th>";
+                    $tool_content .= "<br><span class='link-description ps-4 pt-4'>$description</span></th>";
                 } else {
                     $tool_content .= "</th>";
                 }
@@ -759,7 +762,7 @@ if ($is_editor) {
                     . "&nbsp;&nbsp;" . q($myrow->name) . "</a>";
                 $description = standard_text_escape($myrow->description);
                 if (!empty($description)) {
-                    $tool_content .= "<br><span class='link-description'>$description</span</th>";
+                    $tool_content .= "<br><span class='link-description ps-4 pt-4'>$description</span</th>";
                 } else {
                     $tool_content .= "</th>";
                 }
@@ -773,7 +776,7 @@ if ($is_editor) {
             }
             $i++;
         }
-    $tool_content .= "</table></div></div></div>";
+    $tool_content .= "</table></div></div>";
     add_units_navigation(TRUE);
 }
 draw($tool_content, 2, null, $head_content);
