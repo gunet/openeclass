@@ -49,7 +49,7 @@ function list_exercises($id = NULL) {
                 "<th width='50%' class='text-left text-white'>$langExercices</th>" .
                 "<th class='text-left text-white'>$langDescription</th>" .
                 "<th style='width:20px;' class='text-center text-white'>$langChoice</th>" .
-                "</tr>";
+                "</tr>";        
         foreach ($quizinfo as $entry) {
             if ($entry['visibility'] == '0') {
                 $vis = 'not_visible';

@@ -11,6 +11,9 @@
     font-size: 18px;
   }
 
+  strong{
+    color:#003F87 !important;
+  }
   .form-wrapper.shadow-sm{
     background-color:#F5F5F5
   }
@@ -1487,7 +1490,7 @@
     border-radius: 5px;
   }
 
-  .panel-primary, .panel-success, .panel-default, .panel-info, .panel-action-btn-primary,.panel-action-btn-default{
+  .panel-primary, .panel-success, .panel-default, .panel-info, .panel-action-btn-primary,.panel-action-btn-default,.media{
     border-bottom-right-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -1496,7 +1499,7 @@
     -webkit-box-shadow: 0 0 3px rgb(118, 119, 146);
     box-shadow: 0 0 3px rgb(92, 93, 121);
   }
-  .panel-heading{
+  .panel-heading,.media-left{
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
     padding:10px 15px;
@@ -1506,7 +1509,7 @@
       -moz-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
       box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
   }
-  .panel-body{
+  .panel-body,.media-body{
     padding:15px;
   }
   .panel-title{

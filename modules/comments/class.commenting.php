@@ -141,7 +141,7 @@ Class Commenting {
                 $out .= "<div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
                           <div class='col-12'>
                            <div class='media panel-default'>
-                            <a class='media-left mt-2' href='#'>
+                            <a class='media-left mt-3' href='#'>
                             ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
                             <div class='media-body bubble panel-body'>

@@ -77,15 +77,10 @@
   border: solid thin;
   border-radius: 15px;
   border-color: #003e87;
-  background-color: white;
   color: #003e87;
   font-size: 18px;
 }
 
-.login-form-submit:hover {
-  background: #005ed7;
-  color: #fff;
-}
 
 @import "bootstrap";
 

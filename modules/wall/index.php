@@ -36,6 +36,7 @@ if (isset($_POST['submit'])) {
     if (allow_to_post($course_id, $uid, $is_editor)) {
         if (!empty($_POST['message'])) {
             if (empty($_POST['extvideo'])) {
+                
                 $content = links_autodetection($_POST['message']);
                 $id = Database::get()->query("INSERT INTO wall_post (course_id, user_id, content, timestamp) VALUES (?d,?d,?s,UNIX_TIMESTAMP())",
                         $course_id, $uid, $content)->lastInsertID;
@@ -75,8 +76,8 @@ if (isset($_POST['submit'])) {
                     insert_docs($id);
                 }
                 //save my documents
-                if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
-                    insert_docs($id,'mydocs');
+                if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {                    
+                    insert_docs($id,'mydocs');                    
                 }
                 //save links
                 if ($is_editor || visible_module(MODULE_ID_LINKS)) {
@@ -102,6 +103,7 @@ if (isset($_POST['submit'])) {
                 if ($is_editor || visible_module(MODULE_ID_FORUM)) {
                     insert_forum($id);
                 }
+                echo ('hello');
             }
         } else {
            // Session::Messages($langWallMessageEmpty);
@@ -111,6 +113,7 @@ if (isset($_POST['submit'])) {
                 Session::flash('extvideo', $_POST['extvideo']);
             }
         }
+        
         decide_wall_redirect();
     }
 } elseif (isset($_GET['delete'])) { //handle delete
@@ -288,21 +291,21 @@ if (isset($_GET['showPost'])) { //show comments case
         $extvideo = Session::has('extvideo')? Session::get('extvideo') : $post->extvideo;
 
         if ($is_editor || visible_module(MODULE_ID_VIDEO)) {
-            $video_div = '<div class="form-group tab-pane fade" id="videos_div" style="padding:10px">
+            $video_div = '<div class="form-group tab-pane fade" id="videos_div" role="tabpanel" aria-labelledby="nav_edit_video" style="padding:10px">
                               '.list_videos($id).'
                           </div>';
-            $video_li = '<li><a data-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
+            $video_li = '<li><a id="nav_edit_video" class="nav-link" data-bs-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
         } else {
             $video_div = '';
             $video_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_DOCS)) {
-            $docs_div = '<div class="form-group tab-pane fade" id="docs_div" style="padding:10px">
+            $docs_div = '<div class="form-group tab-pane fade" id="docs_div" role="tabpanel" aria-labelledby="nav_edit_docs" style="padding:10px">
                               <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs($id, NULL, TRUE).'
                           </div>';
-            $docs_li = '<li><a data-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
+            $docs_li = '<li><a id="nav_edit_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
         } else {
             $docs_div = '';
             $docs_li = '';
@@ -311,71 +314,71 @@ if (isset($_GET['showPost'])) { //show comments case
         $post_author = Database::get()->querySingle("SELECT user_id FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id)->user_id;
 
         if (($post_author == $uid) && (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable')))) {
-            $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div" style="padding:10px">
+            $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div" role="tabpanel" aria-labelledby="nav_edit_mydocs" style="padding:10px">
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs($id,'mydocs', TRUE).'
                           </div>';
-            $mydocs_li = '<li><a data-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
+            $mydocs_li = '<li><a id="nav_edit_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
         } else {
             $mydocs_div = '';
             $mydocs_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_LINKS)) {
-            $links_div = '<div class="form-group tab-pane fade" id="links_div" style="padding:10px">
+            $links_div = '<div class="form-group tab-pane fade" id="links_div" role="tabpanel" aria-labelledby="nav_edit_links" style="padding:10px">
                               '.list_links($id).'
                           </div>';
-            $links_li = '<li><a data-toggle="tab" href="#links_div">'.$langLinks.'</a></li>';
+            $links_li = '<li><a id="nav_edit_links" class="nav-link" data-bs-toggle="tab" href="#links_div">'.$langLinks.'</a></li>';
         } else {
             $links_div = '';
             $links_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_EXERCISE)) {
-            $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" style="padding:10px">
+            $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" role="tabpanel" aria-labelledby="nav_edit_exercises" style="padding:10px">
                               '.list_exercises($id).'
                           </div>';
-            $exercises_li = '<li><a data-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
+            $exercises_li = '<li><a id="nav_edit_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
         } else {
             $exercises_div = '';
             $exercises_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_ASSIGN)) {
-            $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" style="padding:10px">
+            $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" role="tabpanel" aria-labelledby="nav_edit_assigments" style="padding:10px">
                               '.list_assignments($id).'
                           </div>';
-            $assignments_li = '<li><a data-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
+            $assignments_li = '<li><a id="nav_edit_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
         } else {
             $assignments_div = '';
             $assignments_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_CHAT)) {
-            $chats_div = '<div class="form-group tab-pane fade" id="chats_div" style="padding:10px">
+            $chats_div = '<div class="form-group tab-pane fade" id="chats_div" role="tabpanel" aria-labelledby="nav_edit_chats" style="padding:10px">
                               '.list_chats($id).'
                           </div>';
-            $chats_li = '<li><a data-toggle="tab" href="#chats_div">'.$langChat.'</a></li>';
+            $chats_li = '<li><a id="nav_edit_chats" class="nav-link" data-bs-toggle="tab" href="#chats_div">'.$langChat.'</a></li>';
         } else {
             $chats_div = '';
             $chats_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_QUESTIONNAIRE)) {
-            $polls_div = '<div class="form-group tab-pane fade" id="polls_div" style="padding:10px">
+            $polls_div = '<div class="form-group tab-pane fade" id="polls_div" role="tabpanel" aria-labelledby="nav_edit_polls" style="padding:10px">
                               '.list_polls($id).'
                           </div>';
-            $polls_li = '<li><a data-toggle="tab" href="#polls_div">'.$langQuestionnaire.'</a></li>';
+            $polls_li = '<li><a id="nav_edit_polls" class="nav-link" data-bs-toggle="tab" href="#polls_div">'.$langQuestionnaire.'</a></li>';
         } else {
             $polls_div = '';
             $polls_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_FORUM)) {
-            $forums_div = '<div class="form-group tab-pane fade" id="forums_div" style="padding:10px">
+            $forums_div = '<div class="form-group tab-pane fade" id="forums_div" role="tabpanel" aria-labelledby="nav_edit_forums" style="padding:10px">
                               '.list_forums($id).'
                           </div>';
-            $forums_li = '<li><a data-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
+            $forums_li = '<li><a id="nav_edit_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
         } else {
             $forums_div = '';
             $forums_li = '';
@@ -390,10 +393,10 @@ if (isset($_GET['showPost'])) { //show comments case
                                 <label for="message_input">'.$langMessage.'</label>
                                 <textarea class="form-control" rows="6" name="message" id="message_input">'.strip_tags($content).'</textarea>
                             </div>
-                            <div class="panel panel-default">
+                            <div class="panel panel-default mt-3">
                                 <div class="panel-body">
                                     <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
+                                        <li class="active"><a id="nav_edit_extvideo" class="nav-link" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                         '.$video_li.'
                                         '.$docs_li.'
                                         '.$mydocs_li.'
@@ -405,7 +408,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$forums_li.'
                                     </ul>
                                     <div class="tab-content">
-                                        <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
+                                        <div class="form-group tab-pane fade show active" id="extvideo_video_div" role="tabpanel" aria-labelledby="nav_edit_extvideo" style="padding:10px">
                                             <label for="extvideo_video">'.$langWallExtVideoLink.'</label>
                                             <input class="form-control" type="url" name="extvideo" id="extvideo_video" value="'.$extvideo.'">
                                         </div>
@@ -421,8 +424,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                     </div>
                                 </div>
                             </div>
-                        </fieldset>
-                        <div class="form-group">'.
+                            <div class="form-group mt-3">'.
                             form_buttons(array(
                                 array(
                                     'text'  =>  $langSubmit,
@@ -431,6 +433,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                 )
                             ))
                         .'</div>
+                        </fieldset>
                     </form>
                 </div>
             </div>

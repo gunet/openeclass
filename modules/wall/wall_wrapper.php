@@ -45,92 +45,92 @@ function show_post_form() {
         $extvideo = Session::has('extvideo')? Session::get('extvideo'): '';
 
         if ($is_editor || visible_module(MODULE_ID_VIDEO)) {
-            $video_div = '<div class="form-group tab-pane fade" id="videos_div" style="padding:10px">
+            $video_div = '<div class="form-group tab-pane fade" id="videos_div" role="tabpanel" aria-labelledby="nav_video" style="padding:10px">
                               '.list_videos().'
                           </div>';
-            $video_li = '<li><a data-bs-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
+            $video_li = '<li><a id="nav_video" class="nav-link" data-bs-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
         } else {
             $video_div = '';
             $video_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_DOCS)) {
-            $docs_div = '<div class="form-group tab-pane fade" id="docs_div" style="padding:10px">
+            $docs_div = '<div class="form-group tab-pane fade" id="docs_div" role="tabpanel" aria-labelledby="nav_docs" style="padding:10px">
                             <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs().'
                           </div>';
-            $docs_li = '<li><a data-bs-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
+            $docs_li = '<li><a id="nav_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
         } else {
             $docs_div = '';
             $docs_li = '';
         }
 
         if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
-            $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div" style="padding:10px">
+            $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div" role="tabpanel" aria-labelledby="nav_mydocs" style="padding:10px">
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs(NULL,'mydocs').'
                           </div>';
-            $mydocs_li = '<li><a data-bs-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
+            $mydocs_li = '<li><a id="nav_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
         } else {
             $mydocs_div = '';
             $mydocs_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_LINKS)) {
-            $links_div = '<div class="form-group tab-pane fade" id="links_div" style="padding:10px">
+            $links_div = '<div class="form-group tab-pane fade" id="links_div" role="tabpanel" aria-labelledby="nav_links" style="padding:10px">
                               '.list_links().'
                           </div>';
-            $links_li = '<li><a data-bs-toggle="tab" href="#links_div">'.$langLinks.'</a></li>';
+            $links_li = '<li><a id="nav_links" class="nav-link" data-bs-toggle="tab" href="#links_div">'.$langLinks.'</a></li>';
         } else {
             $links_div = '';
             $links_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_EXERCISE)) {
-            $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" style="padding:10px">
+            $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" role="tabpanel" aria-labelledby="nav_exercises" style="padding:10px">
                               '.list_exercises().'
                           </div>';
-            $exercises_li = '<li><a data-bs-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
+            $exercises_li = '<li><a id="nav_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
         } else {
             $exercises_div = '';
             $exercises_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_ASSIGN)) {
-            $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" style="padding:10px">
+            $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" role="tabpanel" aria-labelledby="nav_assigments" style="padding:10px">
                               '.list_assignments().'
                           </div>';
-            $assignments_li = '<li><a data-bs-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
+            $assignments_li = '<li><a id="nav_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
         } else {
             $assignments_div = '';
             $assignments_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_CHAT)) {
-            $chats_div = '<div class="form-group tab-pane fade" id="chats_div" style="padding:10px">
+            $chats_div = '<div class="form-group tab-pane fade" id="chats_div" role="tabpanel" aria-labelledby="nav_chats" style="padding:10px">
                               '.list_chats().'
                           </div>';
-            $chats_li = '<li><a data-bs-toggle="tab" href="#chats_div">'.$langChat.'</a></li>';
+            $chats_li = '<li><a id="nav_chats" class="nav-link" data-bs-toggle="tab" href="#chats_div">'.$langChat.'</a></li>';
         } else {
             $chats_div = '';
             $chats_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_QUESTIONNAIRE)) {
-            $polls_div = '<div class="form-group tab-pane fade" id="polls_div" style="padding:10px">
+            $polls_div = '<div class="form-group tab-pane fade" id="polls_div" role="tabpanel" aria-labelledby="nav_polls" style="padding:10px">
                               '.list_polls().'
                           </div>';
-            $polls_li = '<li><a data-bs-toggle="tab" href="#polls_div">'.$langQuestionnaire.'</a></li>';
+            $polls_li = '<li><a id="nav_polls" class="nav-link" data-bs-toggle="tab" href="#polls_div">'.$langQuestionnaire.'</a></li>';
         } else {
             $polls_div = '';
             $polls_li = '';
         }
 
         if ($is_editor || visible_module(MODULE_ID_FORUM)) {
-            $forums_div = '<div class="form-group tab-pane fade" id="forums_div" style="padding:10px">
+            $forums_div = '<div class="form-group tab-pane fade" id="forums_div" role="tabpanel" aria-labelledby="nav_forums" style="padding:10px">
                               '.list_forums().'
                           </div>';
-            $forums_li = '<li><a data-bs-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
+            $forums_li = '<li><a id="nav_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
         } else {
             $forums_div = '';
             $forums_li = '';
@@ -151,10 +151,10 @@ function show_post_form() {
                                 <label for="message_input">'.$langMessage.'</label>
                                 <textarea id="textr" onfocus="expand_form();" class="form-control" rows="1" name="message" id="message_input">'.$content.'</textarea>
                             </div>
-                            <div id="resources_panel" class="panel panel-default collapse">
+                            <div id="resources_panel" class="panel panel-default collapse mt-3">
                                 <div class="panel-body">
                                     <ul class="nav nav-tabs">
-                                        <li class="nav-item active"><a class="nav-link" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
+                                        <li class="nav-item active"><a id="nav_extvideo" class="nav-link" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                         '.$video_li.'
                                         '.$docs_li.'
                                         '.$mydocs_li.'
@@ -166,7 +166,7 @@ function show_post_form() {
                                         '.$forums_li.'
                                     </ul>
                                     <div class="tab-content">
-                                        <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
+                                        <div class="form-group tab-pane fade show active" id="extvideo_video_div" role="tabpanel" aria-labelledby="nav_extvideo" style="padding:10px">
                                             <label for="extvideo_video">'.$langWallExtVideoLink.'</label>
                                             <input class="form-control" type="url" name="extvideo" id="extvideo_video" value="'.$extvideo.'">
                                         </div>
@@ -182,16 +182,16 @@ function show_post_form() {
                                     </div>
                                 </div>
                             </div>
-                        </fieldset>
-                        <div class="form-group">'.
-            form_buttons(array(
-                array(
-                    'text'  =>  $langSubmit,
-                    'name'  =>  'submit',
-                    'value' =>  $langSubmit
-                )
-            ))
-            .'</div>        
+                            <div class="form-group mt-3">'.
+                            form_buttons(array(
+                                array(
+                                    'text'  =>  $langSubmit,
+                                    'name'  =>  'submit',
+                                    'value' =>  $langSubmit
+                                )
+                            ))
+                            .'</div>  
+                        </fieldset>      
                     </form>
                 </div>
             </div>';
@@ -275,14 +275,14 @@ function show_wall_posts() {
                 };
                 buttons.cancel = {
                             label: '$langCancel',
-                            className: 'btn-default'
+                            className: 'btn-secondary'
                         };
                 bootbox.dialog({
                     size: 'large',
                     title: fileTitle,
                     message: '<div class=\"row\">'+
                                 '<div class=\"col-sm-12\">'+
-                                    '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                                    '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\" style=\"width:100%; height:500px;\"></iframe></div>'+
                                 '</div>'+
                             '</div>',
                     buttons: buttons

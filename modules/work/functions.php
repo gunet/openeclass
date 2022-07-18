@@ -454,7 +454,7 @@ function show_submission_details($id) {
                     <div class='col-sm-9' style='white-space: pre-wrap'>" . q($sub->grade_comments) . $file_comments_link . "
                     </div>
                 </div>
-                <div class='row margin-bottom-fat'>
+                <div class='row p-2 margin-bottom-fat'>
                     <div class='col-sm-3'>
                         <strong class='control-label-notes'>" . $m['sub_date'] . ":</strong>
                     </div>
@@ -475,7 +475,7 @@ function show_submission_details($id) {
             }, Database::get()->queryArray('SELECT id, file_name FROM assignment_submit
                     WHERE assignment_id = ?d AND uid = ?d AND group_id = ?d ORDER BY id',
                     $sub->assignment_id, $sub->uid, $sub->group_id)));
-        $tool_content .= "<div class='row margin-bottom-fat'>
+        $tool_content .= "<div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langOpenCoursesFiles:</strong>
                 </div>
@@ -488,14 +488,14 @@ function show_submission_details($id) {
             $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$sub->id";
         }
         $filelink = MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name);
-        $tool_content .= "<div class='row margin-bottom-fat'>
+        $tool_content .= "<div class='row p-2 margin-bottom-fat'>
                     <div class='col-sm-3'>
                         <strong class='control-label-notes'>$langFileName:</strong>
                     </div>
                     <div class='col-sm-9'>$filelink</div>";
     } else {
         // online text
-        $tool_content .= "<div class='row margin-bottom-fat'>
+        $tool_content .= "<div class='row p-2 margin-bottom-fat'>
                     <div class='col-sm-3'>
                         <strong class='control-label-notes'>$langWorkOnlineText:</strong>
                     </div>
@@ -508,7 +508,7 @@ function show_submission_details($id) {
     if ($assignment->auto_judge and $autojudge->isEnabled()) {
         $reportlink = $urlServer."modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
         $tool_content .= "
-                    <div class='row margin-bottom-fat'>
+                    <div class='row p-2 margin-bottom-fat'>
                         <div class='col-sm-3'>
                             <strong class='control-label-notes'>" . $langAutoJudgeEnable . ":</strong>
                         </div>

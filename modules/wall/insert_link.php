@@ -27,7 +27,7 @@ function list_links($id = NULL) {
     $ret_string = '';
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $course_id);
     if (count($result) == 0) {
-        $ret_string .= "div class='col-12 mt-3'<div class='alert alert-warning'>$langNoLinksExist</div></div>";
+        $ret_string .= "<div class='col-12 mt-3'><div class='alert alert-warning'>$langNoLinksExist</div></div>";
     } else {
         $exist_link = array();
 

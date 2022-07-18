@@ -25,7 +25,6 @@ function list_assignments($id = NULL) {
     $ret_string = '';
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY title", $course_id);
     if (count($result) == 0) {
-
         $ret_string .= "<div class='col-12 mt-3'><div class='alert alert-warning'>$langNoAssign</div></div>";
     } else {
         $exist_assignment = array();
@@ -42,7 +41,7 @@ function list_assignments($id = NULL) {
                 "<th class='text-white text-left'>&nbsp;$langTitle</th>" .
                 "<th class='text-white' width='120'>$langGroupWorkDeadline_of_Submission</th>" .
                 "<th style='width:20px;' class='text-white text-center'>$langChoice</th>" .
-                "</tr>";
+                "</tr>";        
         foreach ($result as $row) {
             $checked = '';
             if (in_array($row->id, $exist_assignment)) {
@@ -54,9 +53,10 @@ function list_assignments($id = NULL) {
                     "<td>".q($row->title)."<br><br><div class='text-muted'>$description</div></td>" .
                     "<td class='text-center'>".nice_format($row->submission_date, true)."</td>" .
                     "<td class='text-center'><input type='checkbox' $checked name='assignment[]' value='$row->id' /></td>" .
-                    "</tr>";
+                    "</tr>";            
         }
         $ret_string .= "</table></div>";
     }
     return $ret_string;
 }
+

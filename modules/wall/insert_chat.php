@@ -55,6 +55,7 @@ function list_chats($id = NULL) {
             if (in_array($entry['id'], $exist_chat)) {
                 $checked = 'checked';
             }
+
             $ret_string .= "<tr>";
             $ret_string .= "<td>&nbsp;".icon('fa fa-exchange')."&nbsp;&nbsp;<a href='${urlServer}modules/chat/chat.php?conference_id=$entry[id]'>".q($entry['name'])."</a></td>";
             $ret_string .= "<td>".$entry['description']."</td>";
@@ -62,7 +63,6 @@ function list_chats($id = NULL) {
             $ret_string .= "</tr>";
         }
         $ret_string .= "</table></div>";
-
     }
     return $ret_string;
 }

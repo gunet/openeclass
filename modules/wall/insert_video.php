@@ -50,12 +50,12 @@ function list_videos($id = NULL) {
         }
         
         $video_found = TRUE;
-        $ret_string .= "<table class='table-default'>";
-        $ret_string .= "<tr class='list-header'>" .
-                         "<th width='200' class='text-left'>&nbsp;$langTitle</th>" .
-                         "<th class='text-left'>$langDescription</th>" .
-                         "<th width='100'>$langDate</th>" .
-                         "<th width='80'>$langChoice</th>" .
+        $ret_string .= "<table class='announcements_table'>";
+        $ret_string .= "<tr class='notes_thead'>" .
+                         "<th width='200' class='text-white text-left'>&nbsp;$langTitle</th>" .
+                         "<th class='text-white text-left'>$langDescription</th>" .
+                         "<th class='text-white pe-2' width='100'>$langDate</th>" .
+                         "<th class='text-white pe-2' width='80'>$langChoice</th>" .
                          "</tr>";
         foreach (array('video', 'videolink') as $table) {
             $result = Database::get()->queryArray("SELECT * FROM $table WHERE (category IS NULL OR category = 0) AND course_id = ?d AND visible = ?d", $course_id, 1);
@@ -117,7 +117,8 @@ function list_videos($id = NULL) {
         $ret_string .= "</table>";
     }
     if (!$video_found) {
-        $ret_string .= "<div class='alert alert-warning'>$langNoVideo</div>";
+        $ret_string .= "<div class='row p-2'></div>
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoVideo</div></div>";
     }
     return $ret_string;                     
 }
