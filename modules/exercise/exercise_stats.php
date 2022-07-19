@@ -93,9 +93,9 @@ $tool_content .= "
                 </tr>
             </tbody>
             <tfoot>
-                <tr class='active bg-white'>
-                    <th class='ps-3 text-start control-label-notes' colspan='3'>$langTotal:</th>
-                    <th class='ps-4 text-start fw-bold text-dark' colspan='1'>$total_attempts</th>
+                <tr class='active'>
+                    <th class='bg-light ps-3 text-start control-label-notes' colspan='3'>$langTotal:</th>
+                    <th class='bg-light ps-4 text-start fw-bold text-dark' colspan='1'>$total_attempts</th>
                 </tr>            
             </tfoot>
         </table>

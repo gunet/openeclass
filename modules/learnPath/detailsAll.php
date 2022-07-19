@@ -81,10 +81,10 @@ if ($lcnt == 0) {
     draw($tool_content, 2, null, $head_content);
     exit;
 } else {
-    $tool_content .= "<div class='alert alert-info'>
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>
           $langSave <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langDumpUserDurationToFile</a>
                 (<a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=UTF-8'>$langcsvenc2</a>)
-          </div>";
+          </div></div>";
 }
 
 $tool_content .= "<div class='table-responsive'>

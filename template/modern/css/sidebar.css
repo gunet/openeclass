@@ -175,12 +175,6 @@ input[type="checkbox"].toggles + label.rounded::before{
   border-bottom: solid 1px white;
 }
 
-.nav-link:active,
-.nav-link:focus,
-.nav-link:hover{
-  background-color: #003F87;
-  border-bottom: solid 1px white;
-}
 
 
 .nav-item:active{

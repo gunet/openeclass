@@ -53,8 +53,8 @@ function display_certificates() {
                                                     FROM certificate WHERE course_id = ?d", $course_id);
 
         $tool_content .= "
-            <div class='row'>
-                <div class='col-xs-12'>
+            
+                <div class='col-12 mt-3'>
                     <div class='panel panel-default'>
                         <div class='panel-body'>
                             <div class='inner-heading'>
@@ -62,12 +62,13 @@ function display_certificates() {
                                     <div class='col-sm-7'>
                                         <strong>$langCertificates</strong>
                                     </div>
-                                    <div class='col-sm-5 text-right'>
+                                    <div class='col-sm-5 text-end'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> &nbsp;&nbsp;&nbsp;$langNewCertificate</a>
                                     </div>
                                 </div>
                             </div>
-                            <div class='res-table-wrapper'>";
+                            <hr>
+                            <div class='res-table-wrapper shadow-sm p-3 rounded'>";
     if (count($sql_cer) == 0) { // If no certificates
         $tool_content .= "<p class='text-center text-muted'>$langNoCertificates</p>";
     } else { // If there are certificates
@@ -87,13 +88,13 @@ function display_certificates() {
                     <img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='$template_thumbnail' title='$template_name'>
                 </a>
                 </div>
-                <div class='col-sm-9'>
+                <div class='col-sm-8'>
                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id'>".q($data->title)."</a>
                     <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;"
                     . "<span class='{$vis_status}'>$status_msg</span>
                     </div>
                 </div>
-                <div class='col-sm-1 text-left'>".
+                <div class='col-sm-2 text-end'>".
                 action_button(array(
                     array('title' => $langEditChange,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1",
@@ -124,8 +125,7 @@ function display_certificates() {
                     </div>
                 </div>
             </div>
-        </div>
-    </div>";
+        </div>";
 }
 
 
@@ -162,8 +162,7 @@ function display_badges() {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND active = 1 AND bundle >= 0 ", $course_id);
     }
         $tool_content .= "
-            <div class='row'>
-                <div class='col-xs-12'>
+                <div class='col-12 mt-3'>
                     <div class='panel panel-default'>
                         <div class='panel-body'>
                             <div class='inner-heading'>
@@ -171,12 +170,13 @@ function display_badges() {
                                     <div class='col-sm-7'>
                                         <strong>$langBadges</strong>
                                     </div>
-                                    <div class='col-sm-5 text-right'>
+                                    <div class='col-sm-5 text-end'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> &nbsp;&nbsp;&nbsp;$langNewBadge</a>
                                     </div>
                                 </div>
                             </div>
-                            <div class='res-table-wrapper'>";
+                            <hr>
+                            <div class='res-table-wrapper shadow-sm p-3 rounded'>";
 
     if (count($sql_cer) == 0) { // no badges
         $tool_content .= "<p class='text-center text-muted'>$langNoBadges</p>";
@@ -194,11 +194,11 @@ function display_badges() {
                                     <div class='col-sm-2'>
                                         <img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='$icon_link'>
                                     </div>
-                                    <div class='col-sm-9'>
+                                    <div class='col-sm-8'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
                                         <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
                                     </div>
-                                    <div class='col-sm-1 text-left'>".
+                                    <div class='col-sm-2 text-end'>".
                 action_button(array(
                     array('title' => $langEditChange,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;edit=1",
@@ -225,8 +225,7 @@ function display_badges() {
     $tool_content .= "</div>
                         </div>
                     </div>
-                </div>
-            </div>";
+                </div>";
     }
 
 /**
@@ -255,8 +254,7 @@ function display_course_completion() {
 
     if ($data) {
         $tool_content .= "
-            <div class='row'>
-                <div class='col-xs-12'>
+                <div class='col-12'>
                     <div class='panel panel-default'>
                         <div class='panel-body'>
                             <div class='inner-heading'>
@@ -266,7 +264,8 @@ function display_course_completion() {
                                     </div>
                                 </div>
                             </div>
-                            <div class='res-table-wrapper'>";
+                            <hr>
+                            <div class='res-table-wrapper shadow-sm p-3 rounded'>";
 
             $vis_status = $data->active ? "text-success" : "text-danger";
             $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
@@ -276,11 +275,11 @@ function display_course_completion() {
                             <div class='col-sm-2'>
                                 <i class='fa fa-trophy fa-3x' aria-hidden='true'></i>
                             </div>
-                            <div class='col-sm-9'>
+                            <div class='col-sm-8'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
                                 <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
                             </div>
-                            <div class='col-sm-1 text-left'>".
+                            <div class='col-sm-2 text-end'>".
                 action_button(array(
                     array('title' => $data->active ? $langDeactivate : $langActivate,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
@@ -304,9 +303,7 @@ function display_course_completion() {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        ";
+                </div>";
     }
 }
 
@@ -515,45 +512,48 @@ function display_activities($element, $id, $unit_id = 0) {
 
     if (!$unit_id) {
         $tool_content .= "
-            <div class='row'>
-            <div class='col-xs-12'>
+            <div class='col-12 mt-3'>
                 <div class='panel panel-default'>
                     <div class='panel-body'>
                         <div class='inner-heading'>
                             <div class='row'>
-                                <div class='col-sm-10'>
+                                <div class='col-sm-9'>
                                     <strong>$langAttendanceActList</strong>
                                 </div>
-                                <div class='col-sm-2 text-right'>
+                                <div class='col-sm-3 text-end'>
                                     $addActivityBtn
                                 </div>
                             </div>
                         </div>
+                        <hr>
                         <div class='res-table-wrapper'>
-                            <div class='row res-table-header'>
-                                <div class='col-sm-7'>
-                                    $langTitle
-                                </div>
-                                <div class='col-sm-2'>
-                                    $langType
-                                </div>
-                                <div class='col-sm-2'>
-                                    $langValue
-                                </div>
-                                <div class='col-sm-1 text-center'>
-                                    <i class='fa fa-cogs'></i>
-                                </div>
-                            </div>";
+                                <div class='res-table-header list-header p-1'>
+                                    <div class='row'>
+                                        <div class='col-sm-6 text-white text-start'>
+                                            $langTitle
+                                        </div>
+                                        <div class='col-sm-2 text-white text-start'>
+                                            $langType
+                                        </div>
+                                        <div class='col-sm-2 text-white text-start'>
+                                            $langValue
+                                        </div>
+                                        <div class='col-sm-2 text-end text-white pt-1'>
+                                            <i class='fa fa-cogs'></i>
+                                        </div>
+                                    </div>
+                                </div>";
         if (count($result) == 0) {
             $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
         } else {
             foreach ($result as $details) {
                 $resource_data = get_resource_details($element, $details->id);
                 $tool_content .= "
-                <div class='row res-table-row'>
-                    <div class='col-sm-7'>".$resource_data['title']."</div>
-                    <div class='col-sm-2'>". $resource_data['type']."</div>
-                    <div class='col-sm-2'>";
+                <div class='res-table-row'>
+                    <div class='row p-2'>
+                        <div class='col-sm-6 text-start'>".$resource_data['title']."</div>
+                        <div class='col-sm-2 text-start'>". $resource_data['type']."</div>
+                        <div class='col-sm-2 text-start'>";
                 if (!empty($details->operator)) {
                     $op = get_operators();
                     $tool_content .= $op[$details->operator];
@@ -561,7 +561,7 @@ function display_activities($element, $id, $unit_id = 0) {
                     $tool_content .= "&mdash;";
                 }
                 $tool_content .= "&nbsp;$details->threshold</div>";
-                $tool_content .= "<div class='col-sm-1 text-center'>".
+                $tool_content .= "<div class='col-sm-2 text-end'>".
                     action_button(array(
                         array('title' => $langEditChange,
                             'icon' => 'fa-edit',
@@ -573,15 +573,13 @@ function display_activities($element, $id, $unit_id = 0) {
                             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
                             'confirm' => $langConfirmDelete,
                             'class' => 'delete'))).
-                    "</div></div>";
+                    "</div></div></div>";
             }
         }
         $tool_content .= "</div>
                     </div>
                 </div>
-            </div>
-        </div>
-        ";
+            </div>";
     } else {
             $tool_content .= "<div class='main-content'>
                                 <div class='col-sm-12'>
@@ -848,18 +846,18 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
         }
         $operators = get_operators();
 
-        $tool_content .= "<form action=$action method='post'>";
+        $tool_content .= "<form action=$action method='post'><div class='form-wrapper shadow-sm p-3 rounded'>";
         $tool_content .= "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='name' class='col-sm-1 control-label'>$langOperator:</label>";
+        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<label for='name' class='col-sm-1 control-label-notes'>$langOperator:</label>";
         $tool_content .= "<span class='col-sm-2'>" . selection($operators, 'cert_operator', $data->operator) . "</span>";
         $tool_content .= "<span class='col-sm-2'><input class='form-control' type='text' name='cert_threshold' value='$data->threshold'></span>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='col-sm-5 col-sm-offset-5'>";
+        $tool_content .= "<div class='col-sm-5 col-sm-offset-5 mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='mod_cert_activity' value='$langModify'>";
         $tool_content .= "</div>";
-        $tool_content .= "</form>";
+        $tool_content .= "</div></form>";
     }
 }
 
@@ -954,7 +952,7 @@ function display_available_exercises($element, $element_id, $unit_id = 0) {
             'visibility' => $row->active);
     }
     if (count($quizinfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoExercises</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoExercises</div></div>";
     } else {
         $action = $unit_id ? "manage.php?course=$course_code&manage=1&unit_id=$unit_id" : "index.php?course=$course_code";
 
@@ -1048,7 +1046,7 @@ function display_available_documents($element, $element_id, $unit_id = 0) {
     }
 
     if (count($fileinfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoDocuments</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoDocuments</div></div>";
     } else {
         if (!empty($path)) {
             $dirname = Database::get()->querySingle("SELECT filename FROM document WHERE $group_sql AND path = ?s", $path);
@@ -1124,7 +1122,7 @@ function display_available_documents($element, $element_id, $unit_id = 0) {
                 } else {
                     $size = format_file_size($entry['size']);
                     $date = nice_format($entry['date'], true, true);
-                    $tool_content .= "<td class='text-right'>$size</td><td class='text-center'>$date</td>";
+                    $tool_content .= "<td class='text-end'>$size</td><td class='text-center'>$date</td>";
                 }
                 $tool_content .= "<td class='text-center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
                 $tool_content .= "</tr>";
@@ -1132,7 +1130,7 @@ function display_available_documents($element, $element_id, $unit_id = 0) {
             }
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<div class='text-end'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='add_document' value='$langAddModulesButton' /></div>$dir_html</form>";
     }
 }
@@ -1230,7 +1228,7 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
                                 ORDER BY title", $course_id, $element_id);
 
     if (count($result) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langBlogEmpty</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langBlogEmpty</div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1268,7 +1266,7 @@ function display_available_coursecomments($element, $element_id, $unit_id = 0) {
 // TODO: implement for unit completion as well
     global $tool_content;
 
-    $tool_content .= "<div class='alert alert-warning'>....Προς υλοποίηση....</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>....Προς υλοποίηση....</div></div>";
 
     return $tool_content;
 }
@@ -1293,7 +1291,7 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
                                             AND module = " . MODULE_ID_FORUM . "", $element_id);
 
     if (count($res) > 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langResourceAlreadyAdded</div></div>";
     } else {
 
         if ($unit_id) {
@@ -1355,7 +1353,7 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0) {
     }
 
     if (count($topicinfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoForumTopic</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoForumTopic</div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1384,7 +1382,7 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0) {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-right'>
+        $tool_content .= "<div class='text-end'>
                             <input class='btn btn-primary' type='submit' name='add_forumtopic' value='$langAddModulesButton'>
                         </div></form>";
     }
@@ -1421,7 +1419,7 @@ function display_available_lps($element, $element_id, int $unit_id = 0) {
             'rank' => $row->rank);
     }
     if (count($lpinfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoLearningPath</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoLearningPath</div></div>";
     } else {
 
         if ($unit_id) {
@@ -1454,7 +1452,7 @@ function display_available_lps($element, $element_id, int $unit_id = 0) {
             }
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<div class='text-end'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='add_lp' value='$langAddModulesButton'></div></form>";
 
     }
@@ -1559,13 +1557,13 @@ function display_available_multimedia($element, $element_id, $unit_id = 0) {
             }
         }
         $tool_content .= "</table>"
-                . "<div class='text-right'>"
+                . "<div class='text-end'>"
                 . "<input class='btn btn-primary' type='submit' name='add_multimedia' value='".q($langAddModulesButton)."'>&nbsp;&nbsp;"
                 . "</div>"
                 . "</form>";
     }
     if (!$video_found) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoVideo</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoVideo</div></div>";
     }
 }
 
@@ -1591,7 +1589,7 @@ function display_available_ebooks($element, $element_id, $unit_id = 0) {
                                         AND resource!='' AND activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "' AND module = " . MODULE_ID_EBOOK . ")", $course_id, $element_id);
 
     if (count($result) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoEBook</div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1661,7 +1659,7 @@ function display_available_ebooks($element, $element_id, $unit_id = 0) {
         }
         $tool_content .=
                 "</table>
-                <div class='text-right'>
+                <div class='text-end'>
                 <input class='btn btn-primary' type='submit' name='add_ebook' value='$langAddModulesButton' /></div></form>";
     }
 }
@@ -1697,7 +1695,7 @@ function display_available_polls($element, $element_id, $unit_id = 0) {
             'description' => $row->description);
     }
     if (count($pollinfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langPollNone</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langPollNone</div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1719,7 +1717,7 @@ function display_available_polls($element, $element_id, $unit_id = 0) {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<div class='text-end'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='add_poll' value='$langAddModulesButton'></div></form>";
     }
 }
@@ -1753,7 +1751,7 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
                                             AND module = " . MODULE_ID_WIKI . "", $element_id);
 
     if (count($result) > 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langResourceAlreadyAdded</div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1780,7 +1778,7 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
 
         $tool_content .= "
                     </table>
-                <div class='text-right'>
+                <div class='text-end'>
                     <input class='btn btn-primary' type='submit' name='add_wiki' value='$langAddModulesButton'>
                 </div></form>";
     }
@@ -1805,7 +1803,7 @@ function display_available_participation($element, $element_id, $unit_id = 0) {
                                             AND activity_type = '" . CourseParticipationEvent::ACTIVITY . "'", $element_id);
 
     if (count($result) > 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langResourceAlreadyAdded</div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1832,7 +1830,7 @@ function display_available_participation($element, $element_id, $unit_id = 0) {
 
         $tool_content .= "
                     </table>
-                <div class='text-right'>
+                <div class='text-end'>
                     <input class='btn btn-primary' type='submit' name='add_participation' value='$langAddModulesButton'>
                 </div></form>";
     }
@@ -1862,7 +1860,7 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
                                     ORDER BY title", $course_id, $element_id);
 
     if (count($result) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoGradeBooks</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoGradeBooks</div></div>";
     } else {
 
         if ($unit_id) {
@@ -1921,7 +1919,7 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
                                             AND module = " . MODULE_ID_PROGRESS, $element_id);
 
     if (count($res) > 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langResourceAlreadyAdded</div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1995,8 +1993,7 @@ function display_settings($element, $element_id, $unit_id = 0) {
             $icon_link = $urlServer . CERT_TEMPLATE_PATH . $thumbnail_filename;
         }
         $tool_content .= "
-            <div class='row'>
-                <div class='col-xs-12'>
+                <div class='col-12'>
                     <div class='panel panel-default'>
                         <div class='panel-body'>
                             <div class='inner-heading'>
@@ -2004,49 +2001,73 @@ function display_settings($element, $element_id, $unit_id = 0) {
                                     <div class='col-sm-7'>
                                         <strong>$langProgressBasicInfo</strong>
                                     </div>
-                                    <div class='col-sm-5 text-right'>
+                                    <div class='col-sm-5 text-end'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'>"
                                                 . "<span class='fa fa-pencil'></span> &nbsp;&nbsp;$langEditChange
                                         </a>
                                     </div>
                                 </div>
                             </div>
+                            <hr>
                             <div class='row'>
-                                <div class='col-sm-5'>
+                                <div class='col-sm-4'>
                                     <img style='box-shadow: 0 0 15px 1px #bbb' class='img-responsive center-block' src='$icon_link'>
                                 </div>
-                                <div class='col-sm-7'>
-                                    <div class='pn-info-title-sct'>$langTitle</div>
-                                    <div class='pn-info-text-sct'>$title</div>
-                                    <div class='pn-info-title-sct'>$langDescription</div>
-                                    <div class='pn-info-text-sct'>$description</div>
-                                    <div class='pn-info-title-sct'>$langMessage</div>
-                                    <div class='pn-info-text-sct'>$message</div>
-                                    <div class='pn-info-title-sct'>$langpublisher</div>
-                                    <div class='pn-info-text-sct'>$issuer</div>
+                                <div class='col-sm-8'>
+                                    <div class='row p-2'>
+                                        <div class='col-sm-6'>
+                                            <div class='pn-info-title-sct control-label-notes'>$langTitle</div>
+                                        </div>
+                                        <div class='col-sm-6 text-start'>
+                                            <div class='pn-info-text-sct'>$title</div>
+                                        </div>
+                                    </div>
+
+                                    <div class='row p-2'>
+                                        <div class='col-sm-6'>
+                                            <div class='pn-info-title-sct control-label-notes'>$langDescription</div>
+                                        </div>
+                                        <div class='col-sm-6 text-start'>
+                                            <div class='pn-info-text-sct'>$description</div>
+                                        </div>
+                                    </div>
+
+                                    <div class='row p-2'>
+                                        <div class='col-sm-6'>
+                                            <div class='pn-info-title-sct control-label-notes'>$langMessage</div>
+                                        </div>
+                                        <div class='col-sm-6'>
+                                            <div class='pn-info-text-sct text-start'>$message</div>
+                                        </div>
+                                    </div>
+
+                                    <div class='row p-2'>
+                                        <div class='col-sm-6'>
+                                            <div class='pn-info-title-sct control-label-notes'>$langpublisher</div>
+                                        </div>
+                                        <div class='col-sm-6'>
+                                            <div class='pn-info-text-sct text-start'>$issuer</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        ";
+                </div>";
     } else { // course completion
         if (!$unit_id) {
             $tool_content .= "
-        <div class='row'>
-            <div class='col-xs-12'>
+            <div class='col-12'>
                 <div class='panel panel-default'>
-                    <div class='panel-body'>
+                    <div class='panel-body bg-light'>
                         <div class='row'>
-                            <div class='col-sm-7'>
+                            <div class='col-sm-12 text-center'>
                                 <h4><strong>$langCourseCompletion</strong></h4>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>";
+            </div>";
         }
     }
 }
@@ -2136,41 +2157,41 @@ function certificate_settings($element, $element_id = 0) {
     }
     $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
-                <div class='form-group'>
-                    <label for='title' class='col-sm-2 control-label'>$langTitle</label>
-                    <div class='col-sm-10'>
+                <div class='form-group mt-3'>
+                    <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
+                    <div class='col-sm-12'>
                         <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label for='description' class='col-sm-2 control-label'>$langDescription: </label>
-                    <div class='col-sm-10'>
+                <div class='form-group mt-3'>
+                    <label for='description' class='col-sm-6 control-label-notes'>$langDescription: </label>
+                    <div class='col-sm-12'>
                         <textarea class='form-control' name='description' rows='6'>$description</textarea>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label for='title' class='col-sm-2 control-label'>";
+                <div class='form-group mt-3'>
+                    <label for='title' class='col-sm-6 control-label-notes'>";
                     $tool_content .= ($element == 'certificate') ? $langTemplate : $langIcon;
                     $tool_content .= "</label>
-                        <div class='col-sm-10'>";
+                        <div class='col-sm-12'>";
                             $tool_content .= ($element == 'certificate') ? selection(get_certificate_templates(), 'template', $template) : selection(get_badge_icons(), 'template', $template);
                         $tool_content .= "</div>
                 </div>
-                <div class='form-group'>
-                    <label for='message' class='col-sm-2 control-label'>$langMessage</label>
-                    <div class='col-sm-10'>
+                <div class='form-group mt-3'>
+                    <label for='message' class='col-sm-6 control-label-notes'>$langMessage</label>
+                    <div class='col-sm-12'>
                         <textarea class='form-control' name='message' rows='3' maxlength='200'>$message</textarea>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label for='title' class='col-sm-2 control-label'>$langpublisher</label>
-                    <div class='col-sm-10'>
+                <div class='form-group mt-3'>
+                    <label for='title' class='col-sm-6 control-label-notes'>$langpublisher</label>
+                    <div class='col-sm-12'>
                         <input class='form-control' type='text' name='issuer' value='$issuer'>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langCertificateDeadline:</label>
-                    <div class='col-sm-10'>
+                <div class='form-group mt-3'>
+                    <label class='col-sm-6 control-label-notes'>$langCertificateDeadline:</label>
+                    <div class='col-sm-12'>
                        <div class='input-group'>
                            <span class='input-group-addon'>
                              <input style='cursor:pointer;' type='checkbox' id='enablecertdeadline' name='enablecertdeadline' value='1' $check_certdeadline>
@@ -2181,8 +2202,8 @@ function certificate_settings($element, $element_id = 0) {
                     </div>
                 </div>
                 $cert_id";
-                $tool_content .= "<div class='form-group'>
-                    <div class='col-xs-10 col-xs-offset-2'>".form_buttons(array(
+                $tool_content .= "<div class='form-group mt-3'>
+                    <div class='col-10 col-offset-2'>".form_buttons(array(
                         array(
                                 'text' => $langSave,
                                 'name' => $name,
@@ -2384,7 +2405,7 @@ function student_view_progress() {
         }
 
     if (!$found) {
-        $tool_content .= "<div class='alert alert-info'>$langNoCertBadge</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langNoCertBadge</div></div>";
     }
 }
 
@@ -2444,13 +2465,13 @@ function display_users_progress($element, $element_id) {
                                             AND course_id = ?d", $course_id)->total;
 
     if (count($sql) > 0) {
-        $tool_content .= "<div class='alert alert-info'>$langUsersCertResults $certified_users / $all_users $langUsersS.</div>";
-        $tool_content .= "<table class='table-default custom_list_order'>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langUsersCertResults $certified_users / $all_users $langUsersS.</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default custom_list_order'>";
             $tool_content .= "<thead>
-                        <tr>
-                          <th style='width:5%'>$langID</th>
-                          <th>$langSurnameName</th>
-                          <th style='width: 20%;'>$langProgress</th>
+                        <tr class='list-header'>
+                          <th class='text-white ps-2' style='width:5%'>$langID</th>
+                          <th class='text-white ps-2'>$langSurnameName</th>
+                          <th class='text-white ps-2' style='width: 20%;'>$langProgress</th>
                         </tr>
                     </thead>
                     <tbody>";
@@ -2474,9 +2495,9 @@ function display_users_progress($element, $element_id) {
                     </td>
                     </tr>";
         }
-        $tool_content .= "</tbody></table>";
+        $tool_content .= "</tbody></table></div></div>";
     } else {
-        $tool_content .= "<div class='alert alert-info'>$langNoCertificateUsers</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langNoCertificateUsers</div></div>";
     }
 }
 
@@ -2546,8 +2567,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
     }
 
 	$tool_content .= "
-        <div class='row'>
-            <div class='col-xs-12'>
+            <div class='col-12'>
                 <div class='panel panel-default'>
                     <div class='panel-body'>
                         <div class='inner-heading'>
@@ -2557,11 +2577,12 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                 </div>
                             </div>
                         </div>
+                        <hr>
                         <div class='row'>
                             <div class='col-sm-12'>
                                 <div class='row p-2'>
                                 <div class='col-6'>
-                                        <div class='pn-info-title-sct'>$langTotalPercentCompleteness</div></div>";
+                                        <div class='pn-info-title-sct control-label-notes'>$langTotalPercentCompleteness</div></div>";
                                         $tool_content .= "<div class='col-6'>";
                                         if ($user_data) {
                                             $tool_content .= "<div class='pn-info-text-sct text-end'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</div>";
@@ -2572,7 +2593,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                 $tool_content .= "
                                 <div class='row p-2'>
                                     <div class='col-6'>
-                                        <div class='pn-info-title-sct'>$langDescription</div>
+                                        <div class='pn-info-title-sct control-label-notes'>$langDescription</div>
                                     </div>
                                     <div class='col-6'>
                                         <div class='pn-info-text-sct text-end'>" . get_cert_desc($element, $element_id) . "</div>
@@ -2580,7 +2601,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                 </div>
                                 <div class='row p-2'>
                                     <div class='col-6'>
-                                        <div class='pn-info-title-sct'>$langpublisher</div>
+                                        <div class='pn-info-title-sct control-label-notes'>$langpublisher</div>
                                     </div>
                                     <div class='col-6'>
                                         <div class='pn-info-text-sct text-end'>" . get_cert_issuer($element, $element_id) . "</div>
@@ -2591,13 +2612,10 @@ function display_user_progress_details($element, $element_id, $user_id) {
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    ";
+            </div>";
 
 	$tool_content .= "
-            <div class='row'>
-            <div class='col-xs-12'>
+            <div class='col-12 mt-3'>
                 <div class='panel panel-default'>
                     <div class='panel-body'>
                         <div class='inner-heading'>
@@ -2607,9 +2625,10 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                 </div>
                             </div>
                         </div>
+                        <hr>
                         <div class='res-table-wrapper'>
                             <div class='row p-2 res-table-header'>
-                                <div class='col-sm-9'>
+                                <div class='col-sm-9 control-label-notes'>
                                     $langTitle
                                 </div>
                                 <div class='col-sm-3 text-center'>
@@ -2622,8 +2641,8 @@ function display_user_progress_details($element, $element_id, $user_id) {
 		$resource_data = get_resource_details($element, $user_criterion);
 		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
 		$tool_content .= "
-                <div class='row res-table-row'>
-                    <div class='col-sm-9'>$activity</div>
+                <div class='row p-2 res-table-row'>
+                    <div class='col-sm-9 control-label-notes'>$activity</div>
                     <div class='col-sm-3 text-center'>" . icon('fa-check-circle') . "</div>
                 </div>";
 	}
@@ -2639,13 +2658,13 @@ function display_user_progress_details($element, $element_id, $user_id) {
                 }
 		$tool_content .= "
                 <div class='row p-2 res-table-row not_visible'>
-                    <div class='col-sm-9'>$activity</div>
+                    <div class='col-sm-9 control-label-notes'>$activity</div>
                     <div class='col-sm-3 text-center'>$op_content&nbsp;" . $user_criterion->threshold . "</div>
                 </div>";
 	}
 	$tool_content .= "
             <div class='row p-2 res-table-header'>
-                <div class='col-sm-9'>$langTotalPercentCompleteness</div>";
+                <div class='col-sm-9 control-label-notes'>$langTotalPercentCompleteness</div>";
                 if ($user_data) {
                     $tool_content .= "<div class='col-sm-3 text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></div>";
                 } else {
@@ -2655,9 +2674,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
             $tool_content .= "
                     </div></div>
                 </div>
-            </div>
-        </div>
-        ";
+            </div>";
 }
 
 

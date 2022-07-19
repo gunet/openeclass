@@ -139,7 +139,7 @@ function show_edit_form($id, $sid, $assign) {
             if($cdate < $assign->start_date_review){
                 $tool_content .= "
                     <p class='sub_title1'></p>
-                    <div class='alert alert-warning'>$langPeerReviewNoAssignments</div>";
+                    <div class='col-sm-12'><div class='alert alert-warning'>$langPeerReviewNoAssignments</div></div>";
 			}
 			/*if ($cdate > $ass->deadline && $cdate > $ass->start_date_review){
 				$tool_content .= "<div class='form-group'>
@@ -275,7 +275,7 @@ function show_edit_form($id, $sid, $assign) {
                 } else {
                     $tool_content .= "
                             <p class='sub_title1'></p>
-                            <div class='alert alert-warning'>$langNoAssignmentsForReview</div>";
+                            <div class='col-sm-12'><div class='alert alert-warning'>$langNoAssignmentsForReview</div></div>";
                 }
             }
         }

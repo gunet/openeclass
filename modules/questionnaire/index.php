@@ -264,10 +264,10 @@ function printPolls() {
         ++$poll_check;
     }
     if (!$poll_check) {
-        $tool_content .= "<div class='alert alert-warning'>" . $langPollNone . "</div><br>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>" . $langPollNone . "</div></div><br>";
     } else {
         // Print active polls
-        $tool_content .= "<div class='row'><div class='col-md-12'>
+        $tool_content .= "<div class='col-sm-12'>
                     <div class='table-responsive'>
               <table class='table-default'>
                 <tr class='list-header'>
@@ -412,7 +412,7 @@ function printPolls() {
                 }
             }
         }
-        $tool_content .= "</table></div></div></div>
+        $tool_content .= "</table></div></div>
 
             <div class='modal fade' tabindex='-1' role='dialog' id='cloneModal'>
               <div class='modal-dialog' role='document'>

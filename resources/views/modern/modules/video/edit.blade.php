@@ -144,7 +144,7 @@
 
 
                                         <div class='form-group'>
-                                            <label for='Creator' class='col-sm-6 control-label-notes'>{{ trans('langcreator') }}:</label>
+                                            <label for='Creator' class='col-sm-6 control-label-notes'>{{ trans('langCreator') }}:</label>
                                             <div class='col-sm-12'>
                                                 @if (isset($form_input))
                                                     <input class='form-control' type='text' name='creator' value='{{ $nick }}'>

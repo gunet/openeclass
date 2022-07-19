@@ -118,7 +118,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 
 $tool_content .= "
         <div class='row margin-bottom-thin'>
-            <div class='col-xs-12'>
+            <div class='col-12'>
                 <div class='alert alert-info'>
                     <strong>$langLearnPath:</strong> <span class='text-muted'>$LPname</span><br>
                     <strong>$langStudent:</sstrong> <span class='text-muted'>".q($uDetails->surname) . "&nbsp;" . q($uDetails->givenname) . " (" . q($uDetails->email).")</span>

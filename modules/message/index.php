@@ -553,11 +553,11 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     $tool_content .= "<div class='row p-2'></div>
                       <div id='dropboxTabs'>
                         <ul class='nav nav-tabs' role='tablist'>
-                            <li role='presentation'><a class='btn btn-secondary' id='inboxA' data-bs-target='#inbox' role='tab' data-bs-toggle='tab' href= 'inbox.php" . $courseParam . $msg_id_param . "'><strong>$langDropBoxInbox</strong></a></li>
-                            <li role='presentation'><a class='btn btn-secondary' id='outboxA' data-bs-target='#outbox' role='tab' data-bs-toggle='tab' href='outbox.php" . $courseParam . "'><strong>$langDropBoxOutbox</strong></a></li>
+                            <li class='nav-item' role='presentation'><a class='nav-link' id='inboxA' data-bs-target='#inbox' role='tab' data-bs-toggle='tab' href= 'inbox.php" . $courseParam . $msg_id_param . "'><strong>$langDropBoxInbox</strong></a></li>
+                            <li class='nav-item' role='presentation'><a class='nav-link' id='outboxA' data-bs-target='#outbox' role='tab' data-bs-toggle='tab' href='outbox.php" . $courseParam . "'><strong>$langDropBoxOutbox</strong></a></li>
                         </ul>
                         <div class='tab-content'>
-                            <div role='tabpanel' class='tab-pane fade in active' id='inbox' aria-labelledby='inboxA'></div>
+                            <div role='tabpanel' class='tab-pane fade show active' id='inbox' aria-labelledby='inboxA'></div>
                             <div role='tabpanel' class='tab-pane fade' id='outbox' aria-labelledby='outboxA'></div>
                         </div>
                       </div>";

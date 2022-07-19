@@ -68,7 +68,7 @@ if (isset($_REQUEST['badge_id'])) {
 if ($is_editor) {
 
     // Top menu
-    $tool_content .= "<div class='col-12'>";
+    $tool_content .= "<div class='col-sm-12'>";
     if(isset($_GET['edit'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
         $pageName = $langConfig;

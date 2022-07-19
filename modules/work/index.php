@@ -3932,7 +3932,7 @@ function show_student_assignment($id) {
             $tool_content .= "<p>$langUserOnly</p>";
             $submit_ok = FALSE;
         } elseif ($GLOBALS['status'] == USER_GUEST) {
-            $tool_content .= "<div class='alert alert-warning'>$m[noguest]</div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$m[noguest]</div></div>";
             $submit_ok = FALSE;
         } else {
             foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
@@ -4201,11 +4201,11 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         </div>";
             } else {
                 $group_link = $urlAppend . 'modules/group/';
-                $tool_content .= "<div class='alert alert-warning'>$m[this_is_group_assignment] <br />" .
+                $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$m[this_is_group_assignment] <br />" .
                         sprintf(count($user_group_info) ?
                                         $m['group_assignment_publish'] :
                                         $m['group_assignment_no_groups'], $group_link) .
-                        "</div>\n";
+                        "</div></div>\n";
             }
         } else {
             $groups_with_no_submissions = groups_with_no_submissions($id);
@@ -4759,7 +4759,7 @@ function assignment_details($id, $row, $x =false) {
     </div></div>";
     $cdate = date('Y-m-d H:i:s');
     if ($row->deadline < $cdate && $row->late_submission && !$is_editor) {
-        $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langWarnAboutDeadLine</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langWarnAboutDeadLine</div></div>";
     }
 }
 
@@ -5276,7 +5276,7 @@ function show_non_submitted($id) {
         } else {
             $tool_content .= "
                       <p class='sub_title1'>$m[WorkGroupNoSubmission]:</p>
-                      <div class='alert alert-warning'>$m[NoneWorkGroupNoSubmission]</div>";
+                      <div class='col-sm-12'><div class='alert alert-warning'>$m[NoneWorkGroupNoSubmission]</div></div>";
         }
 
     } else {
@@ -5313,7 +5313,7 @@ function show_non_submitted($id) {
         } else {
             $tool_content .= "
                       <p class='sub_title1'>$m[WorkUserNoSubmission]:</p>
-                      <div class='alert alert-warning'>$m[NoneWorkUserNoSubmission]</div>";
+                      <div class='col-sm-12'><div class='alert alert-warning'>$m[NoneWorkUserNoSubmission]</div></div>";
         }
     }
 }
@@ -5671,7 +5671,7 @@ function show_assignments() {
         }
         $tool_content .= '</tbody></table></div></div>';
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoAssign</div></div>";
     }
 }
 

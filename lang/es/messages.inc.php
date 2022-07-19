@@ -5426,3 +5426,4 @@ $langUnitNotCompleted = 'Unit prerequisites not yet completed';
 $langUnitNotStarted = "The unit has not begun yet";
 $langOfUnitCompletion = 'Unit completion activities';
 $lang_pass_submit = 'Enviado';
+$langInsertExerciseCap = "Ejercicio";

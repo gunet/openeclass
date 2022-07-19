@@ -274,10 +274,10 @@ if (isset($_GET['delete'])) {
                              'level' => 'primary-label')
                         ));
         $tool_content .= "
-        <div class='row p-2'></div>
+        <div class='col-sm-12'>
             <div class='panel panel-default'>
                 <div class='panel-heading'>
-                    <h3 class='panel-title text-white'>$langEBookInfo &nbsp;
+                    <h3 class='panel-title'>$langEBookInfo &nbsp;
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1'>
                             <i class='fa fa-edit' title='$langEdit' data-toggle='tooltip'></i>
                         </a>
@@ -301,7 +301,8 @@ if (isset($_GET['delete'])) {
                         </div>
                     </div>
                 </div>
-            </div>";
+            </div>
+        </div>";
 
         $q = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
                            WHERE ebook_id = ?d

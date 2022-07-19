@@ -118,7 +118,7 @@ if ($total_categories > 0) {
         $tool_content .= "<caption><strong>$langCategory :</strong> $cat_title<div class='pull-right'>";
 
         $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
-                          <div class='h-100 shadow-lg p-3 bg-body rounded bg-primary'><caption>";
+                          <div class='shadow-sm p-3 rounded'><caption>";
         $tool_content .= "<strong>$langCategory :</strong> $cat_title";
         $tool_content .= "<div class='float-sm-end float-start mt-md-0 mt-3'>";
 
@@ -150,7 +150,7 @@ if ($total_categories > 0) {
                         'url' => "forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum",
                         'icon' => 'fa-times text-danger',
                         'class' => 'delete',
-                        'confirm' => $langConfirmDelete,
+                        // 'confirm' => $langConfirmDelete,
                         'level' => 'primary',
                         'show' => $is_editor
                     )

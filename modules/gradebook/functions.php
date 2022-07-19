@@ -191,8 +191,8 @@ function new_gradebook() {
             <div class='row p-2'></div>
 
                 <div class='form-group".($title_error ? " has-error" : "")."'>
-                    <div class='col-xs-12'>
-                        <label>$langTitle</label>
+                    <div class='col-12'>
+                        <label class='control-label-notes'>$langTitle</label>
                     </div>
                     <div class='col-xs-12'>
                         <input class='form-control' type='text' name='title' value='$title'>
@@ -204,8 +204,8 @@ function new_gradebook() {
 
 
                 <div class='form-group".($start_date_error ? " has-error" : "")."'>
-                    <div class='col-xs-12'>
-                        <label>$langStart</label>
+                    <div class='col-12'>
+                        <label class='control-label-notes'>$langStart</label>
                     </div>
                     <div class='col-xs-12'>
                         <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
@@ -217,10 +217,10 @@ function new_gradebook() {
 
 
                 <div class='form-group".($end_date_error ? " has-error" : "")."'>
-                    <div class='col-xs-12'>
-                        <label>$langEnd</label>
+                    <div class='col-12'>
+                        <label class='control-label-notes'>$langEnd</label>
                     </div>
-                    <div class='col-xs-12'>
+                    <div class='col-12'>
                         <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
                         <span class='help-block'>$end_date_error</span>
                     </div>
@@ -230,8 +230,8 @@ function new_gradebook() {
 
 
                 <div class='form-group".($degreerange_error ? " has-error" : "")."'>
-                    <label class='col-xs-12'>$langGradebookRange</label>
-                    <div class='col-xs-12'>
+                    <label class='col-12 control-label-notes'>$langGradebookRange</label>
+                    <div class='col-12'>
                         <select name='degreerange' class='form-control'>
                             <option value".($degreerange == 0 ? ' selected' : '').">-- $langGradeScalesSelect --</option>
                             <option value='5'".($degreerange == 5 ? ' selected' : '').">0-5</option>
@@ -392,8 +392,8 @@ function gradebook_settings($gradebook_id) {
             <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id) . "'>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
-                        <label class='col-xs-12 control-label-notes'>$langTitle</label>
-                        <div class='col-xs-12'>
+                        <label class='col-12 control-label-notes'>$langTitle</label>
+                        <div class='col-12'>
                             <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
                             <span class='help-block'>$title_error</span>
                         </div>
@@ -403,10 +403,10 @@ function gradebook_settings($gradebook_id) {
 
 
                     <div class='form-group".($start_date_error ? " has-error" : "")."'>
-                        <div class='col-xs-12'>
+                        <div class='col-12'>
                             <label class='control-label-notes'>$langStart</label>
                         </div>
-                        <div class='col-xs-12'>
+                        <div class='col-12'>
                             <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
                             <span class='help-block'>$start_date_error</span>
                         </div>
@@ -415,10 +415,10 @@ function gradebook_settings($gradebook_id) {
                     <div class='row p-2'></div>
 
                     <div class='form-group".($end_date_error ? " has-error" : "")."'>
-                        <div class='col-xs-12'>
+                        <div class='col-12'>
                             <label class='control-label-notes'>$langEnd</label>
                         </div>
-                        <div class='col-xs-12'>
+                        <div class='col-12'>
                             <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
                             <span class='help-block'>$end_date_error</span>
                         </div>
@@ -426,8 +426,8 @@ function gradebook_settings($gradebook_id) {
 
                     <div class='row p-2'></div>
 
-                    <div class='form-group".($degreerange_error ? " has-error" : "")."'><label class='col-xs-12 control-label-notes'>$langGradebookRange</label>
-                            <div class='col-xs-12'>
+                    <div class='form-group".($degreerange_error ? " has-error" : "")."'><label class='col-12 control-label-notes'>$langGradebookRange</label>
+                            <div class='col-12'>
                                 <select name='degreerange' class='form-control'>
                                     <option value".($degreerange == 0 ? ' selected' : '').">-- $langGradeScalesSelect --</option>
                                     <option value='10'" . ($degreerange == 10 ? " selected" : "") .">0-10</option>
@@ -442,7 +442,7 @@ function gradebook_settings($gradebook_id) {
                         <div class='row p-2'></div>
 
                         <div class='form-group'>
-                            <div class='col-xs-12'>".form_buttons(array(
+                            <div class='col-12'>".form_buttons(array(
                                 array(
                                     'text' => $langSave,
                                     'name' => 'submitGradebookSettings',
@@ -543,20 +543,20 @@ function user_gradebook_settings() {
                     <div class='form-group' id='all_users'>
                         <div class='input-append date form-group' id='startdatepicker'>
                             <label for='UsersStart' class='col-sm-6 control-label-notes'>$langRegistrationDate $langFrom2:</label>
-                            <div class='col-xs-10 col-sm-9'>
+                            <div class='col-10 col-sm-9'>
                                 <input class='form-control' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
                             </div>
-                            <div class='col-xs-2 col-sm-1'>
+                            <div class='col-2 col-sm-1'>
                                 <span class='add-on'><i class='fa fa-calendar'></i></span>
                             </div>
                         </div>
                         <div class='row p-2'></div>
                         <div class='input-append date form-group' id='enddatepicker'>
                             <label for='UsersEnd' class='col-sm-6 control-label-notes'>$langTill:</label>
-                            <div class='col-xs-10 col-sm-9'>
+                            <div class='col-10 col-sm-9'>
                                 <input class='form-control' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
                             </div>
-                            <div class='col-xs-2 col-sm-1'>
+                            <div class='col-2 col-sm-1'>
                                 <span class='add-on'><i class='fa fa-calendar'></i></span>
                             </div>
                         </div>

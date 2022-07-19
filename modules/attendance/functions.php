@@ -310,7 +310,7 @@ function display_attendance_activities($attendance_id) {
     if (count($result) > 0) {
         $tool_content .= "<div class='table-responsive'>
                         <table class='announcements_table'>
-                        <tr class='list-header' style='height:45px;'><th class='text-secondary text-center' colspan='5'>$langAttendanceActList</th></tr>
+                        <tr class='bg-light' style='height:45px;'><th class='control-label-notes text-center' colspan='5'>$langAttendanceActList</th></tr>
                         <tr class='notes_thead'>
                             <th class='text-white'>$langTitle</th>
                             <th class='text-white'>$langAttendanceActivityDate</th>
@@ -565,7 +565,8 @@ function add_attendance_other_activity($attendance_id) {
     $date_error = Session::getError('date');
     $tool_content .= "
     <div class='row p-2'></div>
-            <div class='form-wrapper'>
+    <div class='col-sm-12'>
+            <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id'>
                     <fieldset>";
                     if (isset($_GET['modify'])) { // modify an existing attendance activity
@@ -650,7 +651,7 @@ function add_attendance_other_activity($attendance_id) {
                     }
                     $tool_content .= "</fieldset>
                             </form>
-                        </div>";
+                        </div></div>";
 }
 
 
@@ -827,7 +828,7 @@ function new_attendance() {
     $limit_error  = Session::getError('limit');
     $limit = Session::has('limit') ? Session::get('limit') : '';
 
-    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    $tool_content .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
   
             
@@ -1127,7 +1128,7 @@ function attendance_settings($attendance_id) {
     // update attendance title
     $tool_content .= "
 
-    <div class='col-12'>
+    <div class='col-sm-12'>
             <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id'>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
@@ -1239,12 +1240,12 @@ function user_attendance_settings($attendance_id) {
     $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $attendance->end_date)->format('d-m-Y H:i');
     $tool_content .= "
     
-    <div class='col-12'>
+    <div class='col-sm-12'>
         
             <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id&editUsers=1'>
                     <div class='form-group'>
-                        <label class='col-12 control-label-notes'><span class='help-block'>$langAttendanceInfoForUsers</span></label>
+                        <label class='col-12 text-secondary'><span class='help-block'>$langAttendanceInfoForUsers</span></label>
                     </div>
 
                     <div class='row p-2'></div>
@@ -1278,20 +1279,25 @@ function user_attendance_settings($attendance_id) {
                     <div class='form-group' id='all_users'>
                         <div class='input-append date form-group' id='startdatepicker'>
                             <label for='UsersStart' class='col-sm-6 control-label-notes'>$langRegistrationDate $langFrom2:</label>
-                            <div class='col-10 col-sm-9'>
-                                <input class='form-control' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
-                            </div>
-                            <div class='col-2 col-sm-1'>
-                                <span class='add-on'><i class='fa fa-calendar'></i></span>
+                            <div class='row'>
+                                <div class='col-10 col-sm-9'>
+                                    <input class='form-control' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
+                                </div>
+                                <div class='col-2 col-sm-1'>
+                                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                                </div>
                             </div>
                         </div>
+                        <div class='row p-2'></div>
                         <div class='input-append date form-group' id='enddatepicker'>
                             <label for='UsersEnd' class='col-sm-2 control-label-notes'>$langTill:</label>
-                            <div class='col-10 col-sm-9'>
-                                <input class='form-control' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
-                            </div>
-                            <div class='col-2 col-sm-1'>
-                                <span class='add-on'><i class='fa fa-calendar'></i></span>
+                            <div class='row'>
+                                <div class='col-10 col-sm-9'>
+                                    <input class='form-control' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
+                                </div>
+                                <div class='col-2 col-sm-1'>
+                                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                                </div>
                             </div>
                         </div>
                     </div>

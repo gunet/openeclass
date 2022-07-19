@@ -367,12 +367,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
             <div class='input-append date form-group".(Session::getError('PollStart') ? " has-error" : "")."' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
                 <label for='PollStart' class='col-sm-6 control-label-notes'>$langPollStart:</label>
-                <div class='col-xs-10 col-sm-9'>
-                    <input class='form-control' name='PollStart' id='PollStart' type='text' value='$PollStart'>
-                    <span class='help-block'>".Session::getError('PollStart')."</span>
-                </div>
-                <div class='col-xs-2 col-sm-1'>
-                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                <div class='row'>
+                    <div class='col-10 col-sm-9'>
+                        <input class='form-control' name='PollStart' id='PollStart' type='text' value='$PollStart'>
+                        <span class='help-block'>".Session::getError('PollStart')."</span>
+                    </div>
+                    <div class='col-2 col-sm-1'>
+                        <span class='add-on'><i class='fa fa-calendar'></i></span>
+                    </div>
                 </div>
             </div>
 
@@ -380,12 +382,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
             <div class='input-append date form-group".(Session::getError('PollEnd') ? " has-error" : "")."' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
                 <label for='PollEnd' class='col-sm-6 control-label-notes'>$langPollEnd:</label>
-                <div class='col-xs-10 col-sm-9'>
-                    <input class='form-control' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
-                    <span class='help-block'>".Session::getError('PollEnd')."</span>
-                </div>
-                <div class='col-xs-2 col-sm-1'>
-                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                <div class='row'>
+                    <div class='col-10 col-sm-9'>
+                        <input class='form-control' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
+                        <span class='help-block'>".Session::getError('PollEnd')."</span>
+                    </div>
+                    <div class='col-2 col-sm-1'>
+                        <span class='add-on'><i class='fa fa-calendar'></i></span>
+                    </div>
                 </div>
             </div>
 
@@ -693,7 +697,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
         <div class='panel panel-primary'>
             <div class='panel-heading'>
-                <h4 class='panel-title text-white'>$langQuestion&nbsp;"
+                <h4 class='panel-title'>$langQuestion&nbsp;"
                     . icon('fa-edit', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid") .
                 "</h4>
             </div>
@@ -708,7 +712,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
         <div class='panel panel-info'>
             <div class='panel-heading'>
-                <h4 class='panel-title text-white'>$langQuestionAnswers</h4>
+                <h4 class='panel-title'>$langQuestionAnswers</h4>
             </div>
             <div class='panel-body' style='padding-left:15px; padding-right:15px;'>
                     <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id' method='post'>                    
@@ -795,7 +799,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
         <div class='panel panel-primary'>
           <div class='panel-heading'>
-            <h5 class='panel-title text-white'>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h5>
+            <h5 class='panel-title'>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h5>
           </div>
 
           <div class='panel-body'>
@@ -936,8 +940,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                 <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
                                 $aType[$question->qtype - 1]."</td>
                                 <td style='padding: 10px 0; width: 85px;'>
-                                    <div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
-                                            <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
+                                    <div class='reorder-btn pull-left mb-3' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
+                                            <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
                                     </div>
                                 <div class='pull-left'>".action_button(array(
                                     array(

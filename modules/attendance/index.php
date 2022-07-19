@@ -173,12 +173,16 @@ if ($is_editor) {
         Database::get()->query("UPDATE attendance SET active = ?d WHERE id = ?d AND course_id = ?d", $_GET['vis'], $_GET['attendance_id'], $course_id);
         $log_details = array('action' => 'change attendance visibility', 'id' =>$_GET['attendance_id'], 'title' => get_attendance_title($_GET['attendance_id']), 'visibility' => $_GET['vis']);
         Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
-        Session::Messages($langGlossaryUpdated, 'alert-success');
+        //Session::Messages($langGlossaryUpdated, 'alert-success');
+        Session::flash('message',$langGlossaryUpdated);
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/attendance/index.php?course=$course_code");
     }
     if (isset($_GET['dup'])) {
         clone_attendance($attendance_id);
-        Session::Messages($langCopySuccess, 'alert-success');
+        //Session::Messages($langCopySuccess, 'alert-success');
+        Session::flash('message',$langCopySuccess);
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/attendance/index.php?course=$course_code");
     }
 
@@ -206,7 +210,9 @@ if ($is_editor) {
             $log_details = array('id' => $attendance_id, 'title' => $newTitle, 'attendance_limit' => $attendance_limit, 'start_date' => $start_date, 'end_date' => $end_date);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_INSERT, $log_details);
 
-            Session::Messages($langChangeAttendanceCreateSuccess, 'alert-success');
+            //Session::Messages($langChangeAttendanceCreateSuccess, 'alert-success');
+            Session::flash('message',$langChangeAttendanceCreateSuccess);
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/attendance/index.php?course=$course_code");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -329,12 +335,14 @@ if ($is_editor) {
             $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'add users in date range', 'users_start' => $usersstart->format("Y-m-d"), 'users_end' => $usersend->format("Y-m-d"), 'user_count' => count($added_users),'users' => $added_users);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
         }
-        Session::Messages($langGradebookEdit,"alert-success");
+        //Session::Messages($langGradebookEdit,"alert-success");
+        Session::flash('message',$langGradebookEdit);
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/attendance/index.php?course=' . $course_code . '&attendance_id=' . $attendance_id . '&attendanceBook=1');
     }
 
     // Top menu
-    $tool_content .= "<div class='row'><div class='col-sm-12'>";
+    $tool_content .= "<div class='col-sm-12'>";
 
     if (isset($_GET['editUsers']) or isset($_GET['Book'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
@@ -438,7 +446,7 @@ if ($is_editor) {
                       'level' => 'primary-label',
                       'button-class' => 'btn-success')));
     }
-    $tool_content .= "</div></div>";
+    $tool_content .= "</div>";
 
     // update attendance settings
     if (isset($_POST['submitAttendanceBookSettings'])) {
@@ -463,7 +471,9 @@ if ($is_editor) {
             Database::get()->querySingle("UPDATE attendance SET `title` = ?s, `limit` = ?d, `start_date` = ?t, `end_date` = ?t WHERE id = ?d ", $attendance_title, $attendance_limit, $start_date, $end_date, $attendance_id);
             $log_details = array('id' => $attendance_id, 'title' => $attendance_title, 'attendance_limit' => $attendance_limit, 'start_date' => $start_date, 'end_date' => $end_date);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
-            Session::Messages($langGradebookEdit,"alert-success");
+            //Session::Messages($langGradebookEdit,"alert-success");
+            Session::flash('message',$langGradebookEdit);
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -482,7 +492,9 @@ if ($is_editor) {
         $actt = add_attendance_activity($attendance_id, $id, $type);
         $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'add activity', 'activity_title' => $actt);
         Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
-        Session::Messages("$langGradebookSucInsert","alert-success");
+        //Session::Messages("$langGradebookSucInsert","alert-success");
+        Session::flash('message',$langGradebookSucInsert);
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
         $display = FALSE;
     }
@@ -509,7 +521,9 @@ if ($is_editor) {
                                             WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $id);
                 $log_details = array('id' => $id, 'title' => get_attendance_title($id), 'action' => 'modify activity', 'activity_title' => $actTitle, 'activity_date' => $actDate, 'visible' => $visible);
                 Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
-                Session::Messages("$langGradebookEdit", "alert-success");
+                //Session::Messages("$langGradebookEdit", "alert-success");
+                Session::flash('message',$langGradebookEdit);
+                Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
             } else {
                 //insert
@@ -518,7 +532,9 @@ if ($is_editor) {
                                                     $attendance_id, $actTitle, $actDate, $actDesc);
                 $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'add activity', 'activity_title' => $actTitle, 'activity_date' => $actDate);
                 Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
-                Session::Messages("$langGradebookSucInsert","alert-success");
+                //Session::Messages("$langGradebookSucInsert","alert-success");
+                Session::flash('message',$langGradebookSucInsert);
+                Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
             }
         } else {
@@ -568,7 +584,7 @@ if ($is_editor) {
                         Database::get()->query("INSERT INTO attendance_book SET uid = ?d, attendance_activity_id = ?d, attend = ?d, comments = ?s", $userID, $activity->id, $attend, '');
                     }
                 }
-                $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
+                $message = "<div class='col-sm-12'><div class='alert alert-success'>$langGradebookEdit</div></div>";
             }
         }
         // display user grades

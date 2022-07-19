@@ -3504,7 +3504,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $dataAttrs = 'data-bs-toggle="dropdown" data-bs-placement="right" aria-haspopup="true" aria-expanded="false"';
             $form_begin = '<div class="btn-group" role="group">';
             $form_end = '</div>';
-            $subMenu = '<ul class="dropdown-menu dropdown-menu-right">';
+            $subMenu = '<ul class="dropdown-menu dropdown-menu-end bg-light p-2">';
             foreach ($option['options'] as $subOption) {
                $subMenu .= '<li><a class="'.$subOption['class'].'" href="' . $subOption['url'] . '">';
                $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].'"></span>' : '';

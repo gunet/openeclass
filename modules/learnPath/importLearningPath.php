@@ -1036,18 +1036,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
       status messages
       -------------------------------------- */
     foreach ($okMsgs as $msg) {
-        $tool_content .= "<div class='alert alert-success'>" . icon('fa-check', $langSuccessOk) . ' ' . $msg . '</div>';
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>" . icon('fa-check', $langSuccessOk) . ' ' . $msg . '</div></div>';
     }
 
     foreach ($errorMsgs as $msg) {
-        $tool_content .= "<div class='alert alert-danger'>" . icon('fa-times', $langError) . ' ' . $msg . '</div>';
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>" . icon('fa-times', $langError) . ' ' . $msg . '</div></div>';
     }
 
     // installation completed or not message
     if (!$errorFound) {
-        $tool_content .= "<div class='alert alert-info'>" . $langInstalled . "</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>" . $langInstalled . "</div></div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>" . $langNotInstalled . "</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>" . $langNotInstalled . "</div></div>";
     }
 
     $tool_content .=  action_bar(array(
