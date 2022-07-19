@@ -826,7 +826,7 @@ function lessonToolsMenu($rich=true) {
         array_push($sideMenuGroup, $sideMenuSubGroup);
     }
 
-    if ($is_course_admin) {  // display course admin tools
+    /*if ($is_course_admin) {  // display course admin tools
         $sideMenuSubGroup = array();
         $sideMenuText = array();
         $sideMenuLink = array();
@@ -853,7 +853,7 @@ function lessonToolsMenu($rich=true) {
         array_push($sideMenuSubGroup, $sideMenuImg);
         array_push($sideMenuSubGroup, $sideMenuID);
         array_push($sideMenuGroup, $sideMenuSubGroup);
-    }
+    }*/
     return $sideMenuGroup;
 }
 

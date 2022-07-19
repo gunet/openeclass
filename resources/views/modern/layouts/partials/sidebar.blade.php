@@ -32,28 +32,28 @@
             </a>
         </div>
     @endif
+
     <div class="panel-group accordion mt-5" id="sidebar-accordion">
         <div class="panel bg-transparent">
             @foreach ($toolArr as $key => $tool_group)
-                @if($tool_group[0]['text'] != 'Διαχείριση μαθήματος')
-                    <a id="Tool{{$key}}" class="collapsed parent-menu mt-5" data-bs-toggle="collapse" href="#collapse{{ $key }}">
-                        <div class="panel-sidebar-heading">
-                            <div class="panel-title h3">
-                                <div class='row'>
-                                    <div class='col-1'>
-                                        <span class="fa fa-chevron-right ms-1 fs-6 text-warning" style='font-size:12px;'></span>
-                                    </div>
-                                    <div class='col-10'>
-                                        <span class='text-wrap text-white fs-6 mt-1'>{{ $tool_group[0]['text'] }}</span>
-                                    </div>
+                <a id="Tool{{$key}}" class="collapsed parent-menu mt-5" data-bs-toggle="collapse" href="#collapse{{ $key }}">
+                    <div class="panel-sidebar-heading">
+                        <div class="panel-title h3">
+                            <div class='row'>
+                                <div class='col-1'>
+                                    <span class="fa fa-chevron-right ms-1 fs-6 text-warning" style='font-size:12px;'></span>
                                 </div>
+                                <div class='col-10'>
+                                    <span class='text-wrap text-white fs-6 mt-1'>{{ $tool_group[0]['text'] }}</span>
+                                </div>
+                            </div>
 
 
-                            </div><hr class='text-white'>
-                        </div>
-                    </a>
-                    <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse {{ $tool_group[0]['class'] }}{{ $key == $default_open_group? ' show': '' }}" aria-labelledby="Tool{{$key}}" data-bs-parent="#sidebar-accordion">
-                        @foreach ($tool_group[1] as $key2 => $tool)
+                        </div><hr class='text-white'>
+                    </div>
+                </a>
+                <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse {{ $tool_group[0]['class'] }}{{ $key == $default_open_group? ' show': '' }}" aria-labelledby="Tool{{$key}}" data-bs-parent="#sidebar-accordion">
+                    @foreach ($tool_group[1] as $key2 => $tool)
                         <a href="{{ $tool_group[2][$key2] }}" class='list-group-item bg-transparent{{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                             <div class='row'>
                                 <div class='col-xxl-1 col-xl-1 col-2'>
@@ -65,9 +65,8 @@
 
                             </div>
                         </a>
-                        @endforeach
-                    </div>
-                @endif
+                    @endforeach
+                </div>
                 <div class='p-3'></div>
             @endforeach
         </div>
