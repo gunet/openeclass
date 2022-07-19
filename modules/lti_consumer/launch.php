@@ -39,7 +39,7 @@ $toolName = $langLtiConsumer;
 
 // guest user not allowed
 if (check_guest()) {
-    $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langNoGuest</div></div>";
     draw($tool_content, 2);
     exit;
 }
@@ -90,14 +90,14 @@ $tool_content .= action_bar(array(
     )
 ));
 
-$tool_content .= '<iframe id="contentframe"
+$tool_content .= '<div class="col-sm-12"><iframe id="contentframe"
     src="' . $urlAppend . "modules/lti_consumer/post_launch.php?course=" . $course_code . "&amp;id=" . $_GET['id'] . '"
     webkitallowfullscreen=""
     mozallowfullscreen=""
     allowfullscreen=""
     width="100%"
     height="800px"
-    style="border: 1px solid #ddd; border-radius: 4px;"></iframe>';
+    style="border: 1px solid #ddd; border-radius: 4px;"></iframe></div>';
 
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);

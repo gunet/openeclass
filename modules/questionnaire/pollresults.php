@@ -127,7 +127,7 @@ if (!$total_participants) {
 $export_box = "";
 if ($is_editor) {
     $export_box .= "
-        <div class='alert alert-info'>
+    <div class='col-sm-12'><div class='alert alert-info'>
             <b>$langDumpUserDurationToFile:</b>
             <ul>
               <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langPollPercentResults</a>
@@ -135,7 +135,7 @@ if ($is_editor) {
               <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langPollFullResults</a>
                   (<a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;enc=UTF-8'>$langcsvenc2</a>)</li>
             </ul>
-        </div>";
+        </div></div>";
 }
 if (isset($_REQUEST['unit_id'])) {
     $back_link = "../units/index.php?course=$course_code&amp;id=" . intval($_REQUEST['unit_id']);
@@ -212,6 +212,7 @@ if ($PollType == POLL_NORMAL) {
             $tool_content .= "<div class='col-12'><div class='alert alert-info'>$theQuestion->question_text</div></div>";
         } else {
             $tool_content .= "
+            <div class='col-sm-12 mt-3'>
             <div class='panel panel-success'>
                 <div class='panel-heading'>
                     <h3 class='panel-title'>$langQuestion $j</h3>
@@ -462,7 +463,7 @@ if ($PollType == POLL_NORMAL) {
                 }
                 $tool_content .= '</tbody></table><br>';
             }
-            $tool_content .= "</div></div>";
+            $tool_content .= "</div></div></div>";
         }
     }
 } elseif ($PollType == POLL_COLLES) {

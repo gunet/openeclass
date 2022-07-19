@@ -201,7 +201,9 @@ if ($is_editor) {
                 } else {
                     $show_link = '';
                 }
-                Session::Messages($message, 'alert-success');
+                //Session::Messages($message, 'alert-success');
+                Session::flash('message',$message);
+                Session::flash('alert-class', 'alert-success');
             }
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         }

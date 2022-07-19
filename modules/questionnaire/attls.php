@@ -127,7 +127,7 @@ $export_box = "";
 
 if ($is_editor) {
     $export_box .= "
-        <div class='alert alert-info'>
+        <div class='col-sm-12'><div class='alert alert-info'>
             <b>$langDumpUserDurationToFile:</b>
             <ul>
               <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langPollPercentResults</a>
@@ -135,7 +135,7 @@ if ($is_editor) {
               <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langPollFullResults</a>
                   (<a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;enc=UTF-8'>$langcsvenc2</a>)</li>
             </ul>
-        </div>";
+        </div></div>";
 }
 
 $tool_content .= action_bar(array(
@@ -327,6 +327,7 @@ $chart_data = array();
 $this_chart_data = array();
 
 $tool_content .= "
+<div class='col-sm-12 mt-3'>
 <div class='panel panel-success'>
     <div class='panel-heading'>
         <h3 class='panel-title'>$lang_result_summary</h3>
@@ -350,7 +351,7 @@ $tool_content .= "<div class='col-lg-12'>";
 $tool_content .= plot_placeholder("poll_chart");
 $tool_content .= "</div></div>";
 
-$tool_content .= "</div></div>";
+$tool_content .= "</div></div></div>";
 
 // display page
 draw($tool_content, 2, null, $head_content);

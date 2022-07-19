@@ -52,8 +52,8 @@ $tool_content .= action_bar(array(
             ),false);
 
 $tool_content .= "
-    <div class='row'>
-        <div class='col-xs-12'>
+
+        <div class='col-12'>
             <div class='panel-body'>
                 <div class='col-sm-6'>
                     <ul class='list-group'>
@@ -84,5 +84,4 @@ $tool_content .= "
                     </ul>
                 </div>
             </div>
-        </div>
-    </div>";
+        </div>";

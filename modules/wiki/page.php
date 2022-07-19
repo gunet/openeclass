@@ -498,7 +498,7 @@ switch ($action) {
 }
 
 if (!empty($message)) {
-    $tool_content .= "<div class='alert $style'>$message</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert $style'>$message</div></div>";
 }
 
 // user is not allowed to read this page
@@ -572,9 +572,10 @@ switch ($action) {
             $userInfo = user_get_data($newEditor);
             $newEditorStr = q($userInfo->givenname) . "&nbsp;" . q($userInfo->surname);
 
-            $tool_content .= "<div class='alert alert-info'>
+            $tool_content .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>
                              ". sprintf($langWikiDifferencePattern, $oldTime, $oldEditorStr, $newTime, $newEditorStr) ."
-                             </div>
+                             </div></div>
                              <strong>$langWikiDifferenceKeys</strong>";
 
             $tool_content .= '<div class="diff">' . "\n";
@@ -586,13 +587,13 @@ switch ($action) {
             $tool_content .= '<strong>' . $langWikiDifferenceTitle . '</strong>';
             $tool_content .= '<div class="diff">';
             $tool_content .= $diff;
-            $tool_content .= '</div>';
+            $tool_content .= '</div></div></div>';
 
             break;
         }
     case "recent": {
             if (is_array($recentChanges)) {
-                $tool_content .= '<div class="list-group">' . "\n";
+                $tool_content .= '<div class="col-sm-12"><div class="list-group">' . "\n";
 
                 foreach ($recentChanges as $recentChange) {
                     $pgtitle = ( $recentChange->title == "__MainPage__" ) ? $langWikiMainPage : $recentChange->title;
@@ -610,14 +611,14 @@ switch ($action) {
                     $userUrl = $userStr;
                     $tool_content .= sprintf($langWikiRecentChangesPattern, $entry, $time, $userUrl) . '</small></a>';
                 }
-                $tool_content .= '</div>';
+                $tool_content .= '</div></div>';
             }
             break;
         }
     case "all": {
             // handle main page
 
-            $tool_content .= '<div class="list-group"><a class="list-group-item" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
+            $tool_content .= '<div class="col-sm-12"><div class="list-group"><a class="list-group-item" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
                     . '&amp;wikiId=' . $wikiId
                     . '&amp;title=' . rawurlencode("__MainPage__")
                     . '&amp;action=show">'
@@ -640,7 +641,7 @@ switch ($action) {
                             . '>' . $page->title . '</a>';
                     $tool_content .= $link;
                 }
-                $tool_content .= '</div>';
+                $tool_content .= '</div></div>';
             }
             break;
         }
@@ -648,7 +649,7 @@ switch ($action) {
         $tool_content .= '<div class="wikiTitle">';
         $tool_content .= '<h5>' . $langWikiEditLock . '</h5>';
         $tool_content .= '</div>';
-        $tool_content .= "<div class='alert alert-danger'>$langWikiLockInfo</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langWikiLockInfo</div></div>";
 
         if (isset($content) && $content != '') {
             //proceed to edit for, in order to save the content later
@@ -710,13 +711,13 @@ switch ($action) {
                                             })
                                     </script>\n";
 
-                    $tool_content .= "  <div>
+                    $tool_content .= "  <div class='col-sm-12'><div>
                                             $langWikiLockTimeRemaining
                                             <span id='progresstime'>".intval(gmdate('i', $lock_manager->lock_duration-5)).":".gmdate('s', $lock_manager->lock_duration-5)."</span>
                                         </div>
                                         <div class='progress'>
                                             <div class='progress-bar progress-bar-striped active' id='progress'></div>
-                                        </div>
+                                        </div></div>
                                         <noscript>
                                             <div>
                                                 <img src='lib/nojslock.php?uid=$uid&amp;page_title=".urlencode($wiki_title)."&amp;wiki_id=$wikiId'>
@@ -761,8 +762,10 @@ switch ($action) {
             if (!isset($content)) {
                 $content = '';
             }
+            $tool_content .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>";
             $tool_content .= claro_disp_wiki_preview($wikiRenderer, $wiki_title, $content);
             $tool_content .= claro_disp_wiki_preview_buttons($wikiId, $wiki_title, $content, $changelog);
+            $tool_content .= "</div></div>";
             break;
         }
     // view page
@@ -925,7 +928,7 @@ switch ($action) {
             }
             $tool_content .= '</ul>';
         } else {
-            $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoResult</div></div>";
         }
         break;
     }
@@ -936,13 +939,13 @@ switch ($action) {
             <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='". htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>
                     <input type='hidden' name='action' value='exSearch'>
-                    <div class='form-group'>
-                        <label for='searchPattern' class='col-sm-2 control-label'>$langSearch:</label>
-                        <div class='col-sm-10'>
+                    <div class='form-group mt-3'>
+                        <label for='searchPattern' class='col-sm-6 control-label-notes'>$langSearch:</label>
+                        <div class='col-sm-12'>
                             <input class='form-control' type='text' id='searchPattern' name='searchPattern' placeholder='$langGiveText'>
                         </div>
                     </div>
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                         <div class='col-sm-offset-2 col-sm-10'>
                             <input class='btn btn-primary' type='submit' value='". $langSubmit ."'>
                             <a class='btn btn-default' href='".htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>$langCancel</a>
@@ -957,7 +960,7 @@ switch ($action) {
 }
 $print_button = icon('fa-print', $langWikiPagePrintable, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=show&amp;printable=yes&amp;versionId=$versionId&amp;title=". rawurlencode($wiki_title));
 if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes")) {
-        $tool_content .= "<div class='panel panel-action-btn-default'>
+        $tool_content .= "<div class='col-sm-12'><div class='panel panel-action-btn-default'>
                                 <div class='panel-heading'>
                                     <div class='pull-right'>
                                         ".action_button(array(
@@ -995,7 +998,7 @@ if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes
                                 <div class='panel-body'>
                                     ". (isset($wiki_content) ? $wiki_content : "") ."
                                 </div>
-                          </div>";
+                          </div></div>";
 }
 add_units_navigation(TRUE);
 if (isset($_GET['printable']) and $_GET['printable']=="yes") {

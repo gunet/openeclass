@@ -355,12 +355,12 @@ switch ($action) {
             // wiki list not empty
             if (is_array($wikiList) && count($wikiList) > 0) {
 
-                $tool_content .= "<div class='row'>
-                                  <div class='col-md-12'>
+                $tool_content .= "
+                                  <div class='col-sm-12'>
                                   <div class='table-responsive'>
                                   <table class='table-default'>";
                 $tool_content .= "<tr class='list-header'>
-                                    <th class='text-left' style='width: 30%;'>$langTitle</th>
+                                    <th class='text-left ps-3' style='width: 30%;'>$langTitle</th>
                                     <th class='text-center'>$langDescription</th>
                                     <th class='text-center'>$langPages</th>";
                 if ($is_editor) {
@@ -404,7 +404,7 @@ switch ($action) {
                                             </a>
                                         </td>";
                     if ($is_editor) {
-                        $tool_content.= "<td class='option-btn-cell'>";
+                        $tool_content.= "<td class='option-btn-cell text-center'>";
                         $tool_content .=
                                 action_button(array(
                                     array('title' => $langEditChange,
@@ -439,7 +439,7 @@ switch ($action) {
                     }
                     $tool_content .= '</tr>';
                 }
-                $tool_content .= '</table></div></div></div>';
+                $tool_content .= '</table></div></div>';
             }
             // wiki list empty
             else {

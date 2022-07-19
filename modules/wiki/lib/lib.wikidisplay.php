@@ -55,12 +55,12 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
     $out = "
             <h4>$localtitle</h4>
             <br>
-            <div class='form-wrapper'>
+            <div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='POST' action='$script' name='editform' id='editform'>";
 
     if ($showWikiToolBar === true) {
         $wikiarea = new Wiki2xhtmlArea($content, 'wiki_content', 80, 15, null);
-        $out .= "<div class='form-group'><div class='col-xs-12'>". $wikiarea->toHTML() . "</div></div>";
+        $out .= "<div class='form-group mt-3'><div class='col-12'>". $wikiarea->toHTML() . "</div></div>";
     } else { // Does it ever gets in here?
         $out .= "<label>Texte :</label><br>
                 <textarea class='form-control' name='wiki_content' id='wiki_content'vcols='80' rows='15' wrap='virtual'>
@@ -69,9 +69,9 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
     }
 
     //notes
-    $out .= "<div class='form-group'>
-                <label for='changelog' class='col-sm-2 control-label'>$langNote:</label>
-                <div class='col-sm-10'>
+    $out .= "<div class='form-group mt-3'>
+                <label for='changelog' class='col-sm-6 control-label-notes'>$langNote:</label>
+                <div class='col-sm-12'>
                     <input class='form-control' type='text'  id='changelog' value='".q($changelog)."' name='changelog' size='70' maxlength='200' wrap='virtual'>
                 </div>
             </div>";
@@ -105,7 +105,7 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
     $out .= "   <a class='btn btn-default' href='$location'>$langCancel</a>
             </div>
         </form>
-    </div>";
+    </div></div>";
 
     return $out;
 }
@@ -128,7 +128,7 @@ function claro_disp_wiki_preview(&$wikiRenderer, $title, $content = '') {
     $out = "<div id='preview' class='wikiTitle'>
                 <h4 class='wikiTitle'>$langWikiPreviewTitle$title</h4>
             </div>
-            <div class='alert alert-danger'>$langWikiPreviewWarning</div><br>
+            <div class='col-sm-12'><div class='alert alert-danger'>$langWikiPreviewWarning</div></div><br>
             <div class='wiki2xhtml'>";
 
     if ($content != '') {
@@ -230,16 +230,16 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
                         <input type='hidden' name='wikiId' value='$wikiId'>
                         <!-- groupId = 0 if course wiki, != 0 if group_wiki  -->
                         <input type='hidden' name='gid' value='$groupId'>
-                        <div class='form-group".(Session::getError('title') ? " has-error" : "")."'>
-                            <label for='title' class='col-sm-2 control-label'>$langWikiTitle:</label>
-                            <div class='col-sm-10'>
+                        <div class='form-group".(Session::getError('title') ? " has-error" : "")." mt-3'>
+                            <label for='title' class='col-sm-6 control-label-notes'>$langWikiTitle:</label>
+                            <div class='col-sm-12'>
                                 <input name='title' type='text' class='form-control' id='wikiTitle' value='".q($title) ."' placeholder='$langWikiTitle'>
                                 <span class='help-block'>".Session::getError('title')."</span>
                             </div>
                         </div>
-                        <div class='form-group'>
-                            <label for='wikiDesc' class='col-sm-2 control-label'>".$langWikiDescription.":</label>
-                            <div class='col-sm-10'>
+                        <div class='form-group mt-3'>
+                            <label for='wikiDesc' class='col-sm-6 control-label-notes'>".$langWikiDescription.":</label>
+                            <div class='col-sm-12'>
                                 <textarea class='form-control' id='wikiDesc' name='desc'>" . q($desc) . "</textarea>";
 
 // atkyritsis
@@ -269,7 +269,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
 
     $form .= "                  </div>
                             </div>
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <div class='col-sm-10 col-sm-offset-2'>
                                     <input class='btn btn-primary' type='submit' name='action[exEdit]' value='$langSave'>
                                     <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langCancel</a>

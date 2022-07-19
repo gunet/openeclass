@@ -93,7 +93,7 @@
 
 
                                         <div class='form-group mt-3'>
-                                            <label for='description' class='col-sm-6 control-label-notes'>{{ trans('langInfoabout') }}:</label>
+                                            <label for='description' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
                                             <div class='col-sm-12'>{!! $description_textarea !!}</div>
                                         </div>
 

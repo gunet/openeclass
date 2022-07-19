@@ -140,13 +140,17 @@ function add_prereq($prereqId) {
 
     // check invalid
     if ($prereqId <= 0) {
-        Session::Messages($langNewCoursePrerequisiteFailInvalid, 'alert-danger');
+        //Session::Messages($langNewCoursePrerequisiteFailInvalid, 'alert-danger');
+        Session::flash('message',$langNewCoursePrerequisiteFailInvalid); 
+        Session::flash('alert-class', 'alert-danger');
         return;
     }
 
     // check the prereq same as current course
     if ($prereqId == $course_id) {
-        Session::Messages($langNewCoursePrerequisiteFailSelf, 'alert-danger');
+        //Session::Messages($langNewCoursePrerequisiteFailSelf, 'alert-danger');
+        Session::flash('message',$langNewCoursePrerequisiteFailSelf); 
+        Session::flash('alert-class', 'alert-danger');
         return;
     }
 
@@ -156,7 +160,9 @@ function add_prereq($prereqId) {
                                  WHERE cp.course_id = ?d
                                  AND cp.prerequisite_course = ?d", $course_id, $prereqId);
     if (count($result) > 0) {
-        Session::Messages($langNewCoursePrerequisiteFailAlreadyIn, 'alert-danger');
+        //Session::Messages($langNewCoursePrerequisiteFailAlreadyIn, 'alert-danger');
+        Session::flash('message',$langNewCoursePrerequisiteFailAlreadyIn); 
+        Session::flash('alert-class', 'alert-danger');
         return;
     }
 
@@ -166,11 +172,15 @@ function add_prereq($prereqId) {
                                  WHERE course_id = ?d
                                  AND bundle = -1 AND active = 1", $prereqId);
     if (!$result) {
-        Session::Messages($langNewCoursePrerequisiteFailBadgeMissing, 'alert-danger');
+        //Session::Messages($langNewCoursePrerequisiteFailBadgeMissing, 'alert-danger');
+        Session::flash('message',$langNewCoursePrerequisiteFailBadgeMissing); 
+        Session::flash('alert-class', 'alert-danger');
         return;
     }
 
-    Session::Messages($langNewCoursePrerequisiteSuccess, 'alert-success');
+    //Session::Messages($langNewCoursePrerequisiteSuccess, 'alert-success');
+    Session::flash('message',$langNewCoursePrerequisiteSuccess); 
+    Session::flash('alert-class', 'alert-success');
     Database::get()->query("INSERT INTO course_prerequisite (course_id, prerequisite_course) VALUES (?d, ?d)", $course_id, $prereqId);
 }
 
@@ -181,7 +191,9 @@ function del_prereq($prereqId) {
         return;
     }
 
-    Session::Messages($langDelCoursePrerequisiteSuccess, 'alert-success');
+    //Session::Messages($langDelCoursePrerequisiteSuccess, 'alert-success');
+    Session::flash('message',$langDelCoursePrerequisiteSuccess); 
+    Session::flash('alert-class', 'alert-success');
     Database::get()->query("DELETE FROM course_prerequisite WHERE course_id = ?d AND prerequisite_course = ?d", $course_id, $prereqId);
 }
 
@@ -213,8 +225,8 @@ function show_prereqs() {
             <div class='row'><div class='col-sm-12'>
             <div class='table-responsive'><table class='table-default'>
                                   <tr class='list-header'>
-                                      <th>$langTitle</th>
-                                      <th class='text-center'>".icon('fa-gears')."</th>
+                                      <th class='text-white'>$langTitle</th>
+                                      <th class='text-white text-center'>".icon('fa-gears')."</th>
                                   </tr>";
         foreach ($result as $row) {
 
@@ -239,6 +251,6 @@ function show_prereqs() {
 
         $tool_content .= '</table></div></div></div>';
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoCoursePrerequisites</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoCoursePrerequisites</div></div>";
     }
 }

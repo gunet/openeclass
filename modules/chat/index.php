@@ -84,21 +84,21 @@ if ($is_editor) {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 
-        $tool_content .= "<div class='form-wrapper'>";
+        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='title' class='col-sm-2 control-label'>$langTitle:</label>";
-        $tool_content .= "<div class='col-sm-10'>";
+        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>";
+        $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />";
         $tool_content .= "</div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='description' class='col-sm-2 control-label'>$langDescription:</label>";
-        $tool_content .= "<div class='col-sm-10'>";
+        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<label for='description' class='col-sm-6 control-label-notes'>$langDescription:</label>";
+        $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "$textarea";
         $tool_content .= "</div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group'>
+        $tool_content .= "<div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <div class='checkbox'>
                     <label>
@@ -108,7 +108,7 @@ if ($is_editor) {
             </div>
         </div>";
         if ($colmoocapp->isEnabled()) {
-            $tool_content .= "<div class='form-group'>
+            $tool_content .= "<div class='form-group mt-3'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <div class='checkbox'>
                         <label>
@@ -119,9 +119,9 @@ if ($is_editor) {
             </div>";
         }
 
-        $tool_content .= "<div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langChatToSpecUsers:</label></div>
-            <div class='form-group'>
-                <div class='col-sm-offset-2 col-sm-10'>
+        $tool_content .= "<div class='form-group mt-3'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel control-labe-notes'>$langChatToSpecUsers:</label></div>
+            <div class='form-group mt-3'>
+                <div class='col-sm-12'>
                     <select class='form-control' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
             $chat_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.username
                                                         FROM course_user cu
@@ -138,8 +138,8 @@ if ($is_editor) {
                 </div>
             </div>";
 
-        $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
-        $tool_content .= "</form></div>";
+        $tool_content .= "<div class='col-sm-offset-2 col-sm-10 mt-3'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
+        $tool_content .= "</form></div></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
             //<![CDATA[
                 var chkValidator  = new Validator("confForm");
@@ -160,7 +160,9 @@ if ($is_editor) {
         if(file_exists($tmpArchiveFile))
             unlink($tmpArchiveFile);
 
-        Session::Messages($langChatDeleted,"alert-success");
+        //Session::Messages($langChatDeleted,"alert-success");
+        Session::flash('message',$langChatDeleted); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/chat/index.php");
 
     } else if (isset($_POST['submit'])) {
@@ -200,7 +202,9 @@ if ($is_editor) {
                     $colmooc_activity_id = colmooc_create_activity($conf_id, $title);
                     if ($colmooc_activity_id) {
                         Database::get()->querySingle("UPDATE conference SET chat_activity_id = ?d WHERE conf_id = ?d", $colmooc_activity_id, $conf_id);
-                        Session::Messages($langAttendanceEdit . ". " . $langColMoocAgentNeeded, "alert-success");
+                        //Session::Messages($langAttendanceEdit . ". " . $langColMoocAgentNeeded, "alert-success");
+                        Session::flash('message',$langAttendanceEdit . ". " . $langColMoocAgentNeeded); 
+                        Session::flash('alert-class', 'alert-success');
                         $skipFlash = true;
                     } else {
                         Database::get()->querySingle("UPDATE conference SET chat_activity = false WHERE conf_id = ?d", $conf_id);
@@ -218,7 +222,9 @@ if ($is_editor) {
                 $colmooc_activity_id = colmooc_create_activity($newChatId, $title);
                 if ($colmooc_activity_id) {
                     Database::get()->querySingle("UPDATE conference SET chat_activity_id = ?d WHERE conf_id = ?d", $colmooc_activity_id, $newChatId);
-                    Session::Messages($langAttendanceEdit . ". " . $langColMoocAgentNeeded, "alert-success");
+                    //Session::Messages($langAttendanceEdit . ". " . $langColMoocAgentNeeded, "alert-success");
+                    Session::flash('message',$langAttendanceEdit . ". " . $langColMoocAgentNeeded); 
+                    Session::flash('alert-class', 'alert-success');
                     $skipFlash = true;
                 } else {
                     Database::get()->querySingle("UPDATE conference SET chat_activity = false WHERE conf_id = ?d", $newChatId);
@@ -227,7 +233,9 @@ if ($is_editor) {
         }
         // Display result message
         if (!$skipFlash) {
-            Session::Messages($langAttendanceEdit, "alert-success");
+            //Session::Messages($langAttendanceEdit, "alert-success");
+            Session::flash('message',$langAttendanceEdit); 
+            Session::flash('alert-class', 'alert-success');
         }
         redirect_to_home_page("modules/chat/index.php");
 } elseif (isset($_GET['edit_conference'])) {
@@ -243,26 +251,26 @@ if ($is_editor) {
         $conf = Database::get()->querySingle("SELECT * FROM conference WHERE conf_id = ?d", $conf_id);
         $textarea = rich_text_editor('description', 4, 20, $conf->conf_description);
 
-        $tool_content .= "<div class='form-wrapper'>";
+        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
         $tool_content .= "<fieldset>";
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='title' class='col-sm-2 control-label'>$langTitle:</label>";
-        $tool_content .= "<div class='col-sm-10'>";
+        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>";
+        $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<input class='form-control' type='text' name='title' id='title' value='$conf->conf_title' size='50' />";
         $tool_content .= "</div>";
         $tool_content .= "</div>";
 
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='desc' class='col-sm-2 control-label'>$langDescription:</label>";
-        $tool_content .= "<div class='col-sm-10'>";
+        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<label for='desc' class='col-sm-6 control-label-notes'>$langDescription:</label>";
+        $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "$textarea";
         $tool_content .= "</div>";
         $tool_content .= "</div>";
 
-        $tool_content .= "<div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langChatToSpecUsers:</label></div>
-        <div class='form-group'>
-            <div class='col-sm-offset-2 col-sm-10'>
+        $tool_content .= "<div class='form-group mt-3'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langChatToSpecUsers:</label></div>
+        <div class='form-group mt-3'>
+            <div class='col-sm-12'>
                 <select class='form-control' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
 
         if ($conf->user_id > 0) { // existing chat users (if exist)
@@ -301,7 +309,7 @@ if ($is_editor) {
         </div>";
 
         $checked_status = ($conf->status == "active") ? 'checked' : '';
-        $tool_content .= "<div class='form-group'>
+        $tool_content .= "<div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <div class='checkbox'>
                     <label>
@@ -313,7 +321,7 @@ if ($is_editor) {
 
         if ($colmoocapp->isEnabled()) {
             $activity_status = ($conf->chat_activity == true) ? 'checked' : '';
-            $tool_content .= "<div class='form-group'>
+            $tool_content .= "<div class='form-group mt-3'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <div class='checkbox'>
                         <label>
@@ -325,8 +333,8 @@ if ($is_editor) {
         }
 
         $tool_content .= "<input type = 'hidden' name = 'conference_id' value='$conf_id'>";
-        $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></div>";
-        $tool_content .= "</fieldset></form></div>";
+        $tool_content .= "<div class='col-sm-offset-2 col-sm-10 mt-3'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></div>";
+        $tool_content .= "</fieldset></form></div></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
                 //<![CDATA[
                     var chkValidator  = new Validator("confForm");
@@ -355,7 +363,7 @@ if ($display == TRUE) {
         $tool_content .= "<table class='table-default'>
             <thead>
                 <tr class='list-header'>
-                    <th>$langChat</th>
+                    <th class='ps-2'>$langChat</th>
                     <th class = 'text-center' width='150'>$langNewBBBSessionStatus</th>
                     <th class = 'text-center' width='200'>$langStartDate</th>";
 
@@ -395,7 +403,7 @@ if ($display == TRUE) {
             $tool_content .= "<td class='text-center'>$enabled_conference</td>";
             $tool_content .= "<td class='text-center'>".claro_format_locale_date($dateTimeFormatShort, strtotime($conf->start))."</td>";
             if($is_editor) {
-                $tool_content .= "<td class='option-btn-cell'>".
+                $tool_content .= "<td class='option-btn-cell text-center'>".
                     action_button(array(
                         array('title' => $langEdit,
                               'url' => "$_SERVER[SCRIPT_NAME]?edit_conference=$conf->conf_id&amp;course=$course_code",
@@ -415,7 +423,7 @@ if ($display == TRUE) {
         }
         $tool_content .= "</table></div>";
     } else {
-         $tool_content .= "<div class='alert alert-warning'>$langNoChatAvailable</div>";
+         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoChatAvailable</div></div>";
     }
 }
 

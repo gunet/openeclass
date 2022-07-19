@@ -60,8 +60,8 @@
 
                         @if ($course_descs)
                             @foreach ($course_descs as $key => $course_desc)    
-                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>      
-                                    <div class='panel panel-action-btn-default mydescriptionPanel ps-3 pt-3 pb-3 pe-3'>
+                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>      
+                                    <div class='panel panel-action-btn-default'>
                                         <div class='panel-heading'>
                                             @if ($is_editor) 
                                                 <div class='pull-right'>

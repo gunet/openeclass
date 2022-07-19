@@ -86,13 +86,15 @@ if (isset($_GET['u'])) { //  stats per user
                 'level' => 'primary-label')
         ), false);
 
-        $tool_content .= "<div class='alert alert-info'>" . uid_to_name($_GET['u']) . " $am_legend $grp_legend</div>";
+        $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-info'>" . uid_to_name($_GET['u']) . " $am_legend $grp_legend</div></div>";
 
         $tool_content .= "
+        <div class='col-sm-12'>
+        <div class='table-responsive'>
             <table class='table-default'>
-            <tr>
-              <th>$langModule</th>          
-              <th>$langDuration</th>          
+            <tr class='list-header'>
+              <th class='text-white'>$langModule</th>          
+              <th class='text-white'>$langDuration</th>          
             </tr>";
         foreach ($user_actions as $ua) {
             $tool_content .= "<tr>";
@@ -100,7 +102,7 @@ if (isset($_GET['u'])) { //  stats per user
             $tool_content .= "<td>" . format_time_duration(0 + $ua->duration) . "</td>";
             $tool_content .= "</tr>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div></div>";
 
         // user last logins
         $user_logins = Database::get()->queryArray("SELECT last_update
@@ -112,16 +114,16 @@ if (isset($_GET['u'])) { //  stats per user
                     DESC ", $course_id, $_GET['u']);
 
         if (count($user_logins) > 0) {
-            $tool_content .= "<table class='table-default'>
-            <tr>
-                <th>$langLastUserVisits</th>
+            $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
+            <tr class='list-header'>
+                <th class='text-white'>$langLastUserVisits</th>
             </tr>";
             foreach ($user_logins as $ul) {
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>" . nice_format($ul->last_update, true) . "</td>";
                 $tool_content .= "</tr>";
             }
-            $tool_content .= "</table>";
+            $tool_content .= "</table></div></div>";
         }
     }
     draw($tool_content, 2);
@@ -168,15 +170,17 @@ if (isset($_GET['u'])) { //  stats per user
 
         $tool_content .=  selection_course_modules();
 
-        $tool_content .= "<div class='alert alert-info'>" . which_module($module) . "</div>";
+        $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-info'>" . which_module($module) . "</div></div>";
 
         $tool_content .= "
+        <div class='col-sm-12'>
+        <div class='table-responsive'>
             <table class='table-default'>
-            <tr>
-                <th>$langUser</th>
-                <th>$langAm</th>
-                <th>$langGroup</th>
-                <th>$langDuration</th>            
+            <tr class='list-header'>
+                <th class='text-white ps-3'>$langUser</th>
+                <th  class='text-white'>$langAm</th>
+                <th  class='text-white'>$langGroup</th>
+                <th  class='text-white'>$langDuration</th>            
             </tr>";
         foreach ($user_actions as $um) {
             $grp_name = user_groups($course_id, $um->user_id);
@@ -188,7 +192,7 @@ if (isset($_GET['u'])) { //  stats per user
             $tool_content .= "<td>" . format_time_duration(0 + $um->duration) . "</td>";
             $tool_content .= "</tr>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div></div>";
         draw($tool_content, 2);
 
     }
@@ -221,13 +225,15 @@ if (isset($_GET['u'])) { //  stats per user
         $tool_content .= selection_course_modules();
 
         $tool_content .= "
+        <div class='col-sm-12'>
+        <div class='table-responsive'>
         <table class='table-default'>
-        <tr>
-          <th>$langSurnameName</th>
-          <th>$langAm</th>
-          <th>$langGroup</th>
-          <th>$langDuration</th>
-          <th class='text-center'>" . icon('fa-gears') . "</th>
+        <tr class='list-header'>
+          <th class='text-white ps-3'>$langSurnameName</th>
+          <th class='text-white'>$langAm</th>
+          <th class='text-white'>$langGroup</th>
+          <th class='text-white'>$langDuration</th>
+          <th class='text-white text-center'>" . icon('fa-gears') . "</th>
         </tr>";
     }
 
@@ -254,7 +260,7 @@ if (isset($_GET['u'])) { //  stats per user
             }
         }
         if ($format == 'html') {
-            $tool_content .= "</table>";
+            $tool_content .= "</table></div></div>";
         }
     }
     if ($format == 'html') {

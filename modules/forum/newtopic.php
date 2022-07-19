@@ -76,7 +76,7 @@ if (!add_units_navigation(TRUE)) {
 $navigation[] = array('url' => $forumUrl, 'name' => $forum_name);
 
 if (!does_exists($forum_id, "forum")) {
-    $tool_content .= "<div class='alert alert-danger'>$langErrorPost</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langErrorPost</div></div>";
     draw($tool_content, 2);
     exit;
 }
@@ -178,26 +178,26 @@ if (isset($_POST['submit'])) {
     <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' action='$action' method='post' enctype='multipart/form-data'>
         <fieldset>
-            <div class='form-group'>
-              <label for='subject' class='col-sm-2 control-label'>$langSubject:</label>
-              <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+              <label for='subject' class='col-sm-6 control-label-notes'>$langSubject:</label>
+              <div class='col-sm-12'>
                 <input type='text' name='subject' id='subject' class='form-control' maxlength='100'>
               </div>
             </div>
-            <div class='form-group'>
-              <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
-              <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+              <label for='message' class='col-sm-6 control-label-notes'>$langBodyMessage:</label>
+              <div class='col-sm-12'>
                 " . rich_text_editor('message', 14, 50, '') . "
               </div>
             </div>
-            <div class='form-group'>
-                <label for='topic_file' class='col-sm-2 control-label'>$langAttachedFile:</label>
-                <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+                <label for='topic_file' class='col-sm-6 control-label-notes'>$langAttachedFile:</label>
+                <div class='col-sm-12'>
                     <input type='file' name='topic_file' id='topic_file' size='35'>
                     " . fileSizeHidenInput() . "
                 </div>
             </div>
-            <div class='form-group'>
+            <div class='form-group mt-3'>
               <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                 <a class='btn btn-default' href='viewforum.php?course=$course_code&forum=$forum_id'>$langCancel</a>

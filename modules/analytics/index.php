@@ -36,7 +36,9 @@ if (isset($_POST['insert_analytics'])) {
 
         $analytics_id = insert_analytics($_POST['title'], $_POST['description'], $_POST['active'], $_POST['periodType'], $start_date, $end_date, $created);
 
-        Session::Messages($langAnalyticsInsertSuccess, 'alert-success');
+        //Session::Messages($langAnalyticsInsertSuccess, 'alert-success');
+        Session::flash('message',$langAnalyticsInsertSuccess);
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -66,7 +68,9 @@ if (isset($_POST['insert_analytics'])) {
     if($v->validate()) {
         update_analytics($analytics_id, $_POST['title'], $_POST['description'], $_POST['active'], $_POST['periodType'], $start_date, $end_date);
 
-        Session::Messages($langAnalyticsUpdateSuccess, 'alert-success');
+        //Session::Messages($langAnalyticsUpdateSuccess, 'alert-success');
+        Session::flash('message',$langAnalyticsUpdateSuccess);
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -98,17 +102,23 @@ if (isset($_POST['insert_analytics'])) {
 }  else if (isset($_REQUEST['delete_analytics'])) {
     $analytics_id = $_REQUEST['analytics_id'];
     delete_analytics($analytics_id);
-    Session::Messages($langAnalyticsDeleteSuccess, "alert-success");
+    //Session::Messages($langAnalyticsDeleteSuccess, "alert-success");
+    Session::flash('message',$langAnalyticsDeleteSuccess);
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/analytics/index.php?course=$course_code");
 } else if  (isset($_REQUEST['activate'])) {
     if ($_REQUEST['activate'] == 0) { // Deactivate analytics
         $analytics_id = $_REQUEST['analytics_id'];
         switch_activation($analytics_id, 0);
-        Session::Messages($langAnalyticsDeactivated, "alert-success");
+        //Session::Messages($langAnalyticsDeactivated, "alert-success");
+        Session::flash('message',$langAnalyticsDeactivated);
+        Session::flash('alert-class', 'alert-success');
     } else if ($_REQUEST['activate'] == 1) { // Activate analytics
         $analytics_id = $_REQUEST['analytics_id'];
         switch_activation($analytics_id, 1);
-        Session::Messages($langAnalyticsActivated, "alert-success");
+        //Session::Messages($langAnalyticsActivated, "alert-success");
+        Session::flash('message',$langAnalyticsActivated);
+        Session::flash('alert-class', 'alert-success');
     }
     redirect_to_home_page("modules/analytics/index.php?course=$course_code");
 // Go to edit analytics elememt forms,
@@ -116,7 +126,9 @@ if (isset($_POST['insert_analytics'])) {
     $analytics_id = $_REQUEST['analytics_id'];
     $analytics_element_id = $_REQUEST['analytics_element_id'];
     delete_analytics_element($analytics_id, $analytics_element_id);
-    Session::Messages($langAnalyticsElementDeleteSuccess, "alert-success");
+    //Session::Messages($langAnalyticsElementDeleteSuccess, "alert-success");
+    Session::flash('message',$langAnalyticsElementDeleteSuccess);
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showElements");
 } else if (isset($_REQUEST['edit_analytics_element'])){
     $analytics_id = $_REQUEST['analytics_id'];
@@ -155,7 +167,9 @@ if (isset($_POST['insert_analytics'])) {
     if($v->validate()) {
         update_analytics_element($_POST['analytics_id'], $_POST['analytics_element_id'], $_POST['resource'], $_POST['module_id'], $_POST['min_value'], $_POST['max_value'], $_POST['lower_threshold'], $_POST['upper_threshold'], $_POST['weight']);
 
-        Session::Messages($langAnalyticsElementUpdateSuccess, 'alert-success');
+        //Session::Messages($langAnalyticsElementUpdateSuccess, 'alert-success');
+        Session::flash('message',$langAnalyticsElementUpdateSuccess);
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showElements");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -178,7 +192,9 @@ if (isset($_POST['insert_analytics'])) {
     if($v->validate()) {
         insert_analytics_element($_POST['analytics_id'], $_POST['resource'], $_POST['module_id'], $_POST['min_value'], $_POST['max_value'], $_POST['lower_threshold'], $_POST['upper_threshold'], $_POST['weight'], $_POST['analytics_element_id']);
 
-        Session::Messages($langAnalyticsElementInsertSuccess, 'alert-success');
+        //Session::Messages($langAnalyticsElementInsertSuccess, 'alert-success');
+        Session::flash('message',$langAnalyticsElementInsertSuccess);
+        Session::flash('alert-class', 'alert-success');
 
         redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showElements");
     } else {

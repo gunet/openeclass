@@ -24,26 +24,26 @@ $tool_content .= action_bar(array(
 require_once 'modules/usage/form.php';
 
 /****   Plots   ****/
-$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
+$tool_content .= "<div class='plotscontainer'><div class='col-12 mt-3'>";
 $tool_content .= plot_placeholder("generic_stats", "$langHits $langAnd $langDuration");
 $tool_content .= "</div></div>";
 
-$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'><div id='modulepref_pie_container'>";
+$tool_content .= "<div class='plotscontainer'><div class='col-12 mt-3'><div id='modulepref_pie_container'>";
 $tool_content .= plot_placeholder("modulepref_pie", $langFavourite);
 $tool_content .= "</div></div></div>";
 
-$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'><div id='module_container'>";
+$tool_content .= "<div class='plotscontainer'><div class='col-12 mt-3'><div id='module_container'>";
 $tool_content .= plot_placeholder("module_stats", $langModule);
 $tool_content .= "</div></div/></div>";
 
 if (!isset($_GET['id'])) {
-    $tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
+    $tool_content .= "<div class='plotscontainer'><div class='col-12 mt-3'>";
     $tool_content .= plot_placeholder("coursereg_stats", $langMonthlyCourseRegistrations);
     $tool_content .= "</div></div>";
 }
 
 /****   Datatables   ****/
-$tool_content .= "<div class='panel panel-default detailscontainer'>";
+$tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
 $tschema = "<thead><tr>"
     . "<th>$langDate</th>"
     . "<th>$langModule</th>"
@@ -56,10 +56,10 @@ $tschema = "<thead><tr>"
     . "<tbody></tbody>"
     . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th></tr></tfoot>";
 $tool_content .= table_placeholder("cdetails1", "table table-striped table-bordered", $tschema, "$langHits $langAnd $langDuration");
-$tool_content .= "</div>";
+$tool_content .= "</div></div>";
 
 if (!isset($_GET['id'])) {
-    $tool_content .= "<div class='panel panel-default detailscontainer'>";
+    $tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
     $tschema = "<thead><tr>"
         . "<th>$langDate</th>"
         . "<th>$langUser</th>"
@@ -69,10 +69,10 @@ if (!isset($_GET['id'])) {
         . "</tr></thead>"
         . "<tbody></tbody>";
     $tool_content .= table_placeholder("cdetails2", "table table-striped table-bordered", $tschema, $langMonthlyCourseRegistrations);
-    $tool_content .= "</div>";
+    $tool_content .= "</div></div>";
 }
 
-$tool_content .= "<div class='panel panel-default logscontainer'>";
+$tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default logscontainer'>";
 $tschema = "<thead><tr>"
     . "<th>$langDate - $langHour</th>"
     . "<th>$langUser</th>"
@@ -85,4 +85,4 @@ $tschema = "<thead><tr>"
     . "</tr></thead>"
     . "<tbody></tbody>";
 $tool_content .= table_placeholder("cdetails3", "table table-striped table-bordered", $tschema, $langUsersLog);
-$tool_content .= "</div>";
+$tool_content .= "</div></div>";

@@ -113,30 +113,29 @@ $tool_content = action_bar(array(
             'level' => 'primary-label',
         )
     ),false)."
-    <div class='row'>
-        <div class='col-xs-12'>
-            <div class='form-wrapper'>
+        <div class='col-12'>
+            <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='editdesc.php?course=$course_code' enctype='multipart/form-data'>
                     <fieldset>
-                    <div class='form-group'>
-                        <label for='description' class='col-sm-2 control-label'>$langCourseLayout:</label>
-                        <div class='col-sm-10'>
+                    <div class='form-group mt-3'>
+                        <label for='description' class='col-sm-6 control-label-notes'>$langCourseLayout:</label>
+                        <div class='col-sm-12'>
                             ".  selection($layouts, 'layout', $layout, 'class="form-control"')."
                         </div>
                     </div>
-                    <div id='image_field' class='form-group".(($layout == 1)?"":" hidden")."'>
-                        <label for='course_image' class='col-sm-2 control-label'>$langCourseImage:</label>
-                        <div class='col-sm-10'>
+                    <div id='image_field' class='form-group".(($layout == 1)?"":" hidden")." mt-3'>
+                        <label for='course_image' class='col-sm-6 control-label-notes'>$langCourseImage:</label>
+                        <div class='col-sm-12'>
                             $course_image
                         </div>
                     </div>                  
-                    <div class='form-group'>
-                        <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
-                        <div class='col-sm-10'>
+                    <div class='form-group mt-3'>
+                        <label for='description' class='col-sm-6 control-label-notes'>$langDescription:</label>
+                        <div class='col-sm-12'>
                             " . rich_text_editor('description', 8, 20, $description) . "
                         </div>
                     </div>
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                         <div class='col-sm-10 col-sm-offset-2'>
                             <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                             <a href='{$urlAppend}courses/$course_code' class='btn btn-default'>$langCancel</a>
@@ -145,6 +144,6 @@ $tool_content = action_bar(array(
                   </fieldset>
                   ". generate_csrf_token_form_field() ."
                 </form>
-    </div></div></div>";
+    </div></div>";
 
 draw($tool_content, 2, null, $head_content);

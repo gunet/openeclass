@@ -64,19 +64,20 @@ function display_learning_analytics() {
     $tool_content .= "
 
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
-                    <div class='panel-body ps-3 pe-3 pt-3 pb-3'>
-                        <div class='inner-heading notes_thead'>
+                <div class='panel panel-default'>
+                    <div class='panel-body'>
+                        <div class='inner-heading'>
                             <div class='row'>
                                 <div class='col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12'>
                                     <strong>$langLearningAnalytics</strong>
                                 </div>
-                                <div class='col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12'>
-                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='float-end me-3 btn btn-success btn-sm'><span class='fa fa-plus'></span> &nbsp;&nbsp;&nbsp;$langAdd</a>
+                                <div class='col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12 text-end'>
+                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> &nbsp;&nbsp;&nbsp;$langAdd</a>
                                 </div>
                             </div>
                         </div>
-                        <div class='res-table-wrapper panel-body-admin ps-3 pb-3 pt-3 pe-3'>
+                        <hr>
+                        <div class='res-table-wrapper'>
                             $results
                         </div>  
                     </div>
@@ -124,7 +125,7 @@ function display_general_lists($analytics_id) {
             $message_critical = $langAnalyticsCriticalLevel;
             foreach ($critical as $crit) {
                 $userid = $crit['id'];
-                $bad_results .="<div class='row res-table-row panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                $bad_results .="<div class='res-table-row'>
                     <div class='col-sm-5'>". display_user($userid) ."</div>
                     <div class='col-sm-7'>".
                 action_bar(
@@ -148,7 +149,7 @@ function display_general_lists($analytics_id) {
             $message_advanced = $langAnalyticsAdvancedLevel;
             foreach ($advanced as $adv) {
                 $userid = $adv['id'];
-                $good_results .= "<div class='row res-table-row panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                $good_results .= "<div class='res-table-row'>
                     <div class='col-sm-5'>". display_user($userid) ."</div>
                         <div class='col-sm-7'>".
                         action_bar(
@@ -170,8 +171,8 @@ function display_general_lists($analytics_id) {
         }
 
         $tool_content .= "
-                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                    <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+                    <div class='panel panel-default'>
                         <div class='panel-body'>
                             <div class='inner-heading'>
                                 <div class='row'>
@@ -182,7 +183,8 @@ function display_general_lists($analytics_id) {
                                         </strong>
                                     </div>
                                 </div>
-                            </div>                        
+                            </div>       
+                            <hr>                 
                             <div class='col-sm-12 collapse ps-4 pe-4 pt-3 pb-3 mt-4' id='LearnAnalyticsResource$module_id'>
                                 <h6 class='text-success'>$message_advanced</h6>
                                 <div class='res-table-wrapper'>
@@ -234,7 +236,7 @@ function display_analytics_elements($analytics_id) {
     if (count($sql_data) == 0) {
         $results = "<p class='text-center text-muted'>$langAnalyticsNoElements</p>";
     } else {
-        $results ="<div class='row p-2 res-table-header panel-body-admin'>
+        $results ="<div class='row p-2 res-table-header'>
                         <div class='col-sm-2'>
                             <span class='control-label-notes'>$langAnalyticsType</span>
                         </div>
@@ -261,7 +263,7 @@ function display_analytics_elements($analytics_id) {
             $resource = $result->resource;
             $module_id = $result->module_id;
             $results .= "
-                <div class='row p-2 res-table-row panel-body-admin'>
+                <div class='row p-2 res-table-row'>
                     <div class='col-sm-3'><em>
                         " . get_resource_info($resource, $module_id) . "</em>
                         </div>
@@ -290,19 +292,20 @@ function display_analytics_elements($analytics_id) {
 
     $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-            <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
-                <div class='panel-body ps-3 pt-3 pb-3 pe-3'>
-                    <div class='inner-heading notes_thead'>
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <div class='inner-heading'>
                         <div class='row'>
                             <div class='col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12'>
                                 <strong>$langAnalyticsParameters</strong>
                             </div>
-                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12'>
-                                <div class='float-end pe-3' style='margin-top:-3px;'>$addParametersBtn</div>
+                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12 text-end'>
+                                <div style='margin-top:-3px;'>$addParametersBtn</div>
                             </div>
                         </div>
                     </div>
-                    <div class='res-table-wrapper panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                    <hr>
+                    <div class='res-table-wrapper'>
                         $results
                     </div>  
                 </div>
@@ -331,21 +334,22 @@ function display_analytics_information($analytics_id) {
 
     $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-            <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
-                <div class='panel-body ps-3 pt-3 pb-3 pe-3'>
-                    <div class='inner-heading notes_thead'>
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <div class='inner-heading'>
                         <div class='row'>
                             <div class='col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12'>
                                 <strong>$title</strong> <span class='$active_vis'>($active_msg)</span>
                             </div>
-                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn btn-primary btn-sm float-end me-md-3'>"
+                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12 text-end'>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn btn-primary'>"
                                         . "<span class='fa fa-pencil'></span> &nbsp;&nbsp;$langModify
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                    <hr>
+                    <div class='panel-body'>
                         <div class='row'>
                             <div class='col-sm-7'>
                                 <div class='control-label-notes pn-info-title-sct'>$langDescription</div>
@@ -415,7 +419,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
         }
 
         $results = "
-                <div class='inner-heading notes_thead'>
+                <div class='inner-heading'>
                     <div class='row p-2 res-table-header'>
                         <div class='col-sm-3'>
                             <h6>$langSurnameName <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=surname&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionName fa-fw' aria-hidden='true'></i></a></h6>
@@ -435,7 +439,8 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                         </div>
                     </div>
                 </div>
-                <div class='res-table-wrapper panel-body-admin pt-3 pb-3 pe-3 pe-3'>";
+                <hr>
+                <div class='res-table-wrapper'>";
 
         $peruserarray = array();
 
@@ -500,11 +505,11 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
 
     $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>                 
-            <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+            <div class='panel panel-default'>
                 <div class='panel-heading'>             
                     <div class='control-label-notes text-center'>$analytics_title->title</div>
                 </div>
-                <div class='panel-body pt-3 pb-3 pe-3 pe-3'>
+                <div class='panel-body'>
                      $results
                 </div>
             </div>
@@ -564,13 +569,13 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
         <div class='inner-heading notes_thead mt-3'>
             <h6>
                 <div class='row p-2 res-table-header'>
-                    <div class='col-sm-5'>
+                    <div class='col-sm-5 text-white'>
                         $langAnalyticsType 
                     </div>
-                    <div class='col-sm-3'>
+                    <div class='col-sm-3 text-white'>
                         $langPercentage
                     </div>
-                    <div class='col-sm-4'>
+                    <div class='col-sm-4 text-white'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$previous'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>"
                             . nice_format($start) . " &mdash; " . nice_format($end) .
                             "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$next'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
@@ -578,7 +583,8 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
                 </div>
             </h6>
         </div>
-    <div class='res-table-wrapper panel-body-admin pt-3 pb-3 pe-3 pe-3'>";
+
+    <div class='res-table-wrapper'>";
 
     $elements_data = Database::get()->queryArray("SELECT id, module_id, resource, upper_threshold, lower_threshold, max_value, min_value 
                                             FROM analytics_element
@@ -643,8 +649,9 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
     
     $tool_content .= "
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3 col-12'>
-                    <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
-                        <h4 class='control-label-notes text-center'>$analytics_title->title</h4>
+                    <div class='panel panel-default'>
+                        <h4 class='control-label-notes text-center pt-3'>$analytics_title->title</h4>
+                        <hr>
                         <div class='panel-body'>
                         $results
                         </div>
@@ -675,16 +682,17 @@ function display_user_info($user_id) {
     
     $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-            <div class='panel panel-default shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
-                <div class='panel-body ps-3 pt-3 pb-3 pe-3'>
-                    <div class='inner-heading notes_thead'>
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <div class='inner-heading'>
                         <div class='row'>
                             <div class='col-sm-12'>
                                 <strong>$givenname $surname</strong>
                             </div>
                         </div>
                     </div>
-                    <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                    <hr>
+                    <div class='panel-body'>
                         <div class='row p-2'>
                             <div class='col-sm-7'>
                                 <div class='pn-info-title-sct control-label-notes'>$langEmail</div>

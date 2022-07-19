@@ -158,7 +158,7 @@ if (isset($_GET['post_id'])) { //needed to find post page for anchors
 
 
 if (!$myrow) {
-    $tool_content .= "<div class='alert alert-warning'>$langErrorTopicSelect</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langErrorTopicSelect</div></div>";
     draw($tool_content, 2);
     exit();
 }
@@ -241,7 +241,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
 			SET topic_time = '$topic_time_fixed'
 			WHERE id = $topic";
     }
-    $tool_content .= "<div class='alert alert-success'>$langDeletedMessage</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langDeletedMessage</div></div>";
 }
 
 if ($paging and $total > POSTS_PER_PAGE) {
@@ -273,7 +273,7 @@ if (isset($_SESSION['message'])) {
 }
 
 if ($topic_locked == 1) {
-    $tool_content .= "<div class='alert alert-warning'>$langErrorTopicLocked</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langErrorTopicLocked</div></div>";
 } else {
     if ($unit) {
         $back_url = "../units/index.php?course=$course_code&id=$unit";
@@ -319,26 +319,26 @@ if ($topic_locked == 1) {
     }
 
     $tool_content .= "
-    <div class='row'>
-        <div class='col-md-12'>
-            <form class='form-horizontal' name='viewselect' action='$selection_url' method='get'>
-                <div class='form-group'>
-                    <label class='col-sm-8 control-label'>$langQuestionView</label>
-                    <div class='col-sm-4'>
-                        $hidden_inputs
-                        <input type='hidden' name='course' value='$course_code'>
-                        <input type='hidden' name='forum' value='$forum'>
-                        <input type='hidden' name='topic' value='$topic'>
-                        <select name='view' id='view' class='form-control' onChange='document.viewselect.submit();'>
-                            <option value='0' $selected_view_0>$langForumPostFlatViewAsc</option>
-                            <option value='1' $selected_view_1>$langForumPostFlatViewDesc</option>
-                            <option value='2' $selected_view_2>$langForumPostThreadedView</option>
-                        </select>
+        <div class='col-sm-12 mb-3'>
+            <div class='form-wrapper shadow-sm p-3 rounded'>
+                <form class='form-horizontal' name='viewselect' action='$selection_url' method='get'>
+                    <div class='form-group mt-3'>
+                        <label class='col-sm-8 control-label'>$langQuestionView</label>
+                        <div class='col-sm-12'>
+                            $hidden_inputs
+                            <input type='hidden' name='course' value='$course_code'>
+                            <input type='hidden' name='forum' value='$forum'>
+                            <input type='hidden' name='topic' value='$topic'>
+                            <select name='view' id='view' class='form-select' onChange='document.viewselect.submit();'>
+                                <option value='0' $selected_view_0>$langForumPostFlatViewAsc</option>
+                                <option value='1' $selected_view_1>$langForumPostFlatViewDesc</option>
+                                <option value='2' $selected_view_2>$langForumPostThreadedView</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div>
-    </div>";
+                </form>
+            </div>
+        </div>";
 
 
 }
@@ -482,7 +482,7 @@ if ($view != POSTS_THREADED_VIEW) {
     }
 }
 
-$tool_content .= "<div class='row'><div class='col-xs-12'>";
+$tool_content .= "<div class='col-12'>";
 
 if ($view != POSTS_THREADED_VIEW) { // pagination view
     $count = 1; // highlight the initial post
@@ -511,7 +511,7 @@ if ($view != POSTS_THREADED_VIEW) { // pagination view
      }
  }
 
-$tool_content .= "</div></div>";
+$tool_content .= "</div>";
 
 Database::get()->query("UPDATE forum_topic SET num_views = num_views + 1
             WHERE id = ?d AND forum_id = ?d", $topic, $forum);
@@ -639,11 +639,11 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     }
 
     if ($count > 1) { // for all posts except first
-        $content .= "<div id='$myrow->id' class='post-message panel panel-default col-sm-offset-$offset'>";
-        $content .= "<div class='panel-heading'><h5 class='panel-title'>$langMsgRe " . q($topic_subject);
+        $content .= "<div id='$myrow->id' class='post-message panel panel-default col-sm-offset-$offset mt-3'>";
+        $content .= "<div class='panel-heading'><h5 class='panel-title text-dark'>$langMsgRe " . q($topic_subject);
     } else {
-        $content .= "<div id='$myrow->id' class='parent-post-message panel panel-primary'>";
-        $content .= "<div class='panel-heading'><h5 class='panel-title'>". q($topic_subject);
+        $content .= "<div id='$myrow->id' class='parent-post-message panel panel-primary mt-3'>";
+        $content .= "<div class='panel-heading'><h5 class='panel-title text-dark'>". q($topic_subject);
     }
 
     if ($is_editor) {
@@ -651,11 +651,11 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
                 <span class='pull-right'>
                     <a href='../forum/editpost.php?course=$course_code&amp;post_id=" . $myrow->id .
                         "&amp;topic=$topic&amp;forum=$forum'>" .
-                            "<span class='fa fa-edit' title='$langModify' data-toggle='tooltip' " .
+                            "<span class='fa fa-edit' title='$langModify' data-bs-toggle='tooltip' " .
                                 "data-original-title='$langModify'></span></a>&nbsp;" .
                     "<a class='delete-btn' href='../forum/viewtopic.php?course=$course_code&amp;post_id=" . $myrow->id .
                         "&amp;topic=$topic&amp;forum=$forum&amp;delete=on'>" .
-                            "<span class='fa fa-times' title='$langDelete' data-toggle='tooltip' " .
+                            "<span class='fa fa-times text-danger' title='$langDelete' data-bs-toggle='tooltip' " .
                             "data-original-title='$langDelete'></span></a>
                 </span>";
     }
@@ -698,7 +698,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     $content .= "
                     </div>
                 </div>
-                <div class='col-xs-12' style='margin-top: 5px;'>
+                <div class='col-12' style='margin-top: 5px;'>
                     <div class='text-justify'>$message</div>
                     $fileinfo
                 </div>
@@ -708,7 +708,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         $content .= "
         <div class='panel-footer'>
             <div class='row'>
-                <div class='col-xs-12'>
+                <div class='col-12'>
                     <small>
                         <span class='pull-left' style='margin-left: 15px;'>$rate_str $parent_post_link</span>
                         <span class='pull-right'>$reply_button</span>

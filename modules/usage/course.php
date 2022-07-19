@@ -77,8 +77,7 @@ if (isset($_GET['id'])) {
                                 FROM course_user
                                 WHERE course_id = ?d AND user_id = ?d ORDER BY reg_date ASC LIMIT 1", $course_id, $_GET['id'])->reg_date;
     $tool_content .= "
-        <div class='row'>
-            <div class='col-xs-12'>                
+            <div class='col-12'>                
                 <div class='panel-body'>
                     <div class='inner-heading'>$langUserStats: ". uid_to_name($_GET['id'], 'fullname') ."</div>
                     <div class='row'>
@@ -95,12 +94,10 @@ if (isset($_GET['id'])) {
                     </div>
                 </div>
             </div>                
-        </div>
-    </div>";
+        </div>";
 } else {
     $tool_content .= "
-        <div class='row'>
-            <div class='col-xs-12'>
+            <div class='col-12'>
                 <div class='panel-body'>
                     <div class='row'>
                         <div class='col-sm-6'>
@@ -120,6 +117,5 @@ if (isset($_GET['id'])) {
                         </div>
                     </div>                
                 </div>
-            </div>
-        </div>";
+            </div>";
 }

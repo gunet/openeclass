@@ -235,13 +235,12 @@ function printPollForm() {
             $qtype = $theQuestion->qtype;
             if($qtype==QTYPE_LABEL) {
                 $tool_content .= "
-                    <div class='alert alert-info' role='alert'>
+                <div class='col-sm-12'><div class='alert alert-info' role='alert'>
                         <strong>" . standard_text_escape($theQuestion->question_text) . "</strong>
-                    </div>";
+                    </div></div>";
             } else {
                 $tool_content .= "
-                <div class=col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12>
-                <div class='row p-2'></div>
+                <div class='col-sm-12 mt-3'>
                     <div class='panel panel-success'>
                         <div class='panel-heading'>
                             $langQuestion $i
@@ -415,7 +414,7 @@ function submitPoll() {
                             VALUES (?d, ?d, ?d, ?s, ?t)", $user_record_id, $pqid, $aid, $answer_text, $CreationDate);
         }
         $end_message = Database::get()->querySingle("SELECT end_message FROM poll WHERE pid = ?d", $pid)->end_message;
-        $tool_content .= "<div class='alert alert-success'>".$langPollSubmitted."</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>".$langPollSubmitted."</div></div>";
         if (!empty($end_message)) {
             $tool_content .=  $end_message;
         }

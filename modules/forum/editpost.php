@@ -62,7 +62,9 @@ if (isset($_GET['delete'])) {
     $fp = Database::get()->querySingle("SELECT topic_filepath FROM forum_post WHERE id = ?d", $id);
     unlink("$webDir/courses/$course_code/forum/$fp->topic_filepath");
     Database::get()->query("UPDATE forum_post SET topic_filepath = '', topic_filename = '' WHERE id = ?d", $id);
-    Session::Messages($langForumAttachmentDeleted, 'alert-success');
+    //Session::Messages($langForumAttachmentDeleted, 'alert-success');
+    Session::flash('message',$langForumAttachmentDeleted); 
+    Session::flash('alert-class', 'alert-success');
     header("Location: {$urlServer}modules/forum/viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id");
 }
 
@@ -129,9 +131,9 @@ if (isset($_POST['submit'])) {
     $subject_field = $attached_file_content = '';
     if ($first_post) {
         $subject_field .= "
-            <div class='form-group'>
-                <label for='title' class='col-sm-2 control-label'>$langSubject:</label>
-                <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+                <label for='title' class='col-sm-6 control-label-notes'>$langSubject:</label>
+                <div class='col-sm-12'>
                     <input type='text' name='subject' size='53' maxlength='100' value='" . q($myrow->title) . "'  class='form-control'>
                 </div>
             </div>";
@@ -140,9 +142,9 @@ if (isset($_POST['submit'])) {
     if (!empty($myrow->topic_filename)) {
         $actual_filename = $webDir . "/courses/" . $course_code . "/forum/" . $myrow->topic_filepath;
         $attached_file_content =
-            "<div class='form-group'>
-                <label class='col-sm-2 control-label'>$langAttachedFile:</label>
-                <div class='col-sm-10'>
+            "<div class='form-group mt-3'>
+                <label class='col-sm-6 control-label-notes'>$langAttachedFile:</label>
+                <div class='col-sm-12'>
                     " .q($myrow->topic_filename) ." (" . format_file_size(filesize($actual_filename)) . ") <a id='filedelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id&amp;delete=$myrow->id'>
                         <span class='fa fa-fw fa-times text-danger' data-original-title='$langDeleteAttachment' title='' data-toggle='tooltip'></span>
                     </a>
@@ -159,13 +161,13 @@ if (isset($_POST['submit'])) {
                 <input type='hidden' name='forum' value='$forum_id'>            
                 $subject_field
                 $attached_file_content
-                <div class='form-group'>
-                    <label for='title' class='col-sm-2 control-label'>$langBodyMessage:</label>
-                    <div class='col-sm-10'>
+                <div class='form-group mt-3'>
+                    <label for='title' class='col-sm-6 control-label-notes'>$langBodyMessage:</label>
+                    <div class='col-sm-12'>
                         " . rich_text_editor('message', 10, 50, $message) . "
                     </div>
                 </div>
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                         <a class='btn btn-default' href='viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id'>$langCancel</a>

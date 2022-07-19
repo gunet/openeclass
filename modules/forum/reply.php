@@ -100,7 +100,7 @@ if (!does_exists($forum, "forum") || !does_exists($topic, "topic") || !$parent_p
 }
 
 if ($topic_locked == 1) {
-    $tool_content .= "<div class='alert alert-warning'>$langErrorTopicLocked</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langErrorTopicLocked</div></div>";
     draw($tool_content, 2, null, $head_content);
     exit();
 }
@@ -111,7 +111,7 @@ if (isset($_POST['submit'])) {
     $parent_post = $_POST['parent_post'];
     if (trim($message) == '') {
         $tool_content .= "
-                <div class='alert alert-warning'>$langEmptyMsg</div>
+        <div class='col-sm-12'><div class='alert alert-warning'>$langEmptyMsg</div></div>
                 <p class='back'>&laquo; $langClick <a href='newtopic.php?course=$course_code&amp;forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
         draw($tool_content, 2, null, $head_content);
         exit();
@@ -203,20 +203,20 @@ if (isset($_POST['submit'])) {
     $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' action='$form_url' method='post' enctype='multipart/form-data'>
             <input type='hidden' name='parent_post' value='$parent_post'>
-            <div class='form-group'>
-              <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
-              <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+              <label for='message' class='col-sm-6 control-label-notes'>$langBodyMessage:</label>
+              <div class='col-sm-12'>
                 " . rich_text_editor('message', 15, 70, $reply) . "
               </div>
             </div>
-            <div class='form-group'>
-                <label for='topic_file' class='col-sm-2 control-label'>$langAttachedFile:</label>
-                <div class='col-sm-10'>
+            <div class='form-group mt-3'>
+                <label for='topic_file' class='col-sm-6 control-label-notes'>$langAttachedFile:</label>
+                <div class='col-sm-12'>
                     <input type='file' name='topic_file' id='topic_file' size='35'>
                     " . fileSizeHidenInput() . "
                 </div>
             </div>
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                     <a class='btn btn-default' href='$cancel_url'>$langCancel</a>

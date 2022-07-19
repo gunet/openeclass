@@ -40,8 +40,8 @@
     {!! $action_bar !!}
 
     {{-- h5p editor form --}}
-    <div class='row'>
-        <div class='col-xs-12'>
+
+        <div class='col-12'>
             <form id='coolh5peditor' autocomplete='off' action='{{ $urlAppend }}modules/h5p/create.php?course={{ $course_code }}' method='post' accept-charset='utf-8' class='mform'>
                 <div style='display: none;'>
                     <input name='library' type='hidden' value='{{ $library }}' />
@@ -66,6 +66,6 @@
 
             </form>
         </div>
-    </div>
+
 
 @endsection

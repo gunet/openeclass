@@ -37,7 +37,7 @@ $actionBar .= action_bar(array(
     )
 ));
 
-$tool_content = $actionBar . "<div class='alert alert-danger'>" . $langColmoocCreateAgentFailed . "</div>";
+$tool_content = $actionBar . "<div class='col-sm-12'><div class='alert alert-danger'>" . $langColmoocCreateAgentFailed . "</div></div>";
 
 if (isset($_GET['id']) && $is_editor) {
 
@@ -46,7 +46,7 @@ if (isset($_GET['id']) && $is_editor) {
         $success = colmooc_update_activity($conf->conf_id, $conf->conf_title, $conf->agent_id);
         if ($success) {
             Database::get()->query("UPDATE conference SET agent_created = true WHERE conf_id = ?d", $conf->conf_id);
-            $tool_content = $actionBar . "<div class='alert alert-info'>" . $langColmoocCreateAgentSuccess . "</div>";
+            $tool_content = $actionBar . "<div class='col-sm-12'><div class='alert alert-info'>" . $langColmoocCreateAgentSuccess . "</div></div>";
         }
     }
 }

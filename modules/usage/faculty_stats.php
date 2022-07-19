@@ -79,33 +79,35 @@ if (isset($_GET['stats_submit'])) {
         $course = Database::get()->querySingle("SELECT title, prof_names, code, visible FROM course WHERE id = ?d", $_GET['c']);
         $users = Database::get()->querySingle("SELECT COUNT(user_id) AS users FROM course_user WHERE course_id = ?d", $_GET['c'])->users;
 
-        $tool_content .= "<div class='panel panel-default'>
-                             <div class='panel-body panel-body-admin'>
+        $tool_content .= "
+        <div class='col-sm-12'>
+                        <div class='panel panel-default'>
+                            <div class='panel-body panel-body-admin'>
                                 <div class='inner-heading notes_thead'>" . $tree->unserializeLangField($name) . "</div>
-                                <div class='row'>
-                                   <div class='col-sm-6'>
-                                    <dl class='ps-3 pb-3 pt-3 pe-3'>
-                                        <dt class='control-label-notes'>$langTitle :</dt>
-                                        <dd>$course->title <small>($course->code)</small></dd>
-                                    </dl>
-                                    <dl class='ps-3 pb-3 pt-3 pe-3'>
-                                        <dt class='control-label-notes'>$langTeacher :</dt>
-                                        <dd>$course->prof_names</dd>
-                                    </dl>
-                                   </div>
-                                   <div class='col-sm-6'>
-                                    <dl class='ps-3 pb-3 pt-3 pe-3'>
-                                        <dt class='control-label-notes'>$langCourseVis :</dt>
-                                        <dd>" . course_status_message($_GET['c']) . "</dd>
-                                    </dl>
-                                    <dl class='ps-3 pb-3 pt-3 pe-3'>
-                                        <dt class='control-label-notes'>$langUsers :</dt>
-                                        <dd>$users</dd>
-                                    </dl>
-                                   </div>
+                                    <div class='row'>
+                                        <div class='col-sm-6'>
+                                                <dl class='ps-3 pb-3 pt-3 pe-3'>
+                                                    <dt class='control-label-notes'>$langTitle :</dt>
+                                                    <dd>$course->title <small>($course->code)</small></dd>
+                                                </dl>
+                                                <dl class='ps-3 pb-3 pt-3 pe-3'>
+                                                    <dt class='control-label-notes'>$langTeacher :</dt>
+                                                    <dd>$course->prof_names</dd>
+                                                </dl>
+                                        </div>
+                                        <div class='col-sm-6'>
+                                                <dl class='ps-3 pb-3 pt-3 pe-3'>
+                                                    <dt class='control-label-notes'>$langCourseVis :</dt>
+                                                    <dd>" . course_status_message($_GET['c']) . "</dd>
+                                                </dl>
+                                                <dl class='ps-3 pb-3 pt-3 pe-3'>
+                                                    <dt class='control-label-notes'>$langUsers :</dt>
+                                                    <dd>$users</dd>
+                                                </dl>
+                                        </div>
+                                    </div>
                                 </div>
-                             </div>
-                          </div>";
+                            </div>";
 
         // user registrations per month
         $tool_content .= "<div class='table-responsive mt-5'><table class='announcements_table'>";
@@ -150,7 +152,7 @@ if (isset($_GET['stats_submit'])) {
                 $tool_content .= "</tr>";
             }
         }
-        $tool_content .= "</table></div></div>";
+        $tool_content .= "</table></div></div></div>";
     } else {
         // courses list
         $tool_content .= "<div class='table-responsive'>";

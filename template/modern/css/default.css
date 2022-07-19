@@ -325,23 +325,23 @@
   }
 
   .buttons-print{
-    color:white;
+    color:#003F87;
   }
   .buttons-copy{
-    color:white;
+    color:#003F87;
   }
   .buttons-collection{
-    color:white;
+    color:#003F87;
   }
 
   .buttons-print:hover{
-    color:white;
+    color:blue;
   }
   .buttons-copy:hover{
-    color:white;
+    color:blue;
   }
   .buttons-collection:hover{
-    color:white;
+    color:blue;
   }
   
   /* --------------------------------------------- MyDropdowns ----------------------------------------*/
@@ -773,8 +773,8 @@
     color:#003F87;
     padding-right: 10px;
   }
-  
-  
+
+
   /* -------------------------------------------- Announcements ---------------------------------------/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1512,6 +1512,14 @@
   .panel-title .fa-edit{
     color:#ffc107;
   }
+  .panel-footer{
+    background-color: #fafafa;
+    padding:10px;
+  }
+  .inner-heading{
+    height: auto;
+  }
+  
 
  
   

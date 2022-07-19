@@ -65,7 +65,9 @@ if (isset($_GET['id']) && intval($_GET['id']) > 0 && $uid) {
         echo "<p>".$langPollSubmitted."</p>";
         echo "<p>".$langPollOutcomeClose."</p>";
     } else {
-        Session::Messages($langPollSubmitted);
+        //Session::Messages($langPollSubmitted);
+        Session::flash('message',$langPollSubmitted);
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
     }
 

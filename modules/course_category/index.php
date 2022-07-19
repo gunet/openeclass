@@ -65,9 +65,10 @@ if (isset($_POST['submit'])) {
 }
 
 $tool_content .= "
+<div class='col-sm-12'>
 <div class='panel panel-default panel-action-btn-default mt-3'>
-    <div class='panel-heading shadow-sm p-3 bg-body rounded bg-primary'>
-        <h3 class='panel-title control-label-notes text-center'><span class='fas fa-tools text-warning pe-2'></span>" . $langCourseCategoryActions . "</h3>
+    <div class='panel-heading'>
+        <h3 class='panel-title text-center'><span class='fas fa-tools text-warning pe-2'></span>" . $langCourseCategoryActions . "</h3>
 
     </div>
     <form name='courseCategories' action='" . $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "' method='post' enctype='multipart/form-data'>
@@ -181,6 +182,6 @@ $tool_content .= "
             </table>
         </div>" . generate_csrf_token_form_field() . "
     </form>
-</div>";
+</div></div>";
 
 draw($tool_content, 2, null, $head_content);

@@ -142,7 +142,7 @@ $export_box = "";
 
 if ($is_editor) {
     $export_box .= "
-        <div class='alert alert-info'>
+    <div class='col-sm-12'><div class='alert alert-info'>
             <b>$langDumpUserDurationToFile:</b>
             <ul>
               <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langPollPercentResults</a>
@@ -150,7 +150,7 @@ if ($is_editor) {
               <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langPollFullResults</a>
                   (<a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;enc=UTF-8'>$langcsvenc2</a>)</li>
             </ul>
-        </div>";
+        </div></div>";
 }
 
 $tool_content .= action_bar(array(
@@ -275,6 +275,7 @@ $chart_counter = 0;
 $this_chart_data = array();
 
 $tool_content .= "
+<div class='col-sm-12 mt-3'>
     <div class='panel panel-success'>
     <div class='panel-heading'>
         <h3 class='panel-title'>$lcolles1</h3>
@@ -300,10 +301,11 @@ $tool_content .= "
     $tool_content .= "</div></div>";
                 $chart_counter++;
 
-    $tool_content .= "</div></div>";
+    $tool_content .= "</div></div></div>";
     $this_chart_data= array();
 
 $tool_content .= "
+<div class='col-sm-12 mt-3'>
     <div class='panel panel-success'>
     <div class='panel-heading'>
         <h3 class='panel-title'>$lcolles2</h3>
@@ -329,10 +331,11 @@ $tool_content .= "
     $tool_content .= "</div></div>";
     $chart_counter++;
 
-    $tool_content .= "</div></div>";
+    $tool_content .= "</div></div></div>";
     $this_chart_data= array();
 
 $tool_content .= "
+<div class='col-sm-12 mt-3'>
     <div class='panel panel-success'>
     <div class='panel-heading'>
         <h3 class='panel-title'>$lcolles3</h3>
@@ -358,10 +361,11 @@ $tool_content .= "
     $tool_content .= "</div></div>";
     $chart_counter++;
 
-$tool_content .= "</div></div>";
+$tool_content .= "</div></div></div>";
 $this_chart_data = array();
 
 $tool_content .= "
+<div class='col-sm-12 mt-3'>
     <div class='panel panel-success'>
     <div class='panel-heading'>
         <h3 class='panel-title'>$lcolles4</h3>
@@ -386,10 +390,12 @@ $tool_content .= "
     $tool_content .= "</div></div>";
     $chart_counter++;
 
-    $tool_content .= "</div></div>";
+    $tool_content .= "</div></div></div>";
     $this_chart_data = array();
 
     $tool_content .= "
+
+<div class='col-sm-12 mt-3'>
     <div class='panel panel-success'>
     <div class='panel-heading'>
         <h3 class='panel-title'>$lcolles5</h3>
@@ -415,10 +421,12 @@ $tool_content .= "
     $tool_content .= "</div></div>";
     $chart_counter++;
 
-    $tool_content .= "</div></div>";
+    $tool_content .= "</div></div></div>";
     $this_chart_data= array();
 
     $tool_content .= "
+
+<div class='col-sm-12 mt-3'>
     <div class='panel panel-success'>
     <div class='panel-heading'>
         <h3 class='panel-title'>$lcolles6</h3>
@@ -444,7 +452,7 @@ $tool_content .= "
     $tool_content .= "</div></div>";
     $chart_counter++;
 
-    $tool_content .= "</div></div>";
+    $tool_content .= "</div></div></div>";
     $this_chart_data = array();
 
 // display page
