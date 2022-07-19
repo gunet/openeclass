@@ -88,7 +88,7 @@ if ($is_editor) {
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
             //Session::Messages($langCourseUnitDeleted, 'alert-success');
-            Session::flash('message',$langCourseUnitDeleted); 
+            Session::flash('message',$langCourseUnitDeleted);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("courses/$course_code/");
         }
@@ -133,11 +133,11 @@ if (isset($_REQUEST['register'])) {
                 Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
                                     VALUES (?d, ?d, ?d, NOW())", $course_id, $uid, USER_STUDENT);
                 //Session::Messages($langNotifyRegUser1, 'alert-success');
-                Session::flash('message',$langNotifyRegUser1); 
-                Session::flash('alert-class', 'alert-success'); 
+                Session::flash('message',$langNotifyRegUser1);
+                Session::flash('alert-class', 'alert-success');
             } else {
                 //Session::Messages($langInvalidCode, 'alert-warning');
-                Session::flash('message',$langInvalidCode); 
+                Session::flash('message',$langInvalidCode);
                 Session::flash('alert-class', 'alert-warning');
             }
         }
@@ -490,7 +490,6 @@ if ($is_editor) {
     $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order` FROM course_units WHERE course_id = ?d AND visible = 1 AND `order` >= 0 ORDER BY `order`";
 }
 
-
 $data['all_units'] = $all_units = Database::get()->queryArray($query, $course_id);
 foreach ($all_units as $unit) {
     check_unit_progress($unit->id);  // check unit completion - call to Game.php
@@ -498,13 +497,11 @@ foreach ($all_units as $unit) {
 
 $visible_units_id = [];
 if (!$is_editor) {
-    //$visible_user_units = findUserVisibleUnits($uid, $all_units);
-    
-    foreach ($visible_user_units as $data) {
-        $visible_units_id[] = $data->id;
+    $visible_user_units = findUserVisibleUnits($uid, $all_units);
+    foreach ($visible_user_units as $d) {
+        $visible_units_id[] = $d->id;
     }
 }
-
 
 $total_cunits = count($all_units);
 if ($total_cunits > 0) {
@@ -579,11 +576,11 @@ if ($total_cunits > 0) {
             //                     <button class='btn btn-primary dropdown-toggle mt-2' type='button' id='dropdownMenuButton$cu->id' data-bs-toggle='dropdown' aria-expanded='false'>
             //                         <i class='fa-cogs'></i>
             //                     </button>";
-    
+
             //     $cunits_content .= "<ul class='row p-4 dropdown-menu myuls' aria-labelledby='dropdownMenuButton$cu->id->id'>
-            //         <li><a href='{$urlAppend}modules/units/info.php?course=$course_code&amp;edit=$cu->id->id'><i class='fa-edit'></i>&nbsp;&nbsp;$langEditChange</a></li>            
+            //         <li><a href='{$urlAppend}modules/units/info.php?course=$course_code&amp;edit=$cu->id->id'><i class='fa-edit'></i>&nbsp;&nbsp;$langEditChange</a></li>
             //         <li><a href='$_SERVER[REQUEST_URI]?vis=$cu->id'><i class='fa-eye'></i>";
-    
+
             //     if ($cu->visible == 1) {
             //         $cunits_content .= "&nbsp;&nbsp;$langViewHide";
             //     } else {
@@ -599,9 +596,9 @@ if ($total_cunits > 0) {
             //     $cunits_content .= "</a></li>
             //         <li><a href='$_SERVER[REQUEST_URI]?del='" .$cu_indirect . "'&order='.$cu->order' data-bs-toggle='modal' data-bs-target='#unit$cu->id'><i class='fa-trash'></i>&nbsp;&nbsp;$langDelete</a></li>
             //     </ul>";
-    
+
             // $cunits_content .= "</div>";
-    
+
             $cunits_content .= "<div class='float-end'>".action_button(array(
                 array('title' => $langEditChange,
                       'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
@@ -618,10 +615,10 @@ if ($total_cunits > 0) {
                       'icon' => 'fa-trash',
                       'class' => 'delete',
                       'confirm' => $langCourseUnitDeleteConfirm)))."</div>";
-                
-    
+
+
                     //$cunits_content .= '</div>';
-    
+
         } else {
             $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
             $cunits_content .= $icon;

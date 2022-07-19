@@ -16,7 +16,7 @@
                                     <div class="input-group mb-3">
                                         <input id="search_terms" type="text" class="border-0 form-control outline-0 text-white inputSearch " name="search_terms" placeholder="{{ trans('langSearch') }}..." aria-describedby="basic-inputSearch">
                                         <button id="btn-search" class="btn btn-primary" type="submit" name="quickSearch"><i class="fa fa-search text-white"></i></button>
-                                        {!! lang_selections() !!}                                        
+                                        {!! lang_selections() !!}
                                     </div>
                                 </form>
                             @endif
@@ -52,10 +52,10 @@
                                     <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle tempBtnButton"
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                         <span><img class="user-icon-filename" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}"
-                                                alt="{{ $uname }}">{{uid_to_am($uid)}}</span>
+                                                alt="{{ $uname }}">{{ $uname }}</span>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end dropdown_menu_user" aria-labelledby="btnGroupDrop1">
-                
+
                                         @if($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == ADMIN_USER)
                                         <li class='p-1'>
                                             <a class="dropdown-item" href="{{ $urlAppend }}modules/create_course/create_course.php">
@@ -132,27 +132,27 @@
                                             </a>
                                         </li>
                                         @if (get_config('eportfolio_enable'))
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}">
-                                                <div class='row'>
-                                                    <div class='col-1'>
-                                                        <span class="fas fa-briefcase text-warning pt-1"></span>
+                                            <li class='p-1'>
+                                                <a class="dropdown-item" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}">
+                                                    <div class='row'>
+                                                        <div class='col-1'>
+                                                            <span class="fas fa-briefcase text-warning pt-1"></span>
+                                                        </div>
+                                                        <div class='col-10 ps-3 pe-3'>
+                                                            <span class='text-white user_menu_tool'>
+                                                                {{ trans('langMyePortfolio') }}
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                    <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
-                                                            {{ trans('langMyePortfolio') }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
+                                                </a>
+                                            </li>
                                         @endif
                                         <li class='p-1'>
                                             <a class="dropdown-item" href="{{ $urlAppend }}modules/usage/index.php?t=u">
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class="fas fa-chart-bar text-warning pt-1"></span>
-                                                    </div>                                
+                                                    </div>
                                                     <div class='col-10 ps-3 pe-3'>
                                                         <span class='text-white user_menu_tool'>
                                                             {{ trans('langMyStats') }}
@@ -162,20 +162,20 @@
                                             </a>
                                         </li>
                                         @if (get_config('personal_blog'))
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}">
-                                                <div class='row'>
-                                                    <div class='col-1'>
-                                                        <span class="fas fa-location-arrow text-warning pt-1"></span>
+                                            <li class='p-1'>
+                                                <a class="dropdown-item" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}">
+                                                    <div class='row'>
+                                                        <div class='col-1'>
+                                                            <span class="fas fa-location-arrow text-warning pt-1"></span>
+                                                        </div>
+                                                        <div class='col-10 ps-3 pe-3'>
+                                                            <span class='text-white user_menu_tool'>
+                                                                {{ trans('langMyBlog') }}
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                    <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
-                                                            {{ trans('langMyBlog') }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
+                                                </a>
+                                            </li>
                                         @endif
                                         <li class='p-1'>
                                             <a class="dropdown-item" href="{{ $urlAppend }}modules/message/index.php">
@@ -277,15 +277,15 @@
                                                 </a>
                                             </li>
                                         @endif
-                                        
-                                        
+
+
                                         <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:14px;'>
                                             <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
                                             <li>
                                                 <button type='submit' class='btn btn-secondary w-100 mt-3' name='submit'><i class="fas fa-sign-out-alt"></i><span class='ps-2 fs-6 text-white'>{{ trans('langLogout') }}</span></button>
                                             </li>
                                         </form>
-                                        
+
                                     </ul>
                                 </div>
                             </div>
