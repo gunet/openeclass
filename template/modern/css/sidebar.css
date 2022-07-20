@@ -236,9 +236,9 @@ ul {
 }
 
 .col_maincontent_active_calendar{
-  -moz-box-shadow: 0 0 3px #ccc;
-  -webkit-box-shadow: 0 0 3px #ccc;
-  box-shadow: 0 0 3px #ccc;
+  -moz-box-shadow: 0 0 2px rgb(101, 102, 133);
+    -webkit-box-shadow: 0 0 2px rgb(118, 119, 146);
+    box-shadow: 0 0 2px rgb(92, 93, 121);
 }
 
 .col_maincontent_active_CourseComplete{

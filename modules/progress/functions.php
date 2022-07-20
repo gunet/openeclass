@@ -2248,8 +2248,7 @@ function student_view_progress() {
         $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
 
         $tool_content .= "
-            <div class='row'>
-                <div class='col-xs-12'>
+                <div class='col-12'>
                     <div class='panel panel-default'>
                         <div class='panel-body'>
                             <div class='inner-heading'>
@@ -2260,14 +2259,14 @@ function student_view_progress() {
                                 </div>
                             </div>
                             <div class='res-table-wrapper'>
-                                <div class='row res-table-row'>
+                                <div class='row p-2 res-table-row'>
                                     <div class='col-sm-2'>
                                         <i class='fa fa-trophy fa-4x' aria-hidden='true'></i>
                                     </div>
                                     <div class='col-sm-9'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&badge_id=$course_completion_id&u=$uid'>$langCourseCompletion</a>
                                         <div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
-                                            <p class='progress-bar active from-control-static' role='progressbar' 
+                                            <p class='progress-bar active from-control-static pt-2' role='progressbar' 
                                                     aria-valuenow='\".str_replace('%','',$percentage).\"' 
                                                     aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage;'>$percentage
                                             </p>
@@ -2277,9 +2276,7 @@ function student_view_progress() {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>            
-        ";
+                </div>";
     }
 
 
@@ -2308,8 +2305,7 @@ function student_view_progress() {
             $found = true;
 
             $tool_content .= "
-                <div class='row'>
-                    <div class='col-xs-12'>
+                    <div class='col-12 mt-3'>
                         <div class='panel panel-default'>
                             <div class='panel-body'>
                                 <div class='inner-heading'>
@@ -2337,7 +2333,7 @@ function student_view_progress() {
                                         <div class='col-sm-9'>
                                         <a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>" . ellipsize($badge->title, 40) . "</a>                                    
                                             <div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
-                                                <p class='progress-bar active from-control-static' role='progressbar'
+                                                <p class='progress-bar active from-control-static pt-2' role='progressbar'
                                                         aria-valuenow='" . str_replace('%','',$badge_percentage) . "'
                                                         aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $badge_percentage;'>$badge_percentage
                                                 </p>
@@ -2346,7 +2342,7 @@ function student_view_progress() {
                                     </div>
                                 </div>";
             }
-            $tool_content .= "</div></div></div></div>";
+            $tool_content .= "</div></div></div>";
         }
 
         // display certificates
@@ -2354,8 +2350,7 @@ function student_view_progress() {
             $found = true;
 
             $tool_content .= "
-                <div class='row'>
-                    <div class='col-xs-12'>
+                    <div class='col-12 mt-3'>
                         <div class='panel panel-default'>
                             <div class='panel-body'>
                                 <div class='inner-heading'>
@@ -2371,9 +2366,9 @@ function student_view_progress() {
                 $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned));
                 $dateAssigned = ($certificate->completed == 1) ? $formatted_date : '';
 
-                $tool_content .= "<div class='res-table-wrapper'>";
+                $tool_content .= "<hr><div class='res-table-wrapper'>";
 
-                $tool_content .= "<div class='col-xs-12 col-sm-6 col-xl-4'>";
+                $tool_content .= "<div class='col-12 col-sm-6 col-4'>";
                 $tool_content .= "<a style='display:inline-block; width: 100%' href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user'>";
                 $tool_content .= "<div class='certificate_panel'>
                         <h4 class='certificate_panel_title'>$certificate->title</h4>
@@ -2401,7 +2396,7 @@ function student_view_progress() {
 
                 $tool_content .= "</div>";
             }
-            $tool_content .= "</div></div></div></div>";
+            $tool_content .= "</div></div></div>";
         }
 
     if (!$found) {

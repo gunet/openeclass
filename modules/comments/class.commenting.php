@@ -81,13 +81,13 @@ Class Commenting {
         $commentsNum = $this->getCommentsNum();
 
         if (!$always_open) {
-            $comments_title = "<span class='fa fa-comments'></span>&nbsp;&nbsp;<a class='course_commenting' data-toggle='modal' data-target='#commentArea-$this->rid'><span id='commentsNum-$this->rid'>$commentsNum</span> $langComments</a>";
+            $comments_title = "<span class='fa fa-comments'></span>&nbsp;&nbsp;<a class='course_commenting' data-bs-toggle='modal' data-bs-target='#commentArea-$this->rid'><span id='commentsNum-$this->rid'>$commentsNum</span> $langComments</a>";
             $out = "$comments_title
                     <div class='modal fade text-left' id='commentArea-$this->rid' role='dialog'>
                       <div class='modal-dialog modal-lg'>
                         <div class='modal-content' style='padding:1%'>
                           <div class='modal-header'>
-                            <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                            <button type='button' class='close' data-bs-dismiss='modal'>&times;</button>
                               <h4 class='modal-title'>$langComments</h4>
                           </div>
                           <div class='modal-body' id='comments-$this->rid'>";
@@ -140,8 +140,8 @@ Class Commenting {
                 }
                 $out .= "<div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
                           <div class='col-12'>
-                           <div class='media panel-default'>
-                            <a class='media-left mt-3' href='#'>
+                           <div class='media panel-default p-1'>
+                            <a class='media-left' href='#'>
                             ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
                             <div class='media-body bubble panel-body'>
@@ -175,7 +175,7 @@ Class Commenting {
 
         if (!$always_open) {
             $out .= '<div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                      </div>';
             $out .= '</div>';
         }

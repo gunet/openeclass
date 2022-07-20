@@ -507,7 +507,9 @@ $total_cunits = count($all_units);
 if ($total_cunits > 0) {
     $cunits_content .= "";
     $count_index = 0;
+    $counter_hr = 0;
     foreach ($all_units as $cu) {
+        $counter_hr++;
         $not_shown = false;
         $icon = '';
             // check if course unit has started
@@ -625,7 +627,10 @@ if ($total_cunits > 0) {
             $cunits_content .= "</div>";
         }
 
-        $cunits_content .= "</div></div></div></div><hr>";
+        $cunits_content .= "</div></div></div></div>";
+        if($counter_hr <= count($all_units)-1){
+            $cunits_content .= "<hr>";
+        }
     }
 } else {
     $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible'> - $langNoUnits - </div></div></div>";

@@ -6044,3 +6044,4 @@ $lang_pass_submit = 'Αποστολή';
 $langInsertExerciseCap = "Άσκηση";
 $langPollStart = "Έναρξη";
 $langSections = 'Ενότητες';
+$langCategoryEssay = "Εργασία";

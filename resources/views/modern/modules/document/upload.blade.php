@@ -54,7 +54,7 @@
                         
                         {!! $backButton !!}
                         
-                        @if ($can_upload == 1)
+                        @if ($can_upload)
                             
                                 <div class='col-12'>
                                     <div class='form-wrapper shadow-sm p-3 mt-2 rounded'>

@@ -66,8 +66,8 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                 $response[3] = "
          <div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
                     <div class='col-12'>
-                        <div class='media panel-default'>
-                            <a class='media-left mt-3' href='#'>
+                        <div class='media panel-default p-1'>
+                            <a class='media-left' href='#'>
                                 ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
                             <div class='media-body bubble panel-body'>

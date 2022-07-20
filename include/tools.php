@@ -772,7 +772,7 @@ function lessonToolsMenu($rich=true) {
                     $new_msgs = $mbox->unreadMsgsNumber();
                     if ($new_msgs != 0) {
                         array_push($sideMenuText, '<b>' . q($modules[$mid]['title']) .
-                            " $mail_status<span class='badge pull-right'>$new_msgs</span></b>");
+                            " $mail_status<span class='badge pull-right btn btn-success pe-none mt-1 float-end'>$new_msgs</span></b>");
                     } else {
                         array_push($sideMenuText, q($modules[$mid]['title']).' '.$mail_status);
                     }

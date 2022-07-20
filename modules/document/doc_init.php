@@ -45,7 +45,7 @@ function doc_init() {
         $upload_target_url = 'document.php?course=' . $course_code;
         $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
         $group_hidden_input = "<input type='hidden' name='group_id' value='$group_id' />";
-        $basedir = $webDir . '/courses/' . $course_code . '/group/' . $secret_directory;
+        $basedir = $webDir . '/courses/' . $course_code . '/group/' . $secret_directory;    
         $can_upload = $can_upload || $is_member;
         $pageName = trans('langGroupDocumentsLink');
         $navigation[] = array('url' => $urlAppend . 'modules/group/index.php?course=' . $course_code, 'name' => trans('langGroups'));

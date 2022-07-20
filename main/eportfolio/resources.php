@@ -83,8 +83,10 @@ if ($userdata) {
         
         if ($userdata->eportfolio_enable == 1) {
             $tool_content .= "<script type='text/javascript'>
-                                // $('#copy-btn').tooltip({
-                                // });
+
+                                $(document).ready(function(){
+                                    $('#copy-btn').tooltip({container: 'body'});
+                                })
                     
                                 $(function() {
                                   var clipboard = new Clipboard('#copy-btn');
@@ -371,7 +373,7 @@ if ($userdata) {
             } else {
                 $post->course_title = $langUserBlog;
             }
-            $tool_content .= "<div class='panel panel-action-btn-default'>
+            $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
                                     <div class='panel-heading'>
                                         <div class='pull-right'>
                                             ". action_button(array(
@@ -418,7 +420,7 @@ if ($userdata) {
         $active_class = ' class="nav-item"';
         
         if ($blog_posts) {
-            $blog_li = '<li'.$active_class.'><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#blog">'.$langBlogPosts.'</button></li>';
+            $blog_li = '<li'.$active_class.' role="presentation"><button id="blogtab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#blog">'.$langBlogPosts.'</button></li>';
             if ($active_class != '') {
                 $blog_div_class = 'tab-pane fade show active';
             } else {
@@ -430,9 +432,9 @@ if ($userdata) {
         }
         
         if ($submissions) {
-            $work_li = '<li'.$active_class.'><button class="nav-link" data-bs-toggle="tab" data-bs-target="#works">'.$langWorks.'</button></li>';
+            $work_li = '<li'.$active_class.' role="presentation"><button id="worktab" class="nav-link" data-bs-toggle="tab" data-bs-target="#works">'.$langWorks.'</button></li>';
             if ($active_class != '') {
-                $work_div_class = 'tab-pane fade sjow active';
+                $work_div_class = 'tab-pane fade show active';
             } else {
                 $work_div_class = 'tab-pane fade';
             }
@@ -442,7 +444,7 @@ if ($userdata) {
         }
         
         if ($docs) {
-            $mydocs_li = '<li'.$active_class.'><button class="nav-link" data-bs-toggle="tab" data-bs-target="#mydocs">'.$langDoc.'</button></li>';
+            $mydocs_li = '<li'.$active_class.' role="presentation"><button id="docstab" class="nav-link" data-bs-toggle="tab" data-bs-target="#mydocs">'.$langDoc.'</button></li>';
             if ($active_class != '') {
                 $mydocs_div_class = 'tab-pane fade show active';
             } else {
@@ -453,7 +455,7 @@ if ($userdata) {
             $mydocs_li = '';    
         }
         
-        $tool_content .= '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><ul class="nav nav-tabs">
+        $tool_content .= '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><ul class="nav nav-tabs" role="tablist">
                             '.$blog_li.'
                             '.$work_li.'
                             '.$mydocs_li.'
@@ -462,7 +464,7 @@ if ($userdata) {
 
         //show blog_posts    
         if ($blog_posts) {
-            $tool_content .= '<div id="blog" role="tabpanel" class="'.$blog_div_class.'" style="padding-top:20px">';
+            $tool_content .= '<div id="blog" role="tabpanel" class="'.$blog_div_class.'" aria-labelledby="blogtab" style="padding-top:20px">';
             //usort($blog_posts, "cmp");
             $tool_content .= "<div class='row'>";
             $tool_content .= "<div class='col-sm-12'>";
@@ -474,7 +476,7 @@ if ($userdata) {
                     $post->course_title = $langUserBlog;
                 }
                 $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
-                                    <div class='panel-heading notes_thead'>
+                                    <div class='panel-heading'>
                                         <div class='pull-right'>
                                             ". action_button(array(
                                                     array(
@@ -488,7 +490,7 @@ if ($userdata) {
                                          </div>
                                             <h3 class='panel-title'>".q($data['title'])."</h3>
                                     </div>
-                                    <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                                    <div class='panel-body'>
                                         <button class='btn btn-success pe-none'>" . nice_format($data['timestamp'], true). "</button><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                                     </div>
                                                     <div class='panel-footer panel-body-progress ps-2'>
@@ -500,12 +502,12 @@ if ($userdata) {
             }
             $tool_content .= "</div>
                             </div>
-                          </div></div>";
+                          </div>";
         }
         
         //show assignment submissions
         if ($submissions) {
-            $tool_content .= '<div id="works" role="tabpanel" class="'.$work_div_class.'" style="padding-top:20px">';
+            $tool_content .= '<div id="works" role="tabpanel" class="'.$work_div_class.'" aria-labelledby="worktab" style="padding-top:20px">';
             //usort($submissions, "cmp");
             $tool_content .= "<div class='row'>";
             $tool_content .= "<div class='col-sm-12'>";
@@ -519,11 +521,11 @@ if ($userdata) {
                 } else {
                     $assignment_type = $m['group_work'];
                 }
-                $submission_header_content = "<div><h3 class='panel-title text-white'>".$langTitle.": ".q($data['title'])."</h3></div>";
+                $submission_header_content = "<div><h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3></div>";
                 $submission->course_title = $langCourse.': '.$submission->course_title;
                 $submission_content = "<div class='well'>"; 
-                $submission_content .= "<div><button type='button' class='btn btn-primary btn-xs' data-bs-toggle='collapse' data-bs-target='#header_more_$submission->id'>$langMore</button></div>
-                                       <div id='header_more_$submission->id' class='collapse panel-body-admin ps-3 pe-3 pt-3 pb-3 mt-3 mb-3'>";
+                $submission_content .= "<div><button type='button' class='btn btn-primary btn-sm' data-bs-toggle='collapse' data-bs-target='#header_more_$submission->id'>$langMore</button></div>
+                                       <div id='header_more_$submission->id' class='collapse panel-body'>";
                 if (!empty($data['descr'])) {
                     $submission_content .= "<div><b class='control-label-notes pt-3 pb-3'>".$langDescription."</b>:</div><div>".$data['descr']."</div>";
                 }
@@ -543,8 +545,8 @@ if ($userdata) {
                                               <div class='col-sm-6'>$submission->course_title</div>
                                           </div>
                                       </div>";
-                $tool_content .= "<div class='panel panel-action-btn-default'>
-                                    <div class='panel-heading notes_thead'>
+                $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
+                                    <div class='panel-heading'>
                                         <div class='pull-right'>
                                             ". action_button(array(
                                                         array(
@@ -558,7 +560,7 @@ if ($userdata) {
                                          </div>
                                             $submission_header_content
                                     </div>
-                                    <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                                    <div class='panel-body'>
                                     $submission_content    
                                     </div>
                                     $submission_footer
@@ -571,18 +573,18 @@ if ($userdata) {
         
         //show mydocs collection
         if ($docs) {
-            $tool_content .= '<div id="mydocs" role="tabpanel" class="'.$mydocs_div_class.'" style="padding-top:20px">';
+            $tool_content .= '<div id="mydocs" role="tabpanel" class="'.$mydocs_div_class.'" aria-labelledby="blogtab" style="padding-top:20px">';
             //usort($docs, "cmp");
             $tool_content .= "<div class='table-responsive'>
                                 <table class='announcements_table'>
                                   <tbody>
                                     <tr class='notes_thead'>
-                                      <th class='text-left' width='60'>$langType</th>
-                                      <th class='text-left'>$langName</th>
-                                      <th class='text-left'>$langDate</th>
-                                      <th class='text-left'>$langSize</th>";
+                                      <th class='text-white text-left' width='60'>$langType</th>
+                                      <th class='text-white text-left'>$langName</th>
+                                      <th class='text-white text-left'>$langDate</th>
+                                      <th class='text-white text-left'>$langSize</th>";
             if ($id == $uid) {
-                $tool_content .= "<th class='text-center'>".icon('fa-gears', $langCommands)."</th>";
+                $tool_content .= "<th class='text-white text-center'>".icon('fa-gears', $langCommands)."</th>";
             }
                                       
             $tool_content .= "</tr>";
@@ -627,12 +629,12 @@ if ($userdata) {
         }
         
         if ($userdata->eportfolio_enable == 1) {
-            $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/resources.php?id=$id&token=$token", $langUserePortfolio)."</div>";
+            $social_share = "<div class='col-sm-12 mt-3'><div class='shadow-sm p-3 rounded float-end'>".print_sharing_links($urlServer."main/resources.php?id=$id&token=$token", $langUserePortfolio)."</div></div>";
         } else {
             $social_share = '';
         }
         
-        $tool_content .= $social_share.'</div>';
+        $tool_content .= $social_share.'</div></div>';
     }
 }
 

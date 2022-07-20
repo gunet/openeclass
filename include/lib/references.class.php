@@ -377,16 +377,29 @@ class References {
             return false;
         }
         $objprops = self::get_module_from_objtype($item_type);
-        $res = Database::get()->queryArray("SELECT {$objprops['id_field']} id, {$objprops['title_field']} title FROM {$objprops['objtable']} WHERE {$objprops['id_field']} = ?d", $item_id);    
+        $res = Database::get()->queryArray("SELECT {$objprops['id_field']} id, {$objprops['title_field']} title FROM {$objprops['objtable']} WHERE {$objprops['id_field']} = ?d", $item_id);   
         if($res){
             $itemattributes = $res[0];
             if($item_type == 'course'){
-                $itemurl .= $objprops['relative_prefix_path'].sprintf($objprops['relative_module_path'], course_id_to_code($itemattributes->id));
+                //$itemurl .= $objprops['relative_prefix_path'].sprintf($objprops['relative_module_path'], course_id_to_code($itemattributes->id));
+
+                //////////////////////////////////////////////////////
+                // ΔΙΚΗ ΜΟΥ ΠΡΟΣΘΗΚΗ ΓΙΑΤΙ ΤΟ course_code ΗΤΑΝ NULL //
+                //////////////////////////////////////////////////////
+
+                $itemurl .= $objprops['relative_prefix_path'].sprintf($objprops['relative_module_path'], course_id_to_code($course_id));
             }    
             else{
-                $itemurl .= $objprops['relative_prefix_path'].$objprops['relative_module_path'].'?';
+                $itemurl .= $objprops['relative_prefix_path'].$objprops['relative_module_path'].'index.php?';
                 if(!empty($course_id)){
-                    $itemurl .= $objprops['course_parameter']."=".course_id_to_code($itemattributes->id);
+                    //$itemurl .= $objprops['course_parameter']."=".course_id_to_code($itemattributes->id);
+
+                    //////////////////////////////////////////////////////
+                    // ΔΙΚΗ ΜΟΥ ΠΡΟΣΘΗΚΗ ΓΙΑΤΙ ΤΟ course_code ΗΤΑΝ NULL //
+                    //////////////////////////////////////////////////////
+
+                    $itemurl .= $objprops['course_parameter']."=".course_id_to_code($course_id);
+
                     if(!empty($objprops['item_id_parameter'])){
                         $itemurl .= '&amp;';
                     }

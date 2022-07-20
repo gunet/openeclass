@@ -3552,7 +3552,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-cogs";
     if (count($out_secondary)) {
         $action_button .= "<div class='btn-group'><button type='button' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
-        $action_button .= "  <ul class='row p-4 dropdown-menu dropdown-menu-end myuls' role='menu'>
+        $action_button .= "  <ul class='row p-3 dropdown-menu dropdown-menu-end myuls' role='menu'>
                      ".implode('', $out_secondary)."
                   </ul></div>";
     }

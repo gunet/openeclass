@@ -6,7 +6,7 @@
 <script type='text/javascript'>
 
 
-console.log('{{ $_SERVER['REQUEST_URI'] }}');
+
     
     function act_confirm() {
         $('.confirmAction').on('click', function (e) {

@@ -124,27 +124,27 @@ function show_assignments() {
                 <fieldset>
                     <input type='hidden' name='file' value='" . q($_GET['submit']) . "'>
                     <input type='hidden' name='group_id' value='$group_id'>
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                         <label for='title' class='col-sm-2 control-label'>$langWorks ($langSelect):</label>
-                        <div class='col-sm-10'>
+                        <div class='col-sm-12'>
                             <table class='table-default'>
-                                <tr>
-                                    <th class='left' colspan='2'>$langTitle</th>
-                                    <th align='center' width='30%'>$langGroupWorkDeadline_of_Submission</th>
-                                    <th align='center' width='10%'>$m[submitted]</th>
-                                    <th align='center' width='10%'>$langSelect</th>
+                                <tr class='list-header'>
+                                    <th class='left text-white ps-3' colspan='2'>$langTitle</th>
+                                    <th class='text-white' align='center' width='30%'>$langGroupWorkDeadline_of_Submission</th>
+                                    <th class='text-white' align='center' width='10%'>$m[submitted]</th>
+                                    <th class='text-white' align='center' width='10%'>$langSelect</th>
                                 </tr>
                                 $table_content
                             </table>
                         </div>
                     </div>
-                    <div class='form-group'>
-                        <label for='title' class='col-sm-2 control-label'>$m[comments]:</label>
-                        <div class='col-sm-10'>
+                    <div class='form-group mt-3'>
+                        <label for='title' class='col-sm-6 control-label-notes'>$m[comments]:</label>
+                        <div class='col-sm-12'>
                             <textarea name='comments' rows='4' cols='60' class='form-control'></textarea>
                         </div>
                     </div>
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                         <div class='col-sm-10 col-sm-offset-2'>
                             <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                             <a class='btn btn-default' href='$urlServer/modules/group/document.php?course=$course_code&group_id=$group_id'>$langCancel</a>
@@ -185,7 +185,7 @@ function submit_work($uid, $group_id, $id, $file) {
 			<br>$m[the_file] \"$original_filename\" $m[was_submitted]<br>
 			<a href='index.php?course=$course_code'>$langBack</a></div><br>";
     } else {
-        $tool_content .="<div class='alert alert-danger'>$langUploadError<br>
-		<a href='index.php?course=$course_code'>$langBack</a></div><br>";
+        $tool_content .="<div class='col-sm-12'><div class='alert alert-danger'>$langUploadError<br>
+		<a href='index.php?course=$course_code'>$langBack</a></div></div><br>";
     }
 }

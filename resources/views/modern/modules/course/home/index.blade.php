@@ -39,11 +39,6 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                    <p class='mt-5'>
-                        <a class="btn btn-secondary rounded-circle float-end" data-bs-toggle="collapse" href="#InfoCourse" role="button" aria-expanded="false" aria-controls="InfoCourse">
-                            <i class='fa fa-arrow-down'></i>
-                        </a>
-                    </p>
 
                     @if(Session::has('message'))
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
@@ -54,102 +49,79 @@
                         </div>
                     @endif
 
-                    <div class="collapse mt-2" id="InfoCourse">
-                        <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="tools-courses-new ps-2 pe-2 shadow-lg p-3 mb-5 bg-body rounded bg-primary">
-                                <div class='row p-2'>
-                                    <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
-                                        <a data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langCitation') }}'></span> {{ trans('langCitation') }}</a>
-                                    </div>
-                                    <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
-                                        @if($uid)
-
-                                            @if ($is_course_admin)
-                                                <a class="ps-2 pe-2 float-end" href="{{ $urlAppend }}modules/user/index.php?course={{$course_code}}"><span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span> {{ $numUsers }}&nbsp;{{ trans('langRegistered') }}</a>
-                                            @else
-                                                @if ($visible == COURSE_CLOSED)
-                                                    <a class="ps-2 pe-2 float-end" href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}"><span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span> {{ $numUsers }}&nbsp;{{ trans('langRegistered') }}</a>
-                                                @endif
-                                            @endif
-
-                                        @endif
-                                    </div>
-                                </div>
-
-
-
-                                    @if(isset($rating_content) || isset($social_content) || isset($comment_content))
-                                        <div class='row p-2'>
-                                            <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
-                                                @if(isset($rating_content))
-                                                    <li>
-                                                        {!! $rating_content !!}
-                                                    </li>
-                                                @endif
-                                            </div>
-
-
-                                            <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
-                                                @if(isset($social_content) || isset($comment_content))
-                                                    <span class='float-end ps-2 pe-2'>
-                                                        @if(isset($comment_content))
-                                                            {!! $comment_content !!}
-                                                        @endif
-                                                        @if(isset($social_content) && isset($comment_content))
-                                                            &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;
-                                                        @endif
-                                                        @if(isset($social_content))
-                                                            {!! $social_content !!}
-                                                        @endif
-                                                    </span>
-
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                    @endif
-
-                                @if ($offline_course)
-                                    <li>
-                                        <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}">
-                                            <span class="fa fa-download fa-fw" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ trans('langDownloadCourse') }}"></span>
-                                        </a>
-                                    </li>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
 
                     <div class='col-sm-12'>
                         <div class='panel panel-default mt-3 border-0 col_maincontent_coursePage'>
                             <div class='panel-body'>
-                                @if ($course_info->home_layout == 1)
-                                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                                        <figure>
-                                            <picture>
-                                                @if($course_info->course_image)
-                                                <img class='uploadImageCourse' src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_info->course_image}}' alt='Course Banner'/>
+                                <div class='row'>
+                                    <div class='col-12 pb-2'>
+                                        <ul class="nav navbar navbar-left d-flex d-inline-flex float-end">
+                                            <li class='nav-item d-inline-flex  align-items-center mr-2 ps-3 pe-3'>
+                                                <a href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation'>
+                                                    <span class='fa fa-paperclip fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langCitation') }}"></span>
+                                                </a>
+                                            </li>
+                                            @if($uid)
+                                                @if ($is_course_admin)
+                                                    <li class='nav-item d-inline-flex  align-items-center mr-2 ps-3 pe-3'>
+                                                        <a href="{{ $urlAppend }}modules/user/index.php?course={{$course_code}}">
+                                                            <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
+                                                        </a>
+                                                    </li>
                                                 @else
-                                                <img class='uploadImageCourse' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
+                                                    @if ($visible == COURSE_CLOSED)
+                                                        <li class='nav-item d-inline-flex  align-items-center mr-2 ps-3 pe-3'>
+                                                            <a href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}">
+                                                                <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
+                                                            </a>
+                                                        </li>
+                                                    @endif
                                                 @endif
+                                            @endif
+                                            @if ($offline_course)
+                                                <li class='nav-item d-inline-flex  align-items-center mr-2 ps-3 pe-3'>
+                                                    <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}">
+                                                        <span class="fa fa-download fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langDownloadCourse') }}"></span>
+                                                    </a>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    </div><hr>
+                                    @if($course_info->home_layout == 1)
+                                        <div class='col-lg-6 col-12'>
+                                            <figure>
+                                                <picture>
+                                                    @if($course_info->course_image)
+                                                    <img class='uploadImageCourse' src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_info->course_image}}' alt='Course Banner'/>
+                                                    @else
+                                                    <img class='uploadImageCourse' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
+                                                    @endif
+                                                </picture>
+                                            </figure>
+                                        </div>
+                                        <div class='col-lg-6 col-12'>
+                                            <div class='course_info'>
+                                                @if ($course_info->description)
+                                                        {!! $course_info->description !!}
+                                                @else
+                                                    <p class='not_visible'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class='col-12'>
+                                            <div class='course_info'>
+                                                @if ($course_info->description)
+                                                        <div class="control-label-notes">{{ trans('langDescription') }}</div>
+                                                        {!! $course_info->description !!}
+                                                @else
+                                                    <p class='not_visible'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
 
-                                            </picture>
-                                        </figure>
-
-                                    </div>
-                                @endif
-                                <div class='col-12{{ $course_info->home_layout == 1 ? ' col-sm-7' : ''}}'>
-                                    <div class='course_info'>
-                                        @if ($course_info->description)
-                                                <div class="control-label-notes">{{ trans('langDescription') }}</div>
-                                                {!! $course_info->description !!}
-                                        @else
-                                            <p class='not_visible'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
-                                        @endif
-                                    </div>
                                 </div>
-
-                                <div class="row p-2"></div>
 
                                 @if ((!$is_editor) and (!$courseDescriptionVisible))
                                     @if ($course_info->course_license)
@@ -168,11 +140,11 @@
                                                 @if($is_editor)
                                                     <div class="col-xl-7 col-lg-7 col-md-6 col-sm-12 col-12 d-flex justify-content-md-end justify-content-center">
                                                         @if($courseDescriptionVisible>0)
-                                                            <span class='float-md-end pe-md-2 mt-md-0 float-start pe-0 mt-5'>{{trans('langCourseDescription')}}</span>
+                                                            <span class='float-md-end pe-md-0 mt-md-0 float-start pe-0 mt-5'>{{trans('langCourseDescription')}}</span>
                                                         @else
-                                                            <span class='float-md-end pe-md-2 mt-md-0 float-start pe-0 mt-5'>{{trans('langAdd')}}</span>
+                                                            <span class='float-md-end pe-md-0 mt-md-0 float-start pe-0 mt-5'>{{trans('langAdd')}}</span>
                                                         @endif
-                                                        <span class='float-md-end pe-md-2 mt-md-0 float-start pe-0 mt-5'>{!! $edit_course_desc_link !!}</span>
+                                                        <span class='float-md-end pe-md-0 mt-md-0 float-start pe-0 mt-5'>{!! $edit_course_desc_link !!}</span>
                                                     </div>
                                                 @endif
                                             </div>
@@ -184,10 +156,13 @@
                                                 <div class='collapse shadow-sm p-3 bg-body rounded' id='collapseDescription'>
                                                     <div class='col-12'>
                                                         @foreach ($course_descriptions as $row)
-                                                            <div class='d-flex justify-content-between'>
-                                                                <p class='control-label-notes text-start'>{{$row->title}}</p>
-                                                                {!! standard_text_escape($row->comments) !!}
-                                                                
+                                                            <div class='row'>
+                                                                <div class='col-xl-6 col-12'>
+                                                                    <p class='control-label-notes text-start'>{{$row->title}}</p>
+                                                                </div>
+                                                                <div class='col-xl-6 col-12'>
+                                                                    {!! standard_text_escape($row->comments) !!}
+                                                                </div>
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -199,158 +174,173 @@
 
                             </div>
 
+
+                            @if(isset($rating_content) || isset($social_content) || isset($comment_content)) 
+                                <div class='panel-footer'>
+                                    <div class='row'>
+                                        @if(isset($rating_content))
+                                            <div class='col-xl-4 col-lg-4 col-12 mt-lg-0 mt-4'>
+                                                <div class='ps-2 d-flex justify-content-lg-start justify-content-center'>{!! $rating_content !!}</div>
+                                            </div>
+                                        @endif
+                                        @if(isset($comment_content))
+                                            <div class='col-xl-4 col-lg-3 col-12 mt-lg-0 mt-4'>
+                                                <div class='d-flex justify-content-center'>{!! $comment_content !!}</div>
+                                            </div>  
+                                        @endif
+                                        @if(isset($social_content))
+                                            <div class='col-xl-4 col-lg-5 col-12 mt-lg-0 mt-4'>
+                                                <div class='d-flex justify-content-lg-end justify-content-center pe-1'>{!! $social_content !!}</div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+
                         </div>
                     </div>
-                </div> <!-- end row p-5 -->
 
-                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
-                    <div class="col-xl-8 col-lg-6 col-md-12 col_maincontent_active_unit">
-                        <div class="pt-3 bg-white">
-                            @if (!$alter_layout)
-                                <div class='col-md-12 course-units'>
+                    <div class="col-xl-8 col-lg-6 col-md-12 col_maincontent_unit mt-4">
+                        @if (!$alter_layout)
+                            <div class='panel panel-default'>
+                                <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                     <div class='row'>
-                                        <div class='col-md-12 mt-5px'>
-                                            <div class='content-title pull-left h5'>
+                                        <div class='col-sm-12'>
+                                            <div class='control-label-notes text-center'>
                                                 {{ trans('langCourseUnits') }}
                                             </div>
-                                            <div class='row p-2'></div><div class='row p-2'></div>
-                                                <a style="float:right" class='pull-left add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{$language}}&topic=course_units' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'>
-                                                {{ trans('langHelp') }} <span class='fa fa-question-circle'></span>
-                                                </a>
+                                        </div>
+                                        
+                                        <div class='col-md-6 col-12 d-flex justify-content-md-start justify-content-center mt-md-0 mt-4'>
                                             @if ($is_editor and $course_info->view_type == 'units')
-                                                <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='{{ trans('langAddUnit') }}'>
-                                                {{ trans('langAddUnit') }} <span class='fa fa-plus-circle'></span>
-
+                                                <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
+                                                    {{ trans('langAddUnit') }} <span class='fa fa-plus-circle'></span>
                                                 </a>
-                                            @endif
+                                            @endif 
+                                        </div>
+                                        
+                                        <div class='col-md-6 col-12 d-flex justify-content-md-end justify-content-center mt-md-0 mt-4'>
+                                            <a class='add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                                {{ trans('langHelp') }} <span class='fa fa-question-circle'></span>
+                                            </a>
                                         </div>
                                     </div>
-                                    <hr>
-                                    <!-- <div class='row boxlist no-list' id='boxlistSort'> -->
+                                </div> 
+
+                                <div class='panel-body'>
                                     <div class='' id='boxlistSort'>
                                         {!! $cunits_content !!}
                                     </div>
-
-                                    {!! $course_home_main_area_widgets !!}
                                 </div>
-                            @else
-                                <div class='col-sm-12'>
-                                    {{ trans('langCourseUnits') }}<hr>
-                                    <div class='panel'>
-                                        <div class='panel-body not_visible'> - {{ trans('langNoUnits') }} - </div>
+                                
+                            </div>
+                            {!! $course_home_main_area_widgets !!}
+                        @else
+                            <div class='panel panel-default'>
+                                <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
+                                    {{ trans('langCourseUnits') }}
+                                </div>
+                                <div class='panel-body'>
+                                    <div class='not_visible text-center'> - {{ trans('langNoUnits') }} - </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        <div class="panel panel-default mt-4">                            
+                            <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
+                                <div class='control-label-notes text-center'>{{ trans('langAnnouncements') }}</div>
+                            </div>
+                            <div class='panel-body'>
+                                <ul class='tablelist'>
+                                    {!! course_announcements() !!}
+                                </ul>
+                            </div>
+                            <div class='panel-footer'>
+                                <div class='text-end'>
+                                    <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code}}'>
+                                        <small>{{ trans('langMore') }}&hellip;</small>
+                                    </a>
+                                </div>
+                            </div>
+                            {!! $course_home_sidebar_widgets !!}
+                        </div>
+
+                    </div><!-- end col units -->
+
+                    <div class="col-xl-4 col-lg-6 col-md-12 mt-lg-4 mt-4 float-end ">
+
+                        <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar">
+                            {!! $user_personal_calendar !!}
+                            <div class='col-sm-12 mt-4 pb-2'>
+                                <div class='row'>
+                                    <div class='col-sm-12 event-legend'>
+                                        <span class='event event-important mt-1'></span>
+                                        <span>{{ trans('langAgendaDueDay') }}</span>
+                                    </div>
+                                        
+                                    <div class='col-sm-12 event-legend'>
+                                        <span class='event event-info mt-1'></span>
+                                        <span>{{ trans('langAgendaCourseEvent') }}</span>
+                                    </div>
+
+                                    <div class='col-sm-12 event-legend'>
+                                        <span class='event event-success mt-1'></span>
+                                        <span>{{ trans('langAgendaSystemEvent') }}</span>
+                                    </div>
+                                    <div class='col-sm-12 event-legend pb-3'>
+                                        <span class='event event-special'></span>
+                                        <span>{{ trans('langAgendaPersonalEvent') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default mt-4">
+                            <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
+                                <div class='control-label-notes text-center'>{{ trans('langCourseCompletion') }}</div>
+                            </div>
+                            @if(isset($course_completion_id) and $course_completion_id > 0)
+                                <div class='panel-body'>
+                                    <div class='text-center'>
+                                        <div class='col-sm-12'>
+                                            <div class="center-block" style="display:inline-block;">
+                                                <a style="text-decoration:none" href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
+                                            @if ($percentage == '100%')
+                                                <i class='fa fa-check-circle fa-5x state_success'></i>
+                                            @else
+                                                <div class='course_completion_panel_percentage'>
+                                                    {{ $percentage }}
+                                                </div>
+                                            @endif
+                                            </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if (isset($level) && !empty($level))
+                                <div class='panel panel-default mt-3'>
+                                    <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
+                                        <div class='control-label-notes text-center'>{{ trans('langOpenCourseShort') }}</div>
+                                    </div>
+                                    <div class='panel-body'>
+                                        {!! $opencourses_level !!}
+                                    </div>
+                                    <div class='panel-footer'>
+                                        {!! $opencourses_level_footer !!}
                                     </div>
                                 </div>
                             @endif
                         </div>
-                    </div><!-- end col units -->
-                    <div class="col-xl-4 col-lg-6 col-md-12 mt-lg-0 mt-4 float-end ">
-
-                        <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar">
-                            {!! $user_personal_calendar !!}
-                            <div class='row p-2'></div>
-                            <div class='row p-2'></div>
-                            <div class='panel-footer'>
-                                <div class='row'>
-                                    <div class='col-sm-6 event-legend'>
-                                        <div>
-                                            <span class='event event-important'></span>
-                                            <span>{{ trans('langAgendaDueDay') }}</span>
-                                        </div>
-                                        <div>
-                                            <span class='event event-info'></span>
-                                            <span>{{ trans('langAgendaCourseEvent') }}</span>
-                                        </div>
-                                    </div>
-                                    <div class='col-sm-6 event-legend'>
-                                        <div>
-                                            <span class='event event-success'></span>
-                                            <span>{{ trans('langAgendaSystemEvent') }}</span>
-                                        </div>
-                                        <div>
-                                            <span class='event event-special'></span>
-                                            <span>{{ trans('langAgendaPersonalEvent') }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class='row p-2'></div>
-                            <div class='row p-2'></div>
-                        </div>
-
-                        <div class="col-md-12 pt-4 pb-4 ps-5 pe-5 mt-lg-3 mt-4 announcement-course-page">                            
-                            <h5 class='content-title'>{{ trans('langAnnouncements') }}</h5>
-                            <hr>
-                            <div class='panel'>
-                                <div class='panel-body' style='margin-left:-15px;'>
-                                    <ul class='tablelist'>
-                                        {!! course_announcements() !!}
-                                    </ul>
-                                </div>
-                                <hr>
-                                <div class='panel-footer'>
-                                    <div class='pull-right'>
-                                        <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code}}'>
-                                            <small>{{ trans('langMore') }}&hellip;</small>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class='pb-4'>{!! $course_home_sidebar_widgets !!}</div>
-                        </div>
-
-                        <div class="col-md-12 px-5 mt-lg-3 mt-4 col_maincontent_active_CourseComplete">
-                            <div class="row p-2 bg-white"></div>
-                            <div class="row p-2 bg-white"></div>
-                            <div class="pb-5 bg-white">
-                            <h5 class='content-title'>{{ trans('langCourseCompletion') }}</h5>
-                            <hr>
-                                @if(isset($course_completion_id) and $course_completion_id > 0)
-                                    <div class='col-md-12'>
-                                        <div class='panel'>
-                                            <div class='panel-body'>
-                                                <div class='text-center'>
-                                                    <div class='col-sm-12'>
-                                                        <div class="center-block" style="display:inline-block;">
-                                                            <a style="text-decoration:none" href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
-                                                        @if ($percentage == '100%')
-                                                            <i class='fa fa-check-circle fa-5x state_success'></i>
-                                                        @else
-                                                            <div class='course_completion_panel_percentage'>
-                                                                {{ $percentage }}
-                                                            </div>
-                                                        @endif
-                                                        </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-
-                                @if (isset($level) && !empty($level))
-                                    <div class='col-md-12'>
-                                        <h5 class='content-title'>{{ trans('langOpenCourseShort') }}</h5>
-                                        <div class='panel'>
-                                            <div class='panel-body'>
-                                                {!! $opencourses_level !!}
-                                            </div>
-                                            <div class='panel-footer'>
-                                                {!! $opencourses_level_footer !!}
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
 
 
 
-                    </div><!-- end col calendar -->
+                    </div><!-- end col calendar-announcements-progress -->
 
-                </div><!-- end row pb3 pt1 -->
-
+                
+                </div> <!-- end row -->
+               
 
             </div><!-- end col-10 maincontent active-->
 
