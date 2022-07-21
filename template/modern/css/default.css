@@ -110,9 +110,14 @@
       display:none;
     }
 
+    .item-content .not_visible{
+      opacity:0.3;
+    }
+    
     .not_visible td{
       opacity:0.3;
     }
+    
     .not_visible td:last-child{
       opacity:1;
     }

@@ -130,8 +130,8 @@ $tool_content .= action_bar(array(
 
 $boolean_field = "";
 $tool_content .= "
-    <div class='row extapp'><div class='col-xs-12'>
-      <div class='form-wrapper'>
+    <div class='extapp'><div class='col-12'>
+      <div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
 
 foreach ($app->getParams() as $param) {
@@ -141,10 +141,10 @@ foreach ($app->getParams() as $param) {
         $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
     } else if ($param->name() == LtiPublishApp::FRAMEANCESTORS) {
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "&nbsp;&nbsp;";
-        $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langLtiPublishFrameAncestorsTooltip'></span></label>";
-        $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='https://url1, https://url2'></div>";
+        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-6 control-label-notes'>" . $param->display() . "&nbsp;&nbsp;";
+        $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langLtiPublishFrameAncestorsTooltip'></span></label>";
+        $tool_content .= "<div class='col-sm-12'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='https://url1, https://url2'></div>";
         $tool_content .= "</div>";
     } else if ($param->name() == LtiPublishApp::ENABLEDCOURSES) {
         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
@@ -158,10 +158,10 @@ foreach ($app->getParams() as $param) {
         } else {
             $selected = "selected";
         }
-        $tool_content .= "<div class='form-group' id='courses-list'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-3 control-label'>$langUseOfApp&nbsp;&nbsp;";
-        $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfAppInfo'></span></label>";
-        $tool_content .= "<div class='col-sm-9'><select id='select-courses' class='form-control' name='lti_courses[]' multiple>";
+        $tool_content .= "<div class='form-group mt-3' id='courses-list'>";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-6 control-label-notes'>$langUseOfApp&nbsp;&nbsp;";
+        $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langUseOfAppInfo'></span></label>";
+        $tool_content .= "<div class='col-sm-12'><select id='select-courses' class='form-control' name='lti_courses[]' multiple>";
         $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";
         foreach($courses_list as $c) {
             $selected = in_array($c->id, $selections) ? "selected" : "";
@@ -170,16 +170,16 @@ foreach ($app->getParams() as $param) {
         $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></div></div>";
         $tool_content .= "<input type='hidden' id='enabled-courses' name='" . $param->name() . "'>";
     } else {
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
-        $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
+        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-6 control-label-notes'>" . $param->display() . "</label>";
+        $tool_content .= "<div class='col-sm-12'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
         $tool_content .= "</div>";
     }
 }
 
 $tool_content .= $boolean_field;
 $tool_content .= "
-            <div class='form-group'>
+            <div class='form-group mt-3'>
               <div class='col-sm-offset-2 col-sm-10'>
                 <button class='btn btn-primary' type='submit' name='submit'>$langSubmit</button>
                 <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>

@@ -49,40 +49,24 @@
                         {!! $action_bar !!}
 
                        
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-                            <div class='panel shadow-sm p-3 bg-body rounded'>
+                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                            <div class='panel panel-default'>
+                                <div class='panel-heading'>
+                                   <span class='control-label-notes'>{!! $title !!}</span>
+                                </div>
                                 <div class='panel-body'>
-                                    <div class='single_announcement'>
-                                        <label class="control-label-notes">{{trans('langHomePageIntroTitle')}}</label>
-                                        <div class='announcement-title'>
-                                            {!! $title !!}
-                                        </div>
-
-                                        <div class="row p-2"></div>
-
-
-                                        <label class="control-label-notes">{{trans('langDate')}}</label>
-                                        <div class='announcement-date'>
-                                            {!! $date !!}
-                                        </div>
-
-                                        <div class="row p-2"></div>
-
-
-                                        <label class="control-label-notes">{{trans('langContent')}}</label>
-                                        <div class='announcement-main'>
-                                            {!! $content !!}
-                                        </div>
-                                    </div>
-
-                                    <div class="row p-2"></div>
-
-
+                                    <span class='text-secondary'>{!! $content !!}</span>
                                     @if ($tags_list)
-                                        <hr>
-                                        <div>{{ trans('langTags') }}: {!! $tags_list !!}</div>
+                                        <div class='text-start'>{{ trans('langTags') }}: {!! $tags_list !!}</div>
                                     @endif
                                 </div>
+                                <div class='panel-footer'>
+                                    
+                                    <div class='text-end text-secondary'>
+                                        {!! $date !!}
+                                    </div>
+                                </div>
+                                
                             </div>
                         </div>
                         

@@ -49,6 +49,7 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
         }
         if ($tag->module_id !== $latest_module_id){
             $tool_content .= "
+            <div class='col-sm-12 mt-3'>
                     <div class='panel panel-default'>
                         <div class='panel-heading'>
                             " . $modules[$tag->module_id]['title'] . "
@@ -79,9 +80,9 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
         $latest_module_id = $tag->module_id;
     }
     if ($tag_elements) {
-        $tool_content .= "</div></div>";
+        $tool_content .= "</div></div></div></div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langTagNotFound</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langTagNotFound</div></div>";
     }
 }
 

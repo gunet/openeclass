@@ -1462,7 +1462,7 @@ function submit_work($id, $on_behalf_of = null) {
                 }
             }
 
-            //triggerGame($course_id, $user_id, $row->id);
+            triggerGame($course_id, $user_id, $row->id);
             triggerAssignmentAnalytics($course_id, $user_id, $row->id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
             triggerAssignmentAnalytics($course_id, $user_id, $row->id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $sid,
@@ -3718,7 +3718,7 @@ function delete_assignment($id) {
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id);
             Database::get()->query("DELETE FROM assignment_grading_review WHERE assignment_id = ?d", $id);
             foreach ($uids as $user_id) {
-                //triggerGame($course_id, $user_id, $id);
+                triggerGame($course_id, $user_id, $id);
                 triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
                 triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
             }
@@ -3753,7 +3753,7 @@ function purge_assignment_subs($id) {
     $uids = Database::get()->queryArray("SELECT uid FROM assignment_submit WHERE assignment_id = ?d", $id);
     if (Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id)->affectedRows > 0) {
         foreach ($uids as $user_id) {
-            //triggerGame($course_id, $user_id, $id);
+            triggerGame($course_id, $user_id, $id);
             triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
             triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
         }
@@ -3804,7 +3804,7 @@ function delete_user_assignment($id) {
             $userdir = preg_replace('|/[^/]+$|', '', $file);
             rmdir($userdir);
         }
-        //triggerGame($course_id, $info->uid, $id);
+        triggerGame($course_id, $info->uid, $id);
         triggerAssignmentAnalytics($course_id, $info->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
         triggerAssignmentAnalytics($course_id, $info->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
     }
@@ -5769,7 +5769,7 @@ function submit_grade_comments($args) {
                                     WHERE id = ?d", $grade, $grade_rubric, $comment, $comments_filepath,
                                             $comments_real_filename, Log::get_client_ip(), $sid)->affectedRows>0) {
             $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-            //triggerGame($course_id, $quserid, $id);
+            triggerGame($course_id, $quserid, $id);
             triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
             triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
@@ -5964,7 +5964,7 @@ function submit_grades($grades_id, $grades, $email = false) {
                                                 SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
                                                 WHERE id = ?d", $grade, Log::get_client_ip(), $sid);
                         $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-                    //triggerGame($course_id, $quserid, $assignment->id);
+                    triggerGame($course_id, $quserid, $assignment->id);
                     triggerAssignmentAnalytics($course_id, $quserid, $assignment->id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
                     triggerAssignmentAnalytics($course_id, $quserid, $assignment->id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
                     Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
