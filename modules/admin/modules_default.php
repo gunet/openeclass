@@ -35,7 +35,9 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['module'])) {
         set_config('default_modules', serialize(array_keys($_POST['module'])));
     }
-    Session::Messages($langWikiEditionSucceed, 'alert-success');
+    //Session::Messages($langWikiEditionSucceed, 'alert-success');
+    Session::flash('message',$langWikiEditionSucceed); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/modules_default.php');
 } else {
     $data['disabled'] = [];

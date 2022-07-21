@@ -46,7 +46,9 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    Session::Messages($langAntivirusUpdated, 'alert-success');
+    //Session::Messages($langAntivirusUpdated, 'alert-success');
+    Session::flash('message',$langAntivirusUpdated); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/antivirusmoduleconf.php');
 }
 $toolName = $langBasicCfgSetting;

@@ -78,14 +78,14 @@ if (!isset($_REQUEST['action'])) {
 if (!isset($_GET['action'])) {
     $values = Database::get()->queryArray("SELECT * FROM category_value WHERE category_id = ?d ORDER BY ordering, id", $catId);
     if (count($values) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>" . $langNoResult . "</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>" . $langNoResult . "</div></div>";
     } else {
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<th>$langAllCourseCategoryValues</th><th class='text-right'>".icon('fa-gears', $langActions)."</th>";
+        $tool_content .= "<tr class='list-header'><th class='ps-3'>$langAllCourseCategoryValues</th><th class='text-center'>".icon('fa-gears', $langActions)."</th></tr>";
         foreach ($values as $value) {
             $name = Hierarchy::unserializeLangField($value->name);
             $visibility = $value->active ? '' : ' class=not_visible';
-            $tool_content .= "<tr><td$visibility>" . $name . "</td><td class='option-btn-cell'>";
+            $tool_content .= "<tr><td$visibility>" . $name . "</td><td class='option-btn-cell text-center'>";
             $tool_content .= action_button(array(
                 array(
                     'title' => $langEditChange,
@@ -110,13 +110,17 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         list($names, $name, $ordering, $active) = prepareDataFromPost();
 
         if (empty($names)) {
-            Session::Messages($langEmptyNodeName, 'alert alert-danger');
+            //Session::Messages($langEmptyNodeName, 'alert alert-danger');
+            Session::flash('message',$langEmptyNodeName); 
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId . '&action=add');
         } else {
             // OK Create the new course category value
             $q = "INSERT INTO category_value (category_id, name, ordering, active) VALUES (?d, ?s, ?d, ?d)";
             Database::get()->query($q, $catId, $name, $ordering, $active);
-            Session::Messages($langAddSuccess, 'alert-success');
+            //Session::Messages($langAddSuccess, 'alert-success');
+            Session::flash('message',$langAddSuccess); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId);
         }
     } else {
@@ -135,7 +139,9 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
         // The category value can be deleted
         Database::get()->query("DELETE FROM course_category WHERE category_value_id = ?d", $id);
         Database::get()->query("DELETE FROM category_value WHERE id = ?d", $id);
-        Session::Messages($langCourseCategoryValueErase, 'alert-success');
+        //Session::Messages($langCourseCategoryValueErase, 'alert-success');
+        Session::flash('message',$langCourseCategoryValueErase); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId);
     }
 }
@@ -149,13 +155,17 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         list($names, $name, $ordering, $active) = prepareDataFromPost();
 
         if (empty($names)) {
-            Session::Messages($langEmptyNodeName, 'alert-danger');
+            //Session::Messages($langEmptyNodeName, 'alert-danger');
+            Session::flash('message',$langEmptyNodeName); 
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId . '&action=edit&id=' . $id);
         } else {
             // OK Update the course category value
             $q = "UPDATE category_value SET name = ?s, ordering = ?d, active = ?d WHERE id = ?d";
             Database::get()->query($q, $name, $ordering, $active, $id);
-            Session::Messages($langEditCourseCategoryValueSuccess, 'alert-success');
+            //Session::Messages($langEditCourseCategoryValueSuccess, 'alert-success');
+            Session::flash('message',$langEditCourseCategoryValueSuccess); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId);
         }
     } else {
@@ -193,7 +203,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
     $action = ($id == null) ? 'add' : 'edit';
     $actionValue = ($id == null) ? $GLOBALS['langAdd'] : $GLOBALS['langAcceptChanges'];
 
-    $html .= "<div class='form-wrapper'>
+    $html .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?category=" . $catId . "&amp;action=" . $action . "'>
         <fieldset>";
 
@@ -218,8 +228,8 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
         }
 
         $langSuffix = " (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
-        $html .= "<div class='form-group'><label class='col-sm-3 control-label'>" . $GLOBALS['langName'] . $langSuffix . ":</label>";
-        $tdpre = ($i >= 0) ? "<div class='col-sm-9'>" : '';
+        $html .= "<div class='form-group mt-3'><label class='col-sm-6 control-label-notes'>" . $GLOBALS['langName'] . $langSuffix . ":</label>";
+        $tdpre = ($i >= 0) ? "<div class='col-sm-12'>" : '';
         $placeholder = $GLOBALS['langCourseCategoryValue2'] . $langSuffix;
         $html .= $tdpre . "<input class='form-control' type='text' name='name-" . q($langcode) . "' " . $nameValue . " placeholder='$placeholder'></div></div>";
         $i++;
@@ -228,9 +238,9 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
     // ordering input
     $orderingValue = ($id != null) ? "value='" . $ordering . "'" : '';
     $html .= "
-    <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategoryValueOrdering'] . ":</label>
-        <div class='col-sm-9'>
+    <div class='form-group mt-3'>
+        <label class='col-sm-6 control-label-notes'>" . $GLOBALS['langCourseCategoryValueOrdering'] . ":</label>
+        <div class='col-sm-12'>
             <input class='form-control' type='text' name='ordering' " . $orderingValue . " placeholder='". $GLOBALS['langCourseCategoryValueOrdering2'] . "'>
         </div>
     </div>";
@@ -243,10 +253,10 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
     }
 
     $html .= "
-    <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langChatActive'] . ":</label>
-        <div class='col-sm-9'>
-            <input class='form-control' type='checkbox' name='active' value='1' " . $check_active . ">
+    <div class='form-group mt-3'>
+        <label class='col-sm-6 control-label-notes'>" . $GLOBALS['langChatActive'] . ":</label>
+        <div class='col-sm-12'>
+            <input class='form-check-input' type='checkbox' name='active' value='1' " . $check_active . ">
             <span class='help-block'><small>" . $GLOBALS['langCourseCategoryValueActive2'] . "</small></span>
         </div>
     </div>";
@@ -256,7 +266,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
     }
 
     $html .= "
-    <div class='form-group'>
+    <div class='form-group mt-3'>
         <div class='col-sm-9 col-sm-offset-3'>" . form_buttons(array(
             array(
                 'text' => $GLOBALS['langSave'],
@@ -272,7 +282,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
     </fieldset>
     ". generate_csrf_token_form_field() ."
     </form>
-    </div>";
+    </div></div>";
 
     return $html;
 }

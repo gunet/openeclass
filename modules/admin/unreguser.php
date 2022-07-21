@@ -75,10 +75,14 @@ if ($doit) {
             Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM user_certificate WHERE user = ?d", $u);
             $message = "$langWithUsername $u_accoun $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em>";
-            Session::Messages($message, 'alert-info');
+            //Session::Messages($message, 'alert-info');
+            Session::flash('message',$message); 
+            Session::flash('alert-class', 'alert-info');
         }
     } else {
-        Session::Messages($langErrorDelete, 'alert-danger');
+        //Session::Messages($langErrorDelete, 'alert-danger');
+        Session::flash('message',$langErrorDelete); 
+        Session::flash('alert-class', 'alert-danger');
     }
     redirect_to_home_page("edituser.php?u=$u");
 }

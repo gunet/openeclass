@@ -1,6 +1,7 @@
 @extends('layouts.default_old')
 
 @section('content')
+
     {!! isset($action_bar) ?  $action_bar : '' !!}
     @if (isset($auth_methods_active) == 0)
         <div class='alert alert-warning'>{{ trans('langAuthChangeno') }}</div>

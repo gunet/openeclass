@@ -83,7 +83,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class='panel-body bg-light p-5'>
+                                        <div class='panel-body bg-light p-5' style='border-bottom-right-radius:15px; border-bottom-left-radius:15px;'>
                                             {!! trans('langInfoAbout') !!}
                                         </div>
                                     </div>  

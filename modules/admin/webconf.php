@@ -56,7 +56,9 @@ if (isset($_GET['delete_server'])) {
     $id = $_GET['delete_server'];
     Database::get()->querySingle("DELETE FROM tc_servers WHERE id=?d", $id);
     // Display result message   
-    Session::Messages($langFileUpdatedSuccess, 'alert-success');
+    //Session::Messages($langFileUpdatedSuccess, 'alert-success');
+    Session::flash('message',$langFileUpdatedSuccess); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/webconf.php');
 }
 // Save new config.php
@@ -94,7 +96,9 @@ else if (isset($_POST['submit'])) {
         }
     }
     // Display result message
-    Session::Messages($langFileUpdatedSuccess, 'alert-success');
+    //Session::Messages($langFileUpdatedSuccess, 'alert-success');
+    Session::flash('message',$langFileUpdatedSuccess); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/webconf.php');
 } // end of if($submit)
 

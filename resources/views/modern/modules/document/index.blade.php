@@ -68,7 +68,7 @@
                     
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                         @if ($dialogBox)
-                            @include("modules.document.$dialogBox")
+                            {!! $dialogBox !!}
                         @endif
                     </div>
                     

@@ -69,7 +69,7 @@
                                 @else
                                     @foreach ($faqs as $key => $faq)
                                         <div class='panel panel-default mt-3'>
-                                            <div class='panel-heading' role='tab' id='heading{{ $faq->id }}'>
+                                            <div class='panel-heading' role='tab' id='heading{{ $faq->id }}' style='border-bottom-right-radius:15px; border-bottom-left-radius:15px;'>
                                                 
                                                     <a class='control-label-notes' role='button' data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
                                                         <span>{{ $key+1 }}.</span>{!! $faq->title !!} <span class='caret'></span>

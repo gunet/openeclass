@@ -74,16 +74,17 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
     $checkMap['meta_level'] = metaBuildCheckMap($metaLevels, "meta_level");
 
     $output = "
+    <div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>
 	<form method='post' action='index.php?course=$course_code'>
 	<fieldset>
 	  <input type='hidden' name='metadataPath' value='" . q($metadata) . "' />
 	  <input type='hidden' name='meta_filename' value='$oldFilename' />
 	  <input type='hidden' name='meta_mimetype' value='" . get_mime_type($oldFilename) . "' />
 	  $group_hidden_input
-	  <legend>$langAddMetadata</legend>
+	  <legend class='control-label-notes text-center'>$langAddMetadata</legend>
 	  <table class='table-default'>
 	  <tr>
-	    <th>$langWorkFile:</th>
+	    <th class='bg-light ps-2 text-secondary'>$langWorkFile:</th>
 	    <td>$oldFilename</td>
 	  </tr>";
 
@@ -118,16 +119,16 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
     $output .= metaCheckBoxRow($langIntentedEndUserRole, "meta_intendedenduserrole", $userRoles, $checkMap, $langIntentedEndUserRoleHelp);
 
     $output .= "<tr>
-	    <th>&nbsp;</th>
+	    <th class='bg-light ps-2 text-secondary'>&nbsp;</th>
 	    <td class='right'><input class='btn btn-primary' type='submit' value='$langOkComment' /></td>
 	  </tr>
 	  <tr>
-	    <th>&nbsp;</th>
+	    <th class='bg-light ps-2 text-secondary'>&nbsp;</th>
 	    <td class='right'>$langNotRequired</td>
 	  </tr>
 	  </table>
 	</fieldset>
-	</form>";
+	</form></div></div>";
 
     return $output;
 }
@@ -153,7 +154,7 @@ function metaBuildCheckMap($values, $group) {
 
 function metaFormRow($title, $cell, $help) {
     return "<tr>
-	    <th rowspan='2'>$title:</th>
+	    <th class='bg-light ps-2 text-secondary' rowspan='2'>$title:</th>
 	    <td>$cell</td>
 	  </tr><tr><td>$help</td></tr>";
 }

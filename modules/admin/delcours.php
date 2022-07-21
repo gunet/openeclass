@@ -56,7 +56,9 @@ if (isset($_GET['delete']) && $course_id) {
     }
     delete_course($course_id);
     // Display confirmatiom message for course deletion
-    Session::Messages($langCourseDelSuccess, "alert-success");
+    //Session::Messages($langCourseDelSuccess, "alert-success");
+    Session::flash('message',$langCourseDelSuccess); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/listcours.php');
 }
 

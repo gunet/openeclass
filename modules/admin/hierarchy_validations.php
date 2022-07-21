@@ -171,7 +171,9 @@ function validateCourseNodes($courseId, $checkOwn) {
  * @param string $message - The optional error message to display
  */
 function exitWithError($message) {
-    Session::Messages($message, 'alert-danger');
+    //Session::Messages($message, 'alert-danger');
+    Session::flash('message',$message); 
+    Session::flash('alert-class', 'alert-danger');
 }
 
 /**

@@ -37,7 +37,9 @@ if (isset($_POST['submit'])) {
     $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
     // validation in case it skipped JS validation for department(s)
     if (count($departments) < 1 || empty($departments[0])) {
-        Session::Messages($langEmptyAddNode);
+        //Session::Messages($langEmptyAddNode);
+        Session::flash('message',$langEmptyAddNode); 
+        Session::flash('alert-class', 'alert-success');
         header("Location:" . $urlServer . "modules/admin/multicourse.php");
         exit;
     }
@@ -91,8 +93,16 @@ if (isset($_POST['submit'])) {
         }
         $line = strtok("\n");
     }
-    if (!empty($sucess_messages)) Session::Messages ($sucess_messages, 'alert-success');
-    if (!empty($error_messages)) Session::Messages ($error_messages);
+    if (!empty($sucess_messages)){
+         //Session::Messages ($sucess_messages, 'alert-success');
+         Session::flash('message',$sucess_messages); 
+         Session::flash('alert-class', 'alert-success');
+    }
+    if (!empty($error_messages)){
+         //Session::Messages ($error_messages);
+         Session::flash('message',$error_messages); 
+         Session::flash('alert-class', 'alert-danger');
+    }
     redirect_to_home_page('modules/admin/multicourse.php');
 }
 

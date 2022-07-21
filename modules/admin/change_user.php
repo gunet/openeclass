@@ -63,7 +63,9 @@ if (isset($_REQUEST['username'])) {
         redirect_to_home_page();
     } else {
         $message = sprintf($langChangeUserNotFound, canonicalize_whitespace(q($_POST['username'])));
-        Session::Messages($message, 'alert-danger');
+        //Session::Messages($message, 'alert-danger');
+        Session::flash('message',$message); 
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/admin/change_user.php');
     }
 }

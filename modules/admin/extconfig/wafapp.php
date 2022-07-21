@@ -56,7 +56,9 @@ class WafApp extends ExtApp {
 
     public static function block($output) {
         require_once 'include/tools.php';
-        Session::Messages($output);
+        //Session::Messages($output);
+        Session::flash('message',$output); 
+        Session::flash('alert-class', 'alert-warning');
         header("Location: {$_SERVER['SCRIPT_NAME']}");
         exit();
     }

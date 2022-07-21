@@ -239,17 +239,26 @@ if (isset($_POST['submit'])) {
     }
 
     if ($privacyPolicyChanged and $activate_privacy_policy_consent) {
-        Session::Messages(trans('langPrivacyPolicyConsentAskAgain') .
+        // Session::Messages(trans('langPrivacyPolicyConsentAskAgain') .
+        //     "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
+        //         <button type='submit' class='btn btn-default' name='updatePrivacyPolicy' value='true'>" .
+        //             trans('langPrivacyPolicyConsentRedisplay') . "
+        //         </button>
+        //     </form>", 'alert-info');
+            Session::flash('message',trans('langPrivacyPolicyConsentAskAgain') .
             "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
                 <button type='submit' class='btn btn-default' name='updatePrivacyPolicy' value='true'>" .
                     trans('langPrivacyPolicyConsentRedisplay') . "
                 </button>
-            </form>", 'alert-info');
+            </form>"); 
+            Session::flash('alert-class', 'alert-info');
     }
 
     // Display result message
     Session::flash('scheduleIndexing', $scheduleIndexing);
-    Session::Messages($langFileUpdatedSuccess, 'alert-success');
+    //Session::Messages($langFileUpdatedSuccess, 'alert-success');
+    Session::flash('message',$langFileUpdatedSuccess); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/eclassconf.php');
 
 } // end of if($submit)

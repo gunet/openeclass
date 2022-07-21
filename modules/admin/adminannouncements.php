@@ -130,7 +130,9 @@ if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) &
 
 // action message
 if (isset($message) && !empty($message)) {
-    Session::Messages($message, 'alert-success');
+    //Session::Messages($message, 'alert-success');
+    Session::flash('message',$message); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("/modules/admin/adminannouncements.php");
 }
 
@@ -223,9 +225,14 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         
         $data['checked_public'] = $announcement->visible == 1 ? " checked" : "";
         $data['start_checkbox'] = isset($begindate) ? " checked" : "";
-        $data['startdate'] = isset($begindate) ? $begindate->format("d-m-Y H:i") : date('d-m-Y H:i', strtotime('now'));
+        if($begindate){
+            $data['startdate'] = $begindate->format("d-m-Y H:i");
+        }
         $data['end_checkbox'] = isset($enddate) ? " checked" : "";
-        $data['enddate'] = isset($enddate) ? $enddate->format("d-m-Y H:i") : date('d-m-Y H:i', strtotime('now +1 month'));        
+        if($enddate){
+            $data['enddate'] = $enddate->format("d-m-Y H:i");
+        }
+               
     } else {
         $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, "");
         $data['checked_public'] = " checked";
@@ -234,7 +241,31 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         $data['enddate'] = date('d-m-Y H:i', strtotime('now +1 month'));
     }
     $view = 'admin.other.announcements.create';
-} else {
+} 
+
+elseif (isset($_GET['ann_id'])) {
+    
+    $row = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE id = ". intval($_GET['ann_id']));
+    if(empty($row)){
+        redirect_to_home_page("modules/admin/adminannouncements.php");
+    }else{
+        $data['announcementsID'] = $row;
+
+        $data['action_bar'] = action_bar([
+            [
+                'title' => $langBack,
+                'url' => $_SERVER['SCRIPT_NAME'],
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'
+            ]
+        ]);
+        $view = 'admin.other.announcements.show';
+    }
+}
+
+
+
+else {
     $data['action_bar'] = action_bar([
                                 [
                                     'title' => $langAdminAddAnn,

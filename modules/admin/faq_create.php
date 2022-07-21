@@ -43,7 +43,9 @@ if (isset($_POST['submitFaq'])) {
 
     Database::get()->query("INSERT INTO faq (title, body, `order`) VALUES (?s, ?s, ?d)", $question, $answer, $top + 1);
 
-    Session::Messages("$langFaqAddSuccess", 'alert-success');
+    //Session::Messages("$langFaqAddSuccess", 'alert-success');
+    Session::flash('message',"$langFaqAddSuccess"); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/faq_create.php");
 }
 
@@ -54,7 +56,9 @@ if (isset($_POST['modifyFaq'])) {
 
     Database::get()->query("UPDATE faq SET `title`=?s, `body`=?s WHERE `id`=?d", $question, $answer, $record);
 
-    Session::Messages("$langFaqEditSuccess", 'alert-success');
+    //Session::Messages("$langFaqEditSuccess", 'alert-success');
+    Session::flash('message',"$langFaqEditSuccess"); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/faq_create.php");
 }
 
@@ -63,7 +67,9 @@ if (isset($_GET['faq']) && $_GET['faq'] == 'delete') {
 
     Database::get()->query("DELETE FROM faq WHERE `id`=?d", $record);
 
-    Session::Messages("$langFaqDeleteSuccess", 'alert-success');
+    //Session::Messages("$langFaqDeleteSuccess", 'alert-success');
+    Session::flash('message',"$langFaqDeleteSuccess"); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/faq_create.php");
 }
 

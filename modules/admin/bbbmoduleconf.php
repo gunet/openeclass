@@ -60,7 +60,9 @@ if (isset($_GET['delete_server'])) {
     $id = getDirectReference($_GET['delete_server']);
     Database::get()->querySingle("DELETE FROM tc_servers WHERE id=?d", $id);
     // Display result message
-    Session::Messages($langFileUpdatedSuccess, 'alert-success');
+    //Session::Messages($langFileUpdatedSuccess, 'alert-success');
+    Session::flash('message',$langFileUpdatedSuccess); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/bbbmoduleconf.php');
 } else if (isset($_POST['submit'])) {
     // Save new config
@@ -110,7 +112,9 @@ if (isset($_GET['delete_server'])) {
         }
     }
     // Display result message
-    Session::Messages($langFileUpdatedSuccess,"alert-success");
+    //Session::Messages($langFileUpdatedSuccess,"alert-success");
+    Session::flash('message',$langFileUpdatedSuccess); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/bbbmoduleconf.php");
 } // end of if($submit)
 

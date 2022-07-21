@@ -30,7 +30,9 @@ if (isset($_POST['submit'])) {
         $messages[] = sprintf("$langCleaningUp", "<b>$days</b>", ($days == 1) ? $langDaySing : $langDayPlur, $dir);
         cleanup("$webDir/courses/$dir", $days);
     }
-    Session::Messages($messages, 'alert-success');
+    //Session::Messages($messages, 'alert-success');
+    Session::flash('message',$messages); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/cleanup.php');
 }
 

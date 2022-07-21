@@ -37,7 +37,9 @@ if (isset($_REQUEST['u'])) {
     $data['u'] = $u = intval(getDirectReference($_REQUEST['u']));
     $navigation[] = array('url' => "edituser.php?u=$u", 'name' => $langEditUser);
     if ($u == 1 or get_admin_rights($u) >= 0) {
-        Session::Messages($langUserMergeAdminForbidden, 'alert-danger');
+        //Session::Messages($langUserMergeAdminForbidden, 'alert-danger');
+        Session::flash('message',$langUserMergeAdminForbidden); 
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/admin/edituser.php?u=$u");
     }
     $info = Database::get()->querySingle("SELECT * FROM user WHERE id = ?s", $u);
@@ -173,8 +175,11 @@ function do_user_merge($source, $target) {
         fix_table('user_department', 'user', $source_id, $target_id);
         fix_table('custom_profile_fields_data', 'user_id', $source_id, $target_id);
 
-        Session::Messages(sprintf($langUserMergeSuccess, '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>
-            <p><a href=\'search_user.php\'>$langBack</p>'), 'alert-success');
+        // Session::Messages(sprintf($langUserMergeSuccess, '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>
+        //     <p><a href=\'search_user.php\'>$langBack</p>'), 'alert-success');
+            Session::flash('message',sprintf($langUserMergeSuccess, '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>
+            <p><a href=\'search_user.php\'>$langBack</p>')); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/search_user.php');
     }
 }

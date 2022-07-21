@@ -61,7 +61,9 @@ if (isset($_POST['submit'])) {
 
     foreach ($fields as $field) {
         if (!in_array($field, $acceptable_fields)) {
-            Session::Messages("$langMultiRegFieldError <b>$field)</b>", 'alert-danger');
+            //Session::Messages("$langMultiRegFieldError <b>$field)</b>", 'alert-danger');
+            Session::flash('message',"$langMultiRegFieldError <b>$field)</b>"); 
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/multireguser.php');
             exit;
         }
@@ -85,7 +87,9 @@ if (isset($_POST['submit'])) {
                 }
 
                 if ($info['email'] and !valid_email($info['email'])) {
-                    Session::Messages($langUsersEmailWrong . ': ' . q($info['email']), 'alert-danger');
+                    //Session::Messages($langUsersEmailWrong . ': ' . q($info['email']), 'alert-danger');
+                    Session::flash('message',$langUsersEmailWrong . ': ' . q($info['email'])); 
+                    Session::flash('alert-class', 'alert-danger');
                     $info['email'] = '';
                 }
 

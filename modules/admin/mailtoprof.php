@@ -163,7 +163,9 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
     if (count($recipients) > 0) {
         send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent);
     }
-    Session::Messages($emailsuccess, 'alert-success');
+    //Session::Messages($emailsuccess, 'alert-success');
+    Session::flash('message',$emailsuccess); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/mailtoprof.php');
 }
 

@@ -46,7 +46,9 @@ if (isset($_POST['submit'])) {
     }
 
     // Display result message
-    Session::Messages($langsecondfaUpdated, 'alert-success');
+    //Session::Messages($langsecondfaUpdated, 'alert-success');
+    Session::flash('message',$langsecondfaUpdated); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/secondfamoduleconf.php');
 } // end of if($submit)
 

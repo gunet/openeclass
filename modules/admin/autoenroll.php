@@ -38,7 +38,9 @@ if (isset($_GET['delete'])) {
         forbidden();
     }
     if (Database::get()->query('DELETE FROM autoenroll_rule WHERE id = ?d', $rule)->affectedRows) {
-        Session::Messages($langAutoEnrollDeleted);
+        //Session::Messages($langAutoEnrollDeleted);
+        Session::flash('message',$langAutoEnrollDeleted); 
+        Session::flash('alert-class', 'alert-success');
     }
     redirect_to_home_page('modules/admin/autoenroll.php');
 } elseif (isset($_POST['submit'])) {
@@ -70,10 +72,14 @@ if (isset($_GET['delete'])) {
                 'rule, department_id', $rule, $_POST['rule_deps']);
         }
     }
-    Session::Messages($langAutoEnrollAdded, 'alert-success');
+    //Session::Messages($langAutoEnrollAdded, 'alert-success');
+    Session::flash('message',$langAutoEnrollAdded); 
+    Session::flash('alert-class', 'alert-success');
     if (isset($_POST['apply'])) {
         apply_autoenroll($rule);
-        Session::Messages($langRuleApplied, 'alert-info');
+        //Session::Messages($langRuleApplied, 'alert-info');
+        Session::flash('message',$langRuleApplied); 
+        Session::flash('alert-class', 'alert-info');
     }
     redirect_to_home_page('modules/admin/autoenroll.php');
 } elseif (isset($_GET['add']) or isset($_GET['edit'])) {

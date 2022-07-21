@@ -36,7 +36,9 @@ if (isset($_POST['submit'])) {
         Database::get()->query('INSERT INTO module_disable (module_id) VALUES ' . $optArray,
             array_keys($_POST['moduleDisable']));
     }
-    Session::Messages($langWikiEditionSucceed, 'alert-success');
+    //Session::Messages($langWikiEditionSucceed, 'alert-success');
+    Session::flash('message',$langWikiEditionSucceed); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/modules.php');
 } else {
     $data['disabled'] = [];

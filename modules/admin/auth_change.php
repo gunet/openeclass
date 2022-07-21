@@ -50,7 +50,9 @@ register_posted_variables(array('submit' => true));
 if ($submit && $auth && $auth_change) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (Database::get()->query("UPDATE user SET password=?s WHERE password=?s AND id != 1", $auth_ids[$auth_change], $auth_ids[$auth])->affectedRows >= 1) {
-        Session::Messages($langAuthChangeYes, 'alert-success');
+        //Session::Messages($langAuthChangeYes, 'alert-success');
+        Session::flash('message',$langAuthChangeYes); 
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/auth.php');
     }
 }

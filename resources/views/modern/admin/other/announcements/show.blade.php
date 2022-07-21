@@ -37,7 +37,7 @@
                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
                         <div class="offcanvas-body">
-                        @include('layouts.partials.sidebarAdmin')
+                            @include('layouts.partials.sidebarAdmin')
                         </div>
                     </div>
 
@@ -46,23 +46,23 @@
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
                     @if($announcementsID)
-                       @foreach($announcementsID as $an)
-                           <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                                <div class="panel panel-default panel-default-admin mt-3">
-                                    <div class="panel-heading ps-3 pb-2 pt-2 pe-3">                   
-                                        <span class="text-white">
-                                            <span class='text-warning'>{{trans('langTitle')}}:</span> {{$an->title}}
-                                        </span>
-                                    </div>
-
-                                    <div class="panel-body panel-body-admin ps-3 pb-3 pe-3 pt-3">
-                                        <span class="text-secondary">
-                                           <span class='control-label-notes'>{{trans('langContent')}}:</span> {!! $an->body !!}
-                                        </span>
-                                        <div class='text-primary text-end pt-3'>{{trans('langDate')}}: <span class='text-secondary'>{{ $an->date }}</span></div>
-                                    </div>
+                       
+                        <div class='col-sm-12'>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">                   
+                                    <span class='control-label-notes'>{{$announcementsID->title}}</span>
                                 </div>
-                       @endforeach
+                                <div class="panel-body">
+                                    <span class="text-secondary">
+                                        {!! $announcementsID->body !!}
+                                    </span>
+                                </div>
+                                <div class='panel-footer'>
+                                    <div class='text-primary text-end'>{{trans('langDate')}}: <span class='text-secondary'>{{ $announcementsID->date }}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                       
                     @endif
                 </div>
             </div>

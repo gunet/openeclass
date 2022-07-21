@@ -30,9 +30,13 @@ if ((!empty($activate)) && ($activate == 1)) {
     // update        
     $countinactive = Database::get()->query("UPDATE user SET expires_at = ".DBHelper::timeAfter(15552000) . " WHERE expires_at<= CURRENT_DATE()")->affectedRows;
     if ($countinactive > 0) {
-        Session::Messages("$langRealised $countinactive $langChanges", 'alert-success');
+        //Session::Messages("$langRealised $countinactive $langChanges", 'alert-success');
+        Session::flash('message',"$langRealised $countinactive $langChanges"); 
+        Session::flash('alert-class', 'alert-success');
     } else {
-        Session::Messages($langNoChanges);
+        //Session::Messages($langNoChanges);
+        Session::flash('message',$langNoChanges); 
+        Session::flash('alert-class', 'alert-warning');
     }   
 }
 redirect_to_home_page('modules/admin/listusers.php');

@@ -73,14 +73,14 @@ if (!isset($_REQUEST['action'])) {
 if (!isset($_GET['action'])) {
     $categories = Database::get()->queryArray("SELECT * FROM category ORDER BY ordering, id");
     if (count($categories) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>" . $langNoResult . "</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>" . $langNoResult . "</div></div>";
     } else {
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<th>$langAllCourseCategories</th><th class='text-right'>".icon('fa-gears', $langActions)."</th>";
+        $tool_content .= "<tr class='list-header'><th class='ps-3'>$langAllCourseCategories</th><th class='text-center'>".icon('fa-gears', $langActions)."</th></tr>";
         foreach ($categories as $category) {
             $name = Hierarchy::unserializeLangField($category->name);
             $visibility = $category->active ? '' : ' class=not_visible';
-            $tool_content .= "<tr><td$visibility>" . $name . "</td><td class='option-btn-cell'>";
+            $tool_content .= "<tr><td$visibility>" . $name . "</td><td class='option-btn-cell text-center'>";
             $tool_content .= action_button(array(
                 array(
                     'title' => $langEditChange,
@@ -110,13 +110,17 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         list($names, $name, $ordering, $multiple, $searchable, $active) = prepareDataFromPost();
 
         if (empty($names)) {
-            Session::Messages($langEmptyNodeName, 'alert alert-danger');
+            //Session::Messages($langEmptyNodeName, 'alert alert-danger');
+            Session::flash('message',$langEmptyNodeName); 
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/coursecategory.php?action=add');
         } else {
             // OK Create the new course category
             $q = "INSERT INTO category (name, ordering, multiple, searchable, active) VALUES (?s, ?d, ?d, ?d, ?d)";
             Database::get()->query($q, $name, $ordering, $multiple, $searchable, $active);
-            Session::Messages($langAddSuccess, 'alert alert-success');
+            //Session::Messages($langAddSuccess, 'alert alert-success');
+            Session::flash('message',$langAddSuccess); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/admin/coursecategory.php');
         }
     } else {
@@ -138,11 +142,15 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
 
         if ($c > 0) {
             // The category cannot be deleted
-            Session::Messages("$langCourseCategoryProErase<br>$langCourseCategoryNoErase", 'alert-danger');
+            //Session::Messages("$langCourseCategoryProErase<br>$langCourseCategoryNoErase", 'alert-danger');
+            Session::flash('message',"$langCourseCategoryProErase<br>$langCourseCategoryNoErase"); 
+            Session::flash('alert-class', 'alert-danger');
         } else {
             // The category can be deleted
             Database::get()->query("DELETE FROM category WHERE id = ?d", $id);
-            Session::Messages($langCourseCategoryErase, 'alert alert-success');
+            //Session::Messages($langCourseCategoryErase, 'alert alert-success');
+            Session::flash('message',$langCourseCategoryErase); 
+            Session::flash('alert-class', 'alert-success');
         }
         redirect_to_home_page('modules/admin/coursecategory.php');
     }
@@ -157,13 +165,17 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         list($names, $name, $ordering, $multiple, $searchable, $active) = prepareDataFromPost();
 
         if (empty($names)) {
-            Session::Messages($langEmptyNodeName, 'alert alert-danger');
+            //Session::Messages($langEmptyNodeName, 'alert alert-danger');
+            Session::flash('message',$langEmptyNodeName); 
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/coursecategory.php?action=edit&id=' . $id);
         } else {
             // OK Update the course category
             $q = "UPDATE category SET name = ?s, ordering = ?d, multiple = ?d, searchable = ?d, active = ?d WHERE id = ?d";
             Database::get()->query($q, $name, $ordering, $multiple, $searchable, $active, $id);
-            Session::Messages($langEditCourseCategorySuccess, 'alert alert-success');
+            //Session::Messages($langEditCourseCategorySuccess, 'alert alert-success');
+            Session::flash('message',$langEditCourseCategorySuccess); 
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/admin/coursecategory.php');
         }
     } else {
@@ -203,7 +215,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     $action = ($id == null) ? 'add' : 'edit';
     $actionValue = ($id == null) ? $GLOBALS['langAdd'] : $GLOBALS['langAcceptChanges'];
 
-    $html .= "<div class='form-wrapper'>
+    $html .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?action=" . $action . "'>
         <fieldset>";
 
@@ -228,8 +240,8 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
         }
 
         $langSuffix = " (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
-        $html .= "<div class='form-group'><label class='col-sm-3 control-label'>" . $GLOBALS['langName'] . $langSuffix . ":</label>";
-        $tdpre = ($i >= 0) ? "<div class='col-sm-9'>" : '';
+        $html .= "<div class='form-group mt-3'><label class='col-sm-6 control-label-notes'>" . $GLOBALS['langName'] . $langSuffix . ":</label>";
+        $tdpre = ($i >= 0) ? "<div class='col-sm-12'>" : '';
         $placeholder = $GLOBALS['langCourseCategory2'] . $langSuffix;
         $html .= $tdpre . "<input class='form-control' type='text' name='name-" . q($langcode) . "' " . $nameValue . " placeholder='$placeholder'></div></div>";
         $i++;
@@ -238,9 +250,9 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     // ordering input
     $orderingValue = ($id != null) ? "value='" . $ordering . "'" : '';
     $html .= "
-    <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langReorder'] . ":</label>
-        <div class='col-sm-9'>
+    <div class='form-group mt-3'>
+        <label class='col-sm-6 control-label-notes'>" . $GLOBALS['langReorder'] . ":</label>
+        <div class='col-sm-12'>
             <input class='form-control' type='text' name='ordering' " . $orderingValue . " placeholder='". $GLOBALS['langCourseCategoryOrdering2'] . "'>
         </div>
     </div>";
@@ -255,23 +267,23 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     }
 
     $html .= "
-    <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategoryMultiple'] . ":</label>
-        <div class='col-sm-9'>
+    <div class='form-group mt-3'>
+        <label class='col-sm-6 control-label-notes'>" . $GLOBALS['langCourseCategoryMultiple'] . ":</label>
+        <div class='col-sm-12'>
             <input type='checkbox' name='multiple' value='1' " . $check_multiple . ">
             <span class='help-block'><small>" . $GLOBALS['langCourseCategoryMultiple2'] . "</small></span>
         </div>
     </div>
-    <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategorySearchable'] . ":</label>
-        <div class='col-sm-9'>
+    <div class='form-group mt-3'>
+        <label class='col-sm-6 control-label-notes'>" . $GLOBALS['langCourseCategorySearchable'] . ":</label>
+        <div class='col-sm-12'>
             <input type='checkbox' name='searchable' value='1' " . $check_searchable . ">
             <span class='help-block'><small>" . $GLOBALS['langCourseCategorySearchable2'] . "</small></span>
         </div>
     </div>
-    <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langChatActive'] . ":</label>
-        <div class='col-sm-9'>
+    <div class='form-group mt-3'>
+        <label class='col-sm-6 control-label-notes'>" . $GLOBALS['langChatActive'] . ":</label>
+        <div class='col-sm-12'>
             <input type='checkbox' name='active' value='1' " . $check_active . ">
             <span class='help-block'><small>" . $GLOBALS['langCourseCategoryActive2'] . "</small></span>
         </div>
@@ -282,7 +294,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     }
 
     $html .= "
-    <div class='form-group'>
+    <div class='form-group mt-3'>
         <div class='col-sm-9 col-sm-offset-3'>" . form_buttons(array(
             array(
                 'text' => $GLOBALS['langSave'],
@@ -298,7 +310,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     </fieldset>
     ". generate_csrf_token_form_field() ."
     </form>
-    </div>";
+    </div></div>";
 
     return $html;
 }

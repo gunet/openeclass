@@ -41,7 +41,9 @@ if (isset($_POST['submit'])) {
     foreach ($_POST['lessons'] as $cId) {
         $course->refresh($cId, arrayValuesDirect($_POST['newdepid']));
     }
-    Session::Messages($langModifDone, 'alert-success');
+    //Session::Messages($langModifDone, 'alert-success');
+    Session::flash('message',$langModifDone); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/listcours.php');
     
 }

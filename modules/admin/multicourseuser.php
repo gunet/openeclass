@@ -64,13 +64,17 @@ if (isset($_POST['submit'])) {
             $courses = implode('<br>', $course_not_found);
             $warn_messages[] = "$langCourseNotExist<br> $courses";
         }
-        Session::Messages($warn_messages);
+        //Session::Messages($warn_messages);
+        Session::flash('message',$warn_messages); 
+        Session::flash('alert-class', 'alert-warning');
         if (count($ok)) {
             $added_users = implode('<br>', array_map(function($userid) {
                 return display_user($userid);
             }, $ok));
             $sucess_message = "$langUsersRegistered<br> $added_users";
-            Session::Messages($sucess_message, 'alert-success');
+            //Session::Messages($sucess_message, 'alert-success');
+            Session::flash('message',$sucess_message); 
+            Session::flash('alert-class', 'alert-success');
         }
 
         if (count($existing)) {
@@ -78,7 +82,9 @@ if (isset($_POST['submit'])) {
                 return display_user($userid);
             }, $existing));
             $info_message = "$langUsersAlreadyRegistered<br> $already_registered_users";
-            Session::Messages($info_message, 'alert-info');
+            //Session::Messages($info_message, 'alert-info');
+            Session::flash('message',$info_message); 
+            Session::flash('alert-class', 'alert-info');
         }
         redirect_to_home_page('modules/admin/multicourseuser.php');
 }

@@ -48,7 +48,9 @@ if (isset($_POST['submit'])) {
     }
 
     // Display result message
-    Session::Messages($langWafUpdated, 'alert-success');
+    //Session::Messages($langWafUpdated, 'alert-success');
+    Session::flash('message',$langWafUpdated); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/wafmoduleconf.php');
 } // end of if($submit)
 

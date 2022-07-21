@@ -176,9 +176,13 @@ if (isset($_POST['submit'])) {
 
         send_mail_multipart('', '', '', $email_form, $emailsubject, $emailbodyplain, $emailbody);
 
-        Session::Messages(array($message,
+        // Session::Messages(array($message,
+        //     "$langTheU \"$givenname_form $surname_form\" $langAddedU" .
+        //     ((isset($auth) and $auth == 1)? " $langAndP": '')), 'alert-success');
+            Session::flash('message',array($message,
             "$langTheU \"$givenname_form $surname_form\" $langAddedU" .
-            ((isset($auth) and $auth == 1)? " $langAndP": '')), 'alert-success');
+            ((isset($auth) and $auth == 1)? " $langAndP": ''))); 
+                    Session::flash('alert-class', 'alert-success');
         if ($rid) {
             $req_type = Database::get()->querySingle('SELECT status FROM user_request WHERE id = ?d', $rid)->status;
             redirect_to_home_page('modules/admin/listreq.php' .
