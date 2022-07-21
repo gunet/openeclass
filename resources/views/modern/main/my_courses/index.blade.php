@@ -18,13 +18,9 @@
                             </div>
                         @endif
                    
-                        @if($myCourses)
-                           @include('layouts.partials.all_my_courses_view',['myCourses' => $myCourses])
-                        @else
-                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                                <div class='alert alert-warning'>{{ trans('langNoCourses') }}</div>
-                            </div>
-                        @endif
+                       
+                        @include('layouts.partials.all_my_courses_view',['myCourses' => $myCourses])
+
                 </div>
 
             </div>

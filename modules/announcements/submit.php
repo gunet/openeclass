@@ -200,13 +200,19 @@ if (isset($_POST['submitAnnouncement'])) {
                 if (count($recipients) > 0) {
                     send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
                 }
-                Session::Messages("$langAnnAddWithEmail $countEmail $langRegUser", 'alert-success');
+               // Session::Messages("$langAnnAddWithEmail $countEmail $langRegUser", 'alert-success');
+                Session::flash('message',"$langAnnAddWithEmail $countEmail $langRegUser"); 
+                Session::flash('alert-class', 'alert-success');
                 if ($invalid > 0) { // info about invalid emails (if exist)
-                    Session::Messages("$langInvalidMail $invalid", 'alert-warning');
+                    //Session::Messages("$langInvalidMail $invalid", 'alert-warning');
+                    Session::flash('message',"$langInvalidMail $invalid"); 
+                    Session::flash('alert-class', 'alert-warning');
                 }
             }
         } else {
-            Session::Messages($message, 'alert-success');
+            //Session::Messages($message, 'alert-success');
+            Session::flash('message',$message); 
+            Session::flash('alert-class', 'alert-success');
         }
         redirect_to_home_page("modules/announcements/index.php?course=$course_code");
     } else {

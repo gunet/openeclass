@@ -91,49 +91,54 @@
                             </tr>
                         </thead>
                         <tbody>
+                        @if($myCourses)
                         <div class="row cources-bars-page" id="cources-bars-page-1">
+                            <?php $i=0; ?>
+                                @foreach ($myCourses as $course)
+                                <?php $i++; ?>
+                                <tr>
+                                    <th scope="row">{{$i}}</th>
+                                    <td><a class="course_title_table_mycourses" href="{{$urlServer}}courses/{{$course->code}}/index.php">{{ q($course->title) }}</a></td>
+                                    <td><span class="course_prof_code">({{ q($course->public_code) }})</span></td>
+                                    <td><span class="course_prof_code">{{ q($course->professor) }}</span></td>
+                                    <td>
+                                        <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
+                                            <i class="fas fa-remove-format"></i>
+                                        </a>
 
+                                    </td>
+                                </tr>
 
-                                <?php $i=0; ?>
-                                    @foreach ($myCourses as $course)
-                                    <?php $i++; ?>
-                                    <tr>
-                                        <th scope="row">{{$i}}</th>
-                                        <td><a class="course_title_table_mycourses" href="{{$urlServer}}courses/{{$course->code}}/index.php">{{ q($course->title) }}</a></td>
-                                        <td><span class="course_prof_code">({{ q($course->public_code) }})</span></td>
-                                        <td><span class="course_prof_code">{{ q($course->professor) }}</span></td>
-                                        <td>
-                                            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
-                                                <i class="fas fa-remove-format"></i>
-                                            </a>
+                                
+                                <div class="modal fade" id="exampleModal{{$course->course_id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{$course->course_id}}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel{{$course->course_id}}">{{ trans('langUnCourse') }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                {{ trans('langConfirmUnregCours') }}<strong class="unregCourseStrong">{{$course->title}}</strong>;
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a class="btn btn-secondary" href="" data-bs-dismiss="modal">{{trans('langCancel')}}</a>
 
-                                        </td>
-                                    </tr>
+                                                <a class="btn btn-danger" href="my_courses.php?title={{ q($course->title) }}">{{trans('langDelete')}}</a>
 
-                                    
-                                    <div class="modal fade" id="exampleModal{{$course->course_id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{$course->course_id}}" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel{{$course->course_id}}">{{ trans('langUnCourse') }}</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    {{ trans('langConfirmUnregCours') }}<strong class="unregCourseStrong">{{$course->title}}</strong>;
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <a class="btn btn-secondary" href="" data-bs-dismiss="modal">{{trans('langCancel')}}</a>
-
-                                                    <a class="btn btn-danger" href="my_courses.php?title={{ q($course->title) }}">{{trans('langDelete')}}</a>
-
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
-                                @endforeach
+                            @endforeach
+                        </div>   
+                        @else
+                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                                <div class='alert alert-warning'>{{ trans('langNoCourses') }}</div>
+                            </div> 
+                        @endif
 
-                            </div>
+                            
                         </tbody>
                     </table>
                 </div>

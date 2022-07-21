@@ -487,7 +487,7 @@ $tool_content .= "<div class='panel panel-default panel-action-btn-default'>
                     <div class='pull-right' style='padding:8px;'>
                         $lp_action_button
                     </div>
-                    <div class='panel-heading'>
+                    <div class='panel-heading' style='border-radius:0px;'>
                         <h3 class='panel-title'>$langLearningPathStructure</h3>
                     </div>";
 
