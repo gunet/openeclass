@@ -1205,8 +1205,8 @@ function display_available_assignments($gradebook_id) {
         $tool_content .= "
             <div class='row p-2'></div><div class='table-responsive'>
                           <table class='announcements_table'";
-        $tool_content .= "<tr class='notes_thead' style='background-color:#003F87;'><th class='text-white'>$langTitle</th><th class='text-white'>".q($m['deadline'])."</th><th class='text-white'>$langDescription</th>";
-        $tool_content .= "<th class='text-center text-white'><i class='fa fa-cogs'></i></th>";
+        $tool_content .= "<tr class='list-header'><th class='text-secondary'>$langTitle</th><th class='text-secondary'>".q($m['deadline'])."</th><th class='text-secondary'>$langDescription</th>";
+        $tool_content .= "<th class='text-center text-secondary'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
         foreach ($checkForAss as $newAssToGradebook) {
             $content = ellipsize_html($newAssToGradebook->description, 50);
@@ -1225,7 +1225,7 @@ function display_available_assignments($gradebook_id) {
                 $date_str = $m['no_deadline'];
                 $hour_str = "";
             }
-            $tool_content .= "<tr class='notes_thead' style='background-color:white'><td><b>";
+            $tool_content .= "<tr><td><b>";
 
             if (!empty($newAssToGradebook->title)) {
                 $tool_content .= q($newAssToGradebook->title);

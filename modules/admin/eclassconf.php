@@ -274,14 +274,14 @@ else {
     $head_content .= "
         <script>
         $(function() {
-            $('#floatMenu').affix({
-              offset: {
-                top: 230,
-                bottom: function () {
-                  return (this.bottom = $('.footer').outerHeight(true))
-                }
-              }
-            })
+            // $('#floatMenu').affix({
+            //   offset: {
+            //     top: 230,
+            //     bottom: function () {
+            //       return (this.bottom = $('.footer').outerHeight(true))
+            //     }
+            //   }
+            // })
         });
         </script>";
     // Display link to index.php
