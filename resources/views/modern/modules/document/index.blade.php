@@ -66,11 +66,18 @@
                     @endif
 
                     
+                    
+                    @if ($dialogBox)
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        @if ($dialogBox)
-                            {!! $dialogBox !!}
-                        @endif
+                        @include("modules.document.$dialogBox")
                     </div>
+                    @endif
+
+                    @if($metaDataBox)
+                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                            {!! $metaDataBox !!}
+                        </div>
+                    @endif
                     
                     @if (count($fileInfo) or $curDirName)
                         

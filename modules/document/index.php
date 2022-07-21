@@ -980,7 +980,8 @@ if ($can_upload or $user_upload) {
             $navigation[] = array('url' => $backUrl, 'name' => $pageName);
             $oldFilename = q($row->filename);
             $real_filename = $basedir . str_replace('/..', '', q($metadata));
-            $dialogBox .= metaCreateForm($metadata, $oldFilename, $real_filename);
+            // $dialogBox .= metaCreateForm($metadata, $oldFilename, $real_filename);
+            $metaDataBox .= metaCreateForm($metadata, $oldFilename, $real_filename);
         } else {
             Session::flash('message',$langFileNotFound); 
             Session::flash('alert-class', 'alert-danger');
@@ -1281,7 +1282,7 @@ foreach ($result as $row) {
 // ----------------------------------------------
 
 $data = compact('menuTypeID', 'can_upload', 'is_in_tinymce', 'base_url',
-    'group_hidden_input', 'curDirName', 'curDirPath', 'dialogBox');
+    'group_hidden_input', 'curDirName', 'curDirPath', 'dialogBox','metaDataBox');
 $data['fileInfo'] = array_merge($dirs, $files);
 
 if (isset($dialogData)) {

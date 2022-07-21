@@ -153,27 +153,27 @@ function bbb_session_form($session_id = 0) {
         <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
         <fieldset>
-        <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
-            <div class='col-sm-10'>
+        <div class='form-group mt-3'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
+            <div class='col-sm-12'>
                 <input class='form-control' type='text' name='title' id='title' value='$value_title' placeholder='$langTitle' size='50'>
             </div>
         </div>
-        <div class='form-group'>
-            <label for='desc' class='col-sm-2 control-label'>$langUnitDescr:</label>
-            <div class='col-sm-10'>
+        <div class='form-group mt-3'>
+            <label for='desc' class='col-sm-6 control-label-notes'>$langUnitDescr:</label>
+            <div class='col-sm-12'>
                 $textarea
             </div>
         </div>
-        <div class='form-group'>
-            <label for='start_session' class='col-sm-2 control-label'>$langStart:</label>
-            <div class='col-sm-10'>
+        <div class='form-group mt-3'>
+            <label for='start_session' class='col-sm-6 control-label-notes'>$langStart:</label>
+            <div class='col-sm-12'>
                 <input class='form-control' type='text' name='start_session' id='start_session' value='$start_session'>
             </div>
         </div>";
-        $tool_content .= "<div class='input-append date form-group".(Session::getError('BBBEndDate') ? " has-error" : "")."' id='enddatepicker' data-date='$BBBEndDate' data-date-format='dd-mm-yyyy'>
-            <label for='BBBEndDate' class='col-sm-2 control-label'>$langEnd:</label>
-            <div class='col-sm-10'>
+        $tool_content .= "<div class='input-append date form-group".(Session::getError('BBBEndDate') ? " has-error" : "")." mt-3' id='enddatepicker' data-date='$BBBEndDate' data-date-format='dd-mm-yyyy'>
+            <label for='BBBEndDate' class='col-sm-6 control-label-notes'>$langEnd:</label>
+            <div class='col-sm-12'>
                 <div class='input-group'>
                     <span class='input-group-addon'>
                         <input style='cursor:pointer;' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
@@ -185,9 +185,9 @@ function bbb_session_form($session_id = 0) {
         </div>";
         $en_recordings = has_enable_recordings($server_id);
         if ($en_recordings == 'true') {
-            $tool_content .= "<div class='form-group'>
-                <label for='group_button' class='col-sm-2 control-label'>$langBBBRecord:</label>
-                <div class='col-sm-10'>
+            $tool_content .= "<div class='form-group mt-3'>
+                <label for='group_button' class='col-sm-6 control-label-notes'>$langBBBRecord:</label>
+                <div class='col-sm-12'>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='user_button' name='record' value='true' " . (($record == true) ? 'checked' : '') . ">
@@ -203,9 +203,9 @@ function bbb_session_form($session_id = 0) {
                 </div>
             </div>";
         }
-        $tool_content .= "<div class='form-group'>
-            <label for='active_button' class='col-sm-2 control-label'>$langNewBBBSessionStatus:</label>
-            <div class='col-sm-10'>
+        $tool_content .= "<div class='form-group mt-3'>
+            <label for='active_button' class='col-sm-6 control-label-notes'>$langNewBBBSessionStatus:</label>
+            <div class='col-sm-12'>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='active_button' name='status' value='1' " . (($status==1) ? "checked" : "") . ">
@@ -218,9 +218,9 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group'>
-        <label for='active_button' class='col-sm-2 control-label'>$langAnnouncements:</label>
-            <div class='col-sm-10'>
+        <div class='form-group mt-3'>
+        <label for='active_button' class='col-sm-6 control-label-notes'>$langAnnouncements:</label>
+            <div class='col-sm-12'>
                      <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='addAnnouncement' value='1'>$langBBBAnnDisplay
@@ -228,15 +228,15 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group'>
-            <label for='minutes_before' class='col-sm-2 control-label'>$langBBBSessionAvailable:</label>
-            <div class='col-sm-10'>" . selection(array(10 => '10', 15 => '15', 30 => '30'), 'minutes_before', $unlock_interval, "id='minutes_before'") . "
+        <div class='form-group mt-3'>
+            <label for='minutes_before' class='col-sm-6 control-label-notes'>$langBBBSessionAvailable:</label>
+            <div class='col-sm-12'>" . selection(array(10 => '10', 15 => '15', 30 => '30'), 'minutes_before', $unlock_interval, "id='minutes_before'") . "
                 $langBBBMinutesBefore
             </div>
         </div>
-        <div class='form-group'>
-            <label for='sessionUsers' class='col-sm-2 control-label'>$langBBBSessionMaxUsers:</label>
-            <div class='col-sm-10'>
+        <div class='form-group mt-3'>
+            <label for='sessionUsers' class='col-sm-6 control-label-notes'>$langBBBSessionMaxUsers:</label>
+            <div class='col-sm-12'>
                 <input class='form-control' type='number' min='1' pattern='\d+' name='sessionUsers' id='sessionUsers' value='$value_session_users'>";
         if (isset($bbb_max_part_per_room_limit)) {
             $tool_content .= " $langBBBMaxPartPerRoom: <strong>$bbb_max_part_per_room</strong>";
@@ -246,9 +246,9 @@ function bbb_session_form($session_id = 0) {
         $tool_content .= "
             </div>
         </div>";
-        $tool_content .= "<div class='form-group'>
-                <label for='select-groups' class='col-sm-2 control-label'>$langParticipants:</label>
-                <div class='col-sm-10'>
+        $tool_content .= "<div class='form-group mt-3'>
+                <label for='select-groups' class='col-sm-6 control-label-notes'>$langParticipants:</label>
+                <div class='col-sm-12'>
                 <select name='groups[]' multiple='multiple' class='form-control' id='select-groups'>";
 
         if (empty($r_group) or (count($r_group)>=1 and in_array("0", $r_group))) {
@@ -297,7 +297,7 @@ function bbb_session_form($session_id = 0) {
             </div>";
 
 
-        $tool_content .= "<div class='form-group'>
+        $tool_content .= "<div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -308,14 +308,14 @@ function bbb_session_form($session_id = 0) {
         </div>";
 
         $tool_content .= "
-        <div class='form-group'>
-            <label for='tags_1' class='col-sm-2 control-label'>$langBBBExternalUsers:</label>
-            <div class='col-sm-10'>
+        <div class='form-group mt-3'>
+            <label for='tags_1' class='col-sm-6 control-label-notes'>$langBBBExternalUsers:</label>
+            <div class='col-sm-12'>
                 <select id='tags_1' class='form-control' name='external_users[]' multiple></select>
                 <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBNotifyExternalUsersHelpBlock</span>
             </div>
         </div>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -325,14 +325,14 @@ function bbb_session_form($session_id = 0) {
             </div>
         </div>";
         $tool_content .= "<div class='clearfix'>
-                            <a role='button' data-toggle='collapse' href='#MoreInfo' aria-expanded='false' aria-controls='MoreInfo'>
+                            <a role='button' data-bs-toggle='collapse' href='#MoreInfo' aria-expanded='false' aria-controls='MoreInfo'>
                                  <h5 class='panel-heading' style='margin-bottom: 0px;'>
                                        <span class='fa fa-chevron-down fa-fw'></span> $langReadMore   
                                  </h5>
                             </a>
                           </div>";
         $tool_content .= "<div class='collapse $options_show' id='MoreInfo'>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -341,7 +341,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -350,7 +350,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -359,7 +359,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -368,7 +368,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -377,7 +377,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -386,7 +386,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -395,7 +395,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -404,7 +404,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -416,7 +416,7 @@ function bbb_session_form($session_id = 0) {
 
         $tool_content .= "</div>
         $submit_id
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='$submit_name' value='$value_message'>
             </div>
@@ -698,10 +698,10 @@ function bbb_session_details() {
 
     if (!is_active_tc_server($tc_type, $course_id)) { // check availability
         if ($is_editor) {
-            $tool_content .= "<div class='alert alert-danger'>$langBBBNotServerAvailableTeacher</div>";
-            $tool_content .= "<div class='alert alert-info'>$langBBBNotServerAvailableTeacherCovid</div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langBBBNotServerAvailableTeacher</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langBBBNotServerAvailableTeacherCovid</div></div>";
         } else {
-            $tool_content .= "<div class='alert alert-danger'>$langBBBNotServerAvailableStudent</div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langBBBNotServerAvailableStudent</div></div>";
         }
     }
 
@@ -713,15 +713,15 @@ function bbb_session_details() {
                                                 ORDER BY start_date DESC", $course_id);
     if ($result) {
         if ((!$is_editor) and is_active_tc_server($tc_type, $course_id)) {
-            $tool_content .= "<div class='alert alert-info'><label>$langNote</label>: $langBBBNoteEnableJoin</div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><label>$langNote</label>: $langBBBNoteEnableJoin</div></div>";
         }
         $headingsSent = false;
-        $headings = "<div class='row'>
-                       <div class='col-md-12'>
+        $headings = "
+                       <div class='col-sm-12'>
                          <div class='table-responsive'>
                            <table class='table-default'>
                              <tr class='list-header'>
-                               <th style='width: 50%'>$langTitle</th>
+                               <th class='ps-3' style='width: 50%'>$langTitle</th>
                                <th class='text-center'>$langDate</th>
                                <th class='text-center'>$langParticipants</th>
                                <th class='text-center'>".icon('fa-gears')."</th>
@@ -916,14 +916,14 @@ function bbb_session_details() {
             }
         }
         if ($headingsSent) {
-            $tool_content .= "</table></div></div></div>";
+            $tool_content .= "</table></div></div>";
         }
 
         if (!$is_editor and !$headingsSent) {
-            $tool_content .= "<div class='alert alert-warning'>$langNoBBBSesssions</div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoBBBSesssions</div></div>";
         }
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoBBBSesssions</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoBBBSesssions</div></div>";
     }
 }
 
@@ -1452,13 +1452,13 @@ function publish_video_recordings($course_id, $id)
         switch($finalMsg)
         {
             case 0:
-                $tool_content .= "<div class='alert alert-warning'>$langBBBImportRecordingsNo</div>";
+                $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langBBBImportRecordingsNo</div></div>";
                 break;
             case 1:
-                $tool_content .= "<div class='alert alert-warning'>$langBBBImportRecordingsNoNew</div>";
+                $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langBBBImportRecordingsNoNew</div></div>";
                 break;
             case 2:
-                $tool_content .= "<div class='alert alert-success'>$langBBBImportRecordingsOK</div>";
+                $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langBBBImportRecordingsOK</div></div>";
                 break;
         }
     }

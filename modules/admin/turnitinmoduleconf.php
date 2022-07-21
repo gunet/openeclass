@@ -131,7 +131,7 @@ if (isset($_GET['add_template'])) {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>
                 <thead>
-                <tr><th class = 'text-center'>$langTitle</th>
+                <tr class='list-header'><th class = 'text-center'>$langTitle</th>
                     <th class = 'text-center'>$langUnitDescr</th>
                     <th class = 'text-center'>$langTurnitinEnabled</th>
                     <th class = 'text-center'>".icon('fa-gears')."</th></tr>
@@ -142,7 +142,7 @@ if (isset($_GET['add_template'])) {
                     "<td>$lti->title</td>" .
                     "<td>$lti->description</td>" .
                     "<td class = 'text-center'>$enabled_lti_template</td>" .
-                    "<td class='option-btn-cell'>" .
+                    "<td class='option-btn-cell text-center'>" .
                     action_button(array(
                         array('title' => $langEditChange,
                             'url' => "$_SERVER[SCRIPT_NAME]?edit_template=" . getIndirectReference($lti->id),
@@ -157,7 +157,7 @@ if (isset($_GET['add_template'])) {
             $tool_content .= "</table></div>";
 
         } else {
-            $tool_content .= "<div class='alert alert-warning'>$langNoAvailableTurnitinTemplates</div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoAvailableTurnitinTemplates</div></div>";
         }
     }
 }

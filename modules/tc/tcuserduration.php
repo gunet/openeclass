@@ -93,8 +93,8 @@ if (isset($_GET['u']) and $_GET['u']) { // if we want specific user
 if (count($result) > 0) {
     $tool_content .= "
     <table class='table-default'>
-    <tr>
-      <th>$langSurnameName</th>      
+    <tr class='list-header'>
+      <th class='ps-3'>$langSurnameName</th>      
       <th>$langBBB</th>
       <th>$langTotalDuration</th>
     </tr>";
@@ -117,7 +117,7 @@ if (count($result) > 0) {
     }
     $tool_content .= "</table>";
 } else {
-    $tool_content .= "<div class='alert alert-warning'>$langBBBNoParticipation</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langBBBNoParticipation</div></div>";
 }
 
 draw($tool_content, 2);

@@ -4413,14 +4413,14 @@ $(document).ready(function() {
 </script>
 EOF;*/
 
-        $tool_content .= '<iframe id="contentframe"
+        $tool_content .= '<div class="col-sm-12 mt-3"><iframe id="contentframe"
             src="' . $urlAppend . "modules/work/post_launch.php?course=" . $course_code . "&amp;id=" . $id . '"
             webkitallowfullscreen=""
             mozallowfullscreen=""
             allowfullscreen=""
             width="100%"
             height="800px"
-            style="border: 1px solid #ddd; border-radius: 4px;"></iframe>';
+            style="border: 1px solid #ddd; border-radius: 4px;"></iframe></div>';
     } else {
         $joinLink = create_join_button(
             $lti->lti_provider_url,
