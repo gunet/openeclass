@@ -295,11 +295,12 @@
                             </div>
                         </div>
 
-                        <div class="panel panel-default mt-4">
-                            <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
-                                <div class='control-label-notes text-center'>{{ trans('langCourseCompletion') }}</div>
-                            </div>
-                            @if(isset($course_completion_id) and $course_completion_id > 0)
+                        
+                        @if(isset($course_completion_id) and $course_completion_id > 0)
+                            <div class="panel panel-default mt-4">
+                                <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
+                                    <div class='control-label-notes text-center'>{{ trans('langCourseCompletion') }}</div>
+                                </div>
                                 <div class='panel-body'>
                                     <div class='text-center'>
                                         <div class='col-sm-12'>
@@ -317,22 +318,23 @@
                                         </div>
                                     </div>
                                 </div>
-                            @endif
+                            </div>
+                        @endif
 
-                            @if (isset($level) && !empty($level))
-                                <div class='panel panel-default mt-3'>
-                                    <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
-                                        <div class='control-label-notes text-center'>{{ trans('langOpenCourseShort') }}</div>
-                                    </div>
-                                    <div class='panel-body'>
-                                        {!! $opencourses_level !!}
-                                    </div>
-                                    <div class='panel-footer'>
-                                        {!! $opencourses_level_footer !!}
-                                    </div>
+                        @if (isset($level) && !empty($level))
+                            <div class='panel panel-default mt-4'>
+                                <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
+                                    <div class='control-label-notes text-center'>{{ trans('langOpenCourseShort') }}</div>
                                 </div>
-                            @endif
-                        </div>
+                                <div class='panel-body'>
+                                    {!! $opencourses_level !!}
+                                </div>
+                                <div class='panel-footer'>
+                                    {!! $opencourses_level_footer !!}
+                                </div>
+                            </div>
+                        @endif
+                        
 
 
 

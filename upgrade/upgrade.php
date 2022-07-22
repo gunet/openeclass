@@ -323,12 +323,12 @@ if (isset($_POST['login']) and isset($_POST['password'])) {
         //Session::Messages($langUpgAdminError, 'alert-warning');
         Session::flash('message',$langUpgAdminError);
         Session::flash('alert-class', 'alert-warning');
-        redirect_to_home_page('upgrade/');
+        redirect_to_home_page('upgrade/index.php');
     }
 }
 
 if (!($command_line or $is_admin)) {
-    redirect_to_home_page('upgrade/');
+    redirect_to_home_page('upgrade/index.php');
 }
 
 // upgrade from versions < 3.0 is not possible

@@ -627,7 +627,7 @@ function adminMenu() {
         }
 
         array_push($sideMenuText, $GLOBALS['langUpgradeBase']);
-        array_push($sideMenuLink, $urlServer . "upgrade/");
+        array_push($sideMenuLink, $urlServer . "upgrade/index.php");
         array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuText, $GLOBALS['langUsage']);

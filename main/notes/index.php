@@ -286,7 +286,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
         $tool_content .= "<div class = 'note-content' data-id= '" . getIndirectReference($note->id) . "'>$content</div>";
         $tool_content .= "</td>";
 
-        $tool_content .= "<td class='option-btn-cell'>" .
+        $tool_content .= "<td class='option-btn-cell text-center'>" .
                 action_button(array(
                     array('title' => $langEditChange,
                         'url' => "$_SERVER[SCRIPT_NAME]?modify=" . getIndirectReference($note->id),

@@ -2134,5 +2134,5 @@ function triggerGameGradebook($courseId, $uid, $gradebookId) {
     $eventData->activityType = GradebookEvent::ACTIVITY;
     $eventData->module = MODULE_ID_GRADEBOOK;
     $eventData->resource = intval($gradebookId);
-    GradebookEvent::trigger(GradebookEvent::UPDGRADE, $eventData);
+    GradebookEvent::trigger(GradebookEvent::UPGRADE, $eventData);
 }

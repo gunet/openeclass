@@ -4,12 +4,10 @@
 
             <div class="btn-group w-100" role="group" aria-label="Basic example">
 
-                @if (isset($_SESSION['uid']))
-                    <a type="button" class="btn btn-transparent text-white" href="{{ $urlServer }}"><i class="fa fa-home"></i></a>
-                @endif
-
+                
+                <a type="button" class="btn btn-transparent text-white" href="{{ $urlServer }}"><i class="fa fa-home"></i></a>
                 <a type="button" class="btn btn-transparent text-white" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib"></i></a>
-                <a type='button' class="btn btn-transparent text-white" href="{{ $urlServer }}modules/auth/courses.php"><i class="fas fa-book"></i></a>
+                <a type='button' class="btn btn-transparent text-white" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-university"></i></a>
                     
 
                 {!! lang_selections() !!}

@@ -1,82 +1,89 @@
+<!---------------------------------------------------->
+<!---------------------------------------------------->
+<!---------------------------------------------------->
+<!---------------------------------------------------->
+<!---------------------------------------------------->
+<!-- Το αρχείο αυτό θα περιέχει τα panels του admin -->
+<!---------------------------------------------------->
+<!---------------------------------------------------->
+<!---------------------------------------------------->
+<!---------------------------------------------------->
+<!---------------------------------------------------->
+<?php //print_a($toolArr);?>
 
-<div id="leftnav" class="sidebar float-menu">
-    @if(($is_editor || $is_power_user || $is_departmentmanage_user || $is_usermanage_user) && $course_code)
-        <p class="text-center text-light fs-6 mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
-
-        <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center'>
-            <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}' data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}">
-                <span class="on">{{ trans('langCStudent2') }}</span>
-                <span class="off">{{ trans('langCTeacher') }}</span>
-                <p class="text-right on2">{{ trans('langCStudent2') }}</p>
-                <p class="text-left off2">{{ trans('langCTeacher') }}</p>
-            </button>
-        </form>
-    @else
-        <p class="text-center text-light fs-6 mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
-        <div class='d-flex justify-content-center'>
-            <a class='w-75 btn btn-primary pe-none text-white text-center'>
-                @if (isset($_SESSION['uid']))
-                    @if(($session->status == USER_TEACHER))
-                    <span class='text-uppercase'>{{trans('langCTeacher')}}</span>
-                    @elseif($session->status == USER_STUDENT)
-                    <span class='text-uppercase'>{{ trans('langCStudent2') }}</span>
-                    @elseif($session->status == USERMANAGE_USER)
-                    <span class='text-uppercase'>{{ trans('langManageUser') }}</span>
-                    @elseif($session->status == USER_DEPARTMENTMANAGER)
-                    <span class='text-uppercase'>{{ trans('langManageDepartment') }}</span>
-                    @else
-                    <span class='text-uppercase'>{{ trans('langAdministrator') }}</span>
-                    @endif
-                @else
-                <span class='text-uppercase'>{{ trans('langVisitor') }}</span>
-                @endif
-            </a>
+@foreach ($toolArr as $key => $tool_group)
+<div class='col-lg-6 col-12 mt-3'>
+    <div class='panel panel-default'>
+        <div class='panel-heading'>
+            <span class='control-label-notes'>{{ $tool_group[0]['text'] }}</span>
         </div>
-    @endif
-    <div class="panel-group accordion mt-5" id="sidebar-accordion">
-        <div class="panel bg-transparent">
-            @foreach ($toolArr as $key => $tool_group)
-                <a id="Tool{{$key}}" class="collapsed parent-menu mt-5" data-bs-toggle="collapse" href="#collapse{{ $key }}">
-                    <div class="panel-sidebar-heading">
-                        <div class="panel-title h3">
+        <div class='panel-body'>
+            <ul class="list-group list-group-flush">
+                @foreach ($tool_group[1] as $key2 => $tool)
+                    <li class="list-group-item border-0">
+                        <a href="{{ $tool_group[2][$key2] }}" class='list-group-item bg-light{{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                             <div class='row'>
-                                <div class='col-1'>
-                                    <span class="fa fa-chevron-right text-warning ms-0 mt-1" style='font-size:12px;'></span>
-                                </div>
-                                <div class='col-10'>
-                                    <span class='text-wrap text-white fs-6'>{{ $tool_group[0]['text'] }}</span>
-                                </div>
-                            </div>
-                            
-                            
-                        </div><hr class='text-white'>
-                    </div>
-                </a>
-                <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse {{ $tool_group[0]['class'] }}{{ $key == $default_open_group? ' show': '' }}" aria-labelledby="Tool{{$key}}" data-bs-parent="#sidebar-accordion">
-                    @foreach ($tool_group[1] as $key2 => $tool)
-                    <a href="{{ $tool_group[2][$key2] }}" class='list-group-item bg-transparent{{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
-                          
-                            <div class='row'>
-                                <div class='col-xxl-1 col-xl-1 col-2'>
+                                <div class='col-sm-2'>
                                     <span class="fa {{ $tool_group[3][$key2] }} fa-fw mt-1 text-warning toolSidebarTxt"></span>
                                 </div>
-                                <div class='col-xxl-10 col-xl-10 col-9'>
-                                    <span class='text-white toolSidebarTxt'>{!! $tool !!}</span>
+                                <div class='col-sm-10'>
+                                    <span class='text-primary'>{!! $tool !!}</span>
                                 </div>
-                                
                             </div>
-                            
-                                
-                            
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>  
+</div>
+@endforeach
+
+
+
+{{--
+<div class="panel bg-transparent">
+    @foreach ($toolArr as $key => $tool_group)
+        <a id="Tool{{$key}}" class="collapsed parent-menu mt-5" data-bs-toggle="collapse" href="#collapse{{ $key }}">
+            <div class="panel-sidebar-heading">
+                <div class="panel-title h3">
+                    <div class='row'>
+                        <div class='col-1'>
+                            <span class="fa fa-chevron-right text-warning ms-0 mt-1" style='font-size:12px;'></span>
+                        </div>
+                        <div class='col-10'>
+                            <span class='text-wrap text-white fs-6'>{{ $tool_group[0]['text'] }}</span>
+                        </div>
+                    </div>
+                    
+                    
+                </div><hr class='text-white'>
+            </div>
+        </a>
+        <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse {{ $tool_group[0]['class'] }}{{ $key == $default_open_group? ' show': '' }}" aria-labelledby="Tool{{$key}}" data-bs-parent="#sidebar-accordion">
+            @foreach ($tool_group[1] as $key2 => $tool)
+            <a href="{{ $tool_group[2][$key2] }}" class='list-group-item bg-transparent{{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
+                    
+                    <div class='row'>
+                        <div class='col-xxl-1 col-xl-1 col-2'>
+                            <span class="fa {{ $tool_group[3][$key2] }} fa-fw mt-1 text-warning toolSidebarTxt"></span>
+                        </div>
+                        <div class='col-xxl-10 col-xl-10 col-9'>
+                            <span class='text-white toolSidebarTxt'>{!! $tool !!}</span>
+                        </div>
                         
-                    </a>
-                    @endforeach
-                </div>
-                <div class='p-3'></div>
+                    </div>
+
+            </a>
             @endforeach
         </div>
-        {{ isset($eclass_leftnav_extras) ? $eclass_leftnav_extras : "" }}
-    </div>
+        <div class='p-3'></div>
+    @endforeach
 </div>
+{{ isset($eclass_leftnav_extras) ? $eclass_leftnav_extras : "" }}
+
+--}}
+
+
 
 

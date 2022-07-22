@@ -12,26 +12,13 @@
 
             <div class="row">
 
-                <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
-                    <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
-                        @include('layouts.partials.sidebarAdmin')
-                    </div>
-                </div>
-
-                <div class="col-xl-10 col-lg-9 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_Homepage">
 
                     <div class="row ps-lg-5 pt-lg-5 pe-lg-5">
 
                         <div class="col-lg-12 p-5 mt-3 w-100 jumbotron jumbotron-login">
 
-                            <nav class="navbar navbar-expand-lg navrbar_menu_btn">
-                                <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn btn-primary menu_btn_button">
-                                    <i class="fas fa-align-left"></i>
-                                    <span></span>
-                                </button>
-                                <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
-                                    <i class="fas fa-tools"></i>
-                                </a>
+                            <nav class="navbar navbar-expand-lg">
                                 <span class="control-label-notes fs-5 ps-3" style='margin-top:-10px;'><span class='fa fa-home'></span> {{trans('langEclass')}}</span>
                             </nav>
 
@@ -39,8 +26,8 @@
 
                             <div class='col-xl-7 col-lg-9'>
                                 <div class="panel panel-default w-auto d-flex justify-content-center">
-                                    <div class='panel-heading w-25 text-center borderHeadingPanel'>
-                                        <img src="template/modern/img/user.jpg" class='user-icon m-auto d-block mt-5'>
+                                    <div class='panel-heading w-25 text-center borderHeadingPanel' style='border-top-right-radius:0px;'>
+                                        <img src="template/modern/img/user2.png" class='user-icon m-auto d-block mt-5'>
                                         <strong class='fs-6 control-label-notes pt-2'>{{ trans('langUserLogin') }}</strong>
                                     </div>
                                     <div class="panel-body w-75 bg-light ps-5 pe-5 pb-4 borderBodyPanel">
@@ -140,22 +127,9 @@
     <div class='row'>
         <div class='col-12 p-5 jumbotron jumbotron-login mt-3' style='border-radius:15px;'>
 
-            <nav class="navbar navbar-expand-lg navrbar_menu_btn">
-                <a class="btn btn-default d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
-                    <i class="fas fa-tools"></i>
-                </a>
-            </nav>
-
-            <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
-                <div class="offcanvas-header">
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    @include('layouts.partials.sidebarAdmin')
-                </div>
+            <div class='col-sm-12 text-center'>
+                <span class="control-label-notes"><span class='fa fa-home text-primary'></span> {{trans('langEclass')}}</span>
             </div>
-
-
 
             <div id="idform" class="panel panel-default WelcomeEclassPanelDefault mt-3">
                 <div class="panel-heading text-center WelcomeEclassHeading">

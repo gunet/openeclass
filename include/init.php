@@ -116,7 +116,7 @@ if (isset($language)) {
     $uid = $session->user_id;
     $session->active_ui_languages = array($language);
     if (!defined('UPGRADE')) {
-        redirect_to_home_page('upgrade/');
+        redirect_to_home_page('upgrade/index.php');
     }
 } else {
     // Global configuration

@@ -41,6 +41,7 @@ $(document).ready(function(){
 
     // $(".navbar_sidebar").css({"min-height": windowHeight });
     $(".col_maincontent_active").css({"min-height": windowHeight - headerHeight - footerHeight});
+    $(".col_maincontent_active_Homepage").css({"min-height": windowHeight - headerHeight - footerHeight});
     // $(".jumbotron-login").css({"min-height": windowHeight - headerHeight - footerHeight});
 
 

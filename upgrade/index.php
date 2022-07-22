@@ -43,6 +43,7 @@ if (version_compare(PHP_VERSION, '7.4') < 0) {
 }
 
 $tool_content .= "
+<div class='col-sm-12'>
   <div class='alert alert-info'>
     <p class='margin-bottom-thin'>$langExplUpgrade</p>
     <p class='margin-top-thin margin-bottom-thin text-danger'>$langExpl2Upgrade</p>
@@ -51,27 +52,38 @@ $tool_content .= "
     <p>$langUpgradeCont</p>
   </div>
 
+
+
   <div class='panel panel-default login-page'>
-    <div class='panel-heading'><span>$langUpgDetails</span></div>
-    <div class='panel-body login-page-option'>
-      <form class='form-horizontal' role='form' action='upgrade.php' method='post'>
-        <div class='form-group'>
-          <div class='col-xs-12'>
-            <input class='form-control' name='login' placeholder='$langUsername'>
+      <div class='panel-heading'>
+        <span>$langUpgDetails</span>
+      </div>
+      <div class='panel-body login-page-option'>
+
+        <form class='form-horizontal' role='form' action='upgrade.php' method='post'>
+
+          <div class='form-group mt-3'>
+            <div class='col-12'>
+              <input class='form-control' name='login' placeholder='$langUsername'>
+            </div>
           </div>
-        </div>
-        <div class='form-group'>
-          <div class='col-xs-12'>
-            <input class='form-control' name='password' placeholder='$langPass' type='password'>
+
+          <div class='form-group mt-3'>
+            <div class='col-12'>
+              <input class='form-control' name='password' placeholder='$langPass' type='password'>
+            </div>
           </div>
-        </div>
-        <div class='form-group'>
-          <div class='col-xs-12'>
-            <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit_upgrade2' value='$langUpgrade'>$langUpgrade</button>
+
+          <div class='form-group mt-3'>
+            <div class='col-12'>
+              <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit_upgrade2' value='$langUpgrade'>$langUpgrade</button>
+            </div>
           </div>
-        </div>
-      </form>
-    </div>
-  </div>";
+
+        </form>
+
+      </div>
+  </div>
+</div>";
 
 draw($tool_content, 0);

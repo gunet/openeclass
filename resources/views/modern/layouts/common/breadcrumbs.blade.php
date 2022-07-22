@@ -2,7 +2,11 @@
 
     <!-- BEGIN breadCrumbs -->
 
+    @if($course_code)
     <nav class="navbar_breadcrumb d-flex justify-content-start" aria-label="breadcrumb">
+    @else
+    <nav class="w-95 h-auto d-flex justify-content-start" aria-label="breadcrumb">
+    @endif
         <ol class="breadcrumb">
             @foreach ($breadcrumbs as $key => $item)
                @if (isset($item['bread_href']))
