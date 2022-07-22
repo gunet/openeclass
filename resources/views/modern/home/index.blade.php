@@ -107,7 +107,7 @@
                         </div>
 
                     
-                        <div class="col-12 mt-5">
+                        <div class="col-12 mt-5 mb-5">
                             <a class="btn btn-default m-auto d-block" data-bs-toggle="collapse" href="#collapse_main_section" role="button" aria-expanded="false" aria-controls="collapse_main_section">
                                 <span class='control-label-notes text-center'>{{trans('langReadMore')}}</span>
                             </a>
