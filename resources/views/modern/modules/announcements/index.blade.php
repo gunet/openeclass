@@ -245,11 +245,7 @@
 
             <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
-                @if($course_code)
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
-                @else
-                    @include('layouts.partials.sidebarAdmin')
-                @endif 
                 </div>
             </div>
 

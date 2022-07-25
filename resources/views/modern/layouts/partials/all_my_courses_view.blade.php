@@ -48,13 +48,13 @@
             <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3">
                 <div class="table-responsive">
                     <table id="courses_table_pag" class="table_my_courses">
-                        <thead class="thead_courses text-light">
+                        <thead class="list-header text-light">
                             <tr>
-                                <th scope="col"><span class="th_courses_comment">#</span></th>
-                                <th><span class="th_courses_comment">{{ trans('langTitle') }}</span></th>
-                                <th><span class="th_courses_comment">{{ trans('langCode') }}</span></th>
-                                <th><span class="th_courses_comment">{{ trans('langTeacher') }}</span></th>
-                                <th><span class="th_courses_comment">{{ trans('langUnCourse') }}</span></th>
+                                <th scope="col">#</th>
+                                <th>{{ trans('langTitle') }}</th>
+                                <th>{{ trans('langCode') }}</th>
+                                <th>{{ trans('langTeacher') }}</th>
+                                <th>{{ trans('langUnCourse') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,9 +65,9 @@
                                 <?php $i++; ?>
                                 <tr>
                                     <th scope="row">{{$i}}</th>
-                                    <td><a class="course_title_table_mycourses" href="{{$urlServer}}courses/{{$course->code}}/index.php">{{ q($course->title) }}</a></td>
-                                    <td><span class="course_prof_code">({{ q($course->public_code) }})</span></td>
-                                    <td><span class="course_prof_code">{{ q($course->professor) }}</span></td>
+                                    <td><a href="{{$urlServer}}courses/{{$course->code}}/index.php">{{ q($course->title) }}</a></td>
+                                    <td><span class="text-secondary">({{ q($course->public_code) }})</span></td>
+                                    <td><span class="text-secondary">{{ q($course->professor) }}</span></td>
                                     <td>
                                         <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
                                             <i class="fas fa-remove-format"></i>
@@ -85,7 +85,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                {{ trans('langConfirmUnregCours') }}<strong class="unregCourseStrong">{{$course->title}}</strong>;
+                                                {{ trans('langConfirmUnregCours') }}<strong class="text-warning">{{$course->title}}</strong>;
                                             </div>
                                             <div class="modal-footer">
                                                 <a class="btn btn-secondary" href="" data-bs-dismiss="modal">{{trans('langCancel')}}</a>

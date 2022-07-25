@@ -5,126 +5,283 @@
 /*---------------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------------*/
 
-  body{
-    background-color: #f5f5f5;
-    font-family: 'FontAwesome';
-    font-size: 18px;
+body{
+  background-color: #f5f5f5;
+  font-family: 'FontAwesome';
+  font-size: 18px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  list-style-type: none;
+}
+
+
+.navbar-eclass {
+  height: 170px;
+  overflow: visible;
+  background: rgba(0, 62, 135, 0.9);
+  border: 0 none;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.eclass-nav-link {
+  background: none;
+  color: #fff;
+  text-decoration: none;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.eclass-nav-link:hover {
+  background: none;
+  color: #fff;
+  text-decoration: underline;
+}
+
+.eclass-nav-link i {
+  width: 30px;
+  line-height: 30px;
+  text-align: center;
+  border: 1px solid #fff;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.eclass-nav-link i.active {
+  border-color: #005ed7;
+  background: #005ed7;
+}
+
+
+.form-wrapper.shadow-sm{
+  background-color:#F5F5F5
+}
+
+.modal-header .close{
+  background-color: transparent;
+  border-radius: 50%;
+  color:#003F87;
+}
+
+a{
+    text-decoration: none;
+}
+
+.main-container{
+    width:100%;
+}
+
+
+/* -------------------------------- testimonials ------------------------------------------ */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+
+.testimonials {
+  background: #f5f5f5;
+  padding: 80px 0;
+  position: relative;
+  height:400px;
+}
+
+.testimonials .testimonial {
+  position: relative;
+  margin: 0 40px;
+  padding: 100px 60px 60px 100px;
+  border-radius: 15px;
+  background: #fff;
+  color: #001146;
+  transition: all 0.4s;
+  font-size: 16px;
+}
+
+.testimonials .testimonial>div {
+  position: relative;
+  z-index: 2;
+}
+
+.testimonials .testimonial:before {
+  background: url(../images/testimonials-quote.png) no-repeat center;
+  background-size: contain;
+  content: "";
+  position: absolute;
+  left: 30px;
+  top: 10px;
+  width: 113px;
+  height: 112px;
+  opacity: 0.2;
+  z-index: 0;
+}
+
+.testimonials .testimonial.slick-current {
+  background: #003e87;
+  color: #fff;
+}
+
+.testimonials .testimonial.slick-current:before {
+  opacity: 1;
+}
+
+.testimonials .testimonial .testimonial-person {
+  margin-top: 15px;
+  font-style: italic;
+}
+
+.testimonials .slick-arrow {
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 50%;
+  left: 9vw;
+  transform: translate(-50%, -50%);
+  background: url(../images/prev.svg) no-repeat center;
+  background-size: contain;
+  z-index: 99;
+}
+
+.testimonials .slick-arrow:before {
+  display: none;
+}
+
+.testimonials .slick-arrow.slick-next {
+  left: 78vw;
+  background: url(../images/next.svg) no-repeat center;
+  background-size: contain;
+}
+
+/*---------------------------------------- NOT VISIBLE CLASSES ---------------------------------*/
+/*---------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------*/
+
+  .form-group.hide{
+    display:none;
   }
 
-  .form-wrapper.shadow-sm{
-    background-color:#F5F5F5
+  .item-content .not_visible{
+    opacity:0.3;
   }
-
-  .modal-header .close{
-    background-color: transparent;
-    border-radius: 50%;
-    color:#003F87;
+  
+  .not_visible td{
+    opacity:0.3;
   }
-
-  a{
-      text-decoration: none;
+  
+  .not_visible td:last-child{
+    opacity:1;
   }
-  .sidebarColToolText{
-    margin-top:-4px;
+  .help-block{
+    color:#ffc107;
+    font-size: 15px;
   }
-
-  .panel-heading.notes_thead{
-    height: auto;
-  }
-
 
   
-  .main-container{
-      width:100%;
-  }
+/* ----------------------------------- checkboxes---------------------------------------- */
+/* -------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------- */
 
-  
-  .table-condensed th,
-  .table-condensed td {
-    padding: 4px 15px;
-  }
-  
-  .table-condensed thead > tr > th,
-  .table-condensed tbody > tr > th,
-  .table-condensed tfoot > tr > th,
-  .table-condensed thead > tr > td,
-  .table-condensed tbody > tr > td,
-  .table-condensed tfoot > tr > td {
-    padding: 5px;
-  }
-  
-  .table-condensed thead tr th.next{
-    height: auto;
-    width: auto;
-    border: 2px solid #003F87;
-    border-radius: 50%;
-    visibility: visible;
-  }
-  .table-condensed thead tr th.next::after{
-    content: '>';
-    font-size: 40px;
-    font-weight: 500;
-  }
-  .table-condensed thead tr th.next:hover{
-    background-color: transparent;
-  }
-  
-  .table-condensed thead tr th.switch{
-    height: auto;
-    width: auto;
-    border: 2px solid #003F87;
-    margin-left:30px;
-    margin-right:30px;
-    visibility: visible;
-    color: orange;
-  }
-  
-  .table-condensed thead tr th.prev{
-    height: auto;
-    width: auto;
-    border: 2px solid #003F87;
-    border-radius: 50%;
-    visibility: visible;
-  }
-  .table-condensed thead tr th.prev::before{
-    content: '<';
-    font-size: 40px;
-    font-weight: 500;
-  }
-  .table-condensed thead tr th.prev:hover{
-    background-color: transparent;
-  }
-  
-  td.day.active{
-    background-color: transparent;
-    color: orange;
-  }
+.checkbox_container2 {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
-  /*---------------------------------------- NOT VISIBLE CLASSES ---------------------------------*/
-  /*---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------------------------*/
+/* Hide the browser's default checkbox */
+.checkbox_container2 input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
 
-    .form-group.hide{
-      display:none;
-    }
+/* Create a custom checkbox */
+.checkmark2 {
+  position: absolute;
+  height: 25px;
+  width: 25px;
+  background-color: #ccc;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  margin-top:0px;
+  margin-left:-35px;
+}
 
-    .item-content .not_visible{
-      opacity:0.3;
-    }
-    
-    .not_visible td{
-      opacity:0.3;
-    }
-    
-    .not_visible td:last-child{
-      opacity:1;
-    }
-    .help-block{
-      color:#ffc107;
-      font-size: 15px;
-    }
+.checkmark2--bordered{
+  background: transparent;
+  border: 1px solid #fff;
+  right: 20px;
+}
+
+.checkmark2--bordered::after{
+  left: 8px !important;
+    top: 3px !important;
+}
+
+/* On mouse-over, add a grey background color */
+
+
+/* When the checkbox is checked, add a blue background */
+.checkbox_container2 input:checked ~ .checkmark2 {
+  background-color: #003F87;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark2:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox_container2 input:checked ~ .checkmark2:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox_container2 .checkmark2:after {
+  left: 9px;
+  top: 5px;
+  width: 8px;
+  height: 14px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
 
 
 
@@ -166,13 +323,6 @@
   .fas.fa-home{
      color:blue;
      background-color: white;
-  }
-  
-  .user-item{
-    padding-left:20px;
-  }
-  .user-item:hover{
-      color:white;
   }
   
   .inputSearch{
@@ -230,19 +380,6 @@
       color:white; padding-left:15px; padding-top:40px;
   }
 
-  
-  /* --------------------------------------------- Forums ----------------------------------------*/
-  /* ---------------------------------------------------------------------------------------------*/
-  /* ---------------------------------------------------------------------------------------------*/
-  /* ---------------------------------------------------------------------------------------------*/
-  /* ---------------------------------------------------------------------------------------------*/
-  /* ---------------------------------------------------------------------------------------------*/
-  /* ---------------------------------------------------------------------------------------------*/
-  /* ---------------------------------------------------------------------------------------------*/
-  
-  .announcement_th_comment{
-      padding-left:10px;
-  }
   
   /* --------------------------------------------- CourseHome ----------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -304,25 +441,6 @@
       color: #11D888;
   }
 
-  .buttons-print{
-    color:#003F87;
-  }
-  .buttons-copy{
-    color:#003F87;
-  }
-  .buttons-collection{
-    color:#003F87;
-  }
-
-  .buttons-print:hover{
-    color:blue;
-  }
-  .buttons-copy:hover{
-    color:blue;
-  }
-  .buttons-collection:hover{
-    color:blue;
-  }
   
   /* --------------------------------------------- MyDropdowns ----------------------------------------*/
   /* ------------------------------------------------------------------------------------------------- */
@@ -420,17 +538,6 @@
       color: orange;
   }
   
-  .registerCourse_container{
-      width:95%;
-      height: auto;
-      background-color: white;
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-      border-bottom-left-radius: 15px;
-      border-bottom-right-radius: 15px;
-  }
-  
-
   .list_grouping{
       margin-top:-25px;
   }
@@ -446,12 +553,7 @@
   .back_col_registerCourse{
       margin-top:-30px;
   }
-  
-  .thead_register{
-      background-color:#003F87;
-  }
-  
-  
+
   
   /* --------------------------------------------- Portfolio ----------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -463,7 +565,9 @@
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
 
-
+  .lesson-image:hover{
+    opacity:0.5;
+  }
   .panel-body-eportfolio-edit{
       border:2px solid rgba(0,63,135,0.1);
   }
@@ -480,7 +584,6 @@
       color:#003F87; margin-left:20px;
   }
 
-  
   .user-details-collapse-more{
       cursor: pointer;
   }
@@ -492,195 +595,74 @@
   .collapse-menu-button:hover{
     cursor: pointer;
   }
-  
-  
-  .mt-30px {
-      margin-top: 30px;
-    }
-    
-    .mb-30px {
-      margin-bottom: 30px;
-    }
-    
-    .user-details {
-      background-color: white;
-      border-radius: 15px;
-      padding-right: 15px;
-      padding-left: 15px;
-      height:auto;
-    }
-  
-    .user-announcements-portfolio{
-      border-radius: 15px;
-      height:auto;
-    }
-  
-    .user-messages-portfolio{
-      border-radius: 15px;
-      height:auto;
-    }
-    
-    .user-detals-photo {
-      min-width: 180px;
-      height: 180px;
-      border-radius: 100%;
-    }
-    
-    .block-title-2 {
-      font-weight: bold;
-      color: #0d6efd;
-      border-bottom: thin solid #0d6efd;
-      margin-bottom: 25px;
-    }
-    
-    .collapse-courses-button {
-      margin-left: 15px;
-    }
-    
-    .collapse-courses-button-deactivated:hover {
-      background-color: #ffc107;
-    }
-    
-    .fa-custom-size {
-      font-size: 1.6em;
-    }
-    
-    .courses-paging-num {
-      font-size: 16px;
-      font-weight: bold;
-      padding: 4px;
-      padding-left: 12px;
-      padding-right: 12px;
-      margin-top: 1px;
-    }
-    
-    .courses-paging-num:hover {
-    
-      text-decoration: underline;
-    }
-    
-    .courses-paging-arrow {
-      color: #0d6efd;
-      border: 2px solid #0d6efd;
-      font-size: 25px;
-      border-radius: 100%;
-      width: 38px;
-      padding: 4px;
-      padding-left: 8px;
-    }
-    
-    .courses-paging-arrow:hover {
-      color: white;
-      background-color: #0d6efd;
-    }
-    
-    .courses-paging-ellipsis {
-      font-size: 16px;
-      font-weight: bold;
-      padding: 4px;
-      padding-left: 0px;
-      padding-right: 0px;
-      margin-top: 1px;
-    }
-  
-    .btn_left_rigth{
-      height:30px; width:30px; border-radius:50%; border:solid 1px blue;
-    }
-  
-    .arrow-left{
-      color:blue; margin-left:8px; margin-top:5px;
-    }
-  
-    .arrow-right{
-      padding-left:10px; color:blue; margin-top:5px;
-    }
-  
-    .all_courses_a{
-        text-decoration: none;
-    }
-      
-  
-  .panel-footer{
-      background-color:white;
+
+  .user-details {
+    background-color: white;
+    border-radius: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
+    height:auto;
+  }
+
+  .user-announcements-portfolio{
+    border-radius: 15px;
+    height:auto;
+  }
+
+  .user-messages-portfolio{
+    border-radius: 15px;
+    height:auto;
   }
   
+  .user-detals-photo {
+    min-width: 180px;
+    height: 180px;
+    border-radius: 100%;
+  }
+  
+  .block-title-2 {
+    font-weight: bold;
+    color: #0d6efd;
+    border-bottom: thin solid #0d6efd;
+    margin-bottom: 25px;
+  }
+
+  .fa-custom-size {
+    font-size: 1.6em;
+  }
+  
+  .btn_left_rigth{
+    height:30px; width:30px; border-radius:50%; border:solid 1px blue;
+  }
+
+  .arrow-left{
+    color:blue; margin-left:8px; margin-top:5px;
+  }
+
+  .arrow-right{
+    padding-left:10px; color:blue; margin-top:5px;
+  }
+
   .event.event-important{
-     float:left;
+      float:left;
   }
-  
+
   .event.event-info{
       float:left;
   }
-  
+
   .event.event-success{
       float:left;
   }
-  
+
   .event.event-special{
       float:left;
   }
-  
+
   .agenda-comment{
-     font-size:13px;
+      font-size:13px;
   }
       
-  
-  /* -------------------------------------------- AllMyCoursesViewPartial ----------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  
-  
-  .th_courses_comment{
-      color:white;
-      margin-left:-7px;
-  }
-  
-  .fas.fa-remove-format{
-    margin-left:40px; color:orange;
-  }
-  
-  .thead_courses{
-      background-color:#003F87;
-  }
-  
-  .course_title_table_mycourses{
-      text-decoration:none; color:grey;
-  }
-  
-  .course_title_table_mycourses:hover{
-      color: orange;
-  }
-  
-  .course_prof_code{
-      color:grey;
-  }
-  
-  .unregCourseStrong{
-    color: orange;
-  }
-  
-  .fa.fa-gears{
-      color:white;
-  }
-  .courses_fas{
-    float:right; margin-top:-60px; margin-right:-30px;
-    font-size:45px;
-  }
-  
-  .registerToCourseText{
-    margin-right:35px; margin-top:-25px; font-size:17px; color:#003F87;
-  }
-  
-  
-  .ColContentCourses{
-    height:auto; margin:auto; display:block; margin-top:-20px;
-  }
   
   /* -------------------------------------------- AllTables ------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -692,7 +674,61 @@
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   
-  
+  .table-condensed th,
+  .table-condensed td {
+  padding: 4px 15px;
+  }
+
+  .table-condensed thead > tr > th,
+  .table-condensed tbody > tr > th,
+  .table-condensed tfoot > tr > th,
+  .table-condensed thead > tr > td,
+  .table-condensed tbody > tr > td,
+  .table-condensed tfoot > tr > td {
+  padding: 5px;
+  }
+
+  .table-condensed thead tr th.next{
+  height: auto;
+  width: auto;
+  border: 2px solid #003F87;
+  border-radius: 50%;
+  visibility: visible;
+  }
+  .table-condensed thead tr th.next::after{
+  content: '>';
+  font-size: 40px;
+  font-weight: 500;
+  }
+  .table-condensed thead tr th.next:hover{
+  background-color: transparent;
+  }
+
+  .table-condensed thead tr th.switch{
+  height: auto;
+  width: auto;
+  border: 2px solid #003F87;
+  margin-left:30px;
+  margin-right:30px;
+  visibility: visible;
+  color: orange;
+  }
+
+  .table-condensed thead tr th.prev{
+  height: auto;
+  width: auto;
+  border: 2px solid #003F87;
+  border-radius: 50%;
+  visibility: visible;
+  }
+  .table-condensed thead tr th.prev::before{
+  content: '<';
+  font-size: 40px;
+  font-weight: 500;
+  }
+  .table-condensed thead tr th.prev:hover{
+  background-color: transparent;
+  }
 
   .announcements_table{
      width:100%;
@@ -719,7 +755,6 @@
   }
 
   .table-default tr td{
-    /* min-height:70px; */
     padding-top:20px !important;
     padding-left:20px !important;
     padding-bottom: 20px !important;
@@ -727,12 +762,6 @@
   }
 
   .list-header{
-    /* background-color:#003F87; */
-    /* height:40px;
-    border-color: #005ed7;
-    background: linear-gradient(180deg,#003F87 0%,#003F87 49%, #003F87 51%,#003F87 100%);
-    border-radius: 5px; */
-
     height:40px;
     background: rgb(199,212,210);
     background: radial-gradient(circle, #003F87 0%, #003F87 100%);
@@ -773,7 +802,6 @@
   }
   .title1{
     background-color: #003F87;
-    
   }
   .title1 td{
     color:white;
@@ -784,44 +812,7 @@
   .announcements_table tr th{
      padding-left: 15px;
   }
-  
-  .announcements_thead{
-     background-color:#003F87;
-  }
-  
-  .announcement_th_comment{
-     margin-left:-10px;
-  }
-  
-   .announcement-item{
-      padding-left: 20px;
-      margin: 10px 0px 10px 0px;
-      color:white;
-  }
-  
-  .visible-button{
-      border:0; background-color:transparent; color:white;
-      color:white;
-  }
-  
-  .announcement-item:hover{
-      color:orange;
-  }
-  
-  .myDropDownDocument{
-      width:60px;
-      height:35px;
-      background-color: #003F87;
-  }
-  .myDropDownDocument:focus{
-      background-color: #003F87;
-  }
-  .myDropDownDocument:active{
-      background-color: #003F87;
-  }
-  .myDropDownDocument:hover{
-      background-color: #003F87;
-  }
+
   
   /* -------------------------------------------- Glossary ------------------------------------------ */
   /* -------------------------------------------------------------------------------------------------*/
@@ -837,12 +828,7 @@
       color:black;
       font-weight: 500;
   }
-  
-  .glossary_a{
-      color:white;
-      text-decoration: none;
-  }
-  
+
   .paging_a_glossary{
       height:40px;
       width:40px;
@@ -863,151 +849,8 @@
       color:orange;
       border:solid 3px grey;
   }
-  
-  .indexCategory-ul{
-      background-color: #003F87;
-  }
-  .indexCategory-ul li{
-      padding-left: 35px;
-  }
-  .indexCategory-ul li a{
-      color:white;
-  }
-  
 
-  /* -------------------------------------------- Messages ---------------------------------- --------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  
-   .panel-heading-message{
-      background-color:#003F87;
-      padding-left: 15px;
-      color:white;
-   }
-   .panel-default-message{
-      border:2px solid rgba(0,63,135,0.1);
-   }
-  
-   .panel-body-message{
-       padding-left: 15px;
-   }
-  
-  /* -------------------------------------------- Create Course  -------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  
-   .row_line{
-      height:20px;
-   }
-  
-   .row_line2{
-      height:10px;
-   }
-  
-   /* -------------------------------------------- Legend ManageCourse --------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  
-  .pos_TitleCourse{
-      margin-left:-20px;
-      color:#003F87;
-      font-weight: 600;
 
-  }
-  
-  
-  
-   /* -------------------------------------------- Open Courses --------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  
-  .opencourses_container{
-      width:95%;
-  }
-  .col_opencourses{
-      height:auto;
-  }
-  .col_open_courses{
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-      border-bottom-left-radius: 15px;
-      border-bottom-right-radius: 15px;
-      border:solid 5px #483D8B; height:440px; 
-      /* background-color:#003F87; */
-      background-repeat: no-repeat; background-size: cover;
-      background-image: url(../images/books.jpeg);
-      margin-top:30px;
-      height:auto;
-      padding-top: 155px;
-  }
-  
-  .opencoursesCol{
-      padding-bottom: 150px;
-  }
-  
-  .col_backOpenCourses{
-     padding-bottom: 150px;   
-  }
-  
-  .opencourses_thead{
-      background-color: #003F87;
-  }
-  
-  .fieldset_registration{
-      background-color:white; margin-top:-25px;
-  }
-  
-  .register-legend {
-      color:orange; 
-      background-color:white;
-      border-radius:30px;
-      border-top-style: solid;
-      border-width: thin;
-      border-color: #dee2e6;
-      border:solid 4px orange;
-  }
-  
-  .fieldset_border{
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-      border-bottom-left-radius: 15px;
-      border-bottom-right-radius: 15px;
-    }
-    
-    .fas.fa-custom-size.fa-bars{
-      cursor: pointer;
-    }
-    
-    .fas.fa-custom-size.fa-th-large{
-      cursor: pointer ;
-      margin-left:8px;
-    }
-    
-  
   /* -------------------------------------------- Home Pages -----------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1042,7 +885,12 @@
       background-image: url(../images/playstore.png);
   }
 
-  
+  .user-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+
   .homes.fas.fa-chevron-up{
       color:white; margin-left:17px; margin-top:15px;
   }
@@ -1055,16 +903,8 @@
       margin-left: 5px;
   }
   
-  .password_h4{
-      margin-top: 10px;
-  }
-  
   .row_pad_courses{
       padding-top: 40px;
-  }
-  
-  .testimonials{
-      height:400px;
   }
   
   .all_announcements{
@@ -1081,29 +921,226 @@
       font-size: 17px;
   }
   
-  .all_courses_btn{
-      text-decoration: none;
-  }
-  
-  .all_courses_btn::after{
-      content: ">";
-      font-size: 17px;
-  }
-  
   .hidden-xs{
       color:white;
   }
-  
-  
-  .user-menu{
-      margin-top:-60px;
-  }
-  
+
   .wrapper {
       display: flex;
       width: 100%;
       align-items: stretch;
   }
+
+  .login-form-spacing {
+    padding-top: 20px;
+    text-align: center;
+  }
+  
+  .login-form-spacing2 {
+    padding-top: 17px;
+    margin-top:-12px;
+    text-align: center;
+  }
+
+  .login-input {
+    text-align: center;
+    background-color: lightgrey;
+    border: none;
+    border-radius: 15px;
+  }
+  
+  .login-form-submit {
+    border: solid thin;
+    border-radius: 15px;
+    border-color: #003e87;
+    color: #003e87;
+    font-size: 18px;
+  }
+
+  .block-title {
+    font-weight: bold;
+    color: #003e87;
+    border-bottom: 1px solid #003e87;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+  }
+
+  .statistics {
+    min-height: 400px;
+    padding: 50px 15px;
+    background: url('../images/statistics.jpg') no-repeat center;
+    background-size: cover;
+    position: relative;
+    color: #fff;
+    border-radius:15px;
+  }
+  
+  .statistics h2 {
+    color: #fff;
+  }
+  
+  .statistics>div {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .statistics>div .row>div {
+    margin-bottom: 30px;
+  }
+  
+  .statistics:before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    content: "";
+    z-index: 0;
+    background: #001146;
+    opacity: 0.9;
+  }
+  
+  .statistics i {
+    font-size: 20px;
+    background: #005ed7;
+    border-radius: 50%;
+    width: 60px;
+    line-height: 60px;
+    text-align: center;
+  }
+  
+  .statistics .num {
+    font-size: 60px;
+    font-weight: bold;
+  }
+  
+  .statistics .num span {
+    font-weight: normal;
+  }
+  
+  .statistics .num-text {
+    font-size: 20px;
+  }
+
+  .main-section>.row>div {
+    padding: 50px;
+  }
+  
+  .main-section>.row>div.sidebar {
+    background: #f5f5f5;
+  }
+
+  .news-list .news-list-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #dadada;
+  }
+  
+  .news-list .news-list-item .date {
+    color: #9d9d9c;
+    font-weight: 600;
+  }
+  
+  .news-list .news-list-item .title a {
+    color: #003e87;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  /********************************************* FOOTER **********************************************/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+
+  .copyright{
+    float:right;
+    text-decoration: none;
+    line-height: 30px;
+  }
+  
+  .social_meadia_ul li{
+    display: inline;
+    float:right;
+    padding: 5px;
+  }
+  
+  .ul_tools_site_footer li{
+    line-height: 30px;
+  }
+  
+  .a_tools_site_footer{
+    text-decoration: none;
+  }
+  
+  .div_social{
+    height:40px;
+    width:40px;
+    border-radius: 50px;
+    background-color: blue;
+    padding-top: 3px;
+    padding-left: 12px;
+  }
+  
+  
+  .fab.fa-linkedin-in{
+    font-size:19px;
+  }
+  
+  .fab.fa-twitter{
+    font-size:19px;
+  }
+  
+  .fab.fa-facebook-f{
+    font-size:19px;
+  }
+  
+  .site-footer {
+    padding: 45px 40px;
+    background: #001146;
+    color: #fff;
+    font-size: 12px;
+    width:auto;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+  
+  .site-footerMobile {
+    background: #001146;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+  
+  .site-footer a {
+    font-size: 12px;
+    color: #fff;
+  }
+  
+  .site-footer ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  
+  .site-footer .social-icons {
+    margin-bottom: 20px;
+  }
+  
+  .site-footer .social-icons a {
+    display: inline-block;
+    text-align: center;
+    margin-left: 15px;
+    font-size: 16px;
+    width: 30px;
+    line-height: 30px;
+    background: #005ed7;
+    border-radius: 50%;
+    border-radius: 50%;
+  }
+  
   
   /* -------------------------------------------- Notes ----------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1114,140 +1151,22 @@
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
-    .addNodesText{
-      margin-left:-80px; margin-top:-45px; font-size:17px; color:#003F87;
-      margin-right:40px;
-    }
-  
-    .AddNotePlus{
-      color:white; font-size:28px; filter: brightness(300%);
-      margin-right:-6px; margin-top:-60px;
-    }
-  
-    .formAddNote{
-      height:50px;
-    }
-  
-    .form_fieldset_notes{
-      margin-top:-20px;
-    }
-  
-    .nodes_fas{
-      float:right;
-      margin-right:-15px; margin-top:-60px;
-    }
-  
-    .myNodesText{
-      margin-top:0px; font-size:25px; color:#003F87;
-      margin-left:-20px;
-    }
-  
-    .notes_container{
-      width:95%;
-      height: auto;
-    }
-  
-    .col_notes{
-      border:solid 5px white; height:auto; background-color:white;
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-      border-bottom-left-radius: 15px;
-      border-bottom-right-radius: 15px;
-    }
-  
-    .fas.fa-sticky-note.fa-spin.fa-3x{
-      color:#003F87; filter:brightness(80%);
-      font-size: 40px;
-    }
-  
-  
-    .fieldset_notes{
-      background-color:white;
-      border:solid 2px #003F87;
-    }
-  
-    .notes-legend{
-      -webkit-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
-      -moz-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
-      box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
-      border-radius: 15px;
-    }
-  .notes_thead{
-    /* height:40px;
-    border-color: #005ed7;
-    background: linear-gradient(180deg,#003F87 0%,#003F87 49%, #003F87 51%,#003F87 100%);
-    border-radius: 5px; */
 
+  .notes_thead{
     height:40px;
     background: rgb(199,212,210);
     background: radial-gradient(circle, #003F87 0%, #003F87 100%);
     -webkit-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
-      -moz-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
-      box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
+    -moz-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
+    box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
   }
 
-  
-  .edit_trash_notes{
-      margin-left:40px;
+  .control-label-notes{
+    font-size:19px;
+    color:#003F87;
+    font-weight: 600;
   }
-  
-  .notes_th_comment{
-      margin-left:-10px;
-  }
-  
-  .notes_th_comment2{
-      margin-left:-7px;
-  }
-  
-  .add_note_button{
-    border:0;
-    background-color: transparent;
-    float:right;
-    
-  }
-  
-  .add_btn{
-      width:170px;
-   }
    
-   .cancel_btn{
-     width:170px;
-     margin-right: 0px ;
-   }
-   
-   .fieldset_addnotes{
-     background-color: white;
-     border:solid 2px #003F87 ;
-   }
-   .control-label-notes{
-     font-size:19px;
-     color:#003F87;
-     font-weight: 600;
-   }
-   
-   .back_{
-     margin-top:-40px;
-   }
-   
-   .fas.fa-arrow-left{
-     color:white; font-size:20px;
-   }
-   .content-truncate-note{
-      color: black;
-    }
-  
-    .modalNote{
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
-    
-    .btn_back_note{
-      height:45px; float:right; margin-top:-47px; margin-right:-27px;
-      font-size:22px; padding-top:12px;
-      background-color: transparent; color:#003F87; border: 0;
-    }
   
   /* -------------------------------------------- Video ----------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1267,25 +1186,12 @@
       padding-right:15px;
       padding-top:10px;
   }
-  
   .modify_note_button{
     border:0;
     background-color: transparent;
     padding-left:40px;
   }
-  /* -------------------------------------------- Ebook ----------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  
-  .back_title{
-    font-size:20px;
-  }
+
   
   /* -------------------------------------------- Forum ----------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1296,37 +1202,6 @@
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
-  
-  .view_forum_ul{
-      background-color: #003F87;
-  }
-  .view_forum_ul li{
-      padding-left: 35px;
-  }
-  .view_forum_ul li a{
-      color:white;
-      font-size:16px;
-  }
-  .my-panel-heading-forum{
-      background-color:#003F87;
-      height:45px;
-  
-  }
-  .my-panel-title{
-      padding-left:15px;
-      padding-top:9px;
-      color:white;
-  }
-  
-  .my-pull-right-forum{
-      padding-right:15px;
-      padding-top:3px;
-  }
-  .my-panel-body{
-     background-color: #DCDCDC;
-     margin-top:0px;
-     border:solid 2px #003F87;
-  }
   
   .profile-name
   {
@@ -1350,13 +1225,6 @@
       margin-bottom: 40px;
   }
   
-  li.list-item{
-      list-style-type: none ;
-  }
-  
-  li.list-item:not(:last-child) { 
-      margin-bottom: 25px;  
-   }
   
   /* -------------------------------------------- BootBox MenuPopover ---------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1399,19 +1267,8 @@
   .menu-popover .delete.delete_btn:hover{
     background: red;
   }
-  
- 
-  /* .menu-popover:hover{
-      background-color: #003F87 ;
-  }
-  .menu-popover:active{
-      background-color: #003F87 ;
-  }
-  .menu-popover:focus{
-      background-color: #003F87 ;
-  }
-   */
-  /* -------------------------------------------- Exercises ------------------------------------------*/
+
+  /* -------------------------------------------- BUTTONS  ------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1484,6 +1341,16 @@
     border-radius: 5px;
   }
 
+  /* -------------------------------------------- PANELS  -------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/  
+
   .panel-primary, .panel-success, .panel-default, .panel-info, .panel-action-btn-primary,.panel-action-btn-default,.media{
     border-bottom-right-radius: 15px;
     border-top-right-radius: 15px;
@@ -1497,12 +1364,16 @@
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
     padding:10px 15px;
-    /* background: rgb(199,212,210); */
     background: #F5F5F4;
     -webkit-box-shadow: inset 0 0 2px rgba(127,132,153,0.35);
       -moz-box-shadow: inset 0 0 2px rgba(127,132,153,0.35);
       box-shadow: inset 0 0 2px rgba(127,132,153,0.35);
   }
+  
+  .panel-heading.notes_thead{
+    height: auto;
+  }
+
   .panel-body,.media-body{
     padding:15px;
   }
@@ -1525,8 +1396,6 @@
     height: auto;
   }
   
-
- 
   
   /* -------------------------------------------- Links ----------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1550,15 +1419,6 @@
   .category-link a{
       padding-left:15px ;
   }
-  
-  .fa.fa-folder-open{
-      color:orange;
-  }
-  
-  .fa.fa-folder{
-      color:orange;
-  }
-  
   
   /* ------------------------------------- All Tables And Panels For ToolContent ---------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1593,58 +1453,7 @@
   .shadow-sm .res-table-row{
     border:none ;
   }
-  /* .mydescriptionPanel{
-      border:2px solid rgba(0,63,135,0.1) ;
-  }
-  .panel-action-note{
-      border:2px solid rgba(0,63,135,0.1) ;
-  }
-  .module_path_body{
-      border:2px solid rgba(0,63,135,0.1) ;
-  }
-  .panel-body-request{
-      border:2px solid rgba(0,63,135,0.1) ;
-  }
-  .panel-body-exercise{
-      border:2px solid rgba(0,63,135,0.1) ;
-  }
-  .panel-body-blog{
-      border:2px solid rgba(0,63,135,0.1) ;
-  }
-  .panel-footer-blog{
-      border:2px solid rgba(0,63,135,0.1) ;
-  }
-  .fieldset-eportfolio{
-      border:2px solid rgba(0,63,135,0.1) ;
-  }
-  .panel_default{
-    border:2px solid rgba(0,63,135,0.1) ;
-  } */
-  /* .inner-heading.notes_thead{
-     color:white;
-     padding-top:10px;
-     padding-left: 15px;
-     padding-bottom: 10px;
-     padding-right: 15px;
-     height: auto;
-  }
-  .panel-heading-note{
-      border:2px solid #003F87 ;
-      background-color:#003F87;
-  }
-  .panel-title-note{
-      color:white;
-      padding-left: 15px;
-      padding-top: 7px;
-  }
-  .panel-body-note{
-      padding-left: 15px;
-  }
-  
-  .myrowP-2{
-      background-color:white;
-  } */
-  
+
   .fa.fa-pencil.text-danger.fa-custom-lock{
       margin-top:-25px;
       margin-left:15px;
@@ -1685,10 +1494,6 @@
     color:orange;
   }
 
-
-  /* .sorting_desc{
-    width:100% !important;
-  } */
   /* ------------------------------------- Documents ------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1736,33 +1541,12 @@
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/  
   
-  /* .panel-heading-questionaire{
-      border:2px solid #003F87 ;
-      background-color:#003F87;
-      color:white;
-      padding-left:15px;
-  } */
-  
   .panel-body-questionaire{
       padding-left:15px;
       padding-top:10px;
       padding-bottom:10px;
   }
   
-  /* ------------------------------------- electronicBook ------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/  
-  /* .panel-body-electronicBook{
-      border:2px solid rgba(0,63,135,0.1) ;
-      padding-top:10px;
-    padding-bottom:10px;
-  } */
 
   /* ------------------------------------- wall ------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1773,40 +1557,10 @@
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/  
- .media-body.bubble{
-   padding:15px;
+  .media-body.bubble{
+    padding:15px;
+  }
 
- }
-
-   /* ------------------------------------- groups ------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/  
- .panel-body-group{
-    border:2px solid rgba(0,63,135,0.1) ;
-    padding-top:10px;
-    padding-bottom:10px;
- }
-
- /* ------------------------------------- wiki ------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
- .panel-body-wiki{
-    border:2px solid rgba(0,63,135,0.1) ;
-    padding-top:10px;
-    padding-bottom:10px;
- }
 
  /* ------------------------------------- progress ------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1839,47 +1593,6 @@
       padding-top:25px;
       padding-bottom:25px;
   }
- /* ------------------------------------- Create FAQ ------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
- 
-  
-
-/* ------------------------------------- ADMIN ------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* .panel-admin{
-      background-color:#003F87;
-  }
-  .panel-body-admin{
-      border:2px solid rgba(0,63,135,0.1) ;
-  }
-  .nav-link-adminTools:hover{
-      background-color: blue;
-      color:white;
-  }
-  .nav-link.active.nav-link-adminTools:hover{
-      background-color: blue;
-      color:white !important;
-  }
-  .panel.panel-success.widget{
-      border:2px solid rgba(0,63,135,0.1) ;
-  }
-  .panel-default-admin{
-      border:2px solid rgba(0,63,135,0.1) !important;
-  } */
 
 
 /* ------------------------------------- TERMS ------------------------------------------------*/
@@ -1965,10 +1678,6 @@
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------*/
   @media (max-width: 320px){
-
-    .login-form-body{
-      width:270px;
-    }
 
     .WelcomeEclassPanelDefault{
       border-radius: 15px;
@@ -2157,14 +1866,6 @@
       background-color: transparent;
     }
 
-    .login-form-body{
-      width:auto;
-    }
-    .login-form-icon{
-      width:auto;
-      margin-left: -40px;
-    }
-
     .manage-course-ul{
       background-color: #003F87;
       width:260px;
@@ -2290,20 +1991,10 @@
       background-color: transparent;
     }
 
-
-    .login-form-body{
-      width:auto;
-    }
-    .login-form-icon{
-      width:auto;
-      margin-left: -40px;
-    }
-
     .manage-course-ul{
       background-color: #003F87;
       width:260px;
     }
-
 
     textarea{
       max-width:285px;
@@ -2347,16 +2038,6 @@
     }
     .btn-group .btn.btn-success{
       border:solid 3px white;
-    }
-
-    .user-menu{
-      max-width: 100% ;
-      margin: 0 auto ;
-      padding: 0 40px ;
-    }
-    
-    .user-menu{
-        margin-top:5px ;
     }
 
     .user-icon{
@@ -2470,14 +2151,6 @@
       background-color: transparent;
     }
 
-    .login-form-body{
-      width:auto;
-    }
-    .login-form-icon{
-      width:auto;
-    }
-
-
     .user-detals-photo {
       min-width: 180px;
       height: 180px;
@@ -2489,7 +2162,6 @@
     textarea{
       max-width:315px;
     }
-
 
     .navrbar_menu_btn{
       margin-left:0px;
@@ -2587,13 +2259,6 @@
     }
     .btnLang:focus{
       background-color: transparent;
-    }
-    .login-form-body{
-      width:auto;
-    }
-    .login-form-icon{
-      width:auto;
-      margin-left: 80px;
     }
 
     .navrbar_menu_btn{
@@ -3004,58 +2669,7 @@
 /* ---------------------------------------------------------------------------------------------------------------------- */
 /* ------------------------------------------------- OTHERS ------------------------------------------------------------- */
 
-@media(max-width: 424px) {
-    .welcome {
-      font-size: 34px;
-    }
 
-  }
-  
-  @media(max-width: 320px) {
-    .welcome {
-      font-size: 28px;
-    }
-  }
-  
-  @media(max-width: 645px) {
-    .eclass-nav-link-group {
-      width: 140px;
-    }
-  
-    .eclass-nav-link-group i {
-      margin-right: 6px ;
-      margin-top: 6px;
-    }
-  }
-  
-  @media (max-width: 375px) {
-  
-    .icon-border {
-      margin-left: 171px;
-    }
-  
-    .user-bg {
-      margin-left: 123px;
-    }
-  }
-  
-  @media (max-width: 320px) {
-  
-    .eclass-nav-link-group {
-      width: 140px;
-    }
-  
-  
-   
-    .icon-border {
-      margin-left: 127px;
-    }
-  
-    .user-bg {
-      margin-left: 80px;
-    }
-  }
-  
   @media (max-width: 1024px) {
     .testimonials .slick-arrow {
       left: 12vw;
@@ -3070,10 +2684,6 @@
     .testimonials .testimonial {
       margin: 0 20px;
       padding: 40px;
-    }
-  
-    .intro-row {
-      padding: 250px 25px 50px;
     }
   }
   

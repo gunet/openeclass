@@ -189,7 +189,7 @@
                     <div id="bars-active" class='float-end mt-0' style="display:flex;">
                         <div id="cources-bars-button"
                             class="collapse-cources-button text-primary" >
-                            <span class="list-style active"><i class="fas fa-custom-size fa-bars"></i></span>
+                            <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars"></i></span>
                         </div>
                         <div id="cources-pics-button"
                             class="collapse-cources-button text-secondary collapse-cources-button-deactivated"
@@ -202,7 +202,7 @@
                         <div id="cources-bars-button"
                             class="collapse-cources-button text-secondary collapse-cources-button-deactivated"
                             onclick="switch_cources_toggle()">
-                            <span class="list-style active"><i class="fas fa-custom-size fa-bars"></i></span>
+                            <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars"></i></span>
                         </div>
                         <div id="cources-pics-button" class="collapse-cources-button text-primary">
                             <span class="grid-style"><i class="fas fa-custom-size fa-th-large"></i></span>

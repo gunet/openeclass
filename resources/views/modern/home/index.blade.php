@@ -44,7 +44,7 @@
                                             </div>
                                         </form>
                                         <div class="login-form-spacing2">
-                                            <a class="login-forgot" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
+                                            <a class="text-warning" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -147,7 +147,7 @@
                         </div>
                     </form>
                     <div class="login-form-spacing2">
-                        <a class="login-forgot" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
+                        <a class="text-warning" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
                     </div>
                 </div>
             </div>
@@ -216,7 +216,7 @@
     </div>
 
 
-    <div class="container-fluid statistics mt-3" style="border-radius:15px;">
+    <div class="container-fluid statistics mt-3">
         <div class="statistics-wrapper">
             <h2 class="text-center">
                 Στατιστικά Επισκεψιμότητας

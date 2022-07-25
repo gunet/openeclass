@@ -204,7 +204,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_url = $urlAppend . 'modules/announcements/index.php?course=' . $ann->code . '&amp;an_id=' . $ann->id;
                     $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
                     $ann_content .= "
-                        <li class='list-item ps-3 pe-3'>
+                        <li class='list-item p-3'>
                             <div class='item-wholeline'>
                                     <div class='text-title'>
                                         <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
@@ -217,7 +217,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_url = $urlAppend . 'main/system_announcements.php?an_id=' . $ann->id;
                     $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
                     $ann_content .= "
-                    <li class='list-item ps-3 pe-3'>
+                    <li class='list-item p-3'>
                         <div class='item-wholeline'>
                                 <div class='text-title'>
                                     <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
@@ -257,7 +257,7 @@ function getUserMessages() {
                 $course_title = '';
             }
             $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
-            $message_content .= "<li class='list-item ps-3 pe-3'>
+            $message_content .= "<li class='list-item p-3'>
                                     <div class='item-wholeline'>
                                         <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
                                             <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>

@@ -391,7 +391,7 @@ $tool_content .= "
 
 if ($is_editor) {
     // Titles for teachers
-    $tool_content .= "      <th><div align='center'>" . icon('fa-gears') . "</div></th>\n";
+    $tool_content .= "      <th class='text-white'><div align='center'>" . icon('fa-gears') . "</div></th>\n";
 } elseif ($uid) {
     // display progression only if user is not teacher && not anonymous
     $tool_content .= "      <th colspan='2' width='50'><div align='center' class='text-white'>$langProgress</div></th>\n";

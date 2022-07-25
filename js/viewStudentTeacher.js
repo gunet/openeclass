@@ -1,11 +1,5 @@
 $(document).ready(function(){
 
-    // $(function(){
-    //     var test = localStorage.input === 'true'? true: false;
-    //     $('#rounded').prop('checked', test || false);
-    // });
-
-
      // Teacher - Student Button
      $('.btn-toggle').on('click', function () {
         //localStorage.input = $(this).is(':checked');

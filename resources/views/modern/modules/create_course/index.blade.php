@@ -107,7 +107,7 @@
                       <div class='form-wrapper shadow-sm p-3 rounded'>
                         <form class='form-horizontal' role='form' method='post' name='createform' action="{{ $_SERVER['SCRIPT_NAME'] }}" onsubmit=\"return validateNodePickerForm();\">
                        
-                                  <div class="row">
+                                  <div class="row p-2">
                                     <div class="col-lg-6 col-12">
                                       <div class='form-group'>
                                           <h3 for='title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</h3>
@@ -127,10 +127,8 @@
                                     </div>
                                   </div>
 
-                                  <div class="row p-2"></div>
 
-
-                                  <div class="row">
+                                  <div class="row p-2">
                                     <div class="col-lg-4 col-12">
                                       <div class='form-group'>
                                           <h3  class='col-sm-4 control-label-notes'>{{ trans('langFaculty') }}:</h3>
@@ -159,9 +157,7 @@
                                     </div>
                                   </div>
 
-                                  <div class="row row_line"></div>
-
-                                  <div class="row">
+                                  <div class="row p-2">
                                     <div class="col-lg-12 col-12">
                                       <div class='form-group'>
                                           <label for='description' class='col-sm-12 control-label-notes'>Περιγραφή μαθήματος (προαιρετικό)</label>
@@ -172,14 +168,11 @@
                                     </div>
                                   </div>
                               
-                                  <div class="row p-2"></div>
 
-                                  
-                                  <div class='form-group'>
+                                  <div class='form-group mt-3'>
                                     <div class="col-xl-12 col-md-12 col-sm-6 col-xs-6">
                                       <label class='col-sm-12 control-label-notes'>{{ trans('langCourseFormat') }}:</label>
-                                      <div class="row" style="height:10px;"></div>
-                                      <div class="row">
+                                      <div class="row p-2">
 
                                         <div class="col-xl-4 col-md-4 col-sm-6 col-xs-6">
                                           
@@ -216,16 +209,10 @@
                                   </div>
                                       
                                   
-                                  
-                                  <div class="row p-2"></div>
-
-
-                                  
-                                  <div class='form-group'>
+                                  <div class='form-group mt-3'>
                                     <div class="col-xl-12 col-md-12 col-12">
                                       <label class='col-sm-12 control-label-notes'>{{ trans('langOpenCoursesLicense') }}:</label>
-                                      <div class="row row_line2"></div>
-                                      <div class="row">
+                                      <div class="row p-2">
                                         <div class="col-xl-4 col-md-4 col-12">
                                             <div class='radio'>
                                               <label class="checkbox_container2">
@@ -257,25 +244,17 @@
                                     </div>
                                   </div>
 
-                                  <div class="row p-2"></div>
 
-
-                                  <div class='form-group' id='cc'>
+                                  <div class='form-group mt-3' id='cc'>
                                       <div class='col-sm-12 col-sm-offset-2'>
                                             {!! $selection_license !!}
                                       </div>              
                                   </div>
 
-                                 
-                                  <div class="row p-2"></div>
-
-
-
-                                  <div class='form-group'>
+                                  <div class='form-group mt-3'>
                                     <div class="col-xl-12 col-md-12 col-sm-6 col-6">
                                       <label for='localize' class='col-sm-12 control-label-notes'>{{ trans('langAvailableTypes') }}:</label>
-                                      <div class="row row_line2"></div>
-                                      <div class='row'>
+                                      <div class='row p-2'>
                                         <div class="col-xl-3 col-md-3 col-12">
                                             <div class='radio'>
                                               <label class="checkbox_container2">
@@ -319,10 +298,8 @@
                                       </div>
                                     </div>
 
-                                    <div class="row p-2"></div>
- 
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                           <label for='coursepassword' class='col-sm-12 control-label-notes'>{{ trans('langOptPassword') }}:</label>
                                           <div class='col-sm-12'>
                                                 <input class='form-control' id='coursepassword' type='text' name='password' value='{{ trans('password') }}' autocomplete='off'>                        
@@ -333,10 +310,9 @@
                                           
                                     </div>
 
-                                    <div class="row p-2"></div>
 
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                           <div class='col-sm-10 col-sm-offset-2'>
                                                 <input class='btn btn-primary' type='submit' name='create_course' value='{{ trans('langCourseCreate') }}'>                          
                                                 <a href='{{ $cancel_link }}' class='btn btn-secondary'>{{ trans('langCancel') }}</a>

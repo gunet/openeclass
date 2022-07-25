@@ -7,10 +7,6 @@ $(document).ready(function(){
 
     //////////////////////////////////////////////////////////////////////////////
 
-    $('#getTopicButton').on('click',function(){
-        $('#getTopicModal').modal("show");
-    });
-
     var action_bar = $('.action_bar').length;
     if (!action_bar) {
         $('div.title-row').css('margin-bottom', '24px');
@@ -31,21 +27,6 @@ $(document).ready(function(){
 		$(this).addClass('active');
 	})
 	
-	$('.user-details-trigger a').on('click',function()
-	{
-		var headertext = $('.user-details > h2').text();
-		$('.user-details > h2').text( headertext == "ΣΥΝΟΠΤΙΚΟ ΠΡΟΦΙΛ" ? "ΠΡΟΦΙΛ ΧΡΗΣΤΗ" : "ΣΥΝΟΠΤΙΚΟ ΠΡΟΦΙΛ" );
-		var text = $('.user-details-trigger a').text();
-		$(this).text( text == "ΠΕΡΙΣΣΟΤΕΡΕΣ ΠΛΗΡΟΦΟΡΙΕΣ" ? "ΣΥΝΟΠΤΙΚΟ ΠΡΟΦΙΛ" : "ΠΕΡΙΣΣΟΤΕΡΕΣ ΠΛΗΡΟΦΟΡΙΕΣ");
-		$('.user-details').toggleClass('expanded');
-	})
-	
-	$('.user-menu-trigger a').on('click',function(){
-		var text = $('.user-menu-trigger a').text();
-		$(this).text( text == "ΠΕΡΙΣΣΟΤΕΡΕΣ ΕΠΙΛΟΓΕΣ" ? "ΛΙΓΟΤΕΡΕΣ ΕΠΙΛΟΓΕΣ" : "ΠΕΡΙΣΣΟΤΕΡΕΣ ΕΠΙΛΟΓΕΣ");
-		$('.user-menu').toggleClass('expanded');
-	})
-
 
     /////////////////////////////// play testinomonials ////////////////////////////////////////////////////////////////////////
 
@@ -61,60 +42,6 @@ $(document).ready(function(){
 		}]
 	});
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	var counter_button_collapse_main_section = 0;
-	$('.button_collapse_main_section').on('click',function(){
-		counter_button_collapse_main_section++;
-		if(counter_button_collapse_main_section%2==1){
-               $('.button_collapse_main_section .fas.fa-chevron-down').hide();
-		       $('.button_collapse_main_section .fas.fa-chevron-up').show();
-		}else{
-			$('.button_collapse_main_section .fas.fa-chevron-down').show();
-			$('.button_collapse_main_section .fas.fa-chevron-up').hide();
-		}
-        
-	})
-
-
-	var counter_button_collapse_energy_tools = 0;
-	$('.container_chevrons .fas.fa-chevron-up').hide();
-    $('.container_chevrons').click(function(){
-        counter_button_collapse_energy_tools++;
-        if(counter_button_collapse_energy_tools%2==1){
-            $('.container_chevrons .fas.fa-chevron-down').hide();
-            $('.container_chevrons .fas.fa-chevron-up').show();
-        }else{
-            $('.container_chevrons .fas.fa-chevron-down').show();
-            $('.container_chevrons .fas.fa-chevron-up').hide();
-        }
-    })
-
-	var counter_button_collapse_managment_tools = 0;
-	$('.container_chevrons_managment .fas.fa-chevron-up').hide();
-    $('.container_chevrons_managment').click(function(){
-        counter_button_collapse_managment_tools++;
-        if(counter_button_collapse_managment_tools%2==1){
-            $('.container_chevrons_managment .fas.fa-chevron-down').hide();
-            $('.container_chevrons_managment .fas.fa-chevron-up').show();
-        }else{
-            $('.container_chevrons_managment .fas.fa-chevron-down').show();
-            $('.container_chevrons_managment .fas.fa-chevron-up').hide();
-        }
-    })
-
-	var disable_counter_button_collapse_managment_tools = 0;
-	$('.disable_container_chevrons .fas.fa-chevron-up').hide();
-    $('.disable_container_chevrons').click(function(){
-        disable_counter_button_collapse_managment_tools++;
-        if(disable_counter_button_collapse_managment_tools%2==1){
-            $('.disable_container_chevrons .fas.fa-chevron-down').hide();
-            $('.disable_container_chevrons .fas.fa-chevron-up').show();
-        }else{
-            $('.disable_container_chevrons .fas.fa-chevron-down').show();
-            $('.disable_container_chevrons .fas.fa-chevron-up').hide();
-        }
-    })
 
     
     /////////////////////////////////////////////////// initial datatable /////////////////////////////////////////////////
@@ -152,18 +79,6 @@ $(document).ready(function(){
 // portfolio //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // portfolio //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-function switch_user_menu_toggle() {
-		
-	if( $('.user-menu-collapse-more').is(":visible") ) 
-	{
-		$('.user-menu-collapse-more').hide();
-		$('.user-menu-collapse-less').show();
-	} else {
-		$('.user-menu-collapse-more').show();
-		$('.user-menu-collapse-less').hide();
-	}
-}
 
 function switch_user_details_toggle() {
 		
@@ -304,77 +219,6 @@ function truncate_toggle(click_elem, truncated, not_truncated, container_elem){
     $(document).on("click", click_elem, show_text);
 }
 
-
-// function open_document(){
-//     $('.fileModal').click(function (e)
-//     {
-//         e.preventDefault();
-//         var fileURL = $(this).attr('href');
-//         var downloadURL = $(this).prev('input').val();
-//         var fileTitle = $(this).attr('title');
-       
-
-
-//         if(downloadURL == null){
-//             downloadURL = $(this).attr('data-download');
-//         }
-
-//         console.log('the fileURL:'+fileURL);
-//         console.log('the downloadURL:'+downloadURL);
-
-//         // BUTTONS declare
-//         var bts = {
-//             download: {
-//                 label: '<span class="fa fa-download"></span> Ληψη',
-//                 className: 'btn-success',
-//                 callback: function (d) {
-//                     window.location = downloadURL;
-//                 }
-//             },
-//             print: {
-//                 label: '<span class="fa fa-print"></span> Εκτυπωση',
-//                 className: 'btn-primary',
-//                 callback: function (d) {
-//                     var iframe = document.getElementById('fileFrame');
-//                     iframe.contentWindow.print();
-//                 }
-//             }
-//         };
-//         if (screenfull.enabled) {
-//             bts.fullscreen = {
-//                 label: '<span class="fa fa-arrows-alt"></span> Πληρης οθονη',
-//                 className: 'btn-primary',
-//                 callback: function() {
-//                     screenfull.request(document.getElementById('fileFrame'));
-//                     return false;
-//                 }
-//             };
-//         }
-//         bts.newtab = {
-//             label: '<span class="fa fa-plus"></span> Νεο παραθυρο',
-//             className: 'btn-primary',
-//             callback: function() {
-//                 window.open(fileURL);
-//                 return false;
-//             }
-//         };
-//         bts.cancel = {
-//             label: 'Ακυρωση',
-//             className: 'btn-secondary'
-//         };
-
-//         bootbox.dialog({
-//             size: 'large',
-//             title: fileTitle,
-//             message: '<div class="row">'+
-//                         '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">'+
-//                             '<div class="iframe-container" style="height:500px;"><iframe id="fileFrame" src="'+fileURL+'" style="width:100%; height:500px;"></iframe></div>'+
-//                         '</div>'+
-//                     '</div>',
-//             buttons: bts
-//         });
-//     });
-// }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // Validator form in rubric work

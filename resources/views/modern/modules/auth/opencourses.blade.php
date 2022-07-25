@@ -67,14 +67,14 @@
                             <div class='col-12'>
                                 <div class='table-responsive'>
                                     <table class='table opencourses_table' id="myopencourses_table">
-                                        <thead class="opencourses_thead text-light">
+                                        <thead>
                                             <tr class='list-header'>
-                                                <th class='text-left'>{!! trans('langCourseCode') !!}</th>
+                                                <th class='text-start text-white'>{!! trans('langCourseCode') !!}</th>
                                             @if (isset($isInOpenCoursesMode))
-                                                <th class='text-left' width='220'>{!! trans('langTeacher') !!}</th>
-                                                <th width='30'>{!! trans('langOpenCoursesLevel') !!}</th>
+                                                <th class='text-start text-white' width='220'>{!! trans('langTeacher') !!}</th>
+                                                <th class='text-start text-white'width='30'>{!! trans('langOpenCoursesLevel') !!}</th>
                                             @else
-                                                <th class='text-left' width='220'>{!! trans('langTeacher') !!}</th>
+                                                <th class='text-start text-white' width='220'>{!! trans('langTeacher') !!}</th>
                                                 <th width='30'>{!! trans('langType') !!}</th>
                                             @endif
                                             </tr>
