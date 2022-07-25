@@ -72,7 +72,7 @@ $(function() {
                ],
                'fnDrawCallback': function( oSettings ) {
                             $('#users_table{$course_id}_wrapper label input').attr({
-                              class : 'form-control input-sm',
+                              class : 'form-control input-sm ms-0 mb-3',
                               placeholder : '$langSearch...'
                             });
                         },

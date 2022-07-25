@@ -57,3 +57,11 @@
     margin-left: 10px;
     font-size: 13px;
 }
+
+.cal-day-today{
+    margin-left: 0px;
+}
+
+.events-list{
+    margin-left: -5px;
+}

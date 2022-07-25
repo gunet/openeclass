@@ -421,7 +421,7 @@ function printPolls() {
                 <div class='modal-content'>
                   <form action='$_SERVER[SCRIPT_NAME]' method='POST' id='clone_form'>
                     <div class='modal-header'>
-                      <button type='button' class='close' data-dismiss='modal' aria-label='$langCancel'><span aria-hidden='true'>&times;</span></button>
+                      <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langCancel'><span aria-hidden='true'>&times;</span></button>
                       <h4 class='modal-title'>$langCreateDuplicateIn</h4>
                     </div>
                     <div class='modal-body'>
@@ -432,7 +432,7 @@ function printPolls() {
                         </div>
                     </div>
                     <div class='modal-footer'>
-                      <button type='button' class='btn btn-default' data-dismiss='modal'>$langCancel</button>
+                      <button type='button' class='btn btn-default' data-bs-dismiss='modal'>$langCancel</button>
                       <button type='submit' class='btn btn-success'>$langCreateDuplicate</button>
                     </div>
                   </form>

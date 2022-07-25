@@ -652,11 +652,11 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
                     <a href='../forum/editpost.php?course=$course_code&amp;post_id=" . $myrow->id .
                         "&amp;topic=$topic&amp;forum=$forum'>" .
                             "<span class='fa fa-edit' title='$langModify' data-bs-toggle='tooltip' " .
-                                "data-original-title='$langModify'></span></a>&nbsp;" .
+                                "data-bs-original-title='$langModify' data-bs-placement='bottom'></span></a>&nbsp;" .
                     "<a class='delete-btn' href='../forum/viewtopic.php?course=$course_code&amp;post_id=" . $myrow->id .
                         "&amp;topic=$topic&amp;forum=$forum&amp;delete=on'>" .
                             "<span class='fa fa-times text-danger' title='$langDelete' data-bs-toggle='tooltip' " .
-                            "data-original-title='$langDelete'></span></a>
+                            "data-bs-original-title='$langDelete' data-bs-placement='bottom'></span></a>
                 </span>";
     }
 

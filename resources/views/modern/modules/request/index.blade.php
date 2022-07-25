@@ -1,5 +1,3 @@
-<?php print_r($deleteUrl)?>
-
 @extends('layouts.default')
 
 @section('content')

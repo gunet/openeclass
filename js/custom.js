@@ -112,6 +112,8 @@ function switch_cources_toggle(id)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // popover and tooltip with bootbox 
 
+
+
 function act_confirm() {
     $('.confirmAction').click(function (e) {
 	

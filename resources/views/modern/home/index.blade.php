@@ -26,7 +26,7 @@
 
                             <div class='col-xl-7 col-lg-9'>
                                 <div class="panel panel-default w-auto d-flex justify-content-center">
-                                    <div class='panel-heading w-25 text-center borderHeadingPanel' style='border-top-right-radius:0px;'>
+                                    <div class='panel-heading-login w-25 text-center borderHeadingPanel' style='border-top-right-radius:0px;'>
                                         <img src="template/modern/img/user2.png" class='user-icon m-auto d-block mt-5'>
                                         <strong class='fs-6 control-label-notes pt-2'>{{ trans('langUserLogin') }}</strong>
                                     </div>
@@ -132,7 +132,7 @@
             </div>
 
             <div id="idform" class="panel panel-default WelcomeEclassPanelDefault mt-3">
-                <div class="panel-heading text-center WelcomeEclassHeading">
+                <div class="panel-heading-login text-center WelcomeEclassHeading">
                     <img src="template/modern/img/user.jpg" class='user-icon m-auto d-block'>
                     <strong class='fs-5 control-label-notes'>{{ trans('langUserLogin') }}</strong>
                 </div>

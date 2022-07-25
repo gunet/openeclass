@@ -537,7 +537,7 @@ if (isset($_GET['mid'])) {
                    'bAutoWidth' : false,
                    'fnDrawCallback': function( oSettings ) {
                         $('#inbox_table_filter label input').attr({
-                          class : 'form-control input-sm',
+                          class : 'form-control input-sm ms-0 mb-3',
                           placeholder : '".js_escape($langSearch)."...'
                         });
                     },

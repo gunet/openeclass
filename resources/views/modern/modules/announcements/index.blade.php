@@ -5,9 +5,6 @@
 <script src="{{ $urlServer }}/js/trunk8.js"></script>
 <script type='text/javascript'>
 
-
-
-    
     function act_confirm() {
         $('.confirmAction').on('click', function (e) {
             var message = $(this).attr('data-message');
@@ -77,7 +74,7 @@
 
         var oTable = $('#ann_table{{ $course_id }}').DataTable ({
             @if ($is_editor)
-            'aoColumnDefs':[{'sClass':'option-btn-cell',
+            'aoColumnDefs':[{'sClass':'option-btn-cell text-center',
                 'aTargets':[-1]}],
             @endif
             bStateSave: true,
@@ -101,7 +98,7 @@
                     })
                 });
                 $('#ann_table{{ $course_id }}_filter label input').attr({
-                    class : 'form-control input-sm',
+                    class : 'form-control input-sm mb-3 ms-0',
                     placeholder : '{{ trans('langSearch') }}...'
                 });
             },
@@ -145,9 +142,11 @@
                 }
             });
         });
+
         $(document).on( 'click','.delete_btn', function (e) {
             e.preventDefault();
-            var row_id = $(this).data('id');
+            //var row_id = $(this).data('id');
+            var row_id = (this.id);
             bootbox.confirm('{{ js_escape(trans('langSureToDelAnnounce')) }}', function(result) {
                 if(result) {
                     $.ajax({
@@ -171,15 +170,22 @@
                     });
                     $.ajax({
                         type: 'POST',
-                        url: '{$urlAppend}/modules/search/idxasync.php'
+                        url: '{{$urlAppend}}modules/search/idxasync.php'
                     });
                 }
             });
         });
         $(document).on( 'click','.vis_btn', function (g) {
             g.preventDefault();
-            var vis = $(this).data('vis');
-            var row_id = $(this).data('id');
+            // var vis = $(this).data('vis');
+            // var row_id = $(this).data('id');
+            
+            var announceID = (this.id);
+            var row_id = announceID;
+            var vis = $('#'+row_id).attr( "data-vis" );
+            console.log('the id:'+row_id);
+            console.log('the vis:'+vis);
+
             $.ajax({
                 type: 'POST',
                 url: '',
@@ -200,10 +206,12 @@
             });
             $.ajax({
                 type: 'POST',
-                url: '{$urlAppend}/modules/search/idxasync.php'
+                url: '{{$urlAppend}}modules/search/idxasync.php'
             });
         });
         $('.success').delay(3000).fadeOut(1500);
+
+        
         
     });
 

@@ -72,7 +72,7 @@ if (get_config('activate_privacy_policy_text')) {
                 <div class='modal-dialog' role='document'>
                     <div class='modal-content'>
                         <div class='modal-header'>
-                            <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                            <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                             <h4 class='modal-title' id='consentModalLabel'>$langUserConsent</h4>
                         </div>
                         <div class='modal-body' style='margin-left:20px; margin-right:20px;'>
@@ -105,7 +105,7 @@ jQuery(document).ready(function() {
     'bSort' : false,
     'fnDrawCallback': function( oSettings ) {
       $('#portfolio_lessons_filter label input').attr({
-        class : 'form-control input-sm',
+        class : 'form-control input-sm searchCoursePortfolio ms-0 mb-3',
         placeholder : '$langSearch...'
       });
       $('#portfolio_lessons_filter label').prepend('<span class=\"sr-only\">$langSearch</span>')

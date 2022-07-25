@@ -111,7 +111,7 @@ $head_content .= "
                     })
                 });
                 $('#ann_table_admin_logout_filter label input').attr({
-                      class : 'form-control input-sm',
+                      class : 'form-control input-sm ms-0 mb-3',
                       placeholder : '$langSearch...'
                     });
              },

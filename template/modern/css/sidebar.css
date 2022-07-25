@@ -383,7 +383,7 @@ input[type="checkbox"].toggles + label.rounded::before{
 
 @media(min-width:1024px) and (max-width:1199px){
 
-  .on{
+  /* .on{
     font-size:7px !important;
   }
   .off{
@@ -402,7 +402,7 @@ input[type="checkbox"].toggles + label.rounded::before{
 
   .viewPageAs{
     font-size:12px !important; 
-  }
+  } */
 
   .active_tools_dropdown2.nav-link.text-white{
     font-size:12px !important; 
@@ -580,7 +580,7 @@ input[type="checkbox"].toggles + label.rounded::before{
     overflow: inherit;
   }
   .btn-toggle{
-      width: 8.5rem;
+      width: 12rem;
   }
   .off2{
     margin-left:-85px;
@@ -588,7 +588,7 @@ input[type="checkbox"].toggles + label.rounded::before{
 }
 @media (min-width: 768px) and (max-width: 1023px){ 
   .btn-toggle{
-    width: 11rem;
+    width: 12rem;
   }
   .off2{
     margin-left:-85px;

@@ -674,6 +674,11 @@ a{
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   
+  /* afora to input search των πινακων */
+  #courses_table_pag_filter, #ann_table_my_ann_filter{
+    margin-bottom:10px !important;
+  }
+
   .table-condensed th,
   .table-condensed td {
   padding: 4px 15px;
@@ -1361,6 +1366,16 @@ a{
     box-shadow: 0 0 2px rgb(92, 93, 121);
   }
   .panel-heading,.media-left{
+    /* border-top-right-radius: 15px;
+    border-top-left-radius: 15px; */
+    border-radius: 15px;
+    padding:10px 15px;
+    background: #F5F5F4;
+    -webkit-box-shadow: inset 0 0 2px rgba(127,132,153,0.35);
+      -moz-box-shadow: inset 0 0 2px rgba(127,132,153,0.35);
+      box-shadow: inset 0 0 2px rgba(127,132,153,0.35);
+  }
+  .panel-heading-login{
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
     padding:10px 15px;
@@ -1369,6 +1384,7 @@ a{
       -moz-box-shadow: inset 0 0 2px rgba(127,132,153,0.35);
       box-shadow: inset 0 0 2px rgba(127,132,153,0.35);
   }
+  
   
   .panel-heading.notes_thead{
     height: auto;

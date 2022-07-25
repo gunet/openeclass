@@ -58,7 +58,7 @@ $head_content .= "<script type='text/javascript'>
                }
             });
             $('.dataTables_filter input').attr({
-                          class : 'form-control input-sm',
+                          class : 'form-control input-sm ms-0 mb-3',
                           placeholder : '$langSearch...'
                         });
         });

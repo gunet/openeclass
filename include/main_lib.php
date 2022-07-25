@@ -2625,7 +2625,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
 
     if (isset($title)) {
         $title = q($title);
-        $extra = "title='$title' data-toggle='tooltip'";
+        $extra = "title data-bs-original-title='$title' data-bs-toggle='tooltip' data-bs-placement='bottom'";
     } else {
         $extra = '';
     }
@@ -3643,7 +3643,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         if ($level == 'primary-label') {
             array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon] space-after-icon$primary_icon_class'></span>" . q($option['title']) . "<span class='hidden'></span></a>");
         } elseif ($level == 'primary') {
-            array_unshift($out_primary, "<a data-bs-placement='bottom' data-bs-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'></span></a>");
+            array_unshift($out_primary, "<a data-bs-placement='bottom' data-bs-toggle='tooltip' title data-bs-original-title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'></span></a>");
         } else {
             array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
         }

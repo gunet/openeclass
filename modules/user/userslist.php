@@ -129,7 +129,7 @@ $head_content .= "
                        }
                    }
             });
-            $('.dataTables_filter input').attr({style: 'width:200px', class:'form-control input-sm', placeholder: '$langName, Username'});
+            $('.dataTables_filter input').attr({style: 'width:200px', class:'form-control input-sm ms-0 mb-3', placeholder: '$langName, Username'});
             $('.success').delay(3000).fadeOut(1500);
         });
         </script>";
