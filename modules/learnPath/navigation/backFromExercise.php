@@ -32,7 +32,7 @@ require_once '../../../include/init.php';
         <title>-</title>
         <link href="../../../template/<?php echo $theme ?>/CSS/lp.css" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="../../../template/default/CSS/bootstrap-custom.css">
-        <script src="../../../template/default/js/bootstrap.min.js"></script>                
+        <script src="../../../js/bootstrap.bundle.min.js"></script>                
     </head>
     <body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">
         <div id="content" style="width:800px; margin: 0 auto;">

@@ -10,6 +10,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Favicon for various devices -->
+    <link rel="shortcut icon" href="{{ $urlAppend }}template/modern/favicon/favicon.ico" />
+    <link rel="apple-touch-icon-precomposed" href="{{ $urlAppend }}template/modern/favicon/openeclass_128x128.png" />
+    <link rel="icon" type="image/png" href="{{ $urlAppend }}template/modern/favicon/openeclass_128x128.png" />
+
     <!-- jQuery -->
     <script type="text/javascript" src="{{$urlAppend}}js/jquery3-6-0.min.js"></script>
 
@@ -23,7 +28,7 @@
     <!-- Font Awesome - A font of icons -->
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/all.css">
     <link href="{{ $urlAppend }}template/modern/css/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
-    <link rel="shortcut icon" href="{{ $urlAppend }}template/modern/favicon/favicon.ico">
+
 
 
     <!-- DataTables and Checkitor -->

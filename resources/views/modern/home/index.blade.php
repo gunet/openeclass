@@ -16,15 +16,9 @@
 
                     <div class="row ps-lg-5 pt-lg-5 pe-lg-5">
 
-                        <div class="col-lg-12 p-5 mt-3 w-100 jumbotron jumbotron-login">
+                        <div class="col-lg-12 p-5 mt-3 w-100 jumbotron jumbotron-login" style='border-radius:15px;'>
 
-                            <nav class="navbar navbar-expand-lg">
-                                <span class="control-label-notes fs-5 ps-3" style='margin-top:-10px;'><span class='fa fa-home'></span> {{trans('langEclass')}}</span>
-                            </nav>
-
-                            <div class='col-lg-12 mt-3'>{!! $warning !!}</div>
-
-                            <div class='col-xl-7 col-lg-9'>
+                            <div class='col-xl-7 col-lg-9 mt-3'>
                                 <div class="panel panel-default w-auto d-flex justify-content-center">
                                     <div class='panel-heading-login w-25 text-center borderHeadingPanel' style='border-top-right-radius:0px;'>
                                         <img src="template/modern/img/user2.png" class='user-icon m-auto d-block mt-5'>
@@ -48,6 +42,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class='col-lg-12 mt-3'>{!! $warning !!}</div>
                             </div>
                         </div>
                         
@@ -56,16 +51,16 @@
                             <div class='row'>     
                                 <div class='col-lg-8'>        
                                     <div class="panel panel-default w-100" style='margin-left:-10px;'>
-                                        <div class="panel-heading text-center">
+                                        <div class="panel-heading text-center p-2" style='background:#003F87;'>
                                             <div class='row'>
                                                 <div class='col-2'>
                                                     <a href="http://www.openeclass.org/" target="_blank">
                                                         <img class="img-responsive center-block w-auto" src="/template/modern/img/open_eclass_banner.png" alt="Open eClass Banner">
                                                     </a>
                                                 </div>
-                                                <div class='col-9'>
-                                                    <span class='control-label-notes'>{{trans('langWelcomeTo')}} 
-                                                        <strong class='text-primary'>{{trans('langEclass')}}</strong>
+                                                <div class='col-9 pt-1 pe-3'>
+                                                    <span class='fs-5 p-3 text-white'>{{trans('langWelcomeTo')}} 
+                                                        <strong class='text-info'>{{trans('langEclass')}}</strong>
                                                     </span>
                                                 </div>
                                             </div>
@@ -79,8 +74,8 @@
                                     @if (get_config('enable_mobileapi'))
                                         <div class='col-lg-12' style='margin-left:10px;'>
                                             <div class='panel panel-default'>
-                                                <div class='panel-heading text-center'>
-                                                    <span class='control-label-notes'>App Store</span>
+                                                <div class='panel-heading text-center p-2' style='background:#003F87;'>
+                                                    <span class='fs-5 p-3 text-white'>App Store</span>
                                                 </div>
                                                 <div class='panel-body'>
                                                     <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank>
@@ -91,8 +86,8 @@
                                         </div>
                                         <div class='col-lg-12 mt-4' style='margin-left:10px;'>
                                             <div class='panel panel-default'>
-                                                <div class='panel-heading text-center'>
-                                                    <span class='control-label-notes'>Play Store</span>
+                                                <div class='panel-heading text-center p-2' style='background:#003F87;'>
+                                                    <span class='fs-5 p-3 text-white'>Play Store</span>
                                                 </div>
                                                 <div class='panel-body'>
                                                     <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank>

@@ -37,7 +37,9 @@ if (isset($_POST['title'])) {
 }
 
 if (empty($title)) {
-    Session::Messages($langFieldsMissing, 'alert-danger');
+    //Session::Messages($langFieldsMissing, 'alert-danger');
+    Session::flash('message',$langFieldsMissing);
+    Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page("modules/ebook/index.php?course=$course_code&create=1");
 }
 
@@ -52,13 +54,17 @@ doc_init();
 
 if (!make_dir($basedir)) {
     Database::get()->query("DELETE FROM ebook WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
-    Session::Messages($langImpossible, 'alert-danger');
+    //Session::Messages($langImpossible, 'alert-danger');
+    Session::flash('message',$langImpossible);
+    Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page("modules/ebook/index.php?course=$course_code&create=1");
 }
 
 if (isset($_FILES['file']['name']) and !$_FILES['file']['error']) {
     if (!preg_match('/\.zip$/i', $_FILES['file']['name'])) {
-        Session::Messages("$langUnwantedFiletype: " . $_FILES['file']['name'], 'alert-danger');
+        //Session::Messages("$langUnwantedFiletype: " . $_FILES['file']['name'], 'alert-danger');
+        Session::flash('message',"$langUnwantedFiletype: " . $_FILES['file']['name']);
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/ebook/index.php?course=$course_code&create=1");
     }
     validateUploadedFile($_FILES['file']['name'], 2);
@@ -81,7 +87,9 @@ if (isset($_FILES['file']['name']) and !$_FILES['file']['error']) {
             $stat = $zipFile->statIndex($i);
             $realFileSize += $stat["size"]; // check for free space
             if ($diskUsed + $realFileSize > $diskQuotaDocument) {
-                Session::Messages($langNoSpace, 'alert-danger');
+                //Session::Messages($langNoSpace, 'alert-danger');
+                Session::flash('message',$langNoSpace);
+                Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page("modules/ebook/index.php?course=$course_code&create=1");
             }
             $extracted_file_name = process_extracted_file($stat);
@@ -92,7 +100,9 @@ if (isset($_FILES['file']['name']) and !$_FILES['file']['error']) {
         }
         $zipFile->close();
     } else {
-        Session::Messages($langErrorFileMustBeZip, 'alert-warning');
+        //Session::Messages($langErrorFileMustBeZip, 'alert-warning');
+        Session::flash('message',$langErrorFileMustBeZip);
+        Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("modules/ebook/index.php?course=$course_code&create=1");
     }
 }

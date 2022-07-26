@@ -176,7 +176,7 @@ function file_url($path, $filename = null, $courseCode = null) {
 
     if (defined('EBOOK_DOCUMENTS')) {
         return htmlspecialchars($urlServer .
-                "modules/ebook/show.php/$courseCode/$ebook_id/_" .
+                "modules/ebook/show.php?$courseCode/$ebook_id/_" .
                 public_file_path($path, $filename), ENT_QUOTES);
     } else {
         if (defined('COMMON_DOCUMENTS')) {

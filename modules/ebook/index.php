@@ -204,7 +204,7 @@ if (!$q && !isset($_GET['create'])) {
         if (is_null($r->sid)) {
             $title_link = q($r->title) . ' <i>(' . $langEBookNoSections . ')</i>';
         } else {
-            $title_link = "<a href='show.php/$course_code/$r->id/'>" . q($r->title) . "</a>";
+            $title_link = "<a href='show.php?$course_code/$r->id/'>" . q($r->title) . "</a>";
         }
         if ($is_editor) {
             $title_link .= '&nbsp;' . icon('fa-edit', $langEditChange, "edit.php?course=$course_code&amp;id=" . $r->id);
@@ -243,7 +243,7 @@ function tools($id, $vis) {
         return '';
     } else {
         $content = "<td class='option-btn-cell' style='width: 90px;'>
-               <div class='reorder-btn pull-left' style='font-size: 16px; cursor: pointer; margin-left:-10px; margin-top:6px;'>
+               <div class='reorder-btn pull-left ms-3 mb-2' style='font-size: 16px; cursor: pointer; margin-left:-10px; margin-top:6px;'>
                     <span class='fa fa-arrows' style='cursor: pointer;'></span>
                </div><div class='pull-right'>";
         $content .= action_button(array(

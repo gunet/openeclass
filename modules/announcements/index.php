@@ -166,7 +166,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     array('title' => !$myrow->visible == '0' ? $langViewHide : $langViewShow,
                         'icon' => !$myrow->visible == '0' ? 'fa-eye-slash' : 'fa-eye',
                         'icon-class' => 'vis_btn',
-                        'icon-extra' => "data-vis='$visible' data-id='$myrow->id' id='$myrow->id'"),
+                        'icon-extra' => "data-vis='$visible' data-id='$myrow->id' id='$myrow->id.$visible'"),
                     array('title' => $langDelete,
                         'class' => 'delete',
                         'icon' => 'fa-times',

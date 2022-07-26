@@ -38,10 +38,10 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <head><title>-</title>
     <meta http-equiv='Content-Type' content='text/html; charset=$charset'>
     <!-- jQuery -->
-    <script type='text/javascript' src='$urlAppend}js/jquery-'" . JQUERY_VERSION . "'.js'></script>
+    <script type='text/javascript' src='{$urlAppend}js/jquery'" . JQUERY_VERSION . "'.min.js'></script>
 
     <!-- Latest compiled and minified JavaScript -->
-    <script src='{$urlAppend}template/default/js/bootstrap.min.js'></script>
+    <script src='{$urlAppend}js/bootstrap.bundle.min.js'></script>
         
     <!-- Latest compiled and minified CSS -->
     <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css'>

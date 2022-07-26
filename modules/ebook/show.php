@@ -25,6 +25,14 @@ $unit = false;
 $file_path = false;
 $full_url_found = false;
 $show_orphan_file = false;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Παρομοια αλλαγή οπως εκανα και στο fileDocument για να παιξει το filemodal του εγγραφου!
+// Υπεμθυμιζω οτι ο λογος που το κανω αυτο ειναι οτι το show.php/ κανει redirect .
+// Χρειαζεται ? δηλαδη show.php? για να μην γινει redirect στην αρχικη σελιδα.
+$_SERVER['REQUEST_URI'] = str_replace("show.php?", "show.php/", $_SERVER['REQUEST_URI']);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 $uri = (!$is_in_playmode) ? preg_replace('/\?[^?]*$/', '', strstr($_SERVER['REQUEST_URI'], 'ebook/show.php')) :
         preg_replace('/\?[^?]*$/', '', strstr($_SERVER['REQUEST_URI'], 'ebook/play.php'));
 $path_components = explode('/', $uri);
@@ -81,7 +89,7 @@ if ($not_found) {
 }
 
 triggerGame($ebook_id);
-$ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/";
+$ebook_url_base = "{$urlServer}modules/ebook/show.php?$course_code/$ebook_id/";
 
 if ($show_orphan_file and $file_path) {
     if (!preg_match('/\.html?$/i', $file_path)) {
@@ -181,7 +189,7 @@ foreach ($q as $row) {
 }
 
 if (!$full_url_found and !$show_orphan_file) {
-    header('Location: ' . $ebook_url_base . $current_display_id . '/' . $unit_parameter);
+    header('Location: ' . $ebook_url_base . $current_display_id . '?' . $unit_parameter);
     exit;
 }
 

@@ -305,7 +305,7 @@ class MultimediaHelper {
         global $urlAppend;
         $ret = '';
         $ret .= "<link rel='stylesheet' href='{$urlAppend}js/flowplayer/html5/skin/skin.css'>";
-        $ret .= "<script type='text/javascript' src='{$urlAppend}js/jquery-" . JQUERY_VERSION . ".min.js'></script>";
+        $ret .= "<script type='text/javascript' src='{$urlAppend}js/jquery" . JQUERY_VERSION . ".min.js'></script>";
         $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/html5/flowplayer.min.js'></script>";
         $ret .= $startdiv;
         $ret .= '<div class="flowplayer"

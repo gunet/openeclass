@@ -148,7 +148,7 @@ if (isset($_GET['store']) && $is_editor) {
     <?php /*print_r($_REQUEST)*/?>
     <title><?php echo $langMessages ?></title>
     <!-- jQuery -->
-    <script src="<?php echo $urlServer;?>js/jquery-<?php echo JQUERY_VERSION; ?>.min.js"></script>
+    <script src="<?php echo $urlServer;?>js/jquery<?php echo JQUERY_VERSION; ?>.min.js"></script>
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="<?php echo $urlServer;?>template/default/js/bootstrap.min.js"></script>

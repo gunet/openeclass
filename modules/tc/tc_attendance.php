@@ -28,7 +28,7 @@ $require_login = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 require_once 'modules/attendance/functions.php';
-load_js('jquery-' . JQUERY_VERSION . '.min.js');
+load_js('jquery' . JQUERY_VERSION . '.min.js');
 load_js('tools.js');
 
 $head_content .= "

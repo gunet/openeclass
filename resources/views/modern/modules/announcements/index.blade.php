@@ -174,16 +174,21 @@
                     });
                 }
             });
-        });
+        });            
+        
+
         $(document).on( 'click','.vis_btn', function (g) {
+            
             g.preventDefault();
             // var vis = $(this).data('vis');
             // var row_id = $(this).data('id');
-            
-            var announceID = (this.id);
-            var row_id = announceID;
-            var vis = $('#'+row_id).attr( "data-vis" );
-            console.log('the id:'+row_id);
+
+            var temp_id = this.id;
+            var row_id = temp_id.split(".")[0];
+            var vis = temp_id.split(".")[1];
+
+            console.log('the id:'+temp_id);
+            console.log('the row_id:'+row_id);
             console.log('the vis:'+vis);
 
             $.ajax({

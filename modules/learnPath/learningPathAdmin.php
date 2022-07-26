@@ -379,7 +379,8 @@ $tool_content .= action_bar(array(
             )
         ),false);
 
-$tool_content .= "<div class='col-sm-12'><div class='panel panel-default'>
+$tool_content .= "<div class='col-sm-12'>
+                    <div class='panel panel-default'>
                     <div class='panel-heading'>
                         <h3 class='panel-title'>$langLearningPathData</h3>
                     </div>";
@@ -409,7 +410,7 @@ if ($cmd == "updatecomment") {
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .= "</td></tr></table></div</div>";
+$tool_content .= "</td></tr></table></div></div>";
 
 if (isset($displayChangePosForm) && $displayChangePosForm) {
     $dialogBox = "
@@ -483,7 +484,7 @@ $lp_action_button = action_button(array(
         'secondary_btn_class' => 'btn-success btn-sm'
     )
 );
-$tool_content .= "<div class='panel panel-default panel-action-btn-default'>
+$tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default panel-action-btn-default'>
                     <div class='pull-right' style='padding:8px;'>
                         $lp_action_button
                     </div>
@@ -652,5 +653,5 @@ foreach ($flatElementList as $module) {
     $tool_content .= "</tr>";
 } // end of foreach
 
-$tool_content .= "</table></div>";
+$tool_content .= "</table></div></div>";
 draw($tool_content, 2, null, $head_content, $body_action);

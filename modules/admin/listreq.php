@@ -77,7 +77,7 @@ $head_content .= "<script type='text/javascript'>
                    }
                }
             });
-            $('.dataTables_filter input').attr('placeholder', '$langName, $langSurname, $langUsername');
+            $('.dataTables_filter input ms-0 mb-3').attr('placeholder', '$langName, $langSurname, $langUsername');
         });
         </script>";
 
