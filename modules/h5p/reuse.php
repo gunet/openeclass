@@ -31,7 +31,7 @@ $content = Database::get()->querySingle("SELECT * FROM h5p_content WHERE id = ?d
 if (!$content) {
     exit;
 }
-if (!$content->reuse_enabled) {
+if (!$content->reuse_enabled || !$is_editor) {
     exit;
 }
 
