@@ -13,9 +13,9 @@
 
 @foreach ($toolArr as $key => $tool_group)
 <div class='col-lg-6 col-12 mt-3'>
-    <div class='panel panel-default'>
-        <div class='panel-heading'>
-            <span class='control-label-notes'>{{ $tool_group[0]['text'] }}</span>
+    <div class='panel panel-admin'>
+        <div class='panel-heading text-center'>
+            <span class='text-white'>{{ $tool_group[0]['text'] }}</span>
         </div>
         <div class='panel-body'>
             <ul class="list-group list-group-flush">

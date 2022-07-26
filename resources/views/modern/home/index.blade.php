@@ -50,8 +50,8 @@
                         <div class="col-lg-12 mt-5">   
                             <div class='row'>     
                                 <div class='col-lg-8'>        
-                                    <div class="panel panel-default w-100" style='margin-left:-10px;'>
-                                        <div class="panel-heading text-center p-2" style='background:#003F87;'>
+                                    <div class="panel panel-admin w-100" style='margin-left:-10px;'>
+                                        <div class="panel-heading text-center p-2">
                                             <div class='row'>
                                                 <div class='col-2'>
                                                     <a href="http://www.openeclass.org/" target="_blank">
@@ -60,12 +60,12 @@
                                                 </div>
                                                 <div class='col-9 pt-1 pe-3'>
                                                     <span class='fs-5 p-3 text-white'>{{trans('langWelcomeTo')}} 
-                                                        <strong class='text-info'>{{trans('langEclass')}}</strong>
+                                                        <strong class='text-white'>{{trans('langEclass')}}</strong>
                                                     </span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class='panel-body bg-light p-5' style='border-bottom-right-radius:15px; border-bottom-left-radius:15px;'>
+                                        <div class='panel-body bg-light p-5'>
                                             {!! trans('langInfoAbout') !!}
                                         </div>
                                     </div>  
@@ -73,8 +73,8 @@
                                 <div class='col-lg-4'>
                                     @if (get_config('enable_mobileapi'))
                                         <div class='col-lg-12' style='margin-left:10px;'>
-                                            <div class='panel panel-default'>
-                                                <div class='panel-heading text-center p-2' style='background:#003F87;'>
+                                            <div class='panel panel-admin'>
+                                                <div class='panel-heading text-center p-2'>
                                                     <span class='fs-5 p-3 text-white'>App Store</span>
                                                 </div>
                                                 <div class='panel-body'>
@@ -85,8 +85,8 @@
                                             </div>
                                         </div>
                                         <div class='col-lg-12 mt-4' style='margin-left:10px;'>
-                                            <div class='panel panel-default'>
-                                                <div class='panel-heading text-center p-2' style='background:#003F87;'>
+                                            <div class='panel panel-admin'>
+                                                <div class='panel-heading text-center p-2'>
                                                     <span class='fs-5 p-3 text-white'>Play Store</span>
                                                 </div>
                                                 <div class='panel-body'>

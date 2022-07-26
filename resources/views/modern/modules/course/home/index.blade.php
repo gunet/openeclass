@@ -51,8 +51,8 @@
 
 
                     <div class='col-sm-12'>
-                        <div class='panel panel-default mt-3 border-0 col_maincontent_coursePage'>
-                            <div class='panel-body'>
+                        <div class='panel panel-default mt-3 col_maincontent_coursePage'>
+                            <div class='panel-body borderBody'>
                                 <div class='row'>
                                     <div class='col-12 pb-2'>
                                         <ul class="nav navbar navbar-left d-flex d-inline-flex float-end">

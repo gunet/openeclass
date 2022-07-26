@@ -62,9 +62,9 @@
                                     <div class='col-lg-6 col-12 mt-3'>
                                         <div class='row'>
                                             <div class='col-sm-12'>
-                                                <div class='panel panel-default'>
-                                                    <div class='panel-heading'>
-                                                        <span class='control-label-notes'>{{ trans('langQuickLinks') }}</span>
+                                                <div class='panel panel-admin'>
+                                                    <div class='panel-heading text-center'>
+                                                        <span class='text-white'>{{ trans('langQuickLinks') }}</span>
                                                     </div>
                                                     <div class='panel-body'>
                                                         <div class='row pt-2 pb-2'>
@@ -83,11 +83,11 @@
                                                 </div>
                                             </div>
                                             <div class='col-sm-12 mt-3'>
-                                                <div class='panel panel-default'>
-                                                    <div class='panel-heading'>
-                                                        <div class='panel-title fs-5 ps-3 pt-2 pb-2'>{{ trans('langPlatformIdentity') }}</div>
+                                                <div class='panel panel-admin'>
+                                                    <div class='panel-heading text-center'>
+                                                        <div class='panel-title'>{{ trans('langPlatformIdentity') }}</div>
                                                     </div>
-                                                    <div class='panel-body panel-body-admin ps-3 pt-2 pb-2'>
+                                                    <div class='panel-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
                                                             <div class='col-sm-6'>
                                                                 {!! icon('fa-check') !!} <strong class='control-label-notes'>{{ trans('langWebServerVersion') }}</strong>
@@ -133,11 +133,11 @@
                                                 </div>
                                             </div>
                                             <div class='col-sm-12 mt-3'>
-                                                <div class='panel panel-default'>
+                                                <div class='panel panel-admin'>
                                                     <div class='panel-heading'>
-                                                        <div class='panel-title fs-5 ps-3 pt-2 pb-2'>{{ trans('langIndexInfo') }}</div>
+                                                        <div class='panel-title text-center'>{{ trans('langIndexInfo') }}</div>
                                                     </div>
-                                                    <div class='panel-body panel-body-admin'>
+                                                    <div class='panel-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
                                                             <div class='col-sm-6'>
                                                             <strong class='control-label-notes'>{{ trans('langIndexNumDocs') }}:</strong>

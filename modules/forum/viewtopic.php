@@ -640,10 +640,10 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
 
     if ($count > 1) { // for all posts except first
         $content .= "<div id='$myrow->id' class='post-message panel panel-default col-sm-offset-$offset mt-3'>";
-        $content .= "<div class='panel-heading'><h5 class='panel-title text-dark'>$langMsgRe " . q($topic_subject);
+        $content .= "<div class='panel-heading'><h5 class='panel-title'>$langMsgRe " . q($topic_subject);
     } else {
         $content .= "<div id='$myrow->id' class='parent-post-message panel panel-primary mt-3'>";
-        $content .= "<div class='panel-heading'><h5 class='panel-title text-dark'>". q($topic_subject);
+        $content .= "<div class='panel-heading'><h5 class='panel-title'>". q($topic_subject);
     }
 
     if ($is_editor) {
