@@ -49,7 +49,7 @@ $tool_content .= action_bar([
       'icon' => 'fa-download',
       'level' => 'primary-label',
       'button-class' => 'btn-success',
-      'show' => $content->reuse_enabled
+      'show' => ($content->reuse_enabled && $is_editor)
     ],
     [ 'title' => $langBack,
       'url' => $backUrl,
@@ -83,7 +83,7 @@ $head_content .= "
               copyright: true,
               icon: true,
               fullScreen: true,
-              export: " . ($content->reuse_enabled ? "true" : "false") . ",
+              export: " . (($content->reuse_enabled && $is_editor) ? "true" : "false") . ",
               downloadUrl: '" . $urlServer . "modules/h5p/reuse.php?course=" . $course_code . "&id=" . $content->id . "'
             };
 
