@@ -98,11 +98,11 @@
                                                             </td>
                                                             <td>
                                                                 @if($array_exercises_editor[$row->id][1] != 1)
-                                                                    <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{!! $array_exercises_editor[$row->id][0] !!}">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{!! $array_exercises_editor[$row->id][0] !!}">
                                                                         {!! $array_exercises_editor[$row->id][2] !!}
                                                                     </button>
                                                                 @else
-                                                                    <button type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="{!! $array_exercises_editor[$row->id][0] !!}">
+                                                                    <button type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{!! $array_exercises_editor[$row->id][0] !!}">
                                                                         {!! $array_exercises_editor[$row->id][2] !!}
                                                                     </button>
                                                                 @endif

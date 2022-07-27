@@ -381,7 +381,7 @@ $tool_content .= action_bar(array(
 
 $tool_content .= "<div class='col-sm-12'>
                     <div class='panel panel-default'>
-                    <div class='panel-heading'>
+                    <div class='panel-heading list-header'>
                         <h3 class='panel-title'>$langLearningPathData</h3>
                     </div>";
 $tool_content .= "<table class='table-default'>";
@@ -488,7 +488,7 @@ $tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default pa
                     <div class='pull-right' style='padding:8px;'>
                         $lp_action_button
                     </div>
-                    <div class='panel-heading' style='border-radius:0px;'>
+                    <div class='panel-heading list-header'>
                         <h3 class='panel-title'>$langLearningPathStructure</h3>
                     </div>";
 

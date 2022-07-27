@@ -45,7 +45,7 @@ $tool_content .= action_bar(array(
 require_once 'modules/usage/form.php';
 
 /****   Plots   ****/
-$tool_content .= "<div class='row plotscontainer'>";
+$tool_content .= "<div class='plotscontainer mt-3'>";
 $tool_content .= "<div id='userlogins_container' class='col-lg-12'>";
 $tool_content .= plot_placeholder("userlogins_stats", $langNbLogin.' '.$langAndTotalCourseVisits);
 $tool_content .= "</div>";
@@ -54,7 +54,7 @@ $tool_content .= plot_placeholder("popular_courses", $langFavouriteCourses);
 $tool_content .= "</div>";
 $tool_content .= "</div>";
 
-$tool_content .= "<div class='row plotscontainer'>";
+$tool_content .= "<div class='plotscontainer mt-3'>";
 $tool_content .= "<div id='modulepref_pie_container' class='col-sm-12'>";
 $tool_content .= plot_placeholder("depuser_stats", $langUsers);
 $tool_content .= "</div>";
@@ -65,7 +65,7 @@ $tool_content .= "</div>";
 
 /****   Datatables   ****/
 
-$tool_content .= "<div class='panel panel-default detailscontainer'>";
+$tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
 $tschema = "<thead><tr>"
     . "<th rowspan='2'>$langCategory</th>"
     . "<th colspan='3'>$langUsers</th>"
@@ -81,9 +81,9 @@ $tschema .= "</tr></thead>"
     . "<tbody></tbody>"
     . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>";
 $tool_content .= table_placeholder("adetails1", "table table-default dataTable", $tschema, "$langUsers $langAnd $langCourses");
-$tool_content .= "</div>";
+$tool_content .= "</div></div>";
 
-$tool_content .= "<div class='panel panel-default detailscontainer'>";
+$tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
 $tschema = "<thead><tr>"
     . "<th>$langDate $langAnd $langHour</th>"
     . "<th>$langUser</th>"
@@ -95,5 +95,5 @@ $tschema = "<thead><tr>"
     . "</thead>"
     . "<tbody></tbody>";
 $tool_content .= table_placeholder("adetails2", "table table-striped table-bordered", $tschema, $langNbLogin);
-$tool_content .= "</div>";
+$tool_content .= "</div></div>";
 

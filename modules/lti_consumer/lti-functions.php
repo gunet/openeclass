@@ -380,7 +380,7 @@ function lti_app_details() {
                            <table class='announcements_table'>
                              <tr class='notes_thead'>
                                <th class='text-white' style='width:30%'>$langTitle</th>
-                               <th class='text-white text-center'>$langUnitDescr</th>
+                               <th class='text-white text-start'>$langUnitDescr</th>
                                <th class='text-white text-center'>$langLTIAppActions</th>";
         if ($is_editor) {
             $headings .= "<th class='text-white text-center'>" . icon('fa-cogs') . "</th>";
@@ -421,7 +421,7 @@ function lti_app_details() {
                     <td class='text-left'>$title</td>
                     <td>$desc</td>
                     <td class='text-center'>$joinLink</td>
-                    <td class='option-btn-cell'>".
+                    <td class='option-btn-cell text-center'>".
                         action_button(array(
                             array(  'title' => $langEditChange,
                                     'url' => "../lti_consumer/index.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",

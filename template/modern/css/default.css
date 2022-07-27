@@ -737,6 +737,7 @@ a{
 
   .announcements_table{
      width:100%;
+     background: #FFFFFF;
   }
 
   .announcements_table .list-header th{
@@ -745,6 +746,7 @@ a{
 
   .table-default{
     width:100%;
+    background: #FFFFFF;
   }
   
   .table-default .list-header th{
@@ -770,9 +772,9 @@ a{
     height:40px;
     background: rgb(199,212,210);
     background: radial-gradient(circle, #003F87 0%, #003F87 100%);
-    -webkit-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
+    /* -webkit-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
       -moz-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
-      box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
+      box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35); */
   }
 
   tr.active{
@@ -1393,8 +1395,8 @@ a{
 
   .panel-default,.panel-action-btn-default{
     border-radius: 15px;
-    background: #efeded;
-    border:solid 2px #efeded;
+    background: #F5F5F5;
+    border:solid 2px #F5F5F5;
   }
   .panel-default .panel-title{
     color:#001146;
@@ -1449,16 +1451,23 @@ a{
   
   
   .panel-heading.notes_thead{
+    background: #EEEEEE;
+    padding: 10px 15px;
+    height: auto;
+  }
+  .panel-heading.list-header{
+    background: #EEEEEE;
+    padding: 10px 15px;
     height: auto;
   }
 
   .panel-body,.media-body{
     padding:15px;
-    background: #f8f9fa;
+    background: #ffffff;
     border-bottom-left-radius:11px;
     border-bottom-right-radius:11px;
-    border-top-left-radius:7px;
-    border-top-right-radius:7px;
+    border-top-left-radius:11px;
+    border-top-right-radius:11px;
   }
   .borderBody{
     border-top-right-radius:15px; border-top-left-radius:15px;
@@ -1519,17 +1528,17 @@ a{
      padding-top:25px;
   }
   tbody,tr,th,td{
-      border:2px solid rgba(0,63,135,0.1) ;
+      border:1px solid rgba(65, 66, 66, 0.1) ;
       
   }
   .announcements_table tr{
-      border:2px solid rgba(0,63,135,0.1) ;
+    border:1px solid rgba(65, 66, 66, 0.1) ;
   }
   .announcements_table td{
-      border:2px solid rgba(0,63,135,0.1) ;
+    border:1px solid rgba(65, 66, 66, 0.1) ;
   }
   .res-table-row{
-    border:1px solid rgba(0,63,135,0.1) ;
+    border:1px solid rgba(65, 66, 66, 0.1) ;
   }
   .shadow-sm .res-table-row{
     border:none ;
@@ -2172,6 +2181,18 @@ a{
   /* ------------------------------------------------------- MOBILE L ------------------------------------------------------- */
   @media (min-width: 426px) and (max-width: 767px){ 
 
+    .btn-group{
+      max-width:400px;
+      flex-wrap: wrap;
+    }
+
+    .btn-group .btn.btn-secondary{
+       border:solid 3px white;
+    }
+    .btn-group .btn.btn-success{
+      border:solid 3px white;
+    }
+
     .WelcomeEclassPanelDefault{
       border-radius: 15px;
     }
@@ -2281,6 +2302,18 @@ a{
   /* ------------------------------------------------------- tablet ------------------------------------------------------- */
 
   @media (min-width: 768px) and (max-width: 1023px){
+
+    .btn-group{
+      max-width:400px;
+      flex-wrap: wrap;
+    }
+
+    .btn-group .btn.btn-secondary{
+       border:solid 3px white;
+    }
+    .btn-group .btn.btn-success{
+      border:solid 3px white;
+    }
 
     .WelcomeEclassPanelDefault{
       border-radius: 15px;
@@ -2434,6 +2467,18 @@ a{
   /* ------------------------------------------------------- L tablet --------------------------------------------------*/
 
   @media (min-width: 1024px) and (max-width: 1199px){ 
+
+    .btn-group{
+      max-width:400px;
+      flex-wrap: wrap;
+    }
+
+    .btn-group .btn.btn-secondary{
+       border:solid 3px white;
+    }
+    .btn-group .btn.btn-success{
+      border:solid 3px white;
+    }
 
     .sidebarColToolText{
       margin-left:-14px;

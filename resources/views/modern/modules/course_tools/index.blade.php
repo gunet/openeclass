@@ -1,4 +1,4 @@
-<?php  print_a($_SESSION['messages']); ?>
+
 @extends('layouts.default')
 
 @push('head_scripts')
@@ -21,7 +21,7 @@
                 </div>
             </div>
 
-            <div class="col-xl-10 col-lg-9 col-lg-10 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
+            <div class="col-xl-10 col-lg-9 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
                     
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
@@ -112,15 +112,18 @@
 
                     <div class='col-sm-12 mt-3'>
                         <div class='panel panel-default panel-action-btn-default'>
-                            <div class='float-end pt-3 pb-2 pe-3'>
-                                <div id='operations_container'>
-                                    <a class='btn btn-success mt-1 ms-md-0 ms-3' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> {{ trans('langAddExtLink') }}</a>
+                            <div class='panel-heading'>
+                                <div class='float-end pt-3 pb-2 pe-3'>
+                                    <div id='operations_container'>
+                                        <a class='btn btn-success mt-1 ms-md-0 ms-3' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> {{ trans('langAddExtLink') }}</a>
+                                    </div>
+                                </div>
+                                <div class='p-3'>
+                                    <h3 class='panel-title control-label-notes pt-2'> {{ trans('langOperations') }}</h3>
                                 </div>
                             </div>
-                            <div class='bg-light p-3'>
-                                <h3 class='panel-title control-label-notes pt-2'> {{ trans('langOperations') }}</h3>
-                            </div>
-                            <table class='announcements_table'>
+                            
+                            <table class='announcements_table mb-2 bg-light'>
                             @foreach($q as $externalLinks)
                                 <tr>
                                     <td class='text-left'>
@@ -135,12 +138,13 @@
                                 </tr>
                             @endforeach
                             </table>
+                            
                         </div>
                     </div>
 
                     <div class='col-sm-12 mt-3'>
                         <div class='panel panel-default'>
-                            <div class='bg-light p-3'>
+                            <div class='panel-heading'>
                                 <span class='panel-title control-label-notes pt-2' style='line-height: 45px;'>{{ trans('langLtiConsumer') }}</span>
                                 <span class='float-end pt-1'>
                                     <a class='btn btn-success' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>

@@ -138,7 +138,7 @@
         <div class='modal-dialog'>
             <div class='modal-content'>
                 <div class='modal-header'>
-                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
                         <span aria-hidden='true'>&times;</span>
                     </button>
                     <div class='modal-title h4' id='myModalLabel'>{{ trans('langCitation') }}</div>

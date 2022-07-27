@@ -81,8 +81,8 @@
                                             <th>{{ trans('langDate') }}</th>
                                             <th>{{ trans('langSelect') }}</th>
                                         </tr>
-                                        <tr class="list-header">
-                                            <th colspan="6">{{ trans('langOpenDelosPublicVideos') }}</th>
+                                        <tr class="bg-light">
+                                            <th class='p-3' colspan="6">{{ trans('langOpenDelosPublicVideos') }}</th>
                                         </tr>
                                         @if ($jsonPublicObj !== null && property_exists($jsonPublicObj, "resources") && count($jsonPublicObj->resources) > 0)
                                             @foreach ($jsonPublicObj->resources as $resource)
@@ -113,7 +113,7 @@
                                             <tr><td colspan='6'><div class='alert alert-warning' role='alert'>{{ trans('langNoVideo') }}</div></td></tr>
                                         @endif
                                         <tr class="list-header">
-                                            <th colspan="6">{{ trans('langOpenDelosPrivateVideos') }}</th>
+                                            <th class='ps-3' colspan="6">{{ trans('langOpenDelosPrivateVideos') }}</th>
                                         </tr>
                                         @if (!$checkAuth)
                                             <?php
@@ -181,7 +181,7 @@
                     </div>
 
                     <div class='col-sm-12'>
-                        <div class='alert alert-warning' role='alert'>{{ trans('langOpenDelosReplaceInfo') }}</div>
+                        <div class='alert alert-warning' role='alert'>{!! trans('langOpenDelosReplaceInfo') !!}</div>
                     </div>
                 </div>
             </div>

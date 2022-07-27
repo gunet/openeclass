@@ -6045,3 +6045,4 @@ $langInsertExerciseCap = "Άσκηση";
 $langPollStart = "Έναρξη";
 $langSections = 'Ενότητες';
 $langCategoryEssay = "Εργασία";
+$langAnalyticsEditElements = 'Επεξεργασία Στοιχείων';

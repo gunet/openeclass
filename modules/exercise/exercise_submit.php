@@ -713,7 +713,7 @@ if ($questionList) {
                 }
                 $tool_content .= "
                     <div style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>
-                        <input class='btn $class' $extra_style type='submit' name='q_id' id='q_num$k' value='$k' data-toggle='tooltip' data-placement='top' title='$title'>
+                        <input class='btn $class' $extra_style type='submit' name='q_id' id='q_num$k' value='$k' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$title'>
                     </div>";
             }
             $tool_content .= "</div>";

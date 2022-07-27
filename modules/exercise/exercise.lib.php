@@ -321,7 +321,7 @@ function display_exercise($exercise_id) {
             <div class='panel-heading'>
               <h3 class='panel-title'>" . q_math($exercise->selectTitle()) . "
                 <a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes'>
-                  <span class='fa fa-edit' data-bs-toggle='tooltip' data-original-title='$langModify'></span>
+                  <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
                 </a>
               </h3>
             </div>
@@ -392,7 +392,7 @@ function display_exercise($exercise_id) {
               <td colspan='$colspan'>
                 <strong><u>$langQuestion</u>: $i</strong>
                 <a $modal_params href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid'>
-                  <span class='fa fa-edit' data-bs-toggle='tooltip' data-original-title='$langModify'></span>
+                  <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
                 </a>
                 </td>
             </tr>

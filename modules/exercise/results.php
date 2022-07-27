@@ -268,9 +268,9 @@ foreach ($result as $row) {
                     $estimatedEndTime->add(new DateInterval('P1D'));
                 }
                 if ($now > $estimatedEndTime) {
-                    $row_class = " class='warning' data-toggle='tooltip' title='$langAttemptActiveButDeadMsg'";
+                    $row_class = " class='warning' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAttemptActiveButDeadMsg'";
                 } else {
-                    $row_class = " class='success' data-toggle='tooltip' title='$langAttemptActiveMsg'";
+                    $row_class = " class='success' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAttemptActiveMsg'";
                 }
                 // IF ATTEMPT PENDING OR CANCELED
             } else if ($row2->attempt_status == ATTEMPT_PENDING) {
@@ -279,7 +279,7 @@ foreach ($result as $row) {
             } else if ($row2->attempt_status == ATTEMPT_CANCELED) {
                 $results_link = "-/-";
                 $status = $langAttemptCanceled;
-                $row_class = " class='danger' data-toggle='tooltip' title='$langAttemptCanceled''";
+                $row_class = " class='danger' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAttemptCanceled''";
             }
 
             $tool_content .= "<tr$row_class><td class='text-center'>" . q($row2->record_start_date) . "</td>";

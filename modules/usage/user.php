@@ -62,20 +62,20 @@ $head_content .=
 require_once 'modules/usage/form.php';
 
 /****   Plots   ****/
-$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
+$tool_content .= "<div class='plotscontainer mt-3'><div class='col-12'>";
 $tool_content .= plot_placeholder("generic_userstats", "$langHits $langAnd $langDuration");
 $tool_content .= "</div></div>";
 
-$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'><div id='coursepref_pie_container'>";
+$tool_content .= "<div class='plotscontainer mt-3'><div class='col-12'><div id='coursepref_pie_container'>";
 $tool_content .= plot_placeholder("coursepref_pie", $langFavouriteCourse);
 $tool_content .= "</div></div></div>";
 
-$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'><div id='module_container'>";
+$tool_content .= "<div class='plotscontainer mt-3'><div class='col-12'><div id='module_container'>";
 $tool_content .= plot_placeholder("course_stats", $langModule);
 $tool_content .= "</div></div></div>";
 
 /****   Datatables   ****/
-$tool_content .= "<div class='panel panel-default detailscontainer'>";
+$tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
 $tschema = "<thead><tr>"
         . "<th>$langDate</th>"
         . "<th>$langCourse</th>"
@@ -86,4 +86,4 @@ $tschema = "<thead><tr>"
         . "<tbody></tbody>"
         . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th></tr></tfoot>";
 $tool_content .= table_placeholder("udetails1", "table table-striped table-bordered", $tschema, "$langHits $langAnd $langDuration");
-$tool_content .= "</div>";
+$tool_content .= "</div></div>";

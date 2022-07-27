@@ -81,7 +81,8 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
         $data = array();
         list($diskQuotaVideo, $updir, $diskUsed) = getQuotaInfo($course_code, $webDir);
         $data['showQuota'] = showquota($diskQuotaVideo, $diskUsed, "$_SERVER[SCRIPT_NAME]?course=$course_code");
-        view('modules.video.showQuota', $data);
+        exit;
+        // view('modules.video.showQuota', $data);
     }
 
     // visibility commands

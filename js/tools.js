@@ -100,7 +100,7 @@ function course_checkbox_disabled(id, state)
 function course_list_init() {
     $.course_closed = [];
 
-    var dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="modal-label"></h4></div><div class="modal-body"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal"></button><button type="button" class="btn btn-primary"></button></div></div></div></div>');
+    var dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="modal-label"></h4></div><div class="modal-body"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-bs-dismiss="modal"></button><button type="button" class="btn btn-primary"></button></div></div></div></div>');
     $('.modal-body', dialog).html(lang.reregisterImpossible);
     $('.modal-title', dialog).html(lang.unregCourse);
     $('.btn-default', dialog).html(lang.cancel);
@@ -186,7 +186,7 @@ function course_list_handler() {
                     course_checkbox_disabled(cid, true);
                 }
                 if (passfield.length && result === 'unauthorized') {
-                    var dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal"></button></div></div></div></div>');
+                    var dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-bs-dismiss="modal"></button></div></div></div></div>');
                     $('.modal-body', dialog).html(lang.invalidCode);
                     $('.btn-default', dialog).html(lang.close);
                     dialog.modal("show");

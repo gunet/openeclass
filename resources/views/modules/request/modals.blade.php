@@ -2,7 +2,7 @@
     <div class='modal-dialog' role='document'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <button type='button' class='close' data-dismiss='modal' aria-label='{{ trans('langCancel') }}'>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label='{{ trans('langCancel') }}'>
                     <span aria-hidden='true'>&times;</span>
                 </button>
                 <div class='modal-title h4' id='assigneesModalLabel'>{{ trans("m['WorkAssignTo']") }}...</div>
@@ -20,7 +20,7 @@
                     </select>
                 </div>
                 <div class='modal-footer'>
-                    <button type='button' class='btn btn-default' class='close' data-dismiss='modal'>{{ trans('langCancel') }}</button>
+                    <button type='button' class='btn btn-default' class='close' data-bs-dismiss='modal'>{{ trans('langCancel') }}</button>
                     <button class='btn btn-primary' type='submit' name='assignmentSubmit'>{{ trans('langSubmit') }}</button>
                 </div>
             </form>
@@ -32,7 +32,7 @@
     <div class='modal-dialog' role='document'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <button type='button' class='close' data-dismiss='modal' aria-label='{{ trans('langCancel') }}'>
+                <button type='button' class='close' data-bs-dismiss='modal' aria-label='{{ trans('langCancel') }}'>
                     <span aria-hidden='true'>&times;</span>
                 </button>
                 <div class='modal-title h4' id='watchersModalLabel'>{{ trans("langWatchers") }}...</div>
@@ -52,7 +52,7 @@
                     </select>
                 </div>
                 <div class='modal-footer'>
-                    <button type='button' class='btn btn-default' class='close' data-dismiss='modal'>{{ trans('langCancel') }}</button>
+                    <button type='button' class='btn btn-default' class='close' data-bs-dismiss='modal'>{{ trans('langCancel') }}</button>
                     <button class='btn btn-primary' type='submit' name='watchersSubmit'>{{ trans('langSubmit') }}</button>
                 </div>
             </form>

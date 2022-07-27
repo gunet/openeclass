@@ -853,12 +853,12 @@ function user_duration_per_course($u) {
 
     $totalDuration = format_time_duration(0 + $totalDuration, 240);
     $tool_content .= "
-                <div class='row margin-bottom-fat margin-top-fat'>
-                  <div class='col-xs-12'>
+                <div class='margin-bottom-fat margin-top-fat mb-3'>
+                  <div class='col-12'>
                     <ul class='list-group'>
-                      <li class='list-group-item disabled'>
+                      <li class='list-group-item disabled bg-primary'>
                         <div class='row'>
-                          <div class='col-sm-12'><b>$langDurationVisitsPerCourse</b></div>
+                          <div class='col-sm-12'><b class='text-white'>$langDurationVisitsPerCourse</b></div>
                         </div>
                       </li>";
     foreach ($duration as $code => $time) {
@@ -875,7 +875,7 @@ function user_duration_per_course($u) {
                   </div>
                 </div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNotEnrolledToLessons</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNotEnrolledToLessons</div></div>";
     }
 
 }
@@ -894,12 +894,12 @@ function user_last_logins($u) {
     $result = Database::get()->queryArray("SELECT * FROM loginout
                                         WHERE id_user = ?d ORDER by idLog DESC LIMIT 5", $u);
     if (count($result) > 0) {
-        $tool_content .= "<div class='row margin-bottom-fat margin-top-fat'>
-                  <div class='col-xs-12'>
+        $tool_content .= "<div class='margin-bottom-fat margin-top-fat mb-3'>
+                  <div class='col-12'>
                     <ul class='list-group'>
-                      <li class='list-group-item disabled'>
+                      <li class='list-group-item disabled bg-secondary'>
                         <div class='row'>
-                          <div class='col-sm-12'><b>$langLastVisits</b></div>
+                          <div class='col-sm-12'><b class='text-white'>$langLastVisits</b></div>
                         </div>";
 
         foreach ($result as $lastVisit) {

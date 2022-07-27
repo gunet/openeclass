@@ -507,7 +507,7 @@ if ($nbrQuestions) {
             <td>" . $legend . "</td>";
         $tool_content .= "<td class='option-btn-cell' style='width: 85px;'>";
         $tool_content .= "<div class='reorder-btn pull-left' style='margin-left:15px;'>
-                            <span class='fa fa-arrows' style='cursor: pointer;' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
+                            <span class='fa fa-arrows' style='cursor: pointer;' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-titile='$langReorder'></span>
                         </div>";
 
         $tool_content .= "<div class='pull-right' style='margin-top:10px;'>";
@@ -556,7 +556,7 @@ $tool_content .= "
   <div class='modal-dialog'>
     <div class='modal-content'>
       <div class='modal-header'>
-        <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
+        <button type='button' class='close' data-bs-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
       </div>
       <div class='modal-body'>
         $langUsedInSeveralExercises
