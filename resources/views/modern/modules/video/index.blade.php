@@ -180,7 +180,7 @@
                         @endif
                     @else
                         <div class='row p-2'></div>
-                        M<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning' role='alert'>{{ trans('langNoVideo') }}</div></div>
+                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning' role='alert'>{{ trans('langNoVideo') }}</div></div>
                     @endif
 
                 </div>

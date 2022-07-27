@@ -110,7 +110,9 @@ if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
 // handle submitted data
 if (isset($_POST['add_submit'])) { // add
     $uploaded = false;
-    $videodate = date_format(date_create_from_format( 'd-m-Y H:i', $_POST['videodate']), "Y-m-d H:i");
+    // $videodate = date_format(date_create_from_format( 'd-m-Y H:i', $_POST['videodate']), "Y-m-d H:i"); 
+    $date = date_create($_POST['videodate']);
+    $videodate = date_format($date, "Y-m-d H:i");
     if (isset($_POST['URL'])) { // add videolink
         $url = $_POST['URL'];
         $title = ($_POST['title'] == '') ? $url : $_POST['title'];
