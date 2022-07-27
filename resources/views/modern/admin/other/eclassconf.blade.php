@@ -1,3 +1,41 @@
+<?php 
+    $install = isset($GLOBALS['input_fields']);
+
+    $emailTransports = array(0 => 'PHP mail()', 1 => 'SMTP', 2 => 'sendmail');
+    $email_transport = get_var('email_transport');
+    if (!is_numeric($email_transport)) {
+        if ($email_transport == 'smtp') {
+            $email_transport = 1;
+        } elseif ($email_transport == 'sendmail') {
+            $email_transport = 2;
+        } else {
+            $email_transport = 0;
+        }
+    }
+    $emailEncryption = array(0 => $langNo, 1 => 'SSL', 2 => 'TLS');
+    $smtp_encryption = get_var('smtp_encryption');
+    if ($smtp_encryption == 'ssl') {
+        $smtp_encryption = 1;
+    } elseif ($smtp_encryption == 'tls') {
+        $smtp_encryption = 2;
+    } else {
+        $smtp_encryption = 0;
+    }
+    $cbox_dont_mail_unverified_mails = get_var('dont_mail_unverified_mails') ? 'checked' : '';
+    $cbox_email_from = get_var('email_from') ? 'checked' : '';
+
+    $defaultHomepage = $toolboxHomepage = $externalHomepage = '';
+    $homepageSet = get_config('homepage');
+    if ($homepageSet == 'toolbox') {
+        $toolboxHomepage = 'checked';
+    } elseif ($homepageSet == 'external') {
+        $externalHomepage = 'checked';
+    } else {
+        $defaultHomepage = 'checked';
+    }
+?>
+
+
 @extends('layouts.default')
 
 @section('content')
@@ -26,7 +64,6 @@
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='row p-2'></div>
 
                     @if (Session::get('scheduleIndexing'))
                         <!--schedule indexing if necessary-->
@@ -38,11 +75,11 @@
                         </div>
                     @endif
                     
-                    <div class='row p-2'>
+                    
                         <div class='col-xxl-9 col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12'>
                             <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>  
                                 <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">  
-                                    <div class='panel panel-default' id='one'>
+                                    <div class='panel panel-admin' id='one'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langBasicCfgSetting') }}</h2>
                                         </div>
@@ -186,7 +223,7 @@
                                     
 
 
-                                    <div class='panel panel-default mt-5' id='two'>
+                                    <div class='panel panel-admin mt-5' id='two'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langUpgReg') }}</h2>
                                         </div>
@@ -368,7 +405,7 @@
 
 
 
-                                    <div class='panel panel-default mt-5' id='three'>
+                                    <div class='panel panel-admin mt-5' id='three'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langEclassThemes') }}</h2>
                                         </div>
@@ -418,9 +455,232 @@
                                         </div>
                                     </div>
 
-                                    {!! mail_settings_form() !!}
 
-                                    <div class='panel panel-default mt-5' id='six'>
+                                    
+
+
+                                    <div class='panel panel-primary mt-5' id='four'>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{trans('langHomePageSettings')}}</h2>
+                                        </div>
+                                        <div class='panel-body'>
+                                            <div class='margin-bottom-fat margin-top-fat'><strong>{{trans('langSelectHomePage')}} :</strong></div>
+                                            <fieldset>
+                                                <div class='landing-default'>
+                                                    <div class='radio margin-bottom-fat'>
+                                                        <label>
+                                                            <input {{$defaultHomepage}} class='homepageSet' name='homepageSet' value='default' data-bs-collapse='collapse-defaultHomepage' type='radio'> {{trans('langHomePageDefault')}}
+                                                        </label>
+                                                    </div>
+                                                    <div id='collapse-defaultHomepage' class='collapse homepage-inputs margin-bottom-fat'>
+                                                        <hr class='margin-bottom-fat'>
+                                                        <div class='form-group mt-3'>
+                                                            <label for='defaultHomepageTitle' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
+                                                            <div class='col-sm-12'>
+                                                                <input class='form-control' type='text' name='homepage_title' id='defaultHomepageTitle' value="{!! q(get_config('homepage_title', $langEclass)) !!}">
+                                                                <p class='help-block'>{{trans('langHomePageTitleHelpText')}}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class='form-group mt-3'>
+                                                            <label for='defaultHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
+                                                            <div class='col-sm-12'>
+                                                                <input class='form-control' type='text' name='homepage_name' id='defaultHomepageBcrmp' value="{!! q(get_config('homepage_name', $langHomePage)) !!}">
+                                                                <p class='help-block'>{{trans('langHomePageNavTitleHelp')}}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class='form-group mt-3'>
+                                                            <label for='defaultHomepageIntro' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
+                                                            <div class='col-sm-12'>
+                                                                {!! rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro', $langInfoAbout)) !!}
+                                                                <p class='help-block'>{{trans('langHomePageIntroTextHelp')}}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class='form-group'>
+                                                            <label for='theme' class='col-sm-2 col-sm-offset-1 control-label'>{{trans('lang_login_form')}}: </label>
+                                                            <div class='col-sm-9'>
+                                                                    <div class='checkbox'>
+                                                                        <label>
+                                                                            <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' {{ $cbox_dont_display_login_form }}>
+                                                                            {{trans('lang_dont_display_login_form')}}
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class='checkbox'>
+                                                                        <label>
+                                                                            <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' {{ $cbox_hide_login_link }}>
+                                                                            {{trans('lang_hide_login_link')}}
+                                                                        </label>
+                                                                    </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class='landing-toolbox'>
+                                                    <div class='radio margin-bottom-fat'>
+                                                        <label>
+                                                            <input {{$toolboxHomepage}} class='homepageSet' name='homepageSet' value='toolbox' data-collapse='collapse-toolboxHomepage' type='radio'> {{trans('langHomePageToolbox')}}
+                                                        </label>
+                                                    </div>
+                                                    <div id='collapse-toolboxHomepage' class='collapse homepage-inputs margin-bottom-fat'>
+                                                        <hr class='margin-bottom-fat'>
+                                                        <div class='form-group mt-3'>
+                                                            <label for='toolboxHomepageTitle' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
+                                                            <div class='col-sm-12'>
+                                                                <input class='form-control' type='text' name='toolbox_title' id='toolboxHomepageTitle' value="{!! q(get_config('toolbox_title', $langEclass)) !!}">
+                                                                <p class='help-block'>{{trans('langHomePageTitleHelpText')}}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class='form-group mt-3'>
+                                                            <label for='toolboxHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
+                                                            <div class='col-sm-12'>
+                                                                <input class='form-control' type='text' name='toolbox_name' id='toolboxHomepageBcrmp' value="{!! q(get_config('toolbox_name', $langHomePage)) !!}">
+                                                                <p class='help-block'>{{trans('langHomePageNavTitleHelp')}}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class='form-group mt-3'>
+                                                            <label for='toolboxHomepageIntro' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
+                                                            <div class='col-sm-12'>
+                                                                {!! rich_text_editor('toolbox_intro', 5, 20, get_config('toolbox_intro', $langInfoAbout)) !!}
+                                                                <p class='help-block'>{{trans('langHomePageIntroTextHelp')}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class='landing-external'>
+                                                    <div class='radio margin-bottom-fat'>
+                                                        <label>
+                                                            <input {{$externalHomepage}} class='homepageSet' type='radio' name='homepageSet' value='external' data-bs-collapse='collapse-externalHomepage'> {{trans('langHomePageExternal')}}
+                                                        </label>
+                                                    </div>
+                                                    <div id='collapse-externalHomepage' class='collapse homepage-inputs margin-bottom-fat'>
+                                                        <hr class='margin-bottom-fat'>
+                                                        <div class='form-group mt-3'>
+                                                            <label for='externalHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}:</label>
+                                                            <div class='col-sm-12'>
+                                                                <input class='form-control' type='text' name='landing_name' id='externalHomepageBcrmp' value="{!! q(get_config('landing_name')) !!}">
+                                                                <p class='help-block'>{{trans('langHomePageNavTitleHelp')}}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class='form-group mt-3'>
+                                                            <label for='externalHomepageUrl' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroUrl')}}:</label>
+                                                            <div class='col-sm-12'>
+                                                                <input class='form-control' type='text' name='landing_url' id='externalHomepageUrl' value="{!! q(get_config('landing_url')) !!}">
+                                                                <p class='help-block'>{{trans('langHomePageExtUrlHelp')}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                    
+
+                                            </fieldset>
+                                        </div>
+                                    </div>
+
+
+                                    @if(!$install)
+                                    <div class='panel panel-admin mt-5' id='five'>
+                                        <div class='panel-heading'>
+                                            <h2 class='panel-title'>{{ trans('langEmailSettings') }}</h2>
+                                        </div>
+                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                                            <fieldset>
+                                    @endif
+                                                <div class='form-group mt-3'>
+                                                    <div class='col-sm-12'>
+                                                            <div class='checkbox'>
+                                                                <label>
+                                                                    <input type='checkbox' name='dont_mail_unverified_mails' value='1' {!! $cbox_dont_mail_unverified_mails !!}>
+                                                                    {{ trans('lang_dont_mail_unverified_mails') }}
+                                                                </label>
+                                                            </div>
+                                                            <div class='checkbox'>
+                                                                <label>
+                                                                    <input type='checkbox' name='email_from' value='1' {!! $cbox_email_from !!}>
+                                                                    {{ trans('lang_email_from') }}
+                                                                </label>
+                                                            </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group mt-3' id='formEmailAnnounceGroup'>
+                                                    <label for='formEmailAnnounce' class='col-sm-6 control-label-notes'>{{ trans('langEmailAnnounce') }}:</label>
+                                                    <div class='col-sm-12'>
+                                                            <input type='text' class='form-control' name='email_announce' id='formEmailAnnounce' value="{!! q(get_var('email_announce')) !!}">
+                                                            <span class='help-block' id='emailSendWarn'>{{ trans('langEmailSendWarn') }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group mt-3'>
+                                                    <label for='formEmailBounces' class='col-sm-6 control-label-notes'>{{ trans('langEmailBounces') }}:</label>
+                                                    <div class='col-sm-12'>
+                                                            <input type='text' class='form-control' name='email_bounces' id='formEmailBounces' value="{!! q(get_var('email_bounces')) !!}">
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group mt-3'>
+                                                    <label for='formEmailTransport' class='col-sm-6 control-label-notes'>{{ trans('langEmailTransport') }}:</label>
+                                                    <div class='col-sm-12'>
+                                                        {!! selection($emailTransports, 'email_transport', $email_transport,
+                                                                    "class='form-select' id='formEmailTransport'") !!}
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group SMTP-settings mt-3'>
+                                                    <label for='formSMTPServer' class='col-sm-6 control-label-notes'>{{ trans('langEmailSMTPServer') }}:</label>
+                                                    <div class='col-sm-12'>
+                                                            <input type='text' class='form-control' name='smtp_server' id='formSMTPServer' value="{!! q(get_var('smtp_server')) !!}">
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group SMTP-settings mt-3'>
+                                                    <label for='formSMTPPort' class='col-sm-6 control-label-notes'>{{trans('langEmailSMTPPort')}}:</label>
+                                                    <div class='col-sm-12'>
+                                                            <input type='text' class='form-control' name='smtp_port' id='formSMTPPort' value="{!! q(get_var('smtp_port', 25)) !!}">
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group SMTP-settings mt-3'>
+                                                    <label for='formEmailEncryption' class='col-sm-6 control-label-notes'>{{ trans('langEmailEncryption') }}:</label>
+                                                    <div class='col-sm-12'>
+                                                        {!! selection($emailEncryption, 'smtp_encryption', $smtp_encryption,
+                                                                    "class='form-select' id='formEmailEncryption'") !!}
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group SMTP-settings mt-3'>
+                                                    <label for='formSMTPUsername' class='col-sm-6 control-label-notes'>{{trans('langUsername')}}:</label>
+                                                    <div class='col-sm-12'>
+                                                            <input type='text' class='form-control' name='smtp_username' id='formSMTPUsername' value="{!! q(get_var('smtp_username')) !!}">
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group SMTP-settings mt-3'>
+                                                    <label for='formSMTPPassword' class='col-sm-6 control-label-notes'>{{trans('langPassword')}}:</label>
+                                                    <div class='col-sm-12'>
+                                                            <div class='input-group'>
+                                                                <input type='password' class='form-control' name='smtp_password' id='formSMTPPassword' value="{!! q(get_var('smtp_password')) !!}"><span id='revealPass' class='input-group-addon'><span class='fa fa-eye'></span></span>
+                                                            </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class='form-group Sendmail-settings mt-3'>
+                                                    <label for='formSendmailCommand' class='col-sm-6 control-label-notes'>{{trans('langEmailSendmail')}}:</label>
+                                                    <div class='col-sm-12'>
+                                                            <input type='text' class='form-control' name='sendmail_command' id='formSendmailCommand' value="{!! q(get_var('sendmail_command', ini_get('sendmail_path'))) !!}">
+                                                            <span class='help-text'>{{trans('langEG')}} <code>/usr/sbin/sendmail -t -i</code></span>
+                                                    </div>
+                                                </div>
+
+                                    @if(!$install)
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                    @endif
+
+                                    <div class='panel panel-admin mt-5' id='six'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langCourseSettings') }}</h2>
                                         </div>
@@ -471,7 +731,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-default mt-5' id='seven'>
+                                    <div class='panel panel-admin mt-5' id='seven'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langMetaCommentary') }}</h2>
                                         </div>
@@ -505,7 +765,7 @@
 
 
 
-                                    <div class='panel panel-default mt-5' id='eight'>
+                                    <div class='panel panel-admin mt-5' id='eight'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langOtherOptions') }}</h2>
                                         </div>
@@ -652,7 +912,7 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-default mt-5' id='nine'>
+                                    <div class='panel panel-admin mt-5' id='nine'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langDocumentSettings') }}</h2>
                                         </div>
@@ -716,7 +976,7 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-default mt-5' id='ten'>
+                                    <div class='panel panel-admin mt-5' id='ten'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langDefaultQuota') }}</h2>
                                         </div>
@@ -751,7 +1011,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-default mt-5' id='eleven'>
+                                    <div class='panel panel-admin mt-5' id='eleven'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langUploadWhitelist') }}</h2>
                                         </div>
@@ -777,7 +1037,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-default mt-5' id='twelve'>
+                                    <div class='panel panel-admin mt-5' id='twelve'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langLogActions') }}</h2>
                                         </div>
@@ -827,7 +1087,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-default mt-5' id='thirteen'>
+                                    <div class='panel panel-admin mt-5' id='thirteen'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langLoginFailCheck') }}</h2>
                                         </div>
@@ -875,7 +1135,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-default mt-5' id='fourteen'>
+                                    <div class='panel panel-admin mt-5' id='fourteen'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langPrivacyPolicy') }}</h2>
                                         </div>
@@ -968,8 +1228,8 @@
                                     <a class="nav-link nav-link-adminTools" href="#one">{{ trans('langBasicCfgSetting') }}</a>
                                     <a class="nav-link nav-link-adminTools" href="#two">{{ trans('langUpgReg') }}</a>
                                     <a class="nav-link nav-link-adminTools" href="#three">{{ trans('langEclassThemes') }}</a>
-                                    <!-- <a class="nav-link" href="#four">{{ trans('langHomePageSettings') }}</a>
-                                    <a class="nav-link" href="#five">{{ trans('langEmailSettings') }}</a> -->
+                                    <a class="nav-link" href="#four">{{ trans('langHomePageSettings') }}</a>
+                                    <a class="nav-link" href="#five">{{ trans('langEmailSettings') }}</a>
                                     <a class="nav-link nav-link-adminTools" href="#six">{{ trans('langCourseSettings') }}</a>
                                     <a class="nav-link nav-link-adminTools" href="#seven">{{ trans('langMetaCommentary') }}</a>
                                     <a class="nav-link nav-link-adminTools" href="#eight">{{ trans('langOtherOptions') }}</a>
@@ -983,7 +1243,7 @@
                             </nav>
                         </div>
 
-                    </div>
+                    
                     {!! modalConfirmation('confirmIndexDialog', 'confirmIndexLabel', trans('langConfirmEnableIndexTitle'), trans('langConfirmEnableIndex'), 'confirmIndexCancel', 'confirmIndexOk') !!}
                     {!! modalConfirmation('confirmMobileAPIDialog', 'confirmMobileAPILabel', trans('langConfirmEnableMobileAPITitle'), trans('langConfirmEnableMobileAPI'), 'confirmMobileAPICancel', 'confirmMobileAPIOk') !!}
                 </div>

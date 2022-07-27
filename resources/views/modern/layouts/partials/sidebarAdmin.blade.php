@@ -20,16 +20,11 @@
         <div class='panel-body'>
             <ul class="list-group list-group-flush">
                 @foreach ($tool_group[1] as $key2 => $tool)
-                    <li class="list-group-item border-0">
+                    <li class="list-group-item border-0 admin-list-group">
                         <a href="{{ $tool_group[2][$key2] }}" class='list-group-item bg-light{{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
-                            <div class='row'>
-                                <div class='col-sm-2'>
-                                    <span class="fa {{ $tool_group[3][$key2] }} fa-fw mt-1 text-warning toolSidebarTxt"></span>
-                                </div>
-                                <div class='col-sm-10'>
-                                    <span class='text-primary'>{!! $tool !!}</span>
-                                </div>
-                            </div>
+                            
+                            <span class='toolAdminText'>{!! $tool !!}</span>
+                               
                         </a>
                     </li>
                 @endforeach

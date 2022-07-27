@@ -136,7 +136,7 @@ if ($content) {
     $tool_content .= "
             </tr>
         </thead>
-        <tbody></div></div>";
+        <tbody>";
 
     foreach ($content as $item) {
         $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version 
@@ -180,9 +180,9 @@ if ($content) {
         }
         $tool_content .= "</tr>";
     }
-    $tool_content .= "</tbody></table>";
+    $tool_content .= "</tbody></table></div></div>";
 } else {
-    $tool_content .= "<div class='alert alert-warning'>$langH5pNoContent</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langH5pNoContent</div></div>";
 }
 
 // utilize bootstrap-select for Add/Create dropdown button
