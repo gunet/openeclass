@@ -65,12 +65,12 @@ class WafApp extends ExtApp {
 
     public static function getWaf() {
         $antivirus = ExtAppManager::getApp('waf');
-        $connector = q(get_config('waf_connector'));
+        $connector = get_config('waf_connector');
         if(!$connector) {
             $connector = new phpids();
         } else {
             $connector = new $connector();
-        }       
+        }
         $param = $connector->getParam('enabled');
         if ($param) {
             $param->setValue($antivirus->isEnabled());
