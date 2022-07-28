@@ -1162,9 +1162,9 @@ jContent;
                     }
 
                     $ret .= "<li class='list-group-item'><div class='table_td_header'><a href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
-                    $ret .= (strlen(q($code)) > 0) ? "&nbsp;(" . q($code) . ")" : '';
+                    $ret .= (!empty($code)) ? "&nbsp;(" . q($code) . ")" : '';
                     $ret .= "<small>&nbsp;&nbsp;-&nbsp;&nbsp;" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</small></div>";
-                    $ret .= (strlen(q($description)) > 0) ? "<div class='table_td_body' style='font-size:small; padding-right:10px; padding-left:10px;'>" . $description  . "</div>" : '';
+                    $ret .= (!empty($description)) ? "<div class='table_td_body' style='font-size:small; padding-right:10px; padding-left:10px;'>" . q($description)  . "</div>" : '';
                     $ret .= "</li>";
                 }
             }

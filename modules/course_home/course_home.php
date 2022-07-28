@@ -640,7 +640,7 @@ $q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE id = ?d
 
 
 
-                    
+
 $tool_content .= "<ul class='course-title-actions clearfix pull-right list-inline'>" .
 
                         ($is_course_admin? "<li class='access pull-right'><a href='{$urlAppend}modules/course_info/?course=$course_code' style='color: #23527C;'><span class='fa fa-wrench fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInfo'></span></a></li>": '') . "

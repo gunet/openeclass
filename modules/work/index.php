@@ -5030,8 +5030,8 @@ function show_assignment($id, $display_graph_results = false) {
                     $label = "<h6>($langGradedAt " .nice_format($row->grade_submission_date) . ")</h6>";
                 }
                 // professor comments
-                if (trim($row->grade_comments) or ($row->grade_comments_filename)) {
-                    $grade_comments = q_math($row->grade_comments);
+                if ($row->grade_comments or $row->grade_comments_filename) {
+                    $grade_comments = trim(q_math($row->grade_comments));
                     if (preg_match('/[\n\r] +\S/', $grade_comments)) {
                         $grade_comments = "<div style='white-space: pre-wrap'>$grade_comments</div>";
                     } else {

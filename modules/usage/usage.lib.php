@@ -25,8 +25,7 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/textLib.inc.php';
 
 /**
- * Get statistics of visits and visit duration to a course. The results are
- * depicted in te first plot of course statistics
+ * @brief Get statistics of visits and visit duration to a course. The results are depicted in first plot of course statistics
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
  * @param string $interval the time interval to aggregate statistics on, values: 'year'|'month'|'week'|'day'
@@ -34,7 +33,7 @@ require_once 'include/lib/textLib.inc.php';
  * @param int $user_id the id of the user to filter out the statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
-function get_course_stats($start = null, $end = null, $interval, $cid, $user_id = null)
+function get_course_stats($cid, $interval, $start = null, $end = null, $user_id = null)
 {
 
     $formattedr = array('time'=> array(), 'hits'=> array(), 'duration'=> array());
@@ -59,7 +58,7 @@ function get_course_stats($start = null, $end = null, $interval, $cid, $user_id 
 }
 
 /**
- * Get preference statistics on the visits in different modules of the course. The
+ * @brief Get preference statistics on the visits in different modules of the course. The
  * preference distribution is based on visits but can be changed to duration if
  * preferable. The results are shown in a pie (second plot) of the course stats
  * @param date $start the start of period to retrieve statistics for
@@ -70,7 +69,7 @@ function get_course_stats($start = null, $end = null, $interval, $cid, $user_id 
  * @param int $user_id the id of the user to filter out the statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
-function get_course_module_stats($start = null, $end = null, $interval, $cid, $mid, $user_id = null){
+function get_course_module_stats($cid, $mid, $interval, $start = null, $end = null, $user_id = null){
     global $modules;
     $mtitle = which_module($mid);
     $g = build_group_selector_cond($interval);
@@ -94,7 +93,7 @@ function get_course_module_stats($start = null, $end = null, $interval, $cid, $m
 }
 
 /**
- * Get statistics of visits and visit duration to a module of a course. The
+ * @brief Get statistics of visits and visit duration to a module of a course. The
  * results are depicted in the plot of module statistics beside the pie of the
  * course statistics page (third plot).
   * @param date $start the start of period to retrieve statistics for
@@ -103,7 +102,7 @@ function get_course_module_stats($start = null, $end = null, $interval, $cid, $m
  * @param int $user_id the id of the user to filter out the statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
-function get_module_preference_stats($start = null, $end = null, $cid, $user_id = null){
+function get_module_preference_stats($cid, $start = null, $end = null, $user_id = null){
 
     if(is_numeric($user_id)){
         $q = "SELECT module_id mdl, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d GROUP BY module_id ORDER BY hits DESC";
@@ -128,15 +127,15 @@ function get_module_preference_stats($start = null, $end = null, $cid, $user_id 
 }
 
 /**
- * Get statistics of user register and unregister actions of a course. The results are
+ * @brief Get statistics of user register and unregister actions of a course. The results are
  * depicted in the last plot of the course statistics
+ * @param int $cid the id of the course
+ * @param string $interval the time interval to aggregate statistics on, values: 'year'|'month'|'week'|'day'
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
- * @param string $interval the time interval to aggregate statistics on, values: 'year'|'month'|'week'|'day'
- * @param int $cid the id of the course
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
-function get_course_registration_stats($start = null, $end = null, $interval, $cid)
+function get_course_registration_stats($cid, $interval, $start = null, $end = null)
 {
     $formattedr = array('time'=> array(), 'regs'=> array(), 'unregs'=> array());
     if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){
@@ -160,16 +159,16 @@ function get_course_registration_stats($start = null, $end = null, $interval, $c
 }
 
 /**
- * Detailed list of user activity in course. The results are
+ * @brief Detailed list of user activity in course. The results are
  * listed in the first table of the course detailed statistics
- * @param date $start the start of period to retrieve statistics for
- * @param date $end the end of period to retrieve statistics for
  * @param int $user the id of the user to filter out the statistics for
  * @param int $course the id of the course
+ * @param date $start the start of period to retrieve statistics for
+ * @param date $end the end of period to retrieve statistics for
  * @param int $module the module id
  * @return array an array appropriate for displaying in a datatables table
 */
-function get_course_activity_details($start = null, $end = null, $user, $course, $module = -1){
+function get_course_activity_details($user, $course, $start = null, $end = null, $module = -1){
 
     $course_cond = " WHERE course_id = ?d";
     $pars = array($course);
@@ -216,14 +215,14 @@ function get_course_activity_details($start = null, $end = null, $user, $course,
 }
 
 /**
- * Detailed list of user visits and duaration in course. The results are
+ * @brief Detailed list of user visits and duaration in course. The results are
  * listed in the second table of the course detailed statistics
+ * @param int $cid the id of the course
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
- * @param int $cid the id of the course
  * @return array an array appropriate for displaying in a datatables table
 */
-function get_course_details($start = null, $end = null, $interval, $cid, $user_id = null)
+function get_course_details($cid, $start = null, $end = null, $user_id = null)
 {
     if (is_numeric($user_id)){
         $q = "SELECT day, hits, duration, CONCAT(surname, ' ', givenname) uname, username, email, module_id FROM actions_daily a JOIN user u ON a.user_id=u.id WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d ORDER BY day, module_id";
@@ -248,7 +247,7 @@ function get_course_details($start = null, $end = null, $interval, $cid, $user_i
  * @param int $cid the id of the course
  * @return array an array appropriate for displaying in a datatables table
 */
-function get_course_registration_details($start = null, $end = null, $cid)
+function get_course_registration_details($cid, $start = null, $end = null)
 {
     $formattedr = array();
     $reg_t = "SELECT reg_date day, user_id, CONCAT(surname, ' ', givenname) uname, username, email, 1 action FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE cu.course_id=?d AND cu.reg_date BETWEEN ?t AND ?t ORDER BY cu.reg_date";
@@ -273,7 +272,7 @@ function get_course_registration_details($start = null, $end = null, $cid)
  * @param int $course the id of the course
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
-function get_user_stats($start = null, $end = null, $interval, $user, $course = null)
+function get_user_stats($user, $interval, $start = null, $end = null, $course = null)
 {
     $g = build_group_selector_cond($interval);
     $groupby = $g['groupby'];
@@ -298,18 +297,18 @@ function get_user_stats($start = null, $end = null, $interval, $user, $course = 
 /**
  * Get preference statistics of the user based on the visits in different courses of the platform.
  * The results are shown in the pie chart of the user stats (second plot)
+ * @param int $user the id of the user to filter out the statistics for
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
- * @param int $user the id of the user to filter out the statistics for
  * @param int $course the id of the course
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
-function get_course_preference_stats($start = null, $end = null, $user, $course = null){
+function get_course_preference_stats($user, $start = null, $end = null, $course = null){
 
     $courses = null;
     $pcid = null;
     if(!is_null($course)){
-        $formattedr = get_module_preference_stats($start, $end, $course, $user);
+        $formattedr = get_module_preference_stats($course, $start, $end, $user);
     }
     else{
         $q = "SELECT c.id cid, c.title, s.hits, s.dur FROM (SELECT course_id cid, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE user_id=?d AND day BETWEEN ?t AND ?t GROUP BY course_id) s JOIN course c on s.cid=c.id ORDER BY hits DESC LIMIT 10";
@@ -329,39 +328,38 @@ function get_course_preference_stats($start = null, $end = null, $user, $course 
 }
 
 /**
- * Get user visits and duration in a course. If the course is specified in the
+ * @brief  Get user visits and duration in a course. If the course is specified in the
  * reports' parameters then return the visits in a specified module of a course.
  * The results are shown in a bar chart (third plot) of the user stats
- * @param date $start the start of period to retrieve statistics for
- * @param date $end the end of period to retrieve statistics for
- * @param string $interval the time interval to aggregate statistics on, values: 'year'|'month'|'week'|'day'
  * @param int $user the id of the user to filter out the statistics for
  * @param int $course the id of the course
  * @param int $module the module id
+ * @param string $interval the time interval to aggregate statistics on, values: 'year'|'month'|'week'|'day'
+ * @param date $start the start of period to retrieve statistics for
+ * @param date $end the end of period to retrieve statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
-function get_user_course_stats($start = null, $end = null, $interval, $user, $course, $module){
+function get_user_course_stats($user, $course, $module, $interval, $start = null, $end = null){
     $ctitle = course_id_to_title($course);
     if(!is_null($module) && !empty($module)){
         $formattedr = get_course_module_stats($start, $end, $interval, $course, $module, $user);
     }
     else{
-        $formattedr = get_user_stats($start, $end, $interval, $user, $course);
+        $formattedr = get_user_stats($user, $interval, $start, $end, $course);
     }
     return array('charttitle'=>$ctitle, 'chartdata'=>$formattedr);
 }
 
 /**
- * Detailed list of user's daily aggregated activity in course. The results are
+ * @brief Detailed list of user's daily aggregated activity in course. The results are
  * listed in the first table of the user detailed statistics
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
- * @param string $interval the time interval to aggregate statistics on, values: 'year'|'month'|'week'|'day'
  * @param int $user the id of the user to filter out the statistics for
  * @param int $course the id of the course
  * @return array an array appropriate for displaying in a datatables table
 */
-function get_user_details($start = null, $end = null, $interval, $user, $course = null)
+function get_user_details($user, $start = null, $end = null, $course = null)
 {
     if(is_numeric($course)){
         $q = "SELECT day, hits hits, duration dur, module_id, c.title FROM actions_daily a JOIN course c ON a.course_id=c.id WHERE user_id = ?d AND day BETWEEN ?t AND ?t AND course_id = ?d ORDER BY day";
@@ -383,15 +381,14 @@ function get_user_details($start = null, $end = null, $interval, $user, $course 
 
 
 /**
- * Get user login statistics in the platform.
+ * @brief Get user login statistics in the platform.
  * The results are shown in the top chart of the admin stats (first plot).
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
  * @param string $interval the time interval to aggregate statistics on, values: 'year'|'month'|'week'|'day'
- * @param int $user the id of the user to filter out the statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
-function get_user_login_stats($start = null, $end = null, $interval, $user, $root_department = 1){
+function get_user_login_stats($interval, $start = null, $end = null, $root_department = 1){
     $temp = array();
     $g = build_group_selector_cond($interval, 'date_time');
     $groupby = $g['groupby'];
@@ -453,7 +450,7 @@ function get_popular_courses_stats($start = null, $end = null, $root_department 
 }
 
 /**
- * Get number of users per type and per department of the platform.
+ * @brief Get number of users per type and per department of the platform.
  * The results are shown in the a bar chart of the admin stats (third plot)
  * @param date $root_department the deprtament for which statistics will be retrieved per subdepartment
  * @param boolean $total if true only the total number of users will be returned
@@ -515,7 +512,7 @@ function get_department_user_stats($root_department = 1, $total = false){
 }
 
 /**
- * Get number of courses per type and per department of the platform.
+ * @brief Get number of courses per type and per department of the platform.
  * The results are shown in the a bar chart of the admin stats (fourth plot)
  * @param date $root_department the deprtament for which statistics will be retrieved per subdepartment
  * @return array an array appropriate for displaying in a c3 plot when json encoded
@@ -572,14 +569,13 @@ function get_department_course_stats($root_department = 1){
 }
 
 /**
- * Detailed list of user logins. The results are
+ * @brief Detailed list of user logins. The results are
  * listed in the first table of the admin detailed statistics
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
- * @param int $user the id of the user to filter out the statistics for
  * @return array an array appropriate for displaying in a datatables table
 */
-function get_user_login_details($start = null, $end = null, $user, $root_department = 1){
+function get_user_login_details($start = null, $end = null, $root_department = 1){
     $q = "SELECT id, lft, rgt INTO @rootid, @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);
     $q = "SELECT l.date_time, concat(u.surname, ' ', u.givenname) user_name, username, email, c.title course_title, l.ip
@@ -801,10 +797,10 @@ function plot_placeholder($plot_id, $title = null){
 /**
  * Create the panel and the table structure of a table to be filled with AJAX with data
  * @param string table_id the id of the table in the DOM
- * @param string table_class tha class of the table element
+ * @param string table_class the class of the table element
  * @param string table_schema the header and footer of the table which also specify the column number of the table
- * @param string titel the caption of the table
- * @return string a formated element containing the specified table
+ * @param string title the caption of the table
+ * @return string a formatted element containing the specified table
 */
 function table_placeholder($table_id, $table_class, $table_schema, $title = null){
     $t = "<div class='panel-body'>";
@@ -905,8 +901,8 @@ function user_last_logins($u) {
         foreach ($result as $lastVisit) {
             $tool_content .= "<li class='list-group-item'>
                         <div class='row'>
-                          <div class='col-sm-8'><b>" . claro_format_locale_date($dateFormatLong, strtotime($lastVisit->when)) .
-                        "</b>&nbsp;&nbsp;(" . date_format(date_create($lastVisit->when),'H:i') . ")</div>
+                          <div class='col-sm-8'><strong>" . claro_format_locale_date($dateFormatLong, strtotime($lastVisit->when)) . "</strong>
+                          </div>
                         </div>
                       </li>";
         }
@@ -928,7 +924,7 @@ function user_last_logins($u) {
  * @param int $user_id the id of the user to filter out the statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
-function get_course_old_stats($start = null, $end = null, $cid, $mid)
+function get_course_old_stats($cid, $mid, $start = null, $end = null)
 {
     $formattedr = array('time'=> array(), 'hits'=> array(), 'duration'=> array());
     if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){

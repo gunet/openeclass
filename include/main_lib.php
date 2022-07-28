@@ -44,7 +44,11 @@ require_once 'lib/file_cache.class.php';
 
 // Shortcut for htmlspecialchars()
 function q($s) {
-    return htmlspecialchars($s, ENT_QUOTES);
+    if (is_null($s)) {
+        return null;
+    } else {
+        return htmlspecialchars($s, ENT_QUOTES);
+    }
 }
 
 // Escape HTML special characters and expand math tags

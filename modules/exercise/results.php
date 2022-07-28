@@ -82,7 +82,10 @@ $exerciseRange = $objExercise->selectRange();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid = ?d", $exerciseId, $uid)->count;
 $cur_date = new DateTime("now");
-$end_date = new DateTime($objExercise->selectEndDate());
+$end_date = null;
+if (!is_null($objExercise->selectEndDate())) {
+    $end_date = new DateTime($objExercise->selectEndDate());
+}
 $showScore = $displayScore == 1
             || $is_editor
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
