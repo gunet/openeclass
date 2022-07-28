@@ -274,7 +274,7 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str }";
         if (isset($theme_options_styles['loginImgPlacement']) && $theme_options_styles['loginImgPlacement']=='full-width') {
             // $styles_str .= ".jumbotron.jumbotron-login {background-size: cover, cover; background-position: 0% 0%;}";
-            $styles_str .= ".jumbotron.jumbotron-login {background-repeat: no-repeat; background-size: cover; width:auto; margin-top:-169px;}";
+            $styles_str .= ".jumbotron.jumbotron-login {background-repeat: no-repeat; background-size: cover; border-top-left-radius:15px border-bottom-left-radius-15xp;}";
         }
         //$styles_str .= ".jumbotron.jumbotron-login {  background-size: 353px, cover; background-position: 10% 60%;}";
         if (isset($theme_options_styles['fluidContainerWidth'])){

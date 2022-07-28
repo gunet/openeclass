@@ -27,7 +27,7 @@ $data['action_bar'] = action_bar([
       'url' => $urlAppend,
       'icon' => 'fa-reply',
       'level' => 'primary-label',
-      'button-class' => 'btn-default' ]
+      'button-class' => 'btn-secondary' ]
   ], false);
 
 view('info.privacy_policy', $data);

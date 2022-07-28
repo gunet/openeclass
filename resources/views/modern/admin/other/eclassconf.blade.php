@@ -500,7 +500,7 @@
                                                     </div>
                                                 </div>
 
-
+                                                {{--
                                                 <div class='landing-toolbox'>
                                                     <div class='radio margin-bottom-fat'>
                                                         <label>
@@ -558,7 +558,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                    
+                                                --}}    
 
                                             </fieldset>
                                         </div>
@@ -1487,16 +1487,16 @@
             $('#collapse-toolboxHomepage').collapse('hide');
             $('#collapse-externalHomepage').collapse('hide');
         })
-        $('.checkbox_toolbox').on('click',function(){
-            $('#collapse-toolboxHomepage').collapse('show');
-            $('#collapse-defaultHomepage').collapse('hide');
-            $('#collapse-externalHomepage').collapse('hide');
-        })
-        $('.checkbox_external').on('click',function(){
-            $('#collapse-externalHomepage').collapse('show');
-            $('#collapse-defaultHomepage').collapse('hide');
-            $('#collapse-toolboxHomepage').collapse('hide');
-        })
+        // $('.checkbox_toolbox').on('click',function(){
+        //     $('#collapse-toolboxHomepage').collapse('show');
+        //     $('#collapse-defaultHomepage').collapse('hide');
+        //     $('#collapse-externalHomepage').collapse('hide');
+        // })
+        // $('.checkbox_external').on('click',function(){
+        //     $('#collapse-externalHomepage').collapse('show');
+        //     $('#collapse-defaultHomepage').collapse('hide');
+        //     $('#collapse-toolboxHomepage').collapse('hide');
+        // })
     });
 
 </script>

@@ -31,7 +31,7 @@
                 <br><br><br><br>
                 @endif
                 <ul>
-                    <li><a class="copyright">Open eClass © 2022 All rights reserved</a></li>
+                    <li><a class="copyright" href='{{$urlAppend}}info/copyright.php'>Open eClass - 2022 All rights reserved</a></li>
                 </ul>
             </div>
         </div>

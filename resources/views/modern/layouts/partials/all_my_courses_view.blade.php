@@ -7,8 +7,8 @@
 
             <div class='d-none d-md-block'>
                 <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-                    <div class='h-100 shadow-lg p-3 bg-body rounded bg-primary'>
-                        <span class='float-md-start'><i class="fas fa-graduation-cap text-warning"></i> <span class='control-label-notes'>{{ trans('langMyCourses') }}</span></span>
+                    <div class='shadow-lg p-3 bg-body rounded bg-primary' style='height:70px;'>
+                        <span class='float-md-start pt-1'><i class="fas fa-graduation-cap text-warning"></i> <span class='control-label-notes'>{{ trans('langMyCourses') }}</span></span>
                         <span class='float-md-end'>
                             <span class='text-secondary'>{{ trans('langRegCourses') }}:</span>
                             <a class='btn btn-primary' href="{{ $urlAppend }}modules/auth/courses.php">

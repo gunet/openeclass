@@ -245,7 +245,7 @@
         </div>
     </div>
 
-     <div class="d-flex justify-content-center">
+     <div class="d-flex justify-content-center mt-3 mb-3">
         <div class="container-fluid testimonials bg-light">
             <div class="testimonial">
                 <div class="testimonial-body">{!! get_config('homepage_intro') !!}</div>

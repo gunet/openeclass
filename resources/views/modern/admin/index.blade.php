@@ -85,7 +85,7 @@
                                             <div class='col-sm-12 mt-3'>
                                                 <div class='panel panel-admin'>
                                                     <div class='panel-heading text-center'>
-                                                        <div class='panel-title'>{{ trans('langPlatformIdentity') }}</div>
+                                                        <span class='text-white'>{{ trans('langPlatformIdentity') }}</span>
                                                     </div>
                                                     <div class='panel-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
@@ -134,8 +134,8 @@
                                             </div>
                                             <div class='col-sm-12 mt-3'>
                                                 <div class='panel panel-admin'>
-                                                    <div class='panel-heading'>
-                                                        <div class='panel-title text-center'>{{ trans('langIndexInfo') }}</div>
+                                                    <div class='panel-heading text-center'>
+                                                        <span class='text-white'>{{ trans('langIndexInfo') }}</span>
                                                     </div>
                                                     <div class='panel-body'>
                                                         <div class='row p-2 margin-bottom-thin'>

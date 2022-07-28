@@ -29,7 +29,7 @@ $data['action_bar'] = action_bar(array(
           'url' => $urlServer,
           'icon' => 'fa-reply',
           'level' => 'primary-label',
-          'button-class' => 'btn-default')), false);
+          'button-class' => 'btn-secondary')), false);
 
 
 view('info.copyright', $data);
