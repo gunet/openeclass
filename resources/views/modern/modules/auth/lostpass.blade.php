@@ -63,7 +63,7 @@
                             @endif
                             @if(!$change_ok)
                                 <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                                    <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                                    <div class='form-wrapper shadow-sm p-3 rounded'>
 
                                         <form class="form-horizontal" role="form" method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                             <input type='hidden' name='u' value='{{ $userUID }}'>
@@ -160,9 +160,9 @@
 
 
                             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                                <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                                <div class='form-wrapper shadow-sm p-3 rounded'>
                                     <form class='form-horizontal' role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
-                                        <div class='row'><div class='col-sm-8'><h4>{!! trans('langUserData') !!}</h4></div></div>
+                                        <div class='row'><div class='col-sm-8'><h4 class='control-label-notes ps-1 mt-1'>{!! trans('langUserData') !!}</h4></div></div>
                                         <div class='form-group mt-3'>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='userName' id='userName' autocomplete='off' placeholder='{!! trans('lang_username') !!}'>

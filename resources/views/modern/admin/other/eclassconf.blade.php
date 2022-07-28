@@ -1,4 +1,6 @@
 <?php 
+
+    //////////////////////////////////// five ///////////////////////////////////////
     $install = isset($GLOBALS['input_fields']);
 
     $emailTransports = array(0 => 'PHP mail()', 1 => 'SMTP', 2 => 'sendmail');
@@ -24,6 +26,7 @@
     $cbox_dont_mail_unverified_mails = get_var('dont_mail_unverified_mails') ? 'checked' : '';
     $cbox_email_from = get_var('email_from') ? 'checked' : '';
 
+    //////////////////////////////////// four ///////////////////////////////////////
     $defaultHomepage = $toolboxHomepage = $externalHomepage = '';
     $homepageSet = get_config('homepage');
     if ($homepageSet == 'toolbox') {
@@ -67,11 +70,13 @@
 
                     @if (Session::get('scheduleIndexing'))
                         <!--schedule indexing if necessary-->
-                        <div class='alert alert-warning'>
-                            {{ trans('langIndexingNeeded') }}
-                            <a id='idxpbut' href='../search/idxpopup.php' onclick="return idxpopup('../search/idxpopup.php', 600, 500)">
-                            {{ trans('langHere') }}.
-                            </a>
+                        <div class='col-sm-12'>
+                            <div class='alert alert-warning'>
+                                {{ trans('langIndexingNeeded') }}
+                                <a id='idxpbut' href='../search/idxpopup.php' onclick="return idxpopup('../search/idxpopup.php', 600, 500)">
+                                {{ trans('langHere') }}.
+                                </a>
+                            </div>
                         </div>
                     @endif
                     
@@ -431,26 +436,6 @@
                                                     {!! implode(' ', $sel) !!}
                                                     </div>
                                                 </div>
-
-                                                <div class='row p-2'></div>
-
-                                                <div class='form-group'>
-                                                    <label for='theme' class='col-sm-6 control-label-notes'>{{ trans('lang_login_form') }}: </label>
-                                                    <div class='col-sm-12'>
-                                                            <div class='checkbox'>
-                                                                <label>
-                                                                    <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' {{ $cbox_dont_display_login_form }}>
-                                                                    {{ trans('lang_dont_display_login_form') }}
-                                                                </label>
-                                                            </div>
-                                                            <div class='checkbox'>
-                                                                <label>
-                                                                    <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' {{ $cbox_hide_login_link }}>
-                                                                    {{ trans('lang_hide_login_link') }}
-                                                                </label>
-                                                            </div>
-                                                    </div>
-                                                </div>
                                             </fieldset>
                                         </div>
                                     </div>
@@ -464,50 +449,50 @@
                                             <h2 class='panel-title'>{{trans('langHomePageSettings')}}</h2>
                                         </div>
                                         <div class='panel-body'>
-                                            <div class='margin-bottom-fat margin-top-fat'><strong>{{trans('langSelectHomePage')}} :</strong></div>
+                                            <div class='margin-bottom-fat margin-top-fat fs-5 mb-3'><strong>{{trans('langSelectHomePage')}} :</strong></div>
                                             <fieldset>
                                                 <div class='landing-default'>
                                                     <div class='radio margin-bottom-fat'>
                                                         <label>
-                                                            <input {{$defaultHomepage}} class='homepageSet' name='homepageSet' value='default' data-bs-collapse='collapse-defaultHomepage' type='radio'> {{trans('langHomePageDefault')}}
+                                                            <input {{$defaultHomepage}} class='homepageSet default_checkbox' name='homepageSet' value='default' type='radio'> <span class='text-secondary fs-4'>{{trans('langHomePageDefault')}}</span>
                                                         </label>
                                                     </div>
-                                                    <div id='collapse-defaultHomepage' class='collapse homepage-inputs margin-bottom-fat'>
+                                                    <div id='collapse-defaultHomepage' class='collapse homepage-inputs margin-bottom-fat show'>
                                                         <hr class='margin-bottom-fat'>
                                                         <div class='form-group mt-3'>
-                                                            <label for='defaultHomepageTitle' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
+                                                            <label for='defaultHomepageTitle' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='homepage_title' id='defaultHomepageTitle' value="{!! q(get_config('homepage_title', $langEclass)) !!}">
                                                                 <p class='help-block'>{{trans('langHomePageTitleHelpText')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
-                                                            <label for='defaultHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
+                                                            <label for='defaultHomepageBcrmp' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='homepage_name' id='defaultHomepageBcrmp' value="{!! q(get_config('homepage_name', $langHomePage)) !!}">
                                                                 <p class='help-block'>{{trans('langHomePageNavTitleHelp')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
-                                                            <label for='defaultHomepageIntro' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
+                                                            <label for='defaultHomepageIntro' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
                                                             <div class='col-sm-12'>
                                                                 {!! rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro', $langInfoAbout)) !!}
                                                                 <p class='help-block'>{{trans('langHomePageIntroTextHelp')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group'>
-                                                            <label for='theme' class='col-sm-2 col-sm-offset-1 control-label'>{{trans('lang_login_form')}}: </label>
+                                                            <label for='theme' class='col-sm-6 control-label-notes'>{{trans('lang_login_form')}}: </label>
                                                             <div class='col-sm-9'>
                                                                     <div class='checkbox'>
                                                                         <label>
                                                                             <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' {{ $cbox_dont_display_login_form }}>
-                                                                            {{trans('lang_dont_display_login_form')}}
+                                                                            <span class='text-danger fs-6'>{{trans('lang_dont_display_login_form')}}</span>
                                                                         </label>
                                                                     </div>
                                                                     <div class='checkbox'>
                                                                         <label>
                                                                             <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' {{ $cbox_hide_login_link }}>
-                                                                            {{trans('lang_hide_login_link')}}
+                                                                            <span class='text-danger fs-6'>{{trans('lang_hide_login_link')}}</span>
                                                                         </label>
                                                                     </div>
                                                             </div>
@@ -519,27 +504,27 @@
                                                 <div class='landing-toolbox'>
                                                     <div class='radio margin-bottom-fat'>
                                                         <label>
-                                                            <input {{$toolboxHomepage}} class='homepageSet' name='homepageSet' value='toolbox' data-collapse='collapse-toolboxHomepage' type='radio'> {{trans('langHomePageToolbox')}}
+                                                            <input {{$toolboxHomepage}} class='homepageSet checkbox_toolbox' name='homepageSet' value='toolbox' type='radio'> <span class='text-secondary mb-3 fs-4'>{{trans('langHomePageToolbox')}}</span>
                                                         </label>
                                                     </div>
                                                     <div id='collapse-toolboxHomepage' class='collapse homepage-inputs margin-bottom-fat'>
                                                         <hr class='margin-bottom-fat'>
                                                         <div class='form-group mt-3'>
-                                                            <label for='toolboxHomepageTitle' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
+                                                            <label for='toolboxHomepageTitle' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='toolbox_title' id='toolboxHomepageTitle' value="{!! q(get_config('toolbox_title', $langEclass)) !!}">
                                                                 <p class='help-block'>{{trans('langHomePageTitleHelpText')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
-                                                            <label for='toolboxHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
+                                                            <label for='toolboxHomepageBcrmp' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='toolbox_name' id='toolboxHomepageBcrmp' value="{!! q(get_config('toolbox_name', $langHomePage)) !!}">
                                                                 <p class='help-block'>{{trans('langHomePageNavTitleHelp')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
-                                                            <label for='toolboxHomepageIntro' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
+                                                            <label for='toolboxHomepageIntro' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
                                                             <div class='col-sm-12'>
                                                                 {!! rich_text_editor('toolbox_intro', 5, 20, get_config('toolbox_intro', $langInfoAbout)) !!}
                                                                 <p class='help-block'>{{trans('langHomePageIntroTextHelp')}}</p>
@@ -552,20 +537,20 @@
                                                 <div class='landing-external'>
                                                     <div class='radio margin-bottom-fat'>
                                                         <label>
-                                                            <input {{$externalHomepage}} class='homepageSet' type='radio' name='homepageSet' value='external' data-bs-collapse='collapse-externalHomepage'> {{trans('langHomePageExternal')}}
+                                                            <input {{$externalHomepage}} class='homepageSet checkbox_external' type='radio' name='homepageSet' value='external'> <span class='text-secondary mb-3 fs-4'>{{trans('langHomePageExternal')}}</span>
                                                         </label>
                                                     </div>
                                                     <div id='collapse-externalHomepage' class='collapse homepage-inputs margin-bottom-fat'>
                                                         <hr class='margin-bottom-fat'>
                                                         <div class='form-group mt-3'>
-                                                            <label for='externalHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}:</label>
+                                                            <label for='externalHomepageBcrmp' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}:</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='landing_name' id='externalHomepageBcrmp' value="{!! q(get_config('landing_name')) !!}">
                                                                 <p class='help-block'>{{trans('langHomePageNavTitleHelp')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
-                                                            <label for='externalHomepageUrl' class='col-sm-2 col-sm-offset-1 control-label-notes'>{{trans('langHomePageIntroUrl')}}:</label>
+                                                            <label for='externalHomepageUrl' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroUrl')}}:</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='landing_url' id='externalHomepageUrl' value="{!! q(get_config('landing_url')) !!}">
                                                                 <p class='help-block'>{{trans('langHomePageExtUrlHelp')}}</p>
@@ -1205,25 +1190,9 @@
 
 
                         <div class='col-xxl-3 col-xl-3 col-lg-3 col-md-0 col-sm-0 col-0 d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block float-end hidden-xs' id='affixedSideNav'>
-                            <!-- <ul id='floatMenu' class='nav nav-pills nav-stacked well well-sm' role='tablist'>
-                                <li class='active'><a href='#one'>{{ trans('langBasicCfgSetting') }}</a></li>
-                                <li><a href='#two'>{{ trans('langUpgReg') }}</a></li>
-                                <li><a href='#three'>{{ trans('langEclassThemes') }}</a></li>
-                                <li><a href='#four'>{{ trans('langHomePageSettings') }}</a></li>
-                                <li><a href='#five'>{{ trans('langEmailSettings') }}</a></li>
-                                <li><a href='#six'>{{ trans('langCourseSettings') }}</a></li>
-                                <li><a href='#seven'>{{ trans('langMetaCommentary') }}</a></li>
-                                <li><a href='#eight'>{{ trans('langOtherOptions') }}</a></li>
-                                <li><a href='#nine'>{{ trans('langDocumentSettings') }}</a></li>
-                                <li><a href='#ten'>{{ trans('langDefaultQuota') }}</a></li>
-                                <li><a href='#eleven'>{{ trans('langUploadWhitelist') }}</a></li>
-                                <li><a href='#twelve'>{{ trans('langLogActions') }}</a></li>
-                                <li><a href='#thirteen'>{{ trans('langLoginFailCheck') }}</a></li>
-                                <li><a href='#fourteen'>{{ trans('langPrivacyPolicy') }}</a></li>
-                            </ul> -->
 
 
-                            <nav id="navbar-example3" class="navbar navbar-light bg-light flex-column align-items-stretch p-3 sticky-top" style='z-index:1;'>
+                            <nav id="navbar-example3" class="navbar navbar-light bg-light flex-column align-items-stretch p-3 sticky-top shadow-lg" style='z-index:1;'>
                                 <nav class="nav nav-pills flex-column">
                                     <a class="nav-link nav-link-adminTools" href="#one">{{ trans('langBasicCfgSetting') }}</a>
                                     <a class="nav-link nav-link-adminTools" href="#two">{{ trans('langUpgReg') }}</a>
@@ -1279,6 +1248,8 @@
 @endif
 
 <script>
+
+
     function loginFailPanel(e) {
         duration = null;
         if (e) {
@@ -1510,6 +1481,22 @@
         }).change();
 
         {!! $mail_form_js !!}
+
+        $('.default_checkbox').on('click',function(){
+            $('#collapse-defaultHomepage').collapse('show');
+            $('#collapse-toolboxHomepage').collapse('hide');
+            $('#collapse-externalHomepage').collapse('hide');
+        })
+        $('.checkbox_toolbox').on('click',function(){
+            $('#collapse-toolboxHomepage').collapse('show');
+            $('#collapse-defaultHomepage').collapse('hide');
+            $('#collapse-externalHomepage').collapse('hide');
+        })
+        $('.checkbox_external').on('click',function(){
+            $('#collapse-externalHomepage').collapse('show');
+            $('#collapse-defaultHomepage').collapse('hide');
+            $('#collapse-toolboxHomepage').collapse('hide');
+        })
     });
 
 </script>

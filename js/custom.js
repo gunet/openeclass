@@ -30,17 +30,17 @@ $(document).ready(function(){
 
     /////////////////////////////// play testinomonials ////////////////////////////////////////////////////////////////////////
 
-  	$('.testimonials').slick({
-		autoplay:true,
-		autoplaySpeed:1500,
-		centerMode: true,
-		centerPadding: '25vw',
-		slidesToShow: 1,
-		responsive: [{
-			breakpoint: 1024,
-			settings: { centerPadding: '15vw', }
-		}]
-	});
+  	// $('.testimonials').slick({
+	// 	autoplay:true,
+	// 	autoplaySpeed:1500,
+	// 	centerMode: true,
+	// 	centerPadding: '25vw',
+	// 	slidesToShow: 1,
+	// 	responsive: [{
+	// 		breakpoint: 3840,
+	// 		settings: { centerPadding: '15vw', }
+	// 	}]
+	// });
 
 
     

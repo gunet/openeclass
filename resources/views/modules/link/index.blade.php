@@ -104,7 +104,7 @@
                                         @endif
                                     </th>
                                     @if ($display_tools)
-                                        <td class='option-btn-cell'>
+                                        <td class='option-btn-cell text-center'>
                                         {!! action_button(array(
                                                 array('title' => trans('langEditChange'),
                                                       'icon' => 'fa-edit',
@@ -151,7 +151,7 @@
                                         @endif
                                     </th>
                                     @if ($display_tools)
-                                        <td class='option-btn-cell'>
+                                        <td class='option-btn-cell text-center'>
                                             {!! action_button(array(
                                                 array('title' => trans('langEditChange'),
                                                       'icon' => 'fa-edit',

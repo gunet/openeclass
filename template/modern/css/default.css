@@ -97,7 +97,7 @@ a{
   background: #f5f5f5;
   padding: 80px 0;
   position: relative;
-  height:400px;
+  height:auto;
 }
 
 .testimonials .testimonial {
@@ -132,6 +132,8 @@ a{
 .testimonials .testimonial.slick-current {
   background: #003e87;
   color: #fff;
+  height:auto;
+  overflow-y: auto;
 }
 
 .testimonials .testimonial.slick-current:before {
@@ -160,7 +162,7 @@ a{
 }
 
 .testimonials .slick-arrow.slick-next {
-  left: 78vw;
+  left: 58vw;
   background: url(../images/next.svg) no-repeat center;
   background-size: contain;
 }
@@ -871,7 +873,37 @@ a{
   .jumbotron.jumbotron-login{
       background-repeat: no-repeat; background-size: cover;
       background-image: url(../images/books.jpeg);
+      border-top-left-radius: 15px;
+      border-bottom-left-radius: 15px;
       /* background-image: url('/courses/theme_data/7/dhmiourgia-e-class-psd.jpg'), radial-gradient(closest-corner at 30% 60%, rgb(0, 11, 255), rgb(139, 131, 169)) */
+  }
+
+  /* after login-form disabled from admin */
+  .temp_jumbotron{
+    border-radius: 15px;
+    height: 410px;
+  }
+  
+  .login-form-Homepage{
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+  .btnMoreHomePage{
+    border-radius: 50%;
+    height:50px;
+    width:50px;
+    text-align: center;
+    background:#003F87;
+    color:white;
+  }
+  .btnMoreHomePage:hover{
+    background: #a5bdd7;
+    color: #fafafa;
+  }
+
+  .WelcomeEclassPanelDefault{
+    border-radius: 15px;
   }
 
   .borderHeadingPanel{
@@ -1787,20 +1819,6 @@ a{
   /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------*/
   @media (max-width: 320px){
 
-    .WelcomeEclassPanelDefault{
-      border-radius: 15px;
-    }
-
-    .WelcomeEclassHeading{
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-    }
-  
-    .WelcomeEclassBody{
-      border-bottom-left-radius: 15px;
-      border-bottom-right-radius: 15px;
-    }
-
     .calendar_announce_message_col{
       background-color: white;
       border-radius: 15px;
@@ -1914,20 +1932,6 @@ a{
   /* ------------------------------------------------------- small mobile - portrait-----------------------------------*/
   @media (min-width:321px) and (max-width: 375px){
 
-    .WelcomeEclassPanelDefault{
-      border-radius: 15px;
-    }
-
-    .WelcomeEclassHeading{
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-    }
-  
-    .WelcomeEclassBody{
-      border-bottom-left-radius: 15px;
-      border-bottom-right-radius: 15px;
-    }
-
     .calendar_announce_message_col{
       background-color: white;
       border-radius: 15px;
@@ -2038,20 +2042,6 @@ a{
   /* -------------------------------------------------------mobile - portrait-----------------------------------------------*/
   
   @media (min-width:376px) and (max-width: 425px){
-
-    .WelcomeEclassPanelDefault{
-      border-radius: 15px;
-    }
-
-    .WelcomeEclassHeading{
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-    }
-  
-    .WelcomeEclassBody{
-      border-bottom-left-radius: 15px;
-      border-bottom-right-radius: 15px;
-    }
 
     .calendar_announce_message_col{
       background-color: white;
@@ -2211,20 +2201,6 @@ a{
       border:solid 3px white;
     }
 
-    .WelcomeEclassPanelDefault{
-      border-radius: 15px;
-    }
-
-    .WelcomeEclassHeading{
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-    }
-  
-    .WelcomeEclassBody{
-      border-bottom-left-radius: 15px;
-      border-bottom-right-radius: 15px;
-    }
-
     .calendar_announce_message_col{
       background-color: white;
       border-radius: 15px;
@@ -2332,21 +2308,6 @@ a{
     .btn-group .btn.btn-success{
       border:solid 3px white;
     }
-
-    .WelcomeEclassPanelDefault{
-      border-radius: 15px;
-    }
-
-    .WelcomeEclassHeading{
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-    }
-  
-    .WelcomeEclassBody{
-      border-bottom-left-radius: 15px;
-      border-bottom-right-radius: 15px;
-    }
-
     .calendar_announce_message_col{
       background-color: white;
       border-radius: 15px;

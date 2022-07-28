@@ -10,24 +10,26 @@
 
                 <div class='row p-2'>
                     <div class='d-flex justify-content-end'>
-                        <div class="col-3">
-                            @if(get_config('enable_search'))
-                                <form action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
-                                    <div class="input-group mb-3">
+                        <div class="col-3 d-flex justify-content-end">
+                            <form action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
+                                <div class="input-group mb-3">
+                                    @if(get_config('enable_search'))
                                         <input id="search_terms" type="text" class="border-0 form-control outline-0 text-white inputSearch " name="search_terms" placeholder="{{ trans('langSearch') }}..." aria-describedby="basic-inputSearch">
                                         <button id="btn-search" class="btn btn-primary" type="submit" name="quickSearch"><i class="fa fa-search text-white"></i></button>
-                                        {!! lang_selections() !!}
-                                    </div>
-                                </form>
-                            @endif
+                                    @endif
+                                    <a class='btn btn-primary' href="{{$urlAppend}}main/login_form.php"><span class="fa fa-lock pt-1"></span></a>
+                                    {!! lang_selections() !!}
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
+               
 
                 <div class='row p-2 mt-3'>
 
                     <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
-                        @if (isset($_SESSION['uid']))
+                        @if(!get_config('hide_login_link'))
                             <a class="eclass-nav-link text-white pt-5" href="{{ $urlServer }}"> <i class="fa fa-home"></i> {{ trans('langHome') }}</a>
                         @endif
                         <a class="eclass-nav-link text-white" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib"></i> {{ trans('langRegistration') }}</a>

@@ -38,7 +38,7 @@ function render_eportfolio_fields_content($uid) {
     $return_string = array();
     $return_string['panels'] = "";
     $return_string['right_menu'] = "<div class='d-none col-sm-3 hidden-xs' id='affixedSideNav'>
-    <nav id='navbar-exampleIndexPortfolio' class='navbar navbar-light mt-4 bg-light flex-column align-items-stretch p-3 sticky-top' style='z-index:1;'>
+    <nav id='navbar-exampleIndexPortfolio' class='navbar navbar-light mt-4 bg-light flex-column align-items-stretch p-3 sticky-top shadow-lg' style='z-index:1;'>
         <nav class='nav nav-pills flex-column'>";
 
     
@@ -153,7 +153,7 @@ function render_eportfolio_fields_form() {
     $return_string = array();
     $return_string['panels'] = "";
     $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav' style='margin-top:-8px;'>
-    <nav id='navbar-examplePortfolioEdit' class='navbar navbar-light mt-4 bg-light flex-column align-items-stretch p-3 sticky-top' style='z-index:2;'>
+    <nav id='navbar-examplePortfolioEdit' class='navbar navbar-light mt-4 bg-light flex-column align-items-stretch p-3 sticky-top shadow-lg' style='z-index:2;'>
         <nav class='nav nav-pills flex-column'>";
 
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");

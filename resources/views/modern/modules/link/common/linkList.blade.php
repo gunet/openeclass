@@ -18,7 +18,7 @@
                                     </td>
                                     @if (!$is_in_tinymce)
                                         @if ($is_editor)   
-                                            <td class='option-btn-cell'>
+                                            <td class='option-btn-cell text-center'>
                                                 {!! action_button(array(
                                                     array('title' => trans('langEditChange'),
                                                           'icon' => 'fa-edit',
@@ -45,7 +45,7 @@
                                         @elseif ($category->id == -2)
                                             @if (isset($uid))
                                                 @if (is_link_creator($link->id))
-                                                    <td class='option-btn-cell'>
+                                                    <td class='option-btn-cell text-center'>
                                                     {!! action_button(array(
                                                             array('title' => trans('langEditChange'),
                                                                     'icon' => 'fa-edit',
@@ -62,7 +62,7 @@
                                                         <?php
                                                         $flag_arr = abuse_report_action_button_flag('link', $link->id, $course_id);
                                                         ?>
-                                                        <td class='option-btn-cell'>
+                                                        <td class='option-btn-cell text-center'>
                                                             {!! action_button(array($flag_arr[0])).$flag_arr[1] !!}
                                                         </td>
                                                     @else

@@ -122,7 +122,18 @@
                                                 <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >E-mail: <span class='text-secondary'>{{ $_SESSION['email'] }}</span></p>
                                             </div>
                                             <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langStatus') }}: <span class='text-secondary'>{{ trans('langMetaTeacher') }}</span></p>
+                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langStatus') }}: 
+                                                    <span class='text-secondary text-lowercase'>
+                                                        @if(($session->status == USER_TEACHER))
+                                                        {{ trans('langMetaTeacher') }}
+                                                        @elseif(($session->status == USER_STUDENT))
+                                                        {{ trans('langCStudent') }}
+                                                        @else
+                                                        {{ trans('langAdministrator')}}
+                                                        @endif
+
+                                                    </span>
+                                                </p>
                                             </div>
                                             <div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
                                                 <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langFaculty') }}: <span class='text-secondary'>-</span></p>
