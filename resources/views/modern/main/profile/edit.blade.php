@@ -20,7 +20,7 @@
         <div class="row">
 
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_Homepage">
-                    
+
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -168,8 +168,8 @@
                                 <div class='col-sm-12'>{!! $info_text_area !!}</div>
                             </div>
                             {!! render_profile_fields_form(array('origin' => 'edit_profile')) !!}
-                            @if (count($allProviders))
-                            <div class="row p-2"></div>
+                            @if (count($allProviders) > 0)
+                                <div class="row p-2"></div>
                                 <div class='form-group'>
                                     <label class='col-sm-6 control-label-notes'>{{ trans('langProviderConnectWith') }}:</label>
                                     <div class='col-sm-12'>

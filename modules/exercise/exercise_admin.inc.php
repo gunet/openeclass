@@ -152,11 +152,16 @@ if (isset($_POST['submitExercise'])) {
     $continueTimeField = str_replace('[]',
         "<input type='text' class='form-control' name='continueTimeLimit' value='$continueTimeLimit'>",
         $langContinueAttemptTime);
-    $exerciseIPLock = Session::has('exerciseIPLock') ? Session::get('exerciseIPLock') : explode(',', $objExercise->selectIPLock());
-    $exerciseIPLockOptions = implode('', array_map(
-        function ($item) {
-            return $item? ('<option selected>' . q(trim($item)) . '</option>'): '';
-        }, $exerciseIPLock));
+    if (!is_null($objExercise->selectIPLock())) {
+        $exerciseIPLock = Session::has('exerciseIPLock') ? Session::get('exerciseIPLock') : explode(',', $objExercise->selectIPLock());
+        $exerciseIPLockOptions = implode('', array_map(
+            function ($item) {
+                return $item? ('<option selected>' . q(trim($item)) . '</option>'): '';
+            }, $exerciseIPLock));
+    } else {
+        $exerciseIPLockOptions = '';
+    }
+
     $exercisePasswordLock = Session::has('exercisePasswordLock') ? Session::get('exercisePasswordLock') : $objExercise->selectPasswordLock();
     $exerciseAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : $objExercise->selectAssignToSpecific();
     if ($objExercise->selectAssignToSpecific()) {

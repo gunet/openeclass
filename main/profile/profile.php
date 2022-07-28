@@ -527,6 +527,8 @@ $data['SecFactorProfile'] = showSecondFactorUserProfile();
 
 $data['SecFactorChallenge'] = showSecondFactorChallenge();
 
+$data['allProviders'] = $allProviders;
+
 $data['menuTypeID'] = 1;
 view('main.profile.edit', $data);
 

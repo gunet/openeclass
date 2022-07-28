@@ -86,28 +86,27 @@ else{
 if(isset($_REQUEST['t'])){
     switch($_REQUEST['t']){
         case 'cg':
-            $result = get_course_stats($startdate, $enddate,$interval, $plotcourse, $plotuser);
+            $result = get_course_stats($plotcourse, $interval, $startdate, $enddate, $plotuser);
             break;
         case 'cmp':
-            $result = get_module_preference_stats($startdate, $enddate, $plotcourse, $plotuser);
+            $result = get_module_preference_stats($plotcourse, $startdate, $enddate, $plotuser);
             break;
         case 'cm':
-            $result = get_course_module_stats($startdate, $enddate, $interval, $plotcourse, $plotmodule, $plotuser);
+            $result = get_course_module_stats($plotcourse, $plotmodule, $interval, $startdate, $enddate, $plotuser);
             break;
         case 'cd':
-            $result = get_course_details($startdate, $enddate,$interval, $plotcourse, $plotuser);
+            $result = get_course_details($plotcourse, $startdate, $enddate, $plotuser);
             break;
-        case 'ug':
-            $result = get_user_stats($startdate, $enddate, $interval, $plotuser, $plotcourse);
+        case 'ug':$result = get_user_stats($plotuser, $interval, $startdate, $enddate, $plotcourse);
             break;
         case 'ucp':
-            $result = get_course_preference_stats($startdate, $enddate, $plotuser, $plotcourse);
+            $result = get_course_preference_stats($plotuser, $startdate, $enddate, $plotcourse);
             break;
         case 'uc':
-            $result = get_user_course_stats($startdate, $enddate, $interval, $plotuser, $plotcourse, $plotmodule);
+            $result = get_user_course_stats($plotuser, $plotcourse, $plotmodule, $interval, $startdate, $enddate);
             break;
         case 'ud':
-            $result = get_user_details($startdate, $enddate, $interval, $plotuser, $plotcourse);
+            $result = get_user_details($plotuser, $startdate, $enddate, $plotcourse);
             break;
         case 'du':
             $result = get_department_user_stats($department, $total);
@@ -116,25 +115,25 @@ if(isset($_REQUEST['t'])){
             $result = get_department_course_stats($department);
             break;
         case 'ul':
-            $result = get_user_login_stats($startdate, $enddate, $interval, $plotuser, $department);
+            $result = get_user_login_stats($interval, $startdate, $enddate, $department);
             break;
         case 'uld':
-            $result = get_user_login_details($startdate, $enddate, $plotuser, $department);
+            $result = get_user_login_details($startdate, $enddate, $department);
             break;
         case 'pcs':
             $result = get_popular_courses_stats($startdate, $enddate, $department);
             break;
         case 'crd':
-            $result = get_course_registration_details($startdate, $enddate, $plotcourse);
+            $result = get_course_registration_details($plotcourse, $startdate, $enddate);
             break;
         case 'cad':
-            $result = get_course_activity_details($startdate, $enddate, $plotuser, $plotcourse, $plotmodule);
+            $result = get_course_activity_details($plotuser, $plotcourse, $startdate, $enddate, $plotmodule);
             break;
         case 'crs':
-            $result = get_course_registration_stats($startdate, $enddate, $interval, $plotcourse);
+            $result = get_course_registration_stats($plotcourse, $interval, $startdate, $enddate);
             break;
         case 'ocs':
-            $result = get_course_old_stats($startdate, $enddate, $plotcourse, $plotmodule);
+            $result = get_course_old_stats($plotcourse, $plotmodule, $startdate, $enddate);
             break;
         case 'ols':
             $result = get_login_old_stats($startdate, $enddate);

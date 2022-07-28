@@ -139,8 +139,6 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
         $filter_param = array();
     }
 
-    $last_month = strftime('%Y-%m-%d', strtotime('now -1 month'));
-
     if (!count($lesson_id)) {
         $q = Database::get()->queryArray("
                                 SELECT admin_announcement.title,
@@ -148,11 +146,11 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                              admin_announcement.id
                                 FROM admin_announcement
                                 WHERE admin_announcement.visible = 1
-                                        AND (admin_announcement.begin <= NOW() OR admin_announcement.begin IS NULL)
-                                        AND (admin_announcement.end >= NOW() OR admin_announcement.end IS NULL)
-                                        AND admin_announcement.`date` >= ?s $admin_filter_sql
+                                        AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
+                                        AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
+                                        AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
                                  ORDER BY an_date DESC
-                         $sql_append", $last_month, $filter_param);
+                         $sql_append", $filter_param);
     } else {
 
         $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
@@ -168,22 +166,22 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                     AND course.id = course_module.course_id
                                     AND course.id = announcement.course_id
                                     AND announcement.visible = 1
-                                    AND (announcement.start_display <= NOW() OR announcement.start_display IS NULL)
-                                    AND (announcement.stop_display >= NOW() OR announcement.stop_display IS NULL)
-                                    AND announcement.`date` >= ?s
-                                    AND course_module.module_id = ?d
+                                    AND (announcement.start_display <= " . DBHelper::timeAfter() . " OR announcement.start_display IS NULL)
+                                    AND (announcement.stop_display >= " . DBHelper::timeAfter() . " OR announcement.stop_display IS NULL)
+                                    AND announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+                                    AND course_module.module_id = " . MODULE_ID_ANNOUNCE . "
                                     AND course_module.visible = 1 $course_filter_sql)
                             UNION
                                 (SELECT admin_announcement.title,
                                              admin_announcement.`date` AS admin_an_date,
                                              admin_announcement.id, admin_announcement.body AS content, '', ''
                                 FROM admin_announcement
-                                WHERE   admin_announcement.visible = 1
-                                        AND (admin_announcement.begin <= NOW() OR admin_announcement.begin IS NULL)
-                                        AND (admin_announcement.end >= NOW() OR admin_announcement.end IS NULL)
-                                        AND admin_announcement.`date` >= ?s $admin_filter_sql
+                                WHERE admin_announcement.visible = 1
+                                      AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
+                                      AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
+                                      AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
                                 ) ORDER BY an_date DESC
-                         $sql_append", $lesson_id, $last_month, MODULE_ID_ANNOUNCE, $filter_param, $last_month, $filter_param);
+                         $sql_append", $lesson_id, $filter_param, $filter_param);
     }
 
     if ($to_ajax) {

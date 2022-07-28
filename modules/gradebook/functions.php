@@ -957,6 +957,7 @@ function display_gradebook($gradebook) {
                                             <th class='text-white text-center'>$langScore</th>
                                             <th class='text-white text-center'>".icon('fa-cogs')."</i></th>
                                         </tr>";
+
         foreach ($result as $details) {
             $activity_id = getIndirectReference($details->id);
             $content = ellipsize_html($details->description, 50);
@@ -973,7 +974,11 @@ function display_gradebook($gradebook) {
              }
             $tool_content .= "</small";
             $tool_content .= "</strong>";
-            $tool_content .= "</td><td><div class='smaller'>" . nice_format($details->date, true, true) . "</div></td>";
+            $tool_content .= "</td><td>";
+            if (!empty($details->date)) {
+                $tool_content .= "<div class='smaller'>" . nice_format($details->date, true, true) . "</div>";
+            }
+            $tool_content .= "</td>";
 
             if ($details->module_auto_id) {
                 if ($details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
@@ -990,7 +995,7 @@ function display_gradebook($gradebook) {
                     $tool_content .= "<small class='help-block'>($langGradebookInsAut)</small>";
                 } else {
                     $tool_content .= "<small class='help-block'>($langGradebookInsMan)</small>";
-                }
+                    }
                 $tool_content .= "</td>";
             } else {
                 $tool_content .= "<td class='smaller'>$langAttendanceActivity</td>";
@@ -1353,9 +1358,13 @@ function register_user_grades($gradebook_id, $actID) {
             <tr>
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
-                <td>$resultUser->am</td>
-                <td class='text-center'>" . claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date)) . "</td>
-                <td class='text-center form-group".(Session::getError(getIndirectReference($resultUser->userID)) ? " has-error" : "")."'>
+                <td>$resultUser->am</td><td class='text-center'>";
+                if (!empty($resultUser->reg_date)) {
+                    $tool_content .= claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date));
+                } else {
+                    $tool_content .= " -- ";
+                }
+                $tool_content .= "</td><td class='text-center form-group".(Session::getError(getIndirectReference($resultUser->userID)) ? " has-error" : "")."'>
                     <input class='form-control' type='text' name='usersgrade[".getIndirectReference($resultUser->userID)."]' value = '".$grade."'>
                     <input type='hidden' value='" . getIndirectReference($actID) . "' name='actID'>
                     <span class='help-block'>".Session::getError(getIndirectReference($resultUser->userID))."</span>
