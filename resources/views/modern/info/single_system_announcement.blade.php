@@ -21,16 +21,18 @@
 
                     
                     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="panel panel-admin ps-3 pt-3 pb-3 pe-3">
-                            <span class='text-white'>{!! $title !!}</span>
-                        </div>
-                        <div class="panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3">
-                            <div class="single_announcement">
-                                <span class="announcement-date">
-                                    - {!! $date !!} -
-                                </span>
-                                <div class='announcement-main'>
-                                    {!! $body !!}
+                        <div class="panel panel-default">
+                            <div class='panel-heading'>
+                            <span class='text-secondary'>{!! $title !!}</span></div>
+                        
+                            <div class="panel-body">
+                                <div class="single_announcement">
+                                    <span class="announcement-date">
+                                        - {!! $date !!} -
+                                    </span>
+                                    <div class='announcement-main'>
+                                        {!! $body !!}
+                                    </div>
                                 </div>
                             </div>
                         </div>

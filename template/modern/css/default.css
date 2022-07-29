@@ -894,13 +894,13 @@ a{
   .login-form-Homepage{
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
+    background:#F5F5F5;
   }
 
   .btnMoreHomePage{
     border-radius: 50%;
-    height:50px;
-    width:50px;
-    text-align: center;
+    height:40px;
+    width:40px;
     background:#003F87;
     color:white;
   }
@@ -932,8 +932,8 @@ a{
   }
 
   .user-icon {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
   }
 
@@ -1779,7 +1779,7 @@ a{
 
   @media (max-width:1023px){
     .col_maincontent_active, .col_maincontent_active_Homepage{
-      min-height: calc(100vh - 54px - 78px);
+      min-height: calc(100vh - 54px - 54px);
     }
   }
   /*******************************************************************/
@@ -1821,6 +1821,15 @@ a{
   /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------*/
   @media (max-width: 320px){
 
+    .login-form-Homepage{
+       border-bottom-left-radius: 15px;
+       border-top-left-radius: 15px;
+    }
+    .user-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
     .calendar_announce_message_col{
       background-color: white;
       border-radius: 15px;
@@ -1926,6 +1935,17 @@ a{
   /* ------------------------------------------------------- small mobile - portrait-----------------------------------*/
   @media (min-width:321px) and (max-width: 375px){
 
+    .login-form-Homepage{
+      border-bottom-left-radius: 15px;
+      border-top-left-radius: 15px;
+    }
+
+    .user-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+
     .calendar_announce_message_col{
       background-color: white;
       border-radius: 15px;
@@ -2028,6 +2048,17 @@ a{
   /* -------------------------------------------------------mobile - portrait-----------------------------------------------*/
   
   @media (min-width:376px) and (max-width: 425px){
+    
+    .login-form-Homepage{
+       border-bottom-left-radius: 15px;
+       border-top-left-radius: 15px;
+    }
+
+    .user-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
 
     .calendar_announce_message_col{
       background-color: white;
@@ -2116,10 +2147,6 @@ a{
       border:solid 3px white;
     }
 
-    .user-icon{
-        margin-top:100px;
-    }
-
     .fas.fa-pen-nib{
         transform: rotate(265deg);
     }
@@ -2166,6 +2193,17 @@ a{
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- MOBILE L ------------------------------------------------------- */
   @media (min-width: 426px) and (max-width: 767px){ 
+
+    .login-form-Homepage{
+      border-bottom-left-radius: 15px;
+      border-top-left-radius: 15px;
+    }
+
+    .user-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
 
     .btn-group{
       max-width:400px;

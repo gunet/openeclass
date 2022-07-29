@@ -10,7 +10,7 @@
 
                 <div class='row p-2'>
                     <div class='d-flex justify-content-end'>
-                        <div class="col-3 d-flex justify-content-end">
+                        <div class="col-lg-4 col-xl-3 d-flex justify-content-end">
                             <form action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
                                 <div class="input-group mb-3">
                                     @if(get_config('enable_search'))
