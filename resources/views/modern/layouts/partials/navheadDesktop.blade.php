@@ -17,7 +17,9 @@
                                         <input id="search_terms" type="text" class="border-0 form-control outline-0 text-white inputSearch " name="search_terms" placeholder="{{ trans('langSearch') }}..." aria-describedby="basic-inputSearch">
                                         <button id="btn-search" class="btn btn-primary" type="submit" name="quickSearch"><i class="fa fa-search text-white"></i></button>
                                     @endif
+                                    @if(!$_SESSION['uid'])
                                     <a class='btn btn-primary' href="{{$urlAppend}}main/login_form.php"><span class="fa fa-lock pt-1"></span></a>
+                                    @endif
                                     {!! lang_selections() !!}
                                 </div>
                             </form>

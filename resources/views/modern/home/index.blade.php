@@ -123,40 +123,43 @@
 
 <div class="container-fluid mt-3 mb-3 d-block d-md-block d-lg-none">
     <div class='row'>
-        <div class='col-12 p-5 jumbotron jumbotron-login' style='border-radius:15px;'>
-
-            <div class='col-sm-12 text-center'>
-                <span class="control-label-notes fs-5">{{trans('langEclass')}}</span>
-            </div>
-
-            <div id="idform" class="panel panel-default mt-3">
-                <div class="panel-heading-login text-center">
-                    <img src="template/modern/img/user2.png" class='user-icon m-auto d-block'>
-                    <strong class='fs-5 control-label-notes'>{{ trans('langUserLogin') }}</strong>
+        @if(!get_config('dont_display_login_form'))
+            <div class='col-12 p-5 jumbotron jumbotron-login border-15px'>
+                <div class='col-sm-12 text-center'>
+                    <span class="control-label-notes fs-5">{{trans('langEclass')}}</span>
                 </div>
-                <div class="panel-body bg-light">
-                    <form action="{{ $urlAppend }}" method="post">
-                        <div class="login-form-spacing">
-                            <h4 class='text-secondary fs-5'>{{ trans('langUsername') }}</h4>
-                            <input class="login-input w-100 border border-secondary bg-body" placeholder="&#xf007;" type="text" id="uname" name="uname" >
-                            <h4 class="text-secondary fs-5 mt-3">{{ trans('langPassword') }} (password)</h4>
-                            <input class="login-input w-100 border border-secondary bg-body" placeholder="&#xf023;" type="password" id="pass" name="pass">
-                            <input class="btn btn-primary text-white login-form-submit w-100 mt-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
+
+                <div id="idform" class="panel panel-default mt-3">
+                    <div class="panel-heading-login text-center">
+                        <img src="template/modern/img/user2.png" class='user-icon m-auto d-block'>
+                        <strong class='fs-5 control-label-notes'>{{ trans('langUserLogin') }}</strong>
+                    </div>
+                    <div class="panel-body bg-light">
+                        <form action="{{ $urlAppend }}" method="post">
+                            <div class="login-form-spacing">
+                                <h4 class='text-secondary fs-5'>{{ trans('langUsername') }}</h4>
+                                <input class="login-input w-100 border border-secondary bg-body" placeholder="&#xf007;" type="text" id="uname" name="uname" >
+                                <h4 class="text-secondary fs-5 mt-3">{{ trans('langPassword') }} (password)</h4>
+                                <input class="login-input w-100 border border-secondary bg-body" placeholder="&#xf023;" type="password" id="pass" name="pass">
+                                <input class="btn btn-primary text-white login-form-submit w-100 mt-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
+                            </div>
+                        </form>
+                        <div class="login-form-spacing2">
+                            <a class="text-primary fs-6" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
                         </div>
-                    </form>
-                    <div class="login-form-spacing2">
-                        <a class="text-primary fs-6" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
                     </div>
                 </div>
+                <div class='mt-3'>{!! $warning !!}</div>
             </div>
-            <div class='mt-3'>{!! $warning !!}</div>
-        </div>
+        @else
+            <div class='col-12 p-5 jumbotron jumbotron-login border-15px h-300px'></div>
+        @endif
         <div class='col-12 mt-3 panel panel-default bg-light shadow-sm'>
             <div class="panel-heading text-center">
                 <span class='control-label-notes'>{!! get_config('homepage_title') !!}</span>
             </div>
             <div class="panel-body bg-body p-5 mb-3">
-                {!! trans('langInfoAbout') !!}
+                {!! get_config('homepage_intro') !!}
             </div>
         </div>
 
@@ -192,7 +195,7 @@
 <div class="collapse" id="collapse_main_section">
     <div class="container-fluid main-section">
         <div class="row">
-            <div class="col-lg-12 bg-white sidebar" style="border-radius:15px;">
+            <div class="col-lg-12 bg-white border-15px sidebar">
                 @if ($announcements)
                     <div class="news">
                         <h2 class="block-title">{{ trans('langAnnouncements') }}
@@ -201,16 +204,20 @@
                             </a>
                         </h2>
                         <div class="row news-list">
+                            @php $counterAn = 0; @endphp
                             @foreach ($announcements as $announcement)
+                                @if($counterAn < 6)
                                 <div class="col-sm-12 news-list-item">
                                     <div class="date">
                                         {{ claro_format_locale_date($dateFormatLong, strtotime($announcement->date)) }}
                                     </div>
                                     <div class="title"><a class="announcement-title-a" href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>{{$announcement->title}}</a></div>
                                 </div>
+                                @endif
+                            @php $counterAn++; @endphp
                             @endforeach
                         </div>
-                        <div class="more-link"><a class="all_announcements" href="{{ $urlServer }}main/system_announcements.php">ΟΛΕΣ ΟΙ ΑΝΑΚΟΙΝΩΣΕΙΣ</a></div>
+                        <div class="more-link"><a class="all_announcements mt-3" href="{{ $urlServer }}main/system_announcements.php">ΟΛΕΣ ΟΙ ΑΝΑΚΟΙΝΩΣΕΙΣ <span class='fa fa-arrow-right'></span></a></div>
                     </div>
                 @endif
             </div>
@@ -227,7 +234,7 @@
                 <div class="col-lg-4 text-center">
                         <i class="fas fa-book"></i>
                         <div class="num">10</div>
-                        <div class="num-text">μαθήματα</div>
+                        <div class="num-text">{{trans('langsCourses')}}</div>
                 </div>
                 <div class="col-lg-4 text-center">
                         <i class="fas fa-mouse-pointer"></i>

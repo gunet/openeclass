@@ -4,11 +4,14 @@
 
             <div class="btn-group w-100" role="group" aria-label="Basic example">
 
-                
+                @if(!get_config('hide_login_link'))
                 <a type="button" class="btn btn-transparent text-white" href="{{ $urlServer }}"><i class="fa fa-home"></i></a>
+                @endif
                 <a type="button" class="btn btn-transparent text-white" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib"></i></a>
                 <a type='button' class="btn btn-transparent text-white" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-university"></i></a>
-                    
+                @if(!$_SESSION['uid'])
+                <a class='btn btn-transparent text-white' href="{{$urlAppend}}main/login_form.php"><span class="fa fa-lock pt-1"></span></a>
+                @endif   
 
                 {!! lang_selections() !!}
                 

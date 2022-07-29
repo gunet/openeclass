@@ -512,7 +512,10 @@ function lang_selections() {
         return ('&nbsp;');
     }
     $lang_select = "
-      <button class='btnLang btn btn-primary' type='button' aria-expanded='false' id='dropdownMenuLang' data-bs-toggle='dropdown'>
+      <button class='d-none d-sm-none d-md-none d-lg-block btn btn-primary' type='button' aria-expanded='false' id='dropdownMenuLang' data-bs-toggle='dropdown'>
+          <span class='fa fa-globe'></span>
+      </button>
+      <button class='d-block d-sm-block d-md-block d-lg-none btn btn-transparent text-white' type='button' aria-expanded='false' id='dropdownMenuLang' data-bs-toggle='dropdown'>
           <span class='fa fa-globe'></span>
       </button>
       <ul class='dropdown-menu dropdown-menu-end user-language-menu' role='menu' aria-labelledby='dropdownMenuLang'>";

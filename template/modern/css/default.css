@@ -24,6 +24,13 @@ li {
   list-style-type: none;
 }
 
+.border-15px{
+  border-radius:15px;
+}
+
+.h-300px{
+  height:300px;
+}
 
 .navbar-eclass {
   height: 170px;
@@ -955,11 +962,6 @@ a{
       color: #005ed7;
   }
   
-  .all_announcements::after{
-      content: ">";
-      font-size: 17px;
-  }
-  
   .hidden-xs{
       color:white;
   }
@@ -1857,14 +1859,6 @@ a{
       padding:25px;
     }
 
-    .btnLang{
-      background-color: transparent;
-      border: 0;
-    }
-    .btnLang:focus{
-      background-color: transparent;
-    }
-
     .manage-course-ul{
       background-color: #003F87;
       width:260px;
@@ -1970,14 +1964,6 @@ a{
       padding:25px;
     }
 
-    .btnLang{
-      background-color: transparent;
-      border: 0;
-    }
-    .btnLang:focus{
-      background-color: transparent;
-    }
-
     .manage-course-ul{
       background-color: #003F87;
       width:260px;
@@ -2079,14 +2065,6 @@ a{
       box-shadow: 0 0 3px #ccc;
       border-radius: 25px;
       padding:25px;
-    }
-
-    .btnLang{
-      background-color: transparent;
-      border: 0;
-    }
-    .btnLang:focus{
-      background-color: transparent;
     }
 
     .manage-course-ul{
@@ -2239,14 +2217,6 @@ a{
       padding:25px;
     }
 
-    .btnLang{
-      background-color: transparent;
-      border: 0;
-    }
-    .btnLang:focus{
-      background-color: transparent;
-    }
-
     .user-detals-photo {
       min-width: 180px;
       height: 180px;
@@ -2344,14 +2314,6 @@ a{
       box-shadow: 0 0 3px #ccc;
       border-radius: 25px;
       padding:25px;
-    }
-
-    .btnLang{
-      background-color: transparent;
-      border: 0;
-    }
-    .btnLang:focus{
-      background-color: transparent;
     }
 
     .navrbar_menu_btn{
