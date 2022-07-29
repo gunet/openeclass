@@ -139,11 +139,15 @@ if (isset($_POST['submit'])) {
         $image_file = $_FILES['userimage']['tmp_name'];
 
         if (!copy_resized_image($image_file, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $image_path . '_' . IMAGESIZE_LARGE . '.jpg')) {
-            Session::Messages($langInvalidPicture);
+            //Session::Messages($langInvalidPicture);
+            Session::flash('message',$langInvalidPicture);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("main/profile/profile.php");
         }
         if (!copy_resized_image($image_file, $type, IMAGESIZE_SMALL, IMAGESIZE_SMALL, $image_path . '_' . IMAGESIZE_SMALL . '.jpg')) {
-            Session::Messages($langInvalidPicture);
+            //Session::Messages($langInvalidPicture);
+            Session::flash('message',$langInvalidPicture);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("main/profile/profile.php");
         }
         Database::get()->query("UPDATE user SET has_icon = 1 WHERE id = ?d", $_SESSION['uid']);
@@ -155,13 +159,17 @@ if (isset($_POST['submit'])) {
 
     // check if email is valid
     if (!empty($email_form) and !valid_email($email_form)) {
-        Session::Messages($langEmailWrong);
+        //Session::Messages($langEmailWrong);
+        Session::flash('message',$langEmailWrong);
+        Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("main/profile/profile.php");
     }
 
     // check if there are empty fields
     if (!$all_ok) {
-        Session::Messages($langFieldsMissing);
+        //Session::Messages($langFieldsMissing);
+        Session::flash('message',$langFieldsMissing);
+        Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("main/profile/profile.php");
     }
 
@@ -179,7 +187,9 @@ if (isset($_POST['submit'])) {
     if ($username_form != $_SESSION['uname']) {
         $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $username_form);
         if ($username_check) {
-            Session::Messages($langUserFree);
+            //Session::Messages($langUserFree);
+            Session::flash('message',$langUserFree);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page("main/profile/profile.php");
         }
     }
@@ -192,7 +202,9 @@ if (isset($_POST['submit'])) {
         foreach ($cpf_check as $cpf_error) {
             $cpf_error_str .= $cpf_error;
         }
-        Session::Messages($cpf_error_str);
+       // Session::Messages($cpf_error_str);
+        Session::flash('message',$cpf_error_str);
+        Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("main/profile/profile.php");
     }
 
@@ -238,12 +250,16 @@ if (isset($_POST['submit'])) {
         if ($need_email_verification) { // email has been changed and needs verification
             redirect_to_home_page("modules/auth/mail_verify_change.php?from_profile=true");
         } else {
-            Session::Messages($langProfileReg, 'alert-success');
+           // Session::Messages($langProfileReg, 'alert-success');
+            Session::flash('message',$langProfileReg);
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("main/profile/display_profile.php");
         }
     }
     if ($old_language != $language) {
-        Session::Messages($langProfileReg, 'alert-success');
+       // Session::Messages($langProfileReg, 'alert-success');
+        Session::flash('message',$langProfileReg);
+        Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("main/profile/display_profile.php");
     }
 }
@@ -260,7 +276,9 @@ if (isset($_GET['provider'])) {
             if ($auth_id and
                 Database::get()->query('DELETE FROM user_ext_uid
                     WHERE user_id = ?d AND auth_id = ?d', $uid, $auth_id)) {
-                Session::Messages($langProfileReg, 'alert-success');
+                //Session::Messages($langProfileReg, 'alert-success');
+                Session::flash('message',$langProfileReg);
+                Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page('main/profile/profile.php');
             }
         } elseif ($_GET['action'] == 'connect') {
@@ -330,15 +348,21 @@ if (isset($_GET['provider'])) {
                                 // HybridAuth provider uid is already in the db!
                                 // (which means the user tried to authenticate a second
                                 // eClass account with the same facebook etc. account)
-                                Session::Messages($langProviderIdAlreadyExists, 'alert-warning');
+                                //Session::Messages($langProviderIdAlreadyExists, 'alert-warning');
+                                Session::flash('message',$langProviderIdAlreadyExists);
+                                Session::flash('alert-class', 'alert-warning');
                             } else {
                                 Database::get()->querySingle('INSERT INTO user_ext_uid
                                     SET user_id = ?d, auth_id = ?d, uid = ?s',
                                     $uid, $providerAuthId, $user_data->identifier);
-                                Session::Messages($langProfileReg, 'alert-success');
+                                //Session::Messages($langProfileReg, 'alert-success');
+                                Session::flash('message',$langProfileReg);
+                                Session::flash('alert-class', 'alert-success');
                             }
                     } else {
-                        Session::Messages($langProviderError, 'alert-danger');
+                        //Session::Messages($langProviderError, 'alert-danger');
+                        Session::flash('message',$langProviderError);
+                        Session::flash('alert-class', 'alert-danger');
                     }
                     redirect_to_home_page('main/profile/profile.php');
                 } catch (Exception $e) {
@@ -349,29 +373,45 @@ if (isset($_GET['provider'])) {
                     // to know more please refer to Exceptions handling section on the userguide
                     switch($e->getCode()) {
                         case 0:
-                            Session::Messages($langProviderError1, 'alert-danger');
+                            //Session::Messages($langProviderError1, 'alert-danger');
+                            Session::flash('message',$langProviderError1);
+                            Session::flash('alert-class', 'alert-danger');
                             break;
                         case 1:
-                            Session::Messages($langProviderError2, 'alert-danger');
+                            //Session::Messages($langProviderError2, 'alert-danger');
+                            Session::flash('message',$langProviderError2);
+                            Session::flash('alert-class', 'alert-danger');
                             break;
                         case 2:
-                            Session::Messages($langProviderError3, 'alert-danger');
+                            //Session::Messages($langProviderError3, 'alert-danger');
+                            Session::flash('message',$langProviderError3);
+                            Session::flash('alert-class', 'alert-danger');
                             break;
                         case 3:
-                            Session::Messages($langProviderError4, 'alert-danger');
+                            //Session::Messages($langProviderError4, 'alert-danger');
+                            Session::flash('message',$langProviderError4);
+                            Session::flash('alert-class', 'alert-danger');
                             break;
                         case 4:
-                            Session::Messages($langProviderError5, 'alert-danger');
+                           // Session::Messages($langProviderError5, 'alert-danger');
+                            Session::flash('message',$langProviderError5);
+                            Session::flash('alert-class', 'alert-danger');
                             break;
                         case 5:
-                            Session::Messages($langProviderError6, 'alert-danger');
+                           // Session::Messages($langProviderError6, 'alert-danger');
+                            Session::flash('message',$langProviderError6);
+                            Session::flash('alert-class', 'alert-danger');
                             break;
                         case 6:
-                            Session::Messages($langProviderError7, 'alert-danger');
+                            //Session::Messages($langProviderError7, 'alert-danger');
+                            Session::flash('message',$langProviderError7);
+                            Session::flash('alert-class', 'alert-danger');
                             $adapter->disconnect();
                             break;
                         case 7:
-                            Session::Messages($langProviderError8, 'alert-danger');
+                            //Session::Messages($langProviderError8, 'alert-danger');
+                            Session::flash('message',$langProviderError8);
+                            Session::flash('alert-class', 'alert-danger');
                             $adapter->disconnect();
                             break;
                     }

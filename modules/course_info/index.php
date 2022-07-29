@@ -75,7 +75,9 @@ if (isset($_POST['submit'])) {
         $_POST['finish_date'] = null;
     }
     if (empty($_POST['title'])) {
-        Session::Messages($langNoCourseTitle, 'alert-danger');
+        //Session::Messages($langNoCourseTitle, 'alert-danger');
+        Session::flash('message',$langNoCourseTitle);
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/course_info/index.php?course=$course_code");
     } else {
         // update course settings
@@ -129,7 +131,9 @@ if (isset($_POST['submit'])) {
         //=======================================================
         // Check if the teacher is allowed to create in the departments he chose
         if ($deps_changed and !$deps_valid) {
-            Session::Messages($langCreateCourseNotAllowedNode, 'alert-danger');
+            //Session::Messages($langCreateCourseNotAllowedNode, 'alert-danger');
+            Session::flash('message',$langCreateCourseNotAllowedNode);
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
         } else {
             Database::get()->query("UPDATE course
@@ -184,7 +188,9 @@ if (isset($_POST['submit'])) {
                 setting_set(SETTING_DOCUMENTS_PUBLIC_WRITE, $_POST['enable_docs_public_write'], $course_id);
             }
             //-------------------------
-            Session::Messages($langModifDone,'alert-success');
+            //Session::Messages($langModifDone,'alert-success');
+            Session::flash('message',$langModifDone);
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
         }
     }

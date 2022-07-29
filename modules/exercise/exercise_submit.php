@@ -102,7 +102,9 @@ if (isset($_REQUEST['exerciseId'])) {
         // if the specified exercise is disabled (this only applies to students)
         // or doesn't exist, redirect and show error
         if (!$objExercise->read($exerciseId) || (!$is_editor && $objExercise->selectStatus($exerciseId)==0)) {
-            session::Messages($langExerciseNotFound);
+            //session::Messages($langExerciseNotFound);
+            Session::flash('message',$langExerciseNotFound);
+            Session::flash('alert-class', 'alert-warning');
             if (isset($_REQUEST['unit'])) {
                 redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
             } else {
@@ -139,7 +141,9 @@ if ($objExercise->selectAssignToSpecific() and !$is_editor) {
         }
     }
     if (!$accessible) {
-        Session::Messages($langNoAccessPrivilages);
+        //Session::Messages($langNoAccessPrivilages);
+        Session::flash('message',$langNoAccessPrivilages);
+        Session::flash('alert-class', 'alert-warning');
         if (isset($_REQUEST['unit'])) {
             redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
         } else {
@@ -211,7 +215,9 @@ if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
             if (isset($_POST['password']) && $password === $_POST['password']) {
                 $_SESSION['password'][$exerciseId][$attempt_value] = 1;
             } else {
-                Session::Messages($langWrongPassword);
+               // Session::Messages($langWrongPassword);
+                Session::flash('message',$langWrongPassword);
+                Session::flash('alert-class', 'alert-warning');
                 if (!isset($_REQUEST['unit'])) {
                     redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
                 } else {
@@ -228,7 +234,9 @@ $ips = $objExercise->selectIPLock();
 if ($ips && !$is_editor){
     $user_ip = Log::get_client_ip();
     if(!match_ip_to_ip_or_cidr($user_ip, explode(',', $ips))){
-        Session::Messages($langIPHasNoAccess);
+        //Session::Messages($langIPHasNoAccess);
+        Session::flash('message',$langIPHasNoAccess);
+        Session::flash('alert-class', 'alert-warning');
         if (isset($_REQUEST['unit'])) {
             redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
         } else {
@@ -251,7 +259,9 @@ if (isset($_POST['buttonCancel'])) {
         'legend' => $langCancel,
         'eurid' => $eurid ]);
     unset_exercise_var($exerciseId);
-    Session::Messages($langAttemptWasCanceled);
+    //Session::Messages($langAttemptWasCanceled);
+    Session::flash('message',$langAttemptWasCanceled);
+    Session::flash('alert-class', 'alert-warning');
     if (isset($_REQUEST['unit'])) {
         redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
     } else {
@@ -296,7 +306,9 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
     if ($is_editor) {
         // Allow editors to test expired or not yet started exercises, but warn them
         if (!isset($_POST['buttonFinish']) and !$autoSubmit) {
-            Session::Messages($langExerciseExpired, 'alert-info');
+            //Session::Messages($langExerciseExpired, 'alert-info');
+            Session::flash('message',$langExerciseExpired);
+            Session::flash('alert-class', 'alert-info');
         }
     } else {
         // if that happens during an active attempt
@@ -330,7 +342,9 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
                 'legend' => $langSubmit,
                 'eurid' => $eurid ]);
             unset_exercise_var($exerciseId);
-            Session::Messages($langExerciseExpiredTime);
+           // Session::Messages($langExerciseExpiredTime);
+            Session::flash('message',$langExerciseExpiredTime);
+            Session::flash('alert-class', 'alert-warning');
             if (isset($_REQUEST['unit'])) {
                 redirect_to_home_page('modules/units/view.php?course='.$course_code.'&eurId='.$eurid.'&res_type=exercise_results&unit='.$_REQUEST['unit']);
             } else {
@@ -338,7 +352,9 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
             }
         } else {
             unset_exercise_var($exerciseId);
-            Session::Messages($langExerciseExpired);
+            //Session::Messages($langExerciseExpired);
+            Session::flash('message',$langExerciseExpired);
+            Session::flash('alert-class', 'alert-warning');
             if (isset($_REQUEST['unit'])) {
                 redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
             } else {
@@ -414,7 +430,9 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
     // Check if allowed number of attempts exceeded and if so redirect
     if ($exerciseAllowedAttempts > 0 && $attempt >= $exerciseAllowedAttempts) {
         unset_exercise_var($exerciseId);
-        Session::Messages($langExerciseMaxAttemptsReached);
+       // Session::Messages($langExerciseMaxAttemptsReached);
+        Session::flash('message',$langExerciseMaxAttemptsReached);
+        Session::flash('alert-class', 'alert-warning');
         if (isset($_REQUEST['unit'])) {
             redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $_REQUEST['unit']);
         } else {
@@ -458,7 +476,9 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
             'legend' => $langStart,
             'eurid' => $eurid ]);
         if ($exerciseType == ONE_WAY_TYPE) {
-            Session::Messages($langWarnOneWayExercise, 'alert-warning');
+           // Session::Messages($langWarnOneWayExercise, 'alert-warning');
+            Session::flash('message',$langWarnOneWayExercise);
+            Session::flash('alert-class', 'alert-warning');
         }
     }
 }
@@ -540,9 +560,13 @@ if (isset($_POST['formSent'])) {
         unset_exercise_var($exerciseId);
         // if time expired set flashdata
         if ($time_expired) {
-            Session::Messages($langExerciseExpiredTime);
+           // Session::Messages($langExerciseExpiredTime);
+            Session::flash('message',$langExerciseExpiredTime);
+            Session::flash('alert-class', 'alert-warning');
         } else {
-            Session::Messages($langExerciseCompleted, 'alert-success');
+            //Session::Messages($langExerciseCompleted, 'alert-success');
+            Session::flash('message',$langExerciseCompleted);
+            Session::flash('alert-class', 'alert-success');
         }
         if (isset($_REQUEST['unit'])) {
             redirect_to_home_page('modules/units/view.php?course='.$course_code.'&eurId='.$eurid.'&res_type=exercise_results&unit='.$_REQUEST['unit']);
@@ -809,7 +833,9 @@ if ($exerciseType == MULTIPLE_PAGE_TYPE or $exerciseType == ONE_WAY_TYPE) {
 $attempt = Database::get()->querySingle('SELECT eurid FROM exercise_user_record
         WHERE eurid = ?d AND attempt_status = ?d', $eurid, ATTEMPT_ACTIVE);
 if (!$attempt && !$is_editor) {
-    Session::Messages($langExerciseAttemptGone, 'alert-danger');
+   // Session::Messages($langExerciseAttemptGone, 'alert-danger');
+    Session::flash('message',$langExerciseAttemptGone);
+    Session::flash('alert-class', 'alert-danger');
     if (isset($_REQUEST['unit'])) {
         redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
     } else {

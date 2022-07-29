@@ -120,8 +120,10 @@ function sendMessage($message) {
     try {
         return getMailer()->send($message);
     } catch (Exception $e) {
-        Session::Messages("$langMailError<p>" . q($e->getMessage()) . '</p>',
-            'alert-danger');
+        // Session::Messages("$langMailError<p>" . q($e->getMessage()) . '</p>',
+        //     'alert-danger');
+            Session::flash('message',"$langMailError<p>" . q($e->getMessage()) . '</p>');
+            Session::flash('alert-class', 'alert-danger');
         return false;
     }
 }
@@ -138,7 +140,9 @@ function fromHeader($from, $from_address) {
     }
 
     if (!valid_email($from_address)) { // check if sender address is valid
-        Session::Messages("$langInvalidEmailRecipient", 'alert-danger');
+        //Session::Messages("$langInvalidEmailRecipient", 'alert-danger');
+        Session::flash('message',"$langInvalidEmailRecipient");
+        Session::flash('alert-class', 'alert-danger');
         return;
     } else {
         return array($from_address => $from);
@@ -157,7 +161,9 @@ function addReplyTo($message, $from, $from_address) {
 
     if (!get_config('email_from') and $emailAdministrator <> $from_address) {
         if (!valid_email($from_address)) { // check if sender address is valid
-            Session::Messages("$langInvalidEmailRecipient", 'alert-danger');
+            //Session::Messages("$langInvalidEmailRecipient", 'alert-danger');
+            Session::flash('message',"$langInvalidEmailRecipient");
+            Session::flash('alert-class', 'alert-danger');
             return;
         } else {
             $message->setReplyTo(array($from_address => $from));

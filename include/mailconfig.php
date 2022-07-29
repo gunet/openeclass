@@ -63,15 +63,19 @@ function store_mail_config() {
     if ($email_announce == '' or valid_email($email_announce)) {
         set_config('email_announce', $email_announce);
     } else {
-        Session::Messages("$langEmailAnnounce: $langInvalidEmail: " . q($email_announce),
-            'alert-warning');
+        //Session::Messages("$langEmailAnnounce: $langInvalidEmail: " . q($email_announce),
+            //'alert-warning');
+            Session::flash('message',"$langEmailAnnounce: $langInvalidEmail: " . q($email_announce));
+            Session::flash('alert-class', 'alert-warning');
     }
     $email_bounces = trim($_POST['email_bounces']);
     if ($email_bounces == '' or valid_email($email_bounces)) {
         set_config('email_bounces', $email_bounces);
     } else {
-        Session::Messages("$langEmailBounces: $langInvalidEmail: " . q($email_bounces),
-            'alert-warning');
+        // Session::Messages("$langEmailBounces: $langInvalidEmail: " . q($email_bounces),
+        //     'alert-warning');
+            Session::flash('message',"$langEmailBounces: $langInvalidEmail: " . q($email_bounces));
+            Session::flash('alert-class', 'alert-warning');
     }
     if ($_POST['email_transport'] == 1) {
         set_config('email_transport', 'smtp');

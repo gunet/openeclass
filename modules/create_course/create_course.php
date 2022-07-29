@@ -112,12 +112,16 @@ if (!isset($_POST['create_course'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $validationFailed = false;
     if (count($departments) < 1 || empty($departments[0])) {
-        Session::Messages($langEmptyAddNode);
+       // Session::Messages($langEmptyAddNode);
+        Session::flash('message',$langEmptyAddNode);
+        Session::flash('alert-class', 'alert-warning');
         $validationFailed = true;
     }
 
     if (empty($title)) {
-        Session::Messages($langFieldsMissing);
+        //Session::Messages($langFieldsMissing);
+        Session::flash('message',$langFieldsMissing);
+        Session::flash('alert-class', 'alert-warning');
         $validationFailed = true;
     }
 
@@ -144,7 +148,9 @@ if (!isset($_POST['create_course'])) {
 
     // create course directories
     if (!create_course_dirs($code)) {
-        Session::Messages($langGeneralError, 'alert-danger');
+        //Session::Messages($langGeneralError, 'alert-danger');
+        Session::flash('message',$langGeneralError);
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/create_course/create_course.php');
     }
 
@@ -208,7 +214,9 @@ if (!isset($_POST['create_course'])) {
             $dropbox_quota * 1024 * 1024, $password, $view_type, $description);
     $new_course_id = $result->lastInsertID;
     if (!$new_course_id) {
-        Session::Messages($langGeneralError);
+       // Session::Messages($langGeneralError);
+        Session::flash('message',$langGeneralError);
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/create_course/create_course.php');
     }
 

@@ -52,7 +52,9 @@ if (isset($_POST['delete'])) {
     Log::record(0, 0, LOG_DELETE_COURSE, array('id' => $course_id,
                                                'code' => $course_code,
                                                'title' => $currentCourseName));
-    Session::Messages("$langTheCourse <b>" . q($currentCourseName) . " ($course_code)</b> $langHasDel", 'alert-info');
+    //Session::Messages("$langTheCourse <b>" . q($currentCourseName) . " ($course_code)</b> $langHasDel", 'alert-info');
+    Session::flash('message',"$langTheCourse <b>" . q($currentCourseName) . " ($course_code)</b> $langHasDel");
+    Session::flash('alert-class', 'alert-info');
     unset($_SESSION['dbname']);
     redirect_to_home_page('main/portfolio.php');
 } else {

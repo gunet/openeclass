@@ -398,7 +398,9 @@ if (isset($require_current_course) and $require_current_course) {
             if (!$uid) {
                 $toolContent_ErrorExists = $langNoAdminAccess;
             } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED) and !@$course_guest_allowed) {
-                Session::Messages($langLoginRequired, 'alert-info');
+                //Session::Messages($langLoginRequired, 'alert-info');
+                Session::flash('message',$langLoginRequired);
+                Session::flash('alert-class', 'alert-info');
                 redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
             } elseif ($status != USER_TEACHER and $visible == COURSE_INACTIVE) {
                 $toolContent_ErrorExists = $langCheckProf;

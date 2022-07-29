@@ -48,7 +48,9 @@ function submit_link() {
     $v->rule('required', array('urllink'))->message($langTheFieldIsRequired)->label('');
     if($v->validate()) {
         if (!is_url_accepted($urllink,"(https?|ftp)")){
-            Session::Messages($langLinkNotPermitted, 'alert-danger');
+           // Session::Messages($langLinkNotPermitted, 'alert-danger');
+            Session::flash('message',$langLinkNotPermitted);
+            Session::flash('alert-class', 'alert-danger');
             if (isset($_POST['id'])) {
                 $id =  getDirectReference($_POST['id']);
                 redirect_to_home_page("modules/link/index.php?course=$course_code&action=editlink&id=" . getIndirectReference($id) . "&urlview=");

@@ -470,7 +470,9 @@ if (!isset($_POST['submit'])) {
         $provider_name = '';
         $provider_id ='';
         foreach ($registration_errors as $error) {
-            Session::Messages("$error", 'alert-danger');
+            //Session::Messages("$error", 'alert-danger');
+            Session::flash('message',"$error");
+            Session::flash('alert-class', 'alert-danger');
         }
         redirect_to_home_page("modules/auth/newuser.php?givenname_form=" . urlencode($givenname_form) . "&surname_form=" . urlencode($surname_form) . "&uname=" . urlencode($uname) . "&email=" . urlencode($email) . "&am=" . urlencode($am) . "&phone=" . urlencode($phone) . "" . augment_url_refill_custom_profile_fields_registr() . "");
     }

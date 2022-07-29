@@ -87,7 +87,9 @@ if (!isset($_POST['doit'])) {
             unset($_SESSION['dbname']);
             unset($_SESSION['cid_tmp']);
             unset($_SESSION['courses'][$code]);
-            Session::Messages($langCoursDelSuccess, 'alert-success');
+            //Session::Messages($langCoursDelSuccess, 'alert-success');
+            Session::flash('message',$langCoursDelSuccess);
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('main/portfolio.php');
         } else {
             $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langCoursError</div></div>";

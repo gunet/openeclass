@@ -120,7 +120,9 @@ if (isset($_GET['mindmap'])) {
 
     $file_path = '/' . safe_filename('jm');
     if (!file_put_contents($basedir . $file_path, $_GET['mindmap'])) {
-        Session::Messages($langGeneralError, 'alert-danger');
+        //Session::Messages($langGeneralError, 'alert-danger');
+        Session::flash('message',$langGeneralError);
+        Session::flash('alert-class', 'alert-danger');
     } else {
         $filename = $title . '.jm';
         $file_creator = "$_SESSION[givenname] $_SESSION[surname]";

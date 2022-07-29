@@ -46,7 +46,9 @@ if (isset($_POST['submit'])) {
         }
         $course_title = course_id_to_title($cid);
         $message = q(sprintf($course_title, $langEmailUnsubSuccess));
-        Session::Messages($message, "alert-success");
+        //Session::Messages($message, "alert-success");
+        Session::flash('message',$message);
+        Session::flash('alert-class', 'alert-success');
     } else { // change email subscription for all courses
         foreach ($_SESSION['courses'] as $course_code => $c_value) {
             $cid = course_code_to_id($course_code);
@@ -58,7 +60,9 @@ if (isset($_POST['submit'])) {
             Database::get()->query("UPDATE course_user SET receive_mail = ?d
                 WHERE user_id = ?d AND course_id = ?d", $receive_mail, $uid, $cid);
         }
-        Session::Messages($langWikiEditionSucceed, "alert-success");
+        //Session::Messages($langWikiEditionSucceed, "alert-success");
+        Session::flash('message',$langWikiEditionSucceed);
+        Session::flash('alert-class', 'alert-success');
     }
     redirect_to_home_page("main/profile/display_profile.php");
 } else {

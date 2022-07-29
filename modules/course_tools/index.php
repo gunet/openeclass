@@ -73,7 +73,9 @@ if (isset($_REQUEST['toolStatus'])) {
     if ($log) {
         Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_MODIFY, $log);
     }
-    Session::Messages($langRegDone, 'alert-success');
+    //Session::Messages($langRegDone, 'alert-success');
+    Session::flash('message',$langRegDone);
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page($page_url);
 }
 
@@ -84,7 +86,9 @@ if (isset($_GET['delete'])) {
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_DELETE, array('id' => $delete,
                                                                    'link' => $r->url,
                                                                    'name_link' => $r->title));
-    Session::Messages($langLinkDeleted, 'alert-success');
+    //Session::Messages($langLinkDeleted, 'alert-success');
+    Session::flash('message',$langLinkDeleted);
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page($page_url);
 }
 
@@ -98,7 +102,9 @@ if (isset($_POST['submit'])) {
     $link = isset($_POST['link']) ? $_POST['link'] : '';
     $name_link = isset($_POST['name_link']) ? $_POST['name_link'] : '';
     if ((trim($link) == 'http://') or ( trim($link) == 'ftp://') or empty($link) or empty($name_link) or ! is_url_accepted($link)) {
-        Session::Messages($langInvalidLink, 'alert-danger');
+        //Session::Messages($langInvalidLink, 'alert-danger');
+        Session::flash('message',$langInvalidLink);
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page($page_url);
     }
 
@@ -108,7 +114,9 @@ if (isset($_POST['submit'])) {
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_INSERT, array('id' => $id,
                                                                    'link' => $link,
                                                                    'name_link' => $name_link));
-    Session::Messages($langLinkAdded, 'alert-success');
+    //Session::Messages($langLinkAdded, 'alert-success');
+    Session::flash('message',$langLinkAdded);
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page($page_url);
 } elseif (isset($_GET['action'])) { // add external link
     $pageName = $langAddExtLink;

@@ -42,7 +42,9 @@ $alt_auth_stud_reg = get_config('alt_auth_stud_reg'); // user registration via a
 $alt_auth_prof_reg = get_config('alt_auth_prof_reg'); // prof registration via alternative auth methods
 
 if (!$user_registration) {
-    Session::Messages($langCannotRegister, 'alert-info');
+    //Session::Messages($langCannotRegister, 'alert-info');
+    Session::flash('message',$langCannotRegister);
+    Session::flash('alert-class', 'alert-info');
     draw($tool_content, 0);
     exit;
 }

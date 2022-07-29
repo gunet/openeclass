@@ -786,7 +786,9 @@ function hybridauth_login() {
     $warning = '';
 
     if (isset($_GET['error'])) {
-        Session::Messages(q(trim(strip_tags($_GET['error']))));
+        //Session::Messages(q(trim(strip_tags($_GET['error']))));
+        Session::flash('message',q(trim(strip_tags($_GET['error']))));
+        Session::flash('alert-class', 'alert-warning');
     }
 
     $ip = Log::get_client_ip();
@@ -890,7 +892,9 @@ function hybridauth_login() {
             if (in_array($auth_id, $auth_methods)) {
                 $auth_allow = login($myrow, null, null, $provider, $user_data);
             } else {
-                Session::Messages($langInvalidAuth, 'alert-danger');
+                //Session::Messages($langInvalidAuth, 'alert-danger');
+                Session::flash('message',$langInvalidAuth);
+                Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page();
             }
         }
@@ -968,7 +972,9 @@ function hybridauth_login() {
                     $userObj->refresh($_SESSION['uid'], $options['departments']);
                     user_hook($_SESSION['uid']);
                 } else {
-                    Session::Messages($langGeneralError, 'alert-danger');
+                   // Session::Messages($langGeneralError, 'alert-danger');
+                    Session::flash('message',$langGeneralError);
+                    Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page();
                 }
             } else {
@@ -1353,7 +1359,9 @@ function shib_cas_login($type) {
             unset_shib_cas_session();
             $message = "$langAccountInactive1 <a href='modules/auth/contactadmin.php?userid=$info->id&amp;h=" .
                             token_generate("userid=$info->id") . "'>$langAccountInactive2</a>";
-            Session::Messages($message, 'alert-warning');
+            //Session::Messages($message, 'alert-warning');
+            Session::flash('message',$message);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page();
         }
 
@@ -1361,7 +1369,9 @@ function shib_cas_login($type) {
         if ($info->password != $type) {
             // has different auth method - redirect to home page
             unset_shib_cas_session();
-            Session::Messages($langUserAltAuth, 'alert-danger');
+            //Session::Messages($langUserAltAuth, 'alert-danger');
+            Session::flash('message',$langUserAltAuth);
+            Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page();
         } else {
             // don't force email address from CAS/Shibboleth.
@@ -1616,7 +1626,9 @@ function update_shibboleth_endpoint($settings) {
     $path = $webDir . '/secure';
     if (!file_exists($path)) {
         if (!make_dir($path)) {
-            Session::Messages("Error: mkdir($path)", 'alert-danger');
+            //Session::Messages("Error: mkdir($path)", 'alert-danger');
+            Session::flash('message',"Error: mkdir($path)");
+            Session::flash('alert-class', 'alert-danger');
             return false;
         }
     }
@@ -1642,21 +1654,29 @@ if (isset($_GET["reg"])) {
 ';
     if ($f = fopen($indexfile, 'w')) {
         if (!fwrite($f, $filecontents)) {
-            Session::Messages("Error: write($indexfile)<pre>" .
-                q($filecontents) . '</pre>', 'alert-danger');
+            // Session::Messages("Error: write($indexfile)<pre>" .
+            //     q($filecontents) . '</pre>', 'alert-danger');
+                Session::flash('message',"Error: write($indexfile)<pre>" .
+                q($filecontents) . '</pre>');
+            Session::flash('alert-class', 'alert-danger');
             return false;
         }
         fclose($f);
     } else {
-        Session::Messages("Error: open($indexfile)<pre>" .
-            q($filecontents) . '</pre>', 'alert-danger');
+        // Session::Messages("Error: open($indexfile)<pre>" .
+        //     q($filecontents) . '</pre>', 'alert-danger');
+            Session::flash('message',"Error: open($indexfile)<pre>" .
+            q($filecontents) . '</pre>');
+        Session::flash('alert-class', 'alert-danger');
         return false;
     }
 
     // Remove obsolete secure/index_reg.php
     $indexregfile = $path . '/index_reg.php';
     if (file_exists($indexregfile) and !unlink($indexregfile)) {
-        Session::Messages("Warning: unable to delete obsolete $indexregfile", 'alert-warning');
+        //Session::Messages("Warning: unable to delete obsolete $indexregfile", 'alert-warning');
+        Session::flash('message',"Warning: unable to delete obsolete $indexregfile");
+        Session::flash('alert-class', 'alert-warning');
     }
     return true;
 }
@@ -1690,7 +1710,9 @@ function deny_access() {
         foreach (array_keys($_SESSION) as $key) {
             unset($_SESSION[$key]);
         }
-        Session::Messages($langRegistrationDenied, 'alert-warning');
+        //Session::Messages($langRegistrationDenied, 'alert-warning');
+        Session::flash('message',$langRegistrationDenied);
+        Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page();
     }
 }

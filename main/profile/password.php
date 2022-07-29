@@ -67,10 +67,14 @@ if (isset($_POST['submit'])) {
                 WHERE id = ?d", $new_pass, $_SESSION['uid']);
             Log::record(0, 0, LOG_PROFILE,
                 array('uid' => $_SESSION['uid'], 'pass_change' => 1));
-            Session::Messages($langPassChanged, 'alert-success');
+            //Session::Messages($langPassChanged, 'alert-success');
+            Session::flash('message',$langPassChanged);
+            Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('main/profile/display_profile.php');
         } else {
-            Session::Messages($langPassOldWrong);
+            //Session::Messages($langPassOldWrong);
+            Session::flash('message',$langPassOldWrong);
+            Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page('main/profile/password.php');
         }
     } else {

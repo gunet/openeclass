@@ -101,7 +101,9 @@ function create_course_dirs($code) {
         "$base/scormPackages", "video/$code"];
     foreach ($dirs as $dir) {
         if (!make_dir($dir)) {
-            Session::Messages(sprintf($langDirectoryCreateError, $dir));
+            //Session::Messages(sprintf($langDirectoryCreateError, $dir));
+            Session::flash('message',sprintf($langDirectoryCreateError, $dir));
+            Session::flash('alert-class', 'alert-warning');
             return false;
         }
         if ($dir != $base) {

@@ -201,7 +201,9 @@ function doArchive($course_id, $course_code) {
     // create zip file
     $zip = new ZipArchive;
     if ($zip->open($zipfile, ZipArchive::CREATE) !== true) {
-        Session::Messages($langGeneralError, 'alert-danger');
+        //Session::Messages($langGeneralError, 'alert-danger');
+        Session::flash('message',$langGeneralError);
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/course_info/index.php?course=' . $course_code);
     }
     $result = $zip->addGlob($archivedir . '/*', GLOB_NOSORT, [
@@ -212,7 +214,9 @@ function doArchive($course_id, $course_code) {
     removeDir($basedir);
 
     if (!$result) {
-        Session::Messages($langGeneralError, 'alert-danger');
+        //Session::Messages($langGeneralError, 'alert-danger');
+        Session::flash('message',$langGeneralError);
+        Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/course_info/index.php?course=' . $course_code);
     }
 
