@@ -1,4 +1,4 @@
-<?php print_r('mobile:'.$is_mobile); ?>
+
 @extends('layouts.default')
 
 @push('head_scripts')
@@ -6,11 +6,11 @@
 
 @section('content')
 
-<div class="pb-3 pt-3">
+<div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
 
     <div class="container-fluid main-container">
 
-        <div class="row">
+        <div class="row rowMedium">
 
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active col_maincontent_active_Homepage">
                     
@@ -130,15 +130,16 @@
                                     </div>
                                 </div>
                             </div>
-                                {!! render_profile_fields_content(array('user_id' => $id)) !!}
+                         {!! render_profile_fields_content(array('user_id' => $id)) !!} 
                         </div>
                     </div>
-                    
 
-                    @if (count($cert_completed) > 0)
+
+                    {{-- @if (count($cert_completed) > 0) --}}
+                    <div class='col-12 mt-3'>
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <div class='col-sm-10' style='padding-top:20px;'><h4>{{ trans('langMyCertificates') }}</h4></div>
+                                <div class='col-sm-10'><h4>{{ trans('langMyCertificates') }}</h4></div>
                                 <div class='row'>
                                     <div class='badge-container'>
                                         <div class='clearfix'>
@@ -168,8 +169,12 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    </div>
+                    {{-- @endif --}}
+
+
                     @if (count($badge_completed) > 0)
+                    <div class='col-12 mt-3'>
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class='col-sm-10' style='padding-bottom:30px;'><h4>{{ trans('langBadges') }}</h4></div>
@@ -190,12 +195,12 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                     @endif
-
 
                     @if ($uid == $id)
                        
-                            <div class="col-12 mt-4">
+                            <div class="col-12 mt-3">
                                 <div class="panel panel-default">
                                     <div class="panel-body">
                                         <div class="row">
@@ -216,6 +221,10 @@
                             </div>
                        
                     @endif
+                    
+                    
+
+                    
                 </div>
             </div>
         </div>

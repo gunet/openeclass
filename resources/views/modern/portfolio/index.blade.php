@@ -2,17 +2,17 @@
 
 @section('content')
 
-<div class="pb-3 pt-3">
+<div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
 
 <div class="container-fluid main-container details-section">
 
-    <div class="row">
+    <div class="row rowMedium">
         <div class="col-lg-12 user-details" >
             <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-3 pb-5">
 
                 <div class="container-fluid">
-                    <div class="row block-title-2 justify-content-between">
-                        <div class="col-3 col-md-5 ps-0">
+                    <div class="row block-title-2 rowMedium justify-content-between">
+                        <div class="col-3 col-xl-8 col-md-5 ps-0">
                             <h5>{{ trans('langSummaryProfile') }}</h5>
                         </div>
                         <div class="col-4 col-xl-4 col-md-7 pe-0">
@@ -28,7 +28,7 @@
 
                 <div class="container-fluid collapse user-details-collapse show">
 
-                    <div class="row">
+                    <div class="row rowMedium mt-lg-0 mt-3">
 
                         <div class="col-xl-4 col-lg-6 col-md-7 col-sm-12 col-12">                           
                             <div class="row">
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="container-fluid collapse user-details-collapse">
-                    <div class="row">
+                    <div class="row mt-lg-0 mt-3">
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
                             <div class="container-fluid">
                                 <div class="row justify-content-center">
@@ -92,7 +92,7 @@
                         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
                             
                                 <div class="row">
-                                    <div class="container-fluid">
+                                    <div class="col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
                                         <div class="shadow-sm bg-body rounded bg-primary">
                                             <p class='text-center ps-2 pe-2 pb-2 pt-2 control-label-notes'>{{ trans('langCourseDescription') }}</p>
                                         </div>
@@ -112,7 +112,7 @@
 
                                 <div class="row">
 
-                                    <div class="container-fluid">
+                                    <div class="col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
 
                                         <div class="shadow-sm bg-body rounded bg-primary">
                                             <p class='text-center ps-2 pe-2 pb-2 pt-2 control-label-notes'>{{ trans('langPersInfo') }}</p>
@@ -187,8 +187,8 @@
     </div>
 </div>
 
-<div class="container-fluid main-container cources-section mt-3">
-    <div class="row">
+<div class="container-fluid main-container cources-section mt-lg-3 mt-0">
+    <div class="row rowMedium">
         <div class="col-12 col-lg-8 user-details">
             <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-3 pb-5">
                 
@@ -229,6 +229,7 @@
                 {{-- Courses List --}}
 
                 <div id="cources-bars" class="container-fluid">
+                    <div class='row rowMedium'>
 
                     {!! $perso_tool_content['lessons_content'] !!}
 
@@ -255,6 +256,8 @@
 
                     <div class='d-flex justify-content-md-end justify-content-center'> 
                         <a class="btn btn-primary float-md-end text-center mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
+                    </div>
+
                     </div>
                 </div>
 
@@ -294,7 +297,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-4 calendar_announce_message_col mt-lg-0 mt-3 ps-lg-2 pe-lg-2 pt-lg-0 pb-lg-0 ps-md-5 pe-md-5 pt-md-3 pb-md-5 ps-3 pe-3 pt-3 pb-5">
+        <div class="col-12 col-lg-4 calendar_announce_message_col mt-lg-0 mt-0 ps-lg-2 pe-lg-2 pt-lg-0 pb-lg-0 ps-md-5 pe-md-5 pt-md-3 pb-md-5 ps-3 pe-3 pt-3 pb-5">
 
 
             <div class="container-fluid container_fluid_calendar container_fluid_calendar_portfolio bg-white ms-lg-2 mt-lg-0 mt-md-4 mt-4">
@@ -303,7 +306,7 @@
 
 
             <div class="container-fluid user-announcements-portfolio bg-white mt-lg-3 ms-lg-2 mt-lg-0 mt-md-4 mt-4">
-                <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-5">
+                <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-3 rowMedium">
 
                     <span class="text-center control-label-notes">{{ trans('langMyPersoAnnouncements') }}</span><hr class='text-primary mt-3'>
                     <div class="container-fluid text-md-center">
@@ -320,7 +323,7 @@
 
 
             <div class="container-fluid user-messages-portfolio bg-white mt-lg-3 ms-lg-2 mt-lg-0 mt-md-4 mt-4">
-                <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-5">
+                <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-3 rowMedium">
 
                     <span class="text-center control-label-notes">{{ trans('langMyPersoMessages') }}</span><hr class='text-primary mt-3'>
                     <div class="container-fluid text-md-center"> 

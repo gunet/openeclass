@@ -100,7 +100,11 @@
 </head>
 
 <body>
+
     <div class="d-flex flex-column min-vh-100 {{ $container }}">
+
+    
+
         <!-- Desktop navbar -->
         <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
             @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
@@ -125,5 +129,6 @@
             @include('layouts.partials.footerMobile')
         </div>
     </div>
+   
  </body>
 </html>

@@ -2,11 +2,11 @@
 
 @section('content')
 
-<div class="pb-3 pt-3">
+<div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
 
     <div class="container-fluid main-container">
 
-        <div class="row">
+        <div class="row rowMedium">
 
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_Homepage">
 
@@ -30,14 +30,12 @@
                                             <input class="login-input bg-body border border-secondary w-50" placeholder="&#xf007;" type="text" id="uname" name="uname" >
                                             <h4 class="text-secondary mt-3 fs-5">{{ trans('langPassword') }} (password)</h4>
                                             <input class="login-input bg-body border border-secondary w-50" placeholder="&#xf023;" type="password" id="pass" name="pass">
-                                            
+                                            <input class="btn btn-primary text-white w-50 login-form-submit mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
                                         </div>
-                                        <div class="login-form-spacing">
-                                            <input class="btn btn-primary text-white w-50 login-form-submit mt-3" type="submit" name="submit" value="{{ trans('langLogin') }}">
-                                        </div>
+                                    
                                     </form>
                                     <div class="login-form-spacing2 mb-3">
-                                        <a class="text-primary" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
+                                        <a class="text-primary btnlostpass" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
                                     </div>
                                 </div>
                             @else
@@ -47,6 +45,7 @@
                     </div>
                     
 
+                    
                     <div class='col-12 mt-4'>    
                         <div class="panel panel-default w-100">
                             <div class="panel-heading text-center p-3">
@@ -126,8 +125,8 @@
 
 <div class="collapse" id="collapse_main_section">
     <div class="container-fluid main-section">
-        <div class="row">
-            <div class="col-lg-12 bg-white border-15px sidebar">
+        <div class="row rowMedium">
+            <div class="col-lg-12 bg-white border-15px sidebar Announcements-Homepage">
                 @if ($announcements)
                     <div class="news">
                         <h2 class="block-title">{{ trans('langAnnouncements') }}
@@ -157,7 +156,7 @@
     </div>
 
 
-    <div class="container-fluid statistics mt-3">
+    <div class="container-fluid statistics mt-lg-3 mt-0">
         <div class="statistics-wrapper">
             <h2 class="text-center">
                 Στατιστικά Επισκεψιμότητας
@@ -184,7 +183,7 @@
         </div>
     </div>
 
-     <div class="d-flex justify-content-center mt-3 mb-3">
+     <div class="d-flex justify-content-center mt-lg-3 mb-lg-3 mt-0 mb-0">
         <div class="container-fluid testimonials bg-light">
             <div class="testimonial">
                 <div class="testimonial-body">{!! get_config('homepage_intro') !!}</div>

@@ -73,7 +73,7 @@ if (isset($_GET['delete_image'])) {
     // update index
     require_once 'modules/search/indexer.class.php';
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    header("Location: {$urlServer}courses/$course_code");
+    header("Location: {$urlServer}courses/$course_code/");
     exit;
 }
     $head_content .= "

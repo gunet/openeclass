@@ -381,6 +381,46 @@ input[type="checkbox"].toggles + label.rounded::before{
   
 }
 
+@media(min-width:992px) and (max-width:1023px){
+
+  .menu_btn_button{
+    display:block;
+    pointer-events: all;
+  }
+
+  .active-nav{
+    margin-left:-450px;
+  }
+  .active-nav2{
+    margin-left:-218px;
+  }
+
+  .active-cont{
+    width: 100%;
+    align-items: end;
+    margin: 0px 0px 0px auto;
+    background-color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+  .active-cont-completeCourse{
+    width: 100%;
+    align-items: end;
+    margin: 0px 0px 0px auto;
+
+    
+    background-color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    /* background-color: red !important; */
+  }
+}
+
 @media(min-width:1024px) and (max-width:1199px){
 
   /* .on{

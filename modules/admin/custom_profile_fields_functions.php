@@ -323,7 +323,7 @@ function render_profile_fields_content($context) {
     $return_str = '';
 
     $result = Database::get()->queryArray("SELECT id, name FROM custom_profile_fields_category ORDER BY sortorder DESC");
-
+print_a($result);
     foreach ($result as $cat) {
         $args = array();
 

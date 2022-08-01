@@ -1775,13 +1775,32 @@ a{
   /*******************************************************************/
   /*******************************************************************/
   /*******************************************************************/
-  /* Αφορα το υψος του main_content ολου του eclass για mobile-tablet */
+  /* Αφορα το υψος του main_content και το padding του container
+     ολου του eclass για mobile-tablet */
 
-  @media (max-width:1023px){
+  @media (max-width:991px){
     .col_maincontent_active, .col_maincontent_active_Homepage{
-      min-height: calc(100vh - 54px - 54px);
+      min-height: calc(100vh - 46px - 46px);
+      border-radius:0px !important;
+    }
+    .container, .container-fluid{
+      padding: 0;
+    }
+    .rowMedium, .cources-pics-page{
+     margin: auto;
+    }
+
+    .navbar-eclass, .site-footerMobile, .border-15px{
+      border-radius: 0px;
+    }
+    .Announcements-Homepage{
+     background: #DCDCDC !important;
+    }
+    .calendar_announce_message_col, .user-details, .cources-section{
+      border-radius:0px !important;
     }
   }
+
   /*******************************************************************/
   /*******************************************************************/
   /*******************************************************************/
@@ -1822,9 +1841,29 @@ a{
   @media (max-width: 320px){
 
     .login-form-Homepage{
-       border-bottom-left-radius: 15px;
-       border-top-left-radius: 15px;
-    }
+      border-bottom-left-radius: 15px;
+      border-top-left-radius: 15px;
+      background-repeat: no-repeat; background-size: cover;
+      background-image: url(../images/books.jpeg);
+      
+   }
+
+   .login-form-spacing{
+      background: #F5F5F5;
+      border-radius: 15px;
+   }
+
+   .login-form-spacing2{
+    border-radius:15px;
+    background: #003F87;
+    padding:5px 5px ;
+    margin-top:10px;
+   }
+
+   .btnlostpass{
+     color:#fafafa !important;
+   }
+
     .user-icon {
       width: 30px;
       height: 30px;
@@ -1938,7 +1977,26 @@ a{
     .login-form-Homepage{
       border-bottom-left-radius: 15px;
       border-top-left-radius: 15px;
-    }
+      background-repeat: no-repeat; background-size: cover;
+      background-image: url(../images/books.jpeg);
+      
+   }
+
+   .login-form-spacing{
+      background: #F5F5F5;
+      border-radius: 15px;
+   }
+
+   .login-form-spacing2{
+    border-radius:15px;
+    background: #003F87;
+    padding:5px 5px ;
+    margin-top:10px;
+   }
+
+   .btnlostpass{
+     color:#fafafa !important;
+   }
 
     .user-icon {
       width: 30px;
@@ -2048,11 +2106,30 @@ a{
   /* -------------------------------------------------------mobile - portrait-----------------------------------------------*/
   
   @media (min-width:376px) and (max-width: 425px){
-    
+  
     .login-form-Homepage{
        border-bottom-left-radius: 15px;
        border-top-left-radius: 15px;
+       background-repeat: no-repeat; background-size: cover;
+       background-image: url(../images/books.jpeg);
+       
     }
+
+    .login-form-spacing{
+       background: #F5F5F5;
+       border-radius: 15px;
+    }
+
+    .login-form-spacing2{
+      border-radius:15px;
+      background: #003F87;
+      padding:5px 5px ;
+      margin-top:10px;
+     }
+  
+     .btnlostpass{
+       color:#fafafa !important;
+     }
 
     .user-icon {
       width: 30px;
@@ -2197,7 +2274,26 @@ a{
     .login-form-Homepage{
       border-bottom-left-radius: 15px;
       border-top-left-radius: 15px;
-    }
+      background-repeat: no-repeat; background-size: cover;
+      background-image: url(../images/books.jpeg);
+      
+   }
+
+   .login-form-spacing{
+      background: #F5F5F5;
+      border-radius: 15px;
+   }
+
+   .login-form-spacing2{
+    border-radius:15px;
+    background: #003F87;
+    padding:5px 5px ;
+    margin-top:10px;
+   }
+
+   .btnlostpass{
+     color:#fafafa !important;
+   }
 
     .user-icon {
       width: 30px;
@@ -2303,7 +2399,7 @@ a{
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- tablet ------------------------------------------------------- */
 
-  @media (min-width: 768px) and (max-width: 1023px){
+  @media (min-width: 768px) and (max-width: 991px){
 
     .btn-group{
       max-width:400px;
@@ -2430,6 +2526,22 @@ a{
       -webkit-box-shadow: none;
       box-shadow: none;
     }
+
+    .user-icon-filename{
+      width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
+  }
+
+  .dropdown-user-menu-ul{
+    background-color: #003F87 ;
+    width:220px;
+    margin-left:-150px;
+  }
+
+  .dropdown-language-ul{
+    margin-left:-60px ;
+    margin-top:0px !important;
+    background-color: #003F87 ;
+  }
 
 
   }

@@ -85,27 +85,27 @@ function make_clickable($text) {
  *
  */
 
-function claro_format_locale_date($dateFormat, $timeStamp = -1) {
-    // Retrieve $langMonthNames and $langDay_of_weekNames
+// function claro_format_locale_date($dateFormat, $timeStamp = -1) {
+//     // Retrieve $langMonthNames and $langDay_of_weekNames
 
-    if (is_null($timeStamp) or $timeStamp == '') {
-        return '';
-    }
-    $langMonthNames = $GLOBALS['langMonthNames'];
-    $langDay_of_weekNames = $GLOBALS['langDay_of_weekNames'];
+//     if (is_null($timeStamp) or $timeStamp == '') {
+//         return '';
+//     }
+//     $langMonthNames = $GLOBALS['langMonthNames'];
+//     $langDay_of_weekNames = $GLOBALS['langDay_of_weekNames'];
 
-    if ($timeStamp == -1)
-        $timeStamp = time();
+//     if ($timeStamp == -1)
+//         $timeStamp = time();
 
-    // we replace %aAbB of date format
-    // (they can be done by the system when locale date aren't available
-    $date = preg_replace('/%[A]/', $langDay_of_weekNames['long'][(int) strftime('%w', $timeStamp)], $dateFormat);
-    $date = preg_replace('/%[a]/', $langDay_of_weekNames['short'][(int) strftime('%w', $timeStamp)], $date);
-    $date = preg_replace('/%[B]/', $langMonthNames['fine'][(int) strftime('%m', $timeStamp) - 1], $date);
-    $date = preg_replace('/%[b]/', $langMonthNames['short'][(int) strftime('%m', $timeStamp) - 1], $date);
+//     // we replace %aAbB of date format
+//     // (they can be done by the system when locale date aren't available
+//     $date = preg_replace('/%[A]/', $langDay_of_weekNames['long'][(int) strftime('%w', $timeStamp)], $dateFormat);
+//     $date = preg_replace('/%[a]/', $langDay_of_weekNames['short'][(int) strftime('%w', $timeStamp)], $date);
+//     $date = preg_replace('/%[B]/', $langMonthNames['fine'][(int) strftime('%m', $timeStamp) - 1], $date);
+//     $date = preg_replace('/%[b]/', $langMonthNames['short'][(int) strftime('%m', $timeStamp) - 1], $date);
 
-    return strftime($date, $timeStamp);
-}
+//     return strftime($date, $timeStamp);
+// }
 
 /*******************************************************************************/
 /*******************************************************************************/
@@ -115,37 +115,36 @@ function claro_format_locale_date($dateFormat, $timeStamp = -1) {
 /*******************************************************************************/
 /*******************************************************************************/
 
-// function claro_format_locale_date($dateFormat, $timeStamp = -1) {
+function claro_format_locale_date($dateFormat, $timeStamp = -1) {
 
-//     global $dateFormatShort, $dateFormatMiddle;
+    global $dateFormatShort, $dateFormatMiddle;
 
-//     $locale = 'el'; // default locale
-//     $format_style = IntlDateFormatter::RELATIVE_FULL; // default formatting style
-//     print_r('localelocalelocale');
-//     if (is_null($timeStamp) or $timeStamp == '') {
-//         return '';
-//     }
+    $locale = 'el'; // default locale
+    $format_style = IntlDateFormatter::RELATIVE_FULL; // default formatting style
+    if (is_null($timeStamp) or $timeStamp == '') {
+        return '';
+    }
 
-//     if ($timeStamp == -1) {
-//         $timeStamp = time();
-//     }
+    if ($timeStamp == -1) {
+        $timeStamp = time();
+    }
 
-//     if (isset($_GET['localize'])) {
-//         $locale = $_GET['localize'];
-//     }
-//     if (isset($language)) {
-//         $locale = $language;
-//     }
+    if (isset($_GET['localize'])) {
+        $locale = $_GET['localize'];
+    }
+    if (isset($language)) {
+        $locale = $language;
+    }
 
-//     if ($dateFormat == $dateFormatShort or $dateFormat == $dateFormatMiddle) {
-//         $format_style = IntlDateFormatter::SHORT;
-//     }
+    if ($dateFormat == $dateFormatShort or $dateFormat == $dateFormatMiddle) {
+        $format_style = IntlDateFormatter::SHORT;
+    }
 
-//     /* PHP reference
-//         https://www.php.net/manual/en/intldateformatter.create.php
-//         https://www.php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants
-//     */
-//     $fmt = datefmt_create($locale, $format_style, IntlDateFormatter::SHORT, 'Europe/Athens', IntlDateFormatter::TRADITIONAL);
+    /* PHP reference
+        https://www.php.net/manual/en/intldateformatter.create.php
+        https://www.php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants
+    */
+    $fmt = datefmt_create($locale, $format_style, IntlDateFormatter::SHORT, 'Europe/Athens', IntlDateFormatter::TRADITIONAL);
 
-//     return (datefmt_format($fmt, $timeStamp));
-// }
+    return (datefmt_format($fmt, $timeStamp));
+}

@@ -24,11 +24,11 @@ $(function() {
 @section('content')
 
 
-<div class="pb-3 pt-3">
+<div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
 
     <div class="container-fluid main-container">
 
-        <div class="row">
+        <div class="row rowMedium">
 
             <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">

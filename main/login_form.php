@@ -86,8 +86,7 @@ $tool_content .= action_bar(array(
           'icon' => 'fa-reply',
           'level' => 'primary-label',
           'button-class' => 'btn-secondary')), false);
-$tool_content .= "<div class='login-page'>
-                    <div class='row'>";
+$tool_content .= "<div class='login-page'>";
 foreach ($authLink as $authInfo) {
     $tool_content .= "
       <div class='col-sm-$columns'>
@@ -104,6 +103,6 @@ foreach ($authLink as $authInfo) {
                         </div>";
 
 }
-$tool_content .= "</div></div>";
+$tool_content .= "</div>";
 
 draw($tool_content, 0, null, $head_content);

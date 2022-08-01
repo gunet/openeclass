@@ -2,9 +2,9 @@
 
 @section('content')
 
-<div class="pb-3 pt-3">
+<div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
     <div class="container-fluid main-container">
-        <div class="row">
+        <div class="row rowMedium">
 
             <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
@@ -272,7 +272,7 @@
                         <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar">
                             {!! $user_personal_calendar !!}
                             <div class='col-sm-12 mt-4 pb-2'>
-                                <div class='row'>
+                                <div class='row rowMedium'>
                                     <div class='col-sm-12 event-legend'>
                                         <span class='event event-important mt-1'></span>
                                         <span>{{ trans('langAgendaDueDay') }}</span>

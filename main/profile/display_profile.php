@@ -126,6 +126,7 @@ if ($data['userdata']) {
     }
 
     $data['profile_img'] = profile_image($data['id'], IMAGESIZE_LARGE, 'img-responsive img-circle');
+    
 
     $data['cert_completed'] = Database::get()->queryArray("SELECT identifier, template_id "
                                         . "FROM certified_users "
