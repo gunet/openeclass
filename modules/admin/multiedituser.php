@@ -98,7 +98,7 @@ if (isset($_POST['submit'])) {
             $line = strtok("\n");
         }
     }
-    if (isset($success_mgs)) { 
+    if (isset($error_mgs)) { 
         //Session::Messages($success_mgs, 'alert-success');
         Session::flash('message',$success_mgs); 
         Session::flash('alert-class', 'alert-success'); }
@@ -108,9 +108,10 @@ if (isset($_POST['submit'])) {
         Session::flash('alert-class', 'alert-danger');}
     redirect_to_home_page('modules/admin/multiedituser.php');
 } else {
-
+   
     $usernames = '';
     if (isset($_POST['dellall_submit']) or isset($_POST['activate_submit']) or isset($_POST['move_submit'])) {
+        
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         // get the incoming values
         $search = isset($_POST['search']) ? $_POST['search'] : '';
@@ -296,6 +297,7 @@ if (isset($_POST['submit'])) {
         $monthsField = "<input type='hidden' name='delete' value='true'>";
         $confirm = " onclick='return confirmation(\"" . q($langMultiDelUserConfirm) . "\");'";
     }
+
     $tool_content .= "
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$infoText</div></div>
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>

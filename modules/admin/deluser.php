@@ -68,7 +68,7 @@ $pageName = $langConfirmDelete;
 
 $data['action_bar'] = action_bar(array(
         array('title' => $langBackAdmin,
-              'url' => "modules/admin/listusers.php",
+              'url' => "listusers.php",
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
 

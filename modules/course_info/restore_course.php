@@ -170,6 +170,6 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             </div>
           ". generate_csrf_token_form_field() ."
           </form>
-        </div>";
+        </div></div>";
 }
 draw($tool_content, 3, null, $head_content);

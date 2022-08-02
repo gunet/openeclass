@@ -20,7 +20,7 @@
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
                         <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            {{ Session::get('message') }}
+                        {!! Session::get('message') !!}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </p>
                     </div>
@@ -167,8 +167,8 @@
 
                         <!--user is registered to courses-->
                         @if (count($sql) > 0)
-                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                                <div class='shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+                                <div class='shadow-lg p-3 bg-body rounded bg-primary'>
                                     <h4>{{ trans('langStudentParticipation') }}</h4>
                                     <div class='table-responsive'>
                                         <table class='announcements_table'>

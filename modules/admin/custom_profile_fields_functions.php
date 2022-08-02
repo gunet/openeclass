@@ -323,11 +323,12 @@ function render_profile_fields_content($context) {
     $return_str = '';
 
     $result = Database::get()->queryArray("SELECT id, name FROM custom_profile_fields_category ORDER BY sortorder DESC");
-print_a($result);
+
     foreach ($result as $cat) {
         $args = array();
 
         $ref_user_type = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $context['user_id'])->status;
+
         if ($ref_user_type == USER_TEACHER) {
             $user_type = '(user_type = ?d OR user_type = ?d)';
             $args[] = 1;

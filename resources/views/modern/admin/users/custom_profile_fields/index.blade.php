@@ -19,7 +19,7 @@
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
                         <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            {{ Session::get('message') }}
+                        {!! Session::get('message') !!}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </p>
                     </div>
@@ -121,7 +121,7 @@
                         </form>
                         <script src='custom_profile_fields.js'></script>
                     @else
-                        <div class='alert alert-warning'>{{ trans('langCPFNoCats') }}</div> 
+                        <div class='col-sm-12'><div class='alert alert-warning'>{{ trans('langCPFNoCats') }}</div></div> 
                     @endif
                 </div>
             </div>

@@ -20,7 +20,7 @@
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
                         <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            {{ Session::get('message') }}
+                        {!! Session::get('message') !!}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </p>
                     </div>
@@ -29,7 +29,7 @@
                      {!! isset($action_bar) ?  $action_bar : '' !!}
                      
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                        <div class='form-wrapper shadow-sm p-3 rounded'>
                        
                         <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] . $params }}' method='post' onsubmit='return validateNodePickerForm();'>
                         <fieldset>
@@ -211,6 +211,7 @@
                             <div class='row p-2'></div>
                             {!! render_profile_fields_form($cpf_context, true) !!}
                             {!! showSecondFactorChallenge() !!}
+                            <div class='row p-2'></div>   
                             <div class='col-sm-offset-2 col-sm-10'>
                             <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
                             </div>        

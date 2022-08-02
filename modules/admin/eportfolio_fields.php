@@ -285,11 +285,11 @@ if (isset($_GET['add_cat'])) { //add a new category form
               'url' => "eportfolio_fields.php",
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
-    
+              
     $fieldid = intval(getDirectReference($_GET['edit_field']));
     $result = Database::get()->querySingle("SELECT * FROM eportfolio_fields WHERE id = ?d", $fieldid);
-    if (count($result) != 0) {
-        
+   
+    if ($result) {
         $name = q($result->name);
         $shortname = q($result->shortname);
         $description = standard_text_escape($result->description);

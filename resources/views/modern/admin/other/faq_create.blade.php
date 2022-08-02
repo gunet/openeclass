@@ -20,7 +20,7 @@
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
                         <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            {{ Session::get('message') }}
+                        {!! Session::get('message') !!}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </p>
                     </div>
@@ -63,7 +63,7 @@
                     @else
                         
                             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                                <div class='panel shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                                <div class='panel'>
                                     <div class='panel-group faq-section' id='accordion' role='tablist' aria-multiselectable='true'>
                                         @if (count($faqs) == 0)
                                             <div class='panel list-group-item'>
@@ -71,7 +71,7 @@
                                             </div>
                                         @else
                                             @foreach ($faqs as $key => $faq)
-                                                <div class='panel panel-default list-group-item' data-id='{{ $faq->id }}'>
+                                                <div class='panel panel-default list-group-item mt-3' data-id='{{ $faq->id }}'>
                                                     <div class='panel-heading' role='tab' id='heading-{{ $faq->id }}'>
                                                         <h4 class='panel-title pt-1 pe-3'>
                                                             <a class='control-label-notes' role='button' data-bs-toggle='collapse' data-bs-parent='#accordion' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>

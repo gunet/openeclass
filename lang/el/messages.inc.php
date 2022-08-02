@@ -5432,6 +5432,7 @@ $langCPFSortOrderSuccess = 'Η διάταξη των κατηγοριών και
 $langCPFAdminSideMenuLink = 'Πεδία προφίλ χρήστη';
 $langCPFLinkValidFail = 'Το πεδίο %s δεν είναι έγκυρη διαδικτυακή διεύθυνση. ';
 $langCPFDateValidFail = 'Το πεδίο %s δεν είναι έγκυρη ημερομηνία. ';
+$langCPFLink = 'Σύνδεσμος';
 
 /**************************************************************
  * e-Portfolio

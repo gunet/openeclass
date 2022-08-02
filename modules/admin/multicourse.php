@@ -34,7 +34,8 @@ if (isset($_POST['submit'])) {
     checkSecondFactorChallenge();
     $line = strtok($_POST['courses'], "\n");
 
-    $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
+    // $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
+    $departments = isset($_POST['department']) ? $_POST['department'] : array();
     // validation in case it skipped JS validation for department(s)
     if (count($departments) < 1 || empty($departments[0])) {
         //Session::Messages($langEmptyAddNode);
@@ -103,6 +104,7 @@ if (isset($_POST['submit'])) {
          Session::flash('message',$error_messages); 
          Session::flash('alert-class', 'alert-danger');
     }
+    
     redirect_to_home_page('modules/admin/multicourse.php');
 }
 

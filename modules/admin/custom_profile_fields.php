@@ -211,7 +211,6 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
     $view = 'admin.users.custom_profile_fields.createCategory';
 } elseif (isset($_GET['add_field'])) { //add new field form (first step)
     $data['catid'] = intval(getDirectReference($_GET['add_field']));
-
     $pageName = $langAddField;
 
     $data['action_bar'] = action_bar(array(
@@ -263,8 +262,9 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
               'level' => 'primary-label')));
 
     $data['fieldid'] = intval(getDirectReference($_GET['edit_field']));
+    
     $result = Database::get()->querySingle("SELECT * FROM custom_profile_fields WHERE id = ?d", $data['fieldid']);
-    if (count($result) != 0) {
+    if ($result != 0) {
 
         $data['name'] = $name = q($result->name);
         $data['shortname'] = $shortname = q($result->shortname);

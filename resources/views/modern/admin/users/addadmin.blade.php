@@ -22,7 +22,7 @@
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
                         <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            {{ Session::get('message') }}
+                        {!! Session::get('message') !!}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </p>
                     </div>
@@ -66,7 +66,7 @@
                                             </div>
                                             <div class='row p-2'></div>
                                             <div class='radio'>
-                                                <input type='radio' name='adminrights' value='managedepartment'>{{ trans('langManageDepartment') }}
+                                                <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio'>{{ trans('langManageDepartment') }}
                                                 <span class='help-block'>
                                                     <br><small class='text-warning'>{{ trans('langHelpManageDepartment') }}</small>
                                                 </span>
@@ -134,4 +134,21 @@
         </div>
     </div>
 </div>
+<script>
+    $(function () {
+        if ($('#managedepartmentradio').is(':checked')) {
+            $('#departmentPicker').removeClass('hidden').show();
+        } else {
+            $('#departmentPicker').removeClass('hidden').hide();
+        }
+        $('input[name=adminrights]').change(function (e) {
+            $('#departmentPicker').removeClass('hidden');
+            if ($('#managedepartmentradio').is(':checked')) {
+                $('#departmentPicker').slideDown('fast');
+            } else {
+                $('#departmentPicker').slideUp('fast');
+            }
+        });
+    });
+</script>
 @endsection
