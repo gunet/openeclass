@@ -1,3 +1,4 @@
+<?php print_a($admins)?>
 @extends('layouts.default')
 
 @section('content')
@@ -22,71 +23,91 @@
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
                         <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                        {!! Session::get('message') !!}
+                            @if(is_array(Session::get('message')))
+                                @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                                @foreach($messageArray as $message)
+                                    {!! $message !!}
+                                @endforeach
+                            @else
+                                {!! Session::get('message') !!}
+                            @endif
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </p>
                     </div>
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
-                        
-                        <form class='form-horizontal' role='form' method='post' name='makeadmin' action='{{ $_SERVER['SCRIPT_NAME']  }}'>
-                        <fieldset>
-                                <div class='form-group'>
-                                    <label for='username' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}</label>
-                                    <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='username' size='30' maxlength='30' placeholder='{{ trans('langUsername') }}'>
-                                    </div>
-                                </div>
-                                <div class='row p-2'></div>
-                                <div class='form-group'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langAddRole') }}</label>
-                                        <div class='col-sm-12'>
-                                            <div class='radio'>
-                                                <input type='radio' name='adminrights' value='admin' checked>{{ trans('langAdministrator') }}
-                                                <span class='help-block'>
-                                                    <br><small class='text-warning'>{{ trans('langHelpAdministrator') }}</small>
-                                                </span>
-                                            </div>
-                                            <div class='row p-2'></div>
-                                            <div class='radio'>
-                                                <input type='radio' name='adminrights' value='poweruser'>{{ trans('langPowerUser') }}
-                                                <span class='help-block'>
-                                                    <br><small class='text-warning'>{{ trans('langHelpPowerUser') }}&nbsp;</small>
-                                                </span>
-                                            </div>
-                                            <div class='row p-2'></div>
-                                            <div class='radio'>
-                                                <input type='radio' name='adminrights' value='manageuser'>{{ trans('langManageUser') }}
-                                                <span class='help-block'>
-                                                    <br><small class='text-warning'>{{ trans('langHelpManageUser') }}</small>
-                                                </span>
-                                            </div>
-                                            <div class='row p-2'></div>
-                                            <div class='radio'>
-                                                <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio'>{{ trans('langManageDepartment') }}
-                                                <span class='help-block'>
-                                                    <br><small class='text-warning'>{{ trans('langHelpManageDepartment') }}</small>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                                <div class='row p-2'></div>
-                                {!! showSecondFactorChallenge() !!}
-                                <div class='form-group'>
-                                    <div class='col-sm-10 col-sm-offset-2'>
-                                        <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langAdd') }}'>
-                                    </div>
-                                </div>       
-                            </fieldset>
-                            {!! generate_csrf_token_form_field() !!}
-                        </form>
-                    </div></div>  
 
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                    @if($showFormAdmin)
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+
+                        <div class='form-wrapper shadow-sm p-3 rounded'>
+                        
+                            <form class='form-horizontal' role='form' method='post' name='makeadmin' action='{{ $_SERVER['SCRIPT_NAME']  }}'>
+                                <fieldset>
+                                    <div class='form-group mt-3'>
+                                        <label for='username' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}</label>
+                                        <div class='col-sm-12'>
+                                            <input class='form-control' type='text' name='username' size='30' maxlength='30' placeholder='{{ trans('langUsername') }}'>
+                                        </div>
+                                    </div>
+
+                                    <div class='form-group mt-3'>
+                                        <label class='col-sm-6 control-label-notes'>{{ trans('langAddRole') }}</label>
+                                            <div class='col-sm-12'>
+                                                <div class='radio'>
+                                                    <input type='radio' name='adminrights' value='admin' checked>{{ trans('langAdministrator') }}
+                                                    <span class='help-block'>
+                                                        <br><small class='text-warning'>{{ trans('langHelpAdministrator') }}</small>
+                                                    </span>
+                                                </div>
+                                                <div class='row p-2'></div>
+                                                <div class='radio'>
+                                                    <input type='radio' name='adminrights' value='poweruser'>{{ trans('langPowerUser') }}
+                                                    <span class='help-block'>
+                                                        <br><small class='text-warning'>{{ trans('langHelpPowerUser') }}&nbsp;</small>
+                                                    </span>
+                                                </div>
+                                                <div class='row p-2'></div>
+                                                <div class='radio'>
+                                                    <input type='radio' name='adminrights' value='manageuser'>{{ trans('langManageUser') }}
+                                                    <span class='help-block'>
+                                                        <br><small class='text-warning'>{{ trans('langHelpManageUser') }}</small>
+                                                    </span>
+                                                </div>
+                                                <div class='row p-2'></div>
+                                                <div class='radio'>
+                                                    <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio'>{{ trans('langManageDepartment') }}
+                                                    <span class='help-block'>
+                                                        <br><small class='text-warning'>{{ trans('langHelpManageDepartment') }}</small>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div class='form-group hidden' id='departmentPicker'>
+                                        <label class='col-sm-2 control-label'>{{$langFaculties}}</label>
+                                        <div class='col-sm-10' style='padding-top: 7px;'>
+                                            {!! $pickerHtml !!}
+                                        </div>
+                                    </div>
+                                    
+                                    {!! showSecondFactorChallenge() !!}
+
+                                    <div class='form-group mt-3'>
+                                        <div class='col-sm-10 col-sm-offset-2'>
+                                            <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langAdd') }}'>
+                                        </div>
+                                    </div>       
+                                </fieldset>
+                                {!! generate_csrf_token_form_field() !!}
+                            </form>
+                        </div>
+                    </div> 
+                    @endif 
+
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                         <div class='table-responsive'>
                             <table class='announcements_table'>
                                 <tr class='notes_thead'>
@@ -96,6 +117,7 @@
                                     <th class='text-white text-center'>{{ trans('langRole') }}</th>
                                     <th class='text-white text-center'>{!! icon('fa-gears') !!}</th>
                                 </tr>
+                            
                                 @foreach ($admins as $admin)
                                     <tr>
                                         <td>{{ $admin->id }}</td>
@@ -113,11 +135,11 @@
                                         @endif
                                         </td>
                                         <td class='text-center'>
-                                        @if ($admin->id != 1)
+                                        @if ($admin->$user_id != 1)
                                             {!! action_button([
                                                     [
                                                         'title' => trans('langDelete'),
-                                                        'url' => "$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=" . getIndirectReference($admin->id),
+                                                        'url' => "$_SERVER[SCRIPT_NAME]?delete=" . getIndirectReference($admin->user_id),
                                                         'class' => 'delete',
                                                         'icon' => 'fa-times'
                                                     ]

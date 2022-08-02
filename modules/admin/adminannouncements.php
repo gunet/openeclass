@@ -226,11 +226,13 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         $data['checked_public'] = $announcement->visible == 1 ? " checked" : "";
         $data['start_checkbox'] = isset($begindate) ? " checked" : "";
         if($begindate){
-            $data['startdate'] = $begindate->format("d-m-Y H:i");
+            //$data['startdate'] = $begindate->format("d-m-Y H:i");
+            $data['startdate'] = isset($begindate) ? $begindate->format("d-m-Y H:i") : date('d-m-Y H:i', strtotime('now'));
         }
         $data['end_checkbox'] = isset($enddate) ? " checked" : "";
         if($enddate){
-            $data['enddate'] = $enddate->format("d-m-Y H:i");
+            //$data['enddate'] = $enddate->format("d-m-Y H:i");
+            $data['enddate'] = isset($enddate) ? $enddate->format("d-m-Y H:i") : date('d-m-Y H:i', strtotime('now +1 month'));
         }
                
     } else {

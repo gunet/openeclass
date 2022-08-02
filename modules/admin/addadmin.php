@@ -110,13 +110,68 @@ if (isset($_POST['submit']) and isset($_POST['adminrights']) and $username) {
 
 
 $data['action_bar'] = action_bar([
-            [
-                'title' => $langBack,
-                'url' => "index.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label'
-            ]
-        ]);
+    [ 'title' => $langAdd,
+      'url' => 'addadmin.php?add=admin',
+      'icon' => 'fa-plus-circle',
+      'button-class' => 'btn-success',
+      'level' => 'primary-label' ],
+    [ 'title' => $langBack,
+      'url' => "index.php",
+      'icon' => 'fa-reply',
+      'level' => 'primary-label' ],
+]);
+
+if (isset($_GET['add']) or isset($_GET['edit'])) {
+    load_js('jstree3');
+    $navigation[] = ['url' => 'index.php', 'name' => $langAdmins];
+
+    if (isset($_GET['edit'])) {
+        $user_id = getDirectReference($_GET['edit']);
+        $user = Database::get()->querySingle('SELECT * FROM user WHERE id = ?d', $user_id);
+        $username = q($user->username);
+        $toolName = $langEditPrivilege;
+        $usernameValue = " readonly value='$username'";
+        $roles = Database::get()->queryArray('SELECT * FROM admin WHERE user_id = ?d', $user_id);
+        $privilege = $roles[0]->privilege;
+        $checked = [
+            'admin' => $privilege == ADMIN_USER? ' checked': '',
+            'poweruser' => $privilege == POWER_USER? ' checked': '',
+            'manageuser' => $privilege == USERMANAGE_USER? ' checked': '',
+            'managedepartment' => $privilege == DEPARTMENTMANAGE_USER? ' checked': '',
+        ];
+        if ($privilege == DEPARTMENTMANAGE_USER) {
+            $adminDeps = array_map(function ($item) {
+                return $item->department_id;
+            }, $roles);
+        }
+    } else {
+        $toolName = $langAddAdmin;
+        $usernameValue = " placeholder='$langUsername'";
+        $checked = [
+            'admin' => '',
+            'poweruser' => '',
+            'manageuser' => '',
+            'managedepartment' => '',
+        ];
+        $adminDeps = [];
+    }
+    $data['pickerHtml'] = list($pickerJs, $pickerHtml) = $tree->buildNodePicker([
+        'params' => 'name="adminDeps[]"',
+        'multiple' => true,
+        'defaults' => $adminDeps]);
+    $head_content .= $pickerJs;
+
+    $data['showFormAdmin'] = true;
+    $data['action_bar'] = action_bar([
+     [ 'title' => $langBack,
+       'url' => "index.php",
+       'icon' => 'fa-reply',
+       'level' => 'primary-label' ],
+   ]);
+
+
+}
+
 
 $data['admins'] = Database::get()->queryArray('SELECT admin.*, user.username
     FROM user, admin

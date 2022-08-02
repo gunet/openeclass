@@ -57,8 +57,11 @@
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
                         <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @if(count(Session::get('message')) > 0)
-                                <?php print_a(Session::get('message')); ?>
+                            @if(is_array(Session::get('message')))
+                                @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                                @foreach($messageArray as $message)
+                                    {!! $message !!}
+                                @endforeach
                             @else
                                 {!! Session::get('message') !!}
                             @endif

@@ -19,7 +19,14 @@
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
                         <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                        {!! Session::get('message') !!}
+                            @if(is_array(Session::get('message')))
+                                @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                                @foreach($messageArray as $message)
+                                    {!! $message !!}
+                                @endforeach
+                            @else
+                                {!! Session::get('message') !!}
+                            @endif
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </p>
                     </div>
@@ -112,7 +119,7 @@
                                         </th>
                                     </tr>
                                     @if (count($loginDouble) > 0)
-                                        {!! tablize($loginDouble) !!}
+                                     {{--   {!! tablize($loginDouble) !!}  --}}
                                         <tr>
                                             <td class=right colspan='2'>
                                                 <b>
@@ -161,7 +168,7 @@
                         @elseif  ($_GET['stats'] == 'vmusers')
                             
                                 <div class='col-sm-12 mt-5'>
-                                    <div class='shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
+                                    <div class='shadow-lg p-3 bg-body rounded bg-primary'>
                                         <div class='control-label-notes pb-3'>
                                             {{ trans('langUsers') }}
                                         </div>
