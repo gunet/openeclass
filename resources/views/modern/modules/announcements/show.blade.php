@@ -54,13 +54,13 @@
                                 <div class='panel-heading'>
                                    <span class='control-label-notes'>{!! $title !!}</span>
                                 </div>
-                                <div class='panel-body'>
+                                <div class='card-body bg-white'>
                                     <span class='text-secondary'>{!! $content !!}</span>
                                     @if ($tags_list)
                                         <div class='text-start'>{{ trans('langTags') }}: {!! $tags_list !!}</div>
                                     @endif
                                 </div>
-                                <div class='panel-footer'>
+                                <div class='panel-footer bg-transparent'>
                                     
                                     <div class='text-end text-secondary'>
                                         {!! $date !!}

@@ -124,36 +124,36 @@
 <!-- collapse menu -->
 
 <div class="collapse" id="collapse_main_section">
+    @if ($announcements)
     <div class="container-fluid main-section">
         <div class="row rowMedium">
             <div class="col-lg-12 bg-white border-15px sidebar Announcements-Homepage">
-                @if ($announcements)
-                    <div class="news">
-                        <h2 class="block-title">{{ trans('langAnnouncements') }}
-                            <a href='{{ $urlServer }}rss.php' style='padding-left:5px;'>
-                                <span class='fa fa-rss-square'></span>
-                            </a>
-                        </h2>
-                        <div class="row news-list">
-                            @php $counterAn = 0; @endphp
-                            @foreach ($announcements as $announcement)
-                                @if($counterAn < 6)
-                                <div class="col-sm-12 news-list-item">
-                                    <div class="date">
-                                        {{ claro_format_locale_date($dateFormatLong, strtotime($announcement->date)) }}
-                                    </div>
-                                    <div class="title"><a class="announcement-title-a" href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>{{$announcement->title}}</a></div>
+                <div class="news">
+                    <h2 class="block-title">{{ trans('langAnnouncements') }}
+                        <a href='{{ $urlServer }}rss.php' style='padding-left:5px;'>
+                            <span class='fa fa-rss-square'></span>
+                        </a>
+                    </h2>
+                    <div class="row news-list">
+                        @php $counterAn = 0; @endphp
+                        @foreach ($announcements as $announcement)
+                            @if($counterAn < 6)
+                            <div class="col-sm-12 news-list-item">
+                                <div class="date">
+                                    {{ claro_format_locale_date($dateFormatLong, strtotime($announcement->date)) }}
                                 </div>
-                                @endif
-                            @php $counterAn++; @endphp
-                            @endforeach
-                        </div>
-                        <div class="more-link"><a class="all_announcements mt-3" href="{{ $urlServer }}main/system_announcements.php">ΟΛΕΣ ΟΙ ΑΝΑΚΟΙΝΩΣΕΙΣ <span class='fa fa-arrow-right'></span></a></div>
+                                <div class="title"><a class="announcement-title-a" href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>{{$announcement->title}}</a></div>
+                            </div>
+                            @endif
+                        @php $counterAn++; @endphp
+                        @endforeach
                     </div>
-                @endif
+                    <div class="more-link"><a class="all_announcements mt-3" href="{{ $urlServer }}main/system_announcements.php">ΟΛΕΣ ΟΙ ΑΝΑΚΟΙΝΩΣΕΙΣ <span class='fa fa-arrow-right'></span></a></div>
+                </div>
             </div>
         </div>
     </div>
+    @endif
 
 
     <div class="container-fluid statistics mt-lg-3 mt-0">

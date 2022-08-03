@@ -34,7 +34,7 @@
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'> 
+                        <div class='form-wrapper shadow-sm p-3 mt-4 rounded'> 
                             
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                 @if (isset($announcement))
@@ -67,7 +67,7 @@
                                             <span class='input-group-addon'>
                                                 <input type='checkbox' name='startdate_active'{{ $start_checkbox }}>
                                             </span>
-                                            <input class='form-control' name='startdate' id='startdate' type='text' value='{{ $startdate }}' disabled>
+                                            <input class='form-control' name='startdate' id='startdate' type='text' value='{{ $startdate }}'>
                                         </div>
                                     </div>
                                 </div>
@@ -76,9 +76,9 @@
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
                                             <span class='input-group-addon'>
-                                                <input type='checkbox' name='enddate_active'{{ $end_checkbox }} disabled>
+                                                <input type='checkbox' name='enddate_active'{{ $end_checkbox }} {{ $end_disabled}}>
                                             </span>
-                                            <input class='form-control' name='enddate' id='enddate' type='text' value='{{ $enddate }}' disabled>
+                                            <input class='form-control' name='enddate' id='enddate' type='text' value='{{ $enddate }}'>
                                         </div>
                                     </div>
                                 </div>

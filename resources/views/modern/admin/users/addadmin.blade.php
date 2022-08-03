@@ -1,4 +1,3 @@
-<?php print_a($admins)?>
 @extends('layouts.default')
 
 @section('content')
@@ -48,7 +47,7 @@
                                     <div class='form-group mt-3'>
                                         <label for='username' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}</label>
                                         <div class='col-sm-12'>
-                                            <input class='form-control' type='text' name='username' size='30' maxlength='30' placeholder='{{ trans('langUsername') }}'>
+                                            <input class='form-control' type='text' name='username' size='30' maxlength='30' placeholder="{{ trans('langUsername') }}" {!! $usernameValue !!}>
                                         </div>
                                     </div>
 
@@ -56,28 +55,28 @@
                                         <label class='col-sm-6 control-label-notes'>{{ trans('langAddRole') }}</label>
                                             <div class='col-sm-12'>
                                                 <div class='radio'>
-                                                    <input type='radio' name='adminrights' value='admin' checked>{{ trans('langAdministrator') }}
+                                                    <input type='radio' name='adminrights' value='admin' {{$checked['admin']}}>{{ trans('langAdministrator') }}
                                                     <span class='help-block'>
                                                         <br><small class='text-warning'>{{ trans('langHelpAdministrator') }}</small>
                                                     </span>
                                                 </div>
                                                 <div class='row p-2'></div>
                                                 <div class='radio'>
-                                                    <input type='radio' name='adminrights' value='poweruser'>{{ trans('langPowerUser') }}
+                                                    <input type='radio' name='adminrights' value='poweruser' {{$checked['poweruser']}}>{{ trans('langPowerUser') }}
                                                     <span class='help-block'>
                                                         <br><small class='text-warning'>{{ trans('langHelpPowerUser') }}&nbsp;</small>
                                                     </span>
                                                 </div>
                                                 <div class='row p-2'></div>
                                                 <div class='radio'>
-                                                    <input type='radio' name='adminrights' value='manageuser'>{{ trans('langManageUser') }}
+                                                    <input type='radio' name='adminrights' value='manageuser' {{$checked['manageuser']}}>{{ trans('langManageUser') }}
                                                     <span class='help-block'>
                                                         <br><small class='text-warning'>{{ trans('langHelpManageUser') }}</small>
                                                     </span>
                                                 </div>
                                                 <div class='row p-2'></div>
                                                 <div class='radio'>
-                                                    <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio'>{{ trans('langManageDepartment') }}
+                                                    <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio' {{$checked['managedepartment']}}>{{ trans('langManageDepartment') }}
                                                     <span class='help-block'>
                                                         <br><small class='text-warning'>{{ trans('langHelpManageDepartment') }}</small>
                                                     </span>
@@ -132,11 +131,20 @@
                                             {{ trans('langManageUser') }}
                                         @elseif ($admin->privilege == 3)
                                             {{ trans('langManageDepartment') }}
+                                            {!! $message !!}
                                         @endif
                                         </td>
                                         <td class='text-center'>
-                                        @if ($admin->$user_id != 1)
+                                        @if ($admin->user_id != 1)
                                             {!! action_button([
+                                                    [   'title' => trans('langEditPrivilege'),
+                                                        'url' => "{$urlAppend}modules/admin/addadmin.php?edit=$indirect". getIndirectReference($admin->user_id),
+                                                        'icon' => 'fa-edit' 
+                                                    ],
+                                                    [   'title' => trans('langEditUser'),
+                                                        'url' => "{$urlAppend}modules/admin/edituser.php?u={$admin->user_id}",
+                                                        'icon' => 'fa-edit' 
+                                                    ],
                                                     [
                                                         'title' => trans('langDelete'),
                                                         'url' => "$_SERVER[SCRIPT_NAME]?delete=" . getIndirectReference($admin->user_id),

@@ -38,7 +38,7 @@
                     @if (get_admin_rights($user) > 0)
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                             <div class='alert alert-warning'>
-                                {{ trans('langCantDeleteAdmin', ["<em>$u_realname ($u_account)</em>"]) }}
+                                {{ trans('langCantDeleteAdmin', ["$u_realname ($u_account)"]) }}
                                 {{ trans('langIfDeleteAdmin') }}
                             </div>
                         </div>

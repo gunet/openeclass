@@ -58,8 +58,7 @@
                                         <span><img class="user-icon-filename" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}"
                                                 alt="{{ $uname }}">{{ $uname }}</span>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown_menu_user" aria-labelledby="btnGroupDrop1">
-
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown_menu_user mt-1 shadow-lg" aria-labelledby="btnGroupDrop1">
                                         @if($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == ADMIN_USER)
                                         <li class='p-1'>
                                             <a class="dropdown-item" href="{{ $urlAppend }}modules/create_course/create_course.php">
@@ -68,7 +67,7 @@
                                                         <span class="fas fa-plus-circle text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
+                                                        <span class='fs-6 fw-bold'>
                                                             {{ trans('langCourseCreate') }}
                                                         </span>
                                                     </div>
@@ -83,7 +82,7 @@
                                                         <span class="fas fa-home bg-transparent text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
+                                                        <span class='fs-6 fw-bold'>
                                                             {{ trans('langMyPortfolio') }}
                                                         </span>
                                                     </div>
@@ -98,7 +97,7 @@
                                                         <span class="fas fa-graduation-cap text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
+                                                        <span class='fs-6 fw-bold'>
                                                             {{ trans('langMyCoursesSide') }}
                                                         </span>
                                                     </div>
@@ -113,7 +112,7 @@
                                                         <span class="fas fa-bell text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
+                                                        <span class='fs-6 fw-bold'>
                                                             {{ trans('langMyAnnouncements') }}
                                                         </span>
                                                     </div>
@@ -128,7 +127,7 @@
                                                         <span class="fas fa-sticky-note text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
+                                                        <span class='fs-6 fw-bold'>
                                                             {{ trans('langNotes') }}
                                                         </span>
                                                     </div>
@@ -143,7 +142,7 @@
                                                             <span class="fas fa-briefcase text-warning pt-1"></span>
                                                         </div>
                                                         <div class='col-10 ps-3 pe-3'>
-                                                            <span class='text-white user_menu_tool'>
+                                                            <span class='fs-6 fw-bold'>
                                                                 {{ trans('langMyePortfolio') }}
                                                             </span>
                                                         </div>
@@ -158,7 +157,7 @@
                                                         <span class="fas fa-chart-bar text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
+                                                        <span class='fs-6 fw-bold'>
                                                             {{ trans('langMyStats') }}
                                                         </span>
                                                     </div>
@@ -173,7 +172,7 @@
                                                             <span class="fas fa-location-arrow text-warning pt-1"></span>
                                                         </div>
                                                         <div class='col-10 ps-3 pe-3'>
-                                                            <span class='text-white user_menu_tool'>
+                                                            <span class='fs-6 fw-bold'>
                                                                 {{ trans('langMyBlog') }}
                                                             </span>
                                                         </div>
@@ -188,7 +187,7 @@
                                                         <span class="fas fa-envelope text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
+                                                        <span class='fs-6 fw-bold'>
                                                             {{ trans('langMyDropBox') }}
                                                         </span>
                                                     </div>
@@ -202,7 +201,7 @@
                                                         <span class="fas fa-bell text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
+                                                        <span class='fs-6 fw-bold'>
                                                             {{ trans('langMyAgenda') }}
                                                         </span>
                                                     </div>
@@ -216,7 +215,7 @@
                                                         <span class="fas fa-user text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
+                                                        <span class='fs-6 fw-bold'>
                                                             {{ trans('langMyProfile') }}
                                                         </span>
                                                     </div>
@@ -230,7 +229,7 @@
                                                         <span class="fa fa-magic fa-fw text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
+                                                        <span class='fs-6 fw-bold'>
                                                             {{ trans('langMyWidgets') }}
                                                         </span>
                                                     </div>
@@ -244,7 +243,7 @@
                                                         <span class="fa fa-sort-numeric-desc fa-fw text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
+                                                        <span class='fs-6 fw-bold'>
                                                             {{ trans('langGradeTotal') }}
                                                         </span>
                                                     </div>
@@ -258,7 +257,7 @@
                                                         <span class="fa fa-trophy fa-fw text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='text-white user_menu_tool'>
+                                                        <span class='fs-6 fw-bold'>
                                                             {{ trans('langMyCertificates') }}
                                                         </span>
                                                     </div>
@@ -273,7 +272,7 @@
                                                             <span class="fas fa-folder text-warning pt-1"></span>
                                                         </div>
                                                         <div class='col-10 ps-3 pe-3'>
-                                                            <span class='text-white user_menu_tool'>
+                                                            <span class='fs-6 fw-bold'>
                                                                 {{ trans('langMyDocs') }}
                                                             </span>
                                                         </div>
@@ -282,13 +281,14 @@
                                             </li>
                                         @endif
 
-
-                                        <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:14px;'>
-                                            <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
-                                            <li>
-                                                <button type='submit' class='btn btn-secondary w-100 mt-3' name='submit'><i class="fas fa-sign-out-alt"></i><span class='ps-2 fs-6 text-white'>{{ trans('langLogout') }}</span></button>
-                                            </li>
-                                        </form>
+                                        <li class='p-1'>
+                                            <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:14px;'>
+                                                <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
+                                                <li>
+                                                    <button type='submit' class='btn btn-secondary btn-sm w-100 mt-1 border border-dark bg-light' name='submit'><i class="fas fa-sign-out-alt text-white fw-bold"></i><span class='ps-2 fs-6 fw-bold text-white text-uppercase'>{{ trans('langLogout') }}</span></button>
+                                                </li>
+                                            </form>
+                                         </li>
 
                                     </ul>
                                 </div>

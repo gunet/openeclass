@@ -184,8 +184,8 @@
             // var row_id = $(this).data('id');
 
             var temp_id = this.id;
-            var row_id = temp_id.split(".")[0];
-            var vis = temp_id.split(".")[1];
+            var row_id = temp_id.split("|")[0];
+            var vis = temp_id.split("|")[1];
 
             console.log('the id:'+temp_id);
             console.log('the row_id:'+row_id);

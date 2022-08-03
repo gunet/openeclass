@@ -34,7 +34,7 @@
                     
                     {!! isset($action_bar) ?  $action_bar : '' !!}
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                        <div class='form-wrapper shadow-sm p-3 rounded'>
                             
                             <form role='form' class='form-horizontal' action='listcours.php?search=yes' method='get'>
                                 <fieldset>      

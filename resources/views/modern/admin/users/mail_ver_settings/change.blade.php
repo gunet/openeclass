@@ -35,24 +35,24 @@
                     {!! isset($action_bar) ?  $action_bar : '' !!}
                     @if (isset($sub))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                        <div class='form-wrapper shadow-sm p-3 rounded'>
                         
                             <form class='form-horizontal' role='form' name='mail_verification_change' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
-                        <fieldset>		
-                            <div class='row p-2'></div>
-                                <div class='form-group'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langChangeTo') }}:</label>
-                                    <div class='col-sm-12'>
-                                        {!! selection($mail_ver_data, "new_mail_ver", $sub, "class='form-control'") !!}
-                                    </div>
-                        </div>
-                                {!! showSecondFactorChallenge() !!}
+                            <fieldset>		
                                 <div class='row p-2'></div>
-                        <div class='col-sm-offset-2 col-sm-10'>
-                                    <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langEdit') }}'>
-                                </div>
-                        <input type='hidden' name='old_mail_ver' value='{{ $sub }}'>		
-                        </fieldset>
+                                    <div class='form-group'>
+                                        <label class='col-sm-6 control-label-notes'>{{ trans('langChangeTo') }}:</label>
+                                        <div class='col-sm-12'>
+                                            {!! selection($mail_ver_data, "new_mail_ver", $sub, "class='form-control'") !!}
+                                        </div>
+                                    </div>
+                                    {!! showSecondFactorChallenge() !!}
+                                    <div class='row p-2'></div>
+                                    <div class='col-sm-offset-2 col-sm-10'>
+                                        <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langEdit') }}'>
+                                    </div>
+                                    <input type='hidden' name='old_mail_ver' value='{{ $sub }}'>		
+                            </fieldset>
                                 {!! generate_csrf_token_form_field() !!}
                             </form>
                         </div></div>

@@ -109,18 +109,6 @@ if (isset($_POST['submit']) and isset($_POST['adminrights']) and $username) {
 }
 
 
-$data['action_bar'] = action_bar([
-    [ 'title' => $langAdd,
-      'url' => 'addadmin.php?add=admin',
-      'icon' => 'fa-plus-circle',
-      'button-class' => 'btn-success',
-      'level' => 'primary-label' ],
-    [ 'title' => $langBack,
-      'url' => "index.php",
-      'icon' => 'fa-reply',
-      'level' => 'primary-label' ],
-]);
-
 if (isset($_GET['add']) or isset($_GET['edit'])) {
     load_js('jstree3');
     $navigation[] = ['url' => 'index.php', 'name' => $langAdmins];
@@ -133,7 +121,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
         $usernameValue = " readonly value='$username'";
         $roles = Database::get()->queryArray('SELECT * FROM admin WHERE user_id = ?d', $user_id);
         $privilege = $roles[0]->privilege;
-        $checked = [
+        $data['checked'] = [
             'admin' => $privilege == ADMIN_USER? ' checked': '',
             'poweruser' => $privilege == POWER_USER? ' checked': '',
             'manageuser' => $privilege == USERMANAGE_USER? ' checked': '',
@@ -147,7 +135,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
     } else {
         $toolName = $langAddAdmin;
         $usernameValue = " placeholder='$langUsername'";
-        $checked = [
+        $data['checked'] = [
             'admin' => '',
             'poweruser' => '',
             'manageuser' => '',
@@ -155,11 +143,16 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
         ];
         $adminDeps = [];
     }
-    $data['pickerHtml'] = list($pickerJs, $pickerHtml) = $tree->buildNodePicker([
+
+    $data['usernameValue'] = $usernameValue;
+
+    list($pickerJs, $pickerHtml) = $tree->buildNodePicker([
         'params' => 'name="adminDeps[]"',
         'multiple' => true,
         'defaults' => $adminDeps]);
     $head_content .= $pickerJs;
+
+    $data['pickerHtml'] = $pickerHtml;
 
     $data['showFormAdmin'] = true;
     $data['action_bar'] = action_bar([
@@ -170,13 +163,55 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
    ]);
 
 
+}else {
+    $toolName = $langAdmins;
+    $data['showFormAdmin'] = false;
+    $data['action_bar'] = action_bar([
+        [ 'title' => $langAdd,
+          'url' => 'addadmin.php?add=admin',
+          'icon' => 'fa-plus-circle',
+          'button-class' => 'btn-success',
+          'level' => 'primary-label' ],
+        [ 'title' => $langBack,
+          'url' => "index.php",
+          'icon' => 'fa-reply',
+          'level' => 'primary-label' ],
+    ]);
 }
 
 
-$data['admins'] = Database::get()->queryArray('SELECT admin.*, user.username
+$data['admins'] = $admins = Database::get()->queryArray('SELECT admin.*, user.username
     FROM user, admin
     WHERE user.id = admin.user_id
     ORDER BY user_id');
+
+$out = [];
+foreach ($admins as $admin) {
+    if (isset($out[$admin->user_id])) {
+        $out[$admin->user_id]->department_id[] = $admin->department_id;
+    } else {
+        if (!is_null($admin->department_id)) {
+            $admin->department_id = [$admin->department_id];
+        }
+        $out[$admin->user_id] = $admin;
+    }
+}
+foreach ($out as $row) {
+    $message = [
+        ADMIN_USER => $langAdministrator,
+        POWER_USER => $langPowerUser,
+        USERMANAGE_USER => $langManageUser,
+        DEPARTMENTMANAGE_USER => $langManageDepartment,
+    ][$row->privilege];
+    if ($row->privilege == DEPARTMENTMANAGE_USER) {
+        $data['message'] = '<ul>' .
+            implode('', array_map(function ($department_id) use ($tree) {
+                return '<li>' . $tree->getFullPath($department_id) . '</li>';
+            }, $row->department_id)) .
+            '</ul>';
+    }
+}
+
 $data['menuTypeID'] = 3;
 view ('admin.users.addadmin', $data);
 

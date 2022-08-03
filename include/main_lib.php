@@ -3540,9 +3540,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                 "</$primaryTag>$subMenu$form_end");
         } else {
             array_unshift($out_secondary,
-                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class'" . $href .
+                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class fs-6 fw-bold'" . $href .
                 " $link_attrs>" .
-                "<span class='fa $option[icon]'></span> $title</a>$form_end</li>");
+                "<div class='row'><div class='col-1'><span class='fa $option[icon] text-warning mt-1'></span></div><div class='col-10'> $title</div></div></a>$form_end</li>");
         }
         $i++;
     }
@@ -3556,7 +3556,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-cogs";
     if (count($out_secondary)) {
         $action_button .= "<div class='btn-group'><button type='button' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
-        $action_button .= "  <ul class='row p-3 dropdown-menu dropdown-menu-end myuls' role='menu'>
+        $action_button .= "  <ul class='row p-3 dropdown-menu dropdown-menu-end myuls shadow-lg' role='menu'>
                      ".implode('', $out_secondary)."
                   </ul></div>";
     }

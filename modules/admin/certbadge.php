@@ -249,7 +249,7 @@ if (isset($_GET['action'])) {
  
         $tool_content .= "
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                    <div class='form-wrapper shadow-sm p-3 bg-body rounded bg-primary'>
+                    <div class='form-wrapper shadow-sm p-3 rounded'>
                         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>";
                         if (isset($_GET['bid'])) {
                             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_data->filename";

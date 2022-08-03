@@ -30,7 +30,7 @@ $require_departmentmanage_user = true;
 require_once '../../include/baseTheme.php';
 
 if (isset($_GET['c'])) {
-   $data['course_id'] = $course_id = intval(getDirectReference($_GET['c']));
+   $data['course_id'] = $course_id = intval($_GET['c']);
 } else {
     $data['course_id'] = $course_id = 0;
 }

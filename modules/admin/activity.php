@@ -210,7 +210,7 @@ $(function() {
             $heading = q($heading);
             $indirectId = getIndirectReference($item->id);
             $tool_content .= "
-      <div class='panel panel-default' data-id='$indirectId'>
+      <div class='panel panel-default mt-3' data-id='$indirectId'>
         <div class='panel-heading pt-2 pe-3 ps-3'>
           <span class='control-label-notes'>$heading</span>
           <div class='text-end text-secondary'>$type " .
@@ -224,10 +224,10 @@ $(function() {
             foreach ($headings as $lang => $msg) {
                 $tool_content .= "
           <div class='row'>
-            <div class='col-2 text-right'>
+            <div class='col-md-2 col-4 text-right'>
               <strong>" . $langNameOfLang[langcode_to_name($lang)] . ":</strong>
             </div>
-            <div class='col-10'>" . q($msg) . "</div>
+            <div class='col-md-10 col-8'>" . q($msg) . "</div>
           </div>";
             }
             $tool_content .= "
