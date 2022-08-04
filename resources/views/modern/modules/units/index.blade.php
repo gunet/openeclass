@@ -194,7 +194,7 @@
                             
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                         <div class='panel panel-default'>
-                            <div class='panel-body'>
+                            <div class='panel-body Borders'>
                                 <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
                                     <input type='hidden' name='course' value='{{ $course_code }}'>
                                     <div class='form-group'>

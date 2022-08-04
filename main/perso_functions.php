@@ -195,6 +195,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
         // Ολες οι τελευταιες ανακοινωσεις εμφανιζονται οταν πατησει ο χρηστης το κουμπι.
         $counterAn = 0;
         $ann_content = '';
+        $ann_content .= "<ul class='list-group list-group-flush'>";
         foreach ($q as $ann) {
             if ($counterAn <= 1){
                 if (isset($ann->code) & $ann->code != '') {
@@ -202,7 +203,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_url = $urlAppend . 'modules/announcements/index.php?course=' . $ann->code . '&amp;an_id=' . $ann->id;
                     $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
                     $ann_content .= "
-                        <li class='list-item p-3'>
+                        <li class='list-group-item p-2'>
                             <div class='item-wholeline'>
                                     <div class='text-title'>
                                         <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
@@ -215,7 +216,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_url = $urlAppend . 'main/system_announcements.php?an_id=' . $ann->id;
                     $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
                     $ann_content .= "
-                    <li class='list-item p-3'>
+                    <li class='list-group-item p-2'>
                         <div class='item-wholeline'>
                                 <div class='text-title'>
                                     <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
@@ -230,6 +231,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
             }
             $counterAn++;
         }
+        $ann_content .= "</ul>";
         return $ann_content;
     }
 }
@@ -247,6 +249,7 @@ function getUserMessages() {
     $mbox = new Mailbox($uid, 0);
     $msgs = $mbox->getInboxMsgs('', 5);
     $counterMs = 0;
+    $message_content .= "<ul class='list-group list-group-flush'>";
     foreach ($msgs as $message) {
         if($counterMs <= 1){
             if ($message->course_id > 0) {
@@ -255,7 +258,7 @@ function getUserMessages() {
                 $course_title = '';
             }
             $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
-            $message_content .= "<li class='list-item p-3'>
+            $message_content .= "<li class='list-group-item p-2'>
                                     <div class='item-wholeline'>
                                         <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
                                             <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
@@ -267,6 +270,7 @@ function getUserMessages() {
         }
         $counterMs++;
     }
+    $message_content .= "</ul'>";
     return $message_content;
 }
 

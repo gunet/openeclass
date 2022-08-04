@@ -735,7 +735,7 @@ function course_announcements() {
                 if($counter_ann<=1){
                 $ann_url = $urlAppend . "modules/announcements/index.php?course=$course_code&amp;an_id=" . $ann->id;
                 $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
-                $ann_content .= "<li class='list-item p-3'>
+                $ann_content .= "<li class='list-group-item p-2'>
                                     <span class='item-wholeline'><div class='text-title'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>$ann_date</span>
                                 </li>";
                 }

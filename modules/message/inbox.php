@@ -83,7 +83,7 @@ if (isset($_GET['mid'])) {
         <div id='del_msg'></div>
                 <div id='msg_area'>
                     <div class='panel panel-primary'>
-                        <div class='panel-body'>
+                        <div class='panel-body Borders'>
                             <div class='row p-2 margin-bottom-thin'>
                                 <div class='col-sm-2'>
                                     <strong class='control-label-notes'>$langSubject:</strong>
@@ -161,7 +161,7 @@ if (isset($_GET['mid'])) {
         if ($msg->course_id == 0 && !$personal_msgs_allowed) {
             //do not show reply form when personal messages are not allowed
         } else {
-            $out .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded' id='replyBox' style='display:none;'>";
+            $out .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded mt-3' id='replyBox' style='display:none;'>";
             if ($course_id == 0) {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
                 if ($msg->course_id != 0) {//thread belonging to a course viewed from the central ui
@@ -263,7 +263,7 @@ if (isset($_GET['mid'])) {
                </form></div></div>";
 
             // forward form
-            $out .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded' id='forwardBox' style='display:none;'>";
+            $out .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded mt-3' id='forwardBox' style='display:none;'>";
             if ($course_id == 0) {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
                 if ($msg->course_id != 0) { // thread belonging to a course viewed from the central ui

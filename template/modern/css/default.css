@@ -5,10 +5,51 @@
 /*---------------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------------*/
 
+html{
+  height:100%;
+}
 body{
-  background-color: #f5f5f5;
+  /* background-color: #f5f5f5; */
+  background-color: #eaeaea;
   font-family: 'FontAwesome';
   font-size: 18px;
+}
+
+.h-400px{
+  height:400px;
+}
+
+.text-warning{
+  color:#f79256 !important;
+}
+
+.colorPalette{
+  color: #fbd1a2;
+}
+
+.Borders{
+  border-radius:15px;
+}
+
+.BordersTop{
+  border-top-left-radius:15px;
+  border-top-right-radius:15px;
+}
+
+.BordersBottom{
+  border-bottom-left-radius:15px;
+  border-bottom-right-radius:15px;
+}
+
+
+.NoBorderTop{
+   border-top-left-radius:0px;
+   border-top-right-radius:0px;
+}
+
+.NoBorderBottom{
+  border-bottom-left-radius:0px;
+  border-bottom-right-radius:0px;
 }
 
 img {
@@ -32,10 +73,14 @@ li {
   height:300px;
 }
 
+.Borders{
+  border-radius:15px;
+}
+
 .navbar-eclass {
   height: 170px;
   overflow: visible;
-  background: rgba(0, 62, 135, 0.9);
+  background:#1d4e89;
   border: 0 none;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
@@ -70,10 +115,10 @@ li {
 }
 
 
-.form-wrapper.shadow-sm{
+/* .form-wrapper.shadow-sm{
   background:#F5F5F4;
   border: solid 1px #c5c5c5;
-}
+} */
 
 .modal-header .close{
   background-color: transparent;
@@ -87,6 +132,11 @@ a{
 
 .main-container{
     width:100%;
+}
+
+.btn:focus,.btn:active{
+  outline: none !important;
+  box-shadow: none;
 }
 
 
@@ -106,6 +156,7 @@ a{
   padding: 80px 0;
   position: relative;
   height:auto;
+  border-radius:15px;
 }
 
 .testimonials .testimonial {
@@ -117,6 +168,8 @@ a{
   color: #001146;
   transition: all 0.4s;
   font-size: 16px;
+  max-height:400px;
+  overflow-y: auto;
 }
 
 .testimonials .testimonial>div {
@@ -140,7 +193,7 @@ a{
 .testimonials .testimonial.slick-current {
   background: #003e87;
   color: #fff;
-  height:auto;
+  max-height:400px;
   overflow-y: auto;
 }
 
@@ -158,7 +211,7 @@ a{
   width: 66px;
   height: 66px;
   top: 50%;
-  left: 9vw;
+  left: 15%;
   transform: translate(-50%, -50%);
   background: url(../images/prev.svg) no-repeat center;
   background-size: contain;
@@ -170,9 +223,25 @@ a{
 }
 
 .testimonials .slick-arrow.slick-next {
-  left: 58vw;
+  left: 85%;
   background: url(../images/next.svg) no-repeat center;
   background-size: contain;
+}
+
+@media (max-width:767px){
+  .testimonial{
+    height:300px;
+    overflow-y: auto;
+    margin: 0 20px !important;
+    padding: 40px !important;
+  }
+  .testimonials .testimonial.slick-current {
+    height:300px;
+    overflow-y: auto;
+  }
+}
+@media (min-width:2549px){
+  
 }
 
 /*---------------------------------------- NOT VISIBLE CLASSES ---------------------------------*/
@@ -257,7 +326,7 @@ a{
 
 .checkmark2--bordered::after{
   left: 8px !important;
-    top: 3px !important;
+  top: 3px !important;
 }
 
 /* On mouse-over, add a grey background color */
@@ -308,15 +377,16 @@ a{
   }
 
   .dropdown_menu_user .dropdown-item:hover{
-    background-color: #003F87;
+    background-color: #1d4e89;
     color:white;
   }
 
   .user-language-menu{
-    background-color: #003F87;
+    background: #ffffff;
   }
   .user-language-menu .dropdown-item:hover{
-    background-color: blue;
+    background-color: #1d4e89;
+    color:white;
   }
 
   .fab.fa-facebook-f{
@@ -583,15 +653,8 @@ a{
   .lesson-image:hover{
     opacity:0.5;
   }
-  .panel-body-eportfolio-edit{
-      border:2px solid rgba(0,63,135,0.1);
-  }
   
   .fa.fa-replay.space-after-icon{
-      color:white;
-  }
-  
-  .hidden-xs{
       color:white;
   }
   
@@ -886,21 +949,19 @@ a{
   .jumbotron.jumbotron-login{
       background-repeat: no-repeat; background-size: cover;
       background-image: url(../images/books.jpeg);
-      border-top-left-radius: 15px;
-      border-bottom-left-radius: 15px;
       /* background-image: url('/courses/theme_data/7/dhmiourgia-e-class-psd.jpg'), radial-gradient(closest-corner at 30% 60%, rgb(0, 11, 255), rgb(139, 131, 169)) */
   }
 
-  /* after login-form disabled from admin */
-  .temp_jumbotron{
-    border-radius: 15px;
-    height: 410px;
-  }
-  
   .login-form-Homepage{
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
     background:#F5F5F5;
+  }
+
+  .cardLogin{
+    -webkit-box-shadow: 0 0 30px black !important;
+    box-shadow: 0 0 30px black !important;
+    background-color: rgba(255, 255, 255, 0.776);
   }
 
   .btnMoreHomePage{
@@ -913,19 +974,6 @@ a{
   .btnMoreHomePage:hover{
     background: #a5bdd7;
     color: #fafafa;
-  }
-
-  .WelcomeEclassPanelDefault{
-    border-radius: 15px;
-  }
-
-  .borderHeadingPanel{
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
-  }
-  .borderBodyPanel{
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
   }
 
   .appstore_img{
@@ -968,8 +1016,9 @@ a{
       color: #005ed7;
   }
   
+  /* the titles of action_bars */
   .hidden-xs{
-      color:white;
+    color:white;
   }
 
   .wrapper {
@@ -994,11 +1043,12 @@ a{
     background-color: lightgrey;
     border: none;
     border-radius: 15px;
+    height:40px;
   }
   
   .login-form-submit {
     border: solid thin;
-    border-radius: 15px;
+    border-radius: 15px !important;
     border-color: #003e87;
     color: #003e87;
     font-size: 18px;
@@ -1013,7 +1063,7 @@ a{
   }
 
   .statistics {
-    min-height: 400px;
+    min-height: 300px;
     padding: 50px 15px;
     background: url('../images/statistics.jpg') no-repeat center;
     background-size: cover;
@@ -1045,6 +1095,10 @@ a{
     z-index: 0;
     background: #001146;
     opacity: 0.9;
+    border-radius:15px;
+  }
+  @media(max-width:991px){
+    .statistics:before {border-radius:0px;}
   }
   
   .statistics i {
@@ -1210,7 +1264,7 @@ a{
 
   .control-label-notes{
     font-size:19px;
-    color:#003F87;
+    color:#1d4e89;
     font-weight: 600;
   }
    
@@ -1405,8 +1459,8 @@ a{
 
   .panel-admin{
     border-radius:11px;
-    background: #003F87;
-    border:solid 2px #003F87;
+    background: #1d4e89;
+    border:solid 2px #1d4e89;
   }
   .panel-admin .panel-title{
     color:#fafafa;
@@ -1426,8 +1480,8 @@ a{
 
   .panel-success{
     border-radius:11px;
-    background: #9dd487;
-    border:solid 2px #9dd487;
+    background: #7dcfb6;
+    border:solid 2px #7dcfb6;
   }
   .panel-success .panel-title{
     color:black;
@@ -1435,7 +1489,7 @@ a{
 
   .panel-default,.panel-action-btn-default{
     border-radius: 15px;
-    background: #F5F5F5;
+    background:  #F5F5F5;
     border:solid 2px #F5F5F5;
   }
   .panel-default .panel-title{
@@ -1445,10 +1499,16 @@ a{
     color:#001146;
   }
 
+  .panel-warning{
+    border-radius:15px;
+    background:#fbd1a2;
+    border:solid 2px #fbd1a2;
+  }
+
   .panel-info{
     border-radius:11px;
-    background: #17a2b8;
-    border:solid 2px #17a2b8;
+    background: #00b2ca;
+    border:solid 2px #00b2ca;
   }
   .panel-info .panel-title{
     color:#fafafa;
@@ -1470,14 +1530,7 @@ a{
     box-shadow: 0 0 2px rgb(92, 93, 121);
   }
   .panel-heading,.media-left{
-    /* border-top-right-radius: 15px;
-    border-top-left-radius: 15px; */
-    /* border-radius: 15px; */
     padding:10px 15px;
-    /* background: #F5F5F4;
-    -webkit-box-shadow: inset 0 0 2px rgba(127,132,153,0.35);
-      -moz-box-shadow: inset 0 0 2px rgba(127,132,153,0.35);
-      box-shadow: inset 0 0 2px rgba(127,132,153,0.35); */
   }
   .panel-heading-login{
     border-top-right-radius: 15px;
@@ -1506,8 +1559,8 @@ a{
     background: #ffffff;
     border-bottom-left-radius:11px;
     border-bottom-right-radius:11px;
-    border-top-left-radius:11px;
-    border-top-right-radius:11px;
+    /* border-top-left-radius:11px;
+    border-top-right-radius:11px; */
   }
   .borderBody{
     border-top-right-radius:15px; border-top-left-radius:15px;
@@ -1796,7 +1849,7 @@ a{
      margin: auto;
     }
 
-    .navbar-eclass, .site-footerMobile, .border-15px{
+    .navbar-eclass, .site-footerMobile, .border-15px, .BordersTop{
       border-radius: 0px;
     }
     .Announcements-Homepage{
@@ -1860,20 +1913,17 @@ a{
       
    }
 
-   .login-form-spacing{
-      background: #F5F5F5;
-      border-radius: 15px;
-   }
+   /* the titles of action_bars */
+   .hidden-xs{
+    display:none;
+  }
+
 
    .login-form-spacing2{
     border-radius:15px;
     background: #003F87;
     padding:5px 5px ;
     margin-top:10px;
-   }
-
-   .btnlostpass{
-     color:#fafafa !important;
    }
 
     .user-icon {
@@ -1994,9 +2044,9 @@ a{
       
    }
 
-   .login-form-spacing{
-      background: #F5F5F5;
-      border-radius: 15px;
+   /* the titles of action_bars */
+   .hidden-xs{
+    display:none;
    }
 
    .login-form-spacing2{
@@ -2004,10 +2054,6 @@ a{
     background: #003F87;
     padding:5px 5px ;
     margin-top:10px;
-   }
-
-   .btnlostpass{
-     color:#fafafa !important;
    }
 
     .user-icon {
@@ -2127,9 +2173,9 @@ a{
        
     }
 
-    .login-form-spacing{
-       background: #F5F5F5;
-       border-radius: 15px;
+    /* the titles of action_bars */
+    .hidden-xs{
+      display:none;
     }
 
     .login-form-spacing2{
@@ -2137,10 +2183,6 @@ a{
       background: #003F87;
       padding:5px 5px ;
       margin-top:10px;
-     }
-  
-     .btnlostpass{
-       color:#fafafa !important;
      }
 
     .user-icon {
@@ -2291,9 +2333,9 @@ a{
       
    }
 
-   .login-form-spacing{
-      background: #F5F5F5;
-      border-radius: 15px;
+   /* the titles of action_bars */
+   .hidden-xs{
+    display:none;
    }
 
    .login-form-spacing2{
@@ -2301,10 +2343,6 @@ a{
     background: #003F87;
     padding:5px 5px ;
     margin-top:10px;
-   }
-
-   .btnlostpass{
-     color:#fafafa !important;
    }
 
     .user-icon {
@@ -2886,35 +2924,3 @@ a{
       }
   }
 
-  /* ---------------------------------------------------------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------------------------------------------------------- */
-/* ------------------------------------------------- OTHERS ------------------------------------------------------------- */
-
-
-  @media (max-width: 1024px) {
-    .testimonials .slick-arrow {
-      left: 12vw;
-    }
-  
-    .testimonials .slick-arrow.slick-next {
-      left: 88vw;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .testimonials .testimonial {
-      margin: 0 20px;
-      padding: 40px;
-    }
-  }
-  
-  
-  

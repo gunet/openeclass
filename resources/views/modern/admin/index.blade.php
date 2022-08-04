@@ -71,9 +71,9 @@
                                             <div class='col-sm-12'>
                                                 <div class='panel panel-admin'>
                                                     <div class='panel-heading text-center'>
-                                                        <span class='text-white'>{{ trans('langQuickLinks') }}</span>
+                                                        <span class='colorPalette'>{{ trans('langQuickLinks') }}</span>
                                                     </div>
-                                                    <div class='panel-body'>
+                                                    <div class='panel-body NoBorderTop'>
                                                         <div class='row pt-2 pb-2'>
                                                             <a href='search_user.php' class='w-50 btn btn-transparent text-primary btn-xs'>{{ trans('langSearchUser') }}</a>
                                                             <a href='searchcours.php' class='w-50 btn btn-transparent text-primary btn-xs'>{{ trans('langSearchCourse') }}</a>
@@ -92,9 +92,9 @@
                                             <div class='col-sm-12 mt-3'>
                                                 <div class='panel panel-admin'>
                                                     <div class='panel-heading text-center'>
-                                                        <span class='text-white'>{{ trans('langPlatformIdentity') }}</span>
+                                                        <span class='colorPalette'>{{ trans('langPlatformIdentity') }}</span>
                                                     </div>
-                                                    <div class='panel-body'>
+                                                    <div class='panel-body NoBorderTop'>
                                                         <div class='row p-2 margin-bottom-thin'>
                                                             <div class='col-sm-6'>
                                                                 {!! icon('fa-check') !!} <strong class='control-label-notes'>{{ trans('langWebServerVersion') }}</strong>
@@ -142,9 +142,9 @@
                                             <div class='col-sm-12 mt-3'>
                                                 <div class='panel panel-admin'>
                                                     <div class='panel-heading text-center'>
-                                                        <span class='text-white'>{{ trans('langIndexInfo') }}</span>
+                                                        <span class='colorPalette'>{{ trans('langIndexInfo') }}</span>
                                                     </div>
-                                                    <div class='panel-body'>
+                                                    <div class='panel-body NoBorderTop'>
                                                         <div class='row p-2 margin-bottom-thin'>
                                                             <div class='col-sm-6'>
                                                             <strong class='control-label-notes'>{{ trans('langIndexNumDocs') }}:</strong>
@@ -184,7 +184,7 @@
                                 @endif
 
                                 <div class='col-sm-12 mt-3'>
-                                    <a class="btn btn-primary w-100" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    <a class="btn btn-primary w-25 float-end" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                                         {{trans('langMore')}}
                                     </a>
                                 </div>
@@ -192,17 +192,17 @@
                                 <div class="collapse" id="collapseExample">
                                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
 
-                                        <div class='panel panel-default'>
-                                            <div class='panel-body ps-3 pt-2 pb-2 control-label-notes text-center'>
+                                        <div class='panel panel-admin'>
+                                            <div class='panel-heading ps-3 pt-2 pb-2 colorPalette text-center'>
                                             {{ trans('langOnlineUsers') }} : <b>{{ getOnlineUsers() }}</b>
                                             </div>
                                         </div>
 
-                                        <div class='panel panel-default mt-3'>
+                                        <div class='panel panel-info mt-3'>
                                             <div class='panel-heading'>
-                                                <div class='panel-title fs-5 ps-3 pt-2 pb-2'>{{ trans('langInfoAdmin') }}</div>
+                                                <div class='panel-title text-center fs-5 ps-3 pt-2 pb-2'>{{ trans('langInfoAdmin') }}</div>
                                             </div>
-                                            <div class='panel-body panel-body-admin'>
+                                            <div class='panel-body panel-body-admin NoBorderTop'>
                                                 <div class='row p-2 margin-bottom-thin'>
                                                     <div class='col-sm-5'>
                                                         <strong class='control-label-notes'>{{ trans('langOpenRequests') }}:</strong>
@@ -272,11 +272,11 @@
                                         </div>
 
                                         @if (count($cronParams) > 0)
-                                        <div class='panel panel-default mt-3'>
+                                        <div class='panel panel-info mt-3'>
                                             <div class='panel-heading'>
-                                                <div class='panel-title fs-5 ps-3 pt-2 pb-2'>{{ trans('langCronInfo') }}</div>
+                                                <div class='panel-title text-center fs-5 ps-3 pt-2 pb-2'>{{ trans('langCronInfo') }}</div>
                                             </div>
-                                            <div class='panel-body panel-body-admin'>
+                                            <div class='panel-body panel-body-admin NoBorderTop'>
                                                 <div class='row p-2 margin-bottom-thin'>
                                                     <div class='col-sm-5'>
                                                     <strong class='control-label-notes'>{{ trans('langCronName') }}</strong>

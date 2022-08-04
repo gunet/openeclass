@@ -22,7 +22,7 @@
 
                     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="panel panel-default">
-                            <div class="panel-body">
+                            <div class="panel-body Borders">
                                 <div class="inner-heading clearfix">
                                     {!! $action_bar !!}
                                     @if(Session::has('message'))
@@ -145,7 +145,7 @@
                     {{-- @if (count($cert_completed) > 0) --}}
                     <div class='col-12 mt-3'>
                         <div class="panel panel-default">
-                            <div class="panel-body">
+                            <div class="panel-body Borders">
                                 <div class='col-sm-10'><h4>{{ trans('langMyCertificates') }}</h4></div>
                                 <div class='row'>
                                     <div class='badge-container'>
@@ -183,7 +183,7 @@
                     @if (count($badge_completed) > 0)
                     <div class='col-12 mt-3'>
                         <div class="panel panel-default">
-                            <div class="panel-body">
+                            <div class="panel-body Borders">
                                 <div class='col-sm-10' style='padding-bottom:30px;'><h4>{{ trans('langBadges') }}</h4></div>
                                     <div class='row'>
                                         <div class='badge-container'>
@@ -209,7 +209,7 @@
                        
                             <div class="col-12 mt-3">
                                 <div class="panel panel-default">
-                                    <div class="panel-body">
+                                    <div class="panel-body Borders">
                                         <div class="row">
                                             <div class="col-sm-8">
                                                 <div class="profile-content-panel-title">

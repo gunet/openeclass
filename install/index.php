@@ -615,7 +615,7 @@ elseif (isset($_POST['install1'])) {
         <h1>$langWelcomeWizard</h1>
         <div class='panel panel-info text-left'>
           <div class='notes_thead'>$langThisWizard</div>
-          <div class='panel-body'>
+          <div class='panel-body Borders'>
              <ul>
                 <li>$langWizardHelp1</li>
                 <li>$langWizardHelp2</li>

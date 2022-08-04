@@ -54,7 +54,7 @@ $tool_content .= action_bar(array(
 $tool_content .= "
 
         <div class='col-12'>
-            <div class='panel-body'>
+            <div class='panel-body Borders'>
                 <div class='col-sm-6'>
                     <ul class='list-group'>
                         <li class='list-group-item'><strong>$langUsageCoursesHeader</strong><span class='badge rounded bg-success text-white float-end'>".count_courses()."</span></li>

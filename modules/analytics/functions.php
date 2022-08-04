@@ -65,7 +65,7 @@ function display_learning_analytics() {
 
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                 <div class='panel panel-default'>
-                    <div class='panel-body'>
+                    <div class='panel-body Borders'>
                         <div class='inner-heading'>
                             <div class='row'>
                                 <div class='col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12'>
@@ -173,7 +173,7 @@ function display_general_lists($analytics_id) {
         $tool_content .= "
                 <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                     <div class='panel panel-default'>
-                        <div class='panel-body'>
+                        <div class='panel-body Borders'>
                             <div class='inner-heading'>
                                 <div class='row'>
                                     <div class='col-sm-12'>
@@ -293,7 +293,7 @@ function display_analytics_elements($analytics_id) {
     $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
             <div class='panel panel-default'>
-                <div class='panel-body'>
+                <div class='panel-body Borders'>
                     <div class='inner-heading'>
                         <div class='row'>
                             <div class='col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12'>
@@ -335,7 +335,7 @@ function display_analytics_information($analytics_id) {
     $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
             <div class='panel panel-default'>
-                <div class='panel-body'>
+                <div class='panel-body Borders'>
                     <div class='inner-heading'>
                         <div class='row'>
                             <div class='col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12'>
@@ -652,7 +652,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
                     <div class='panel panel-default'>
                         <h4 class='control-label-notes text-center pt-3'>$analytics_title->title</h4>
                         <hr>
-                        <div class='panel-body'>
+                        <div class='panel-body Borders'>
                         $results
                         </div>
                     </div>
@@ -683,7 +683,7 @@ function display_user_info($user_id) {
     $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
             <div class='panel panel-default'>
-                <div class='panel-body'>
+                <div class='panel-body Borders'>
                     <div class='inner-heading'>
                         <div class='row'>
                             <div class='col-sm-12'>

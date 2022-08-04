@@ -268,7 +268,7 @@ input[type="checkbox"].toggles + label.rounded::before{
   transition: 0.4s;
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
-  background-color: #003F87;
+  background-color: #1d4e89;
 }
 
 .navrbar_menu_btn{
@@ -586,7 +586,7 @@ input[type="checkbox"].toggles + label.rounded::before{
 @media (min-width: 2560px){
   
   .active-nav{
-    margin-left:-870px;
+    margin-left:-200%;
   }
 
 }

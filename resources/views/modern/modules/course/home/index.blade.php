@@ -235,7 +235,7 @@
                                 </div> 
 
                                 <div class='panel-body'>
-                                    <div class='' id='boxlistSort'>
+                                    <div id='boxlistSort'>
                                         {!! $cunits_content !!}
                                     </div>
                                 </div>
@@ -257,8 +257,8 @@
                             <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                 <div class='control-label-notes text-center'>{{ trans('langAnnouncements') }}</div>
                             </div>
-                            <div class='card-body bg-white'>
-                                <ul class='tablelist'>
+                            <div class='panel-body bg-white'>
+                                <ul class='list-group list-group-flush'>
                                     {!! course_announcements() !!}
                                 </ul>
                             </div>

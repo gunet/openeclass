@@ -559,7 +559,7 @@
     <div class='row'>
         <div class='col-md-12'>
             <div class='panel panel-default'>
-                <div class='panel-body'>
+                <div class='panel-body Borders'>
                     <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/' method='get'>
                         <input type='hidden' name='course' value='{{ $course_code }}'>
                         <div class='form-group'>

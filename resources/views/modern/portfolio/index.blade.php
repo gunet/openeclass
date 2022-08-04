@@ -12,13 +12,13 @@
 
                 <div class="container-fluid">
                     <div class="row block-title-2 rowMedium justify-content-between">
-                        <div class="col-3 col-xl-8 col-md-5 ps-0">
-                            <h5>{{ trans('langSummaryProfile') }}</h5>
+                        <div class="col-xl-8 col-md-5 col-10 ps-0">
+                            <h6 class='fw-bold'>{{ trans('langSummaryProfile') }}</h6>
                         </div>
-                        <div class="col-4 col-xl-4 col-md-7 pe-0">
+                        <div class="col-xl-4 col-md-7 col-2 pe-0">
                             <div class="collapse-details-button" data-bs-toggle="collapse" data-bs-target=".user-details-collapse" aria-expanded="false" onclick="switch_user_details_toggle()" >
-                                <span class="user-details-collapse-more fs-lg-5 fs-6 float-end"> {{ trans('langMoreInfo') }} <i class="fas fa-chevron-down"></i> </span>
-                                <span class="user-details-collapse-less fs-lg-5 fs-6 float-end"> {{ trans('langSummaryProfile') }} <i class="fas fa-chevron-up"></i> </span>
+                                <span class="user-details-collapse-more fs-lg-5 fs-6 float-end"> <span class='hidden-xs text-primary'>{{ trans('langMoreInfo') }}</span> <i class="fas fa-chevron-down"></i> </span>
+                                <span class="user-details-collapse-less fs-lg-5 fs-6 float-end"> <span class='hidden-xs text-primary'>{{ trans('langSummaryProfile') }}</span> <i class="fas fa-chevron-up"></i> </span>
                             </div>
                         </div>
 
@@ -306,7 +306,7 @@
 
 
             <div class="container-fluid user-announcements-portfolio bg-white mt-lg-3 ms-lg-2 mt-lg-0 mt-md-4 mt-4">
-                <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-3 rowMedium">
+               {{-- <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-3 rowMedium">
 
                     <span class="text-center control-label-notes">{{ trans('langMyPersoAnnouncements') }}</span><hr class='text-primary mt-3'>
                     <div class="container-fluid text-md-center">
@@ -318,12 +318,19 @@
                         <a class='text-primary fs-6' href="{{$urlAppend}}modules/announcements/myannouncements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span></a>
                     </div>
 
+                </div> --}}
+                <div class='row rowMedium'>
+                    <div class='control-label-notes text-center mt-3 mb-3'>{{ trans('langMyPersoAnnouncements') }}</div><hr class='text-primary'>
+                    <div class='ps-3 pb-3 pe-3'>{!! $user_announcements !!}</div><hr class='text-primary'>
+                    <div class='text-center text-primary fw-bold fs-6 mb-3'>
+                        <a href="{{$urlAppend}}modules/announcements/myannouncements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span></a>
+                    </div>
                 </div>
             </div>
 
 
             <div class="container-fluid user-messages-portfolio bg-white mt-lg-3 ms-lg-2 mt-lg-0 mt-md-4 mt-4">
-                <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-3 rowMedium">
+                {{-- <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-3 rowMedium">
 
                     <span class="text-center control-label-notes">{{ trans('langMyPersoMessages') }}</span><hr class='text-primary mt-3'>
                     <div class="container-fluid text-md-center"> 
@@ -343,6 +350,22 @@
                         <a class='text-primary fs-6' href="{{$urlAppend}}modules/message/index.php">{{ trans('langAllMessages') }} <span class='fa fa-arrow-right'></span></a>
                     </div>
 
+                </div> --}}
+                <div class='row rowMedium'>
+                    <div class='control-label-notes text-center mt-3 mb-3'>{{ trans('langMyPersoMessages') }}</div><hr class='text-primary'>
+                    @if(!empty($user_messages))
+                        <div class='ps-3 pb-3 pe-3'>
+                            {!! $user_messages !!}
+                        </div>
+                    @else
+                        <li class='list-item'>
+                            <div class='text-title not_visible'> - {{ trans('langDropboxNoMessage') }} - </div>
+                        </li>
+                    @endif
+                    <hr class='text-primary'>
+                    <div class='text-center text-primary fw-bold fs-6 mb-3'>
+                        <a href="{{$urlAppend}}modules/message/index.php">{{ trans('langAllMessages') }} <span class='fa fa-arrow-right'></span></a>
+                    </div>
                 </div>
             </div>
 

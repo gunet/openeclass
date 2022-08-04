@@ -15,9 +15,9 @@
 <div class='col-lg-6 col-12 mt-3'>
     <div class='panel panel-admin'>
         <div class='panel-heading text-center'>
-            <span class='text-white'>{{ $tool_group[0]['text'] }}</span>
+            <span class='colorPalette'>{{ $tool_group[0]['text'] }}</span>
         </div>
-        <div class='panel-body'>
+        <div class='panel-body NoBorderTop'>
             <ul class="list-group list-group-flush">
                 @foreach ($tool_group[1] as $key2 => $tool)
                     <li class="list-group-item border-0 admin-list-group">

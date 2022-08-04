@@ -526,7 +526,7 @@ function lang_selections() {
         $lang_select .=
             "<li class='p-1' role='presentation'$class>
                 <a class='dropdown-item' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
-                    <span class='fa fa-language text-warning' aria-hidden='true'></span><span class='text-white ps-2 pe-2'>" .
+                    <span class='fa fa-language text-warning' aria-hidden='true'></span><span class='fs-6 fw-bold ps-2 pe-2'>" .
                     q($native_language_names_init[$code]) . "</span></a></li>";
     }
     $lang_select .= "</ul>";
