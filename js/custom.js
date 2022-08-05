@@ -46,14 +46,14 @@ $(document).ready(function(){
     
     /////////////////////////////////////////////////// initial datatable /////////////////////////////////////////////////
 
-	$('#cources-bars-button2').trigger('click');
+	// $('#cources-bars-button2').trigger('click');
 	$('#courses_table_pag').DataTable();
-	$('#mynotes_table').DataTable();
-	$('#myannouncements_table').DataTable();
-	$('#glossary_table').DataTable();
-	$('.user-menu-collapse-more').trigger('click');
-	$('.user-menu-collapse-less').show();
-	$('.user-menu-collapse-more').hide();
+	// $('#mynotes_table').DataTable();
+	// $('#myannouncements_table').DataTable();
+	// $('#glossary_table').DataTable();
+	// $('.user-menu-collapse-more').trigger('click');
+	// $('.user-menu-collapse-less').show();
+	// $('.user-menu-collapse-more').hide();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

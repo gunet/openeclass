@@ -25,7 +25,7 @@ function display_learning_analytics() {
             $description = $data->description;
             
             $results .= "
-            <div class='row res-table-row'>
+            <div class='row res-table-row border-0'>
                 <div class='col-sm-3'>
                     <strong>$title</strong> <span class='$active_vis'>($active_msg)</span><br/>
                     <small class='text-left text-muted'>$description</small>
@@ -263,7 +263,7 @@ function display_analytics_elements($analytics_id) {
             $resource = $result->resource;
             $module_id = $result->module_id;
             $results .= "
-                <div class='row p-2 res-table-row'>
+                <div class='row p-2 res-table-row border-0'>
                     <div class='col-sm-3'><em>
                         " . get_resource_info($resource, $module_id) . "</em>
                         </div>
@@ -463,7 +463,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
         }
         */
         //foreach ($peruserarray as $peruser) {
-            $results .="<div class='row p-2 res-table-row'>
+            $results .="<div class='row p-2 res-table-row border-0'>
             <div class='col-sm-3'>
                 <div >". display_user($userid). "</div>
             </div>
@@ -554,7 +554,7 @@ function generate_analytics_csv($peruserarray, $title) {
  */
 function display_analytics_user($userid, $analytics_id, $start, $end, $previous, $next) {
 
-    global $tool_content, $course_code, $langAnalyticsType, $langPercentage;
+    global $tool_content, $course_code, $langType, $langPercentage;
 
     $backclass = '';
     if (is_null($previous)) {
@@ -567,10 +567,10 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
     }
     $results = "
         <div class='inner-heading notes_thead mt-3'>
-            <h6>
+            <h5>
                 <div class='row p-2 res-table-header'>
                     <div class='col-sm-5 text-white'>
-                        $langAnalyticsType 
+                        $langType 
                     </div>
                     <div class='col-sm-3 text-white'>
                         $langPercentage
@@ -581,9 +581,8 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
                             "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$next'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
                     </div>
                 </div>
-            </h6>
+            </h5>
         </div>
-
     <div class='res-table-wrapper'>";
 
     $elements_data = Database::get()->queryArray("SELECT id, module_id, resource, upper_threshold, lower_threshold, max_value, min_value 
@@ -599,24 +598,20 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
         $max_value = $element_data->max_value;
         $min_value = $element_data->min_value;
 
-        $start = $start ." 00:00";
-        $end = $end ." 23:59";
-
         $elements_data = Database::get()->queryArray("SELECT value, updated 
                                                         FROM user_analytics
                                                         WHERE user_id = ?d
                                                         AND analytics_element_id = ?d
                                                         AND updated >= ?t
                                                         AND updated <= ?t", $userid, $element_id, $start, $end);
-        
-        $percentage_value = 0;
+
         $total_value = 0;
 
         if(count($elements_data) > 0) {
             foreach ($elements_data as $element_data) {
                 $total_value = $total_value + $element_data->value;
             }
-        } 
+        }
 
         if($max_value < $total_value) {
             $total_value = $max_value;
@@ -635,7 +630,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
         $percentage_value = (($total_value - $min_value) * 100) / ($max_value - $min_value);
         $percentage_value = number_format($percentage_value , 2, '.', '') + 0;
 
-        $results .="<div class='row p-2 res-table-row'>
+        $results .="<div class='m-auto row p-2 res-table-row'>
                         <div class='col-sm-5'>
                             <div >". ElementTypes::elements[$module_id]['title'] . "</div>
                         </div>
@@ -646,9 +641,9 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
 
     }
     $analytics_title = Database::get()->querySingle("SELECT title FROM analytics WHERE id=?d", $analytics_id);
-    
+
     $tool_content .= "
-            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3 col-12'>
+            <div class='col-12 mt-3'>
                     <div class='panel panel-default'>
                         <h4 class='control-label-notes text-center pt-3'>$analytics_title->title</h4>
                         <hr>

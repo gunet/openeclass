@@ -48,7 +48,6 @@
                                     @if($is_editor)
 
                                             <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 bg-white">{!! isset($action_bar) ?  $action_bar : '' !!}</div>
-                                            <div class="row p-2"></div>
 
                                     @endif
 
@@ -73,17 +72,15 @@
                                     @endif
 
                                     @if ($glossary_index && count($prefixes) > 1)
-                                        <div class="row p-2"></div>
-                                        <nav>
-
-                                            <ul class="pagination">
-                                                <small>{{trans('langGlossaryIndex')}}:</small>
-                                            @foreach ($prefixes as $key => $letter)
-                                                <li {!! (!isset($_GET['prefix']) && !$cat_id && !$key) ||
-                                                        (isset($_GET['prefix']) && $_GET['prefix'] == $letter)? " class='active'" : "" !!} ><div class="paging_a_glossary"><a class="paging_a_glossary1" href="{{ $base_url."&amp;prefix=" . urlencode($letter)  }}&editor={{$is_editor}}">{{ $letter }}</a></div></li>
-                                            @endforeach
+                                        <div class="col-12">
+                                            <ul class="pagination bg-light ps-2 pt-2 pb-0 pe-2" style='overflow-y:auto;'>
+                                                <span class='control-label-notes fs-6'>{{trans('langGlossaryIndex')}}:</span>
+                                                @foreach ($prefixes as $key => $letter)
+                                                    <li {!! (!isset($_GET['prefix']) && !$cat_id && !$key) ||
+                                                            (isset($_GET['prefix']) && $_GET['prefix'] == $letter)? " class='active'" : "" !!} ><div class="paging_a_glossary"><a class="paging_a_glossary1" href="{{ $base_url."&amp;prefix=" . urlencode($letter)  }}&editor={{$is_editor}}">{{ $letter }}</a></div></li>
+                                                @endforeach
                                             </ul>
-                                        </nav>
+                                        </div>
                                     @endif
 
 

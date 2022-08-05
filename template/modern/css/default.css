@@ -27,29 +27,36 @@ body{
   color: #fbd1a2;
 }
 
+.colorPaletteBasic{
+  color : #1d4e89;
+}
+
 .Borders{
-  border-radius:15px;
+  border-radius:15px !important;
 }
 
 .BordersTop{
-  border-top-left-radius:15px;
-  border-top-right-radius:15px;
+  border-top-left-radius:15px !important;
+  border-top-right-radius:15px !important;
 }
 
 .BordersBottom{
-  border-bottom-left-radius:15px;
-  border-bottom-right-radius:15px;
+  border-bottom-left-radius:15px !important;
+  border-bottom-right-radius:15px !important;
 }
 
+.NoBorders{
+  border-radius:0px !important;
+}
 
 .NoBorderTop{
-   border-top-left-radius:0px;
-   border-top-right-radius:0px;
+   border-top-left-radius:0px !important;
+   border-top-right-radius:0px !important;
 }
 
 .NoBorderBottom{
-  border-bottom-left-radius:0px;
-  border-bottom-right-radius:0px;
+  border-bottom-left-radius:0px !important;
+  border-bottom-right-radius:0px !important;
 }
 
 img {
@@ -138,7 +145,6 @@ a{
   outline: none !important;
   box-shadow: none;
 }
-
 
 /* -------------------------------- testimonials ------------------------------------------ */
 /* ---------------------------------------------------------------------------------------- */
@@ -370,6 +376,23 @@ a{
   /* ---------------------------------------------------------------------------------------------*/
   /* ---------------------------------------------------------------------------------------------*/
   /* ---------------------------------------------------------------------------------------------*/
+  .BtnMoreInfoAdmin{
+    width:200px;
+    height:200px;
+    border-radius: 50%;
+    border:solid 2px #1d4e89;
+    background-color: #1d4e89;
+    color:#fbd1a2;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+
+  .BtnMoreInfoAdmin:hover{
+    border:solid 2px #1d4e89;
+    background-color: #fbd1a2;
+    color:#1d4e89;
+  }
 
   .dropdown_menu_user{
     background: #ffffff;
@@ -437,31 +460,16 @@ a{
   /* ------------------------------------------------------------------------------------------------------------*/
   
   .manage-course-ul{
-      background-color: #003F87;
-      width:240px;
+      width:280px;
   }
-  .manage-course-item{
-      color:white;
-      padding-left: 12px;
-  }
-  .manage-course-item:hover{
-      color:white;
-  }
-  .manage-course-li{
-      margin: 10px 0 10px 0;
-  } 
-  .active-manage-course-li{
-    margin-top:-10px;
-  }
-  .manage-course-li:hover{
-      background-color: blue;
-  } 
-  
-  .manage-course-title{
-      color:white; padding-left:15px; padding-top:40px;
+  .manage-course-li-active{
+    background: #1d4e89;
   }
 
-  
+  .manage-course-ul .manage-course-li a:hover{
+    background: #e6e6e6;
+  }
+
   /* --------------------------------------------- CourseHome ----------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -474,7 +482,6 @@ a{
   .course-units{
     padding:25px;
   }
-
   .form-group.hidden{
     display: none;
   }
@@ -531,7 +538,7 @@ a{
   /* ------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------------------------------------------------- */
-  
+
   .myuls{
       background-color: #fafafa;
       width:245px;
@@ -753,9 +760,10 @@ a{
   /* -------------------------------------------------------------------------------------------------*/
   
   /* afora to input search των πινακων */
-  #courses_table_pag_filter, #ann_table_my_ann_filter{
+  #courses_table_pag_filter, #ann_table_my_ann_filter, #search_results_table_filter, #requests_table_filter, #course_results_table_filter{
     margin-bottom:10px !important;
   }
+
 
   .table-condensed th,
   .table-condensed td {
@@ -1969,10 +1977,6 @@ a{
       padding:25px;
     }
 
-    .manage-course-ul{
-      background-color: #003F87;
-      width:260px;
-    }
     .btn-group{
       max-width:300px;
       flex-wrap: wrap;
@@ -2100,11 +2104,6 @@ a{
       padding:25px;
     }
 
-    .manage-course-ul{
-      background-color: #003F87;
-      width:260px;
-    }
-
     .btn-group{
       max-width:355px;
       flex-wrap: wrap;
@@ -2227,11 +2226,6 @@ a{
       box-shadow: 0 0 3px #ccc;
       border-radius: 25px;
       padding:25px;
-    }
-
-    .manage-course-ul{
-      background-color: #003F87;
-      width:260px;
     }
 
     textarea{

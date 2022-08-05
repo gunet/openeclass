@@ -183,14 +183,14 @@
                                     
                                 @endif
 
-                                <div class='col-sm-12 mt-3'>
-                                    <a class="btn btn-primary w-25 float-end" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                        {{trans('langMore')}}
+                                <div class='col-sm-12 d-flex justify-content-center mt-5'>
+                                    <a class="BtnMoreInfoAdmin" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <span class='text-uppercase'>{{trans('langMore')}}</span>
                                     </a>
                                 </div>
 
                                 <div class="collapse" id="collapseExample">
-                                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+                                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
 
                                         <div class='panel panel-admin'>
                                             <div class='panel-heading ps-3 pt-2 pb-2 colorPalette text-center'>

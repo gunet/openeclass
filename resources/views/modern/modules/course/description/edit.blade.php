@@ -12,7 +12,7 @@
 
 <div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
 
-    <div class="container-fluid main-container pb-3">
+    <div class="container-fluid main-container">
 
         <div class="row rowMedium">
 
@@ -80,10 +80,10 @@
                                         {!! $text_area_comments !!}
                                     </div>
                                 </div>
-                            <div class='form-group mt-3'>
-                                <div class='col-sm-10 col-sm-offset-2'>
-                                    {!! $form_buttons !!}
-                                </div>
+                                <div class='form-group mt-3'>
+                                    <div class='col-sm-10 col-sm-offset-2'>
+                                        {!! $form_buttons !!}
+                                    </div>
                                 </div>
                             {!! generate_csrf_token_form_field() !!}
                             </form>

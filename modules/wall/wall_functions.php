@@ -217,7 +217,7 @@ function generate_single_post_html($post) {
     
     $ret = '
     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-        <div class="row p-2 margin-right-thin margin-left-thin margin-top-thin">
+        <div class="row p-2 margin-right-thin margin-left-thin margin-top-thin m-auto">
                               
                                   <div class="media">
                                       <div class="row p-2"></div>

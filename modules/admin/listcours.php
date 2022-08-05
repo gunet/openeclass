@@ -227,7 +227,7 @@ $head_content .= "<script type='text/javascript'>
                    }
                }
             });
-            $('.dataTables_filter input').attr('placeholder', '$langTitle, $langTeacher');
+            $('.dataTables_filter input ms-0 mb-3').attr('placeholder', '$langTitle, $langTeacher');
         });
         </script>";
 

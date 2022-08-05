@@ -13,7 +13,7 @@
                 <div class="row">
 
                     @if(!get_config('dont_display_login_form'))
-                    <div class='card jumbotron jumbotron-login BordersTop'>
+                    <div class='col-12 card jumbotron jumbotron-login BordersTop'>
                         <div class='row'>
                             @if($warning)<div class='col-12 mt-4 mb-0'>{!! $warning !!}</div>@endif
                             <div class='col-xl-6 col-lg-7 col-md-8 col-12'>
@@ -145,7 +145,7 @@
                             <span class='fa fa-rss-square'></span>
                         </a>
                     </h2>
-                    <div class="row news-list">
+                    <div class="row news-list m-auto">
                         @php $counterAn = 0; @endphp
                         @foreach ($announcements as $announcement)
                             @if($counterAn < 6)
@@ -168,27 +168,29 @@
 
 
     <div class="container-fluid statistics mt-lg-3 mt-0">
-        <div class="statistics-wrapper">
-            <h2 class="text-center pt-lg-0 pt-4">
-                Στατιστικά Επισκεψιμότητας
-            </h2>
-            <div class="row row_pad_courses">
-                <div class="col-lg-4 text-center">
-                        <i class="fas fa-book"></i>
-                        <div class="num">10</div>
-                        <div class="num-text">{{trans('langsCourses')}}</div>
-                </div>
-                <div class="col-lg-4 text-center">
-                        <i class="fas fa-mouse-pointer"></i>
-                        <div class="num">10<span>K+</span></div>
-                        <div class="num-text">επισκέψεις/εβδομάδα</div>
-                </div>
-                <div class="col-lg-4 text-center">
-                        <i class="fas fa-user"></i>
-                        <div class="num">10
-                            <!-- <span>K+</span> -->
-                        </div>
-                        <div class="num-text">ενεργοί χρήστες</div>
+        <div class='row rowMedium'>
+            <div class="statistics-wrapper">
+                <h2 class="text-center pt-lg-0 pt-4">
+                    Στατιστικά Επισκεψιμότητας
+                </h2>
+                <div class="row row_pad_courses">
+                    <div class="col-lg-4 text-center">
+                            <i class="fas fa-book"></i>
+                            <div class="num">10</div>
+                            <div class="num-text">{{trans('langsCourses')}}</div>
+                    </div>
+                    <div class="col-lg-4 text-center">
+                            <i class="fas fa-mouse-pointer"></i>
+                            <div class="num">10<span>K+</span></div>
+                            <div class="num-text">επισκέψεις/εβδομάδα</div>
+                    </div>
+                    <div class="col-lg-4 text-center">
+                            <i class="fas fa-user"></i>
+                            <div class="num">10
+                                <!-- <span>K+</span> -->
+                            </div>
+                            <div class="num-text">ενεργοί χρήστες</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -225,6 +227,16 @@
 			settings: { centerPadding: '15vw', }
 		}]
 	});
+    var moreCounter = 0;
+    $('.btnMoreHomePage').on('click',function(){
+        moreCounter++;
+        if(moreCounter % 2 == 1){
+            $('.btnMoreHomePage .fa').css('transform','rotate(180deg)');
+        }else{
+            $('.btnMoreHomePage .fa').css('transform','rotate(0deg)');
+        }
+        
+    });
 </script>
 
 @endsection

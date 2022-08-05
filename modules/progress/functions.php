@@ -2636,7 +2636,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
 		$resource_data = get_resource_details($element, $user_criterion);
 		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
 		$tool_content .= "
-                <div class='row p-2 res-table-row'>
+                <div class='row p-2 res-table-row border-0'>
                     <div class='col-sm-9 control-label-notes'>$activity</div>
                     <div class='col-sm-3 text-center'>" . icon('fa-check-circle') . "</div>
                 </div>";
@@ -2652,13 +2652,13 @@ function display_user_progress_details($element, $element_id, $user_id) {
                     $op_content = "&mdash;";
                 }
 		$tool_content .= "
-                <div class='row p-2 res-table-row not_visible'>
+                <div class='row p-2 res-table-row not_visible border-0'>
                     <div class='col-sm-9 control-label-notes'>$activity</div>
                     <div class='col-sm-3 text-center'>$op_content&nbsp;" . $user_criterion->threshold . "</div>
                 </div>";
 	}
 	$tool_content .= "
-            <div class='row p-2 res-table-header'>
+            <hr><div class='row p-2 res-table-header'>
                 <div class='col-sm-9 control-label-notes'>$langTotalPercentCompleteness</div>";
                 if ($user_data) {
                     $tool_content .= "<div class='col-sm-3 text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></div>";

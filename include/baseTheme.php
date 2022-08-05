@@ -514,12 +514,12 @@ function lang_selections() {
         return ('&nbsp;');
     }
     $lang_select = "
-      <button class='d-none d-sm-none d-md-none d-lg-block btn btn-primary' type='button' aria-expanded='false' id='dropdownMenuLang' data-bs-toggle='dropdown'>
+      <a class='d-none d-sm-none d-md-none d-lg-block btn btn-primary' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
+          <span class='fa fa-globe pt-1'></span>
+      </a>
+      <a class='d-block d-sm-block d-md-block d-lg-none btn btn-transparent text-white' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
           <span class='fa fa-globe'></span>
-      </button>
-      <button class='d-block d-sm-block d-md-block d-lg-none btn btn-transparent text-white' type='button' aria-expanded='false' id='dropdownMenuLang' data-bs-toggle='dropdown'>
-          <span class='fa fa-globe'></span>
-      </button>
+      </a>
       <ul class='dropdown-menu dropdown-menu-end user-language-menu' role='menu' aria-labelledby='dropdownMenuLang'>";
     foreach ($session->active_ui_languages as $code) {
         $class = ($code == $session->language)? ' class="active"': '';

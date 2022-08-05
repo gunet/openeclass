@@ -299,8 +299,8 @@ if ($is_editor) {
             $categories[0] = '-';
             $data['category_selection'] = "
                         <div class='form-group'>
-                             <label for='category_id' class='col-sm-2 control-label'>$langCategory: </label>
-                             <div class='col-sm-10'>
+                             <label for='category_id' class='col-sm-6 control-label-notes'>$langCategory: </label>
+                             <div class='col-sm-12'>
                                  " . selection($categories, 'category_id', $category_id, 'class="form-control"') . "
                              </div>
                         </div>";

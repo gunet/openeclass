@@ -85,7 +85,7 @@ $head_content .= "
 
       $(document).on('click', '.expand:not(.revert)', function(e) {
         e.preventDefault();
-        $('.faq-section .panel-collapse:not(.in)').collapse('show');
+        $('.faq-section .panel-collapse').addClass('show');
         $(this).toggleClass('revert');
         $(this).children().eq(0).toggleClass('fa-plus-circle').toggleClass('fa-minus-circle');
         $(this).children().eq(1).html('$langFaqCloseAll');
@@ -93,7 +93,8 @@ $head_content .= "
 
       $(document).on('click', '.expand.revert', function(e) {
         e.preventDefault();
-        $('.faq-section .panel-collapse.in').collapse('hide');
+        $('.faq-section .panel-collapse').removeClass('show');
+        $('.faq-section .panel-collapse').addClass('hide');
         $(this).toggleClass('revert');
         $(this).children().eq(0).toggleClass('fa-minus-circle').toggleClass('fa-plus-circle');
         $(this).children().eq(1).html('$langFaqExpandAll');

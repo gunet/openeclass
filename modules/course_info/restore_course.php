@@ -149,7 +149,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                     <input type='file' name='archiveZipped' />
                 </div>
                 <div class='col-sm-6'>
-                    <input class='btn btn-primary' type='submit' name='send_archive' value='" . $langSend . "'>
+                    <input class='btn btn-primary mt-3' type='submit' name='send_archive' value='" . $langSend . "'>
                     <span class='help-block'><small>$langMaxFileSize " .ini_get('upload_max_filesize') . "</small></span>
                 </div>
             </div>
@@ -166,7 +166,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 <input type='text' class='form-control' name='pathToArchive'>
             </div>
             <div class='form-group'>
-                <input class='btn btn-primary' type='submit' name='send_path' value='" . $langSend . "'>
+                <input class='btn btn-primary mt-3' type='submit' name='send_path' value='" . $langSend . "'>
             </div>
           ". generate_csrf_token_form_field() ."
           </form>

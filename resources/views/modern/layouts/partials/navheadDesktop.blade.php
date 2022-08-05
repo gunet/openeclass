@@ -46,14 +46,14 @@
                                     (isset($is_power_user) and $is_power_user) or
                                     (isset($is_usermanage_user) and ($is_usermanage_user)) or
                                     (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                                    <a id="AdminToolBtn" type="button" class="btn btn-primary tempBtnButton" aria-haspopup="true"
+                                    <a id="AdminToolBtn" type="button" class="btn btn-primary" aria-haspopup="true"
                                             aria-expanded="false" data-bs-toggle="tooltip" data-bs-placement="left"
                                             title="{{trans('langAdminTool')}}" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench text-white pt-1"></i>
                                     </a>
                                 @endif
 
                                 <div class="btn-group" role="group">
-                                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle tempBtnButton"
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle user-menu-btn"
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                         <span><img class="user-icon-filename" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}"
                                                 alt="{{ $uname }}">{{ $uname }}</span>

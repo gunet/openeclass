@@ -70,37 +70,40 @@
                     @else
                         
                             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                                <div class='panel'>
-                                    <div class='panel-group faq-section' id='accordion' role='tablist' aria-multiselectable='true'>
-                                        @if (count($faqs) == 0)
-                                            <div class='panel list-group-item'>
-                                                <div class='text-center text-muted'><em>{{ trans('langFaqNoEntries') }}</em> <br><br> <em>{{ trans('langFaqAddNew') }}</em></div>
-                                            </div>
-                                        @else
-                                            @foreach ($faqs as $key => $faq)
-                                                <div class='panel panel-default list-group-item mt-3' data-id='{{ $faq->id }}'>
-                                                    <div class='panel-heading' role='tab' id='heading-{{ $faq->id }}'>
-                                                        <h4 class='panel-title pt-1 pe-3'>
-                                                            <a class='control-label-notes' role='button' data-bs-toggle='collapse' data-bs-parent='#accordion' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
-                                                                <span class="indexing">{{ $key+1 }}.</span>{!! $faq->title !!} <span class='caret'></span>
-                                                                <span class='fa fa-arrow-down text-warning fs-6 ps-2'></span>
-                                                            </a>
-                                                            <a class='forDelete' href='javascript:void(0);' data-id='{{ $faq->id }}' data-order='{{ $faq->order }}'><span class='fa fa-times text-danger pull-right' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langDelete') }}'></span></a>
-                                                            <a href='javascript:void(0);'><span class='fa fa-arrows text-dark pull-right' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></span></a>
-                                                            <a href='{{ $_SERVER['SCRIPT_NAME'] }}?faq=modify&id={{ $faq->id }}'><span class='fa fa-pencil-square text-primary pull-right' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEdit') }}'></span></a>
-                                                        </h4>
-                                                    </div>
-                                                    <div id='faq-{{ $faq->id }}' class='panel-collapse collapse' role='tabpanel' aria-labelledby='heading{{ $faq->id }}'>
-                                                        <div class='panel-body'>
-                                                            <p><strong><u>{{ trans('langFaqAnswer') }}:</u></strong></p>
-                                                            {!! $faq->body !!}
+                                
+                                <div class='accordion panel-group faq-section' id='accordion' role='tablist' aria-multiselectable='true'>
+                                    @if (count($faqs) == 0)
+                                        <div class='panel list-group-item'>
+                                            <div class='text-center text-muted'><em>{{ trans('langFaqNoEntries') }}</em> <br><br> <em>{{ trans('langFaqAddNew') }}</em></div>
+                                        </div>
+                                    @else
+                                        @foreach ($faqs as $key => $faq)
+                                            <div class='accordion-item' data-id='{{ $faq->id }}'>
+                                                <div class='accordion-header' role='tab' id='heading-{{ $faq->id }}'>
+                                                    <div class='row'>
+                                                        <div class='col-12'>
+                                                            <button class="accordion-button btn btn-transparent" type='button' data-bs-toggle='collapse' data-bs-target='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
+                                                                <span class="control-label-notes">{{ $key+1 }}. {!! $faq->title !!}</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class='col-12'>
+                                                            <a class='forDelete' href='javascript:void(0);' data-id='{{ $faq->id }}' data-order='{{ $faq->order }}'><span class='fa fa-times text-danger pull-right p-2' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langDelete') }}'></span></a>
+                                                            <a href='javascript:void(0);'><span class='fa fa-arrows text-dark pull-right p-2' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></span></a>
+                                                            <a href='{{ $_SERVER['SCRIPT_NAME'] }}?faq=modify&id={{ $faq->id }}'><span class='fa fa-pencil-square text-primary pull-right p-2' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEdit') }}'></span></a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @endforeach
-                                        @endif
-                                    </div>
+                                                <div id='faq-{{ $faq->id }}' class='panel-collapse accordion-collapse collapse' role='tabpanel' data-bs-parent='#accordion' aria-labelledby='heading{{ $faq->id }}'>
+                                                    <div class='accordion-body'>
+                                                        <p><strong><u>{{ trans('langFaqAnswer') }}:</u></strong></p>
+                                                        {!! $faq->body !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
                                 </div>
+                            
                             </div>
                         
                     @endif

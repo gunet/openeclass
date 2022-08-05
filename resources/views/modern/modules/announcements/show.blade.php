@@ -62,7 +62,7 @@
                                 </div>
                                 <div class='panel-footer bg-transparent'>
                                     
-                                    <div class='text-end text-secondary'>
+                                    <div class='text-end text-success'>
                                         {!! $date !!}
                                     </div>
                                 </div>

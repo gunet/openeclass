@@ -25,7 +25,7 @@
                                 <div class="panel-heading">                   
                                     <span class='control-label-notes'>{{$announcementsID->title}}</span>
                                 </div>
-                                <div class="panel-body">
+                                <div class="panel-body NoBorders">
                                     <span class="text-secondary">
                                         {!! $announcementsID->body !!}
                                     </span>

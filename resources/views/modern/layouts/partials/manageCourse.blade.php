@@ -1,22 +1,142 @@
 
 <div class="dropdown dropstart">
-    <button class="btn btn-primary rounded dropdown-toggle float-end @if($toolName) mt-4 @else mt-2 @endif" type="button" id="dropdownManageCourse" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false" data-bs-toggle-second="tooltip" data-bs-placement="left" title="{{trans('langModifyInfo')}}">
-        <i class="fas fa-tasks"></i>
+    <button class="btn btn-primary rounded dropdown-toggle float-end @if($toolName) mt-4 @else mt-2 @endif" type="button" id="dropdownManageCourse" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false">
+        <span data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{trans('langModifyInfo')}}"><i class="fas fa-tasks"></i></span>
     </button>
-    <ul class="dropdown-menu manage-course-ul" aria-labelledby="dropdownManageCourse">
-        <li class='bg-primary active-manage-course-li'><span class="manage-course-title ms-2 me-2 fs-5"><i class="fas fa-bank"></i> {{ trans('langAdm') }}</span></li>
-        <li class="manage-course-li"><a href="{{ $urlAppend }}modules/course_info/index.php?course={{$coursePrivateCode}}" class="manage-course-item"><i class="fas fa-cogs"></i>&nbsp;&nbsp;{{trans('langCourseInfo')}}</a></li>
+    <ul class="p-0 m-0 dropdown-menu manage-course-ul shadow-lg border border-secondary" aria-labelledby="dropdownManageCourse">
+        <li class='manage-course-li-active border-bottom border-secondary text-center p-2'>
+            <span class="d-inline fas fa-bank fs-6 colorPalette"></span>
+            <span class="d-inline fs-6 fw-bold colorPalette"> {{trans('langModifyInfo')}}</span>
+        </li>
+        <li class="manage-course-li border-0">
+            <a href="{{ $urlAppend }}modules/course_info/index.php?course={{$coursePrivateCode}}" class="list-group-item border border-top-0 border-bottom-secondary text-dark fw-bold">
+                <div class='row'>
+                    <div class='col-10 text-start'>
+                    <span class='colorPaletteBasic'>{{trans('langCourseInfo')}}</span>
+                    </div>
+                    <div class='col-2 text-end'>
+                        <span class="pt-1 fas fa-cogs colorPaletteBasic"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
         @if ($is_course_admin)
-            <li class="manage-course-li"><a href="{{ $urlAppend }}modules/course_home/editdesc.php?course={{$coursePrivateCode}}" class="manage-course-item ps-3 pe-2"><i class="fas fa-edit"></i>&nbsp;&nbsp;{{trans('langDescription')}}</a></li>
+            <li class="manage-course-li border-0">
+                <a href="{{ $urlAppend }}modules/course_home/editdesc.php?course={{$coursePrivateCode}}" class="list-group-item border border-top-0 border-bottom-secondary text-dark fw-bold">
+                    <div class='row'>
+                        <div class='col-10 text-start'>
+                            <span class='colorPaletteBasic'>{{trans('langDescription')}}</span>
+                        </div>
+                        <div class='col-2 text-end'>
+                            <span class="pt-1 fas fa-edit colorPaletteBasic"></span>
+                        </div>
+                    </div>
+                </a>
+            </li>
         @endif
-        <li class="manage-course-li"><a href="{{ $urlAppend }}modules/user/index.php?course={{$coursePrivateCode}}" class="manage-course-item ps-3 pe-2"><i class="fas fa-user"></i>&nbsp;&nbsp;{{trans('langUsers')}}</a></li>
-        <li class="manage-course-li"><a href="{{ $urlAppend }}modules/usage/index.php?course={{$coursePrivateCode}}" class="manage-course-item ps-3 pe-2"><i class="fas fa-chart-bar"></i>&nbsp;&nbsp;{{trans('langUsage')}}</a></li>
-        <li class="manage-course-li"><a href="{{ $urlAppend }}modules/course_tools/index.php?course={{$coursePrivateCode}}" class="manage-course-item ps-3 pe-2"><i class="fas fa-wrench"></i>&nbsp;&nbsp;{{trans('langTools')}}</a></li>
-        <li class="manage-course-li"><a href="{{ $urlAppend }}modules/abuse_report/index.php?course={{$coursePrivateCode}}" class="manage-course-item ps-3 pe-2"><i class="fas fa-flag"></i>&nbsp;&nbsp;{{trans('langAbuseReports')}}</a></li>
-        <li class="manage-course-li"><a href="{{ $urlAppend }}modules/course_prerequisites/index.php?course={{$coursePrivateCode}}" class="manage-course-item ps-3 pe-2"><i class="fas fa-university"></i>&nbsp;&nbsp;{{trans('langCoursePrerequisites')}}</a></li>
-        <li class="manage-course-li"><a href="{{ $urlAppend }}modules/course_widgets/index.php?course={{$coursePrivateCode}}" class="manage-course-item ps-3 pe-2"><i class="fas fa-magic"></i>&nbsp;&nbsp;{{trans('langWidgets')}}</a></li>
-        <li class="manage-course-li"><a href="{{ $urlAppend }}modules/lti_consumer/index.php?course={{$coursePrivateCode}}" class="manage-course-item ps-3 pe-2"><i class="fas fa-link"></i>&nbsp;&nbsp;{{trans('langLtiConsumer')}}</a></li>
-        <li class="manage-course-li"><a href="{{ $urlAppend }}modules/analytics/index.php?course={{$coursePrivateCode}}" class="manage-course-item ps-3 pe-2"><i class="fas fa-chart-line"></i>&nbsp;&nbsp;{{trans('langLearningAnalytics')}}</a></li>
+        <li class="manage-course-li border-0">
+            <a href="{{ $urlAppend }}modules/user/index.php?course={{$coursePrivateCode}}" class="list-group-item border border-top-0 border-bottom-secondary text-dark fw-bold">
+                <div class='row'>
+                    <div class='col-10 text-start'>
+                        <span class="colorPaletteBasic">{{trans('langUsers')}}</span>
+                    </div>
+                    <div class='col-2 text-end'>
+                        <span class="pt-1 fas fa-user colorPaletteBasic"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
+
+        <li class="manage-course-li border-0">
+            <a href="{{ $urlAppend }}modules/usage/index.php?course={{$coursePrivateCode}}" class="list-group-item border border-top-0 border-bottom-secondary text-dark fw-bold">
+                <div class='row'>
+                    <div class='col-10 text-start'>
+                        <span class="colorPaletteBasic">{{trans('langUsage')}}</span>
+                    </div>
+                    <div class='col-2 text-end'>
+                        <span class="pt-1 fas fa-chart-bar colorPaletteBasic"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
+
+        <li class="manage-course-li border-0">
+            <a href="{{ $urlAppend }}modules/course_tools/index.php?course={{$coursePrivateCode}}" class="list-group-item border border-top-0 border-bottom-secondary text-dark fw-bold">
+                <div class='row'>
+                    <div class='col-10 text-start'>
+                        <span class="colorPaletteBasic">{{trans('langTools')}}</span>
+                    </div>
+                    <div class='col-2 text-end'>
+                        <span class="pt-1 fas fa-wrench colorPaletteBasic"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
+        
+        <li class="manage-course-li border-0">
+            <a href="{{ $urlAppend }}modules/abuse_report/index.php?course={{$coursePrivateCode}}" class="list-group-item border border-top-0 border-bottom-secondary text-dark fw-bold">
+                <div class='row'>
+                    <div class='col-10 text-start'>
+                        <span class="colorPaletteBasic">{{trans('langAbuseReports')}}</span>
+                    </div>
+                    <div class='col-2 text-end'>
+                        <span class="pt-1 fas fa-flag colorPaletteBasic"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
+        
+        <li class="manage-course-li border-0">
+            <a href="{{ $urlAppend }}modules/course_prerequisites/index.php?course={{$coursePrivateCode}}" class="list-group-item border border-top-0 border-bottom-secondary text-dark fw-bold">
+                <div class='row'>
+                    <div class='col-10 text-start'>
+                        <span class="colorPaletteBasic">{{trans('langCoursePrerequisites')}}</span>
+                    </div>
+                    <div class='col-2 text-end'>
+                        <span class="pt-1 fas fa-university colorPaletteBasic"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
+
+        <li class="manage-course-li border-0">
+            <a href="{{ $urlAppend }}modules/course_widgets/index.php?course={{$coursePrivateCode}}" class="list-group-item border border-top-0 border-bottom-secondary text-dark fw-bold">
+                <div class='row'>
+                    <div class='col-10 text-start'>
+                        <span class="colorPaletteBasic">{{trans('langWidgets')}}</span>
+                    </div>
+                    <div class='col-2 text-end'>
+                        <span class="pt-1 fas fa-magic colorPaletteBasic"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
+
+        <li class="manage-course-li border-0">
+            <a href="{{ $urlAppend }}modules/lti_consumer/index.php?course={{$coursePrivateCode}}" class="list-group-item border border-top-0 border-bottom-secondary text-dark fw-bold">
+                <div class='row'>
+                    <div class='col-10 text-start'>
+                        <span class="colorPaletteBasic">{{trans('langLtiConsumer')}}</span>
+                    </div>
+                    <div class='col-2 text-end'>
+                        <span class="pt-1 fas fa-link colorPaletteBasic"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
+
+        <li class="manage-course-li border border-0">
+            <a href="{{ $urlAppend }}modules/analytics/index.php?course={{$coursePrivateCode}}" class="list-group-item border border-top-0 border-bottom-secondary text-dark fw-bold">
+                <div class='row'>
+                    <div class='col-10 text-start'>
+                        <span class="colorPaletteBasic">{{trans('langLearningAnalytics')}}</span>
+                    </div>
+                    <div class='col-2 text-end'>
+                        <span class="pt-1 fas fa-chart-line colorPaletteBasic"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
     </ul>
 </div>
 

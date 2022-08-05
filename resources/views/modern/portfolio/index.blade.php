@@ -18,7 +18,7 @@
                         <div class="col-xl-4 col-md-7 col-2 pe-0">
                             <div class="collapse-details-button" data-bs-toggle="collapse" data-bs-target=".user-details-collapse" aria-expanded="false" onclick="switch_user_details_toggle()" >
                                 <span class="user-details-collapse-more fs-lg-5 fs-6 float-end"> <span class='hidden-xs text-primary'>{{ trans('langMoreInfo') }}</span> <i class="fas fa-chevron-down"></i> </span>
-                                <span class="user-details-collapse-less fs-lg-5 fs-6 float-end"> <span class='hidden-xs text-primary'>{{ trans('langSummaryProfile') }}</span> <i class="fas fa-chevron-up"></i> </span>
+                                <span class="user-details-collapse-less fs-lg-5 fs-6 float-end"> <span class='hidden-xs text-primary text-uppercase'>{{ trans('langViewHide') }}</span> <i class="fas fa-chevron-up"></i> </span>
                             </div>
                         </div>
 

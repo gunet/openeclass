@@ -214,6 +214,7 @@ $langFaqCloseAll = "Κλείσιμο όλων";
 $langFaqEditSuccess = "Οι αλλαγές αποθηκεύτηκαν με επιτυχία";
 $langFaqAddSuccess = "Η ερώτηση αποθηκεύτηκε με επιτυχία";
 $langFaqDeleteSuccess = "Η ερώτηση διαγράφτηκε με επιτυχία";
+$langdoRefreshSuccess = "Κάντε ανανέωση της σελίδας!";
 $langFaqNoEntries = "Δεν υπάρχουν ερωτήσεις.";
 $langFaqAddNew = "Προσθέστε μία νέα πατώντας το κουμπί \"Προσθήκη ερώτησης\".";
 $langFaqReorderSuccess = "Η ταξινόμηση έγινε με επιτυχία";

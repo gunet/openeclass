@@ -182,7 +182,7 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'])
     $backPath = "$_SERVER[SCRIPT_NAME]" . (($course_id != 0)? "?course=$course_code" : "");
     $tool_content .= showquota($diskQuotaDropbox, $diskUsed-$space_released, $backPath);
 
-    draw($tool_content, 2);
+    //draw($tool_content, 2);
     exit;
 }
 

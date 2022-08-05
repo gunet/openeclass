@@ -69,7 +69,7 @@
                             @endif
 
                             @if (count($categories))
-                                <div class='table-responsive glossary-categories' style="">    
+                                <div class='table-responsive glossary-categories'>    
                                     <table class='table' id="glossary_table" style="overflow: inherit">
                                         <thead class="notes_thead text-light">
                                             
@@ -79,7 +79,7 @@
                                                 <th scope="col"><span class="notes_th_comment">Περιγραφή</span></th>
                                                 @if($is_editor)
                                                 
-                                                        <th scope="col"><span class="notes_th_comment"><i class='fas fa-cogs'></i></span></th>
+                                                        <th class='text-center' scope="col"><span class="notes_th_comment"><i class='fas fa-cogs'></i></span></th>
                                                     
                                                 @endif
                                             </tr>
@@ -103,7 +103,7 @@
                                                 <td>
                                                     {!! $category->description !!}
                                                 </td>
-                                                <td>
+                                                <td class='text-center'>
                                                     @if($is_editor)
                                                       
                                                     {!! action_button(array(

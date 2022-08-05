@@ -510,11 +510,11 @@ function adminMenu() {
     array_push($sideMenuLink, '../admin/mailtoprof.php');
     array_push($sideMenuImg, 'fa-caret-right');
 
-    if ($is_admin) {
-        array_push($sideMenuText, $GLOBALS['langAdmins']);
-        array_push($sideMenuLink, '../admin/addadmin.php');
-        array_push($sideMenuImg, 'fa-caret-right');
-    }
+    // if ($is_admin) {
+    //     array_push($sideMenuText, $GLOBALS['langAdmins']);
+    //     array_push($sideMenuLink, '../admin/addadmin.php');
+    //     array_push($sideMenuImg, 'fa-caret-right');
+    // }
     foreach ($sideMenuLink as $module_link) {
         if ($current_module_dir == module_path($module_link)) {
             $sideMenuSubGroup[0]['class'] = ' in';
@@ -546,11 +546,11 @@ function adminMenu() {
         array_push($sideMenuLink, '../course_info/restore_course.php');
         array_push($sideMenuImg, 'fa-caret-right');
 
-        if ($is_admin) {
-            array_push($sideMenuText, $GLOBALS['langHierarchy']);
-            array_push($sideMenuLink, '../admin/hierarchy.php');
-            array_push($sideMenuImg, 'fa-caret-right');
-        }
+        // if ($is_admin) {
+        //     array_push($sideMenuText, $GLOBALS['langHierarchy']);
+        //     array_push($sideMenuLink, '../admin/hierarchy.php');
+        //     array_push($sideMenuImg, 'fa-caret-right');
+        // }
 
         array_push($sideMenuText, $GLOBALS['langMultiCourse']);
         array_push($sideMenuLink, '../admin/multicourse.php');
@@ -573,9 +573,9 @@ function adminMenu() {
             array_push($sideMenuLink, '../admin/activity.php');
             array_push($sideMenuImg, 'fa-caret-right');
 
-            array_push($sideMenuText, $GLOBALS['langCourseCategoryActions']);
-            array_push($sideMenuLink, '../admin/coursecategory.php');
-            array_push($sideMenuImg, 'arrow.png');
+            // array_push($sideMenuText, $GLOBALS['langCourseCategoryActions']);
+            // array_push($sideMenuLink, '../admin/coursecategory.php');
+            // array_push($sideMenuImg, 'arrow.png');
         }
 
         foreach ($sideMenuLink as $module_link) {
@@ -634,9 +634,9 @@ function adminMenu() {
         array_push($sideMenuLink, "../../modules/usage/index.php?t=a");
         array_push($sideMenuImg, "fa-caret-right");
 
-        array_push($sideMenuText, $GLOBALS['langAdminAn']);
-        array_push($sideMenuLink, "../admin/adminannouncements.php");
-        array_push($sideMenuImg, "fa-caret-right");
+        // array_push($sideMenuText, $GLOBALS['langAdminAn']);
+        // array_push($sideMenuLink, "../admin/adminannouncements.php");
+        // array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuText, $GLOBALS['langAdminCreateFaq']);
         array_push($sideMenuLink, "../admin/faq_create.php");
@@ -662,10 +662,10 @@ function adminMenu() {
         array_push($sideMenuLink, "../admin/phpInfo.php");
         array_push($sideMenuImg, "fa-caret-right");
 
-        array_push($sideMenuText, $GLOBALS['langAdminManual']);
-        $manual_language = ($language == 'el')? $language: 'en';
-        array_push($sideMenuLink, "http://docs.openeclass.org/$manual_language/admin");
-        array_push($sideMenuImg, "fa-caret-right");
+        // array_push($sideMenuText, $GLOBALS['langAdminManual']);
+        // $manual_language = ($language == 'el')? $language: 'en';
+        // array_push($sideMenuLink, "http://docs.openeclass.org/$manual_language/admin");
+        // array_push($sideMenuImg, "fa-caret-right");
 
         foreach ($sideMenuLink as $module_link) {
             if ($current_module_dir == module_path($module_link)) {
