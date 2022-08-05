@@ -346,7 +346,7 @@ $this_chart_data['percentage'][] = round(100*$both_con_sep/$total_partic,2);
 /****   C3 plot   ****/
 $chart_data[] = $this_chart_data;
 $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
-$tool_content .= "<div class='row plotscontainer'>";
+$tool_content .= "<div class='row plotscontainer mb-3'>";
 $tool_content .= "<div class='col-lg-12'>";
 $tool_content .= plot_placeholder("poll_chart");
 $tool_content .= "</div></div>";

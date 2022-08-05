@@ -301,7 +301,7 @@ if ($PollType == POLL_NORMAL) {
                 $answers_table .= "</table><br>";
                 $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
                 /****   C3 plot   ****/
-                $tool_content .= "<div class='row plotscontainer'>";
+                $tool_content .= "<div class='row plotscontainer mb-3'>";
                 $tool_content .= "<div class='col-lg-12'>";
                 $tool_content .= plot_placeholder("poll_chart$chart_counter", q_math($theQuestion->question_text));
                 $tool_content .= "</div></div>";
@@ -382,7 +382,7 @@ if ($PollType == POLL_NORMAL) {
                 /****   C3 plot   ****/
                 $chart_data[] = $this_chart_data;
                 $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
-                $tool_content .= "<div class='row plotscontainer'>";
+                $tool_content .= "<div class='row plotscontainer mb-3'>";
                 $tool_content .= "<div class='col-lg-12'>";
                 $tool_content .= plot_placeholder("poll_chart$chart_counter", q($theQuestion->question_text));
                 $tool_content .= "</div></div>";

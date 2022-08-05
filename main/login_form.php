@@ -69,7 +69,7 @@ foreach ($q as $l) {
                   <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
                 </div>
                 <div class='col-9 text-end pt-3'>
-                  <a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
+                  <a class='fs-6' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
                 </div>
               </div>
            </div>

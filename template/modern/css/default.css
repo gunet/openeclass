@@ -1858,7 +1858,7 @@ a{
     }
 
     .navbar-eclass, .site-footerMobile, .border-15px, .BordersTop{
-      border-radius: 0px;
+      border-radius: 0px !important;
     }
     .Announcements-Homepage{
      background: #DCDCDC !important;

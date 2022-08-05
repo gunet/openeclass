@@ -527,7 +527,7 @@ function display_activities($element, $id, $unit_id = 0) {
                         </div>
                         <hr>
                         <div class='res-table-wrapper'>
-                                <div class='res-table-header list-header p-1'>
+                                <div class='res-table-header list-header p-1 h-auto'>
                                     <div class='row'>
                                         <div class='col-sm-6 text-white text-start'>
                                             $langTitle
