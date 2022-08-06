@@ -189,8 +189,8 @@
 
 <div class="container-fluid main-container cources-section mt-lg-3 mt-0">
     <div class="row rowMedium">
-        <div class="col-12 col-lg-8 user-details">
-            <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-3 pb-5">
+        <div class="col-12 col-lg-8 user-courses pt-lg-5 ps-lg-5 pe-lg-5 pb-lg-5 p-md-5 p-3">
+            <div class="row">
                 
                 <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-8 col-8">
                     <span class="text-primary fs-4">{{ trans('langMyCoursesSide') }}</span>
@@ -297,15 +297,15 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-4 calendar_announce_message_col mt-lg-0 mt-0 ps-lg-2 pe-lg-2 pt-lg-0 pb-lg-0 ps-md-5 pe-md-5 pt-md-3 pb-md-5 ps-3 pe-3 pt-3 pb-5">
+        <div class="col-12 col-lg-4 bg-white calendar_announce_message_col mt-0 ps-lg-0 pe-lg-5 pt-lg-5 pb-lg-5 ps-md-5 pe-md-5 pt-md-3 pb-md-5 ps-3 pe-3 pt-3 pb-5">
 
 
-            <div class="container-fluid container_fluid_calendar container_fluid_calendar_portfolio bg-white ms-lg-2 mt-lg-0 mt-md-4 mt-4">
+            <div class="container-fluid container_fluid_calendar container_fluid_calendar_portfolio bg-white border border-light shadow-sm mt-lg-0 mt-md-4 mt-4">
                 @include('portfolio.portfolio-calendar')
             </div>
 
 
-            <div class="container-fluid user-announcements-portfolio bg-white mt-lg-3 ms-lg-2 mt-lg-0 mt-md-4 mt-4">
+            <div class="container-fluid user-announcements-portfolio bg-white border border-light shadow-sm mt-lg-3 mt-md-4 mt-4">
                {{-- <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-3 rowMedium">
 
                     <span class="text-center control-label-notes">{{ trans('langMyPersoAnnouncements') }}</span><hr class='text-primary mt-3'>
@@ -329,7 +329,7 @@
             </div>
 
 
-            <div class="container-fluid user-messages-portfolio bg-white mt-lg-3 ms-lg-2 mt-lg-0 mt-md-4 mt-4">
+            <div class="container-fluid user-messages-portfolio bg-white border border-light shadow-sm mt-lg-3 mt-md-4 mt-4">
                 {{-- <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-3 rowMedium">
 
                     <span class="text-center control-label-notes">{{ trans('langMyPersoMessages') }}</span><hr class='text-primary mt-3'>
@@ -351,17 +351,18 @@
                     </div>
 
                 </div> --}}
+
                 <div class='row rowMedium'>
                     <div class='control-label-notes text-center mt-3 mb-3'>{{ trans('langMyPersoMessages') }}</div><hr class='text-primary'>
-                    @if(!empty($user_messages))
+                    {{-- @if(!empty($user_messages)) --}}
                         <div class='ps-3 pb-3 pe-3'>
                             {!! $user_messages !!}
                         </div>
-                    @else
+                    {{-- @else
                         <li class='list-item'>
                             <div class='text-title not_visible'> - {{ trans('langDropboxNoMessage') }} - </div>
                         </li>
-                    @endif
+                    @endif --}}
                     <hr class='text-primary'>
                     <div class='text-center text-primary fw-bold fs-6 mb-3'>
                         <a href="{{$urlAppend}}modules/message/index.php">{{ trans('langAllMessages') }} <span class='fa fa-arrow-right'></span></a>

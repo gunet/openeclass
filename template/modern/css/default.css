@@ -36,33 +36,6 @@ body{
   color : #1d4e89;
 }
 
-.Borders{
-  border-radius:15px !important;
-}
-
-.BordersTop{
-  border-top-left-radius:15px !important;
-  border-top-right-radius:15px !important;
-}
-
-.BordersBottom{
-  border-bottom-left-radius:15px !important;
-  border-bottom-right-radius:15px !important;
-}
-
-.NoBorders{
-  border-radius:0px !important;
-}
-
-.NoBorderTop{
-   border-top-left-radius:0px !important;
-   border-top-right-radius:0px !important;
-}
-
-.NoBorderBottom{
-  border-bottom-left-radius:0px !important;
-  border-bottom-right-radius:0px !important;
-}
 
 img {
   max-width: 100%;
@@ -630,6 +603,13 @@ a{
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
+
+  .calendar_announce_message_col{
+    background-color: white;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius:15px;
+  }
+  
   .BtnCourseRegister{
     width:200px;
     height:200px;
@@ -671,7 +651,15 @@ a{
     cursor: pointer;
   }
 
-  .user-details {
+  .user-courses {
+    background-color: white;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
+    height:auto;
+  }
+  .user-details{
     background-color: white;
     border-radius: 15px;
     padding-right: 15px;
@@ -1582,6 +1570,44 @@ a{
   .inner-heading{
     height: auto;
   }
+
+  /* -------------------------------------------- TEMP BORDERS ---------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/  
+  
+  .Borders{
+    border-radius:15px;
+  }
+  
+  .BordersTop{
+    border-top-left-radius:15px;
+    border-top-right-radius:15px;
+  }
+  
+  .BordersBottom{
+    border-bottom-left-radius:15px;
+    border-bottom-right-radius:15px;
+  }
+  
+  .NoBorders{
+    border-radius:0px;
+  }
+  
+  .NoBorderTop{
+     border-top-left-radius:0px;
+     border-top-right-radius:0px;
+  }
+  
+  .NoBorderBottom{
+    border-bottom-left-radius:0px;
+    border-bottom-right-radius:0px;
+  }
   
   
   /* -------------------------------------------- Links ----------------------------------------------*/
@@ -1853,7 +1879,7 @@ a{
      margin: auto;
     }
 
-    .navbar-eclass, .site-footerMobile, .border-15px, .BordersTop{
+    .navbar-eclass, .site-footerMobile, .border-15px, .BordersTop, .user-courses{
       border-radius: 0px !important;
     }
     .Announcements-Homepage{
@@ -1935,15 +1961,12 @@ a{
       height: 30px;
       border-radius: 50%;
     }
-    .calendar_announce_message_col{
-      background-color: white;
-      border-radius: 15px;
-    }
-    .container_fluid_calendar{
+  
+    /* .container_fluid_calendar{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
       box-shadow: 0 0 3px #ccc;
-    }
+    } */
     .user-announcements-portfolio{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
@@ -2062,15 +2085,11 @@ a{
       border-radius: 50%;
     }
 
-    .calendar_announce_message_col{
-      background-color: white;
-      border-radius: 15px;
-    }
-    .container_fluid_calendar{
+    /* .container_fluid_calendar{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
       box-shadow: 0 0 3px #ccc;
-    }
+    } */
     .user-announcements-portfolio{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
@@ -2186,15 +2205,11 @@ a{
       border-radius: 50%;
     }
 
-    .calendar_announce_message_col{
-      background-color: white;
-      border-radius: 15px;
-    }
-    .container_fluid_calendar{
+    /* .container_fluid_calendar{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
       box-shadow: 0 0 3px #ccc;
-    }
+    } */
     .user-announcements-portfolio{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
@@ -2353,15 +2368,11 @@ a{
       border:solid 3px white;
     } */
 
-    .calendar_announce_message_col{
-      background-color: white;
-      border-radius: 15px;
-    }
-    .container_fluid_calendar{
+    /* .container_fluid_calendar{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
       box-shadow: 0 0 3px #ccc;
-    }
+    } */
     .user-announcements-portfolio{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
@@ -2452,15 +2463,11 @@ a{
     .btn-group .btn.btn-success{
       border:solid 3px white;
     } */
-    .calendar_announce_message_col{
-      background-color: white;
-      border-radius: 15px;
-    }
-    .container_fluid_calendar{
+    /* .container_fluid_calendar{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
       box-shadow: 0 0 3px #ccc;
-    }
+    } */
     .user-announcements-portfolio{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
@@ -2525,6 +2532,10 @@ a{
   }
 
   @media(min-width: 992px) and (max-width: 1023px){
+    /* this is min-height for portfolio page - userdetailsColumn - header - footer */
+    .calendar_announce_message_col{
+      min-height: calc(100vh - 329px - 46px - 46px);
+    }
     .col_maincontent_active_unit{
       transition: 0.4s;
       height:auto;
@@ -2543,11 +2554,6 @@ a{
       box-shadow: none;
       border-radius: 25px;
       padding:25px;
-    }
-
-    .calendar_announce_message_col{
-      background-color: transparent;
-      border-radius: none;
     }
 
     .container_fluid_calendar_portfolio{
@@ -2599,10 +2605,15 @@ a{
 
   @media (min-width: 1024px) and (max-width: 1199px){ 
 
-    .btn-group{
+    /* this is min-height for portfolio page - userdetailsColumn - header - footer */
+    .calendar_announce_message_col{
+      min-height: calc(100vh - 329px - 46px - 46px);
+    }
+
+    /* .btn-group{
       max-width:400px;
       flex-wrap: wrap;
-    }
+    } */
 
     /* .btn-group .btn.btn-secondary{
        border:solid 3px white;
@@ -2671,6 +2682,11 @@ a{
   /* ------------------------------------------------------- small laptop --------------------------------------------------*/
   
   @media (min-width: 1200px) and (max-width: 1399px){ 
+
+    /* this is min-height for portfolio page - userdetailsColumn - header - footer */
+    .calendar_announce_message_col{
+      min-height: calc(100vh - 329px - 46px - 46px);
+    }
 
     .sidebarColToolText{
       margin-left:-8px;
@@ -2742,7 +2758,7 @@ a{
       .imageCourse{
           float: left;
           width:  100%;
-          height: 280px;
+          height: 200px;
           background-size: cover ;
       }
   
@@ -2812,105 +2828,108 @@ a{
   
   @media (min-width:1400px){
 
-        .col_maincontent_active_completeCourse{
-            width:648px ;
-            margin-left:72px ;
-        }
+    /* this is min-height for portfolio page - userdetailsColumn - header - footer */
+    .calendar_announce_message_col{
+      min-height: calc(100vh - 329px - 46px - 46px);
+    }
 
-        .user-calendar{
-            float: right;
-            margin-right: 10px;
-        }
+    .col_maincontent_active_completeCourse{
+        width:648px ;
+        margin-left:72px ;
+    }
 
-        .user-message{
-            float: right;
-            margin-right: 35px;
-        }
+    .user-calendar{
+        float: right;
+        margin-right: 10px;
+    }
 
-        .user-menu-logout{
-            margin-right: 35px;
-            float:right; margin-top:30px;
-        }
+    .user-message{
+        float: right;
+        margin-right: 35px;
+    }
 
-        .collapse-menu-button{
-            float:right;
-            margin-right: 35px;
-        }
-  
-       
-  
-      /* modal frame */
-      .modal-dialog.modal-lg .modal-content{
-          width:900px ;
-      }
-  
-      .content_col{
-          padding-bottom:50px;
-      }
-  
-      .NouploadImageCourseCol{
-          width:30%;
-      }
-  
-      .imageCourse{
-          float: left;
-          width:  100%;
-          height: 350px;
-          background-size: cover ;
-      }
-  
-      .uploadImageCourse{
-          height: 350px;
-          width: 100%;
-          object-fit: fill ;
-      }
-  
-      .register_to_course_comment{
-          float:right;
-          color:black; 
-          margin-top:5px;
-      }
-  
-      .add_course_comment_col{
-         height:22px; margin-left:73%; margin-top:15px;
-      }
-  
-      .add_course_image_col{
-         height:auto; margin-left:90%; margin-top:-30px;
-      }
-  
-      .add_course_a{
-          text-decoration:none; margin-left:-32px; margin-top:-15px;
-          color:black ;
-      }
-  
-      .span_add_course_a{
-          float:right; margin-right:-14px; margin-top:-60px;
-          color:orange; font-size:35px; filter: brightness(100%); 
-          font-weight: 600;
-      }
-  
-      .fa.fa-reply.space-after-icon{
-          color:orange ;
-      }
-  
-      .input_search_col_default{
-          width:300px ;
-      }
-  
-      .user-icon-filename{
-          width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
-      }
-      .dropdown-user-menu-ul{
-          width:250px ;
-          background-color: #003F87 ;
-          margin-left:30px;
-      }
- 
-      .dropdown-language-ul{
-          margin-left:900px;
-          margin-top:40px !important;
-          background-color: #003F87 ;
-      }
+    .user-menu-logout{
+        margin-right: 35px;
+        float:right; margin-top:30px;
+    }
+
+    .collapse-menu-button{
+        float:right;
+        margin-right: 35px;
+    }
+
+    /* modal frame */
+    .modal-dialog.modal-lg .modal-content{
+        width:900px ;
+    }
+
+    .content_col{
+        padding-bottom:50px;
+    }
+
+    .NouploadImageCourseCol{
+        width:30%;
+    }
+
+    .imageCourse{
+        float: left;
+        width:  100%;
+        height: 200px;
+        background-size: cover ;
+    }
+
+    .uploadImageCourse{
+        height: 350px;
+        width: 100%;
+        object-fit: fill ;
+    }
+
+    .register_to_course_comment{
+        float:right;
+        color:black; 
+        margin-top:5px;
+    }
+
+    .add_course_comment_col{
+        height:22px; margin-left:73%; margin-top:15px;
+    }
+
+    .add_course_image_col{
+        height:auto; margin-left:90%; margin-top:-30px;
+    }
+
+    .add_course_a{
+        text-decoration:none; margin-left:-32px; margin-top:-15px;
+        color:black ;
+    }
+
+    .span_add_course_a{
+        float:right; margin-right:-14px; margin-top:-60px;
+        color:orange; font-size:35px; filter: brightness(100%); 
+        font-weight: 600;
+    }
+
+    .fa.fa-reply.space-after-icon{
+        color:orange ;
+    }
+
+    .input_search_col_default{
+        width:300px ;
+    }
+
+    .user-icon-filename{
+        width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
+    }
+    .dropdown-user-menu-ul{
+        width:250px ;
+        background-color: #003F87 ;
+        margin-left:30px;
+    }
+
+    .dropdown-language-ul{
+        margin-left:900px;
+        margin-top:40px !important;
+        background-color: #003F87 ;
+    }
   }
 

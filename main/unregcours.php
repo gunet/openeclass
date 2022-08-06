@@ -45,15 +45,15 @@ if (!isset($_POST['doit'])) {
             </div>
           </div>
           <div class='form-group mt-3'>
-            <label class='col-sm-6'>$langYes:</label>
-            <div class='col-sm-12'>
-              <button class='btn btn-danger' name='doit'> $langUnCourse</button>
+            <div class='d-inline-flex align-items-center'>
+              <label class='control-label-notes'>$langYes:</label>
+              <button class='btn btn-danger ms-2' name='doit'> $langUnCourse</button>
             </div>
           </div>
           <div class='form-group mt-3'>
-            <label class='col-sm-6'>$langNo:</label>
-            <div class='col-sm-12'>
-              <a href='{$urlAppend}main/portfolio.php' class='btn btn-secondary'> $langCancel</a>
+            <div class='d-inline-flex align-items-center'>
+              <label class='control-label-notes'>$langNo:</label>
+              <a href='{$urlAppend}main/portfolio.php' class='btn btn-secondary ms-2'> $langCancel</a>
             </div>
           </div>
         </form>

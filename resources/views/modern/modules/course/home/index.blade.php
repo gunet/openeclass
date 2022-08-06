@@ -271,7 +271,7 @@
 
                     <div class="col-xl-4 col-lg-6 col-md-12 mt-lg-4 mt-4 float-end ">
 
-                        <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar">
+                        <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar border border-light shadow-sm">
                             {!! $user_personal_calendar !!}
                             <div class='col-sm-12 mt-4 pb-2'>
                                 <div class='row rowMedium'>

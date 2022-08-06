@@ -10,13 +10,13 @@
     background-color: #003F87 !important;
     border-top-left-radius: 15px !important;
     border-top-right-radius: 15px !important;
-    margin-left:-23px !important;
-    margin-right:-23px !important;
+    margin-left:-25px !important;
+    margin-right:-25px !important;
 }
 
 @media (max-width: 991px){
     #cal-header{
-        margin-left:0px !important;
+       margin-left:0px !important;
        margin-right:0px !important;
     }
 }
