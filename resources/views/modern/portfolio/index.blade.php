@@ -13,12 +13,12 @@
                 <div class="container-fluid">
                     <div class="row block-title-2 rowMedium justify-content-between">
                         <div class="col-xl-8 col-md-5 col-10 ps-0">
-                            <h6 class='fw-bold'>{{ trans('langSummaryProfile') }}</h6>
+                            <span class='fw-bold mt-2'>{{ trans('langSummaryProfile') }}</span>
                         </div>
                         <div class="col-xl-4 col-md-7 col-2 pe-0">
                             <div class="collapse-details-button" data-bs-toggle="collapse" data-bs-target=".user-details-collapse" aria-expanded="false" onclick="switch_user_details_toggle()" >
-                                <span class="user-details-collapse-more fs-lg-5 fs-6 float-end"> <span class='hidden-xs text-primary'>{{ trans('langMoreInfo') }}</span> <i class="fas fa-chevron-down"></i> </span>
-                                <span class="user-details-collapse-less fs-lg-5 fs-6 float-end"> <span class='hidden-xs text-primary text-uppercase'>{{ trans('langViewHide') }}</span> <i class="fas fa-chevron-up"></i> </span>
+                                <span class="user-details-collapse-more fs-lg-5 fs-6 float-end"> <span class='hidden-xs text-primary mt-2'>{{ trans('langMoreInfo') }}</span> <i class="fas fa-chevron-down"></i> </span>
+                                <span class="user-details-collapse-less fs-lg-5 fs-6 float-end"> <span class='hidden-xs text-primary text-uppercase mt-2'>{{ trans('langViewHide') }}</span> <i class="fas fa-chevron-up"></i> </span>
                             </div>
                         </div>
 
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="container-fluid collapse user-details-collapse">
-                    <div class="row mt-lg-0 mt-3">
+                    <div class="row rowMedium mt-lg-0 mt-3">
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
                             <div class="container-fluid">
                                 <div class="row justify-content-center">
@@ -200,12 +200,12 @@
                     <div id="bars-active" type='button' class='float-end mt-0' style="display:flex;">
                         <div id="cources-bars-button"
                             class="collapse-cources-button text-primary" >
-                            <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars"></i></span>
+                            <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars mt-2"></i></span>
                         </div>
                         <div id="cources-pics-button"
                             class="collapse-cources-button text-secondary collapse-cources-button-deactivated"
                             onclick="switch_cources_toggle()">
-                            <span class="grid-style"><i class="fas fa-custom-size fa-th-large"></i></span>
+                            <span class="grid-style"><i class="fas fa-custom-size fa-th-large mt-2"></i></span>
                         </div>
                     </div>
 
@@ -213,10 +213,10 @@
                         <div id="cources-bars-button"
                             class="collapse-cources-button text-secondary collapse-cources-button-deactivated"
                             onclick="switch_cources_toggle()">
-                            <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars"></i></span>
+                            <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars mt-2"></i></span>
                         </div>
                         <div id="cources-pics-button" class="collapse-cources-button text-primary">
-                            <span class="grid-style"><i class="fas fa-custom-size fa-th-large"></i></span>
+                            <span class="grid-style"><i class="fas fa-custom-size fa-th-large mt-2"></i></span>
                         </div>
                     </div>
                     
@@ -254,8 +254,8 @@
                     @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'bars', 'cource_pages' => $cource_pages])
                         --}}
 
-                    <div class='d-flex justify-content-md-end justify-content-center'> 
-                        <a class="btn btn-primary float-md-end text-center mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
+                    <div class='d-flex justify-content-center'> 
+                        <a class="BtnCourseRegister mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="ps-1 fa fa-arrow-right"></span></a>
                     </div>
 
                     </div>

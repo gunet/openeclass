@@ -212,23 +212,18 @@
                             <div class='panel panel-default'>
                                 <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                     <div class='row'>
-                                        <div class='col-sm-12'>
-                                            <div class='control-label-notes text-center'>
-                                                {{ trans('langCourseUnits') }}
-                                            </div>
-                                        </div>
                                         
-                                        <div class='col-md-6 col-12 d-flex justify-content-md-start justify-content-center mt-md-0 mt-4'>
+                                        <div class='col-sm-12'>
+                                            <span class='control-label-notes'>
+                                                {{ trans('langCourseUnits') }}
+                                            </span>
                                             @if ($is_editor and $course_info->view_type == 'units')
-                                                <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
-                                                    {{ trans('langAddUnit') }} <span class='fa fa-plus-circle'></span>
+                                                <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn float-end mt-1' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
+                                                    <span class='fa fa-plus-circle'></span>
                                                 </a>
                                             @endif 
-                                        </div>
-                                        
-                                        <div class='col-md-6 col-12 d-flex justify-content-md-end justify-content-center mt-md-0 mt-4'>
-                                            <a class='add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
-                                                {{ trans('langHelp') }} <span class='fa fa-question-circle'></span>
+                                            <a class='add-unit-btn float-end pe-2 mt-1' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                                <span class='fa fa-question-circle'></span>
                                             </a>
                                         </div>
                                     </div>
@@ -244,7 +239,7 @@
                             {!! $course_home_main_area_widgets !!}
                         @else
                             <div class='panel panel-default'>
-                                <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
+                                <div class='panel-heading text-center control-label-notes ps-3 pe-3 pb-2 pt-2'>
                                     {{ trans('langCourseUnits') }}
                                 </div>
                                 <div class='panel-body'>

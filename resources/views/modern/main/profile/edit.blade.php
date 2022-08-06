@@ -88,31 +88,37 @@
                                 <div class="row p-2"></div>
                                 <div class='form-group'>
                                     <label for='email_form' class='col-sm-6 control-label-notes'>{{ trans('langEmail') }}:</label>
-                                    <div class='col-sm-5'>
-                                        <input class='form-control' type='text' name='email_form' id='email_form' value='{{ $email_form }}'>
-                                    </div>
-                                    <div class='col-sm-5'>
-                                        {!! selection($access_options, 'email_public', $email_public, "class='form-control'") !!}
+                                    <div class='row'>   
+                                        <div class='col-sm-6'>
+                                            <input class='form-control' type='text' name='email_form' id='email_form' value='{{ $email_form }}'>
+                                        </div>
+                                        <div class='col-sm-6'>
+                                            {!! selection($access_options, 'email_public', $email_public, "class='form-control'") !!}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row p-2"></div>
                                 <div class='form-group'>
                                     <label for='am_form' class='col-sm-6 control-label-notes'>{{ trans('langAm') }}:</label>
-                                    <div class='col-sm-5'>
-                                        <input type='text' class='form-control' name='am_form' id='am_form' value='{{ $am_form }}'>
-                                    </div>
-                                    <div class='col-sm-5'>
-                                        {!! selection($access_options, 'am_public', $am_public, "class='form-control'") !!}
+                                    <div class='row'>   
+                                        <div class='col-sm-6'>
+                                            <input type='text' class='form-control' name='am_form' id='am_form' value='{{ $am_form }}'>
+                                        </div>
+                                        <div class='col-sm-6'>
+                                            {!! selection($access_options, 'am_public', $am_public, "class='form-control'") !!}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row p-2"></div>
                                 <div class='form-group'>
                                     <label for='phone_form' class='col-sm-6 control-label-notes'>{{ trans('langPhone') }}</label>
-                                    <div class='col-sm-5'>
-                                        <input type='text' class='form-control' name='phone_form' id='phone_form' value='{{$phone_form }}'>
-                                    </div>
-                                    <div class='col-sm-5'>
-                                        {!! selection($access_options, 'phone_public', $phone_public, "class='form-control'") !!}
+                                    <div class='row'>   
+                                        <div class='col-sm-6'>
+                                            <input type='text' class='form-control' name='phone_form' id='phone_form' value='{{$phone_form }}'>
+                                        </div>
+                                        <div class='col-sm-6'>
+                                            {!! selection($access_options, 'phone_public', $phone_public, "class='form-control'") !!}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row p-2"></div>
@@ -121,12 +127,12 @@
                                     <div class='col-sm-10'>
                                         <div class='radio'>
                                             <label>
-                                                <input type='radio' name='subscribe' value='yes' {{ $selectedyes }}>{{ trans('langYes') }}
+                                                <input type='radio' name='subscribe' value='yes' {{ $selectedyes }}> {{ trans('langYes') }}
                                             </label>
                                         </div>
                                         <div class='radio'>
                                             <label>
-                                                <input type='radio' name='subscribe' value='no' {{ $selectedno }}>{{ trans('langNo') }}
+                                                <input type='radio' name='subscribe' value='no' {{ $selectedno }}> {{ trans('langNo') }}
                                             </label>
                                         </div>
                                     </div>

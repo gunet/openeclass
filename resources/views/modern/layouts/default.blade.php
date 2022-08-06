@@ -111,7 +111,7 @@
         </div>
 
         <!-- Mobile navbar -->
-        <div class="d-lg-none mr-auto">
+        <div class="d-lg-none">
             @include('layouts.partials.navheadMobile',['logo_img_small' => $logo_img_small])
         </div>
 

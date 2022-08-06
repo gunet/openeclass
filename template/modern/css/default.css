@@ -14,6 +14,11 @@ body{
   font-family: 'FontAwesome';
   font-size: 18px;
 }
+@media (max-width:1023px){
+  body{
+    font-size:15px;
+  }
+}
 
 .h-400px{
   height:400px;
@@ -80,10 +85,6 @@ li {
   height:300px;
 }
 
-.Borders{
-  border-radius:15px;
-}
-
 .navbar-eclass {
   height: 170px;
   overflow: visible;
@@ -135,6 +136,11 @@ li {
 
 a{
     text-decoration: none;
+}
+@media(max-width:1023px){
+  a{
+    font-size: 15px;
+  }
 }
 
 .main-container{
@@ -393,13 +399,14 @@ a{
     background-color: #fbd1a2;
     color:#1d4e89;
   }
+  
 
   .dropdown_menu_user{
     background: #ffffff;
-    width:235px;
+    width:255px;
   }
 
-  .dropdown_menu_user .dropdown-item:hover{
+  .dropdown_menu_user .list-group-item:hover{
     background-color: #1d4e89;
     color:white;
   }
@@ -407,7 +414,7 @@ a{
   .user-language-menu{
     background: #ffffff;
   }
-  .user-language-menu .dropdown-item:hover{
+  .user-language-menu .list-group-item:hover{
     background-color: #1d4e89;
     color:white;
   }
@@ -539,48 +546,15 @@ a{
   /* ------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------------------------------------------------- */
 
-  .myuls{
+  .mydropdowns{
       background-color: #fafafa;
-      width:245px;
-      max-height:450px;
-      overflow-y: scroll;
+      width:315px;
+  }  
+  .mydropdowns .list-group-item:hover{
+      background-color: #1d4e89;
+      color:white;
   }
-  .myuls a{
-    color:#001146;
-   }
 
-  .myuls::-webkit-scrollbar {
-      width: 10px;
-    }
-    
-    /* Track */
-  .myuls::-webkit-scrollbar-track {
-      box-shadow: inset 0 0 5px #fafafa; 
-      border-radius: 10px;
-    }
-     
-    /* Handle */
-  .myuls::-webkit-scrollbar-thumb {
-      background: #9d9d9c; 
-      border-radius: 10px;
-    }
-    
-    /* Handle on hover */
-  .myuls::-webkit-scrollbar-thumb:hover {
-      background: #003F87; 
-  }
-  
-  .myuls li{
-      margin: 10px 0 20px 0;
-  }
-  
-  .myuls li:hover{
-      background-color: #003F87;
-  }
-  .myuls li a:hover{
-    color: #fafafa;
-  }
-  
   
   /* --------------------------------------------- Datepicker-datetimepicker --------------------------*/
   /* ------------------------------------------------------------------------------------------------- */
@@ -656,7 +630,23 @@ a{
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
+  .BtnCourseRegister{
+    width:200px;
+    height:200px;
+    border-radius: 50%;
+    border:solid 2px #1d4e89;
+    background-color: #1d4e89;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
 
+  .BtnCourseRegister:hover{
+    border:solid 2px #1d4e89;
+    background-color: #F8F8FF;
+    color:#1d4e89;
+  }
   .lesson-image:hover{
     opacity:0.5;
   }
@@ -1275,6 +1265,12 @@ a{
     color:#1d4e89;
     font-weight: 600;
   }
+  @media (max-width:1023px){
+    .control-label-notes{
+      font-size: 16px;
+    }
+  }
+  
    
   
   /* -------------------------------------------- Video ----------------------------------------------*/
@@ -1977,16 +1973,16 @@ a{
       padding:25px;
     }
 
-    .btn-group{
+    /* .btn-group{
       max-width:300px;
       flex-wrap: wrap;
-    }
-    .btn-group .btn.btn-secondary{
+    } */
+    /* .btn-group .btn.btn-secondary{
       border:solid 3px white;
     }
     .btn-group .btn.btn-success{
       border:solid 3px white;
-    }
+    } */
 
     .breadcrumb-item a{
       max-width:300px;
@@ -2104,16 +2100,16 @@ a{
       padding:25px;
     }
 
-    .btn-group{
+    /* .btn-group{
       max-width:355px;
       flex-wrap: wrap;
-    }
-    .btn-group .btn.btn-secondary{
+    } */
+    /* .btn-group .btn.btn-secondary{
       border:solid 3px white;
     }
     .btn-group .btn.btn-success{
       border:solid 3px white;
-    }
+    } */
     .breadcrumb-item a{
       max-width:325px;
       flex-wrap: wrap;
@@ -2260,17 +2256,17 @@ a{
         margin-left:0px;
     }
 
-    .btn-group{
+    /* .btn-group{
       max-width:400px;
       flex-wrap: wrap;
-    }
+    } */
 
-    .btn-group .btn.btn-secondary{
+    /* .btn-group .btn.btn-secondary{
        border:solid 3px white;
     }
     .btn-group .btn.btn-success{
       border:solid 3px white;
-    }
+    } */
 
     .fas.fa-pen-nib{
         transform: rotate(265deg);
@@ -2345,17 +2341,17 @@ a{
       border-radius: 50%;
     }
 
-    .btn-group{
+    /* .btn-group{
       max-width:400px;
       flex-wrap: wrap;
-    }
+    } */
 
-    .btn-group .btn.btn-secondary{
+    /* .btn-group .btn.btn-secondary{
        border:solid 3px white;
     }
     .btn-group .btn.btn-success{
       border:solid 3px white;
-    }
+    } */
 
     .calendar_announce_message_col{
       background-color: white;
@@ -2445,17 +2441,17 @@ a{
 
   @media (min-width: 768px) and (max-width: 991px){
 
-    .btn-group{
+    /* .btn-group{
       max-width:400px;
       flex-wrap: wrap;
-    }
+    } */
 
-    .btn-group .btn.btn-secondary{
+    /* .btn-group .btn.btn-secondary{
        border:solid 3px white;
     }
     .btn-group .btn.btn-success{
       border:solid 3px white;
-    }
+    } */
     .calendar_announce_message_col{
       background-color: white;
       border-radius: 15px;
@@ -2608,12 +2604,12 @@ a{
       flex-wrap: wrap;
     }
 
-    .btn-group .btn.btn-secondary{
+    /* .btn-group .btn.btn-secondary{
        border:solid 3px white;
     }
     .btn-group .btn.btn-success{
       border:solid 3px white;
-    }
+    } */
 
     .sidebarColToolText{
       margin-left:-14px;

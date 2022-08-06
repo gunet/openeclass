@@ -58,10 +58,10 @@
                                         <span><img class="user-icon-filename" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}"
                                                 alt="{{ $uname }}">{{ $uname }}</span>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown_menu_user mt-1 shadow-lg" aria-labelledby="btnGroupDrop1">
+                                    <ul class="m-0 p-0 dropdown-menu dropdown-menu-end dropdown_menu_user shadow-lg bg-body border-0" aria-labelledby="btnGroupDrop1">
                                         @if($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == ADMIN_USER)
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}modules/create_course/create_course.php">
+                                        <li>
+                                            <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/create_course/create_course.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class="fas fa-plus-circle text-warning pt-1"></span>
@@ -75,8 +75,8 @@
                                             </a>
                                         </li>
                                         @endif
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}main/portfolio.php">
+                                        <li>
+                                            <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/portfolio.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class="fas fa-home bg-transparent text-warning pt-1"></span>
@@ -90,8 +90,8 @@
                                             </a>
                                         </li>
 
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}main/my_courses.php">
+                                        <li>
+                                            <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/my_courses.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class="fas fa-graduation-cap text-warning pt-1"></span>
@@ -105,8 +105,8 @@
                                             </a>
                                         </li>
 
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}modules/announcements/myannouncements.php">
+                                        <li>
+                                            <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/announcements/myannouncements.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class="fas fa-bell text-warning pt-1"></span>
@@ -120,8 +120,8 @@
                                             </a>
                                         </li>
 
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}main/notes/index.php">
+                                        <li>
+                                            <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/notes/index.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class="fas fa-sticky-note text-warning pt-1"></span>
@@ -135,8 +135,8 @@
                                             </a>
                                         </li>
                                         @if (get_config('eportfolio_enable'))
-                                            <li class='p-1'>
-                                                <a class="dropdown-item" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}">
+                                            <li>
+                                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}">
                                                     <div class='row'>
                                                         <div class='col-1'>
                                                             <span class="fas fa-briefcase text-warning pt-1"></span>
@@ -150,8 +150,8 @@
                                                 </a>
                                             </li>
                                         @endif
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}modules/usage/index.php?t=u">
+                                        <li>
+                                            <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/usage/index.php?t=u">
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class="fas fa-chart-bar text-warning pt-1"></span>
@@ -165,8 +165,8 @@
                                             </a>
                                         </li>
                                         @if (get_config('personal_blog'))
-                                            <li class='p-1'>
-                                                <a class="dropdown-item" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}">
+                                            <li>
+                                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}">
                                                     <div class='row'>
                                                         <div class='col-1'>
                                                             <span class="fas fa-location-arrow text-warning pt-1"></span>
@@ -180,8 +180,8 @@
                                                 </a>
                                             </li>
                                         @endif
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}modules/message/index.php">
+                                        <li>
+                                            <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/message/index.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class="fas fa-envelope text-warning pt-1"></span>
@@ -194,8 +194,8 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}main/personal_calendar/index.php">
+                                        <li>
+                                            <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/personal_calendar/index.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class="fas fa-bell text-warning pt-1"></span>
@@ -208,8 +208,8 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}main/profile/display_profile.php">
+                                        <li>
+                                            <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/profile/display_profile.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class="fas fa-user text-warning pt-1"></span>
@@ -222,8 +222,8 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}main/my_widgets.php">
+                                        <li>
+                                            <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/my_widgets.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class="fa fa-magic fa-fw text-warning pt-1"></span>
@@ -236,8 +236,8 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}main/gradebookUserTotal/index.php">
+                                        <li>
+                                            <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/gradebookUserTotal/index.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class="fa fa-sort-numeric-desc fa-fw text-warning pt-1"></span>
@@ -250,8 +250,8 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class='p-1'>
-                                            <a class="dropdown-item" href="{{ $urlAppend }}main/mycertificates.php">
+                                        <li>
+                                            <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/mycertificates.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class="fa fa-trophy fa-fw text-warning pt-1"></span>
@@ -265,8 +265,8 @@
                                             </a>
                                         </li>
                                         @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')) or ($session->status == ADMIN_USER and get_config('mydocs_teacher_enable')))
-                                            <li class='p-1'>
-                                                <a class="dropdown-item" href="{{ $urlAppend }}main/mydocs/index.php">
+                                            <li>
+                                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/mydocs/index.php">
                                                     <div class='row'>
                                                         <div class='col-1'>
                                                             <span class="fas fa-folder text-warning pt-1"></span>
@@ -281,14 +281,17 @@
                                             </li>
                                         @endif
 
-                                        <li class='p-1'>
-                                            <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:14px;'>
+                                        
+                                        <li>
+                                            <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:15px;'>
                                                 <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
-                                                <li>
-                                                    <button type='submit' class='btn btn-secondary btn-sm w-100 mt-1 border border-dark bg-light' name='submit'><i class="fas fa-sign-out-alt text-white fw-bold"></i><span class='ps-2 fs-6 fw-bold text-white text-uppercase'>{{ trans('langLogout') }}</span></button>
-                                                </li>
+                                                <button class='w-100 list-group-item border border-top-0 border-bottom-0 bg-light text-end bg-light'type='submit' name='submit'>
+                                                    <i class="fas fa-sign-out-alt fw-bold text-primary"></i>
+                                                    <span class='fs-6 fw-bold text-dark'>{{ trans('langLogout') }}</span>
+                                                </button>
                                             </form>
-                                         </li>
+                                        </li>
+                                         
 
                                     </ul>
                                 </div>

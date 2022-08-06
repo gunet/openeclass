@@ -3457,7 +3457,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $i=0;
     $page_title = "";
     if (isset($pageName) and !empty($pageName) and $page_title_flag) {
-        $page_title = "<div class='pull-left'><h4 class='text-secondary pt-2'>".q($pageName)."</h4></div>";
+        $page_title = "<div class='pull-left'><h5 class='text-secondary pt-2'>".q($pageName)."</h5></div>";
     }
     foreach (array_reverse($options) as $option) {
         // skip items with show=false
@@ -3540,9 +3540,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                 "</$primaryTag>$subMenu$form_end");
         } else {
             array_unshift($out_secondary,
-                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class fs-6 fw-bold'" . $href .
+                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class list-group-item border border-top-0 border-bottom-secondary fw-bold'" . $href .
                 " $link_attrs>" .
-                "<div class='row'><div class='col-1'><span class='fa $option[icon] text-warning mt-1'></span></div><div class='col-10'> $title</div></div></a>$form_end</li>");
+                "<span class='fa $option[icon] text-warning mt-1'></span> $title</a>$form_end</li>");
         }
         $i++;
     }
@@ -3555,18 +3555,18 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-cogs";
     if (count($out_secondary)) {
-        $action_button .= "<div class='btn-group'><button type='button' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
-        $action_button .= "  <ul class='row p-3 dropdown-menu dropdown-menu-end myuls shadow-lg' role='menu'>
+        $action_button .= "<button data-bs-display='static' type='button' id='toolDropdown' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
+        $action_button .= "<ul class='dropdown-menu dropdown-menu-end p-0 m-0 mydropdowns shadow-lg' role='menu' aria-labelledby='toolDropdown'>
                      ".implode('', $out_secondary)."
-                  </ul></div>";
+                  </ul>";
     }
     if ($out && $i!=0) {
         return "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix'>
                     <div class='action_bar shadow-sm p-3 mt-2 rounded'>  
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix'>
                             $page_title
-                            <div class='float-md-end float-start mt-md-0 mt-2 margin-top-thin margin-bottom-fat hidden-print'>
-                                <div class='btn-group'>
+                            <div class='float-end mt-md-0 mt-2 margin-top-thin margin-bottom-fat hidden-print'>
+                                <div class='btn-group float-end'>
                                 $out
                                 $action_button
                                 </div>

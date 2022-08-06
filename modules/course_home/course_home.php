@@ -548,7 +548,7 @@ if ($total_cunits > 0) {
         $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
             <div class='item-content'>
                 <div class='item-header clearfix'>
-                    <div class='item-title h4 $class_vis text-primary'>";
+                    <div class='item-title h4 $class_vis text-primary fs-5'>";
         if ($not_shown) {
             $cunits_content .= q($cu->title) ;
         } else {
@@ -744,7 +744,7 @@ function course_announcements() {
             return $ann_content;
         }
     }
-    return "<li class='list-item'><span class='item-wholeline'><div class='text-title not_visible'> - $langNoAnnounce - </div></span></li>";
+    return "<li class='list-item'><span class='item-wholeline'><div class='text-title text-center not_visible'> - $langNoAnnounce - </div></span></li>";
 }
 
 

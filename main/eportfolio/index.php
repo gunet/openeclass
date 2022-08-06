@@ -82,7 +82,7 @@ if ($userdata) {
         } elseif ($userdata->eportfolio_enable == 1) {
             load_js('clipboard.js');
             $clipboard_link = "
-                            <div class='margin-bottom-fat'>
+                            <div class='margin-bottom-fat mt-3'>
                                 <div class='margin-bottom-thin'><strong>$langPageLink</strong></div>
                                 <div class='input-group'>
                                     <input class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?id=$id&token=$token'>
@@ -243,7 +243,7 @@ if ($userdata) {
 
     
     if ($userdata->eportfolio_enable == 1 AND $ret_str['panels'] != "") {
-        $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/eportfolio/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
+        $social_share = "<div class='pull-right mt-3'>".print_sharing_links($urlServer."main/eportfolio/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
     } else {
         $social_share = '';
     }

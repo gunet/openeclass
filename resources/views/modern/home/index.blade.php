@@ -42,9 +42,9 @@
 
                 
                     <div class='d-none d-sm-none d-md-block'>
-                        <div class='row'>
+                        <div class='row rowMedium'>
                             <div class='col-12 ps-md-5 pe-md-5 pt-md-5 pb-md-5'>
-                                <div class="panel panel-default w-100 shadow-sm">
+                                <div class="panel panel-default w-100">
                                     <div class="panel-heading text-center p-3">
                                         <span class='fs-5 control-label-notes'>
                                             {!! get_config('homepage_title') !!}
@@ -59,19 +59,21 @@
                     </div>
 
                     <div class='d-block d-md-none'>
-                        <div class='col-12 pt-5'>    
-                            <div class="panel panel-default w-100 shadow-sm">
-                                <div class='panel-body Borders'>
-                                    {!! get_config('homepage_intro') !!}
-                                </div>
-                            </div>  
+                        <div class='row rowMedium'>
+                            <div class='col-12 pt-5'>    
+                                <div class="panel panel-default w-100 shadow-sm">
+                                    <div class='panel-body Borders'>
+                                        {!! get_config('homepage_intro') !!}
+                                    </div>
+                                </div> 
+                            </div> 
                         </div>
                     </div>
 
                     
                     @if (get_config('enable_mobileapi'))
                     <div class='col-12 ps-md-5 pe-md-5 pt-md-0 pt-5'>
-                        <div class='row'>
+                        <div class='row rowMedium'>
                             <div class='col-md-6 col-12'>
                                 <div class='panel panel-default'>
                                     <div class='panel-body Borders'>

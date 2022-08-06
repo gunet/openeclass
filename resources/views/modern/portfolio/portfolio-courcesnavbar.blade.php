@@ -1,6 +1,6 @@
-<div class="row justify-content-between">
-    <div class="col-6">
-        <div style="display:flex" class="cources-{{$paging_type}}-num-group" >
+<div class="row justify-content-center">
+    <div class="col-6 d-flex justify-content-center">
+        <div class="cources-{{$paging_type}}-num-group d-flex" >
             <div type="button" onclick="cources_paging_left('{{$paging_type}}')"> 
                 <div class="btn_left_rigth"><i class="fas fa-chevron-left  cources-paging-arrow arrow-left"></i></div> 
             </div>&emsp;
@@ -28,8 +28,8 @@
             </div>
         </div>
     </div>
-    <div class='d-flex justify-content-md-end justify-content-center'>    
-        <a class="btn btn-primary float-md-end text-center mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="fa fa-arrow-right"></span></a>
+    <div class='d-flex justify-content-center'>    
+        <a class="BtnCourseRegister mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="ps-1 fa fa-arrow-right"></span></a>
     </div>
 </div>
 

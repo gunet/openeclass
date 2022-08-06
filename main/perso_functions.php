@@ -102,11 +102,11 @@ function getUserLessonInfo($uid) {
         }
         $lesson_content .= "</tbody></table>";
     } else { // if we are not registered to courses
-        $lesson_content .= "<div class='alert alert-warning'>$langNotEnrolledToLessons!</div>";
+        $lesson_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNotEnrolledToLessons!</div></div>";
         if ($session->status == USER_TEACHER) {
-            $lesson_content .= "<div class='alert alert-info'>$langWelcomeSelect $langWelcomeProfPerso</div>";
+            $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langWelcomeSelect $langWelcomeProfPerso</div></div>";
         } else {
-            $lesson_content .= "<div class='alert alert-info'>$langWelcomeSelect $langWelcomeStudPerso</div>";
+            $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langWelcomeSelect $langWelcomeStudPerso</div></div>";
         }
     }
     return $lesson_content;

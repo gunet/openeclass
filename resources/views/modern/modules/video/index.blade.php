@@ -148,18 +148,18 @@
                                                     $folder_icon = icon('fa-folder-o', $GLOBALS['langViewShow']);
                                                 }
                                             ?>
-                                            <tr class='link-subcategory-title'><th class='category-link' colspan='{{ $colspan }}'>{!! $folder_icon !!}&nbsp;
+                                            <tr class='link-subcategory-title'><th class='category-link p-3' colspan='{{ $colspan }}'>{!! $folder_icon !!}&nbsp;
                                             @if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)
                                                 <a href='{!! $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . $embedParam !!}' class='open-category'>{{ $myrow->name }}</a>
                                             @else
                                                 <a href='{!! $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;cat_id=" . $myrow->id . $embedParam !!}' class='open-category'>{{ $myrow->name }}</a>
                                             @endif
                                             @if (!empty($description))
-                                                <br><span class='link-description'>{{ $description }}</span>
+                                                <br><br><span class='link-description'>{{ $description }}</span>
                                             @endif
                                                 </th>
                                                 @if ($display_tools)
-                                                    <td style='float:right' class='option-btn-cell'>
+                                                    <td class='option-btn-cell text-end'>
                                                         {!!
                                                         action_button(array(
                                                             array('title' => $GLOBALS['langEditChange'],

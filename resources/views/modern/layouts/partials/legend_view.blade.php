@@ -89,13 +89,13 @@
     </div></br>
 </div>
 
-<div class='d-block d-md-block d-lg-none mt-4'>
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 shadow p-3 pb-3 bg-body rounded bg-primary'>
+<div class='d-block d-md-block d-lg-none mt-3'>
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 shadow p-3 bg-body rounded'>
         
             @if($course_code)
                 @if($is_editor)
                     <div class='row'>
-                        <div class='col-12'>
+                        <div class='col-12 border border-top-0 border-start-0 border-end-0 border-bottom-secondary'>
                            
                                 <table class='table'>
                                     <thead>
@@ -177,7 +177,7 @@
                                 </table>
                             
                         </div>
-                        <div class='col-12'>
+                        <div class='col-12 @if(!$toolName) mt-2 @else mt-0 mb-1 @endif'>
                             @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code])
                         </div>
                     </div>
