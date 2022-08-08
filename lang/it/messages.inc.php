@@ -5418,3 +5418,4 @@ $langUnitNotStarted = "The unit has not begun yet";
 $langOfUnitCompletion = 'Unit completion activities';
 $lang_pass_submit = "Inviare";
 $langInsertExerciseCap = "Esercizio";
+$langViewStatics = "Statistiche sul traffico";

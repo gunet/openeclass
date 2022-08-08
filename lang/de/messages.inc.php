@@ -5346,3 +5346,4 @@ $langInvalidCourseUnitPrerequisites = 'Unit completion is not activated.';
 $langUnitNotCompleted = 'Unit prerequisites not yet completed';
 $langUnitNotStarted = "The unit has not begun yet";
 $langOfUnitCompletion = 'Unit completion activities';
+$langViewStatics = "Traffic Statistics";

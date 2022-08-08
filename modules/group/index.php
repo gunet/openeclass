@@ -500,7 +500,7 @@ if ($is_editor) {
                             </script>";
     }
     if ($num_of_groups==0 && $num_of_cat==0) {
-            $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoGroup</div></div>";
         }
     elseif ($num_of_groups==0 && $num_of_cat>0) {
             $tool_content .= "

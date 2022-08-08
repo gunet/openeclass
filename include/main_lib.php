@@ -3724,17 +3724,17 @@ function setOpenCoursesExtraHTML() {
         $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
         $openCoursesExtraHTML = "
             <div class='inner_opencourses'>
-                <div class='row'>
-                    <div class='col-xs-6 col-xs-offset-3 col-md-12 col-md-offset-0'>
-                        <img class='img-responsive center-block' src='$themeimg/banner_open_courses.png' alt='".q($langListOpenCourses)."'>
-                    </div>
+                
+                <div class='col-sm-12 d-flex justify-content-center'>
+                    <img class='img-responsive center-block' src='$themeimg/banner_open_courses.png' alt='".q($langListOpenCourses)."'>
                 </div>
+                
                 <div class='clearfix'>
                     <div class='row num_sub_wrapper center-block clearfix'>
-                        <div class='col-xs-6 col-md-5 opencourse_num'><div class='pull-right'>$openCoursesNum</div></div>
-                        <div class='col-xs-6 col-md-7 opencourse_num_text'>
+                        <div class='col-6 col-md-5 opencourse_num'><div class='float-end'><span class='fs-2 fw-bold'>$openCoursesNum</span></div></div>
+                        <div class='col-6 col-md-7 opencourse_num_text'>
                             <a target='_blank' href='$openFacultiesUrl'>
-                            <div class='pull-left'>
+                            <div class='float-start'>
                                 <span class='opencourse_sub'>" .
                                     (($openCoursesNum == 1)? $langNumOpenCourseBanner: $langNumOpenCoursesBanner) . "
                                 </span>

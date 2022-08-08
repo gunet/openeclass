@@ -38,7 +38,7 @@
                         @if ($user_registration)
                             @if ($registration_info)
                             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-                                <div class='alert alert-info'>{{ $registration_info }}</div>
+                                <div class='alert alert-info'>{!! $registration_info !!}</div>
                             </div>
                             @else
                                 <!-- student registration -->
@@ -101,7 +101,7 @@
 
                                 <!--  teacher registration -->
                                 @if ($eclass_prof_reg or $alt_auth_prof_reg)  <!-- allow teacher registration -->
-                                    <div class='table-responsive mt-3'>
+                                    <div class='table-responsive'>
                                         <table class="announcements_table table">
                                             
                                             <tr class='notes_thead'>

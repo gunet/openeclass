@@ -5537,3 +5537,4 @@ $langUnitNotStarted = "The unit has not begun yet";
 $langOfUnitCompletion = 'Unit completion activities';
 $lang_pass_submit = 'Send';
 $langInsertExerciseCap = "Exercise";
+$langViewStatics = "Traffic Statistics";

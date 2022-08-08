@@ -190,7 +190,7 @@
 <div class="container-fluid main-container cources-section mt-lg-3 mt-0">
     <div class="row rowMedium">
         <div class="col-12 col-lg-8 user-courses pt-lg-5 ps-lg-5 pe-lg-5 pb-lg-5 p-md-5 p-3">
-            <div class="row">
+            <div class="row rowMedium">
                 
                 <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-8 col-8">
                     <span class="text-primary fs-4">{{ trans('langMyCoursesSide') }}</span>
@@ -224,7 +224,21 @@
 
                 <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><hr class='text-primary mt-0 fs-1'></div>
                     
-                
+                @if(Session::has('message'))
+                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                    <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                        @if(is_array(Session::get('message')))
+                            @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                            @foreach($messageArray as $message)
+                                {!! $message !!}
+                            @endforeach
+                        @else
+                            {!! Session::get('message') !!}
+                        @endif
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </p>
+                </div>
+                @endif
 
                 {{-- Courses List --}}
 
@@ -255,7 +269,7 @@
                         --}}
 
                     <div class='d-flex justify-content-center'> 
-                        <a class="BtnCourseRegister mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="ps-1 fa fa-arrow-right"></span></a>
+                        <a class="BtnCourseRegister mt-5" href="{{$urlServer}}modules/auth/courses.php">{{ trans('langRegCourses') }} <span class="ps-1 fa fa-arrow-right"></span></a>
                     </div>
 
                     </div>
@@ -263,9 +277,9 @@
 
                 <div id="cources-pics" class="container-fluid cources-paging" style="display:none">
                     <div class="row cources-pics-page" id="cources-pics-page-1">
-                        <?php $i=0; ?>
+                        @php $i=0; @endphp
                         @foreach($cources as $cource)
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="lesson">
                                 <figure class="lesson-image">
                                     <a href="{{$urlServer}}courses/{{$cource->code}}/index.php">
@@ -289,7 +303,7 @@
                     </div>
                     <div class="row cources-pics-page" style="display:none" id="cources-pics-page-{{ceil($i/$items_per_page)+1}}" >
                             @endif
-                            <?php $i++; ?>
+                            @php $i++; @endphp
                         @endforeach
                     </div>
                     @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'pics', 'cource_pages' => $cource_pages])

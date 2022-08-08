@@ -14,7 +14,7 @@
             $email_transport = 0;
         }
     }
-    $emailEncryption = array(0 => $langNo, 1 => 'SSL', 2 => 'TLS');
+    $emailEncryption = array(0 => 'Όχι', 1 => 'SSL', 2 => 'TLS');
     $smtp_encryption = get_var('smtp_encryption');
     if ($smtp_encryption == 'ssl') {
         $smtp_encryption = 1;
@@ -58,7 +58,7 @@
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     @if(Session::has('message'))
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                         <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
@@ -400,7 +400,7 @@
                                                 <div class='form-group'>
                                                     <label class='col-sm-6 control-label-notes'>{{ trans('langGuestLoginLabel') }}:</label>
                                                     <div class='col-sm-12'>
-                                                        {!! selection([
+                                                        {{-- {!! selection([
                                                                         'off' => trans('m[deactivate]'),
                                                                         'on' => trans('m[activate]'),
                                                                         'link' => trans('langGuestLoginLinks')
@@ -408,7 +408,17 @@
                                                                         'course_guest',
                                                                         get_config('course_guest', 'on'),
                                                                         "class='form-control form-control-admin'"
-                                                                    ) !!}
+                                                                    ) !!} --}}
+                                                        
+                                                        {!! selection([
+                                                            'off' => trans('langDeactivate'),
+                                                            'on' => trans('langActivate'),
+                                                            'link' => trans('langGuestLoginLinks')
+                                                            ],
+                                                            'course_guest',
+                                                            get_config('course_guest', 'on'),
+                                                            "class='form-control form-control-admin'"
+                                                        ) !!}
                                                     </div>
                                                 </div>
                                             </fieldset>

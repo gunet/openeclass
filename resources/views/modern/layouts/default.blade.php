@@ -71,10 +71,10 @@
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick-theme.css"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/custom.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/custom.css"/> -->
 
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?donotcache">
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/custom.css?donotcache">
+    <!-- <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/custom.css?donotcache"> -->
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/sidebar.css?donotcache">
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/new_calendar.css?donotcache">
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/default.css?donotcache">

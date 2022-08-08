@@ -443,7 +443,7 @@ switch ($action) {
             }
             // wiki list empty
             else {
-                $tool_content .= '<div class="alert alert-warning">' . $langWikiNoWiki . '</div>';
+                $tool_content .= '<div class="col-sm-12"><div class="alert alert-warning">' . $langWikiNoWiki . '</div></div>';
             }
             break;
         }

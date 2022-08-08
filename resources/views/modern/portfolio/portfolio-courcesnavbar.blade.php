@@ -29,7 +29,7 @@
         </div>
     </div>
     <div class='d-flex justify-content-center'>    
-        <a class="BtnCourseRegister mt-5" href="{{$urlServer}}main/my_courses.php">{{ trans('langRegCourses') }} <span class="ps-1 fa fa-arrow-right"></span></a>
+        <a class="BtnCourseRegister mt-5" href="{{$urlServer}}modules/auth/courses.php">{{ trans('langRegCourses') }} <span class="ps-1 fa fa-arrow-right"></span></a>
     </div>
 </div>
 

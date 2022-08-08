@@ -252,7 +252,7 @@
                             <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                 <div class='control-label-notes text-center'>{{ trans('langAnnouncements') }}</div>
                             </div>
-                            <div class='panel-body bg-white'>
+                            <div class='panel-body bg-white NoBorders'>
                                 <ul class='list-group list-group-flush'>
                                     {!! course_announcements() !!}
                                 </ul>

@@ -517,7 +517,7 @@ function lang_selections() {
       <a class='d-none d-sm-none d-md-none d-lg-block btn btn-primary' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
           <span class='fa fa-globe pt-1'></span>
       </a>
-      <a class='d-block d-sm-block d-md-block d-lg-none btn btn-transparent text-white' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
+      <a class='d-block d-sm-block d-md-block d-lg-none btn btn-transparent text-white pt-2' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
           <span class='fa fa-globe'></span>
       </a>
       <ul class='m-0 p-0 border-0 dropdown-menu dropdown-menu-end user-language-menu' role='menu' aria-labelledby='dropdownMenuLang'>";

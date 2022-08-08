@@ -42,7 +42,21 @@
             </div>
 
            
-
+            @if(Session::has('message'))
+            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                    @if(is_array(Session::get('message')))
+                        @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                        @foreach($messageArray as $message)
+                            {!! $message !!}
+                        @endforeach
+                    @else
+                        {!! Session::get('message') !!}
+                    @endif
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </p>
+            </div>
+            @endif
 
 
             <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3">
@@ -54,21 +68,21 @@
                                 <th>{{ trans('langTitle') }}</th>
                                 <th>{{ trans('langCode') }}</th>
                                 <th>{{ trans('langTeacher') }}</th>
-                                <th>{{ trans('langUnCourse') }}</th>
+                                <th class='text-center'>{{ trans('langUnCourse') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                         @if($myCourses)
                         <div class="row cources-bars-page" id="cources-bars-page-1">
-                            <?php $i=0; ?>
+                            @php $i=0; @endphp
                                 @foreach ($myCourses as $course)
-                                <?php $i++; ?>
+                                @php $i++; @endphp
                                 <tr>
                                     <th scope="row">{{$i}}</th>
                                     <td><a href="{{$urlServer}}courses/{{$course->code}}/index.php">{{ q($course->title) }}</a></td>
                                     <td><span class="text-secondary">({{ q($course->public_code) }})</span></td>
                                     <td><span class="text-secondary">{{ q($course->professor) }}</span></td>
-                                    <td>
+                                    <td class='text-center'>
                                         <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
                                             <i class="fas fa-remove-format"></i>
                                         </a>
@@ -78,23 +92,26 @@
 
                                 
                                 <div class="modal fade" id="exampleModal{{$course->course_id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{$course->course_id}}" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel{{$course->course_id}}">{{ trans('langUnCourse') }}</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                {{ trans('langConfirmUnregCours') }}<strong class="text-warning">{{$course->title}}</strong>;
-                                            </div>
-                                            <div class="modal-footer">
-                                                <a class="btn btn-secondary" href="" data-bs-dismiss="modal">{{trans('langCancel')}}</a>
+                                    <form method="post" action="{{$urlAppend}}main/unregcours.php?u={{ $_SESSION['uid'] }}&amp;cid={{$course->course_id}}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel{{$course->course_id}}">{{ trans('langUnCourse') }}</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {{ trans('langConfirmUnregCours') }}<strong class="text-warning"> {{$course->title}}</strong>;
+                                                    <input type='hidden' name='fromMyCoursesPage' value="1">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a class="btn btn-secondary" href="" data-bs-dismiss="modal">{{trans('langCancel')}}</a>
 
-                                                <a class="btn btn-danger" href="my_courses.php?title={{ q($course->title) }}">{{trans('langDelete')}}</a>
+                                                    <button type='submit' class="btn btn-danger" name="doit">{{trans('langDelete')}}</a>
 
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
 
                             @endforeach
