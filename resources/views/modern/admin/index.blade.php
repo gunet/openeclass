@@ -184,12 +184,12 @@
                                 @endif
 
                                 <div class='col-sm-12 d-flex justify-content-center mt-5'>
-                                    <a class="BtnMoreInfoAdmin" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                        <span class='text-uppercase'>{{trans('langMore')}}</span>
+                                    <a class="BtnMoreInfoAdmin" data-bs-toggle="collapse" href="#collapseMoreInfoAdmin" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <span class='text-uppercase'>{{trans('langMore')}} <span class='fa fa-arrow-down'></span>
                                     </a>
                                 </div>
 
-                                <div class="collapse" id="collapseExample">
+                                <div class="collapse" id="collapseMoreInfoAdmin">
                                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
 
                                         <div class='panel panel-admin'>
@@ -200,7 +200,7 @@
 
                                         <div class='panel panel-info mt-3'>
                                             <div class='panel-heading'>
-                                                <div class='panel-title text-center fs-5 ps-3 pt-2 pb-2'>{{ trans('langInfoAdmin') }}</div>
+                                                <div class='panel-title text-center pb-2'>{{ trans('langInfoAdmin') }}</div>
                                             </div>
                                             <div class='panel-body panel-body-admin NoBorderTop'>
                                                 <div class='row p-2 margin-bottom-thin'>
@@ -274,7 +274,7 @@
                                         @if (count($cronParams) > 0)
                                         <div class='panel panel-info mt-3'>
                                             <div class='panel-heading'>
-                                                <div class='panel-title text-center fs-5 ps-3 pt-2 pb-2'>{{ trans('langCronInfo') }}</div>
+                                                <div class='panel-title text-center pb-2'>{{ trans('langCronInfo') }}</div>
                                             </div>
                                             <div class='panel-body panel-body-admin NoBorderTop'>
                                                 <div class='row p-2 margin-bottom-thin'>

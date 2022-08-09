@@ -27,7 +27,7 @@ if (isset($_GET['action'])) {
     Transition::change_exception_status($_GET['eid'], $action);
 }
 
-$tool_content .= "<div class='alert alert-info'>Αιτήματα εξαίρεσης</div>";
+$tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>Αιτήματα εξαίρεσης</div></div>";
 $tool_content .= "<div class='table-responsive'>";
 
 $q = Database::get()->queryArray("SELECT * FROM sso_exception");
@@ -57,7 +57,7 @@ if (count($q) > 0) {
     }
     $tool_content .= "</table>";
 } else {
-    $tool_content .= "<div class='alert alert-warning'>Δεν υπάρχουν αιτήματα εξαίρεσης.</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>Δεν υπάρχουν αιτήματα εξαίρεσης.</div></div>";
 }
 
 $tool_content .= "</div>";

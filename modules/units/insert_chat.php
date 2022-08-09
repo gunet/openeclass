@@ -24,7 +24,7 @@ function list_chats() {
             'visible' => $row->status);
     }
     if (count($chatinfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoChatAvailable</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoChatAvailable</div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
             "<input type='hidden' name='id' value='$id'>" .
@@ -52,7 +52,7 @@ function list_chats() {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_chat' value='$langAddModulesButton'></div></form>";
 
     }

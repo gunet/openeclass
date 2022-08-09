@@ -119,12 +119,12 @@ if (!empty($_POST['submit'])) {
 } else {
     if (get_config('alt_auth_stud_reg') == 2) {
         if (get_config('email_required')) {
-            $tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langMailVerificationReq</div></div>";
         } else {
-            $tool_content .= "<div class='alert alert-info'>$langEmailInfo <br><br> $langEmailNotice</div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langEmailInfo <br><br> $langEmailNotice</div></div>";
         }
     } else if (isset($_SESSION['mail_verification_required'])) {
-        $tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langMailVerificationReq</div></div>";
     }
 }
 

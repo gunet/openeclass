@@ -116,20 +116,20 @@ $tool_content .= generate_csrf_token_form_field() .
               'button-class' => 'btn-success')));
 
 $tool_content .= "
-    <div class='alert alert-info'>$langDoSearch";
+    <div class='col-sm-12'><div class='alert alert-info'>$langDoSearch";
 if (isset($_POST['search_terms'])) {
     $tool_content .= ":&nbsp;<label> '". q($_POST['search_terms']) ."'</label>";
 }
-$tool_content .= "<br><small>" . count($courses) . " $langResults2</small></div>
-    <table class='table-default'>
-    <tr>";
+$tool_content .= "<br><small>" . count($courses) . " $langResults2</small></div></div>
+    <div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
+    <tr class='list-header'>";
 if ($uid > 0) {
     $tool_content .= "<th width='50' align='center'>$langRegistration</th>";
 }
-$tool_content .= "<th class='text-left'>" . $langCourse . " ($langCode)</th>
-      <th class='text-left'>$langTeacher</th>
-      <th class='text-left'>$langKeywords</th>
-      <th class='text-left'>$langType</th>
+$tool_content .= "<th class='text-start text-white ps-1'>" . $langCourse . " ($langCode)</th>
+      <th class='text-start text-white'>$langTeacher</th>
+      <th class='text-start text-white'>$langKeywords</th>
+      <th class='text-start text-white'>$langType</th>
     </tr>";
 
 foreach ($courses as $course) {
@@ -209,7 +209,7 @@ foreach ($courses as $course) {
     $tool_content .= course_access_icon($course->visible);
     $tool_content .= "</td></tr>";
 }
-$tool_content .= "</table>";
+$tool_content .= "</table></div></div>";
 
 $tool_content .= "<script type='text/javascript'>$(course_list_init);
 var themeimg = '" . js_escape($themeimg) . "';

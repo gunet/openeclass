@@ -49,7 +49,7 @@
                         {!! isset($action_bar) ?  $action_bar : '' !!}
 
                         @if(Session::has('message'))
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                             <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                                 @if(is_array(Session::get('message')))
                                     @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
@@ -64,7 +64,6 @@
                         </div>
                         @endif
                         
-                        <div class="row p-2"></div>
 
                         @if ($course_descs)
                             @foreach ($course_descs as $key => $course_desc)    
@@ -117,7 +116,7 @@
                                                 <span class='control-label-notes'>{{ $course_desc->title}}</span>
                                                 @if ($course_desc->visible && $is_editor)
                                                     &nbsp;&nbsp;
-                                                    <span data-original-title='{{ trans('langSeenToCourseHome') }}' data-toggle='tooltip' data-placement='bottom' class='label label-primary'>
+                                                    <span data-bs-original-title='{{ trans('langSeenToCourseHome') }}' data-bs-toggle='tooltip' data-bs-placement='bottom' class='label label-primary'>
                                                         <i class='fa fa-eye'></i>
                                                     </span>
                                                 @endif

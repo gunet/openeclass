@@ -80,7 +80,7 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
         $latest_module_id = $tag->module_id;
     }
     if ($tag_elements) {
-        $tool_content .= "</div></div></div></div>";
+        $tool_content .= "</div></div></div>";
     } else {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langTagNotFound</div></div>";
     }

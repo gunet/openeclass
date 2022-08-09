@@ -29,14 +29,14 @@ function list_assignments() {
 
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY title", $course_id);
     if (count($result) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoAssign</div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "<th class='text-left'>&nbsp;$langWorks</th>" .
+                "<th class='text-start'>&nbsp;$langWorks</th>" .
                 "<th width='120'>$langGroupWorkDeadline_of_Submission</th>" .
                 "</tr>";
         foreach ($result as $row) {
@@ -60,6 +60,6 @@ function list_assignments() {
         }
         $tool_content .=
                 "</table>" .
-                "<div style='text-align: right;'><input class='btn btn-primary' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
+                "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
     }
 }

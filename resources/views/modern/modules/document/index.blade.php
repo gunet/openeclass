@@ -27,7 +27,7 @@
 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
-                    @if($course_code)
+                    @if($course_code and !$is_in_tinymce)
                     <nav class="navbar navbar-expand-lg navrbar_menu_btn">
                         <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn btn-primary menu_btn_button">
                             <i class="fas fa-align-left"></i>
@@ -39,10 +39,12 @@
                     </nav>
                     @endif
 
-                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    @if(!$is_in_tinymce)
+                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    @endif
 
                     
-                    @if($course_code)
+                    @if($course_code and !$is_in_tinymce)
                     <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
                         <div class="offcanvas-header">
                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -53,8 +55,9 @@
                     </div>
                     @endif
 
-                     
-                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                    @if(!$is_in_tinymce)
+                        @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                    @endif
 
                     {!! $actionBar !!}
 

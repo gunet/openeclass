@@ -59,7 +59,7 @@
                                                 alt="{{ $uname }}">{{ $uname }}</span>
                                     </button>
                                     <ul class="m-0 p-0 dropdown-menu dropdown-menu-end dropdown_menu_user shadow-lg bg-body border-0" aria-labelledby="btnGroupDrop1">
-                                        @if($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == ADMIN_USER)
+                                        @if($_SESSION['status'] == USER_TEACHER)
                                         <li>
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/create_course/create_course.php">
                                                 <div class='row'>

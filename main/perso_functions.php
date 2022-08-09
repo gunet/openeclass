@@ -88,9 +88,9 @@ function getUserLessonInfo($uid) {
 			  <td class='text-left'>
 			  <strong><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></strong>&nbsp;(" . q($data->public_code) . ")
 			  <div><small>" . q($data->professor) . "</small></div></td>";
-            $lesson_content .= "<td class='text-center'>";
+            $lesson_content .= "<td class='text-center'><div class='col-6 m-auto d-block'><div class='row'><div class='col-12 col-md-6'>";
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
-            $lesson_content .= "&nbsp;&nbsp;";
+            $lesson_content .= "</div><div class='col-12 col-md-6 mt-md-0 mt-3'>";
             if ($data->status == USER_STUDENT) {
                 $lesson_content .= icon('fa-minus-circle', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
                 $student_courses_count++;
@@ -98,7 +98,7 @@ function getUserLessonInfo($uid) {
                 $lesson_content .= icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
                 $teacher_courses_count++;
             }
-            $lesson_content .= "</td></tr>";
+            $lesson_content .= "</div></div></div></td></tr>";
         }
         $lesson_content .= "</tbody></table>";
     } else { // if we are not registered to courses

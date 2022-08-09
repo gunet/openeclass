@@ -185,7 +185,7 @@ foreach (Database::get()->queryArray($query) as $row) {
 }
 $min_w = date("d-m-Y", $min_when);
 
-$tool_content .= '<div class="alert alert-info">' . sprintf($langOldStatsLoginsExpl, get_config('actions_expire_interval')) . '</div>';
+$tool_content .= '<div class="col-sm-12"><div class="alert alert-info">' . sprintf($langOldStatsLoginsExpl, get_config('actions_expire_interval')) . '</div></div>';
 
 /****   C3 plot   ****/
 $tool_content .= "<div class='row plotscontainer'>";

@@ -364,11 +364,19 @@ a{
     justify-content:center;
     align-items:center;
   }
+  .BtnMoreInfoAdmin.collapsed .fa-arrow-down{
+    transform: rotate(180deg);
+  }
 
   .BtnMoreInfoAdmin:hover{
     border:solid 2px #1d4e89;
     background-color: #fbd1a2;
     color:#1d4e89;
+  }
+
+  .accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(0,0,0,.125);
   }
   
 

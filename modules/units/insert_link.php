@@ -31,14 +31,14 @@ function list_links() {
 
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $course_id);
     if (count($result) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoLinksExist</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoLinksExist</div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
                 <input type='hidden' name='id' value='$id' />" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th style='width: 10px;'>$langChoice</th>" .
-                "<th class='text-left' style='width:'>&nbsp;$langLinks</th>" .
+                "<th class='text-start' style='width:'>&nbsp;$langLinks</th>" .
                 "</tr>";
         $sql = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d", $course_id);
         if (count($sql) > 0) {
@@ -116,7 +116,7 @@ function list_links() {
             }
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-right'>" .
+        $tool_content .= "<div class='text-end mt-3'>" .
                 "<input class='btn btn-primary' type='submit' name='submit_link' value='$langAddModulesButton'></div></form>";
     }
 }

@@ -12,7 +12,7 @@
 
 @php $countNewPanel = 0; @endphp
 @foreach ($toolArr as $key => $tool_group)
-<div class='col-lg-6 col-12 mt-3'>
+<div class='@if(count($toolArr) == 1) and ($is_power_user) col-lg-12 col-12 mt-3 @else col-lg-6 col-12 mt-3 @endif'>
     
     @if($countNewPanel == 2)
     <div class='panel panel-admin mb-3'>
@@ -48,7 +48,7 @@
     </div>
     @endif
 
-    <div class='panel panel-admin'>
+    <div class='panel panel-admin m-auto'>
         <div class='panel-heading text-center'>
             <span class='colorPalette'>{{ $tool_group[0]['text'] }}</span>
         </div>
@@ -68,29 +68,29 @@
     </div>
 
     @if($countNewPanel == 1)
-    <div class='panel panel-admin mt-3'>
-        <div class='panel-heading text-center'>
-            <span class='colorPalette'>{{trans('langFaculties')}}</span>
-        </div>
-        <div class='panel-body NoBorderTop'>
-            <ul class="list-group list-group-flush">
-                @if ($is_power_user or $is_departmentmanage_user)
-                    @if ($is_admin)
-                        <li class="list-group-item border-0 admin-list-group">
-                            <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='list-group-item bg-light'>
-                                <span class='toolAdminText'>{!!  $GLOBALS['langHierarchy'] !!}</span>      
-                            </a>
-                        </li>
-                        <li class="list-group-item border-0 admin-list-group">
-                            <a href="{{$urlAppend}}modules/admin/coursecategory.php" class='list-group-item bg-light'>
-                                <span class='toolAdminText'>{!!  $GLOBALS['langCourseCategoryActions'] !!}</span>      
-                            </a>
-                        </li>
-                    @endif
-                @endif
-            </ul>
-        </div>
-    </div>
+        @if($is_power_user or $is_departmentmanage_user)
+            @if($is_admin)
+                <div class='panel panel-admin mt-3'>
+                    <div class='panel-heading text-center'>
+                        <span class='colorPalette'>{{trans('langFaculties')}}</span>
+                    </div>
+                    <div class='panel-body NoBorderTop'>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item border-0 admin-list-group">
+                                <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='list-group-item bg-light'>
+                                    <span class='toolAdminText'>{!!  $GLOBALS['langHierarchy'] !!}</span>      
+                                </a>
+                            </li>
+                            <li class="list-group-item border-0 admin-list-group">
+                                <a href="{{$urlAppend}}modules/admin/coursecategory.php" class='list-group-item bg-light'>
+                                    <span class='toolAdminText'>{!!  $GLOBALS['langCourseCategoryActions'] !!}</span>      
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            @endif
+        @endif
     @endif
 
 </div>

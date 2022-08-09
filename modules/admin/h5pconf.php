@@ -22,7 +22,7 @@ if (isset($_GET['update']) and $_GET['update']) {
     $hubUpdater = new H5PHubUpdater();
     $hubUpdater->fetchLatestContentTypes();
     set_config('h5p_update_content_ts', date('Y-m-d H:i', time()));
-    $tool_content .= "<div class='alert alert-info text text-center'>$langH5pUpdateComplete</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info text text-center'>$langH5pUpdateComplete</div></div>";
 } else {
     $ts = get_config('h5p_update_content_ts');
     $tool_content .= "

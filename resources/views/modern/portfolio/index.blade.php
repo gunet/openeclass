@@ -293,7 +293,7 @@
                                 </figure>
                                 <h3 class="lesson-title">
                                     <a class="fs-5" href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
-                                    <span class="lesson-id fs-5 text-secondary">({{ $cource->code }})</span>
+                                    <span class="lesson-id fs-5 text-secondary">({{ $cource->public_code }})</span>
                                 </h3>
                                 <div class="lesson-professor fs-5 text-secondary">{{ $cource->professor }}</div>
                             </div>
@@ -306,7 +306,7 @@
                             @php $i++; @endphp
                         @endforeach
                     </div>
-                    @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'pics', 'cource_pages' => $cource_pages])
+                    @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'pics', 'cource_pages' => $cource_pages ,'cources' => $cources])
                 </div>
             </div>
         </div>

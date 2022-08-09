@@ -24,14 +24,14 @@ function list_tcs() {
             'visible' => $row->active);
     }
     if (count($tcinfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoBBBSesssions</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoBBBSesssions</div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
             "<input type='hidden' name='id' value='$id'>" .
             "<table class='table-default'>" .
             "<tr class='list-header'>" .
             "<th style='width: 80px;'>$langChoice</th>" .
-            "<th><div class='text-left'>&nbsp;$langBBB</div></th>" .
+            "<th><div class='text-start'>&nbsp;$langBBB</div></th>" .
             "</tr>";
         foreach ($tcinfo as $entry) {
             if ($entry['visible'] == 0) {
@@ -52,7 +52,7 @@ function list_tcs() {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_tc' value='$langAddModulesButton'></div></form>";
     }
 }

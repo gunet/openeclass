@@ -2153,8 +2153,8 @@ tinymce.init({
     // General options
     selector: 'textarea.mceEditor',
     content_css: [
-        '{$urlAppend}template/default/CSS/bootstrap-custom.css',
-        '{$urlAppend}template/default/CSS/font-awesome-4.7.0/css/font-awesome.css',
+        '{$urlAppend}template/modern/css/bootstrap.min.css',
+        '{$urlAppend}template/modern/css/font-awesome-4.7.0/css/font-awesome.css',
     ],
     content_style: 'body { margin: 8px; background: none !important; }',
     extended_valid_elements: 'span[*]',

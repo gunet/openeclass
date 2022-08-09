@@ -554,7 +554,7 @@ if ($total_cunits > 0) {
         } else {
             $cunits_content .= "<a class='$class_vis' href='${urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
         }
-        $cunits_content .= "<small><span class='help-block'>";
+        $cunits_content .= "<br><small><span class='help-block'>";
         if (!(is_null($cu->start_week))) {
             $cunits_content .= "$langFrom2 " . nice_format($cu->start_week);
         }
@@ -633,7 +633,7 @@ if ($total_cunits > 0) {
         }
     }
 } else {
-    $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible'> - $langNoUnits - </div></div></div>";
+    $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible text-center'> - $langNoUnits - </div></div></div>";
 }
 
 $data['cunits_content'] = $cunits_content;

@@ -98,7 +98,7 @@ function list_docs() {
             'object' => MediaResourceFactory::initFromDocument($row));
     }
     if (count($fileinfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoDocuments</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoDocuments</div></div>";
     } else {
         if (!empty($path)) {
             $dirname = Database::get()->querySingle("SELECT filename FROM document
@@ -115,7 +115,7 @@ function list_docs() {
         if( !empty($path)) {
         $tool_content .=
                 "<tr>" .
-                "<th colspan='$colspan'><div class='text-left'>$langDirectory: $dirname$parenthtml</div></th>" .
+                "<th colspan='$colspan'><div class='text-start'>$langDirectory: $dirname$parenthtml</div></th>" .
                 "</tr>" ;
         }
         $tool_content .=
@@ -177,7 +177,7 @@ function list_docs() {
             }
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_doc' value='$langAddModulesButton' /></div>$dir_html</form>";
 
     }

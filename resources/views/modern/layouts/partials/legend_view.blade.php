@@ -20,7 +20,7 @@
                                 <div class='row'>
                                     <span class='control-label-notes'>
                                         <span class='fas fa-user text-warning pe-1'></span><span class='text-secondary fs-6 ms-1'>{{course_id_to_prof($course_id)}}</span>
-                                        <span class="fas fa-code text-warning pe-1"></span><span class='text-secondary fs-6'>{{$course_code}}</span>                                     
+                                        <span class="fas fa-code text-warning pe-1"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                                     
                                     </span>
                                 </div>
                             @else
@@ -32,7 +32,7 @@
                                 <div class='row'>      
                                     <span class='control-label-notes'>
                                         <span class='fas fa-user text-warning pe-2'></span><span class='text-secondary fs-6'>{{course_id_to_prof($course_id)}}</span> 
-                                        <span class="fas fa-code text-warning pe-2"></span><span class='text-secondary fs-6'>{{$course_code}}</span>                              
+                                        <span class="fas fa-code text-warning pe-2"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                              
                                     </span>
                                 </div>
                             @endif
@@ -58,7 +58,7 @@
                                 <div class='row'>
                                     <span class='control-label-notes'>
                                         <span class='fas fa-user text-warning pe-1'></span><span class='text-secondary fs-6 ms-1'>{{course_id_to_prof($course_id)}}</span>
-                                        <span class="fas fa-code text-warning pe-1"></span><span class='text-secondary fs-6'>{{$course_code}}</span>                                     
+                                        <span class="fas fa-code text-warning pe-1"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                                     
                                     </span>
                                 </div>
                             @else
@@ -70,7 +70,7 @@
                                 <div class='row'>      
                                     <span class='control-label-notes'>
                                         <span class='fas fa-user text-warning pe-2'></span><span class='text-secondary fs-6'>{{course_id_to_prof($course_id)}}</span> 
-                                        <span class="fas fa-code text-warning pe-2"></span><span class='text-secondary fs-6'>{{$course_code}}</span>                              
+                                        <span class="fas fa-code text-warning pe-2"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                              
                                     </span>
                                 </div>
                             @endif
@@ -163,7 +163,7 @@
                                                     </div>
                                                     <div class='col-10'>
                                                         <span class='control-label-notes fs-6'>
-                                                           {{$course_code}}
+                                                        {{course_id_to_public_code($course_id)}}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -251,7 +251,7 @@
                                                     </div>
                                                     <div class='col-10'>
                                                         <span class='control-label-notes fs-6'>
-                                                           {{$course_code}}
+                                                        {{course_id_to_public_code($course_id)}}
                                                         </span>
                                                     </div>
                                                 </div>

@@ -1,5 +1,6 @@
 <div class="row justify-content-center">
     <div class="col-6 d-flex justify-content-center">
+        @if($cources)
         <div class="cources-{{$paging_type}}-num-group d-flex" >
             <div type="button" onclick="cources_paging_left('{{$paging_type}}')"> 
                 <div class="btn_left_rigth"><i class="fas fa-chevron-left  cources-paging-arrow arrow-left"></i></div> 
@@ -27,6 +28,16 @@
                 <div class="btn_left_rigth"><i class="fas fa-chevron-right cources-paging-arrow arrow-right"></i></div>
             </div>
         </div>
+        @else
+            <div class='col-sm-12'>
+                <div class='alert alert-warning'>{{trans('langNotEnrolledToLessons')}}!</div>
+            </div>
+            @if($_SESSION['status'] == USER_TEACHER)
+                <div class='col-sm-12 ps-1'><div class='alert alert-info'>{{trans('langWelcomeSelect')}} {!! trans('langWelcomeProfPerso') !!}</div></div>
+            @else
+                <div class='col-sm-12 ps-1'><div class='alert alert-info'>{{trans('langWelcomeSelect')}} {!! trans('langWelcomeStudPerso') !!}</div></div>
+            @endif
+        @endif
     </div>
     <div class='d-flex justify-content-center'>    
         <a class="BtnCourseRegister mt-5" href="{{$urlServer}}modules/auth/courses.php">{{ trans('langRegCourses') }} <span class="ps-1 fa fa-arrow-right"></span></a>

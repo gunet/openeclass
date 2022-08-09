@@ -30,14 +30,14 @@ function list_forums() {
     $foruminfo = Database::get()->queryArray("SELECT * FROM forum WHERE course_id = ?d
                                                     AND cat_id IN (SELECT id FROM forum_category WHERE cat_order >= 0)", $course_id);
     if (!$foruminfo) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoForums</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoForums</div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id' />" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "<th class='text-left'>&nbsp;$langForums</th>" .
+                "<th class='text-start'>&nbsp;$langForums</th>" .
                 "</tr>";
 
         foreach ($foruminfo as $entry) {
@@ -69,7 +69,7 @@ function list_forums() {
             }
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-right'>
+        $tool_content .= "<div class='text-end mt-3'>
                             <input class='btn btn-primary' type='submit' name='submit_forum' value='$langAddModulesButton' />
                         </div></form>";
     }

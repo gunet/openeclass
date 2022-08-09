@@ -17,14 +17,14 @@ function list_h5p() {
             'main_library_id' => $row->main_library_id);
     }
     if (count($h5pinfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langH5pNoContent</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langH5pNoContent</div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
             "<input type='hidden' name='id' value='$id'>" .
             "<table class='table-default'>" .
             "<tr class='list-header'>" .
             "<th style='width: 80px;'>$langChoice</th>" .
-            "<th><div class='text-left'>&nbsp;$langH5p</div></th>" .
+            "<th><div class='text-start'>&nbsp;$langH5p</div></th>" .
             "</tr>";
         foreach ($h5pinfo as $entry) {
             $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version 
@@ -41,7 +41,7 @@ function list_h5p() {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_h5p' value='$langAddModulesButton'>";
         $tool_content .= "</div>";
         $tool_content .= "</form>";

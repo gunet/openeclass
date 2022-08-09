@@ -17,7 +17,7 @@ function list_blogs() {
             'content' => $row->content);
     }
     if (count($bloginfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langBlogEmpty</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langBlogEmpty</div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
             "<input type='hidden' name='id' value='$id'>" .
@@ -36,7 +36,7 @@ function list_blogs() {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_blog' value='$langAddModulesButton'></div></form>";
     }
 }

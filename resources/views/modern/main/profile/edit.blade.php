@@ -49,8 +49,7 @@
                     <div class='form-wrapper shadow-sm p-3 rounded'>
                         <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='{{ $sec }}' onsubmit='return validateNodePickerForm();'>
                             <fieldset>
-                                <div class="row p-2"></div>
-                                <div class='form-group'>
+                                <div class='form-group mt-3'>
                                     <label for='givenname_form' class='col-sm-6 control-label-notes'>{{ trans('langName') }}:</label>
                                     <div class='col-sm-12'>
                                     @if ($allow_name_change)
@@ -61,8 +60,8 @@
                                     @endif
                                     </div>
                                 </div>
-                                <div class="row p-2"></div>
-                                <div class='form-group'>
+
+                                <div class='form-group mt-3'>
                                     <label for='surname_form' class='col-sm-6 control-label-notes'>{{ trans('langSurname') }}:</label>
                                     <div class='col-sm-12'>
                                     @if ($allow_name_change)
@@ -73,8 +72,8 @@
                                     @endif
                                     </div>
                                 </div>
-                                <div class="row p-2"></div>
-                                <div class='form-group'>
+
+                                <div class='form-group mt-3'>
                                     <label for='username_form' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}:</label>
                                     <div class='col-sm-12'>
                                     @if ($allow_username_change)
@@ -85,44 +84,44 @@
                                     @endif
                                     </div>
                                 </div>
-                                <div class="row p-2"></div>
-                                <div class='form-group'>
+
+                                <div class='form-group mt-3'>
                                     <label for='email_form' class='col-sm-6 control-label-notes'>{{ trans('langEmail') }}:</label>
                                     <div class='row'>   
                                         <div class='col-sm-6'>
                                             <input class='form-control' type='text' name='email_form' id='email_form' value='{{ $email_form }}'>
                                         </div>
-                                        <div class='col-sm-6'>
+                                        <div class='col-sm-6 mt-md-0 mt-2'>
                                             {!! selection($access_options, 'email_public', $email_public, "class='form-control'") !!}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row p-2"></div>
-                                <div class='form-group'>
+
+                                <div class='form-group mt-3'>
                                     <label for='am_form' class='col-sm-6 control-label-notes'>{{ trans('langAm') }}:</label>
                                     <div class='row'>   
                                         <div class='col-sm-6'>
                                             <input type='text' class='form-control' name='am_form' id='am_form' value='{{ $am_form }}'>
                                         </div>
-                                        <div class='col-sm-6'>
+                                        <div class='col-sm-6 mt-md-0 mt-2'>
                                             {!! selection($access_options, 'am_public', $am_public, "class='form-control'") !!}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row p-2"></div>
-                                <div class='form-group'>
+
+                                <div class='form-group mt-3'>
                                     <label for='phone_form' class='col-sm-6 control-label-notes'>{{ trans('langPhone') }}</label>
                                     <div class='row'>   
                                         <div class='col-sm-6'>
                                             <input type='text' class='form-control' name='phone_form' id='phone_form' value='{{$phone_form }}'>
                                         </div>
-                                        <div class='col-sm-6'>
+                                        <div class='col-sm-6 mt-md-0 mt-2'>
                                             {!! selection($access_options, 'phone_public', $phone_public, "class='form-control'") !!}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row p-2"></div>
-                                <div class='form-group'>
+
+                                <div class='form-group mt-3'>
                                     <label for='emailfromcourses' class='col-sm-6 control-label-notes'>{{ trans('langEmailFromCourses') }}:</label>
                                     <div class='col-sm-10'>
                                         <div class='radio'>
@@ -138,15 +137,15 @@
                                     </div>
                                 </div>
                             @if (get_config('email_verification_required'))
-                            <div class="row p-2"></div>
-                                <div class='form-group {{ $messageClass }}'>
+
+                                <div class='form-group {{ $messageClass }} mt-3'>
                                     <label class='col-sm-6 control-label-notes'>{{ trans('langVerifiedMail') }}</label>
                                     <div class='col-sm-12 form-control-static'>{!! $message !!}</div>
                                 </div>
                             @endif
                             @if (!get_config('restrict_owndep'))
-                            <div class="row p-2"></div>
-                                <div class='form-group'>
+
+                                <div class='form-group mt-3'>
                                     <label for='faculty' class='col-sm-6 control-label-notes'>{{ trans('langFaculty') }}:</label>
                                     <div class='col-sm-12 form-control-static'>
                                             {!! $html !!}
@@ -154,16 +153,16 @@
                                 </div>
                             @endif
 
-                            <div class="row p-2"></div>
 
-                            <div class='form-group'>
+
+                            <div class='form-group mt-3'>
                                 <label for='language' class='col-sm-6 control-label-notes'>{{ trans('langLanguage') }}:</label>
                                 <div class='col-sm-12'>{!! lang_select_options('userLanguage', "class='form-control'") !!}</div>
                             </div>
 
-                            <div class="row p-2"></div>
 
-                            <div class='form-group'>
+
+                            <div class='form-group mt-3'>
                                 <label for='picture' class='col-sm-6 control-label-notes'>{{ $message_pic }}</label>
                                 <div class='col-sm-12'>
                                     <span>
@@ -174,16 +173,16 @@
                                 </div>
                             </div>
 
-                            <div class="row p-2"></div>
 
-                            <div class='form-group'>
+
+                            <div class='form-group mt-3'>
                                 <label for='desription' class='col-sm-6 control-label-notes'>{{ trans('langProfileAboutMe') }}:</label>
                                 <div class='col-sm-12'>{!! $info_text_area !!}</div>
                             </div>
                             {!! render_profile_fields_form(array('origin' => 'edit_profile')) !!}
                             @if (count($allProviders) > 0)
-                                <div class="row p-2"></div>
-                                <div class='form-group'>
+
+                                <div class='form-group mt-3'>
                                     <label class='col-sm-6 control-label-notes'>{{ trans('langProviderConnectWith') }}:</label>
                                     <div class='col-sm-12'>
                                         <div class='row'>";

@@ -38,14 +38,14 @@ function list_lps() {
             'rank' => $row->rank);
     }
     if (count($lpinfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoLearningPath</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoLearningPath</div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th width='80'>$langChoice</th>" .
-                "<th><div class='text-left'>&nbsp;$langLearningPaths</div></th>" .
+                "<th><div class='text-start'>&nbsp;$langLearningPaths</div></th>" .
                 "</tr>";
         foreach ($lpinfo as $entry) {
             if ($entry['visible'] == 0) {
@@ -72,7 +72,7 @@ function list_lps() {
             }
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_lp' value='$langAddModulesButton'></div></form>";
     }
 }

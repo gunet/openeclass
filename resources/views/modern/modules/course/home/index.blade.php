@@ -137,27 +137,21 @@
                                 @else
                                     <div class='col-12 course-below-wrapper mt-5'>
                                         <div class='row text-muted course-below-info'>
-                                            <div class="row">
-                                                <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12 d-flex justify-content-md-start justify-content-center">
-                                                    <a role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
-                                                        <span class='fa fa-chevron-right fa-fw'></span>
-                                                        <span class='ps-1'>{{ trans('langCourseDescription') }}</span>
-                                                    </a>
-                                                </div>
+                                            
+                                            <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12 d-flex justify-content-md-start justify-content-center">
+                                                <a role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
+                                                    <span class='fa fa-chevron-right fa-fw'></span>
+                                                    <span class='ps-1'>{{ trans('langCourseDescription') }}</span>
+                                                </a>
                                                 @if($is_editor)
-                                                    <div class="col-xl-7 col-lg-7 col-md-6 col-sm-12 col-12 d-flex justify-content-md-end justify-content-center">
-                                                        @if($courseDescriptionVisible>0)
-                                                            <span class='float-md-end pe-md-0 mt-md-0 float-start pe-0 mt-5'>{{trans('langCourseDescription')}}</span>
-                                                        @else
-                                                            <span class='float-md-end pe-md-0 mt-md-0 float-start pe-0 mt-5'>{{trans('langAdd')}}</span>
-                                                        @endif
-                                                        <span class='float-md-end pe-md-0 mt-md-0 float-start pe-0 mt-5'>{!! $edit_course_desc_link !!}</span>
-                                                    </div>
+                                                    <span class='ps-2'>{!! $edit_course_desc_link !!}</span>
                                                 @endif
                                             </div>
+                                            
+                                           
 
                                             @if ($course_info->course_license)
-                                                <span class="pull-right">{!! copyright_info($course_id) !!}</span>
+                                                <div class="col-12 d-flex justify-content-end mt-2">{!! copyright_info($course_id) !!}</div>
                                             @endif
                                             <div class='col-12'>
                                                 <div class='collapse shadow-sm p-3 bg-body rounded' id='collapseDescription'>

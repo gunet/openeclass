@@ -1,4 +1,4 @@
-    
+
     <div class="col-xl-12 col-lg-12 col-md-12 col-12 col-12 justify-content-center col_maincontent_active_Homepage">
 
         <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
@@ -68,7 +68,7 @@
                                 <th>{{ trans('langTitle') }}</th>
                                 <th>{{ trans('langCode') }}</th>
                                 <th>{{ trans('langTeacher') }}</th>
-                                <th class='text-center'>{{ trans('langUnCourse') }}</th>
+                                <th class='text-center'>{{ trans('langOptions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -83,9 +83,21 @@
                                     <td><span class="text-secondary">({{ q($course->public_code) }})</span></td>
                                     <td><span class="text-secondary">{{ q($course->professor) }}</span></td>
                                     <td class='text-center'>
-                                        <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
-                                            <i class="fas fa-remove-format"></i>
+                                        <!-- check if uid is editor of course or student -->
+                                        <!------------------------------------------------->
+                                        @php $is_course_teacher = check_editor($uid,$course->course_id); @endphp 
+                                        <!------------------------------------------------->
+                                        <!------------------------------------------------->
+                                        @if($_SESSION['status'] == USER_TEACHER and $is_course_teacher and $course->status == 1)
+                                        <a href="{{$urlServer}}modules/course_info/index.php?from_home=true&amp;course={{$course->code}}">
+                                            <span class="fa fa-wrench" title="" data-bs-original-title="{{trans('langAdm')}}" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                                            </span><span class="sr-only">{{trans('langAdm')}}</span>
                                         </a>
+                                        @else
+                                        <button class='btn btn-danger' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
+                                            <i class="fas fa-remove-format"></i>
+                                        </button>
+                                        @endif
 
                                     </td>
                                 </tr>

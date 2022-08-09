@@ -901,7 +901,7 @@ function pickerMenu() {
             $mid = $module->module_id;
             array_push($sideMenuText, q($modules[$mid]['title']));
             array_push($sideMenuLink, q($urlServer . 'modules/' .
-                            $modules[$mid]['link'] . '/' . $params));
+                            $modules[$mid]['link'] . '/index.php' . $params));
             array_push($sideMenuImg, $modules[$mid]['image'] . "_on.png");
         }
     }

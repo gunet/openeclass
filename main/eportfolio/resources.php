@@ -490,10 +490,10 @@ if ($userdata) {
                                          </div>
                                             <h3 class='panel-title'>".q($data['title'])."</h3>
                                     </div>
-                                    <div class='panel-body'>
+                                    <div class='panel-body NoBorders'>
                                         <button class='btn btn-success pe-none'>" . nice_format($data['timestamp'], true). "</button><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                                     </div>
-                                                    <div class='panel-footer panel-body-progress ps-2'>
+                                                    <div class='panel-footer'>
                                                     <div class='row'>
                                                     <div class='col-sm-6'>$post->course_title</div>
                                                     </div>

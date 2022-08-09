@@ -37,14 +37,14 @@ function list_wikis() {
             'description' => $row->description);
     }
     if (count($wikiinfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langWikiNoWiki</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langWikiNoWiki</div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
                 <input type='hidden' name='id' value='$id'>
                 <table class='table-default'>
                     <tr class='list-header'>
                         <th style='width: 80px;'>$langChoice</th>
-                        <th class='text-left'>&nbsp;$langWikis</th>                        
+                        <th class='text-start'>&nbsp;$langWikis</th>                        
                     </tr>";
         foreach ($wikiinfo as $entry) {
             if (!empty($entry['description'])) {
@@ -59,7 +59,7 @@ function list_wikis() {
                             </tr>";
         }
         $tool_content .= "</table>
-                <div class='text-right'>
+                <div class='text-end mt-3'>
                     <input class='btn btn-primary' type='submit' name='submit_wiki' value='$langAddModulesButton'>
                 </div>
             </form>";

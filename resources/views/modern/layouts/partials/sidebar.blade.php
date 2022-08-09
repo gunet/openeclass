@@ -1,5 +1,6 @@
 <div id="leftnav" class="sidebar float-menu">
-    @if(($is_editor || $is_power_user || $is_departmentmanage_user || $is_usermanage_user) && $course_code)
+    @php $is_course_teacher = check_editor($uid,$course_id); @endphp 
+    @if(($is_editor or $is_power_user or $is_departmentmanage_user or $is_usermanage_user or $is_course_teacher) && $course_code)
         <p class="text-center text-light fs-6 mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
         <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center'>
             <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}' data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}">
@@ -13,21 +14,22 @@
     @else
         <p class="text-center text-light fs-6 mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
         <div class='d-flex justify-content-center'>
-            <a class='w-75 btn btn-primary pe-none text-white text-center'>
+            <a class='w-100 btn btn-primary pe-none text-white text-center'>
+                @php $is_course_teacher = check_editor($uid,$course_id); @endphp 
                 @if (isset($_SESSION['uid']))
-                    @if(($session->status == USER_TEACHER))
-                    <span class='text-uppercase'>{{trans('langCTeacher')}}</span>
-                    @elseif($session->status == USER_STUDENT)
-                    <span class='text-uppercase'>{{ trans('langCStudent2') }}</span>
+                    @if(($session->status == USER_TEACHER) and $is_course_teacher)
+                    <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{trans('langCTeacher')}}</span>
+                    @elseif($session->status == USER_STUDENT or ($session->status == USER_TEACHER and !$is_course_teacher))
+                    <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langCStudent2') }}</span>
                     @elseif($session->status == USERMANAGE_USER)
-                    <span class='text-uppercase'>{{ trans('langManageUser') }}</span>
+                    <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langManageUser') }}</span>
                     @elseif($session->status == USER_DEPARTMENTMANAGER)
-                    <span class='text-uppercase'>{{ trans('langManageDepartment') }}</span>
+                    <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langManageDepartment') }}</span>
                     @else
-                    <span class='text-uppercase'>{{ trans('langAdministrator') }}</span>
+                    <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langAdministrator') }}</span>
                     @endif
                 @else
-                <span class='text-uppercase'>{{ trans('langVisitor') }}</span>
+                <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langVisitor') }}</span>
                 @endif
             </a>
         </div>

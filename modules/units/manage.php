@@ -284,7 +284,7 @@ if ($is_editor) {
 }
 
 if ($show_completion_button) {
-    $tool_content .= "<div class='text-center alert alert-warning'>$langInvalidCourseUnitPrerequisites</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='text-center alert alert-warning'>$langInvalidCourseUnitPrerequisites</div></div>";
 }
 
 if (isset($display) and $display == TRUE) {
