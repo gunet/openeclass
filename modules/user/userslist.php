@@ -145,7 +145,7 @@ $tool_content .= action_bar(array(
 $tool_content .= "
     <table id='users_table{$course_id}' cellspacing = '0' class='table-default'>
         <thead>
-            <tr>
+            <tr class='list-header'>
               <th>$langSurnameName</th>
               <th class='text-center'>$langRole</th>
             </tr>

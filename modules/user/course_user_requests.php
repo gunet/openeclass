@@ -100,21 +100,21 @@ if (isset($_GET['rid'])) {
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/user/course_user_requests.php?course=' . $course_code);
         } else {
-            $tool_content .= "<div class='alert alert-danger'>$langCourseUserRegError</div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langCourseUserRegError</div></div>";
         }
     } else {
         $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>";
         $tool_content .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
-        <div class='col-sm-12'><label>$langReasonReject</label></div>
-        <div class='col-sm-12'><label>$langFrom:&nbsp;</label><small>" . uid_to_name($uid, 'fullname') . "</small></div>
-        <div class='col-sm-12'><label>$langSendTo:&nbsp;</label><small>" . uid_to_name($_GET['u'], 'fullname') . "</small></div>
-        <div class='form-group'>
+        <div class='col-sm-12'><label class='control-label-notes'>$langReasonReject</label></div>
+        <div class='col-sm-12'><label class='control-label-notes'>$langFrom:&nbsp;</label><small>" . uid_to_name($uid, 'fullname') . "</small></div>
+        <div class='col-sm-12'><label class='control-label-notes'>$langSendTo:&nbsp;</label><small>" . uid_to_name($_GET['u'], 'fullname') . "</small></div>
+        <div class='form-group mt-3'>
             <div class='col-sm-12'>
               <textarea name='rej_content' rows='8' cols='80'></textarea>
             </div>
     </div>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-offset-1 col-sm-11'>
                 <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRejectRequest) . "'>
             </div>
@@ -127,9 +127,9 @@ if (isset($_GET['rid'])) {
 } else { // display course user requests
     $sql = Database::get()->queryArray("SELECT id, uid, course_id, comments, ts FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id);
     if ($sql) {
-        $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr>";
-        $tool_content .= "<th width='320'>$langSurnameName</th><th>$langComments</th><th width='110'>$langDateRequest</th><th width='80' class='text-center'>".icon('fa-gears')."</th>";
+        $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>";
+        $tool_content .= "<tr class='list-header'>";
+        $tool_content .= "<th width='320' class='ps-3'>$langSurnameName</th><th class='ps-3'>$langComments</th><th width='110'>$langDateRequest</th><th width='80' class='text-center'>".icon('fa-gears')."</th>";
         $tool_content .= "</tr>";
         foreach ($sql as $udata) {
             $am_message = '';
@@ -156,7 +156,7 @@ if (isset($_GET['rid'])) {
                         "</td>";
             $tool_content .= "</tr>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div></div>";
     } else {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langUserNoRequests</div></div>";
     }

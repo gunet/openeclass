@@ -111,7 +111,7 @@
                                                 @if ($course_info->description)
                                                         {!! $course_info->description !!}
                                                 @else
-                                                    <p class='not_visible'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
+                                                    <p class='not_visible text-center'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
                                                 @endif
                                             </div>
                                         </div>
@@ -122,7 +122,7 @@
                                                         <div class="control-label-notes">{{ trans('langDescription') }}</div>
                                                         {!! $course_info->description !!}
                                                 @else
-                                                    <p class='not_visible'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
+                                                    <p class='not_visible text-center'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
                                                 @endif
                                             </div>
                                         </div>
@@ -132,10 +132,10 @@
 
                                 @if ((!$is_editor) and (!$courseDescriptionVisible))
                                     @if ($course_info->course_license)
-                                        <span class='pull-right' style="margin-top: 15px;">{!! copyright_info($course_id) !!}</span>
+                                        <div class='col-sm-12 d-flex justify-content-end'>{!! copyright_info($course_id) !!}</div>
                                     @endif
                                 @else
-                                    <div class='col-12 course-below-wrapper mt-5'>
+                                    <div class='col-12 course-below-wrapper mt-2'>
                                         <div class='row text-muted course-below-info'>
                                             
                                             <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12 d-flex justify-content-md-start justify-content-center">

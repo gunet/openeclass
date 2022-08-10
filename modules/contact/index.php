@@ -55,7 +55,7 @@ if (empty($userdata->email)) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $content = trim($_POST['content']);
     if (empty($content)) {
-        $tool_content .= "<div class='alert alert-warning'>$langEmptyMessage</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langEmptyMessage</div></div>";
         $tool_content .= form("$userdata->surname $userdata->givenname");
     } else {
         
@@ -102,28 +102,28 @@ function form($user) {
         $userprof .= "$prof->surname $prof->givenname &nbsp;&nbsp;";
     }
         
-    $ret = "<div class='alert alert-info'>$langInfoAboutRegistration</div>";
-    $ret .= "<div class='form-wrapper'>";
+    $ret = "<div class='col-sm-12'><div class='alert alert-info'>$langInfoAboutRegistration</div></div>";
+    $ret .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>";
     $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	<fieldset>
-        <div class='col-sm-12'><label>$langRequest $langOfCourse</label>&nbsp;&nbsp;<small>" . course_id_to_title($course_id) . "</small></div>
-        <div class='col-sm-12'><label>$langFrom:&nbsp;</label><small>$user</small></div>
-        <div class='col-sm-12'><label>$langSendTo:&nbsp;</label><small>$userprof</small></div>
+        <div class='col-sm-12'><label class='control-label-notes'>$langRequest $langOfCourse:</label>&nbsp;&nbsp;<small>" . course_id_to_title($course_id) . "</small></div>
+        <div class='col-sm-12'><label class='control-label-notes'>$langFrom:&nbsp;</label><small>$user</small></div>
+        <div class='col-sm-12'><label class='control-label-notes'>$langSendTo:&nbsp;</label><small>$userprof</small></div>
             
-        <div class='help-block' style='margin-top: 2.5cm;'><small>$langRequestReasons</small></div>            
-        <div class='form-group'>
+        <div class='help-block mt-3'><small>$langRequestReasons</small></div>            
+        <div class='form-group mt-3'>
             <div class='col-sm-12'>
               <textarea name='content' rows='10' cols='80'></textarea>
             </div>
 	</div>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
             <div class='col-sm-offset-1 col-sm-11'>
                 <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
             </div>
         </div>		
         ". generate_csrf_token_form_field() ."
         <input type='hidden' name='course_id' value='$course_id'>
-	</fieldset></form></div>";
+	</fieldset></form></div></div>";
 
     return $ret;
 }
@@ -149,7 +149,7 @@ function email_profs($course_id, $content, $from_name, $from_username, $from_add
     $c_code = course_id_to_code($course_id);
     $title = course_id_to_title($course_id);
     $public_code = course_id_to_public_code($course_id);
-    $ret = "<div class='alert alert-info'>$langSendingMessage $title</div>";    
+    $ret = "<div class='col-sm-12'><div class='alert alert-info'>$langSendingMessage $title</div></div>";    
     $profs = Database::get()->queryArray("SELECT user.id AS prof_uid, user.email AS email,
                               user.surname, user.givenname
                            FROM course_user JOIN user ON user.id = course_user.user_id
@@ -191,9 +191,9 @@ function email_profs($course_id, $content, $from_name, $from_username, $from_add
             continue;
         } else {
             $to_name = $prof->givenname . ' ' . $prof->surname;
-            $ret .= "<div class='alert alert-success'>" . icon('fa-university') . "&nbsp;" . q($to_name) . "</div>";            
+            $ret .= "<div class='col-sm-12'><div class='alert alert-success'>" . icon('fa-university') . "&nbsp;" . q($to_name) . "</div></div>";            
             if (!send_mail_multipart($from_name, $from_address, $to_name, $prof->email, $subject, $plainMessage, $message)) {
-                $ret .= "<div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div>";
+                $ret .= "<div class='col-sm-12'><div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div></div>";
             }
         }
     }    

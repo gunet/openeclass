@@ -79,9 +79,31 @@
                                 @php $i++; @endphp
                                 <tr>
                                     <th scope="row">{{$i}}</th>
-                                    <td><a href="{{$urlServer}}courses/{{$course->code}}/index.php">{{ q($course->title) }}</a></td>
-                                    <td><span class="text-secondary">({{ q($course->public_code) }})</span></td>
-                                    <td><span class="text-secondary">{{ q($course->professor) }}</span></td>
+                                    <td>
+                                        <a class='@if($course->visible == 3) InvisibleCourse @endif' href="{{$urlServer}}courses/{{$course->code}}/index.php">{{ q($course->title) }}</a>
+                                        @if($course->visible == 1) 
+                                            <button type="button" class="btn btn-transparent" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langRegCourse')}}">
+                                              <span class='fa fa-lock text-secondary'></span>
+                                            </button>
+                                        @endif
+                                        @if($course->visible == 2) 
+                                            <button type="button" class="btn btn-transparent" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langOpenCourse')}}">
+                                              <span class='fa fa-unlock text-success'></span>
+                                            </button>
+                                        @endif
+                                        @if($course->visible == 0) 
+                                            <button type="button" class="btn btn-transparent" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langClosedCourse')}}">
+                                              <span class='fa fa-lock text-warning'></span>
+                                            </button>
+                                        @endif
+                                        @if($course->visible == 3) 
+                                            <button type="button" class="btn btn-transparent" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langInactiveCourse')}}">
+                                              <span class='fa fa-exclamation-triangle text-danger InvisibleCourse'></span>
+                                            </button>
+                                        @endif
+                                    </td>
+                                    <td><span class="text-secondary @if($course->visible == 3) InvisibleCourse @endif">({{ q($course->public_code) }})</span></td>
+                                    <td><span class="text-secondary @if($course->visible == 3) InvisibleCourse @endif">{{ q($course->professor) }}</span></td>
                                     <td class='text-center'>
                                         <!-- check if uid is editor of course or student -->
                                         <!------------------------------------------------->

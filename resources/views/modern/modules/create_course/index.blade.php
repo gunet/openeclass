@@ -184,31 +184,28 @@
                                         <div class="col-xl-4 col-md-4 col-sm-6 col-xs-6">
                                           
                                           <div class='radio'>
-                                            <label class="checkbox_container2">
+                                            <div class='d-inline-flex align-items-center'>
                                                 <input type='radio' name='view_type' value='simple' id='simple'>
-                                                <span class="checkmark2"></span>
-                                                <span class='fs-6'>{{ trans('langCourseSimpleFormat') }}</span>
-                                            </label>
+                                                <span class='ps-2'>{{ trans('langCourseSimpleFormat') }}</span>
+                                            </div>
                                           </div>
                                         </div>
 
                                         <div class="col-xl-4 col-md-4 col-sm-6 col-xs-6">
                                           <div class='radio'>
-                                            <label class="checkbox_container2">
+                                            <div class='d-inline-flex align-items-center'>
                                               <input type='radio' name='view_type' value='units' id='units' checked>
-                                              <span class="checkmark2"></span>
-                                              <span class='fs-6'>{{ trans('langWithCourseUnits') }}</span>
-                                            </label>
+                                              <span class='ps-2'>{{ trans('langWithCourseUnits') }}</span>
+                                            </div>
                                           </div>
                                         </div>
 
                                         <div class="col-xl-4 col-md-4 col-sm-6 col-xs-6">
                                           <div class='radio'>
-                                            <label class="checkbox_container2">
+                                            <div class='d-inline-flex align-items-center'>
                                               <input type='radio' name='view_type' value='wall' id='wall'>
-                                              <span class="checkmark2"></span>
-                                              <span class='fs-6'>{{ trans('langCourseWallFormat') }}</span>
-                                            </label>
+                                              <span class='ps-2'>{{ trans('langCourseWallFormat') }}</span>
+                                            </div>
                                           </div>   
                                         </div>
                                       </div>
@@ -222,29 +219,26 @@
                                       <div class="row p-2">
                                         <div class="col-xl-4 col-md-4 col-12">
                                             <div class='radio'>
-                                              <label class="checkbox_container2">
+                                              <div class='d-inline-flex align-items-center'>
                                                 <input type='radio' name='l_radio' value='0' checked>
-                                                <span class="checkmark2"></span>
-                                                <span class='fs-6'>{{ $license_0 }}</span>
-                                              </label>
+                                                <span class='ps-2'>{{ $license_0 }}</span>
+                                              </div>
                                             </div>
                                         </div>
                                         <div class="col-xl-4 col-md-4 col-12">
                                             <div class='radio'>
-                                              <label class="checkbox_container2">
+                                              <div class='d-inline-flex align-items-center'>
                                                 <input type='radio' name='l_radio' value='10'>
-                                                <span class="checkmark2"></span>
-                                                <span class='fs-6'>{{ $license_10 }}</span>
-                                              </label>
+                                                <span class='ps-2'>{{ $license_10 }}</span>
+                                              </div>
                                             </div>
                                         </div>
                                         <div class="col-xl-4 col-md-4 col-12">
                                             <div class='radio'>
-                                              <label class="checkbox_container2">
+                                              <div class='d-inline-flex align-items-center'>
                                                 <input id='cc_license' type='radio' name='l_radio' value='cc'>
-                                                <span class="checkmark2"></span>
-                                                <span class='fs-6'>{{ trans("langCMeta['course_license']") }}</span>
-                                              </label>
+                                                <span class='ps-2'>{{ trans("langCMeta['course_license']") }}</span>
+                                              </div>
                                             </div>       
                                         </div>
                                       </div>
@@ -259,48 +253,44 @@
                                   </div>
 
                                   <div class='form-group mt-3'>
-                                    <div class="col-xl-12 col-md-12 col-sm-6 col-6">
+                                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
                                       <label for='localize' class='col-sm-12 control-label-notes'>{{ trans('langAvailableTypes') }}:</label>
                                       <div class='row p-2'>
+
                                         <div class="col-xl-3 col-md-3 col-12">
-                                            <div class='radio'>
-                                              <label class="checkbox_container2">
-                                                <input id='courseopen' type='radio' name='formvisible' value='2' checked>
-                                                <span class="checkmark2"></span>
-                                                <span class='fs-6'>{!! $icon_course_open !!} {{ trans('langOpenCourse') }}</span><br>
-                                                <span class='help-block'><small class='text-warning fs-6'>{{ trans('langPublic') }}</small></span>
-                                              </label>
-                                            </div>
+                                          <div class='d-inline-flex align-items-center'>
+                                            <input id='courseopen' type='radio' name='formvisible' value='2' checked>
+                                            <span class='ps-2'>{!! $icon_course_open !!}</span> 
+                                            <span class='ps-2'>{{ trans('langOpenCourse') }}</span>
+                                          </div><br>
+                                          <small class='text-warning'>{{ trans('langPublic') }}</small>
                                         </div>
-                                        <div class="col-xl-3 col-md-3 col-12">
-                                            <div class='radio'>
-                                              <label class="checkbox_container2">
-                                                <input id='coursewithregistration' type='radio' name='formvisible' value='1'>
-                                                <span class="checkmark2"></span>
-                                                <span class='fs-6'>{!! $icon_course_registration !!}{{ trans('langRegCourse') }}</span><br>
-                                                <span class='help-block'><small class='text-warning fs-6'>{{ trans('langPrivOpen') }}</small></span>
-                                              </label>
-                                            </div>
+
+                                        <div class="col-xl-3 col-md-3 col-12 mt-md-0 mt-3">
+                                          <div class='d-inline-flex align-items-center'>
+                                            <input id='coursewithregistration' type='radio' name='formvisible' value='1'>
+                                            <span class='ps-2'>{!! $icon_course_registration !!}</span>
+                                            <span class='ps-3'>{{ trans('langRegCourse') }}</span>
+                                          </div><br>
+                                          <small class='text-warning'>{{ trans('langPrivOpen') }}</small>
                                         </div>
-                                        <div class="col-xl-3 col-md-3 col-12">
-                                            <div class='radio'>
-                                              <label class="checkbox_container2">
-                                                <input id='courseclose' type='radio' name='formvisible' value='0'>
-                                                <span class="checkmark2"></span>
-                                                <span class='fs-6'>{!! $icon_course_closed !!} {{ trans('langClosedCourse') }}</span>
-                                                <span class='help-block'><small class='text-warning fs-6'>{{ trans('langClosedCourseShort') }}</small></span>
-                                              </label>
-                                            </div>
+
+                                        <div class="col-xl-3 col-md-3 col-12 mt-md-0 mt-3">
+                                          <div class='d-inline-flex align-items-center'>
+                                            <input id='courseclose' type='radio' name='formvisible' value='0'>
+                                            <span class='ps-2'>{!! $icon_course_closed !!}</span>
+                                            <span class='ps-2'>{{ trans('langClosedCourse') }}</span>
+                                          </div><br>
+                                          <small class='text-warning'>{{ trans('langClosedCourseShort') }}</small>
                                         </div>
-                                        <div class="col-xl-3 col-md-3 col-12">
-                                            <div class='radio'>
-                                              <label class="checkbox_container2">
+
+                                        <div class="col-xl-3 col-md-3 col-12 mt-md-0 mt-3">
+                                            <div class='d-inline-flex align-items-center'>
                                                 <input id='courseinactive' type='radio' name='formvisible' value='3'>
-                                                <span class="checkmark2"></span>
-                                                <span class='fs-6'>{!! $icon_course_inactive !!} {{ trans('langInactiveCourse') }}</span>
-                                                <span class='help-block'><small class='text-warning fs-6'>{{ trans('langCourseInactive') }}</small></span>
-                                              </label>
-                                            </div>
+                                                <span class='ps-2'>{!! $icon_course_inactive !!}</span>
+                                                <span class='ps-2'>{{ trans('langInactiveCourse') }}</span>
+                                            </div><br>
+                                            <small class='text-warning'>{{ trans('langCourseInactive') }}</small>
                                         </div>                   
                                       </div>
                                     </div>
