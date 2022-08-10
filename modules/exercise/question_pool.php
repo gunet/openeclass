@@ -240,7 +240,7 @@ foreach ($q_cats as $q_cat) {
 //Start of filtering Component
 $tool_content .= "
 <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-    <div class='form-wrapper shadow-sm p-3 rounded'><form class='form-inline' role='form' name='qfilter' method='get' action='$_SERVER[REQUEST_URI]'><input type='hidden' name='course' value='$course_code'>
+    <div class='form-wrapper shadow-sm p-3 rounded mb-5'><form class='form-inline' role='form' name='qfilter' method='get' action='$_SERVER[REQUEST_URI]'><input type='hidden' name='course' value='$course_code'>
                     ".(isset($fromExercise)? "<input type='hidden' name='fromExercise' value='$fromExercise'>" : "")."
                     <div class='form-group mt-3'>
                         <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-select'>

@@ -73,14 +73,22 @@
                                 </div>
                                 <div class="row justify-content-center text-center" >
                                     <h5> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h5>
-                                    <p> {{ trans('langTeacher') }} </p>
+                                    <p> 
+                                        @if(($session->status == USER_TEACHER))
+                                        {{ trans('langMetaTeacher') }}
+                                        @elseif(($session->status == USER_STUDENT))
+                                        {{ trans('langCStudent') }}
+                                        @else
+                                        {{ trans('langAdministrator')}}
+                                        @endif 
+                                    </p>
                                 </div>
                                 <div class="row justify-content-center text-center">
                                     <div class="py-1" >
                                         <a href="{{ $urlAppend }}main/profile/profile.php" class="btn btn-outline-primary btn-rounded"><i class="fas fa-pen"></i>{{ trans('langModProfile') }}</a>
                                     </div>
                                     <div class="py-1">
-                                        <a href="#" class="btn btn-outline-warning btn-rounded"><i class="fas fa-trash"></i>{{ trans('langUnregUser') }} </a>
+                                        <a href="{{$urlAppend}}main/unreguser.php" class="btn btn-outline-danger btn-rounded"><i class="fa fa-trash-o"></i>{{ trans('langUnregUser') }} </a>
                                     </div>
                                     <div class="py-1">
                                         {{ trans('langExplain') }}
@@ -320,22 +328,15 @@
 
 
             <div class="container-fluid user-announcements-portfolio bg-white border border-light shadow-sm mt-lg-3 mt-md-4 mt-4">
-               {{-- <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-3 rowMedium">
-
-                    <span class="text-center control-label-notes">{{ trans('langMyPersoAnnouncements') }}</span><hr class='text-primary mt-3'>
-                    <div class="container-fluid text-md-center">
-                        {!! $user_announcements !!}
-                    </div>
-
-                    <div class="container-fluid mt-3 text-center">
-                        <hr class='text-primary'>
-                        <a class='text-primary fs-6' href="{{$urlAppend}}modules/announcements/myannouncements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span></a>
-                    </div>
-
-                </div> --}}
                 <div class='row rowMedium'>
                     <div class='control-label-notes text-center mt-3 mb-3'>{{ trans('langMyPersoAnnouncements') }}</div><hr class='text-primary'>
-                    <div class='ps-3 pb-3 pe-3'>{!! $user_announcements !!}</div><hr class='text-primary'>
+                    <div class='ps-3 pb-3 pe-3'>
+                        @if($user_announcements_exist)
+                           {!! $user_announcements !!}
+                        @else
+                           <span class='text-title not_visible'> - {{trans('langNoRecentAnnounce')}} - </span>
+                        @endif
+                    </div><hr class='text-primary'>
                     <div class='text-center text-primary fw-bold fs-6 mb-3'>
                         <a href="{{$urlAppend}}modules/announcements/myannouncements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span></a>
                     </div>
@@ -344,39 +345,11 @@
 
 
             <div class="container-fluid user-messages-portfolio bg-white border border-light shadow-sm mt-lg-3 mt-md-4 mt-4">
-                {{-- <div class="row p-xxl-5 px-xl-4 py-xl-4 px-lg-3 py-lg-3 p-md-5 ps-1 pe-2 pt-3 pb-3 rowMedium">
-
-                    <span class="text-center control-label-notes">{{ trans('langMyPersoMessages') }}</span><hr class='text-primary mt-3'>
-                    <div class="container-fluid text-md-center"> 
-                        <ul class='tablelist pt-2 pb-2 ps-2 pe-2'>
-                            @if(!empty($user_messages))
-                                {!! $user_messages !!}
-                            @else
-                                <li class='list-item' style='border-bottom:none;'>
-                                    <div class='text-title not_visible'> - {{ trans('langDropboxNoMessage') }} - </div>
-                                </li>
-                            @endif
-                        </ul>
-                    </div>
-
-                    <div class="container-fluid mt-3 text-center">
-                        <hr class='text-primary'>
-                        <a class='text-primary fs-6' href="{{$urlAppend}}modules/message/index.php">{{ trans('langAllMessages') }} <span class='fa fa-arrow-right'></span></a>
-                    </div>
-
-                </div> --}}
-
                 <div class='row rowMedium'>
                     <div class='control-label-notes text-center mt-3 mb-3'>{{ trans('langMyPersoMessages') }}</div><hr class='text-primary'>
-                    {{-- @if(!empty($user_messages)) --}}
                         <div class='ps-3 pb-3 pe-3'>
-                            {!! $user_messages !!}
+                               {!! $user_messages !!}
                         </div>
-                    {{-- @else
-                        <li class='list-item'>
-                            <div class='text-title not_visible'> - {{ trans('langDropboxNoMessage') }} - </div>
-                        </li>
-                    @endif --}}
                     <hr class='text-primary'>
                     <div class='text-center text-primary fw-bold fs-6 mb-3'>
                         <a href="{{$urlAppend}}modules/message/index.php">{{ trans('langAllMessages') }} <span class='fa fa-arrow-right'></span></a>

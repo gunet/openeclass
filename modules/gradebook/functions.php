@@ -65,7 +65,6 @@ function display_user_grades($gradebook_id) {
         $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_id = ?d  ORDER BY `DATE` DESC", $gradebook_id);
         $actNumber = count($result);
         if ($actNumber > 0) {
-            $tool_content .= "<div class='row p-2'></div>";
             $tool_content .= "<h5>" . display_user($userID) . " ($langGradebookGrade: " . userGradeTotal($gradebook_id, $userID) . ")</h5>";
             $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
                               <table class='announcements_table'>";
@@ -746,7 +745,7 @@ function student_view_gradebook($gradebook_id, $uid) {
                 'level' => 'primary-label'),
     ));
     if (!$checkForRecords) {
-        $tool_content .="<div class='alert alert-warning'>$langGradebookTotalGradeNoInput</div>";
+        $tool_content .="<div class='col-sm-12'><div class='alert alert-warning'>$langGradebookTotalGradeNoInput</div></div>";
     }
 
     $result = Database::get()->queryArray("SELECT * FROM gradebook_activities
@@ -758,7 +757,7 @@ function student_view_gradebook($gradebook_id, $uid) {
             $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;
         }
         if(weightleft($gradebook_id, 0) != 0) {
-            $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langGradebookAlertToChange</div></div>";
+            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langGradebookAlertToChange</div></div>";
         }
         $tool_content .= "<div style='padding: 15px;'>" . display_user($uid, false, false) . "</div>";
         $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='table-responsive'><table class='announcements_table' >";
@@ -935,15 +934,15 @@ function display_gradebook($gradebook) {
     } else {
         foreach ($result as $details) {
             if ($details->weight == 0 or (empty($details->weight))) { // check if there are activities with 0% weight
-                $weightMessage = "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langGradebookGradeAlert3</div></div>";
+                $weightMessage = "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langGradebookGradeAlert3</div></div>";
             }
         }
         //check if there is spare weight
         if(weightleft($gradebook->id, 0)) {
-            $weightMessage = "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langGradebookGradeAlert (" . weightleft($gradebook->id, 0) . "%)</div></div>";
+            $weightMessage = "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langGradebookGradeAlert (" . weightleft($gradebook->id, 0) . "%)</div></div>";
         }
         $tool_content .= $weightMessage;
-        $tool_content .= "<div class='row p-2'></div>
+        $tool_content .= "
                                 <div class='table-responsive'>
                                     <table class='announcements_table'>
                                         <tr style='height:45px;'>
@@ -1077,12 +1076,12 @@ function display_gradebooks() {
                 . "AND gradebook.id = gradebook_users.gradebook_id AND gradebook_users.uid = ?d", $course_id, $uid);
     }
     if (count($result) == 0) { // no gradebooks
-        $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langNoGradeBooks</div></div>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langNoGradeBooks</div></div>";
     } else {
-        $tool_content .= "<div class='row p-2'></div>";
+
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='announcements_table'>";
-        $tool_content .= "<tr class='notes_thead' style='height:45px;'>
+        $tool_content .= "<tr class='notes_thead'>
                             <th style='padding-left:15px' class='text-white'>$langAvailableGradebooks</th>
                             <th class='text-white' style='width: 150px;'>$langStart</th>
                             <th  class='text-white' style='width: 150px;'>$langFinish</th>";
@@ -1157,9 +1156,9 @@ function display_available_exercises($gradebook_id) {
     $checkForExerNumber = count($checkForExer);
     if ($checkForExerNumber > 0) {
         
-        $tool_content .= "<div class='row p-2'></div><div class='row'><div class='col-sm-12'><div class='table-responsive'>";
+        $tool_content .= "<div class='col-sm-12'><div class='table-responsive'>";
         $tool_content .= "<table class='announcements_table'>";
-        $tool_content .= "<tr class='notes_thead' style='height:45px;'><th class='text-white'>$langTitle</th><th class='text-white'>$langGradebookActivityDate2</th><th class='text-white'>$langDescription</th>";
+        $tool_content .= "<tr class='notes_thead'><th class='text-white'>$langTitle</th><th class='text-white'>$langGradebookActivityDate2</th><th class='text-white'>$langDescription</th>";
         $tool_content .= "<th class='text-center text-white'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
 
@@ -1175,9 +1174,9 @@ function display_available_exercises($gradebook_id) {
                     . "<td>" . $content . "</td>";
             $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->id) . "&amp;type=2");
         }
-        $tool_content .= "</td></tr></table></div></div></div>";
+        $tool_content .= "</td></tr></table></div></div>";
     } else {
-        $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langAttendanceNoActMessageExe4</div></div>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langAttendanceNoActMessageExe4</div></div>";
     }
 }
 
@@ -1208,7 +1207,7 @@ function display_available_assignments($gradebook_id) {
 
     if ($checkForAssNumber > 0) {
         $tool_content .= "
-            <div class='row p-2'></div><div class='table-responsive'>
+            <div class='table-responsive'>
                           <table class='announcements_table'";
         $tool_content .= "<tr class='list-header'><th class='text-secondary'>$langTitle</th><th class='text-secondary'>".q($m['deadline'])."</th><th class='text-secondary'>$langDescription</th>";
         $tool_content .= "<th class='text-center text-secondary'><i class='fa fa-cogs'></i></th>";
@@ -1270,9 +1269,9 @@ function display_available_lps($gradebook_id) {
 
     $checkForLpNumber = count($checkForLp);
     if ($checkForLpNumber > 0) {
-        $tool_content .= "<div class='row p-2'></div><div class='table-responsive'>";
+        $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='announcements_table'>";
-        $tool_content .= "<tr class='notes_thead' style='height:45px;'><th class='text-white' style='padding-left:15px;'>$langTitle</th><th class='text-white'>$langDescription</th>";
+        $tool_content .= "<tr class='notes_thead'><th class='text-white' style='padding-left:15px;'>$langTitle</th><th class='text-white'>$langDescription</th>";
         $tool_content .= "<th class='text-center text-white'>$langActions</th>";
         $tool_content .= "</tr>";
         foreach ($checkForLp as $newExerToGradebook) {
@@ -1284,7 +1283,7 @@ function display_available_lps($gradebook_id) {
         } // end of while
         $tool_content .= "</table></div>";
     } else {
-        $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langAttendanceNoActMessageLp4</div></div>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langAttendanceNoActMessageLp4</div></div>";
     }
 }
 
@@ -1317,7 +1316,7 @@ function register_user_grades($gradebook_id, $actID) {
     $gradebook_range = get_gradebook_range($gradebook_id);
     $result = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d", $actID);
     $act_type = $result->activity_type; // type of activity
-    $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>" .(!empty($result->title) ? q($result->title) : $langGradebookNoTitle) . " <br>
+    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>" .(!empty($result->title) ? q($result->title) : $langGradebookNoTitle) . " <br>
                         <small>$langGradebookActivityWeight: $result->weight%</small></div></div>";
     //display users
     $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, gradebook_users.uid as userID, user.surname as surname,
@@ -1331,7 +1330,7 @@ function register_user_grades($gradebook_id, $actID) {
         $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' id='user_grades_form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($actID) . "'>
         <div class='row'>
-        <div class='col-xs-12'>
+        <div class='col-12'>
         <table id='users_table{$course_id}' class='announcements_table custom_list_order'>
             <thead>
                 <tr class='notes_thead'>

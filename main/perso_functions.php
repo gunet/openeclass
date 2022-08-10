@@ -231,16 +231,6 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
             }
             $counterAn++;
         }
-        if(!$q){
-            $ann_content .= "
-                    <li class='list-group-item p-2'>
-                        <div class='item-wholeline'>
-                            <div class='text-title text-center'>
-                                - Δεν υπάρχουν πρόσφατες ανακοινώσεις -
-                            </div>
-                        </div>
-                    </li>";
-        }
         $ann_content .= "</ul>";
         return $ann_content;
     }

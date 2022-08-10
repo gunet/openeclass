@@ -232,7 +232,7 @@ if ($userdata) {
                         <div class='row p-2'>
                             <div class='col-sm-12'>
                                 <div class='panel panel-default'>
-                                    <div class='text-center text-muted panel-body'>".$langNoInfoAvailable."</div>
+                                    <div class='text-center text-muted panel-body Borders'>".$langNoInfoAvailable."</div>
                                 </div>";
     } else {
         $tool_content .= "

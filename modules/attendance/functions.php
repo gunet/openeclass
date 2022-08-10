@@ -929,7 +929,7 @@ function display_user_presences($attendance_id) {
                             WHERE attendance_book.attendance_activity_id = attendance_activities.id
                             AND uid = ?d AND attendance_activities.attendance_id = ?d", $userID, $attendance_id)->count;
         if(!$checkForRecords) {
-            $tool_content .="<div class='alert alert-success'>$langAttendanceNewBookRecord</div>";
+            $tool_content .="<div class='col-sm-12'><div class='alert alert-success'>$langAttendanceNewBookRecord</div></div>";
         }
 
         //get all the activities

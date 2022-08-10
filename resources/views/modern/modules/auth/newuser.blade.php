@@ -34,22 +34,26 @@
                     
                     {!! $action_bar !!}
                     @if (!$user_registration or $eclass_stud_reg != 2)
-                        <div class='alert alert-info'>
-                            {{ trans('langStudentCannotRegister') }}
+                        <div class='col-sm-12'>
+                            <div class='alert alert-info'>
+                                {{ trans('langStudentCannotRegister') }}
+                            </div>
                         </div>
                     @else
                         @if (isset($_POST['submit']))
                             @if ($vmail)
-                                <div class='alert alert-info'> {{ trans('langMailVerificationSuccess') }} {{ trans('langMailVerificationSuccess2') }} <br><br><small> {{ trans('langMailVerificationNote') }} </small> <br><br>{{ trans('langClick') }} <a href='{{ $urlServer }}' class='mainpage'>{{ trans('langHere') }}</a> {{ trans('langBackPage') }}</div>
+                                <div class='col-sm-12'><div class='alert alert-info'> {{ trans('langMailVerificationSuccess') }} {{ trans('langMailVerificationSuccess2') }} <br><br><small> {{ trans('langMailVerificationNote') }} </small> <br><br>{{ trans('langClick') }} <a href='{{ $urlServer }}' class='mainpage'>{{ trans('langHere') }}</a> {{ trans('langBackPage') }}</div></div>
                             @else
-                                <div class='alert alert-success'>
-                                    <p>{{ $user_msg }}</p>
-                                    <p>{{ trans('langClick') }} <a href='../../'>{{ trans('langHere') }}</a> {{ trans('langPersonalSettingsMore') }}
-                                    <ul>
-                                        <li>{{ trans('langPersonalSettingsMore1') }}</li>
-                                        <li>{{ trans('langPersonalSettingsMore2') }}</li>
-                                    </ul>
-                                    </p>
+                                <div class='col-sm-12'>
+                                    <div class='alert alert-success'>
+                                        <p>{{ $user_msg }}</p>
+                                        <p>{{ trans('langClick') }} <a href='../../'>{{ trans('langHere') }}</a> {{ trans('langPersonalSettingsMore') }}
+                                        <ul>
+                                            <li>{{ trans('langPersonalSettingsMore1') }}</li>
+                                            <li>{{ trans('langPersonalSettingsMore2') }}</li>
+                                        </ul>
+                                        </p>
+                                    </div>
                                 </div>
                             @endif
                         @else

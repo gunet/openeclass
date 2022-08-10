@@ -41,6 +41,20 @@ $user = new User();
 $course = new Course();
 $tree = new Hierarchy();
 
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+// add my changes because course_id is always wrong!! //
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+if(isset($_GET['course_code'])){
+    $course_code = $_GET['course_code'];
+    $course_id = course_code_to_id($course_code);
+} 
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
 // departments and validation
 $depadmin_mode = get_config('restrict_teacher_owndep') && !$is_admin;
 $allowables = array();
@@ -423,15 +437,6 @@ if (isset($_POST['submit'])) {
     $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course_code=$course_code";
     $data['menuTypeID'] = 2;
 
-
-    ////////////// mychanges ///////////////
-    // $title_course = course_id_to_title($course_id);
-    // $course_code_title = course_id_to_code($course_id);
-    // $course_Teacher = course_id_to_prof($course_id);
-    // $data['title_course'] = $title_course;
-    // $data['course_code_title'] = $course_code;
-    // $data['course_Teacher'] = $course_Teacher;
-    ////////////////////////////////////////
 
     view('modules.course_info.index', $data);
 }

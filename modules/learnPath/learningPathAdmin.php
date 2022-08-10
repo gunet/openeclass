@@ -380,7 +380,7 @@ $tool_content .= action_bar(array(
         ),false);
 
 $tool_content .= "<div class='col-sm-12'>
-                    <div class='panel panel-default'>
+                    <div class='panel panel-default NoBorders'>
                     <div class='panel-heading list-header'>
                         <h3 class='panel-title'>$langLearningPathData</h3>
                     </div>";
@@ -484,13 +484,14 @@ $lp_action_button = action_button(array(
         'secondary_btn_class' => 'btn-success btn-sm'
     )
 );
-$tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default panel-action-btn-default'>
-                    <div class='pull-right' style='padding:8px;'>
-                        $lp_action_button
-                    </div>
-                    <div class='panel-heading list-header'>
-                        <h3 class='panel-title'>$langLearningPathStructure</h3>
-                    </div>";
+$tool_content .= "<div class='col-sm-12 mt-3'>
+                    <div class='panel panel-default panel-action-btn-default NoBorders' style='overflow-y:auto;'>
+                        <div class='pull-right' style='padding:8px;'>
+                            $lp_action_button
+                        </div>
+                        <div class='panel-heading list-header'>
+                            <h3 class='panel-title'>$langLearningPathStructure</h3>
+                        </div>";
 
 //  -------------------------- learning path list content ----------------------------
 $sql = "SELECT M.*, LPM.*, A.`path`
@@ -507,9 +508,9 @@ $result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 if (count($result) == 0) {
     // handle exceptional requirement to add label before exiting early
     if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
-        $tool_content .= "</div><table class='table-default'>" . $createLabelHTML . "</table>";
+        $tool_content .= "<div class='panel-body'><div class='table-responsive'><table class='table-default'>" . $createLabelHTML . "</table></div></div></div></div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoModule</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoModule</div></div></div>";
     }
     draw($tool_content, 2, null, $head_content, $body_action);
     exit();

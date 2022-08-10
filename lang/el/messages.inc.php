@@ -335,7 +335,7 @@ $langCourseDelSuccess = "Το $langsCourse διαγράφηκε με επιτυ�
 $langCourseDelConfirm = "Επιβεβαίωση Διαγραφής $langOfCourse";
 $langCourseDelConfirm2 = "Θέλετε σίγουρα να διαγράψετε το $langsCourse";
 $langNoticeDel = "ΣΗΜΕΙΩΣΗ: Η διαγραφή του $langsOfCourse θα διαγράψει επίσης τους εγγεγραμμένους " . $langsOfStudentss . " από το $langsCourse, την αντιστοιχία του $langsOfCourse στη $langsFaculty, καθώς και όλο το υλικό του $langsOfCourse.";
-
+$langNotice = "Σημείωση";
 // editcours
 $langCourseInformationText = "Επεξεργασία περιγραφής $langsOfCourse";
 $langCourseEdit = "Επεξεργασία $langOfCourse";

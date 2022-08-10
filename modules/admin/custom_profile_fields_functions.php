@@ -361,13 +361,13 @@ function render_profile_fields_content($context) {
         }
 
         if (count($res) > 0) { //category start
-            $return_str .= "<div class='row'><div class='col-sm-6'>
-                            <div class='profile-content-panel'>
-                                    <div class='profile-content-panel-title'>".$cat->name."</div>";
+            $return_str .= "<div class='col-sm-6'>
+                            <div class='panel panel-admin NoBorders mt-3'>
+                                    <div class='panel-heading text-center text-white'>".$cat->name."</div>";
         }
 
         foreach ($res as $f) { //get user data for each field
-            $return_str .= "<div class='profile-pers-info-data'>";
+            $return_str .= "<div class='panel-body NoBorders'><div class='profile-pers-info-data'>";
 
             $fdata_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields_data
                                                        WHERE user_id = ?d AND field_id = ?d", $context['user_id'], $f->id);
@@ -402,11 +402,11 @@ function render_profile_fields_content($context) {
                         break;
                 }
             }
-            $return_str .= "</div></div>";
+            $return_str .= "</div></div></div>";
         }
 
         if (count($res) > 0) { //category end
-            $return_str .= "</div></div></div>";
+            $return_str .= "</div></div>";
         }
 
     }

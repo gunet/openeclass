@@ -82,6 +82,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  <input type='hidden' name='meta_mimetype' value='" . get_mime_type($oldFilename) . "' />
 	  $group_hidden_input
 	  <legend class='control-label-notes text-center'>$langAddMetadata</legend>
+      <div class='table-responsive pt-0'>
 	  <table class='table-default'>
 	  <tr>
 	    <th class='bg-light ps-2 text-secondary'>$langWorkFile:</th>
@@ -127,6 +128,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	    <td class='right'>$langNotRequired</td>
 	  </tr>
 	  </table>
+      </div>
 	</fieldset>
 	</form></div></div>";
 

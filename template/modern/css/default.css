@@ -24,6 +24,10 @@ body{
   height:400px;
 }
 
+.lh-25px{
+  line-height: 25px;
+}
+
 .text-warning{
   color:#f79256 !important;
 }
@@ -36,17 +40,12 @@ body{
   color : #1d4e89;
 }
 
-
 img {
   max-width: 100%;
   height: auto;
 }
 
-ul {
-  list-style-type: none;
-}
-
-li {
+ul,li{
   list-style-type: none;
 }
 
@@ -95,12 +94,6 @@ li {
   background: #005ed7;
 }
 
-
-/* .form-wrapper.shadow-sm{
-  background:#F5F5F4;
-  border: solid 1px #c5c5c5;
-} */
-
 .modal-header .close{
   background-color: transparent;
   border-radius: 50%;
@@ -124,6 +117,7 @@ a{
   outline: none !important;
   box-shadow: none;
 }
+
 
 /* -------------------------------- testimonials ------------------------------------------ */
 /* ---------------------------------------------------------------------------------------- */
@@ -346,7 +340,6 @@ a{
 }
 
 
-
   /* ---------------------------------------------Default ----------------------------------------*/
   /* ---------------------------------------------------------------------------------------------*/
   /* ---------------------------------------------------------------------------------------------*/
@@ -529,10 +522,35 @@ a{
       background-color: #fafafa;
       width:315px;
   }  
+  .fa-times, .fa-trash{
+    color:tomato;
+  }
+
   .mydropdowns .list-group-item:hover{
       background-color: #1d4e89;
       color:white;
   }
+
+  .mydropdowns .confirmAction .fa-times{
+    color: tomato !important;
+  }
+
+  .mydropdowns .confirmAction:hover{
+    background-color: tomato;
+    cursor: pointer;
+    color:white;
+  }
+
+  .mydropdowns .delete_all_in .list-group-item:hover{
+    background-color: tomato;
+    color:white;
+  }
+  .mydropdowns .delete_all_in .list-group-item span:hover{
+    color:white;
+  }
+  
+  
+
 
   
   /* --------------------------------------------- Datepicker-datetimepicker --------------------------*/
@@ -712,19 +730,7 @@ a{
     padding-left:10px; color:blue; margin-top:5px;
   }
 
-  .event.event-important{
-      float:left;
-  }
-
-  .event.event-info{
-      float:left;
-  }
-
-  .event.event-success{
-      float:left;
-  }
-
-  .event.event-special{
+  .event-important, .event-info, .event-success, .event-special{
       float:left;
   }
 
@@ -748,10 +754,9 @@ a{
     margin-bottom:10px !important;
   }
 
-
   .table-condensed th,
   .table-condensed td {
-  padding: 4px 15px;
+    padding: 4px 15px;
   }
 
   .table-condensed thead > tr > th,
@@ -760,54 +765,55 @@ a{
   .table-condensed thead > tr > td,
   .table-condensed tbody > tr > td,
   .table-condensed tfoot > tr > td {
-  padding: 5px;
+     padding: 5px;
   }
 
   .table-condensed thead tr th.next{
-  height: auto;
-  width: auto;
-  border: 2px solid #003F87;
-  border-radius: 50%;
-  visibility: visible;
+    height: auto;
+    width: auto;
+    border: 2px solid #003F87;
+    border-radius: 50%;
+    visibility: visible;
   }
   .table-condensed thead tr th.next::after{
-  content: '>';
-  font-size: 40px;
-  font-weight: 500;
+    content: '>';
+    font-size: 40px;
+    font-weight: 500;
   }
   .table-condensed thead tr th.next:hover{
-  background-color: transparent;
+    background-color: transparent;
   }
 
   .table-condensed thead tr th.switch{
-  height: auto;
-  width: auto;
-  border: 2px solid #003F87;
-  margin-left:30px;
-  margin-right:30px;
-  visibility: visible;
-  color: orange;
+    height: auto;
+    width: auto;
+    border: 2px solid #003F87;
+    margin-left:30px;
+    margin-right:30px;
+    visibility: visible;
+    color: orange;
   }
 
   .table-condensed thead tr th.prev{
-  height: auto;
-  width: auto;
-  border: 2px solid #003F87;
-  border-radius: 50%;
-  visibility: visible;
+    height: auto;
+    width: auto;
+    border: 2px solid #003F87;
+    border-radius: 50%;
+    visibility: visible;
   }
   .table-condensed thead tr th.prev::before{
-  content: '<';
-  font-size: 40px;
-  font-weight: 500;
+    content: '<';
+    font-size: 40px;
+    font-weight: 500;
   }
   .table-condensed thead tr th.prev:hover{
-  background-color: transparent;
+    background-color: transparent;
   }
 
   .announcements_table{
      width:100%;
      background: #FFFFFF;
+     overflow-y: auto !important;
   }
 
   .announcements_table .list-header th{
@@ -817,6 +823,7 @@ a{
   .table-default{
     width:100%;
     background: #FFFFFF;
+    overflow-y: auto !important;
   }
   
   .table-default .list-header th{
@@ -824,31 +831,20 @@ a{
   }
 
   .announcements_table tr td{
-    /* min-height:70px; */
-    padding-top:20px !important;
-    padding-left:20px !important;
-    padding-bottom: 20px !important;
-    padding-right: 20px !important;
+    padding:20px ;
   }
 
   .table-default tr td{
-    padding-top:20px !important;
-    padding-left:20px !important;
-    padding-bottom: 20px !important;
-    padding-right: 20px !important;
+    padding:20px ;
   }
 
   .list-header{
     height:40px;
     background: rgb(199,212,210);
     background: radial-gradient(circle, #003F87 0%, #003F87 100%);
-    /* -webkit-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
-      -moz-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
-      box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35); */
   }
 
   tr.active{
-    /* background-color:#003F87; */
     background: #fafafa;
   }
 
@@ -890,7 +886,6 @@ a{
      padding-left: 15px;
   }
 
-  
   /* -------------------------------------------- Glossary ------------------------------------------ */
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -956,10 +951,20 @@ a{
     background-color: rgba(255, 255, 255, 0.776);
   }
 
+  /******************************************************************************************************/
+  /******************************************************************************************************/
+  /* to logo pou tha vazei kathe panepisthmio sthn arxikh selida toy eclass mesa sto homepageintropanel */
+  /******************************************************************************************************/
+  /******************************************************************************************************/
   .homepageIntroPanel img{
      margin:auto;
      display: block;
+     padding: 15px;
   }
+  /******************************************************************************************************/
+  /******************************************************************************************************/
+  /******************************************************************************************************/
+  /******************************************************************************************************/
 
   .opencourse_triangle{
     float:left;
@@ -1201,7 +1206,6 @@ a{
     padding-left: 12px;
   }
   
-  
   .fab.fa-linkedin-in{
     font-size:19px;
   }
@@ -1289,7 +1293,6 @@ a{
   }
   
    
-  
   /* -------------------------------------------- Video ----------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1580,9 +1583,8 @@ a{
     background: #ffffff;
     border-bottom-left-radius:15px;
     border-bottom-right-radius:15px;
-    /* border-top-left-radius:11px;
-    border-top-right-radius:11px; */
   }
+
   .borderBody{
     border-top-right-radius:15px; border-top-left-radius:15px;
   }
@@ -1672,16 +1674,13 @@ a{
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/  
   /* for all tables */
-  /* table{
-    box-shadow: rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(17, 17, 26, 0.1) 0px 24px 80px;
-  } */
 
   .table-responsive{
-     padding-top:25px;
+     margin-top:20px;
   }
+
   tbody,tr,th,td{
       border:1px solid rgba(65, 66, 66, 0.1) ;
-      
   }
   .announcements_table tr{
     border:1px solid rgba(65, 66, 66, 0.1) ;
@@ -1935,8 +1934,6 @@ a{
       background: rgba(189, 184, 184, 0.8);
       box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
     }
-
-    
   }
 
   /*******************************************************************/
@@ -1964,8 +1961,6 @@ a{
       color: #fafafa !important;
   }
   
-
-  
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */
@@ -1983,33 +1978,30 @@ a{
       border-top-left-radius: 15px;
       background-repeat: no-repeat; background-size: cover;
       background-image: url(../images/books.jpeg);
-      
-   }
+    }
 
-   /* the titles of action_bars */
-   .hidden-xs{
-    display:none;
-  }
+    /* the titles of action_bars */
+    .hidden-xs{
+      display:none;
+    }
 
+    select{
+      overflow-y: auto !important;
+    }
 
-   .login-form-spacing2{
-    border-radius:15px;
-    background: #003F87;
-    padding:5px 5px ;
-    margin-top:10px;
-   }
+    .login-form-spacing2{
+      border-radius:15px;
+      background: #003F87;
+      padding:5px 5px ;
+      margin-top:10px;
+    }
 
     .user-icon {
       width: 30px;
       height: 30px;
       border-radius: 50%;
     }
-  
-    /* .container_fluid_calendar{
-      -moz-box-shadow: 0 0 3px #ccc;
-      -webkit-box-shadow: 0 0 3px #ccc;
-      box-shadow: 0 0 3px #ccc;
-    } */
+
     .user-announcements-portfolio{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
@@ -2031,6 +2023,7 @@ a{
       -webkit-box-shadow:none;
       box-shadow:none;
     }
+
     .course-units{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
@@ -2038,17 +2031,6 @@ a{
       border-radius: 25px;
       padding:25px;
     }
-
-    /* .btn-group{
-      max-width:300px;
-      flex-wrap: wrap;
-    } */
-    /* .btn-group .btn.btn-secondary{
-      border:solid 3px white;
-    }
-    .btn-group .btn.btn-success{
-      border:solid 3px white;
-    } */
 
     .breadcrumb-item a{
       max-width:300px;
@@ -2086,11 +2068,10 @@ a{
       margin:auto;
       display:block;
     }
-
   }
   
   
-   /* ---------------------------------------------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */
@@ -2102,25 +2083,32 @@ a{
   /* ------------------------------------------------------- small mobile - portrait-----------------------------------*/
   @media (min-width:321px) and (max-width: 375px){
 
+    .dataTables_wrapper{
+      overflow-y: auto !important;
+    }
+
     .login-form-Homepage{
       border-bottom-left-radius: 15px;
       border-top-left-radius: 15px;
       background-repeat: no-repeat; background-size: cover;
       background-image: url(../images/books.jpeg);
-      
-   }
+    }
 
-   /* the titles of action_bars */
-   .hidden-xs{
-    display:none;
-   }
+    /* the titles of action_bars */
+    .hidden-xs{
+      display:none;
+    }
 
-   .login-form-spacing2{
-    border-radius:15px;
-    background: #003F87;
-    padding:5px 5px ;
-    margin-top:10px;
-   }
+    select{
+      overflow-y: auto !important;
+    }
+
+    .login-form-spacing2{
+      border-radius:15px;
+      background: #003F87;
+      padding:5px 5px ;
+      margin-top:10px;
+    }
 
     .user-icon {
       width: 30px;
@@ -2128,11 +2116,6 @@ a{
       border-radius: 50%;
     }
 
-    /* .container_fluid_calendar{
-      -moz-box-shadow: 0 0 3px #ccc;
-      -webkit-box-shadow: 0 0 3px #ccc;
-      box-shadow: 0 0 3px #ccc;
-    } */
     .user-announcements-portfolio{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
@@ -2161,17 +2144,6 @@ a{
       border-radius: 25px;
       padding:25px;
     }
-
-    /* .btn-group{
-      max-width:355px;
-      flex-wrap: wrap;
-    } */
-    /* .btn-group .btn.btn-secondary{
-      border:solid 3px white;
-    }
-    .btn-group .btn.btn-success{
-      border:solid 3px white;
-    } */
     .breadcrumb-item a{
       max-width:325px;
       flex-wrap: wrap;
@@ -2221,6 +2193,10 @@ a{
   /* -------------------------------------------------------mobile - portrait-----------------------------------------------*/
   
   @media (min-width:376px) and (max-width: 425px){
+
+    .dataTables_wrapper{
+       overflow-y: auto !important;
+    }
   
     .login-form-Homepage{
        border-bottom-left-radius: 15px;
@@ -2233,6 +2209,10 @@ a{
     /* the titles of action_bars */
     .hidden-xs{
       display:none;
+    }
+
+    select{
+      overflow-y: auto !important;
     }
 
     .login-form-spacing2{
@@ -2248,11 +2228,6 @@ a{
       border-radius: 50%;
     }
 
-    /* .container_fluid_calendar{
-      -moz-box-shadow: 0 0 3px #ccc;
-      -webkit-box-shadow: 0 0 3px #ccc;
-      box-shadow: 0 0 3px #ccc;
-    } */
     .user-announcements-portfolio{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
@@ -2314,18 +2289,6 @@ a{
         margin-left:0px;
     }
 
-    /* .btn-group{
-      max-width:400px;
-      flex-wrap: wrap;
-    } */
-
-    /* .btn-group .btn.btn-secondary{
-       border:solid 3px white;
-    }
-    .btn-group .btn.btn-success{
-      border:solid 3px white;
-    } */
-
     .fas.fa-pen-nib{
         transform: rotate(265deg);
     }
@@ -2350,9 +2313,6 @@ a{
       background-color: #003F87 ;
     }
   
-    /* .col-nav-tools{
-      margin-top:-10px ;
-    } */
     .dropdown-language-ul{
       margin-left:-60px ;
       margin-top:5px !important;
@@ -2373,25 +2333,32 @@ a{
   /* ------------------------------------------------------- MOBILE L ------------------------------------------------------- */
   @media (min-width: 426px) and (max-width: 767px){ 
 
+    .dataTables_wrapper{
+      overflow-y: auto !important;
+    }
+
     .login-form-Homepage{
       border-bottom-left-radius: 15px;
       border-top-left-radius: 15px;
       background-repeat: no-repeat; background-size: cover;
       background-image: url(../images/books.jpeg);
-      
-   }
+    }
 
-   /* the titles of action_bars */
-   .hidden-xs{
-    display:none;
-   }
+    /* the titles of action_bars */
+    .hidden-xs{
+      display:none;
+    }
 
-   .login-form-spacing2{
-    border-radius:15px;
-    background: #003F87;
-    padding:5px 5px ;
-    margin-top:10px;
-   }
+    select{
+      overflow-y: auto !important;
+    }
+
+    .login-form-spacing2{
+        border-radius:15px;
+        background: #003F87;
+        padding:5px 5px ;
+        margin-top:10px;
+    }
 
     .user-icon {
       width: 30px;
@@ -2399,23 +2366,6 @@ a{
       border-radius: 50%;
     }
 
-    /* .btn-group{
-      max-width:400px;
-      flex-wrap: wrap;
-    } */
-
-    /* .btn-group .btn.btn-secondary{
-       border:solid 3px white;
-    }
-    .btn-group .btn.btn-success{
-      border:solid 3px white;
-    } */
-
-    /* .container_fluid_calendar{
-      -moz-box-shadow: 0 0 3px #ccc;
-      -webkit-box-shadow: 0 0 3px #ccc;
-      box-shadow: 0 0 3px #ccc;
-    } */
     .user-announcements-portfolio{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
@@ -2495,22 +2445,6 @@ a{
 
   @media (min-width: 768px) and (max-width: 991px){
 
-    /* .btn-group{
-      max-width:400px;
-      flex-wrap: wrap;
-    } */
-
-    /* .btn-group .btn.btn-secondary{
-       border:solid 3px white;
-    }
-    .btn-group .btn.btn-success{
-      border:solid 3px white;
-    } */
-    /* .container_fluid_calendar{
-      -moz-box-shadow: 0 0 3px #ccc;
-      -webkit-box-shadow: 0 0 3px #ccc;
-      box-shadow: 0 0 3px #ccc;
-    } */
     .user-announcements-portfolio{
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
@@ -2618,20 +2552,19 @@ a{
 
     .user-icon-filename{
       width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
-  }
+    }
 
-  .dropdown-user-menu-ul{
-    background-color: #003F87 ;
-    width:220px;
-    margin-left:-150px;
-  }
+    .dropdown-user-menu-ul{
+      background-color: #003F87 ;
+      width:220px;
+      margin-left:-150px;
+    }
 
-  .dropdown-language-ul{
-    margin-left:-60px ;
-    margin-top:0px !important;
-    background-color: #003F87 ;
-  }
-
+    .dropdown-language-ul{
+      margin-left:-60px ;
+      margin-top:0px !important;
+      background-color: #003F87 ;
+    }
 
   }
 
@@ -2652,18 +2585,6 @@ a{
     .calendar_announce_message_col{
       min-height: calc(100vh - 329px - 46px - 46px);
     }
-
-    /* .btn-group{
-      max-width:400px;
-      flex-wrap: wrap;
-    } */
-
-    /* .btn-group .btn.btn-secondary{
-       border:solid 3px white;
-    }
-    .btn-group .btn.btn-success{
-      border:solid 3px white;
-    } */
 
     .sidebarColToolText{
       margin-left:-14px;
@@ -2789,71 +2710,71 @@ a{
 
 
     
-      /* modal frame */
-      .modal-dialog.modal-lg .modal-content{
-          width:800px ;
-      }
-  
-      .content_col{
-         padding-bottom:25px;
-      }
-  
-      .imageCourse{
-          float: left;
-          width:  100%;
-          height: 200px;
-          background-size: cover ;
-      }
-  
-      .uploadImageCourse{
-          height: 350px;
-          width: 100%;
-          object-fit: fill ;
-      }
-  
-      .register_to_course_comment{
-          float:center;
-          color:black; 
-          margin-top:5px;
-          margin-left:35px;
-      }
-  
-      .add_course_comment_col{
-          height:22px; margin-left:73%; margin-top:15px;
-      }
-  
-      .add_course_image_col{
-          height:auto; margin-left:90%; margin-top:-30px;
-      }
-  
-      .add_course_a{
-          text-decoration:none; margin-left:-32px; margin-top:-15px;
-      }
-  
-      .span_add_course_a{
-          float:right; margin-right:-14px; margin-top:-60px;
-          color:orange; font-size:35px; filter: brightness(100%); 
-          font-weight: 600;
-      }
-     
-      .fa.fa-reply.space-after-icon{
-         color:orange ;
-      }
-  
-      .user-icon-filename{
-          width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
-      }
-      .dropdown-user-menu-ul{
-          width:250px ;
-          background-color: #003F87 ;
-          
-      }
+    /* modal frame */
+    .modal-dialog.modal-lg .modal-content{
+        width:800px ;
+    }
 
-      .dropdown-language-ul{
-          margin-left:730px ;
-          margin-top:40px !important;
-          background-color: #003F87 ;
-      }
+    .content_col{
+        padding-bottom:25px;
+    }
+
+    .imageCourse{
+        float: left;
+        width:  100%;
+        height: 200px;
+        background-size: cover ;
+    }
+
+    .uploadImageCourse{
+        height: 350px;
+        width: 100%;
+        object-fit: fill ;
+    }
+
+    .register_to_course_comment{
+        float:center;
+        color:black; 
+        margin-top:5px;
+        margin-left:35px;
+    }
+
+    .add_course_comment_col{
+        height:22px; margin-left:73%; margin-top:15px;
+    }
+
+    .add_course_image_col{
+        height:auto; margin-left:90%; margin-top:-30px;
+    }
+
+    .add_course_a{
+        text-decoration:none; margin-left:-32px; margin-top:-15px;
+    }
+
+    .span_add_course_a{
+        float:right; margin-right:-14px; margin-top:-60px;
+        color:orange; font-size:35px; filter: brightness(100%); 
+        font-weight: 600;
+    }
+    
+    .fa.fa-reply.space-after-icon{
+        color:orange ;
+    }
+
+    .user-icon-filename{
+        width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
+    }
+    .dropdown-user-menu-ul{
+        width:250px ;
+        background-color: #003F87 ;
+        
+    }
+
+    .dropdown-language-ul{
+        margin-left:730px ;
+        margin-top:40px !important;
+        background-color: #003F87 ;
+    }
         
   }
   

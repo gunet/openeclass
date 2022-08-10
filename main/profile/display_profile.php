@@ -102,7 +102,7 @@ if ($data['userdata']) {
             action_bar(array(
                 array('title' => $langUnregUser,
                     'url' => "../unreguser.php",
-                    'icon' => 'fa-times',
+                    'icon' => 'fa-trash-o',
                     'level' => 'primary-label',
                     'button-class' => 'btn-danger')
                 ));

@@ -41,31 +41,21 @@
                 <a id="Tool{{$key}}" class="collapsed parent-menu mt-5" data-bs-toggle="collapse" href="#collapse{{ $key }}">
                     <div class="panel-sidebar-heading">
                         <div class="panel-title h3">
-                            <div class='row'>
-                                <div class='col-1'>
-                                    <span class="fa fa-chevron-right ms-1 fs-6 text-warning" style='font-size:12px;'></span>
-                                </div>
-                                <div class='col-10'>
-                                    <span class='text-wrap text-white fs-6 mt-1'>{{ $tool_group[0]['text'] }}</span>
-                                </div>
+                            <div class='d-inline-flex align-items-center'>
+                                <span class="fa fa-chevron-right ms-1 fs-6 text-warning" style='font-size:12px;'></span>
+                                <span class='text-wrap text-white fs-6 mt-1 ps-2'>{{ $tool_group[0]['text'] }}</span>
                             </div>
-
-
                         </div><hr class='text-white'>
                     </div>
                 </a>
                 <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse {{ $tool_group[0]['class'] }}{{ $key == $default_open_group? ' show': '' }}" aria-labelledby="Tool{{$key}}" data-bs-parent="#sidebar-accordion">
                     @foreach ($tool_group[1] as $key2 => $tool)
-                        <a href="{{ $tool_group[2][$key2] }}" class='list-group-item bg-transparent{{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
-                            <div class='row'>
-                                <div class='col-xxl-1 col-xl-1 col-2'>
-                                    <span class="fa {{ $tool_group[3][$key2] }} fa-fw mt-1 text-warning toolSidebarTxt"></span>
-                                </div>
-                                <div class='col-xxl-10 col-xl-10 col-9'>
-                                    <span class='text-white toolSidebarTxt'>{!! $tool !!}</span>
-                                </div>
-
+                        <a href="{{ $tool_group[2][$key2] }}" class='leftMenuToolCourse list-group-item bg-transparent{{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
+                            <div class='d-inline-flex align-items-center'>
+                                <span class="fa {{ $tool_group[3][$key2] }} fa-fw mt-1 text-warning toolSidebarTxt pe-2"></span>
+                                <span class='text-white toolSidebarTxt pt-1'>{!! $tool !!}</span>
                             </div>
+                                
                         </a>
                     @endforeach
                 </div>

@@ -26,6 +26,14 @@ $(document).ready(function(){
 		}
 		$(this).addClass('active');
 	})
+
+    $('body').on('click', 'a.disabled', function (e) {
+        e.preventDefault();
+    });
+    $('body').on('click', 'a.back_btn', function (e) {
+        e.preventDefault();
+        javascript:window.history.back();
+    });
 	
 
     /////////////////////////////// play testinomonials ////////////////////////////////////////////////////////////////////////

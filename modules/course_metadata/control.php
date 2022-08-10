@@ -115,7 +115,7 @@ if (isset($_POST['submit'])) {
         $tool_content .= "<div class='alert alert-success'>$langOpenCoursesWasSet $langOpenCoursesIsAMinusLevel</div>";
         $level = CourseXMLElement::A_MINUS_LEVEL;
     } else {
-        $tool_content .= "<div class='alert alert-danger'>$langOpenCoursesWasNotSet</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langOpenCoursesWasNotSet</div></div>";
         $is_certified = 0;
     }
 
@@ -144,21 +144,21 @@ $disabledALevel = (!$looksA && !$checkedALevel) ? "disabled='disabled'" : '';
 $disabledAPlusLevel = (!$looksAPlus && !$checkedAPlusLevel) ? "disabled='disabled'" : '';
 
 // images
-$openAccessImg = ($hasOpenAccess) ? 'fa-check' : 'fa-times';
+$openAccessImg = ($hasOpenAccess) ? 'fa-check text-secondary' : 'fa-times';
 $openAccessImgBadge = ($hasOpenAccess) ? 'valid' : 'not-valid';
-$mandatoryMetadataImg = ($hasMandatoryMetadata) ? 'fa-check' : 'fa-times';
+$mandatoryMetadataImg = ($hasMandatoryMetadata) ? 'fa-check text-secondary' : 'fa-times';
 $mandatoryMetadataImgBadge = ($hasMandatoryMetadata) ? 'valid' : 'not-valid';
-$licenseImg = ($hasLicense) ? 'fa-check' : 'fa-times';
+$licenseImg = ($hasLicense) ? 'fa-check text-secondary' : 'fa-times';
 $licenseImgBadge = ($hasLicense) ? 'valid' : 'not-valid';
-$teacherConfirmImg = ($hasTeacherConfirm) ? 'fa-check' : 'fa-times';
+$teacherConfirmImg = ($hasTeacherConfirm) ? 'fa-check text-secondary' : 'fa-times';
 $teacherConfirmImgBadge = ($hasTeacherConfirm) ? 'valid' : 'not-valid';
-$docsImg = ($numDocs > 0) ? 'fa-check' : 'fa-times';
+$docsImg = ($numDocs > 0) ? 'fa-check text-secondary' : 'fa-times';
 $docsImgBadge = ($numDocs > 0) ? 'valid' : 'not-valid';
-$unitsImg = ($numUnits > 0) ? 'fa-check' : 'fa-times';
+$unitsImg = ($numUnits > 0) ? 'fa-check text-secondary' : 'fa-times';
 $unitsImgBadge = ($numUnits > 0) ? 'valid' : 'not-valid';
-$mediaImg = ($numMedia > 0) ? 'fa-check' : 'fa-times';
+$mediaImg = ($numMedia > 0) ? 'fa-check text-secondary' : 'fa-times';
 $mediaImgBadge = ($numMedia > 0) ? 'valid' : 'not-valid';
-$teacherConfirmVideoImg = ($hasTeacherConfirmVideo) ? 'fa-check' : 'fa-times';
+$teacherConfirmVideoImg = ($hasTeacherConfirmVideo) ? 'fa-check text-secondary' : 'fa-times';
 $teacherConfirmVideoImgBadge = ($hasTeacherConfirmVideo) ? 'valid' : 'not-valid';
 
 // parse last submission date
@@ -175,8 +175,8 @@ $tool_content .= action_bar(array(
             'icon' => 'fa-reply',
             'level' => 'primary-label')),false);
 $tool_content .= "
-    <div class='row oc-metedata-list'>
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 shadow-lg p-3 mb-5 bg-body rounded bg-primary ms-2 mt-3'>
+    <div class='oc-metedata-list'>
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
             <ul class='list-group'>
                 <li class='list-group-item list-header notes_thead'>
                     <h5 class='text-white'>$langOpenCoursesCharacteristics</h5>
@@ -218,8 +218,8 @@ $tool_content .= "
     </div>
         ";
 
-$tool_content .= "<div class='row'>
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 shadow-lg p-3 mb-5 bg-body rounded bg-primary ms-2 mt-3'>
+$tool_content .= "
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                         <div class='list-group'>
                             <form class='horizontal-form' role='form' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>";
 $tool_content .= <<<EOF
@@ -246,7 +246,7 @@ $tool_content .= <<<EOF
                         </form>
                     </div>
                 </div>
-            </div>
+            
     
     
     

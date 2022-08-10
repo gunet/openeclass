@@ -564,7 +564,7 @@ if ($is_editor) {
     //DISPLAY: list of users and form for each user
     elseif(isset($_GET['attendanceBook']) or isset($_GET['book'])) {
         if (isset($_GET['update']) and $_GET['update']) {
-            $tool_content .= "<div class='alert alert-success'>$langAttendanceUsers</div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langAttendanceUsers</div></div>";
         }
         //record booking
         if(isset($_POST['bookUser'])) {

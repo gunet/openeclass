@@ -203,11 +203,11 @@ class CourseXMLElement extends SimpleXMLElement {
         // proper divs initializations
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
-            $fieldStart .= "<div class='panel-group shadow-lg p-3 mb-5 bg-body rounded bg-primary mt-3'>
+            $fieldStart .= "<div class='panel-group shadow-lg p-3 rounded mt-3'>
                 <div class='panel panel-default'>
                     <div class='panel-heading'>
                         <div class='panel-title h3 d-flex justify-content-center'>
-                            <a class='metadataCourseCollapseBtn text-white' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
+                            <a class='metadataCourseCollapseBtn text-dark' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
                             <span class='fas fa-arrow-down'></span></a>
                         </div>
                     </div>

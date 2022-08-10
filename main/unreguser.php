@@ -49,27 +49,23 @@ if (!isset($_POST['doit'])) {
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
             <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
-                <div class='row p-2'></div>
-                  <div class='form-group'>
+
+                  <div class='form-group mt-3'>
                     <div class='col-sm-12'>
                       $langConfirm
                     </div>
                   </div>
 
-                  <div class='row p-2'></div>
-
-                  <div class='form-group'>
-                    <label class='col-sm-6 control-label-notes'>$langYes:</label>
-                    <div class='col-sm-12'>
-                      <button class='btn btn-danger' name='doit'><i class='fa fa-times'></i> $langUnregUser</button>
+                  <div class='form-group mt-3'>
+                    <div class='d-inline-flex align-items-center'>
+                      <label class='control-label-notes pe-2'>$langYes:</label>
+                      <button class='btn btn-danger' name='doit'><i class='fa fa-trash-o'></i> $langUnregUser</button>
                     </div>
                   </div>
 
-                  <div class='row p-2'></div>
-
-                  <div class='form-group'>
-                    <label class='col-sm-6 control-label-notes'>$langNo:</label>
-                    <div class='col-sm-12'>
+                  <div class='form-group mt-3'>
+                    <div class='d-inline-flex align-items-center'>
+                      <label class='control-label-notes pe-2'>$langNo:</label>
                       <a href='{$urlAppend}main/profile/display_profile.php' class='btn btn-secondary'><i class='fa fa-reply'></i> $langCancel</a>
                     </div>
                   </div>
@@ -105,7 +101,7 @@ if (!isset($_POST['doit'])) {
                 'url' => "../index.php?logout=yes",
                 'icon' => 'fa-sign-out',
                 'level' => 'primary-label')));
-        $tool_content .= "<div class='alert alert-success'>$langDelSuccess</br>$langThanks</div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langDelSuccess</br>$langThanks</div></div>";
     }
 }
 if (isset($_SESSION['uid'])) {

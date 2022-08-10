@@ -3475,7 +3475,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $confirm_extra = " data-title='$title_conf' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept_conf' data-action-class='btn-danger'";
             $confirm_modal_class = ' confirmAction';
-            $form_begin = "<form method=post action='$url'>";
+            $form_begin = "<form method=post action='$url' class='mb-0'>";
             $form_end = '</form>';
             $href = '';
         } else {
@@ -3505,7 +3505,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $primaryTag = 'button';
             $button_class .= ' dropdown-toggle';
             $caret = ' <span class="caret"></span>';
-            $dataAttrs = 'data-bs-toggle="dropdown" data-bs-placement="right" aria-haspopup="true" aria-expanded="false"';
+            $dataAttrs = 'data-bs-toggle="dropdown" data-bs-placement="bottom" aria-haspopup="true" aria-expanded="false"';
             $form_begin = '<div class="btn-group" role="group">';
             $form_end = '</div>';
             $subMenu = '<ul class="dropdown-menu dropdown-menu-end bg-light p-2">';
@@ -3542,7 +3542,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             array_unshift($out_secondary,
                 "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class list-group-item border border-top-0 border-bottom-secondary fw-bold'" . $href .
                 " $link_attrs>" .
-                "<span class='fa $option[icon] text-warning mt-1'></span> $title</a>$form_end</li>");
+                "<div class='d-inline-flex align-items-center'><span class='fa $option[icon] pe-2'></span> $title</div></a>$form_end</li>");
         }
         $i++;
     }

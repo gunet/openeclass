@@ -84,6 +84,7 @@ if (isset($_GET['delete'])) {
         <fieldset>
         <h5 class='control-label-notes'>$langSections</h5>
         <input type='hidden' name='id' value='$ebook_id' />
+        <div class='table-responsive'>
           <table class='announcements_table'>
           <tr class='notes_thead'>
             <th class='text-white text-left'>$langID</th>
@@ -158,7 +159,7 @@ if (isset($_GET['delete'])) {
             </tr>";
         }
         $tool_content .= "
-          </table>
+          </table></div>
           </fieldset></form>";
 } elseif (isset($_POST['new_section_submit'])) {
     $v = new Valitron\Validator($_POST);
@@ -345,6 +346,7 @@ if (isset($_GET['delete'])) {
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='id' value='$ebook_id' />
                 <fieldset>
+                <div class='table-responsive'>
                     <table class='announcements_table'>
                     <tr class='notes_thead'>
                       <th class='text-white'>$langFileName</th>
@@ -392,7 +394,7 @@ if (isset($_GET['delete'])) {
                     <tr>
                       <td colspan='3'>&nbsp;</td>
                       <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></td>
-                    </table>
+                    </table></div>
                 </fieldset>
              </form>";
         } else {

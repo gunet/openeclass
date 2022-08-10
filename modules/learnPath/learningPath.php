@@ -192,7 +192,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
   ================================================================ */
 
 // comment
-$tool_content .= "<div class='col-sm-12'><div class='panel panel-default'>
+$tool_content .= "<div class='col-sm-12'><div class='panel panel-default NoBorders'>
                     <div class='panel-heading list-header'>
                         <h3 class='panel-title'>$langLearningPathData</h3>
                     </div>";
