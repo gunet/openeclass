@@ -520,14 +520,14 @@ function lang_selections() {
       <a class='d-block d-sm-block d-md-block d-lg-none btn btn-transparent text-white pt-2' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
           <span class='fa fa-globe'></span>
       </a>
-      <ul class='m-0 p-0 border-0 dropdown-menu dropdown-menu-end user-language-menu' role='menu' aria-labelledby='dropdownMenuLang'>";
+      <ul class='m-0 p-0 border-0 dropdown-menu dropdown-menu-end user-language-menu me-lg-0 me-md-5 me-0' role='menu' aria-labelledby='dropdownMenuLang'>";
     foreach ($session->active_ui_languages as $code) {
         $class = ($code == $session->language)? ' class="active"': '';
         $lang_select .=
             "<li role='presentation'$class>
                 <a class='list-group-item border border-top-0 border-bottom-secondary' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
-                    <span class='fa fa-language text-warning' aria-hidden='true'></span><span class='fs-6 fw-bold ps-1'>" .
-                    q($native_language_names_init[$code]) . "</span></a></li>";
+                    <div class='d-inline-flex align-items-center'><span class='fa fa-language text-warning' aria-hidden='true'></span><span class='fs-6 fw-bold ps-1'>" .
+                    q($native_language_names_init[$code]) . "</span></div></a></li>";
     }
     $lang_select .= "</ul>";
     return $lang_select;

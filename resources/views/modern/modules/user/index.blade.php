@@ -142,7 +142,7 @@
         });
         $(document).on('click', '.delete_btn', function (e) {
             e.preventDefault();
-            var row_id = $(this).data('id');
+            var row_id = $(this).closest('tr').attr('id');
             bootbox.confirm('{{ js_escape(trans('langDeleteUser') . ' ' . trans('langDeleteUser2')) }}',
                 function (result) {
                     if (result) {
@@ -178,7 +178,7 @@
         });
         $('.dataTables_filter input')
             .attr({ style: 'width: 200px',
-                    class: 'form-control input-sm',
+                    class: 'form-control input-sm mb-3',
                     placeholder: '{{ js_escape(trans('langName') . ', Username, Email') }}' });
         $('.success').delay(3000).fadeOut(1500);
     });

@@ -21,8 +21,13 @@
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="panel panel-default">
-                            <div class="panel-body Borders">
+                        <div class="panel panel-admin">
+                            <div class='panel-heading'>
+                                <div class='panel-title text-center p-0'>
+                                    {{trans('langAnalyticsEditElements')}}
+                                </div>
+                            </div>
+                            <div class="panel-body NoBorderTop">
                                 <div class="inner-heading clearfix">
                                     {!! $action_bar !!}
                                     @if(Session::has('message'))
@@ -65,8 +70,8 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-md-6 col-sm-12">
-                                        <div class="panel panel-admin NoBorders">
-                                            <div class="panel-heading text-white text-center">
+                                        <div class="panel panel-default NoBorders">
+                                            <div class="panel-heading text-dark text-center">
                                                 {{ trans('langProfilePersInfo') }}
                                             </div>
                                             <div class='panel-body NoBorders'>
@@ -128,8 +133,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-sm-12 mt-md-0 mt-3">
-                                        <div class="panel panel-admin NoBorders">
-                                            <div class="panel-heading text-center text-white">
+                                        <div class="panel panel-default NoBorders">
+                                            <div class="panel-heading text-center text-dark">
                                                 {{ trans('langProfileAboutMe') }}
                                             </div>
                                             <div class='panel-body NoBorders'>
@@ -148,85 +153,119 @@
                         </div>
                     </div>
 
-
-                    @if ($cert_completed))
-                    <div class='col-12 mt-3'>
-                        <div class="panel panel-default">
-                            <div class="panel-body Borders">
-                                <div class='col-sm-10'><h4>{{ trans('langMyCertificates') }}</h4></div>
-                                <div class='row'>
-                                    <div class='badge-container'>
-                                        <div class='clearfix'>
-                                            @foreach ($cert_completed as $key => $certificate)
-                                                <div class='col-xs-12 col-sm-4 col-xl-2'>
-                                                    <a style='display:inline-block; width: 100%;' href='../out.php?i={{ $certificate->identifier }}'>
-                                                        <div class='certificate_panel' style='width:210px; height:120px;'>
-                                                            <h4 class='certificate_panel_title' style='font-size:15px; margin-top:2px;'>
-                                                                {{ $certificate->cert_title }}
-                                                            </h4>
-                                                            <div style='font-size:10px;'>
-                                                                {{ claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned)) }}
-                                                            </div>
-                                                            <div class='certificate_panel_issuer' style='font-size:11px;'>
-                                                                {{ $certificate->cert_issuer }}
-                                                            </div>
-
-                                                            <div class='certificate_panel_state'>
-                                                                <i class='fa fa-check-circle fa-inverse state_success'></i>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            @endforeach
-                                        </div>
+                    @if(count($cert_completed) > 0 or count($badge_completed) > 0)
+                        
+                        @if (count($cert_completed) > 0)
+                        <div class='col-sm-6 mt-3'>
+                            <div class="panel panel-success">
+                                <div class='panel-heading'>
+                                    <div class='panel-title text-center text-white p-0'>
+                                         {{ trans('langMyCertificates') }}
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                     @endif
-
-
-                    @if (count($badge_completed) > 0)
-                    <div class='col-12 mt-3'>
-                        <div class="panel panel-default">
-                            <div class="panel-body Borders">
-                                <div class='col-sm-10' style='padding-bottom:30px;'><h4>{{ trans('langBadges') }}</h4></div>
+                                <div class="panel-body NoBorderTop">
                                     <div class='row'>
                                         <div class='badge-container'>
-                                        <div class='clearfix'>
-                                            @foreach ($badge_completed as $key => $badge)
-                                                <div class='col-xs-6 col-sm-4'>
-                                                <a href='../../modules/progress/index.php?course={{ course_id_to_code($badge->course_id) }}&amp;badge_id={{ $badge->badge }}&amp;u={{ $badge->user }}' style='display: block; width: 100%'>
-                                                    <img class='center-block' src='{{ $urlServer . BADGE_TEMPLATE_PATH . get_badge_filename($badge->badge) }}' width='100' height='100'>
-                                                    <h5 class='text-center' style='padding-top: 10px;'>
-                                                        {{ ellipsize($badge->title, 40) }}
-                                                    </h5>
-                                                </a></div>
-                                            @endforeach
+                                            <div class='clearfix'>
+                                            @php $counterCertificate = 0; @endphp
+                                                @foreach ($cert_completed as $key => $certificate)
+                                                    <div class='col-sm-12 d-flex justify-content-center'>
+                                                        <a href='../out.php?i={{ $certificate->identifier }}'>
+                                                            <div class='certificate_panel'>
+                                                                <h4 class='certificate_panel_title text-center'>
+                                                                    {!! $certificate->cert_title !!}
+                                                                </h4>
+                                                                <div class='text-center text-success'>
+                                                                    {!! claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned)) !!}
+                                                                </div>
+                                                                <div class='certificate_panel_issuer text-center text-secondary'>
+                                                                    {!! $certificate->cert_issuer !!}
+                                                                </div>
+
+                                                                <div class='certificate_panel_state text-center'>
+                                                                    <i class='fa fa-check-circle fa-inverse state_success'></i>
+                                                                </div>
+
+                                                                <div class='certificate_panel_badge mt-2'>
+                                                                    <img class='m-auto d-block' src='{{$urlServer}}template/modern/img/game/badge.png' width='100' height='100'>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    @if($counterCertificate < (count($cert_completed)-1) and count($cert_completed)>=2)
+                                                    <hr>
+                                                    @endif
+                                                    @php $counterCertificate++; @endphp   
+                                                   
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        @endif
+                        
+                        @if (count($badge_completed) > 0)
+                        <div class='col-sm-6 mt-3'>
+                            <div class="panel panel-success Borders">
+                                <div class='panel-heading'>
+                                    <div class='panel-title text-center text-white p-0'>
+                                        {{ trans('langBadges') }}
+                                    </div>
+                                </div>
+                                <div class="panel-body NoBorderTop">
+                                    <div class='row'>
+                                        <div class='badge-container'>
+                                            <div class='clearfix'>
+                                            @php $counterBagde = 0; @endphp
+                                                @foreach ($badge_completed as $key => $badge)
+                                                <div class='col-sm-12 d-flex justify-content-center'>
+                                                    <a href='../../modules/progress/index.php?course={{ course_id_to_code($badge->course_id) }}&amp;badge_id={{ $badge->badge }}&amp;u={{ $badge->user }}'>
+                                                        <h4 class='text-center'>
+                                                            {{ ellipsize($badge->title, 40) }}
+                                                        </h4>
+                                                        <div class='badge_date text-center text-success'>
+                                                            {!! claro_format_locale_date('%A, %d %B %Y', strtotime($badge->assigned)) !!}
+                                                        </div>
+                                                        <div class='bagde_panel_issuer text-center text-secondary'>
+                                                            {!! $badge->issuer !!}
+                                                        </div>
+                                                        <img class='m-auto d-block' src='{{ $urlServer . BADGE_TEMPLATE_PATH . get_badge_filename($badge->badge) }}' width='100' height='100'>
+                                                    </a>
+                                                </div>
+                                                @if($counterBagde < (count($badge_completed)-1) and count($badge_completed)>=2)
+                                                <hr>
+                                                @endif
+                                                @php $counterBagde++; @endphp 
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                        
                     @endif
 
                     @if ($uid == $id)
                        
                             <div class="col-12 mt-3">
-                                <div class="panel panel-default">
-                                    <div class="panel-body Borders">
+                                <div class="panel panel-danger">
+                                    <div class='panel-heading'>
+                                        <div class='panel-title text-center p-0'>
+                                            {{trans('langUnregUser')}}
+                                        </div>
+                                    </div>
+                                    <div class="panel-body NoBorderTop">
                                         <div class="row">
-                                            <div class="col-sm-8">
-                                                <div class="profile-content-panel-title">
-                                                    {{ trans('langUnregUser') }}
-                                                </div>
+                                            <div class="col-sm-9">
                                                 <div class="profile-content-panel-text">
                                                     {{ trans('langExplain') }}
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 {!! $action_bar_unreg !!}
                                             </div>
                                         </div>

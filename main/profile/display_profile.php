@@ -128,7 +128,7 @@ if ($data['userdata']) {
     $data['profile_img'] = profile_image($data['id'], IMAGESIZE_LARGE, 'img-responsive img-circle');
     
 
-    $data['cert_completed'] = Database::get()->queryArray("SELECT identifier, template_id "
+    $data['cert_completed'] = Database::get()->queryArray("SELECT cert_title,identifier,template_id,cert_issuer,assigned "
                                         . "FROM certified_users "
                                         . "WHERE user_fullname = ?s OR user_id = ?d", uid_to_name($uid, 'fullname'), $uid);
 

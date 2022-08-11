@@ -1344,9 +1344,8 @@ function course_access_icon($visibility) {
             break;
         }
         case COURSE_REGISTRATION: {
-            $access_icon = "<span class='fa fa-lock fa-fw access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration'>
-                                    <span class='fa fa-pencil text-danger fa-custom-lock pt-1'></span>
-                            </span>";
+            $access_icon = "<div class='d-inline-flex align-items-center'><span class='fa fa-lock fa-fw access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration'></span>
+                            <span class='fa fa-pencil text-danger fa-custom-lock mt-0' style='margin-left:-9px;'></span></div>";
             break;
         }
         case COURSE_CLOSED: {

@@ -73,10 +73,10 @@ if ($userdata) {
         }
         
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langePortfolioDisableWarning</div></div>";
+            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langePortfolioDisableWarning</div></div>";
         }
         
-        $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info '>
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info '>
                             <a href='#' class='close text-danger' data-bs-dismiss='alert' aria-label='close'>&times;</a>
                             $langePortfolioCollectionUserInfo
                           </div></div>";
@@ -161,8 +161,8 @@ if ($userdata) {
                             //Session::Messages($langePortfolioResourceAdded, 'alert-success');
                             Session::flash('message', $langePortfolioResourceAdded); 
                             Session::flash('alert-class', 'alert-success');
-                            $tool_content .= "<div class='row p-2'></div>
-                                              <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col'>
+                            $tool_content .= "
+                                              <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                                                   <div class='alert alert-success alert-dismissible fade show' role='alert'>$langePortfolioResourceAdded</div>
                                                   <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                                               </div>";
@@ -305,7 +305,7 @@ if ($userdata) {
         }
     } else {
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content = "<div class='alert alert-danger'>$langUserePortfolioDisabled</div>";
+            $tool_content = "<div class='col-sm-12'><div class='alert alert-danger'>$langUserePortfolioDisabled</div></div>";
             if ($session->status == 0) {
                 draw($tool_content, 0);
             } else {
@@ -375,7 +375,7 @@ if ($userdata) {
             }
             $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
                                     <div class='panel-heading'>
-                                        <div class='pull-right'>
+                                        <div class='pull-right mt-1'>
                                             ". action_button(array(
                                                                 array(
                                                                         'title' => $langePortfolioRemoveResource,
@@ -414,7 +414,7 @@ if ($userdata) {
     
     //hide tabs when there are no resources
     if (!$blog_posts && !$submissions && !$docs) {
-        $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langePortfolioNoResInCollection</div></div>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langePortfolioNoResInCollection</div></div>";
     } else {
         
         $active_class = ' class="nav-item"';
@@ -477,7 +477,7 @@ if ($userdata) {
                 }
                 $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
                                     <div class='panel-heading'>
-                                        <div class='pull-right'>
+                                        <div class='pull-right mt-1'>
                                             ". action_button(array(
                                                     array(
                                                         'title' => $langePortfolioRemoveResource,
@@ -532,11 +532,11 @@ if ($userdata) {
                 $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=assignment&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 $submission_content .= "</div>";
                 $submission_content .= "</div>";
-                $submission_content .= "<div><b class='control-label-notes pt-3 pb-3'>$langSubmit</b>: " . nice_format($data['subm_date'], true). "</div>
-                                       <div><b class='control-label-notes pt-3 pb-3'>$langGradebookGrade</b>: ".$data['grade']." / ".$data['max_grade']."</div>
-                                       <div><b class='control-label-notes pt-3 pb-3'>".$m['group_or_user']."</b>: ".$assignment_type."</div>";
+                $submission_content .= "<div><b class='control-label-notes pt-3 pb-3 fs-6'>$langSubmit</b>: " . nice_format($data['subm_date'], true). "</div>
+                                       <div><b class='control-label-notes pt-3 pb-3 fs-6'>$langGradebookGrade</b>: ".$data['grade']." / ".$data['max_grade']."</div>
+                                       <div><b class='control-label-notes pt-3 pb-3 fs-6'>".$m['group_or_user']."</b>: ".$assignment_type."</div>";
                 if (!is_null($data['subm_text'])) {
-                    $submission_content .= "<div><b class='control-label-notes pt-3 pb-3'>$langWorkOnlineText</b>: <br>".$data['subm_text']."</div>";
+                    $submission_content .= "<div><b class='control-label-notes pt-3 pb-3 fs-6'>$langWorkOnlineText</b>: <br>".$data['subm_text']."</div>";
                 } else {
                    $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>"; 
                 }
@@ -547,7 +547,7 @@ if ($userdata) {
                                       </div>";
                 $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
                                     <div class='panel-heading'>
-                                        <div class='pull-right'>
+                                        <div class='pull-right mt-1'>
                                             ". action_button(array(
                                                         array(
                                                                 'title' => $langePortfolioRemoveResource,
@@ -560,7 +560,7 @@ if ($userdata) {
                                          </div>
                                             $submission_header_content
                                     </div>
-                                    <div class='panel-body'>
+                                    <div class='panel-body NoBorders'>
                                     $submission_content    
                                     </div>
                                     $submission_footer
@@ -609,7 +609,7 @@ if ($userdata) {
                                     <td>$file_link</td>
                                     <td>".nice_format($data['date_modified'], true, true)."</td>
                                     <td>$filesize</td>
-                                    <td class='option-btn-cell'>
+                                    <td class='option-btn-cell text-center'>
                                        ". action_button(array(
                                                     array(
                                                             'title' => $langePortfolioRemoveResource,

@@ -83,7 +83,7 @@
 
                                 <div class="row p-2"></div>
 
-                                @if ($request_types)
+                                {{--@if ($request_types)--}}
                                     <div class='form-group'>
                                         <label for='requestType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}:</label>
                                         <div class='col-sm-12'>
@@ -95,7 +95,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                @endif
+                                {{--@endif--}}
 
                                 <div class="row p-2"></div>
 

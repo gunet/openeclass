@@ -33,7 +33,7 @@ foreach ($q as $l) {
                 <a class='btn btn-primary btn-block' href='$authUrl' style='line-height:40px;'>$langEnter</a>
             </div>", $authTitle);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
-        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/default/CSS/bootstrap-social.css'>";
+        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/modern/css/bootstrap-social.css'>";
         $providerClass = $l->auth_name;
         $providerFont = $l->auth_name;
         if ($l->auth_name === 'live') {
@@ -91,7 +91,7 @@ foreach ($authLink as $authInfo) {
     $tool_content .= "
       <div class='col-sm-$columns'>
         <div class='panel panel-admin panel_default'>
-          <div class='panel-heading text-white p-3 fs-5'><span>" . q($authInfo[2]) . "</span></div>
+          <div class='panel-heading'><div class='panel-title p-0 text-white text-center'>" . q($authInfo[2]) . "</div></div>
             <div class='panel-body login-page-option'>" .
               $authInfo[1];
     if (Session::has('login_error') and $authInfo[0]) {

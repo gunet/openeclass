@@ -6,8 +6,8 @@
             <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}' data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}">
                 <span class="on">{{ trans('langCStudent2') }}</span>
                 <span class="off">{{ trans('langCTeacher') }}</span>
-                <p class="text-right on2">{{ trans('langCStudent2') }}</p>
-                <p class="text-left off2">{{ trans('langCTeacher') }}</p>
+                <p class="on2">{{ trans('langCStudent2') }}</p>
+                <p class="off2">{{ trans('langCTeacher') }}</p>
             </button>
         </form>
 

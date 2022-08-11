@@ -58,7 +58,6 @@ ul,li{
 }
 
 .navbar-eclass {
-  height: 170px;
   overflow: visible;
   background:#1d4e89;
   border: 0 none;
@@ -388,6 +387,7 @@ a{
 
   .user-language-menu{
     background: #ffffff;
+    width:200px;
   }
   .user-language-menu .list-group-item:hover{
     background-color: #1d4e89;
@@ -2046,24 +2046,11 @@ a{
     .navrbar_menu_btn{
       margin-left: 0px;
     }
-    .dropdown-user-menu-ul{
-      width:230px ;
-      margin-left:0px;
-      background-color: #003F87 ;
-    }
-
     .dropdownLanguage{
       width:230px ;
       background-color: #003F87 ;
     }
-    .dropdown-language-ul{
-      margin-left:-120px ;
-      margin-top:5px !important;
-      background-color: #003F87 ;
-    }
-    .navbar-eclass .btn-group{
-      max-width:300px;
-    } 
+
     .user-detals-photo {
       min-width: 180px;
       height: 180px;
@@ -2158,19 +2145,8 @@ a{
     .navrbar_menu_btn{
       margin-left: 0px;
     }
-    .dropdown-user-menu-ul{
-      width:230px ;
-      margin-left:-180px;
-      background-color: #003F87 ;
-    }
-
     .dropdownLanguage{
       width:230px ;
-      background-color: #003F87 ;
-    }
-    .dropdown-language-ul{
-      margin-left:-60px ;
-      margin-top:5px !important;
       background-color: #003F87 ;
     }
 
@@ -2304,23 +2280,11 @@ a{
     .user-icon-filename{
       width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
     }
-
-    .dropdown-user-menu-ul{
-      width:230px ;
-      margin-left:-180px;
-      background-color: #003F87 ;
-    }
-
     .dropdownLanguage{
       width:230px ;
       background-color: #003F87 ;
     }
-  
-    .dropdown-language-ul{
-      margin-left:-60px ;
-      margin-top:5px !important;
-      background-color: #003F87 ;
-    }
+
   }
 
   /* ---------------------------------------------------------------------------------------------------------------------- */
@@ -2420,17 +2384,6 @@ a{
     .user-icon-filename{
         width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
     }
-    .dropdown-language-ul{
-        margin-left:-60px ;
-        margin-top:0px;
-        background-color: #003F87 ;
-    }
-    .dropdown-user-menu-ul{
-        width:220px ;
-        background-color: #003F87 ;
-        margin-left:-150px;
-    }
-    
   }
 
   
@@ -2494,21 +2447,6 @@ a{
         width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
     }
 
-    .dropdown-user-menu-ul{
-      background-color: #003F87 ;
-      width:220px;
-      margin-left:-150px;
-    }
-
-    .dropdown-language-ul{
-      margin-left:-60px ;
-      margin-top:0px !important;
-      background-color: #003F87 ;
-    }
-
-    .navbar-eclass .btn-group{
-      max-width:350px;
-    } 
   }
 
   @media(min-width: 992px) and (max-width: 1023px){
@@ -2520,10 +2458,7 @@ a{
       transition: 0.4s;
       height:auto;
       background-color: white; 
-      border-bottom-right-radius: 15px;
-      border-top-right-radius: 15px;
-      border-bottom-left-radius: 15px;
-      border-top-left-radius: 15px;
+      border-radius:15px;
       -moz-box-shadow: 0 0 3px #ccc;
       -webkit-box-shadow: 0 0 3px #ccc;
       box-shadow: 0 0 3px #ccc;
@@ -2556,19 +2491,6 @@ a{
     .user-icon-filename{
       width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
     }
-
-    .dropdown-user-menu-ul{
-      background-color: #003F87 ;
-      width:220px;
-      margin-left:-150px;
-    }
-
-    .dropdown-language-ul{
-      margin-left:-60px ;
-      margin-top:0px !important;
-      background-color: #003F87 ;
-    }
-
   }
 
   /* ---------------------------------------------------------------------------------------------------------------------- */
@@ -2606,10 +2528,7 @@ a{
         align-items: end;
         /* margin: 0px 0px 0px auto; */
         background-color: white;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
-        border-bottom-left-radius: 15px;
-        border-bottom-right-radius: 15px;
+        border-radius:15px;
     }
 
     .active-cont-completeCourse{
@@ -2617,23 +2536,8 @@ a{
         align-items: end;
         margin-left: 0px ;
         background-color: white;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
-        border-bottom-left-radius: 15px;
-        border-bottom-right-radius: 15px;
+        border-radius:15px;
     }
-
-    .dropdown-user-menu-ul{
-        width:250px ;
-        background-color: #003F87 ;
-        margin-left:-40px;
-    }
-
-    .dropdown-language-ul{
-        margin-left:-60px ;
-        margin-top:40px !important;
-        background-color: #003F87 ;
-      }
 
   }
   
@@ -2667,10 +2571,7 @@ a{
         align-items: end;
         margin: 0px 0px 0px auto;
         background-color: white;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
-        border-bottom-left-radius: 15px;
-        border-bottom-right-radius: 15px;
+        border-radius:15px;
     }
 
     .active-cont-completeCourse{
@@ -2678,10 +2579,7 @@ a{
         align-items: end;
         margin-left: 0px ;
         background-color: white;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
-        border-bottom-left-radius: 15px;
-        border-bottom-right-radius: 15px;
+        border-radius:15px;
     }
 
     
@@ -2767,18 +2665,6 @@ a{
     .user-icon-filename{
         width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
     }
-    .dropdown-user-menu-ul{
-        width:250px ;
-        background-color: #003F87 ;
-        
-    }
-
-    .dropdown-language-ul{
-        margin-left:730px ;
-        margin-top:40px !important;
-        background-color: #003F87 ;
-    }
-        
   }
   
   /* ---------------------------------------------------------------------------------------------------------------------- */
@@ -2886,17 +2772,6 @@ a{
 
     .user-icon-filename{
         width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px;
-    }
-    .dropdown-user-menu-ul{
-        width:250px ;
-        background-color: #003F87 ;
-        margin-left:30px;
-    }
-
-    .dropdown-language-ul{
-        margin-left:900px;
-        margin-top:40px !important;
-        background-color: #003F87 ;
     }
   }
 

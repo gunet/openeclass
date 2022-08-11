@@ -1,74 +1,63 @@
 
 /* header-calendar */
 .cal-row-fluid.cal-row-head .cal-cell1{
-    color:blue !important;
-    background-color: white !important;
+    color:blue;
+    background-color: white;
     border-bottom: 1px solid blue !important;
 }
 
 #cal-header{
-    background-color: #003F87 !important;
-    border-top-left-radius: 15px !important;
-    border-top-right-radius: 15px !important;
-    margin-left:-25px !important;
-    margin-right:-25px !important;
+    background-color: #003F87;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    margin-left:-25px;
+    margin-right:-25px;
 }
 
 @media (max-width: 991px){
     #cal-header{
-       margin-left:0px !important;
-       margin-right:0px !important;
+       margin-left:0px;
+       margin-right:0px;
     }
 }
 
 /* button header-calendar */
-.pull-right.form-inline{
+/* .pull-right.form-inline{
    margin-right:0px !important;
-}
+} */
 
 /* rows calendar */
-.cal-row-fluid.cal-before-eventlist{
+/* .cal-row-fluid.cal-before-eventlist{
     border-bottom: 0px !important;
-}
+} */
 
 /* month-row */
 .cal-month-box{
-    border-left: 0px !important;
-    border-bottom: 0px !important;
-    border-right: 0px !important;
-    background-color: white !important;
+    border: 0px !important;
+    background-color: white ;
 }
 #current-month{
-    color:white !important;
+    color:white;
 }
-
-#cal-header .fas.fa-chevron-left{
-    color:white !important;
+#cal-header .fa-chevron-left{
+    color:white;
    
 }
-#cal-header .fas.fa-chevron-right{
-    color:white !important;
+#cal-header .fa-chevron-right{
+    color:white;
    
 }
-
-.event-legend span{
-    font-size:13px !important;
-}
-
 .container_fluid_calendar{
     border-radius: 15px;
     height:auto;
 }
-
 .cal-month-day{
     margin-left: 10px;
     font-size: 13px;
 }
-
 .cal-day-today{
     margin-left: 0px;
 }
-
 .events-list{
     margin-left: -5px;
 }

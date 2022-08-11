@@ -322,36 +322,39 @@
         <div class="col-12 col-lg-4 bg-white calendar_announce_message_col mt-0 ps-lg-0 pe-lg-5 pt-lg-5 pb-lg-5 ps-md-5 pe-md-5 pt-md-3 pb-md-5 ps-3 pe-3 pt-3 pb-5">
 
 
-            <div class="container-fluid container_fluid_calendar container_fluid_calendar_portfolio bg-white border border-light shadow-sm mt-lg-0 mt-md-4 mt-4">
+            <div class="container-fluid container_fluid_calendar container_fluid_calendar_portfolio bg-white border border-secondary-4 shadow-sm mt-lg-0 mt-md-4 mt-4">
                 @include('portfolio.portfolio-calendar')
             </div>
 
 
-            <div class="container-fluid user-announcements-portfolio bg-white border border-light shadow-sm mt-lg-3 mt-md-4 mt-4">
+            <div class="container-fluid user-announcements-portfolio bg-white border border-secondary-4 shadow-sm mt-lg-3 mt-md-4 mt-4">
                 <div class='row rowMedium'>
-                    <div class='control-label-notes text-center mt-3 mb-3'>{{ trans('langMyPersoAnnouncements') }}</div><hr class='text-primary'>
+                    <div class='control-label-notes text-center p-2'>{{ trans('langMyPersoAnnouncements') }}</div>
+                    <hr class='text-primary mt-0'>
                     <div class='ps-3 pb-3 pe-3'>
                         @if($user_announcements_exist)
                            {!! $user_announcements !!}
                         @else
                            <span class='text-title not_visible'> - {{trans('langNoRecentAnnounce')}} - </span>
                         @endif
-                    </div><hr class='text-primary'>
-                    <div class='text-center text-primary fw-bold fs-6 mb-3'>
+                    </div>
+                    <hr class='text-primary mb-0'>
+                    <div class='text-center text-primary fw-bold fs-6 p-2'>
                         <a href="{{$urlAppend}}modules/announcements/myannouncements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span></a>
                     </div>
                 </div>
             </div>
 
 
-            <div class="container-fluid user-messages-portfolio bg-white border border-light shadow-sm mt-lg-3 mt-md-4 mt-4">
+            <div class="container-fluid user-messages-portfolio bg-white border border-secondary-4 shadow-sm mt-lg-3 mt-md-4 mt-4">
                 <div class='row rowMedium'>
-                    <div class='control-label-notes text-center mt-3 mb-3'>{{ trans('langMyPersoMessages') }}</div><hr class='text-primary'>
-                        <div class='ps-3 pb-3 pe-3'>
-                               {!! $user_messages !!}
-                        </div>
-                    <hr class='text-primary'>
-                    <div class='text-center text-primary fw-bold fs-6 mb-3'>
+                    <div class='control-label-notes text-center p-2'>{{ trans('langMyPersoMessages') }}</div>
+                    <hr class='text-primary mt-0'>
+                    <div class='ps-3 pb-3 pe-3'>
+                            {!! $user_messages !!}
+                    </div>
+                    <hr class='text-primary mb-0'>
+                    <div class='text-center text-primary fw-bold fs-6 p-2'>
                         <a href="{{$urlAppend}}modules/message/index.php">{{ trans('langAllMessages') }} <span class='fa fa-arrow-right'></span></a>
                     </div>
                 </div>

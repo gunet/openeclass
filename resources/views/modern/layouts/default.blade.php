@@ -15,27 +15,47 @@
     <link rel="apple-touch-icon-precomposed" href="{{ $urlAppend }}template/modern/favicon/openeclass_128x128.png" />
     <link rel="icon" type="image/png" href="{{ $urlAppend }}template/modern/favicon/openeclass_128x128.png" />
 
-    <!-- jQuery -->
-    <script type="text/javascript" src="{{$urlAppend}}js/jquery3-6-0.min.js"></script>
-
-
     <!-- Bootstrap v5 -->
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css"/>
-    <script type="text/javascript" src="{{$urlAppend}}js/bootstrap.bundle.min.js"></script>
-
 
     <!-- new link for input icon -->
     <!-- Font Awesome - A font of icons -->
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/all.css">
     <link href="{{ $urlAppend }}template/modern/css/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
 
-
-
     <!-- DataTables and Checkitor -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+
+    <!-- Our css modern if we need it -->
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick-theme.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/sidebar.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css"/>
+
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?donotcache">
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/sidebar.css?donotcache">
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/new_calendar.css?donotcache">
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/default.css?donotcache">
+
+    <!-- if change eclass theme then put styles css of this theme -->
+    @if (isset($styles_str) && $styles_str)
+    <style>
+        {!! $styles_str !!}
+    </style>
+    @endif
+    @stack('head_styles')
+
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="{{$urlAppend}}js/jquery3-6-0.min.js"></script>
+
+    <!-- Bootstrap v5 js -->
+    <script type="text/javascript" src="{{$urlAppend}}js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTables and Checkitor js-->
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
-
 
     <!-- Bootbox -->
     <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js"></script>
@@ -48,7 +68,7 @@
     <!-- Screenfull -->
     <script src="{{ $urlAppend }}js/screenfull/screenfull.min.js"></script>
     <!-- cLICKbOARD -->
-    <!-- <script src="{{ $urlAppend }}js/clipboard.js/clipboard.min.js"></script> -->
+    <script src="{{ $urlAppend }}js/clipboard.js/clipboard.min.js"></script>
 
     <script>
         $(function() {
@@ -63,29 +83,6 @@
             locale: "{{ $language }}"
         });
     </script>
-
-
-     <!-- Our css modern if we need it -->
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick.css"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/sidebar.css"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick-theme.css"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css"/>
-    <!-- <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/custom.css"/> -->
-
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?donotcache">
-    <!-- <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/custom.css?donotcache"> -->
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/sidebar.css?donotcache">
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/new_calendar.css?donotcache">
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/default.css?donotcache">
-
-    <!-- if change eclass theme then put styles css of this theme -->
-    @if (isset($styles_str) && $styles_str)
-    <style>
-        {!! $styles_str !!}
-    </style>
-    @endif
-    @stack('head_styles')
 
     <!-- Our js modern -->
     <script type="text/javascript" src="{{ $urlAppend }}js/slick.min.js"></script>

@@ -224,10 +224,7 @@ input[type="checkbox"].toggles + label.rounded::before{
   transition: 0.4s;
   height:auto;
   background-color: white; 
-  border-bottom-right-radius: 15px;
-  border-top-right-radius: 15px;
-  border-bottom-left-radius: 15px;
-  border-top-left-radius: 15px;
+  border-radius:15px;
   -moz-box-shadow: 0 0 3px #ccc;
   -webkit-box-shadow: 0 0 3px #ccc;
   box-shadow: 0 0 3px #ccc;
@@ -237,10 +234,7 @@ input[type="checkbox"].toggles + label.rounded::before{
 .col_maincontent_coursePage{
   height:auto;
   background-color: white; 
-  border-bottom-right-radius: 15px;
-  border-top-right-radius: 15px;
-  border-bottom-left-radius: 15px;
-  border-top-left-radius: 15px;
+  border-radius:15px;
   -moz-box-shadow: 0 0 3px #ccc;
   -webkit-box-shadow: 0 0 3px #ccc;
   box-shadow: 0 0 3px #ccc;
@@ -380,17 +374,6 @@ input[type="checkbox"].toggles + label.rounded::before{
 
 @media(min-width:1024px) and (max-width:1199px){
 
-  .active_tools_dropdown2.nav-link.text-white{
-    font-size:12px !important; 
-  }
-  .active_tools_dropdown3.nav-link.text-white{
-    font-size:12px !important; 
-  }
-  .sidebarColToolText .text-wrap{
-    font-size:12px !important; 
-    margin-top:5px !important;
-  }
-
   .active-nav{
     margin-left:-450px;
   }
@@ -416,28 +399,11 @@ input[type="checkbox"].toggles + label.rounded::before{
     border-radius:15px;
     /* background-color: red !important; */
   }
-  
 
 }
 
 /* laptop */
 @media (min-width: 1200px) and (max-width:1399px){
-
-  .on{
-    font-size:10px !important;
-  }
-  .off{
-    font-size:10px !important;
-  }
-  .on2{
-    font-size:10px !important;
-    padding-top: 15px !important;
-  }
-  .off2{
-    font-size:10px !important;
-    padding-left: 15px !important;
-    padding-top: 4px !important;
-  }
 
   .active-nav{
     margin-left:-450px;
@@ -452,8 +418,6 @@ input[type="checkbox"].toggles + label.rounded::before{
     background-color: white;
     border-radius:15px;
   }
- 
-
   .active-cont-completeCourse{
     width: 100% ;
     align-items: end;
@@ -506,36 +470,44 @@ input[type="checkbox"].toggles + label.rounded::before{
 
 }
 
-
-
-
-
-
 @media (min-width:1400px){
-  .table-responsive{
+  /* .table-responsive{
     overflow: inherit;
-  }
+  } */
   .btn-toggle{
       width: 12rem;
   }
 }
 @media (min-width: 1200px) and (max-width: 1399px){ 
-  .table-responsive{
+  /* .table-responsive{
     overflow: inherit;
-  }
+  } */
   .btn-toggle{
-      width: 10.5rem;
+      width: 11.5rem;
+  }
+  .on{
+    font-size:10px !important;
+  }
+  .off{
+    font-size:10px !important;
+  }
+  .on2{
+    font-size:10px !important;
+    padding-top: 15px !important;
   }
   .off2{
-    margin-left:-85px;
+    margin-left:-90px;
+    font-size:10px;
+    padding-left: 15px;
+    padding-top: 3px;
   }
 }
 @media (min-width: 1024px) and (max-width: 1199px){ 
-  .table-responsive{
+  /* .table-responsive{
     overflow: inherit;
-  }
+  } */
   .btn-toggle{
-      width: 12rem;
+      width: 12.3rem;
   }
   .off2{
     margin-left:-85px;

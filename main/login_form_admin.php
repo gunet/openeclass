@@ -25,28 +25,32 @@ require_once '../include/baseTheme.php';
 
 $pageName = $langAdminLoginPage;
 
-$tool_content .= "    
-  <div class='panel panel-default login-page'>
-    <div class='panel-heading'><span>$langUpgDetails</span></div>
+$tool_content .= "  
+<div class='col-sm-12'>  
+  <div class='panel panel-admin login-page'>
+    <div class='panel-heading'>
+      <div class='panel-title p-0 text-white text-center'>$langUpgDetails</div>
+    </div>
     <div class='panel-body login-page-option'>
       <form class='form-horizontal' role='form' action='$urlServer' method='post'>
-        <div class='form-group'>
-          <div class='col-xs-12'>
+        <div class='form-group mt-3'>
+          <div class='col-12'>
             <input class='form-control' name='uname' placeholder='$langUsername' autofocus>
           </div>
         </div>
-        <div class='form-group'>
-          <div class='col-xs-12'>
+        <div class='form-group mt-3'>
+          <div class='col-12'>
             <input class='form-control' name='pass' placeholder='$langPass' type='password'>
           </div>
         </div>
-        <div class='form-group'>
-          <div class='col-xs-12'>
+        <div class='form-group mt-3'>
+          <div class='col-12'>
             <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit' value='submit'>$langAdminLoginPage</button>
           </div>
         </div>
       </form>
     </div>
-  </div>";
+  </div>
+</div>";
 
 draw($tool_content, 0);

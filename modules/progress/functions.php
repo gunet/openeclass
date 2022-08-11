@@ -898,7 +898,7 @@ function display_available_assignments($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name = '$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-left'>&nbsp;$langTitle</th>" .
+                "<th class='text-start ps-2'>&nbsp;$langTitle</th>" .
                 "<th style='width:160px;'>$langGroupWorkDeadline_of_Submission</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langGradebookGrade</th>" .
@@ -916,7 +916,7 @@ function display_available_assignments($element, $element_id, $unit_id = 0) {
                     "</tr>";
         }
         $tool_content .= "</table>" .
-                "<div align='right'><input class='btn btn-primary' type='submit' name='add_assignment' value='$langAddModulesButton'></div></th></form>";
+                "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='add_assignment' value='$langAddModulesButton'></div></th></form>";
     }
 }
 
@@ -960,7 +960,7 @@ function display_available_exercises($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-left'>$langExercices</th>" .
+                "<th class='text-start ps-2'>$langExercices</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langGradebookGrade</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
@@ -969,13 +969,13 @@ function display_available_exercises($element, $element_id, $unit_id = 0) {
             $exercise_id = $entry['id'];
             $comments = empty($entry['comment']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['comment']. "</div>";
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
+            $tool_content .= "<td class='text-start ps-2'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
             $tool_content .= "<td>". selection(get_operators(), "operator[$exercise_id]") . "</td>";
             $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$exercise_id]' value=''></td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$exercise_id'></td>";
             $tool_content .= "</tr>";
         }
-        $tool_content .= "</table><div class='text-right'>";
+        $tool_content .= "</table><div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='add_exercise' value='$langAddModulesButton'></div>
         </form>";
     }
@@ -1068,12 +1068,12 @@ function display_available_documents($element, $element_id, $unit_id = 0) {
         if( !empty($path)) {
         $tool_content .=
                 "<tr>" .
-                "<th colspan='$colspan'><div class='text-left'>$langDirectory: $dirname$parenthtml</div></th>" .
+                "<th colspan='$colspan'><div class='text-start ps-2'>$langDirectory: $dirname$parenthtml</div></th>" .
                 "</tr>" ;
         }
         $tool_content .=
                 "<tr class='list-header'>" .
-                "<th class='text-left'>$langName</th>" .
+                "<th class='text-start ps-2'>$langName</th>" .
                 "<th class='text-center'>$langSize</th>" .
                 "<th class='text-center'>$langDate</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
@@ -1130,7 +1130,7 @@ function display_available_documents($element, $element_id, $unit_id = 0) {
             }
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-end'>";
+        $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='add_document' value='$langAddModulesButton' /></div>$dir_html</form>";
     }
 }
@@ -1177,7 +1177,7 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
+                "<th class='text-start ps-2' style='width:70%;'>&nbsp;$langTitle</th>" .
                 "<th style='width:5px;'>&nbsp;$langOperator</th>" .
                 "<th style='width:30px;'>$langValue</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
@@ -1191,7 +1191,7 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
                     "</tr>";
 
         $tool_content .= "</table>" .
-                "<div align='right'><input class='btn btn-primary' type='submit' name='add_blog' value='$langAddModulesButton'></div></th></form>";
+                "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='add_blog' value='$langAddModulesButton'></div></th></form>";
     }
 }
 
@@ -1240,8 +1240,8 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-left' style='width:50%;'>&nbsp;$langTitle</th>" .
-                "<th class='text-left'>&nbsp;$langDate</th>" .
+                "<th class='text-start ps-2' style='width:50%;'>&nbsp;$langTitle</th>" .
+                "<th class='text-start ps-2'>&nbsp;$langDate</th>" .
                 "<th style='width:5px;'>&nbsp;$langOperator</th>" .
                 "<th style='width:50px;'>$langValue</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
@@ -1257,7 +1257,7 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
                     "</tr>";
         }
         $tool_content .= "</table>" .
-                "<div align='right'><input class='btn btn-primary' type='submit' name='add_blogcomment' value='$langAddModulesButton'></div></th></form>";
+                "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='add_blogcomment' value='$langAddModulesButton'></div></th></form>";
     }
 }
 
@@ -1304,7 +1304,7 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
+                "<th class='text-start ps-2' style='width:70%;'>&nbsp;$langTitle</th>" .
                 "<th style='width:5px;'>&nbsp;$langOperator</th>" .
                 "<th style='width:30px;'>$langValue</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
@@ -1318,7 +1318,7 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
                     "</tr>";
 
         $tool_content .= "</table>" .
-                "<div align='right'><input class='btn btn-primary' type='submit' name='add_forum' value='$langAddModulesButton'></div></th></form>";
+                "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='add_forum' value='$langAddModulesButton'></div></th></form>";
     }
 
 }
@@ -1365,7 +1365,7 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th>$langTopics</th>" .
+                "<th class='text-start ps-2'>$langTopics</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langValue</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
@@ -1382,7 +1382,7 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0) {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-end'>
+        $tool_content .= "<div class='text-end mt-3'>
                             <input class='btn btn-primary' type='submit' name='add_forumtopic' value='$langAddModulesButton'>
                         </div></form>";
     }
@@ -1431,7 +1431,7 @@ function display_available_lps($element, $element_id, int $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th>$langLearningPaths</th>" .
+                "<th class='text-start ps-2'>$langLearningPaths</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langPercentage</th>" .
                 "<th style='width:10px;' class='text-center'>$langChoice</th>" .
@@ -1452,7 +1452,7 @@ function display_available_lps($element, $element_id, int $unit_id = 0) {
             }
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-end'>";
+        $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='add_lp' value='$langAddModulesButton'></div></form>";
 
     }
@@ -1498,7 +1498,7 @@ function display_available_multimedia($element, $element_id, $unit_id = 0) {
                          "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='list-header'>" .
-                         "<th class='text-left'>&nbsp;$langTitle</th>" .
+                         "<th class='text-start ps-2'>&nbsp;$langTitle</th>" .
                          "<th width='100'>$langDate</th>" .
                          "<th width='80'>$langChoice</th>" .
                          "</tr>";
@@ -1557,7 +1557,7 @@ function display_available_multimedia($element, $element_id, $unit_id = 0) {
             }
         }
         $tool_content .= "</table>"
-                . "<div class='text-end'>"
+                . "<div class='text-end mt-3'>"
                 . "<input class='btn btn-primary' type='submit' name='add_multimedia' value='".q($langAddModulesButton)."'>&nbsp;&nbsp;"
                 . "</div>"
                 . "</form>";
@@ -1600,7 +1600,7 @@ function display_available_ebooks($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-left'>&nbsp;$langEBook</th>" .
+                "<th class='text-start ps-2'>&nbsp;$langEBook</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
         foreach ($result as $catrow) {
@@ -1659,7 +1659,7 @@ function display_available_ebooks($element, $element_id, $unit_id = 0) {
         }
         $tool_content .=
                 "</table>
-                <div class='text-end'>
+                <div class='text-end mt-3'>
                 <input class='btn btn-primary' type='submit' name='add_ebook' value='$langAddModulesButton' /></div></form>";
     }
 }
@@ -1706,7 +1706,7 @@ function display_available_polls($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-left'>&nbsp;$langQuestionnaire</th>" .
+                "<th class='text-start ps-2'>&nbsp;$langQuestionnaire</th>" .
                 "<th style='width:80px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
         foreach ($pollinfo as $entry) {
@@ -1717,7 +1717,7 @@ function display_available_polls($element, $element_id, $unit_id = 0) {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='text-end'>";
+        $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='add_poll' value='$langAddModulesButton'></div></form>";
     }
 }
@@ -1763,7 +1763,7 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
+                "<th class='text-start ps-2' style='width:70%;'>&nbsp;$langTitle</th>" .
                 "<th style='width:5px;'>&nbsp;$langOperator</th>" .
                 "<th style='width:30px;'>$langValue</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
@@ -1778,7 +1778,7 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
 
         $tool_content .= "
                     </table>
-                <div class='text-end'>
+                <div class='text-end mt-3'>
                     <input class='btn btn-primary' type='submit' name='add_wiki' value='$langAddModulesButton'>
                 </div></form>";
     }
@@ -1815,7 +1815,7 @@ function display_available_participation($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
+                "<th class='text-start ps-2' style='width:70%;'>&nbsp;$langTitle</th>" .
                 "<th style='width:5px;'>&nbsp;$langOperator</th>" .
                 "<th style='width:30px;'>$langHours</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
@@ -1830,7 +1830,7 @@ function display_available_participation($element, $element_id, $unit_id = 0) {
 
         $tool_content .= "
                     </table>
-                <div class='text-end'>
+                <div class='text-end mt-3'>
                     <input class='btn btn-primary' type='submit' name='add_participation' value='$langAddModulesButton'>
                 </div></form>";
     }
@@ -1872,7 +1872,7 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
             "<input type='hidden' name = '$element_name' value='$element_id'>" .
             "<table class='table-default'>" .
             "<tr class='list-header'>" .
-            "<th class='text-left'>$langAvailableGradebooks</th>" .
+            "<th class='text-start ps-2'>$langAvailableGradebooks</th>" .
             "<th style='width:160px;'>$langStart</th>" .
             "<th style='width:160px;'>$langFinish</th>" .
             "<th style='width:5px;'>$langOperator</th>" .
@@ -1895,7 +1895,7 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
         }
 
         $tool_content .= "</table>" .
-            "<div align='right'><input class='btn btn-primary' type='submit' name='add_gradebook' value='$langAddModulesButton'></div></th></form>";
+            "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='add_gradebook' value='$langAddModulesButton'></div></th></form>";
     }
 }
 
@@ -1930,7 +1930,7 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
             "<input type='hidden' name='$element_name' value='$element_id'>" .
             "<table class='table-default'>" .
             "<tr class='list-header'>" .
-            "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
+            "<th class='text-start ps-2' style='width:70%;'>&nbsp;$langTitle</th>" .
             "<th style='width:5px;'>&nbsp;$langValue</th>" .
             "<th style='width:30px;'>$langPercentage</th>" .
             "<th style='width:20px;' class='text-center'>$langChoice</th>" .
@@ -1944,7 +1944,7 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
             "</tr>";
 
         $tool_content .= "</table>" .
-            "<div align='right'><input class='btn btn-primary' type='submit' name='add_coursecompletiongrade' value='$langAddModulesButton'></div></th></form>";
+            "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='add_coursecompletiongrade' value='$langAddModulesButton'></div></th></form>";
     }
 }
 
@@ -2368,23 +2368,25 @@ function student_view_progress() {
 
                 $tool_content .= "<hr><div class='res-table-wrapper'>";
 
-                $tool_content .= "<div class='col-12 col-sm-6 col-4'>";
+                $tool_content .= "<div class='col-12'>";
                 $tool_content .= "<a style='display:inline-block; width: 100%' href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user'>";
-                $tool_content .= "<div class='certificate_panel'>
-                        <h4 class='certificate_panel_title'>$certificate->title</h4>
-                        <div class='certificate_panel_date'>$dateAssigned</div>
-                        <div class='certificate_panel_issuer'>$certificate->issuer</div>
-                        <div class='certificate_panel_viewdetails'>";
+                $tool_content .= "<div class='col-8 certificate_panel border border-secondary-4 m-auto d-block bg-light shadow-lg p-3'>
+                        <h4 class='certificate_panel_title text-center'>$certificate->title</h4><br>
+                        <div class='row'>
+                            <div class='col-sm-12 certificate_panel_date text-success text-center'>$dateAssigned</div>
+                            <div class='col-sm-12 certificate_panel_issuer text-center text-secondary'>$certificate->issuer</div>
+                        </div>
+                        <div class='col-12 certificate_panel_viewdetails text-center'>";
                 if ($certificate->completed == 1) {
                     $tool_content .= "&nbsp;&nbsp;<a href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user&amp;p=1'>$langPrintVers</a>";
                 }
                 $tool_content .= "</div>";
                 if ($certificate->completed == 1) {
-                    $tool_content .= "<div class='certificate_panel_state'>
+                    $tool_content .= "<div class='col-12 certificate_panel_state text-center'>
                         <i class='fa fa-check-circle fa-inverse state_success'></i>
                     </div>
-                    <div class='certificate_panel_badge'>
-                        <img src='" . $urlServer . "template/default/img/game/badge.png'>
+                    <div class='col-sm-12 d-flex justify-content-center ertificate_panel_badge mt-3'>
+                        <img src='" . $urlServer . "template/modern/img/game/badge.png' width='100' height='100'>
                     </div>";
                 } else {
                     $tool_content .= "<div class='certificate_panel_percentage'> "

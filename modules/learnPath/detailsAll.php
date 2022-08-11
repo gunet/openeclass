@@ -77,7 +77,7 @@ $tool_content .= action_bar(array(
 // check if there are learning paths available
 $lcnt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM lp_learnPath WHERE course_id = ?d", $course_id)->count;
 if ($lcnt == 0) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoLearningPath</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoLearningPath</div></div>";
     draw($tool_content, 2, null, $head_content);
     exit;
 } else {

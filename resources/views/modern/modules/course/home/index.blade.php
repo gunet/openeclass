@@ -58,8 +58,10 @@
 
 
                     <div class='col-sm-12'>
-                        <div class='panel panel-default mt-3 col_maincontent_coursePage'>
-                            <div class='panel-body borderBody'>
+                        <div class='panel panel-default mt-3 col_maincontent_coursePage border border-secondary-4 shadow-sm'>
+                            <div class='panel-body borderBody 
+                                        @if(isset($rating_content) or isset($social_content) or isset($comment_content)) NoBorderBottom
+                                        @else Borders @endif'>
                                 <div class='row'>
                                     <div class='col-12 pb-2'>
                                         <ul class="nav navbar navbar-left d-flex d-inline-flex float-end">
@@ -177,21 +179,21 @@
 
 
                             @if(isset($rating_content) || isset($social_content) || isset($comment_content)) 
-                                <div class='panel-footer'>
+                                <div class='panel-footer p-0'>
                                     <div class='row'>
                                         @if(isset($rating_content))
-                                            <div class='col-xl-4 col-lg-4 col-12 mt-lg-0 mt-4'>
-                                                <div class='ps-2 d-flex justify-content-lg-start justify-content-center'>{!! $rating_content !!}</div>
+                                            <div class='col-xl-4 col-lg-4 col-12 mt-lg-3 mt-4'>
+                                                <div class='p-2 d-flex justify-content-lg-start justify-content-center'>{!! $rating_content !!}</div>
                                             </div>
                                         @endif
                                         @if(isset($comment_content))
-                                            <div class='col-xl-4 col-lg-3 col-12 mt-lg-0 mt-4'>
-                                                <div class='d-flex justify-content-center'>{!! $comment_content !!}</div>
+                                            <div class='col-xl-4 col-lg-3 col-12 mt-lg-3 mt-4'>
+                                                <div class='p-2 d-flex justify-content-center'>{!! $comment_content !!}</div>
                                             </div>  
                                         @endif
                                         @if(isset($social_content))
-                                            <div class='col-xl-4 col-lg-5 col-12 mt-lg-0 mt-4'>
-                                                <div class='d-flex justify-content-lg-end justify-content-center pe-1'>{!! $social_content !!}</div>
+                                            <div class='col-xl-4 col-lg-5 col-12 mt-lg-2 mt-4'>
+                                                <div class='p-2 d-flex justify-content-lg-end justify-content-center'>{!! $social_content !!}</div>
                                             </div>
                                         @endif
                                     </div>
@@ -203,7 +205,7 @@
 
                     <div class="col-xl-8 col-lg-6 col-md-12 col_maincontent_unit mt-4">
                         @if (!$alter_layout)
-                            <div class='panel panel-default'>
+                            <div class='panel panel-default border border-secondary-4 shadow-sm'>
                                 <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                     <div class='row'>
                                         
@@ -232,7 +234,7 @@
                             </div>
                             {!! $course_home_main_area_widgets !!}
                         @else
-                            <div class='panel panel-default'>
+                            <div class='panel panel-default border border-secondary-4 shadow-sm'>
                                 <div class='panel-heading text-center control-label-notes ps-3 pe-3 pb-2 pt-2'>
                                     {{ trans('langCourseUnits') }}
                                 </div>
@@ -242,7 +244,7 @@
                             </div>
                         @endif
 
-                        <div class="panel panel-default mt-4">                            
+                        <div class="panel panel-default mt-4 border border-secondary-4 shadow-sm">                            
                             <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                 <div class='control-label-notes text-center'>{{ trans('langAnnouncements') }}</div>
                             </div>
@@ -265,27 +267,35 @@
 
                     <div class="col-xl-4 col-lg-6 col-md-12 mt-lg-4 mt-4 float-end ">
 
-                        <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar border border-light shadow-sm">
+                        <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar border border-secondary-4 shadow-sm">
                             {!! $user_personal_calendar !!}
                             <div class='col-sm-12 mt-4 pb-2'>
                                 <div class='row rowMedium'>
                                     <div class='col-sm-12 event-legend'>
-                                        <span class='event event-important mt-1'></span>
-                                        <span>{{ trans('langAgendaDueDay') }}</span>
+                                        <div class='d-inline-flex align-items-center'>
+                                            <span class='event event-important'></span>
+                                            <span>{{ trans('langAgendaDueDay') }}</span>
+                                        </div>
                                     </div>
                                         
                                     <div class='col-sm-12 event-legend'>
-                                        <span class='event event-info mt-1'></span>
-                                        <span>{{ trans('langAgendaCourseEvent') }}</span>
+                                        <div class='d-inline-flex align-items-center'>
+                                            <span class='event event-info'></span>
+                                            <span>{{ trans('langAgendaCourseEvent') }}</span>
+                                        </div>
                                     </div>
 
                                     <div class='col-sm-12 event-legend'>
-                                        <span class='event event-success mt-1'></span>
-                                        <span>{{ trans('langAgendaSystemEvent') }}</span>
+                                        <div class='d-inline-flex align-items-center'>
+                                            <span class='event event-success'></span>
+                                            <span>{{ trans('langAgendaSystemEvent') }}</span>
+                                        </div>
                                     </div>
                                     <div class='col-sm-12 event-legend pb-3'>
-                                        <span class='event event-special'></span>
-                                        <span>{{ trans('langAgendaPersonalEvent') }}</span>
+                                        <div class='d-inline-flex align-items-center'>
+                                            <span class='event event-special'></span>
+                                            <span>{{ trans('langAgendaPersonalEvent') }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -293,7 +303,7 @@
 
                         
                         @if(isset($course_completion_id) and $course_completion_id > 0)
-                            <div class="panel panel-default mt-4">
+                            <div class="panel panel-default mt-4 border border-secondary-4 shadow-sm">
                                 <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                     <div class='control-label-notes text-center'>{{ trans('langCourseCompletion') }}</div>
                                 </div>
@@ -318,7 +328,7 @@
                         @endif
 
                         @if (isset($level) && !empty($level))
-                            <div class='panel panel-default mt-4'>
+                            <div class='panel panel-default mt-4 border border-secondary-4 shadow-sm'>
                                 <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                     <div class='control-label-notes text-center'>{{ trans('langOpenCourseShort') }}</div>
                                 </div>

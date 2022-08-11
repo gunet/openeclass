@@ -221,21 +221,21 @@
                         <div class='panel-footer'>
                             <div class='row'>
                                 <div class='col-sm-6 event-legend'>
-                                <div>
+                                <div class='d-inline-flex align-items-center'>
                                     <span class='event event-important'></span>
                                     <span>{{ trans('langAgendaDueDay') }}</span>
                                 </div>
-                                <div>
+                                <div class='d-inline-flex align-items-center'>
                                     <span class='event event-info'></span>
                                     <span>{{ trans('langAgendaCourseEvent') }}</span>
                                 </div>
                             </div>
                             <div class='col-sm-6 event-legend'>
-                                <div>
+                                <div class='d-inline-flex align-items-center'>
                                     <span class='event event-success'></span>
                                     <span>{{ trans('langAgendaSystemEvent') }}</span>
                                 </div>
-                                <div>
+                                <div class='d-inline-flex align-items-center'>
                                     <span class='event event-special'></span>
                                     <span>{{ trans('langAgendaPersonalEvent') }}</span>
                                 </div>
