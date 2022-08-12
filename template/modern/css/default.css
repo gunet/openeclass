@@ -65,6 +65,10 @@ ul,li{
   border-bottom-right-radius: 15px;
 }
 
+.bg-eclass-default{
+  background:#1d4e89;
+}
+
 .eclass-nav-link {
   background: none;
   color: #fff;

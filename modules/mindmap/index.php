@@ -42,7 +42,7 @@ $toolName = $langMindmap;
 
 // guest user not allowed
 if (check_guest()) {
-    $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langNoGuest</div></div>";
     draw($tool_content, 2, 'mindmap');
 }
 
@@ -84,6 +84,12 @@ $head_content .= '
         jmnodes.theme-greensea jmnode.selected{
         	color: black ;
         }
+
+        .max-dropdown-height{
+            max-height:400px;
+            overflow-y:scroll;
+        }
+
     </style>';
 
 $tool_content .= "
@@ -92,50 +98,50 @@ $tool_content .= "
 		<div class='btn-group btn-group-justified' role='group'>
 			<div class='btn-group' role='group'>
 				<button type='button' class='btn btn-default dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langOpenMind <span class='caret'></span> </button>
-				<ul class='dropdown-menu'>
-					<li><a href='javascript:void(0)' role='button' onclick='open_json();'>$langOpenEx</a></li>
+				<ul class='dropdown-menu m-0 p-0 dropdown_menu_user shadow-lg bg-body border-0'>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button' onclick='open_json();'>$langOpenEx</a></li>
 					<li><input id='file_input' type='file' onchange='open_file();'/></li>
 				</ul>
 			</div>
 			<div class='btn-group' role='group'>
 				<button type='button' class='btn btn-default dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langEditMind <span class='caret'></span> </button>
-				<ul class='dropdown-menu'>
-					<li><a href='javascript:void(0)' role='button' onclick='toggle_editable(this);'>$langEditDis</a></li>
-            		<li><a href='javascript:void(0)' role='button' onclick='add_node();'>$langAddNode</a></li>
-            		<li><a href='javascript:void(0)' role='button' onclick='remove_node();'>$langRemoveNode</a></li>
-            		<li><a href='javascript:void(0)' role='button' onclick='reset();'>$langResetMap</a></li>
+				<ul class='dropdown-menu m-0 p-0 dropdown_menu_user shadow-lg bg-body border-0'>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button' onclick='toggle_editable(this);'>$langEditDis</a></li>
+            		<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button' onclick='add_node();'>$langAddNode</a></li>
+            		<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button' onclick='remove_node();'>$langRemoveNode</a></li>
+            		<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button' onclick='reset();'>$langResetMap</a></li>
 				</ul>
 			</div>
 			<div class='btn-group' role='group'>
 				<button type='button' class='btn btn-default dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langThemes <span class='caret'></span> </button>
-				<ul class='dropdown-menu'>
-					<li><a href='javascript:void(0)' data-theme='' role='button' onclick='set_theme(this);'>Default</a></li>
-					<li><a href='javascript:void(0)' data-theme='primary' role='button' onclick='set_theme(this);'>Primary</a></li>
-					<li><a href='javascript:void(0)' data-theme='warning' role='button' onclick='set_theme(this);'>Warning</a></li>
-					<li><a href='javascript:void(0)' data-theme='danger' role='button' onclick='set_theme(this);'>Danger</a></li>
-					<li><a href='javascript:void(0)' data-theme='success' role='button' onclick='set_theme(this);'>Success</a></li>
-					<li><a href='javascript:void(0)' data-theme='info' role='button' onclick='set_theme(this);'>Info</a></li>
-					<li><a href='javascript:void(0)' data-theme='greensea' role='button' onclick='set_theme(this);'>Greensea</a></li>
-					<li><a href='javascript:void(0)' data-theme='nephrite' role='button' onclick='set_theme(this);'>Nephrite</a></li>
-					<li><a href='javascript:void(0)' data-theme='belizehole' role='button' onclick='set_theme(this);'>Belizehole</a></li>
-					<li><a href='javascript:void(0)' data-theme='wisteria' role='button' onclick='set_theme(this);'>Wisteria</a></li>
-					<li><a href='javascript:void(0)' data-theme='asphalt' role='button' onclick='set_theme(this);'>Asphalt</a></li>
-					<li><a href='javascript:void(0)' data-theme='orange' role='button' onclick='set_theme(this);'>Orange</a></li>
-					<li><a href='javascript:void(0)' data-theme='pumpkin' role='button' onclick='set_theme(this);'>Pumpkin</a></li>
-					<li><a href='javascript:void(0)' data-theme='pomegranate' role='button' onclick='set_theme(this);'>Pomegranate</a></li>
-					<li><a href='javascript:void(0)' data-theme='clouds' role='button' onclick='set_theme(this);'>Clouds</a></li>
-					<li><a href='javascript:void(0)' data-theme='asbestos' role='button' onclick='set_theme(this);'>Asbestos</a></li>
+				<ul class='dropdown-menu m-0 p-0 dropdown_menu_user max-dropdown-height shadow-lg bg-body border-0'>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-secondary' href='javascript:void(0)' data-theme='' role='button' onclick='set_theme(this);'>Default</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-primary' href='javascript:void(0)' data-theme='primary' role='button' onclick='set_theme(this);'>Primary</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-warning' href='javascript:void(0)' data-theme='warning' role='button' onclick='set_theme(this);'>Warning</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-danger' href='javascript:void(0)' data-theme='danger' role='button' onclick='set_theme(this);'>Danger</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-success' href='javascript:void(0)' data-theme='success' role='button' onclick='set_theme(this);'>Success</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-info' href='javascript:void(0)' data-theme='info' role='button' onclick='set_theme(this);'>Info</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-success' href='javascript:void(0)' data-theme='greensea' role='button' onclick='set_theme(this);'>Greensea</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-success' href='javascript:void(0)' data-theme='nephrite' role='button' onclick='set_theme(this);'>Nephrite</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-primary' href='javascript:void(0)' data-theme='belizehole' role='button' onclick='set_theme(this);'>Belizehole</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' data-theme='wisteria' role='button' onclick='set_theme(this);' style='color:#6f42c1;'>Wisteria</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' data-theme='asphalt' role='button' onclick='set_theme(this);'>Asphalt</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-warning' href='javascript:void(0)' data-theme='orange' role='button' onclick='set_theme(this);'>Orange</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-warning' href='javascript:void(0)' data-theme='pumpkin' role='button' onclick='set_theme(this);'>Pumpkin</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-danger' href='javascript:void(0)' data-theme='pomegranate' role='button' onclick='set_theme(this);'>Pomegranate</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' data-theme='clouds' role='button' onclick='set_theme(this);'>Clouds</a></li>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-secondary' href='javascript:void(0)' data-theme='asbestos' role='button' onclick='set_theme(this);'>Asbestos</a></li>
 				</ul>
 			</div>
 			<div class='btn-group' role='group'>
 				<button type='button' class='btn btn-default dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langSave <span class='caret'></span> </button>
-				<ul class='dropdown-menu'>
-					<li><a href='javascript:void(0)' role='button'  onclick='screen_shot();'>$langScreenshot</a></li>
-            		<li><a href='javascript:void(0)' role='button'  onclick='save_file();'>$langSaveFile</a></li>";
+				<ul class='dropdown-menu m-0 p-0 dropdown_menu_user shadow-lg bg-body border-0'>
+					<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button'  onclick='screen_shot();'>$langScreenshot</a></li>
+            		<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button'  onclick='save_file();'>$langSaveFile</a></li>";
             		//<li><button role='button' onclick='show_data();'>show data</button></li>
 
 if($is_editor)	{
-    $tool_content .="<li><a href='javascript:void(0)' role='button' onclick='save_file_in_doc();'>$langSaveInDoc</a></li>";
+    $tool_content .="<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button' onclick='save_file_in_doc();'>$langSaveInDoc</a></li>";
 }
 
 $tool_content .="

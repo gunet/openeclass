@@ -2,11 +2,11 @@
 /* ------------------------ LEFT MENU HOVER ITEMS --------------------- */
 
 .leftMenuToolCourse.active{
-  background-color:  #ccc !important;
+  background-color:  white !important;
   border: 0 !important;
 }
 .leftMenuToolCourse.active span{
-  color: #313a49 !important;
+  color: #003F87 !important;
   /* font-weight: 600 !important; */
 }
 .leftMenuToolCourse:hover{
