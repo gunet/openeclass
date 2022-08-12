@@ -375,26 +375,26 @@ if ($action == "createPost") {
         <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
             <fieldset>
-                <div class='row p-2'></div>
+                
 
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <label for='blogPostTitle' class='col-sm-6 control-label-notes'>$langBlogPostTitle:</label>
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' placeholder='$langBlogPostTitle'>
                     </div>
                 </div>
 
-                <div class='row p-2'></div>
+             
 
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <label for='newContent' class='col-sm-6 control-label-notes'>$langBlogPostBody:</label>
                     <div class='col-sm-12'>
                         ".rich_text_editor('newContent', 4, 20, '')."
                     </div>
                 </div>
                 $commenting_setting
-                <div class='row p-2'></div>
-                <div class='form-group'>
+                
+                <div class='form-group mt-3'>
                     <div class='col-sm-10 col-sm-offset-2'>".
                         form_buttons(array(
                             array(
@@ -464,18 +464,18 @@ if ($action == "editPost") {
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
                 <fieldset>
 
-                <div class='row p-2'></div>
+               
 
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <label for='blogPostTitle' class='col-sm-6 control-label-notes'>$langBlogPostTitle:</label>
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' value='".q($post->getTitle())."' placeholder='$langBlogPostTitle'>
                     </div>
                 </div>
 
-                <div class='row p-2'></div>
+               
 
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <label for='newContent' class='col-sm-6 control-label-notes'>$langBlogPostBody:</label>
                     <div class='col-sm-12'>
                         ".rich_text_editor('newContent', 4, 20, $post->getContent())."
@@ -483,9 +483,9 @@ if ($action == "editPost") {
                 </div>
                 $commenting_setting
 
-                <div class='row p-2'></div>
+                
 
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <div class='col-sm-10 col-sm-offset-2'>".
                         form_buttons(array(
                             array(
@@ -709,7 +709,7 @@ if ($action == "showBlog") {
 
     $num_posts = $blog->blogPostsNumber();
     if ($num_posts == 0) {//no blog posts
-        $tool_content .= "<div class='row p-2'></div>
+        $tool_content .= "
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langBlogEmpty</div></div>";
     } else {//show blog posts
         //if page num was changed at the url and exceeds pages number show the first page
@@ -721,7 +721,7 @@ if ($action == "showBlog") {
         $posts = $blog->getBlogPostsDB($page, $posts_per_page);
 
         /***blog posts area***/
-        $tool_content .= "<div class='row p-2'></div><div class='row'>";
+        $tool_content .= "<div class='row'>";
         $tool_content .= "<div class='col-sm-9'>";
         foreach ($posts as $post) {
             if ($blog_type == 'course_blog') {

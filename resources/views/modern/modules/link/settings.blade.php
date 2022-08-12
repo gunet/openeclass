@@ -72,8 +72,8 @@
                             <div class='form-wrapper shadow-sm p-3 rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='index.php?course={{ $course_code }}'>
                                 <fieldset>                 
-                                    <div class='row p-2'></div>              
-                                    <div class='form-group'>
+                                             
+                                    <div class='form-group mt-3'>
                                         <label class='col-sm-6 control-label-notes'>{{ trans('langSocialBookmarksFunct') }}</label>
                                         <div class='col-sm-9'> 
                                             <div class='radio'>
@@ -89,9 +89,9 @@
                                         </div>
                                     </div>
 
-                                    <div class='row p-2'></div>              
+                            
                                     
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                         <div class='col-sm-9 col-sm-offset-3'>
                                             <input type='submit' class='btn btn-primary' name='submitSettings' value='{{ trans('langSubmit') }}' />
                                             <a href='index.php?course={{ $course_code }}' class='btn btn-secondary'>{{ trans('langCancel') }}</a>

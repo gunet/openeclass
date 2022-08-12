@@ -150,8 +150,8 @@ if (isset($_GET['scale_id'])) {
                     <form class='form-horizontal' role='form' data-bs-toggle='validator' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='scales_form'>
                     <fieldset>
                         $hidden_input
-                        <div class='row p-2'></div>
-                        <div class='form-group".(Session::getError('title') ? " has-error" : "")."'>
+                        
+                        <div class='form-group".(Session::getError('title') ? " has-error" : "")." mt-3'>
                             <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
                             <div class='col-sm-12'>
                               <input name='title' type='text' class='form-control' id='title' value='$title'".($scale_used ? " disabled" : "").">
@@ -159,9 +159,9 @@ if (isset($_GET['scale_id'])) {
                             </div>
                         </div>
 
-                        <div class='row p-2'></div>
+                       
 
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <label class='col-sm-6 control-label-notes'>$langScales:</label>
                             <div class='col-sm-12'>
                                 <div class='table-responsive'>
@@ -187,8 +187,8 @@ if (isset($_GET['scale_id'])) {
     $tool_content .= "</div>";
     if (!$scale_used) {
         $tool_content .= " 
-        <div class='row p-2'></div>
-                        <div class='form-group'>
+     
+                        <div class='form-group mt-3'>
                             <div class='col-sm-offset-2 col-sm-10'>".
                                 form_buttons(array(
                                     array(
@@ -262,7 +262,7 @@ if (isset($_GET['scale_id'])) {
                         ";
         }
         $tool_content .= "
-        <div class='row p-2'></div>
+
             <div class='table-responsive'>
                 <table class='announcements_table'>
                     <thead class='notes_thead' style='height:45px;'>

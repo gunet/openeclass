@@ -140,8 +140,8 @@ $ret_str = render_eportfolio_fields_form();
 $tool_content .= $ret_str['panels'];
 
 $tool_content .= "
-<div class='row p-2'></div>
-<div class='form-group'>
+
+<div class='form-group mt-3'>
                       <div class='col-sm-12'>
                           <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                           <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn btn-secondary'>$langCancel</a>

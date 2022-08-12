@@ -113,41 +113,41 @@ if (isset($_GET['add'])) {
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <fieldset>
 
-                <div class='row p-2'></div>
 
-                <div class='form-group'>
+
+                <div class='form-group mt-3'>
                 <label for='surname' class='col-sm-6 control-label-notes'>$langSurname:</label>
                 <div class='col-sm-12'>
                     <input class='form-control' id='surname' type='text' name='search_surname' value='" . q($search_surname) . "' placeholder='$langSurname'></div>
                 </div>
 
-                <div class='row p-2'></div>
 
-                <div class='form-group'>
+
+                <div class='form-group mt-3'>
                 <label for='name' class='col-sm-6 control-label-notes'>$langName:</label>
                 <div class='col-sm-12'>
                     <input class='form-control' id='name' type='text' name='search_givenname' value='" . q($search_givenname) . "' placeholder='$langName'></div>
                 </div>
 
-                <div class='row p-2'></div>
 
-                <div class='form-group'>
+
+                <div class='form-group mt-3'>
                 <label for='username' class='col-sm-6 control-label-notes'>$langUsername:</label>
                 <div class='col-sm-12'>
                     <input class='form-control' id='username' type='text' name='search_username' value='" . q($search_username) . "' placeholder='$langUsername'></div>
                 </div>
 
-                <div class='row p-2'></div>
 
-                <div class='form-group'>
+
+                <div class='form-group mt-3'>
                 <label for='am' class='col-sm-6 control-label-notes'>$langAm:</label>
                 <div class='col-sm-12'>
                     <input class='form-control' id='am' type='text' name='search_am' value='" . q($search_am) . "' placeholder='$langAm'></div>
                 </div>
 
-                <div class='row p-2'></div>
 
-                <div class='form-group'>
+
+                <div class='form-group mt-3'>
                 <div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='search' value='$langSearch'>
                     <a class='btn btn-secondary' href='index.php?course=$course_code'>$langCancel</a>
@@ -174,7 +174,7 @@ if (isset($_GET['add'])) {
                                                 user u LEFT JOIN lala c ON u.id = c.user_id WHERE
                                                 c.user_id IS NULL AND u.expires_at >= CURRENT_DATE() AND $query", $values);
         if ($result) {
-            $tool_content .= "<table class='announcements_table'>
+            $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='announcements_table'>
                                 <tr class='notes_thead'>
                                   <th class='text-white'>$langID</th>
                                   <th class='text-white'>$langName</th>
@@ -199,7 +199,7 @@ if (isset($_GET['add'])) {
                         icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=" . getIndirectReference($myrow->id)). "</td></tr>";
                 $i++;
             }
-            $tool_content .= "</table>";
+            $tool_content .= "</table></div></div>";
         } else {
             $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langNoUsersFound</div></div>";
         }

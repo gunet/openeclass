@@ -39,16 +39,16 @@
                         
                             <form class='form-horizontal' role='form' name='mail_verification_change' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                             <fieldset>		
-                                <div class='row p-2'></div>
-                                    <div class='form-group'>
+                          
+                                    <div class='form-group mt-3'>
                                         <label class='col-sm-6 control-label-notes'>{{ trans('langChangeTo') }}:</label>
                                         <div class='col-sm-12'>
                                             {!! selection($mail_ver_data, "new_mail_ver", $sub, "class='form-control'") !!}
                                         </div>
                                     </div>
                                     {!! showSecondFactorChallenge() !!}
-                                    <div class='row p-2'></div>
-                                    <div class='col-sm-offset-2 col-sm-10'>
+                             
+                                    <div class='col-sm-offset-2 col-sm-10 mt-3'>
                                         <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langEdit') }}'>
                                     </div>
                                     <input type='hidden' name='old_mail_ver' value='{{ $sub }}'>		

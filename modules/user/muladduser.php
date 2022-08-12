@@ -92,18 +92,18 @@ $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12
 <div class='form-wrapper shadow-sm p-3 rounded'>
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <fieldset>     
-            <div class='row p-2'></div>      
-            <div class='form-group'>
+                  
+            <div class='form-group mt-3'>
                <div class='col-sm-12 radio'><label class='control-label-notes'><input type='radio' name='type' value='uname' checked>$langUsername</label></div>
                 <div class='col-sm-12 radio'><label class='control-label-notes'><input type='radio' name='type' value='am'>$langAm</label></div>
             </div>
-            <div class='row p-2'></div>      
-            <div class='form-group'>
+                 
+            <div class='form-group mt-3'>
                 <textarea class='auth_input' name='user_info' rows='10'></textarea>
             </div>
             ".showSecondFactorChallenge()." 
-            <div class='row p-2'></div>      
-            <div class='col-sm-offset-2 col-sm-10'>
+               
+            <div class='col-sm-offset-2 col-sm-10 mt-3'>
                 <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
             </div>                       
         </fieldset>

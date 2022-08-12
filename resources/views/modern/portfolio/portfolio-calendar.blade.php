@@ -53,8 +53,6 @@
             </script>
 
         </div>
-        <div class='row p-2'></div>
-        <div class='row p-2'></div>
         <div class='panel-footer'>
             <div class='row'>
                 <div class='col-sm-6 event-legend'>
@@ -79,7 +77,5 @@
                 </div>
             </div>
         </div>
-        <div class='row p-2'></div>
-        <div class='row p-2'></div>
     </div>
 </div>

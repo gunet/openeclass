@@ -8,7 +8,7 @@
 
         <div class="row rowMedium">
 
-            @if($course_code)
+            @if($course_code and $currentCourseName)
             <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
@@ -16,7 +16,7 @@
             </div>
             @endif
 
-            @if($course_code)
+            @if($course_code and $currentCourseName)
             <div class="col-xl-10 col-lg-9 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
             @else
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_Homepage">
@@ -24,7 +24,7 @@
 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
-                    @if($course_code)
+                    @if($course_code and $currentCourseName)
                         <nav class="navbar navbar-expand-lg navrbar_menu_btn">
                             <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn btn-primary menu_btn_button">
                                 <i class="fas fa-align-left"></i>
@@ -39,7 +39,7 @@
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
 
-                    @if($course_code)
+                    @if($course_code and $currentCourseName)
                     <div class="offcanvas offcanvas-start d-lg-none mr-auto" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
                         <div class="offcanvas-header">
                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>

@@ -265,16 +265,16 @@ if ($is_editor) {
             <input type='hidden' id = 'id' name='id' value='$id'>"
                 . "<input type='hidden' name='rep' id='rep' value='$applytogroup'>";
         @$tool_content .= "
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <label for='event_title' class='col-sm-6 control-label-notes'>$langTitle :</label>
                 <div class='col-sm-12'>
                     <input type='text' class='form-control' id='event_title' name='event_title' placeholder='$langTitle' value='" . q($event_title) . "'>
                 </div>
             </div>
 
-            <div class='row p-2'></div>
+            
 
-            <div class='input-append date form-group' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+            <div class='input-append date form-group mt-3' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                 <label for='startdate' class='col-sm-6 control-label-notes'>$langDate :</label>
                 <div class='col-sm-12'>
                     <div class='input-group'>
@@ -284,9 +284,9 @@ if ($is_editor) {
                 </div>
             </div>
 
-            <div class='row p-2'></div>
+           
 
-            <div class='input-append bootstrap-timepicker form-group'>
+            <div class='input-append bootstrap-timepicker form-group mt-3'>
                 <label for='durationcal' class='col-sm-6 control-label-notes'>$langDuration <small>$langInHour</small></label>
                 <div class='col-sm-12'>
                     <div class='input-group add-on'>
@@ -296,7 +296,7 @@ if ($is_editor) {
                 </div>
             </div>";
         /**** Recursion paramneters *****/
-             $tool_content .= "<div class='row p-2'></div><div class='form-group'>
+             $tool_content .= "<div class='form-group mt-3'>
                                     <label for='Repeat' class='col-sm-6 control-label-notes'>$langRepeat $langEvery</label>
                                 <div class='col-sm-12'>
                                     <select class='form-select' name='frequencynumber' id='frequencynumber'>
@@ -314,7 +314,7 @@ if ($is_editor) {
             if($is_recursive_event){
                 $selected[$repeatperiod] = ' selected';
             }
-            $tool_content .= "<div class='col-sm-2'>
+            $tool_content .= "<div class='col-sm-12 mt-2'>
                         <select class='form-select' name='frequencyperiod' id='frequencyperiod'>
                             <option value=\"\">$langSelectFromMenu...</option>
                             <option value=\"D\"{$selected['D']}>$langDays</option>
@@ -323,7 +323,7 @@ if ($is_editor) {
                         </select>
                         </div>
                     ";
-            $tool_content .= "<div class='row p-2'></div><div class='input-append date' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+            $tool_content .= "<div class='input-append date mt-3' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                 <label for='Enddate' class='col-sm-6 control-label-notes'>$langUntil :</label>
                     <div class='col-sm-12'>
                         <div class='input-group'>
@@ -334,14 +334,14 @@ if ($is_editor) {
                 </div>
               </div>";
         /**** end of recursion paramneters *****/
-         $tool_content .= "<div class='row p-2'></div><div class='form-group'>
+         $tool_content .= "<div class='form-group mt-3'>
                         <label for='Detail' class='col-sm-6 control-label-notes'>$langDetail :</label>
                         <div class='col-sm-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
                       </div>    
                       
-                      <div class='row p-2'></div>
+                      
 
-                      <div class='form-group'>
+                      <div class='form-group mt-3'>
                         <div class='col-sm-offset-2 col-sm-10'>".
                             form_buttons(array(
                                 array(

@@ -204,8 +204,8 @@ if ($is_editor) {
                             )
                         ));
                         // display error message
-                        $dialogBox .= "<div class='row p-2'></div>
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                        $dialogBox .= "
+                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                            <div class='alert alert-warning'>$langErrorNameAlreadyExists</div>
                         </div>";
                         $style = "caution";
@@ -216,25 +216,25 @@ if ($is_editor) {
                         
                        
 
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <label for='newPathName' class='col-sm-6 control-label-notes'>$langName:</label>
                             <div class='col-sm-12'>
                               <input name='newPathName' type='text' class='form-control' id='newPathName'>
                             </div>
                         </div>
 
-                        <div class='row p-2'></div>
+      
 
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription:</label>
                             <div class='col-sm-12'>
                               <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
                         </div>
 
-                        <div class='row p-2'></div>
+           
 
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <div class='col-sm-10 col-sm-offset-2'>
                               <input type='hidden' name='cmd' value='create'>".
                                     form_buttons(array(
@@ -265,25 +265,25 @@ if ($is_editor) {
                     <div class='col-12'>
 
                     <div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <label for='newPathName' class='col-sm-6 control-label-notes'>$langName:</label>
                             <div class='col-sm-12'>
                               <input name='newPathName' type='text' class='form-control' id='newPathName'>
                             </div>
                         </div>
 
-                        <div class='row p-2'></div>
+                       
 
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription:</label>
                             <div class='col-sm-12'>
                               <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
                         </div>
 
-                        <div class='row p-2'></div>
+                       
 
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <div class='col-sm-10 col-sm-offset-2'>
                               <input type='hidden' name='cmd' value='create'>".
                                     form_buttons(array(
@@ -343,7 +343,6 @@ if ($is_editor) {
         exit;
     } else {
         $tool_content .= "
-        <div class='row p-2'></div>
             <div class='col-sm-12'>
                 <div id='operations_container'>" .
                 action_bar(array(
@@ -373,7 +372,7 @@ if ($is_editor) {
 // check if there are learning paths available
 $l = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->count;
 if ($l == 0) {
-    $tool_content .= "<div class='row p-2'></div>
+    $tool_content .= "
                       <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                         <div class='alert alert-warning'>$langNoLearningPath</div>
                       </div>";
@@ -382,7 +381,7 @@ if ($l == 0) {
 }
 
 $tool_content .= "
-<div class='row p-2'></div>
+
 <div class='table-responsive'>
     <table class='announcements_table'>
     <thead class='notes_thead'>

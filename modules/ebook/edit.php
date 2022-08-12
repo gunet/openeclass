@@ -62,11 +62,11 @@ if (isset($_GET['delete'])) {
                         ));
         // Form #1 - edit title
         $tool_content .= "
-        <div class='row p-2'></div>
+        
         <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='id' value='$ebook_id' />
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <label class='col-sm-6 control-label-notes'>$langTitle:</label>
                     <div class='col-sm-9 input-group'>
                         <input class='form-control' type='text' name='ebook_title' value='" . q($info->title) . "' />
@@ -79,7 +79,7 @@ if (isset($_GET['delete'])) {
         </div></div>";
         // Form #2 - edit sections
         $tool_content .= "
-        <div class='row p-2'></div>
+        
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
         <h5 class='control-label-notes'>$langSections</h5>
@@ -342,7 +342,7 @@ if (isset($_GET['delete'])) {
                                           CONVERT(pssid, UNSIGNED), pssid");
         if (count($files) > 0 || count($q) > 0) {
             $tool_content .= "
-            <div class='row p-2'></div>
+      
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='id' value='$ebook_id' />
                 <fieldset>
@@ -398,7 +398,7 @@ if (isset($_GET['delete'])) {
                 </fieldset>
              </form>";
         } else {
-            $tool_content .= "<div class='row p-2'></div>
+            $tool_content .= "
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langEBookNoPages</div></div>";
         }
     }

@@ -171,10 +171,10 @@ if (isset($_GET['mid'])) {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
             }
             $out .= generate_csrf_token_form_field() . "
-            <div class='row p-2'></div>
+          
                 <fieldset>
                 <h4>$langReply</h4>
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                         <label for='senderName' class='col-sm-6 control-label-notes'>$langSender:</label>
                         <div class='col-sm-12'>
                             <input name='senderName' type='text' class='form-control' id='senderName' value='" . q(uid_to_name($uid)) . "' disabled>
@@ -182,8 +182,8 @@ if (isset($_GET['mid'])) {
                     </div>";
 
             $out .= "
-            <div class='row p-2'></div>
-            <div class='form-group'>
+      
+            <div class='form-group mt-3'>
             <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
             <div class='col-sm-12'>
                 <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
@@ -197,16 +197,16 @@ if (isset($_GET['mid'])) {
             </div>
         </div>";
         $out .= "
-        <div class='row p-2'></div>
-        <div class='form-group'>
+     
+        <div class='form-group mt-3'>
                     <label for='message_title' class='col-sm-6 control-label-notes'>$langSubject:</label>
                     <div class='col-sm-12'>
                         <input name='message_title' type='text' class='form-control' id='message_title' value='" .
                             q($langMsgRe . ' ' . $msg->subject) . "'>
                     </div>
                 </div>
-                <div class='row p-2'></div>
-                <div class='form-group'>
+                
+                <div class='form-group mt-3'>
                     <label for='body' class='col-sm-6 control-label-notes'>$langMessage:</label>
                     <div class='col-sm-12'>
                         ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>")."
@@ -216,8 +216,8 @@ if (isset($_GET['mid'])) {
         if ($course_id != 0) {
             enableCheckFileSize();
             $out .= "
-            <div class='row p-2'></div>
-            <div class='form-group'>
+           
+            <div class='form-group mt-3'>
                         <label for='body' class='col-sm-6 control-label-notes'>$langFileName:</label>
                         <div class='col-sm-12'>" .
                             fileSizeHidenInput() . "
@@ -227,8 +227,8 @@ if (isset($_GET['mid'])) {
         }
 
         $out .= "
-        <div class='row p-2'></div>
-                <div class='form-group'>
+     
+                <div class='form-group mt-3'>
                     <div class='col-sm-10 col-sm-offset-2'>
                             <div class='checkbox'>
                                 <label>
@@ -239,8 +239,8 @@ if (isset($_GET['mid'])) {
 
                     </div>
                 </div>
-                <div class='row p-2'></div>
-                <div class='form-group'>
+              
+                <div class='form-group mt-3'>
                     <div class='col-sm-10 col-sm-offset-2'>".
                         form_buttons(array(
                             array(
@@ -273,17 +273,17 @@ if (isset($_GET['mid'])) {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
             }
             $out .= generate_csrf_token_form_field() . "
-            <div class='row p-2'></div>
+           
                 <fieldset>
                 <h4>$langForward</h4>
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                         <label for='senderName' class='col-sm-6 control-label-notes'>$langSender:</label>
                         <div class='col-sm-12'>
                             <input name='senderName' type='text' class='form-control' id='senderName' value='" . q(uid_to_name($uid)) . "' disabled>
                         </div>
                     </div>
-                    <div class='row p-2'></div>
-                <div class='form-group'>
+                   
+                <div class='form-group mt-3'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
                 <div class='col-sm-12'>
                     <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients-forward'>";
@@ -293,16 +293,16 @@ if (isset($_GET['mid'])) {
             $out .= "</select><a href='#' id='removeAllForward'>$langJQUncheckAll</a>
                 </div>
             </div>
-            <div class='row p-2'></div>
-            <div class='form-group'>
+            
+            <div class='form-group mt-3'>
                 <label for='message_title' class='col-sm-6 control-label-notes'>$langSubject:</label>
                 <div class='col-sm-12'>
                     <input name='message_title' type='text' class='form-control' id='message_title' value='" .
                         q($langMsgFw . ' ' . $msg->subject) . "'>
                 </div>
             </div>
-            <div class='row p-2'></div>
-            <div class='form-group'>
+          
+            <div class='form-group mt-3'>
                 <label for='body' class='col-sm-6 control-label-notes'>$langMessage:</label>
                 <div class='col-sm-12'>
                     ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>")."
@@ -311,8 +311,8 @@ if (isset($_GET['mid'])) {
 
             if ($msg->filename and $msg->filesize != 0) {
                 $out .= "
-                <div class='row p-2'></div>
-                    <div class='form-group attachment-section'>
+                
+                    <div class='form-group attachment-section mt-3'>
                         <label class='col-sm-6 control-label-notes'>$langAttachedFile:</label>
                         <div class='col-sm-8'>
                             <p class='form-control-static'>
@@ -330,7 +330,7 @@ if (isset($_GET['mid'])) {
             } elseif ($course_id != 0) {
                 enableCheckFileSize();
                 
-                $out .= "<div class='row p-2'></div><div class='form-group'>
+                $out .= "<div class='form-group mt-3'>
                             <label for='body' class='col-sm-6 control-label-notes'>$langFileName:</label>
                             <div class='col-sm-12'>" .
                                 fileSizeHidenInput() . "
@@ -339,8 +339,8 @@ if (isset($_GET['mid'])) {
                         </div>";
             }
             $out .= "
-            <div class='row p-2'></div>
-                    <div class='form-group'>
+           
+                    <div class='form-group mt-3'>
                         <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
                                     <label>
@@ -350,8 +350,8 @@ if (isset($_GET['mid'])) {
                                 </div>
                         </div>
                     </div>
-                    <div class='row p-2'></div>
-                    <div class='form-group'>
+                   
+                    <div class='form-group mt-3'>
                         <div class='col-sm-10 col-sm-offset-2'>".
                             form_buttons(array(
                                 array(

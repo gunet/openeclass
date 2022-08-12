@@ -63,32 +63,32 @@
                     </div>
                     @endif
 
-                   <div class='row p-2'></div>
+               
 
                     <div class='col-sm-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                             <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code}}&action=true'>
-                                <div class='form-group'>
+                                <div class='form-group mt-3'>
                                     <label for='link' class='col-sm-6 control-label-notes'>{{ trans('langLink') }}:</label>
                                     <div class='col-sm-12'>
                                         <input id='link' class='form-control' type='text' name='link' size='50' value='http://'>
                                     </div>
                                 </div>
 
-                                <div class='row p-2'></div>
+                          
 
 
-                                <div class='form-group'>
+                                <div class='form-group mt-3'>
                                     <label for='name_link' class='col-sm-6 control-label-notes'>{{ trans('langLinkName') }}:</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' type='text' name='name_link' size='50'>
                                     </div>
                                 </div>
 
-                                <div class='row p-2'></div>
+                               
 
 
-                                <div class='form-group'>
+                                <div class='form-group mt-3'>
                                     <div class='col-sm-offset-2 col-sm-10'>
                                     <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langAdd') }}'>
                                     </div>

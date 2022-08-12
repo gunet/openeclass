@@ -197,7 +197,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
 
     if ($course_id == 0 && $type == 'pm') {
         if (!$personal_msgs_allowed) {
-            $tool_content .= "<div class='row p-2'></div>
+            $tool_content .= "
                 <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                     <div class='alert alert-warning'>$langGeneralError</div></div>";
             draw($tool_content, 1, null, $head_content);
@@ -211,9 +211,9 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
         $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     }
     $tool_content .= "
-    <div class='row p-2'></div>
+    
         <fieldset>
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langSender:</label>
                 <div class='col-sm-12'>
                   <input type='text' class='form-control' value='" . q(uid_to_name($uid)) . "' disabled>
@@ -257,8 +257,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                           </script>";
 
         $tool_content .= "
-        <div class='row p-2'></div>
-            <div class='form-group'>
+       
+            <div class='form-group mt-3'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langCourse:</label>
                 <div class='col-sm-12'>
                     <select id='courseselect' class='form-control' name='course'>
@@ -273,8 +273,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
 
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
         $tool_content .= "
-        <div class='row p-2'></div>
-        <div class='form-group'>
+      
+        <div class='form-group mt-3'>
             <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
             <div class='col-sm-12'>
                 <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
@@ -399,8 +399,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                 $u_name = $q->name;
             }
             $tool_content .= "<input type='hidden' name='recipients' value='$_GET[id]'>
-            <div class='row p-2'></div>
-                            <div class='form-group'>
+           
+                            <div class='form-group mt-3'>
                                 <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
                                 <div class='col-sm-12'>
                                     <label>$u_name</label>
@@ -408,8 +408,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                             </div>";
         } else {
             $tool_content .= "
-            <div class='row p-2'></div>
-                            <div class='form-group'>
+           
+                            <div class='form-group mt-3'>
                                 <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
                                 <div class='col-sm-12'>
                                     <select name='recipients' class='form-control' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
@@ -419,8 +419,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     }
 
     $tool_content .= "
-    <div class='row p-2'></div>
-        <div class='form-group'>
+  
+        <div class='form-group mt-3'>
             <label for='title' class='col-sm-6 control-label-notes'>$langSubject:</label>
             <div class='col-sm-12'>
                 <input type='text' class='form-control' name='message_title'>
@@ -428,8 +428,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
         </div>";
 
     $tool_content .= "
-    <div class='row p-2'></div>
-        <div class='form-group'>
+ 
+        <div class='form-group mt-3'>
             <label for='title' class='col-sm-6 control-label-notes'>$langMessage:</label>
             <div class='col-sm-12'>
                 ".rich_text_editor('body', 4, 20, '')."
@@ -438,8 +438,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
         enableCheckFileSize();
         $tool_content .= "
-        <div class='row p-2'></div>
-        <div class='form-group'>
+        
+        <div class='form-group mt-3'>
             <label for='title' class='col-sm-6 control-label-notes'>$langAttachedFile:</label>
             <div class='col-sm-12'>" .
                 fileSizeHidenInput() . "
@@ -449,8 +449,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     }
 
     $tool_content .= "
-    <div class='row p-2'></div>
-        <div class='form-group'>
+    
+        <div class='form-group mt-3'>
             <div class='col-xs-10 col-xs-offset-2'>
                 <div class='checkbox'>
                   <label>
@@ -460,8 +460,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                 </div>
             </div>
         </div>
-        <div class='row p-2'></div>
-        <div class='form-group'>
+       
+        <div class='form-group mt-3'>
             <div class='col-sm-offset-2 col-sm-10'>".
                 form_buttons(array(
                         array(
@@ -550,8 +550,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
 
                     </script>";
 
-    $tool_content .= "<div class='row p-2'></div>
-                      <div id='dropboxTabs'>
+    $tool_content .= "
+                      <div id='dropboxTabs' class='mt-3'>
                         <ul class='nav nav-tabs' role='tablist'>
                             <li class='nav-item' role='presentation'><a class='nav-link' id='inboxA' data-bs-target='#inbox' role='tab' data-bs-toggle='tab' href= 'inbox.php" . $courseParam . $msg_id_param . "'><strong>$langDropBoxInbox</strong></a></li>
                             <li class='nav-item' role='presentation'><a class='nav-link' id='outboxA' data-bs-target='#outbox' role='tab' data-bs-toggle='tab' href='outbox.php" . $courseParam . "'><strong>$langDropBoxOutbox</strong></a></li>

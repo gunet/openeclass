@@ -65,7 +65,7 @@ $tool_content .= action_bar(array(
 
 
 // display use explication text
-$tool_content .= "<div class='alert alert-info'>$langUseOfPool</div>";
+$tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langUseOfPool</div></div>";
 
 // HANDLE COMMANDS:
 $cmd = ( isset($_REQUEST['cmd']) && is_string($_REQUEST['cmd']) ) ? (string) $_REQUEST['cmd'] : '';

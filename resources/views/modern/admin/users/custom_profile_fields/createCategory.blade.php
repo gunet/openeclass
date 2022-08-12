@@ -40,14 +40,14 @@
                             @if ($catid)
                             <input type='hidden' name='cat_id' value='{{ getIndirectReference($catid) }}'>
                             @endif
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <label for='catname' class='col-sm-6 control-label-notes'>{{ trans('langName') }}</label>
                                 <div class='col-sm-12'>
                                     <input id='catname' class="form-control" type='text' name='cat_name' value="{{ $cat_name ?: '' }}">
                                 </div>
                             </div>
-                            <div class='row p-2'></div>
-                            <div class='col-sm-offset-2 col-sm-10'>
+                     
+                            <div class='col-sm-offset-2 col-sm-10 mt-3'>
                                 {!! showSecondFactorChallenge() !!}
                                 <input class='btn btn-primary' type='submit' name='submit_cat' value='{{ trans('langAdd') }}'>
                             </div>

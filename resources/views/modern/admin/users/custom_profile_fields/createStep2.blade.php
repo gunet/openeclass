@@ -45,14 +45,14 @@
                                 <input type='hidden' name='catid' value='{{ $catid }}'>
                             @endif
                             <input type='hidden' name='datatype' value='{{ $datatype }}'>
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <label for='name' class='col-sm-6 control-label-notes'>{{ trans('langName') }}</label>
                                 <div class='col-sm-12'>
                                     <input id='name' type='text' name='field_name' class="form-control" value="{{ isset($name) ? $name : '' }}">
                                 </div>
                             </div>
-                            <div class='row p-2'></div>
-                            <div class='form-group'>
+                 
+                            <div class='form-group mt-3'>
                                 <label for='shortname' class='col-sm-6 control-label-notes'>
                                     {{ trans('langCPFShortName') }} <small>({{ trans('langCPFUniqueShortname') }})</small>
                                 </label>
@@ -60,33 +60,33 @@
                                     <input id='shortname' type='text' name='field_shortname' class="form-control" value="{{ isset($shortname) ? $shortname : '' }}">
                                 </div>
                             </div>
-                            <div class='row p-2'></div>
+               
 
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <label for='fielddescr' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}</label>
                                 <div class='col-sm-12'>
                                     {!! $fielddescr_rich_text !!}
                                 </div>
                             </div>
                             @if (isset($_GET['edit_field']))
-                            <div class='row p-2'></div>
-                                <div class='form-group'>
+                    
+                                <div class='form-group mt-3'>
                                     <label for='datatype' class='col-sm-6 control-label-notes'>{{ trans('langCPFFieldDatatype') }}</label>
                                     <div class='col-sm-12'>
                                         {!! selection($field_types, 'datatype_disabled', $datatype, 'class="form-control" disabled') !!}
                                     </div>
                                 </div>           
                             @endif
-                            <div class='row p-2'></div>
-                            <div class='form-group'>
+                     
+                            <div class='form-group mt-3'>
                                 <label for='required' class='col-sm-6 control-label-notes'>{{ trans('langCPFFieldRequired') }}</label>
                                 <div class='col-sm-12'>
                                     {!! selection($yes_no, 'required', isset($required) ? $required : '', 'class="form-control"') !!}
                                 </div>
                             </div>
                             @if ($datatype == CPF_MENU)
-                            <div class='row p-2'></div>
-                                <div class='form-group'>
+                 
+                                <div class='form-group mt-3'>
                                     <label for='options' class='col-sm-6 control-label-notes'>
                                         {{ trans('langCPFMenuOptions') }} <small>({{ trans('langCPFMenuOptionsExplan') }})</small>
                                     </label>
@@ -95,29 +95,29 @@
                                     </div>
                                 </div>
                             @endif
-                            <div class='row p-2'></div>
-                            <div class='form-group'>
+                       
+                            <div class='form-group mt-3'>
                                 <label for='registration' class='col-sm-6 control-label-notes'>{{ trans('langCPFFieldRegistration') }}</label>
                                 <div class='col-sm-12'>
                                     {!! selection($yes_no, 'registration', isset($registration) ? $registration : '', 'class="form-control"') !!}
                                 </div>
                             </div>
-                            <div class='row p-2'></div>
-                            <div class='form-group'>
+                       
+                            <div class='form-group mt-3'>
                                 <label for='user_type' class='col-sm-6 control-label-notes'>{{ trans('langCPFFieldUserType') }}</label>
                                 <div class='col-sm-12'>
                                     {!! selection($user_type, 'user_type', isset($utype) ? $utype : 10, 'class="form-control"') !!}
                                 </div>
                             </div>
-                            <div class='row p-2'></div>
-                            <div class='form-group'>
+             
+                            <div class='form-group mt-3'>
                                 <label for='visibility' class='col-sm-6 control-label-notes'>{{ trans('langCPFFieldVisibility') }}</label>
                                 <div class='col-sm-12'>
                                     {!! selection($visibility, 'visibility', isset($vis) ? $vis : 10, 'class="form-control"') !!}
                                 </div>
                             </div>
-                            <div class='row p-2'></div>
-                            <div class='col-sm-offset-2 col-sm-10'>
+                         
+                            <div class='col-sm-offset-2 col-sm-10 mt-3'>
                                 {!! showSecondFactorChallenge() !!}
                                 <input class='btn btn-primary' type='submit' name='submit_field' value='{{ trans('langAdd') }}'>
                             </div>

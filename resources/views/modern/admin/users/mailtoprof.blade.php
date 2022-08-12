@@ -41,28 +41,28 @@
                         
                         <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                         <fieldset>
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <label for='email_title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' type='text' name='email_title' value=''>
                                 </div>
                             </div>
-                            <div class='row p-2'></div>
-                            <div class='form-group'>
+                           
+                            <div class='form-group mt-3'>
                             <label for='body_mail' class='col-sm-6 control-label-notes'>{{ trans('typeyourmessage') }}</label>
                                 <div class='col-sm-12'>
                                 {!! $body_mail_rich_text !!}
                                 </div>
                             </div>
-                            <div class='row p-2'></div>
-                            <div class='form-group'>
+                            
+                            <div class='form-group mt-3'>
                                 <label class='col-sm-6 control-label-notes'>{{ trans('langFaculty') }}:</label>
                                 <div class='col-sm-12'>
                                     {!! $buildusernode !!}
                                 </div>
                             </div>
-                            <div class='row p-2'></div>
-                            <div class='form-group'>
+                          
+                            <div class='form-group mt-3'>
                             <label for='sendTo' class='col-sm-6 control-label-notes'>{{ trans('langSendMessageTo') }}</label>
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>
@@ -75,9 +75,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class='row p-2'></div>
+                            <div class='mt-3'></div>
                             {!! showSecondFactorChallenge() !!}
-                            <div class='col-sm-offset-2 col-sm-10'>	
+                            <div class='col-sm-offset-2 col-sm-10 mt-3'>	
                             <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSend') }}'>          
                             </div>	
                         </fieldset>

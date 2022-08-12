@@ -212,8 +212,8 @@ if (isset($_GET['rubric_id'])) {
         foreach ($unserialized_criteria as $crit => $title) {            
             $crit_rows .= "
                 <div id='critDiv$crit'>
-                <div class='row p-2'></div>
-                <div class='form-group'>
+               
+                <div class='form-group mt-3'>
                    <div class='row'>
                     <label for='title[$crit]' class='col-sm-2 control-label-notes'>$langRubricCrit:</label>
                     <div class='col-sm-3'>
@@ -229,8 +229,8 @@ if (isset($_GET['rubric_id'])) {
                                 <a href='#' class='removeCrit' id='remCrit$crit'><span class='fa fa-times' style='color:red'></span></a>
                         </div>";
                 $crit_rows .= "</div>  
-                <div class='row p-2'></div>         
-                    <div class='form-group'>
+                     
+                    <div class='form-group mt-3'>
                     <label class='col-sm-6 control-label-notes'>$langScales:</label>
                     <div class='col-sm-12'>
                     <div class='table-responsive'>
@@ -292,16 +292,16 @@ if (isset($_GET['rubric_id'])) {
                     <form class='form-horizontal' role='form' data-toggle='validator' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='rubric_form'>
                     <fieldset>
                         $hidden_input
-                        <div class='row p-2'></div>
-                        <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
+                        
+                        <div class='form-group".(Session::getError('name') ? " has-error" : "")." mt-3'>
                             <label for='name' class='col-sm-6 control-label-notes'>$langTitleRubric:</label>
                             <div class='col-sm-12'>
                               <input name='name' type='text' class='form-control' id='name' value='$name'".($rubric_used ? " disabled" : "").">
                               ".(Session::getError('name') ? "<span class='help-block'>" . Session::getError('name') . "</span>" : "")."
                          </div>
                         </div>
-                        <div class='row p-2'></div>
-                        <div class='form-group'>
+                        
+                        <div class='form-group mt-3'>
                                 <label for='desc' class='col-sm-6 control-label-notes'>$langRubricDesc:</label>
                                 <div class='col-sm-12'>
                                  " . @rich_text_editor('desc', 4, 20, $desc) . "
@@ -312,8 +312,8 @@ if (isset($_GET['rubric_id'])) {
     } else {
         $opt1 = $sel_opt1 = $opt2 = $sel_opt2 = '';
         @$tool_content .= "<div id='critDiv0'>
-        <div class='row p-2'></div>
-            <div class='form-group".(Session::getError('title') ? " has-error" : "")."'>
+       
+            <div class='form-group".(Session::getError('title') ? " has-error" : "")." mt-3'>
                 <div class='row'>
                     <label for='title' class='col-sm-2 control-label-notes'>$langRubricCrit:</label>
                     <div class='col-sm-3'>
@@ -326,8 +326,8 @@ if (isset($_GET['rubric_id'])) {
                     </div>
                 </div>
             </div>
-            <div class='row p-2'></div>
-            <div class='form-group'>
+          
+            <div class='form-group mt-3'>
                 <label class='col-sm-6 control-label-notes'>$langScales:</label>
                 <div class='col-sm-12'>
                     <div class='table-responsive'>
@@ -469,7 +469,7 @@ if (isset($_GET['rubric_id'])) {
                             </td>
                         </tr>";
             }
-            $tool_content .= "<div class='row p-2'></div><div class='table-responsive '>
+            $tool_content .= "<div class='table-responsive '>
                 <table class='announcements_table'>
                     <thead class='notes_thead' style='height:45px;'>
                         <tr>
@@ -485,7 +485,7 @@ if (isset($_GET['rubric_id'])) {
             </div>";
         }
     } else {
-        $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoGradeRubrics</div></div>";
+        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoGradeRubrics</div></div>";
     }
     if (isset($_GET['preview'])) { // preview rubric
         $rubric_id = $_GET['preview'];
@@ -526,7 +526,6 @@ function show_rubric ($rubric_id) {
         }
     }
         $tool_content .= "
-        <div class='row p-2'></div>
         <div class='table-responsive'>
         <table class='announcements_table'>
             <thead class='notes_thead' style='height:45px;'>

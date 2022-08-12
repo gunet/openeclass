@@ -195,7 +195,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 
     <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>
-            <div class='row p-2'></div>            
+                  
             
             <div class='form-group ".(Session::getError('questionName') ? "has-error" : "")." mt-3'>
                 <label for='questionName' class='col-sm-6 control-label-notes'>$langQuestion:</label>

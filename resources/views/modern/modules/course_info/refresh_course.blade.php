@@ -102,9 +102,9 @@ $(function() {
                                 @endif
                                 <fieldset>
 
-                                <div class='row p-2'></div>
+                       
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                         <label for='delusers' class='col-sm-6 control-label-notes'>{{ trans('langUsers') }}</label>
                                         <div class='col-sm-12 checkbox'>
                                             <label><input type='checkbox' name='delusers'> {{ trans('langUserDelCourse') }}:</label>
@@ -118,27 +118,27 @@ $(function() {
                                     </div>
                                 @if (!isset($_GET['from_user']))
 
-                                <div class='row p-2'></div>
+                          
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                         <label for='delannounces' class='col-sm-6 control-label-notes'>{{ trans('langAnnouncements') }}</label>
                                         <div class='col-sm-12 checkbox'>
                                             <label><input type='checkbox' name='delannounces'> {{ trans('langAnnouncesDel') }}</label>
                                         </div>
                                     </div>
 
-                                    <div class='row p-2'></div>
+                        
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                     <label for='delagenda' class='col-sm-6 control-label-notes'>{{ trans('langAgenda') }}</label>
                                     <div class='col-sm-12 checkbox'>
                                         <label><input type='checkbox' name='delagenda'> {{ trans('langAgendaDel') }}</label>
                                     </div>
                                     </div>
 
-                                    <div class='row p-2'></div>
+                                    
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                     <label for='hideworks' class='col-sm-6 control-label-notes'>{{ trans('langWorks') }}</label>
                                         <div class='col-sm-12 checkbox'>
                                             <label><input type='checkbox' name='hideworks'> {{ trans('langHideWork') }}</label>
@@ -148,36 +148,36 @@ $(function() {
                                         </div>
                                     </div>
 
-                                    <div class='row p-2'></div>
+                          
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                     <label for='purgeexercises' class='col-sm-6 control-label-notes'>{{ trans('langExercises') }}</label>
                                     <div class='col-sm-12 checkbox'>
                                         <label><input type='checkbox' name='purgeexercises'> {{ trans('langPurgeExercisesResults') }}</label>
                                     </div>
                                     </div>
 
-                                    <div class='row p-2'></div>
+                                    
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                     <label for='clearstats' class='col-sm-6 control-label-notes'>{{ trans('langUsage') }}</label>
                                     <div class='col-sm-12 checkbox'>
                                         <label><input type='checkbox' name='clearstats'> {{ trans('langClearStats') }}</label>
                                     </div>
                                     </div>
 
-                                    <div class='row p-2'></div>
+                      
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                     <label for='delblogposts' class='col-sm-6 control-label-notes'>{{ trans('langBlog') }}</label>
                                     <div class='col-sm-12 checkbox'>
                                         <label><input type='checkbox' name='delblogposts'> {{ trans('langDelBlogPosts') }}</label>
                                     </div>
                                     </div>
 
-                                    <div class='row p-2'></div>
+                                
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                     <label for='delwallposts' class='col-sm-6 control-label-notes'>{{ trans('langWall') }}</label>
                                     <div class='col-sm-12 checkbox'>
                                         <label><input type='checkbox' name='delwallposts'> {{ trans('langDelWallPosts') }}</label>
@@ -185,13 +185,13 @@ $(function() {
                                     </div>
                                 @endif
 
-                                <div class='row p-2'></div>
+                                <div class='mt-3'></div>
 
                                     {{ showSecondFactorChallenge() }}
 
-                                    <div class='row p-2'></div>
+                               
 
-                                <div class='col-sm-offset-2 col-sm-10'>
+                                <div class='col-sm-offset-2 col-sm-10 mt-3'>
                                     <input class='btn btn-primary' type='submit' value='{{ trans('langSubmitActions') }}' name='submit'>
                                 </div>
                                 </fieldset>

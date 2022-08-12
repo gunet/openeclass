@@ -310,7 +310,9 @@ input[type="checkbox"].toggles + label.rounded::before{
 
 /* tablet */
 @media (min-width: 768px) and (max-width: 1023px){ 
-
+  .table-responsive{
+    overflow: inherit;
+  }
    .btn-close.text-reset{
     background-color:white;
   }
@@ -339,7 +341,9 @@ input[type="checkbox"].toggles + label.rounded::before{
 }
 
 @media(min-width:992px) and (max-width:1023px){
-
+  .table-responsive{
+    overflow: inherit;
+  }
   .menu_btn_button{
     display:block;
     pointer-events: all;
@@ -471,17 +475,17 @@ input[type="checkbox"].toggles + label.rounded::before{
 }
 
 @media (min-width:1400px){
-  /* .table-responsive{
+  .table-responsive{
     overflow: inherit;
-  } */
+  }
   .btn-toggle{
       width: 12rem;
   }
 }
 @media (min-width: 1200px) and (max-width: 1399px){ 
-  /* .table-responsive{
+  .table-responsive{
     overflow: inherit;
-  } */
+  }
   .btn-toggle{
       width: 11.5rem;
   }
@@ -503,9 +507,9 @@ input[type="checkbox"].toggles + label.rounded::before{
   }
 }
 @media (min-width: 1024px) and (max-width: 1199px){ 
-  /* .table-responsive{
+  .table-responsive{
     overflow: inherit;
-  } */
+  }
   .btn-toggle{
       width: 12.3rem;
   }

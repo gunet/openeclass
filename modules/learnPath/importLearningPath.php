@@ -1083,22 +1083,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                 <div class='form-wrapper shadow-sm p-3 rounded'>
                     <h4 class='form-heading'>$langImport</h4>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <label for='uploadedPackage' class='col-sm-6 control-label-notes'>$langPathUploadFile</label>
                             <div class='col-sm-12'>
                                 <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >" .
                                 fileSizeHidenInput() . replaceIdHiddenInput() . "
-                                <input id='uploadedPackage' type='file' name='uploadedPackage'>
-                                <div class='row p-2'></div>
-                                <span class='smaller'>$langLearningPathUploadFile</span>
+                                <input id='uploadedPackage' type='file' name='uploadedPackage'><br>
+                                
+                                <span class='smaller'>$langLearningPathUploadFile</span><br>
                                 <span class='help-block' style='margin-bottom: 0px;'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></span>
                             </div>
                         </div>
 
-                        <div class='row p-2'></div>
 
 
-                        <div class='form-group'>
+
+                        <div class='form-group mt-3'>
                             <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
                                     array(
                                         'text' => $langImport,
@@ -1116,7 +1116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
     $tool_content .= "
             
-                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                     <div class='alert alert-info'>
                         <p>$langNote:</p>
                         <p>$langScormIntroTextForDummies</p>

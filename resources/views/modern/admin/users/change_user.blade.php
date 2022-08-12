@@ -38,15 +38,15 @@
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                         
                         <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
-                            <div class='row p-2'></div>
-                            <div class='form-group'>
+                            
+                            <div class='form-group mt-3'>
                             <label for = 'username' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}:</label>
                                 <div class='col-sm-12'>
                                     <input id='username' class='form-control' type='text' name='username' placeholder='{{ trans('langUsername') }}'>
                                 </div>
                             </div>
-                            <div class='row p-2'></div>
-                            <div class='form-group'>
+                         
+                            <div class='form-group mt-3'>
                                 <div class='col-sm-9 col-sm-offset-3'>
                                     {!! showSecondFactorChallenge() !!}
                                     <input class='btn btn-primary' type='submit' value='{{ trans('langSubmit') }}'>

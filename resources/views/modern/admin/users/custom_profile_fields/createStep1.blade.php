@@ -38,14 +38,14 @@
                             <form class='form-horizontal' role='form' name='fieldForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                                 <fieldset>
                                 <input type='hidden' name='catid' value='{{ getIndirectReference($catid) }}'>
-                                <div class='form-group'>
+                                <div class='form-group mt-3'>
                                     <label for='datatype' class='col-sm-6 control-label-notes'>{{ trans('langCPFFieldDatatype') }}</label>
                                     <div class='col-sm-12'>
                                         {!! selection($field_types, 'datatype', 1, 'class="form-control"') !!}
                                     </div>
                                 </div>
-                                <div class='row p-2'></div>
-                                <div class='col-sm-offset-2 col-sm-10'>
+                             
+                                <div class='col-sm-offset-2 col-sm-10 mt-3'>
                                     <input class='btn btn-primary' type='submit' name='add_field_proceed_step2' value='{{ trans('langNext') }}'>
                                 </div>
                                 </fieldset>

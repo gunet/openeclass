@@ -92,8 +92,8 @@
                                     enctype='{{ $form_enctype }}'
                                     onsubmit="return checkrequired(this, 'title');">
                                     <fieldset>
-                                        <div class='row p-2'></div>
-                                        <div class='form-group'>
+                                       
+                                        <div class='form-group mt-3'>
                                             @if (isset($pendingCloudUpload))
                                                 <label for='fileCloudName' class='col-sm-12 control-labe-notes'>{{ trans('langCloudFile') }}</label>
                                                 <div class='col-sm-12'>
@@ -124,9 +124,9 @@
                                             @endif
                                         </div>
 
-                                        <div class='row p-2'></div>
+                                        
 
-                                        <div class='form-group'>
+                                        <div class='form-group mt-3'>
                                             <label for='Title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
                                             <div class='col-sm-12'>
                                                 @if (isset($edititem))
@@ -137,20 +137,20 @@
                                             </div>
                                         </div>
 
-                                        <div class='row p-2'></div>
+                                      
 
 
-                                        <div class='form-group'>
+                                        <div class='form-group mt-3'>
                                             <label for='Desc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
                                             <div class='col-sm-12'>
                                                 <textarea class='form-control' rows='3' name='description'>@if (isset($_GET['id']) && isset($_GET['table_edit'])){{ $edititem->description }}@endif</textarea>
                                             </div>
                                         </div>
 
-                                        <div class='row p-2'></div>
+                                     
 
 
-                                        <div class='form-group'>
+                                        <div class='form-group mt-3'>
                                             <label for='Creator' class='col-sm-6 control-label-notes'>{{ trans('langCreator') }}:</label>
                                             <div class='col-sm-12'>
                                                 @if (isset($form_input))
@@ -161,10 +161,10 @@
                                             </div>
                                         </div>
 
-                                        <div class='row p-2'></div>
+                                    
 
 
-                                        <div class='form-group'>
+                                        <div class='form-group mt-3'>
                                             <label for='Publisher' class='col-sm-6 control-label-notes'>{{ trans('langpublisher') }}:</label>
                                             <div class='col-sm-12'>
                                                 @if (isset($form_input))
@@ -177,16 +177,16 @@
 
 
                                         @if (isset($form_input))
-                                        <div class='row p-2'></div>
-                                            <div class='form-group'>
+                                      
+                                            <div class='form-group mt-3'>
                                                 <label for='Date' class='col-sm-6 control-label-notes'>{{ trans('langDate') }}:</label>
                                                 <div class='col-sm-12'><input class='form-control' type='text' name='date' value='{{ date('Y-m-d G:i') }}'></div>
                                             </div>
                                         @endif
 
-                                        <div class='row p-2'></div>
+                                    
 
-                                        <div class='form-group'>
+                                        <div class='form-group mt-3'>
                                             <label for='Category' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}:</label>
                                             <div class='col-sm-12'>
                                                 <select class='form-select' name='selectcategory'>
@@ -208,10 +208,10 @@
                                             </div>
                                         </div>
 
-                                        <div class='row p-2'></div>
+                                     
 
 
-                                        <div class='form-group'>
+                                        <div class='form-group mt-3'>
                                             <div class='col-sm-offset-2 col-sm-10'>
                                                 @if ($form_input === 'file')
                                                     {!!
@@ -259,8 +259,8 @@
                                         </div>
                                     </fieldset>
                                     @if ($form_input === 'file')
-                                    <div class='row p-2'></div>
-                                        <div class='form-group'>
+                                    
+                                        <div class='form-group mt-3'>
                                             <div class='col-sm-offset-2 col-sm-10'>
                                                 <div class='smaller right'>{{ trans('langMaxFileSize') }} {{ ini_get('upload_max_filesize') }}</div>
                                             </div>

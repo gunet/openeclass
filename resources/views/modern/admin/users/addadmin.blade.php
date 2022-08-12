@@ -55,28 +55,28 @@
                                         <label class='col-sm-6 control-label-notes'>{{ trans('langAddRole') }}</label>
                                             <div class='col-sm-12'>
                                                 <div class='radio'>
-                                                    <input type='radio' name='adminrights' value='admin' {{$checked['admin']}}>{{ trans('langAdministrator') }}
+                                                    <input type='radio' name='adminrights' value='admin' {{$checked['admin']}}> {{ trans('langAdministrator') }}
                                                     <span class='help-block'>
                                                         <br><small class='text-warning'>{{ trans('langHelpAdministrator') }}</small>
                                                     </span>
                                                 </div>
-                                                <div class='row p-2'></div>
-                                                <div class='radio'>
-                                                    <input type='radio' name='adminrights' value='poweruser' {{$checked['poweruser']}}>{{ trans('langPowerUser') }}
+                                                
+                                                <div class='radio mt-3'>
+                                                    <input type='radio' name='adminrights' value='poweruser' {{$checked['poweruser']}}> {{ trans('langPowerUser') }}
                                                     <span class='help-block'>
                                                         <br><small class='text-warning'>{{ trans('langHelpPowerUser') }}&nbsp;</small>
                                                     </span>
                                                 </div>
-                                                <div class='row p-2'></div>
-                                                <div class='radio'>
-                                                    <input type='radio' name='adminrights' value='manageuser' {{$checked['manageuser']}}>{{ trans('langManageUser') }}
+                                               
+                                                <div class='radio mt-3'>
+                                                    <input type='radio' name='adminrights' value='manageuser' {{$checked['manageuser']}}> {{ trans('langManageUser') }}
                                                     <span class='help-block'>
                                                         <br><small class='text-warning'>{{ trans('langHelpManageUser') }}</small>
                                                     </span>
                                                 </div>
-                                                <div class='row p-2'></div>
-                                                <div class='radio'>
-                                                    <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio' {{$checked['managedepartment']}}>{{ trans('langManageDepartment') }}
+                                              
+                                                <div class='radio mt-3'>
+                                                    <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio' {{$checked['managedepartment']}}> {{ trans('langManageDepartment') }}
                                                     <span class='help-block'>
                                                         <br><small class='text-warning'>{{ trans('langHelpManageDepartment') }}</small>
                                                     </span>

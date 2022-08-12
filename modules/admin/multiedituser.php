@@ -265,8 +265,8 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['activate_submit'])) {
         $infoText = $langActivateUserInfo;
         $monthsField = "
-        <div class='row p-2'></div>
-                <div class='form-group'>
+        
+                <div class='form-group mt-3'>
                     <label class='col-sm-6 control-label-notes' for='months-id'>$langActivateMonths:</label>
                     <div class='col-sm-12'>
                         <input name='months' id='months-id' class='form-control' type='number' min='1' step='1' value='6'>
@@ -286,8 +286,8 @@ if (isset($_POST['submit'])) {
         $infoText = sprintf($langMoveUserInfo, '<b>' . q($tree->getNodeName($dep)) . '</b>');
         $monthsField = "
                 <input type='hidden' name='old_dep' value='$dep'>
-                <div class='row p-2'></div>
-                <div class='form-group'>
+                
+                <div class='form-group mt-3'>
                     <label class='col-sm-6 control-label-notes' for='dialog-set-value'>$langFaculty:</label>
                     <div class='col-sm-12'>$html</div>
                 </div>";
@@ -305,15 +305,15 @@ if (isset($_POST['submit'])) {
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
             <fieldset>
                 $monthsField
-                <div class='row p-2'></div>
-                <div class='form-group'>
+                
+                <div class='form-group mt-3'>
                     <label class='col-sm-6 control-label-notes'>$langMultiDelUserData:</label>
                     <div class='col-sm-12'>
                         <textarea class='auth_input form-control' name='user_names' rows='30'>$usernames</textarea>
                     </div>
                 </div>
-                <div class='row p-2'></div>
-                <div class='form-group'>
+                
+                <div class='form-group mt-3'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "'$confirm>
                         <a href='index.php' class='btn btn-secondary'>$langCancel</a>

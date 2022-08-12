@@ -1,8 +1,8 @@
 <fieldset class='extra-fields-set' id='fields_{{ $type_id }}'>
     <legend>{{ $type_name }}</legend>
     @foreach ($fields_info as $field_id => $field_description)
-        <div class='row p-2'></div>
-        <div class='form-group'>
+
+        <div class='form-group mt-3'>
             <label for='field_{{ $type_id }}_{{ $field_id }}' class='col-sm-6 control-label-notes'>{{ $field_description->name }}:</label>
             <div class='col-sm-12'>
                 @if ($field_description->datatype == REQUEST_FIELD_TEXTBOX)
@@ -26,7 +26,7 @@
                         @endif
                     >
                 @elseif ($field_description->datatype == REQUEST_FIELD_MENU_EDITABLE)
-                    <select class='form-control combobox' name='field_{{ $type_id }}_{{ $field_id }}' id='field_{{ $type_id }}_{{ $field_id }}'>
+                    <select class='form-select combobox' name='field_{{ $type_id }}_{{ $field_id }}' id='field_{{ $type_id }}_{{ $field_id }}'>
                         @if (!$field_description->data)
                             <option></option>
                         @endif
@@ -39,7 +39,7 @@
                         @endforeach
                     </select>
                 @elseif ($field_description->datatype == REQUEST_FIELD_MENU)
-                    <select class='form-control' name='field_{{ $type_id }}_{{ $field_id }}' id='field_{{ $type_id }}_{{ $field_id }}'>
+                    <select class='form-select' name='field_{{ $type_id }}_{{ $field_id }}' id='field_{{ $type_id }}_{{ $field_id }}'>
                         @foreach ($field_description->values as $option)
                             <option value='{{ $option }}'
                                 @if ($option == $field_description->data)

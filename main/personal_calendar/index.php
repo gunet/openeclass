@@ -360,25 +360,25 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         <form id='myeventform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' style='display:inline'>
         <input type='hidden' id='id' name='id' value='$eventToModify'>
         <input type='hidden' name='rep' id='rep' value='$applytogroup'>
-        <div class='form-group'>
+        <div class='form-group mt-3'>
           <label for='newTitle' class='col-sm-6 control-label-notes'>$langTitle:</label>
           <div class='col-sm-12'>
                <input class='form-control' type='text' name='newTitle' id='newTitle' value='$titleToModify' placeholder='$langTitle'>
           </div>
         </div>
 
-        <div class='row p-2'></div>
+        
 
-        <div class='form-group'>
+        <div class='form-group mt-3'>
           <label for='newContent' class='col-sm-6 control-label-notes'>$langDescription:</label>
           <div class='col-sm-12'>
                " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
           </div>
         </div>
 
-        <div class='row p-2'></div>
+        
 
-        <div class='input-append date form-group' name='startdatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+        <div class='input-append date form-group mt-3' name='startdatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
               <label for='startdate' class='col-sm-6 control-label-notes'>$langDate:</label>
               <div class='col-sm-12'>
                   <div class='input-group'>
@@ -388,9 +388,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
               </div>
         </div>
 
-        <div class='row p-2'></div>
+       
 
-        <div class='input-append bootstrap-timepicker form-group'>
+        <div class='input-append bootstrap-timepicker form-group mt-3'>
             <label for='durationcal' class='col-sm-6 control-label-notes'>$langDuration <small>$langInHour</small></label>
             <div class='col-sm-12'>
                 <div class='input-group add-on'>
@@ -403,10 +403,10 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         /* Repeat period*/
         $tool_content .= "
 
-        <div class='row p-2'></div>
-            <div class='form-group'>
+        
+            <div class='form-group mt-3'>
               <label for='frequencynumber' class='col-sm-6 control-label-notes'>$langRepeat $langEvery:</label>
-              <div class='col-sm-2'>
+              <div class='col-sm-12'>
                     <select class='form-select' name='frequencynumber' id='frequencynumber'>
                         <option value='0'>$langSelectFromMenu</option>";
                 for ($i = 1; $i < 10; $i++) {
@@ -421,7 +421,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                     $selected[$repeatperiod] = ' selected';
                 }
                 $tool_content .= "</select></div>
-                <div class='col-sm-2'>
+                <div class='col-sm-12 mt-2'>
                       <select class='form-select' name='frequencyperiod' id='frequencyperiod'>
                         <option value=\"\">$langSelectFromMenu...</option>
                         <option value=\"D\"{$selected['D']}>$langDays</option>
@@ -430,9 +430,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                     </select>
               </div>
 
-              <div class='row p-2'></div>
+              
 
-              <div class='input-append date' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+              <div class='input-append date mt-3' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                 <label for='enddate' class='col-sm-6 control-label-notes'>$langUntil:</label>
                 <div class='col-sm-4'>
                   <div class='input-group'>
@@ -446,8 +446,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             $eventtype = 'personal';
             $tool_content .= "
 
-            <div class='row p-2'></div>
-            <div class='form-group'>
+            
+            <div class='form-group mt-3'>
               <label for='startdate' class='col-sm-6 control-label-notes'>$langReferencedObject:</label>
               <div class='col-sm-12'>
                    " . References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected) . "
@@ -461,9 +461,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             }
             $tool_content .= "
 
-            <div class='row p-2'></div>
+          
 
-            <div class='form-group'>
+            <div class='form-group mt-3'>
               <label for='startdate' class='col-sm-6 control-label-notes'>$langShowTo:</label>
               <div class='col-sm-12'>
                 <select class='form-select' name='visibility_level'>
@@ -477,9 +477,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         }
         $tool_content .= "
 
-        <div class='row p-2'></div> <div class='row p-2'></div> <div class='row p-2'></div>
+        
 
-            <div class='form-group'>
+            <div class='form-group mt-5'>
               <div class='col-sm-10 col-sm-offset-2'>
                    <input class='btn btn-primary' type='button' id='submitEvent' name='submitEvent' value='$langSubmit'>
                    <a class='btn btn-secondary' href='index.php'>$langCancel</a>

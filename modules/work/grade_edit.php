@@ -409,48 +409,48 @@ function show_edit_form($id, $sid, $assign) {
 				<input type='hidden' name='submission' value='$sid'>
 				<fieldset style='padding-left:15px'>
                
-                    <div class='row p-2'></div>
+                    
 
-					<div class='form-group'>
+					<div class='form-group mt-3'>
 						<label class='col-sm-3 control-label-notes'>$m[username]:</label>
 						<div class='col-sm-9'>
 						$uid_2_name $group_submission
 						</div>
 					</div>
 
-                    <div class='row p-2'></div>
+                   
 
-					<div class='form-group'>
+					<div class='form-group mt-3'>
 						<label class='col-sm-3 control-label-notes'>$m[sub_date]:</label>
 						<div class='col-sm-9'>
 							<span>".q($sub->submission_date)."</span>
 						</div>
 					</div>
 
-                    <div class='row p-2'></div>
+                    <div class='mt-3'></div>
 					$submission
 
                     
 
-					<div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
+					<div class='form-group".(Session::getError('grade') ? " has-error" : "")." mt-3'>
 						<label for='grade' class='col-sm-3 control-label-notes'>$langGradebookGrade:</label>
 							$grade_field
 							<span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
 					</div>
 
-                    <div class='row p-2'></div>
+                   
 
-					<div class='form-group'>
+					<div class='form-group mt-3'>
 						<label for='comments' class='col-sm-3 control-label-notes'>$m[gradecomments]:</label>
 						<div class='col-sm-9'>
 							<textarea class='form-control' rows='3' name='comments'  id='comments'>$comments</textarea>
 						</div>
 					</div>
 
-                    <div class='row p-2'></div>
+                    
 
 
-					<div class='form-group'>
+					<div class='form-group mt-3'>
 						<label for='comments_file' class='col-sm-3 control-label-notes'>$langCommentsFile:</label>
 						<div class='col-sm-9'>
 							<input type='file' name='comments_file' id='comments_file' size='35'>
@@ -458,9 +458,9 @@ function show_edit_form($id, $sid, $assign) {
 						</div>
 					</div>
 
-                    <div class='row p-2'></div>
+                   
 
-					<div class='form-group'>
+					<div class='form-group mt-3'>
 						<div class='col-sm-9 col-sm-offset-3'>
 							<div class='checkbox'>
 								<label>
@@ -471,17 +471,17 @@ function show_edit_form($id, $sid, $assign) {
 						</div>
 					</div>
 
-                    <div class='row p-2'></div>
+                   
 
 
-					<div class='form-group'>
+					<div class='form-group mt-3'>
 						<div class='col-sm-9 col-sm-offset-3'>
 							<input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'>
 							<a class='btn btn-default' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
 						</div>
 					</div>
 
-                    <div class='row p-2'></div>
+                    
                     
 				</fieldset>
 				</form>

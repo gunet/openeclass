@@ -76,7 +76,7 @@
                                 @endif
                                 <fieldset>
 
-                                    <div class='form-group{{ $categoryNameError ? ' has-error' : ''}}'>
+                                    <div class="form-group{{ $categoryNameError ? ' has-error' : ''}} mt-3">
                                     <label for='CatName' class='col-sm-6 control-label-notes'>{{ trans('langCategoryName') }}:</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' type='text' name='categoryname' size='53' placeholder='{{ trans('langCategoryName') }}' value='{{ isset($category) ? $category->name : "" }}'>
@@ -84,18 +84,18 @@
                                     </div>
                                     </div>
 
-                                    <div class='row p-2'></div>
+                                  
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                         <label for='CatDesc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
                                         <div class='col-sm-12'>
                                             <textarea class='form-control' rows='5' name='description'>{{ isset($category) ? $category->description : "" }}</textarea>
                                         </div>
                                     </div>
 
-                                    <div class='row p-2'></div>
+                                  
                                     
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                         <div class='col-sm-10 col-sm-offset-2'>
                                             <input type='submit' class='btn btn-primary' name='submitCategory' value="{{ $form_legend }}">
                                             <a href='index.php?course={{ $course_code }}' class='btn btn-secondary'>{{ trans('langCancel') }}</a>

@@ -67,9 +67,9 @@
                     </div>
                     @endif
 
-                    <div class='row p-2'></div>
+               
                             
-                    <div class='panel panel-default'>
+                    <div class='panel panel-default mt-3'>
                         <div class='panel-heading notes_thead'>
                             <div class='row'>
                                 <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
@@ -93,7 +93,7 @@
                         </div>
                         
                         <div class='panel-body panel-body-request'>
-                            <div class='row p-2'></div>
+   
                             <div class='row'>
                                 <div class='col-12 col-sm-2 text-right'>
                                     <b class='control-label-notes ps-3'>{{ trans('langNewBBBSessionStatus') }}:</b>
@@ -186,7 +186,7 @@
                             <form class='form-horizontal' role='form' method='post' action='{{ $targetUrl }}' enctype='multipart/form-data'>
                                 <fieldset>
                                     @if ($can_modify)
-                                        <div class='form-group'>
+                                        <div class='form-group mt-3'>
                                             <label for='newState' class='col-sm-6 control-label-notes'>{{ trans('langChangeState') }}:</label>
                                             <div class='col-sm-12'>
                                                 <select class='form-select' name='newState' id='newState'>
@@ -196,21 +196,20 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class='row p-2'></div>
                                     @endif
 
                                     
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                         <label for='requestComment' class='col-sm-6 control-label-notes'>{{ trans('langComment') }}:</label>
                                         <div class='col-sm-12'>
                                             {!! $commentEditor !!}
                                         </div>
                                     </div>
 
-                                    <div class='row p-2'></div>
+                                    
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                         <label for='requestFile' class='col-sm-6 control-label-notes'>{{ trans('langAttachedFile') }}:</label>
                                         <div class='col-sm-12'>
                                             <input type='hidden' name='MAX_FILE_SIZE' value='{{ fileUploadMaxSize() }}'>
@@ -218,9 +217,9 @@
                                         </div>
                                     </div>
 
-                                    <div class='row p-2'></div>
+                                    
 
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                         <div class='col-xs-offset-2 col-xs-10'>
                                             <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
                                             <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>

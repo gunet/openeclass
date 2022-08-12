@@ -138,12 +138,12 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 // Display restore info form
 // -------------------------------------
     enableCheckFileSize();
-    $tool_content .= "<div class='row p-2'></div>
+    $tool_content .= "
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'><label>$langFirstMethod</label> $langRequest1</div></div>
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
     <div class='form-wrapper shadow-sm p-3 rounded'>
             <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>            
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <div class='col-sm-4'>" .
                     fileSizeHidenInput() . "
                     <input type='file' name='archiveZipped' />
@@ -156,16 +156,16 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             ". generate_csrf_token_form_field() ."  
             </form></div>
         </div> 
-        <div class='row p-2'></div>
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>
+        
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'><div class='alert alert-info'>
         <label>$langSecondMethod</label> $langRequest2</div></div>      
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
         <div class='form-wrapper shadow-sm p-3 rounded'>
           <form role='form' class='form-inline' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <input type='text' class='form-control' name='pathToArchive'>
             </div>
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <input class='btn btn-primary mt-3' type='submit' name='send_path' value='" . $langSend . "'>
             </div>
           ". generate_csrf_token_form_field() ."

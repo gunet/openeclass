@@ -121,31 +121,31 @@ if ($is_editor) {
         <div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>" .
                 fileSizeHidenInput() . "
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <label for='ebook_title' class='col-sm-6 control-label-notes'>$langTitle: </label>
                     <div class='col-sm-12'>
                         <input type='text' class='form-control' id='ebook_title' name='title' placeholder='$langTitle'>
                     </div>
                 </div>
 
-                <div class='row p-2'></div>
+            
 
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <label for='fileUpload' class='col-sm-6 control-label-notes'>$langZipFile:</label>
                     <div class='col-sm-12'>
                       <input type='file' name='file' id='fileUpload'><small class='help-block'>$langOptional</small>
                     </div>
                 </div>
 
-                <div class='row p-2'></div>
+               
 
-                <div class='row'>
+                <div class='row mt-3'>
                       <div class='infotext col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                 </div>
 
-                <div class='row p-2'></div>
+               
 
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <div class='col-sm-10 col-sm-offset-2 '>".
             form_buttons(array(
                 array(
@@ -189,9 +189,9 @@ $q = Database::get()->queryArray("SELECT ebook.id, ebook.title, visible, MAX(ebo
                       ORDER BY `order`", $course_id);
 
 if (!$q && !isset($_GET['create'])) {
-    $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoEBook</div></div>";
+    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoEBook</div></div>";
 } else if(!isset($_GET['create'])){
-    $tool_content .= "<div class='row p-2'></div><div class='table-responsive'>";
+    $tool_content .= "<div class='table-responsive'>";
     $tool_content .= "<table class='announcements_table'><thead>
      <tr class='notes_thead'>
        <th class = 'text-white text-left'>$langEBooks</th>" .

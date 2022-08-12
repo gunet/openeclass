@@ -42,29 +42,29 @@
                                 <input type='hidden' name='id' value='{{ $_GET['edit'] }}'>
                             @endif           
                             <fieldset>
-                                <div class='form-group'>
+                                <div class='form-group mt-3'>
                                     <label class='col-sm-6 control-label-notes'>{{ trans('langStatus') }}:</label>   
                                     <div class='col-sm-12'>
                                         <p class='form-control-static'>{{ $type == USER_STUDENT ? trans('langStudents') : trans('langTeachers') }}</p>
                                     </div>
                                 </div>
-                                <div class='row p-2'></div>
-                                <div class='form-group'>
+                             
+                                <div class='form-group mt-3'>
                                     <label for='title' class='col-sm-6 control-label-notes'>{{ trans('langFaculty') }}:</label>   
                                     <div class='col-sm-12 form-control-static'>
                                         {!! $htmlTree !!}
                                     </div>
                                 </div>
-                                <div class='row p-2'></div>
-                                <div class='form-group'>
+                    
+                                <div class='form-group mt-3'>
                                     <label for='title' class='col-sm-6 control-label-notes'>{{ trans('langAutoEnrollCourse') }}:</label>   
                                     <div class='col-sm-12'>
                                         {{--<input class='form-control' type='hidden' id='courses' name='courses' value=''>--}}
                                         <select id='courses-select' class='form-control' name='courses[]' multiple>{{$coursesOptions}}</select>
                                     </div>
                                 </div>
-                                <div class='row p-2'></div>
-                                <div class='form-group'>
+                          
+                                <div class='form-group mt-3'>
                                     <label for='title' class='col-sm-6 control-label-notes'>{{ trans('langAutoEnrollDepartment') }}:</label>   
                                     <div class='col-sm-12 form-control-static'>                  
                                         <div id='nodCnt2'>
@@ -108,8 +108,8 @@
                                         </div>                    
                                     </div>
                                 </div>
-                                <div class='row p-2'></div>
-                                <div class='form-group'>
+                          
+                                <div class='form-group mt-3'>
                                     <div class='col-sm-12 checkbox'>
                                         <label>
                                             <input type='checkbox' name='apply' id='apply' value='1' checked='1'>
@@ -117,9 +117,9 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class='row p-2'></div>
+                                <div class='mt-3'></div>
                                 {!! showSecondFactorChallenge() !!}
-                                <div class='form-group'>
+                                <div class='form-group mt-3'>
                                     <div class='col-sm-10 col-sm-offset-2'>
                                         <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                                         <a href='autoenroll.php' class='btn btn-secondary'>{{ trans('langCancel') }}</a>    

@@ -65,7 +65,7 @@
                     </div>
                     @endif
 
-                     <div class='row p-2'></div>
+                  
 
                         
                                 <div class='table-responsive'>

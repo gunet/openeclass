@@ -56,7 +56,16 @@ if (!$offline_course) {
 $tree = new Hierarchy();
 $course = new Course();
 
-$viewsDir = $webDir . '/resources/views/offline';
+
+
+/************************************ */
+/* ViewDir for modern offline course */
+/*********************************** */
+// $viewsDir = $webDir . '/resources/views/offline';
+$viewsDir = $webDir . '/resources/views/modern/offline';
+/************************************* */
+/************************************* */
+
 $cacheDir = $webDir . '/courses/'. $course_code . '/temp/' . safe_filename();
 $downloadDir = $webDir . '/courses/'. $course_code . '/temp/' . safe_filename();
 mkdir($cacheDir);
@@ -67,8 +76,8 @@ $real_filename = remove_filename_unsafe_chars($public_code . '-offline.zip');
 /////////////////////////////
 // generic and course data //
 /////////////////////////////
-$logo_img = "./template/default/img/eclass-new-logo.png";
-$logo_img_small = "./template/default/img/logo_eclass_small.png";
+$logo_img = "./template/modern/img/eclass-new-logo.png";
+$logo_img_small = "./template/modern/img/logo_eclass_small.png";
 
 $theme_data = get_theme_options();
 
@@ -82,8 +91,8 @@ if (!empty($theme_data['logo_img_small'])) {
 
 $data = [
     'urlAppend' => './',
-    'template_base' => './template/default',
-    'themeimg' => './template/default/img',
+    'template_base' => './template/modern',
+    'themeimg' => './template/modern/img',
     'is_mobile' => false,
     'eclass_version' => ECLASS_VERSION,
     'course_info_popover' => null,
@@ -175,8 +184,8 @@ fclose($fp);
 mkdir($downloadDir . '/modules');
 $bladeData['lessonStatus'] = '../../';
 $bladeData['urlAppend'] = '../';
-$bladeData['template_base'] = $bladeData['urlAppend'] . 'template/default';
-$bladeData['themeimg'] = $bladeData['urlAppend'] . 'template/default/img';
+$bladeData['template_base'] = $bladeData['urlAppend'] . 'template/modern';
+$bladeData['themeimg'] = $bladeData['urlAppend'] . 'template/modern/img';
 
 if (!empty($theme_data['logo_img'])) {
     $bladeData['logo_img'] = $bladeData['urlAppend'] . $theme_data['logo_img'];

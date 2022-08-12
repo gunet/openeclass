@@ -355,7 +355,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     <div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>            
-            <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")."'>
+            <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")." mt-3'>
               <label for='PollName' class='col-sm-6 control-label-notes'>$langTitle:</label>
               <div class='col-sm-12'>
                 <input type='text' class='form-control' id='PollName' name='PollName' placeholder='$langTitle' value='$PollName'>
@@ -363,9 +363,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               </div>
             </div>
 
-            <div class='row p-2'></div>
+            
 
-            <div class='input-append date form-group".(Session::getError('PollStart') ? " has-error" : "")."' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
+            <div class='input-append date form-group".(Session::getError('PollStart') ? " has-error" : "")." mt-3' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
                 <label for='PollStart' class='col-sm-6 control-label-notes'>$langPollStart:</label>
                 <div class='row'>
                     <div class='col-10 col-sm-9'>
@@ -378,9 +378,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            <div class='row p-2'></div>
+           
 
-            <div class='input-append date form-group".(Session::getError('PollEnd') ? " has-error" : "")."' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
+            <div class='input-append date form-group".(Session::getError('PollEnd') ? " has-error" : "")." mt-3' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
                 <label for='PollEnd' class='col-sm-6 control-label-notes'>$langPollEnd:</label>
                 <div class='row'>
                     <div class='col-10 col-sm-9'>
@@ -393,9 +393,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            <div class='row p-2'></div>
+           
 
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <label class='col-sm-6 control-label-notes'>$langResults:</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
@@ -413,29 +413,29 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               </div>
             </div>
 
-            <div class='row p-2'></div>
+       
 
 
-            <div class='form-group'>
+            <div class='form-group mt-3'>
               <label for='PollDescription' class='col-sm-6 control-label-notes'>$langDescription:</label>
               <div class='col-sm-12'>
                 ".rich_text_editor('PollDescription', 4, 52, $PollDescription)."
               </div>
             </div>
 
-            <div class='row p-2'></div>
             
-            <div class='form-group'>
+            
+            <div class='form-group mt-3'>
               <label for='PollEndMessage' class='col-sm-2 control-label-notes'>$langPollEndMessage:</label>
               <div class='col-sm-12'>
                 ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."
               </div>
             </div>
 
-            <div class='row p-2'></div>
+            
 
 
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <label class='col-sm-6 control-label-notes'>$m[WorkAssignTo]:</label>
                 <div class='col-sm-12'>
                     <div class='radio'>
@@ -459,9 +459,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            <div class='row p-2'></div>
+           
 
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <div class='col-sm-12 col-sm-offset-2'>
                     <div class='table-responsive'>
                         <table id='assignees_tbl' class='announcements_table".(isset($poll) && in_array($poll->assign_to_specific, [1, 2]) ? '' : ' hide')."'>
@@ -490,10 +490,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            <div class='row p-2'></div>
+            
 
 
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <label class='col-sm-6 control-label-notes'>$langType:</label>
                 <div class='col-sm-12'>
                     <div class='radio'>
@@ -517,10 +517,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            <div class='row p-2'></div>
+           
 
 
-            <div class='form-group'>
+            <div class='form-group mt-3'>
               <div class='col-sm-offset-2 col-sm-10'>".
             form_buttons(array(
                 array(
@@ -609,8 +609,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         });
         </script>";
         $tool_content .= "
-        <div class='row p-2'></div>
-            <div class='form-group'>
+        
+            <div class='form-group mt-3'>
                 <label for='answerType' class='col-sm-6 control-label-notes'>$langType:</label>
                 <div class='col-sm-12'>
                     <div class='radio'>
@@ -640,10 +640,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            <div class='row p-2'></div>
+            
 
 
-            <div class='form-group$questionScaleErrorClass$questionScaleShowHide'>
+            <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-3'>
                 <label for='questionScale' class='col-sm-6 control-label-notes'>$langMax $langScale (1-..):</label>
                 <div class='col-sm-12 col-md-3'>
                     <input type='text' class='form-control' name='questionScale' id='questionScale' value='".q($questionScale)."'>
@@ -653,9 +653,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     }
     $tool_content .= "
 
-    <div class='row p-2'></div>
+   
 
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <div class='col-md-10 col-md-offset-2'>".
                     form_buttons(array(
                         array(
@@ -693,8 +693,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     );
     $tool_content .= "
 
-    <div class='row p-2'></div>
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+ 
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
         <div class='panel panel-primary'>
             <div class='panel-heading'>
                 <h4 class='panel-title'>$langQuestion&nbsp;"
@@ -708,8 +708,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     </div>";
 
     $tool_content .= "
-    <div class='row p-2'></div>
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    
+    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
         <div class='panel panel-info'>
             <div class='panel-heading'>
                 <h4 class='panel-title'>$langQuestionAnswers</h4>
@@ -728,21 +728,21 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         if (count($answers) > 0) {
             foreach ($answers as $answer) {
               $tool_content .="
-              <div class='row p-2'></div>
+             
 
-                  <div class='form-group'>
+                  <div class='form-group mt-3'>
                         <div class='col-xs-11'>
                             <input type='text' class='form-control' name='answers[]' value='$answer->answer_text'>
                         </div>
                         <div class='col-xs-1 form-control-static'>
                             " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
                         </div>
-                    </div> <div class='row p-2'></div>";
+                    </div>";
               }
         } else {
             $tool_content .="
-                    <div class='row p-2'></div>
-                    <div class='form-group'>
+                    
+                    <div class='form-group mt-3'>
                         <div class='col-xs-11'>
                             <input class='form-control' type='text' name='answers[]' value=''>
                         </div>
@@ -751,20 +751,20 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         </div>
                     </div>
 
-                    <div class='row p-2'></div>
+                   
               
-                  <div class='form-group'>
-                        <div class='col-xs-11'>
+                  <div class='form-group mt-3'>
+                        <div class='col-11'>
                             <input class='form-control' type='text' name='answers[]' value=''>
                         </div>
-                        <div class='col-xs-1 form-control-static'>
+                        <div class='col-1 form-control-static'>
                             " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
                         </div>
-                    </div> <div class='row p-2'></div>";
+                    </div>";
         }
         $tool_content .= "
-        <div class='row p-2'></div>
-                    <div class='form-group'>
+       
+                    <div class='form-group mt-3'>
                         <div class='col-sm-10 col-sm-offset-2'>
                             <input class='btn btn-primary' type='submit' name='submitAnswers' value='$langCreate'>
                             <a class='btn btn-secondary' href='admin.php?course=$course_code&amp;pid=$pid'>$langCancel</a>

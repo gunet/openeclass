@@ -98,7 +98,7 @@ if (isset($_POST['toReorder'])) {
             $value = '';
         }
         $tool_content .= "
-            <div class='form-group'>
+            <div class='form-group mt-3'>
               <label class='col-sm-6 control-label-notes' for='heading-$langcode'>$langTitle (" . $langNameOfLang[langcode_to_name($langcode)] . "):</label>
               <div class='col-sm-12'>
                 <input class='form-control' type='text' name='heading[$langcode]' id='heading-$langcode' value='$value'>
@@ -107,8 +107,8 @@ if (isset($_POST['toReorder'])) {
     }
 
     $tool_content .= "
-    <div class='row p-2'></div>
-            <div class='form-group'>
+  
+            <div class='form-group mt-3'>
               <div class='col-sm-9 col-sm-offset-3 checkbox'>
                 <label>
                   <input type='checkbox' name='required' id='required' value='1'$checked>
@@ -117,9 +117,9 @@ if (isset($_POST['toReorder'])) {
               </div>
             </div>
 
-            <div class='row p-2'></div>
+            
 
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>
                 <a href='activity.php' class='btn btn-secondary'>$langCancel</a>
@@ -237,8 +237,8 @@ $(function() {
         $tool_content .= "</div>";
 
     } else {
-        $tool_content .= "<div class='row p-2'></div>
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning text-center'>$langNoActivityHeadings</div></div>";
+        $tool_content .= "
+        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning text-center mt-3'>$langNoActivityHeadings</div></div>";
     }
 }
 

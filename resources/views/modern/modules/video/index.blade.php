@@ -123,7 +123,7 @@
 
                         @if ($num_of_categories > 0)
 
-                            <div class='row p-2'></div>
+     
                                     <div class='table-responsive'>
                                         <table class='announcements_table category-links'>
                                             <tr class='notes_thead'>
@@ -186,7 +186,6 @@
                                 
                         @endif
                     @else
-                        <div class='row p-2'></div>
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning' role='alert'>{{ trans('langNoVideo') }}</div></div>
                     @endif
 

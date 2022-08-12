@@ -44,7 +44,7 @@
                       
                       <form class='form-horizontal' role='form' action='modules.php' method='post'>
                       @foreach ($modules as $mid => $minfo)
-                      <div class='form-group'>
+                      <div class='form-group mt-3'>
                         <div class='col-12 checkbox'>
                           <label>
                             <input type='checkbox' name='moduleDisable[{{ $mid }}]' value='1'{{ in_array($mid, $disabled)? ' checked': '' }}>
@@ -54,9 +54,9 @@
                         </div>
                       </div>
                       @endforeach  
-                      <div class='row p-2'></div>
+                      <div class='mt-3'></div>
                       {!! showSecondFactorChallenge() !!}
-                      <div class='form-group'>
+                      <div class='form-group mt-3'>
                         <div class='col-12'>
                           <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSubmitChanges') }}'>
                         </div>

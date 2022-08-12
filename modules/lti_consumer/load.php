@@ -39,7 +39,7 @@ $toolName = $langLtiConsumer;
 
 // guest user not allowed
 if (check_guest()) {
-    $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langNoGuest</div></div>";
     draw($tool_content, 2);
     exit;
 }

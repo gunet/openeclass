@@ -97,8 +97,8 @@
                                     <input type='hidden' name='id' value='{{ $_GET["id"] }}' />
                                     @endif
                                     <fieldset>
-                                        <div class='row p-2'></div>
-                                        <div class='form-group{{ Session::getError("categoryname") ? " has-error" : "" }}'>
+                                        
+                                        <div class='form-group{{ Session::getError("categoryname") ? " has-error" : "" }} mt-3'>
                                             <label for='CatName' class='col-sm-6 control-label-notes'>{{ trans('langCategoryName') }}:</label>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='categoryname' size='53'{!! $form_name !!} />
@@ -106,16 +106,16 @@
                                             </div>
                                         </div>
 
-                                        <div class='row p-2'></div>
+                                  
 
-                                        <div class='form-group'>
+                                        <div class='form-group mt-3'>
                                             <label for='CatDesc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
                                             <div class='col-sm-12'><textarea class='form-control' rows='5' name='description'>{{ $form_description }}</textarea></div>
                                         </div>
 
-                                        <div class='row p-2'></div>
                                         
-                                        <div class='form-group'>
+                                        
+                                        <div class='form-group mt-3'>
                                             <div class='col-sm-offset-2 col-sm-10'>
                                                 {!!
                                                 form_buttons(array(

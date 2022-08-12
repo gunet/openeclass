@@ -50,7 +50,7 @@ function display_attendances() {
                 . "AND attendance.id = attendance_users.attendance_id AND attendance_users.uid = ?d", $course_id, $uid);
     }
     if (count($result) == 0) { // no attendances
-        $tool_content .= "<div class='row p-2'></div>
+        $tool_content .= "
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                 <div class='alert alert-info'>$langNoAttendances</div></div>";
     } else {
@@ -126,7 +126,7 @@ function register_user_presences($attendance_id, $actID) {
 
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
-    $tool_content .= "<div class='row p-2'></div>
+    $tool_content .= "
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
         <div class='alert alert-info'>" . q($result->title) . "</div></div>";
 
@@ -301,7 +301,7 @@ function display_attendance_activities($attendance_id) {
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count
                                             FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
     if ($participantsNumber == 0) {
-        $tool_content .= "<div class='row p-2'></div>
+        $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
             <div class='alert alert-warning'>$langNoStudentsInAttendance <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . $attendance->id . "&amp;editUsers=1'>$langHere</a>.</div></div>";
     }
@@ -361,7 +361,7 @@ function display_attendance_activities($attendance_id) {
         } // end of while
         $tool_content .= "</table></div>";
     } else {
-        $tool_content .= "<div class='row p-2'></div>
+        $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
             <div class='alert alert-warning'>$langAttendanceNoActMessage1 $langAttendanceNoActMessage3</div></div>";
     }
@@ -409,7 +409,7 @@ function attendance_display_available_exercises($attendance_id) {
         }
         $tool_content .= "</td></tr></table></div>";
     } else {
-        $tool_content .= "<div class='row p-2'></div>
+        $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
         <div class='alert alert-warning'>$langAttendanceNoActMessageExe4</div></div>";
     }
@@ -480,7 +480,7 @@ function attendance_display_available_assignments($attendance_id) {
         } // end of while
         $tool_content .= "</tr></table></div>";
     } else {
-        $tool_content .= "<div class='row p-2'></div>
+        $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
         <div class='alert alert-warning'>$langAttendanceNoActMessageAss4</div></div>";
     }
@@ -524,7 +524,7 @@ function attendance_display_available_tc($attendance_id) {
         } // end of while
         $tool_content .= "</tr></table></div>";
     } else {
-        $tool_content .= "<div class='row p-2'></div>
+        $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
         <div class='alert alert-warning'>$langAttendanceNoActMessageTc</div></div>";
     }
@@ -564,7 +564,7 @@ function add_attendance_other_activity($attendance_id) {
 
     $date_error = Session::getError('date');
     $tool_content .= "
-    <div class='row p-2'></div>
+    
     <div class='col-sm-12'>
             <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id'>
@@ -593,16 +593,16 @@ function add_attendance_other_activity($attendance_id) {
                     }
                     if (!isset($contentToModify)) $contentToModify = "";
                     @$tool_content .= "
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <label for='actTitle' class='col-sm-6 control-label-notes'>$langTitle:</label>
                             <div class='col-sm-12'>
                                 <input type='text' class='form-control' name='actTitle' value='$titleToModify'/>
                             </div>
                         </div>
 
-                        <div class='row p-2'></div>
+                        
 
-                        <div class='form-group".($date_error ? " has-error" : "")."'>
+                        <div class='form-group".($date_error ? " has-error" : "")." mt-3'>
                             <label for='date' class='col-sm-6 control-label-notes'>$langAttendanceActivityDate:</label>
                             <div class='col-sm-12'>
                                 <input type='text' class='form-control' name='date' id='startdatepicker' value='" . datetime_remove_seconds($date) . "'/>
@@ -610,9 +610,9 @@ function add_attendance_other_activity($attendance_id) {
                             </div>
                         </div>
 
-                        <div class='row p-2'></div>
+                       
 
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <label for='actDesc' class='col-sm-6 control-label-notes'>$langDescription:</label>
                             <div class='col-sm-12'>
                                 " . rich_text_editor('actDesc', 4, 20, $contentToModify) . "
@@ -620,9 +620,9 @@ function add_attendance_other_activity($attendance_id) {
                         </div>";
                     if (isset($module_auto_id) && $module_auto_id != 0) { //accept the auto attendance mechanism
                         $tool_content .= "
-                        <div class='row p-2'></div>
+                       
                         
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <label for='weight' class='col-sm-6 control-label-notes'>$langAttendanceInsAut:</label>
                                 <div class='col-sm-12'><input type='checkbox' value='1' name='auto' ";
                         if ($auto) {
@@ -631,9 +631,9 @@ function add_attendance_other_activity($attendance_id) {
                         $tool_content .= "/></div>";
                     }
                     $tool_content .= "
-                    <div class='row p-2'></div>
+                   
 
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                     <div class='col-sm-10 col-sm-offset-2'>".form_buttons(array(
                         array(
                             'text' => $langSave,
@@ -943,7 +943,7 @@ function display_user_presences($attendance_id) {
             $tool_content .= "<th width='10' class='text-white text-center'>$langAttendanceBooking</th>";
             $tool_content .= "</tr>";
         } else {
-            $tool_content .= "<div class='row p-2'></div>
+            $tool_content .= "
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
             <div class='alert alert-warning'>$langAttendanceNoActMessage1</div></div>";
         }
@@ -1082,7 +1082,7 @@ function display_all_users_presences($attendance_id) {
         }
         $tool_content .= "</tbody></table>";
     } else {
-        $tool_content .= "<div class='row p-2'></div>
+        $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoStudentsInAttendance <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1'>$langHere</a>.</div></div>";
     }
 }
@@ -1131,7 +1131,7 @@ function attendance_settings($attendance_id) {
     <div class='col-sm-12'>
             <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id'>
-                    <div class='form-group".($title_error ? " has-error" : "")."'>
+                    <div class='form-group".($title_error ? " has-error" : "")." mt-3'>
                         <label class='col-12 control-label-notes'>$langTitle</label>
                         <div class='col-12'>
                             <input class='form-control' type='text' placeholder='$langTitle' name='title' value='".q($title)."'>
@@ -1139,9 +1139,9 @@ function attendance_settings($attendance_id) {
                         </div>
                     </div>
 
-                    <div class='row p-2'></div>
+                 
 
-                    <div class='form-group".($start_date_error ? " has-error" : "")."'>
+                    <div class='form-group".($start_date_error ? " has-error" : "")." mt-3'>
                         <div class='col-12'>
                             <label class='control-label-notes'>$langStart</label>
                         </div>
@@ -1151,9 +1151,9 @@ function attendance_settings($attendance_id) {
                         </div>
                     </div>
 
-                    <div class='row p-2'></div>
+              
 
-                    <div class='form-group".($end_date_error ? " has-error" : "")."'>
+                    <div class='form-group".($end_date_error ? " has-error" : "")." mt-3'>
                         <div class='col-12'>
                             <label class='control-label-notes'>$langEnd</label>
                         </div>
@@ -1163,9 +1163,9 @@ function attendance_settings($attendance_id) {
                         </div>
                     </div>
 
-                    <div class='row p-2'></div>
+                   
 
-                    <div class='form-group".($limit_error ? " has-error" : "")."'>
+                    <div class='form-group".($limit_error ? " has-error" : "")." mt-3'>
                         <label class='col-12 control-label-notes'>$langAttendanceLimitNumber:</label>
                         <div class='col-sm-12'>
                             <input class='form-control' type='text' name='limit' value='$limit'/>
@@ -1173,9 +1173,9 @@ function attendance_settings($attendance_id) {
                         </div>
                     </div>
 
-                    <div class='row p-2'></div>
+                  
 
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                         <div class='col-12'>".form_buttons(array(
                             array(
                                 'text' => $langSave,
@@ -1244,13 +1244,13 @@ function user_attendance_settings($attendance_id) {
         
             <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id&editUsers=1'>
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                         <label class='col-12 text-secondary'><span class='help-block'>$langAttendanceInfoForUsers</span></label>
                     </div>
 
-                    <div class='row p-2'></div>
+                  
 
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                     <label class='col-sm-6 control-label-notes'>$langUserDuration:</label>
                         <div class='col-sm-12'>
                             <div class='radio'>
@@ -1274,9 +1274,9 @@ function user_attendance_settings($attendance_id) {
                         </div>
                     </div>
 
-                    <div class='row p-2'></div>
+                    
 
-                    <div class='form-group' id='all_users'>
+                    <div class='form-group mt-3' id='all_users'>
                         <div class='input-append date form-group' id='startdatepicker'>
                             <label for='UsersStart' class='col-sm-6 control-label-notes'>$langRegistrationDate $langFrom2:</label>
                             <div class='row'>
@@ -1288,8 +1288,8 @@ function user_attendance_settings($attendance_id) {
                                 </div>
                             </div>
                         </div>
-                        <div class='row p-2'></div>
-                        <div class='input-append date form-group' id='enddatepicker'>
+                       
+                        <div class='input-append date form-group mt-3' id='enddatepicker'>
                             <label for='UsersEnd' class='col-sm-2 control-label-notes'>$langTill:</label>
                             <div class='row'>
                                 <div class='col-10 col-sm-9'>
@@ -1302,9 +1302,9 @@ function user_attendance_settings($attendance_id) {
                         </div>
                     </div>
 
-                    <div class='row p-2'></div>
+                  
 
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                         <div class='col-sm-12 col-sm-offset-2'>
                             <div class='table-responsive'>
                                 <table id='participants_tbl' class='announcements_table hide'>
@@ -1330,9 +1330,9 @@ function user_attendance_settings($attendance_id) {
                         </div>
                     </div>
 
-                    <div class='row p-2'></div>
+                    
 
-                    <div class='form-group'>
+                    <div class='form-group mt-3'>
                         <div class='col-10 col-offset-2'>".form_buttons(array(
                         array(
                             'text' => $langRefreshList,
@@ -1386,7 +1386,7 @@ function student_view_attendance($attendance_id) {
                 'level' => 'primary-label'),
     ));
     if (!$checkForRecords) {
-        $tool_content .="<div class='row p-2'></div>
+        $tool_content .="
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langAttendanceStudentFailure</div></div>";
     }
 
@@ -1396,7 +1396,7 @@ function student_view_attendance($attendance_id) {
     if ($results > 0) {
         if ($checkForRecords) {
             $range = Database::get()->querySingle("SELECT `limit` FROM attendance WHERE id = ?d", $attendance_id)->limit;
-            $tool_content .= "<div class='row p-2'></div>
+            $tool_content .= "
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>" . userAttendTotal($attendance_id, $uid) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </div></div>";
         }
 

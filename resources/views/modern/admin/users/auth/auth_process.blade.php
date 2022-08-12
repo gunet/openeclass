@@ -64,8 +64,8 @@
                                 @include('admin.users.auth.methods.hybrid')
                             @endif
                             {!! showSecondFactorChallenge() !!}
-                            <div class='row p-2'></div>
-                            <div class='form-group'>
+                            
+                            <div class='form-group mt-3'>
                                 <div class='col-sm-10 col-sm-offset-2'>
                                     <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                     <a class='btn btn-secondary' href='auth.php'>{{ trans('langCancel') }}</a>

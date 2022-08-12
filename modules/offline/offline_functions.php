@@ -143,8 +143,8 @@ function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) 
             $info['url'] = $curDirPrefix . '/' . $row->filename . ".html";
             $newData = $bladeData;
             $newData['urlAppend'] .= '../';
-            $newData['template_base'] = $newData['urlAppend'] . 'template/default';
-            $newData['themeimg'] = $newData['urlAppend'] . 'template/default/img';
+            $newData['template_base'] = $newData['urlAppend'] . 'template/modern';
+            $newData['themeimg'] = $newData['urlAppend'] . 'template/modern/img';
             if (!empty($theme_data['logo_img'])) {
                 $newData['logo_img'] = $newData['urlAppend'] . $theme_data['logo_img'];
             } else {
@@ -196,17 +196,17 @@ function offline_announcements($bladeData) {
     global $blade, $course_id, $downloadDir, $theme_data;
 
     $bladeData['urlAppend'] = '../';
-    $bladeData['template_base'] = '../template/default';
-    $bladeData['themeimg'] = '../template/default/img';
+    $bladeData['template_base'] = '../template/modern';
+    $bladeData['themeimg'] = '../template/modern/img';
     if (!empty($theme_data['logo_img'])) {
         $bladeData['logo_img'] = $bladeData['urlAppend'] . $theme_data['logo_img'];
     } else {
-        $bladeData['logo_img'] = $bladeData['urlAppend'] . 'template/default/img/eclass-new-logo.png';
+        $bladeData['logo_img'] = $bladeData['urlAppend'] . 'template/modern/img/eclass-new-logo.png';
     }
     if (!empty($theme_data['logo_img_small'])) {
         $bladeData['logo_img_small'] = $bladeData['urlAppend'] . $theme_data['logo_img_small'];
     } else {
-        $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'template/default/img/logo_eclass_small.png';
+        $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'template/modern/img/logo_eclass_small.png';
     }
 
     $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
@@ -229,17 +229,17 @@ function offline_announcements($bladeData) {
 
         foreach ($announcements as $a) {
             $bladeData['urlAppend'] = '../../';
-            $bladeData['template_base'] = '../../template/default';
-            $bladeData['themeimg'] = '../../template/default/img';
+            $bladeData['template_base'] = '../../template/modern';
+            $bladeData['themeimg'] = '../../template/modern/img';
             if (!empty($theme_data['logo_img'])) {
                 $bladeData['logo_img'] = $bladeData['urlAppend'] . $theme_data['logo_img'];
             } else {
-                $bladeData['logo_img'] = $bladeData['urlAppend'] . 'template/default/img/eclass-new-logo.png';
+                $bladeData['logo_img'] = $bladeData['urlAppend'] . 'template/modern/img/eclass-new-logo.png';
             }
             if (!empty($theme_data['logo_img_small'])) {
                 $bladeData['logo_img_small'] = $bladeData['urlAppend'] . $theme_data['logo_img_small'];
             } else {
-                $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'template/default/img/logo_eclass_small.png';
+                $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'template/modern/img/logo_eclass_small.png';
             }
             $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
             $bladeData['ann_title'] = $a->title;
@@ -319,17 +319,17 @@ function offline_unit_resources($bladeData, $downloadDir) {
     global $course_id, $blade, $theme_data;
 
     $bladeData['urlAppend'] = '../../';
-    $bladeData['template_base'] = '../../template/default';
-    $bladeData['themeimg'] = '../../template/default/img';
+    $bladeData['template_base'] = '../../template/modern';
+    $bladeData['themeimg'] = '../../template/modern/img';
     if (!empty($theme_data['logo_img'])) {
         $bladeData['logo_img'] = $bladeData['urlAppend'] . $theme_data['logo_img'];
     } else {
-        $bladeData['logo_img'] = $bladeData['urlAppend'] . 'template/default/img/eclass-new-logo.png';
+        $bladeData['logo_img'] = $bladeData['urlAppend'] . 'template/modern/img/eclass-new-logo.png';
     }
     if (!empty($theme_data['logo_img_small'])) {
         $bladeData['logo_img_small'] = $bladeData['urlAppend'] . $theme_data['logo_img_small'];
     } else {
-        $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'template/default/img/logo_eclass_small.png';
+        $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'template/modern/img/logo_eclass_small.png';
     }
     $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
 
@@ -411,17 +411,17 @@ function offline_exercises($bladeData) {
 
         foreach ($exercises as $e) {
             $bladeData['urlAppend'] = '../../';
-            $bladeData['template_base'] = '../../template/default';
-            $bladeData['themeimg'] = '../../template/default/img';
+            $bladeData['template_base'] = '../../template/modern';
+            $bladeData['themeimg'] = '../../template/modern/img';
             if (!empty($theme_data['logo_img'])) {
                 $bladeData['logo_img'] = $bladeData['urlAppend'] . $theme_data['logo_img'];
             } else {
-                $bladeData['logo_img'] = $bladeData['urlAppend'] . 'template/default/img/eclass-new-logo.png';
+                $bladeData['logo_img'] = $bladeData['urlAppend'] . 'template/modern/img/eclass-new-logo.png';
             }
             if (!empty($theme_data['logo_img_small'])) {
                 $bladeData['logo_img_small'] = $bladeData['urlAppend'] . $theme_data['logo_img_small'];
             } else {
-                $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'template/default/img/logo_eclass_small.png';
+                $bladeData['logo_img_small'] = $bladeData['urlAppend'] . 'template/modern/img/logo_eclass_small.png';
             }
             $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);
 
@@ -732,7 +732,7 @@ function get_theme_options() {
             $rgba_no_alpha[3] = "1)";
             $rgba_no_alpha = implode(',', $rgba_no_alpha);
 
-            $styles_str .= "#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer{background:$theme_options_styles[leftNavBgColor];} @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
+            $styles_str .= "#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer,#collapseTools{background:$theme_options_styles[leftNavBgColor];} @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
         }
         if (!empty($theme_options_styles['linkColor'])) {
             $styles_str .= "a {color: $theme_options_styles[linkColor];}";

@@ -54,14 +54,14 @@
                                 <div class='col-sm-12'>{!! text_area('user_info', 10, 30, '') !!}</div>
                             </div>
                             </fieldset>
-                            <div class='row p-2'></div>
+                            <div class='mt-3'></div>
                             <fieldset>
                             <h4 class='control-label-notes'>{{ trans('langCourseCodes') }}</h4>
                             <div class='form-group'>
                                     <div class='col-sm-12'>{!! text_area('courses_codes', 10, 30, '') !!}</div>
                                 </div>
                                 {!! showSecondFactorChallenge() !!}
-                                <div class='row p-2'></div>
+                                <div class='mt-3'></div>
                                 <div class='col-sm-10 col-sm-offset-2'>
                                     <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
                                 </div>
