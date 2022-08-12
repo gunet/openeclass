@@ -943,8 +943,8 @@ function display_gradebook($gradebook) {
         $tool_content .= $weightMessage;
         $tool_content .= "
                                 <div class='table-responsive'>
-                                    <table class='announcements_table'>
-                                        <tr style='height:45px;'>
+                                    <table class='table-default'>
+                                        <tr>
                                             <th colspan='7' class='text-secondary text-center'>$langGradebookActList</th>
                                         </tr>
                                         <tr class='notes_thead'>
