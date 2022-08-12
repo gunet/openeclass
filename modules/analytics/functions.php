@@ -68,10 +68,10 @@ function display_learning_analytics() {
                     <div class='panel-body Borders'>
                         <div class='inner-heading'>
                             <div class='row'>
-                                <div class='col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12'>
+                                <div class='col-xl-7 col-lg-7 col-md-7 col-sm-6 col-6'>
                                     <strong>$langLearningAnalytics</strong>
                                 </div>
-                                <div class='col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12 text-end'>
+                                <div class='col-xl-5 col-lg-5 col-md-5 col-sm-6 col-6 text-end'>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> &nbsp;&nbsp;&nbsp;$langAdd</a>
                                 </div>
                             </div>
@@ -296,10 +296,10 @@ function display_analytics_elements($analytics_id) {
                 <div class='panel-body Borders'>
                     <div class='inner-heading'>
                         <div class='row'>
-                            <div class='col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12'>
+                            <div class='col-xl-7 col-lg-7 col-md-7 col-sm-6 col-6'>
                                 <strong>$langAnalyticsParameters</strong>
                             </div>
-                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12 text-end'>
+                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-6 col-6 text-end'>
                                 <div style='margin-top:-3px;'>$addParametersBtn</div>
                             </div>
                         </div>
@@ -338,11 +338,11 @@ function display_analytics_information($analytics_id) {
                 <div class='panel-body Borders'>
                     <div class='inner-heading'>
                         <div class='row'>
-                            <div class='col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12'>
+                            <div class='col-xl-7 col-lg-7 col-md-7 col-sm-6 col-6'>
                                 <strong>$title</strong> <span class='$active_vis'>($active_msg)</span>
                             </div>
-                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12 text-end'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn btn-primary'>"
+                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-6 col-6 text-end'>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn btn-primary btn-sm'>"
                                         . "<span class='fa fa-pencil'></span> &nbsp;&nbsp;$langModify
                                 </a>
                             </div>

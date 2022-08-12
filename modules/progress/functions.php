@@ -59,10 +59,10 @@ function display_certificates() {
                         <div class='panel-body Borders'>
                             <div class='inner-heading'>
                                 <div class='row'>
-                                    <div class='col-sm-7'>
+                                    <div class='col-md-7 col-sm-6'>
                                         <strong>$langCertificates</strong>
                                     </div>
-                                    <div class='col-sm-5 text-end'>
+                                    <div class='col-md-5 col-sm-6 text-end'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> &nbsp;&nbsp;&nbsp;$langNewCertificate</a>
                                     </div>
                                 </div>
@@ -167,10 +167,10 @@ function display_badges() {
                         <div class='panel-body Borders'>
                             <div class='inner-heading'>
                                 <div class='row'>
-                                    <div class='col-sm-7'>
+                                    <div class='col-md-7 col-sm-6'>
                                         <strong>$langBadges</strong>
                                     </div>
-                                    <div class='col-sm-5 text-end'>
+                                    <div class='col-md-5 col-sm-6 text-end'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> &nbsp;&nbsp;&nbsp;$langNewBadge</a>
                                     </div>
                                 </div>
@@ -685,10 +685,10 @@ function display_activities($element, $id, $unit_id = 0) {
                         <div class='panel-body Borders'>
                             <div class='inner-heading'>
                                 <div class='row'>
-                                    <div class='col-sm-7'>
+                                    <div class='col-md-7 col-sm-6'>
                                         <strong>$langUnitPrerequisites</strong>
                                     </div>
-                                    <div class='col-sm-5 text-right'>
+                                    <div class='col-md-5 col-sm-6 text-end'>
                                     $addPrereqBtn
                                     </div>
                                 </div>
@@ -1998,10 +1998,10 @@ function display_settings($element, $element_id, $unit_id = 0) {
                         <div class='panel-body Borders'>
                             <div class='inner-heading'>
                                 <div class='row'>
-                                    <div class='col-sm-7'>
+                                    <div class='col-md-7 col-sm-6'>
                                         <strong>$langProgressBasicInfo</strong>
                                     </div>
-                                    <div class='col-sm-5 text-end'>
+                                    <div class='col-md-5 col-sm-6 text-end'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'>"
                                                 . "<span class='fa fa-pencil'></span> &nbsp;&nbsp;$langEditChange
                                         </a>

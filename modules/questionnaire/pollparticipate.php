@@ -245,7 +245,7 @@ function printPollForm() {
                         <div class='panel-heading'>
                             $langQuestion $i
                         </div>
-                        <div class='panel-body panel-body-questionaire p-5'>
+                        <div class='panel-body panel-body-questionaire p-3'>
                             <h5>".q_math($theQuestion->question_text)."</h5>
                             <input type='hidden' name='question[$pqid]' value='$qtype'>";
                 if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {

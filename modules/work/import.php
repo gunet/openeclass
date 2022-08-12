@@ -125,18 +125,18 @@ $tool_content .= "
             <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' enctype='multipart/form-data' method='post' action='import.php?course=$course_code&amp;id=$id'>
                     <fieldset>
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <div class='col-sm-12'>
                                 <p class='form-control-static'>$langImportGradesHelp</p>
                             </div>
                         </div>
-                        <div class='form-group'>
-                            <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
+                        <div class='form-group mt-3'>
+                            <label for='userfile' class='col-sm-6 control-label-notes'>$langWorkFile:</label>
                             <div class='col-sm-10'>" . fileSizeHidenInput() . "
                                 <input type='file' id='userfile' name='userfile'>
                             </div>
                         </div>
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <div class='col-sm-offset-2 col-sm-10'>" .
                                 form_buttons([[ 'class' => 'btn-primary',
                                                 'name' => 'new_assign',

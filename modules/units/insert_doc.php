@@ -111,7 +111,7 @@ function list_docs() {
             $colspan = 4;
         }
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />" .
-                "<table class='table-default'>";
+                "<div class='table-responsive'><table class='table-default'>";
         if( !empty($path)) {
         $tool_content .=
                 "<tr>" .
@@ -176,7 +176,7 @@ function list_docs() {
                 $counter++;
             }
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_doc' value='$langAddModulesButton' /></div>$dir_html</form>";
 

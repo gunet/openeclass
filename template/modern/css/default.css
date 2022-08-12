@@ -413,15 +413,15 @@ a{
     color:white;
   }
 
-  .fab.fa-facebook-f{
+  /* .fab.fa-facebook-f{
       height: 30px; padding-top:7px;
   }
   
   .fab.fa-twitter{
       height: 30px; padding-top:7px;
-  }
+  } */
   
-  .fab.fa-linkedin-in{
+  .fab.fa-linkedin-in,.fa-twitter,.fa-facebook-f{
       height: 30px; padding-top:7px;
   }
   
@@ -486,15 +486,15 @@ a{
   .form-group.hidden{
     display: none;
   }
-  .rateit{
+  .rateit,.rateit-info,.ratestar{
     display: inline-block;
   }
-  .rateit-info{
+  /* .rateit-info{
     display: inline-block;
   }
   .ratestar{
     display: inline-block;
-  }
+  } */
   .course_commenting{
     cursor: pointer;
   }
@@ -776,7 +776,7 @@ a{
     margin-bottom:10px !important;
   }
 
-  .table-condensed th,
+  /* .table-condensed th,
   .table-condensed td {
     padding: 4px 15px;
   }
@@ -830,12 +830,11 @@ a{
   }
   .table-condensed thead tr th.prev:hover{
     background-color: transparent;
-  }
+  } */
 
   .announcements_table{
      width:100%;
      background: #FFFFFF;
-     overflow-y: auto !important;
   }
 
   .announcements_table .list-header th{
@@ -845,23 +844,22 @@ a{
   .table-default{
     width:100%;
     background: #FFFFFF;
-    overflow-y: auto !important;
   }
-  
+
   .table-default .list-header th{
      color:#ffffff;
   }
 
-  .announcements_table tr td{
+  /* .announcements_table tr td{
     padding:20px ;
-  }
+  } */
 
-  .table-default tr td{
+  /* .table-default tr td{
     padding:20px ;
-  }
+  } */
 
   .list-header{
-    height:40px;
+    /* height:40px; */
     background: rgb(199,212,210);
     background: radial-gradient(circle, #003F87 0%, #003F87 100%);
   }
@@ -877,7 +875,6 @@ a{
     color:#003F87;
     padding-right: 10px;
   }
-
 
   /* -------------------------------------------- Announcements ---------------------------------------/
   /* -------------------------------------------------------------------------------------------------*/
@@ -901,12 +898,12 @@ a{
   .title1 td{
     color:white;
   }
-  .announcements_table tr td{
+  /* .announcements_table tr td{
       padding-left: 15px;
-  }
-  .announcements_table tr th{
+  } */
+  /* .announcements_table tr th{
      padding-left: 15px;
-  }
+  } */
 
   /* -------------------------------------------- Glossary ------------------------------------------ */
   /* -------------------------------------------------------------------------------------------------*/
@@ -1295,7 +1292,7 @@ a{
   /* -------------------------------------------------------------------------------------------------*/
 
   .notes_thead{
-    height:40px;
+    /* height:40px; */
     background: rgb(199,212,210);
     background: radial-gradient(circle, #003F87 0%, #003F87 100%);
     -webkit-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
@@ -1706,6 +1703,13 @@ a{
      margin-top:20px;
   }
 
+  th, td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 40px;
+  }
+
   tbody,tr,th,td{
       border:1px solid rgba(65, 66, 66, 0.1) ;
   }
@@ -1732,10 +1736,7 @@ a{
   }
   .dataTable{
       width:100% !important;
-      
-  }
-  table.table-default.dataTable{
-    overflow:auto !important;
+      overflow:auto !important;
   }
   #adetails1_wrapper{
     overflow:auto !important;
@@ -1910,7 +1911,7 @@ a{
     height:300px;
   }
 
-  
+
   /*******************************************************************/
   /*******************************************************************/
   /*******************************************************************/
