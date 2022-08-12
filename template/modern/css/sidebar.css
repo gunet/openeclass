@@ -310,9 +310,9 @@ input[type="checkbox"].toggles + label.rounded::before{
 
 /* tablet */
 @media (min-width: 768px) and (max-width: 1023px){ 
-  .table-responsive{
+  /* .table-responsive{
     overflow: inherit;
-  }
+  } */
    .btn-close.text-reset{
     background-color:white;
   }
@@ -341,9 +341,9 @@ input[type="checkbox"].toggles + label.rounded::before{
 }
 
 @media(min-width:992px) and (max-width:1023px){
-  .table-responsive{
+  /* .table-responsive{
     overflow: inherit;
-  }
+  } */
   .menu_btn_button{
     display:block;
     pointer-events: all;
