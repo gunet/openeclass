@@ -125,7 +125,7 @@ function display_general_lists($analytics_id) {
             $message_critical = $langAnalyticsCriticalLevel;
             foreach ($critical as $crit) {
                 $userid = $crit['id'];
-                $bad_results .="<div class='res-table-row'>
+                $bad_results .="<div class='res-table-row row'>
                     <div class='col-sm-5'>". display_user($userid) ."</div>
                     <div class='col-sm-7'>".
                 action_bar(
@@ -149,7 +149,7 @@ function display_general_lists($analytics_id) {
             $message_advanced = $langAnalyticsAdvancedLevel;
             foreach ($advanced as $adv) {
                 $userid = $adv['id'];
-                $good_results .= "<div class='res-table-row'>
+                $good_results .= "<div class='res-table-row row'>
                     <div class='col-sm-5'>". display_user($userid) ."</div>
                         <div class='col-sm-7'>".
                         action_bar(
@@ -468,7 +468,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                 <div >". display_user($userid). "</div>
             </div>
             <div class='col-sm-3'>
-                <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
+                <div class='progress mt-md-0 mt-2' style='display: inline-block; width: 120px; margin-bottom:0px;'>
                     <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: " .$percentage ."%; min-width: 2em;'>
                     " .$percentage ."%
                     </div>

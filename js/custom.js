@@ -25,7 +25,7 @@ $(document).ready(function(){
 			$(this).parents('.view-style-option').addClass('grid-style').removeClass('list-style');
 		}
 		$(this).addClass('active');
-	})
+	});
 
     $('body').on('click', 'a.disabled', function (e) {
         e.preventDefault();
@@ -76,8 +76,6 @@ $(document).ready(function(){
     validator_rubric();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-
 
 });
 
@@ -124,8 +122,7 @@ function switch_cources_toggle(id)
 
 function act_confirm() {
     $('.confirmAction').click(function (e) {
-	
-	
+
 		var message = $(this).attr('data-message');
 		var title = $(this).attr('data-title'); 
 		var cancel_text = $(this).attr('data-cancel-txt');

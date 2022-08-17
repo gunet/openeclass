@@ -1,30 +1,33 @@
 
 /* ------------------------ LEFT MENU HOVER ITEMS --------------------- */
-
-.leftMenuToolCourse.active{
-  background-color:  white !important;
-  border: 0 !important;
+.leftMenuToolCourse{
+  background: transparent;
 }
-.leftMenuToolCourse.active span{
-  color: #003F87 !important;
-  /* font-weight: 600 !important; */
-}
-.leftMenuToolCourse:hover{
-  background-color: blue !important;
-}
-.leftMenuToolCourse.active:hover{
-  background-color:  #ccc !important;
-  border: 0 !important;
-}
-
 .toolSidebarTxt{
   font-size: 15px;
+  color: white;
 }
+.leftMenuToolCourse.active{
+  background-color:  white;
+  border: 0;
+}
+.leftMenuToolCourse.active span{
+  color: #003F87;
+}
+.leftMenuToolCourse:hover{
+  background-color: blue;
+}
+.leftMenuToolCourse.active:hover{
+  background-color:  #ccc;
+  border: 0;
+}
+
+
 
 
 /* ------------------------ LEFT MENU view page as teacher-student form --------------------- */
 
-input[type=checkbox].toggles + label{
+/* input[type=checkbox].toggles + label{
   display:inline-block;
   height:35px;
   width:180px;
@@ -52,10 +55,10 @@ input[type=checkbox].toggles + label::before{
   transition: all 0.3s ease;
   z-index: 3;
   content: '';
-}
+} */
 
 /* apo pisw otan patisei kai paei deksia */
-input[type=checkbox].toggles + label::after{
+/* input[type=checkbox].toggles + label::after{
   width:140px;
   text-align: center;
   z-index: 2;
@@ -72,10 +75,10 @@ input[type=checkbox].toggles + label::after{
 input[type=checkbox].toggles:not(:checked) + label{
   background-color: transparent;
   text-align: right;
-}
+} */
 
 /* apo pisw prin pathsei mathitis*/
-input[type=checkbox].toggles:not(:checked) + label::after{
+/* input[type=checkbox].toggles:not(:checked) + label::after{
   content: attr(data-unchecked);
   font-size: 11px;
   right: 0;
@@ -133,17 +136,17 @@ input[type="checkbox"].toggles + label.rounded::before{
   color:white;
   font-size: 11px;
   text-align: center;
-}
+} */
 
 .on2{
   margin-right:-95px;
   font-size: 12px;
   color:white;
-  padding-top:13px;
+  padding-top:14px;
 }
 
 .off2{
-  margin-top:-33px; color:white;
+  margin-top:-34px; color:white;
   font-size: 12px;
   margin-left:-95px;
 }
@@ -489,7 +492,22 @@ input[type="checkbox"].toggles + label.rounded::before{
   .btn-toggle{
       width: 11.5rem;
   }
-  .on{
+  .btn-toggle> .off {
+    width: 60%;
+  }
+  .btn-toggle> .on {
+    right: 0;
+    left: auto;
+    padding: 0px 0px 0px 5px;
+    width:42%;
+  }
+  .btn-toggle> .off2{
+    padding-left: 32px;
+  }
+  .btn-toggle> .on2{
+    padding-top: 14px;
+  }
+  /* .on{
     font-size:10px !important;
   }
   .off{
@@ -504,7 +522,7 @@ input[type="checkbox"].toggles + label.rounded::before{
     font-size:10px;
     padding-left: 15px;
     padding-top: 3px;
-  }
+  } */
 }
 @media (min-width: 1024px) and (max-width: 1199px){ 
   /* .table-responsive{
@@ -525,22 +543,27 @@ input[type="checkbox"].toggles + label.rounded::before{
     margin-left:-85px;
   }
 }
-@media (min-width: 426px) and (max-width: 767px){ 
+@media (max-width: 767px){ 
   .btn-toggle{
-    width: 11rem;
+    width: 10rem;
   }
-  .off2{
-    margin-left:-85px;
+  .btn-toggle> .off {
+    width: 60%;
+  }
+  .btn-toggle> .on {
+    right: 0;
+    left: auto;
+    padding: 0px 0px 0px 5px;
+    width:42%;
+  }
+  .btn-toggle> .off2{
+    padding-left: 32px;
+  }
+  .btn-toggle> .on2{
+    padding-top: 14px;
   }
 }
-@media(max-width: 425px){ 
-  .btn-toggle{
-    width: 11rem;
-  }
-  .off2{
-    margin-left:-85px;
-  }
-}
+
 
 
 

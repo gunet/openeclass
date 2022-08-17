@@ -161,7 +161,7 @@ function view($view_file, $view_data = array()) {
                 $hideStart = true;
                 $homebreadcrumb = get_config('homepage_name');
                 if (isset($homebreadcrumb)) {
-                    $item['bread_text'] = trans('homebreadcrumb');
+                    $item['bread_text'] = $homebreadcrumb;
                 } else {
                     $item['bread_text'] = trans('langHomePage');
                 }
@@ -173,10 +173,10 @@ function view($view_file, $view_data = array()) {
                     $item['bread_href'] = $urlAppend;
                 }
             }
-            if (!isset($hideStart)) {
+            // if (!isset($hideStart)) {
                 array_push($breadcrumbs, $item);
                 unset($item);
-            }
+            //}
         }
 
         // Breadcrumb course home entry

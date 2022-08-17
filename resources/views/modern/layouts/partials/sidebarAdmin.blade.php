@@ -24,20 +24,20 @@
                 @if ($is_power_user or $is_departmentmanage_user)
                     @if ($is_admin)
                         <li class="list-group-item border-0 admin-list-group">
-                            <a href="{{$urlAppend}}modules/admin/addadmin.php" class='list-group-item bg-light'>
+                            <a href="{{$urlAppend}}modules/admin/addadmin.php" class='list-group-item'>
                                 <span class='toolAdminText'>{!!  $GLOBALS['langAdmins'] !!}</span>      
                             </a>
                         </li>
                     @endif
                     @if (isset($is_admin) and $is_admin)
                         <li class="list-group-item border-0 admin-list-group">
-                            <a href="{{$urlAppend}}modules/admin/adminannouncements.php" class='list-group-item bg-light'>
+                            <a href="{{$urlAppend}}modules/admin/adminannouncements.php" class='list-group-item'>
                                 <span class='toolAdminText'>{!!  $GLOBALS['langAdminAn'] !!}</span>      
                             </a>
                         </li>
                         @php $manual_language = ($language == 'el')? $language: 'en'; @endphp
                         <li class="list-group-item border-0 admin-list-group">
-                            <a href="http://docs.openeclass.org/{{$manual_language}}/admin" class='list-group-item bg-light'>
+                            <a href="http://docs.openeclass.org/{{$manual_language}}/admin" class='list-group-item'>
                                 <span class='toolAdminText'>{!!  $GLOBALS['langAdminManual'] !!}</span>      
                             </a>
                         </li>
@@ -56,7 +56,7 @@
             <ul class="list-group list-group-flush">
                 @foreach ($tool_group[1] as $key2 => $tool)
                     <li class="list-group-item border-0 admin-list-group">
-                        <a href="{{ $tool_group[2][$key2] }}" class='list-group-item bg-light{{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
+                        <a href="{{ $tool_group[2][$key2] }}" class='list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                             
                             <span class='toolAdminText'>{!! $tool !!}</span>
                                
@@ -77,12 +77,12 @@
                     <div class='panel-body NoBorderTop'>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item border-0 admin-list-group">
-                                <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='list-group-item bg-light'>
+                                <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='list-group-item'>
                                     <span class='toolAdminText'>{!!  $GLOBALS['langHierarchy'] !!}</span>      
                                 </a>
                             </li>
                             <li class="list-group-item border-0 admin-list-group">
-                                <a href="{{$urlAppend}}modules/admin/coursecategory.php" class='list-group-item bg-light'>
+                                <a href="{{$urlAppend}}modules/admin/coursecategory.php" class='list-group-item'>
                                     <span class='toolAdminText'>{!!  $GLOBALS['langCourseCategoryActions'] !!}</span>      
                                 </a>
                             </li>

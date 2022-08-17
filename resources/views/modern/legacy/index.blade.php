@@ -71,7 +71,7 @@
                     @endif
                     
                    
-                    {!! $tool_content !!}
+                    <div class='col-sm-12'>{!! $tool_content !!}</div>
                     
                 </div>    
                        

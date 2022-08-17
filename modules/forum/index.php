@@ -119,10 +119,11 @@ if ($total_categories > 0) {
             $link_notify = toggle_link($action_notify);
         }
 
-        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-        <div class='h-100 shadow-sm p-3 p-3 rounded'><caption>";
-        $tool_content .= "<strong>$langCategory :</strong> $cat_title";
-        $tool_content .= "<div class='float-sm-end float-start mt-md-0 mt-3'>";
+        $tool_content .= "<div class='col-sm-12 mt-3'><caption>";
+        $tool_content .= "<div class='col-sm-12 shadow-lg p-3 rounded'>
+                          <div class='row'>
+                          <div class='col-sm-6 text-md-start text-center'><strong>$langCategory :</strong> $cat_title</div>";
+        $tool_content .= "<div class='col-sm-6 text-md-end text-center mt-md-0 mt-3'>";
         $tool_content .= action_button(
                 array(
                     array(
@@ -160,7 +161,7 @@ if ($total_categories > 0) {
                     )
                 )
             );
-        $tool_content .= "</div></div></caption></div>";
+        $tool_content .= "</div></div></div></caption>";
 
         $tool_content .= "<div class='mt-0 table-responsive'><table class='announcements_table'>";
         $tool_content .= "<thead class='notes_thead text-light' style='height:40px;'>";
@@ -301,7 +302,7 @@ if ($total_categories > 0) {
         } else {
             $tool_content .= "<tr><td colspan='8' class='text-center'><span class='not_visible'> - ".$langNoForumTopic." - </td></tr>";
         }
-        $tool_content .= "</tbody></table></div>";
+        $tool_content .= "</tbody></table></div></div>";
 
 
        

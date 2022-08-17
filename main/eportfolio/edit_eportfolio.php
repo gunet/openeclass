@@ -128,7 +128,7 @@ $tool_content .=
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
         $tool_content .=
-            "
+            "<div class='row'>
                 <div class='col-sm-9'>
                     <form class='form-horizontal' role='form' action='$sec' method='post'>
                     <div data-bs-spy='scroll' data-bs-target='#navbar-examplePortfolioEdit' data-bs-offset='0' tabindex='0'>  ";
@@ -151,6 +151,6 @@ $tool_content .= "
       </div></form>
       </div>
       ".$ret_str['right_menu']."
-      ";
+      </div>";
 
 draw($tool_content, 1, null, $head_content);

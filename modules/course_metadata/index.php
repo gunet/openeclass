@@ -99,7 +99,7 @@ $head_content .= <<<EOF
             html: true
         });
         
-        $( "#multiselect" ).select2({width: '476'});
+        $( "#multiselect" ).select2({width: '185'});
         
         $( "#course_coursePhoto_delete" ).on('click', function() {
             $( "#course_coursePhoto_image" ).remove();

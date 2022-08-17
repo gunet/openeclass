@@ -37,6 +37,7 @@
                         <div class='alert alert-warning'>
                             {{ $user_request->status == 5 ? trans('langWarnReject') : trans('langGoingRejectRequest') }}
                         </div>
+                        <div class='table-responsive'>
                         <table class='table-default'>
                             <tr>
                                 <th class='ps-1'>{{ trans('langName') }}</th>
@@ -77,6 +78,7 @@
                                 </td>
                             </tr>
                         </table>
+                        </div>
                         {!! generate_csrf_token_form_field() !!}
                     </form>
                 </div>

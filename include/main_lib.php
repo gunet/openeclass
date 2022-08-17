@@ -3474,7 +3474,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $confirm_extra = " data-title='$title_conf' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept_conf' data-action-class='btn-danger'";
             $confirm_modal_class = ' confirmAction';
-            $form_begin = "<form method=post action='$url' class='mb-0'>";
+            $form_begin = "<form class='form-action-button-mydropdowns mb-0' method=post action='$url' class='mb-0'>";
             $form_end = '</form>';
             $href = '';
         } else {
@@ -3504,14 +3504,14 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $primaryTag = 'button';
             $button_class .= ' dropdown-toggle';
             $caret = ' <span class="caret"></span>';
-            $dataAttrs = 'data-bs-toggle="dropdown" data-bs-placement="bottom" aria-haspopup="true" aria-expanded="false"';
+            $dataAttrs = 'data-bs-display="static" data-bs-toggle="dropdown" data-bs-placement="bottom" aria-haspopup="true" aria-expanded="false"';
             $form_begin = '<div class="btn-group" role="group">';
             $form_end = '</div>';
-            $subMenu = '<ul class="dropdown-menu dropdown-menu-end bg-light p-2">';
+            $subMenu = '<ul class="dropdown-menu dropdown-menu-end mydropdownsSecond shadow-lg m-0 p-0">';
             foreach ($option['options'] as $subOption) {
-               $subMenu .= '<li><a class="'.$subOption['class'].'" href="' . $subOption['url'] . '">';
-               $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].'"></span>' : '';
-               $subMenu .= q($subOption['title']) . '</a></li>';
+               $subMenu .= '<li><a class="'.$subOption['class'].' list-group-item" href="' . $subOption['url'] . '"><div class="d-inline-flex align-items-center">';
+               $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].' pe-2"></span>' : '';
+               $subMenu .= q($subOption['title']) . '</div></a></li>';
 
             }
             $subMenu .= '</ul>';
@@ -3554,7 +3554,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-cogs";
     if (count($out_secondary)) {
-        $action_button .= "<button data-bs-display='static' type='button' id='toolDropdown' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
+        $action_button .= "<button data-bs-display='static' type='button' id='toolDropdown' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span><span class='hidden-xs'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
         $action_button .= "<ul class='dropdown-menu dropdown-menu-end p-0 m-0 mydropdowns shadow-lg' role='menu' aria-labelledby='toolDropdown'>
                      ".implode('', $out_secondary)."
                   </ul>";
@@ -3565,7 +3565,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 clearfix'>
                             $page_title
                             <div class='float-end mt-md-0 mt-2 margin-top-thin margin-bottom-fat hidden-print'>
-                                <div class='btn-group float-end'>
+                                <div class='btn-group float-end' style='flex-wrap:wrap;'>
                                 $out
                                 $action_button
                                 </div>
@@ -3619,7 +3619,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         if (isset($option['confirm'])) {
             $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete);
             $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
-            $form_begin = "<form method=post action='$option[url]'>";
+            $form_begin = "<form class='form-action-button-popover mb-0' method=post action='$option[url]'>";
             $form_end = '</form>';
             if ($level == 'primary-label' or $level == 'primary') {
                 $primary_form_begin = $form_begin;

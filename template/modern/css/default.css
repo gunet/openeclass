@@ -14,6 +14,7 @@ body{
   font-family: 'FontAwesome';
   font-size: 18px;
 }
+
 @media (max-width:1023px){
   body{
     font-size:15px;
@@ -38,6 +39,9 @@ body{
 
 .colorPaletteBasic{
   color : #1d4e89;
+}
+.colorOrange{
+  color: #f79256;
 }
 
 img {
@@ -119,6 +123,43 @@ a{
 .btn:focus,.btn:active{
   outline: none !important;
   box-shadow: none;
+}
+
+/* ----------------------------- LABELS -INPUTS -MARGIN ------------------------------------ */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------- */
+
+/* this is d-inline-flex between inputs-radio and texts */
+.radio label{
+  display:inline-flex;
+  align-items: center;
+} 
+.radio label p{
+  margin-top:15px;
+} 
+/* this is space between input-radio and texts */
+input[type="radio"]{
+  margin: 0 5px 0 0px;
+}
+
+/* this is d-inline-flex between inputs-checkbox and texts */
+.checkbox label{
+  display:inline-flex;
+  align-items: center;
+} 
+.checkbox label p{
+  margin-top:15px;
+} 
+/* this is space between input-checkbox and texts */
+input[type="checkbox"]{
+  margin: 0 5px 0 0px;
 }
 
 /* ------------------------------------- alerts ------------------------------------------ */
@@ -281,7 +322,7 @@ a{
 /* -------------------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------------------- */
 
-.checkbox_container2 {
+/* .checkbox_container2 {
   display: block;
   position: relative;
   padding-left: 35px;
@@ -292,19 +333,19 @@ a{
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
+} */
 
 /* Hide the browser's default checkbox */
-.checkbox_container2 input {
+/* .checkbox_container2 input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
   height: 0;
   width: 0;
-}
+} */
 
 /* Create a custom checkbox */
-.checkmark2 {
+/* .checkmark2 {
   position: absolute;
   height: 25px;
   width: 25px;
@@ -325,30 +366,30 @@ a{
 .checkmark2--bordered::after{
   left: 8px !important;
   top: 3px !important;
-}
+} */
 
 /* On mouse-over, add a grey background color */
 
 
 /* When the checkbox is checked, add a blue background */
-.checkbox_container2 input:checked ~ .checkmark2 {
+/* .checkbox_container2 input:checked ~ .checkmark2 {
   background-color: #003F87;
-}
+} */
 
 /* Create the checkmark/indicator (hidden when not checked) */
-.checkmark2:after {
+/* .checkmark2:after {
   content: "";
   position: absolute;
   display: none;
-}
+} */
 
 /* Show the checkmark when checked */
-.checkbox_container2 input:checked ~ .checkmark2:after {
+/* .checkbox_container2 input:checked ~ .checkmark2:after {
   display: block;
-}
+} */
 
 /* Style the checkmark/indicator */
-.checkbox_container2 .checkmark2:after {
+/* .checkbox_container2 .checkmark2:after {
   left: 9px;
   top: 5px;
   width: 8px;
@@ -358,7 +399,7 @@ a{
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
-}
+} */
 
 
   /* ---------------------------------------------Default ----------------------------------------*/
@@ -544,6 +585,7 @@ a{
       background-color: #fafafa;
       width:315px;
   }  
+  
   .fa-times, .fa-trash{
     color:tomato;
   }
@@ -554,7 +596,7 @@ a{
   }
 
   .mydropdowns .confirmAction .fa-times{
-    color: tomato !important;
+    color: tomato;
   }
 
   .mydropdowns .confirmAction:hover{
@@ -570,8 +612,24 @@ a{
   .mydropdowns .delete_all_in .list-group-item span:hover{
     color:white;
   }
-  
-  
+
+  .mydropdownsSecond{
+    background-color: #fafafa;
+    width:200px;
+  }  
+  .mydropdownsSecond .list-group-item:hover{
+    background-color: #1d4e89;
+    color:white;
+  }
+
+
+  /* after close modal , display none from body and block inside mydropdowns for form-action-button-mydropdowns */
+  body .form-action-button-mydropdowns{
+    display: none;
+  }
+  .mydropdowns .form-action-button-mydropdowns{
+    display: block;
+  }
 
 
   
@@ -776,62 +834,6 @@ a{
     margin-bottom:10px !important;
   }
 
-  /* .table-condensed th,
-  .table-condensed td {
-    padding: 4px 15px;
-  }
-
-  .table-condensed thead > tr > th,
-  .table-condensed tbody > tr > th,
-  .table-condensed tfoot > tr > th,
-  .table-condensed thead > tr > td,
-  .table-condensed tbody > tr > td,
-  .table-condensed tfoot > tr > td {
-     padding: 5px;
-  }
-
-  .table-condensed thead tr th.next{
-    height: auto;
-    width: auto;
-    border: 2px solid #003F87;
-    border-radius: 50%;
-    visibility: visible;
-  }
-  .table-condensed thead tr th.next::after{
-    content: '>';
-    font-size: 40px;
-    font-weight: 500;
-  }
-  .table-condensed thead tr th.next:hover{
-    background-color: transparent;
-  }
-
-  .table-condensed thead tr th.switch{
-    height: auto;
-    width: auto;
-    border: 2px solid #003F87;
-    margin-left:30px;
-    margin-right:30px;
-    visibility: visible;
-    color: orange;
-  }
-
-  .table-condensed thead tr th.prev{
-    height: auto;
-    width: auto;
-    border: 2px solid #003F87;
-    border-radius: 50%;
-    visibility: visible;
-  }
-  .table-condensed thead tr th.prev::before{
-    content: '<';
-    font-size: 40px;
-    font-weight: 500;
-  }
-  .table-condensed thead tr th.prev:hover{
-    background-color: transparent;
-  } */
-
   .announcements_table{
      width:100%;
      background: #FFFFFF;
@@ -965,10 +967,14 @@ a{
   }
 
   .cardLogin{
-    -webkit-box-shadow: 0 0 30px black !important;
-    box-shadow: 0 0 30px black !important;
+    -webkit-box-shadow: 0 0 30px black;
+    box-shadow: 0 0 30px black;
     background-color: rgba(255, 255, 255, 0.776);
   }
+
+  .Announcements-Homepage{
+    background: white;
+   }
 
   /******************************************************************************************************/
   /******************************************************************************************************/
@@ -1059,6 +1065,9 @@ a{
   .hidden-xs{
     color:white;
   }
+  .btn-group .hidden-xs{
+    padding-left: 2px;
+  }
 
   .wrapper {
       display: flex;
@@ -1087,10 +1096,11 @@ a{
   
   .login-form-submit {
     border: solid thin;
-    border-radius: 15px !important;
+    border-radius: 15px;
     border-color: #003e87;
     color: #003e87;
     font-size: 18px;
+    background: linear-gradient(180deg,#0d6efd 0%,rgba(30, 0, 255, 0.8) 49%, rgba(30, 0, 255, 0.8) 51%,rgba(30, 0, 255, 0.8) 100%);
   }
 
   .block-title {
@@ -1381,7 +1391,7 @@ a{
   /* -------------------------------------------------------------------------------------------------*/  
   
   .bootbox-close-button.close{
-      background-color: grey;
+      background-color: black;
       color:white;
       font-size:18px;
       border:0;
@@ -1417,6 +1427,14 @@ a{
     background: red;
   }
 
+  /* after close modal , display none from body and block inside popover for form-action-button */
+  body .form-action-button-popover{
+    display: none;
+  }
+  .menu-popover .form-action-button-popover{
+    display: block;
+  }
+  
   /* -------------------------------------------- BUTTONS  ------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1624,6 +1642,10 @@ a{
   }
   .inner-heading{
     height: auto;
+  }
+
+  .detailscontainer .panel-body{
+    border-radius: 15px;
   }
 
   /* -------------------------------------------- TEMP BORDERS ---------------------------------------*/
@@ -1910,7 +1932,18 @@ a{
   .embed-responsive-item{
     height:300px;
   }
-
+/* -------------------------------------     LTI COURSE     ------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  /* -------------------------------------------------------------------------------------------------*/
+  .iframeLti{
+    height: 500px !important;
+  }
 
   /*******************************************************************/
   /*******************************************************************/
@@ -1926,7 +1959,7 @@ a{
   @media (max-width:991px){
     .col_maincontent_active, .col_maincontent_active_Homepage{
       min-height: calc(100vh - 50px - 46px);
-      border-radius:0px !important;
+      border-radius:0px;
     }
     .container, .container-fluid{
       padding: 0;
@@ -1936,13 +1969,13 @@ a{
     }
 
     .navbar-eclass, .site-footerMobile, .border-15px, .BordersTop, .user-courses{
-      border-radius: 0px !important;
+      border-radius: 0px;
     }
     .Announcements-Homepage{
-     background: #DCDCDC !important;
+     background: #DCDCDC;
     }
     .calendar_announce_message_col, .user-details, .cources-section{
-      border-radius:0px !important;
+      border-radius:0px;
     }
     .dropdown_menu_user{
       width:250px;
@@ -1961,6 +1994,9 @@ a{
       border-radius: 10px;
       background: rgba(189, 184, 184, 0.8);
       box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+    }
+    select,.dataTables_wrapper{
+      overflow-y: auto !important;
     }
   }
 
@@ -1985,8 +2021,8 @@ a{
   /* ------------------------------------------------------- ADMIN----------------------------------------------------------*/
 
   .admin-list-group .list-group-item:hover{
-      background: #003e87 !important;
-      color: #fafafa !important;
+      background: #003e87;
+      color: #fafafa;
   }
   
   /* ---------------------------------------------------------------------------------------------------------------------- */
@@ -2013,10 +2049,6 @@ a{
       display:none;
     }
 
-    select{
-      overflow-y: auto !important;
-    }
-
     .login-form-spacing2{
       border-radius:15px;
       background: #003F87;
@@ -2041,10 +2073,10 @@ a{
       box-shadow: 0 0 3px #ccc;
     }
 
-    .col_maincontent_active{
+    /* .col_maincontent_active{
       border-bottom-left-radius: 15px;
       border-top-left-radius: 15px;
-    }
+    } */
 
     .col_maincontent_active_unit{
       -moz-box-shadow:none;
@@ -2098,10 +2130,6 @@ a{
   /* ------------------------------------------------------- small mobile - portrait-----------------------------------*/
   @media (min-width:321px) and (max-width: 375px){
 
-    .dataTables_wrapper{
-      overflow-y: auto !important;
-    }
-
     .login-form-Homepage{
       border-bottom-left-radius: 15px;
       border-top-left-radius: 15px;
@@ -2112,10 +2140,6 @@ a{
     /* the titles of action_bars */
     .hidden-xs{
       display:none;
-    }
-
-    select{
-      overflow-y: auto !important;
     }
 
     .login-form-spacing2{
@@ -2142,10 +2166,10 @@ a{
       box-shadow: 0 0 3px #ccc;
     }
 
-    .col_maincontent_active{
+    /* .col_maincontent_active{
       border-bottom-left-radius: 15px;
       border-top-left-radius: 15px;
-    }
+    } */
 
     .col_maincontent_active_unit{
       -moz-box-shadow:none;
@@ -2198,10 +2222,6 @@ a{
   
   @media (min-width:376px) and (max-width: 425px){
 
-    .dataTables_wrapper{
-       overflow-y: auto !important;
-    }
-  
     .login-form-Homepage{
        border-bottom-left-radius: 15px;
        border-top-left-radius: 15px;
@@ -2213,10 +2233,6 @@ a{
     /* the titles of action_bars */
     .hidden-xs{
       display:none;
-    }
-
-    select{
-      overflow-y: auto !important;
     }
 
     .login-form-spacing2{
@@ -2243,10 +2259,10 @@ a{
       box-shadow: 0 0 3px #ccc;
     }
 
-    .col_maincontent_active{
+    /* .col_maincontent_active{
       border-bottom-left-radius: 15px;
       border-top-left-radius: 15px;
-    }
+    } */
 
     .col_maincontent_active_unit{
       -moz-box-shadow:none;
@@ -2325,10 +2341,6 @@ a{
   /* ------------------------------------------------------- MOBILE L ------------------------------------------------------- */
   @media (min-width: 426px) and (max-width: 767px){ 
 
-    .dataTables_wrapper{
-      overflow-y: auto !important;
-    }
-
     .login-form-Homepage{
       border-bottom-left-radius: 15px;
       border-top-left-radius: 15px;
@@ -2339,10 +2351,6 @@ a{
     /* the titles of action_bars */
     .hidden-xs{
       display:none;
-    }
-
-    select{
-      overflow-y: auto !important;
     }
 
     .login-form-spacing2{
@@ -2369,10 +2377,10 @@ a{
       box-shadow: 0 0 3px #ccc;
     }
 
-    .col_maincontent_active{
+    /* .col_maincontent_active{
       border-bottom-left-radius: 15px;
       border-top-left-radius: 15px;
-    }
+    } */
 
     .col_maincontent_active_unit{
       -moz-box-shadow:none;
@@ -2437,10 +2445,10 @@ a{
       box-shadow: 0 0 3px #ccc;
     }
 
-    .col_maincontent_active{
+    /* .col_maincontent_active{
       border-bottom-left-radius: 15px;
       border-top-left-radius: 15px;
-    }
+    } */
 
     .col_maincontent_active_unit{
       -moz-box-shadow:none;

@@ -235,7 +235,7 @@
                                     
 
 
-                                    <div class='panel panel-admin mt-5' id='two'>
+                                    <div class='panel panel-admin mt-3' id='two'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langUpgReg') }}</h2>
                                         </div>
@@ -426,7 +426,7 @@
 
 
 
-                                    <div class='panel panel-admin mt-5' id='three'>
+                                    <div class='panel panel-admin mt-3' id='three'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langEclassThemes') }}</h2>
                                         </div>
@@ -460,7 +460,7 @@
                                     
 
 
-                                    <div class='panel panel-primary mt-5' id='four'>
+                                    <div class='panel panel-primary mt-3' id='four'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{trans('langHomePageSettings')}}</h2>
                                         </div>
@@ -582,7 +582,7 @@
 
 
                                     @if(!$install)
-                                    <div class='panel panel-admin mt-5' id='five'>
+                                    <div class='panel panel-admin mt-3' id='five'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langEmailSettings') }}</h2>
                                         </div>
@@ -681,7 +681,7 @@
                                     </div>
                                     @endif
 
-                                    <div class='panel panel-admin mt-5' id='six'>
+                                    <div class='panel panel-admin mt-3' id='six'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langCourseSettings') }}</h2>
                                         </div>
@@ -732,7 +732,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-5' id='seven'>
+                                    <div class='panel panel-admin mt-3' id='seven'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langMetaCommentary') }}</h2>
                                         </div>
@@ -766,7 +766,7 @@
 
 
 
-                                    <div class='panel panel-admin mt-5' id='eight'>
+                                    <div class='panel panel-admin mt-3' id='eight'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langOtherOptions') }}</h2>
                                         </div>
@@ -913,7 +913,7 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-admin mt-5' id='nine'>
+                                    <div class='panel panel-admin mt-3' id='nine'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langDocumentSettings') }}</h2>
                                         </div>
@@ -977,7 +977,7 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-admin mt-5' id='ten'>
+                                    <div class='panel panel-admin mt-3' id='ten'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langDefaultQuota') }}</h2>
                                         </div>
@@ -1012,7 +1012,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-5' id='eleven'>
+                                    <div class='panel panel-admin mt-3' id='eleven'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langUploadWhitelist') }}</h2>
                                         </div>
@@ -1038,7 +1038,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-5' id='twelve'>
+                                    <div class='panel panel-admin mt-3' id='twelve'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langLogActions') }}</h2>
                                         </div>
@@ -1088,7 +1088,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-5' id='thirteen'>
+                                    <div class='panel panel-admin mt-3' id='thirteen'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langLoginFailCheck') }}</h2>
                                         </div>
@@ -1136,7 +1136,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-5' id='fourteen'>
+                                    <div class='panel panel-admin mt-3' id='fourteen'>
                                         <div class='panel-heading'>
                                             <h2 class='panel-title'>{{ trans('langPrivacyPolicy') }}</h2>
                                         </div>

@@ -59,10 +59,10 @@ function display_certificates() {
                         <div class='panel-body Borders'>
                             <div class='inner-heading'>
                                 <div class='row'>
-                                    <div class='col-md-7 col-sm-6'>
+                                    <div class='col-md-7 col-sm-6 text-md-start text-center'>
                                         <strong>$langCertificates</strong>
                                     </div>
-                                    <div class='col-md-5 col-sm-6 text-end'>
+                                    <div class='col-md-5 col-sm-6 text-md-end text-center mt-md-0 mt-3'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> &nbsp;&nbsp;&nbsp;$langNewCertificate</a>
                                     </div>
                                 </div>
@@ -83,18 +83,18 @@ function display_certificates() {
             $template_thumbnail = $urlServer . CERT_TEMPLATE_PATH . $thumbnail_filename;
             $tool_content .= "
             <div class='row res-table-row border-0'>
-                <div class='col-sm-2'>
+                <div class='col-sm-2 text-md-start text-center'>
                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1' target=_blank>
                     <img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='$template_thumbnail' title='$template_name'>
                 </a>
                 </div>
-                <div class='col-sm-8'>
+                <div class='col-sm-8 text-md-start text-center mt-md-0 mt-3'>
                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id'>".q($data->title)."</a>
                     <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;"
                     . "<span class='{$vis_status}'>$status_msg</span>
                     </div>
                 </div>
-                <div class='col-sm-2 text-end'>".
+                <div class='col-sm-2 text-end mt-md-0 mt-3'>".
                 action_button(array(
                     array('title' => $langEditChange,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1",
@@ -167,10 +167,10 @@ function display_badges() {
                         <div class='panel-body Borders'>
                             <div class='inner-heading'>
                                 <div class='row'>
-                                    <div class='col-md-7 col-sm-6'>
+                                    <div class='col-md-7 col-sm-6 text-md-start text-center'>
                                         <strong>$langBadges</strong>
                                     </div>
-                                    <div class='col-md-5 col-sm-6 text-end'>
+                                    <div class='col-md-5 col-sm-6 text-md-end text-center mt-md-0 mt-3'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> &nbsp;&nbsp;&nbsp;$langNewBadge</a>
                                     </div>
                                 </div>
@@ -191,14 +191,14 @@ function display_badges() {
             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_icon";
             $tool_content .= "
                                 <div class='row res-table-row border-0'>
-                                    <div class='col-sm-2'>
+                                    <div class='col-sm-2 text-md-start text-center'>
                                         <img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='$icon_link'>
                                     </div>
-                                    <div class='col-sm-8'>
+                                    <div class='col-sm-8 text-md-start text-center mt-md-0 mt-3'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
                                         <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
                                     </div>
-                                    <div class='col-sm-2 text-end'>".
+                                    <div class='col-sm-2 text-end mt-md-0 mt-3'>".
                 action_button(array(
                     array('title' => $langEditChange,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;edit=1",
@@ -259,7 +259,7 @@ function display_course_completion() {
                         <div class='panel-body Borders'>
                             <div class='inner-heading'>
                                 <div class='row'>
-                                    <div class='col-sm-7'>
+                                    <div class='col-sm-7 text-md-start text-center'>
                                         <strong>$langCourseCompletion</strong>
                                     </div>
                                 </div>
@@ -272,14 +272,14 @@ function display_course_completion() {
             $status_msg = $data->active ? $langActive : $langInactive;
             $tool_content .= "
                         <div class='row res-table-row border-0'>
-                            <div class='col-sm-2'>
+                            <div class='col-sm-2 text-md-start text-center'>
                                 <i class='fa fa-trophy fa-3x' aria-hidden='true'></i>
                             </div>
-                            <div class='col-sm-8'>
+                            <div class='col-sm-8 text-md-start text-center mt-md-0 mt-3'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
                                 <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
                             </div>
-                            <div class='col-sm-2 text-end'>".
+                            <div class='col-sm-2 text-end mt-md-0 mt-3'>".
                 action_button(array(
                     array('title' => $data->active ? $langDeactivate : $langActivate,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
@@ -1998,10 +1998,10 @@ function display_settings($element, $element_id, $unit_id = 0) {
                         <div class='panel-body Borders'>
                             <div class='inner-heading'>
                                 <div class='row'>
-                                    <div class='col-md-7 col-sm-6'>
+                                    <div class='col-md-7 col-sm-6 text-md-start text-center'>
                                         <strong>$langProgressBasicInfo</strong>
                                     </div>
-                                    <div class='col-md-5 col-sm-6 text-end'>
+                                    <div class='col-md-5 col-sm-6 text-md-end text-center mt-md-0 mt-3'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'>"
                                                 . "<span class='fa fa-pencil'></span> &nbsp;&nbsp;$langEditChange
                                         </a>
@@ -2011,7 +2011,7 @@ function display_settings($element, $element_id, $unit_id = 0) {
                             <hr>
                             <div class='row'>
                                 <div class='col-sm-4'>
-                                    <img style='box-shadow: 0 0 15px 1px #bbb' class='img-responsive center-block' src='$icon_link'>
+                                    <img style='box-shadow: 0 0 15px 1px #bbb' class='img-responsive center-block m-md-0 m-auto d-block' src='$icon_link'>
                                 </div>
                                 <div class='col-sm-8'>
                                     <div class='row p-2'>

@@ -85,8 +85,8 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
         $cpt1 = 'A';
         $cpt2 = 1;
         $Select = array();
-        $tool_content .= "<table class='table-default'>
-                            <tr>
+        $tool_content .= "<div class='table-responsive'><table class='table-default'>
+                            <tr class='list-header'>
                               <th>$langColumnA</th>
                               <th>$langMakeCorrespond</th>
                               <th>$langColumnB</th>
@@ -207,7 +207,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
         }
     } // end for()
     if ($answerType == MATCHING && $nbrAnswers>0) {
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
     }
     if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
         $tool_content .= "</div>";
@@ -349,7 +349,7 @@ function display_exercise($exercise_id) {
             $colspan = 1;
         }
 
-        $tool_content .= "<div class='col-sm-12 mt-3'><table class = 'table-default'>";
+        $tool_content .= "<div class='col-sm-12 mt-3'><div class='table-responsive'><table class = 'table-default'>";
         if (is_array($qid)) { // placeholder for random questions (if any)
             $hasRandomQuestions = true;
             $tool_content .= "<tr class='active'>
@@ -494,7 +494,7 @@ function display_exercise($exercise_id) {
             $tool_content .= "<span style='float:right;'>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>";
             $tool_content .= "</th></tr>";
         }
-        $tool_content .= "</table></div>";
+        $tool_content .= "</table></div></div>";
 
         unset($answer);
         // question  numbering

@@ -119,7 +119,7 @@ switch ($cmd) {
                         <div class='table-responsive'>
                         <table class='table-default'>
                         <tr class='list-header'>
-                        <td width=\"160\"><label for=\"newName\">" . $langInsertNewModuleName . "</label> :</td>
+                        <td width=\"160\"><label class='text-white' for=\"newName\">" . $langInsertNewModuleName . "</label> :</td>
                         <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"" . q($list->name) . "\"></input>
                                 <input class='btn btn-primary' type=\"submit\" value=\"" . $langModify . "\" name=\"submit\">
                                 <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
@@ -224,7 +224,7 @@ $num_results = count($result);
 // Display modules of the pool of this course
 
 if (!$num_results == 0) {
-    $tool_content .= "<table class=\"table-default\">
+    $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class=\"table-default\">
         <tr class='list-header'>
         <th colspan='2'>" . $langLearningObjects . "</th>
         <th class='text-center'>" . icon('fa-gears') . "</th>
@@ -266,10 +266,10 @@ foreach ($result as $list) {
     
 } //end while another module to display
 
-$tool_content .= "</table>";
+$tool_content .= "</table></div></div>";
 
 if ($atleastOne == false) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoModule</div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoModule</div></div>";
 }
 
 draw($tool_content, 2, null, $head_content, $body_action);

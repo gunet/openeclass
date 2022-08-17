@@ -66,10 +66,10 @@ $tool_content .= "</div>";
 /****   Datatables   ****/
 
 $tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
-$tschema = "<thead><tr>"
-    . "<th rowspan='2'>$langCategory</th>"
-    . "<th colspan='3'>$langUsers</th>"
-    . "<th colspan='4'>$langCourses</th>"
+$tschema = "<thead><tr class='list-header'>"
+    . "<th class='text-white' rowspan='2'>$langCategory</th>"
+    . "<th class='text-white' colspan='3'>$langUsers</th>"
+    . "<th class='text-white' colspan='4'>$langCourses</th>"
     . "</tr><tr>";
 foreach(array($langTeachers, $langStudents, $langVisitors) as $us) {
     $tschema .= "<th>" . q($us) . "</th>";
@@ -84,13 +84,13 @@ $tool_content .= table_placeholder("adetails1", "table table-default dataTable",
 $tool_content .= "</div></div>";
 
 $tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
-$tschema = "<thead><tr>"
-    . "<th>$langDate $langAnd $langHour</th>"
-    . "<th>$langUser</th>"
-    . "<th>$langCourse</th>"
-    . "<th>$langIpAddress</th>"
-    . "<th>$langUsername</th>"
-    . "<th>$langEmail</th>"
+$tschema = "<thead><tr class='list-header'>"
+    . "<th class='text-white'>$langDate $langAnd $langHour</th>"
+    . "<th class='text-white'>$langUser</th>"
+    . "<th class='text-white'>$langCourse</th>"
+    . "<th class='text-white'>$langIpAddress</th>"
+    . "<th class='text-white'>$langUsername</th>"
+    . "<th class='text-white'>$langEmail</th>"
     . "</tr>"
     . "</thead>"
     . "<tbody></tbody>";

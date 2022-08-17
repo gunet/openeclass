@@ -297,7 +297,7 @@ if (isset($_GET['action'])) {
     $sql1 = Database::get()->queryArray("SELECT * FROM certificate_template");
     $tool_content .= "<div class='table-responsive'>
                         <table class='announcements_table'>
-                        <tr class='list-header'><th class='text-center' colspan='5'>$langAvailableCertTemplates</th></tr>
+                        <tr class='bg-light'><th class='text-center text-uppercase' colspan='5'>$langAvailableCertTemplates</th></tr>
                         <tr class='notes_thead'>
                             <th class='text-white'>$langTitle</th>
                             <th class='text-white'>$langDescription</th>                            
@@ -305,7 +305,7 @@ if (isset($_GET['action'])) {
                         </tr>";
                 foreach ($sql1 as $cert_data) {
                     //$template_link = $urlServer . CERT_TEMPLATE_PATH ."$cert_data->filename";
-                    $tool_content .= "<tr><td width='100'>$cert_data->name</td>
+                    $tool_content .= "<tr><td>$cert_data->name</td>
                                       <td>" . ellipsize_html($cert_data->description, 100) . "</td>";
                     $tool_content .= "<td class='text-center option-btn-cell'>".
                             action_button(array(
@@ -328,7 +328,7 @@ if (isset($_GET['action'])) {
     
     $tool_content .= "<div class='table-responsive'>
                         <table class='announcements_table'>
-                        <tr class='list-header'><th class='text-center' colspan='5'>$langAvailableBadges</th></tr>
+                        <tr class='bg-light'><th class='text-center text-uppercase' colspan='5'>$langAvailableBadges</th></tr>
                         <tr class='notes_thead'>
                             <th class='text-white'>$langTitle</th>
                             <th class='text-white'>$langDescription</th>

@@ -105,7 +105,7 @@
 
                     @if ($count_video > 0 or $count_video_links > 0)
                         @if (count($items))
-                            <div class="row p-2"></div>
+                        <div class='col-sm-12'>
                             <div class='table-responsive'>
                                 <table class='announcements_table nocategory-links'>
                                     <tr class='notes_thead'>
@@ -118,71 +118,73 @@
                                     @include('modules.video.common.videoList')
                                 </table>
                             </div>
+                        </div>
                                 
                         @endif
 
                         @if ($num_of_categories > 0)
 
-     
-                                    <div class='table-responsive'>
-                                        <table class='announcements_table category-links'>
-                                            <tr class='notes_thead'>
-                                                <th class='first-item-col text-white'>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
-                                                @if ($expand_all)
-                                                    {!! icon('fa-folder-open', $GLOBALS['langViewHide'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=0") !!}
-                                                @else
-                                                    {!! icon('fa-folder', $GLOBALS['langViewShow'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=1") !!}
-                                                @endif
-                                                </th>
-                                                <th class='text-center text-white' style='width:100px;'>{{ trans('langDate') }}</th>
-                                                @if (!$is_in_tinymce)
-                                                    <th class='cogsClass text-center text-white'>{!! icon('fa-cogs') !!}</th>
-                                                @endif
-                                            </tr>
-                                        @foreach ($categories as $myrow)
-                                            <?php
-                                                $description = standard_text_escape($myrow->description);
-                                                if ((isset($_GET['d']) and $_GET['d'] == 1) or ( isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
-                                                    $folder_icon = icon('fa-folder-open-o', $GLOBALS['langViewHide']);
-                                                } else {
-                                                    $folder_icon = icon('fa-folder-o', $GLOBALS['langViewShow']);
-                                                }
-                                            ?>
-                                            <tr class='link-subcategory-title'><th class='category-link p-3' colspan='{{ $colspan }}'>{!! $folder_icon !!}&nbsp;
-                                            @if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)
-                                                <a href='{!! $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . $embedParam !!}' class='open-category'>{{ $myrow->name }}</a>
+                            <div class='col-sm-12'>
+                                <div class='table-responsive'>
+                                    <table class='announcements_table category-links'>
+                                        <tr class='notes_thead'>
+                                            <th class='first-item-col text-white'>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
+                                            @if ($expand_all)
+                                                {!! icon('fa-folder-open', $GLOBALS['langViewHide'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=0") !!}
                                             @else
-                                                <a href='{!! $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;cat_id=" . $myrow->id . $embedParam !!}' class='open-category'>{{ $myrow->name }}</a>
+                                                {!! icon('fa-folder', $GLOBALS['langViewShow'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=1") !!}
                                             @endif
-                                            @if (!empty($description))
-                                                <br><br><span class='link-description'>{{ $description }}</span>
+                                            </th>
+                                            <th class='text-center text-white' style='width:100px;'>{{ trans('langDate') }}</th>
+                                            @if (!$is_in_tinymce)
+                                                <th class='cogsClass text-center text-white'>{!! icon('fa-cogs') !!}</th>
                                             @endif
-                                                </th>
-                                                @if ($display_tools)
-                                                    <td class='option-btn-cell text-end'>
-                                                        {!!
-                                                        action_button(array(
-                                                            array('title' => $GLOBALS['langEditChange'],
-                                                                'icon' => 'fa-edit',
-                                                                'url' => $urlAppend . "modules/video/editCategory.php?course=" . $course_code . "&amp;id=" . $myrow->id),
-                                                            array('title' => $GLOBALS['langDelete'],
-                                                                'icon' => 'fa-times',
-                                                                'class' => 'delete',
-                                                                'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "&amp;id=" . $myrow->id . "&amp;delete=delcat",
-                                                                'confirm' => $GLOBALS['langCatDel'])))
-                                                        !!}
-                                                    </td>
-                                                @endif
-                                            </tr>
-                                            @if ($expand_all or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id))
-                                                <?php
-                                                    $currentcatresults = getLinksOfCategory($myrow->id, $is_editor, $filterv, $order, $course_id, $filterl, $is_in_tinymce, $compatiblePlugin);
-                                                ?>
-                                                @include('modules.video.common.videoList', ['items' => $currentcatresults])
+                                        </tr>
+                                    @foreach ($categories as $myrow)
+                                        <?php
+                                            $description = standard_text_escape($myrow->description);
+                                            if ((isset($_GET['d']) and $_GET['d'] == 1) or ( isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
+                                                $folder_icon = icon('fa-folder-open-o', $GLOBALS['langViewHide']);
+                                            } else {
+                                                $folder_icon = icon('fa-folder-o', $GLOBALS['langViewShow']);
+                                            }
+                                        ?>
+                                        <tr class='link-subcategory-title'><th class='category-link p-3' colspan='{{ $colspan }}'>{!! $folder_icon !!}&nbsp;
+                                        @if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)
+                                            <a href='{!! $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . $embedParam !!}' class='open-category'>{{ $myrow->name }}</a>
+                                        @else
+                                            <a href='{!! $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;cat_id=" . $myrow->id . $embedParam !!}' class='open-category'>{{ $myrow->name }}</a>
+                                        @endif
+                                        @if (!empty($description))
+                                            <br><br><span class='link-description'>{{ $description }}</span>
+                                        @endif
+                                            </th>
+                                            @if ($display_tools)
+                                                <td class='option-btn-cell text-end'>
+                                                    {!!
+                                                    action_button(array(
+                                                        array('title' => $GLOBALS['langEditChange'],
+                                                            'icon' => 'fa-edit',
+                                                            'url' => $urlAppend . "modules/video/editCategory.php?course=" . $course_code . "&amp;id=" . $myrow->id),
+                                                        array('title' => $GLOBALS['langDelete'],
+                                                            'icon' => 'fa-times',
+                                                            'class' => 'delete',
+                                                            'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "&amp;id=" . $myrow->id . "&amp;delete=delcat",
+                                                            'confirm' => $GLOBALS['langCatDel'])))
+                                                    !!}
+                                                </td>
                                             @endif
-                                        @endforeach
-                                        </table>
-                                    </div>
+                                        </tr>
+                                        @if ($expand_all or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id))
+                                            <?php
+                                                $currentcatresults = getLinksOfCategory($myrow->id, $is_editor, $filterv, $order, $course_id, $filterl, $is_in_tinymce, $compatiblePlugin);
+                                            ?>
+                                            @include('modules.video.common.videoList', ['items' => $currentcatresults])
+                                        @endif
+                                    @endforeach
+                                    </table>
+                                </div>
+                            </div>
                                 
                         @endif
                     @else

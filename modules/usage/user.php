@@ -76,12 +76,12 @@ $tool_content .= "</div></div></div>";
 
 /****   Datatables   ****/
 $tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
-$tschema = "<thead><tr>"
-        . "<th>$langDate</th>"
-        . "<th>$langCourse</th>"
-        . "<th>$langModule</th>"
-        . "<th>$langHits</th>"
-        . "<th>$langDuration</th>"
+$tschema = "<thead><tr class='list-header'>"
+        . "<th class='text-white'>$langDate</th>"
+        . "<th class='text-white'>$langCourse</th>"
+        . "<th class='text-white'>$langModule</th>"
+        . "<th class='text-white'>$langHits</th>"
+        . "<th class='text-white'>$langDuration</th>"
         . "</tr></thead>"
         . "<tbody></tbody>"
         . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th></tr></tfoot>";

@@ -229,7 +229,7 @@ if ($userdata) {
 
     if ($ret_str['panels'] == ""){
         $tool_content .= "
-                        <div class='row p-2'>
+                        
                             <div class='col-sm-12'>
                                 <div class='panel panel-default'>
                                     <div class='text-center text-muted panel-body Borders'>".$langNoInfoAvailable."</div>
@@ -242,7 +242,7 @@ if ($userdata) {
 
     
     if ($userdata->eportfolio_enable == 1 AND $ret_str['panels'] != "") {
-        $social_share = "<div class='pull-right mt-3'>".print_sharing_links($urlServer."main/eportfolio/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
+        $social_share = "<div class='float-end mt-3 shadow-sm p-3 rounded bg-light'>".print_sharing_links($urlServer."main/eportfolio/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
     } else {
         $social_share = '';
     }

@@ -67,7 +67,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
                             <div class="container-fluid">
                                 <div class="row justify-content-center">
-                                    <div class="user-detals-photo-2">
+                                    <div class="user-detals-photo-2 text-md-start text-center">
                                         <img class='rounded-circle ps-4' src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                                     </div>
                                 </div>
@@ -335,7 +335,7 @@
                         @if($user_announcements_exist)
                            {!! $user_announcements !!}
                         @else
-                           <span class='text-title not_visible'> - {{trans('langNoRecentAnnounce')}} - </span>
+                           <div class='text-center'><span class='text-title not_visible'> - {{trans('langNoRecentAnnounce')}} - </span></div>
                         @endif
                     </div>
                     <hr class='text-primary mb-0'>

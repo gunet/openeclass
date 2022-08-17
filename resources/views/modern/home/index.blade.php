@@ -17,7 +17,7 @@
                         <div class='row'>
                             @if($warning)<div class='col-12 mt-4 mb-0'>{!! $warning !!}</div>@endif
                             <div class='col-xl-6 col-lg-7 col-md-8 col-12'>
-                                <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 shadow-lg Borders cardLogin'>
+                                <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 Borders cardLogin'>
                                     <div class='card-header bg-transparent border-0'>
                                         <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'> {{ trans('langUserLogin') }}</div>
                                     </div>
@@ -25,7 +25,7 @@
                                         <div class="login-form-spacing mt-2">
                                             <input class="login-input bg-body border border-secondary w-100" placeholder="{{ trans('langUsername') }} &#xf007;" type="text" id="uname" name="uname" >
                                             <input class="login-input bg-body border border-secondary w-100 mt-4" placeholder="{{ trans('langPassword') }} &#xf023;" type="password" id="pass" name="pass">
-                                            <input class="btn btn-primary text-white w-100 login-form-submit mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
+                                            <input class="btn text-white w-100 login-form-submit mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
                                         </div>
                                     </form>
                                     <div class='col-sm-12 d-flex justify-content-center'>
@@ -199,7 +199,7 @@
     @if ($announcements)
     <div class="container-fluid main-section">
         <div class="row rowMedium">
-            <div class="col-lg-12 bg-white border-15px sidebar Announcements-Homepage">
+            <div class="col-lg-12 border-15px Announcements-Homepage">
                 <div class="news">
                     <h2 class="block-title">{{ trans('langAnnouncements') }}
                         <a href='{{ $urlServer }}rss.php' style='padding-left:5px;'>

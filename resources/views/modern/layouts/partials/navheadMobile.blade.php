@@ -28,7 +28,7 @@
 
                         <ul class="m-0 p-0 dropdown-menu dropdown-menu-end dropdown_menu_user bg-body border-0 shadow-lg" aria-labelledby="dropdownMenuButton1">
                             <li>
-                                <a class='list-group-item pe-none bg-primary text-center'><i class="fa fa-user text-white mt-1 pe-2"></i> <span class='text-white'>{{uid_to_am($uid)}}</span></a>
+                                <a class='list-group-item pe-none bg-light text-center'><i class="fa fa-user text-dark mt-1 pe-2"></i> <span class='text-dark fw-bold'>{{ $uname }}</span></a>
                             </li>
                             @if ((isset($is_admin) and $is_admin) or
                                 (isset($is_power_user) and $is_power_user) or
