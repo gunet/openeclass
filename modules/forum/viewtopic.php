@@ -406,7 +406,7 @@ if ($view != POSTS_THREADED_VIEW) {
                 <ul class='pagination'>
                 $pagination_btns
                 </ul>
-                <div class='pull-right'>";
+                <div class='float-end'>";
                 if ($unit) {
                     $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true&amp;unit=$unit'>$langAllOfThem</a>";
                 } else if ($res_type) {
@@ -422,7 +422,7 @@ if ($view != POSTS_THREADED_VIEW) {
             $tool_content .= "
             <div class='clearfix margin-bottom-fat'>
               <nav>
-                <div class='pull-right'>";
+                <div class='float-end'>";
                 if ($unit) {
                     $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0&amp;unit=$unit'>$langPages</a>";
                 } else if ($res_type) {
@@ -523,7 +523,7 @@ if ($view == POSTS_PAGINATION_VIEW_ASC) {
             <ul class='pagination'>
             $pagination_btns
             </ul>
-            <div class='pull-right'>";
+            <div class='float-end'>";
             if ($unit) {
                 $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;all=true&amp;unit=$unit'>$langAllOfThem</a>";
             } else if ($res_type) {
@@ -540,7 +540,7 @@ if ($view == POSTS_PAGINATION_VIEW_ASC) {
             $tool_content .= "
             <div class='clearfix margin-bottom-fat'>
               <nav>
-                <div class='pull-right'>";
+                <div class='float-end'>";
                 if ($unit) {
                     $tool_content .= "<a class='btn btn-default' href='../units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$topic&amp;forum=$forum&amp;start=0&amp;unit=$unit'>$langPages</a>";
                 } else if ($res_type) {
@@ -648,7 +648,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
 
     if ($is_editor) {
         $content .= "
-                <span class='pull-right'>
+                <span class='float-end'>
                     <a href='../forum/editpost.php?course=$course_code&amp;post_id=" . $myrow->id .
                         "&amp;topic=$topic&amp;forum=$forum'>" .
                             "<span class='fa fa-edit' title='$langModify' data-bs-toggle='tooltip' " .
@@ -671,7 +671,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     $content .= "
             </h5>
         </div>
-        <div class='panel-body'>
+        <div class='panel-body NoBorders'>
             <div class='row'>
                 <div class='col-sm-1 col-xs-2'>" .
                     profile_image($myrow->poster_id, '40px', 'img-rounded-corners margin-bottom-thin') . "
@@ -685,7 +685,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
                         </small><small>$achor_to_parent_post</small>";
 
     if (!empty($dyntools)) {
-        $content .= "<span style='margin-left: 20px;' class='pull-right'>";
+        $content .= "<span style='margin-left: 20px;' class='float-end'>";
         if (isset($report_modal)) {
             $content .= "<span class='option-btn-cell'>" . action_button($dyntools) . $report_modal . "</span>";
             unset($report_modal);

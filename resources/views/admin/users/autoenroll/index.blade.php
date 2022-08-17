@@ -7,7 +7,7 @@
             <div class='panel panel-info'>
                 <div class='panel-heading'>
                     {{ trans('langAutoEnrollRule') }} {{ $key + 1 }}
-                    <div class='pull-right'>
+                    <div class='float-end'>
                     {!! action_button([
                         [
                             'title' => trans('langEditChange'),

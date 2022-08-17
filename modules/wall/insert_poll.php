@@ -44,7 +44,7 @@ function list_polls($id = NULL) {
             }
         }
 
-        $ret_string .= "<table class='table-default'>" .
+        $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-white text-left'>&nbsp;$langQuestionnaire</th>" .
                 "<th style='width:20px;' class='text-white text-center'>$langChoice</th>" .
@@ -60,7 +60,7 @@ function list_polls($id = NULL) {
             $ret_string .= "<td class='text-center'><input type='checkbox' $checked name='poll[]' value='$entry[id]'></td>";
             $ret_string .= "</tr>";
         }
-        $ret_string .= "</table>";
+        $ret_string .= "</table></div>";
     }
     return $ret_string;
 }

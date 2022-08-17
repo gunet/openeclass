@@ -213,7 +213,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     <div class='col-sm-12'>
         <div class='panel panel-action-btn-default'>
             <div class='panel-heading'>
-                <div class='pull-right'>".
+                <div class='float-end'>".
                     action_button(array(
                         array('title' => $langEditChange,
                             'url' => "$_SERVER[SCRIPT_NAME]?modify=".getIndirectReference($note->id),

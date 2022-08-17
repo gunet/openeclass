@@ -215,8 +215,8 @@ function show_edit_form($id, $sid, $assign) {
                                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data'>
                                     <input type='hidden' name='assignment' value='$id' />
                                     <input type='hidden' name='submission' value='$row->id' />
-                                    <div class='btn-group pull-right'>
-                                        <a class='linkdelete btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;a_id=$sub->id&amp;ass_id=$row->id' data-placement='bottom' data-toggle='tooltip' title='$langDeletePeerReview' data-original-title=''>
+                                    <div class='btn-group float-end'>
+                                        <a class='linkdelete btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;a_id=$sub->id&amp;ass_id=$row->id' data-bs-placement='bottom' data-bs-toggle='tooltip' title='$langDeletePeerReview' data-bs-original-title=''>
                                             <span class='fa fa-times'></span>
                                         </a>
                                     </div>
@@ -474,7 +474,7 @@ function show_edit_form($id, $sid, $assign) {
                    
 
 
-					<div class='form-group mt-3'>
+					<div class='form-group mt-3 mb-3'>
 						<div class='col-sm-9 col-sm-offset-3'>
 							<input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'>
 							<a class='btn btn-default' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>

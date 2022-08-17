@@ -172,7 +172,7 @@ function login_form($format='main') {
     }
 
     $loginForm .= "
-        <div class='col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right login-form'>
+        <div class='col-xs-12 col-sm-6 col-md-5 col-lg-4 float-end login-form'>
             <div class='wrapper-login-option'>";
 
     $show_seperator = count($authLink) > 1;

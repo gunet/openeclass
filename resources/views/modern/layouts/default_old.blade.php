@@ -103,7 +103,7 @@
                                        <div style="display: block; float: left;">{{ $uname }}</div>
                                     </a>
 
-                                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                                    <ul class="dropdown-menu float-end" role="menu" aria-labelledby="dropdownMenu1">
                                         @if ((isset($is_admin) and $is_admin) or
                                             (isset($is_power_user) and $is_power_user) or
                                             (isset($is_usermanage_user) and ($is_usermanage_user)) or

@@ -278,7 +278,7 @@ function loggedInMenu($rich=true) {
     if (!$rich or $new_msgs == 0) {
         array_push($sideMenuText, $GLOBALS['langMyDropBox']);
     } else {
-        array_push($sideMenuText, "<b>$GLOBALS[langMyDropBox]<span class='badge pull-right'>$new_msgs</span></b>");
+        array_push($sideMenuText, "<b>$GLOBALS[langMyDropBox]<span class='badge float-end'>$new_msgs</span></b>");
     }
     array_push($sideMenuLink, $urlServer . "modules/message/index.php");
     array_push($sideMenuImg, "fa-envelope-o");

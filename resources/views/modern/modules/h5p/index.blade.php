@@ -85,7 +85,7 @@
 
                         
                         <div class='col-12'>
-                            <div class='margin-top-thin margin-bottom-fat pull-right'>
+                            <div class='margin-top-thin margin-bottom-fat float-end'>
                                 {{-- Dropdown select for Creating H5P Content --}}
                                 @if ($h5pcontenttypes)
                                     <div class='btn-group'>

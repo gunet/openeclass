@@ -71,7 +71,7 @@
                                     <div class='panel panel-action-btn-default'>
                                         <div class='panel-heading'>
                                             @if ($is_editor) 
-                                                <div class='pull-right'>
+                                                <div class='float-end'>
                                                 {!! action_button(
                                                         array(
                                                             array(

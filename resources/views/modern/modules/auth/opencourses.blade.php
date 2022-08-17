@@ -97,7 +97,7 @@
                                                     @endif
                                                     @if ($displayGuestLoginLinks)
                                                         @if ($course_data[$mycourse->id]['userguest'])
-                                                            <div class='pull-right'>
+                                                            <div class='float-end'>
                                                             @if ($course_data[$mycourse->id]['userguest']->password === '')
                                                                     <form method='post' action='{{ $urlAppend }}'>
                                                                         <input type='hidden' name='uname' value='{{ $course_data[$mycourse->id]['userguest']->username }}'>

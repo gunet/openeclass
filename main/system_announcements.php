@@ -57,7 +57,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     foreach ($result as $myrow) {
 
         if ($myrow->order != 0) {
-            $pinned = "<span class='fa fa-thumb-tack pull-right text-danger'></span>";
+            $pinned = "<span class='fa fa-thumb-tack float-end text-danger'></span>";
         } else {
             $pinned = "";
         }

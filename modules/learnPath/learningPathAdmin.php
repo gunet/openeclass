@@ -486,7 +486,7 @@ $lp_action_button = action_button(array(
 );
 $tool_content .= "<div class='col-sm-12 mt-3'>
                     <div class='panel panel-default panel-action-btn-default NoBorders' style='overflow-y:auto;'>
-                        <div class='pull-right' style='padding:8px;'>
+                        <div class='float-end' style='padding:8px;'>
                             $lp_action_button
                         </div>
                         <div class='panel-heading list-header'>

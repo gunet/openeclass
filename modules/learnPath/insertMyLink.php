@@ -203,7 +203,7 @@ function showlinks() {
         <tfooter>
         <tr>
             <th colspan='2'>
-                <div class='pull-right'>
+                <div class='float-end'>
                 <input type='hidden' name='maxLinkForm' value ='" . ($i - 1) . "' />
                 <input class='btn btn-primary' type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
                 </div>

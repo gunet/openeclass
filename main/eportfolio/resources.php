@@ -375,7 +375,7 @@ if ($userdata) {
             }
             $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
                                     <div class='panel-heading'>
-                                        <div class='pull-right mt-1'>
+                                        <div class='float-end mt-1'>
                                             ". action_button(array(
                                                                 array(
                                                                         'title' => $langePortfolioRemoveResource,
@@ -477,7 +477,7 @@ if ($userdata) {
                 }
                 $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
                                     <div class='panel-heading'>
-                                        <div class='pull-right mt-1'>
+                                        <div class='float-end mt-1'>
                                             ". action_button(array(
                                                     array(
                                                         'title' => $langePortfolioRemoveResource,
@@ -547,7 +547,7 @@ if ($userdata) {
                                       </div>";
                 $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
                                     <div class='panel-heading'>
-                                        <div class='pull-right mt-1'>
+                                        <div class='float-end mt-1'>
                                             ". action_button(array(
                                                         array(
                                                                 'title' => $langePortfolioRemoveResource,

@@ -640,11 +640,11 @@ if ($is_editor) {
             // Allow student to enter group only if he's a member
             if ($is_member or $is_tutor) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
-                        "</a> <span class='pull-right btn btn-success pe-none mt-2'>$langMyGroup</span>";
+                        "</a> <span class='float-end btn btn-success btn-sm pe-none mt-2'>$langMyGroup</span>";
             } else {
                 $full_group_message = '';
                 if ($max_members > 0 and $max_members == $member_count) {
-                   $full_group_message = " <span class='pull-right label label-warning'>$langGroupFull</span>";
+                   $full_group_message = " <span class='float-end label label-warning'>$langGroupFull</span>";
                 }
                 $tool_content .= q($group_name) . "$full_group_message";
             }

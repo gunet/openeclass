@@ -40,7 +40,7 @@
                                 <div class='panel'>
                                     <div class='panel-body'>
                                         @if ($curDirName)
-                                            <div class='pull-right'>
+                                            <div class='float-end'>
                                                 <a href='{{ $parentLink }}' type='button' class='btn btn-success'>
                                                     <span class='fa fa-level-up'></span>&nbsp;{{ trans('langUp') }}
                                                 </a>
@@ -74,7 +74,7 @@
                                                 <td class='text-center'><span class='fa {{ $file->icon }}'></span></td>
                                                 <td>
                                                     @if ($file->updated_message)
-                                                        <span class='label label-success pull-right'>
+                                                        <span class='label label-success float-end'>
                                                             {{ $file->updated_message }}
                                                         </span>
                                                     @endif

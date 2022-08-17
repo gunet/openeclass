@@ -39,7 +39,7 @@
                             <div class='alert alert-danger'>
                                 {{ trans('langCreateCourseNotAllowedNode') }}
                             </div>
-                            <p class='pull-right'>
+                            <p class='float-end'>
                                 <a class='btn btn-secondary' href='create_course.php'>{{ trans('langBack') }}</a>
                             </p>    
                         </div>

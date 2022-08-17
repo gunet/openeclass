@@ -10,7 +10,7 @@
                                 <div class="panel-heading">                   
                                     <a class='text-white' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
                                        href="#widget_desc_{{ $key }}" class="widget_title">
-                                        {{ $portfolio_main_area_widget->getName() }} <span></span> <small class="pull-right">{{ $portfolio_main_area_widget->is_user_widget ? trans('langWidgetPersonal') : trans('langWidgetAdmin') }}</small>
+                                        {{ $portfolio_main_area_widget->getName() }} <span></span> <small class="float-end">{{ $portfolio_main_area_widget->is_user_widget ? trans('langWidgetPersonal') : trans('langWidgetAdmin') }}</small>
                                     </a>                     
                                 </div>
                                 @if (!isset($myWidgets) || isset($myWidgets) && $portfolio_main_area_widget->is_user_widget)
@@ -22,8 +22,8 @@
                                         <a href="#" class="remove">
                                             <small>{{ trans('langDelete') }}</small>
                                         </a>
-                                        <div class="pull-right">
-                                            <a href="#" class="btn btn-xs btn-primary submitOptions">
+                                        <div class="float-end">
+                                            <a href="#" class="btn btn-sm btn-primary submitOptions">
                                                 {{ trans('langSubmit') }}
                                             </a>                                
                                         </div>                    

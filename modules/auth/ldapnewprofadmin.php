@@ -69,7 +69,7 @@ if ($submit) {
     // check if user name exists
     $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $pu);    
     if ($username_check) {
-        $tool_content .= "<div class='alert alert-danger'>$langUserFree</div><br><br><p align='pull-right'>
+        $tool_content .= "<div class='alert alert-danger'>$langUserFree</div><br><br><p align='float-end'>
         <a href='../admin/listreq.php'>$langBackRequests</a></p>";
         draw($tool_content, 3);
         exit();

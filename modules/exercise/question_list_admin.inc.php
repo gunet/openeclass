@@ -510,7 +510,7 @@ if ($nbrQuestions) {
                             <span class='fa fa-arrows' style='cursor: pointer;' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-titile='$langReorder'></span>
                         </div>";
 
-        $tool_content .= "<div class='pull-right' style='margin-top:10px;'>";
+        $tool_content .= "<div class='float-end' style='margin-top:10px;'>";
         if (!is_array($id)) {
             $tool_content .=
                 action_button(array(

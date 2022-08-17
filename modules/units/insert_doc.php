@@ -106,7 +106,7 @@ function list_docs() {
             $parentpath = dirname($path);
             $dirname =  htmlspecialchars($dirname->filename);
             $parentlink = $urlbase . $parentpath;
-            $parenthtml = "<span class='pull-right'><a href='$parentlink'>$langUp " .
+            $parenthtml = "<span class='float-end'><a href='$parentlink'>$langUp " .
                     icon('fa-level-up') . "</a></span>";
             $colspan = 4;
         }

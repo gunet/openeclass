@@ -628,7 +628,7 @@ if ($action == "showPost") {
         <div class='col-sm-12'>
                         <div class='panel panel-action-btn-default'>
                             <div class='panel-heading'>
-                                <div class='pull-right'>
+                                <div class='float-end'>
                                     ". action_button(array(
                                         array(
                                             'title' => $langEditChange,
@@ -656,7 +656,7 @@ if ($action == "showPost") {
                                     ".q($post->getTitle())."
                                 </h3>
                             </div>
-                            <div class='panel-body ps-3 panel-body-blog NoBorders'><button class='btn btn-success pe-none mt-2'>" . nice_format($post->getTime(), true). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
+                            <div class='panel-body ps-3 panel-body-blog NoBorders'><button class='btn btn-success btn-sm pe-none mt-2'>" . nice_format($post->getTime(), true). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
                             <div class='panel-footer ps-3 panel-footer-blog'>
                                 <div class='row'>
                                     <div class='col-sm-6'>$rating_content</div>
@@ -746,13 +746,13 @@ if ($action == "showBlog") {
             }
             if ($comments_enabled && ($post->getCommenting() == 1)) {
                 $comm = new Commenting('blogpost', $post->getId());
-                $comment_content = "<a style='margin-top:-30px;' class='btn btn-primary btn-xs pull-right' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
+                $comment_content = "<a style='margin-top:-30px;' class='btn btn-primary btn-sm float-end' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
             } else {
                 $comment_content = "<div class=\"blog_post_empty_space\"></div>";
             }
             $tool_content .= "<div class='panel panel-action-btn-default'>
                                 <div class='panel-heading'>
-                                    <div class='pull-right'>
+                                    <div class='float-end'>
                                         ". action_button(array(
                                             array(
                                                 'title' => $langEditChange,
@@ -781,7 +781,7 @@ if ($action == "showBlog") {
                                     </h3>
                                 </div>
                                 <div class='panel-body ps-3 panel-body-blog NoBorders'>
-                                    <button class='btn btn-success pe-none mt-2'>" . nice_format($post->getTime(), true). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+                                    <button class='btn btn-success btn-sm pe-none mt-2'>" . nice_format($post->getTime(), true). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     $comment_content
                                 </div>
                                 <div class='panel-footer panel-footer-blog'>

@@ -404,7 +404,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                             <div class="row calendar-header">
                                 
                                     <div id="calendar-header">
-                                        <div class="pull-right form-inline">
+                                        <div class="float-end form-inline">
                                             <div class="btn-group">
                                                     <button class="btn btn-secondary btn-sm" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
                                                     <button class="btn btn-secondary btn-sm" data-calendar-nav="today">' . $langToday . '</button>

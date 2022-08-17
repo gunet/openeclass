@@ -216,7 +216,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_num
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langNoAnswer</div></div>";
     }
     if (in_array($answerType, [TRUE_FALSE, UNIQUE_ANSWER])) {
-        $tool_content .= "<button class='pull-right clearSelect btn btn-secondary btn-sm' style='margin-top:-30px;'><span class='fa fa-times'></span> $langClear</button>";
+        $tool_content .= "<button class='float-end clearSelect btn btn-secondary btn-sm' style='margin-top:-30px;'><span class='fa fa-times'></span> $langClear</button>";
     }
     $tool_content .= "
                 </div>
@@ -506,6 +506,6 @@ function display_exercise($exercise_id) {
         }
     }
     if (!$hasRandomQuestions) {
-        $tool_content .= "<div class='col-sm-12'><span class='pull-right'><strong>$langYourTotalScore: $totalWeighting</strong></span></div>";
+        $tool_content .= "<div class='col-sm-12'><span class='float-end'><strong>$langYourTotalScore: $totalWeighting</strong></span></div>";
     }
 }

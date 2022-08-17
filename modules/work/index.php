@@ -2221,7 +2221,7 @@ function new_assignment() {
                     if (!grading_scales_exist()) {
                         $addon = "disabled";
                         $class_not_visible = 'not_visible';
-                        $label = "data-toggle='tooltip' data-placement='top' title='$langNoGradeScales'";
+                        $label = "data-bs-toggle='tooltip' data-bs-placement='top' title='$langNoGradeScales'";
                     } else {
                         $addon = $class_not_visible = $label = '';
                     }
@@ -2234,7 +2234,7 @@ function new_assignment() {
                     if (!rubrics_exist()) {
                         $addon = "disabled";
                         $class_not_visible = 'not_visible';
-                        $label = "data-toggle='tooltip' data-placement='top' title='$langNoGradeRubrics'";
+                        $label = "data-bs-toggle='tooltip' data-bs-placement='top' title='$langNoGradeRubrics'";
                     } else {
                         $addon = $class_not_visible = $label = '';
                     }
@@ -2530,7 +2530,7 @@ function new_assignment() {
                                       <td><input type='text' name='auto_judge_scenarios[0][weight]' class='auto_judge_weight'></td>
                                       <td class='text-center'>
                                           <a href='#' class='autojudge_remove_scenario' style='display: none;'>
-                                            <span class='fa fa-fw fa-times text-danger' data-original-title='$langDelete' data-toggle='tooltip'></span>
+                                            <span class='fa fa-fw fa-times text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
                                           </a>
                                       </td>
                                     </tr>
@@ -3592,7 +3592,7 @@ function show_edit_assignment($id) {
                             $tool_content .= "
                                     <td><input type='text' value='$aajudge[weight]' name='auto_judge_scenarios[$rows][weight]' class='auto_judge_weight'/></td>
                                     <td><a href='#' class='autojudge_remove_scenario' style='display: ".($rows <= 0 ? 'none': 'visible').";'>
-                                    <span class='fa fa-fw fa-times text-danger' data-original-title='$langDelete' data-toggle='tooltip'></span>
+                                    <span class='fa fa-fw fa-times text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
                                     </a>
                                     </td>
                                 </tr>";
@@ -3630,7 +3630,7 @@ function show_edit_assignment($id) {
                                     <td><input type='text' name='auto_judge_scenarios[$rows][output]' class='auto_judge_output' /></td>
                                     <td><input type='text' name='auto_judge_scenarios[$rows][weight]' class='auto_judge_weight'/></td>
                                     <td><a href='#' class='autojudge_remove_scenario' style='display: none;'>
-                                        <span class='fa fa-fw fa-times text-danger' data-original-title='$langDelete' data-toggle='tooltip'></span>
+                                        <span class='fa fa-fw fa-times text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
                                     </a></td>
                                 </tr>";
                     }
@@ -4077,7 +4077,7 @@ function show_assignment_review($id, $display_graph_results = false) {
             } else {
                 $edit_grade_link = "grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
             }
-            $icon_field = "<a class='link' href='$edit_grade_link'><span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span></a>";
+            $icon_field = "<a class='link' href='$edit_grade_link'><span class='fa fa-fw fa-edit' data-bs-original-title='$langEdit' title='' data-bs-toggle='tooltip'></span></a>";
 
             $grade = Database::get()->querySingle("SELECT grade FROM assignment_grading_review WHERE id = ?d ", $row->id )->grade;
             if (!empty($grade)) {
@@ -4089,7 +4089,7 @@ function show_assignment_review($id, $display_graph_results = false) {
                 } else {
                     $grade_link = "grade_edit_review.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                 }
-                $grade_field = "<a class='link' href='$grade_link'><span class='fa fa-fw fa-plus' data-original-title='$langSGradebookBook' title='' data-toggle='tooltip'></span></a>";
+                $grade_field = "<a class='link' href='$grade_link'><span class='fa fa-fw fa-plus' data-bs-original-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
             }
             $tool_content .= "<tr><td class='text-right' width='4'>$i.</td>";
             // check for plagiarism via unicheck (aka 'unplag') tool (http://www.unicheck.com)
@@ -4301,7 +4301,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 $label = sprintf($langWorkFileLimit, $assignment->max_submissions);
                 $maxFiles = $assignment->max_submissions;
                 $inputName = 'userfile[]';
-                $moreButton = "<div class='pull-right'>
+                $moreButton = "<div class='float-end'>
                                  <button class='btn btn-info btn-xs moreFiles'>
                                    <span class='fa fa-plus'></span>
                                  </button>
@@ -4371,7 +4371,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         </fieldset>
                      </form>
                      </div></div>
-                     <div class='pull-right'><small>$GLOBALS[langMaxFileSize] " .
+                     <div class='float-end'><small>$GLOBALS[langMaxFileSize] " .
                 ini_get('upload_max_filesize') . "</small></div><br>";
     }
 }
@@ -4825,7 +4825,7 @@ function show_assignment($id, $display_graph_results = false) {
                 $tool_content .= " <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
                                <input type='hidden' name='assign' value='$id'>
                                <div class='form-group'>
-                                    <div class='pull-right'>
+                                    <div class='float-end'>
                                         <input class='btn btn-primary' type='submit' name='ass_review' value='$langAssignmentDistribution'>
                                     </div>
                                </div>
@@ -5025,7 +5025,7 @@ function show_assignment($id, $display_graph_results = false) {
                     $grade_edit_link = "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                 }
 
-                $icon_field = "<a class='link' href='$grade_edit_link'><span class='fa fa-fw fa-edit' data-original-title='$langEdit' title='' data-toggle='tooltip'></span></a>";
+                $icon_field = "<a class='link' href='$grade_edit_link'><span class='fa fa-fw fa-edit' data-bs-original-title='$langEdit' title='' data-bs-toggle='tooltip'></span></a>";
                 if ($row->grading_scale_id && $row->grading_type == ASSIGNMENT_SCALING_GRADE) {
                     $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $row->grading_scale_id, $course_id)->scales;
                     $scales = unserialize($serialized_scale_data);
@@ -5060,7 +5060,7 @@ function show_assignment($id, $display_graph_results = false) {
                     } else {
                         $icon_field = '';
                         $grade_field = "<a class='link' href='{$urlServer}modules/work/grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id'>
-                                        <span class='fa fa-fw fa-plus' data-original-title='$langSGradebookBook' title='' data-toggle='tooltip'></span></a>";
+                                        <span class='fa fa-fw fa-plus' data-bs-original-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
                     }
                 } else {
                     // disabled grade field if turnitin
@@ -5141,7 +5141,7 @@ function show_assignment($id, $display_graph_results = false) {
 								<td class='text-center'>
                                         $icon_field
                                     <a class='linkdelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id'>
-                                        <span class='fa fa-fw fa-times text-danger' data-original-title='$langDeleteSubmission' title='' data-toggle='tooltip'></span>
+                                        <span class='fa fa-fw fa-times text-danger' data-bs-original-title='$langDeleteSubmission' title='' data-bs-toggle='tooltip'></span>
                                     </a>
 							    </td>
 							</tr>";
@@ -5164,7 +5164,7 @@ function show_assignment($id, $display_graph_results = false) {
                         </div>
                     </div>
                 </div>
-                <div class='pull-right'>
+                <div class='float-end'>
                     <button class='btn btn-primary' type='submit' name='submit_grades' $disabled_submit>$langGradeOk</button>
                 </div>
                 </form>";

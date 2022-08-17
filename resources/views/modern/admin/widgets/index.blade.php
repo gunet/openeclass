@@ -44,7 +44,7 @@
                                             <div class="panel-heading pt-2 pb-2 ps-3 pe-3">                   
                                                 <a class='text-white' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
                                                 href="#widget_desc_{{ $key }}" class="widget_title">
-                                                    {{ $installed_widget->getName() }} <span></span> <span class="pull-right"></span>
+                                                    {{ $installed_widget->getName() }} <span></span> <span class="float-end"></span>
                                                     <span class='fa fa-arrow-down ps-2 fs-6'></span>
                                                 </a>                     
                                             </div>
@@ -53,7 +53,7 @@
                                                     {{ $installed_widget->getDesc() }}
                                                 </div>
                                                 <div class="panel-footer clearfix">
-                                                    <div class="pull-right">
+                                                    <div class="float-end">
                                                         <form action='{{ $_SERVER['SCRIPT_NAME'] }}' id="uninstallForm{{ $key }}" method="post">
                                                             <input type="hidden" name='widgetClassName' value='{{ get_class($installed_widget) }}'>
                                                             <input type="hidden" name='widgetAction' value='uninstall'>
@@ -72,8 +72,8 @@
                                                     <a href="#" class="remove text-danger">
                                                         <small>{{ trans('langDelete') }}</small>
                                                     </a>
-                                                    <div class="pull-right">
-                                                        <a href="#" class="btn btn-xs btn-primary submitOptions">
+                                                    <div class="float-end">
+                                                        <a href="#" class="btn btn-sm btn-primary submitOptions">
                                                             {{ trans('langSubmit') }}
                                                         </a>                                
                                                     </div>                    
@@ -106,7 +106,7 @@
                                             </span>
                                         </div>
                                         <div class="panel-footer clearfix">
-                                            <div class="pull-right">
+                                            <div class="float-end">
                                                 <form action='{{ $_SERVER['SCRIPT_NAME'] }}' id="installForm{{ $key }}" method="post">
                                                     <input type="hidden" name='widgetClassName' value='{{ get_class($uninstalled_widget) }}'>
                                                     <input type="hidden" name='widgetAction' value='install'>

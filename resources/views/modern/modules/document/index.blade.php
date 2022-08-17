@@ -97,7 +97,7 @@
                             <div class='panel'>
                                 <div class='panel-body bg-light NoBorders'>
                                     @if ($curDirName)
-                                        <div class='pull-right'>
+                                        <div class='float-end'>
                                             <a href='{{$parentLink}}' type='button' class='btn btn-success btn-sm'>
                                                 <span class='fa fa-level-up'></span>&nbsp;{{ trans('langUp') }}
                                             </a>

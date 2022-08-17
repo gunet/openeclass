@@ -809,7 +809,7 @@ function table_placeholder($table_id, $table_class, $table_schema, $title = null
             . "<span id='".$table_id."_title'>"
             . $title
             . "</span>"
-            ."<div class='pull-right' id='{$table_id}_buttons'></div><div style='clear:both;'></div>"
+            ."<div class='float-end' id='{$table_id}_buttons'></div><div style='clear:both;'></div>"
             . "</div>";
     }
     $t .= "<div class='table-responsive'>"

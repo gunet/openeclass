@@ -1775,7 +1775,7 @@ input[type="checkbox"]{
      border-bottom-right-radius: 7px;
      border-bottom-left-radius: 7px;
   }
-  .pull-right.label.label-success{
+  .float-end.label.label-success{
     width:125px;
   }
   .label.label-danger{

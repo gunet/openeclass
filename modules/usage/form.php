@@ -124,7 +124,7 @@ elseif($stats_type == 'user'){
 }
 //<a id="list-view" class="btn btn-default"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><span class="fa fa-list"  data-toggle="tooltip" data-placement="top"></span></a>
 
-$tool_content .= '<div class="pull-right pt-4">
+$tool_content .= '<div class="float-end pt-4">
     <div id="toggle-view" class="btn-group">
         <a id="plots-view" class="btn btn-info active"  data-bs-placement="top" title="'.$langPlots.'" data-bs-toggle="tooltip" data-original-title="'.$langPlots.'"><span class="fa fa-bar-chart"  data-bs-toggle="tooltip" data-bs-placement="top"></span></a>
         <a id="list-view" class="btn btn-info"  data-bs-placement="top" title="'.$langDetails.'" data-bs-toggle="tooltip" data-original-title="'.$langDetails.'"><span class="fa fa-list"  data-bs-toggle="tooltip" data-bs-placement="top"></span></a>';

@@ -239,7 +239,7 @@ function showgroupsofcategory($catid) {
         } else {
             if ($is_member or $is_tutor) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) . "</a>";
-                $tool_content .= "&nbsp;<span class='pull-right btn btn-success pe-none mt-2'>$langMyGroup</span>";
+                $tool_content .= "&nbsp;<span class='float-end btn btn-success btn-sm pe-none mt-2'>$langMyGroup</span>";
             } else {
                 $tool_content .= q($group_name);
             }
@@ -261,7 +261,7 @@ function showgroupsofcategory($catid) {
             }
         } else {
             if ($user_group_description && $student_desc) {
-                $tool_content .= "<small><a href = 'javascript:void(0);' data-toggle = 'modal' data-content='".q($user_group_description)."' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
+                $tool_content .= "<small><a href = 'javascript:void(0);' data-bs-toggle = 'modal' data-bs-content='".q($user_group_description)."' data-bs-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
             }
         }
         $tool_content .= "</td>";

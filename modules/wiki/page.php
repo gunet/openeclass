@@ -962,7 +962,7 @@ $print_button = icon('fa-print', $langWikiPagePrintable, "$_SERVER[SCRIPT_NAME]?
 if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes")) {
         $tool_content .= "<div class='col-sm-12'><div class='panel panel-action-btn-default'>
                                 <div class='panel-heading'>
-                                    <div class='pull-right'>
+                                    <div class='float-end'>
                                         ".action_button(array(
                                           array(
                                               'title' => $langWikiEditPage,

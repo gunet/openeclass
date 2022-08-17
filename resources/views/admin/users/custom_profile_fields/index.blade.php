@@ -11,7 +11,7 @@
                 <table class='table-default'>
                 <caption class='tile__name'>
                     <strong>{{ trans('langCategory') }} :</strong> {{ $res->name }}
-                    <div class='pull-right'>
+                    <div class='float-end'>
                         {!! action_button(array(
                             array(
                                     'title' => trans('langCPFNewField'),

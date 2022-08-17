@@ -259,7 +259,7 @@ if (isset($_GET['mid'])) {
             </fieldset>";
 
             $out .= "
-                <div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+                <div class='float-end'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                </form></div></div>";
 
             // forward form
@@ -324,7 +324,7 @@ if (isset($_GET['mid'])) {
                             </p>
                         </div>
                         <div class='col-sm-2'>
-                            <button class='pull-right btn btn-secondary attachment-delete-button'><span class='fa fa-times space-after-icon'></span>$langLessElements</button>
+                            <button class='float-end btn btn-secondary attachment-delete-button'><span class='fa fa-times space-after-icon'></span>$langLessElements</button>
                         </div>
                     </div>";
             } elseif ($course_id != 0) {
@@ -369,7 +369,7 @@ if (isset($_GET['mid'])) {
                     </div>
                 </fieldset>";
 
-            $out .= "<div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+            $out .= "<div class='float-end'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                </form></div></div>";
 
             // ************* End of forward form ******************

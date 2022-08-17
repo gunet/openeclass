@@ -150,7 +150,7 @@
                                     </a>
                                 @endif
                                 @if ($nextLink)
-                                    <a class='pull-right' title='{{ $nextTitle }}' href='{{ $nextLink}}'>
+                                    <a class='float-end' title='{{ $nextTitle }}' href='{{ $nextLink}}'>
                                         {{ ellipsize($nextTitle, 30) }}
                                         <span class='fa fa-arrow-right space-before-icon'></span>
                                     </a>

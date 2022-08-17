@@ -245,7 +245,7 @@ function tools($id, $vis) {
         $content = "<td class='option-btn-cell' style='width: 90px;'>
                <div class='reorder-btn pull-left ms-3 mb-2' style='font-size: 16px; cursor: pointer; margin-left:-10px; margin-top:6px;'>
                     <span class='fa fa-arrows' style='cursor: pointer;'></span>
-               </div><div class='pull-right'>";
+               </div><div class='float-end'>";
         $content .= action_button(array(
                     array('title' => $langEditChange,
                           'url' => "edit.php?course=$course_code&amp;id=$id",

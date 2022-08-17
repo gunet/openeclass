@@ -53,7 +53,7 @@
                                                             {{ $installed_widget->getDesc() }}
                                                         </div>
                                                         <div class="panel-footer clearfix">
-                                                            <div class="pull-right">
+                                                            <div class="float-end">
                                                                 <form action='{{ $_SERVER['SCRIPT_NAME'] }}' id="uninstallForm{{ $key }}" method="post">
                                                                     <input type="hidden" name='widgetClassName' value='{{ get_class($installed_widget) }}'>
                                                                     <input type="hidden" name='widgetAction' value='uninstall'>
@@ -72,7 +72,7 @@
                                                             <a href="#" class="remove">
                                                                 <small>{{ trans('langDelete') }}</small>
                                                             </a>
-                                                            <div class="pull-right">
+                                                            <div class="float-end">
                                                                 <a href="#" class="btn btn-xs btn-primary submitOptions">
                                                                     {{ trans('langSubmit') }}
                                                                 </a>                                

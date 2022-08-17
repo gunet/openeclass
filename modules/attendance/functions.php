@@ -1005,7 +1005,7 @@ function display_user_presences($attendance_id) {
             } // end of while
         }
         $tool_content .= "</table>";
-        $tool_content .= "<div class='pull-right'><input class='btn btn-primary' type='submit' name='bookUser' value='$langAttendanceBooking'></div>";
+        $tool_content .= "<div class='float-end'><input class='btn btn-primary' type='submit' name='bookUser' value='$langAttendanceBooking'></div>";
 }
 
 
@@ -1400,7 +1400,8 @@ function student_view_attendance($attendance_id) {
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>" . userAttendTotal($attendance_id, $uid) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </div></div>";
         }
 
-        $tool_content .= " <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><table class='announcements_table' >";
+        $tool_content .= " <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='table-responsive'><table class='announcements_table' >";
         $tool_content .= "<tr class='notes_thead'><th class='text-white'>$langTitle</th>
                               <th class='text-white'>$langAttendanceActivityDate2</th>
                               <th class='text-white'>$langDescription</th>
@@ -1441,7 +1442,7 @@ function student_view_attendance($attendance_id) {
             $tool_content .= "</td></tr>";
         } // end of while
     }
-    $tool_content .= "</table></div>";
+    $tool_content .= "</table></div></div>";
 }
 
 /**

@@ -753,7 +753,7 @@ if ($questionList) {
     } else {
         $backlink = "index.php?course=$course_code";
     }
-    $tool_content .= "<div class='pull-right'><a href='$backlink' class='btn btn-secondary'>$langBack</a></div>";
+    $tool_content .= "<div class='float-end'><a href='$backlink' class='btn btn-secondary'>$langBack</a></div>";
 }
 
 // "Temporary save" button

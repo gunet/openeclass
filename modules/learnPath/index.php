@@ -504,7 +504,7 @@ foreach ($result as $list) { // while ... learning path list
 
         $tool_content .= "
             <td>
-                <div><strong>$play_url</strong><span class='pull-right' style='padding-left: 15px;'  data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathData'>$play_button</span></div>
+                <div><strong>$play_url</strong><span class='float-end' style='padding-left: 15px;'  data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathData'>$play_button</span></div>
                 <div style='padding: 15px; 8px; 10px;'>$list->lp_comment</div>
             </td>\n";
 
@@ -561,9 +561,9 @@ foreach ($result as $list) { // while ... learning path list
 
     } else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
         if(!$is_editor){
-            $tool_content .= "<td><a href='javascript:void(0)' class='restrict_learn_path' data-bs-toggle='modal' data-bs-target='#restrictlp'>".htmlspecialchars($list->name)."</a>"/* .$list['minRaw'] */ . "<span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i></span></td>\n";
+            $tool_content .= "<td><a href='javascript:void(0)' class='restrict_learn_path' data-bs-toggle='modal' data-bs-target='#restrictlp'>".htmlspecialchars($list->name)."</a>"/* .$list['minRaw'] */ . "<span class='float-end'><i class='fa fa-minus-circle' style='font-size:20px';></i></span></td>\n";
         } else { // if is editor he can access the learning path even if it is restricted
-            $tool_content .=  "<td><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i>&nbsp;&nbsp;$play_button</span></td>\n";
+            $tool_content .=  "<td><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a><span class='float-end'><i class='fa fa-minus-circle' style='font-size:20px';></i>&nbsp;&nbsp;$play_button</span></td>\n";
         }
     }
 
@@ -621,7 +621,7 @@ foreach ($result as $list) { // while ... learning path list
         $tool_content .= "<td class='option-btn-cell' style='width: 90px;'>
                 <div class='reorder-btn pull-left' style='margin-left:15px;'>
                     <span class='fa fa-arrows' style='cursor: pointer;'></span>
-                </div><div class='pull-right' style='margin-top:10px;'>" .
+                </div><div class='float-end' style='margin-top:10px;'>" .
                 action_button($lp_menu) .
                 "</div></td>\n";
     } elseif ($uid) {

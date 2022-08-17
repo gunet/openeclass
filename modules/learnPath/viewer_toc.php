@@ -318,12 +318,12 @@ echo "<!DOCTYPE HTML>
                   <a id='leftTOCtoggler' class='btn pull-left'><span class='fa fa-bars fa-lg'></span></a>
                   <a id='toc_logo' class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='$logoUrl' alt='Logo'></a>
                 </div>
-                <div class='navbar-header col-xs-10 pull-right'>
+                <div class='navbar-header col-xs-10 float-end'>
                     <ul id='navigation-btns' class='nav navbar-nav navbar-right '>
                         $prevNextString
                         <li id='close-btn' style='padding-top: 15px;'><a href='$returl' target='_top'><span class='fa fa-times fa-lg'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></li>
                     </ul>
-                    <div class='pull-right progressbar-plr'>";
+                    <div class='float-end progressbar-plr'>";
 
                          if ($uid) {
                             $path_id = (int) $_SESSION['path_id'];

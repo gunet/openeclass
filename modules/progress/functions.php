@@ -710,7 +710,7 @@ function display_activities($element, $id, $unit_id = 0) {
             $tool_content .= "  <div class='col-sm-11'>
                                     <p class='text-left'>$prereq_unit_title</p>
                                 </div>
-                                <div class='col-sm-1 pull-right'>$delPrereqBtn</div>";
+                                <div class='col-sm-1 float-end'>$delPrereqBtn</div>";
         } else {
             $tool_content .= "<p class='text-center text-muted'>$langNoUnitPrerequisite</p>";
         }
@@ -1053,7 +1053,7 @@ function display_available_documents($element, $element_id, $unit_id = 0) {
             $parentpath = dirname($path);
             $dirname =  htmlspecialchars($dirname->filename);
             $parentlink = $urlbase . $parentpath;
-            $parenthtml = "<span class='pull-right'><a href='$parentlink'>$langUp " .
+            $parenthtml = "<span class='float-end'><a href='$parentlink'>$langUp " .
                     icon('fa-level-up') . "</a></span>";
             $colspan = 4;
         }

@@ -45,7 +45,7 @@
                                     &nbsp;
                                 @endif
                                 @if (!empty($next_unit_title))
-                                    <a class='pull-right' title='{{ $next_unit_title }}' href='{{ $next_unit_link }}'>{{ $next_unit_title }}<i class='fa fa-arrow-right space-before-icon'></i></a>
+                                    <a class='float-end' title='{{ $next_unit_title }}' href='{{ $next_unit_link }}'>{{ $next_unit_title }}<i class='fa fa-arrow-right space-before-icon'></i></a>
                                 @else
                                     &nbsp;
                                 @endif

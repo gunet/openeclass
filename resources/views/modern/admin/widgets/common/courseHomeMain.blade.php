@@ -10,7 +10,7 @@
                                 <div class="panel-heading">                   
                                     <a class='text-white' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
                                        href="#widget_desc_{{ $key }}" class="widget_title">
-                                        {{ $course_home_main_area_widget->getName() }} <span></span> <small class="pull-right">{{ $course_home_main_area_widget->is_course_admin_widget ? trans('langWidgetCourse') : trans('langWidgetAdmin') }}</small>
+                                        {{ $course_home_main_area_widget->getName() }} <span></span> <small class="float-end">{{ $course_home_main_area_widget->is_course_admin_widget ? trans('langWidgetCourse') : trans('langWidgetAdmin') }}</small>
                                     </a>                     
                                 </div>
                                 @if (!isset($courseWidgets) || isset($courseWidgets) && $course_home_main_area_widget->is_course_admin_widget)
@@ -22,8 +22,8 @@
                                         <a href="#" class="remove">
                                             <small>{{ trans('langDelete') }}</small>
                                         </a>
-                                        <div class="pull-right">
-                                            <a href="#" class="btn btn-xs btn-primary submitOptions">
+                                        <div class="float-end">
+                                            <a href="#" class="btn btn-sm btn-primary submitOptions">
                                                 {{ trans('langSubmit') }}
                                             </a>                                
                                         </div>                    

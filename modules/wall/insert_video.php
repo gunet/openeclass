@@ -50,7 +50,7 @@ function list_videos($id = NULL) {
         }
         
         $video_found = TRUE;
-        $ret_string .= "<table class='announcements_table'>";
+        $ret_string .= "<div class='table-responsive'><table class='announcements_table'>";
         $ret_string .= "<tr class='notes_thead'>" .
                          "<th width='200' class='text-white text-left'>&nbsp;$langTitle</th>" .
                          "<th class='text-white text-left'>$langDescription</th>" .
@@ -114,7 +114,7 @@ function list_videos($id = NULL) {
                 }
             }
         }
-        $ret_string .= "</table>";
+        $ret_string .= "</table></div>";
     }
     if (!$video_found) {
         $ret_string .= "

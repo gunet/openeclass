@@ -45,7 +45,7 @@ function list_forums($id = NULL) {
 
         $ret_string .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id' />" .
-                "<table class='announcements_table'>" .
+                "<div class='table-responsive'><table class='announcements_table'>" .
                 "<tr class='notes_thead'>" .
                 "<th class='text-white'>$langForums</th>" .
                 "<th class='text-white'>$langComments</th>" .
@@ -87,7 +87,7 @@ function list_forums($id = NULL) {
                 }
             }
         }
-        $ret_string .= "</table>";
+        $ret_string .= "</table></div>";
     }
     return $ret_string;
 }

@@ -157,7 +157,7 @@ if ($total_topics > TOPICS_PER_PAGE) { // navigation
 
     $tool_content .= "
     <nav class='clearfix'>
-      <ul class='pagination pull-right'>
+      <ul class='pagination float-end'>
         <li $privurlclass>
             <a href='$prevurl' aria-label='Previous'>
                 <span aria-hidden='true'>&laquo;</span>
