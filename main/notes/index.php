@@ -228,7 +228,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <h3 class='panel-title'>".q($note->title)."</h3>
             </div>
             <div class='panel-body'>
-                <div class='btn btn-success pe-none'>". claro_format_locale_date($dateFormatLong, strtotime($note->date_time)). "</div><br><br>
+                <div class='btn btn-success btn-sm pe-none'>". claro_format_locale_date($dateFormatLong, strtotime($note->date_time)). "</div><br><br>
                 $note->content
             </div>
         </div></div>";

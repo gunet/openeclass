@@ -218,7 +218,7 @@ if (isset($_GET['all'])) {
                                   <input class='btn btn-default' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
                               </div>
                           </td>
-                          <td class='text-right'>
+                          <td class='text-end'>
                             <select class='form-control' id='members_box' name='ingroup[]' size='15' multiple>
                               $tool_content_group_members
                             </select>

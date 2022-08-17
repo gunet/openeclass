@@ -100,7 +100,7 @@ if (!isset($_POST['doit'])) {
             $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langCoursError</div></div>";
         }
     }
-    $tool_content .= "<br><br><div class='text-right'><a href='../index.php' class=mainpage>$langBack</a></div>";
+    $tool_content .= "<br><br><div class='text-end'><a href='../index.php' class=mainpage>$langBack</a></div>";
 }
 
 if (isset($_SESSION['uid'])) {

@@ -591,8 +591,8 @@ function display_activities($element, $id, $unit_id = 0) {
                                                         <div class='col-sm-7'>
                                                             <strong>$langUnitCompletion</strong>
                                                         </div>
-                                                        <div class='col-sm-5 text-right'>
-                                                            <div class='text-right'>
+                                                        <div class='col-sm-5 text-end'>
+                                                            <div class='text-end'>
                                                                 $addActivityBtn
                                                             </div>
                                                         </div>

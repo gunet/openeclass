@@ -65,7 +65,7 @@
                                     <td class='text-center'>
                                         <b>{{ $verified_email_cnt }}</b>
                                     </td>
-                                    <td class='text-right'><input class='btn btn-primary' type='submit' name='submit1' value='{{ trans("m['edit']") }}'></td>
+                                    <td class='text-end'><input class='btn btn-primary' type='submit' name='submit1' value='{{ trans("m['edit']") }}'></td>
                                 </tr>
                         <tr>
                                     <td>
@@ -73,7 +73,7 @@
                             <td class='text-center'>
                                             <b>{{ $unverified_email_cnt }}</b>
                                         </td>
-                                        <td class='text-right'>
+                                        <td class='text-end'>
                                             <input class='btn btn-primary' type='submit' name='submit2' value='{{ trans("m['edit']}") }}'>
                                         </td>
                                 </tr>
@@ -83,7 +83,7 @@
                             <td class='text-center'>
                                             <b>{{ $verification_required_email_cnt }}</b>
                                         </td>
-                                        <td class='text-right'>
+                                        <td class='text-end'>
                                             <input class='btn btn-primary' type='submit' name='submit0' value='{{ trans("m['edit']") }}'>
                                         </td>
                                 </tr>
@@ -95,7 +95,7 @@
                                         <td class='text-center'>
                                             <b>{{ $empty_email_user_cnt }}</b>
                                         </td>
-                                        <td class='text-right'>&nbsp;</td>
+                                        <td class='text-end'>&nbsp;</td>
                                     </tr>
                                 @endif
                                 <tr>
@@ -105,7 +105,7 @@
                                     <td class='text-center'>
                                         <b>{{ $user_cnt }}</b>
                                     </td>
-                                    <td class='text-right'>&nbsp;</td>
+                                    <td class='text-end'>&nbsp;</td>
                                 </tr>
                     </table>
                         </div> 

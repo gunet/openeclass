@@ -22,7 +22,7 @@
     @endif     
     <div class='form-wrapper'>
         <div class='row margin-bottom-fat'>
-            <div class='col-sm-3 text-right'>
+            <div class='col-sm-3 text-end'>
                 <strong>{{ trans('langActiveTheme') }}:</strong>
             </div>
             <div class='col-sm-9'>

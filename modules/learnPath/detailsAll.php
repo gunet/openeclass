@@ -123,8 +123,8 @@ foreach ($usersList as $user) {
     $tool_content .= "<tr>";
     $tool_content .= "<td><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . uid_to_name($user->id) . "</a></td>
             <td class='text-center'>" . q(uid_to_am($user->id)) . "</td>
-            <td class='text-left'>" . user_groups($course_id, $user->id) . "</td>
-            <td class='text-right' width='120'>"
+            <td class='text-start'>" . user_groups($course_id, $user->id) . "</td>
+            <td class='text-end' width='120'>"
             . disp_progress_bar($total, 1) . "
             </td>";
     $tool_content .= "</tr>";

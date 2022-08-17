@@ -466,7 +466,7 @@ if (isset($level) && !empty($level)) {
         </div>";
     $data['opencourses_level_footer'] = "
         <div class='row'>
-            <div class='col-12 text-right'>
+            <div class='col-12 text-end'>
                 <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata</a>".icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");")."</small>
             </div>
         </div>";

@@ -319,7 +319,7 @@
                                       
                                   </div>
 
-                              <div class='text-right'><small>{{ trans('langFieldsOptionalNote') }}</small></div>
+                              <div class='text-end'><small>{{ trans('langFieldsOptionalNote') }}</small></div>
                      
                           {!! generate_csrf_token_form_field() !!}
                         </form></div></div>

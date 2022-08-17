@@ -633,7 +633,7 @@ foreach ($result as $list) { // while ... learning path list
         if ($prog >= 0) {
             $globalprog += $prog;
         }
-        $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($prog, 1) . "</td>";
+        $tool_content .= "<td class='text-end' width='120'>" . disp_progress_bar($prog, 1) . "</td>";
     }
     $tool_content .= "</tr>\n";
     $iterator++;

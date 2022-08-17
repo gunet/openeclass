@@ -184,7 +184,7 @@ if (!$upgrade_begin and $uid) {
                              </div>
                              <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
                            </form>
-                           <div class='text-right'>
+                           <div class='text-end'>
                              <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
                            </div>");
             }

@@ -170,7 +170,7 @@ function list_docs() {
                 } else {
                     $size = format_file_size($entry['size']);
                     $date = nice_format($entry['date'], true, true);
-                    $tool_content .= "<td class='text-right'>$size</td><td class='text-center'>$date</td>";
+                    $tool_content .= "<td class='text-end'>$size</td><td class='text-center'>$date</td>";
                 }
                 $tool_content .= "</tr>";
                 $counter++;

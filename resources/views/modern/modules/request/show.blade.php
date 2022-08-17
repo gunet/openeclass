@@ -95,7 +95,7 @@
                         <div class='panel-body panel-body-request'>
    
                             <div class='row'>
-                                <div class='col-12 col-sm-2 text-right'>
+                                <div class='col-12 col-sm-2 text-end'>
                                     <b class='control-label-notes ps-3'>{{ trans('langNewBBBSessionStatus') }}:</b>
                                 </div>
                                 <div class='col-12 col-sm-4'>
@@ -103,14 +103,14 @@
                                 </div>
                             </div>
                             <div class='row'>
-                                <div class='col-12 col-sm-2 text-right'>
+                                <div class='col-12 col-sm-2 text-end'>
                                     <b class='control-label-notes ps-3'>{{ trans('langFrom') }}:</b>
                                 </div>
                                 <div class='col-12 col-sm-4'>
                                     {!! display_user($request->creator_id) !!}
                                 </div>
                                 @if ($watchers)
-                                    <div class='col-12 col-sm-2 text-right'>
+                                    <div class='col-12 col-sm-2 text-end'>
                                         <b class='control-label-notes ps-3'>{{ trans('langWatchers') }}:</b>
                                     </div>
                                     <div class='col-12 col-sm-4'>
@@ -120,7 +120,7 @@
                                     </div>
                                 @endif
                                 @if ($assigned)
-                                    <div class='col-12 col-sm-2 text-right'>
+                                    <div class='col-12 col-sm-2 text-end'>
                                         <b class='control-label-notes ps-3'>{{ trans("m['WorkAssignTo']") }}:</b>
                                     </div>
                                     <div class='col-12 col-sm-4'>
@@ -134,7 +134,7 @@
                             @if ($field_data)
                                 @foreach ($field_data as $field)
                                     <div class='row'>
-                                        <div class='col-12 col-sm-2 text-right'>
+                                        <div class='col-12 col-sm-2 text-end'>
                                             <b>{{ getSerializedMessage($field->name) }}:</b>
                                         </div>
                                         <div class='col-12 col-sm-10'>

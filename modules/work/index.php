@@ -4091,7 +4091,7 @@ function show_assignment_review($id, $display_graph_results = false) {
                 }
                 $grade_field = "<a class='link' href='$grade_link'><span class='fa fa-fw fa-plus' data-bs-original-title='$langSGradebookBook' title='' data-bs-toggle='tooltip'></span></a>";
             }
-            $tool_content .= "<tr><td class='text-right' width='4'>$i.</td>";
+            $tool_content .= "<tr><td class='text-end' width='4'>$i.</td>";
             // check for plagiarism via unicheck (aka 'unplag') tool (http://www.unicheck.com)
             if (get_config('ext_unicheck_enabled') and valid_plagiarism_file_type($row->id)) {
                 $results = Plagiarism::get()->getResults($row->id);
@@ -4884,7 +4884,7 @@ function show_assignment($id, $display_graph_results = false) {
                     <strong class='control-label-notes ps-1'>$langSubmissions:</strong>&nbsp; $count_of_assignments";
                 // button for transferring student peer review grades to teacher grades
                 if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && ($count_of_ass > 0)) {
-                    $tool_content .= "<div class='text-right' style='margin-bottom: 15px;'><a class='btn btn-primary' href='$_SERVER[SCRIPT_NAME]?course=$course_code' id='transfer_grades'>$langTransferGrades</a></div>";
+                    $tool_content .= "<div class='text-end' style='margin-bottom: 15px;'><a class='btn btn-primary' href='$_SERVER[SCRIPT_NAME]?course=$course_code' id='transfer_grades'>$langTransferGrades</a></div>";
                 }
                 $tool_content .= "</div>";
 
@@ -5073,7 +5073,7 @@ function show_assignment($id, $display_graph_results = false) {
                     $am_field = "<h6>$langAmShort: " . q($stud_am) . "</h6>";
                 }
                 $tool_content .= "<tr>
-                                <td class='text-right count-col'>$i.</td>
+                                <td class='text-end count-col'>$i.</td>
                                 <td class='user-col'>$name $am_field $mess";
 
                 // student comment

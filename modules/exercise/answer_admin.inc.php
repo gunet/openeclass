@@ -451,7 +451,7 @@ if (isset($_GET['modifyAnswers'])) {
                 <fieldset>
                 <table class='table table-striped table-hover'>";
             $tool_content .= "<tr>
-                          <th class='text-right'></th>
+                          <th class='text-end'></th>
                           <th class='text-center'>$langCorrect</th>
                           <th class='text-center'>$langAnswer</th>
                           <th class='text-center'>$langComment</th>
@@ -459,7 +459,7 @@ if (isset($_GET['modifyAnswers'])) {
                         </tr>";
 
             for ($i = 1; $i <= $nbrAnswers; $i++) {
-                $tool_content .="<tr><td class='text-right' valign='top'>$i.</td>";
+                $tool_content .="<tr><td class='text-end' valign='top'>$i.</td>";
                 if ($answerType == UNIQUE_ANSWER) {
                     $tool_content .= "<td class='text-center'><input type='radio' value=\"" . $i . "\" name='correct' ";
                     if ((isset($correct) and $correct == $i) or (isset($_POST['correct']) and ($_POST['correct'] == $i))) {
@@ -565,7 +565,7 @@ if (isset($_GET['modifyAnswers'])) {
                              $default_selection = '';
                          }
                          $tool_content .= "<tr>
-                                            <td style='border-style: none;' class='text-right'>" . selection($blank, "correct_selected_word[".$i."]", $default_selection,'class="form-control"') . "</td>
+                                            <td style='border-style: none;' class='text-end'>" . selection($blank, "correct_selected_word[".$i."]", $default_selection,'class="form-control"') . "</td>
                                             <td style='border-style: none;'><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
                                          </tr>";
                      }
@@ -575,7 +575,7 @@ if (isset($_GET['modifyAnswers'])) {
                                      <table class='table'>";
                      foreach ($blanks as $i => $blank) {
                          $tool_content .= "<tr>
-                                            <td style='border-style: none;' class='text-right'><strong>[" . q($blank) . "] :</strong></td>" . "
+                                            <td style='border-style: none;' class='text-end'><strong>[" . q($blank) . "] :</strong></td>" . "
                                             <td style='border-style: none;'><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
                                          </tr>";
                      }
@@ -608,7 +608,7 @@ if (isset($_GET['modifyAnswers'])) {
                <td>&nbsp;</td>
                <td><b>$langColumnA:</b> <span style='valign:middle;'>$langMoreLessChoices:</span> <input type='submit' name='moreMatches' value='+' />&nbsp;
                <input type='submit' name='lessMatches' value='-' /></td>
-               <td><div align='text-right'>$langColumnB</div></td>
+               <td><div align='text-end'>$langColumnB</div></td>
                <td>$langScore</td>
              </tr>";
          $i = $objAnswer->getFirstMatchingPosition();
@@ -625,9 +625,9 @@ if (isset($_GET['modifyAnswers'])) {
              $optionWeight = isset($weighting[$i])? q($weighting[$i]): 1;
 
              $tool_content .= "<tr>
-               <td class='text-right'><strong>$j</strong></td>
+               <td class='text-end'><strong>$j</strong></td>
                <td><input class='form-control' type='text' name='match[$i]' value='" . q($optionText) . "'></td>
-               <td><div class='text-right'><select class='form-control' name='sel[$i]'>";
+               <td><div class='text-end'><select class='form-control' name='sel[$i]'>";
              foreach ($optionsList as $key => $val) {
                  $tool_content .= "<option value='" . q($key) . "'";
                  if ((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || @$sel[$i] == $key) {
@@ -642,7 +642,7 @@ if (isset($_GET['modifyAnswers'])) {
 
          $tool_content .= "
          <tr>
-           <td class='text-right'>&nbsp;</td>
+           <td class='text-end'>&nbsp;</td>
            <td colspan='3'>&nbsp;</td>
          </tr>
          <tr>
@@ -655,7 +655,7 @@ if (isset($_GET['modifyAnswers'])) {
 
          foreach ($optionsList as $key => $val) {
              $tool_content .= "<tr>
-                       <td class='text-right'><strong>" . q($val) . "</strong></td>
+                       <td class='text-end'><strong>" . q($val) . "</strong></td>
                        <td><input class='form-control' type='text' " .
                      "name=\"option[" . $key . "]\" size='58' value=\"";
              if (isset($_POST['option'][$key])) {

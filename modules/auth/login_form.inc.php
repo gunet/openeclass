@@ -94,7 +94,7 @@ function login_form($format='main') {
                              </div>
                              <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
                            </form>
-                           <div class='text-right'>
+                           <div class='text-end'>
                              <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
                            </div>");
             }
@@ -149,7 +149,7 @@ function login_form($format='main') {
                             <input name='pass' type='password' class='form-control' id='pass' placeholder='$langPass'>
                         </div>
                         <button type='submit' name='submit' class='btn btn-primary btn-block'>$langEnter</button>
-                        <div class='text-right small lost-pass-link'>
+                        <div class='text-end small lost-pass-link'>
                             <a href='$urlAppend/modules/auth/lostpass.php'>$lang_forgot_pass</a>
                         </div>
                     </form>

@@ -611,7 +611,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                             <div class='form-group'>
                                 <input type='text' class='form-control' value='$iCalFeedLink' readonly>
                             </div>
-                            <div class='form-group text-right'>
+                            <div class='form-group text-end'>
                                 <button class='btn btn-secondary' data-bs-dismiss='modal'>$langClose</button>
                             </div>
                         </form>

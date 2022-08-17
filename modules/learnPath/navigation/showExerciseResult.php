@@ -355,7 +355,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
     } // end for()
     if ($displayScore == 1) {
         echo "<tr>
-              <th colspan='$colspan'><div class='text-right'>
+              <th colspan='$colspan'><div class='text-end'>
                         $langQuestionScore: <strong>" . round($questionScore, 2) . " / $questionWeighting</strong></div>
               </th>
             </tr>";

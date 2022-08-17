@@ -648,7 +648,7 @@ if (count($exercise_question_ids) > 0) {
         $rounded_score = round($questionScore, 2);
         if ($showScore and $rounded_weight != $rounded_score) {
             $tool_content .= "<tr class='warning'>
-                                <th colspan='2' class='text-right'>
+                                <th colspan='2' class='text-end'>
                                     $langQuestionStoredScore: $rounded_weight / $questionWeighting
                                 </th>
                               </tr>";

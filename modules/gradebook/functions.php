@@ -813,7 +813,7 @@ function student_view_gradebook($gradebook_id, $uid) {
         $s_grade = userGradeTotal($gradebook_id, $uid);
         $tool_content .= "
             <tr>
-                <th colspan='5' class='text-right'>$langGradebookSum:</th>
+                <th colspan='5' class='text-end'>$langGradebookSum:</th>
                 <th class='text-center'>". (($s_grade != "&mdash;") ? $s_grade . " / $range" : "$s_grade"). "</th>
             </tr>";
     }

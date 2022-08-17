@@ -224,7 +224,7 @@ $(function() {
             foreach ($headings as $lang => $msg) {
                 $tool_content .= "
           <div class='row'>
-            <div class='col-md-2 col-4 text-right'>
+            <div class='col-md-2 col-4 text-end'>
               <strong>" . $langNameOfLang[langcode_to_name($lang)] . ":</strong>
             </div>
             <div class='col-md-10 col-8'>" . q($msg) . "</div>

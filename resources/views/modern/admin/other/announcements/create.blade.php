@@ -56,7 +56,7 @@
                                     <div class='col-sm-12'>
                                         {!! lang_select_options('lang_admin_ann', "class='form-control'", isset($announcement) ? $announcement->lang : false) !!}
                                     </div>
-                                    <small class='text-right'>
+                                    <small class='text-end'>
                                         <span class='help-block'>{{ trans('langTipLangAdminAnn') }}</span>
                                     </small>
                                 </div>

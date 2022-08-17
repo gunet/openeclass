@@ -577,7 +577,7 @@ function display_my_exercises($dialogBox, $style) {
                         . '</td></tr>';
             }
         $output .= "</table></div>";
-        $output .= "<div class='text-right'><input class='btn btn-primary' type='submit' name='insertExercise' value='$langAddModulesButton'></div>";
+        $output .= "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='insertExercise' value='$langAddModulesButton'></div>";
         $output .= "</form>";
     } else {
         $output .= "<div class='alert alert-warning text-center'>$langNoExercises</div>";
@@ -667,7 +667,7 @@ function display_my_documents($dialogBox, $style)
             } else {
                 $size = format_file_size($entry['size']);
                 $date = nice_format($entry['date'], true, true);
-                $content .= "<td class='text-right'>$size</td><td class='text-center'>$date</td>";
+                $content .= "<td class='text-end'>$size</td><td class='text-center'>$date</td>";
             }
             $content .= "<td class='text-center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
             $content .= "</tr>";
@@ -675,7 +675,7 @@ function display_my_documents($dialogBox, $style)
         }
     }
     $content .= "</table>";
-    $content .= "<div class='text-right'>";
+    $content .= "<div class='text-end mt-3'>";
     $content .= "<input class='btn btn-primary' type='submit' name='submitInsertedDocument' value='$langAddModulesButton'>";
     $content .= "</div>";
 
