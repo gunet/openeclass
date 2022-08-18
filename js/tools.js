@@ -627,7 +627,7 @@ function initialize_multifile_submission(max) {
         fileInputs = fileInputCount();
         if (fileInputs < max) {
             var newInput = $(this).closest('.col-sm-10').clone();
-            $(newInput).addClass('col-sm-offset-2').find('input').val(null);
+            $(newInput).addClass('col-sm-offset-2 mt-2').find('input').val(null);
             if (fileInputs == max - 1) {
                 $(newInput).find('button').prop('disabled', true);
             }

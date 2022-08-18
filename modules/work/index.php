@@ -4303,7 +4303,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 $inputName = 'userfile[]';
                 $moreButton = "<div class='float-end'>
                                  <button class='btn btn-info btn-xs moreFiles'>
-                                   <span class='fa fa-plus'></span>
+                                   <span class='fa fa-plus text-white'></span>
                                  </button>
                                </div>";
                 $GLOBALS['head_content'] .=
@@ -4316,7 +4316,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
             $submission_form = "
                         <div class='form-group mt-3'>
                             <label for='userfile' class='col-sm-6 control-label-notes'>$label:</label>
-                            <div class='col-sm-12'>$moreButton
+                            <div class='col-sm-10'>$moreButton
                               <input type='file' name='$inputName' id='userfile'>
                             </div>
                         </div>";
