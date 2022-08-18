@@ -938,7 +938,7 @@ function display_user_presences($attendance_id) {
         if ($actNumber > 0) {
             $tool_content .= "<h5>". display_user($userID) ."</h5>";
             $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
-                              <table class='announcements_table'>";
+                              <div class='table-responsive'><table class='announcements_table'>";
             $tool_content .= "<tr class='notes_thead'><th class='text-white'>$langTitle</th><th class='text-white'>$langDate</th><th class='text-white'>$langType</th>";
             $tool_content .= "<th width='10' class='text-white text-center'>$langAttendanceBooking</th>";
             $tool_content .= "</tr>";
@@ -1004,8 +1004,8 @@ function display_user_presences($attendance_id) {
                 </td></tr>";
             } // end of while
         }
-        $tool_content .= "</table>";
-        $tool_content .= "<div class='float-end'><input class='btn btn-primary' type='submit' name='bookUser' value='$langAttendanceBooking'></div>";
+        $tool_content .= "</table></div>";
+        $tool_content .= "<div class='float-end mt-3'><input class='btn btn-primary' type='submit' name='bookUser' value='$langAttendanceBooking'></div>";
 }
 
 

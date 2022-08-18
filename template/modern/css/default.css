@@ -1427,6 +1427,10 @@ input[type="checkbox"]{
     background: red;
   }
 
+  .menu-popover .fa-times{
+    color:white;
+  }
+
   /* after close modal , display none from body and block inside popover for form-action-button */
   body .form-action-button-popover{
     display: none;

@@ -121,7 +121,7 @@ $tool_content .= "
             <div class='col-12'>
                 <div class='alert alert-info'>
                     <strong>$langLearnPath:</strong> <span class='text-muted'>$LPname</span><br>
-                    <strong>$langStudent:</sstrong> <span class='text-muted'>".q($uDetails->surname) . "&nbsp;" . q($uDetails->givenname) . " (" . q($uDetails->email).")</span>
+                    <strong>$langStudent:</strong> <span class='text-muted'>".q($uDetails->surname) . "&nbsp;" . q($uDetails->givenname) . " (" . q($uDetails->email).")</span>
                 </div>
             </div>
         </div>";

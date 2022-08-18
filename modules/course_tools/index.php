@@ -130,7 +130,7 @@ if (isset($_POST['submit'])) {
                  )));
 
     view('modules.course_tools.external_link_store', $data);
-}
+}elseif(!isset($_GET['action'])){
 
 $data['toolSelection'][0] = $data['toolSelection'][1] = array();
 $module_list = Database::get()->queryArray('SELECT module_id, visible
@@ -160,3 +160,4 @@ $ltipublishapp = ExtAppManager::getApp('ltipublish');
 $data['ltiPublishIsEnabledForCurrentCourse'] = $ltipublishapp->isEnabledForCurrentCourse();
 
 view('modules.course_tools.index', $data);
+}

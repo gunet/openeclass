@@ -851,7 +851,7 @@ switch ($action) {
                 . '<input type="hidden" name="title" value="' . $wiki_title . '" />'
                 . '</div>';
 
-        $tool_content .= '<table class="table-default">';
+        $tool_content .= '<div class="table-responsive"><table class="table-default">';
 
         if (is_array($history)) {
             $firstPass = true;
@@ -902,8 +902,8 @@ switch ($action) {
                 $tool_content .= '</tr>';
             }
         }
-        $tool_content .= '</table>';
-        $tool_content .= '<input class="btn btn-primary" type="submit" name="action[diff]" value="' . $langWikiShowDifferences . '" /></form>';
+        $tool_content .= '</table></div>';
+        $tool_content .= '<input class="btn btn-primary mt-3" type="submit" name="action[diff]" value="' . $langWikiShowDifferences . '" /></form>';
         break;
     }
     case 'exSearch':

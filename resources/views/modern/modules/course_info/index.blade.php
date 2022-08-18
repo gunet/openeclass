@@ -334,7 +334,7 @@
                                             <div class="radio">
                                                 <label>
                                                     <input type='radio' value='1' name='enable_offline_course' {{ $log_offline_course_enable }} {{ $log_offline_course_inactive }}> {{ trans('langActivate') }}
-                                                    <span class='help-block'><small>{{ trans('langCourseOfflineLegend') }}</small></span>
+                                                    <span class='help-block ps-2 pe-2'><small>{{ trans('langCourseOfflineLegend') }}</small></span>
                                                 </label>
                                             </div>
                                             <div class="radio">
@@ -355,7 +355,7 @@
                                             <div class='radio'>
                                               <label>
                                                     <input type='radio' value='0' name='disable_log_course_user_requests' {{ $log_course_user_requests_enable }} {{ $log_course_user_requests_inactive }}> {{ trans('langActivate') }}
-                                                    <span class='help-block'><small>{{ $log_course_user_requests_disable }}</small></span>
+                                                    <span class='help-block ps-2 pe-2'><small>{{ $log_course_user_requests_disable }}</small></span>
                                               </label>
                                             </div>
                                               <label>
@@ -379,7 +379,7 @@
                                             <div class='radio'>
                                               <label>
                                                     <input type='radio' value='0' name='s_radio' {{ $checkSharingDis }} {{ $sharing_radio_dis }}> {{ trans('langSharingDis') }}
-                                                    <span class='help-block'><small>{{ $sharing_dis_label }}</small></span>
+                                                    <span class='help-block ps-2 pe-2'><small>{{ $sharing_dis_label }}</small></span>
                                               </label>
                                             </div>
                                         </div>
@@ -438,7 +438,7 @@
                                             <div class='radio'>
                                               <label>
                                                     <input type='radio' value='0' name='ran_radio' {{ $checkAnonRatingDis }} {{ $anon_rating_radio_dis }}> {{ trans('langRatingAnonDis') }}
-                                                    <span class='help-block'><small>{{ $anon_rating_dis_label }}</small></span>
+                                                    <span class='help-block ps-2 pe-2'><small>{{ $anon_rating_dis_label }}</small></span>
                                               </label>
                                             </div>
                                         </div>

@@ -722,7 +722,7 @@ if ($action == "showBlog") {
 
         /***blog posts area***/
         $tool_content .= "<div class='row m-auto'>";
-        $tool_content .= "<div class='col-sm-9 border border-secondary-4 shadow-sm p-3' style='background:#DCDCDC;'>";
+        $tool_content .= "<div class='col-sm-9 border border-secondary-4 bg-light shadow-sm p-3'>";
         foreach ($posts as $post) {
             if ($blog_type == 'course_blog') {
                 $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);

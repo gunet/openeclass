@@ -83,7 +83,7 @@
                         !!}
                         
                         <div class='col-12'>
-                            <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                            <div class='form-wrapper shadow-sm p-3 rounded'>
                                 
                                 <form class='form-horizontal'
                                     role='form'
