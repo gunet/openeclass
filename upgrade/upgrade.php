@@ -418,30 +418,30 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
           <div class='panel-body'>
             <fieldset>
           <div class='form-group'>
-                <label class='col-sm-2 control-label' for='id_Institution'>$langInstituteShortName:</label>
-                <div class='col-sm-10'>
+                <label class='col-sm-6 control-label-notes' for='id_Institution'>$langInstituteShortName:</label>
+                <div class='col-sm-12'>
               <input class='form-control' type='text' name='Institution' id='id_Institution' value='" . q($Institution) . "'>
             </div>
           </div>
-          <div class='form-group'>
-                <label class='col-sm-2 control-label' for='id_postaddress'>$langUpgAddress</label>
-                <div class='col-sm-10'>
+          <div class='form-group mt-3'>
+                <label class='col-sm-6 control-label-notes' for='id_postaddress'>$langUpgAddress</label>
+                <div class='col-sm-12'>
               <textarea class='form-control' rows='3' name='postaddress' id='id_postaddress'>" . q($postaddress) . "</textarea>
             </div>
           </div>
-          <div class='form-group'>
-                <label class='col-sm-2 control-label' for='id_telephone'>$langUpgTel</label>
-                <div class='col-sm-10'>
+          <div class='form-group mt-3'>
+                <label class='col-sm-6 control-label-notes' for='id_telephone'>$langUpgTel</label>
+                <div class='col-sm-12'>
               <input class='form-control' type='text' name='telephone' id='id_telephone' value='" . q($telephone) . "'>
             </div>
           </div>
-          <div class='form-group'>
-                <label class='col-sm-2 control-label' for='id_fax'>Fax:</label>
-                <div class='col-sm-10'>
+          <div class='form-group mt-3'>
+                <label class='col-sm-6 control-label-notes' for='id_fax'>Fax:</label>
+                <div class='col-sm-12'>
               <input class='form-control' type='text' name='fax' id='id_fax' value='" . q($fax) . "'>
             </div>
           </div>
-          <div class='form-group'>
+          <div class='form-group mt-3'>
             <div class='col-md-12'>
               <input class='pull-right btn btn-primary' name='submit2' value='$langContinue &raquo;' type='submit'>
                 </div>

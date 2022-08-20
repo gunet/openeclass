@@ -147,7 +147,28 @@ a{
 /* this is space between input-radio and texts */
 input[type="radio"]{
   margin: 0 5px 0 0px;
+  accent-color: #003F87;
+  border-radius: 50%;
+  width:17px;
+  height:17px;
+  min-width: 17px;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 2px solid #003F87;
+  transition: 0.2s all linear;
+  position: relative;
+  top: 0px;
 }
+input[type="radio"]:checked {
+  border: 6px solid #003F87;
+  outline: unset;
+}
+input[type="radio"]:disabled {
+  opacity: 0.3;
+}
+
 
 /* this is d-inline-flex between inputs-checkbox and texts */
 .checkbox label{
@@ -160,6 +181,10 @@ input[type="radio"]{
 /* this is space between input-checkbox and texts */
 input[type="checkbox"]{
   margin: 0 5px 0 0px;
+  accent-color: #003F87;
+  width:17px;
+  height:17px;
+  min-width: 17px;
 }
 
 /* ------------------------------------- alerts ------------------------------------------ */
