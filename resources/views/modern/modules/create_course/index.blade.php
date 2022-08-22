@@ -167,7 +167,7 @@
                                   <div class="row p-2">
                                     <div class="col-lg-12 col-12">
                                       <div class='form-group'>
-                                          <label for='description' class='col-sm-12 control-label-notes'>Περιγραφή μαθήματος (προαιρετικό)</label>
+                                          <label for='description' class='col-sm-12 control-label-notes'>{{trans('langDescrInfo')}} <small>{{trans('langOptional')}}</small></label>
                                           <div class='col-sm-12'>
                                                 {!! $rich_text_editor !!}
                                           </div>

@@ -3,7 +3,7 @@
     @if(($is_editor or $is_power_user or $is_departmentmanage_user or $is_usermanage_user or $is_course_teacher) && $course_code)
         <p class="text-center text-light fs-6 mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
         <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center'>
-            <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}' data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}">
+            <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}' data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}">
                 <span class="on">{{ trans('langCStudent2') }}</span>
                 <span class="off">{{ trans('langCTeacher') }}</span>
                 <p class="on2">{{ trans('langCStudent2') }}</p>
@@ -25,11 +25,13 @@
                     <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langManageUser') }}</span>
                     @elseif($session->status == USER_DEPARTMENTMANAGER)
                     <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langManageDepartment') }}</span>
+                    @elseif($session->status == USER_GUEST)
+                    <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langVisitor') }}</span>
                     @else
                     <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langAdministrator') }}</span>
                     @endif
                 @else
-                <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langVisitor') }}</span>
+                <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langCStudent2') }}</span>
                 @endif
             </a>
         </div>
