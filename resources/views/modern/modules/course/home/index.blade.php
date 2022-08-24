@@ -332,7 +332,7 @@
                                 <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                     <div class='control-label-notes text-center'>{{ trans('langOpenCourseShort') }}</div>
                                 </div>
-                                <div class='panel-body'>
+                                <div class='panel-body NoBorders'>
                                     {!! $opencourses_level !!}
                                 </div>
                                 <div class='panel-footer'>

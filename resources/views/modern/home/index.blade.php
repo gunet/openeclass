@@ -12,7 +12,7 @@
 
                 <div class="row">
 
-                    @if(!get_config('dont_display_login_form'))
+                    @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
                     <div class='col-12 card jumbotron jumbotron-login BordersTop'>
                         <div class='row'>
                             @if($warning)<div class='col-12 mt-4 mb-0'>{!! $warning !!}</div>@endif

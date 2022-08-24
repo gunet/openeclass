@@ -424,6 +424,7 @@ if ($uid) {
 
 // display opencourses level in bar
 $level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
+$data['level'] = $level;
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
     $head_content .= "
@@ -452,10 +453,10 @@ if (isset($level) && !empty($level)) {
 </script>";
     $data['opencourses_level'] = "
         <div class='row'>
-            <div class='col-4'>
+            <div class='col-12 d-flex justify-content-center'>
                 <img class='img-responsive center-block' src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
             </div>
-            <div class='col-8'>
+            <div class='col-12 mt-3'>
                 <div style='border-bottom:1px solid #ccc; margin-bottom: 5px;'>${langOpenCoursesLevel}: $level</div>
                 <p class='not_visible'>
                 <small>$langVisitsShort : &nbsp;$visitsopencourses</small>
@@ -466,7 +467,7 @@ if (isset($level) && !empty($level)) {
         </div>";
     $data['opencourses_level_footer'] = "
         <div class='row'>
-            <div class='col-12 text-end'>
+            <div class='col-12 text-center'>
                 <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata</a>".icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");")."</small>
             </div>
         </div>";

@@ -8,7 +8,9 @@
             <a class="btn btn-transparent text-white" href="{{$urlAppend}}info/faq.php"><span class='fa fa-question-circle fa-fw text-white'></span></a>
             <a class="btn btn-transparent text-white" href="{{$urlAppend}}info/manual.php"><span class='fa fa-file-video-o fa-fw text-white'></span></a>
             <a class="btn btn-transparent text-white" href="{{$urlAppend}}info/terms.php"><span class='fa fa-gavel text-white'></span></a>
+            @if (get_config('activate_privacy_policy_text'))
             <a class="btn btn-transparent text-white" href="{{$urlAppend}}info/privacy_policy.php"><span class='fas fa-shield-alt text-white'></span></a>
+            @endif
         </div>
         
     </div>

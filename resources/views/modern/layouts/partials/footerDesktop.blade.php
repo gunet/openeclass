@@ -12,7 +12,9 @@
                 <ul class="ul_tools_site_footer">
                     <li><a class="a_tools_site_footer fs-6" href="{{$urlAppend}}info/manual.php"><span class='fa fa-file-video-o fa-fw colorPalette'></span><span class='ps-2'>{{ trans('langManuals') }}</span></a></li>
                     <li><a class="a_tools_site_footer fs-6" href="{{$urlAppend}}info/terms.php"><span class='fa fa-gavel colorPalette'></span><span class='ps-2'>{{ trans('langUsageTerms') }}</span></a></li>
+                    @if (get_config('activate_privacy_policy_text'))
                     <li><a class="a_tools_site_footer fs-6" href="{{$urlAppend}}info/privacy_policy.php"><span class='fas fa-shield-alt colorPalette'></span><span class='ps-2'>{{ trans('langPrivacyPolicy') }}</span></a></li>
+                    @endif
                 </ul>
             </div>
             <div class="col-lg-4 col-xl-5 col-xxl-5">

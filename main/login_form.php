@@ -53,23 +53,27 @@ foreach ($q as $l) {
         $authLink[] = array(true, "
           <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
             $next
-            <div class='form-group mt-3'>
-              <div class='col-12 ps-2 pe-2'>
-                <input class='form-control' name='uname' placeholder='$langUsername'$userValue autofocus>
-              </div>
-            </div>
-            <div class='form-group mt-3'>
-              <div class='col-12 ps-2 pe-2'>
-                <input class='form-control' name='pass' type='password' placeholder='$langPass'>
-              </div>
-            </div>
-            <div class='form-group mt-3'>
-              <div class='row p-2'>
-                <div class='col-3 ps-3'>
-                  <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+            <div class='row'>
+              <div class='col-12'>
+                <div class='input-group mt-3'>
+                    <span class='input-group-text' id='usernameIcon'><span class='fa fa-user text-dark'></span></span>
+                    <input class='form-control' name='uname' aria-describedby='usernameIcon' placeholder='$langUsername'$userValue>
                 </div>
-                <div class='col-9 text-end pt-3'>
-                  <a class='fs-6' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
+              </div>
+              <div class='col-12'>
+                <div class='input-group mt-3'>
+                    <span class='input-group-text' id='passwordIcon'><span class='fa fa-lock text-danger'></span></span>
+                    <input class='form-control' name='pass' type='password' aria-describedby='passwordIcon' placeholder='$langPass'>
+                </div>
+              </div>
+            </div>
+            <div class='form-group mt-3'>
+              <div class='row'>
+                <div class='col-md-3 col-12 text-md-start text-center'>
+                  <button class='btn btn-primary w-100 margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+                </div>
+                <div class='col-md-9 col-12 text-md-end text-center mt-md-0 mt-3'>
+                  <a class='btn btn-secondary fs-6' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
                 </div>
               </div>
            </div>

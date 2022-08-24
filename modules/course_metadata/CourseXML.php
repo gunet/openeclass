@@ -91,7 +91,7 @@ class CourseXMLElement extends SimpleXMLElement {
                    <li class='nav-item'><a class='nav-link' href='#tabs-3' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['curriculumGroup'] . "</a></li>
                    <li class='nav-item'><a class='nav-link' href='#tabs-4' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
                 </ul>
-                <div class='tab-content courseMetadataContentTab ps-3 pt-3 pb-3 pe-3'>
+                <div class='tab-content courseMetadataContentTab shadow-lg p-3 rounded'>
                     <div class='tab-pane fade show active' id='tabs-1' style='padding-top:20px'>";
         if ($data != null) {
             $this->populate($data);
@@ -203,11 +203,11 @@ class CourseXMLElement extends SimpleXMLElement {
         // proper divs initializations
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
-            $fieldStart .= "<div class='panel-group shadow-lg p-3 rounded mt-3'>
-                <div class='panel panel-default'>
+            $fieldStart .= "<div class='panel-group mt-5'>
+                <div class='panel panel-admin'>
                     <div class='panel-heading'>
                         <div class='panel-title h3 d-flex justify-content-center'>
-                            <a class='metadataCourseCollapseBtn text-dark' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
+                            <a class='metadataCourseCollapseBtn text-white text-uppercase' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
                             <span class='fas fa-arrow-down'></span></a>
                         </div>
                     </div>
@@ -405,18 +405,18 @@ class CourseXMLElement extends SimpleXMLElement {
         // proper divs initializations
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
-            $fieldStart .= "<div class='panel-group shadow-lg p-3 mb-5 bg-body rounded bg-primary'>
-                <div class='panel panel-default'>
+            $fieldStart .= "<div class='panel-group mb-3 mt-3'>
+                <div class='panel panel-admin'>
                     <div class='panel-heading'>
                         <div class='panel-title h3 d-flex justify-content-center'>
-                            <a class='metadataCourseCollapseBtn' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "</a>
+                            <a class='metadataCourseCollapseBtn text-white text-uppercase' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "</a>
                         </div>
                     </div>
                     <div id='metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "' class='panel-collapse collapse'>
                         <div class='panel-body ps-3 pt-3 pb-3 pe-3'>";
         }
         $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel cmetalabel-wd' : 'cmetalabelinaccordion cmetalabelinaccordion-wd';
-        $fieldStart .= "<div class='row margin-top-thin margin-bottom-thin'><div class='col-sm-3'><strong>" . q($keyLbl . $lang) . ":</strong></div><div class='col-sm-9'>";
+        $fieldStart .= "<div class='row p-2 margin-top-thin margin-bottom-thin'><div class='col-sm-6'><strong>" . q($keyLbl . $lang) . ":</strong></div><div class='col-sm-6'>";
 
         $fieldEnd = "</div></div>";
         if (in_array($fullKey, CourseXMLConfig::$breakAccordionEndFields)) {
