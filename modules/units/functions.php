@@ -322,7 +322,9 @@ function show_resources($unit_id) {
 
 
             foreach ($req_in_home as $info_home) {
-                $info_home->comments = standard_text_escape($info_home->comments);
+                if (!is_null($info_home->comments)) {
+                    $info_home->comments = standard_text_escape($info_home->comments);
+                }
                 show_resource($info_home);
             }
 
@@ -342,8 +344,10 @@ function show_resources($unit_id) {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table table-striped table-hover'><tbody id='unitResources_2'>";
             foreach ($req_in_class as $info_class) {
-            $info_class->comments = standard_text_escape($info_class->comments);
-            show_resource($info_class);
+                if (!is_null($info_class->comments)) {
+                    $info_class->comments = standard_text_escape($info_class->comments);
+                }
+                show_resource($info_class);
             }
             $tool_content .= "</tbody></table>";
             $tool_content .= "</div>";
@@ -360,8 +364,10 @@ function show_resources($unit_id) {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table table-striped table-hover'><tbody id='unitResources_3'>";
             foreach ($req_after_class as $info_after_class) {
-            $info_after_class->comments = standard_text_escape($info_after_class->comments);
-            show_resource($info_after_class);
+                if (!is_null($info_after_class->comments)) {
+                    $info_after_class->comments = standard_text_escape($info_after_class->comments);
+                }
+                show_resource($info_after_class);
             }
             $tool_content .= "</tbody></table>";
             $tool_content .= "</div>";
@@ -461,7 +467,9 @@ function show_resources($unit_id) {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table table-striped table-hover'><tbody id='unitResources'>";
             foreach ($req as $info) {
-                $info->comments = standard_text_escape($info->comments);
+                if (!is_null($info->comments)) {
+                    $info->comments = standard_text_escape($info->comments);
+                }
                 show_resource($info);
             }
             $tool_content .= "</tbody></table>";
