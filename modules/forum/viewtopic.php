@@ -670,13 +670,19 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
 
     $content .= "
             </h5>
-        </div>
-        <div class='panel-body NoBorders'>
+        </div>";
+        if ($rate_str or $parent_post_link or $reply_button) {
+            $content .= "<div class='panel-body NoBorders'>";
+        }else{
+            $content .= "<div class='panel-body'>";
+        }
+        $content .= "
+        
             <div class='row'>
-                <div class='col-sm-1 col-xs-2'>" .
+                <div class='col-sm-1 col-2'>" .
                     profile_image($myrow->poster_id, '40px', 'img-rounded-corners margin-bottom-thin') . "
                 </div>
-                <div class='col-sm-11 col-xs-10'>
+                <div class='col-sm-11 col-10'>
                     <div class='forum-post-header'>
                         <small class='help-block'><strong>$langSent:</strong> " .
                             claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->post_time)) .
@@ -698,7 +704,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     $content .= "
                     </div>
                 </div>
-                <div class='col-12' style='margin-top: 5px;'>
+                <div class='col-12 mt-3'>
                     <div class='text-justify'>$message</div>
                     $fileinfo
                 </div>

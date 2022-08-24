@@ -312,6 +312,9 @@ function show_resource($info) {
         case 'chat':
             $html .= show_chat($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
+        case 'h5p':
+            $html .= show_h5p($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            break;
         case 'tc':
             $html .= show_tc($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
@@ -1196,6 +1199,56 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility) {
         </tr>';
 }
 
+/**
+ * @brief display h5p resources
+ * @param $title
+ * @param $comments
+ * @param $resource_id
+ * @param $h5p_id
+ * @param $visibility
+ */
+function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility) {
+    global $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $id, $webDir, $urlAppend;
+
+    $comment_box = '';
+    $title = q($title);
+    $h5p = Database::get()->querySingle("SELECT * FROM h5p_content WHERE course_id = ?d AND id = ?d", $course_id, $h5p_id);
+    
+    if (!$h5p) { // check if it was deleted
+        if (!$is_editor) {
+            return '';
+        } else {
+            $imagelink = icon('fa-times');
+            $h5plink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
+        }
+    } else {
+        $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version 
+                                            FROM h5p_library WHERE id = ?s", $h5p->main_library_id);
+
+        $h5p_content_type_title = $q->title;
+        $typeFolder = $q->machine_name . "-" . $q->major_version . "." . $q->minor_version;
+        $typeIconPath = $webDir . "/courses/h5p/libraries/" . $typeFolder . "/icon.svg";
+        $typeIcon = (file_exists($typeIconPath))
+            ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
+            : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
+        $h5plink = $link . "$title</a>";
+        $imagelink = $link . "</a><img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>";
+    }
+
+    if (!empty($comments)) {
+        $comment_box = "<br />$comments";
+    }
+
+    return "
+        <tr data-id='$resource_id'>
+          <td>$imagelink</td>
+          <td>$h5plink $comment_box</td>" .
+        actions('h5p', $resource_id, $visibility) . '
+        </tr>';
+
+}
+
 
 /**
  * @brief display tc resources
@@ -1289,10 +1342,10 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
     }
 
     $content = "<td style='padding: 10px 0; width: 85px;'>
-                    <div class='reorder-btn pull-left ps-4 pe-3' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
+                    <div class='reorder-btn d-flex justify-content-center' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
                         <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
                     </div>
-                <div class='pull-left mt-3 ps-3 pe-3'>";
+                <div class='d-flex justify-content-center mt-3'>";
     $content .= action_button(array(
                 array('title' => $langEditChange,
                       'url' => $edit_link,
