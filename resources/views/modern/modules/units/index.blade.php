@@ -8,7 +8,7 @@
 
         <div class="row rowMedium">
 
-            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
@@ -18,14 +18,14 @@
 
 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
-                    
+
                     <nav class="navbar navbar-expand-lg navrbar_menu_btn">
                         <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn btn-primary menu_btn_button">
                             <i class="fas fa-align-left"></i>
                             <span></span>
                         </button>
-                        
-                       
+
+
                         <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                             <i class="fas fa-tools"></i>
                         </a>
@@ -45,9 +45,6 @@
 
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-
-
-
 
                     @if ($is_editor)
                                 {!! action_bar(array(
@@ -85,6 +82,11 @@
                                         'icon' => 'fa fa-film',
                                         'level' => 'secondary',
                                         'show' => !is_module_disable(MODULE_ID_VIDEO)),
+                                    array('title' => trans('langAdd') .' '. trans('langOfH5p'),
+                                        'url' => $insertBaseUrl . 'h5p',
+                                        'icon' => 'fa fa-tablet',
+                                        'level' => 'secondary',
+                                        'show' => !is_module_disable(MODULE_ID_H5P)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertForum'),
                                         'url' => $insertBaseUrl . 'forum',
                                         'icon' => 'fa fa-comments',
@@ -120,27 +122,27 @@
                                         'level' => 'secondary',
                                         'show' => (!is_module_disable(MODULE_ID_TC) && is_configured_tc_server()))
                                     )) !!}
-                            
+
                     @endif
 
                     @if(Session::has('message'))
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
-                        <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @if(is_array(Session::get('message')))
-                                @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
-                                @foreach($messageArray as $message)
-                                    {!! $message !!}
-                                @endforeach
-                            @else
-                                {!! Session::get('message') !!}
-                            @endif
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </p>
-                    </div>
+                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                            <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                                @if(is_array(Session::get('message')))
+                                    @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                                    @foreach($messageArray as $message)
+                                        {!! $message !!}
+                                    @endforeach
+                                @else
+                                    {!! Session::get('message') !!}
+                                @endif
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </p>
+                        </div>
                     @endif
 
                     @if ($previousLink or $nextLink)
-                        
+
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                             <div class='form-wrapper course_units_pager bg-light p-3 clearfix'>
                                 @if ($previousLink)
@@ -157,10 +159,10 @@
                                 @endif
                             </div>
                         </div>
-                        
+
                     @endif
 
-                            
+
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                         <div class='panel panel-default'>
                             <div class='panel-heading'>
@@ -187,9 +189,9 @@
                             </div>
                         </div>
                     </div>
-                            
 
-                            
+
+
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                         <div class='panel panel-default'>
                             <div class='panel-body Borders'>
@@ -212,8 +214,8 @@
                             </div>
                         </div>
                     </div>
-                       
-            
+
+
                 </div>
             </div>
         </div>
