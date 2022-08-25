@@ -60,35 +60,61 @@ function process_actions() {
             CourseXMLElement::refreshCourse($course_id, $course_code);
         }
        // Session::Messages($langResourceUnitModified, 'alert-success');
-        Session::flash('message',$langResourceUnitModified); 
+        Session::flash('message',$langResourceUnitModified);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/units/index/php?course=' . $course_code . '&id=' . $id);
     } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
         $res_id = intval($_GET['del']);
         if (check_admin_unit_resource($res_id)) {
             Database::get()->query("DELETE FROM unit_resources WHERE id = ?d", $res_id);
+            Database::get()->query("DELETE FROM course_units_activities WHERE id = ?d", $res_id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
            // Session::Messages($langResourceCourseUnitDeleted, 'alert-success');
-            Session::flash('message',$langResourceCourseUnitDeleted); 
+            Session::flash('message',$langResourceCourseUnitDeleted);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $id);
         }
+    } elseif (isset($_REQUEST['del_act'])) { // delete resource from course unit
+        $res_id = intval($_GET['del_act']);
+        $act_id = $_GET['actid'];
+        Database::get()->query("DELETE FROM course_units_activities WHERE id = ?d", $res_id);
+        Database::get()->query("DELETE FROM unit_resources WHERE activity_id = ?s", $act_id);
+        //Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
+        //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        //CourseXMLElement::refreshCourse($course_id, $course_code);
+        Session::flash('message', $langResourceCourseUnitDeleted);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
+
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only
         $res_id = intval($_REQUEST['vis']);
         if (check_admin_unit_resource($res_id)) {
             $vis = Database::get()->querySingle("SELECT `visible` FROM unit_resources WHERE id = ?d", $res_id)->visible;
             $newvis = ($vis == 1) ? 0 : 1;
             Database::get()->query("UPDATE unit_resources SET visible = '$newvis' WHERE id = ?d", $res_id);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-            CourseXMLElement::refreshCourse($course_id, $course_code);
-            //Session::Messages($langViMod, 'alert-success');
-            Session::flash('message',$langViMod); 
+            //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
+            //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+            //CourseXMLElement::refreshCourse($course_id, $course_code);
+            Session::flash('message',$langViMod);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $id);
         }
+    } elseif (isset($_REQUEST['vis_act'])) { // modify visibility in text resources only
+
+        $res_id = intval($_REQUEST['vis_act']);
+
+        $vis = Database::get()->querySingle("SELECT `visible` FROM course_units_activities WHERE id = ?d", $res_id)->visible;
+        $newvis = ($vis == 1) ? 0 : 1;
+        Database::get()->query("UPDATE course_units_activities SET visible = '$newvis' WHERE id = ?d", $res_id);
+        //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ACTIVITYRESOURCE, $res_id);
+        //Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        // CourseXMLElement::refreshCourse($course_id, $course_code);
+        Session::flash('message', $langViMod);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
+
     } elseif (isset($_REQUEST['down'])) { // change order down
         $res_id = intval($_REQUEST['down']);
         if (check_admin_unit_resource($res_id)) {
@@ -136,120 +162,335 @@ function check_admin_unit_resource($resource_id) {
  * @global type $max_resource_id
  * @param type $unit_id
  */
-function show_resources($unit_id) {
+function show_resources($unit_id)
+{
     global $max_resource_id,
            $head_content, $langDownload, $langPrint, $langCancel,
-           $langFullScreen, $langNewTab;
+           $langFullScreen, $langNewTab, $langActInHome, $langActInClass, $langActAfterClass, $course_code;
 
     $html = '';
-    $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
-    if (count($req) > 0) {
-        load_js('screenfull/screenfull.min.js');
-        $head_content .= "<script>
-        $(document).ready(function(){
-            Sortable.create(unitResources,{
-                handle: '.fa-arrows',
-                animation: 150,
-                onEnd: function (evt) {
+    $q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
 
-                var itemEl = $(evt.item);
+    if ($q->flipped_flag == 2) {
+        $req_in_home = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 AND fc_type =?d ORDER BY `order`", $unit_id, 0);
+        $req_in_class = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 AND fc_type =?d ORDER BY `order`", $unit_id, 1);
+        $req_after_class = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 AND fc_type =?d ORDER BY `order`", $unit_id, 2);
 
-                var idReorder = itemEl.attr('data-id');
-                var prevIdReorder = itemEl.prev().attr('data-id');
+        if (count($req_in_home) > 0 || count($req_in_class) > 0 || count($req_after_class)) {
 
-                $.ajax({
-                  type: 'post',
-                  dataType: 'text',
-                  data: {
-                          toReorder: idReorder,
-                          prevReorder: prevIdReorder,
+            load_js('screenfull/screenfull.min.js');
+            $head_content .= "<script>
+            $(document).ready(function(){
+                var count_1 = $('#unitResources_1').length;
+                var count_2 = $('#unitResources_2').length;
+                var count_3 = $('#unitResources_3').length;
+                
+                if(count_1>0){
+                    Sortable.create(unitResources_1,{
+                        handle: '.fa-arrows',
+                        animation: 150,
+                        onEnd: function (evt) {
+
+                        var itemEl = $(evt.item);
+
+                        var idReorder = itemEl.attr('data-id');
+                        var prevIdReorder = itemEl.prev().attr('data-id');
+
+                        $.ajax({
+                        type: 'post',
+                        dataType: 'text',
+                        data: {
+                                toReorder: idReorder,
+                                prevReorder: prevIdReorder,
+                                }
+                            });
+                        }
+                    });
+                }
+
+                if(count_2>0){
+                    Sortable.create(unitResources_2,{
+                        handle: '.fa-arrows',
+                        animation: 150,
+                        onEnd: function (evt) {
+
+                        var itemEl = $(evt.item);
+
+                        var idReorder = itemEl.attr('data-id');
+                        var prevIdReorder = itemEl.prev().attr('data-id');
+
+                        $.ajax({
+                        type: 'post',
+                        dataType: 'text',
+                        data: {
+                                toReorder: idReorder,
+                                prevReorder: prevIdReorder,
+                                }
+                            });
+                        }
+                    });
+                }
+
+                if(count_3>0){
+                    Sortable.create(unitResources_3,{
+                        handle: '.fa-arrows',
+                        animation: 150,
+                        onEnd: function (evt) {
+
+                        var itemEl = $(evt.item);
+
+                        var idReorder = itemEl.attr('data-id');
+                        var prevIdReorder = itemEl.prev().attr('data-id');
+
+                        $.ajax({
+                        type: 'post',
+                        dataType: 'text',
+                        data: {
+                                toReorder: idReorder,
+                                prevReorder: prevIdReorder,
+                                }
+                            });
                         }
                     });
                 }
             });
-        });
-        $(function(){
-            $('.fileModal').click(function (e)
-            {
-                e.preventDefault();
-                var fileURL = $(this).attr('href');
-                var downloadURL = $(this).prev('input').val();
-                var fileTitle = $(this).attr('title');
-                var buttons = {};
-                if (downloadURL) {
-                    buttons.download = {
-                            label: '<i class=\"fa fa-download\"></i> $langDownload',
-                            className: 'btn-success',
-                            callback: function (d) {
-                                window.location = downloadURL;
-                            }
-                    };
-                }
-                buttons.print = {
-                            label: '<i class=\"fa fa-print\"></i> $langPrint',
+            $(function(){
+                $('.fileModal').click(function (e)
+                {
+                    e.preventDefault();
+                    var fileURL = $(this).attr('href');
+                    var downloadURL = $(this).prev('input').val();
+                    var fileTitle = $(this).attr('title');
+                    var buttons = {};
+                    if (downloadURL) {
+                        buttons.download = {
+                                label: '<i class=\"fa fa-download\"></i> $langDownload',
+                                className: 'btn-success',
+                                callback: function (d) {
+                                    window.location = downloadURL;
+                                }
+                        };
+                    }
+                    buttons.print = {
+                                label: '<i class=\"fa fa-print\"></i> $langPrint',
+                                className: 'btn-primary',
+                                callback: function (d) {
+                                    var iframe = document.getElementById('fileFrame');
+                                    iframe.contentWindow.print();
+                                }
+                            };
+                    if (screenfull.enabled) {
+                        buttons.fullscreen = {
+                            label: '<i class=\"fa fa-arrows-alt\"></i> $langFullScreen',
                             className: 'btn-primary',
-                            callback: function (d) {
-                                var iframe = document.getElementById('fileFrame');
-                                iframe.contentWindow.print();
+                            callback: function() {
+                                screenfull.request(document.getElementById('fileFrame'));
+                                return false;
                             }
                         };
-                if (screenfull.enabled) {
-                    buttons.fullscreen = {
-                        label: '<i class=\"fa fa-arrows-alt\"></i> $langFullScreen',
+                    }
+                    buttons.newtab = {
+                        label: '<i class=\"fa fa-plus\"></i> $langNewTab',
                         className: 'btn-primary',
                         callback: function() {
-                            screenfull.request(document.getElementById('fileFrame'));
+                            window.open(fileURL);
                             return false;
                         }
                     };
-                }
-                buttons.newtab = {
-                    label: '<i class=\"fa fa-plus\"></i> $langNewTab',
-                    className: 'btn-primary',
-                    callback: function() {
-                        window.open(fileURL);
-                        return false;
-                    }
-                };
-                buttons.cancel = {
-                            label: '$langCancel',
-                            className: 'btn-default'
-                        };
-                bootbox.dialog({
-                    size: 'large',
-                    title: fileTitle,
-                    message: '<div class=\"row\">'+
-                                '<div class=\"col-sm-12\">'+
-                                    '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
-                                '</div>'+
-                            '</div>',
-                    buttons: buttons
+                    buttons.cancel = {
+                                label: '$langCancel',
+                                className: 'btn-default'
+                            };
+                    bootbox.dialog({
+                        size: 'large',
+                        title: fileTitle,
+                        message: '<div class=\"row\">'+
+                                    '<div class=\"col-sm-12\">'+
+                                        '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                                    '</div>'+
+                                '</div>',
+                        buttons: buttons
+                    });
                 });
             });
-        });
+
+            </script>";
+        }
+
+
+        if (count($req_in_home) > 0) {
+
+            $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
+                                    WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
+            $html .= "<div class='form-group'>
+                                <label class='col-2 control-label'>$langActInHome</label>
+                            </div>
+            ";
+            $html .= "<div class='table-responsive'>";
+            $html .= "<table class='table table-striped table-hover'><tbody id='unitResources_1'>";
+
+
+            foreach ($req_in_home as $info_home) {
+                if (!is_null($info_home->comments)) {
+                    $info_home->comments = standard_text_escape($info_home->comments);
+                }
+                $html .= show_resource($info_home);
+            }
+
+            $html .= "</tbody></table>";
+            $html .= "</div>";
+
+        }
+
+        if (count($req_in_class) > 0) {
+            $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
+            WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
+
+            $html .= "<div class='form-group'>
+            <label class='col-2 control-label'>$langActInClass</label>
+            </div>
+            ";
+            $html .= "<div class='table-responsive'>";
+            $html .= "<table class='table table-striped table-hover'><tbody id='unitResources_2'>";
+            foreach ($req_in_class as $info_class) {
+                if (!is_null($info_class->comments)) {
+                    $info_class->comments = standard_text_escape($info_class->comments);
+                }
+                $html .= show_resource($info_class);
+            }
+            $html .= "</tbody></table>";
+            $html .= "</div>";
+        }
+
+        if (count($req_after_class) > 0) {
+            $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
+            WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
+
+            $html .= "<div class='form-group'>
+            <label class='col-2 control-label'>$langActAfterClass</label>
+            </div>
+            ";
+            $html .= "<div class='table-responsive'>";
+            $html .= "<table class='table table-striped table-hover'><tbody id='unitResources_3'>";
+            foreach ($req_after_class as $info_after_class) {
+                if (!is_null($info_after_class->comments)) {
+                    $info_after_class->comments = standard_text_escape($info_after_class->comments);
+                }
+                $html .= show_resource($info_after_class);
+            }
+            $html .= "</tbody></table>";
+            $html .= "</div>";
+        }
+    } else {
+        $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
+
+
+        if (count($req) > 0) {
+            load_js('screenfull/screenfull.min.js');
+            $head_content .= "<script>
+            $(document).ready(function(){
+                Sortable.create(unitResources,{
+                    handle: '.fa-arrows',
+                    animation: 150,
+                    onEnd: function (evt) {
+
+                    var itemEl = $(evt.item);
+
+                    var idReorder = itemEl.attr('data-id');
+                    var prevIdReorder = itemEl.prev().attr('data-id');
+
+                    $.ajax({
+                    type: 'post',
+                    dataType: 'text',
+                    data: {
+                            toReorder: idReorder,
+                            prevReorder: prevIdReorder,
+                            }
+                        });
+                    }
+                });
+            });
+            $(function(){
+                $('.fileModal').click(function (e)
+                {
+                    e.preventDefault();
+                    var fileURL = $(this).attr('href');
+                    var downloadURL = $(this).prev('input').val();
+                    var fileTitle = $(this).attr('title');
+                    var buttons = {};
+                    if (downloadURL) {
+                        buttons.download = {
+                                label: '<i class=\"fa fa-download\"></i> $langDownload',
+                                className: 'btn-success',
+                                callback: function (d) {
+                                    window.location = downloadURL;
+                                }
+                        };
+                    }
+                    buttons.print = {
+                                label: '<i class=\"fa fa-print\"></i> $langPrint',
+                                className: 'btn-primary',
+                                callback: function (d) {
+                                    var iframe = document.getElementById('fileFrame');
+                                    iframe.contentWindow.print();
+                                }
+                            };
+                    if (screenfull.enabled) {
+                        buttons.fullscreen = {
+                            label: '<i class=\"fa fa-arrows-alt\"></i> $langFullScreen',
+                            className: 'btn-primary',
+                            callback: function() {
+                                screenfull.request(document.getElementById('fileFrame'));
+                                return false;
+                            }
+                        };
+                    }
+                    buttons.newtab = {
+                        label: '<i class=\"fa fa-plus\"></i> $langNewTab',
+                        className: 'btn-primary',
+                        callback: function() {
+                            window.open(fileURL);
+                            return false;
+                        }
+                    };
+                    buttons.cancel = {
+                                label: '$langCancel',
+                                className: 'btn-default'
+                            };
+                    bootbox.dialog({
+                        size: 'large',
+                        title: fileTitle,
+                        message: '<div class=\"row\">'+
+                                    '<div class=\"col-sm-12\">'+
+                                        '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                                    '</div>'+
+                                '</div>',
+                        buttons: buttons
+                    });
+                });
+            });
 
         </script>";
-        $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
+            $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
                                 WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
-        $html .= "<div class='table-responsive'>";
-        $html .= "<table class='table table-striped table-hover'><tbody id='unitResources'>";
-        foreach ($req as $info) {
-            $info->comments = standard_text_escape($info->comments);
-            $html .= show_resource($info);
+            $html .= "<div class='table-responsive'>";
+            $html .= "<table class='table table-striped table-hover'><tbody id='unitResources'>";
+            foreach ($req as $info) {
+                if (!is_null($info->comments)) {
+                    $info->comments = standard_text_escape($info->comments);
+                }
+                $html .= show_resource($info);
+            }
+            $html .= "</tbody></table>";
+            $html .= "</div>";
         }
-        $html .= "</tbody></table>";
-        $html .= "</div>";
+        return $html;
     }
-    return $html;
 }
 
 /**
  * @brief display unit resources
- * @global type $tool_content
- * @global type $langUnknownResType
- * @global type $is_editor
  * @param type $info
- * @return type
  */
 function show_resource($info) {
     global $langUnknownResType, $is_editor;
@@ -260,63 +501,69 @@ function show_resource($info) {
     }
     switch ($info->type) {
         case 'doc':
-            $html .= show_doc($info->title, $info->comments, $info->id, $info->res_id);
+            $html .= show_doc($info->title, $info->comments, $info->id, $info->res_id, $info->activity_title);
             break;
         case 'text':
-            $html .= show_text($info->comments, $info->id, $info->visible);
+            $html .= show_text($info->comments, $info->id, $info->visible, $info->activity_title);
             break;
-        case 'description':
-            $html .= show_description($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+        case 'description': // deprecated module. only for compatibility !
+            $html .= show_description($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'lp':
-            $html .= show_lp($info->title, $info->comments, $info->id, $info->res_id);
+            $html .= show_lp($info->title, $info->comments, $info->id, $info->res_id, $info->activity_title);
             break;
         case 'video':
         case 'videolink':
-            $html .= show_video($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_video($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'videolinkcategory':
-            $html .= show_videocat($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_videocat($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'exercise':
-            $html .= show_exercise($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_exercise($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'work':
-            $html .= show_work($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_work($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'topic':
         case 'forum':
-            $html .= show_forum($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_forum($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'wiki':
-            $html .= show_wiki($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_wiki($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'poll':
-            $html .= show_poll($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_poll($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'link':
-            $html .= show_link($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_link($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'linkcategory':
-            $html .= show_linkcat($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_linkcat($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'ebook':
-            $html .= show_ebook($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_ebook($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'section':
-            $html .= show_ebook_section($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_ebook_section($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'subsection':
-            $html .= show_ebook_subsection($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_ebook_subsection($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'chat':
-            $html .= show_chat($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_chat($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
+            break;
+        case 'blog':
+            $html .= show_blog($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
+            break;
+        case 'h5p':
+            $html .= show_h5p($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'h5p':
             $html .= show_h5p($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'tc':
-            $html .= show_tc($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
+            $html .= show_tc($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         default:
             $html .= $langUnknownResType;
@@ -326,19 +573,9 @@ function show_resource($info) {
 
 /**
  * @brief display resource documents
- * @global type $is_editor
- * @global type $course_id
- * @global type $langWasDeleted
- * @global type $urlServer
- * @global type $id
- * @global type $course_code
- * @param type $title
- * @param type $comments
- * @param type $resource_id
- * @param type $file_id
  * @return string
  */
-function show_doc($title, $comments, $resource_id, $file_id) {
+function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
     global $can_upload, $course_id, $langWasDeleted, $urlServer,
            $id, $course_code;
 
@@ -384,77 +621,58 @@ function show_doc($title, $comments, $resource_id, $file_id) {
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>" . icon($image, '') . "</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td class='text-left'>$download_hidden_link$link$comment</td>" .
             actions('doc', $resource_id, $status) .
-            '</tr>';
+            "</tr>";
 }
 
 /**
  * @brief display resource text
- * @global string $tool_content
- * @param type $comments
- * @param type $resource_id
- * @param type $visibility
+ * @return string
  */
-function show_text($comments, $resource_id, $visibility) {
+function show_text($comments, $resource_id, $visibility, $act_name) {
 
+    $content = '';
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
-    return "
+    $content .= "
         <tr$class_vis data-id='$resource_id'>
+        <td class='text-left' width='1'>$act_name</td>
           <td colspan='2'>$comments</td>" .
             actions('text', $resource_id, $visibility) .
-            "
-        </tr>";
+            "</tr>";
+
+    return $content;
 }
 
 /**
  * @brief display course description resource
- * @global string $tool_content
- * @param type $title
- * @param type $comments
- * @param type $id
- * @param type $res_id
- * @param type $visibility
+ * @return string
  */
-function show_description($title, $comments, $id, $res_id, $visibility) {
+function show_description($title, $comments, $id, $res_id, $visibility, $act_name) {
 
+    $content = '';
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
-    return "
+    $content .= "
         <tr>
+        <td class='text-left' width='1'>$act_name</td>
           <td colspan='2'>
             <div class='title'>" . q($title) . "</div>
             <div class='content'>$comments</div>
-          </td>" . actions('description', $id, $visibility, $res_id) . "
-        </tr>";
+          </td>" . actions('description', $id, $visibility, $res_id) . "</tr>";
+
+    return $content;
 }
 
 /**
  * @brief display resource learning path
- * @global type $id
- * @global type $urlAppend
- * @global type $course_id
- * @global type $is_editor
- * @global type $langWasDeleted
- * @global type $course_code
- * @global type $langInactiveModule
- * @param type $title
- * @param type $comments
- * @param type $resource_id
- * @param type $lp_id
  * @return string
  */
-function show_lp($title, $comments, $resource_id, $lp_id) {
-    global $id, $urlAppend, $course_id, $is_editor,
-    $langWasDeleted, $course_code, $langInactiveModule;
+function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
+{
 
-    $module_visible = visible_module(MODULE_ID_LP); // checks module visibility
-    if (!$module_visible and ! $is_editor) {
-        return '';
-    }
-
-    $class_vis = (!$module_visible) ?
-            ' class="not_visible"' : ' ';
+    global $id, $urlAppend, $course_id, $is_editor, $langWasDeleted, $course_code;
 
     $title = q($title);
     $lp = Database::get()->querySingle("SELECT * FROM lp_learnPath WHERE course_id = ?d AND learnPath_id = ?d", $course_id, $lp_id);
@@ -468,19 +686,8 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
         }
     } else {
         $status = $lp->visible;
-        if ($is_editor) {
-            $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
-            $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";
-            if (!$module_visible) {
-                $link .= " <i>($langInactiveModule)</i> ";
-            }
-        } else {
-            if ($status == 0) {
-                return '';
-            }
-            $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
-            $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";
-        }
+        $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
+        $link = "<a href='${urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title";
         $imagelink = icon('fa-ellipsis-h');
     }
 
@@ -490,11 +697,11 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
         $comment_box = '';
     }
     return "
-        <tr$class_vis data-id='$resource_id'>
+        <tr data-id='$resource_id'>
           <td width='1'>$imagelink</a></td>
-          <td>$link$title</a>$comment_box</td>" .
-            actions('lp', $resource_id, $status) . '
-        </tr>';
+          <td class='text-left' width='1'>$act_name</td>
+          <td>$link</a>$comment_box</td>" .
+            actions('lp', $resource_id, $status) . "</tr>";
 }
 
 /**
@@ -510,7 +717,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
  * @param string $visibility
  * @return string
  */
-function show_video($table, $title, $comments, $resource_id, $video_id, $visibility) {
+function show_video($table, $title, $comments, $resource_id, $video_id, $visibility, $act_name) {
     global $is_editor, $course_id, $tool_content, $urlServer, $course_code, $id;
 
 
@@ -548,6 +755,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
     $tool_content .= "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>".icon($imagelink)."</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td> $videolink $comment_box</td>" . actions('video', $resource_id, $visibility) . "
         </tr>";
 }
@@ -564,7 +772,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
  * @param type $visibility
  * @return string
  */
-function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visibility)
+function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visibility, $act_name)
 {
     global $is_editor, $course_id, $langInactiveModule;
 
@@ -580,6 +788,7 @@ function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visib
     $content = "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>".icon('fa-folder-o')."</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td>" . q($title);
 
     if (!empty($comments)) {
@@ -633,9 +842,9 @@ function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visib
  * @param type $visibility
  * @return string
  */
-function show_work($title, $comments, $resource_id, $work_id, $visibility) {
+function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor,
-    $langWasDeleted, $course_id, $course_code;
+    $langWasDeleted, $course_id, $course_code, $langPassCode;
 
     $title = q($title);
     $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $work_id);
@@ -647,8 +856,19 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id'>";
-        $exlink = $link . "$title</a>";
+        if ($work->password_lock) {
+            $lock_description = "<ul>";
+            $lock_description .= "<li>$langPassCode</li>";
+            enable_password_bootbox();
+            $class = 'class="password_protected"';
+            $lock_description .= "</ul>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
+        } else {
+            $class = $exclamation_icon = '';
+        }
+
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id' $class>";
+        $exlink = $link . "$title</a> $exclamation_icon";
         $imagelink = $link . "</a>".icon('fa-flask')."";
     }
 
@@ -660,6 +880,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
     return "
         <tr data-id='$resource_id'>
           <td width='1'>$imagelink</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td>$exlink $comment_box</td>" .
             actions('lp', $resource_id, $visibility) . '
         </tr>';
@@ -680,8 +901,9 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
  * @param type $visibility
  * @return string
  */
-function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility) {
-    global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code;
+function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility, $act_name) {
+    global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $langPassCode, $uid,
+        $langAttemptActive, $langAttemptPausedS;
 
     $title = q($title);
     $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
@@ -695,11 +917,50 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         }
     } else {
         $status = $exercise->active;
-        if (!$is_editor and ( !resource_access($exercise->active, $exercise->public))) {
+        if (!$is_editor and (!resource_access($exercise->active, $exercise->public))) {
             return '';
         }
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
-        $exlink = $link . "$title</a>";
+        $link_class = $exclamation_icon = '';
+        if ($exercise->password_lock) {
+            enable_password_bootbox();
+            $link_class = 'password_protected';
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langPassCode'></span>";
+        }
+
+        // check if exercise is in "paused" or "running" state
+        $pending_label = $pending_class = '';
+        if ($uid) {
+            $paused_attempt = Database::get()->querySingle("SELECT eurid, attempt
+                FROM exercise_user_record
+                WHERE eid = ?d AND uid = ?d AND
+                attempt_status = ?d",
+                $exercise_id, $uid, ATTEMPT_PAUSED);
+            if ($paused_attempt) {
+                $eurid = $paused_attempt->eurid;
+                $pending_class = 'paused_exercise';
+                $pending_label = "<span class='not_visible'>($langAttemptPausedS)</span>";
+            } elseif ($exercise->continue_time_limit) {
+                $incomplete_attempt = Database::get()->querySingle("SELECT eurid, attempt
+                    FROM exercise_user_record
+                    WHERE eid = ?d AND uid = ?d AND
+                    attempt_status = ?d AND
+                    TIME_TO_SEC(TIMEDIFF(NOW(), record_end_date)) < ?d
+                    ORDER BY eurid DESC LIMIT 1",
+                    $exercise_id, $uid, ATTEMPT_ACTIVE, 60 * $exercise->continue_time_limit);
+                if ($incomplete_attempt) {
+                    $eurid = $incomplete_attempt->eurid;
+                    $pending_class = 'active_exercise';
+                    $pending_label = "<span class='not_visible'>($langAttemptActive)</span>";
+                }
+            }
+        }
+        if ($pending_class) {
+            enable_password_bootbox();
+            $link = "<a class='ex_settings $pending_class $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
+        } else {
+            $link = "<a class='ex_settings $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+        }
+        $exlink = $link . "$title</a> $exclamation_icon $pending_label";
         $imagelink = $link . "</a>" . icon('fa-pencil-square-o'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';
@@ -713,6 +974,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td>$exlink $comment_box</td>" . actions('lp', $resource_id, $visibility) . "
         </tr>";
 }
@@ -733,7 +995,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
  * @param type $visibility
  * @return string
  */
-function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility) {
+function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor, $course_code, $langWasDeleted;
 
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
@@ -768,6 +1030,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td>$forumlink $comment_box</td>" .
             actions('forum', $resource_id, $visibility) . '
         </tr>';
@@ -783,7 +1046,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
  * @param type $visibility
  * @return string
  */
-function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
+function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_name) {
 
     global $course_id, $course_code, $is_editor, $urlServer, $id, $langWasDeleted;
 
@@ -811,6 +1074,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td>$polllink $comment_box</td>" .
             actions('poll', $resource_id, $visibility) . '
         </tr>';
@@ -834,7 +1098,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
  * @param type $visibility
  * @return string
  */
-function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
+function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor,
     $langWasDeleted, $langInactiveModule, $course_id, $course_code;
 
@@ -872,6 +1136,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td>$wikilink $comment_box</td>" .
             actions('wiki', $resource_id, $visibility) . '
         </tr>';
@@ -889,7 +1154,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
  * @param type $visibility
  * @return string
  */
-function show_link($title, $comments, $resource_id, $link_id, $visibility) {
+function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_name) {
 
     global $is_editor, $langWasDeleted, $course_id;
 
@@ -922,15 +1187,13 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td>$exlink $comment_box</td>" . actions('link', $resource_id, $visibility) . "
         </tr>";
 }
 
 /**
  * @brief display resource link category
- * @global type $is_editor
- * @global type $langWasDeleted
- * @global type $course_id
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -938,11 +1201,11 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
  * @param type $visibility
  * @return string
  */
-function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility) {
+function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility, $act_name) {
 
     global $is_editor, $langWasDeleted, $course_id;
 
-    $content = $linkcontent = $comment_box = $class_vis = $link = '';
+    $content = $linkcontent = $comment_box = '';
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $sql = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d AND id = ?d", $course_id, $linkcat_id);
     if (!$sql) { // check if it was deleted
@@ -950,13 +1213,17 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
             return '';
         } else {
             $content = "<tr class='not_visible' data-id='$resource_id'>
-                        <td width='1'>" . icon('fa-folder-o') . "</td><td>" . q($title) . " ($langWasDeleted)";
+                        <td width='1'>" . icon('fa-folder-o') . "</td>
+                        <td class='text-left' width='1'>$act_name</td>
+                        <td>" . q($title) . " ($langWasDeleted)";
+
         }
     } else {
         foreach ($sql as $lcat) {
             $content .= "
                         <tr$class_vis data-id='$resource_id'>
                           <td width='1'>".icon('fa-folder-o')."</td>
+                          <td class='text-left' width='1'>$act_name</td>
                           <td>" . q($lcat->name);
             if (!empty($lcat->description)) {
                 $comment_box = "<br><small>$lcat->description</small>";
@@ -968,6 +1235,11 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
                 $ltitle = q(($l->title == '') ? $l->url : $l->title);
                 $linkcontent .= "<br>$imagelink&nbsp;&nbsp;<a href='" . q($l->url) ."' target='_blank'>$ltitle</a>";
             }
+        }
+        if (!empty($comments)) {
+            $comment_box = '<br />' . standard_text_escape($comments);
+        } else {
+            $comment_box = '';
         }
     }
     return $content . $comment_box . $linkcontent . '
@@ -990,7 +1262,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
  * @param type $visibility
  * @return string
  */
-function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility) {
+function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor,
     $langWasDeleted, $course_code, $langInactiveModule;
 
@@ -1029,6 +1301,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility) {
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td>$exlink $comment_box</td>" . actions('ebook', $resource_id, $visibility) . "
         </tr>";
 }
@@ -1043,7 +1316,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility) {
  * @param type $visibility
  * @return type
  */
-function show_ebook_section($title, $comments, $resource_id, $section_id, $visibility) {
+function show_ebook_section($title, $comments, $resource_id, $section_id, $visibility, $act_name) {
     global $course_id;
 
     $data = Database::get()->querySingle("SELECT ebook.id AS ebook_id, ebook_subsection.id AS ssid
@@ -1062,7 +1335,7 @@ function show_ebook_section($title, $comments, $resource_id, $section_id, $visib
         $ebook_id = $data->ebook_id;
         $display_id = $section_id . ',' . $data->ssid;
     }
-    return show_ebook_resource($title, $comments, $resource_id, $ebook_id, $display_id, $visibility, $deleted);
+    return show_ebook_resource($title, $comments, $resource_id, $ebook_id, $display_id, $visibility, $deleted, $act_name);
 }
 
 /**
@@ -1075,7 +1348,7 @@ function show_ebook_section($title, $comments, $resource_id, $section_id, $visib
  * @param type $visibility
  * @return type
  */
-function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, $visibility) {
+function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, $visibility, $act_name) {
     global $course_id;
 
     $data = Database::get()->querySingle("SELECT ebook.id AS ebook_id, ebook_section.id AS sid
@@ -1093,7 +1366,7 @@ function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, 
         $ebook_id = $data->ebook_id;
         $display_id = $data->sid . ',' . $subsection_id;
     }
-    return show_ebook_resource($title, $comments, $resource_id, $ebook_id, $display_id, $visibility, $deleted);
+    return show_ebook_resource($title, $comments, $resource_id, $ebook_id, $display_id, $visibility, $deleted, $act_name);
 }
 
 /**
@@ -1113,7 +1386,7 @@ function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, 
  * @param type $deleted
  * @return string
  */
-function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $display_id, $visibility, $deleted) {
+function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $display_id, $visibility, $deleted, $act_name) {
     global $id, $urlServer, $is_editor,
     $langWasDeleted, $course_code, $langInactiveModule;
 
@@ -1151,6 +1424,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td>$exlink $comment_box</td>" . actions('section', $resource_id, $visibility) . "
         </tr>";
 }
@@ -1164,7 +1438,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
  * @param $visibility
  * @return string
  */
-function show_chat($title, $comments, $resource_id, $chat_id, $visibility) {
+function show_chat($title, $comments, $resource_id, $chat_id, $visibility, $act_name) {
     global $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $id;
 
     $comment_box = '';
@@ -1194,8 +1468,51 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility) {
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td>$chatlink $comment_box</td>" .
         actions('chat', $resource_id, $visibility) . '
+        </tr>';
+}
+
+/**
+ * @brief display chat resources
+ * @param $title
+ * @param $comments
+ * @param $resource_id
+ * @param $blog_id
+ * @param $visibility
+ */
+function show_blog($title, $comments, $resource_id, $blog_id, $visibility, $act_name) {
+
+    global $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $id;
+
+    $comment_box = '';
+    $title = q($title);
+    $blog = Database::get()->querySingle("SELECT * FROM blog_post WHERE course_id = ?d AND id = ?d", $course_id, $blog_id);
+    if (!$blog) { // check if it was deleted
+        if (!$is_editor) {
+            return '';
+        } else {
+            $imagelink = icon('fa-times');
+            $bloglink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
+        }
+    } else {
+        //$link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
+        $link = "<a href='${urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id'>";
+        $bloglink = $link . "$title</a>";
+        $imagelink = $link . "</a>" .icon('fa-columns') . "";
+    }
+
+    if (!empty($comments)) {
+        $comment_box = "<br />$comments";
+    }
+
+    return "
+        <tr data-id='$resource_id'>
+          <td width='1'>$imagelink</td>
+          <td class='text-left' width='1'>$act_name</td>
+          <td>$bloglink $comment_box</td>" .
+        actions('blog', $resource_id, $visibility) . '
         </tr>';
 }
 
@@ -1207,13 +1524,12 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility) {
  * @param $h5p_id
  * @param $visibility
  */
-function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility) {
+function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_name) {
     global $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $id, $webDir, $urlAppend;
 
     $comment_box = '';
     $title = q($title);
     $h5p = Database::get()->querySingle("SELECT * FROM h5p_content WHERE course_id = ?d AND id = ?d", $course_id, $h5p_id);
-    
     if (!$h5p) { // check if it was deleted
         if (!$is_editor) {
             return '';
@@ -1224,7 +1540,6 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility) {
     } else {
         $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version 
                                             FROM h5p_library WHERE id = ?s", $h5p->main_library_id);
-
         $h5p_content_type_title = $q->title;
         $typeFolder = $q->machine_name . "-" . $q->major_version . "." . $q->minor_version;
         $typeIconPath = $webDir . "/courses/h5p/libraries/" . $typeFolder . "/icon.svg";
@@ -1243,6 +1558,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility) {
     return "
         <tr data-id='$resource_id'>
           <td>$imagelink</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td>$h5plink $comment_box</td>" .
         actions('h5p', $resource_id, $visibility) . '
         </tr>';
@@ -1259,9 +1575,8 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility) {
  * @param $visibility
  * @return string
  */
-function show_tc($title, $comments, $resource_id, $tc_id, $visibility) {
-    global $urlServer, $is_editor,
-           $langWasDeleted, $langInactiveModule, $course_id, $course_code;
+function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name) {
+    global  $is_editor, $langWasDeleted, $langInactiveModule, $course_id;
 
     $module_visible = visible_module(MODULE_ID_TC); // checks module visibility
 
@@ -1298,6 +1613,7 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility) {
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
+          <td class='text-left' width='1'>$act_name</td>
           <td>$tclink $comment_box</td>" .
         actions('tc', $resource_id, $visibility) . '
         </tr>';
@@ -1305,16 +1621,6 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility) {
 
 /**
  * @brief resource actions
- * @global type $is_editor
- * @global type $langEdit
- * @global type $langDelete
- * @global type $langVisibility
- * @global type $langAddToCourseHome
- * @global type $langDown
- * @global type $langUp
- * @global type $langConfirmDelete
- * @global type $course_code
- * @staticvar boolean $first
  * @param type $res_type
  * @param type $resource_id
  * @param type $status
@@ -1324,12 +1630,29 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility) {
 function actions($res_type, $resource_id, $status, $res_id = false) {
     global $is_editor, $langEditChange, $langDelete,
     $langAddToCourseHome, $langConfirmDelete, $course_code,
-    $langViewHide, $langViewShow, $langReorder;
-
-    static $first = true;
+    $langViewHide, $langViewShow, $langReorder, $langAlreadyBrowsed, $langNeverBrowsed;
 
     if (!$is_editor) {
-        return '';
+        if (prereq_unit_has_completion_enabled($_GET['id'])) {
+            $activity_result = unit_resource_completion($_GET['id'], $resource_id);
+            switch ($activity_result) {
+                case 1: $content = "<td class='style='padding: 10px 0; width: 85px;'>
+                                    <span class='fa fa-check-circle text-center' data-toggle='tooltip' data-placement='top' title='$langAlreadyBrowsed'></span>
+                                    </td>";
+                    break;
+                case 0:
+                    $content = "<td class='style='padding: 10px 0; width: 85px;'>
+                                <span class='fa fa-hourglass-2 text-center' data-toggle='tooltip' data-placement='top' title='$langNeverBrowsed'></span>
+                                </td>";
+                    break;
+                case 2:
+                    $content = '';
+                    break;
+            }
+            return $content;
+        } else {
+            return '';
+        }
     }
 
     if ($res_type == 'description') {
@@ -1341,6 +1664,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
         $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;edit=$resource_id";
     }
 
+    $q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
     $content = "<td style='padding: 10px 0; width: 85px;'>
                     <div class='reorder-btn d-flex justify-content-center' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
                         <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
@@ -1354,7 +1678,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                 array('title' => $showorhide,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
                       'icon' => $icon_vis,
-                      'show' => $status != 'del' and in_array($res_type, array('text', 'video', 'forum', 'topic'))),
+                      'show' => $status != 'del' and (in_array($res_type, array('text', 'video', 'forum', 'topic')) or $q->flipped_flag==2)),
                 array('title' => $langAddToCourseHome,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
                       'icon' => $icon_vis,
@@ -1366,7 +1690,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                       'class' => 'delete')
             ));
 
-    $content .= "</div>";
+    $content .= "</div></td>";
 
     $first = false;
     return $content;
@@ -1374,13 +1698,6 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
 
 /**
  * @brief edit resource
- * @global type $id
- * @global type $urlServer
- * @global type $langTitle
- * @global type $langDescription
- * @global type $langContents
- * @global type $langModify
- * @global type $course_code
  * @param type $resource_id
  * @return string
  */
@@ -1416,4 +1733,116 @@ function edit_res($resource_id) {
             </form></div>
         </div>";
     return $content;
+}
+
+/**
+ * @return string
+ */
+function localhostUrl() {
+    return sprintf(
+        "%s://%s",
+        isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+        $_SERVER['SERVER_NAME']
+    );
+}
+
+/**
+ * @param int $unit_id
+ * @param int $prereq_unit_id
+ */
+function insert_prerequisite_unit ($unit_id, $prereq_unit_id) {
+
+    global $is_editor,
+           $course_id, $course_code,
+           $langResultsFailed, $langUnitHasNotCompletionEnabled, $langNewUnitPrerequisiteFailInvalid,
+           $langNewUnitPrerequisiteSuccess, $langNewUnitPrerequisiteFailAlreadyIn;
+
+    if ($is_editor) { // Auth check
+        if ($prereq_unit_id < 0) {
+            Session::Messages($langNewUnitPrerequisiteFailInvalid);
+            redirect_to_home_page('modules/units/manage.php?course=' . $course_code . '&manage=1&unit_id=' . $unit_id);
+        }
+
+        $prereqHasCompletion = prereq_unit_has_completion_enabled($prereq_unit_id);
+
+        if ( !$prereqHasCompletion ) {
+            Session::Messages($langUnitHasNotCompletionEnabled);
+            redirect_to_home_page('modules/units/manage.php?course=' . $course_code . '&manage=1&unit_id=' . $unit_id);
+        }
+
+        // check already exists
+        $result = Database::get()->queryArray("SELECT up.id
+                                 FROM unit_prerequisite up
+                                 WHERE up.course_id = ?d
+                                 AND up.unit_id = ?d
+                                 AND up.prerequisite_unit = ?d", $course_id, $unit_id, $prereq_unit_id);
+
+        if (count($result) > 0) {
+            Session::Messages($langNewUnitPrerequisiteFailAlreadyIn, 'alert-danger');
+            redirect_to_home_page('modules/units/manage.php?course=' . $course_code . '&manage=1&unit_id=' . $unit_id);
+        }
+
+        Session::Messages($langNewUnitPrerequisiteSuccess, 'alert-success');
+        Database::get()->query("INSERT INTO unit_prerequisite (course_id, unit_id, prerequisite_unit)
+                                                VALUES (?d, ?d, ?d)", $course_id, $unit_id, $prereq_unit_id);
+    } else {
+        Session::Messages($langResultsFailed);
+        redirect_to_home_page('modules/units/manage.php?course=' . $course_code . '&manage=1&unit_id=' . $unit_id);
+    }
+}
+
+/**
+ * @param int $prereq_unit_id
+ * @return bool
+ */
+function prereq_unit_has_completion_enabled($prereq_unit_id) {
+    $query = "SELECT bc.id FROM badge_criterion bc WHERE bc.badge IN (SELECT b.id FROM badge b WHERE b.unit_id = ?d)";
+    $exists = Database::get()->querySingle($query, $prereq_unit_id);
+    if ($exists) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @param int $unit_id
+ */
+function delete_unit_prerequisite($unit_id) {
+    $query = "DELETE FROM unit_prerequisite WHERE unit_id = ?d";
+    Database::get()->query($query, $unit_id);
+}
+
+
+/**
+ * @brief check if unit resource has completed
+ * @param $unit_id
+ * @param $unit_resource_id
+ * @return integer
+ */
+function unit_resource_completion($unit_id, $unit_resource_id) {
+
+    global $uid, $course_id;
+
+    $sql_res = Database::get()->querySingle("SELECT res_id FROM unit_resources WHERE unit_id = ?d AND id = ?d", $unit_id, $unit_resource_id);
+    if ($sql_res) {
+        $res_id = $sql_res->res_id;
+        $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $unit_id);
+        if ($sql) {
+            $badge_id = $sql->id;
+            $q = Database::get()->querySingle("SELECT completed FROM user_badge JOIN badge_criterion
+                                                        ON user_badge.badge = badge_criterion.badge
+                                                        AND user = ?d
+                                                        AND user_badge.badge = ?d
+                                                        AND resource = ?d", $uid, $badge_id, $res_id);
+            if ($q) {
+                if ($q->completed) {
+                    return 1; // activity has been completed
+                } else {
+                    return 0; // activity has not been completed
+                }
+            } else {
+                return 2; // there is no activity
+            }
+        }
+    }
 }

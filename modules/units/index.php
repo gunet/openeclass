@@ -99,6 +99,7 @@ if ($access) {
 
 if ($is_editor) {
     $data['editUrl'] = "info.php?course=$course_code&amp;edit=$id&amp;next=1";
+    $data['manageUrl'] = "manage.php?course=$course_code&amp;manage=1&amp;unit_id=$id";
     $data['insertBaseUrl'] = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
     $visibility_check = $check_start_week = '';
     $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
