@@ -752,7 +752,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         $comment_box = "";
     }
     $class_vis = ($visibility == 0 or $status == 'del') ? ' class="not_visible"' : ' ';
-    $tool_content .= "
+    return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>".icon($imagelink)."</td>
           <td class='text-left' width='1'>$act_name</td>
@@ -1637,12 +1637,12 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
             $activity_result = unit_resource_completion($_GET['id'], $resource_id);
             switch ($activity_result) {
                 case 1: $content = "<td class='style='padding: 10px 0; width: 85px;'>
-                                    <span class='fa fa-check-circle text-center' data-toggle='tooltip' data-placement='top' title='$langAlreadyBrowsed'></span>
+                                    <span class='fa fa-check-circle text-center' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langAlreadyBrowsed'></span>
                                     </td>";
                     break;
                 case 0:
                     $content = "<td class='style='padding: 10px 0; width: 85px;'>
-                                <span class='fa fa-hourglass-2 text-center' data-toggle='tooltip' data-placement='top' title='$langNeverBrowsed'></span>
+                                <span class='fa fa-hourglass-2 text-center' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNeverBrowsed'></span>
                                 </td>";
                     break;
                 case 2:

@@ -33,7 +33,7 @@ function list_assignments() {
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id'>" .
-                "<table class='table-default'>" .
+                "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "<th class='text-start'>&nbsp;$langWorks</th>" .
@@ -59,7 +59,7 @@ function list_assignments() {
                     "</tr>";
         }
         $tool_content .=
-                "</table>" .
+                "</table></div>" .
                 "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
     }
 }

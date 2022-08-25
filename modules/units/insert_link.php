@@ -35,7 +35,7 @@ function list_links() {
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
                 <input type='hidden' name='id' value='$id' />" .
-                "<table class='table-default'>" .
+                "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th style='width: 10px;'>$langChoice</th>" .
                 "<th class='text-start' style='width:'>&nbsp;$langLinks</th>" .
@@ -115,7 +115,7 @@ function list_links() {
                 }
             }
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>" .
                 "<input class='btn btn-primary' type='submit' name='submit_link' value='$langAddModulesButton'></div></form>";
     }

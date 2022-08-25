@@ -28,7 +28,7 @@ function list_chats() {
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
             "<input type='hidden' name='id' value='$id'>" .
-            "<table class='table-default'>" .
+            "<div class='table-responsive'><table class='table-default'>" .
             "<tr class='list-header'>" .
             "<th style='width: 80px;'>$langChoice</th>" .
             "<th><div class='text-left'>&nbsp;$langChat</div></th>" .
@@ -51,7 +51,7 @@ function list_chats() {
             $tool_content .= "<td>&nbsp;<a href='${urlServer}modules/chat/chat.php?course=$course_code&amp;conference_id=$entry[id]'>" . q($entry['name']) . "</a>$description_text</td>";
             $tool_content .= "</tr>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_chat' value='$langAddModulesButton'></div></form>";
 

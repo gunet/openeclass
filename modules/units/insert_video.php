@@ -37,7 +37,7 @@ function list_videos() {
     if ($count > 0) {
         $video_found = TRUE;
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />";
-                    $tool_content .= "<table class='table-default'>";
+                    $tool_content .= "<div class='table-responsive'><table class='table-default'>";
                     $tool_content .= "<tr class='list-header'>" .
                                      "<th style='width: 10px;'>$langChoice</th>" .
                                      "<th class='text-start'>&nbsp;$langVideo</th>" .
@@ -97,7 +97,7 @@ function list_videos() {
                 }
             }
         }
-        $tool_content .= "</table><div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='submit_video' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></form>";
+        $tool_content .= "</table></div><div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='submit_video' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></form>";
     }
     if (!$video_found) {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoVideo</div></div>";

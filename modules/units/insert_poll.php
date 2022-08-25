@@ -42,7 +42,7 @@ function list_polls() {
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id'>" .
-                "<table class='table-default'>" .
+                "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "<th class='text-start'>&nbsp;$langQuestionnaire</th>" .
@@ -58,7 +58,7 @@ function list_polls() {
             $tool_content .= "<td><a href='${urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>$description_text</td>";
             $tool_content .= "</tr>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_poll' value='$langAddModulesButton'></div></form>";
     }

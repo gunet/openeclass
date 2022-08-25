@@ -42,7 +42,7 @@ function list_lps() {
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id'>" .
-                "<table class='table-default'>" .
+                "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th width='80'>$langChoice</th>" .
                 "<th><div class='text-start'>&nbsp;$langLearningPaths</div></th>" .
@@ -71,7 +71,7 @@ function list_lps() {
                 $tool_content .= "</tr>";
             }
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_lp' value='$langAddModulesButton'></div></form>";
     }

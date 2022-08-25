@@ -34,7 +34,7 @@ function list_forums() {
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id' />" .
-                "<table class='table-default'>" .
+                "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "<th class='text-start'>&nbsp;$langForums</th>" .
@@ -68,7 +68,7 @@ function list_forums() {
                 }
             }
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>
                             <input class='btn btn-primary' type='submit' name='submit_forum' value='$langAddModulesButton' />
                         </div></form>";

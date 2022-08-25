@@ -21,7 +21,7 @@ function list_h5p() {
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
             "<input type='hidden' name='id' value='$id'>" .
-            "<table class='table-default'>" .
+            "<div class='table-responsive'><table class='table-default'>" .
             "<tr class='list-header'>" .
             "<th style='width: 80px;'>$langChoice</th>" .
             "<th><div class='text-start'>&nbsp;$langH5p</div></th>" .
@@ -40,7 +40,7 @@ function list_h5p() {
             $tool_content .= "<td>&nbsp;<img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>&nbsp;&nbsp;<a href='${urlServer}modules/h5p/view.php?id=$entry[id]&amp;course=$course_code'>" . q($entry['title']) . "</a></td>";
             $tool_content .= "</tr>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_h5p' value='$langAddModulesButton'>";
         $tool_content .= "</div>";

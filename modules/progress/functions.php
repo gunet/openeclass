@@ -583,7 +583,7 @@ function display_activities($element, $id, $unit_id = 0) {
     } else {
             $tool_content .= "<div class='main-content'>
                                 <div class='col-sm-12'>
-                                    <div class='row row-main'>
+                                    
                                         <div class='panel panel-default'>
                                             <div class='panel-body Borders'>
                                                 <div class='inner-heading'>
@@ -597,22 +597,24 @@ function display_activities($element, $id, $unit_id = 0) {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div><hr>
                                                 <div class='res-table-wrapper'>
-                                                    <div class='row res-table-header'>
-                                                        <div class='col-sm-7'>
-                                                            $langTitle
-                                                        </div>
-                                                        <div class='col-sm-2'>
-                                                            $langType
-                                                        </div>
-                                                        <div class='col-sm-2'>
-                                                            $langValue
-                                                        </div>
-                                                        <div class='col-sm-1 text-center'>
-                                                            <i class='fa fa-cogs'></i>
-                                                        </div>
-                                                    </div>";
+                                                    <div class='table-responsive'>
+                                                        <table class='table-default'>
+                                                            <tr class='list-header'>
+                                                                <th>
+                                                                    $langTitle
+                                                                </th>
+                                                                <th>
+                                                                    $langType
+                                                                </th>
+                                                                <th>
+                                                                    $langValue
+                                                                </th>
+                                                                <th class='text-center'>
+                                                                    <i class='fa fa-cogs'></i>
+                                                                </th>
+                                                            </tr>";
 
         if (count($result) == 0) {
             $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
@@ -620,18 +622,18 @@ function display_activities($element, $id, $unit_id = 0) {
             foreach ($result as $details) {
                 $resource_data = get_resource_details($element, $details->id, $unit_id);
                 $tool_content .= "
-                <div class='row res-table-row border-0'>
-                    <div class='col-sm-7'>".$resource_data['title']."</div>
-                    <div class='col-sm-2'>". $resource_data['type']."</div>
-                    <div class='col-sm-2'>";
+                <tr>
+                    <td>".$resource_data['title']."</td>
+                    <td>". $resource_data['type']."</td>
+                    <td>";
                 if (!empty($details->operator)) {
                     $op = get_operators();
                     $tool_content .= $op[$details->operator];
                 } else {
                     $tool_content .= "&mdash;";
                 }
-                $tool_content .= "&nbsp;$details->threshold</div>";
-                $tool_content .= "<div class='col-sm-1 text-center'>".
+                $tool_content .= "&nbsp;$details->threshold</td>";
+                $tool_content .= "<td class='text-center'>".
                     action_button(array(
                         array('title' => $langEditChange,
                             'icon' => 'fa-edit',
@@ -643,9 +645,10 @@ function display_activities($element, $id, $unit_id = 0) {
                             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
                             'confirm' => $langConfirmDelete,
                             'class' => 'delete'))).
-                    "</div></div>";
+                    "</td></tr>";
             }
         }
+        $tool_content .= "</table></div></div></div></div>";
 
         //************* UNIT PREREQUISITES *************//
         $course_units = Database::get()->queryArray("SELECT * FROM course_units 
@@ -676,12 +679,9 @@ function display_activities($element, $id, $unit_id = 0) {
                 'secondary_icon' => '',
                 'secondary_btn_class' => 'btn-success btn-sm',
             ));
-        $tool_content .= "  </div>
-                        </div>
-                    </div>
-                </div>
-                <div class='row row-main'>
-                    <div class='panel panel-default'>
+        $tool_content .= "  
+               
+                    <div class='panel panel-default mt-3'>
                         <div class='panel-body Borders'>
                             <div class='inner-heading'>
                                 <div class='row'>
@@ -692,7 +692,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                     $addPrereqBtn
                                     </div>
                                 </div>
-                            </div>
+                            </div><hr>
                             <div class='res-table-wrapper'>";
 
 
@@ -707,10 +707,16 @@ function display_activities($element, $id, $unit_id = 0) {
             $prereq_unit_title = Database::get()->querySingle("SELECT title FROM course_units 
                                                                         WHERE id = ?d", $unit_prerequisite_id->prerequisite_unit)->title;
 
-            $tool_content .= "  <div class='col-sm-11'>
-                                    <p class='text-left'>$prereq_unit_title</p>
-                                </div>
-                                <div class='col-sm-1 float-end'>$delPrereqBtn</div>";
+            $tool_content .= "  
+            <div class='table-responsive'>
+                <table class='table-default'>
+                <tr>
+                    <td><p class='text-left'>$prereq_unit_title</p></td>
+                
+                    <td>$delPrereqBtn</td>
+                </tr>
+               </table>
+            </div>";
         } else {
             $tool_content .= "<p class='text-center text-muted'>$langNoUnitPrerequisite</p>";
         }
@@ -718,7 +724,7 @@ function display_activities($element, $id, $unit_id = 0) {
         $tool_content .= " </div>
                         </div>
                     </div>
-                </div>
+
             </div>
         </div>";
     }
