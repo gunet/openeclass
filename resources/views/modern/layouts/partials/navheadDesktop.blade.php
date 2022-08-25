@@ -17,8 +17,8 @@
                                         <input id="search_terms" type="text" class="border-0 form-control outline-0 text-white inputSearch " name="search_terms" placeholder="{{ trans('langSearch') }}..." aria-describedby="basic-inputSearch">
                                         <button id="btn-search" class="btn btn-primary" type="submit" name="quickSearch"><i class="fa fa-search text-white"></i></button>
                                     @endif
-                                    @if(!$_SESSION['uid'])
-                                    <a class='btn btn-primary' href="{{$urlAppend}}main/login_form.php"><span class="fa fa-lock pt-1"></span></a>
+                                    @if (!isset($_SESSION['uid']))
+                                        <a class='btn btn-primary' href="{{$urlAppend}}main/login_form.php"><span class="fa fa-lock pt-1"></span></a>
                                     @endif
                                     {!! lang_selections() !!}
                                 </div>
@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </div>
-               
+
 
                 <div class='row p-2 mt-3'>
 
@@ -281,7 +281,7 @@
                                             </li>
                                         @endif
 
-                                        
+
                                         <li>
                                             <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:15px;'>
                                                 <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
@@ -291,7 +291,7 @@
                                                 </button>
                                             </form>
                                         </li>
-                                         
+
 
                                     </ul>
                                 </div>

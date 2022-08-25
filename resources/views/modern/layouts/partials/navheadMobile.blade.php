@@ -12,18 +12,18 @@
                 @if(get_config('enable_search'))
                 <a type="button" class='btn btn-transparent text-white pt-2' href="{{ $urlAppend }}modules/search/{{ $search_action }}"><i class="fa fa-search"></i></button>
                 @endif
-                @if(!$_SESSION['uid'])
-                <a class='btn btn-transparent text-white pt-2' href="{{$urlAppend}}main/login_form.php"><span class="fa fa-lock"></span></a>
-                @endif   
+                @if (!isset($_SESSION['uid']))
+                    <a class='btn btn-transparent text-white pt-2' href="{{$urlAppend}}main/login_form.php"><span class="fa fa-lock"></span></a>
+                @endif
 
                 {!! lang_selections() !!}
-                
 
-                @if($_SESSION['uid'])
-                    
+
+                @if(isset($_SESSION['uid']))
+
                         <button class="btn btn-transparent dropdown-toogle text-warning pt-2" type="button"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-user"></i>                           
+                                <i class="fa fa-user"></i>
                         </button>
 
                         <ul class="m-0 p-0 dropdown-menu dropdown-menu-end dropdown_menu_user bg-body border-0 shadow-lg" aria-labelledby="dropdownMenuButton1">
@@ -97,7 +97,7 @@
                                 </form>
                             </li>
                         </ul>
-                    
+
                 @endif
             </div>
         </div>
