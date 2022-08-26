@@ -103,7 +103,7 @@ if (count($result) > 0) {
     foreach ($result as $row) {
         if ($row->date != $temp_date) {
             $tool_content .= "<tr><td colspan='4' class='monthLabel list-header'>"
-                    . "<div class='text-center'><b>" . claro_format_locale_date($dateTimeFormatLongFull, strtotime($row->date)) . "</b></div>"
+                    . "<div class='text-center'><b>" . format_locale_date(strtotime($row->date)) . "</b></div>"
                     . "</td></tr>";
             $temp_date = $row->date;
         }

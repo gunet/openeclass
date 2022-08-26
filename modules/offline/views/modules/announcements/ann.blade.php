@@ -11,7 +11,7 @@
                             {!! standard_text_escape($ann_title) !!}
                         </div>
                         <span class="announcement-date">
-                            {{ claro_format_locale_date(trans('dateFormatLong'), strtotime($ann_date)) }}
+                            {{ format_locale_date(strtotime($ann_date)) }}
                         </span>
                         <div class="announcement-main">
                             <p>{!! $ann_body !!}</p>

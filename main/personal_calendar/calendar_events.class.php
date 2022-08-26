@@ -1000,7 +1000,7 @@ class Calendar_Events {
       * @return object with `count` attribute containing the number of associated events with the item
       */
     public static function week_calendar($day, $month, $year) {
-        global $dateFormatLong, $langNoEvents, $langDay, $langWeek, $langMonth, $langViewShow;
+        global $langNoEvents, $langDay, $langWeek, $langMonth, $langViewShow;
 
         $calendar_content = "";
         if (is_null($day)) {
@@ -1014,9 +1014,9 @@ class Calendar_Events {
         $thisweekday = new DateTime("$year-$month-$day");
         $difffromMonday = ($thisweekday->format('w') == 0)? 6:$thisweekday->format('w')-1;
         $monday = $thisweekday->sub(new DateInterval('P'.$difffromMonday.'D')); //Sunday->1, ..., Saturday->7
-        $weekdescription = ucfirst(claro_format_locale_date($dateFormatLong, $monday->getTimestamp()));
+        $weekdescription = ucfirst(format_locale_date($monday->getTimestamp()));
         $sunday = $thisweekday->add(new DateInterval('P6D'));
-        $weekdescription .= ' - '.ucfirst(claro_format_locale_date($dateFormatLong, $sunday->getTimestamp()));
+        $weekdescription .= ' - '.ucfirst(format_locale_date($sunday->getTimestamp()));
         $cursorday = $thisweekday->sub(new DateInterval('P6D'));
 
         $backward = array('day'=>$previousweekdate->format('d'), 'month'=>$previousweekdate->format('m'), 'year' => $previousweekdate->format('Y'));
@@ -1035,7 +1035,6 @@ class Calendar_Events {
         $calendar_content .= "</tr>";
         $calendar_content .= "</table>";
         $eventlist = Calendar_Events::get_calendar_events("week", "$year-$month-$day");
-        $numLine = 0;
 
         $calendar_content .= "<table class='table-default'>";
 
@@ -1051,7 +1050,7 @@ class Calendar_Events {
                         $class = 'today';
                     else
                         $class = 'monthLabel';
-                    $calendar_content .= "<tr><td colspan='3' class='$class'>" . "&nbsp;<b>" . ucfirst(claro_format_locale_date($dateFormatLong, $cursorday->getTimestamp())) . "</b></td></tr>";
+                    $calendar_content .= "<tr><td colspan='3' class='$class'>" . "&nbsp;<b>" . ucfirst(format_locale_date($cursorday->getTimestamp())) . "</b></td></tr>";
                     $calendar_content .= "<tr><td colspan='3'>$langNoEvents</td></tr>";
                     $cursorday->add(new DateInterval('P1D'));
                     $curday++;
@@ -1060,7 +1059,7 @@ class Calendar_Events {
                     $class = 'today';
                 else
                     $class = 'monthLabel';
-                $calendar_content .= "<tr><td colspan='3' class='$class'>" . "&nbsp;<b>" . ucfirst(claro_format_locale_date($dateFormatLong, strtotime($thisevent->startdate))) . "</b></td></tr>";
+                $calendar_content .= "<tr><td colspan='3' class='$class'>" . "&nbsp;<b>" . ucfirst(format_locale_date(strtotime($thisevent->startdate))) . "</b></td></tr>";
                 if ($cursorday <= $thiseventdatetime) {
                     $cursorday->add(new DateInterval('P1D'));
                     $curday++;
@@ -1068,7 +1067,6 @@ class Calendar_Events {
             }
             $calendar_content .= Calendar_Events::week_calendar_item($thisevent, 'even');
             $curstartddate = $thisevent->startdate;
-            //$numLine++;
         }
         /* Fill with empty days*/
         for($i=$curday;$i<7;$i++) {
@@ -1076,7 +1074,7 @@ class Calendar_Events {
                     $class = 'today';
                 else
                     $class = 'monthLabel';
-                $calendar_content .= "<tr><td colspan='3' class='$class'>" . "&nbsp;<b>" . ucfirst(claro_format_locale_date($dateFormatLong, $cursorday->getTimestamp())) . "</b></td></tr>";
+                $calendar_content .= "<tr><td colspan='3' class='$class'>" . "&nbsp;<b>" . ucfirst(format_locale_date($cursorday->getTimestamp())) . "</b></td></tr>";
                 $calendar_content .= "<tr><td colspan='3'>$langNoEvents</td></tr>";
                 $cursorday->add(new DateInterval('P1D'));
         }
@@ -1096,7 +1094,7 @@ class Calendar_Events {
       * @return object with `count` attribute containing the number of associated events with the item
      */
    public static function day_calendar($day, $month, $year) {
-       global $dateFormatLong, $langNoEvents, $langDay, $langWeek, $langMonth, $langViewShow;
+       global $langNoEvents, $langDay, $langWeek, $langMonth, $langViewShow;
 
         $calendar_content = "";
         if (is_null($day)) {
@@ -1108,7 +1106,7 @@ class Calendar_Events {
         $previousdaydate->sub(new DateInterval('P1D'));
 
         $thisday = new DateTime("$year-$month-$day");
-        $daydescription = ucfirst(claro_format_locale_date($dateFormatLong, $thisday->getTimestamp()));
+        $daydescription = ucfirst(format_locale_date($thisday->getTimestamp()));
 
         $backward = array('day'=>$previousdaydate->format('d'), 'month'=>$previousdaydate->format('m'), 'year' => $previousdaydate->format('Y'));
         $foreward = array('day'=>$nextdaydate->format('d'), 'month'=>$nextdaydate->format('m'), 'year' => $nextdaydate->format('Y'));
@@ -1172,7 +1170,6 @@ class Calendar_Events {
             }
             $calendar_content .= Calendar_Events::day_calendar_item($thisevent, 'even');
             $curstarthour = $thiseventhour;
-            //$numLine++;
         }
         /* Fill with empty days*/
         for($i=$curhour;$i<24;$i+=6) {

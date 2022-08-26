@@ -151,7 +151,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->content)."</div>
                         </div>",
                 //'0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.q($myrow->title).'</a>',
-                '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->date)),
+                '1' => format_locale_date(strtotime($myrow->date)),
                 '2' => '<ul class="list-unstyled">'.$status_icon_list.'</ul>',
                 '3' => action_button(array(
                     array('title' => $langEditChange,
@@ -186,7 +186,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                         </div>
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->content)."</div>
                         </div>",
-                '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->date))
+                '1' => format_locale_date(strtotime($myrow->date))
             );
         }
     }
@@ -423,11 +423,7 @@ if ($is_editor) {
             $v->labels(array('enddate' => "$langTheField $langEndDate"));
         }
         if($v->validate()) {
-            if ($language == 'el') {
-                $datetime = claro_format_locale_date($dateTimeFormatShort);
-            } else {
-                $datetime = date('l jS \of F Y h:i A');
-            }
+            $datetime = format_locale_date(time(), 'short');
             if (isset($_POST['show_public'])) {
                 $is_visible = 1;
             } else {
@@ -570,12 +566,14 @@ if ($is_editor) {
                         }
                         // send mail message per 50 recipients
                         if (count($recipients) >= 50) {
-                            send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
+                            echo $emailContent;
+                            //send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
                             $recipients = array();
                         }
                     }, $course_id);
                     if (count($recipients) > 0) {
-                        send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
+                        echo $emailContent;
+                        //send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
                     }
                     Session::Messages("$langAnnAddWithEmail $countEmail $langRegUser", 'alert-success');
                     if ($invalid > 0) { // info about invalid emails (if exist)
@@ -792,7 +790,7 @@ if (isset($_GET['an_id'])) {
                                 ".standard_text_escape($row->title)."
                             </div>
                             <span class='announcement-date'>
-                                - ".claro_format_locale_date($dateFormatLong, strtotime($row->date))." -
+                                - ".format_locale_date(strtotime($row->date))." -
                             </span>
                             <div class='announcement-main'>
                                 ".standard_text_escape($row->content)."

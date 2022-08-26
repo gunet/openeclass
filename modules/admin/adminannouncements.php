@@ -142,7 +142,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->body)."</div>
                         </div>",
                 //'0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.q($myrow->title).'</a>',
-                '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->date)),
+                '1' => format_locale_date(strtotime($myrow->date)),
                 '2' => '<ul class="list-unstyled">'.$status_icon_list.'</ul>',
                 '3' => action_button(array(
                     array('title' => $langEditChange,
@@ -189,7 +189,7 @@ if (isset($_GET['an_id'])) {
                                 ".standard_text_escape($row->title)."
                             </div>
                             <span class='announcement-date'>
-                                - ".claro_format_locale_date($dateFormatLong, strtotime($row->date))." -
+                                - ".format_locale_date(strtotime($row->date))." -
                             </span>
                             <div class='announcement-main'>
                                 ".standard_text_escape($row->body)."
@@ -597,7 +597,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         $startdate = '';
         $enddate = '';
         $tool_content .= "<div class='col-sm-10'>" . lang_select_options('lang_admin_ann', "class='form-control'") . "</div>";
-    }    
+    }
     $tool_content .= "<small class='text-right'><span class='help-block'>$langTipLangAdminAnn</span></small></div>
         <div class='form-group'>
             <label for='startdate' class='col-sm-2 control-label'>$langStartDate :</label>

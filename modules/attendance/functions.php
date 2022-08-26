@@ -169,7 +169,7 @@ function register_user_presences($attendance_id, $actID) {
                 <td class='text-center'>$cnt</td>
                 <td> " . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td>
-                <td class='text-center'>" . claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date)) . "</td>
+                <td class='text-center'>" . format_locale_date(strtotime($resultUser->reg_date), 'short') . "</td>
                 <td class='text-center'><input type='checkbox' value='1' name='$resultUser->userID'";
                 //check if the user has attendance for this activity already OR if it should be automatically inserted here
                 $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
@@ -950,7 +950,7 @@ function display_all_users_presences($attendance_id) {
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID) . "</td>
                 <td>$resultUser->am</td>
-                <td class='text-center'>" . claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date)) . "</td>
+                <td class='text-center'>" . format_locale_date(strtotime($resultUser->reg_date), 'short') . "</td>
                 <td class='text-center'>" . userAttendTotal($attendance_id, $resultUser->userID) . "/" . $attendance_limit . "</td>
                 <td class='option-btn-cell'>"
                    . action_button(array(

@@ -320,7 +320,7 @@ if ($userdata) {
                         $consent_text = $langYouHaveRejectedPrivacyPolicy;
                         $consentButtons = $consentButtons[0];
                     }
-                    $consentDate = claro_format_locale_date($dateTimeFormatLong, strtotime($consent->ts));
+                    $consentDate = format_locale_date(strtotime($consent->ts));
                 } else {
                     $consent_text = $langYouHaveNotConsentedToPrivacyPolicy;
                     $consentButtons = implode('<br>', $consentButtons);

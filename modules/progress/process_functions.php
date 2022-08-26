@@ -1213,7 +1213,7 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         } else {
             $cert_date = time();
         }
-        $certificate_date = claro_format_locale_date($dateFormatLong, $cert_date);
+        $certificate_date = format_locale_date($cert_date);
     } else { // logged out
         $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template
                                                 JOIN certified_users ON certificate_template.id = certified_users.template_id

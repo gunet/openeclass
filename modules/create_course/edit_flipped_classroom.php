@@ -235,13 +235,13 @@ if(!isset($_POST['next'])){
                     </div>
                 </div>
                 <div class='form-group'>
-                    <label for='lecthours' class='col-sm-3 control-label'>$langLectHours <small>$langHoursSmall</small> : </label>
+                    <label for='lecthours' class='col-sm-3 control-label'>$langLectHours <small>($langHoursSmall)</small> : </label>
                     <div class='col-sm-8'>
                         <input name='lecthours' id='lecthours' type='number' min='1' max='150' class='form-control' value='".q($q1->lesson_hours)."' onchange='hoursSum()' >
                     </div>
                 </div>
                 <div class='form-group'>
-                    <label for='homehours' class='col-sm-3 control-label'>$langHomeHours <small>$langHoursSmall</small> : </label>
+                    <label for='homehours' class='col-sm-3 control-label'>$langHomeHours <small>($langHoursSmall)</small> : </label>
                     <div class='col-sm-8'>
                         <input name='homehours' id='homehours' type='number' min='1' max='150' class='form-control' value='".q($q1->home_hours)."' onchange='hoursSum()' >
                     </div>

@@ -64,7 +64,7 @@ function course_announcements() {
             $ann_content = '';
             foreach ($q as $ann) {
                 $ann_url = $urlAppend . "modules/announcements/?course=$course_code&amp;an_id=" . $ann->id;
-                $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
+                $ann_date = format_locale_date(strtotime($ann->date));
                 $ann_content .= "<li class='list-item'>
                                     <span class='item-wholeline'><div class='text-title'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>$ann_date</span>
                                 </li>";

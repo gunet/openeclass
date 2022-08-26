@@ -546,7 +546,7 @@ function display_all_users_grades($gradebook_id) {
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
                 <td>" . $resultUser->am . "</td>
-                <td class='text-center'>" . claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date)) . "</td>
+                <td class='text-center'>" . format_locale_date(strtotime($resultUser->reg_date), 'short') . "</td>
                 <td class='text-center'>";
                 if (weightleft($gradebook_id, 0) == 0) {
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;u=$resultUser->userID'>" . userGradeTotal($gradebook_id, $resultUser->userID). "</a>";
@@ -1139,7 +1139,7 @@ function register_user_grades($gradebook_id, $actID) {
                 <td>" . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td><td class='text-center'>";
                 if (!empty($resultUser->reg_date)) {
-                    $tool_content .= claro_format_locale_date($dateFormatMiddle, strtotime($resultUser->reg_date));
+                    $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short');
                 } else {
                     $tool_content .= " -- ";
                 }

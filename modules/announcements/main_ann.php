@@ -44,7 +44,7 @@ if ($numOfAnnouncements > 0) {
     $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
     for ($i = 0; $i < $numOfAnnouncements; $i++) {
         $tool_content .= "<div class='single_announcement'><div class='announcement-title'>" . q($announceArr[$i]->title) . "</div>
-		<span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . " -</span>
+		<span class='announcement-date'>- " . format_locale_date(strtotime($announceArr[$i]->date)) . " -</span>
 		<div class='announcement-main'>" . standard_text_escape($announceArr[$i]->body) . "</div>
 		</div>";
     }

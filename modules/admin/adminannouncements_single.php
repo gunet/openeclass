@@ -49,7 +49,7 @@ if(isset($ann_id)){
                                             ".standard_text_escape($announcement->title)."
                                         </div>
                                         <span class='announcement-date'>
-                                         - " . claro_format_locale_date($dateFormatLong, strtotime($announcement->date)) . " -
+                                         - " . format_locale_date(strtotime($announcement->date)) . " -
                                         </span>
                                         <div class='announcement-main'>
                                             ".standard_text_escape($announcement->body)."

@@ -56,7 +56,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         <small class='text-grey'>".q(ellipsize($myrow->course_title, 80))."</small>
                         <div class='table_td_body' data-id='$myrow->id'>" . standard_text_escape($myrow->content) . "</div>
                         </div>",
-                '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->an_date))
+                '1' => format_locale_date(strtotime($myrow->an_date))
             );
         } elseif ($myrow->code == '') {
             $data['aaData'][] = array(
@@ -67,7 +67,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         <small class='text-grey'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></small>
                         <div class='table_td_body' data-id='$myrow->id'>" . standard_text_escape($myrow->content) . "</div>
                         </div>",
-                '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->an_date))
+                '1' => format_locale_date(strtotime($myrow->an_date))
             );
         }
     }

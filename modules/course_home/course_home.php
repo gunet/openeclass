@@ -478,9 +478,9 @@ if ($uid) {
 }
 
 // display course citation
-$citation_text = q($professor) . ". <em>" . q($currentCourseName) .
-    ".</em> $langAccessed" . claro_format_locale_date($dateFormatLong, strtotime('now')) .
-    " $langFrom2 {$urlServer}courses/$course_code/";
+$citation_text = q($professor) . " -- <strong>" . q($currentCourseName) .
+    ".</strong> $langAccessed <em>" . format_locale_date(time()) .
+    " </em> $langFrom2 {$urlServer}courses/$course_code/";
 
 $tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='citationModalLabel' aria-hidden='true'>
                     <div class='modal-dialog'>
@@ -1098,7 +1098,7 @@ function course_announcements() {
             $ann_content = '';
             foreach ($q as $ann) {
                 $ann_url = $urlAppend . "modules/announcements/?course=$course_code&amp;an_id=" . $ann->id;
-                $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
+                $ann_date = format_locale_date($dateFormatLong, strtotime($ann->date));
                 $ann_content .= "<li class='list-item'>
                                     <span class='item-wholeline'><div class='text-title'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>$ann_date</span>
                                 </li>";

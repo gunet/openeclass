@@ -2346,8 +2346,11 @@ function student_view_progress() {
 
 
             foreach ($game_certificate as $key => $certificate) {
-                $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned));
-                $dateAssigned = ($certificate->completed == 1) ? $formatted_date : '';
+                if ($certificate->completed == 1) {
+                    $dateAssigned = format_locale_date(strtotime($certificate->assigned), null, false);
+                } else {
+                    $dateAssigned = '';
+                }
 
                 $tool_content .= "<div class='res-table-wrapper'>";
 

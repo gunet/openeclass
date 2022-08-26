@@ -284,7 +284,7 @@ if (empty($search_terms)) {
                 $search_results .= "<tr class='$class'>
                                   <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                                   <td><a href='" . $announcesUrls[$announce->id] . "'>" . q($announce->title) . "</a>&nbsp;&nbsp;
-                                  <small>(" . nice_format(claro_format_locale_date($dateFormatLong, strtotime($announce->date))) . ")
+                                  <small>(" . format_locale_date(strtotime($announce->date)) . ")
                                   </small><br />" . $announce->content . "</td></tr>";
                 $numLine++;
             }
@@ -321,7 +321,7 @@ if (empty($search_terms)) {
                     }
                 }
                 $search_results .= "<span class='day'>" .
-                        ucfirst(claro_format_locale_date($dateFormatLong, strtotime($agenda->start))) .
+                        ucfirst(format_locale_date(strtotime($agenda->start))) .
                         "</span> ($langHour: " . ucfirst(date("H:i", strtotime($agenda->start))) . ")<br />"
                         . q($agenda->title) . " (" . $langDuration . ": " . q($agenda->duration) . " $message) " . $agenda->content . "
                     </td>

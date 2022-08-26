@@ -279,7 +279,7 @@ $lastVisit = Database::get()->querySingle("SELECT * FROM loginout
                         WHERE id_user = ?d ORDER by idLog DESC LIMIT 1", $uid);
 if ($lastVisit) {
     $lastVisitLabel = "<br><span class='tag'>$langProfileLastVisit : </span><span class='tag-value text-muted'>" .
-        claro_format_locale_date($dateFormatLong, strtotime($lastVisit->when)) . "</span>";
+        format_locale_date(strtotime($lastVisit->when)) . "</span>";
 } else {
     $lastVisitLabel = '';
 }

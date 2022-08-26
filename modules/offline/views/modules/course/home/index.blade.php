@@ -14,7 +14,10 @@
                         <ul class='course-title-actions clearfix pull-right list-inline'>
                             <li class='access pull-right'>
                                 <a href='javascript:void(0);' style='color: #23527C;'>
-                                    <span id='lalou' class='fa fa-info-circle fa-fw' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='{{ $course_info_popover }}'></span>
+                                    <span id='lalou' class='fa fa-info-circle fa-fw'
+                                          data-container='#course-title-wrapper' data-toggle='popover'
+                                          data-placement='bottom' data-html='true'
+                                          data-content='{{ $course_info_popover }}'></span>
                                     <span class='hidden'>.</span>
                                 </a>
                             </li>
@@ -22,8 +25,10 @@
                                 <a href='javascript:void(0);'>{!! $lessonStatus !!}</a>
                             </li>
                             <li class='access pull-right'>
-                                <a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'>
-                                    <span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='{{ trans('langCitation') }}'></span>
+                                <a data-modal='citation' data-toggle='modal' data-target='#citation'
+                                   href='javascript:void(0);'>
+                                    <span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top'
+                                          title='{{ trans('langCitation') }}'></span>
                                     <span class='hidden'>.</span>
                                 </a>
                             </li>
@@ -32,7 +37,9 @@
                     @if ($course_info->home_layout == 1)
                         <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
                             <div>
-                                <img class='banner-image img-responsive' src='{{ isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/" . rawurlencode($course_info->course_image) : "$themeimg/ph1.jpg" }}' alt='Course Banner'/>
+                                <img class='banner-image img-responsive'
+                                     src='{{ isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/" . rawurlencode($course_info->course_image) : "$themeimg/ph1.jpg" }}'
+                                     alt='Course Banner'/>
                             </div>
                         </div>
                     @endif
@@ -61,10 +68,10 @@
                                 <strong>{{ trans('langCode') }}: </strong> {{ $course_info->public_code }}<br>
                                 <strong>{{ trans('langFaculty') }}: </strong>
                                 {!! $departments !!}
-                             </div>
+                            </div>
                             <div class='col-xs-6'>
                                 @if ($course_info->course_license)
-                                    <div class ='text-center'>
+                                    <div class='text-center'>
                                         <strong>{{ trans('langLicense') }}:</strong><br>
                                         <span>{!! copyright_info($course_id, 0) !!}</span>
                                     </div>
@@ -83,9 +90,11 @@
                     <div class='content-title pull-left h3'>
                         {{ $course_info->view_type == 'weekly' ? trans('langCourseWeeklyFormat') : trans('langCourseUnits') }}
                     </div>
-                        <a class='pull-left add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{ $language}}&topic=course_units' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'>
-                            <span class='fa fa-question-circle'></span>
-                        </a>
+                    <a class='pull-left add-unit-btn' id='help-btn'
+                       href='{{ $urlAppend }}modules/help/help.php?language={{ $language}}&topic=course_units'
+                       data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'>
+                        <span class='fa fa-question-circle'></span>
+                    </a>
                 </div>
             </div>
             <div class='row boxlist no-list'>
@@ -126,7 +135,7 @@
                 @else
                     <div class='col-sm-12'>
                         <div class='panel'>
-                            <div class='panel-body not_visible'> - {{ trans('langNoUnits') }} - </div>
+                            <div class='panel-body not_visible'> - {{ trans('langNoUnits') }} -</div>
                         </div>
                     </div>
                 @endif
@@ -146,7 +155,8 @@
                 <div class='modal-body'>
                     {{ $course_info->prof_names }}&nbsp;
                     <span>{{ $currentCourseName }}</span>&nbsp;
-                    {{ trans('langAccessed') }} {{ claro_format_locale_date(trans('dateFormatLong'), strtotime('now')) }}&nbsp;
+                    {{ trans('langAccessed') }} {{ format_locale_date(time()) }}
+                    &nbsp;
                     {{ trans('langFrom2') }} {{ $urlServer }}courses/{{$course_code}}/
                 </div>
             </div>
