@@ -73,7 +73,7 @@
                                         </a>
                                     </div>
                                     <span class='announcement-date'>
-                                        - {{ claro_format_locale_date($dateFormatLong, strtotime($announcement->date)) }} -
+                                        - {{ format_locale_date(strtotime($announcement->date)) }} -
                                     </span>
                                     {!! standard_text_escape(ellipsize_html("<div class='announcement-main'>$announcement->body</div>", 500, "<div class='announcements-more'><a href='modules/announcements/main_ann.php?aid=$announcement->id'>".trans('langMore')." &hellip;</a></div>")) !!}
                                 </li>

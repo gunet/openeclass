@@ -77,12 +77,12 @@ $displayForm = true;
 if (isset($_GET['down'])) {
     $thisNoteId = intval(getDirectReference($_GET['down']));
     Notes::movedown_note($thisNoteId);
-    redirect_to_home_page('main/notes/index.php');  
+    redirect_to_home_page('main/notes/index.php');
 }
 if (isset($_GET['up'])) {
     $thisNoteId = intval(getDirectReference($_GET['up']));
     Notes::moveup_note($thisNoteId);
-    redirect_to_home_page('main/notes/index.php');  
+    redirect_to_home_page('main/notes/index.php');
 }
 
 /* submit form: new or updated note */
@@ -91,7 +91,7 @@ if (isset($_POST['submitNote'])) {
     $v->rule('required', array('newTitle'));
     $v->labels(array(
         'newTitle' => "$langTheField $langTitle"
-    ));    
+    ));
     if($v->validate()) {
         $newTitle = $_POST['newTitle'];
         $newContent = $_POST['newContent'];
@@ -100,9 +100,9 @@ if (isset($_POST['submitNote'])) {
             $id = intval(getDirectReference($_POST['id']));
             Notes::update_note($id, $newTitle, $newContent, $refobjid);
            // Session::Messages($langNoteModify, 'alert-success');
-            Session::flash('message',$langNoteModify); 
+            Session::flash('message',$langNoteModify);
             Session::flash('alert-class', 'alert-success');
-            redirect_to_home_page('main/notes/index.php');        
+            redirect_to_home_page('main/notes/index.php');
         } else { // new note
             $id = Notes::add_note($newTitle, $newContent, $refobjid);
             if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -110,7 +110,7 @@ if (isset($_POST['submitNote'])) {
                 exit;
             }
           //  Session::Messages($langNoteAdd, 'alert-success');
-            Session::flash('message',$langNoteAdd); 
+            Session::flash('message',$langNoteAdd);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('main/notes/index.php');
         }
@@ -126,7 +126,7 @@ if (isset($_GET['delete'])) {
     $thisNoteId = intval(getDirectReference($_GET['delete']));
     Notes::delete_note($thisNoteId);
    // Session::Messages($langNoteDel, 'alert-success');
-    Session::flash('message',$langNoteDel); 
+    Session::flash('message',$langNoteDel);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('main/notes/index.php');
 }
@@ -139,11 +139,11 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     if (isset($_GET['modify'])) {
         $langAdd = $pageName = $langModifNote;
         $modify = intval(getDirectReference($_GET['modify']));
-        $note = Notes::get_note($modify);      
+        $note = Notes::get_note($modify);
     } else {
         $pageName = $langAddNote;
     }
-    $noteToModify = isset($note) ? $note->id : '';    
+    $noteToModify = isset($note) ? $note->id : '';
     $titleToModify = Session::has('newTitle') ? Session::get('newTitle') : (isset($note) ? q($note->title) : '');
     $contentToModify = Session::has('newContent') ? Session::get('newContent') : (isset($note) ? $note->content : '');
     $gen_type_selected = isset($note) ? $note->reference_obj_module : null;
@@ -183,7 +183,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     </div>
     <div class='form-group'>
       <div class='col-sm-10 col-sm-offset-2'>
-        <input class='btn btn-primary' type='submit' name='submitNote' value='$langAdd'> 
+        <input class='btn btn-primary' type='submit' name='submitNote' value='$langAdd'>
         <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
       </div>
     </div>";
@@ -192,7 +192,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     }
     $tool_content .="</fieldset>
     </form></div>";
-    
+
 } elseif (isset($_GET['nid'])) {
     $tool_content .= action_bar(array(
         array(
@@ -202,10 +202,10 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             'url' => $_SERVER['SCRIPT_NAME']
         )
     ));
-    
+
     $note = Notes::get_note(intval(getDirectReference($_GET['nid'])));
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langNotes);
-    $pageName = q($note->title);    
+    $pageName = q($note->title);
     $tool_content .= "
         <div class='panel panel-action-btn-default'>
             <div class='panel-heading'>
@@ -224,7 +224,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <h3 class='panel-title'>".q($note->title)."</h3>
             </div>
             <div class='panel-body'>
-                <button class='btn btn-success pe-none mt-2'>". claro_format_locale_date($dateFormatLong, strtotime($note->date_time)). "</button><br><br>
+                <button class='btn btn-success pe-none mt-2'>". format_locale_date(strtotime($note->date_time)). "</button><br><br>
                 $note->content
             </div>
         </div>";
@@ -245,7 +245,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     if (isset($_GET['course'])) {
         $cid = course_code_to_id($_GET['course']);
         $notelist = Notes::get_all_course_notes($cid);
-    } else { 
+    } else {
         $notelist = Notes::get_user_notes();
     }
     //$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
@@ -266,7 +266,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
 
     foreach ($notelist as $note) {
         $content = standard_text_escape($note->content);
-        $note->date_time = claro_format_locale_date($dateFormatLong, strtotime($note->date_time));
+        $note->date_time = format_locale_date(strtotime($note->date_time));
         $tool_content .= "<tr><td><b>";
         if (empty($note->title)) {
             $tool_content .= $langNoteNoTitle;

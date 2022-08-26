@@ -9,7 +9,7 @@
         <div class="row rowMedium">
 
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_Homepage">
-                    
+
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -45,9 +45,9 @@
                                     <th class="text-white text-center">{!! icon('fa-gears') !!}</th>
                                 </tr>
                                 @foreach ($announcements as $announcement)
-                                    <tr{!! !$announcement->visible 
-                                        || !is_null($announcement->end) && $announcement->end <= date("Y-m-d H:i:s") 
-                                        || !is_null($announcement->begin) && $announcement->begin >= date("Y-m-d H:i:s") 
+                                    <tr{!! !$announcement->visible
+                                        || !is_null($announcement->end) && $announcement->end <= date("Y-m-d H:i:s")
+                                        || !is_null($announcement->begin) && $announcement->begin >= date("Y-m-d H:i:s")
                                         ? " class='not_visible'" : "" !!}>
                                         <td>
                                             <div class='table_td'>
@@ -59,7 +59,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{{ claro_format_locale_date(trans('dateTimeFormatShort'), strtotime($announcement->date)) }}</td>
+                                        <td>{{ format_locale_date(strtotime($announcement->date), 'short') }}</td>
                                         <td>
                                             <div>
                                                 <ul class='list-unstyled'>
@@ -78,7 +78,7 @@
                                                         <li class='text-success'>
                                                             <span class='fa fa-clock-o'></span> {{ trans('langAdminWaiting') }}
                                                         </li>
-                                                    @endif                        
+                                                    @endif
                                                 </ul>
                                             </div>
                                         </td>
@@ -117,18 +117,18 @@
                                                 ]
                                             ]) !!}
                                         </td>
-                                    </tr>                
+                                    </tr>
                                 @endforeach
                             </table>
                         </div>
                     @else
-                    
+
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                             <div class='alert alert-warning'>
                                 {{ trans('langNoAnnounce') }}
                             </div>
                         </div>
-                    
+
                     @endif
 
                 </div>

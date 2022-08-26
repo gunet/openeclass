@@ -12,9 +12,9 @@
                     <th class="text-center">{!! icon('fa-gears') !!}</th>
                 </tr>
                 @foreach ($announcements as $announcement)
-                    <tr{!! !$announcement->visible 
-                           || !is_null($announcement->end) && $announcement->end <= date("Y-m-d H:i:s") 
-                           || !is_null($announcement->begin) && $announcement->begin >= date("Y-m-d H:i:s") 
+                    <tr{!! !$announcement->visible
+                           || !is_null($announcement->end) && $announcement->end <= date("Y-m-d H:i:s")
+                           || !is_null($announcement->begin) && $announcement->begin >= date("Y-m-d H:i:s")
                            ? " class='not_visible'" : "" !!}>
                         <td>
                             <div class='table_td'>
@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td>{{ claro_format_locale_date(trans('dateTimeFormatShort'), strtotime($announcement->date)) }}</td>
+                        <td>{{ format_locale_date(strtotime($announcement->date), 'short') }}</td>
                         <td>
                             <div>
                                 <ul class='list-unstyled'>
@@ -45,7 +45,7 @@
                                         <li class='text-success'>
                                             <span class='fa fa-clock-o'></span> {{ trans('langAdminWaiting') }}
                                         </li>
-                                    @endif                        
+                                    @endif
                                 </ul>
                             </div>
                         </td>
@@ -84,7 +84,7 @@
                                 ]
                             ]) !!}
                         </td>
-                    </tr>                
+                    </tr>
                 @endforeach
             </table>
         </div>

@@ -30,7 +30,7 @@
 
                     <div class="row rowMedium mt-lg-0 mt-3">
 
-                        <div class="col-xl-4 col-lg-6 col-md-7 col-sm-12 col-12">                           
+                        <div class="col-xl-4 col-lg-6 col-md-7 col-sm-12 col-12">
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
@@ -52,9 +52,9 @@
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                     <p class='text-secondary text-xl-center text-lg-start text-center mt-3 ps-3 pe-lg-0 pe-3'>{{ trans('langProfileLastVisit') }}:
-                                       <strong class='text-primary text-xl-center text-lg-start text-center'>{{ claro_format_locale_date(trans('dateFormatLong'), strtotime($lastVisit->when)) }}</strong>
-                                    </p> 
-                                    
+                                       <strong class='text-primary text-xl-center text-lg-start text-center'>{{ format_locale_date(strtotime($lastVisit->when)) }}</strong>
+                                    </p>
+
                                 </div>
                             </div>
                         </div>
@@ -73,14 +73,14 @@
                                 </div>
                                 <div class="row justify-content-center text-center" >
                                     <h5> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h5>
-                                    <p> 
+                                    <p>
                                         @if(($session->status == USER_TEACHER))
                                         {{ trans('langMetaTeacher') }}
                                         @elseif(($session->status == USER_STUDENT))
                                         {{ trans('langCStudent') }}
                                         @else
                                         {{ trans('langAdministrator')}}
-                                        @endif 
+                                        @endif
                                     </p>
                                 </div>
                                 <div class="row justify-content-center text-center">
@@ -98,7 +98,7 @@
                         </div>
 
                         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
-                            
+
                                 <div class="row">
                                     <div class="col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
                                         <div class="shadow-sm bg-body rounded bg-primary">
@@ -110,8 +110,8 @@
                                                 <p class='text-lg-start text-start text-secondary'>{{ trans('langSumCoursesSupport') }}:  <strong class='text-primary'>{{ $teacher_courses_count }}</strong></p>
                                             </div>
                                             <div class="col-lg-6 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p class='text-lg-start text-start text-secondary'>{{ trans('langProfileLastVisit') }}: 
-                                                    <strong class='text-primary'>{{ claro_format_locale_date(trans('dateFormatLong'), strtotime($lastVisit->when)) }}</strong>
+                                                <p class='text-lg-start text-start text-secondary'>{{ trans('langProfileLastVisit') }}:
+                                                    <strong class='text-primary'>{{ format_locale_date(strtotime($lastVisit->when)) }}</strong>
                                                 </p>
                                             </div>
                                         </div>
@@ -130,7 +130,7 @@
                                                 <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >E-mail: <span class='text-secondary'>{{ $_SESSION['email'] }}</span></p>
                                             </div>
                                             <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langStatus') }}: 
+                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langStatus') }}:
                                                     <span class='text-secondary text-lowercase'>
                                                         @if(($session->status == USER_TEACHER))
                                                         {{ trans('langMetaTeacher') }}
@@ -146,12 +146,12 @@
                                             <div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
                                                 <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langFaculty') }}: <span class='text-secondary'>-</span></p>
                                             </div>
-                                    
+
                                             <div class="col-xl-5 col-lg-6 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
                                                 <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{trans('langPhone')}}: <span class='text-secondary'>{{ $userdata->phone }}</span></p>
                                             </div>
                                             <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                
+
                                                 <p id="info" class="text-lg-start text-start text-primary font-weight-bold">{{ trans('langAm') }}: <span class='text-secondary'>{{ $userdata->am }}</span></p>
                                             </div>
                                             <div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
@@ -185,7 +185,7 @@
                                     </div>
                                 </div>
 
-                            
+
                         </div>
 
                     </div>
@@ -199,7 +199,7 @@
     <div class="row rowMedium">
         <div class="col-12 col-lg-8 user-courses pt-lg-5 ps-lg-5 pe-lg-5 pb-lg-5 p-md-5 p-3">
             <div class="row rowMedium">
-                
+
                 <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-8 col-8">
                     <span class="text-primary fs-4">{{ trans('langMyCoursesSide') }}</span>
                 </div>
@@ -227,11 +227,11 @@
                             <span class="grid-style"><i class="fas fa-custom-size fa-th-large mt-2"></i></span>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><hr class='text-primary mt-0 fs-1'></div>
-                    
+
                 @if(Session::has('message'))
                 <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                     <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
@@ -276,7 +276,7 @@
                     @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'bars', 'cource_pages' => $cource_pages])
                         --}}
 
-                    <div class='d-flex justify-content-center'> 
+                    <div class='d-flex justify-content-center'>
                         <a class="BtnCourseRegister mt-5" href="{{$urlServer}}modules/auth/courses.php">{{ trans('langRegCourses') }} <span class="ps-1 fa fa-arrow-right"></span></a>
                     </div>
 
@@ -367,7 +367,7 @@
 
 </div>
 
-<script>  
+<script>
     var user_cources = <?php echo json_encode($cources); ?>;
     var user_cource_pages = <?php echo $cource_pages; ?>;
 </script>

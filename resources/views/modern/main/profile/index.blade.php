@@ -13,7 +13,7 @@
         <div class="row rowMedium">
 
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active col_maincontent_active_Homepage">
-                    
+
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -64,7 +64,7 @@
                                     </div>
                                     <div class='col-sm-12'>
                                         <div class='row'>
-                                           {!! render_profile_fields_content(array('user_id' => $id)) !!} 
+                                           {!! render_profile_fields_content(array('user_id' => $id)) !!}
                                         </div>
                                     </div>
                                 </div>
@@ -154,7 +154,7 @@
                     </div>
 
                     @if(count($cert_completed) > 0 or count($badge_completed) > 0)
-                        
+
                         @if (count($cert_completed) > 0)
                         <div class='col-sm-6 mt-3'>
                             <div class="panel panel-success">
@@ -176,7 +176,7 @@
                                                                     {!! $certificate->cert_title !!}
                                                                 </h4>
                                                                 <div class='text-center text-success'>
-                                                                    {!! claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned)) !!}
+                                                                    {!! format_locale_date(strtotime($certificate->assigned), null, false) !!}
                                                                 </div>
                                                                 <div class='certificate_panel_issuer text-center text-secondary'>
                                                                     {!! $certificate->cert_issuer !!}
@@ -195,8 +195,8 @@
                                                     @if($counterCertificate < (count($cert_completed)-1) and count($cert_completed)>=2)
                                                     <hr>
                                                     @endif
-                                                    @php $counterCertificate++; @endphp   
-                                                   
+                                                    @php $counterCertificate++; @endphp
+
                                                 @endforeach
                                             </div>
                                         </div>
@@ -205,7 +205,7 @@
                             </div>
                         </div>
                         @endif
-                        
+
                         @if (count($badge_completed) > 0)
                         <div class='col-sm-6 mt-3'>
                             <div class="panel panel-success Borders">
@@ -226,7 +226,7 @@
                                                             {{ ellipsize($badge->title, 40) }}
                                                         </h4>
                                                         <div class='badge_date text-center text-success'>
-                                                            {!! claro_format_locale_date('%A, %d %B %Y', strtotime($badge->assigned)) !!}
+                                                            {!! format_locale_date(strtotime($badge->assigned), null, false) !!}
                                                         </div>
                                                         <div class='bagde_panel_issuer text-center text-secondary'>
                                                             {!! $badge->issuer !!}
@@ -237,7 +237,7 @@
                                                 @if($counterBagde < (count($badge_completed)-1) and count($badge_completed)>=2)
                                                 <hr>
                                                 @endif
-                                                @php $counterBagde++; @endphp 
+                                                @php $counterBagde++; @endphp
                                                 @endforeach
                                             </div>
                                         </div>
@@ -246,11 +246,11 @@
                             </div>
                         </div>
                         @endif
-                        
+
                     @endif
 
                     @if ($uid == $id)
-                       
+
                             <div class="col-12 mt-3">
                                 <div class="panel panel-danger">
                                     <div class='panel-heading'>
@@ -272,12 +272,12 @@
                                     </div>
                                 </div>
                             </div>
-                       
-                    @endif
-                    
-                    
 
-                    
+                    @endif
+
+
+
+
                 </div>
             </div>
         </div>

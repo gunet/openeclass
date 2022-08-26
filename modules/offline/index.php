@@ -163,7 +163,7 @@ $global_data = @compact('is_editor', 'course_code', 'course_id', 'language',
 $bladeData = array_merge($global_data, $data);
 $bladeData['pageTitle'] = $course_info->title;
 $bladeData['professor'] = $course_info->prof_names;
-$bladeData['course_date'] = claro_format_locale_date($dateTimeFormatLong, strtotime('now'));
+$bladeData['course_date'] = format_locale_date(time());
 
 use Jenssegers\Blade\Blade;
 $blade = new Blade($viewsDir, $cacheDir);

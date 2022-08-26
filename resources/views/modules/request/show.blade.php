@@ -13,8 +13,7 @@
                         @endif
                     </h4>
                     <div class='announcement-date'>{{
-                        claro_format_locale_date(trans('dateFormatLong') . ' ' . trans('timeNoSecFormat'),
-                                                 strtotime($request->open_date)) }}
+                        format_locale_date(strtotime($request->open_date)) }}
                     </div>
                 </div>
                 <div class='panel-body'>
@@ -66,7 +65,7 @@
                                         <span class='not_visible'> - </span>
                                     @else
                                         @if ($field->datatype == REQUEST_FIELD_DATE)
-                                            {{ claro_format_locale_date('%A, %d-%m-%Y', strtotime($field->data)) }}
+                                            {{ format_locale_date(strtotime($field->data)) }}
                                         @else
                                             {{ $field->data }}
                                         @endif
@@ -165,8 +164,7 @@
                                     <b>{{ trans('langDate') }}:</b>
                                 </div>
                                 <div class='col-xs-12 col-sm-10'>
-                                    {{ claro_format_locale_date(trans('dateFormatLong') . ' ' . trans('timeNoSecFormat'),
-                                                                strtotime($comment->ts)) }}
+                                    {{ format_locale_date(strtotime($comment->ts)) }}
                                 </div>
                             </div>
                             @if ($comment->old_state != $comment->new_state)

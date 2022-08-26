@@ -89,7 +89,7 @@ function getSidebarMessages() {
                 $course_title = '';
             }
 
-            $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
+            $message_date = format_locale_date($message->timestamp);
             $message_content .= "<li class='list-item'>
                             <span class='item-wholeline'>
                                 <div class='text-title'>$langFrom: " .

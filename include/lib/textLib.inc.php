@@ -18,7 +18,17 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 /*
-  
+
+
+/**
+* TODO:
+a) replace functions nice_format() greek_format() with claro_format_locale_date()
+    e.g. $datetime_stamp = unix_time_stamp or date_create('2022-07-29') or date_create('2022-07-09 14:43')
+b) remove functions in main_lib.php.
+c) Finally remove file textLib.inc.php
+
+*/
+
   /**
  * function make_clickable($text)
  *
@@ -72,62 +82,22 @@ function make_clickable($text) {
     return($text);
 }
 
-/*
- * formats the date according to the locale settings
- *
- * @author  Christophe Gesche <gesche@ipm.ucl.ac.be>
- *          originally inspired from from PhpMyAdmin
- *
- * @params  string  $formatOfDate date pattern
- * @params  integer $timestamp, default is NOW.
- *
- * @return the formatted date
- *
+/**
+ * @brief formats the date according to the locale settings
+ * @params unix_time_stamp $datetime_stamp
+ * @params string $format pattern. default is 'full' format. Also, available is 'short' format.
+ * @params boolean $display_time. default is true, that is, display time, otherwise don't display time.
+ * @return formatted date
+
  */
 
-// function claro_format_locale_date($dateFormat, $timeStamp = -1) {
-//     // Retrieve $langMonthNames and $langDay_of_weekNames
+function format_locale_date($datetime_stamp, $format = null, $display_time = true) {
 
-//     if (is_null($timeStamp) or $timeStamp == '') {
-//         return '';
-//     }
-//     $langMonthNames = $GLOBALS['langMonthNames'];
-//     $langDay_of_weekNames = $GLOBALS['langDay_of_weekNames'];
-
-//     if ($timeStamp == -1)
-//         $timeStamp = time();
-
-//     // we replace %aAbB of date format
-//     // (they can be done by the system when locale date aren't available
-//     $date = preg_replace('/%[A]/', $langDay_of_weekNames['long'][(int) strftime('%w', $timeStamp)], $dateFormat);
-//     $date = preg_replace('/%[a]/', $langDay_of_weekNames['short'][(int) strftime('%w', $timeStamp)], $date);
-//     $date = preg_replace('/%[B]/', $langMonthNames['fine'][(int) strftime('%m', $timeStamp) - 1], $date);
-//     $date = preg_replace('/%[b]/', $langMonthNames['short'][(int) strftime('%m', $timeStamp) - 1], $date);
-
-//     return strftime($date, $timeStamp);
-// }
-
-/*******************************************************************************/
-/*******************************************************************************/
-/*******************************************************************************/
-/* Προσωρινα κραταω την παλια συναρτηση μεχρι να ενεργοποιησω την php8.1-intl */
-/*******************************************************************************/
-/*******************************************************************************/
-/*******************************************************************************/
-
-function claro_format_locale_date($dateFormat, $timeStamp = -1) {
-
-    global $dateFormatShort, $dateFormatMiddle;
+    global $language;
 
     $locale = 'el'; // default locale
-    $format_style = IntlDateFormatter::RELATIVE_FULL; // default formatting style
-    if (is_null($timeStamp) or $timeStamp == '') {
-        return '';
-    }
-
-    if ($timeStamp == -1) {
-        $timeStamp = time();
-    }
+    $format_date_style = IntlDateFormatter::RELATIVE_FULL; // default date formatting style
+    $format_time_style = IntlDateFormatter::SHORT; // default time formatting style
 
     if (isset($_GET['localize'])) {
         $locale = $_GET['localize'];
@@ -136,15 +106,18 @@ function claro_format_locale_date($dateFormat, $timeStamp = -1) {
         $locale = $language;
     }
 
-    if ($dateFormat == $dateFormatShort or $dateFormat == $dateFormatMiddle) {
-        $format_style = IntlDateFormatter::SHORT;
+    if ($format == 'short') {
+        $format_date_style = IntlDateFormatter::SHORT;
     }
 
+    if (!$display_time) {
+        $format_time_style = IntlDateFormatter::NONE;
+    }
     /* PHP reference
         https://www.php.net/manual/en/intldateformatter.create.php
         https://www.php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants
     */
-    $fmt = datefmt_create($locale, $format_style, IntlDateFormatter::SHORT, 'Europe/Athens', IntlDateFormatter::TRADITIONAL);
+    $fmt = datefmt_create($locale, $format_date_style, $format_time_style, 'Europe/Athens', IntlDateFormatter::TRADITIONAL);
 
-    return (datefmt_format($fmt, $timeStamp));
+    return (datefmt_format($fmt, $datetime_stamp));
 }

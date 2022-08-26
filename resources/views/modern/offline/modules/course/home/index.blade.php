@@ -174,7 +174,7 @@
                                 <div class='modal-body'>
                                     {{ $course_info->prof_names }}&nbsp;
                                     <span>{{ $currentCourseName }}</span>&nbsp;
-                                    {{ trans('langAccessed') }} {{ claro_format_locale_date(trans('dateFormatLong'), strtotime('now')) }}&nbsp;
+                                    {{ trans('langAccessed') }} {{ format_locale_date(strtotime('now')) }}&nbsp;
                                     {{ trans('langFrom2') }} {{ $urlServer }}courses/{{$course_code}}/
                                 </div>
                             </div>

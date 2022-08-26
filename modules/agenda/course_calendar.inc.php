@@ -458,8 +458,8 @@ require_once 'include/lib/references.class.php';
        $event_type_url = array(
             'assignment' => 'modules/work/index.php?id=thisid&course=thiscourse',
             'exercise' => 'modules/exercise/exercise_submit.php?course=thiscourse&exerciseId=thisid',
-            'agenda' => 'modules/agenda/index.php?id=thisid&course=thiscourse',
-            'teleconference' => 'modules/tc/index.php?course=thiscourse');
+            'agenda' => 'modules/agenda/?id=thisid&course=thiscourse',
+            'teleconference' => 'modules/tc/?course=thiscourse');
 
        $fromdatetime = date('Y-m-d H:i:s', $from / 1000);
        $todatetime = date('Y-m-d H:i:s', $to / 1000);
@@ -548,64 +548,31 @@ require_once 'include/lib/references.class.php';
 
     /**
      * @brief display event list
-     * @global type $course_code
-     * @global type $is_editor
-     * @global type $langEvents
-     * @global type $langCalendar
-     * @global type $langDateNow
-     * @global type $dateFormatLong
-     * @global type $langHour
-     * @global type $langHours
-     * @global type $langDuration
-     * @global type $langAgendaNoTitle
-     * @global type $langDelete
-     * @global type $langConfirmDeleteEvent
-     * @global type $langConfirmDeleteRecursive
-     * @global type $langConfirmDeleteRecursiveEvents
-     * @global type $langModify
-     * @global type $langVisible
      * @param type $events
      * @param type $sens
      * @return string
      */
     function event_list($events, $sens, $type = '') {
-        global $course_code, $is_editor, $langDateNow, $dateFormatLong,
-                $langHour, $langHours, $langDuration, $langAgendaNoTitle, $langDelete,
-                $langConfirmDeleteEvent, $langConfirmDeleteRecursive, $langConfirmDeleteRecursiveEvents,
-                $langEditChange, $langViewHide, $langViewShow, $id, $is_admin;
+        global $course_code, $is_editor, $langDateNow, $langMonths,
+               $langHour, $langHoursSmall, $langDuration, $langAgendaNoTitle, $langDelete,
+               $langConfirmDeleteEvent, $langConfirmDeleteRecursive, $langConfirmDeleteRecursiveEvents,
+               $langEditChange, $langViewHide, $langViewShow, $id, $is_admin;
 
-        $dateNow = date("j-n-Y / H:i", time());
         $barMonth = '';
-        $nowBarShowed = false;
-        $eventlist = "<div class='table-responsive'><table class='announcements_table'>";
+        $eventlist = "<div class='table-responsive'><table class='table-default'>";
         foreach ($events as $myrow) {
             $content = standard_text_escape($myrow->content);
             $d = strtotime($myrow->start);
-            if (!$nowBarShowed) {
-                // Following order
-                if ((($d > time()) and ($sens == " ASC")) or ( ($d < time()) and ( $sens == " DESC "))) {
-                    if ($barMonth != date("m", time())) {
-                        $barMonth = date("m", time());
-                        $eventlist .= "<tr class='notes_thead'>";
-                        // current month
-                        $eventlist .= "<td colspan='2' class='monthLabel list-header text-white'><b>" . ucfirst(claro_format_locale_date("%B %Y", time())) . "</b></td>";
-                        $eventlist .= "</tr>";
-                    }
-                    $nowBarShowed = TRUE;
-                    $eventlist .= "<tr>";
-                    $eventlist .= "<td colspan='2' class='today'>$langDateNow $dateNow</td>";
-                    $eventlist .= "</tr>";
-                }
-            }
+            // month year label
             if ($barMonth != date("m", $d)) {
                 $barMonth = date("m", $d);
-                // month LABEL
-                $eventlist .= "<tr class='notes_thead'>";
-                $eventlist .= "<td colspan='2' class='monthLabel list-header text-white'>";
-                $eventlist .= "<div align='center'><b>" . ucfirst(claro_format_locale_date("%B %Y", $d)) . "</b></div></td>";
+                $barYear = date("Y", $d);
+                $eventlist .= "<tr>";
+                $eventlist .= "<td colspan='2' class='monthLabel list-header'>";
+                $eventlist .= "<div class='text-center'><strong>" . $langMonths[$barMonth] . "&nbsp;" . $barYear . "</strong></div>";
+                $eventlist .= "</td>";
                 $eventlist .= "</tr>";
             }
-
             $classvis = '';
             if ($is_editor) {
                 if ($myrow->visible == 0) {
@@ -622,7 +589,7 @@ require_once 'include/lib/references.class.php';
                 if ($myrow->duration == 1) {
                     $message = $langHour;
                 } else {
-                    $message = $langHours;
+                    $message = $langHoursSmall;
                 }
                 $msg = "($langDuration: " . q($myrow->duration) . " $message)";
             } else {
@@ -634,7 +601,7 @@ require_once 'include/lib/references.class.php';
                 $eventlist .= "<strong><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id'>".q($myrow->title)."</a></strong> &nbsp;&nbsp;$msg";
             }
 
-            $eventlist .= "<div><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div>";
+            $eventlist .= "<div><span class='day'>" . format_locale_date($d) . "</span></div>";
             if (isset($id)) {
                 $eventlist .= "<br>";
                 $eventlist .= "<div class='text-muted'>$content</div>";

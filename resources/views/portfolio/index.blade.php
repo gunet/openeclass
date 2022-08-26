@@ -9,7 +9,7 @@
                     <div class='content-title h2'>{{ trans('langMyCourses') }}</div>
                     <div class='panel'>
                         <div class='panel-body'>
-                            {!! $perso_tool_content['lessons_content'] !!}                       
+                            {!! $perso_tool_content['lessons_content'] !!}
                         </div>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            {!! $portfolio_page_main_widgets !!}          
+            {!! $portfolio_page_main_widgets !!}
         </div>
 
         <div class='col-md-5'>
@@ -76,7 +76,7 @@
                         </div>
                     </div>
                 </div>
-            </div>        
+            </div>
             <div class='row'>
                 <div class='col-md-12 my-messages-list'>
                     <div class='content-title h2'>{{ trans('langMyPersoMessages') }}</div>
@@ -101,8 +101,8 @@
                         </div>
                     </div>
                 </div>
-            </div>        
-            {!! $portfolio_page_sidebar_widgets !!}      
+            </div>
+            {!! $portfolio_page_sidebar_widgets !!}
         </div>
     </div>
     <div id='profile_box' class='row'>
@@ -137,7 +137,7 @@
                                 <br>
                                 <span class='tag'>{{ trans('langProfileLastVisit') }}: </span>
                                 <span class='tag-value text-muted'>
-                                    {{ claro_format_locale_date(trans('dateFormatLong'), strtotime($lastVisit->when)) }}
+                                    {{ format_locale_date(strtotime($lastVisit->when)) }}
                                 </span>
                             @endif
                         </div>
@@ -166,5 +166,5 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
 @endsection

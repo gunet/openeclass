@@ -133,7 +133,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $am_message = sanitize_utf8(empty($myrow->am) ? '' : ("<div class='right'>" . q($myrow->am) . "</div>"));
         $stats_icon = icon('fa-bar-chart', $langUserStats, "../usage/index.php?course=$course_code&amp;id=$myrow->id");
         //create date field with unregister button
-        $date_field = $myrow->reg_date ? claro_format_locale_date( $dateFormatMiddle, strtotime($myrow->reg_date)) : $langUnknownDate;
+        $date_field = $myrow->reg_date ? format_locale_date(strtotime($myrow->reg_date), 'short') : $langUnknownDate;
 
         // Create appropriate role control buttons
         // Admin right

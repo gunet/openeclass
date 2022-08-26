@@ -201,7 +201,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                 if (isset($ann->code) & $ann->code != '') {
                     $course_title = q(ellipsize($ann->course_title, 80));
                     $ann_url = $urlAppend . 'modules/announcements/index.php?course=' . $ann->code . '&amp;an_id=' . $ann->id;
-                    $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
+                    $ann_date = format_locale_date(strtotime($ann->an_date));
                     $ann_content .= "
                         <li class='list-group-item p-2'>
                             <div class='item-wholeline'>
@@ -214,7 +214,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                         </li>";
                 } else {
                     $ann_url = $urlAppend . 'main/system_announcements.php?an_id=' . $ann->id;
-                    $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
+                    $ann_date = format_locale_date(strtotime($ann->an_date));
                     $ann_content .= "
                     <li class='list-group-item p-2'>
                         <div class='item-wholeline'>
@@ -257,7 +257,7 @@ function getUserMessages() {
             } else {
                 $course_title = '';
             }
-            $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
+            $message_date = format_locale_date($message->timestamp);
             $message_content .= "<li class='list-group-item p-2'>
                                     <div class='item-wholeline'>
                                         <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":

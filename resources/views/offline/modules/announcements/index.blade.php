@@ -81,7 +81,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    {{ claro_format_locale_date(trans('dateFormatLong'), strtotime($ann->date)) }}
+                                    {{ format_locale_date(strtotime($ann->date)) }}
                                 </td>
                             </tr>
                         @endforeach

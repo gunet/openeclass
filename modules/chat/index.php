@@ -401,7 +401,7 @@ if ($display == TRUE) {
             $tool_content .= "<div style='font-size:smaller; padding-top: 10px;'>$conf->conf_description</div>" . $conf_details;
             $tool_content .= "</td>";
             $tool_content .= "<td class='text-center'>$enabled_conference</td>";
-            $tool_content .= "<td class='text-center'>".claro_format_locale_date($dateTimeFormatShort, strtotime($conf->start))."</td>";
+            $tool_content .= "<td class='text-center'>".format_locale_date(strtotime($conf->start), 'short')."</td>";
             if($is_editor) {
                 $tool_content .= "<td class='option-btn-cell text-center'>".
                     action_button(array(

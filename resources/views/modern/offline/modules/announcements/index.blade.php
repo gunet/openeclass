@@ -87,7 +87,7 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                   
+
                     <div class="col-12">
                         <div class="table-responsive">
                             <table id='ann_table' class='table-default'>
@@ -108,7 +108,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                {{ claro_format_locale_date(trans('dateFormatLong'), strtotime($ann->date)) }}
+                                                {{ format_locale_date(strtotime($ann->date)) }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -121,6 +121,6 @@
         </div>
     </div>
 </div>
-                    
+
 
 @endsection

@@ -60,7 +60,7 @@ if (isset($_GET['id'])) {
                 if ($field->values) {
                     $data['field_data'][$field->field_id]->values = array_map('getSerializedMessage',
                         unserialize($field->values));
-                    if ($field->data and 
+                    if ($field->data and
                         !in_array($field->data, $data['field_data'][$field->field_id]->values)) {
                             $data['field_data'][$field->field_id]->values[] = $field->data;
                     }
@@ -145,7 +145,7 @@ if (isset($_GET['id'])) {
                 $comment);
 
             //Session::Messages(trans('langFaqEditSuccess'), 'alert-success');
-            Session::flash('message',trans('langFaqEditSuccess')); 
+            Session::flash('message',trans('langFaqEditSuccess'));
             Session::flash('alert-class', 'alert-success');
 
             if (isset($_POST['send_mail'])) {
@@ -169,7 +169,7 @@ if (isset($_GET['id'])) {
                 }
                 $recipients = array_unique($recipients);
 
-                $datetime = claro_format_locale_date($dateTimeFormatShort);
+                $datetime = format_locale_date(time(), 'short');
                 $emailSubject = $langEditRequest . ': ' . $request->title;
                 $emailContent = "
                 <!-- Header Section -->

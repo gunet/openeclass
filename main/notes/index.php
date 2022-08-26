@@ -228,7 +228,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <h3 class='panel-title'>".q($note->title)."</h3>
             </div>
             <div class='panel-body'>
-                <div class='btn btn-success btn-sm pe-none'>". claro_format_locale_date($dateFormatLong, strtotime($note->date_time)). "</div><br><br>
+                <div class='btn btn-success btn-sm pe-none'>". format_locale_date(strtotime($note->date_time)). "</div><br><br>
                 $note->content
             </div>
         </div></div>";
@@ -270,7 +270,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
 
     foreach ($notelist as $note) {
         $content = standard_text_escape($note->content);
-        $note->date_time = claro_format_locale_date($dateFormatLong, strtotime($note->date_time));
+        $note->date_time = format_locale_date(strtotime($note->date_time));
         $tool_content .= "<tr><td><b>";
         if (empty($note->title)) {
             $tool_content .= $langNoteNoTitle;

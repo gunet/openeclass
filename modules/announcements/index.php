@@ -157,7 +157,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->content)."</div>
                         </div>",
                 //'0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.q($myrow->title).'</a>',
-                '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->date)),
+                '1' => format_locale_date(strtotime($myrow->date)),
                 '2' => '<ul class="list-unstyled">'.$status_icon_list.'</ul>',
                 '3' => action_button(array(
                     array('title' => $langEditChange,
@@ -192,7 +192,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         </div>
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->content)."</div>
                         </div>",
-                '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->date))
+                '1' => format_locale_date(strtotime($myrow->date))
             );
         }
     }
@@ -234,7 +234,7 @@ if (isset($_GET['an_id'])) {
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
 
     $data['title'] = standard_text_escape($row->title);
-    $data['date'] = claro_format_locale_date($dateFormatLong, strtotime($row->date));
+    $data['date'] = format_locale_date(strtotime($row->date));
     $data['content'] = standard_text_escape($row->content);
 
     $moduleTag = new ModuleElement($row->id);

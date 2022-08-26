@@ -9,14 +9,14 @@
 
         <div class="row rowMedium">
 
-            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active"> 
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col-md-0 col-sm-0 col-0 justify-content-center col_sidebar_active">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
 
             <div class="col-xl-10 col-lg-9 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
-                    
+
                 <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
 
 
@@ -25,8 +25,8 @@
                             <i class="fas fa-align-left"></i>
                             <span></span>
                         </button>
-                        
-                       
+
+
                         <a class="btn btn-primary d-lg-none mr-auto" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style="margin-top:-10px;">
                             <i class="fas fa-tools"></i>
                         </a>
@@ -46,7 +46,7 @@
 
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-                    
+
 
 
                     {!! $action_bar !!}
@@ -67,8 +67,8 @@
                     </div>
                     @endif
 
-               
-                            
+
+
                     <div class='panel panel-default mt-3'>
                         <div class='panel-heading notes_thead'>
                             <div class='row'>
@@ -84,16 +84,15 @@
                                 </div>
                                 <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
                                     <div class='announcement-date text-end text-white pt-2 pe-3'>{{
-                                        claro_format_locale_date(trans('dateFormatLong') . ' ' . trans('timeNoSecFormat'),
-                                                                strtotime($request->open_date)) }}
+                                        format_locale_date(strtotime($request->open_date)) }}
                                     </div>
                                 </div>
                             </div>
-                           
+
                         </div>
-                        
+
                         <div class='panel-body panel-body-request'>
-   
+
                             <div class='row'>
                                 <div class='col-12 col-sm-2 text-end'>
                                     <b class='control-label-notes ps-3'>{{ trans('langNewBBBSessionStatus') }}:</b>
@@ -142,7 +141,7 @@
                                                 <span class='not_visible'> - </span>
                                             @else
                                                 @if ($field->datatype == REQUEST_FIELD_DATE)
-                                                    {{ claro_format_locale_date('%A, %d-%m-%Y', strtotime($field->data)) }}
+                                                    {{ format_locale_date(strtotime($field->data)) }}
                                                 @else
                                                     {{ $field->data }}
                                                 @endif
@@ -161,7 +160,7 @@
                     </div>
 
                     <div class='row p-2'></div>
-                            
+
 
                     @if ($can_modify or $can_assign_to_self)
                         <div class='col-md-12'>
@@ -198,7 +197,7 @@
                                         </div>
                                     @endif
 
-                                    
+
 
                                     <div class='form-group mt-3'>
                                         <label for='requestComment' class='col-sm-6 control-label-notes'>{{ trans('langComment') }}:</label>
@@ -207,7 +206,7 @@
                                         </div>
                                     </div>
 
-                                    
+
 
                                     <div class='form-group mt-3'>
                                         <label for='requestFile' class='col-sm-6 control-label-notes'>{{ trans('langAttachedFile') }}:</label>
@@ -217,7 +216,7 @@
                                         </div>
                                     </div>
 
-                                    
+
 
                                     <div class='form-group mt-3'>
                                         <div class='col-xs-offset-2 col-xs-10'>
@@ -249,8 +248,7 @@
                                                 <b class='control-label-notes ps-3'>{{ trans('langDate') }}:</b>
                                             </div>
                                             <div class='col-12 col-sm-9'>
-                                                {{ claro_format_locale_date(trans('dateFormatLong') . ' ' . trans('timeNoSecFormat'),
-                                                                            strtotime($comment->ts)) }}
+                                                {{ format_locale_date(strtotime($comment->ts)) }}
                                             </div>
                                         </div>
                                         @if ($comment->old_state != $comment->new_state)
@@ -289,7 +287,7 @@
                         @endforeach
                     @endif
 
-                        
+
 
                     @if ($can_modify)
                         @include('modules.request.modals')

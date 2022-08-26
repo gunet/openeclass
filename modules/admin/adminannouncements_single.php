@@ -57,7 +57,7 @@ if(isset($ann_id)){
                                 </div>
                                 <div class='panel-footer'>
                                     <div class='text-end text-success'>
-                                        " . claro_format_locale_date($dateFormatLong, strtotime($announcement->date)) . "
+                                        " . format_locale_date(strtotime($announcement->date)) . "
                                     </div>
                                 </div>
                             </div>

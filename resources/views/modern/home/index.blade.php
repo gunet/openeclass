@@ -49,7 +49,7 @@
                     </div>
                     @endif
 
-                
+
                     @if(get_config('homepage_title') or get_config('homepage_intro'))
                     <div class='d-none d-sm-none d-md-block'>
                         <div class='row rowMedium'>
@@ -65,7 +65,7 @@
                                     <div class="panel-body bg-body @if(get_config('homepage_title')) NoBorderTop @else Borders @endif">
                                         {!! get_config('homepage_intro') !!}
                                     </div>
-                                </div>  
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -74,18 +74,18 @@
                     @if(get_config('homepage_title') or get_config('homepage_intro'))
                     <div class='d-block d-md-none'>
                         <div class='row rowMedium'>
-                            <div class='col-12 pt-5'>    
+                            <div class='col-12 pt-5'>
                                 <div class="panel panel-default w-100">
                                     <div class='panel-body Borders'>
                                         {!! get_config('homepage_intro') !!}
                                     </div>
-                                </div> 
-                            </div> 
+                                </div>
+                            </div>
                         </div>
                     </div>
                     @endif
 
-                    
+
                     @if (get_config('enable_mobileapi'))
                         @if(!get_config('homepage_title') and !get_config('homepage_intro'))
                         <div class='col-12 ps-md-5 pe-md-5 pt-md-5 pt-5 mb-5'>
@@ -122,7 +122,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     @else
@@ -176,10 +176,10 @@
                             </div>
                         </div>
                     @endif
-                        
-                    
 
-                
+
+
+
                     {{--<div class="col-lg-12 d-flex justify-content-end ms-1 mb-3 mt-4">
                         <button class="btnMoreHomePage" data-bs-toggle="collapse" data-bs-target="#collapse_main_section" aria-expanded="false" aria-controls="collapse_main_section">
                             <span class='fa fa-arrow-down'></span>
@@ -212,7 +212,7 @@
                             @if($counterAn < 6)
                             <div class="col-sm-12 news-list-item">
                                 <div class="date">
-                                    {{ claro_format_locale_date($dateFormatLong, strtotime($announcement->date)) }}
+                                    {{ format_locale_date(strtotime($announcement->date)) }}
                                 </div>
                                 <div class="title"><a class="announcement-title-a" href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>{{$announcement->title}}</a></div>
                             </div>
@@ -297,7 +297,7 @@
     //     }else{
     //         $('.btnMoreHomePage .fa').css('transform','rotate(0deg)');
     //     }
-        
+
     // });
 </script>
 

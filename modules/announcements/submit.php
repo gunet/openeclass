@@ -50,11 +50,7 @@ if (isset($_POST['submitAnnouncement'])) {
         $v->labels(array('enddate' => "$langTheField $langEndDate"));
     }
     if ($v->validate()) {
-        if ($language == 'el') {
-            $datetime = claro_format_locale_date($dateTimeFormatShort);
-        } else {
-            $datetime = date('l jS \of F Y h:i A');
-        }
+        $datetime = format_locale_date(time(), 'short');
         if (isset($_POST['show_public'])) {
             $is_visible = 1;
         } else {
@@ -201,17 +197,17 @@ if (isset($_POST['submitAnnouncement'])) {
                     send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
                 }
                // Session::Messages("$langAnnAddWithEmail $countEmail $langRegUser", 'alert-success');
-                Session::flash('message',"$langAnnAddWithEmail $countEmail $langRegUser"); 
+                Session::flash('message',"$langAnnAddWithEmail $countEmail $langRegUser");
                 Session::flash('alert-class', 'alert-success');
                 if ($invalid > 0) { // info about invalid emails (if exist)
                     //Session::Messages("$langInvalidMail $invalid", 'alert-warning');
-                    Session::flash('message',"$langInvalidMail $invalid"); 
+                    Session::flash('message',"$langInvalidMail $invalid");
                     Session::flash('alert-class', 'alert-warning');
                 }
             }
         } else {
             //Session::Messages($message, 'alert-success');
-            Session::flash('message',$message); 
+            Session::flash('message',$message);
             Session::flash('alert-class', 'alert-success');
         }
         redirect_to_home_page("modules/announcements/index.php?course=$course_code");

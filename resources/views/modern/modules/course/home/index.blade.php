@@ -59,7 +59,7 @@
 
                     <div class='col-sm-12'>
                         <div class='panel panel-default mt-3 col_maincontent_coursePage border border-secondary-4 shadow-sm'>
-                            <div class='panel-body borderBody 
+                            <div class='panel-body borderBody
                                         @if(isset($rating_content) or isset($social_content) or isset($comment_content)) NoBorderBottom
                                         @else Borders @endif'>
                                 <div class='row'>
@@ -139,7 +139,7 @@
                                 @else
                                     <div class='col-12 course-below-wrapper mt-2'>
                                         <div class='row text-muted course-below-info'>
-                                            
+
                                             <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12 d-flex justify-content-md-start justify-content-center">
                                                 <a role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
                                                     <span class='fa fa-chevron-right fa-fw'></span>
@@ -149,8 +149,8 @@
                                                     <span class='ps-2'>{!! $edit_course_desc_link !!}</span>
                                                 @endif
                                             </div>
-                                            
-                                           
+
+
 
                                             @if ($course_info->course_license)
                                                 <div class="col-12 d-flex justify-content-end mt-2">{!! copyright_info($course_id) !!}</div>
@@ -178,7 +178,7 @@
                             </div>
 
 
-                            @if(isset($rating_content) || isset($social_content) || isset($comment_content)) 
+                            @if(isset($rating_content) || isset($social_content) || isset($comment_content))
                                 <div class='panel-footer p-0'>
                                     <div class='row'>
                                         @if(isset($rating_content))
@@ -189,7 +189,7 @@
                                         @if(isset($comment_content))
                                             <div class='col-xl-4 col-lg-3 col-12 mt-lg-3 mt-4'>
                                                 <div class='p-2 d-flex justify-content-center'>{!! $comment_content !!}</div>
-                                            </div>  
+                                            </div>
                                         @endif
                                         @if(isset($social_content))
                                             <div class='col-xl-4 col-lg-5 col-12 mt-lg-2 mt-4'>
@@ -208,7 +208,7 @@
                             <div class='panel panel-default border border-secondary-4 shadow-sm'>
                                 <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                     <div class='row'>
-                                        
+
                                         <div class='col-sm-12'>
                                             <span class='control-label-notes'>
                                                 {{ trans('langCourseUnits') }}
@@ -217,20 +217,20 @@
                                                 <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn float-end mt-1' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
                                                     <span class='fa fa-plus-circle'></span>
                                                 </a>
-                                            @endif 
+                                            @endif
                                             <a class='add-unit-btn float-end pe-2 mt-1' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
                                                 <span class='fa fa-question-circle'></span>
                                             </a>
                                         </div>
                                     </div>
-                                </div> 
+                                </div>
 
                                 <div class='panel-body'>
                                     <div id='boxlistSort'>
                                         {!! $cunits_content !!}
                                     </div>
                                 </div>
-                                
+
                             </div>
                             {!! $course_home_main_area_widgets !!}
                         @else
@@ -244,7 +244,7 @@
                             </div>
                         @endif
 
-                        <div class="panel panel-default mt-4 border border-secondary-4 shadow-sm">                            
+                        <div class="panel panel-default mt-4 border border-secondary-4 shadow-sm">
                             <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                 <div class='control-label-notes text-center'>{{ trans('langAnnouncements') }}</div>
                             </div>
@@ -277,7 +277,7 @@
                                             <span>{{ trans('langAgendaDueDay') }}</span>
                                         </div>
                                     </div>
-                                        
+
                                     <div class='col-sm-12 event-legend'>
                                         <div class='d-inline-flex align-items-center'>
                                             <span class='event event-info'></span>
@@ -301,7 +301,7 @@
                             </div>
                         </div>
 
-                        
+
                         @if(isset($course_completion_id) and $course_completion_id > 0)
                             <div class="panel panel-default mt-4 border border-secondary-4 shadow-sm">
                                 <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
@@ -340,15 +340,15 @@
                                 </div>
                             </div>
                         @endif
-                        
+
 
 
 
                     </div><!-- end col calendar-announcements-progress -->
 
-                
+
                 </div> <!-- end row -->
-               
+
 
             </div><!-- end col-10 maincontent active-->
 
@@ -373,7 +373,7 @@
             <div class='modal-body'>
                 {{ $course_info->prof_names }}&nbsp;
                 <span>{{ $currentCourseName }}</span>&nbsp;
-                {{ trans('langAccessed') }} {{ claro_format_locale_date(trans('dateFormatLong'), strtotime('now')) }}&nbsp;
+                {{ trans('langAccessed') }} {{ format_locale_date(strtotime('now')) }}&nbsp;
                 {{ trans('langFrom2') }} {{ $urlServer }}courses/{{$course_code}}/
             </div>
         </div>

@@ -325,7 +325,7 @@ if (count($result) > 0) { // topics found
         $tool_content .= "<td class='text-center'>$replies</td>";
         $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->topic_poster_id)) . "</td>";
         $tool_content .= "<td class='text-center'>$myrow->num_views</td>";
-        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "<br />".claro_format_locale_date($dateTimeFormatShort, strtotime($last_post_datetime))."</td>";
+        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "<br />".format_locale_date(strtotime($last_post_datetime), 'short')."</td>";
         $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
 			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $myrow->id, $course_id);
         if ($sql) {

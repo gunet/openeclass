@@ -28,7 +28,7 @@ $result = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, d
 $temp_date = null;
 foreach ($result as $row) {
     if ($row->date != $temp_date) {
-        $csv->outputRecord(claro_format_locale_date($dateTimeFormatLongFull, strtotime($row->date)));
+        $csv->outputRecord(format_locale_date(strtotime($row->date)));
         $temp_date = $row->date;
     }
     $user_full_name = Database::get()->querySingle("SELECT fullName FROM tc_log

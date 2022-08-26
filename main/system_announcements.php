@@ -70,7 +70,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                         </div>
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->body)."</div>
                         </div>",
-            '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->date))
+            '1' => format_locale_date(strtotime($myrow->date))
         );
     }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -95,7 +95,7 @@ if (isset($_GET['an_id'])) {
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAnnouncements);
 
     $data['title'] = standard_text_escape($row->title);
-    $data['date'] = claro_format_locale_date($dateFormatLong, strtotime($row->date));
+    $data['date'] = format_locale_date(strtotime($row->date));
     $data['body'] = standard_text_escape($row->body);
 
     $data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;

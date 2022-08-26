@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2022-03-28 16:22:32
+// Generated 2022-07-04 12:23:07
 
 $langYes = "Oui";
 $langNo = "Non";
@@ -1075,9 +1075,9 @@ $langDBSetting = "Paramètres de MySQL";
 $langMainLang = "Langue Principale de l'installation";
 $langLastCheck = "Dernière vérification avant l'installation";
 $langRequirements = "Exigences du système";
-$langInstallEnd = "Installation terminée" 
+$langInstallEnd = "Installation terminée"
 ;
-$langModuleNotInstalled = "Non installé" 
+$langModuleNotInstalled = "Non installé"
 ;
 $langReadHelp = "Lire plus";
 $langWarnConfig = "Warning !! File <b>config.php</b> exists !! Installation cannot proceed. If you want to rerun installation, first delete config.php file!";
@@ -1109,7 +1109,7 @@ $langLDAPBaseDn = "Base DN du Serveur LDAP";
 $langChooseLang = "Choisissez la langue";
 $langBeforeInstall1 = "Avant de procéder à l'installation, veuillez imprimer et lire attentivement les";
 $langBeforeInstall2 = "De plus, vous trouverez des informations générales concernant la plateforme";
-$langInstallInstr = "Instructions d'installation" 
+$langInstallInstr = "Instructions d'installation"
 ;
 $langAddComment = "Ajouter / Modifier un commentaire";
 $langLearningModule = "Section";
@@ -1170,7 +1170,7 @@ $langDocumentAsModule = "Utiliser un document";
 $langDocumentAsModuleLabel = "de Document";
 $langDocumentInModule = "Document dans un module";
 $langEXERCISETypeDesc = "Exercice de la plateforme";
-$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape." 
+$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape."
 ;
 $langErrorAssetNotFound = "Élément introuvable :";
 $langErrorCopyAttachedFile = "Impossible de copier le fichier : ";
@@ -1895,9 +1895,9 @@ $langNewId = "Nouveau identifiant"
 $langUsersWillAdd = "Les utilisateurs du cours seront ajoutés";
 $langErrorLang = "Erreur ! Aucune langue trouvée !"
 ;
-$langDoSearch = "Poursuivre la recherche" 
+$langDoSearch = "Poursuivre la recherche"
 ;
-$langSearch_terms = "Critères de recherche :" 
+$langSearch_terms = "Critères de recherche :"
 ;
 $langSearchIn = "Recherche dans :";
 $langSearchWith = "Recherche selon des critères :";
@@ -4162,7 +4162,7 @@ $langPasswordModalTitle = "Enter the exercise password";
 $langIPHasNoAccess = "Your IP address has no access to the specific exercise.";
 $langIPInvalid = "contains an invalid IP or IP CIDR";
 $langAdminMessage = "Message by Administrator of $siteName";
-$langWarn2AboutPHP = "Warning: PHP >= 5.4.0 is required for proper operation of the platform. Please upgrade PHP as soon as possible; otherwise, some modules may not function correctly.";
+$langWarn2AboutPHP = "Warning: PHP >= 7.4 is required for proper operation of the platform. Please upgrade PHP as soon as possible; otherwise, some modules may not function correctly.";
 $langLinkSettings = "Link module settings";
 $langLinkSettingsSucc = "Settings were succesfully saved";
 $langSocialBookmarksFunct = "Social bookmarking functionality";
@@ -4501,7 +4501,7 @@ $langRegistrationInfo = 'Registration instructions';
 $langShow = "Display";
 $langHide = 'Hide';
 $langQuestionAlreadyDeleted = "Question has been deleted!";
-$langUpgForVersion = 'Version %s upgrades.';
+$langUpgForVersion = 'Upgrades for version:';
 $langGroupAllowStudentUnregister = "allow $langsStudents to unregister";
 $langTypeInactive = "Inactive";
 $langWall = 'Wall';
@@ -5626,7 +5626,7 @@ $langUserWayShortDescription = "<p>Accessibility options via the UserWay service
 $langUserWayLongDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/'>https://userway.org/</a></p>";
 $langReuseActivate = "Activate Reuse";
 $langReuseDeactivate = "Deactivate Reuse";
-$langGradebookAllBetweenRegDates = "All those who have enrolled in the $langsCourse during the following period";
+$langGradebookAllBetweenRegDates = "All enrolled in the $langsCourse during the following period";
 $langQuestionUpdated = "The question was updated";
 $langFavorite = "Favourite";
 $langOnlySubmissions = 'Only participants';
@@ -5636,6 +5636,66 @@ $langInvalidCourseUnitPrerequisites = 'Unit completion is not activated.';
 $langUnitNotCompleted = 'Unit prerequisites not yet completed';
 $langUnitNotStarted = "The unit has not begun yet";
 $langOfUnitCompletion = 'Unit completion activities';
-$lang_pass_submit = 'Envoyer';
-$langInsertExerciseCap = "Exercer";
-$langViewStatics = "Statistiques de trafic";
+$langFlippedClassroom = "Flipped Classrοom Model";
+$langCΕnabled = "Enabled";
+$langGoals = "Intended Learning Outcomes (ILO)";
+$langGoalTitle = "ILO";
+$langClassInfoTitle = "Class Information";
+$langStuNum = "Number of Students";
+$langLectNum = "Number of Lessons";
+$langLectHours = "Hours per lesson";
+$langHomeHours = "Homework per week";
+$langTotalHours = "Total hours";
+$langHoursSmall = "hours";
+$langLectModel = "Lectures Model";
+$langLectFromHome = "E-learning";
+$langLectMixed = "Mixed Learning";
+$langUnitsTitle = "Unit";
+$langFinalSubmit = "Final Submit";
+$langActivities = "Activities";
+$langEmptyGoal = "Fill in all the Learning Goals added.";
+$langEmptyUnit = "Fill in all the units added.";
+$langActSelect = "Select activities";
+$langActInHome = "Before Class";
+$langActInClass = "In Class";
+$langActAfterClass = "After Class";
+$langFCEbook = "Study";
+$langFCVideo = "Watch a video";
+$langFCVideoInteract = "Watch an interactive video";
+$langFCRevision = "Revision / Concepts Summary";
+$langFCGames = "Educational game";
+$langFCDiscuss = "Discussion";
+$langFCProject = "Project";
+$langFCBrainstorming = "Brainstorming";
+$langFCWorkPaper = "Worksheets";
+$langFCRolePlay = "Role game";
+$langFCSimulate = "Simulation";
+$langFCProblemSolving = "Problem Solving";
+$langFCMindMap = "Mind Map";
+$langFCEvaluate = "Evaluation";
+$langFlippedEdit = "Edit Flipped Classroom Options";
+$langJustEdited = "You just edited the course titled ";
+$langUnitActivityDeleteConfirm = "Are you sure you want to delete this activity?";
+$langUnitJustEdited = "You just edited the unit titled ";
+$langConfirmDeleteUnit = "Are you sure you want to remove this unit?";
+$langConfirmDeleteGoal = "Are you sure you want to remove this Intended Learning Outcome?";
+$langQuestionPreview = 'Preview of Question';
+$langDumpPDF = 'Export in PDF format';
+$langQuestionUsedInExercises = 'Used in this exercises';
+$langAddDirectoryIndexes = 'Adding subdirectory index files to hinder directory traversal in misconfigured servers';
+$langUpgradeDBInfoMessage = "Database schema upgrade has started";
+$langUpgradePopUpCloseWarning = "Warning! Please don't close this window because the upgrade will be interrupted.";
+$langUpgFinished = 'Finished';
+$langUpgUTF8MB4 = 'Converting database tables to support full Unicode range';
+$langPreviousVersion = 'Previous version';
+$langLtiPublishShortDescription = "Publish $langsOfCourses via LTI protocol.";
+$langLtiPublishLongDescription = "Publish $langsOfCourses via LTI protocol.";
+$langLtiPublishFrameAncestorsTooltip = "Comma separated Url list i.e. https://url1, https://url2";
+$langLtiPublishTool = "Publish as LTI tool";
+$langLTIProviderCartridgeUrl = "LTI Cartridge URL";
+$langLTIProviderHelp1 = "If the remote platform supports so, you can input the <b>Cartridge URL</b> and press <b>Add Legacy LTI</b>, then you will be asked to input the <b>Key</b> and the <b>Secret</b>, while you will not be needing the Provider URL as it will be automatically utilized.";
+$langLTIProviderHelp2 = "If that is not the case, you can manually configure the tool as <b>LTI 1.0/1.1</b> compatible and input the <b>Provider URL</b>, the <b>Key</b> and the <b>Secret</b>, while you will not be needing the Cartridge URL.";
+$langNoPUBLTIApps = "No Published LTI tools are configured.";
+$langLTIAPPlertKey = "Please type the LTI Provider Key";
+$langLTIAPPlertSecret = "Please type the LTI Provider Secret";
+$langPUBLTIAppAddSuccessful = "Published LTI tool was added successfully.";

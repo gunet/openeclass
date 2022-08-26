@@ -118,9 +118,7 @@ if (isset($_POST['requestTitle'])) {
                         }
 
                         if ($field->datatype == REQUEST_FIELD_DATE and $tmpDate) {
-                            $_POST[$field_name] = claro_format_locale_date(
-                                trans('dateFormatLong') . ' ' . trans('timeNoSecFormat'),
-                                $tmpDate);
+                            $_POST[$field_name] = format_locale_date($tmpDate);
                         }
                         if ($field->datatype == REQUEST_FIELD_TEXTAREA) {
                             $field_data_display = '<pre>' . q($_POST[$field_name]) . '</pre>';
@@ -143,7 +141,7 @@ if (isset($_POST['requestTitle'])) {
             }
 
             if (isset($_POST['send_mail'])) {
-                $datetime = claro_format_locale_date($dateTimeFormatShort);
+                $datetime = format_locale_date(time(),'short');
                 $emailSubject = $langNewRequest . ': ' . $title;
                 $emailContent = "
                     <!-- Header Section -->

@@ -1,6 +1,6 @@
 @extends('layouts.default_old')
 
-@section('content')    
+@section('content')
     <style>
 
             .badge-container
@@ -179,11 +179,11 @@
                 <div class="clearfix">
                     @foreach ($game_badge as $key => $badge)
                         <?php
-                            $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($badge->assigned));
+                            $formatted_date = format_locale_date(strtotime($badge->assigned), null, false);
                             $dateAssigned = ($badge->completed == 1) ? $formatted_date : '';
                             $faded = ($badge->completed != 1) ? "faded" : '';
                         ?>
-                        
+
                         <div class="col-xs-6 col-sm-3">
                             <a href="index.php?course={{$course_code}}&amp;badge_id={{$badge->badge}}&amp;u={{$badge->user}}" style="display: block; width: 100%;">
                                 <img class="{{ $faded }} center-block" src="{{ $badge_template_path }}{{ $badge->filename }}">
@@ -224,7 +224,7 @@
                 <div class="clearfix">
                     @foreach ($game_certificate as $key => $certificate)
                         <?php
-                        $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned));
+                        $formatted_date = format_locale_date(strtotime($certificate->assigned), null, false);
                         $dateAssigned = ($certificate->completed == 1) ? $formatted_date : '';
                         ?>
                         <div class="col-xs-12 col-sm-6 col-xl-4">
