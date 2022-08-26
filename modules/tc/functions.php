@@ -696,6 +696,7 @@ function bbb_session_details() {
         $langBBBImportRecordings, $langAllUsers, $langDate, $langBBBNoServerForRecording,
         $langBBBHideParticipants;
 
+    $options = [];
     if (!is_active_tc_server($tc_type, $course_id)) { // check availability
         if ($is_editor) {
             $tool_content .= "<div class='alert alert-danger'>$langBBBNotServerAvailableTeacher</div>";
@@ -729,7 +730,9 @@ function bbb_session_details() {
         $i = 0;
 
         foreach ($result as $row) {
-            $options = unserialize($row->options);
+            if (!is_null($row->options)) {
+                $options = unserialize($row->options);
+            }
             if ($is_editor or empty($options['hideParticipants'])) {
                 $participants = '';
                 // Get participants
