@@ -245,11 +245,29 @@
                                     </div>
                                   </div>
 
-
+                                
                                   <div class='form-group mt-3' id='cc'>
                                       <div class='col-sm-12 col-sm-offset-2'>
                                             {!! $selection_license !!}
                                       </div>              
+                                  </div>
+
+                                  <div class='form-group mt-3'>
+                                    <label for='localize' class='col-sm-6 control-label-notes'>{{trans('langFlippedClassroom')}}</label>
+                                    <div class='col-sm-12'>
+                                        <div class='radio'>
+                                          <label>
+                                            <input id='flippedenabled' type='radio' name='flippedclassroom' value='2'>
+                                                {{trans('langCΕnabled')}}
+                                          </label>
+                                        </div>
+                                        <div class='radio'>
+                                          <label>
+                                            <input id='flippeddisabled' type='radio' name='flippedclassroom' value='1' checked>
+                                                {{trans('langTypeInactive')}}
+                                          </label>
+                                        </div>
+                                    </div>
                                   </div>
 
                                   <div class='form-group mt-3'>

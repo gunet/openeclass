@@ -107,6 +107,32 @@ if (!isset($_POST['create_course'])) {
         $data['menuTypeID'] = 1;
         view('modules.create_course.index', $data);
 
+}else if($_POST['flippedclassroom'] == "2"){
+    $_SESSION['title']= $title;
+    $_SESSION['code']= $departments ;
+    $_SESSION['language']= $language ;
+    $_SESSION['formvisible']= $_POST['formvisible'] ;
+    $_SESSION['l_radio']= $_POST['l_radio'];
+    $_SESSION['cc_use']=$_POST['cc_use'] ;
+    $_SESSION['public_code']=$public_code ;
+    $_SESSION['password']= $_POST['password'];
+    $_SESSION['flipped_flag']=$_POST['flippedclassroom'] ;
+    $_SESSION['view_type']= $_POST['view_type'];
+    $_SESSION['description']=purify($_POST['description']);
+
+    if (empty($title)) {
+        //Session::Messages($langFieldsMissing);
+        Session::flash('message',$langFieldsMissing);
+        Session::flash('alert-class', 'alert-warning');
+        $validationFailed = true;
+    }
+
+    if ($validationFailed) {
+        redirect_to_home_page('modules/create_course/create_course.php');
+    }
+
+    redirect_to_home_page('modules/create_course/flipped_classroom.php');
+
 } else  { // create the course and the course database
     // validation in case it skipped JS validation
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();

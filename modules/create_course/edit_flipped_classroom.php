@@ -178,7 +178,7 @@ if (!isset($_POST['next'])) {
             'url' => $urlServer."modules/create_course/edit_flipped_classroom.php?$course_code",
             'icon' => 'fa-reply',
             'level' => 'primary-label',
-            'button-class' => 'btn-default'
+            'button-class' => 'btn-secondary'
         )
     ), false);
 }
@@ -215,49 +215,49 @@ if(!isset($_POST['next'])){
         <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
             <fieldset>
                 <div class='form-group'>
-                    <label for='title' class='col-sm-3 control-label'>$langTitle:</label>
-                    <div class='col-sm-8'>
+                    <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
+                    <div class='col-sm-12'>
                         <input name='title' id='title' type='text' class='form-control' value='" . q($q4->title) . "' placeholder='$langTitle' readonly>
                     </div>
                 </div>
 
 
-                <div class='form-group'>
-                    <label for='stunum' class='col-sm-3 control-label'>$langStuNum : </label>
-                    <div class='col-sm-8'>
+                <div class='form-group mt-3'>
+                    <label for='stunum' class='col-sm-6 control-label-notes'>$langStuNum : </label>
+                    <div class='col-sm-12'>
                         <input name='stunum' id='stunum' type='text' class='form-control' value='".q($q1->student_number)."' >
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label for='lectnum' class='col-sm-3 control-label'>$langLectNum : </label>
-                    <div class='col-sm-8'>
+                <div class='form-group mt-3'>
+                    <label for='lectnum' class='col-sm-6 control-label-notes'>$langLectNum : </label>
+                    <div class='col-sm-12'>
                         <input name='lectnum' id='lectnum' type='number' min='1' max='50' class='form-control' value='".q($q1->lessons_number)."' >
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label for='lecthours' class='col-sm-3 control-label'>$langLectHours <small>($langHoursSmall)</small> : </label>
-                    <div class='col-sm-8'>
+                <div class='form-group mt-3'>
+                    <label for='lecthours' class='col-sm-6 control-label-notes'>$langLectHours <small>($langHoursSmall)</small> : </label>
+                    <div class='col-sm-12'>
                         <input name='lecthours' id='lecthours' type='number' min='1' max='150' class='form-control' value='".q($q1->lesson_hours)."' onchange='hoursSum()' >
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label for='homehours' class='col-sm-3 control-label'>$langHomeHours <small>($langHoursSmall)</small> : </label>
-                    <div class='col-sm-8'>
+                <div class='form-group mt-3'>
+                    <label for='homehours' class='col-sm-6 control-label-notes'>$langHomeHours <small>($langHoursSmall)</small> : </label>
+                    <div class='col-sm-12'>
                         <input name='homehours' id='homehours' type='number' min='1' max='150' class='form-control' value='".q($q1->home_hours)."' onchange='hoursSum()' >
                     </div>
                 </div>        
-                <div class='form-group'>
-                    <label for='totalhours' class='col-sm-3 control-label'>$langTotalHours : </label>
-                    <div class='col-sm-8'>
+                <div class='form-group mt-3'>
+                    <label for='totalhours' class='col-sm-6 control-label-notes'>$langTotalHours : </label>
+                    <div class='col-sm-12'>
                         <input name='totalhours' id='totalhours' type='number' min='1' max='650' class='form-control' value='".q($q1->total_hours)."' readonly>
                     </div>
                 </div>
             
-                <div class='form-group'>
-                    <label for='goals' class='col-sm-3 control-label'>$langGoals:</label>
+                <div class='form-group mt-3'>
+                    <label for='goals' class='col-sm-6 control-label-notes'>$langGoals:</label>
                 </div>
                 
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <div id='row_g_1'>
                                 ";
                     $count_goals =1;
@@ -295,16 +295,16 @@ if(!isset($_POST['next'])){
                     </div>
                     
                 
-                <div class='form-group'>
-                    <label for='description' class='col-sm-3 control-label'>$langCont <small>$langOptional</small>:</label>
-                    <div class='col-sm-8'>
+                <div class='form-group mt-3'>
+                    <label for='description' class='col-sm-6 control-label-notes'>$langCont <small>$langOptional</small>:</label>
+                    <div class='col-sm-12'>
                           " .  rich_text_editor('description', 4, 20, purify($q4->description)) . "
                     </div>
                 </div>";
                 if($q4->lectures_model==2){
-                    $tool_content .="<div class='form-group'>
-                        <label for='localize' class='col-sm-3 control-label'>$langLectModel:</label>
-                        <div class='col-sm-8'>
+                    $tool_content .="<div class='form-group mt-3'>
+                        <label for='localize' class='col-sm-6 control-label-notes'>$langLectModel:</label>
+                        <div class='col-sm-12'>
                             <div class='radio'>
                                 <label>
                                     <input id='fromHome' type='radio' name='lectModel' value='2' checked>
@@ -320,9 +320,9 @@ if(!isset($_POST['next'])){
                         </div>
                     </div>";
                 }else{
-                    $tool_content .="<div class='form-group'>
-                        <label for='localize' class='col-sm-3 control-label'>$langLectModel:</label>
-                        <div class='col-sm-8'>
+                    $tool_content .="<div class='form-group mt-3'>
+                        <label for='localize' class='col-sm-6 control-label-notes'>$langLectModel:</label>
+                        <div class='col-sm-12'>
                             <div class='radio'>
                                 <label>
                                     <input id='fromHome' type='radio' name='lectModel' value='2' >
@@ -340,10 +340,10 @@ if(!isset($_POST['next'])){
 
                 }
                 $tool_content .="
-                <div class='form-group'>
-                    <label for='units' class='col-sm-3 control-label'>$langUnits:</label>
+                <div class='form-group mt-3'>
+                    <label for='units' class='col-sm-6 control-label-notes'>$langUnits:</label>
                 </div>
-                <div class='form-group'>
+                <div class='form-group mt-3'>
                     <div id='row_u_1'>
                                 ";
                         $count_units =1;
@@ -385,7 +385,7 @@ if(!isset($_POST['next'])){
                 </div>             
             </div>
 
-            <div class='form-group'>
+            <div class='form-group mt-3'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <input class='btn btn-primary' type='submit' name='next' value='" . q($langNext) . "'>
                     <a href='{$urlServer}courses/".$course_code."' class='btn btn-default'>$langCancel</a>
@@ -424,12 +424,16 @@ if(!isset($_POST['next'])){
     if($num_of_new_units > $q7->num_units){ //new unit is added
 
             if (empty($_SESSION['goals']) or array_search("",$_SESSION['goals'])) {
-                Session::Messages($langEmptyGoal);
+                //Session::Messages($langEmptyGoal);
+                Session::flash('message', $langEmptyGoal); 
+                Session::flash('alert-class', 'alert-warning');
                 $validationFailed = true;
             }
 
             if (empty($_SESSION['units']) or array_search("",$_SESSION['units'])) {
-                Session::Messages($langEmptyUnit);
+                //Session::Messages($langEmptyUnit);
+                Session::flash('message', $langEmptyUnit); 
+                Session::flash('alert-class', 'alert-warning');
                 $validationFailed = true;
             }
 
@@ -490,7 +494,7 @@ if(!isset($_POST['next'])){
                 <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
                 <div class='panel panel-default'>
                     <div class='panel-heading'>
-                        <div class='paenel-title h4'>
+                        <div class='panel-title h4'>
                             $langActSelect:
                         </div>
                     </div>
@@ -671,12 +675,16 @@ if(!isset($_POST['next'])){
 
     }else {
         if (empty($_SESSION['goals']) or array_search("",$_SESSION['goals'])) {
-            Session::Messages($langEmptyGoal);
+            //Session::Messages($langEmptyGoal);
+            Session::flash('message', $langEmptyGoal); 
+            Session::flash('alert-class', 'alert-warning');
             $validationFailed = true;
         }
 
         if (empty($_SESSION['units']) or array_search("",$_SESSION['units'])) {
-            Session::Messages($langEmptyUnit);
+            //Session::Messages($langEmptyUnit);
+            Session::flash('message', $langEmptyUnit); 
+            Session::flash('alert-class', 'alert-warning');
             $validationFailed = true;
         }
 
@@ -697,7 +705,9 @@ if(!isset($_POST['next'])){
 
         $validationFailed = false;
         if(empty($stunum)||empty($lectnum)||empty($lecthours)||empty($homehours)){
-            Session::Messages($langFieldsMissing);
+            //Session::Messages($langFieldsMissing);
+            Session::flash('message', $langFieldsMissing); 
+            Session::flash('alert-class', 'alert-warning');
             $validationFailed = true;
 
         }
@@ -706,7 +716,9 @@ if(!isset($_POST['next'])){
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
         if (empty($_SESSION['title'])) {
-            Session::Messages($langFieldsMissing);
+            //Session::Messages($langFieldsMissing);
+            Session::flash('message', $langFieldsMissing); 
+            Session::flash('alert-class', 'alert-warning');
             $validationFailed = true;
         }
 
@@ -864,7 +876,9 @@ if(!isset($_POST['next'])){
 
         $validationFailed = false;
         if(empty($stunum)||empty($lectnum)||empty($lecthours)||empty($homehours)){
-            Session::Messages($langFieldsMissing);
+            //Session::Messages($langFieldsMissing);
+            Session::flash('message', $langFieldsMissing); 
+            Session::flash('alert-class', 'alert-warning');
             $validationFailed = true;
 
         }
@@ -874,7 +888,9 @@ if(!isset($_POST['next'])){
 
 
         if (empty($_SESSION['title'])) {
-            Session::Messages($langFieldsMissing);
+            //Session::Messages($langFieldsMissing);
+            Session::flash('message', $langFieldsMissing); 
+            Session::flash('alert-class', 'alert-warning');
             $validationFailed = true;
         }
 
