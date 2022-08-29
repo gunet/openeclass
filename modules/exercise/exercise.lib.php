@@ -27,7 +27,7 @@
  * @param $question_number
  * @return int
  */
-function showQuestion(&$objQuestionTmp, $exerciseResult = array(), $question_number) {
+function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = array()) {
 
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion, $langSelect,
             $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades,

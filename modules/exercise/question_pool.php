@@ -81,12 +81,12 @@ $head_content .= "
                     success: function(data) {
                         bootbox.dialog({
                             message: data,
-                            title: 'Question Preview',
+                            title: '". js_escape($langQuestionPreview) . "',
                             onEscape: true,
                             backdrop: true,
                             buttons: {
                                 edit: {
-                                    label: '<span class=\"fa fa-edit\"></span> $langEditChange',
+                                    label: '<span class=\"fa fa-edit\"></span> " . js_escape($langEditChange) . "',
                                     callback: function () {
                                         if (nbr > 1) {
                                             $('#modalWarning').modal('show');
@@ -96,7 +96,7 @@ $head_content .= "
                                     }
                                 },
                                 success: {
-                                    label: '$langClose',
+                                    label: '" . js_escape($langClose) . "',
                                     className: 'btn-default',
                                 },
                             }
