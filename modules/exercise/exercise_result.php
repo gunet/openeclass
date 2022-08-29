@@ -203,7 +203,11 @@ $calc_grade_method = $objExercise->getCalcGradeMethod();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
 $cur_date = new DateTime("now");
-$end_date = new DateTime($objExercise->selectEndDate());
+if (!is_null($objExercise->selectEndDate())) {
+    $end_date = new DateTime($objExercise->selectEndDate());
+} else {
+    $end_date = null;
+}
 
 $showResults = $displayResults == 1
                || $is_editor

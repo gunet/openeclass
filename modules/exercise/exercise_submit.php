@@ -698,7 +698,7 @@ if ($questionList) {
     if ($exerciseType == SINGLE_PAGE_TYPE) {
         foreach ($questionList as $questionNumber => $questionId) {
             // show the question and its answers
-            showQuestion($questions[$questionId], $exerciseResult, $questionNumber);
+            showQuestion($questions[$questionId], $questionNumber, $exerciseResult);
         }
     } else {
         if (isset($pausedQuestionNumber)) { // restarting paused attempt
@@ -744,7 +744,7 @@ if ($questionList) {
         }
 
         $question = $questions[$questionList[$questionNumber]];
-        showQuestion($question, $exerciseResult, $questionNumber);
+        showQuestion($question, $questionNumber, $exerciseResult);
     }
 } else {
     $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoQuestion</div></div>";
