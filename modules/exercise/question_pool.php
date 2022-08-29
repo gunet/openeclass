@@ -62,7 +62,7 @@ $head_content .= "
             });
 
             $('.dataTables_filter input').attr({
-                class : 'form-control input-sm',
+                class : 'form-control input-sm mb-3 me-3',
                 placeholder : '$langSearch...'
             });
 
@@ -194,17 +194,23 @@ elseif (isset($_GET['recup']) and $fromExercise) {
     // if the question exists, add it into the list of questions for the
     // current exercise
     if ($objQuestionTmp->read($recup) and $objExercise->addToList($recup)) {
-        Session::Messages($langQuestionReused, 'alert-success');
+        //Session::Messages($langQuestionReused, 'alert-success');
+        Session::flash('message',$langQuestionReused); 
+        Session::flash('alert-class', 'alert-success');
         $objExercise->save();
     }
     redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code" . ($fromExercise? "&fromExercise=$fromExercise": '') . "&exerciseId=$exerciseId");
 } elseif (isset($_REQUEST['clone_pool'])) {
     clone_question_pool($_POST['clone_pool_to_course_id']);
-    Session::Messages($langCopySuccess, 'alert-success');
+    //Session::Messages($langCopySuccess, 'alert-success');
+    Session::flash('message',$langCopySuccess); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/exercise/index.php?course=$course_code");
 } elseif (isset($_REQUEST['purge'])) {
     purge_question_pool($course_id);
-    Session::Messages($langQuestionPoolPurgeSuccess, 'alert-success');
+    //Session::Messages($langQuestionPoolPurgeSuccess, 'alert-success');
+    Session::flash('message',$langQuestionPoolPurgeSuccess); 
+    Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/exercise/index.php?course=$course_code");
 }
 
@@ -280,12 +286,12 @@ foreach ($q_cats as $q_cat) {
 $tool_content .= "<div class='form-wrapper'><form class='form-inline' role='form' name='qfilter' method='get' action='$_SERVER[REQUEST_URI]'><input type='hidden' name='course' value='$course_code'>
                     ".($fromExercise? "<input type='hidden' name='fromExercise' value='$fromExercise'>" : "")."
                     <div class='form-group'>
-                        <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-control'>
+                        <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-select'>
                             $exercise_options
                         </select>
                 </div>
-                <div class='form-group'>
-                    <select onChange = 'document.qfilter.submit();' name='difficultyId' class='form-control'>
+                <div class='form-group mt-3'>
+                    <select onChange = 'document.qfilter.submit();' name='difficultyId' class='form-select'>
                         <option value='-1' ".(isset($difficultyId) && $difficultyId == -1 ? "selected='selected'": "").">-- $langQuestionAllDiffs --</option>
                         <option value='0' ".(isset($difficultyId) && $difficultyId == 0 ? "selected='selected'": "").">-- $langQuestionNotDefined --</option>
                         <option value='1' ".(isset($difficultyId) && $difficultyId == 1 ? "selected='selected'": "").">$langQuestionVeryEasy</option>
@@ -295,8 +301,8 @@ $tool_content .= "<div class='form-wrapper'><form class='form-inline' role='form
                         <option value='5' ".(isset($difficultyId) && $difficultyId == 5 ? "selected='selected'": "").">$langQuestionVeryDifficult</option>
                     </select>
                 </div>
-                <div class='form-group'>
-                    <select onChange = 'document.qfilter.submit();' name='categoryId' class='form-control'>
+                <div class='form-group mt-3'>
+                    <select onChange = 'document.qfilter.submit();' name='categoryId' class='form-select'>
                         $q_cat_options
                     </select>
                 </div>
@@ -308,7 +314,7 @@ if ($fromExercise) {
     $tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
 }
 
-$tool_content .= "<table class='table-default' id='questions'>";
+$tool_content .= "<div class='table-responsive'><table class='table-default' id='questions'>";
 
 //START OF BUILDING QUERIES AND QUERY VARS
 if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercise
@@ -379,9 +385,9 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
 } else {
     $result = Database::get()->queryArray($result_query, $result_query_vars);
     $tool_content .= "<thead>
-    <tr>
-      <th>$langQuesList</th>
-      <th class='text-center'>".icon('fa-gears')."</th>
+    <tr class='list-header'>
+      <th class='text-white'>$langQuesList</th>
+      <th class='text-white text-center'>".icon('fa-gears')."</th>
     </tr></thead><tbody>";
     foreach ($result as $row) {
         $question_temp = new Question();
@@ -401,7 +407,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
             $class = count($exercise_ids) > 0 ? 'previewQuestion warnLink': 'previewQuestion';
             $tool_content .= "
                 <td>
-                  <div class='pull-right small not_visible'>{$row->id}</div>
+                  <div class='float-end small not_visible'>{$row->id}</div>
                   <a class='$class' data-qid='{$row->id}' href='admin.php?course=$course_code&amp;modifyAnswers={$row->id}&amp;fromExercise=$fromExercise'>$question_title</a>
                   <br>
                   <small>$question_type_legend $question_difficulty_legend $question_category_legend $exercises_used_in</small>
@@ -411,13 +417,13 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
             } else {
                 $warning_message = $langConfirmYourChoice;
             }
-            $tool_content .= "<td class='option-btn-cell'>" .
+            $tool_content .= "<td class='option-btn-cell text-center'>" .
                 action_button([
                     [ 'title' => $langEditChange,
                       'url' => "admin.php?course=$course_code&amp;modifyAnswers=" . $row->id,
                       'icon-class' => 'warnLink',
                       'icon-extra' => ((count($exercise_ids)>0)?
-                         " data-toggle='modal' data-target='#modalWarning' data-remote='false'" : ''),
+                         " data-bs-toggle='modal' data-bs-target='#modalWarning' data-bs-remote='false'" : ''),
                       'icon' => 'fa-edit',
                       'show' => !$fromExercise ],
                     [ 'title' => $langReuse,
@@ -436,7 +442,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
         }
         unset($question_temp);
     }
-    $tool_content .= "</tbody></table>";
+    $tool_content .= "</tbody></table></div>";
 }
 
 $tool_content .= "
@@ -445,7 +451,7 @@ $tool_content .= "
   <div class='modal-dialog'>
     <div class='modal-content'>
       <div class='modal-header'>
-        <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
+        <button type='button' class='close' data-bs-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
         <h4 class='modal-title'>$langNote</h4>
       </div>
       <div class='modal-body'>

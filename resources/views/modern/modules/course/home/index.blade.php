@@ -163,7 +163,7 @@
                                                                 <div class='col-xl-6 col-12'>
                                                                     <p class='control-label-notes text-start'>{{$row->title}}</p>
                                                                 </div>
-                                                                <div class='col-xl-6 col-12'>
+                                                                <div class='col-xl-6 col-12 desCourse'>
                                                                     {!! standard_text_escape($row->comments) !!}
                                                                 </div>
                                                             </div>
