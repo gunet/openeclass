@@ -566,14 +566,12 @@ if ($is_editor) {
                         }
                         // send mail message per 50 recipients
                         if (count($recipients) >= 50) {
-                            echo $emailContent;
-                            //send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
+                            send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
                             $recipients = array();
                         }
                     }, $course_id);
                     if (count($recipients) > 0) {
-                        echo $emailContent;
-                        //send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
+                        send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
                     }
                     Session::Messages("$langAnnAddWithEmail $countEmail $langRegUser", 'alert-success');
                     if ($invalid > 0) { // info about invalid emails (if exist)
