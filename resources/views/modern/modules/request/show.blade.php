@@ -68,102 +68,101 @@
                     @endif
 
 
-
-                    <div class='panel panel-default mt-3'>
-                        <div class='panel-heading notes_thead'>
-                            <div class='row'>
-                                <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
-                                    <h4 class='text-white text-start ps-3 pt-1'>
-                                        <span>
-                                        {{ $request->title }}
-                                        @if ($request->type_id)
-                                            <small> -> {{ $type->name }}</small>
-                                        @endif
-                                        </span>
-                                    </h4>
-                                </div>
-                                <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
-                                    <div class='announcement-date text-end text-white pt-2 pe-3'>{{
-                                        format_locale_date(strtotime($request->open_date)) }}
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class='panel-body panel-body-request'>
-
-                            <div class='row'>
-                                <div class='col-12 col-sm-2 text-end'>
-                                    <b class='control-label-notes ps-3'>{{ trans('langNewBBBSessionStatus') }}:</b>
-                                </div>
-                                <div class='col-12 col-sm-4'>
-                                    {{ $state }}
-                                </div>
-                            </div>
-                            <div class='row'>
-                                <div class='col-12 col-sm-2 text-end'>
-                                    <b class='control-label-notes ps-3'>{{ trans('langFrom') }}:</b>
-                                </div>
-                                <div class='col-12 col-sm-4'>
-                                    {!! display_user($request->creator_id) !!}
-                                </div>
-                                @if ($watchers)
-                                    <div class='col-12 col-sm-2 text-end'>
-                                        <b class='control-label-notes ps-3'>{{ trans('langWatchers') }}:</b>
-                                    </div>
-                                    <div class='col-12 col-sm-4'>
-                                        @foreach ($watchers as $user)
-                                            {!! display_user($user) !!}
-                                        @endforeach
-                                    </div>
-                                @endif
-                                @if ($assigned)
-                                    <div class='col-12 col-sm-2 text-end'>
-                                        <b class='control-label-notes ps-3'>{{ trans("m['WorkAssignTo']") }}:</b>
-                                    </div>
-                                    <div class='col-12 col-sm-4'>
-                                        @foreach ($assigned as $user)
-                                            {!! display_user($user) !!}
-                                        @endforeach
-                                    </div>
-                                @endif
-                                </div>
-                            <hr>
-                            @if ($field_data)
-                                @foreach ($field_data as $field)
-                                    <div class='row'>
-                                        <div class='col-12 col-sm-2 text-end'>
-                                            <b>{{ getSerializedMessage($field->name) }}:</b>
-                                        </div>
-                                        <div class='col-12 col-sm-10'>
-                                            @if (is_null($field->data) or $field->data === '')
-                                                <span class='not_visible'> - </span>
-                                            @else
-                                                @if ($field->datatype == REQUEST_FIELD_DATE)
-                                                    {{ format_locale_date(strtotime($field->data)) }}
-                                                @else
-                                                    {{ $field->data }}
-                                                @endif
+                    <div class='col-sm-12'>
+                        <div class='panel panel-default mt-3'>
+                            <div class='panel-heading'>
+                                <div class='row'>
+                                    <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
+                                        <h5 class='text-dark text-start pt-1'>
+                                            <span>
+                                            {{ $request->title }}
+                                            @if ($request->type_id)
+                                                <small> -> {{ $type->name }}</small>
                                             @endif
+                                            </span>
+                                        </h5>
+                                    </div>
+                                    <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
+                                        <div class='announcement-date text-end text-success pt-1'>{{
+                                            format_locale_date(strtotime($request->open_date)) }}
                                         </div>
                                     </div>
-                                @endforeach
-                                <hr>
-                            @endif
-                            <div class='row'>
-                                <div class='col-12'>
-                                    <div class='ps-3'>{!! $request->description !!}</div>
                                 </div>
+                            </div>
+
+                            <div class='panel-body'>
+
+                                <div class='row'>
+                                    <div class='d-inline-flex align-items-center'>
+                                        <span class='control-label-notes pe-2'>{{ trans('langNewBBBSessionStatus') }}:</span>
+                                        {{ $state }}
+                                    </div>
+                                </div>
+                                <div class='row mt-3'>
+                                    <div class='d-inline-flex align-items-center'>
+                                        <b class='control-label-notes pe-2'>{{ trans('langFrom') }}:</b>
+                                        {!! display_user($request->creator_id) !!}
+                                    </div>
+                                </div>
+
+                                @if ($watchers)
+                                    <div class='row mt-3'>
+                                        <div class='d-inline-flex align-items-center'>
+                                            <b class='control-label-notes pe-2'>{{ trans('langWatchers') }}:</b>
+                                            @foreach ($watchers as $user)
+                                                {!! display_user($user) !!}
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if ($assigned)
+                                    <div class='row mt-3'>
+                                        <div class='d-inline-flex align-items-center'>
+                                            <b class='control-label-notes pe-2'>{{ trans("m['WorkAssignTo']") }}:</b>
+                                            @foreach ($assigned as $user)
+                                                {!! display_user($user) !!}
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                                
+                                <hr>
+
+                                @if ($field_data)
+                                    @foreach ($field_data as $field)
+                                        <div class='row'>
+                                            <div class='col-12 col-sm-2 text-end'>
+                                                <b>{{ getSerializedMessage($field->name) }}:</b>
+                                            </div>
+                                            <div class='col-12 col-sm-10'>
+                                                @if (is_null($field->data) or $field->data === '')
+                                                    <span class='not_visible'> - </span>
+                                                @else
+                                                    @if ($field->datatype == REQUEST_FIELD_DATE)
+                                                        {{ format_locale_date(strtotime($field->data)) }}
+                                                    @else
+                                                        {{ $field->data }}
+                                                    @endif
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                    <hr>
+                                @endif
+
+                                <div class='row'>
+                                    <div class='col-12'>
+                                        <div class='p-2'>{!! $request->description !!}</div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
 
-                    <div class='row p-2'></div>
-
-
                     @if ($can_modify or $can_assign_to_self)
-                        <div class='col-md-12'>
+                        <div class='col-sm-12 mt-3'>
                             <form role='form' method='post' action='{{ $targetUrl }}'>
                                 <p>
                                 {!! generate_csrf_token_form_field() !!}
@@ -181,105 +180,98 @@
                     @endif
 
                     @if ($can_comment)
-                        <div class='col-md-12'>
-                            <form class='form-horizontal' role='form' method='post' action='{{ $targetUrl }}' enctype='multipart/form-data'>
-                                <fieldset>
-                                    @if ($can_modify)
+                        <div class='col-sm-12'>
+                            <div class='form-wrapper shadow-sm p-3 rounded'>
+                                <form class='form-horizontal' role='form' method='post' action='{{ $targetUrl }}' enctype='multipart/form-data'>
+                                    <fieldset>
+                                        @if ($can_modify)
+                                            <div class='form-group mt-3'>
+                                                <label for='newState' class='col-sm-6 control-label-notes'>{{ trans('langChangeState') }}:</label>
+                                                <div class='col-sm-12'>
+                                                    <select class='form-select' name='newState' id='newState'>
+                                                        @foreach ($states as $stateId => $stateName)
+                                                            <option value='{{ $stateId }}'@if ($stateId == $request->state) selected @endif>{{ $stateName }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        @endif
+
+
+
                                         <div class='form-group mt-3'>
-                                            <label for='newState' class='col-sm-6 control-label-notes'>{{ trans('langChangeState') }}:</label>
+                                            <label for='requestComment' class='col-sm-6 control-label-notes'>{{ trans('langComment') }}:</label>
                                             <div class='col-sm-12'>
-                                                <select class='form-select' name='newState' id='newState'>
-                                                    @foreach ($states as $stateId => $stateName)
-                                                        <option value='{{ $stateId }}'@if ($stateId == $request->state) selected @endif>{{ $stateName }}</option>
-                                                    @endforeach
-                                                </select>
+                                                {!! $commentEditor !!}
                                             </div>
                                         </div>
-                                    @endif
 
 
 
-                                    <div class='form-group mt-3'>
-                                        <label for='requestComment' class='col-sm-6 control-label-notes'>{{ trans('langComment') }}:</label>
-                                        <div class='col-sm-12'>
-                                            {!! $commentEditor !!}
+                                        <div class='form-group mt-3'>
+                                            <label for='requestFile' class='col-sm-6 control-label-notes'>{{ trans('langAttachedFile') }}:</label>
+                                            <div class='col-sm-12'>
+                                                <input type='hidden' name='MAX_FILE_SIZE' value='{{ fileUploadMaxSize() }}'>
+                                                <input type='file' name='requestFile'>
+                                            </div>
                                         </div>
-                                    </div>
 
 
 
-                                    <div class='form-group mt-3'>
-                                        <label for='requestFile' class='col-sm-6 control-label-notes'>{{ trans('langAttachedFile') }}:</label>
-                                        <div class='col-sm-12'>
-                                            <input type='hidden' name='MAX_FILE_SIZE' value='{{ fileUploadMaxSize() }}'>
-                                            <input type='file' name='requestFile'>
+                                        <div class='form-group mt-3'>
+                                            <div class='col-xs-offset-2 col-xs-10'>
+                                                <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
+                                                <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                            </div>
                                         </div>
-                                    </div>
-
-
-
-                                    <div class='form-group mt-3'>
-                                        <div class='col-xs-offset-2 col-xs-10'>
-                                            <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
-                                            <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
-                                        </div>
-                                    </div>
-                                    {!! generate_csrf_token_form_field() !!}
-                                </fieldset>
-                            </form>
+                                        {!! generate_csrf_token_form_field() !!}
+                                    </fieldset>
+                                </form>
+                            </div>
                         </div>
                     @endif
 
                     @if ($comments)
                         @foreach ($comments as $comment)
-                            <div class='col-md-12'>
+                            <div class='col-sm-12 mt-3'>
                                 <div class='panel panel-default'>
-                                    <div class='panel-body panel-body-request'>
-                                        <div class='row p-2'>
-                                            <div class='col-12 col-sm-3'>
-                                                <b class='control-label-notes ps-3'>{{ trans('langFrom') }}:</b>
-                                            </div>
-                                            <div class='col-12 col-sm-9'>
-                                                {!! display_user($comment->user_id) !!}
-                                            </div>
-                                        </div>
-                                        <div class='row p-2'>
-                                            <div class='col-12 col-sm-3'>
-                                                <b class='control-label-notes ps-3'>{{ trans('langDate') }}:</b>
-                                            </div>
-                                            <div class='col-12 col-sm-9'>
-                                                {{ format_locale_date(strtotime($comment->ts)) }}
-                                            </div>
-                                        </div>
+                                    <div class='panel-body Borders'>
+                                        
+                                        <div class='d-inline-flex align-items-center'>
+                                            <b class='control-label-notes pe-2'>{{ trans('langFrom') }}:</b>
+                                            {!! display_user($comment->user_id) !!}
+                                        </div><br>
+                                        
+                                        
+                                        <div class='d-inline-flex align-items-center'>
+                                            <b class='control-label-notes pe-2'>{{ trans('langDate') }}:</b>
+                                            {{ format_locale_date(strtotime($comment->ts)) }}
+                                        </div><br>
+                                        
                                         @if ($comment->old_state != $comment->new_state)
-                                            <div class='row p-2'>
-                                                <div class='col-12 col-sm-3'>
-                                                    <b class='control-label-notes ps-3'>{{ trans('langChangeState') }}:</b>
-                                                </div>
-                                                <div class='col-12 col-sm-9'>
-                                                    <b>{{ $states[$comment->new_state] }}</b> ({{ trans('langFrom') }}: {{ $states[$comment->old_state] }})
-                                                </div>
-                                            </div>
+                                            
+                                            <div class='d-inline-flex align-items-center'>
+                                                <b class='control-label-notes pe-2'>{{ trans('langChangeState') }}:</b>
+                                                {{ $states[$comment->new_state] }}
+                                                <span>({{ trans('langFrom') }}:</span> {{ $states[$comment->old_state] }})
+                                            </div><br>
+                                            
                                         @endif
                                         @if ($comment->real_filename)
-                                            <div class='row p-2'>
-                                                <div class='col-12 col-sm-3'>
-                                                    <b class='control-label-notes ps-3'>{{ trans('langAttachedFile') }}:</b>
-                                                </div>
-                                                <div class='col-12 col-sm-9'>
-                                                    <a href='{{ commentFileLink($comment) }}'>{{ $comment->filename }}</a>
-                                                </div>
-                                            </div>
+                                            
+                                            <div class='d-inline-flex align-items-center'>
+                                                <b class='control-label-notes pe-2'>{{ trans('langAttachedFile') }}:</b>
+                                                <a href='{{ commentFileLink($comment) }}'>{{ $comment->filename }}</a>
+                                            </div><br>
+                                            
                                         @endif
                                         @if ($comment->comment)
-                                            <div class='row p-2'>
-                                                <div class='col-12 col-sm-3'>
-                                                    <b class='control-label-notes ps-3'>{{ trans('langComment') }}:</b>
-                                                </div>
-                                                <div class='col-12 col-sm-9'>
-                                                    {!! standard_text_escape($comment->comment) !!}
-                                                </div>
+                                            
+                                            <div class='d-inline-flex align-items-center'>
+                                                <b class='control-label-notes pe-2'>{{ trans('langComment') }}:</b>
+                                                {!! standard_text_escape($comment->comment) !!}
                                             </div>
+                                            
                                         @endif
                                     </div>
                                 </div>

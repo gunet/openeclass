@@ -47,7 +47,7 @@ if (isset($_POST['requestTitle'])) {
         $state = isset($_POST['assignTo'])? REQUEST_STATE_ASSIGNED: REQUEST_STATE_NEW;
         $result = Database::get()->query('INSERT INTO request
             SET course_id = ?d, title = ?s, description = ?s,
-                creator_id = ?d, state = ?d, type_id = ?d,
+                creator_id = ?d, state = ?d, type = ?d,
                 open_date = NOW(), change_date = NOW(), close_date = NULL',
             $course_id, $title, $requestDescription,
             $uid, $state, $type_id);
@@ -183,6 +183,9 @@ if (isset($_POST['requestTitle'])) {
             Session::flash('message',trans('langRequestCreated'));
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/request/index.php?course=$course_code&id=$rid");
+        }else{
+            Session::flash('message',trans('langRequestNoType'));
+            Session::flash('alert-class', 'alert-warning');
         }
     } else {
         //Session::Messages(trans('langFieldsRequ'), 'alert-warning');

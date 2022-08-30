@@ -50,7 +50,7 @@ if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerTyp
 }
 $editUrl = $urlAppend . "modules/exercise/admin.php?course=$course_code&amp;modifyAnswers=$qid&amp;fromExercise=";
 $picturePath = "courses/$course_code/image/quiz-$qid";
-$tool_content .= "
+$tool_content .= "<div class='table-responsive'>
     <table class = 'table-default'>
       <tr class='active'>
         <td colspan='$colspan'>
@@ -165,6 +165,6 @@ $tool_content .= "
           <span style='float:right;'>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>
         </th>
       </tr>
-    </table>";
+    </table></div>";
 
 echo $tool_content;

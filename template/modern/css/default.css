@@ -49,9 +49,9 @@ img {
   height: auto;
 }
 
-ul,li{
+/* ul,li{
   list-style-type: none;
-}
+} */
 
 .border-15px{
   border-radius:15px;

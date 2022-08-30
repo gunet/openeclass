@@ -82,7 +82,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'title' => $langDelete,
                 'class' => 'delete delete_btn',
                 'icon' => 'fa-times',
-                'link-attrs' => "data-id='$indirectId'"]]);
+                'link-attrs' => "id='$indirectId' data-id='$indirectId'"]]);
         }
 
         $data['data'][] = [

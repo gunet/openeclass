@@ -68,8 +68,8 @@
                     @endif
 
                     
-                    <div class="table">
-                        <table id='request_table_{{ $course_id }}' class='table announcements_table'>
+                    <div class="table-responsive">
+                        <table id='request_table_{{ $course_id }}' class='table table-default'>
                             <thead>
                                 <tr class='notes_thead'>
                                     <th class='text-white'>{{ trans('langRequest') }}</th>
@@ -83,10 +83,9 @@
                             <tfoot>
                                 <tr>
                                     <th colspan='5'>
-                                        <div class='form-inline'>
-                                            <label>{{ trans('langShowClosedRequests') }}:
-                                                <input type='checkbox' class='form-control' id='closedRequests'>
-                                            </label>
+                                        <div class='d-inline-flex align-items-center'>
+                                            <label class='pe-2'>{{ trans('langShowClosedRequests') }}:</label>
+                                            <input type='checkbox' id='closedRequests'>
                                         </div>
                                     </th>
                                 </tr>
@@ -104,12 +103,45 @@
 
 
 <script>
+
+    function popover_init() {
+        $('[data-bs-toggle="popover"]').on('click',function(e){
+            e.preventDefault();
+        }).popover();
+        var click_in_process = false;
+        var hidePopover = function () {
+            if (!click_in_process) {
+                $(this).popover('hide');
+            }
+        }
+        , togglePopover = function () {
+            $(this).popover('toggle');
+            $('#action_button_menu').parent().parent().addClass('menu-popover');
+        };
+        $('.menu-popover').popover({html:true}).on('click', togglePopover).on('blur', hidePopover);
+        $('.menu-popover').on('shown.bs.popover', function () {
+            $('.popover').mousedown(function () {
+                click_in_process = true;
+            });
+            $('.popover').mouseup(function () {
+                click_in_process = false;
+                $(this).popover('hide');
+            });
+            act_confirm();
+        });
+
+    }
+    function tooltip_init() {
+        $('[data-bs-toggle="tooltip"]').tooltip({container: 'body'});
+    }
+
+
     $(function() {
         var oTable = $('#request_table_{{ $course_id }}').DataTable({
             ajax: {
                 url: '{{ $listUrl }}',
                 data: function (data) {
-                    data.show_closed = $('#closedRequests').prop('checked');
+                    data.show_closed = $('#closedRequests').prop('checked'); 
                 }
             },
             order: [[0, 'desc']],
@@ -157,11 +189,16 @@
             class:'form-control input-sm'
         });
         $(document).on('change', '#closedRequests', function (e) {
+            if($(this).is(":checked")){
+                 $('#closedRequests').attr( 'checked', true );
+            }else{
+                $('#closedRequests').attr( 'checked', false );
+            }
             oTable.ajax.reload();
         });
         $(document).on( 'click','.delete_btn', function (e) {
             e.preventDefault();
-            var row_id = $(this).data('id');
+            var row_id = this.id;
             console.log(row_id);
             bootbox.confirm('{{ js_escape(trans('langConfirmDelete')) }}', function(result) {
                 if (result) {

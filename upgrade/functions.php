@@ -2477,7 +2477,7 @@ function upgrade_to_4_0($tbl_options): void {
     }
 
     // `request` tables (aka `ticketing`)
-    if (!DBHelper::tableExists('request-type')) {
+    if (!DBHelper::tableExists('request_type')) {
         Database::get()->query("CREATE TABLE IF NOT EXISTS request_type (
             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `name` MEDIUMTEXT NOT NULL,
