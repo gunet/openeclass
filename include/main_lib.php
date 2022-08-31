@@ -912,6 +912,51 @@ function nice_format($date, $time = FALSE, $dont_display_time = FALSE) {
     }
 }
 
+
+/**
+ * @brief formats the date according to the locale settings
+ * @params unix_time_stamp $datetime_stamp
+ * @params string $format pattern. default is 'full' format. Also, available is 'short', 'full' format.
+ * @params boolean $display_time. default is true, that is, display time, otherwise don't display time.
+ * @return formatted date
+
+ */
+
+function format_locale_date($datetime_stamp, $format = null, $display_time = true) {
+
+    global $language;
+
+    $locale = 'el'; // default locale
+    $format_date_style = IntlDateFormatter::RELATIVE_FULL; // default date formatting style
+    $format_time_style = IntlDateFormatter::SHORT; // default time formatting style
+
+    if (isset($_GET['localize'])) {
+        $locale = $_GET['localize'];
+    }
+    if (isset($language)) {
+        $locale = $language;
+    }
+
+    if ($format == 'short') {
+        $format_date_style = IntlDateFormatter::SHORT;
+    } else if ($format == 'full') {
+        $format_date_style = IntlDateFormatter::FULL;
+    }
+
+    if (!$display_time) {
+        $format_time_style = IntlDateFormatter::NONE;
+    }
+    /* PHP reference
+        https://www.php.net/manual/en/intldateformatter.create.php
+        https://www.php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants
+    */
+    $fmt = datefmt_create($locale, $format_date_style, $format_time_style, 'Europe/Athens', IntlDateFormatter::TRADITIONAL);
+
+    return (datefmt_format($fmt, $datetime_stamp));
+}
+
+
+
 /**
  * @brief remove seconds from a given datetime
  * @param type $datetime
