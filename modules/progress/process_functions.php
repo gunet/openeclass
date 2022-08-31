@@ -1179,10 +1179,6 @@ function get_resource_details($element, $resource_id) {
 
 /**
  * @brief certificate pdf output
- * @global type $webDir
- * @global $dateFormatLong
- * @global $urlServer
- * @global $langCertAuthenticity;
  * @param type $certificate_id
  * @param type $user_id
  * @param type $certificate_title
@@ -1194,7 +1190,7 @@ function get_resource_details($element, $resource_id) {
  */
 function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_message = null, $certificate_issuer = null, $certificate_date = null, $certificate_template_id = null, $certificate_identifier = null) {
 
-    global $webDir, $dateFormatLong, $urlServer, $langCertAuthenticity;
+    global $webDir, $urlServer, $langCertAuthenticity;
 
     if (intval($user) > 0) { // if we are logged in and course / certificate exist
         $certificate_title = get_cert_title('certificate', $certificate_id);
@@ -1207,13 +1203,13 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         $orientation = $q->orientation;
         $student_name = uid_to_name($user);
         $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . certificate_link($certificate_id, $user, true);
-        $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id);
+        $cert_date = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(assigned) AS cert_date FROM user_certificate WHERE user = ?d AND certificate = ?d", $user, $certificate_id)->cert_date;
         if ($cert_date) {
-            $cert_date = $cert_date->cert_date;
+            $certificate_date = format_locale_date($cert_date, 'full');
         } else {
-            $cert_date = time();
+            $certificate_date = format_locale_date(time(), 'full');
         }
-        $certificate_date = format_locale_date($cert_date);
+
     } else { // logged out
         $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template
                                                 JOIN certified_users ON certificate_template.id = certified_users.template_id

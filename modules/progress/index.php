@@ -151,7 +151,7 @@ if ($is_editor) {
             update_visibility($element, $element_id, $_GET['vis']);
             Session::Messages($langGlossaryUpdated, 'alert-success');
         } else {
-            Session::Messages($langNotActivated, 'alert-warning');
+            Session::Messages($langNotActivated);
         }
         redirect_to_home_page("modules/progress/index.php?course=$course_code");
     }
