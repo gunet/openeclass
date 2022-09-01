@@ -65,56 +65,57 @@
                     @endif
 
 
-
-                    <div class='form-wrapper'>
-                        <form class='form-horizontal' action='{{ $targetUrl }}' method='post'>
-                            <div class='form-group mt-3'>
-                                <label for='requestTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
-                                <div class='col-sm-12'>
-                                    <input type='text' class='form-control' id='requestTitle' name='requestTitle' value='{{ $request->title }}' required>
-                                </div>
-                            </div>
-
-                      
-
-                            <div class='form-group mt-3'>
-                                <label for='requestDescription' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
-                                <div class='col-sm-12'>
-                                    {!! $descriptionEditor !!}
-                                </div>
-                            </div>
-
-                            @if ($request->type_id)
-                            <div class='mt-3'></div>
-                                @include('modules.request.extra_fields',
-                                    ['type_name' => $type->name,
-                                    'type_id' => $type->id,
-                                    'fields_info' => $field_data])
-                            @endif
-
-                          
-
-                            <div class='form-group mt-3'>
-                                <div class='col-sm-10 col-sm-offset-2'>
-                                    <div class='checkbox'>
-                                        <label>
-                                            <input type='checkbox' name='send_mail' value='on' checked> {{ trans('langSendInfoMail') }}
-                                        </label>
+                    <div class='col-sm-12'>
+                        <div class='form-wrapper shadow-sm p-3 rounded'>
+                            <form class='form-horizontal' action='{{ $targetUrl }}' method='post'>
+                                <div class='form-group mt-3'>
+                                    <label for='requestTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
+                                    <div class='col-sm-12'>
+                                        <input type='text' class='form-control' id='requestTitle' name='requestTitle' value='{{ $request->title }}' required>
                                     </div>
                                 </div>
-                            </div>
 
-                    
+                        
 
-                            <div class='form-group mt-3'>
-                                <div class='col-offset-2 col-10'>
-                                    <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
-                                    <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                <div class='form-group mt-3'>
+                                    <label for='requestDescription' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
+                                    <div class='col-sm-12'>
+                                        {!! $descriptionEditor !!}
+                                    </div>
                                 </div>
-                            </div>
 
-                            {!! generate_csrf_token_form_field() !!}
-                        </form>
+                                @if ($request->type_id)
+                                <div class='mt-3'></div>
+                                    @include('modules.request.extra_fields',
+                                        ['type_name' => $type->name,
+                                        'type_id' => $type->id,
+                                        'fields_info' => $field_data])
+                                @endif
+
+                            
+
+                                <div class='form-group mt-3'>
+                                    <div class='col-sm-10 col-sm-offset-2'>
+                                        <div class='checkbox'>
+                                            <label>
+                                                <input type='checkbox' name='send_mail' value='on' checked> {{ trans('langSendInfoMail') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        
+
+                                <div class='form-group mt-3'>
+                                    <div class='col-offset-2 col-10'>
+                                        <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
+                                        <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                    </div>
+                                </div>
+
+                                {!! generate_csrf_token_form_field() !!}
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

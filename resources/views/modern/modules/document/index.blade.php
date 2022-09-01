@@ -125,7 +125,7 @@
                                         <tr>
                                             <th scope="col"><span>{!! headlink(trans('langType'), 'type') !!}</span></th>
                                             <th scope="col"><span>{!! headlink(trans('langName'), 'name') !!}</span></th>
-                                            <th scope="col"><span>Κατάσταση</span></th>
+                                            <th scope="col"><span>{{trans('langCurrentStatus')}}</span></th>
                                             <th scope="col"><span>{{ trans('langSize') }}</span></th>
                                             <th scope="col"><span>{!! headlink(trans('langDate'), 'date') !!}</span></th>
                                             <th scope="col"><span>{{trans('langShow')}}</span></th>
@@ -202,15 +202,15 @@
                                             <td>
                                                 @if($file->updated_message)
                                                     @if($file->visible == 1)
-                                                        <button class="btn btn-success UpdateMessage">{{ $file->updated_message }}</button>
+                                                        <button class="btn btn-success btn-sm UpdateMessage">{{ $file->updated_message }}</button>
                                                     @else
-                                                        <button class="btn btn-secondary UpdatedMessage">{{ $file->updated_message }}</button>
+                                                        <button class="btn btn-secondary btn-sm UpdatedMessage">{{ $file->updated_message }}</button>
                                                     @endif
                                                 @else
                                                     @if($file->visible == 1)
-                                                        <button class="btn btn-secondary DocVisible">{{trans('langDocument')}}</button>
+                                                        <button class="btn btn-secondary btn-sm DocVisible">{{trans('langDocument')}}</button>
                                                     @else
-                                                        <button class="btn btn-secondary DocInvisible">{{trans('langDocument')}}</button>
+                                                        <button class="btn btn-secondary btn-sm DocInvisible">{{trans('langDocument')}}</button>
                                                     @endif
                                                 @endif
                                             </td>

@@ -745,7 +745,7 @@ function course_announcements() {
             return $ann_content;
         }
     }
-    return "<li class='list-item'><span class='item-wholeline'><div class='text-title text-center not_visible'> - $langNoAnnounce - </div></span></li>";
+    return "<li style='list-style-type: none;' class='list-item'><span class='item-wholeline'><div class='text-title text-center not_visible'> - $langNoAnnounce - </div></span></li>";
 }
 
 

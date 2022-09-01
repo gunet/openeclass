@@ -6051,3 +6051,5 @@ $langSections = 'Ενότητες';
 $langCategoryEssay = "Εργασία";
 $langAnalyticsEditElements = 'Επεξεργασία Στοιχείων';
 $langViewStatics = "Στατιστικά Επισκεψιμότητας";
+$langCommands = "Ενέργειες";
+$langDumpPDF = 'Εξαγωγή σε PDF';

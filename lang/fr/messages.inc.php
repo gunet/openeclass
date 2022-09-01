@@ -5699,3 +5699,4 @@ $langNoPUBLTIApps = "No Published LTI tools are configured.";
 $langLTIAPPlertKey = "Please type the LTI Provider Key";
 $langLTIAPPlertSecret = "Please type the LTI Provider Secret";
 $langPUBLTIAppAddSuccessful = "Published LTI tool was added successfully.";
+$langCommands = "Actions";

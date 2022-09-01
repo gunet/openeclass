@@ -23,7 +23,9 @@
  * @file index.php
  * @brief main script for the questionnaire tool
  */
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 $require_current_course = TRUE;
 $require_user_registration = true;
 $require_help = TRUE;

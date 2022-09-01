@@ -144,7 +144,20 @@
                                                 </p>
                                             </div>
                                             <div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langFaculty') }}: <span class='text-secondary'>-</span></p>
+                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langFaculty') }}: 
+                                                    <span class='text-secondary'>
+                                                    
+                                                        @php 
+                                                            $user = new User(); 
+                                                            $departments = $user->getDepartmentIds($uid); 
+                                                        @endphp
+                                                        @foreach ($departments as $dep)
+                                                            {!! $tree->getFullPath($dep) !!}
+                                                            @php $i++; @endphp
+                                                        @endforeach
+                                                        
+                                                    </span>
+                                                </p>
                                             </div>
 
                                             <div class="col-xl-5 col-lg-6 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">

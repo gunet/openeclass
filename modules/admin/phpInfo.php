@@ -38,6 +38,16 @@ $data['action_bar'] = action_bar(array(
         'level' => 'primary-label')));
 
 $head_content .= '<style type="text/css">
+a{
+        background-color:transparent !important;
+        text-decoration:none !important;
+    }
+    .col_maincontent_active_Homepage{
+        transition: 0.4s;
+        min-height:auto;
+        background-color: white; 
+        border-radius:15px;
+    }
         pre {margin: 0px; font-family: monospace;}
         table {border-collapse: collapse;}
         .center {text-align: center;}

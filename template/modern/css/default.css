@@ -596,9 +596,9 @@ input[type="checkbox"]{
       color: #11D888;
   }
 
-  .desCourse li{
+  /* .desCourse li{
     list-style-type:circle; 
-  }
+  } */
 
   
 
@@ -1459,6 +1459,9 @@ input[type="checkbox"]{
   }
 
   .menu-popover .fa-times{
+    color:white;
+  }
+  .menu-popover .fa-trash{
     color:white;
   }
 
