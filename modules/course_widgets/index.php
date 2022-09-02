@@ -66,7 +66,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             Database::get()->query("UPDATE `widget_widget_area` SET `position` = `position` - 1 WHERE `position` <= ?d AND `position` > ?d AND `widget_area_id` = ?d", $newPos, $oldPos, $widget_area_id);
         }
         Database::get()->query("UPDATE `widget_widget_area` SET `position` = ?d WHERE id = ?d", $newPos, $widget_widget_area_id);
-        
+
     } elseif ($_POST['action'] == 'getForm') {
         $widget_id = $_POST['widget_id'];
         $widget_widget_area_id = $_POST['widget_widget_area_id'];
@@ -80,10 +80,10 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         foreach ($options as $option) {
             $option_data[$option['name']] = $option['value'];
         }
-        \Database::get()->query("UPDATE `widget_widget_area` SET `options` = ?s WHERE id = ?d", serialize($option_data), $widget_widget_area_id);     
+        \Database::get()->query("UPDATE `widget_widget_area` SET `options` = ?s WHERE id = ?d", serialize($option_data), $widget_widget_area_id);
     }
     echo json_encode($data);
-    exit;    
+    exit;
 }
 
 load_js('sortable');
@@ -96,7 +96,7 @@ if (isset($_POST['widgetAction'])) {
     }
     redirect_to_home_page('modules/admin/widgets.php');
 }
-$head_content .= 
+$head_content .=
         "
         <script type='text/javascript'>
             $(function() {
@@ -109,32 +109,32 @@ $head_content .=
                 });
                 [
                 'course_home_widget_main',
-                'course_home_widget_sidebar',              
-                ].forEach(function (id, i) { 
+                'course_home_widget_sidebar',
+                ].forEach(function (id, i) {
                     Sortable.create(byId(id), {
                         draggable: '.widget',
-                        sort: true,                        
+                        sort: true,
                         group: { name: 'widgets', pull: true, put: true },
                         animation: 150,
                         filter: '.remove',
                         onFilter: function (e) {
-                            removeWidget(e);                        
+                            removeWidget(e);
                         },
                         // Changed sorting within list
                         onUpdate: function (e) {
-                            changePos(e);                            
-                        },                       
+                            changePos(e);
+                        },
                         onRemove: function (e) {
                             // When a widget is moved between widgets areas
                             moveWidget(e);
-                        },                     
+                        },
                         onAdd: function (e) {
                             // When a widget is added to a widget area
                             // from the widgets list
-                            addWidget(e);       
-                        }                    
-                    });                
-                });           
+                            addWidget(e);
+                        }
+                    });
+                });
             });
             function changePos(e) {
                 var item = $(e.item);
@@ -159,7 +159,7 @@ $head_content .=
                       console.log(textStatus);
                       console.log(error);
                   }
-                });                 
+                });
             }
             function removeWidget(e) {
                 var item = $(e.item);  // dragged HTMLElement
@@ -183,7 +183,7 @@ $head_content .=
                       console.log(textStatus);
                       console.log(error);
                   }
-                });                 
+                });
             }
             function addWidget(e) {
                 if (e.from['id'] == 'widgets') {
@@ -203,7 +203,7 @@ $head_content .=
                             position: e.newIndex,
                             action: 'add'
                           },
-                          success: function(data){ 
+                          success: function(data){
                                 initializeWidget(e, data);
                           },
                           error: function(xhr, textStatus, error){
@@ -213,7 +213,7 @@ $head_content .=
                           }
                         });
                     }
-                }              
+                }
             }
             function moveWidget(e) {
                 var item = $(e.item);  // dragged HTMLElement
@@ -241,12 +241,12 @@ $head_content .=
                       console.log(textStatus);
                       console.log(error);
                   }
-                });             
-            }            
+                });
+            }
             function initializeWidget(e, data) {
                     var item = $(e.item);  // dragged HTMLElement
-                    var widget_id = item.data('widget-id');            
-                    var obj = jQuery.parseJSON(data);                                  
+                    var widget_id = item.data('widget-id');
+                    var obj = jQuery.parseJSON(data);
                     item
                         .attr('data-widget-widget-area-id', obj.widget_widget_area_id)
                         .find('.widget_title')
@@ -310,18 +310,18 @@ $head_content .=
                             console.log(xhr.statusText);
                             console.log(textStatus);
                             console.log(error);
-                        } 
+                        }
                       });
-                });            
+                });
 
         </script>
         ";
-        
+
 $installed_widgets = Database::get()->queryArray("SELECT id, class FROM widget");
 $installed_widgets_arr = [];
 foreach ($installed_widgets as $installed_widget) {
     $installed_widgets_arr[$installed_widget->id] = $installed_widget->class;
-}    
+}
 
 $view_data['course_home_main_area'] = new Widgets\WidgetArea(COURSE_HOME_PAGE_MAIN);
 $view_data['course_home_main_area_widgets'] = $view_data['course_home_main_area']->getCourseAndAdminWidgets($course_id);
@@ -339,7 +339,7 @@ view('admin.widgets.course_widgets', $view_data);
 function recursiveWidgetIterator ($directory = null, $view_data = array()) {
     global $installed_widgets_arr;
     if (!isset($view_data['installed_widgets'])) $view_data['installed_widgets'] = [];
-    if (!isset($view_data['uninstalled_widgets'])) $view_data['uninstalled_widgets'] = [];    
+    if (!isset($view_data['uninstalled_widgets'])) $view_data['uninstalled_widgets'] = [];
     $files = new \DirectoryIterator ( $directory );
     foreach ($files as $file) {
         if ($file->isFile ()) {

@@ -651,10 +651,10 @@ if (($total_cunits > 0 or $is_editor) and ($course_info->view_type != 'simple'))
 
 $data['course_home_main_area_widgets'] = '';
 if (!$alter_layout) {
-    /*$course_home_page_main = new \Widgets\WidgetArea(COURSE_HOME_PAGE_MAIN);
+    $course_home_page_main = new \Widgets\WidgetArea(COURSE_HOME_PAGE_MAIN);
     foreach ($course_home_page_main->getCourseAndAdminWidgets($course_id) as $key => $widget) {
         $data['course_home_main_area_widgets'] .= $widget->run($key);
-    }*/
+    }
 }
 
 //BEGIN - Get user personal calendar
@@ -669,10 +669,10 @@ $data['user_personal_calendar'] = Calendar_Events::small_month_calendar($day, $m
 //END - Get personal calendar
 
 $data['course_home_sidebar_widgets'] = '';
-/*$course_home_page_sidebar = new \Widgets\WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
+$course_home_page_sidebar = new \Widgets\WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
 foreach ($course_home_page_sidebar->getCourseAndAdminWidgets($course_id) as $key => $widget) {
     $data['course_home_sidebar_widgets'] .= $widget->run($key);
-}*/
+}
 
 $data['edit_link'] = $data['action_bar'] = '';
 $data['registered'] = false;
@@ -686,10 +686,10 @@ if ($is_editor) {
 }
 else if ($uid) {
     $myCourses = [];
-    Database::get()->queryFunc("SELECT course.code  course_code, course.public_code public_code, 
-                                        course.id course_id, status 
+    Database::get()->queryFunc("SELECT course.code  course_code, course.public_code public_code,
+                                        course.id course_id, status
                                         FROM course_user, course
-                                        WHERE course_user.course_id = course.id 
+                                        WHERE course_user.course_id = course.id
                                         AND user_id = ?d", function ($course) use (&$myCourses) {
                                             $myCourses[$course->course_id] = $course;
                                         }, $uid);
@@ -747,6 +747,3 @@ function course_announcements() {
     }
     return "<li style='list-style-type: none;' class='list-item'><span class='item-wholeline'><div class='text-title text-center not_visible'> - $langNoAnnounce - </div></span></li>";
 }
-
-
-

@@ -189,22 +189,22 @@ $data['perso_tool_content'] = $perso_tool_content;
 $data['user_announcements'] = $user_announcements;
 
 if(!empty($user_announcements)){
-   $data['user_announcements_exist'] = true; 
+   $data['user_announcements_exist'] = true;
 }else{
-    $data['user_announcements_exist'] = false;  
+    $data['user_announcements_exist'] = false;
 }
 
 
 $data['portfolio_page_main_widgets'] = '';
-/*$portfolio_page_main = new \Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
+$portfolio_page_main = new \Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
 foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {
     $data['portfolio_page_main_widgets'] .= $widget->run($key);
-} */
+}
 $data['portfolio_page_sidebar_widgets'] = "";
-/*$portfolio_page_sidebar = new \Widgets\WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
+$portfolio_page_sidebar = new \Widgets\WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
 foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {
     $data['portfolio_page_sidebar_widgets'] .= $widget->run($key);
-} */
+}
 $data['departments'] = $user->getDepartmentIds($uid);
 
 $data['lastVisit'] = Database::get()->querySingle("SELECT * FROM loginout
