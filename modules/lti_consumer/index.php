@@ -87,8 +87,8 @@ elseif(isset($_POST['update_lti_app']))
 {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
-        $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'],null, false,
-        true, getDirectReference($_GET['id']), LTI_TYPE);
+        $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], LTI_TYPE, null, false,
+        true, getDirectReference($_GET['id']));
     Session::Messages($langLTIAppAddSuccessful, 'alert-success');
     redirect("../course_tools/index.php?course=$course_code");
 }
