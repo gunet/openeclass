@@ -183,8 +183,8 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
  * @param string $type
  * @brief add / update lti app settings
  */
-function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $lti_courses, $course_id = null,
-                            $is_template = false, $update = false, $session_id = null, $type)  {
+function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $lti_courses, $type, $course_id = null,
+                            $is_template = false, $update = false, $session_id = null)  {
     if (in_array(0, $lti_courses)) {
         $all_courses = 1; // lti app is assigned to all courses
     } else {
