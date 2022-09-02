@@ -67,7 +67,7 @@ if (isset($_GET['add_template'])) {
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
 
-    new_lti_app(true, null, "https://api.turnitin.com/api/lti/1p0/assignment");
+    new_lti_app(null, true, "https://api.turnitin.com/api/lti/1p0/assignment");
 
 } else if (isset($_GET['delete_template'])) {
 
