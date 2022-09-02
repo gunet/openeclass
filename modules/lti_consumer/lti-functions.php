@@ -34,11 +34,11 @@ const RESOURCE_LINK_TYPE_POLL = "poll";
 
 /**
  * @brief new lti app (display form)
- * @param bool $is_template
  * @param $course_code
+ * @param bool $is_template
  * @param string $lti_url_default
  */
-function new_lti_app($is_template = false, $course_code, $lti_url_default = '') {
+function new_lti_app($course_code, $is_template = false, $lti_url_default = '') {
     global $tool_content, $langAdd, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderSecret,
            $langLTIProviderKey, $langNewLTIAppActive, $langNewLTIAppInActive, $langNewLTIAppStatus, $langTitle,
            $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer, $langUseOfApp,
@@ -226,7 +226,7 @@ function edit_lti_app($session_id) {
     global $tool_content, $langModify, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
            $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive, $langTitle, $langLTIAPPlertTitle, $langLTIAPPlertURL,
            $langLTILaunchContainer, $langUseOfApp, $course_id,
-           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses;;
+           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses;
 
     $row = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $session_id);
 
@@ -364,9 +364,9 @@ function edit_lti_app($session_id) {
  */
 function lti_app_details() {
     global $course_id, $tool_content, $is_editor, $course_code, $head_content,
-        $langConfirmDelete, $langUnitDescr, $langNote,
+        $langConfirmDelete, $langUnitDescr,
         $langTitle,$langActivate, $langDeactivate, $langLTIAppActions,
-        $langEditChange, $langDelete, $langNoLTIApps, $m;
+        $langEditChange, $langDelete, $langNoLTIApps;
 
     load_js('trunk8');
 

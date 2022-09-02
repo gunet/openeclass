@@ -81,7 +81,7 @@ if ($is_editor) {
 
 if (isset($_GET['add'])) {
     $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langToolManagement);
-    new_lti_app(false, $course_code);
+    new_lti_app($course_code, false);
 }
 elseif(isset($_POST['update_lti_app']))
 {

@@ -67,7 +67,7 @@ if (isset($_GET['add_template'])) {
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
 
-    new_lti_app(true, null, null); // TODO: can we have a default lime url?
+    new_lti_app(null, true, null); // TODO: can we have a default lime url?
 
 } else if (isset($_GET['delete_template'])) {
 
