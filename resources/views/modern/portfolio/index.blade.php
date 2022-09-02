@@ -180,13 +180,17 @@
                                         <div class="shadow-sm bg-body rounded bg-primary">
                                             <p class='text-center ps-2 pe-2 pb-2 pt-2 control-label-notes'>{{ trans('langAboutMe') }}</p>
                                         </div>
-                                        <p class='ps-1'> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
-                                            dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit
-                                            lobortis nisl ut aliquip ex ea commodo. </p>
+                                         
+                                        @if (!empty($userdata->description))
+                                        <p class='ps-1'>{!! standard_text_escape($userdata->description) !!}</p>
+                                        @else
+                                            <p class='text-center'>{{ trans('langNoInfoAvailable') }}</p>
+                                        @endif 
+                                        
                                     </div>
                                 </div>
 
-                                <div class="row">
+                                {{--<div class="row">
                                     <div class="col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
                                         <div class="shadow-sm bg-body rounded bg-primary">
                                             <p class='text-center ps-2 pe-2 pb-2 pt-2 control-label-notes'>{{ trans('langMyInterests') }}</p>
@@ -196,7 +200,7 @@
                                             lobortis nisl ut aliquip ex ea commodo.Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit
                                             lobortis nisl ut aliquip ex ea commodo. </p>
                                     </div>
-                                </div>
+                                </div>--}}
 
 
                         </div>

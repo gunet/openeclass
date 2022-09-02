@@ -32,7 +32,7 @@ $toolName = $langUnregUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // get the incoming values and initialize them
-$u = isset($_GET['u']) ? intval($_GET['u']) : false;
+$data['u'] = $u = isset($_GET['u']) ? intval($_GET['u']) : false;
 $data['c'] = $c = isset($_GET['c']) ? intval($_GET['c']) : false;
 $doit = isset($_GET['doit']);
 
@@ -78,13 +78,17 @@ if ($doit) {
             //Session::Messages($message, 'alert-info');
             Session::flash('message',$message); 
             Session::flash('alert-class', 'alert-info');
+            $m = 1;
         }
     } else {
         //Session::Messages($langErrorDelete, 'alert-danger');
         Session::flash('message',$langErrorDelete); 
         Session::flash('alert-class', 'alert-danger');
     }
-    redirect_to_home_page("edituser.php?u=$u");
+    if ((isset($m)) && (!empty($m))) {
+        redirect_to_home_page("modules/admin/edituser.php?u=$u");
+    }  
+   
 }
 
 $data['menuTypeID'] = 3;

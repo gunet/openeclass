@@ -1,10 +1,10 @@
                     <div class="panel panel-primary margin-top-fat mt-3">
                         <div class="panel-heading">
-                            <h4 class="panel-title text-white">                
+                            <h4 class="panel-title">                
                                 {{ trans('langPortfolioMainContent') }}
                             </h4>
                         </div>                  
-                        <div class="panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3" id="portfolio_widget_main" data-widget-area-id="3">
+                        <div class="panel-body" id="portfolio_widget_main" data-widget-area-id="3">
                             @foreach ($portfolio_main_area_widgets as $key => $portfolio_main_area_widget)
                             <div class="panel{{!isset($myWidgets) || isset($myWidgets) && $portfolio_main_area_widget->is_user_widget ? ' panel-success widget' : ' panel-default'}}" data-widget-id="{{ $portfolio_main_area_widget->id }}" data-widget-widget-area-id="{{ $key }}">
                                 <div class="panel-heading">                   
@@ -15,7 +15,7 @@
                                 </div>
                                 @if (!isset($myWidgets) || isset($myWidgets) && $portfolio_main_area_widget->is_user_widget)
                                 <div class="panel-collapse collapse in">
-                                    <div class="panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3">
+                                    <div class="panel-body">
                                         {!! $portfolio_main_area_widget->getOptionsForm($key) !!}
                                     </div>
                                     <div class="panel-footer clearfix">

@@ -32,6 +32,8 @@
                     </div>
                     @endif
 
+                    @if($message2) <div class='alert alert-info'>{!! $message2 !!}</div> @endif
+
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
@@ -100,7 +102,7 @@
                             </table>
                         </div>
                     @else
-                        <div class='alert alert-warning'>{{ trans('langUserNoRequests') }}</div>
+                        <div class='col-sm-12'><div class='alert alert-warning'>{{ trans('langUserNoRequests') }}</div></div>
                     @endif
                 </div>
             </div>

@@ -1,10 +1,10 @@
                 <div class="panel panel-primary mt-3">
-                    <div class="panel-heading notes_thead">
-                        <h4 class="panel-title text-white">                
+                    <div class="panel-heading">
+                        <h4 class="panel-title">                
                             {{ trans('langHomePageSidebarContent') }}
                         </h4>
                     </div>
-                    <div class="panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3" id="home_widget_sidebar" data-widget-area-id="2">
+                    <div class="panel-body" id="home_widget_sidebar" data-widget-area-id="2">
                         @foreach ($home_sidebar_widgets as $key => $home_sidebar_widget)
                         <div class="panel panel-success widget" data-widget-id="{{ $home_sidebar_widget->widget_id }}" data-widget-widget-area-id="{{ $key }}">
                             <div class="panel-heading">                   
@@ -14,7 +14,7 @@
                                 </a>                     
                             </div>
                             <div class="panel-collapse collapse in">
-                                <div class="panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3">
+                                <div class="panel-body">
                                     {!! $home_sidebar_widget->getOptionsForm($key) !!}
                                 </div>
                                 <div class="panel-footer clearfix">

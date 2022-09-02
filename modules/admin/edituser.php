@@ -82,7 +82,7 @@ if ($u) {
         $oldauth = array_search($info->password, $auth_ids);
         $extra_msg = '' ;
         if ($auth == 1 and $oldauth != 1) {
-            $extra_msg = " <a href='password.php?userid=" . getIndirectReference($u) . "'>$langEditAuthSetPass</a>";
+            $extra_msg = " <a href='password.php?userid=" . intval($u) . "'>$langEditAuthSetPass</a>";
             $newpass = '.';
         } else {
             $newpass = $auth_ids[$auth];
@@ -125,7 +125,7 @@ if ($u) {
     }
     if (!$u_submitted) { // if the form was not submitted
         // Display Actions Toolbar
-        $ind_u = getIndirectReference($u);
+        $ind_u = intval($u);
         $data['action_bar'] = action_bar(array(
             array('title' => $langUserMerge,
                 'url' => "mergeuser.php?u=$u",

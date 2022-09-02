@@ -14,7 +14,9 @@
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
+                    
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                   
 
                     
                     @if(Session::has('message'))
@@ -33,9 +35,9 @@
                     </div>
                     @endif
 
-                    {!! isset($action_bar) ?  $action_bar : '' !!}
+                    @if(!$merge_completed){!! isset($action_bar) ?  $action_bar : '' !!}@endif
                     
-                    @if (isset($_REQUEST['u']))
+                    @if (isset($_REQUEST['u']) and !$merge_completed)
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                             <div class='form-wrapper shadow-sm p-3 rounded'>
                                 
@@ -48,18 +50,18 @@
                                         </div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label -notes'>{{ trans('langEditAuthMethod') }}:</label>
-                                        <div class='col-sm-12'>{{ get_auth_info($auth_id) }}</div>
+                                        <label class='col-sm-6 control-label-notes'>{{ trans('langEditAuthMethod') }}:</label>
+                                        <div class='col-sm-12'>{!! get_auth_info($auth_id) !!}</div>
                                     </div>
                                     <div class='form-group mt-3'>
                                         <label class='col-sm-6 control-label-notes'>{{ trans('langProperty') }}:</label>                     
-                                        <div class='col-sm-12'>{{ $status_names[$info['status']] }}</div>
+                                        <div class='col-sm-12'>{!! $status_names[$info['status']] !!}</div>
                                     </div>                    
                                     {!! $target_field !!}
-                                    <input type='hidden' name='u' value='{{ getIndirectReference($u) }}'>
+                                    <input type='hidden' name='u' value='{{ intval($u) }}'>
                                     {!! showSecondFactorChallenge() !!}
                                     <div class='col-sm-offset-3 col-sm-9 mt-3'>                                                  
-                                        <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                        <input class='btn btn-primary' type='submit' name='submit' value='{{ $submit_button }}'>
                                     </div>                                                  
                                 </fieldset>
                                 {!! $target_user_input !!}
@@ -67,6 +69,8 @@
                                 </form>
                             </div>
                         </div>
+                    @elseif($merge_completed)
+                        <p class='mt-3'><a href='search_user.php'>{{trans('langBack')}}</p>
                     @else
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                             <div class='alert alert-danger'>

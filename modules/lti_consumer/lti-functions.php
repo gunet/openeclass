@@ -377,8 +377,8 @@ function lti_app_details() {
         $headingsSent = false;
         $headings = "
                          <div class='table-responsive'>
-                           <table class='announcements_table'>
-                             <tr class='notes_thead'>
+                           <table class='table-default'>
+                             <tr class='list-header'>
                                <th class='text-white' style='width:30%'>$langTitle</th>
                                <th class='text-white text-start'>$langUnitDescr</th>
                                <th class='text-white text-center'>$langLTIAppActions</th>";

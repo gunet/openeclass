@@ -74,18 +74,38 @@
                                                         <span class='colorPalette'>{{ trans('langQuickLinks') }}</span>
                                                     </div>
                                                     <div class='panel-body NoBorderTop'>
-                                                        <div class='row pt-2 pb-2'>
-                                                            <a href='search_user.php' class='w-50 btn btn-transparent text-primary btn-xs'>{{ trans('langSearchUser') }}</a>
-                                                            <a href='searchcours.php' class='w-50 btn btn-transparent text-primary btn-xs'>{{ trans('langSearchCourse') }}</a>
-                                                        </div>
-                                                        <div class='row pt-2 pb-2'>
-                                                            <a href='hierarchy.php' class='w-50 btn btn-transparent text-primary btn-xs'>{{ trans('langHierarchy') }}</a>
-                                                            <a href='eclassconf.php' class='w-50 btn btn-transparent text-primary btn-xs'>{{ trans('langConfig') }}</a>
-                                                        </div>
-                                                        <div class='row pt-2 pb-2'>
-                                                            <a href='theme_options.php' class='w-50 btn btn-transparent text-primary btn-xs'>{{ trans('langThemeSettings') }}</a>
-                                                            <a href='extapp.php' class='w-50 btn btn-transparent text-primary btn-xs'>{{ trans('langExternalTools') }}</a>
-                                                        </div>
+                                                        <ul class="list-group list-group-flush">
+                                                            <li class="list-group-item border-0 admin-list-group">
+                                                                <a href="search_user.php" class='list-group-item'>
+                                                                    <span class='toolAdminText'>{{ trans('langSearchUser') }}</span>      
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item border-0 admin-list-group">
+                                                                <a href="searchcours.php" class='list-group-item'>
+                                                                    <span class='toolAdminText'>{{ trans('langSearchCourse') }}</span>      
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item border-0 admin-list-group">
+                                                                <a href="hierarchy.php" class='list-group-item'>
+                                                                    <span class='toolAdminText'>{{ trans('langHierarchy') }}</span>      
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item border-0 admin-list-group">
+                                                                <a href="eclassconf.php" class='list-group-item'>
+                                                                    <span class='toolAdminText'>{{ trans('langConfig') }}</span>      
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item border-0 admin-list-group">
+                                                                <a href="theme_options.php" class='list-group-item'>
+                                                                    <span class='toolAdminText'>{{ trans('langThemeSettings') }}</span>      
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item border-0 admin-list-group">
+                                                                <a href="extapp.php" class='list-group-item'>
+                                                                    <span class='toolAdminText'>{{ trans('langExternalTools') }}</span>      
+                                                                </a>
+                                                            </li>
+                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>

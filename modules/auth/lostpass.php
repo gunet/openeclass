@@ -70,10 +70,9 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                                       'button-class' => 'btn-secondary')
                             ),false);
 
-            $hasher = new PasswordHash(8, false);
-            $q1 = Database::get()->query("UPDATE user SET password = ?s
-                                                      WHERE id = ?d",
-                    $hasher->HashPassword($_POST['newpass']), $data['userUID']);
+                            $q1 = Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d",
+                            password_hash($_POST['newpass'], PASSWORD_DEFAULT), $data['userUID']);
+                        
             if ($q1->affectedRows > 0) {
                 $data['user_pass_updated'] = true;
 

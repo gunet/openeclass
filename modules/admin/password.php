@@ -81,9 +81,36 @@ check_uid();
 $passurl = $urlServer . 'modules/admin/password.php';
 $data['action_bar'] = action_bar(array(
             array('title' => $langBack,
-                'url' => "{$urlServer}modules/admin/edituser.php?u=" . urlencode(getDirectReference($_REQUEST['userid'])),
+                'url' => "{$urlServer}modules/admin/edituser.php?u=" . urlencode(($_REQUEST['userid'])),
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')
                 ));
+
+if (isset($_POST['changePass'])) {
+    $userid = intval($_POST['userid']);
+
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
+    if (empty($_POST['password_form']) || empty($_POST['password_form1'])) {
+        //Session::Messages($langFieldsMissing);
+        Session::flash('message',$langFieldsMissing);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("modules/admin/password.php?userid=" . urlencode($userid));
+    }
+    if ($_POST['password_form1'] !== $_POST['password_form']) {
+        //Session::Messages($langPassTwo);
+        Session::flash('message',$langPassTwo);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("modules/admin/password.php?userid=" . urlencode($userid));
+    }
+    // All checks ok. Change password!
+    $new_pass = password_hash($_POST['password_form'], PASSWORD_DEFAULT);
+    Database::get()->query("UPDATE `user` SET `password` = ?s WHERE `id` = ?d", $new_pass, $userid);
+    //Session::Messages($langPassChanged);
+    Session::flash('message',$langPassChanged);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("modules/admin/edituser.php?u=" . urlencode($userid));
+}
+
 $data['menuTypeID'] = 3;
 view('admin.users.password', $data);                

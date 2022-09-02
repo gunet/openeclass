@@ -252,7 +252,7 @@ if (!empty($show) and $show == 'closed') {
                         }
                         $message = $list_status == 1 ? $langTeacherRequestHasRejected : $langRequestReject;
                         $message .= " $langRequestMessageHasSent <b>" . q($_POST['prof_email']) . "</b>";
-                        $message .= "<br><p><b>$langComments:</b><br>" . q($_POST['comment']) . "</p>";
+                        //$message .= "<p><b class='pe-3'>$langComments:</b>" . q($_POST['comment']) . "</p>";
                         //Session::Messages($message, 'alert-success');
                         Session::flash('message',$message); 
                         Session::flash('alert-class', 'alert-success');
@@ -262,8 +262,9 @@ if (!empty($show) and $show == 'closed') {
                 }
             } else {
                 // display the form
-                $data['user_request'] = Database::get()->querySingle("SELECT comment, givenname, surname, email, status FROM user_request WHERE id = ?d", $id);
+                $data['user_request'] = $d = Database::get()->querySingle("SELECT comment, givenname, surname, email, status FROM user_request WHERE id = ?d", $id);
                 $data['id'] = intval($id);
+                $data['warning'] = ($d->status == 5) ? $langWarnReject : $langGoingRejectRequest;
                 $view = 'admin.users.listreq.rejectForm';
             }
             break;

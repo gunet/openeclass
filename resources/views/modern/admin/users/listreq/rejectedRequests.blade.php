@@ -33,54 +33,31 @@
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <form action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
-                        <div class='alert alert-warning'>
-                            {{ $user_request->status == 5 ? trans('langWarnReject') : trans('langGoingRejectRequest') }}
-                        </div>
-                        <div class='table-responsive'>
-                        <table class='table-default'>
+
+                    <div class='table-responsive'>
+                        <table id = 'requests_table' class='announcements_table'>
+                        {!! table_header(2, trans('langDateClosed_small')) !!}        
+                        @foreach ($user_requests as $user_request)
                             <tr>
-                                <th class='ps-1'>{{ trans('langName') }}</th>
-                                <td>{{ $user_request->givenname }}</td>
-                            </tr>
-                            <tr>
-                                <th class='ps-1'>{{ trans('langSurname') }}</th>
-                                <td>{{ $user_request->surname }}</td>
-                            </tr>
-                            <tr>
-                                <th class='ps-1'>{{ trans('langEmail') }}</th>
-                                <td>{{ $user_request->email }}</td>
-                            </tr>
-                            <tr>
-                                <th class='left ps-1'>{{ trans('langComments') }}</th>
+                                <td>{{ $user_request->givenname }} {{ $user_request->surname }} </td>
+                                <td>{{ $user_request->username }}</td>
+                                <td>{!! $tree->getFullPath($user_request->faculty_id) !!}</td>
                                 <td>
-                                    <input type='hidden' name='id' value='{{ $id }}'>
-                                    <input type='hidden' name='close' value='2'>
-                                    <input type='hidden' name='prof_givenname' value='{{ $user_request->givenname }}'>
-                                    <input type='hidden' name='prof_surname' value='{{ $user_request->surname }}'>
-                                    <textarea class='auth_input' name='comment' rows='5' cols='60'>{{ $user_request->comment }}</textarea>
+                                    <small>{{ nice_format(date('Y-m-d', strtotime($user_request->date_open))) }}</small>
+                                </td>
+                                <td>
+                                    <small>{{ nice_format(date('Y-m-d', strtotime($user_request->date_closed))) }}</small>
+                                </td>
+                                <td class='option-btn-cell'>
+                                    {!! action_button(array(
+                                        array('title' => trans('langRestore'), 
+                                                'url' => "$_SERVER[SCRIPT_NAME]?id=$user_request->id&amp;show=closed$reqtype",
+                                                'icon' => 'fa-retweet'))) !!}
                                 </td>
                             </tr>
-                            <tr>
-                                <th class='left ps-1'>{{ trans('langRequestSendMessage') }}</th>
-                                <td>
-                                    &nbsp;<input type='text' class='auth_input' name='prof_email' value='{{ $user_request->email }}'>
-                                    <input type='checkbox' name='sendmail' value='1' checked='yes'> 
-                                    <small>({{ trans('langGroupValidate') }})</small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class='left'>&nbsp;</th>
-                                <td>
-                                    <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langRejectRequest') }}'>
-                                    &nbsp;&nbsp;
-                                    <small>({{ trans('langRequestDisplayMessage') }})</small>
-                                </td>
-                            </tr>
+                        @endforeach
                         </table>
-                        </div>
-                        {!! generate_csrf_token_form_field() !!}
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>

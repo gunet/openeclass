@@ -41,7 +41,7 @@
                             <div id="widgets">
                                 @foreach ($installed_widgets as $key => $installed_widget)
                                         <div class="panel panel-success widget mt-2" data-widget-id="{{ $installed_widget->id }}">
-                                            <div class="panel-heading pt-2 pb-2 ps-3 pe-3">                   
+                                            <div class="panel-heading">                   
                                                 <a class='text-white' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
                                                 href="#widget_desc_{{ $key }}" class="widget_title">
                                                     {{ $installed_widget->getName() }} <span></span> <span class="float-end"></span>
@@ -49,7 +49,7 @@
                                                 </a>                     
                                             </div>
                                             <div id="widget_desc_{{ $key }}" class="panel-collapse collapse">
-                                                <div class="panel-body text-muted panel-body-admin p-3">
+                                                <div class="panel-body text-muted NoBorders">
                                                     {{ $installed_widget->getDesc() }}
                                                 </div>
                                                 <div class="panel-footer clearfix">
@@ -94,14 +94,14 @@
                             <div>           
                                 @foreach ($uninstalled_widgets as $key => $uninstalled_widget)
                                     <div class="panel panel-default panel-default-admin mt-3">
-                                        <div class="panel-heading ps-3 pb-3 pt-2 pe-3">                   
-                                            <span class="text-white">
+                                        <div class="panel-heading">                   
+                                            <span class="text-secondary">
                                                 {{ $uninstalled_widget->getName() }}
                                             </span>
 
                                         </div>
-                                        <div class="panel-body panel-body-admin">
-                                            <span class="text-white">
+                                        <div class="panel-body NoBorders">
+                                            <span class="text-secondary">
                                             {{ $uninstalled_widget->getDesc() }}
                                             </span>
                                         </div>
@@ -129,7 +129,7 @@
 
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" class="active nav-item"><a class='nav-link nav-link-adminTools' href="#home" aria-controls="home" role="tab" data-bs-toggle="tab">Αρχική</a></li>
+                                    <li role="presentation" class="nav-item"><a class='nav-link active nav-link-adminTools' href="#home" aria-controls="home" role="tab" data-bs-toggle="tab">Αρχική</a></li>
                                     <li role="presentation" class='nav-item'><a class='nav-link nav-link-adminTools' href="#portfolio" aria-controls="portfolio" role="tab" data-bs-toggle="tab">Χαρτοφυλάκιο</a></li>
                                     <li role="presentation" class='nav-item'><a class='nav-link nav-link-adminTools' href="#course_home" aria-controls="course_home" role="tab" data-bs-toggle="tab">Αρχική Μαθήματος</a></li>
                                 </ul>

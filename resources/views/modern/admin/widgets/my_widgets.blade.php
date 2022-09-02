@@ -48,10 +48,10 @@
                                                 </a>                     
                                             </div>
                                             <div id="widget_desc_{{ $key }}" class="panel-collapse collapse">
-                                                <div class="panel-body ps-3 pt-3 pb-3 pe-3 text-muted">
+                                                <div class="panel-body text-muted NoBorders">
                                                     {{ $installed_widget->getDesc() }}
                                                 </div>
-                                                <div class="panel-footer ps-3 pt-3 pb-3 pe-3 clearfix">
+                                                <div class="panel-footer clearfix">
                                                     <div class="float-end">
                                                         <form action='{{ $_SERVER['SCRIPT_NAME'] }}' id="uninstallForm{{ $key }}" method="post">
                                                             <input type="hidden" name='widgetClassName' value='{{ get_class($installed_widget) }}'>
@@ -64,7 +64,7 @@
                                                 </div>                        
                                             </div>
                                             <div class="panel-collapse collapse in hidden">
-                                                <div class="panel-body ps-3 pt-3 pb-3 pe-3">
+                                                <div class="panel-body NoBorders">
 
                                                 </div>
                                                 <div class="panel-footer clearfix">
@@ -88,8 +88,8 @@
                             @endif   
                         </div>    
                         <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
-                            {{--@include('admin.widgets.common.portfolioMain')
-                            @include('admin.widgets.common.portfolioSide')--}}            
+                            @include('admin.widgets.common.portfolioMain')
+                            @include('admin.widgets.common.portfolioSide')         
                         </div>
                     </div>
                 </div>
