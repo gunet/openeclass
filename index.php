@@ -1,6 +1,6 @@
 <?php
 
-//use Widgets\WidgetArea;
+use Widgets\WidgetArea;
 
 session_start();
 /* ========================================================================
@@ -235,12 +235,12 @@ if (!$upgrade_begin and $uid) {
     $data['dateFormatLong'] = $dateFormatLong;
 
     $data['home_main_area_widgets'] = '';
-    /*$home_main_area = new WidgetArea(HOME_PAGE_MAIN);
+    $home_main_area = new WidgetArea(HOME_PAGE_MAIN);
     $data['home_main_area_widgets'] = '';
     foreach ($home_main_area->getWidgets() as $key => $widget) {
         $data['home_main_area_widgets'] .= $widget->run($key);
     }
-    */
+
     // display extras right
     $data['extra_right'] = $langExtrasRight ?:false;
 
@@ -253,12 +253,12 @@ if (!$upgrade_begin and $uid) {
         $data['openCoursesExtraHTML'] = $openCoursesExtraHTML;
     }
     $data['home_page_sidebar_widgets'] = '';
-    /*$home_page_sidebar = new WidgetArea(HOME_PAGE_SIDEBAR);
+    $home_page_sidebar = new WidgetArea(HOME_PAGE_SIDEBAR);
     $data['home_page_sidebar_widgets'] = '';
     foreach ($home_page_sidebar->getWidgets() as $key => $widget) {
         $data['home_page_sidebar_widgets'] .= $widget->run($key);
     }
-    */
+
     $data['menuTypeID'] = 0;
 
     view('home.index', $data);
