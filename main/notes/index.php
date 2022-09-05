@@ -270,19 +270,16 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
 
     foreach ($notelist as $note) {
         $content = standard_text_escape($note->content);
-        $note->date_time = format_locale_date(strtotime($note->date_time));
         $tool_content .= "<tr><td><b>";
         if (empty($note->title)) {
             $tool_content .= $langNoteNoTitle;
         } else {
             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?nid=" . getIndirectReference($note->id)."'>" . q($note->title) . "</a>";
         }
-        $tool_content .= "</b><br><small>" . nice_format($note->date_time) . "</small>";
+        $tool_content .= "</b><br><small>" . format_locale_date(strtotime($note->date_time), '', false) . "</small>";
         if (!is_null($note->reference_obj_type)) {
             $tool_content .= "<br><small>$langReferencedObject: " . References::item_link($note->reference_obj_module, $note->reference_obj_type, $note->reference_obj_id, $note->reference_obj_course) . "</small>";
         }
-
-        //$tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?nid=" . getIndirectReference($note->id)."'><span class='smaller'>[$langMore]</span></a></strong>"));
         $tool_content .= "<div class = 'note-content' data-id= '" . getIndirectReference($note->id) . "'>$content</div>";
         $tool_content .= "</td>";
 

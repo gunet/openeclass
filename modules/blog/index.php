@@ -42,18 +42,18 @@ require_once 'modules/analytics/BlogAnalyticsEvent.php';
 
 if ($blog_type == 'course_blog') {
     $user_id = 0;
-    
-    define_rss_link();    
+
+    define_rss_link();
     $toolName = $langBlog;
-    
+
     //check if commenting is enabled for course blogs
     $comments_enabled = setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id);
     //check if rating is enabled for course blogs
     $ratings_enabled = setting_get(SETTING_BLOG_RATING_ENABLE, $course_id);
-    
+
     $sharing_allowed = is_sharing_allowed($course_id);
     $sharing_enabled = setting_get(SETTING_BLOG_SHARING_ENABLE, $course_id);
-    
+
     $url_params = "course=$course_code";
 } elseif ($blog_type == 'perso_blog') {
     if (!get_config('personal_blog')) {
@@ -61,11 +61,11 @@ if ($blog_type == 'course_blog') {
         draw($tool_content, 1);
         exit;
     }
-    
+
     $course_id = 0;
-    
+
     $is_blog_editor = false;
-    
+
     if (isset($_GET['user_id'])) {
         $user_id = intval($_GET['user_id']);
         if ($user_id == $_SESSION['uid']) {
@@ -77,20 +77,20 @@ if ($blog_type == 'course_blog') {
         $user_id = $_SESSION['uid']; //current user's blog
         $is_blog_editor = true;
     }
-    
+
     $db_user = Database::get()->querySingle("SELECT surname, givenname FROM user WHERE id = ?d", $user_id);
     if (!$db_user) {
         $tool_content = "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langBlogUserNotExist</div></div>";
         draw($tool_content, 1);
         exit;
     }
-    
+
     if ($user_id == $_SESSION['uid']) {
         $toolName = $langMyBlog;
     } else {
         $toolName = $langBlog." - ".$db_user->surname." ".$db_user->givenname;
-    }    
-    
+    }
+
     //check if commenting is enabled for personal blogs
     $comments_enabled = get_config('personal_blog_commenting');
     //check if rating is enabled for personal blogs
@@ -98,7 +98,7 @@ if ($blog_type == 'course_blog') {
     //check if sharing is platform widely allowed and enabled for personal blogs
     $sharing_allowed = get_config('enable_social_sharing_links');
     $sharing_enabled = get_config('personal_blog_sharing');
-    
+
     $url_params = "user_id=$user_id";
 }
 
@@ -151,11 +151,11 @@ if ($blog_type == 'course_blog' && $is_editor) {
                 setting_set(SETTING_BLOG_SHARING_ENABLE, $_POST['4_radio'], $course_id);
 		    }
             //Session::Messages($langRegDone, 'alert-success');
-            Session::flash('message',$langRegDone); 
+            Session::flash('message',$langRegDone);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/blog/index.php?course='.$course_code);
         }
-        
+
         if (isset($message) && $message) {
         	$tool_content .= $message . "<br/>";
         	unset($message);
@@ -198,7 +198,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
             $sharing_radio_dis = "";
             $sharing_dis_label = "";
         }
-		
+
         if ($sharing_enabled == 1) {
             $checkSharingDis = "";
             $checkSharingEn = "checked";
@@ -206,8 +206,8 @@ if ($blog_type == 'course_blog' && $is_editor) {
             $checkSharingDis = "checked";
             $checkSharingEn = "";
         }
-        
-        
+
+
         $tool_content .= "
             
                 <div class='col-12'>
@@ -324,23 +324,23 @@ if ($action == "delPost") {
         if ($allow_to_edit) {
             if($post->delete()) {
                 //Session::Messages($langBlogPostDelSucc, 'alert-success');
-                Session::flash('message',$langBlogPostDelSucc); 
+                Session::flash('message',$langBlogPostDelSucc);
                 Session::flash('alert-class', 'alert-success');
                 triggerGame($course_id, $uid, BlogEvent::DELPOST);
                 triggerAnalytics($course_id, $uid, BlogAnalyticsEvent::BLOGEVENT);
             } else {
                 //Session::Messages($langBlogPostDelFail);
-                Session::flash('message',$langBlogPostDelFail); 
+                Session::flash('message',$langBlogPostDelFail);
                 Session::flash('alert-class', 'alert-danger');
             }
         } else {
             //Session::Messages($langBlogPostNotAllowedDel);
-            Session::flash('message',$langBlogPostNotAllowedDel); 
+            Session::flash('message',$langBlogPostNotAllowedDel);
             Session::flash('alert-class', 'alert-danger');
         }
     } else {
         //Session::Messages($langBlogPostNotFound);
-        Session::flash('message',$langBlogPostNotFound); 
+        Session::flash('message',$langBlogPostNotFound);
         Session::flash('alert-class', 'alert-danger');
     }
     redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
@@ -414,7 +414,7 @@ if ($action == "createPost") {
         </div></div>";
     } else {
         //Session::Messages($langBlogPostNotAllowedCreate);
-        Session::flash('message',$langBlogPostNotAllowedCreate); 
+        Session::flash('message',$langBlogPostNotAllowedCreate);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/blog/index.php?$url_params");
     }
@@ -506,13 +506,13 @@ if ($action == "editPost") {
         </div></div>";
         } else {
             //Session::Messages($langBlogPostNotAllowedEdit);
-            Session::flash('message',$langBlogPostNotAllowedEdit); 
+            Session::flash('message',$langBlogPostNotAllowedEdit);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
         }
     } else {
         //Session::Messages($langBlogPostNotFound);
-        Session::flash('message',$langBlogPostNotFound); 
+        Session::flash('message',$langBlogPostNotFound);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
     }
@@ -537,18 +537,18 @@ if ($action == "savePost") {
             }
             if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id, $commenting)) {
                 //Session::Messages($langBlogPostSaveSucc, 'alert-success');
-                Session::flash('message',$langBlogPostSaveSucc); 
+                Session::flash('message',$langBlogPostSaveSucc);
                 Session::flash('alert-class', 'alert-success');
                 triggerGame($course_id, $uid, BlogEvent::NEWPOST);
                 triggerAnalytics($course_id, $uid, BlogAnalyticsEvent::BLOGEVENT);
             } else {
                 //Session::Messages($langBlogPostSaveFail);
-                Session::flash('message',$langBlogPostSaveFail); 
+                Session::flash('message',$langBlogPostSaveFail);
                 Session::flash('alert-class', 'alert-danger');
             }
         } else {
             //Session::Messages($langBlogPostNotAllowedCreate);
-            Session::flash('message',$langBlogPostNotAllowedCreate); 
+            Session::flash('message',$langBlogPostNotAllowedCreate);
             Session::flash('alert-class', 'alert-danger');
         }
     } elseif (isset($_POST['submitBlogPost']) && $_POST['submitBlogPost'] == $langModifBlogPost) {
@@ -568,21 +568,21 @@ if ($action == "savePost") {
                 }
                 if ($post->edit($_POST['blogPostTitle'], purify($_POST['newContent']), $commenting)) {
                     //Session::Messages($langBlogPostSaveSucc, 'alert-success');
-                    Session::flash('message',$langBlogPostSaveSucc); 
+                    Session::flash('message',$langBlogPostSaveSucc);
                     Session::flash('alert-class', 'alert-success');
                 } else {
                     //Session::Messages($langBlogPostSaveFail);
-                    Session::flash('message',$langBlogPostSaveFail); 
+                    Session::flash('message',$langBlogPostSaveFail);
                     Session::flash('alert-class', 'alert-danger');
                 }
             } else {
                 //Session::Messages($langBlogPostNotAllowedEdit);
-                Session::flash('message',$langBlogPostNotAllowedEdit); 
+                Session::flash('message',$langBlogPostNotAllowedEdit);
                 Session::flash('alert-class', 'alert-danger');
             }
         } else {
             //Session::Messages($langBlogPostNotFound);
-            Session::flash('message',$langBlogPostNotFound); 
+            Session::flash('message',$langBlogPostNotFound);
             Session::flash('alert-class', 'alert-danger');
         }
     }
@@ -656,8 +656,9 @@ if ($action == "showPost") {
                                     ".q($post->getTitle())."
                                 </h3>
                             </div>
-                            <div class='panel-body ps-3 panel-body-blog NoBorders'><button class='btn btn-success btn-sm pe-none mt-2'>" . nice_format($post->getTime(), true). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
+                            <div class='panel-body ps-3 panel-body-blog NoBorders'><button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($post->getTime())). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
                             <div class='panel-footer ps-3 panel-footer-blog'>
+
                                 <div class='row'>
                                     <div class='col-sm-6'>$rating_content</div>
                                     <div class='col-sm-6 text-end'>$sharing_content</div>
@@ -679,7 +680,7 @@ if ($action == "showPost") {
 
     } else {
         //Session::Messages($langBlogPostNotFound);
-        Session::flash('message',$langBlogPostNotFound); 
+        Session::flash('message',$langBlogPostNotFound);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
     }
@@ -781,7 +782,7 @@ if ($action == "showBlog") {
                                     </h3>
                                 </div>
                                 <div class='panel-body ps-3 panel-body-blog NoBorders'>
-                                    <button class='btn btn-success btn-sm pe-none mt-2'>" . nice_format($post->getTime(), true). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+                                    <button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($post->getTime())) . "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     $comment_content
                                 </div>
                                 <div class='panel-footer panel-footer-blog'>

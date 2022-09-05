@@ -24,20 +24,20 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 
 function list_videos($id = NULL) {
-    global $themeimg, $course_id, $langTitle, $langDescription, $langDate, 
+    global $themeimg, $course_id, $langTitle, $langDescription, $langDate,
     $langChoice, $langCatVideoDirectory, $langNoVideo, $course_code;
-    
+
     $ret_string = '';
     $count = 0;
     $video_found = FALSE;
     $cnt1 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM video WHERE course_id = ?d AND visible = ?d", $course_id, 1)->cnt;
     $cnt2 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM videolink WHERE course_id = ?d AND visible = ?d", $course_id, 1)->cnt;
-    $count = $cnt1 + $cnt2;    
-    
+    $count = $cnt1 + $cnt2;
+
     if ($count > 0) {
         $exist_video = array();
         $exist_videolink = array();
-        
+
         if (!is_null($id)) { //find existing resources (edit case)
             $post_res = Database::get()->queryArray("SELECT * FROM wall_post_resources WHERE post_id = ?d AND (type = ?s OR type = ?s)", $id, 'video', 'videolink');
             foreach ($post_res as $exist_res) {
@@ -48,7 +48,7 @@ function list_videos($id = NULL) {
                 }
             }
         }
-        
+
         $video_found = TRUE;
         $ret_string .= "<div class='table-responsive'><table class='announcements_table'>";
         $ret_string .= "<tr class='notes_thead'>" .
@@ -74,12 +74,12 @@ function list_videos($id = NULL) {
                     if (in_array($row->id, $exist_videolink)) {
                         $checked = 'checked';
                     }
-                }                
+                }
                 $ret_string .= "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . "</td>".
                                  "<td>" . q($row->description) . "</td>".
-                                 "<td class='text-center'>" . nice_format($row->date, true, true) . "</td>" .
+                                 "<td class='text-center'>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
                                  "<td class='text-center'><input type='checkbox' $checked name='video[]' value='$table:$row->id' /></td>" .
-                                 "</tr>";                
+                                 "</tr>";
             }
         }
         $sql = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY name", $course_id);
@@ -107,9 +107,9 @@ function list_videos($id = NULL) {
                             $ret_string .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
                                     q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a></td>";
                             $ret_string .= "<td>" . standard_text_escape($linkvideocat->description) . "</td>";
-                            $ret_string .= "<td class='text-center'>" . nice_format($linkvideocat->date, true, true) . "</td>";
+                            $ret_string .= "<td class='text-center'>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
                             $ret_string .= "<td class='text-center'><input type='checkbox' $checked name='video[]' value='$table:$linkvideocat->id' /></td>";
-                            $ret_string .= "</tr>";	
+                            $ret_string .= "</tr>";
                     }
                 }
             }
@@ -120,5 +120,5 @@ function list_videos($id = NULL) {
         $ret_string .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoVideo</div></div>";
     }
-    return $ret_string;                     
+    return $ret_string;
 }

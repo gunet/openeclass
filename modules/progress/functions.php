@@ -915,7 +915,7 @@ function display_available_assignments($element, $element_id, $unit_id = 0) {
             $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>$row->description</div>";
             $tool_content .= "<tr>" .
                     "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
-                    "<td class='text-center'>".nice_format($row->submission_date, true)."</td>
+                    "<td class='text-center'>".format_locale_date(strtotime($row->submission_date), 'short')."</td>
                     <td>". selection(get_operators(), "operator[$assignment_id]") . "</td>".
                     "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$assignment_id]' value=''></td>" .
                     "<td class='text-center'><input name='assignment[]' value='$assignment_id' type='checkbox'></td>" .
@@ -1127,7 +1127,7 @@ function display_available_documents($element, $element_id, $unit_id = 0) {
                     $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
                 } else {
                     $size = format_file_size($entry['size']);
-                    $date = nice_format($entry['date'], true, true);
+                    $date = format_locale_date(strtotime($entry['date']), 'short', false);
                     $tool_content .= "<td class='text-end'>$size</td><td class='text-center'>$date</td>";
                 }
                 $tool_content .= "<td class='text-center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
@@ -1256,7 +1256,7 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
             $blog_id = $row->id;
             $tool_content .= "<tr>" .
                     "<td><a href='${urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id#comments-title'>" . q($row->title) . "</a></td>" .
-                    "<td class='text-center'>" . nice_format($row->time, true) . "</td>
+                    "<td class='text-center'>" . format_locale_date(strtotime($row->time), 'short') . "</td>
                     <td>". selection(get_operators(), "operator[$blog_id]") . "</td>".
                     "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$blog_id]' value=''></td>" .
                     "<td class='text-center'><input name='blogcomment[]' value='$blog_id' type='checkbox'></td>" .
@@ -1529,7 +1529,7 @@ function display_available_multimedia($element, $element_id, $unit_id = 0) {
                 }
                 $tool_content .= "<tr>".
                     "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description . "</td>".
-                    "<td class='text-center'>" . nice_format($row->date, true, true) . "</td>" .
+                    "<td class='text-center'>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
                     "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id'></td>" .
                     "</tr>";
             }
@@ -1555,7 +1555,7 @@ function display_available_multimedia($element, $element_id, $unit_id = 0) {
                         $tool_content .= "<tr>";
                         $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
                                 q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>" . $linkvideocat_description . "</td>";
-                        $tool_content .= "<td class='text-center'>" . nice_format($linkvideocat->date, true, true) . "</td>";
+                        $tool_content .= "<td class='text-center'>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
                         $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id'></td>";
                         $tool_content .= "</tr>";
                     }
@@ -1855,7 +1855,7 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d 
+    $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d
                                     AND active = 1
                                     AND end_date > " . DBHelper::timeAfter() . "
                                     AND id NOT IN
@@ -2261,7 +2261,7 @@ function student_view_progress() {
                                 <div class='row'>
                                     <div class='col-sm-7'>
                                         <strong>$langCourseCompletion</strong>
-                                    </div>                                    
+                                    </div>
                                 </div>
                             </div>
                             <div class='res-table-wrapper'>
@@ -2272,8 +2272,8 @@ function student_view_progress() {
                                     <div class='col-sm-9'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&badge_id=$course_completion_id&u=$uid'>$langCourseCompletion</a>
                                         <div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
-                                            <p class='progress-bar active from-control-static pt-2' role='progressbar' 
-                                                    aria-valuenow='\".str_replace('%','',$percentage).\"' 
+                                            <p class='progress-bar active from-control-static pt-2' role='progressbar'
+                                                    aria-valuenow='\".str_replace('%','',$percentage).\"'
                                                     aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage;'>$percentage
                                             </p>
                                         </div>
@@ -2318,7 +2318,7 @@ function student_view_progress() {
                                     <div class='row'>
                                         <div class='col-sm-7'>
                                             <strong>$langBadges</strong>
-                                        </div>                                    
+                                        </div>
                                     </div>
                                 </div>";
 
@@ -2332,12 +2332,12 @@ function student_view_progress() {
 
                 $tool_content .= "<div class='res-table-wrapper'>
                                     <div class='row res-table-row border-0'>
-                                        <div class='col-sm-2'>                                            
+                                        <div class='col-sm-2'>
                                             <img class = '$faded center-block' style='max-height: 60px;' class='img-responsive block-center' src='$urlServer" . BADGE_TEMPLATE_PATH . "$badge_filename'>
                                         </div>";
                                     $tool_content .= "
                                         <div class='col-sm-9'>
-                                        <a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>" . ellipsize($badge->title, 40) . "</a>                                    
+                                        <a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>" . ellipsize($badge->title, 40) . "</a>
                                             <div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
                                                 <p class='progress-bar active from-control-static pt-2' role='progressbar'
                                                         aria-valuenow='" . str_replace('%','',$badge_percentage) . "'
@@ -2363,7 +2363,7 @@ function student_view_progress() {
                                     <div class='row'>
                                         <div class='col-sm-7'>
                                             <strong>$langCertificates</strong>
-                                        </div>                                    
+                                        </div>
                                     </div>
                                 </div>";
 
@@ -2427,47 +2427,47 @@ function display_users_progress($element, $element_id) {
            $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults;
 
     if ($element == 'certificate') {
-        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria 
-                                            FROM user_certificate 
+        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria
+                                            FROM user_certificate
                                             JOIN course_user ON user_certificate.user=course_user.user_id
                                              JOIN user ON user.id = user_certificate.user
-                                                AND course_user.status = " .USER_STUDENT . " 
-                                                AND editor = 0 
+                                                AND course_user.status = " .USER_STUDENT . "
+                                                AND editor = 0
                                                 AND course_id = ?d
                                                 AND certificate = ?d
                                             ORDER BY user.surname, user.givenname
                                             ASC", $course_id, $element_id);
         $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_certificate
-                                            JOIN course_user ON user_certificate.user=course_user.user_id 
-                                                AND status = " .USER_STUDENT . " 
-                                                AND editor = 0 
-                                                AND course_id = ?d 
-                                                AND completed = 1 
+                                            JOIN course_user ON user_certificate.user=course_user.user_id
+                                                AND status = " .USER_STUDENT . "
+                                                AND editor = 0
+                                                AND course_id = ?d
+                                                AND completed = 1
                                                 AND certificate = ?d", $course_id,$element_id)->t;
         $param_name = 'certificate_id';
     } else {
-        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria 
+        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria
                                             FROM user_badge
                                             JOIN course_user ON user_badge.user=course_user.user_id
                                             JOIN user ON user.id = user_badge.user
-                                                AND course_user. status = " .USER_STUDENT . " 
-                                                AND editor = 0 
+                                                AND course_user. status = " .USER_STUDENT . "
+                                                AND editor = 0
                                                 AND course_id = ?d
-                                                AND badge = ?d 
-                                            ORDER BY user.surname, user.givenname 
+                                                AND badge = ?d
+                                            ORDER BY user.surname, user.givenname
                                             ASC", $course_id, $element_id);
-        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge 
-                                            JOIN course_user ON user_badge.user=course_user.user_id 
-                                                AND status = " .USER_STUDENT . " 
-                                                AND editor = 0 
-                                                AND course_id = ?d 
-                                                AND completed = 1 
+        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge
+                                            JOIN course_user ON user_badge.user=course_user.user_id
+                                                AND status = " .USER_STUDENT . "
+                                                AND editor = 0
+                                                AND course_id = ?d
+                                                AND completed = 1
                                                 AND badge = ?d", $course_id, $element_id)->t;
         $param_name = 'badge_id';
     }
     $all_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user
-                                        WHERE status = " .USER_STUDENT . " 
-                                            AND editor = 0                                         
+                                        WHERE status = " .USER_STUDENT . "
+                                            AND editor = 0
                                             AND course_id = ?d", $course_id)->total;
 
     if (count($sql) > 0) {

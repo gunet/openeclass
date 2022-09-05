@@ -3975,7 +3975,7 @@ function show_student_assignment($id) {
             else
             {
                 //auto to mnm emfanizetai mexri kai thn hmeromhnia kai wra tou start_date_review
-                $start_date_review = nice_format($row->start_date_review, TRUE); //hmeromhnia enarkshs aksiologhshs
+                $start_date_review = format_locale_date(strtotime($row->start_date_review), 'short'); //hmeromhnia enarkshs aksiologhshs
                 $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langPendingPeerSubmissions</div></div>";
             }
         }
@@ -4529,7 +4529,7 @@ function assignment_details($id, $row, $x =false) {
             }
         }
 		//metraei tis meres gia start review
-		$start_date_review = nice_format($row->start_date_review, true);
+		$start_date_review = format_locale_date(strtotime($row->start_date_review));
 		if ($row->time_start > 0) {
 			$start_date_review_notice = "<br><span>($langDaysLeft " . format_time_duration($row->time_start) . ")</span>";
 		} /*elseif ((int)$row->start_date_review) {
@@ -4537,7 +4537,7 @@ function assignment_details($id, $row, $x =false) {
 		}*/
 
 		//metraei tis meres gia lhksh review
-		$due_date_review = nice_format($row->due_date_review, true);
+		$due_date_review = format_locale_date(strtotime($row->due_date_review));
 		if ($row->time_due > 0) {
 			$due_date_review_notice = "<br><span>($langDaysLeft " . format_time_duration($row->time_due) . ")</span>";
 		} elseif ((int)$row->due_date_review) {
@@ -4590,7 +4590,7 @@ function assignment_details($id, $row, $x =false) {
             )
         ));
     }
-    $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $langNoDeadline;
+    $deadline = (int)$row->deadline ? format_locale_date(strtotime($row->deadline)) : $langNoDeadline;
     if ($row->time > 0) {
         $deadline_notice = "<br><span>($langDaysLeft " . format_time_duration($row->time) . ")</span>";
     } elseif ((int)$row->deadline) {
@@ -4702,7 +4702,7 @@ function assignment_details($id, $row, $x =false) {
                     <strong class='control-label-notes'>$m[start_date]:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    " . nice_format($row->submission_date, true) . "
+                    " . format_locale_date(strtotime($row->submission_date)) . "
                 </div>
             </div>
             <div class='row p-2 margin-bottom-fat'>
@@ -5085,7 +5085,7 @@ function show_assignment($id, $display_graph_results = false) {
                 $comments = '';
                 //emfanizei pote vathmologhthhke
                 if ($row->grade != '') { // grade submission date
-                    $label = "<h6>($langGradedAt " .nice_format($row->grade_submission_date) . ")</h6>";
+                    $label = "<h6>($langGradedAt " .format_locale_date(strtotime($row->grade_submission_date), 'short', false) . ")</h6>";
                 }
                 // professor comments
                 if ($row->grade_comments or $row->grade_comments_filename) {
@@ -5122,7 +5122,7 @@ function show_assignment($id, $display_graph_results = false) {
                 }
                 $tool_content .= "<td class='text-center filename-col' class='col-md-2'>$filelink <br> $plagiarismlink</td>";
 
-                $tool_content .= "<td class='col-md-2'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>";
+                $tool_content .= "<td class='col-md-2'>" . format_locale_date(strtotime($row->submission_date)) .$late_sub_text. "</td>";
 
 				if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
 					$tool_content .="<td class='col-md-1' class='text-center'>
@@ -5432,7 +5432,7 @@ function show_student_assignments() {
 
             $title_temp = q($row->title);
             if ($row->deadline) {
-                $deadline = nice_format($row->deadline, true);
+                $deadline = format_locale_date(strtotime($row->deadline));
             } else {
                 $deadline = $langNoDeadline;
             }
@@ -5454,7 +5454,7 @@ function show_student_assignments() {
                                 <td class='text-center' data-sort='$sort_id'>" . $deadline ;
 
             if ($not_started) {
-                $tool_content .= "<small><span class='text-warning'>$langWillStartAt: " . nice_format($row->submission_date, true). "</span></small>";
+                $tool_content .= "<small><span class='text-warning'>$langWillStartAt: " . format_locale_date(strtotime($row->submission_date)). "</span></small>";
             } else if ($row->time > 0) {
                 $tool_content .= "<br>(<small>$langDaysLeft " . format_time_duration($row->time) . "</small>)";
             }   else if($row->deadline) {
@@ -5616,7 +5616,7 @@ function show_assignments() {
             }
 
             if (isset($row->deadline)) {
-                $deadline = nice_format($row->deadline, true);
+                $deadline = format_locale_date(strtotime($row->deadline));
             } else {
                 $deadline = $langNoDeadline;
             }
@@ -5636,7 +5636,7 @@ function show_assignments() {
                             <td class='text-center' data-sort='$sort_id'>$deadline";
 
             if ($not_started) {
-                $tool_content .= "<small><span class='text-warning'>$langWillStartAt: " . nice_format($row->submission_date, true). "</span></small>";
+                $tool_content .= "<small><span class='text-warning'>$langWillStartAt: " . format_locale_date(strtotime($row->submission_date)). "</span></small>";
             } else if ($row->time > 0) {
                 $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft " . format_time_duration($row->time) . "</small></span>";
             } else if (intval($row->deadline)) {

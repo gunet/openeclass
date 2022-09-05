@@ -41,7 +41,7 @@ function list_assignments($id = NULL) {
                 "<th class='text-white text-left'>&nbsp;$langTitle</th>" .
                 "<th class='text-white' width='120'>$langGroupWorkDeadline_of_Submission</th>" .
                 "<th style='width:20px;' class='text-white text-center'>$langChoice</th>" .
-                "</tr>";        
+                "</tr>";
         foreach ($result as $row) {
             $checked = '';
             if (in_array($row->id, $exist_assignment)) {
@@ -51,9 +51,9 @@ function list_assignments($id = NULL) {
                     "<div>" . mathfilter($row->description, 12 , "../../courses/mathimg/"). "</div>";
             $ret_string .= "<tr>" .
                     "<td>".q($row->title)."<br><br><div class='text-muted'>$description</div></td>" .
-                    "<td class='text-center'>".nice_format($row->submission_date, true)."</td>" .
+                    "<td class='text-center'>".format_locale_date(strtotime($row->submission_date), 'short')."</td>" .
                     "<td class='text-center'><input type='checkbox' $checked name='assignment[]' value='$row->id' /></td>" .
-                    "</tr>";            
+                    "</tr>";
         }
         $ret_string .= "</table></div>";
     }

@@ -878,41 +878,6 @@ function my_basename($path) {
     return preg_replace('#^.*/#', '', $path);
 }
 
-/* transform the date format from "year-month-day" to "day-month-year"
- * if argument time is defined then
- * transform date time format from "year-month-day time" to "to "day-month-year time"
- */
-
-function greek_format($date, $time = FALSE, $dont_display_time = FALSE) {
-    if ($time) {
-        $datetime = explode(' ', $date);
-        $new_date = implode('-', array_reverse(explode('-', $datetime[0])));
-        if ($dont_display_time) {
-            return $new_date;
-        } else {
-            return $new_date . " " . $datetime[1];
-        }
-    } else {
-        return implode('-', array_reverse(explode('-', $date)));
-    }
-}
-
-/**
- * @brief format the date according to language
- * @param type $date
- * @param type $time
- * @param type $dont_display_time
- * @return type
- */
-function nice_format($date, $time = FALSE, $dont_display_time = FALSE) {
-    if ($GLOBALS['language'] == 'el') {
-        return greek_format($date, $time, $dont_display_time);
-    } else {
-        return $date;
-    }
-}
-
-
 /**
  * @brief formats the date according to the locale settings
  * @params unix_time_stamp $datetime_stamp

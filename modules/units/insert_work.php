@@ -37,7 +37,8 @@ function list_assignments() {
                 "<tr class='list-header'>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "<th class='text-start'>&nbsp;$langWorks</th>" .
-                "<th width='120'>$langGroupWorkDeadline_of_Submission</th>" .
+                "<th width='150'>$langGroupWorkDeadline_of_Submission</th>" .
+
                 "</tr>";
         foreach ($result as $row) {
             if ($row->password_lock) {
@@ -55,7 +56,7 @@ function list_assignments() {
             $tool_content .= "<tr class='$vis'>" .
                     "<td class='text-center'><input name='work[]' value='$row->id' type='checkbox' /></td>" .
                     "<td><a href='${urlServer}modules/work/index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$exclamation_icon $description</td>" .
-                    "<td class='text-center'>".nice_format($row->submission_date, true)."</td>" .
+                    "<td class='text-center'>".format_locale_date(strtotime($row->submission_date), 'short')."</td>" .
                     "</tr>";
         }
         $tool_content .=

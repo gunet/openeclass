@@ -119,8 +119,6 @@ if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
 
                 $pm = new Msg($uid, $course_id, $langMsgRe.$langAbuseReport, $msg_body, $recipients);
             }
-
-            //Session::Messages($langCloseReportSuccess, 'alert-success');
             Session::flash('message',$langCloseReportSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/abuse_report/index.php?course=$course_code");
@@ -295,7 +293,7 @@ if (!$nbrReports) {
                             <td>".$resource_types[$report->rtype]."</td>
                             <td>".$content."</td>
                             <td>".display_user($report->user_id)."</td>
-                            <td>".nice_format(date('Y-m-d H:i:s', $report->timestamp), true)."</td>                                    
+                            <td>".format_locale_date($report->timestamp, 'short') . "</td>                                    
                             <td class='option-btn-cell'>".$options."</td>
                           </tr>";
     }

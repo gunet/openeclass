@@ -62,7 +62,7 @@ $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_
 
 if ($userdata) {
     if ($uid == $id) {
-        
+
         if (isset($_GET['toggle_val'])) {
             if ($_GET['toggle_val'] == 'on') {
                 Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 1, $id);
@@ -71,16 +71,16 @@ if ($userdata) {
             }
             redirect_to_home_page("main/eportfolio/resources.php?id=$id&token=$token");
         }
-        
+
         if ($userdata->eportfolio_enable == 0) {
             $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langePortfolioDisableWarning</div></div>";
         }
-        
+
         $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info '>
                             <a href='#' class='close text-danger' data-bs-dismiss='alert' aria-label='close'>&times;</a>
                             $langePortfolioCollectionUserInfo
                           </div></div>";
-        
+
         if ($userdata->eportfolio_enable == 1) {
             $tool_content .= "<script type='text/javascript'>
 
@@ -103,7 +103,7 @@ if ($userdata) {
                                 });
                               </script>";
         }
-        
+
         $tool_content .= action_bar(array(
                 array('title' => $langBio,
                       'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
@@ -127,12 +127,12 @@ if ($userdata) {
                       'url' => "{$urlAppend}main/eportfolio/bio_upload.php",
                       'icon' => 'fa-upload')
             ));
-        
+
         if (isset($_GET['action']) && $_GET['action'] == 'add') {
             if (isset($_GET['type']) && isset($_GET['rid'])) {
                 $rtype = $_GET['type'];
                 $rid = intval($_GET['rid']);
-                
+
                 if ($rtype == 'blog') {
                     $post = Database::get()->querySingle("SELECT * FROM blog_post WHERE id = ?d AND user_id = ?d", $rid, $uid);
                     if ($post) {
@@ -142,10 +142,10 @@ if ($userdata) {
                             if ($course_status != COURSE_INACTIVE AND $module_status) {
                                 $course_post_proceed = TRUE;
                             } else {
-                                $course_post_proceed = FALSE; 
+                                $course_post_proceed = FALSE;
                             }
                         }
-                        
+
                         if ($course_post_proceed || ($post->course_id == 0 && get_config('personal_blog'))) {
                             if ($post->user_id == $uid){
                                 if ($post->course_id == 0) { //personal blog post
@@ -155,11 +155,11 @@ if ($userdata) {
                                 }
                             }
                             $data = array('title' => $post->title, 'content' => $post->content, 'timestamp' => $post->time);
-                            
+
                             Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
                                     VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'blog',$post->course_id,$course_title,serialize($data));
                             //Session::Messages($langePortfolioResourceAdded, 'alert-success');
-                            Session::flash('message', $langePortfolioResourceAdded); 
+                            Session::flash('message', $langePortfolioResourceAdded);
                             Session::flash('alert-class', 'alert-success');
                             $tool_content .= "
                                               <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
@@ -169,12 +169,12 @@ if ($userdata) {
                             redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
                         }
                     }
-                    
+
                     //Session::Messages($langGeneralError, 'alert-danger');
-                    Session::flash('message', $langGeneralError); 
+                    Session::flash('message', $langGeneralError);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
-                    
+
                 } elseif ($rtype == 'work_submission') {
                     $submission = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d AND uid = ?d", $rid, $uid);
                     if($submission) {
@@ -184,20 +184,20 @@ if ($userdata) {
                         if ($module_status AND $course_status != COURSE_INACTIVE) {
                             if ( ($submission->group_id == 0 && $submission->uid == $uid) ||
                                  ($submission->group_id != 0 && array_key_exists($submission->group_id, user_group_info($uid, $work->course_id))) ) {
-                                
+
                                 $course_info = Database::get()->querySingle("SELECT title,code FROM course WHERE id = ?d", $work->course_id);
                                 $course_title = $course_info->title;
                                 $course_code =  $course_info->code;
-                                
-                                $data = array('title' => $work->title, 'descr' => $work->description, 'subm_date' => $submission->submission_date, 
-                                              'max_grade' => $work->max_grade, 'subm_text' => $submission->submission_text, 'grade' => $submission->grade, 
+
+                                $data = array('title' => $work->title, 'descr' => $work->description, 'subm_date' => $submission->submission_date,
+                                              'max_grade' => $work->max_grade, 'subm_text' => $submission->submission_text, 'grade' => $submission->grade,
                                               'group_id' => $submission->group_id);
-                                
+
                                 //create dir for user
                                 if (!file_exists($webDir."/courses/eportfolio/work_submissions/".$uid)) {
                                     @mkdir($webDir."/courses/eportfolio/work_submissions/".$uid, 0777);
                                 }
-                                
+
                                 //assignment file
                                 if (!empty($work->file_path)) {
                                     $ass_file_path_explode = explode("/", $work->file_path);
@@ -209,7 +209,7 @@ if ($userdata) {
                                 } else {
                                     $data['assignment_file'] = $work->file_path;
                                 }
-                                
+
                                 //submission file
                                 if (!empty($submission->file_path)) {
                                     $subm_file_path_explode = explode("/", $submission->file_path);
@@ -221,37 +221,37 @@ if ($userdata) {
                                 } else {
                                     $data['submission_file'] = $submission->file_path;
                                 }
-                                
+
                                 Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
                                     VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'work_submission',$work->course_id,$course_title,serialize($data));
                                 //Session::Messages($langePortfolioResourceAdded, 'alert-success');
-                                Session::flash('message', $langePortfolioResourceAdded); 
+                                Session::flash('message', $langePortfolioResourceAdded);
                                 Session::flash('alert-class', 'alert-success');
                                 redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
-                                
+
                             }
                         }
                     }
-                    
+
                     //Session::Messages($langGeneralError, 'alert-danger');
-                    Session::flash('message', $langGeneralError); 
+                    Session::flash('message', $langGeneralError);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
-                    
+
                 } elseif ($rtype == 'mydocs') {
                     if (($session->status == USER_TEACHER && get_config('mydocs_teacher_enable')) || ($session->status == USER_STUDENT && get_config('mydocs_student_enable'))) {
                         $document = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d AND subsystem = ?d AND subsystem_id = ?d AND format <> ?s", $rid, MYDOCS, $uid, '.dir');
-                        
+
                         if ($document) {
-                            $data = array('title' => $document->title, 'filename' => $document->filename, 'comment' => $document->comment, 
-                                          'subject' => $document->subject, 'description' => $document->description, 'date' => $document->date, 
+                            $data = array('title' => $document->title, 'filename' => $document->filename, 'comment' => $document->comment,
+                                          'subject' => $document->subject, 'description' => $document->description, 'date' => $document->date,
                                           'date_modified' => $document->date_modified, 'format' => $document->format);
-                            
+
                             //create dir for user
                             if (!file_exists($webDir."/courses/eportfolio/mydocs/".$uid)) {
                                 @mkdir($webDir."/courses/eportfolio/mydocs/".$uid, 0777);
                             }
-                            
+
                             if ($document->extra_path) {
                                 $data['extra_path'] = $document->extra_path;
                             } else {
@@ -261,22 +261,22 @@ if ($userdata) {
                                 copy($file_source,$file_dest);
                                 $data['file_path'] = $file_dest;
                             }
-                            
+
                             Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
                                     VALUES (?d,?d,?s,?d,?s,?s)", $uid, $rid, 'mydocs', 0 ,'', serialize($data));
-                            
+
                             //Session::Messages($langePortfolioResourceAdded, 'alert-success');
-                            Session::flash('message', $langePortfolioResourceAdded); 
+                            Session::flash('message', $langePortfolioResourceAdded);
                             Session::flash('alert-class', 'alert-success');
                             redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
                         }
                     }
-                    
+
                     //Session::Messages($langGeneralError, 'alert-danger');
-                    Session::flash('message', $langGeneralError); 
+                    Session::flash('message', $langGeneralError);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
-                    
+
                 }
             }
         } elseif (isset($_GET['action']) && $_GET['action'] == 'remove' && isset($_GET['er_id'])) {
@@ -293,12 +293,12 @@ if ($userdata) {
                 }
                 Database::get()->query("DELETE FROM eportfolio_resource WHERE id = ?d", $er_id);
                 //Session::Messages($langePortfolioResourceRemoved, 'alert-success');
-                Session::flash('message', $langePortfolioResourceRemoved); 
+                Session::flash('message', $langePortfolioResourceRemoved);
                 Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
             } else {
                 //Session::Messages($langGeneralError, 'alert-danger');
-                Session::flash('message', $langGeneralError); 
+                Session::flash('message', $langGeneralError);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
             }
@@ -313,7 +313,7 @@ if ($userdata) {
             }
             exit;
         }
-        
+
         $tool_content .= action_bar(array(
                 array('title' => $langBio,
                       'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
@@ -329,7 +329,7 @@ if ($userdata) {
                       'button-class' => 'btn-primary'),
             ));
     }
-    
+
     if (isset($_GET['action']) && $_GET['action'] == 'get') {
         if (isset($_GET['type']) && isset($_GET['er_id'])) {
             if ($_GET['type'] == 'assignment' || $_GET['type'] == 'submission') {
@@ -353,7 +353,7 @@ if ($userdata) {
             } elseif ($_GET['type'] == 'mydocs') {
                 $info = Database::get()->querySingle("SELECT data FROM eportfolio_resource WHERE user_id = ?d
                                     AND resource_type = ?d AND id = ?d", $id, 'mydocs', intval($_GET['er_id']));
-                
+
                 if ($info) {
                     $data_array = unserialize($info->data);
                     $file = str_replace('\\', '/', $webDir)."/".$data_array['file_path'];
@@ -363,7 +363,7 @@ if ($userdata) {
             }
         }
     }
-    
+
     if (isset($_GET['action']) && $_GET['action'] == 'showBlogPost' && isset($_GET['er_id'])) {
         $post = Database::get()->querySingle("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND id = ?d", $id, 'blog', intval($_GET['er_id']));
         if ($post) {
@@ -389,7 +389,7 @@ if ($userdata) {
                                             <h3 class='panel-title'>".q($data['title'])."</h3>
                                     </div>
                                     <div class='panel-body'>
-                                        <button class='btn btn-success btn-sm pe-none mt-2'>" . nice_format($data['timestamp'], true). "</button><br><br>".standard_text_escape($data['content'])."
+                                        <button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($data['timestamp'])) . "</button><br><br>".standard_text_escape($data['content'])."
                                     </div>
                                     <div class='panel-footer'>
                                         <div class='row'>
@@ -398,27 +398,27 @@ if ($userdata) {
                                     </div>
                                 </div>";
             }
-            
+
             if ($session->status == 0) {
                 draw($tool_content, 0);
             } else {
                 draw($tool_content, 1);
             }
             exit;
-            
+
         }
-    
+
     $blog_posts = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'blog');
     $submissions = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'work_submission');
     $docs = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'mydocs');
-    
+
     //hide tabs when there are no resources
     if (!$blog_posts && !$submissions && !$docs) {
         $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langePortfolioNoResInCollection</div></div>";
     } else {
-        
+
         $active_class = ' class="nav-item"';
-        
+
         if ($blog_posts) {
             $blog_li = '<li'.$active_class.' role="presentation"><button id="blogtab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#blog">'.$langBlogPosts.'</button></li>';
             if ($active_class != '') {
@@ -430,7 +430,7 @@ if ($userdata) {
         } else {
             $blog_li = '';
         }
-        
+
         if ($submissions) {
             $work_li = '<li'.$active_class.' role="presentation"><button id="worktab" class="nav-link" data-bs-toggle="tab" data-bs-target="#works">'.$langWorks.'</button></li>';
             if ($active_class != '') {
@@ -442,7 +442,7 @@ if ($userdata) {
         } else {
             $work_li = '';
         }
-        
+
         if ($docs) {
             $mydocs_li = '<li'.$active_class.' role="presentation"><button id="docstab" class="nav-link" data-bs-toggle="tab" data-bs-target="#mydocs">'.$langDoc.'</button></li>';
             if ($active_class != '') {
@@ -452,9 +452,9 @@ if ($userdata) {
             }
             $active_class = '';
         } else {
-            $mydocs_li = '';    
+            $mydocs_li = '';
         }
-        
+
         $tool_content .= '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><ul class="nav nav-tabs" role="tablist">
                             '.$blog_li.'
                             '.$work_li.'
@@ -462,7 +462,7 @@ if ($userdata) {
                           </ul></div>';
         $tool_content .= '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><div class="tab-content">';
 
-        //show blog_posts    
+        //show blog_posts
         if ($blog_posts) {
             $tool_content .= '<div id="blog" role="tabpanel" class="'.$blog_div_class.'" aria-labelledby="blogtab" style="padding-top:20px">';
             //usort($blog_posts, "cmp");
@@ -491,20 +491,20 @@ if ($userdata) {
                                             <h3 class='panel-title'>".q($data['title'])."</h3>
                                     </div>
                                     <div class='panel-body NoBorders'>
-                                        <button class='btn btn-success btn-sm pe-none'>" . nice_format($data['timestamp'], true). "</button><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
-                                                    </div>
-                                                    <div class='panel-footer'>
-                                                    <div class='row'>
-                                                    <div class='col-sm-6'>$post->course_title</div>
-                                                    </div>
-                                                    </div>
-                                                    </div>";
+                                        <button class='btn btn-success btn-sm pe-none'>" . format_locale_date(strtotime($data['timestamp'])) . "</button><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+                                    </div>
+                                    <div class='panel-footer'>
+                                        <div class='row'>
+                                            <div class='col-sm-6'>$post->course_title</div>
+                                        </div>
+                                    </div>
+                                </div>";
             }
             $tool_content .= "</div>
                             </div>
                           </div>";
         }
-        
+
         //show assignment submissions
         if ($submissions) {
             $tool_content .= '<div id="works" role="tabpanel" class="'.$work_div_class.'" aria-labelledby="worktab" style="padding-top:20px">';
@@ -523,7 +523,7 @@ if ($userdata) {
                 }
                 $submission_header_content = "<div><h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3></div>";
                 $submission->course_title = $langCourse.': '.$submission->course_title;
-                $submission_content = "<div class='well'>"; 
+                $submission_content = "<div class='well'>";
                 $submission_content .= "<div><button type='button' class='btn btn-primary btn-sm' data-bs-toggle='collapse' data-bs-target='#header_more_$submission->id'>$langMore</button></div>
                                        <div id='header_more_$submission->id' class='collapse panel-body'>";
                 if (!empty($data['descr'])) {
@@ -532,13 +532,14 @@ if ($userdata) {
                 $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=assignment&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 $submission_content .= "</div>";
                 $submission_content .= "</div>";
-                $submission_content .= "<div><b class='control-label-notes pt-3 pb-3 fs-6'>$langSubmit</b>: " . nice_format($data['subm_date'], true). "</div>
+                $submission_content .= "<div><b class='control-label-notes pt-3 pb-3 fs-6'>$langSubmit</b>: " . format_locale_date(strtotime($data['subm_date'])) . "</div>
                                        <div><b class='control-label-notes pt-3 pb-3 fs-6'>$langGradebookGrade</b>: ".$data['grade']." / ".$data['max_grade']."</div>
                                        <div><b class='control-label-notes pt-3 pb-3 fs-6'>".$m['group_or_user']."</b>: ".$assignment_type."</div>";
+
                 if (!is_null($data['subm_text'])) {
                     $submission_content .= "<div><b class='control-label-notes pt-3 pb-3 fs-6'>$langWorkOnlineText</b>: <br>".$data['subm_text']."</div>";
                 } else {
-                   $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>"; 
+                   $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 }
                 $submission_footer = "<div class='panel-footer'>
                                           <div class='row'>
@@ -570,7 +571,7 @@ if ($userdata) {
                             </div>
                           </div>";
         }
-        
+
         //show mydocs collection
         if ($docs) {
             $tool_content .= '<div id="mydocs" role="tabpanel" class="'.$mydocs_div_class.'" aria-labelledby="blogtab" style="padding-top:20px">';
@@ -586,7 +587,7 @@ if ($userdata) {
             if ($id == $uid) {
                 $tool_content .= "<th class='text-white text-center'>".icon('fa-gears', $langCommands)."</th>";
             }
-                                      
+
             $tool_content .= "</tr>";
             foreach ($docs as $doc) {
                 $data = unserialize($doc->data);
@@ -607,7 +608,7 @@ if ($userdata) {
                 $tool_content .= "<tr class='$row_class'>
                                     <td class='text-center'><span class='fa ".choose_image('.' . $data['format'])."'></span></td>
                                     <td>$file_link</td>
-                                    <td>".nice_format($data['date_modified'], true, true)."</td>
+                                    <td>".format_locale_date(strtotime($data['date_modified']), 'short', false)."</td>
                                     <td>$filesize</td>
                                     <td class='option-btn-cell text-center'>
                                        ". action_button(array(
@@ -621,19 +622,19 @@ if ($userdata) {
                                                     )))." 
                                     </td>
                                   </tr>";
-            }      
+            }
             $tool_content .= "    </tbody>
                                 </table>
                               </div>
                             </div>";
         }
-        
+
         if ($userdata->eportfolio_enable == 1) {
             $social_share = "<div class='col-sm-12 mt-3'><div class='shadow-sm p-3 rounded float-end bg-light'>".print_sharing_links($urlServer."main/resources.php?id=$id&token=$token", $langUserePortfolio)."</div></div>";
         } else {
             $social_share = '';
         }
-        
+
         $tool_content .= $social_share.'</div></div>';
     }
 }
@@ -645,7 +646,7 @@ if ($uid == $id) {
 }
 
 function cmp($obj1, $obj2)
-{   
+{
     $data1 = unserialize($obj1->data);
     if (array_key_exists('subm_date', $data1)) {
         $key = 'subm_date';
@@ -657,9 +658,9 @@ function cmp($obj1, $obj2)
     $data1 = strtotime($data1[$key]);
     $data2 = unserialize($obj2->data);
     $data2 = strtotime($data2[$key]);
-    
+
     if ($data1 < $data2)
         return true;
-    else 
+    else
         return false;
 }

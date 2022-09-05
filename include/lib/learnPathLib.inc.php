@@ -666,7 +666,7 @@ function display_my_documents($dialogBox, $style)
                 $content .= "<td>&nbsp;</td><td>&nbsp;</td>";
             } else {
                 $size = format_file_size($entry['size']);
-                $date = nice_format($entry['date'], true, true);
+                $date = format_locale_date(strtotime($entry['date']), 'short', false);
                 $content .= "<td class='text-end'>$size</td><td class='text-center'>$date</td>";
             }
             $content .= "<td class='text-center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";

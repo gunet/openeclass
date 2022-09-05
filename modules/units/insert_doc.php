@@ -27,27 +27,12 @@ require_once 'include/lib/fileManageLib.inc.php';
 doc_init();
 
 /**
- * list documents while inserting them in course unit
- * @global type $id
- * @global type $webDir
- * @global type $course_code
- * @global type $tool_content
- * @global type $group_sql
- * @global type $langDirectory
- * @global type $langUp
- * @global type $langName
- * @global type $langSize
- * @global type $langDate
- * @global type $langType
- * @global type $langAddModulesButton
- * @global type $langChoice
- * @global type $langNoDocuments
- * @global type $course_code
+ * @brief list documents while inserting them in course unit
  */
 function list_docs() {
-    global $id, $webDir, $course_code, $tool_content,
+    global $id, $webDir, $tool_content,
     $group_sql, $langDirectory, $langUp, $langName, $langSize,
-    $langDate, $langType, $langAddModulesButton, $langChoice,
+    $langDate, $langAddModulesButton, $langChoice,
     $langNoDocuments, $course_code, $langCommonDocs, $pageName;
 
     $basedir = $webDir . '/courses/' . $course_code . '/document';
@@ -169,7 +154,7 @@ function list_docs() {
                     $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
                 } else {
                     $size = format_file_size($entry['size']);
-                    $date = nice_format($entry['date'], true, true);
+                    $date = format_locale_date(strtotime($entry['date']), 'short', false);
                     $tool_content .= "<td class='text-end'>$size</td><td class='text-center'>$date</td>";
                 }
                 $tool_content .= "</tr>";

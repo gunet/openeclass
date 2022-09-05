@@ -328,8 +328,8 @@ function display_analytics_information($analytics_id) {
     $description = $sql_data->description;
     $active_vis = $sql_data->active ? "text-success" : "text-danger";
     $active_msg = $sql_data->active ? $langActive : $langInactive;
-    $start_date = nice_format($sql_data->start_date);
-    $end_date = nice_format($sql_data->end_date);
+    $start_date = format_locale_date(strtotime($sql_data->start_date), 'short', false);
+    $end_date = format_locale_date(strtotime($sql_data->end_date), 'short', false);
     $periodType = periodType::periodType[$sql_data->periodType]['title'];
 
     $tool_content .= "
@@ -433,7 +433,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                         <div class='col-sm-4' >
                             <h6>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
-                                " . nice_format($startdate) . " &mdash; " . nice_format($enddate) . "
+                                " . format_locale_date(strtotime($startdate), 'short', false) . " &mdash; " . format_locale_date(strtotime($enddate), 'short', false)  . "
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$next&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
                             </h6>
                         </div>
@@ -577,7 +577,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
                     </div>
                     <div class='col-sm-4 text-white'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$previous'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>"
-                            . nice_format($start) . " &mdash; " . nice_format($end) .
+                            . format_locale_date(strtotime($start), 'short', false) . " &mdash; " . format_locale_date(strtotime($end), 'short', false) .
                             "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$next'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
                     </div>
                 </div>

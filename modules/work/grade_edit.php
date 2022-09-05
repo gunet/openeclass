@@ -423,7 +423,7 @@ function show_edit_form($id, $sid, $assign) {
 					<div class='form-group mt-3'>
 						<label class='col-sm-3 control-label-notes'>$m[sub_date]:</label>
 						<div class='col-sm-9'>
-							<span>".q($sub->submission_date)."</span>
+							".format_locale_date(strtotime($sub->submission_date))."
 						</div>
 					</div>
 

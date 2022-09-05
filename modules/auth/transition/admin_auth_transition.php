@@ -41,7 +41,7 @@ if (count($q) > 0) {
         $tool_content .= "<td>" . display_user($data->uid) . "</td>";
         $tool_content .= "<td>" . q($data->comments) . "</td>";
         $tool_content .= "<td>" . Transition::exception_status($data->status) . "</td>";
-        $tool_content .= "<td>" . nice_format($data->timestamp, true) . "</td>";
+        $tool_content .= "<td>" . format_locale_date(strtotime($data->timestamp), 'short') . "</td>";
         $tool_content .= "<td class='option-btn-cell'>" . action_button(array(
                 array('title' => 'Αποδοχή',
                     'url' => "$_SERVER[SCRIPT_NAME]?eid=$data->id&amp;action=yes",

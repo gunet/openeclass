@@ -170,7 +170,7 @@ $export_box
                 <strong class='control-label-notes'>$langPollCreation:</strong>
             </div>
             <div class='col-sm-9'>
-                " . nice_format(date("Y-m-d H:i", strtotime($thePoll->creation_date)), true) . "
+                " . format_locale_date(strtotime($thePoll->creation_date)) . "
             </div>
         </div>
         <div class='row p-2 margin-bottom-fat'>
@@ -178,7 +178,7 @@ $export_box
                 <strong class='control-label-notes'>$langStart:</strong>
             </div>
             <div class='col-sm-9'>
-                " . nice_format(date("Y-m-d H:i", strtotime($thePoll->start_date)), true) . "
+                " . format_locale_date(strtotime($thePoll->start_date)) . "
             </div>
         </div>
         <div class='row p-2 margin-bottom-fat'>
@@ -186,7 +186,7 @@ $export_box
                 <strong class='control-label-notes'>$langPollEnd:</strong>
             </div>
             <div class='col-sm-9'>
-                " . nice_format(date("Y-m-d H:i", strtotime($thePoll->end_date)), true) . "
+                " . format_locale_date(strtotime($thePoll->end_date)) . "
             </div>
         </div>
         <div class='row p-2 margin-bottom-fat'>

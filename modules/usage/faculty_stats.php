@@ -201,7 +201,8 @@ if (isset($_GET['stats_submit'])) {
             $tool_content .= "<tr>
             <td class='ps-3'><a href='$_SERVER[SCRIPT_NAME]?c=$data->id&amp;user_date_start=$user_date_start&amp;user_date_end=$user_date_end&amp;stats_submit=true'>$data->title</a><br/><small>($data->code)</small></td>
             <td class='ps-3'>$data->prof_names</td>
-            <td class='ps-3'>$data->creation_time</td><td class='text-center'>". action_button(array(
+            <td class='ps-3'>" . format_locale_date(strtotime($data->creation_time), 'short') . "</td>
+            <td class='text-center'>". action_button(array(
                     array('title' => $langCsv,
                         'url' => "faculty_stats_csv.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end",
                         'icon' => 'fa-file-excel-o'),

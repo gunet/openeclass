@@ -90,7 +90,7 @@ function display_user_grades($gradebook_id) {
                 $tool_content .= "</b>";
                 $tool_content .= "</td>";
                 if($activity->date){
-                    $tool_content .= "<td><div class='smaller'><span class='day'>" . nice_format($activity->date, true, true) . "</div></td>";
+                    $tool_content .= "<td><div class='smaller'><span class='day'>" . format_locale_date(strtotime($activity->date), 'short', false) . "</div></td>";
                 } else {
                     $tool_content .= "<td>-</td>";
                 }
@@ -545,9 +545,14 @@ function display_all_users_grades($gradebook_id) {
                 <tr class='$classvis'>
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
-                <td>" . $resultUser->am . "</td>
-                <td class='text-center'>" . format_locale_date(strtotime($resultUser->reg_date), 'short') . "</td>
+                <td>" . $resultUser->am . "</td>                
                 <td class='text-center'>";
+                if (!empty($resultUser->reg_date)) {
+                    $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
+                } else {
+                    $tool_content .= " &mdash; ";
+                }
+                $tool_content .= "<td class='text-center'>";
                 if (weightleft($gradebook_id, 0) == 0) {
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;u=$resultUser->userID'>" . userGradeTotal($gradebook_id, $resultUser->userID). "</a>";
                 } elseif (userGradeTotal($gradebook_id, $resultUser->userID) != "-") { //alert message only when grades have been submitted
@@ -639,7 +644,7 @@ function student_view_gradebook($gradebook_id, $uid) {
                         <strong>" .(!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</strong>
                     </td>
                     <td>
-                        <div class='smaller'>" . nice_format($details->date, true, true) . "</div>
+                        <div class='text-center'>" . (!is_null($details->date) ? format_locale_date(strtotime($details->date), 'short', false) : " &mdash;") . "</div>
                     </td>";
 
             if ($details->module_auto_id) {
@@ -808,7 +813,7 @@ function display_gradebook($gradebook) {
             $tool_content .= "</strong>";
             $tool_content .= "</td><td>";
             if (!empty($details->date)) {
-                $tool_content .= "<div class='smaller'>" . nice_format($details->date, true, true) . "</div>";
+                $tool_content .= "<div class='smaller'>" . format_locale_date(strtotime($details->date), 'short', false) . "</div>";
             }
             $tool_content .= "</td>";
 
@@ -890,7 +895,7 @@ function display_gradebooks() {
     global $course_id, $tool_content, $course_code, $langEditChange,
            $langDelete, $langConfirmDelete, $langCreateDuplicate,
            $langAvailableGradebooks, $langNoGradeBooks, $is_editor,
-           $langViewShow, $langViewHide, $langStart, $langEnd, $uid, $langFinish;
+           $langViewShow, $langViewHide, $langStart, $uid, $langFinish;
 
     if ($is_editor) {
         $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d", $course_id);
@@ -917,8 +922,6 @@ function display_gradebooks() {
         }
         $tool_content .= "</tr>";
         foreach ($result as $g) {
-            $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $g->start_date)->format('d/m/Y H:i');
-            $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $g->end_date)->format('d/m/Y H:i');
             $row_class = !$g->active ? "class='not_visible'" : "";
             $tool_content .= "
                     <tr $row_class>
@@ -929,8 +932,8 @@ function display_gradebooks() {
                                 </div>
                             </div>
                         </td>
-                        <td>$start_date</td>
-                        <td>$end_date</td>
+                        <td>" . format_locale_date(strtotime($g->start_date), 'short') . "</td>
+                        <td>" . format_locale_date(strtotime($g->end_date), 'short') . "</td>
                         ";
             if( $is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
@@ -1139,9 +1142,9 @@ function register_user_grades($gradebook_id, $actID) {
                 <td>" . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td><td class='text-center'>";
                 if (!empty($resultUser->reg_date)) {
-                    $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short');
+                    $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
                 } else {
-                    $tool_content .= " -- ";
+                    $tool_content .= " &mdash; ";
                 }
                 $tool_content .= "</td><td class='text-center form-group".(Session::getError(getIndirectReference($resultUser->userID)) ? " has-error" : "")."'>
                     <input class='form-control' type='text' name='usersgrade[".getIndirectReference($resultUser->userID)."]' value = '".$grade."'>

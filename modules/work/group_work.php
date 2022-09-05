@@ -93,7 +93,7 @@ function show_assignments() {
         $table_content .= "<tr><td width=\"1%\">
 			<img style='padding-top:2px;' src='$themeimg/arrow.png' alt=''></td>
 			<td><div align='left'><a href='index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a></td>
-			<td align='center'>" . nice_format($row->deadline, true, '');
+			<td align='center'>" . format_locale_date(strtotime($row->deadline), 'short');
                         if ($row->time > 0) {
                             $table_content .= "<br>(<small>$langDaysLeft" . format_time_duration($row->time) . "</small>)";
                         } else if($row->deadline){

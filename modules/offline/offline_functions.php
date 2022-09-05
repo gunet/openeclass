@@ -116,8 +116,8 @@ function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) 
             'visible' => ($row->visible == 1),
             'public' => $row->public,
             'comment' => $row->comment,
-            'date' => nice_format($row->date_modified, true, true),
-            'date_time' => nice_format($row->date_modified, true),
+            'date' => format_locale_date(strtotime($row->date_modified), 'short', false),
+            'date_time' => format_locale_date(strtotime($row->date_modified), 'short'),
             'editable' => $row->editable,
             'updated_message' => '');
 

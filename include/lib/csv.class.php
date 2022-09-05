@@ -129,6 +129,9 @@ class CSV {
 	}
 
     public function escape($string, $force=false) {
+        if (is_null($string)) {
+            return;
+        }
         $string = preg_replace('/[\r\n]+/', ' ', trim($string));
 
         if ($this->debug) {

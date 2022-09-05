@@ -562,12 +562,10 @@ if ($action == "edit" || $action == "diff" || $action == "history" || $action ==
 
 switch ($action) {
     case "diff": {
-            $oldTime = nice_format($oldTime, true);
-
+            $oldTime = format_locale_date(strtotime($oldTime), 'short');
+            $newTime = format_locale_date(strtotime($newTime), 'short');
             $userInfo = user_get_data($oldEditor);
             $oldEditorStr = q($userInfo->givenname) . "&nbsp;" . q($userInfo->surname);
-
-            $newTime = nice_format($newTime, TRUE);
 
             $userInfo = user_get_data($newEditor);
             $newEditorStr = q($userInfo->givenname) . "&nbsp;" . q($userInfo->surname);
@@ -603,7 +601,7 @@ switch ($action) {
                             . '&amp;action=show"'
                             . '><strong>' . $pgtitle . '</strong><small>';
 
-                    $time = nice_format($recentChange->last_mtime,TRUE);
+                    $time = format_locale_date(strtotime($recentChange->last_mtime), 'short');
 
                     $userInfo = user_get_data($recentChange->editor_id);
 
@@ -785,7 +783,7 @@ switch ($action) {
                     $editorInfo = user_get_data($wikiPage->getEditorId());
                     $editorStr = q($editorInfo->givenname) . "&nbsp;" . q($editorInfo->username);
                     $editorUrl = '&nbsp;-&nbsp;' . $editorStr;
-                    $mtime = nice_format($wikiPage->getCurrentVersionMtime(), true);
+                    $mtime = format_locale_date(strtotime($wikiPage->getCurrentVersionMtime()), 'short');
                     $versionInfo = sprintf($langWikiVersionInfoPattern, $mtime, $editorUrl);
                     $versionInfo = '&nbsp;<span style="font-size: 10px; font-weight: normal; color: red;">'
                             . $versionInfo . '</span>';
@@ -823,7 +821,7 @@ switch ($action) {
                     $cur_ver_time = $wikiPage->getCurrentVersionMtime();
                     $time = explode(" ", $cur_ver_time);
 
-                    $mtime = nice_format($wikiPage->getCurrentVersionMtime(), TRUE);
+                    $mtime = format_locale_date(strtotime($wikiPage->getCurrentVersionMtime()), 'short');
 
                     $versionInfo = sprintf($langWikiVersionInfoPattern, $mtime, $editorUrl);
                     $printable_content .= $versionInfo;
@@ -889,7 +887,7 @@ switch ($action) {
                         . $wikiId . '&amp;title=' . rawurlencode($wiki_title)
                         . '&amp;action=show&amp;versionId=' . $version->id
                         . '">'
-                        . nice_format($version->mtime,TRUE)
+                        . format_locale_date(strtotime($version->mtime), 'short')
                         . '</a>';
 
                 $tool_content .= '<td>'

@@ -61,7 +61,7 @@ function list_videos() {
                 }
                 $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id'></td>" .
                                  "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description_text . "</td>" .
-                                 "<td class='text-center'>" . nice_format($row->date, true, true) . "</td>" .
+                                 "<td class='text-center'>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
                                  "</tr>";
             }
         }
@@ -91,7 +91,7 @@ function list_videos() {
                         $tool_content .= "<td>&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
                                 q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>";
                         $tool_content .= $linkvideocat_description_text . "</td>";
-                        $tool_content .= "<td class='text-center'>" . nice_format($linkvideocat->date, true, true) . "</td>";
+                        $tool_content .= "<td class='text-center'>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
                         $tool_content .= "</tr>";
                     }
                 }

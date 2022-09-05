@@ -458,7 +458,7 @@ function show_submission_details($id) {
                     <div class='col-sm-3'>
                         <strong class='control-label-notes'>" . $m['sub_date'] . ":</strong>
                     </div>
-                    <div class='col-sm-9'>" . nice_format($sub->submission_date, true) . "</div>
+                    <div class='col-sm-9'>" . format_locale_date(strtotime($sub->submission_date)) . "</div>
                 </div>";
 
     if ($assignment->submission_type == ASSIGNMENT_RUBRIC_GRADE) {
@@ -600,7 +600,7 @@ function export_grades_to_csv($id) {
     if ($q) {
         $assignment_id = $q->id;
         if (!is_null($q->deadline)) {
-            $deadline_message = "$m[with_deadline]: ". nice_format($q->deadline, true);
+            $deadline_message = "$m[with_deadline]: ". format_locale_date(strtotime($q->deadline));
         } else {
             $deadline_message = $langNoDeadline;
         }
@@ -622,7 +622,7 @@ function export_grades_to_csv($id) {
                                                             ORDER BY surname, givenname", $assignment_id);
         foreach ($sql as $data) {
             $ug = user_groups($course_id, $data->uid, 'txt');
-            $csv->outputRecord($data->surname, $data->givenname, greek_format($data->submission_date, true), $data->am, $ug, $data->username, $data->email, $data->grade);
+            $csv->outputRecord($data->surname, $data->givenname, format_locale_date(strtotime($data->submission_date)), $data->am, $ug, $data->username, $data->email, $data->grade);
         }
     }
     exit;

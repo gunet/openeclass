@@ -149,7 +149,7 @@ if (isset($_GET['group_as'])) {
             }
 
             $tool_content .= "<tr class='".(!$row->active ? "not_visible":"")."'>";
-            $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $langNoDeadline;
+            $deadline = (int)$row->deadline ? format_locale_date(strtotime($row->deadline)) : $langNoDeadline;
             $tool_content .= "<td>
                                 <a href='../work/index.php?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>

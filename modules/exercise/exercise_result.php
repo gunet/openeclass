@@ -260,7 +260,7 @@ if ($showScore) {
     $tool_content .= "<h5>$langYourTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</h5>";
 }
 $tool_content .= "
-    <h5>$langStart: <em>" . nice_format($exercise_user_record->record_start_date, true) . "</em></h5>
+    <h5>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em></h5>
     <h5>$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>" .
     ($user && $exerciseAttemptsAllowed ? "<h5>$langAttempt: <em>{$exercise_user_record->attempt}</em></h5>" : '') . "
   </div></div>";

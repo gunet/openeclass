@@ -145,7 +145,7 @@ Class Commenting {
                             ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
                             <div class='media-body bubble panel-body'>
-                             <button class='btn btn-success btn-sm mt-2 media-heading'>".nice_format(datetime_remove_seconds($comment->getTime(), true)).'</button>'.
+                             <button class='btn btn-success btn-sm mt-2 media-heading'>".format_locale_date(strtotime($comment->getTime())).'</button>'.
                               "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
                                $post_actions
                                ."<div class='margin-top-thin mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>

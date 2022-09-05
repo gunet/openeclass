@@ -39,10 +39,10 @@ $csv->filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv'
 $exercise_details[] = $objExercise->selectTitle();
 $exercise_details[] = "$langTotalScore: " . $objExercise->selectTotalWeighting();
 if (!empty($objExercise->selectStartDate())) {
-    $exercise_details[] = "$langStart: " . greek_format($objExercise->selectStartDate(), true);
+    $exercise_details[] = "$langStart: " . format_locale_date(strtotime($objExercise->selectStartDate()), 'short');
 }
 if (!empty($objExercise->selectEndDate())) {
-    $exercise_details[] = "$langPollEnd: " . greek_format($objExercise->selectEndDate(), true);
+    $exercise_details[] = "$langPollEnd: " . format_locale_date(strtotime($objExercise->selectEndDate()), 'short');
 }
 
 $csv->outputRecord($exercise_details);

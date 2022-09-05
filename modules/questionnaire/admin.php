@@ -819,7 +819,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <strong class='control-label-notes'>$langPollStart:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    ".date('d-m-Y H:i',strtotime($poll->start_date))."
+                    ". format_locale_date(strtotime($poll->start_date)) ."
                 </div>
             </div>
 
@@ -830,7 +830,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <strong class='control-label-notes'>$langPollEnd:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    ".date('d-m-Y H:i',strtotime($poll->end_date))."
+                    ". format_locale_date(strtotime($poll->end_date)) ."
                 </div>
             </div>
 

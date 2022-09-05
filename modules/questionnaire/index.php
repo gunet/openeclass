@@ -232,7 +232,7 @@ draw($tool_content, 2, null, $head_content);
 function printPolls() {
     global $tool_content, $course_id, $course_code, $urlAppend,
         $langTitle, $langCancel, $langOpenParticipation,
-        $langStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
+        $langFrom, $langTill, $langPollNone, $is_editor, $langAnswers,
         $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
         $langDeactivate, $langHasExpired, $langActivate, $langResourceAccessUnlock,
         $langParticipate,  $langHasParticipated, $langSee,
@@ -277,7 +277,6 @@ function printPolls() {
                 <tr class='list-header'>
                     <th class='text-white ps-2' style='min-width: 55%;'><div align='left'>&nbsp;$langTitle</div></th>
                     <th class='text-white text-center'>$langDate</th>";
-
         if ($is_editor) {
             $tool_content .= "<th class='text-white text-center' width='16'>$langAnswers</th>";
         } else {
@@ -348,8 +347,8 @@ function printPolls() {
                                     </div></td>";
                 $tool_content .= "
                         <td class='text-center'>
-                            <div style='padding-top: 7px;'><span class='text-success'>$langStart</span>: &nbsp;&nbsp;" . nice_format(date("d/m/Y H:i", strtotime($thepoll->start_date)), true) . "</div>
-                            <div style='padding-top: 7px;'><span class='text-danger'>$langPollEnd</span>: &nbsp;&nbsp;" . nice_format(date("d/m/Y H:i", strtotime($thepoll->end_date)), true) . "</div>
+                            <div style='padding-top: 7px;'><span class='text-success'>$langFrom</span>: &nbsp;" . format_locale_date(strtotime($thepoll->start_date)) . "</div>
+                            <div style='padding-top: 7px;'><span class='text-danger'>$langTill</span>: &nbsp;" . format_locale_date(strtotime($thepoll->end_date)) . "</div>
                         </td>";
 
                 if ($is_editor) {

@@ -656,45 +656,17 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
 
 /**
  ** @brief Print a box with the details of a bbb session
- * @global type $course_id
- * @global type $tool_content
- * @global type $is_editor
- * @global type $course_code
- * @global type $uid
- * @global type $langNewBBBSessionStart
- * @global type $langNewBBBSessionDesc,
- * @global type $langNewBBBSessionEnd,
- * @global type $langParticipants
- * @global type $langConfirmDelete
- * @global type $langBBBSessionJoin
- * @global type $langNote
- * @global type $langBBBNoteEnableJoin
- * @global type $langTitle
- * @global type $langActivate
- * @global type $langDeactivate
- * @global type $langEditChange
- * @global type $langDelete
- * @global type $langParticipate
- * @global type $langNoBBBSesssions
- * @global type $langDaysLeft
- * @global type $langHasExpiredS
- * @global type $langBBBNotServerAvailableStudent
- * @global type $langBBBNotServerAvailableTeacher
- * @global type $langBBBImportRecordings
- * @global type $langAllUsers
- * @global type $langBBBNoServerForRecording
- * @global type $tc_type
  */
 function bbb_session_details() {
 
     global $course_id, $tool_content, $is_editor, $course_code, $uid, $tc_type,
-        $langStart, $langParticipants,$langConfirmDelete, $langHasExpiredS,
+        $langParticipants,$langConfirmDelete, $langHasExpiredS,
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
-        $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
+        $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent,
         $langBBBNotServerAvailableTeacherCovid, $langBBBNotServerAvailableTeacher,
-        $langBBBImportRecordings, $langAllUsers, $langDate, $langBBBNoServerForRecording,
-        $langBBBHideParticipants;
+        $langBBBImportRecordings, $langAllUsers, $langDuration, $langBBBNoServerForRecording,
+        $langFrom, $langTill, $langBBBHideParticipants;
 
     $options = [];
     if (!is_active_tc_server($tc_type, $course_id)) { // check availability
@@ -723,7 +695,7 @@ function bbb_session_details() {
                            <table class='table-default'>
                              <tr class='list-header'>
                                <th class='ps-3' style='width: 50%'>$langTitle</th>
-                               <th class='text-center'>$langDate</th>
+                               <th class='text-center'>$langDuration</th>
                                <th class='text-center'>$langParticipants</th>
                                <th class='text-center'>".icon('fa-gears')."</th>
                              </tr>";
@@ -770,7 +742,7 @@ function bbb_session_details() {
 
             if($end_date) {
                 $timeLeft = date_diff_in_minutes($end_date, date('Y-m-d H:i:s'));
-                $timeLabel = nice_format($end_date, TRUE);
+                $timeLabel = format_locale_date(strtotime($end_date));
             } else {
                 $timeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
                 $timeLabel = '&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;';
@@ -831,10 +803,10 @@ function bbb_session_details() {
                     </td>
                     <td class='text-center'>
                         <div style='padding-top: 7px;'>
-                            <span class='text-success'>$langStart</span>: ".nice_format($start_date, TRUE)."$starttimeLabel<br/>
+                            <span class='text-success'>$langFrom</span>: ".format_locale_date(strtotime($start_date))."$starttimeLabel<br/>
                         </div>
                         <div style='padding-top: 7px;'>
-                            <span class='text-danger'>$langNewBBBSessionEnd</span>: $timeLabel</br></br>
+                            <span class='text-danger'>$langTill</span>: $timeLabel</br></br>
                         </div>
                     </td>
 
@@ -900,10 +872,10 @@ function bbb_session_details() {
                     </td>
                     <td class='text-center'>
                         <div style='padding-top: 7px;'>
-                            <span class='text-success'>$langStart</span>: ".nice_format($start_date, TRUE)."$starttimeLabel<br/>
+                            <span class='text-success'>$langFrom</span>: ". format_locale_date(strtotime($start_date)) ."$starttimeLabel<br/>
                         </div>
                         <div style='padding-top: 7px;'>
-                            <span class='text-danger'>$langNewBBBSessionEnd</span>: $timeLabel</br></br>
+                            <span class='text-danger'>$langTill</span>: $timeLabel</br></br>
                         </div>
                     </td>
                         <td style='width: 20%'>$participants</td>
@@ -943,7 +915,7 @@ function disable_bbb_session($id)
 
     Database::get()->querySingle("UPDATE tc_session set active='0' WHERE id=?d",$id);
    // Session::Messages($langBBBUpdateSuccessful, 'alert-success');
-    Session::flash('message',$langBBBUpdateSuccessful); 
+    Session::flash('message',$langBBBUpdateSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
@@ -961,7 +933,7 @@ function enable_bbb_session($id)
 
     Database::get()->querySingle("UPDATE tc_session SET active='1' WHERE id=?d",$id);
    // Session::Messages($langBBBUpdateSuccessful, 'alert-success');
-    Session::flash('message',$langBBBUpdateSuccessful); 
+    Session::flash('message',$langBBBUpdateSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
@@ -985,7 +957,7 @@ function delete_bbb_session($id)
                                                             'title' => $tc_title));
 
    // Session::Messages($langBBBDeleteSuccessful, 'alert-success');
-    Session::flash('message',$langBBBDeleteSuccessful); 
+    Session::flash('message',$langBBBDeleteSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
@@ -1048,7 +1020,7 @@ function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record, $opt
     }
     if ($run_to == -1) {
       //  Session::Messages($langBBBConnectionErrorOverload, 'alert-danger');
-        Session::flash('message',$langBBBConnectionErrorOverload); 
+        Session::flash('message',$langBBBConnectionErrorOverload);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/tc/index.php?course=$course_code");
     } else { // create the meeting
@@ -1116,13 +1088,13 @@ function create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record, $opt
         if ($result == null) {
             // If we get a null response, then we're not getting any XML back from BBB.
             //Session::Messages($langBBBConnectionError, 'alert-danger');
-            Session::flash('message',$langBBBConnectionError); 
+            Session::flash('message',$langBBBConnectionError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/tc/index.php?course=$course_code");
         }
         if ($result['returncode'] != 'SUCCESS') {
             //Session::Messages($langBBBCreationRoomError, 'alert-danger');
-            Session::flash('message',$langBBBCreationRoomError); 
+            Session::flash('message',$langBBBCreationRoomError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/tc/index.php?course=$course_code");
         }
@@ -1497,14 +1469,14 @@ function get_meeting_users($salt,$bbb_url,$meeting_id,$pw)
     if ($result == null) {
         // If we get a null response, then we're not getting any XML back from BBB.
        // Session::Messages($langBBBConnectionError, 'alert-danger');
-        Session::flash('message',$langBBBConnectionError); 
+        Session::flash('message',$langBBBConnectionError);
         Session::flash('alert-class', 'alert-danger');
         redirect("index.php?course=$course_code");
     } else {
         // We got an XML response, so let's see what it says:
         if (isset($result['messageKey'])) {
            // Session::Messages($langBBBGetUsersError, 'alert-danger');
-            Session::flash('message',$langBBBGetUsersError); 
+            Session::flash('message',$langBBBGetUsersError);
             Session::flash('alert-class', 'alert-danger');
             redirect("index.php?course=$course_code");
         } else {
