@@ -89,15 +89,15 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
                          <div class="modal-body" id="abuse_modal_body_'.$rtype.'_'.$rid.'">
 	                         <form id="abuse_form_'.$rtype.'_'.$rid.'">
 		                         <fieldset>
-                                      <div class="form-group">
+                                      <div class="form-group mt-3">
                                           <label for="abuse_form_select'.$rtype.'_'.$rid.'">'.$langAbuseReportCat.'</label>
-                                          <select class="form-control" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">
+                                          <select class="form-select" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">
                                               <option value="rudeness">'.$langRudeness.'</option>
                                               <option value="spam">'.$langSpam.'</option>
                                               <option value="other">'.$langOther.'</option>    
                                           </select>
                                       </div>
-                                      <div class="form-group">
+                                      <div class="form-group mt-3">
                                           <label for="abuse_form_txt'.$rtype.'_'.$rid.'">'.$langMessage.'</label>
                                           <textarea class="form-control" name="abuse_report_msg" id="abuse_form_txt'.$rtype.'_'.$rid.'"></textarea>
                                       </div>
@@ -146,15 +146,15 @@ function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
                          <div class="modal-body" id="abuse_modal_body_'.$rtype.'_'.$rid.'">
 	                         <form id="abuse_form_'.$rtype.'_'.$rid.'">
 		                         <fieldset>
-                                      <div class="form-group">
+                                      <div class="form-group mt-3">
                                           <label for="abuse_form_select'.$rtype.'_'.$rid.'">'.$langAbuseReportCat.'</label>
-                                          <select class="form-control" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">
+                                          <select class="form-select" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">
                                               <option value="rudeness">'.$langRudeness.'</option>
                                               <option value="spam">'.$langSpam.'</option>
                                               <option value="other">'.$langOther.'</option>
                                           </select>
                                       </div>
-                                      <div class="form-group">
+                                      <div class="form-group mt-3">
                                           <label for="abuse_form_txt'.$rtype.'_'.$rid.'">'.$langMessage.'</label>
                                           <textarea class="form-control" name="abuse_report_msg" id="abuse_form_txt'.$rtype.'_'.$rid.'"></textarea>
                                       </div>

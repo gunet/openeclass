@@ -40,30 +40,31 @@
                         </p>
                         <pre>{{ $unparsed_lines }}</pre>
                     @endif
-
-                    <div class='table-responsive'>
-                        <table class='announcements_table'>
-                            <tr class='notes_thead'>
-                                <th class='text-white'>{{ trans('langSurname') }}</th>
-                                <th class='text-white'>{{ trans('langName') }}</th>
-                                <th class='text-white'>e-mail</th>
-                                <th class='text-white'>{{ trans('langPhone') }}</th>
-                                <th class='text-white'>{{ trans('langAm') }}</th>
-                                <th class='text-white'>username</th>
-                                <th class='text-white'>password</th>
-                            </tr>
-                            @foreach ($new_users_info as $n)
-                                <tr>
-                                    <td>{{ $n[1] }}</td>
-                                    <td>{{ $n[2] }}</td>
-                                    <td>{{ $n[3] }}</td>
-                                    <td>{{ $n[4] }}</td>
-                                    <td>{{ $n[5] }}</td>
-                                    <td>{{ $n[6] }}</td>
-                                    <td>{{ $n[7] }}</td>
+                    <div class='col-sm-12'>
+                        <div class='table-responsive'>
+                            <table class='table-default'>
+                                <tr class='list-header'>
+                                    <th class='text-white'>{{ trans('langSurname') }}</th>
+                                    <th class='text-white'>{{ trans('langName') }}</th>
+                                    <th class='text-white'>e-mail</th>
+                                    <th class='text-white'>{{ trans('langPhone') }}</th>
+                                    <th class='text-white'>{{ trans('langAm') }}</th>
+                                    <th class='text-white'>username</th>
+                                    <th class='text-white'>password</th>
                                 </tr>
-                            @endforeach
-                        </table>
+                                @foreach ($new_users_info as $n)
+                                    <tr>
+                                        <td>{{ $n[1] }}</td>
+                                        <td>{{ $n[2] }}</td>
+                                        <td>{{ $n[3] }}</td>
+                                        <td>{{ $n[4] }}</td>
+                                        <td>{{ $n[5] }}</td>
+                                        <td>{{ $n[6] }}</td>
+                                        <td>{{ $n[7] }}</td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -81,7 +81,8 @@ if (isset($_GET['stats'])) {
             $date_end = date("Y-m-d", strtotime("+1 days"));
             $page_link = "&amp;stats=failurelogin";
             $log = new Log();
-            $data['extra_info'] = $log->display(0, 0, 0, LOG_LOGIN_FAILURE, $date_start, $date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
+            $log->display(0, 0, 0, LOG_LOGIN_FAILURE, $date_start, $date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
+            $data['extra_info'] = $tool_content;
             break;
         case 'unregusers':
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
@@ -89,7 +90,8 @@ if (isset($_GET['stats'])) {
             $date_end = date("Y-m-d", strtotime("+1 days"));
             $page_link = "&amp;stats=unregusers";
             $log = new Log();
-            $data['extra_info'] = $log->display(0, -1, 0, LOG_DELETE_USER, $date_start, $date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
+            $log->display(0, -1, 0, LOG_DELETE_USER, $date_start, $date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
+            $data['extra_info'] = $tool_content;
             break;
         case 'musers':
             $data['loginDouble'] = list_ManyResult("SELECT DISTINCT BINARY(username) AS username, COUNT(*) AS nb

@@ -291,7 +291,7 @@ $head_content .= "
                                 '</div>'+
                                 '<div class=\"form-group\">' +
                                     '<div class=\"col-sm-5\">' +
-                                        '<select id=\"difficultyId\" class=\"form-control\">' +
+                                        '<select id=\"difficultyId\" class=\"form-select\">' +
                                             '<option value=\"0\">  ----  </option>' +
                                             '<option value=\"1\">$langQuestionVeryEasy</option>' +
                                             '<option value=\"2\">$langQuestionEasy</option>' +
@@ -301,7 +301,7 @@ $head_content .= "
                                         '</select>' +
                                     '</div>' +                                
                                     '<div class=\"col-sm-5\">' +
-                                        '<select id=\"categoryId\" class=\"form-control\">$cat_options_2</select>' +
+                                        '<select id=\"categoryId\" class=\"form-select\">$cat_options_2</select>' +
                                     '</div>' +                                    
                                     '<div class=\"col-sm-2\">' +
                                         '<input class=\"form-control\" type=\"text\" id=\"questionRandomDrawn\" value=\"\">' +

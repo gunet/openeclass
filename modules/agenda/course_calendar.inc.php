@@ -458,8 +458,8 @@ require_once 'include/lib/references.class.php';
        $event_type_url = array(
             'assignment' => 'modules/work/index.php?id=thisid&course=thiscourse',
             'exercise' => 'modules/exercise/exercise_submit.php?course=thiscourse&exerciseId=thisid',
-            'agenda' => 'modules/agenda/?id=thisid&course=thiscourse',
-            'teleconference' => 'modules/tc/?course=thiscourse');
+            'agenda' => 'modules/agenda/index.php?id=thisid&course=thiscourse',
+            'teleconference' => 'modules/tc/index.php?course=thiscourse');
 
        $fromdatetime = date('Y-m-d H:i:s', $from / 1000);
        $todatetime = date('Y-m-d H:i:s', $to / 1000);
@@ -569,7 +569,7 @@ require_once 'include/lib/references.class.php';
                 $barYear = date("Y", $d);
                 $eventlist .= "<tr>";
                 $eventlist .= "<td colspan='2' class='monthLabel list-header'>";
-                $eventlist .= "<div class='text-center'><strong>" . $langMonths[$barMonth] . "&nbsp;" . $barYear . "</strong></div>";
+                $eventlist .= "<div class='text-center'><strong class='text-white'>" . $langMonths[$barMonth] . "&nbsp;" . $barYear . "</strong></div>";
                 $eventlist .= "</td>";
                 $eventlist .= "</tr>";
             }

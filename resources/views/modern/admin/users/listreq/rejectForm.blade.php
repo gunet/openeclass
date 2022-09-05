@@ -41,21 +41,22 @@
                                     {!! $warning !!}
                                 </div>
                             @endif
+                            <div class='table-responsive'>
                                 <table class='table-default'>
                                     <tr>
-                                        <th class='left'>{{trans('langName')}}</th>
+                                        <th class='text-start'>{{trans('langName')}}</th>
                                         <td>{!!  q($user_request->givenname) !!}</td>
                                     </tr>
                                     <tr>
-                                        <th class='left'>{{ trans('langSurname') }}</th>
+                                        <th class='text-start'>{{ trans('langSurname') }}</th>
                                         <td>{!! q($user_request->surname) !!}</td>
                                     </tr>
                                     <tr>
-                                        <th class='left'>{{ trans('langEmail') }}</th>
+                                        <th class='text-start'>{{ trans('langEmail') }}</th>
                                         <td>{!! q($user_request->email) !!}</td>
                                     </tr>
                                     <tr>
-                                        <th class='left'>{{ trans('langComments') }}</th>
+                                        <th class='text-start'>{{ trans('langComments') }}</th>
                                         <td>
                                             <input type='hidden' name='id' value='{{$id}}'>
                                             <input type='hidden' name='close' value='2'>
@@ -65,21 +66,22 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class='left'>{{ trans('langRequestSendMessage') }}</th>
+                                        <th class='text-start'>{{ trans('langRequestSendMessage') }}</th>
                                         <td>
                                             &nbsp;<input type='text' class='auth_input' name='prof_email' value='{!! q($user_request->email) !!}'>
                                             <input type='checkbox' name='sendmail' value='1' checked='yes'> <small>{{ trans('langGroupValidate') }}</small>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class='left'>&nbsp;</th>
+                                        <th class='text-start'>&nbsp;</th>
                                         <td>
                                             <input class='btn btn-primary' type='submit' name='submit' value="{{trans('langRejectRequest')}}">&nbsp;&nbsp;<small>{{ trans('langRequestDisplayMessage') }}</small>
                                         </td>
                                     </tr>
                                 </table>
-                                {!! generate_csrf_token_form_field() !!}
-                            </form>
+                            </div>
+                            {!! generate_csrf_token_form_field() !!}
+                        </form>
                     @endif
 
                     @if($user_requests)

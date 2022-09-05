@@ -211,16 +211,22 @@ $(function() {
             $indirectId = getIndirectReference($item->id);
             $tool_content .= "
       <div class='panel panel-default mt-3' data-id='$indirectId'>
-        <div class='panel-heading pt-2 pe-3 ps-3'>
-          <span class='control-label-notes'>$heading</span>
-          <div class='text-end text-secondary'>$type " .
-            icon('fa-edit', $langEdit, 'activity.php?edit=' . $indirectId) . "
-            <a class='confirm-delete' href='activity.php?delete=$indirectId' title='$langDelete' data-bs-toggle='tooltip'>
-                <span class='fa fa-times delete_btn text-danger'></span><span class='sr-only'>$langDelete</span></a>
-            <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
+        <div class='panel-heading'>
+          <div class='row'>
+            <div class='col-md-6 col-12'>
+                <span class='control-label-notes'>$heading</span>
+            </div>
+            <div class='col-md-6 col-12'>
+                <div class='text-end text-secondary'>$type " .
+                    icon('fa-edit', $langEdit, 'activity.php?edit=' . $indirectId) . "
+                    <a class='confirm-delete' href='activity.php?delete=$indirectId' title='$langDelete' data-bs-toggle='tooltip'>
+                        <span class='fa fa-times delete_btn text-danger'></span><span class='sr-only'>$langDelete</span></a>
+                    <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
+                </div>
+            </div>
           </div>
         </div>
-        <div class='panel-body panel-body-admin pe-3 ps-3'>";
+        <div class='panel-body'>";
             foreach ($headings as $lang => $msg) {
                 $tool_content .= "
           <div class='row'>

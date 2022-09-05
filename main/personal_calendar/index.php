@@ -608,7 +608,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                             <div class='form-group'>
                                 <p class='form-control-static'>$langiCalExplanation</p>
                             </div>
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <input type='text' class='form-control' value='$iCalFeedLink' readonly>
                             </div>
                             <div class='form-group text-end'>

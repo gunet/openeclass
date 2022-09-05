@@ -69,21 +69,21 @@
 
                     <div class='col-sm-12'>
                         <div class='table-responsive'>
-                            <table class='announcements_table nocategory-links'>
+                            <table class='table-default nocategory-links'>
                             @if (count($general_category->links) > 0)
-                                <tr class='notes_thead' style='height:45px;'>
-                                    <th class='text-white text-left' style='padding-left:15px;'>{{ trans('langNoCategory') }}</th>
+                                <tr class='list-header'>
+                                    <th class='text-white text-start'>{{ trans('langNoCategory') }}</th>
                                     @if ($display_tools)
-                                    <th class='text-white text-center' style='width:109px;'>{!! icon('fa-cogs') !!}</th>
+                                    <th class='text-white text-center'>{!! icon('fa-cogs') !!}</th>
                                     @endif
                                 <tr>
                                 @include('modules.link.common.linkList', ['category' => $general_category])
                             @else
-                                <tr class='notes_thead' style='height:45px'>
-                                    <th class='text-white text-left list-header' style='padding-left:15px;'>{{ trans('langNoCategory') }}</th>
+                                <tr class='list-header'>
+                                    <th class='text-white text-start'>{{ trans('langNoCategory') }}</th>
                                 </tr>
                                 <tr>
-                                    <td class='text-white text-center not_visible nocategory-link' style='padding-left:15px;'> - {{ trans('langNoLinkInCategory') }} - </td>
+                                    <td class='text-dark text-start not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
                                 </tr>
                             @endif
                             </table>
@@ -93,10 +93,10 @@
                     @if ($social_bookmarks_enabled == 1)
                         <div class='col-sm-12'>
                             <div class='table-responsive'>
-                                <table class='announcements_table nocategory-links'>
+                                <table class='table-default nocategory-links'>
                                 @if (count($social_category->links) > 0)
-                                    <tr class='notes_thead' style='height:45px;'>
-                                        <th class='text-white text-left' style='padding-left:15px;'>
+                                    <tr class='list-header'>
+                                        <th class='text-white text-start'>
                                             {{ trans('langSocialCategory')."   " }}
                                             @if (!$socialview)
                                                 <a href='index.php?course={{ $course_code }}&amp;urlview={{ $urlview }}&amp;socialview'>{!! icon('fa-folder', trans('langViewShow')) !!}</a>
@@ -112,13 +112,13 @@
                                         @include('modules.link.common.linkList', ['category' => $social_category])
                                     @endif
                                 @else
-                                    <tr class='notes_thead' style='height:45px;'>
-                                        <th class='text-white text-left list-header' style='padding-left:15px;'>
+                                    <tr class='list-header'>
+                                        <th class='text-white text-left'>
                                             {{ trans('langSocialCategory') }}
                                         </th>
                                     </tr>
                                     <tr>
-                                        <td style='margin-left:15px;'class='text-center not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
+                                        <td class='text-center not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
                                     </tr>
                                 @endif
                                 </table>
@@ -129,16 +129,16 @@
 
                     <div class='col-sm-12'>
                         <div class='table-responsive'>
-                            <table class='announcements_table category-links'>
-                            <tr class='notes_thead' style='height:45px;'>
-                                    <th class='text-white' style='padding-left:15px;'>{{ trans('langCategorisedLinks').'   ' }}
+                            <table class='table-default category-links'>
+                            <tr class='list-header'>
+                                    <th class='text-white'>{{ trans('langCategorisedLinks').'   ' }}
                                     @if ($categories)    
                                         @if (isset($urlview) && abs($urlview) == 0)
-                                            <a style='padding-left:15px;' href='index.php?course={{ $course_code }}&amp;urlview={{ str_repeat('1', count($categories)) . $tinymce_params . $socialview_param }}'>
+                                            <a href='index.php?course={{ $course_code }}&amp;urlview={{ str_repeat('1', count($categories)) . $tinymce_params . $socialview_param }}'>
                                                 {!! icon('fa-folder', trans('langViewShow')) !!}
                                             </a>
                                         @else
-                                            <a style='padding-left:15px;' href='index.php?course={{ $course_code }}&amp;urlview={{ str_repeat('0', count($categories)) . $tinymce_params . $socialview_param }}'>
+                                            <a href='index.php?course={{ $course_code }}&amp;urlview={{ str_repeat('0', count($categories)) . $tinymce_params . $socialview_param }}'>
                                                 {!! icon('fa-folder-open', trans('langViewHide')) !!}
                                             </a>
                                         @endif
@@ -156,7 +156,7 @@
                                             $newurlview[$key] = '0';
                                         ?>
                                         <tr class='link-subcategory-title'>
-                                            <th class = 'text-left category-link'> {!! icon('fa-folder-open-o', trans('langViewHide')) !!}
+                                            <th class = 'text-start category-link'> {!! icon('fa-folder-open-o', trans('langViewHide')) !!}
                                                 <a style='padding-left:15px;' href='index.php?course={{ $course_code }}&amp;urlview={{ $newurlview.$tinymce_params.$socialview_param }}' class='open-category'>
                                                     {{ $category->name }}
                                                 </a>
@@ -195,7 +195,7 @@
 
                                         @if (count($category->links) == 0)
                                         <tr>
-                                            <td class='text-left not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
+                                            <td class='text-start not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
                                             @if ($display_tools)
                                                 <td></td>
                                             @endif                                
@@ -203,7 +203,7 @@
                                         @endif                            
                                     @else
                                         <tr class='link-subcategory-title'>
-                                            <th class = 'text-left category-link'>{!! icon('fa-folder-o', trans('langViewShow')) !!}
+                                            <th class = 'text-start category-link'>{!! icon('fa-folder-o', trans('langViewShow')) !!}
                                                 <a href='index.php?course={{ $course_code }}&amp;urlview={{ empty($urlview) ? makedefaultviewcode($key) : substr_replace($urlview, '1', $key, 1) }}{{ $tinymce_params }}' class='open-category'>
                                                     {{ $category->name }} 
                                                 </a>
@@ -241,7 +241,7 @@
                                 @endforeach
                             @else
                                 <tr>
-                                    <td class='text-left not_visible nocategory-link'> - {{ trans('langNoLinkCategories') }} - </td>
+                                    <td class='text-start not_visible nocategory-link'> - {{ trans('langNoLinkCategories') }} - </td>
                                 </tr>                    
                             @endif
                             </table>
