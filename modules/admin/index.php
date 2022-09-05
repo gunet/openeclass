@@ -333,7 +333,7 @@ if (count($res) >= 1) {
                     <div class='row'>";
 
     foreach ($res as $row) {
-        $tool_content .= "<div class='col-xs-6'>" . $row->name . "</div><div class='col-xs-6'>" . nice_format($row->last_run, true) . "</div>";
+        $tool_content .= "<div class='col-xs-6'>" . $row->name . "</div><div class='col-xs-6'>" . format_locale_date(strtotime($row->last_run), 'short') . "</div>";
     }
     $tool_content .= "</div>
                 </div>

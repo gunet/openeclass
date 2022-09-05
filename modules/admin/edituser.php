@@ -357,7 +357,7 @@ if ($u) {
                 if (!$logs->reg_date) {
                     $tool_content .= $langUnknownDate;
                 } else {
-                    $tool_content .= " " . nice_format($logs->reg_date) . " ";
+                    $tool_content .= " " . format_locale_date(strtotime($logs->reg_date), 'short', false) . " ";
                 }
                 $tool_content .= "</td><td class='text-center'>";
                 if ($logs->status == USER_TEACHER) {

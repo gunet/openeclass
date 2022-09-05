@@ -99,9 +99,9 @@ function display_attendances() {
  */
 function register_user_presences($attendance_id, $actID) {
 
-    global $tool_content, $course_id, $course_code, $dateFormatMiddle,
+    global $tool_content, $course_id, $course_code,
            $langName, $langSurname, $langRegistrationDateShort, $langAttendanceAbsences,
-           $langAm, $langAttendanceBooking, $langID, $langAttendanceEdit, $langCancel;
+           $langAmShort, $langAttendanceBooking, $langID, $langAttendanceEdit, $langCancel;
 
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
@@ -151,7 +151,7 @@ function register_user_presences($attendance_id, $actID) {
                 <tr>
                   <th class='text-center' width='5%'>$langID</th>
                   <th class='text-left'>$langName $langSurname</th>
-                  <th class='text-center'>$langAm</th>
+                  <th class='text-center'>$langAmShort</th>
                   <th class='text-center'>$langRegistrationDateShort</th>
                   <th class='text-center'>$langAttendanceAbsences</th>
                 </tr>
@@ -169,8 +169,13 @@ function register_user_presences($attendance_id, $actID) {
                 <td class='text-center'>$cnt</td>
                 <td> " . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td>
-                <td class='text-center'>" . format_locale_date(strtotime($resultUser->reg_date), 'short') . "</td>
-                <td class='text-center'><input type='checkbox' value='1' name='$resultUser->userID'";
+                <td class='text-center'>";
+                if (!is_null($resultUser->reg_date)) {
+                    $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
+                } else {
+                    $tool_content .= '';
+                }
+                $tool_content .= "</td><td class='text-center'><input type='checkbox' value='1' name='$resultUser->userID'";
                 //check if the user has attendance for this activity already OR if it should be automatically inserted here
                 $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
                 if(isset($q->attend) && $q->attend == 1) {
@@ -197,40 +202,13 @@ function register_user_presences($attendance_id, $actID) {
 
 /**
  * @brief display attendance activities
- * @global type $tool_content
- * @global type $course_code
- * @global type $langAttendanceActList
- * @global type $langTitle
- * @global type $langType
- * @global type $langAttendanceActivityDate
- * @global type $langAttendanceNoTitle
- * @global type $langExercise
- * @global type $langAssignment
- * @global type $langAttendanceInsAut
- * @global type $langAttendanceInsMan
- * @global type $langDelete
- * @global type $langEditChange
- * @global type $langConfirmDelete
- * @global type $langAttendanceNoActMessage1
- * @global type $langAttendanceActivity
- * @global type $langHere
- * @global type $langAttendanceNoActMessage3
- * @global type $langcsvenc2
- * @global type $langConfig
- * @global type $langUsers
- * @global type $langGradebookAddActivity
- * @global type $langInsertWorkCap
- * @global type $langInsertExerciseCap
- * @global type $langAdd
- * @global type $langExport
- * @global type $langInsertTcMeeting
  * @param type $attendance_id
  */
 function display_attendance_activities($attendance_id) {
 
     global $tool_content, $course_code, $attendance, $langAttendanceInsMan,
-           $langAttendanceActList, $langTitle, $langType, $langAttendanceActivityDate,
-           $langGradebookNoTitle, $langExercise, $langAssignment,$langAttendanceInsAut,
+           $langAttendanceActList, $langTitle, $langType, $langDate,
+           $langGradebookNoTitle, $langAssignment,$langAttendanceInsAut,
            $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1,
            $langHere, $langAttendanceNoActMessage3, $langcsvenc2, $langAttendanceActivity,
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langExercise,
@@ -294,7 +272,7 @@ function display_attendance_activities($attendance_id) {
                         <tr class='list-header'><th class='text-center' colspan='5'>$langAttendanceActList</th></tr>
                         <tr class='list-header'>
                             <th>$langTitle</th>
-                            <th>$langAttendanceActivityDate</th>
+                            <th style='text-align: center;'>$langDate</th>
                             <th>$langType</th>
                             <th>$langStudents</th>
                             <th class='text-center'><i class='fa fa-cogs'></i></th>
@@ -307,9 +285,13 @@ function display_attendance_activities($attendance_id) {
             } else {
                 $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($details->id) . "'>".q($details->title)."</a>";
             }
-            $tool_content .= "</td>
-                    <td>" . nice_format($details->date, true, true) . "</td>";
-            $tool_content .= "<td>";
+            $tool_content .= "</td><td style='text-align:center;'>";
+             if (!is_null($details->date)) {
+                 $tool_content .= format_locale_date(strtotime($details->date), 'short', false);
+             } else {
+                 $tool_content .= " -- ";
+             }
+            $tool_content .= "</td><td>";
 
             if($details->module_auto_id) {
                 if($details->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
@@ -428,13 +410,6 @@ function attendance_display_available_assignments($attendance_id) {
 
 /**
  * @brief display available tc sessions for adding them to attendance
- * @global type $tool_content
- * @global type $course_id
- * @global type $course_code
- * @global type $langAttendanceNoActMessageTc
- * @global type $langGradebookActivityDate
- * @global type $langTitle
- * @global type $langAdd
  * @param type $attendance_id
  */
 function attendance_display_available_tc($attendance_id) {
@@ -459,7 +434,7 @@ function attendance_display_available_tc($attendance_id) {
         $tool_content .= "</tr>";
         foreach ($checkForTc as $data) {
             $tool_content .= "<tr><td><b>" . q($data->title) . "</b></td>";
-            $tool_content .= "<td>".nice_format($data->start_date, true) . "</td>";
+            $tool_content .= "<td>". format_locale_date(strtotime($data->start_date)) . "</td>";
             $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $data->id . "&amp;type=4");
         } // end of while
         $tool_content .= "</tr></table></div></div></div>";
@@ -470,14 +445,6 @@ function attendance_display_available_tc($attendance_id) {
 
 /**
  * @brief add other attendance activity
- * @global type $tool_content
- * @global type $course_code
- * @global type $langTitle
- * @global type $langAttendanceInsAut
- * @global type $langAdd
- * @global type $langAdd
- * @global type $langSave
- * @global type $langAttendanceActivityDate
  * @param type $attendance_id
  */
 function add_attendance_other_activity($attendance_id) {
@@ -816,9 +783,6 @@ function display_user_presences($attendance_id) {
            $langAttendanceNoActMessage1, $langAttendanceActAttend, $langAttendanceActCour,
            $langAttendanceInsAut, $langAttendanceInsMan, $langAttendanceBooking;
 
-        $attendance_limit = get_attendance_limit($attendance_id);
-
-        $limit = isset($_REQUEST['limit']) ? intval($_REQUEST['limit']) : 0;
         $userID = intval($_GET['book']); //user
         //check if there are booking records for the user, otherwise alert message for first input
         $checkForRecords = Database::get()->querySingle("SELECT COUNT(attendance_book.id) AS count FROM attendance_book, attendance_activities
@@ -864,7 +828,6 @@ function display_user_presences($attendance_id) {
                         $userAttend = 0;
                     }
                 }
-                $content = standard_text_escape($activity->description);
                 $tool_content .= "<tr><td><b>";
 
                 if (!empty($activity->title)) {
@@ -873,7 +836,7 @@ function display_user_presences($attendance_id) {
                 $tool_content .= "</b>";
                 $tool_content .= "</td>";
                 if($activity->date){
-                    $tool_content .= "<td><div class='smaller'><span class='day'>" . nice_format($activity->date, true, true) . "</div></td>";
+                    $tool_content .= "<td><div class='smaller'><span class='day'>" . format_locale_date(strtotime($activity->date), 'short', false) . "</div></td>";
                 } else {
                     $tool_content .= "<td>-</td>";
                 }
@@ -910,9 +873,9 @@ function display_user_presences($attendance_id) {
 function display_all_users_presences($attendance_id) {
 
     global $course_id, $course_code, $tool_content, $langName, $langSurname,
-           $langID, $langAm, $langRegistrationDateShort, $langAttendanceAbsences,
+           $langID, $langAmShort, $langRegistrationDateShort, $langAttendanceAbsences,
            $langAttendanceBook, $langAttendanceDelete, $langConfirmDelete,
-           $langNoStudentsInAttendance, $langHere, $dateFormatMiddle;
+           $langNoStudentsInAttendance, $langHere;
 
     $attendance_limit = get_attendance_limit($attendance_id);
 
@@ -932,7 +895,7 @@ function display_all_users_presences($attendance_id) {
                 <tr>
                   <th width='1'>$langID</th>
                   <th>$langName $langSurname</th>
-                  <th class='text-center'>$langAm</th>
+                  <th class='text-center'>$langAmShort</th>
                   <th class='text-center'>$langRegistrationDateShort</th>
                   <th class='text-center'>$langAttendanceAbsences</th>
                   <th class='text-center'><i class='fa fa-cogs'></i></th>
@@ -950,7 +913,14 @@ function display_all_users_presences($attendance_id) {
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID) . "</td>
                 <td>$resultUser->am</td>
-                <td class='text-center'>" . format_locale_date(strtotime($resultUser->reg_date), 'short') . "</td>
+                <td class='text-center'>";
+            if (!is_null($resultUser->reg_date)) {
+                $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
+            } else {
+                $tool_content .= "";
+            }
+
+            $tool_content .= "</td>
                 <td class='text-center'>" . userAttendTotal($attendance_id, $resultUser->userID) . "/" . $attendance_limit . "</td>
                 <td class='option-btn-cell'>"
                    . action_button(array(
@@ -1234,7 +1204,7 @@ function student_view_attendance($attendance_id) {
             }
             $tool_content .= "</b>";
             $tool_content .= "</td>"
-                    . "<td><div class='smaller'>" . nice_format($details->date, true, true) . "</div></td>"
+                    . "<td><div class='smaller'>" . format_locale_date(strtotime($details->date), 'short', false) . "</div></td>"
                     . "<td>" . $content . "</td>";
             $tool_content .= "<td width='70' class='text-center'>";
             //check user grade for this activity

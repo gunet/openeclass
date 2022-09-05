@@ -115,7 +115,7 @@
                                                         @else
                                                             {{ $count_index.trans('langor') }} {{ trans('langsWeek') }}
                                                         @endif
-                                                        ({{ trans('langFrom2') }} {{ nice_format($course_unit->start_week) }} {{ trans('langTill') }} {{ nice_format($course_unit->finish_week) }})
+                                                        ({{ trans('langFrom2') }} {{  format_locale_date(strtotime($course_unit->start_week), 'short', false) }} {{ trans('langTill') }} {{ format_locale_date(strtotime($course_unit->finish_week), 'short', false) }})
                                                     </a>
                                                 @else
                                                     <a href="modules/unit/{{ $course_unit->id }}.html">

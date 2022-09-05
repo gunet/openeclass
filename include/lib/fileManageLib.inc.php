@@ -458,7 +458,7 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
  */
 function common_doc_path($extra_path, $full = false) {
     global $webDir, $common_doc_visible;
-    if (preg_match('#^common:(/.*)$#', $extra_path, $matches)) {
+    if (!is_null($extra_path) and preg_match('#^common:(/.*)$#', $extra_path, $matches)) {
         $cpath = $matches[1];
         $q = Database::get()->querySingle("SELECT visible FROM document
                                       WHERE path = ?s AND

@@ -922,7 +922,7 @@ function showlinksofcategory($cat_id = 0) {
                     $tool_content .= "<p>" . nl2br(q($myrow->description)) . "</p>";
                 }
                 $tool_content .= "</td>
-                    <td class='text-center'>" . nice_format(date('Y-m-d', strtotime($myrow->date))) . "</td>";
+                    <td class='text-center'>" . format_locale_date(strtotime($myrow->date),  'short', false) . "</td>";
                 if (!$is_in_tinymce) {
                     if ($display_tools) {
                         $tool_content .= "<td class='option-btn-cell'>" .

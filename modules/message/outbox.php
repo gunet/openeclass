@@ -97,7 +97,7 @@ if (isset($_GET['mid'])) {
                                     <strong>$langDate:</strong>
                                 </div>
                                 <div class='col-sm-10'>
-                                    ".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."
+                                    ". format_locale_date($msg->timestamp, 'short') ."
                                 </div>                
                             </div>
                             <div class='row  margin-bottom-thin'>

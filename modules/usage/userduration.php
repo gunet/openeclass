@@ -118,7 +118,7 @@ if (isset($_GET['u'])) { //  stats per user
             </tr>";
             foreach ($user_logins as $ul) {
                 $tool_content .= "<tr>";
-                $tool_content .= "<td>" . nice_format($ul->last_update, true) . "</td>";
+                $tool_content .= "<td>" . format_locale_date(strtotime($ul->last_update)) . "</td>";
                 $tool_content .= "</tr>";
             }
             $tool_content .= "</table>";

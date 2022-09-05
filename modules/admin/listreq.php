@@ -162,9 +162,9 @@ if (!empty($show) and $show == 'closed') {
             $tool_content .= '<td>' . q($req->username) . '</td>';
             $tool_content .= '<td>' . $tree->getFullPath($req->faculty_id) . '</td>';
             $tool_content .= "<td class='text-center' data-sort='$sort_date_open'>
-				<small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
+				<small>" . format_locale_date(strtotime($req->date_open), 'short', false) . "</small></td>";
             $tool_content .= "<td class='text-center' data-sort='$sort_date_closed'>
-				<small>" . nice_format(date('Y-m-d', strtotime($req->date_closed))) . "</small></td>";
+				<small>" . format_locale_date(strtotime($req->date_closed), 'short', false) . "</small></td>";
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
                                 array('title' => $langRestore,
@@ -199,9 +199,9 @@ if (!empty($show) and $show == 'closed') {
             $tool_content .= "<td>" . q($req->username) . "&nbsp;</td>";
             $tool_content .= "<td>" . $tree->getFullPath($req->faculty_id) . "</td>";
             $tool_content .= "<td class='text-center' data-sort='$sort_date_open'>
-				<small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
+				<small>" . format_locale_date(strtotime($req->date_open), 'short', false) . "</small></td>";
             $tool_content .= "<td class='text-center' data-sort='$sort_date_closed'>
-				<small>" . nice_format(date('Y-m-d', strtotime($req->date_closed))) . "</small></td>";
+				<small>" . format_locale_date(strtotime($req->date_closed), 'short', false) . "</small></td>";
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
                                 array('title' => $langRestore,
@@ -336,7 +336,7 @@ else {
             $tool_content .= "<td>" . q($req->username) . "</td>";
             $tool_content .= "<td>" . $tree->getFullPath($req->faculty_id) . "</td>";
             $tool_content .= "<td data-sort='$sort_date'>
-                                <small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
+                                <small>" . format_locale_date(strtotime($req->date_open), 'short', false) . "</small></td>";
             $tool_content .= "<td class='option_btn_cell'>";
             switch ($req->password) {
                 case 'pop3':

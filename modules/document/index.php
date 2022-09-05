@@ -1547,8 +1547,8 @@ if ($doc_count == 0) {
                         "</small></span>";
             }
             $tool_content .= "</td>";
-            $date = nice_format($entry['date'], true, true);
-            $date_with_time = nice_format($entry['date'], true);
+            $date = format_locale_date(strtotime($entry['date']), 'short', false);
+            $date_with_time = format_locale_date(strtotime($entry['date']), 'short');
             if (($is_dir) or ($entry['extra_path'] != '')) {
                 $tool_content .= "<td>&nbsp;</td><td class='center'>$date</td>";
             } else if ($entry['format'] == ".meta") {

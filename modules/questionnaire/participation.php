@@ -117,18 +117,18 @@ $tool_content .= "
             </div>" . ($poll->start_date? ("
             <div class='row margin-bottom-thin'>
                 <div class='col-sm-3'>
-                    <strong>$langStartDate:</strong>
+                    <strong>$langStart:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    " . nice_format($poll->start_date, true) . "
+                    " . format_locale_date(strtotime($poll->start_date)) . "
                 </div>
             </div>"): '') . ($poll->end_date? ("
             <div class='row margin-bottom-thin'>
                 <div class='col-sm-3'>
-                    <strong>$langEndDate:</strong>
+                    <strong>$langPollEnd:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    " . nice_format($poll->end_date, true) . "
+                    " . format_locale_date(strtotime($poll->end_date)) . "
                 </div>
             </div>"): '') . "
             <div class='row margin-bottom-thin'>
@@ -180,7 +180,7 @@ foreach ($allUsers as $user_id) {
     $key = $ok? 'yes': 'no';
     $participation_icon = icon($ok? 'fa-check-square-o': 'fa-square-o');
     if (isset($timestamp[$user_id])) {
-        $ts = preg_replace('/:\d\d$/', '', nice_format($timestamp[$user_id], true));
+        $ts = format_locale_date(strtotime($timestamp[$user_id]), 'short');
         $data_ts = " data-sort='{$timestamp[$user_id]}'";
     } else {
         $ts = '';
@@ -198,7 +198,7 @@ foreach ($allUsers as $user_id) {
 
 foreach ($emailUsers as $mail) {
     $participation_icon = icon('fa-check-square-o');
-    $ts = preg_replace('/:\d\d$/', '', nice_format($timestamp[$email], true));
+    $ts = format_locale_date(strtotime($timestamp[$email]), 'short');
     $data_ts = " data-sort='{$timestamp[$email]}'";
     $tool_content .= "
                 <tr>

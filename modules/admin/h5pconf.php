@@ -34,7 +34,7 @@ if (isset($_GET['update']) and $_GET['update']) {
                     <span class='hidden-xs'>$langMaj</span>                    
                 </a>";
                 if ($ts) {
-                    $tool_content .= "<span class='help-block'><em>$langlastUpdated: " . greek_format($ts, true) . "</em></span>";
+                    $tool_content .= "<span class='help-block'><em>$langlastUpdated: " . format_locale_date($ts, 'short', false) . "</em></span>";
                 }
             $tool_content .= "</div>
         </div>";

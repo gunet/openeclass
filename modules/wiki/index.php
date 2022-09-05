@@ -427,7 +427,7 @@ switch ($action) {
                         if ($last_modification){
                             $tool_content .= "<td class='text-center'>
                                             " . q(user_get_data($last_modification->editor_id)->givenname) . "<br/>"
-                                              .nice_format($last_modification->last_mtime,TRUE)."
+                                              . format_locale_date(strtotime($last_modification->last_mtime), 'short')."
                                                 </td>";
                         } else {
                             $tool_content .= "<td class='text-center not_visible'>$langWikiNoModifications</td>";

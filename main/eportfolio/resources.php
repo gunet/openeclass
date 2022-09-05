@@ -366,7 +366,7 @@ if ($userdata) {
                                             <h3 class='panel-title'>".q($data['title'])."</h3>
                                     </div>
                                     <div class='panel-body'>
-                                        <div class='label label-success'>" . nice_format($data['timestamp'], true). "</div><br><br>".standard_text_escape($data['content'])."
+                                        <div class='label label-success'>" . format_locale_date(strtotime($data['timestamp'])). "</div><br><br>".standard_text_escape($data['content'])."
                                     </div>
                                     <div class='panel-footer'>
                                         <div class='row'>
@@ -468,7 +468,7 @@ if ($userdata) {
                                             <h3 class='panel-title'>".q($data['title'])."</h3>
                                     </div>
                                     <div class='panel-body'>
-                                        <div class='label label-success'>" . nice_format($data['timestamp'], true). "</div><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+                                        <div class='label label-success'>" . format_locale_date(strtotime($data['timestamp'])). "</div><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                                     </div>
                                                     <div class='panel-footer'>
                                                     <div class='row'>
@@ -509,7 +509,7 @@ if ($userdata) {
                 $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=assignment&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 $submission_content .= "</div>";
                 $submission_content .= "</div>";
-                $submission_content .= "<div><b>$langSubmit</b>: " . nice_format($data['subm_date'], true). "</div>
+                $submission_content .= "<div><b>$langSubmit</b>: " . format_locale_date(strtotime($data['subm_date'])). "</div>
                                        <div><b>$langGradebookGrade</b>: ".$data['grade']." / ".$data['max_grade']."</div>
                                        <div><b>".$m['group_or_user']."</b>: ".$assignment_type."</div>";
                 if (!is_null($data['subm_text'])) {
@@ -584,7 +584,7 @@ if ($userdata) {
                 $tool_content .= "<tr class='$row_class'>
                                     <td class='text-center'><span class='fa ".choose_image('.' . $data['format'])."'></span></td>
                                     <td>$file_link</td>
-                                    <td>".nice_format($data['date_modified'], true, true)."</td>
+                                    <td>".format_locale_date(strtotime($data['date_modified']), 'short', false)."</td>
                                     <td>$filesize</td>
                                     <td class='option-btn-cell'>
                                        ". action_button(array(

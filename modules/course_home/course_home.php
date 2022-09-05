@@ -799,10 +799,10 @@ if ($total_cunits > 0) {
         }
         $cunits_content .= "<small><span class='help-block'>";
         if (!(is_null($cu->start_week))) {
-            $cunits_content .= "$langFrom2 " . nice_format($cu->start_week);
+            $cunits_content .= "$langFrom2 " . format_locale_date(strtotime($cu->start_week), 'short', false);
         }
         if (!(is_null($cu->finish_week))) {
-            $cunits_content .= " $langTill " . nice_format($cu->finish_week);
+            $cunits_content .= " $langTill " . format_locale_date(strtotime($cu->finish_week), 'short', false);
         }
         $cunits_content .= "</span></small>";
         $cunits_content .= "</div>";

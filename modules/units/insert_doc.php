@@ -169,7 +169,7 @@ function list_docs() {
                     $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
                 } else {
                     $size = format_file_size($entry['size']);
-                    $date = nice_format($entry['date'], true, true);
+                    $date = format_locale_date(strtotime($entry['date']), 'short', false);
                     $tool_content .= "<td class='text-right'>$size</td><td class='text-center'>$date</td>";
                 }
                 $tool_content .= "</tr>";

@@ -293,7 +293,7 @@ if (isset($_GET['id'])) { // if we come from prof request
         $pcom = $res->comment;
         $language = $res->lang;
         $pstatus = intval($res->status);
-        $pdate = nice_format(date('Y-m-d', strtotime($res->date_open)));
+        $pdate = format_locale_date(strtotime($res->date_open), 'short', false);
         // faculty id validation
         if ($res->faculty_id) {
             validateNode($depid, isDepartmentAdmin());

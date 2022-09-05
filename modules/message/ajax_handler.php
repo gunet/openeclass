@@ -185,7 +185,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $recipients = rtrim($recipients, ',&nbsp;'); // remove the last comma
             $td[$i++] = "<div><p class='recipients'>$recipients</p></div>";
         }
-        $td[$i++] = nice_format(date('Y-m-d H:i:s',$msg->timestamp), true);
+        $td[$i++] = format_locale_date($msg->timestamp, 'short');
 
 //            $td[$i++] = action_button(array(
 //                array(

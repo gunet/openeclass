@@ -145,7 +145,7 @@ Class Commenting {
                             ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
                             <div class='media-body bubble'>
-                             <div class='label label-success media-heading'>".nice_format(datetime_remove_seconds($comment->getTime()), true).'</div>'.
+                             <div class='label label-success media-heading'>" . format_locale_date(strtotime($comment->getTime())) . '</div>'.
                               "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
                                $post_actions
                                ."<div class='margin-top-thin' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>

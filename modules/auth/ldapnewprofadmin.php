@@ -65,9 +65,9 @@ if ($submit) {
     $pstatus = $_POST['pstatus'];
     $comment = isset($_POST['comment']) ? $_POST['comment'] : '';
     $lang = $session->validate_language_code(@$_POST['language']);
-    
+
     // check if user name exists
-    $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $pu);    
+    $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $pu);
     if ($username_check) {
         $tool_content .= "<div class='alert alert-danger'>$langUserFree</div><br><br><p align='pull-right'>
         <a href='../admin/listreq.php'>$langBackRequests</a></p>";
@@ -91,7 +91,7 @@ if ($submit) {
         default: $password = "";
             break;
     }
-    
+
     $registered_at = time();
     $expires_at = time() + get_config('account_duration');
     $verified_mail = isset($_REQUEST['verified_mail_form']) ? intval($_REQUEST['verified_mail_form']) : EMAIL_UNVERIFIED;
@@ -100,15 +100,15 @@ if ($submit) {
                                                     am, registered_at, expires_at, lang, verified_mail, description, whitelist)
                                 VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, 
                                 " . DBHelper::timeAfter() . ",
-                                " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, ?d, '', '')", 
+                                " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, ?d, '', '')",
                     $ps, $pn, $pu, $password, $pe, $pstatus, $phone, $comment, $lang, $verified_mail);
     $last_id = $sql->lastInsertID;
     // update personal calendar info table
     // we don't check if trigger exists since it requires `super` privilege
-    Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $last_id);    
+    Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $last_id);
     $userObj->refresh($last_id, array(intval($department)));
     user_hook($last_id);
-    
+
     $telephone = get_config('phone');
     $administratorName = get_config('admin_name');
     $emailhelpdesk = get_config('email_helpdesk');
@@ -165,7 +165,7 @@ if ($submit) {
     // if not submit then display the form
     if (isset($_GET['id'])) { // if we come from prof request
         $id = intval($_GET['id']);
-        
+
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "../admin/index.php",
@@ -183,7 +183,7 @@ if ($submit) {
                   'url' => "../admin/listreq.php?id=$_GET[id]&amp;close=1",
                   'icon' => 'fa-close',
                   'level' => 'primary')));
-                        
+
         $res = Database::get()->querySingle("SELECT givenname, surname, username, email,
                                                     faculty_id, comment, lang, date_open, phone, am, status, verified_mail 
                                                     FROM user_request WHERE id = ?d", $id);
@@ -198,7 +198,7 @@ if ($submit) {
         $lang = $res->lang;
         $pstatus = $res->status;
         $pvm = $res->verified_mail;
-        $pdate = nice_format(date('Y-m-d', strtotime($res->date_open)));
+        $pdate = format_locale_date(strtotime($res->date_open), 'short');
     }
 
     $tool_content .= "<div class='form-wrapper'>
@@ -231,7 +231,7 @@ if ($submit) {
 	<div class='form-group'>
           <label for='emailverified' class='col-sm-2 control-label'>$langEmailVerified:</label>
             <div class='col-sm-10'>";
-        $verified_mail_data = array();        
+        $verified_mail_data = array();
         $verified_mail_data[0] = $m['pending'];
         $verified_mail_data[1] = $langYes;
         $verified_mail_data[2] = $langNo;
@@ -240,10 +240,10 @@ if ($submit) {
         } else {
             $tool_content .= selection($verified_mail_data, "verified_mail_form", '', "class='form-control'");
         }
-        $tool_content .= "</div></div>";          	
+        $tool_content .= "</div></div>";
         $tool_content .= "<div class='form-group'>
         <label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>
-            <div class='col-sm-10'>";           
+            <div class='col-sm-10'>";
         list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $pt, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
@@ -252,7 +252,7 @@ if ($submit) {
             <label for='lang' class='col-sm-2 control-label'>$langLanguage:</label>
             <div class='col-sm-10'>";
         $tool_content .= lang_select_options('language', "class='form-control'", $lang);
-        $tool_content .= "</div></div>";            
+        $tool_content .= "</div></div>";
         $tool_content .= "<div class='form-group'>
             <label for='phone' class='col-sm-2 control-label'>$langPhone:</label>
                 <div class='col-sm-10'>            
@@ -270,11 +270,11 @@ if ($submit) {
         </div>";
         if (isset($pstatus)) {
             $tool_content .= "<input type='hidden' name='pstatus' value='$pstatus'>";
-        }        
+        }
 	$tool_content .= "<input type='hidden' name='auth' value='$auth' >	
 	<input type='hidden' name='rid' value='" . @$id . "'>
       </fieldset>
     </form>
-    </div>";    
+    </div>";
 }
 draw($tool_content, 3, null, $head_content);

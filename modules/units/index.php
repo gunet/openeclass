@@ -226,10 +226,10 @@ if (isset($id) and $id !== false) {
         $comments = standard_text_escape(trim($info->comments));
         $course_start_week = $course_finish_week = '';
         if (!(is_null($info->start_week))) {
-            $course_start_week = " $langFrom2 " . nice_format($info->start_week);
+            $course_start_week = " $langFrom2 " . format_locale_date(strtotime($info->start_week), 'short', false);
         }
         if (!(is_null($info->finish_week))) {
-            $course_finish_week = " $langTill " . nice_format($info->finish_week);
+            $course_finish_week = " $langTill " . format_locale_date(strtotime($info->finish_week), 'short', false);
         }
     }
 }

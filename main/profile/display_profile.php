@@ -219,7 +219,7 @@ if ($userdata) {
                                         <div style='line-height:26px;'>
                                             <span style='font-weight: bold; color: #888;'>
                                                 $langProfileMemberSince:
-                                            </span>" . nice_format($userdata->registered_at, true) . "
+                                            </span>" . format_locale_date(strtotime($userdata->registered_at)) . "
                                         </div>
                                     </div>
                                 </div>

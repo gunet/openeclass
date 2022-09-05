@@ -61,7 +61,7 @@ $courseDir = "/courses/" . $course_code . "/document";
 $baseWorkDir = $baseServDir . $courseDir;
 $file = $baseWorkDir . $assetPath;
 $fileSize = format_file_size(filesize($file));
-$fileDate = nice_format(date('Y-m-d', filectime($file)));
+$fileDate = format_locale_date(filectime($file), 'short', false);
 
 
 //####################################################################################\\

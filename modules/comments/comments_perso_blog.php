@@ -25,9 +25,9 @@ require_once 'modules/comments/class.commenting.php';
 
 if (get_config('personal_blog_commenting')) {
     //response array
-    //[0] -> status, [1] -> message, other positions -> other data 
+    //[0] -> status, [1] -> message, other positions -> other data
     $response = array();
-    
+
     if ($_POST['action'] == 'new') {
         if (isset($_SESSION['uid'])  && $session->status) {
             $comment = new Comment();
@@ -36,9 +36,9 @@ if (get_config('personal_blog_commenting')) {
                 $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
                 $post_actions .= '<span class="fa fa-times text-danger pull-right" data-original-title="'.$langDelete.'" title="" data-toggle="tooltip"></span></a>';
                 $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
-                $post_actions .= '<span class="fa fa-edit pull-right" data-original-title="'.$langModify.'" title="" data-toggle="tooltip"></span></a>';                
-                $post_actions .='</div>';   
-                
+                $post_actions .= '<span class="fa fa-edit pull-right" data-original-title="'.$langModify.'" title="" data-toggle="tooltip"></span></a>';
+                $post_actions .='</div>';
+
                 $response[0] = 'OK';
                 $response[1] = "<div class='alert alert-success'>".$langCommentsSaveSuccess."</div>";
                 $response[2] = $comment->getId();
@@ -50,7 +50,7 @@ if (get_config('personal_blog_commenting')) {
                                 ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
                             <div class='media-body bubble'>
-                                <div class='label label-success media-heading'>".nice_format($comment->getTime(), true).'</div>'.
+                                <div class='label label-success media-heading'>".format_locale_date(strtotime($comment->getTime())).'</div>'.
                                     "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
                                     $post_actions
                                     ."<div class='margin-top-thin' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
@@ -87,7 +87,7 @@ if (get_config('personal_blog_commenting')) {
             if ($permEdit) {
                 if ($comment->delete()) {
                     $response[0] = 'OK';
-                    $response[1] = "<div class='alert alert-success'>".$langCommentsDelSuccess."</div>"; 
+                    $response[1] = "<div class='alert alert-success'>".$langCommentsDelSuccess."</div>";
                 } else {
                     $response[0] = 'ERROR';
                     $response[1] = "<div class='alert alert-warning'>".$langCommentsDelFail."</div>";

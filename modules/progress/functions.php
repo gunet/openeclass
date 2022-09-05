@@ -910,7 +910,7 @@ function display_available_assignments($element, $element_id, $unit_id = 0) {
             $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>$row->description</div>";
             $tool_content .= "<tr>" .
                     "<td><a href='{$urlServer}modules/work/?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
-                    "<td class='text-center'>".nice_format($row->submission_date, true)."</td>
+                    "<td class='text-center'>".format_locale_date(strtotime($row->submission_date), 'short')."</td>
                     <td>". selection(get_operators(), "operator[$assignment_id]") . "</td>".
                     "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$assignment_id]' value=''></td>" .
                     "<td class='text-center'><input name='assignment[]' value='$assignment_id' type='checkbox'></td>" .
@@ -1122,7 +1122,7 @@ function display_available_documents($element, $element_id, $unit_id = 0) {
                     $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
                 } else {
                     $size = format_file_size($entry['size']);
-                    $date = nice_format($entry['date'], true, true);
+                    $date = format_locale_date(strtotime($entry['date']), 'short', false);
                     $tool_content .= "<td class='text-right'>$size</td><td class='text-center'>$date</td>";
                 }
                 $tool_content .= "<td class='text-center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
@@ -1251,7 +1251,7 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
             $blog_id = $row->id;
             $tool_content .= "<tr>" .
                     "<td><a href='${urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id#comments-title'>" . q($row->title) . "</a></td>" .
-                    "<td class='text-center'>" . nice_format($row->time, true) . "</td>
+                    "<td class='text-center'>" . format_locale_date(strtotime($row->time), 'short') . "</td>
                     <td>". selection(get_operators(), "operator[$blog_id]") . "</td>".
                     "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$blog_id]' value=''></td>" .
                     "<td class='text-center'><input name='blogcomment[]' value='$blog_id' type='checkbox'></td>" .
@@ -1524,7 +1524,7 @@ function display_available_multimedia($element, $element_id, $unit_id = 0) {
                 }
                 $tool_content .= "<tr>".
                     "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description . "</td>".
-                    "<td class='text-center'>" . nice_format($row->date, true, true) . "</td>" .
+                    "<td class='text-center'>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
                     "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id'></td>" .
                     "</tr>";
             }
@@ -1550,7 +1550,7 @@ function display_available_multimedia($element, $element_id, $unit_id = 0) {
                         $tool_content .= "<tr>";
                         $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
                                 q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>" . $linkvideocat_description . "</td>";
-                        $tool_content .= "<td class='text-center'>" . nice_format($linkvideocat->date, true, true) . "</td>";
+                        $tool_content .= "<td class='text-center'>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
                         $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id'></td>";
                         $tool_content .= "</tr>";
                     }

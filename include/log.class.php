@@ -164,7 +164,7 @@ class Log {
             // display logs
             foreach ($sql as $r) {
                 $tool_content .= "<tr>";
-                $tool_content .= "<td><span style='display:none;'>$r->ts</span>" . nice_format($r->ts, true) . "<s/</td>";
+                $tool_content .= "<td><span style='display:none;'>$r->ts</span>" . format_locale_date(strtotime($r->ts), 'short') . "<s/</td>";
                 if (($r->user_id == 0) or ($logtype == LOG_DELETE_USER)) { // login failures or delete user
                     $tool_content .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
                 } else {
