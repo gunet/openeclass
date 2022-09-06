@@ -9,14 +9,14 @@
         <div class="row rowMedium">
 
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_Homepage">
-                    
+
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                    
+
                     @if(Session::has('message'))
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
                         <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
@@ -36,7 +36,7 @@
                     {!! isset($action_bar) ?  $action_bar : '' !!}
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                             <div class='form-wrapper shadow-sm p-3 rounded'>
-                                
+
                                 <form class='form-horizontal' role='form' name='edituser' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' onsubmit='return validateNodePickerForm();'>
                                     <fieldset>
                                         <div class='form-group mt-3'>
@@ -60,7 +60,7 @@
                                             @else
                                                 <div class='col-sm-12'>
                                                     <p class='form-control-static'>
-                                                        <b>{{ $info->username }}</b> [{{ $auth_info }}] 
+                                                        <b>{{ $info->username }}</b> [{{ $auth_info }}]
                                                         <input  class='form-control' type='hidden' name='username' value="{{ $info->username }}">
                                                     </p>
                                                 </div>
@@ -74,7 +74,7 @@
                                         </div>
                                         <div class='form-group mt-3'>
                                             <label class='col-sm-6 control-label-notes'>{{ trans('langEmailVerified') }}: </label>
-                                            <div class='col-sm-12'> 
+                                            <div class='col-sm-12'>
                                                 {!! selection($verified_mail_data, "verified_mail", intval($info->verified_mail), "class='form-control'") !!}
                                             </div>
                                         </div>
@@ -92,7 +92,7 @@
                                         </div>
                                         <div class='form-group mt-3'>
                                             <label class='col-sm-6 control-label-notes'>{{ trans('langFaculty') }}:</label>
-                                            <div class='col-sm-12'>   
+                                            <div class='col-sm-12'>
                                                 {!! $html !!}
                                             </div>
                                         </div>
@@ -154,7 +154,7 @@
                                                 </div>
                                             </div>
                                         @endif
-                                        
+
                                         <!--show custom profile fields input-->
                                         @if ($info->status != USER_GUEST)
                                             {!! render_profile_fields_form(array('origin' => 'admin_edit_profile', 'user_id' => $u)) !!}
@@ -200,7 +200,7 @@
                                                             @if (!$logs->reg_date)
                                                                 {{ trans('langUnknownDate') }}
                                                             @else
-                                                                {{ nice_format($logs->reg_date) }};
+                                                                {{ format_locale_date(strtotime($logs->reg_date), 'short', false) }};
                                                             @endif
                                                         </td>
                                                         @if ($logs->status == USER_TEACHER)
@@ -228,11 +228,11 @@
                             </div>
                         @else
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'><div class='alert alert-warning'>{{ trans('langNoStudentParticipation') }}</div></div>
-                        @endif  
+                        @endif
 
                 </div>
             </div>
         </div>
     </div>
-</div>  
+</div>
 @endsection

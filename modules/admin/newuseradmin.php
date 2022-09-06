@@ -181,7 +181,7 @@ if (isset($_POST['submit'])) {
         //     ((isset($auth) and $auth == 1)? " $langAndP": '')), 'alert-success');
             Session::flash('message',array($message,
             "$langTheU \"$givenname_form $surname_form\" $langAddedU" .
-            ((isset($auth) and $auth == 1)? " $langAndP": ''))); 
+            ((isset($auth) and $auth == 1)? " $langAndP": '')));
                     Session::flash('alert-class', 'alert-success');
         if ($rid) {
             $req_type = Database::get()->querySingle('SELECT status FROM user_request WHERE id = ?d', $rid)->status;
@@ -299,7 +299,7 @@ if (isset($_GET['id'])) { // if we come from prof request
         $data['pcom'] = $res->comment;
         $data['language'] = $res->lang;
         $data['pstatus'] = intval($res->status);
-        $data['pdate'] = nice_format(date('Y-m-d', strtotime($res->date_open)));
+        $data['pdate'] = format_locale_date(strtotime($res->date_open), 'short', false);
         // faculty id validation
         if ($res->faculty_id) {
             validateNode($depid, isDepartmentAdmin());

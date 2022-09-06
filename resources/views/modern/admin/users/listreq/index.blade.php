@@ -9,7 +9,7 @@
         <div class="row rowMedium">
 
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_Homepage">
-                    
+
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -41,7 +41,7 @@
                     @if ($user_requests)
                         <div class='table-responsive'>
                             <table id='requests_table' class='announcements_table'>
-                                {!! table_header() !!}        
+                                {!! table_header() !!}
                                 <tbody>
                                 @foreach ($user_requests as $user_request)
                                     <tr>
@@ -49,7 +49,7 @@
                                         <td>{{ $user_request->username }}</td>
                                         <td>{!! $tree->getFullPath($user_request->faculty_id) !!}</td>
                                         <td class='text-center'>
-                                            <small>{{ nice_format(date('Y-m-d', strtotime($user_request->date_open))) }}</small>
+                                            <small>{{ format_locale_date(strtotime($user_request->date_open), 'short', false) }}</small>
                                         </td>
                                         <td class='option_btn_cell'>
                                         @if ($user_request->password == 'pop3')
@@ -93,11 +93,11 @@
                                                 array('title' => trans('langElaboration'),
                                                     'icon' => 'fa-edit',
                                                     'url' => "newuseradmin.php?id=$user_request->id")
-                                            )) !!}                       
+                                            )) !!}
                                         @endif
                                         </td>
-                                    </tr>            
-                                @endforeach               
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>

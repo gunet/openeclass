@@ -104,7 +104,7 @@
                                     <td class='center'>{{ $file->date }}</td>
                                 @else
                                     <td>{{ $file->size }}</td>
-                                    <td title='{{ nice_format($file->date, true) }}' class='center'>{{ nice_format($file->date, true, true) }}</td>
+                                    <td title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'>{{ format_locale_date(strtotime($file->date), 'short') }}</td>
                                 @endif
                                 @unless ($is_in_tinymce)
                                     <td class='{{ $can_upload? 'option-btn-cell': 'text-center'}}'>

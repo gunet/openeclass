@@ -13,7 +13,7 @@
                             <td>{{ $user_request->username }}</td>
                             <td>{!! $tree->getFullPath($user_request->faculty_id) !!}</td>
                             <td data-sort='{{ date("Y-m-d H:i", strtotime($user_request->date_open)) }}'>
-                                <small>{{ nice_format(date('Y-m-d', strtotime($user_request->date_open))) }}</small>
+                                <small>{{ format_locale_date(strtotime($user_request->date_open), 'short', false) }}</small>
                             </td>
                             <td class='option_btn_cell'>
                             @if ($user_request->password == 'pop3')

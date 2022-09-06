@@ -144,18 +144,15 @@
                                                 </p>
                                             </div>
                                             <div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langFaculty') }}: 
+                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langFaculty') }}:
                                                     <span class='text-secondary'>
-                                                    
-                                                        @php 
-                                                            $user = new User(); 
-                                                            $departments = $user->getDepartmentIds($uid); 
+                                                        @php
+                                                            $user = new User();
+                                                            $departments = $user->getDepartmentIds($uid);
                                                         @endphp
                                                         @foreach ($departments as $dep)
                                                             {!! $tree->getFullPath($dep) !!}
-                                                            @php $i++; @endphp
                                                         @endforeach
-                                                        
                                                     </span>
                                                 </p>
                                             </div>
@@ -180,13 +177,13 @@
                                         <div class="shadow-sm bg-body rounded bg-primary">
                                             <p class='text-center ps-2 pe-2 pb-2 pt-2 control-label-notes'>{{ trans('langAboutMe') }}</p>
                                         </div>
-                                         
+
                                         @if (!empty($userdata->description))
                                         <p class='ps-1'>{!! standard_text_escape($userdata->description) !!}</p>
                                         @else
                                             <p class='text-center'>{{ trans('langNoInfoAvailable') }}</p>
-                                        @endif 
-                                        
+                                        @endif
+
                                     </div>
                                 </div>
 

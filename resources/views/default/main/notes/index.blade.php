@@ -273,7 +273,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
         } else {
             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?nid=" . getIndirectReference($note->id)."'>" . q($note->title) . "</a>";
         }
-        $tool_content .= "</b><br><small>" . nice_format($note->date_time) . "</small>";
+        $tool_content .= "</b><br><small>" . format_locale_date(strtotime($note->date_time)) . "</small>";
         if (!is_null($note->reference_obj_type)) {
             $tool_content .= "<br><small>$langReferencedObject: " . References::item_link($note->reference_obj_module, $note->reference_obj_type, $note->reference_obj_id, $note->reference_obj_course) . "</small>";
         }

@@ -359,17 +359,13 @@ function attendance_display_available_exercises($attendance_id) {
 
         foreach ($checkForExer as $newExerToGradebook) {
             $content = ellipsize_html($newExerToGradebook->description, 50);
-            $tool_content .= "<tr><td><b>";
-            if (!empty($newExerToGradebook->title)) {
-                $tool_content .= q($newExerToGradebook->title);
-            }
-            $tool_content .= "</b>";
-            $tool_content .= "</td>"
-                    . "<td><div class='smaller'><span class='day'>" . nice_format($newExerToGradebook->start_date, true, true) . " </div></td>"
-                    . "<td>" . $content . "</td>";
+            $tool_content .= "<tr>";
+            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
+            $tool_content .= "<td>" . $content . "</td>";
             $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2");
+            $tool_content .= "</td></tr>";
         }
-        $tool_content .= "</td></tr></table></div>";
+        $tool_content .= "</table></div>";
     } else {
         $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>

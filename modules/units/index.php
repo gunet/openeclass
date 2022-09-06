@@ -119,10 +119,10 @@ if (isset($id) and $id !== false) {
         $data['unitId'] = $info->id;
         $data['course_start_week'] = $data['course_finish_week'] = '';
         if (!(is_null($info->start_week))) {
-            $data['course_start_week'] = "$langFrom2 " . nice_format($info->start_week);
+            $data['course_start_week'] = "$langFrom2 " . format_locale_date(strtotime($info->start_week), 'short', false);
         }
         if (!(is_null($info->finish_week))) {
-            $data['course_finish_week'] = "$langTill " . nice_format($info->finish_week);
+            $data['course_finish_week'] = "$langTill " . format_locale_date(strtotime($info->finish_week), 'short', false);
         }
     }
 }

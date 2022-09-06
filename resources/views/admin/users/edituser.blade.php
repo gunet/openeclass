@@ -26,7 +26,7 @@
                 @else
                     <div class='col-sm-10'>
                         <p class='form-control-static'>
-                            <b>{{ $info->username }}</b> [{{ $auth_info }}] 
+                            <b>{{ $info->username }}</b> [{{ $auth_info }}]
                             <input  class='form-control' type='hidden' name='username' value="{{ $info->username }}">
                         </p>
                     </div>
@@ -40,7 +40,7 @@
             </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>{{ trans('langEmailVerified') }}: </label>
-                <div class='col-sm-10'> 
+                <div class='col-sm-10'>
                     {!! selection($verified_mail_data, "verified_mail", intval($info->verified_mail), "class='form-control'") !!}
                 </div>
             </div>
@@ -58,7 +58,7 @@
             </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>{{ trans('langFaculty') }}:</label>
-                <div class='col-sm-10'>   
+                <div class='col-sm-10'>
                     {!! $html !!}
                 </div>
             </div>
@@ -120,7 +120,7 @@
                     </div>
                 </div>
             @endif
-            
+
             <!--show custom profile fields input-->
             @if ($info->status != USER_GUEST)
                 {!! render_profile_fields_form(array('origin' => 'admin_edit_profile', 'user_id' => $u)) !!}
@@ -162,7 +162,7 @@
                                     @if (!$logs->reg_date)
                                         {{ trans('langUnknownDate') }}
                                     @else
-                                        {{ nice_format($logs->reg_date) }};
+                                        {{ format_locale_date(strtotime($logs->reg_date), 'short', false) }};
                                     @endif
                                 </td>
                                 @if ($logs->status == USER_TEACHER)
@@ -188,5 +188,5 @@
             </div>
         @else
             <div class='alert alert-warning'>{{ trans('langNoStudentParticipation') }}</div>
-        @endif    
+        @endif
 @endsection

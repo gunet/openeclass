@@ -12,10 +12,10 @@
                     <td>{{ $user_request->username }}</td>
                     <td>{!! $tree->getFullPath($user_request->faculty_id) !!}</td>
                     <td class='text-center' data-sort='{{ date("Y-m-d H:i", strtotime($req->date_open)) }}'>
-                        <small>{{ nice_format(date('Y-m-d', strtotime($user_request->date_open))) }}</small>
+                        <small>{{ format_locale_date(strtotime($req->date_open), 'short', false) }}</small>
                     </td>
                     <td <td class='text-center' data-sort='{{ date("Y-m-d H:i", strtotime($req->date_closed)) }}'>
-                        <small>{{ nice_format(date('Y-m-d', strtotime($user_request->date_closed))) }}</small>
+                        <small>{{ format_locale_date(strtotime($req->date_closed), 'short', false) }}</small>
                     </td>
                     <td class='option-btn-cell'>
                         {!! action_button(array(

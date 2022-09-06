@@ -222,7 +222,7 @@
                                 <div class='row'>
                                     @foreach ($cronParams as $cronParam)
                                         <div class='col-xs-6'>{{ $cronParam->name }}</div>
-                                        <div class='col-xs-6'>{{ nice_format($cronParam->last_run, true) }}</div>
+                                        <div class='col-xs-6'>{{ format_locale_date(strtotime($row->last_run), 'short') }}</div>
                                     @endforeach
                                 </div>
                             </div>
