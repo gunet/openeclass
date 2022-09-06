@@ -23,9 +23,9 @@
 	scromExport.inc.php
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 	               Sakis Agorastos <th_agorastos@hotmail.com>
-                       Amand Tihon <amand.tihon@alrj.org>	
+                       Amand Tihon <amand.tihon@alrj.org>
 ==============================================================================
-    @Description: This script is for export to IMS CP 1.1.4 format. It is 
+    @Description: This script is for export to IMS CP 1.1.4 format. It is
                   based on scormExport12.inc.php.
 
                   How SCORM/IMSCP export should be done
@@ -57,7 +57,6 @@
 
 if (!class_exists('IMSCPExport')) {
 
-    require_once 'include/lib/textLib.inc.php';
     require_once 'modules/exercise/exercise.class.php';
     require_once 'modules/exercise/question.class.php';
     require_once 'modules/exercise/answer.class.php';
@@ -465,7 +464,7 @@ if (!class_exists('IMSCPExport')) {
 
                                     $pageBody .= '</select>'."\n";
                                     }
-                                    else { 
+                                    else {
                                             $pageBody .= '<input type="text" name="' . $name . '" size="10" id="scorm_' . $idCounter . '">';
                                     }
                                 $fillScoreCounter++;
@@ -1115,8 +1114,8 @@ if (!class_exists('IMSCPExport')) {
 
             $zipFile = new ZipArchive();
             $zipFile->open($this->destDir . '.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
-            
-            // Create recursive directory iterator            
+
+            // Create recursive directory iterator
             $files = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($this->destDir),
                 RecursiveIteratorIterator::LEAVES_ONLY
@@ -1132,12 +1131,12 @@ if (!class_exists('IMSCPExport')) {
                     $zipFile->addFile($filePath, $relativePath);
                 }
             }
-                        
+
             if (!$zipFile->close()) {
                 $this->error[] = $langErrorCreatingScormArchive;
                 return false;
             }
-            
+
             claro_delete_file($this->destDir);
             return true;
         }
@@ -1170,7 +1169,7 @@ if (!class_exists('IMSCPExport')) {
             if ( !$this->fetch() ) return false;
             if ( !$this->prepare() ) return false;
             if ( !$this->createManifest() ) return false;
-            if ( !$this->zip() ) return false;           
+            if ( !$this->zip() ) return false;
             $this->send();
             return True;
         }

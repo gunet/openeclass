@@ -796,13 +796,66 @@ function user_app_exists($login) {
  * @return type
  */
 function html2text($string) {
-    $trans_tbl = get_html_translation_table(HTML_ENTITIES);
-    $trans_tbl = array_flip($trans_tbl);
+    //$trans_tbl = get_html_translation_table(HTML_ENTITIES);
+    //$trans_tbl = array_flip($trans_tbl);
     $string = html_entity_decode(strip_tags($string));
     $text = preg_replace('/<(div|p|pre|br)[^>]*>/i', "\n", $string);
     return canonicalize_whitespace(strip_tags($text));
     // return strtr (strip_tags($string), $trans_tbl);
 }
+
+
+/**
+ * @brie   completes url contained in the text with "<a href ...".
+ *         However the function simply returns the submitted text without any
+ *         transformation if it already contains some "<a href:" or "<img src=".
+ * @params string $text text to be converted
+ * @return text after conversion
+ * @author Rewritten by Nathan Codding - Feb 6, 2001.
+ *         completed by Hugues Peeters - July 22, 2002
+ *         Regex fixes by Alexandros Diamantidis - Jan 22, 2008
+ *
+ * Actually this function is taken from the PHP BB 1.4 script
+ * - Goes through the given string, and replaces xxxx://yyyy with an HTML <a> tag linking
+ * 	to that URL
+ * - Goes through the given string, and replaces www.xxxx.yyyy[zzzz] with an HTML <a> tag linking
+ * 	to http://www.xxxx.yyyy[/zzzz]
+ * - Goes through the given string, and replaces xxxx@yyyy with an HTML mailto: tag linking
+ * 		to that email address
+ */
+
+function make_clickable($text) {
+
+    // If the user has decided to deeply use html and manage himself
+    // hyperlink cancel the make clickable() function and return the text
+    // untouched.
+
+    if (preg_match("<(a|img)[[:space:]]*(href|src)[[:space:]]*=(.*)>", $text)) {
+        return $text;
+    }
+
+    // matches an "xxxx://yyyy" URL
+    // xxxx can only be alphanumeric characters
+    // yyyy is anything up to the first space, newline, ()<>
+
+    $text = preg_replace("#\b([a-z0-9]+?://[^, \n\r()<>]+)#i", "<a href='$1'>$1</a>", $text);
+
+    // matches a "www.xxxx.yyyy[/zzzz]" kinda lazy URL thing
+    // Must contain at least 2 dots. xxxx contains either alphanum, or "-"
+    // yyyy contains either alphanum, "-", or "."
+    // zzzz is optional.. will contain everything up to the first space, newline, or comma.
+    // This is slightly restrictive - it's not going to match stuff like "forums.foo.com"
+    // This is to keep it from getting annoying and matching stuff that's not meant to be a link.
+
+    $text = preg_replace("#\b((?<!://)www\.([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,}(/[^, \n\r()<>]*)?)#i", "<a href='http://$1'>$1</a>", $text);
+
+    // matches an email@domain type address
+
+    $text = preg_replace("#\b([0-9a-z_\.\+-]+@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,})\b#i", "<a href='mailto:$1'>$1</a>", $text);
+
+    return($text);
+}
+
 
 /*
   // IMAP authentication functions                                        |

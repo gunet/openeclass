@@ -21,7 +21,6 @@
  */
 
 require_once '../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'modules/progress/functions.php';
 require_once 'modules/progress/process_functions.php';
 

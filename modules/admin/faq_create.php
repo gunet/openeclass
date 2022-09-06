@@ -22,7 +22,6 @@
 
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['toDelete'])) {

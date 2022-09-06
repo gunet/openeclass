@@ -33,7 +33,6 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
-require_once 'include/lib/textLib.inc.php'; // textLib has functions required by templates
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'modules/exercise/exercise.class.php';
 require_once 'modules/exercise/question.class.php';

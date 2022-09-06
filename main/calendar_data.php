@@ -24,7 +24,6 @@
 $require_login = TRUE;
 
 $require_valid_uid = true;
-require_once '../include/lib/textLib.inc.php';
 if (!session_id()) {
     session_start();
 }

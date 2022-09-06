@@ -29,7 +29,6 @@ $require_editor = true;
 $require_help = true;
 $helpTopic = 'ManageCourseUnits';
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'include/main_lib.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'modules/progress/ExerciseEvent.php';

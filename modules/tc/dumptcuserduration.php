@@ -5,7 +5,6 @@ $require_login = true;
 $require_editor = true;
 
 include '../../include/init.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'modules/tc/functions.php';
 require_once 'include/lib/csv.class.php';
 

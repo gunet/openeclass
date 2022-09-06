@@ -33,7 +33,6 @@ require_once 'game.php';
 require_once 'analytics.php';
 
 $pageName = $langExercicesView;
-require_once 'include/lib/textLib.inc.php';
 
 $picturePath = "courses/$course_code/image";
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
@@ -59,7 +58,7 @@ $tool_content_extra = "<br/>
 			<td><br/><br/><br/>
 				<div align='center'><a href='index.php?course=$course_code'>$langBack</a></div>
 			</td>
-	</tr></thead></table>"; 
+	</tr></thead></table>";
 
 // if the object is not in the session
 if (!isset($_SESSION['objExercise'][$exerciseId])) {
@@ -77,7 +76,7 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
 
 // if there is an active attempt and it's time passed. Complete the record to finish attempt
 $tmp = Database::get()->querySingle("SELECT COUNT(*) AS cnt, record_start_date FROM `exercise_user_record` WHERE eid = ?d AND uid= ?d AND record_end_date is NULL", $exerciseId, $uid);
-if ($tmp->cnt > 0) {	
+if ($tmp->cnt > 0) {
     Database::get()->query("UPDATE `exercise_user_record` SET record_end_date = '".date('Y-m-d H:i:s', time())."' WHERE eid = ?d AND uid = ?d AND record_end_date is NULL", $exerciseId, $uid);
     triggerGame($course_id, $uid, $exerciseId);
     triggerExerciseAnalytics($course_id, $uid, $exerciseId);

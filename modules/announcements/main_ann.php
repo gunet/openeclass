@@ -23,7 +23,6 @@ $require_help = true;
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 
 $pageName = $langAnnouncements;
 

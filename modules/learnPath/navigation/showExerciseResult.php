@@ -34,7 +34,6 @@ require_once '../../exercise/answer.class.php';
 $require_current_course = true;
 require_once '../../../include/init.php';
 require_once 'include/lib/learnPathLib.inc.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/exercise/game.php';

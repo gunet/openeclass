@@ -39,7 +39,6 @@ $helpTopic = 'portfolio';
 
 include '../../include/baseTheme.php';
 $require_valid_uid = true;
-require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/references.class.php';
 require_once 'main/notes/notes.class.php';

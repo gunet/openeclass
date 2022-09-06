@@ -22,7 +22,7 @@
 
 /* * ===========================================================================
   scromExport.inc.php
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>  
+  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
                  Amand Tihon <amand.tihon@alrj.org>
   ==============================================================================
   @Description: This script is for export to SCORM 2004 package.
@@ -56,7 +56,6 @@
 
 if (!class_exists('ScormExport')) {
 
-    require_once 'include/lib/textLib.inc.php';
     require_once 'modules/exercise/exercise.class.php';
     require_once 'modules/exercise/question.class.php';
     require_once 'modules/exercise/answer.class.php';
@@ -160,7 +159,7 @@ if (!class_exists('ScormExport')) {
                 $this->error[] = $langLearningPathEmpty;
                 return false;
             }
-            
+
             $module = array();
             foreach ($result as $modobj) {
                 $module['ID'] = $modobj->ID;
@@ -174,7 +173,7 @@ if (!class_exists('ScormExport')) {
                 $module['contentType'] = $modobj->contentType;
                 $module['resourceComment'] = $modobj->resourceComment;
                 $module['path'] = $modobj->path;
-            
+
                 // Check for SCORM content. If at least one module is SCORM, we need to export the existing SCORM package
                 if ($module['contentType'] == 'SCORM' || $module['contentType'] == 'SCORM_ASSET') {
                     $this->fromScorm = true;
@@ -1132,7 +1131,7 @@ if (!class_exists('ScormExport')) {
         }
 
         /**
-         * @brief Create the final zip file.         
+         * @brief Create the final zip file.
          * @return false on error, true otherwise.
          */
         function zip() {
@@ -1140,8 +1139,8 @@ if (!class_exists('ScormExport')) {
 
             $zipFile = new ZipArchive();
             $zipFile->open($this->destDir . '.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
-            
-            // Create recursive directory iterator            
+
+            // Create recursive directory iterator
             $files = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($this->destDir),
                 RecursiveIteratorIterator::LEAVES_ONLY
@@ -1156,13 +1155,13 @@ if (!class_exists('ScormExport')) {
                     // Add current file to archive
                     $zipFile->addFile($filePath, $relativePath);
                 }
-            }            
-            
+            }
+
             if (!$zipFile->close()) {
                 $this->error[] = $langErrorCreatingScormArchive;
                 return false;
             }
-            
+
             claro_delete_file($this->destDir);
             return true;
         }
@@ -1206,5 +1205,5 @@ if (!class_exists('ScormExport')) {
             return True;
         }
 
-    }    
+    }
 }

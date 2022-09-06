@@ -25,7 +25,6 @@ $guest_allowed = true;
 
 
 include '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';

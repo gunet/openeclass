@@ -30,7 +30,6 @@ $require_help = true;
 $helpTopic = 'chat';
 
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'functions.php';
 
 $coursePath = $webDir . '/courses/';

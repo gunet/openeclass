@@ -29,7 +29,6 @@ require_once 'modules/group/group_functions.php';
 require_once 'modules/forum/functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/course_settings.php';
 require_once 'include/user_settings.php';

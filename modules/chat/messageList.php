@@ -28,7 +28,6 @@ $require_login = TRUE;
 $require_user_registration = TRUE;
 
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'modules/document/doc_init.php';
 
 $coursePath = $webDir . '/courses/';

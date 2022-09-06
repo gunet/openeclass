@@ -22,7 +22,6 @@
 
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'include/log.class.php';
 

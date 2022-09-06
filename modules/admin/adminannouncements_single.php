@@ -22,7 +22,6 @@
 
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $toolName = $langAdminAn;

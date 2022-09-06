@@ -22,7 +22,6 @@
 
 require_once 'include/log.class.php';
 require_once 'include/lib/hierarchy.class.php';
-require_once 'include/lib/textLib.inc.php';
 
 /**
  * @brief Get statistics of visits and visit duration to a course. The results are depicted in first plot of course statistics
