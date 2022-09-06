@@ -29,7 +29,6 @@
 $require_current_course = TRUE;
 $guest_allowed = true;
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'indexer.class.php';
 require_once 'announcementindexer.class.php';
 require_once 'agendaindexer.class.php';

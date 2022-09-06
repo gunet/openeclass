@@ -28,7 +28,6 @@ $helpTopic = 'course_users';
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 require_once 'include/course_settings.php';
-require_once 'include/lib/textLib.inc.php';
 
 //Identifying ajax request
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {

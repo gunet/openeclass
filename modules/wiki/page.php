@@ -30,7 +30,7 @@ $require_help = TRUE;
 $helpTopic = 'wiki';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
-require_once 'include/lib/textLib.inc.php';
+
 // Wiki specific classes and libraries
 require_once 'modules/wiki/lib/class.wiki2xhtmlrenderer.php';
 require_once 'modules/wiki/lib/class.wikipage.php';

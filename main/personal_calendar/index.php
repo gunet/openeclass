@@ -39,7 +39,6 @@ $helpSubTopic = 'my_calendar';
 $require_valid_uid = true;
 
 include '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/references.class.php';
 require_once 'main/personal_calendar/calendar_events.class.php';

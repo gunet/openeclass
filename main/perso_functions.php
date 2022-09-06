@@ -23,7 +23,6 @@
  * @file perso_functions.php
  * @brief user course and course activity functions
  */
-require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/message/class.mailbox.php';

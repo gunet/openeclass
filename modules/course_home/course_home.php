@@ -30,7 +30,6 @@ define('HIDE_TOOL_TITLE', 1);
 define('STATIC_MODULE', 1);
 
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/hierarchy.class.php';

@@ -29,7 +29,6 @@ $require_help = true;
 $helpTopic = 'tc';
 
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 
 $toolName = $langUserDuration;
 

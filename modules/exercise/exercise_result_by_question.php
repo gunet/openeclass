@@ -26,7 +26,6 @@ include 'answer.class.php';
 $require_current_course = TRUE;
 $require_editor = TRUE;
 include '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'modules/gradebook/functions.php';
 $pageName = $langExercicesResult;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);

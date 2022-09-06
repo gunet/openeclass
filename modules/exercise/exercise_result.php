@@ -26,7 +26,6 @@ include 'answer.class.php';
 $require_current_course = TRUE;
 $guest_allowed = true;
 include '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
 require_once 'analytics.php';

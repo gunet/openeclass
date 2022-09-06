@@ -26,7 +26,6 @@ $require_help = true;
 $helpTopic = 'attendance';
 
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'functions.php';
 require_once 'include/log.class.php';
 
@@ -266,10 +265,10 @@ if ($is_editor) {
             foreach ($users as $u) {
                 delete_attendance_user($attendance_id, $u->uid);
             }
-            $log_details = array('id' => $attendance_id, 
-                                 'title' => get_attendance_title($attendance_id), 
-                                 'action' => 'delete users', 
-                                 'user_count' => count($users), 
+            $log_details = array('id' => $attendance_id,
+                                 'title' => get_attendance_title($attendance_id),
+                                 'action' => 'delete users',
+                                 'user_count' => count($users),
                                  'users' => $users);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
 

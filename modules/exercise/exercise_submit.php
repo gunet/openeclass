@@ -28,7 +28,6 @@ $require_current_course = true;
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'modules/attendance/functions.php';
 require_once 'modules/group/group_functions.php';

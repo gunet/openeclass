@@ -34,7 +34,6 @@
  */
 
 require_once 'include/log.class.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/references.class.php';
 require_once 'modules/request/functions.php';
 
