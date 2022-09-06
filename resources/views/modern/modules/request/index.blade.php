@@ -67,30 +67,31 @@
                     </div>
                     @endif
 
-                    
-                    <div class="table-responsive">
-                        <table id='request_table_{{ $course_id }}' class='table table-default'>
-                            <thead>
-                                <tr class='notes_thead'>
-                                    <th class='text-white'>{{ trans('langRequest') }}</th>
-                                    <th class='text-white'>{{ trans('langNewBBBSessionStatus') }}</th>
-                                    <th class='text-white'>{{ trans('langOpenedOn') }}</th>
-                                    <th class='text-white'>{{ trans('langUpdatedOn') }}</th>
-                                    <th class='text-white text-center'><span class='fa fa-cogs'></span></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan='5'>
-                                        <div class='d-inline-flex align-items-center'>
-                                            <label class='pe-2'>{{ trans('langShowClosedRequests') }}:</label>
-                                            <input type='checkbox' id='closedRequests'>
-                                        </div>
-                                    </th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                    <div class='col-sm-12'>
+                        <div class="table-responsive">
+                            <table id='request_table_{{ $course_id }}' class='table table-default'>
+                                <thead>
+                                    <tr class='notes_thead'>
+                                        <th class='text-white'>{{ trans('langRequest') }}</th>
+                                        <th class='text-white'>{{ trans('langNewBBBSessionStatus') }}</th>
+                                        <th class='text-white'>{{ trans('langOpenedOn') }}</th>
+                                        <th class='text-white'>{{ trans('langUpdatedOn') }}</th>
+                                        <th class='text-white text-center'><span class='fa fa-cogs'></span></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan='5'>
+                                            <div class='d-inline-flex align-items-center'>
+                                                <label class='pe-2'>{{ trans('langShowClosedRequests') }}:</label>
+                                                <input type='checkbox' id='closedRequests'>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                         
                 </div>

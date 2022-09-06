@@ -139,26 +139,26 @@ if (isset($_GET['rubric_id'])) {
                 }
                 $('#inserthere').before(
                                     '<div id=\'critDiv'+ j +'\'>'+	
-                                    '<div class=\'form-group\'>'+
-            '   <label for=\'title\' class=\'col-sm-2 control-label\'>". js_escape($langRubricCrit). ":</label>'+
-            '    <div class=\'col-sm-3\'>'+
+                                    '<div class=\'form-group mt-3\'>'+
+            '   <label for=\'title\' class=\'col-sm-6 control-label-notes\'>". js_escape($langRubricCrit). ":</label>'+
+            '    <div class=\'col-sm-12\'>'+
             '      <input name=\'title[]\' class=\'form-control\' id=\'title\' value=\'\' type=\'text\'> '+     
             '    </div>'+
-                '<label for=\'weight\' class=\'col-sm-3 control-label\'>" . js_escape($langGradebookWeight). " (%):</label>'+
-            '    <div class=\'col-sm-2\'>'+
+                '<label for=\'weight\' class=\'col-sm-6 control-label-notes\'>" . js_escape($langGradebookWeight). " (%):</label>'+
+            '    <div class=\'col-sm-12\'>'+
             '      <input name=\'weight[]\' class=\'form-control\' id=\'weight\' value=\'\' type=\'number\'> '+     
             '    </div>'+
             '    <div class=\'col-sm-1\'><a href=\'#\' id=\'remCrit'+j+'\'><span class=\'fa fa-times\' style=\'color:red\'></span></a></div>'+
             '</div>'+
-            '<div class=\'form-group\'>'+
-            '    <label class=\'col-sm-2 control-label\'>" . js_escape($langScales). ":</label>'+
-            '    <div class=\'col-sm-10\'>'+
-            '        <div class=\'table-responsive\'>'+
+            '<div class=\'form-group mt-3\'>'+
+            '    <label class=\'col-sm-6 control-label-notes\'>" . js_escape($langScales). ":</label>'+
+            '    <div class=\'col-sm-12\'>'+
+            '        <div class=\'table-responsive mt-0\'>'+
             '            <table class=\'table-default\' id=\'scale_table'+ j +'\'>'+
-            '                <thead>'+
+            '                <thead class=\'list-header\'>'+
             '                    <tr>'+
-            '                        <th style=\'width:47%\'>" . js_escape($langWording). "</th>'+
-            '                        <th style=\'width:47%\'>" . js_escape($langValue). "</th>'+
+            '                        <th class=\'text-white\' style=\'width:47%\'>" . js_escape($langWording). "</th>'+
+            '                        <th class=\'text-white\' style=\'width:47%\'>" . js_escape($langValue). "</th>'+
             '                        <th class=\'text-center option-btn-cell\' style=\'width:5%\'><span class=\'fa fa-gears\'></span></th>'+
             '                    </tr>'+
             '                </thead>'+
@@ -177,8 +177,8 @@ if (isset($_GET['rubric_id'])) {
             '            </table>'+
             '        </div>'+
             '    </div>'+
-            '    <div class=\'col-xs-offset-2 col-sm-10\'>'+
-            '         <a class=\'btn btn-xs btn-success margin-top-thin\' id=\'addScale'+ j +'\'>" . js_escape($langAdd) . "</a>'+
+            '    <div class=\'col-offset-2 col-sm-10 mt-2\'>'+
+            '         <a class=\'btn btn-sm btn-success margin-top-thin\' id=\'addScale'+ j +'\'>" . js_escape($langAdd) . "</a>'+
             '    </div>'+
             '	</div>'+
             '</div>'
@@ -330,9 +330,9 @@ if (isset($_GET['rubric_id'])) {
             <div class='form-group mt-3'>
                 <label class='col-sm-6 control-label-notes'>$langScales:</label>
                 <div class='col-sm-12'>
-                    <div class='table-responsive'>
-                        <table class='announcements_table' id='scale_table0'>
-                            <thead class='notes_thead' style='height:45px;'>
+                    <div class='table-responsive mt-0'>
+                        <table class='table-default' id='scale_table0'>
+                            <thead class='list-header'>
                                 <tr>
                                     <th class='text-white' style='width:47%'>$langWording</th>
                                     <th class='text-white' style='width:47%'>$langValue</th>
@@ -356,8 +356,8 @@ if (isset($_GET['rubric_id'])) {
                 </div>";
             if (!$rubric_used) {
                 $tool_content .= "
-                    <div class='col-xs-offset-2 col-sm-10'>
-                         <a class='btn btn-xs btn-success margin-top-thin' id='addScale0'>$langAdd</a>
+                    <div class='col-offset-2 col-sm-10 mt-2'>
+                         <a class='btn btn-sm btn-success margin-top-thin' id='addScale0'>$langAdd</a>
                     </div>
                 </div>";
             }
@@ -371,25 +371,25 @@ if (isset($_GET['rubric_id'])) {
     }
     $tool_content .= "<div id='inserthere' class=''>
                         <div class='form-group mt-3'>
-                            <div class='col-xs-offset-2 col-sm-10'>
-                                <a class='btn btn-xs btn-success margin-top-thin' id='addCriteria'>$langAddRubricCriteria</a>
+                            <div class='col-offset-2 col-sm-10'>
+                                <a class='btn btn-sm btn-success margin-top-thin' id='addCriteria'>$langAddRubricCriteria</a>
                             </div>
                         </div>
                     </div>
                     <div class='form-group mt-3'>
                         <label for='rubric_options' class='col-sm-2 control-label-notes'>$langConfig:</label>
                         <div class='table-responsive'>
-                        <table id='rubric_opts'> 
-                            <tr class='title1 bg-secondary'>
+                        <table class='table-default' id='rubric_opts'> 
+                            <tr class='title1 bg-light'>
                                 <td colspan='2'>
                                         <input type='checkbox' id='user_button0' name='options0' value='$opt1' $sel_opt1 />
-                                        $langRubricOption1
+                                        <span class='text-warning'>$langRubricOption1</span>
                                 </td>
                             </tr>
-                            <tr class='title1 bg-secondary'>
+                            <tr class='title1 bg-light'>
                                 <td colspan='2'>
                                         <input type='checkbox' id='user_button1' name='options1' value='$opt2' $sel_opt2/>
-                                        $langRubricOption2
+                                        <span class='text-warning'>$langRubricOption2</span>
                                 </td>
                             </tr>
                         </table>

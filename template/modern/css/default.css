@@ -952,28 +952,9 @@ input[type="checkbox"]{
       color:black;
       font-weight: 500;
   }
-
-  .paging_a_glossary{
-      height:40px;
-      width:40px;
-      padding-left:10px;
-      border-radius: 50%;
+  .pagination-glossary{
+    overflow-y: auto;
   }
-  
-  .paging_a_glossary1{
-      padding-left: 10px;
-      padding-right: 10px;
-      border-radius: 50%;
-      background-color: white;
-      border:solid 3px #005ed7;
-  }
-  
-  .paging_a_glossary1:hover{
-      background-color: black;
-      color:orange;
-      border:solid 3px grey;
-  }
-
 
   /* -------------------------------------------- Home Pages -----------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1363,7 +1344,7 @@ input[type="checkbox"]{
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   
-  .first-item-col{
+  /* .first-item-col{
       padding-left:15px;
   }
   .cogsClass{
@@ -1375,7 +1356,7 @@ input[type="checkbox"]{
     border:0;
     background-color: transparent;
     padding-left:40px;
-  }
+  } */
 
   
   /* -------------------------------------------- Forum ----------------------------------------------*/
@@ -1773,10 +1754,7 @@ input[type="checkbox"]{
   }
 
   th, td {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 30px;
-    padding-right: 40px;
+    padding:10px;
   }
 
   tbody,tr,th,td{

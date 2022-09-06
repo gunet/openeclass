@@ -5700,3 +5700,51 @@ $langLTIAPPlertKey = "Please type the LTI Provider Key";
 $langLTIAPPlertSecret = "Please type the LTI Provider Secret";
 $langPUBLTIAppAddSuccessful = "Published LTI tool was added successfully.";
 $langCommands = "Actions";
+
+
+
+
+// ticketing (aka request)
+$langRequests = "Anfragen";
+$langMyRequests = "Meine Anfragen";
+$langSingleRequest = 'Anfrage';
+$langNewRequest = "Neue Anfrage";
+$langEditRequest = "Anfrage bearbeiten";
+$langRequestCreated = 'Die Anfrage wurde erstellt.';
+$langRequestNoType = 'Der Typ existiert nicht.';
+$langRequestDeleted = 'Die Anfrage wurde gelöscht.';
+$langWatchers = 'Beobachter';
+$langRequestState = 'Anforderungsstatus';
+$langRequestStateNew = 'Neu';
+$langRequestStateAssigned = 'Unternommen';
+$langRequestStateLocked = 'Gesperrt';
+$langRequestStateClosed = 'Abgeschlossen';
+$langOpenedOn = 'Schaffung';
+$langUpdatedOn = 'Änderung';
+$langChangeState = 'Status ändern auf';
+$langChangeAssignees = 'Zuweisung geändert zu: %s (von: %s)';
+$langChangeWatchers = 'Beobachter ändern zu: %s (von: %s)';
+$langTakeRequest = 'Auszahlung beantragen';
+$langRequestTaken = 'Benutzer %s hat die Anfrage übernommen.';
+$langRequestBasicType = 'Grundlegende Anfrage';
+$langRequestFieldChange = 'Feld %s ändern in: %s';
+$langHourAgo = 'Vor %d Stunde';
+$langHoursAgo = 'Vor %d Stunden';
+$langMinuteAgo = 'Vor %d Minute';
+$langMinutesAgo = 'Vor %d Minuten';
+$langDayAgo = 'Vor %d Tag';
+$langDaysAgo = 'Vor %d Tagen';
+$langShowClosedRequests = 'Geschlossene Anfragen anzeigen';
+$langChangeDescription = 'Beschreibung der Änderungen';
+$lang_pass_submit = 'Mission';
+$langInsertExerciseCap = "Übung";
+$langPollStart = "Beginn";
+$langSections = 'Einheiten';
+$langCategoryEssay = "Arbeit";
+$langAnalyticsEditElements = 'Datenverarbeitung';
+$langViewStatics = "Verkehrsstatistik";
+$langCommands = "Aktionen";
+$langDumpPDF = 'Als PDF exportieren';
+$langViewAs = "Seite anzeigen als";
+$langCTeacher = "LEHRER";
+$langCStudent2 = "SCHÜLER";

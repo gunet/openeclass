@@ -618,7 +618,7 @@ foreach ($flatElementList as $module) {
     } else {
         $del_conf_text = clean_str_for_javascript($langAreYouSureToRemoveStd);
     }
-    $tool_content .= "<td class='option-btn-cell'>" .
+    $tool_content .= "<td class='option-btn-cell text-center'>" .
             action_button(array(
                 array('title' => $langEditChange, // Modify command / go to other page
                     'url' => "module.php?course=$course_code&amp;module_id=" . $module['module_id'],

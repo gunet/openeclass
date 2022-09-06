@@ -295,7 +295,7 @@ foreach ($result as $row) {
                               <td class='text-center'>$status</td>";
             if ($is_editor) {
                 $tool_content .= "
-                    <td class='option-btn-cell'>" . action_button(array(
+                    <td class='option-btn-cell text-center'>" . action_button(array(
                         array(
                             'title' => $langDelete,
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid",

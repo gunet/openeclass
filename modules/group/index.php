@@ -558,7 +558,7 @@ if ($is_editor) {
                 $visibility_url = 'choice=enable';
             }
 
-            $tool_content .= "<td class='option-btn-cell'>" .
+            $tool_content .= "<td class='option-btn-cell text-center'>" .
                     action_button(array(
                         array('title' => $langEditChange,
                             'url' => "group_edit.php?course=$course_code&amp;category=$group->category_id&amp;group_id=$group->id",
@@ -698,11 +698,11 @@ if ($is_editor) {
         $numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
         $cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
         $aantalcategories = count($cat);
-        $tool_content .= "<div class='col-sm-12 mt-5'><div class='table-responsive'>";
+        $tool_content .= "<div class='col-sm-12'><div class='table-responsive'>";
         if($cat){
-           $tool_content .= "<div class='margin-bottom-thin notes_thead fs-6 ps-3 pt-2 pb-3 pe-3' style='font-weight: bold;'>";
+           $tool_content .= "<div class='margin-bottom-thin bg-secondary ps-3 pt-2 pb-2 pe-3'>";
         }else{
-            $tool_content .= "<div class='margin-bottom-thin fs-6 ps-3 pt-2 pb-3 pe-3' style='font-weight: bold;'>";
+            $tool_content .= "<div class='margin-bottom-thin fs-6 p-2'>";
         }
         if ($aantalcategories > 0) {
             $tool_content .= "<span class='text-white'>$langCategorisedGroups</span>&nbsp;";
@@ -743,7 +743,7 @@ if ($is_editor) {
                 }
 
                 if ($is_editor) {
-                    $tool_content .= "<td class='option-btn-cell'>";
+                    $tool_content .= "<td class='option-btn-cell text-center'>";
                     showgroupcategoryadmintools($myrow->id);
                     $tool_content .= "</td>";
                 } else {
@@ -768,7 +768,7 @@ if ($is_editor) {
                 }
 
                 if ($is_editor) {
-                    $tool_content .= "<td class='option-btn-cell'>";
+                    $tool_content .= "<td class='option-btn-cell text-center'>";
                     showgroupcategoryadmintools($myrow->id);
                     $tool_content .= "</td>";
                 }

@@ -107,12 +107,12 @@
                         @if (count($items))
                         <div class='col-sm-12'>
                             <div class='table-responsive'>
-                                <table class='announcements_table nocategory-links'>
-                                    <tr class='notes_thead'>
-                                        <th class='first-item-col'>{!! headlink($GLOBALS['langVideoDirectory'], 'title') !!}</th>
-                                        <th class='text-center text-whhite' style='width:134px'>{!! headlink($GLOBALS['langDate'], 'date') !!}</th>
+                                <table class='table-default nocategory-links'>
+                                    <tr class='list-header'>
+                                        <th>{!! headlink($GLOBALS['langVideoDirectory'], 'title') !!}</th>
+                                        <th>{!! headlink($GLOBALS['langDate'], 'date') !!}</th>
                                         @if (!$is_in_tinymce)
-                                            <th class='text-end text-white' style='padding-right:15px;'>{!! icon('fa-cogs') !!}</th>
+                                            <th class='text-center'>{!! icon('fa-cogs') !!}</th>
                                         @endif
                                     </tr>
                                     @include('modules.video.common.videoList')
@@ -126,18 +126,18 @@
 
                             <div class='col-sm-12'>
                                 <div class='table-responsive'>
-                                    <table class='announcements_table category-links'>
-                                        <tr class='notes_thead'>
-                                            <th class='first-item-col text-white'>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
+                                    <table class='table-default'>
+                                        <tr class='list-header'>
+                                            <th>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
                                             @if ($expand_all)
                                                 {!! icon('fa-folder-open', $GLOBALS['langViewHide'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=0") !!}
                                             @else
                                                 {!! icon('fa-folder', $GLOBALS['langViewShow'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=1") !!}
                                             @endif
                                             </th>
-                                            <th class='text-center text-white' style='width:100px;'>{{ trans('langDate') }}</th>
+                                            <th>{{ trans('langDate') }}</th>
                                             @if (!$is_in_tinymce)
-                                                <th class='cogsClass text-center text-white'>{!! icon('fa-cogs') !!}</th>
+                                                <th class='text-center'>{!! icon('fa-cogs') !!}</th>
                                             @endif
                                         </tr>
                                     @foreach ($categories as $myrow)
@@ -149,18 +149,20 @@
                                                 $folder_icon = icon('fa-folder-o', $GLOBALS['langViewShow']);
                                             }
                                         ?>
-                                        <tr class='link-subcategory-title'><th class='category-link p-3' colspan='{{ $colspan }}'>{!! $folder_icon !!}&nbsp;
-                                        @if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)
-                                            <a href='{!! $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . $embedParam !!}' class='open-category'>{{ $myrow->name }}</a>
-                                        @else
-                                            <a href='{!! $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;cat_id=" . $myrow->id . $embedParam !!}' class='open-category'>{{ $myrow->name }}</a>
-                                        @endif
-                                        @if (!empty($description))
-                                            <br><br><span class='link-description'>{{ $description }}</span>
-                                        @endif
+                                        <tr class='link-subcategory-title'>
+                                            <th class='category-link p-3' colspan='{{ $colspan }}'>
+                                                {!! $folder_icon !!}&nbsp;
+                                                @if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)
+                                                    <a href='{!! $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . $embedParam !!}' class='open-category'>{{ $myrow->name }}</a>
+                                                @else
+                                                    <a href='{!! $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;cat_id=" . $myrow->id . $embedParam !!}' class='open-category'>{{ $myrow->name }}</a>
+                                                @endif
+                                                @if (!empty($description))
+                                                    <br><br><span class='link-description'>{{ $description }}</span>
+                                                @endif
                                             </th>
                                             @if ($display_tools)
-                                                <td class='option-btn-cell text-end'>
+                                                <td class='option-btn-cell text-center'>
                                                     {!!
                                                     action_button(array(
                                                         array('title' => $GLOBALS['langEditChange'],
@@ -188,7 +190,7 @@
                                 
                         @endif
                     @else
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning' role='alert'>{{ trans('langNoVideo') }}</div></div>
+                        <div class='col-sm-12'><div class='alert alert-warning' role='alert'>{{ trans('langNoVideo') }}</div></div>
                     @endif
 
                 </div>

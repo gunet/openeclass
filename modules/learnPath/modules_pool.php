@@ -249,7 +249,7 @@ foreach ($result as $list) {
         $tool_content .= "<br /><small style='color: #a19b99;'><b>$langComments</b>: " . $list->comment . "</small>";
     }
 
-    $tool_content .= "</td><td class='option-btn-cell'>";
+    $tool_content .= "</td><td class='option-btn-cell text-center'>";
     $tool_content .= action_button(array(
                 array('title' => $langRename,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=rqRename&amp;module_id=$list->module_id",

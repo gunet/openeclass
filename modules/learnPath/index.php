@@ -618,10 +618,10 @@ foreach ($result as $list) { // while ... learning path list
                 'class' => 'delete',
                 'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name) . "\"" : $langDelete);
 
-        $tool_content .= "<td class='option-btn-cell' style='width: 90px;'>
-                <div class='reorder-btn pull-left' style='margin-left:15px;'>
+        $tool_content .= "<td class='option-btn-cell text-center' style='width: 90px;'>
+                <div class='reorder-btn text-center'>
                     <span class='fa fa-arrows' style='cursor: pointer;'></span>
-                </div><div class='float-end' style='margin-top:10px;'>" .
+                </div><div class='text-center mt-3'>" .
                 action_button($lp_menu) .
                 "</div></td>\n";
     } elseif ($uid) {

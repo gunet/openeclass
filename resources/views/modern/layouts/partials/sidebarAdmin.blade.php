@@ -56,7 +56,7 @@
             <ul class="list-group list-group-flush">
                 @foreach ($tool_group[1] as $key2 => $tool)
                     <li class="list-group-item border-0 admin-list-group">
-                        <a href="{{ $tool_group[2][$key2] }}" class='list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
+                        <a href="{!! $tool_group[2][$key2] !!}" class='list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                             
                             <span class='toolAdminText'>{!! $tool !!}</span>
                                

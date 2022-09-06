@@ -44,14 +44,9 @@
 
                                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
                    
-                    
-
-
 
                                     @if($is_editor)
-
-                                            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 bg-white">{!! isset($action_bar) ?  $action_bar : '' !!}</div>
-
+                                        {!! isset($action_bar) ?  $action_bar : '' !!}
                                     @endif
 
                                     @if(Session::has('message'))
@@ -76,96 +71,86 @@
 
                                     @if ($glossary_index && count($prefixes) > 1)
                                         <div class="col-12">
-                                            <ul class="pagination bg-light ps-2 pt-2 pb-0 pe-2" style='overflow-y:auto;'>
-                                                <span class='control-label-notes fs-6'>{{trans('langGlossaryIndex')}}:</span>
-                                                @foreach ($prefixes as $key => $letter)
-                                                    <li {!! (!isset($_GET['prefix']) && !$cat_id && !$key) ||
-                                                            (isset($_GET['prefix']) && $_GET['prefix'] == $letter)? " class='active'" : "" !!} ><div class="paging_a_glossary"><a class="paging_a_glossary1" href="{{ $base_url."&amp;prefix=" . urlencode($letter)  }}&editor={{$is_editor}}">{{ $letter }}</a></div></li>
-                                                @endforeach
-                                            </ul>
+                                            <nav aria-label="...">
+                                                <ul class="pagination bg-light p-3 pagination-glossary" id="myPag">
+                                                   
+                                                    <li class="page-item disabled">
+                                                        <span class="page-link">{{trans('langGlossaryIndex')}}:</span>
+                                                    </li>
+                                                    @foreach ($prefixes as $key => $letter)
+                                                        <li class="page-item {!! (!isset($_GET['prefix']) && !$cat_id && !$key) ||
+                                                                (isset($_GET['prefix']) && $_GET['prefix'] == $letter)? " active" : "" !!}">
+                                                            <a class="page-link" tabindex="-1" aria-disabled="true" href="{{ $base_url."&amp;prefix=" . urlencode($letter)  }}">{{ $letter }}</a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </nav>
                                         </div>
                                     @endif
 
 
                                     @if ($glossary_terms)
-
-                                        <div class='table-responsive glossary-categories' style="">
-                                            <table class='table' id="glossary_table" style="overflow: inherit">
-
-                                                <thead class="notes_thead text-light">
-                                                    <tr>
-                                                        <th scope="col"><span class="notes_th_comment">#</span></th>
-                                                        <th scope="col"><span class="notes_th_comment">{{ trans('langGlossaryTerm') }}</span></th>
-                                                        <th scope="col"><span class="notes_th_comment">{{ trans('langGlossaryDefinition') }}</span></th>
-                                                        <th scope="col"><span class="notes_th_comment">{{ trans('langCategory') }}</span></th>
-                                                        <th scope="col"><span class="notes_th_comment">URL</span></th>
-                                                        <th scope="col"><span class="notes_th_comment">{{ trans("langComments") }}</span></th>
-                                                        @if($is_editor == 1)
-
-                                                                <th scope="col"><span class="notes_th_comment"><i class='fas fa-cogs'></i></span></th>
-
-                                                        @endif
-                                                    </tr>
-                                                </thead>
+                                    <div class='col-sm-12'>
+                                        <div class='table-responsive'>
+                                            <table class='table-default' id="glossary_table">
+                                                <tr class="list-header">
+                                                    <th>{{ trans('langGlossaryTerm') }}</th>
+                                                    <th>{{ trans('langGlossaryDefinition') }}</th>
+                                                    <th>{{ trans('langCategory') }}</th>
+                                                    <th>URL</th>
+                                                    <th>{{ trans("langComments") }}</th>
+                                                    @if($is_editor)
+                                                        <th class='text-center'><i class='fas fa-cogs'></i></span></th>
+                                                    @endif
+                                                </tr>
                                                 <tbody>
-                                                    <?php $i=0; ?>
                                                     @foreach ($glossary_terms as $glossary_term)
-                                                    <?php $tmp_edit_id = Database::get()->querySingle("SELECT * FROM `glossary` WHERE `glossary`.`term`='{$glossary_term->term}' ");?>
-                                                    <?php $edit_id = $tmp_edit_id->id; ?>
-                                                    <?php $i++; ?>
                                                     <tr>
-                                                            <th scope="row">{{$i}}</th>
-                                                            <td>
-                                                                <a class='text-primary' href='{{ $base_url."&amp;id=" . getIndirectReference($glossary_term->id) }}'>
-                                                                    <strong>{{$glossary_term->term}}</strong>
+                                                        <td>
+                                                            <a href='{{ $base_url."&amp;id=" . getIndirectReference($glossary_term->id) }}'>
+                                                                <strong class='text-primary'>{{$glossary_term->term}}</strong>
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <em>
+                                                                {{$glossary_term->definition}}
+                                                            </em>
+                                                        </td>
+                                                        <td>
+                                                            @if ($glossary_term->category_id)
+                                                                <a class='text-primary' href='{{ $base_url }}&amp;cat={{ getIndirectReference($glossary_term->category_id) }}'>
+                                                                    {{ $categories[$glossary_term->category_id] }}
                                                                 </a>
-                                                            </td>
-                                                            <td>
-                                                                <em>
-                                                                    {{$glossary_term->definition}}
-                                                                </em>
-                                                            </td>
-                                                            <td>
-                                                                @if ($glossary_term->category_id)
-
-
-                                                                    <a class='text-primary' href='{{ $base_url }}&amp;cat={{ getIndirectReference($glossary_term->category_id) }}'>
-                                                                        {{ $categories[$glossary_term->category_id] }}
-                                                                    </a>
-
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                @if ($glossary_term->url)
-                                                                    <a class="content-truncate-announcement" data-bs-toggle="modal" role="button" aria-expanded="false" data-bs-target="#ModalUrl{{$i}}">
-                                                                        <span class="d-inline-block text-truncate" style="max-width: 180px;"><i class="fas fa-arrow-down"></i>{{ $glossary_term->url }}</span>
-                                                                    </a>
-
-
-                                                                    <div class="modal fade modalAnnouncement" id="ModalUrl{{$i}}" tabindex="-1" aria-labelledby="ModalUrl{{$i}}" aria-hidden="true">
-                                                                        <div class="modal-dialog modal-xl">
-                                                                            <div class="modal-content">
-                                                                                <div class="modal-header">
-                                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                                </div>
-                                                                                <div class="modal-body">
-                                                                                    <a href='{{ $glossary_term->url }}' target='_blank'>
-                                                                                        {{ $glossary_term->url }}&nbsp;&nbsp;<i class='fas fa-external-link' style='color:#444;'></i>
-                                                                                    </a>
-                                                                                </div>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if ($glossary_term->url)
+                                                                <a class="content-truncate-announcement" data-bs-toggle="modal" role="button" aria-expanded="false" data-bs-target="#ModalUrl{{$i}}">
+                                                                    <span class="d-inline-block text-truncate text-primary" style="max-width: 180px;"><i class="fas fa-arrow-down"></i>{{ $glossary_term->url }}</span>
+                                                                </a>
+                                                                <div class="modal fade modalAnnouncement" id="ModalUrl{{$i}}" tabindex="-1" aria-labelledby="ModalUrl{{$i}}" aria-hidden="true">
+                                                                    <div class="modal-dialog modal-xl">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <a href='{{ $glossary_term->url }}' target='_blank'>
+                                                                                    {{ $glossary_term->url }}&nbsp;&nbsp;<i class='fas fa-external-link'></i>
+                                                                                </a>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                @if ($glossary_term->notes)
-                                                                        {!! standard_text_escape($glossary_term->notes) !!}
-                                                                @endif
-                                                            </td>
-                                                            @if($is_editor)
-                                                            <td>
-
+                                                                </div>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if ($glossary_term->notes)
+                                                                    {!! standard_text_escape($glossary_term->notes) !!}
+                                                            @endif
+                                                        </td>
+                                                        @if($is_editor)
+                                                            <td class='text-center'>
                                                                 {!!
                                                                     action_button(array(
                                                                         array('title' => trans('langEditChange'),
@@ -179,21 +164,16 @@
                                                                         )
                                                                     )
                                                                 !!}
-
-
-
                                                             </td>
-                                                            @endif
-
+                                                        @endif
                                                     </tr>
-
-
                                                     @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
+                                    </div>
                                     @else
-                                        <div class='xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>{{trans('langAnalyticsNotAvailable')}} {{trans('langGlossary')}}.</div></div>
+                                        <div class='col-sm-12'><div class='alert alert-warning'>{{trans('langAnalyticsNotAvailable')}} {{trans('langGlossary')}}</div></div>
                                     @endif
                         </div>
                 </div>

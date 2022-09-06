@@ -3,10 +3,6 @@
 
 @section('content')
 
-
-<!-- <script type="text/javascript" src="{{ $urlAppend }}template/modern/js/my_courses_color_header.js"></script> -->
-<!-- <script src ="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>   -->
-
 <script>
     $(function () {
         var langEmptyGroupName = '{{ js_escape(trans('langEmptyAnTitle')) }}';
@@ -100,9 +96,13 @@
                                 </div>
                                 
                                 @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+
+                                @if($is_editor)
+                                    {!! isset($action_bar) ?  $action_bar : '' !!}
+                                @endif
                         
                                 <div class='col-12'>
-                                    <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>    
+                                    <div class='form-wrapper shadow-sm p-3 rounded'>    
                                             <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">
                                                     
                                                     <div class="form-group {{ $antitle_error }}">

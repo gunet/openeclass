@@ -51,7 +51,7 @@ function display_attendances() {
                             <th class='text-white'>$langStart</th>
                             <th class='text-white'>$langEnd</th>";
         if( $is_editor) {
-            $tool_content .= "<th class='text-white text-start'>" . icon('fa-gears') . "</th>";
+            $tool_content .= "<th class='text-white text-center'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr>";
         foreach ($result as $a) {
@@ -66,7 +66,7 @@ function display_attendances() {
                         <td>$start_date</td>
                         <td>$end_date</td>";
             if( $is_editor) {
-                $tool_content .= "<td class='option-btn-cell'>";
+                $tool_content .= "<td class='option-btn-cell text-center'>";
                 $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;editSettings=1",
@@ -317,7 +317,7 @@ function display_attendance_activities($attendance_id) {
             }
             $tool_content .= "</td>";
             $tool_content .= "<td>" . userAttendTotalActivityStats($details->id, $participantsNumber, $attendance_id) . "</td>";
-            $tool_content .= "<td class='text-center option-btn-cell'>".
+            $tool_content .= "<td class='text-center option-btn-cell text-center'>".
                     action_button(array(
                                 array('title' => $langEditChange,
                                     'icon' => 'fa-edit',
@@ -941,7 +941,7 @@ function display_all_users_presences($attendance_id) {
 
             $tool_content .= "</td>
                 <td class='text-center'>" . userAttendTotal($attendance_id, $resultUser->userID) . "/" . $attendance_limit . "</td>
-                <td class='option-btn-cell'>"
+                <td class='option-btn-cell text-center'>"
                    . action_button(array(
                         array('title' => $langAttendanceBook,
                             'icon' => 'fa-plus',

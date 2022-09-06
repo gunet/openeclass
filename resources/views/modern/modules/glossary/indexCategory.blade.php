@@ -50,7 +50,6 @@
 
 
                             <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 bg-white">{!! isset($action_bar) ?  $action_bar : '' !!}</div>
-                            <div class="row p-2"></div>
 
                             @if(Session::has('message'))
                             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
@@ -69,43 +68,29 @@
                             @endif
 
                             @if (count($categories))
-                                <div class='table-responsive glossary-categories'>    
-                                    <table class='table' id="glossary_table" style="overflow: inherit">
-                                        <thead class="notes_thead text-light">
+                                <div class='table-responsive'>    
+                                    <table class='table-default' id="glossary_table">
                                             
-                                            <tr>
-                                                <th scope="col"><span class="notes_th_comment">#</span></th>
-                                                <th scope="col"><span class="notes_th_comment">{{ trans('langName') }}</span></th>
-                                                <th scope="col"><span class="notes_th_comment">Περιγραφή</span></th>
-                                                @if($is_editor)
-                                                
-                                                        <th class='text-center' scope="col"><span class="notes_th_comment"><i class='fas fa-cogs'></i></span></th>
-                                                    
-                                                @endif
-                                            </tr>
-                                        </thead>
+                                        <tr class='list-header'>
+                                            <th>{{ trans('langName') }}</th>
+                                            <th>Περιγραφή</th>
+                                            @if($is_editor)
+                                                <th class='text-center' scope="col"><span class="notes_th_comment"><i class='fas fa-cogs'></i></span></th>
+                                            @endif
+                                        </tr>
                                         <tbody>
-                                            <?php $i=0; ?>
-                                            
                                             @foreach ($categories as $category)
-                                                <?php $i++; ?>
-                                                <?php $tmp_edit_id = Database::get()->querySingle("SELECT * FROM `glossary_category` WHERE `glossary_category`.`name`='{$category->name}' ");?>
-                                                <?php $edit_id = $tmp_edit_id->id; ?>
-
                                             <tr>
-                                                
-                                                <th scope="row">{{$i}}</th>
                                                 <td>
                                                     <a href='{{ $base_url }}&amp;cat={{ getIndirectReference($category->id) }}'>
-                                                        <strong> {{ $category->name }}</strong>
+                                                        <strong class='text-primary'> {{ $category->name }}</strong>
                                                     </a>
                                                 </td>
                                                 <td>
                                                     {!! $category->description !!}
                                                 </td>
+                                                @if($is_editor)
                                                 <td class='text-center'>
-                                                    @if($is_editor)
-                                                      
                                                     {!! action_button(array(
                                                         array('title' => trans('langCategoryMod'),
                                                             'url' => "$cat_url&amp;edit=" . getIndirectReference($category->id),
@@ -118,16 +103,15 @@
                                                             )
                                                         )
                                                     ) !!}    
-                                                      
-                                                    @endif
                                                 </td>
+                                                @endif
                                             </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
                             @else 
-                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>{{trans('langAnalyticsNotAvailable')}} {{trans('langGlossary')}}.</div></div>
+                                <div class='col-sm-12'><div class='alert alert-warning'>{{trans('langAnalyticsNotAvailable')}} {{trans('langGlossary')}}.</div></div>
                             @endif
                                    
                             

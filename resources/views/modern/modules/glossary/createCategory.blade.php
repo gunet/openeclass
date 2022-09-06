@@ -51,8 +51,10 @@
                                         
                                         @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
+                                        {!! $action_bar !!}
+
                                         <div class='col-12'>
-                                            <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                                            <div class='form-wrapper shadow-sm p-3 rounded'>
 
                                                 <form class='form-horizontal' role='form' action='{{ $cat_url }}' method='post'>
 

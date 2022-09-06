@@ -439,11 +439,11 @@ if ($nbrQuestions) {
     $i = 1;
     $tool_content .= "
         <div class='table-responsive'>
-        <table class='announcements_table'>
-        <thead class='notes_thead'>        
+        <table class='table-default'>
+        <thead class='list-header'>        
             <tr>
-                 <th colspan='2' class='text-left text-white'>$langQuestionList $info_random_text</th>
-                 <th class='text-left text-white'>".icon('fa-cogs', $langActions)."</th>
+                 <th colspan='2' class='text-start text-white'>$langQuestionList $info_random_text</th>
+                 <th class='text-center text-white'>".icon('fa-cogs', $langActions)."</th>
             </tr>
         </thead>
         <tbody id='q_sort'>";
@@ -505,12 +505,12 @@ if ($nbrQuestions) {
         $tool_content .= "<tr data-id='$ewq_id'>
             <td style='text-align: right;' width='1'>" . $i . ".</td>
             <td>" . $legend . "</td>";
-        $tool_content .= "<td class='option-btn-cell' style='width: 85px;'>";
-        $tool_content .= "<div class='reorder-btn pull-left' style='margin-left:15px;'>
+        $tool_content .= "<td class='option-btn-cell text-center' style='width: 85px;'>";
+        $tool_content .= "<div class='reorder-btn text-center'>
                             <span class='fa fa-arrows' style='cursor: pointer;' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-titile='$langReorder'></span>
                         </div>";
 
-        $tool_content .= "<div class='float-end' style='margin-top:10px;'>";
+        $tool_content .= "<div class='text-center mt-2'>";
         if (!is_array($id)) {
             $tool_content .=
                 action_button(array(

@@ -156,7 +156,7 @@ if (isset($_POST['submitCat'])) {
             $tool_content .= "
                         <tr>
                             <td>$q_cat->question_cat_name</td>
-                            <td class='option-btn-cell'>$action_button</td>
+                            <td class='option-btn-cell text-center'>$action_button</td>
                         </tr>";
         }
         $tool_content .= "                

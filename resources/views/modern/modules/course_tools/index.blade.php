@@ -162,10 +162,105 @@
                                     </a>
                                 </span>
                             </div>
+                            <div class='panel-body'>
+                                @php 
+                                    load_js('trunk8');
+                                    $activeClause = ($is_editor) ? '' : "AND enabled = 1";
+                                    $result = Database::get()->queryArray("SELECT * FROM lti_apps
+                                        WHERE course_id = ?s $activeClause AND is_template = 0 ORDER BY title ASC", $course_id);
+                                @endphp
+
+                                @if($result)
+            
+                                        <div class='col-sm-12'>
+                                            <div class='table-responsive mt-0'>
+                                            <table class='table-default'>
+                                                <tr class='list-header'>
+                                                    <th style='width:30%'>{{ trans('langTitle') }}</th>
+                                                    <th class='text-center'>{{ trans('langUnitDescr') }}</th>
+                                                    <th class='text-center'>{{ trans('langLTIAppActions') }}</th>
+                                                    @if ($is_editor)
+                                                        <th class='text-center'>{!! icon('fa-gears') !!}</th>
+                                                    @endif
+                                            </tr>
+
+                                            @foreach ($result as $row)
+                                                    @php 
+                                                        $id = $row->id;
+                                                        $title = $row->title;
+                                                        $desc = isset($row->description)? $row->description: '';
+                                                        $canJoin = ($row->enabled == 1 || $is_editor);
+                                                    @endphp
+
+                                                    @if ($canJoin)
+                                                        @if ($row->launchcontainer == LTI_LAUNCHCONTAINER_EMBED)
+                                                            @php $joinLink = create_launch_button($row->id); @endphp
+                                                        @else
+                                                            @php
+                                                                $joinLink = create_join_button(
+                                                                    $row->lti_provider_url,
+                                                                    $row->lti_provider_key,
+                                                                    $row->lti_provider_secret,
+                                                                    $row->id,
+                                                                    "lti_tool",
+                                                                    $row->title,
+                                                                    $row->description,
+                                                                    $row->launchcontainer
+                                                                );
+                                                            @endphp
+                                                        @endif
+                                                    @else
+                                                        @php $joinLink = q($title); @endphp
+                                                    @endif
+
+                                                    @if ($is_editor)
+                                                        @if (!$headingsSent)
+                                                        @php $headingsSent = true; @endphp
+                                                        @endif
+                                                        <tr {!!($row->enabled? '': " class='not_visible'")!!}>
+                                                            <td class='text-left'>{!! $title !!}</td>
+                                                            <td>{!! $desc !!}</td>
+                                                            <td class='text-center'>{!! $joinLink !!}</td>
+                                                            <td class='option-btn-cell text-center'>
+                                                            {!! action_button(array(
+                                                                    array(  'title' => trans('langEditChange'),
+                                                                            'url' => "../lti_consumer/index.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
+                                                                            'icon' => 'fa-edit'),
+                                                                    array(  'title' => $row->enabled? trans('langDeactivate') : trans('langActivate'),
+                                                                            'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_".
+                                                                                    ($row->enabled? 'disable' : 'enable'),
+                                                                            'icon' => $row->enabled? 'fa-eye': 'fa-eye-slash'),
+                                                                    array(  'title' => trans('langDelete'),
+                                                                            'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
+                                                                            'icon' => 'fa-times',
+                                                                            'class' => 'delete',
+                                                                            'confirm' => trans('langConfirmDelete'))
+                                                                    )) !!}
+                                                            </td></tr>
+                                                    @else
+                                                        @if (!$headingsSent)
+                                                            @php $headingsSent = true; @endphp
+                                                        @endif
+                                                        <tr>
+                                                            <td class='text-center'>{!! $title !!}</td>
+                                                            <td>{!! $desc !!}</td>
+                                                            <td class='text-center'>{!! $joinLink !!}</td>
+                                                        </tr>
+                                                    @endif
+                                                @endforeach
+                                                @if ($headingsSent)
+                                                    </table></div></div>
+                                                @endif
+
+                                                @if (!$is_editor and !$headingsSent)
+                                                    <div class='col-sm-12'><div class='alert alert-warning'>{{trans('langNoLTIApps')}}</div></div>
+                                                @endif
+                                @else
+                                    <div class='col-sm-12'><div class='alert alert-warning'>{{trans('langNoLTIApps')}}</div></div>
+                                @endif
+                            </div>
                         </div>
                     </div>
-
-                    {!! lti_app_details() !!}
                 </div>
             </div>
 

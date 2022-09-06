@@ -394,7 +394,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                 <textarea class="form-control" rows="6" name="message" id="message_input">'.strip_tags($content).'</textarea>
                             </div>
                             <div class="panel panel-default mt-3">
-                                <div class="panel-body">
+                                <div class="panel-body Borders">
                                     <ul class="nav nav-tabs">
                                         <li class="active"><a id="nav_edit_extvideo" class="nav-link" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                         '.$video_li.'

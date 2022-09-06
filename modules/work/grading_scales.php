@@ -164,10 +164,10 @@ if (isset($_GET['scale_id'])) {
                         <div class='form-group mt-3'>
                             <label class='col-sm-6 control-label-notes'>$langScales:</label>
                             <div class='col-sm-12'>
-                                <div class='table-responsive'>
+                                <div class='table-responsive mt-0'>
                                     <table class='table-default' id='scale_table'>
                                         <thead>
-                                            <tr>
+                                            <tr class='list-header'>
                                                 <th style='width:47%'>$langWording</th>
                                                 <th style='width:47%'>$langValue</th>
                                                 ".(!$scale_used ? "<th class='text-center option-btn-cell'  style='width:5%'>".icon('fa-gears')."</th>" : "")."
@@ -180,8 +180,8 @@ if (isset($_GET['scale_id'])) {
                                 </div>
                             </div>";
     if (!$scale_used) {
-        $tool_content .= "<div class='col-xs-offset-2 col-sm-10'>
-                             <a class='btn btn-xs btn-success margin-top-thin' id='addScale'>$langAdd</a>
+        $tool_content .= "<div class='col-offset-2 col-sm-10 mt-2'>
+                             <a class='btn btn-sm btn-success margin-top-thin' id='addScale'>$langAdd</a>
                          </div>";
     }
     $tool_content .= "</div>";

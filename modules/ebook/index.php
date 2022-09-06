@@ -243,9 +243,9 @@ function tools($id, $vis) {
         return '';
     } else {
         $content = "<td class='option-btn-cell' style='width: 90px;'>
-               <div class='reorder-btn pull-left ms-3 mb-2' style='font-size: 16px; cursor: pointer; margin-left:-10px; margin-top:6px;'>
+               <div class='reorder-btn text-center' style='font-size: 16px; cursor: pointer;'>
                     <span class='fa fa-arrows' style='cursor: pointer;'></span>
-               </div><div class='float-end'>";
+               </div><div class='text-center mt-3'>";
         $content .= action_button(array(
                     array('title' => $langEditChange,
                           'url' => "edit.php?course=$course_code&amp;id=$id",

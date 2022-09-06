@@ -81,16 +81,16 @@ if ($is_editor) {
 
 if (isset($_GET['add'])) {
     $navigation[] = array('url' => "../course_tools/index.php?course=$course_code", 'name' => $langToolManagement);
-    new_lti_app($course_code, false);
+    new_lti_app(false, $course_code);
 }
 elseif(isset($_POST['update_lti_app']))
 {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
-        $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], LTI_TYPE, null, false,
-        true, getDirectReference($_GET['id']));
-    Session::flash('message',$langLTIAppAddSuccessful);
-    Session::flash('alert-class', 'alert-success');
+        $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'],null, false,
+        true, getDirectReference($_GET['id']), LTI_TYPE);
+        Session::flash('message',$langLTIAppAddSuccessful);
+        Session::flash('alert-class', 'alert-success');
     redirect("../course_tools/index.php?course=$course_code");
 }
 elseif(isset($_GET['choice']))
@@ -122,9 +122,8 @@ elseif(isset($_GET['choice']))
     add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
         $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], $course_id, false,
         false, null, LTI_TYPE);
-    Session::flash('message',$langLTIAppAddSuccessful);
-    Session::flash('alert-class', 'alert-success');
-
+        Session::flash('message',$langLTIAppAddSuccessful);
+        Session::flash('alert-class', 'alert-success');
     redirect("../course_tools/index.php?course=$course_code");
 }
 else {

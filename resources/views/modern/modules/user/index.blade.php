@@ -107,7 +107,7 @@
             bSort: true,
             aaSorting: [[0, 'desc']],
             aoColumnDefs: [
-                { sClass: 'option-btn-cell', aTargets: [ -1 ] },
+                { sClass: 'option-btn-cell text-center', aTargets: [ -1 ] },
                 { bSortable: false, aTargets: [ 1 ] },
                 { sClass:'text-center', bSortable: false, aTargets: [ 2 ] },
                 { bSortable: false, aTargets: [ 4 ] }
@@ -253,9 +253,9 @@
                     </div>
                     @endif
  
-                    <table id='users_table_{{ $course_code }}' class='announcements_table w-100 ms-0'>
+                    <table id='users_table_{{ $course_code }}' class='table-default w-100 ms-0'>
                         <thead>
-                            <tr class="notes_thead text-light">
+                            <tr class="list-header">
                                 <th>{{ trans('langSurnameName') }}</th>
                                 <th class='text-center'>{{ trans('langRole') }}</th>
                                 <th class='text-center'>{{ trans('langGroup') }}</th>

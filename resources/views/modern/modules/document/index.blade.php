@@ -130,7 +130,7 @@
                                             <th scope="col"><span>{!! headlink(trans('langDate'), 'date') !!}</span></th>
                                             <th scope="col"><span>{{trans('langShow')}}</span></th>
                                             @unless ($is_in_tinymce)
-                                                <th class='text-end'>{!! icon('fa-cogs', trans('langCommands')) !!}</th>
+                                                <th class='text-center'>{!! icon('fa-cogs', trans('langCommands')) !!}</th>
                                             @endif
                                         </tr>
                                     </thead>
@@ -153,13 +153,13 @@
 
                                             <td>
                                                 <?php $downloadfile = $base_url . "download=" . getIndirectReference($file->path);?>
-                                                <input type='hidden' value={{$downloadfile}}>
+                                                <input type='hidden' value={!!$downloadfile!!}>
 
                                                 @if ($file->is_dir)
                                                     @if($file->visible == 1)
-                                                        <a href='{{ $file->url }}'>{{ $file->filename }}</a>
+                                                        <a href='{!! $file->url !!}'>{{ $file->filename }}</a>
                                                     @else
-                                                        <a class="opacity-50 text-secondary pe-none" href='{{ $file->url }}'>{{ $file->filename }}</a>
+                                                        <a class="opacity-50 text-secondary pe-none" href='{!! $file->url !!}'>{{ $file->filename }}</a>
                                                     @endif
                                                 @else
                                                     {!! $file->link !!}
@@ -253,7 +253,7 @@
                                                 @endif
                                             </td>
                                             @unless ($is_in_tinymce)
-                                                <td class='float-end {{ $can_upload? 'option-btn-cell': 'text-end'}}'>
+                                                <td class='text-center {{ $can_upload? 'option-btn-cell': 'text-end'}}'>
                                                     {!! $file->action_button !!}
                                                 </td>
                                             @endif

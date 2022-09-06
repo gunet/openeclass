@@ -556,7 +556,7 @@ function display_all_users_grades($gradebook_id) {
                 } elseif (userGradeTotal($gradebook_id, $resultUser->userID) != "-") { //alert message only when grades have been submitted
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;u=$resultUser->userID'>" . userGradeTotal($gradebook_id, $resultUser->userID). "</a>" . " (<small>" . $langGradebookGradeAlert . "</small>)";
                 }
-            $tool_content .="</td><td class='option-btn-cell'>".
+            $tool_content .="</td><td class='option-btn-cell text-center'>".
                     action_button(array(
                         array('title' => $langGradebookBook,
                                 'icon' => 'fa-plus',
@@ -934,7 +934,7 @@ function display_gradebooks() {
                         <td>" . format_locale_date(strtotime($g->end_date), 'short') . "</td>
                         ";
             if( $is_editor) {
-                $tool_content .= "<td class='option-btn-cell'>";
+                $tool_content .= "<td class='option-btn-cell text-center'>";
                 $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "&amp;editSettings=1",

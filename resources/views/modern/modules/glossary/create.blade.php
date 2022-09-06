@@ -44,10 +44,12 @@
                                 </div>
                                 
                                         
-                                @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])    
+                                @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])  
+                                
+                                {!! $action_bar !!}
                                 
                                 <div class='col-12'>
-                                    <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                                    <div class='form-wrapper shadow-sm p-3 rounded'>
                                         <form role='form' action='{{ $edit_url }}' method='post'>
 
                                                 @if(isset($glossary_item))

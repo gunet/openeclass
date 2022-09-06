@@ -163,14 +163,14 @@ if ($total_categories > 0) {
             );
         $tool_content .= "</div></div></div></caption>";
 
-        $tool_content .= "<div class='mt-0 table-responsive'><table class='announcements_table'>";
-        $tool_content .= "<thead class='notes_thead text-light' style='height:40px;'>";
+        $tool_content .= "<div class='mt-0 table-responsive'><table class='table-default'>";
+        $tool_content .= "<thead class='list-header text-light'>";
         $tool_content .= "<tr>
-            <th class='text-left'>$toolName</th>
-            <th class='text-left'>$langTopics</th>
-            <th class='text-left'>$langPosts</th>
-            <th class='text-left'>$langLastPost</th>
-            <th class='text-left'>" . icon('fa-cogs') . "</th>
+            <th class='text-start'>$toolName</th>
+            <th class='text-start'>$langTopics</th>
+            <th class='text-start'>$langPosts</th>
+            <th class='text-start'>$langLastPost</th>
+            <th class='text-center'>" . icon('fa-cogs') . "</th>
           </tr>";
         $tool_content .= "</thead>";
 

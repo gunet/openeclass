@@ -289,7 +289,7 @@ function showgroupsofcategory($catid) {
                 $visibility_icom = 'fa-eye';
                 $visibility_url = 'choice=enable';
             }
-            $tool_content .= "<td class='option-btn-cell'>";
+            $tool_content .= "<td class='option-btn-cell text-center'>";
             $tool_content .= action_button(array(
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
