@@ -36,6 +36,7 @@
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
                     @if ($announcements)
+                    <div class='col-sm-12'>
                         <div class='table-responsive'>
                             <table class='announcements_table'>
                                 <tr class='notes_thead'>
@@ -121,6 +122,7 @@
                                 @endforeach
                             </table>
                         </div>
+                    </div>
                     @else
 
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>

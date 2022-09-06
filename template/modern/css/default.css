@@ -330,7 +330,7 @@ input[type="checkbox"]{
     color:#ffc107;
     font-size: 15px;
   }
-  .InvisibleCourse{
+  .InvisibleCourse, .InvisibleAuth{
     opacity:0.3;
   }
 
@@ -861,7 +861,7 @@ input[type="checkbox"]{
   /* -------------------------------------------------------------------------------------------------*/
   
   /* afora to input search των πινακων */
-  #courses_table_pag_filter, #ann_table_my_ann_filter, #search_results_table_filter, #requests_table_filter, #course_results_table_filter{
+  #courses_table_pag_filter, #ann_table_my_ann_filter, #search_results_table_filter, #requests_table_filter, #course_results_table_filter,#log_results_table_filter{
     margin-bottom:10px !important;
   }
 

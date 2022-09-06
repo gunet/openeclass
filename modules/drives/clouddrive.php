@@ -98,7 +98,7 @@ final class CloudDriveManager {
         //href=\"../drives/filebrowser.php?" . $drive->getDriveDefaultParameter() . "\"
         foreach (CloudDriveManager::getValidDrives() as $drive) {
             if ($drive->isAuthorized()) {
-                $result .="<a class='btn btn-default vagelis' href='javascript:void(0);'  data-toggle=\"modal\" data-target=\"#tree_container\" data-drive=\"" . $drive->getDriveDefaultParameter() . "\"><i class='fa fa-file space-after-icon'/></i>" . $drive->getDisplayName() . "</a> \n";
+                $result .="<a class='btn btn-default vagelis' href='javascript:void(0);'  data-bs-toggle=\"modal\" data-bs-target=\"#tree_container\" data-drive=\"" . $drive->getDriveDefaultParameter() . "\"><i class='fa fa-file space-after-icon'/></i>" . $drive->getDisplayName() . "</a> \n";
             } else {
                 $result .="<a class='btn btn-default' href=\"javascript:void(0)\" onclick=\"authorizeDrive('" . $drive->getName() . "')\"><i class='fa fa-plug space-after-icon'></i>" . $drive->getDisplayName() . "</a> \n";
             }

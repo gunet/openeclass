@@ -152,7 +152,7 @@ function show_post_form() {
                                 <textarea id="textr" onfocus="expand_form();" class="form-control" rows="1" name="message" id="message_input">'.$content.'</textarea>
                             </div>
                             <div id="resources_panel" class="panel panel-default collapse mt-3">
-                                <div class="panel-body">
+                                <div class="panel-body Borders">
                                     <ul class="nav nav-tabs">
                                         <li class="nav-item active"><a id="nav_extvideo" class="nav-link" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                         '.$video_li.'

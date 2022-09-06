@@ -73,7 +73,7 @@
                             <tbody>
                             @foreach ($authMethods as $authMethod)
                                 <tr>
-                                    <td{!! $authMethod->auth_default? '' : ' class=not_visible' !!}>
+                                    <td{!! $authMethod->auth_default? '' : ' class=InvisibleAuth' !!}>
                                         {{ strtoupper($authMethod->auth_name) }}
                                         @if ($authMethod->auth_default > 1)
                                             &nbsp;&nbsp;

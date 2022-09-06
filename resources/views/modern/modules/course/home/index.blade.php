@@ -182,17 +182,17 @@
                                 <div class='panel-footer p-0'>
                                     <div class='row'>
                                         @if(isset($rating_content))
-                                            <div class='col-xl-4 col-lg-4 col-12 mt-lg-3 mt-4'>
+                                            <div class='col-xl-4 col-lg-4 col-md-4 col-12 mt-md-3 mt-3'>
                                                 <div class='p-2 d-flex justify-content-lg-start justify-content-center'>{!! $rating_content !!}</div>
                                             </div>
                                         @endif
                                         @if(isset($comment_content))
-                                            <div class='col-xl-4 col-lg-3 col-12 mt-lg-3 mt-4'>
+                                            <div class='col-xl-4 col-lg-3 col-md-3 col-12 mt-md-3 mt-3 @if(!isset($social_content)) mb-md-0 mb-3 @endif'>
                                                 <div class='p-2 d-flex justify-content-center'>{!! $comment_content !!}</div>
                                             </div>
                                         @endif
                                         @if(isset($social_content))
-                                            <div class='col-xl-4 col-lg-5 col-12 mt-lg-2 mt-4'>
+                                            <div class='col-xl-4 col-lg-5 col-md-5 col-12 mt-md-2 mt-3'>
                                                 <div class='p-2 d-flex justify-content-lg-end justify-content-center'>{!! $social_content !!}</div>
                                             </div>
                                         @endif

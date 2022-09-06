@@ -224,11 +224,13 @@ $num_results = count($result);
 // Display modules of the pool of this course
 
 if (!$num_results == 0) {
-    $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class=\"table-default\">
-        <tr class='list-header'>
-        <th colspan='2'>" . $langLearningObjects . "</th>
-        <th class='text-center'>" . icon('fa-gears') . "</th>
-        </tr>";
+    $tool_content .= "<div class='col-sm-12'>
+    <div class='table-responsive'>
+        <table class=\"table-default\">
+            <tr class='list-header'>
+                <th colspan='2'>" . $langLearningObjects . "</th>
+                <th class='text-center'>" . icon('fa-gears') . "</th>
+            </tr>";
 }
 
 foreach ($result as $list) {    
@@ -265,8 +267,9 @@ foreach ($result as $list) {
     $atleastOne = true;
     
 } //end while another module to display
-
-$tool_content .= "</table></div></div>";
+if (!$num_results == 0) {
+    $tool_content .= "</table></div></div>";
+}
 
 if ($atleastOne == false) {
     $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoModule</div></div>";

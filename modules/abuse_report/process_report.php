@@ -40,15 +40,15 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
         $response[0] = 'fail';
         $response[1] = '<p class="text-danger">'.$langAbuseReportCatError.'</p><form id="abuse_form_'.$rtype.'_'.$rid.'">
 		                         <fieldset>
-                                      <div class="form-group has-error">
+                                      <div class="form-group has-error mt-3">
                                           <label for="abuse_form_select'.$rtype.'_'.$rid.'">'.$langAbuseReportCat.'</label>
-                                          <select class="form-control" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">
+                                          <select class="form-select" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">
                                               <option value="rudeness">'.$langRudeness.'</option>
                                               <option value="spam">'.$langSpam.'</option>
                                               <option value="other">'.$langOther.'</option>
                                           </select>
                                       </div>
-                                      <div class="form-group">
+                                      <div class="form-group mt-3">
                                           <label for="abuse_form_txt'.$rtype.'_'.$rid.'">'.$langMessage.'</label>
                                           <textarea class="form-control" name="abuse_report_msg" id="abuse_form_txt'.$rtype.'_'.$rid.'"></textarea>
                                       </div>
@@ -61,15 +61,15 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
         $response[0] = 'fail';
         $response[1] = '<p class="text-danger">'.$langAbuseReportMsgError.'</p><form id="abuse_form_'.$rtype.'_'.$rid.'">
 		                         <fieldset>
-                                      <div class="form-group">
+                                      <div class="form-group mt-3">
                                           <label for="abuse_form_select'.$rtype.'_'.$rid.'">'.$langAbuseReportCat.'</label>
-                                          <select class="form-control" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">
+                                          <select class="form-select" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">
                                               <option value="rudeness">'.$langRudeness.'</option>
                                               <option value="spam">'.$langSpam.'</option>
                                               <option value="other">'.$langOther.'</option>
                                           </select>
                                       </div>
-                                      <div class="form-group has-error">
+                                      <div class="form-group has-error mt-3">
                                           <label for="abuse_form_txt'.$rtype.'_'.$rid.'">'.$langMessage.'</label>
                                           <textarea class="form-control" name="abuse_report_msg" id="abuse_form_txt'.$rtype.'_'.$rid.'"></textarea>
                                       </div>
