@@ -23,7 +23,6 @@ $require_login = true;
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'modules/request/functions.php';
 
@@ -84,7 +83,7 @@ if (isset($_GET['id'])) {
             }
             if (array_diff($_POST['assignTo'], $course_user_ids)) {
                 //Session::Messages($langGeneralError, 'alert-danger');
-                Session::flash('message',$langGeneralError); 
+                Session::flash('message',$langGeneralError);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page($data['targetUrl'], true);
             }
@@ -116,7 +115,7 @@ if (isset($_GET['id'])) {
             }
             if (array_diff($_POST['watchers'], $course_user_ids)) {
                 //Session::Messages($langGeneralError, 'alert-danger');
-                Session::flash('message',$langGeneralError); 
+                Session::flash('message',$langGeneralError);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page($data['targetUrl'], true);
             }
@@ -171,7 +170,7 @@ if (isset($_GET['id'])) {
             $filePath = safe_filename();
             if (!(is_dir($workPath) or make_dir($workPath))) {
                 //Session::Messages($langGeneralError, 'alert-danger');
-                Session::flash('message',$langGeneralError); 
+                Session::flash('message',$langGeneralError);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page($data['targetUrl'], true);
             }
@@ -179,7 +178,7 @@ if (isset($_GET['id'])) {
                 $fileName = $_FILES['requestFile']['name'];
             } else {
                 //Session::Messages($langGeneralError, 'alert-danger');
-                Session::flash('message',$langGeneralError); 
+                Session::flash('message',$langGeneralError);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page($data['targetUrl'], true);
             }

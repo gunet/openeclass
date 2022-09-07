@@ -23,7 +23,6 @@ $require_login = true;
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'modules/request/functions.php';
 
 // Datatables AJAX request

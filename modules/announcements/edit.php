@@ -25,7 +25,6 @@ $helpTopic = 'announcements';
 $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'modules/tags/eclasstag.class.php';
 
 // Create or edit announcement

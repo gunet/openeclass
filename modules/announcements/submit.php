@@ -22,7 +22,6 @@ $require_current_course = true;
 $require_editor = true;
 
 include '../../include/baseTheme.php';
-require_once 'include/lib/textLib.inc.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/log.class.php';
 require_once 'modules/search/indexer.class.php';
