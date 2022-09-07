@@ -5456,7 +5456,7 @@ function show_student_assignments() {
             if ($not_started) {
                 $tool_content .= "<small><span class='text-warning'>$langWillStartAt: " . format_locale_date(strtotime($row->submission_date)). "</span></small>";
             } else if ($row->time > 0) {
-                $tool_content .= "<br>(<small>$langDaysLeft " . format_time_duration($row->time) . "</small>)";
+                $tool_content .= "<br>(<small class='text-warning'>$langDaysLeft " . format_time_duration($row->time) . "</small>)";
             }   else if($row->deadline) {
                 $tool_content .= "<br>(<small><span class='text-danger'>$langHasExpiredS</span></small>)";
             }

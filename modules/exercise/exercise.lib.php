@@ -354,7 +354,7 @@ function display_exercise($exercise_id) {
             $hasRandomQuestions = true;
             $tool_content .= "<tr class='active'>
                                 <td colspan='$colspan'>
-                                    <strong><u class='text-white'>$langQuestion</u>: $i</strong>
+                                    <strong><u class='text-dark'>$langQuestion</u>: $i</strong>
                                 </td>
                                </tr>";
             if ($qid['criteria'] == 'difficulty') {

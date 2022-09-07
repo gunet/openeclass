@@ -79,7 +79,7 @@
                                     <div class='form-group'>
                                         <label class='col-sm-4 control-label-notes'>{{ trans('langQuotaUsed') }}:</label>
                                         <div class='col-sm-8'>
-                                            <p class='form-control-static'>{{ $used }}</p>
+                                            <p class='form-control-static'>{!! $used !!}</p>
                                         </div>
                                     </div>
                                     <div class="row p-2"></div>
@@ -101,7 +101,7 @@
                                     <div class='form-group'>
                                         <label class='col-sm-4 control-label-notes'>{{ trans('langQuotaTotal') }}:</label>
                                         <div class='col-sm-8'>
-                                            <p class='form-control-static'>{{ $quota }}</p>
+                                            <p class='form-control-static'>{!! $quota !!}</p>
                                         </div>
                                     </div>  
                                 </form>

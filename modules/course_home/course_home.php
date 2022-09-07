@@ -166,28 +166,28 @@ $head_content .= "
     });";
 
 // Units sorting
-if ($is_editor and $course_info->view_type == 'units') {
-    $head_content .= '
-        Sortable.create(boxlistSort, {
-            animation: 350,
-            handle: \'.fa-arrows\',
-            animation: 150,
-            onUpdate: function (evt) {
-                var itemEl = $(evt.item);
-                var idReorder = itemEl.attr(\'data-id\');
-                var prevIdReorder = itemEl.prev().attr(\'data-id\');
+// if ($is_editor and $course_info->view_type == 'units') {
+//     $head_content .= '
+//         Sortable.create(boxlistSort, {
+//             animation: 350,
+//             handle: \'.fa-arrows\',
+//             animation: 150,
+//             onUpdate: function (evt) {
+//                 var itemEl = $(evt.item);
+//                 var idReorder = itemEl.attr(\'data-id\');
+//                 var prevIdReorder = itemEl.prev().attr(\'data-id\');
 
-                $.ajax({
-                  type: \'post\',
-                  dataType: \'text\',
-                  data: {
-                      toReorder: idReorder,
-                      prevReorder: prevIdReorder,
-                  }
-                });
-            }
-        });';
-}
+//                 $.ajax({
+//                   type: \'post\',
+//                   dataType: \'text\',
+//                   data: {
+//                       toReorder: idReorder,
+//                       prevReorder: prevIdReorder,
+//                   }
+//                 });
+//             }
+//         });';
+// }
 
 // Calendar stuff
 $head_content .= 'var calendar = $("#bootstrapcalendar").calendar({
@@ -507,9 +507,10 @@ $total_cunits = count($all_units);
 if ($total_cunits > 0) {
     $cunits_content .= "";
     $count_index = 0;
-    $counter_hr = 0;
+    $counterUnits = 0;
+    $cunits_content .= "<div id='carouselUnitsControls' class='carousel slide' data-bs-ride='carousel'>
+    <div class='carousel-inner'>";
     foreach ($all_units as $cu) {
-        $counter_hr++;
         $not_shown = false;
         $icon = '';
             // check if course unit has started
@@ -545,6 +546,12 @@ if ($total_cunits > 0) {
         $vis = $cu->visible;
         $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
         $cu_indirect = getIndirectReference($cu->id);
+
+        if($counterUnits == 0){
+            $cunits_content .= "<div class='carousel-item active'>";
+        }else{
+            $cunits_content .= "<div class='carousel-item'>";
+        }
         $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
             <div class='item-content'>
                 <div class='item-header clearfix'>
@@ -601,7 +608,7 @@ if ($total_cunits > 0) {
 
             // $cunits_content .= "</div>";
 
-            $cunits_content .= "<div class='float-end'>".action_button(array(
+            $cunits_content .= "<div class='col-sm-12 mt-3 text-end'>".action_button(array(
                 array('title' => $langEditChange,
                       'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
                       'icon' => 'fa-edit'),
@@ -617,21 +624,50 @@ if ($total_cunits > 0) {
                       'icon' => 'fa-trash',
                       'class' => 'delete',
                       'confirm' => $langCourseUnitDeleteConfirm)))."</div>";
-
-
-                    //$cunits_content .= '</div>';
-
         } else {
             $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
             $cunits_content .= $icon;
             $cunits_content .= "</div>";
         }
 
-        $cunits_content .= "</div></div></div></div>";
-        if($counter_hr <= count($all_units)-1){
-            $cunits_content .= "<hr>";
-        }
+        $cunits_content .= "<hr>
+                    <div class='col-sm-12 bg-transparent'>
+
+                        <button class='btn btn-sm btn-primary' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='prev'>
+                            <span class='carousel-control-prev-icon' aria-hidden='true'></span>
+                            <span class='visually-hidden'>Previous</span>
+                        </button>";
+
+        $cunits_content .=  "<button class='btn btn-sm btn-primary float-end' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='next'>
+                            <span class='carousel-control-next-icon' aria-hidden='true'></span>
+                            <span class='visually-hidden'>Next</span>
+                        </button>
+                
+                    </div>";
+
+        $cunits_content .= "</div></div></div></div></div>";
+        $counterUnits++;
     }
+
+    // end carousel-inner
+    $cunits_content .= "</div>";
+
+    //this is foreach for indicatoras carousel-units
+    $counterIndicator = 0;
+    $cunits_content .=  "<div class='carousel-indicators h-auto mb-1 bg-transparent'>"; 
+    foreach ($all_units as $cu) {   
+        if($counterIndicator == 0){
+            $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' class='active btn btn-secondary' aria-current='true'></button>";
+        }else{
+            $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' class='btn btn-secondary' aria-current='true'></button>";
+        }
+        $counterIndicator++;
+    }
+    $cunits_content .=  "</div>";
+
+    //end courseUnitsControls
+    $cunits_content .= "</div>";
+
 } else {
     $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible text-center'> - $langNoUnits - </div></div></div>";
 }

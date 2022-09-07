@@ -781,8 +781,8 @@ function display_gradebook($gradebook) {
                             <div class='col-sm-12'>
                                 <div class='table-responsive'>
                                     <table class='table-default'>
-                                        <tr class='list-header'>
-                                            <th colspan='7' class='text-center text-white'>$langGradebookActList</th>
+                                        <tr class='bg-light'>
+                                            <th colspan='7' class='text-center text-secondary'>$langGradebookActList</th>
                                         </tr>
                                         <tr class='list-header'>
                                             <th class='text-white'>$langTitle</th>

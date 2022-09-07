@@ -600,6 +600,8 @@ input[type="checkbox"]{
     list-style-type:circle; 
   } */
 
+
+
   
 
   
@@ -1554,7 +1556,7 @@ input[type="checkbox"]{
   .panel-admin{
     border-radius:15px;
     background: #1d4e89;
-    border:solid 2px #1d4e89;
+    border:solid 1px #6c757d;
   }
   .panel-admin .panel-title{
     color:#fafafa;
@@ -1563,7 +1565,7 @@ input[type="checkbox"]{
   .panel-primary,.panel-action-btn-primary{
     border-radius:15px;
     background: #428bca;
-    border:solid 2px #428bca;
+    border:solid 1px #428bca;
   }
   .panel-primary .panel-title{
     color:#fafafa;
@@ -1575,10 +1577,10 @@ input[type="checkbox"]{
   .panel-success{
     border-radius:15px;
     background: #7dcfb6;
-    border:solid 2px #7dcfb6;
+    border:solid 1px #7dcfb6;
   }
   .panel-success .panel-title{
-    color:black;
+    color:#fafafa;
   }
 
   .panel-default,.panel-action-btn-default{
@@ -1596,13 +1598,13 @@ input[type="checkbox"]{
   .panel-warning{
     border-radius:15px;
     background:#fbd1a2;
-    border:solid 2px #fbd1a2;
+    border:solid 1px #fbd1a2;
   }
 
   .panel-info{
     border-radius:15px;
     background: #00b2ca;
-    border:solid 2px #00b2ca;
+    border:solid 1px #00b2ca;
   }
   .panel-info .panel-title{
     color:#fafafa;
@@ -1611,7 +1613,7 @@ input[type="checkbox"]{
   .panel-danger{
     border-radius:15px;
     background: #dc3545;
-    border:solid 2px #dc3545;
+    border:solid 1px #dc3545;
   }
   .panel-danger .panel-title{
     color:#fafafa;
@@ -1651,8 +1653,8 @@ input[type="checkbox"]{
   .panel-body,.media-body{
     padding:15px;
     background: #ffffff;
-    border-bottom-left-radius:15px;
-    border-bottom-right-radius:15px;
+    border-bottom-left-radius:13px;
+    border-bottom-right-radius:13px;
   }
 
   .borderBody{
@@ -1698,6 +1700,10 @@ input[type="checkbox"]{
   .BordersBottom{
     border-bottom-left-radius:15px;
     border-bottom-right-radius:15px;
+  }
+  .BordersBottom2{
+    border-bottom-left-radius:13px;
+    border-bottom-right-radius:13px;
   }
   
   .NoBorders{

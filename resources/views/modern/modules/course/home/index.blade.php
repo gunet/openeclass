@@ -1,3 +1,4 @@
+<?php //print_a($all_units)?>
 @extends('layouts.default')
 
 @section('content')
@@ -205,37 +206,37 @@
 
                     <div class="col-xl-8 col-lg-6 col-md-12 col_maincontent_unit mt-4">
                         @if (!$alter_layout)
-                            <div class='panel panel-default border border-secondary-4 shadow-sm'>
+                            <div class='panel panel-admin border border-secondary-4 shadow-sm'>
                                 <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                     <div class='row'>
 
                                         <div class='col-sm-12'>
-                                            <span class='control-label-notes'>
+                                            <span class='text-white'>
                                                 {{ trans('langCourseUnits') }}
                                             </span>
                                             @if ($is_editor and $course_info->view_type == 'units')
                                                 <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn float-end mt-1' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
-                                                    <span class='fa fa-plus-circle'></span>
+                                                    <span class='fa fa-plus-circle text-white'></span>
                                                 </a>
                                             @endif
                                             <a class='add-unit-btn float-end pe-2 mt-1' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
-                                                <span class='fa fa-question-circle'></span>
+                                                <span class='fa fa-question-circle text-white'></span>
                                             </a>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class='panel-body'>
-                                    <div id='boxlistSort'>
+                                    {{--<div id='boxlistSort'>--}}
                                         {!! $cunits_content !!}
-                                    </div>
+                                    {{--</div>--}}
                                 </div>
 
                             </div>
                             {!! $course_home_main_area_widgets !!}
                         @else
-                            <div class='panel panel-default border border-secondary-4 shadow-sm'>
-                                <div class='panel-heading text-center control-label-notes ps-3 pe-3 pb-2 pt-2'>
+                            <div class='panel panel-admin shadow-sm'>
+                                <div class='panel-heading text-center text-white ps-3 pe-3 pb-2 pt-2'>
                                     {{ trans('langCourseUnits') }}
                                 </div>
                                 <div class='panel-body'>
@@ -244,24 +245,26 @@
                             </div>
                         @endif
 
-                        <div class="panel panel-default mt-4 border border-secondary-4 shadow-sm">
+                        <div class="panel panel-admin mt-4 border border-secondary-4 shadow-sm">
                             <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
-                                <div class='control-label-notes text-center'>{{ trans('langAnnouncements') }}</div>
+                                <div class='row'>
+                                    <div class='col-sm-12'>
+                                        <span class='text-white text-start'>{{ trans('langAnnouncements') }}</span>
+                                        <a class='btn btn-sm btn-transparent float-end' href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}'>
+                                            <small class='text-white text-lowercase'>{{ trans('langAllAnnouncements') }}&hellip;</small>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class='panel-body bg-white NoBorders'>
+                            <div class='panel-body bg-white BordersBottom2'>
                                 <ul class='list-group list-group-flush'>
                                     {!! course_announcements() !!}
                                 </ul>
                             </div>
-                            <div class='panel-footer'>
-                                <div class='text-end'>
-                                    <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code}}'>
-                                        <small>{{ trans('langMore') }}&hellip;</small>
-                                    </a>
-                                </div>
-                            </div>
                             {!! $course_home_sidebar_widgets !!}
                         </div>
+
+                        
 
                     </div><!-- end col units -->
 
@@ -301,11 +304,10 @@
                             </div>
                         </div>
 
-
                         @if(isset($course_completion_id) and $course_completion_id > 0)
-                            <div class="panel panel-default mt-4 border border-secondary-4 shadow-sm">
+                            <div class="panel panel-admin mt-4 border border-secondary-4 shadow-sm">
                                 <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
-                                    <div class='control-label-notes text-center'>{{ trans('langCourseCompletion') }}</div>
+                                    <div class='text-white text-center'>{{ trans('langCourseCompletion') }}</div>
                                 </div>
                                 <div class='panel-body'>
                                     <div class='text-center'>
@@ -328,15 +330,15 @@
                         @endif
 
                         @if (isset($level) && !empty($level))
-                            <div class='panel panel-default mt-4 border border-secondary-4 shadow-sm'>
+                            <div class='panel panel-admin mt-4 border border-secondary-4 shadow-sm'>
                                 <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
-                                    <div class='control-label-notes text-center'>{{ trans('langOpenCourseShort') }}</div>
+                                    <div class='text-white text-center'>{{ trans('langOpenCourseShort') }}</div>
                                 </div>
-                                <div class='panel-body NoBorders'>
+                                <div class='panel-body'>
                                     {!! $opencourses_level !!}
-                                </div>
-                                <div class='panel-footer'>
-                                    {!! $opencourses_level_footer !!}
+                                    <div class='mt-3 text-center'>
+                                        {!! $opencourses_level_footer !!}
+                                    </div>
                                 </div>
                             </div>
                         @endif

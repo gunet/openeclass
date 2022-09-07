@@ -82,7 +82,7 @@ function display_certificates() {
             $thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
             $template_thumbnail = $urlServer . CERT_TEMPLATE_PATH . $thumbnail_filename;
             $tool_content .= "
-            <div class='row res-table-row border-0'>
+            <div class='row res-table-row border-0 p-3'>
                 <div class='col-sm-2 text-md-start text-center'>
                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1' target=_blank>
                     <img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='$template_thumbnail' title='$template_name'>
@@ -190,7 +190,7 @@ function display_badges() {
             $badge_icon = $badge_details[$badge_name];
             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_icon";
             $tool_content .= "
-                                <div class='row res-table-row border-0'>
+                                <div class='row res-table-row border-0 p-3'>
                                     <div class='col-sm-2 text-md-start text-center'>
                                         <img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='$icon_link'>
                                     </div>
@@ -271,7 +271,7 @@ function display_course_completion() {
             $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
             $status_msg = $data->active ? $langActive : $langInactive;
             $tool_content .= "
-                        <div class='row res-table-row border-0'>
+                        <div class='row res-table-row border-0 p-3'>
                             <div class='col-sm-2 text-md-start text-center'>
                                 <i class='fa fa-trophy fa-3x' aria-hidden='true'></i>
                             </div>
@@ -1637,7 +1637,7 @@ function display_available_ebooks($element, $element_id, $unit_id = 0) {
                                         ORDER BY CONVERT(psid, UNSIGNED), psid,
                                                  CONVERT(pssid, UNSIGNED), pssid", $catrow->id, $course_id, $course_id);
 
-            $ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$catrow->id/";
+            $ebook_url_base = "{$urlServer}modules/ebook/show.php?$course_code/$catrow->id/";
             $old_sid = false;
             foreach ($q as $row) {
                 $sid = $row->sid;
@@ -2331,7 +2331,7 @@ function student_view_progress() {
                 $badge_percentage = round($badge->completed_criteria / $badge->total_criteria * 100, 0) . "%";
 
                 $tool_content .= "<div class='res-table-wrapper'>
-                                    <div class='row res-table-row border-0'>
+                                    <div class='row res-table-row border-0 p-3'>
                                         <div class='col-sm-2'>
                                             <img class = '$faded center-block' style='max-height: 60px;' class='img-responsive block-center' src='$urlServer" . BADGE_TEMPLATE_PATH . "$badge_filename'>
                                         </div>";

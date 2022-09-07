@@ -80,7 +80,7 @@
                                                     @foreach ($prefixes as $key => $letter)
                                                         <li class="page-item {!! (!isset($_GET['prefix']) && !$cat_id && !$key) ||
                                                                 (isset($_GET['prefix']) && $_GET['prefix'] == $letter)? " active" : "" !!}">
-                                                            <a class="page-link" tabindex="-1" aria-disabled="true" href="{{ $base_url."&amp;prefix=" . urlencode($letter)  }}">{{ $letter }}</a>
+                                                            <a class="page-link" tabindex="-1" aria-disabled="true" href="{!! $base_url."&amp;prefix=" . urlencode($letter)  !!}">{{ $letter }}</a>
                                                         </li>
                                                     @endforeach
                                                 </ul>
