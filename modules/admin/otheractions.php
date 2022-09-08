@@ -39,6 +39,7 @@ $head_content .= "<script type='text/javascript'>
                 'bAutoWidth': true,
                 'iDisplayLength': 25,
                 'searchDelay': 1000,
+                'order': [[0, 'desc']],
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -82,7 +83,7 @@ if (isset($_GET['stats'])) {
             $date_end = date("Y-m-d", strtotime("+1 days"));
             $page_link = "&amp;stats=failurelogin";
             $log = new Log();
-            $log->display(0, 0, 0, LOG_LOGIN_FAILURE, $date_start, $date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
+            $log->display(0, 0, 0, LOG_LOGIN_FAILURE, $date_start, $date_end, $_SERVER['SCRIPT_NAME']);
             break;
         case 'unregusers':
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
@@ -91,7 +92,7 @@ if (isset($_GET['stats'])) {
             $date_end = date("Y-m-d", strtotime("+1 days"));
             $page_link = "&amp;stats=unregusers";
             $log = new Log();
-            $log->display(0, -1, 0, LOG_DELETE_USER, $date_start, $date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
+            $log->display(0, -1, 0, LOG_DELETE_USER, $date_start, $date_end, $_SERVER['SCRIPT_NAME']);
             break;
         case 'musers':
             $tool_content .= "<div class='table-responsive'>
