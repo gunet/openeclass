@@ -179,7 +179,6 @@
                                 </div>
                             </div>
                             <div class='panel-body'>
-                                <label class='col-sm-8 control-label-notes'>Περιεχόμενο</label>
                                 <div>
                                     {!! standard_text_escape($comments) !!}
                                 </div>

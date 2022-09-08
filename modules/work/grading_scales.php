@@ -264,9 +264,9 @@ if (isset($_GET['scale_id'])) {
         $tool_content .= "
 
             <div class='table-responsive'>
-                <table class='announcements_table'>
-                    <thead class='notes_thead' style='height:45px;'>
-                        <tr>
+                <table class='table-default'>
+                    <thead>
+                        <tr class='list-header'>
                             <th style='padding-left:15px;'class='text-white'>$langTitle</th>
                             <th  class='text-white'>$langGradebookMEANS</th>
                             <th class='text-white text-end' style='padding-right:15px;'>" . icon('fa-cogs') . "</th>

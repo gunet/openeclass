@@ -152,43 +152,43 @@ $export_box
         <h3 class='panel-title'>$langInfoPoll</h3>
     </div>
     <div class='panel-body'>
-        <div class='row  margin-bottom-fat'>
-            <div class='col-sm-3'>
+        <div class='row  margin-bottom-fat p-2'>
+            <div class='col-sm-4'>
                 <strong>$langTitle:</strong>
             </div>
-            <div class='col-sm-9'>
+            <div class='col-sm-8'>
                 " . q($thePoll->name) . "
             </div>
         </div>
-        <div class='row  margin-bottom-fat'>
-            <div class='col-sm-3'>
+        <div class='row  margin-bottom-fat p-2'>
+            <div class='col-sm-4'>
                 <strong>$langPollCreation:</strong>
             </div>
-            <div class='col-sm-9'>
+            <div class='col-sm-8'>
                 " . format_locale_date(strtotime($thePoll->creation_date)) . "
             </div>
         </div>
-        <div class='row  margin-bottom-fat'>
-            <div class='col-sm-3'>
+        <div class='row  margin-bottom-fat p-2'>
+            <div class='col-sm-4'>
                 <strong>$langStart:</strong>
             </div>
-            <div class='col-sm-9'>
+            <div class='col-sm-8'>
                 " . format_locale_date(strtotime($thePoll->start_date)) . "
             </div>
         </div>
-        <div class='row  margin-bottom-fat'>
-            <div class='col-sm-3'>
+        <div class='row  margin-bottom-fat p-2'>
+            <div class='col-sm-4'>
                 <strong>$langPollEnd:</strong>
             </div>
-            <div class='col-sm-9'>
+            <div class='col-sm-8'>
                 " . format_locale_date(strtotime($thePoll->end_date)) . "
             </div>
         </div>
-        <div class='row  margin-bottom-fat'>
-            <div class='col-sm-3'>
+        <div class='row  margin-bottom-fat p-2'>
+            <div class='col-sm-4'>
                 <strong>$langPollTotalAnswers:</strong>
             </div>
-            <div class='col-sm-9'>
+            <div class='col-sm-8'>
                 $total_participants
             </div>
         </div>
@@ -204,9 +204,9 @@ $w_skw = array(0.48,0.39,0.01,0.06,0.08,0.09,0.39,0.11,0.53,0.25,0.29,0.5,0.26,0
 $result = Database::get()->queryArray("SELECT t1.poll_user_record_id, t2.uid AS st FROM poll_answer_record as t1, poll_user_record as t2
                                                 WHERE t1.poll_user_record_id=t2.id AND t2.pid = ?d GROUP BY st, t1.poll_user_record_id", $pid);
 
-$theader = "<table class='table-default'>
+$theader = "<div class='table-responsive'><table class='table-default'>
             <tbody>
-            <tr>
+            <tr class='list-header'>
                 <th>$langStudents</th>
                 <th>$lang_Results</th>
             </tr>";
@@ -315,7 +315,7 @@ foreach ($result as $theresult) {
     }
     $trowcontent .= $tdcontent . "</td></tr>";
 }
-$tfooter .= "</tbody></table>";
+$tfooter .= "</tbody></table></div>";
 
 if (!$thePoll->anonymized) {
     $tool_content .= $theader . $trowcontent . $tfooter;

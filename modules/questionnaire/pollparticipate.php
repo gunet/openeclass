@@ -235,14 +235,14 @@ function printPollForm() {
             $qtype = $theQuestion->qtype;
             if($qtype==QTYPE_LABEL) {
                 $tool_content .= "
-                <div class='col-sm-12'><div class='alert alert-info' role='alert'>
-                        <strong>" . standard_text_escape($theQuestion->question_text) . "</strong>
+                <div class='col-sm-12 mt-3'><div class='alert alert-info text-center' role='alert'>
+                        <strong class='text-uppercase'>" . standard_text_escape($theQuestion->question_text) . "</strong>
                     </div></div>";
             } else {
                 $tool_content .= "
                 <div class='col-sm-12 mt-3'>
                     <div class='panel panel-success'>
-                        <div class='panel-heading'>
+                        <div class='panel-heading text-white'>
                             $langQuestion $i
                         </div>
                         <div class='panel-body panel-body-questionaire p-3'>
@@ -283,7 +283,7 @@ function printPollForm() {
                     if (($pollType == 1) or ($pollType == 2)) {
                         $tool_content .= "<div style='margin-bottom: 0.5em;'><small>".q($langCollesLegend)."</small></div>";
                     }
-                    $tool_content .= "<div class='form-group'>
+                    $tool_content .= "<div class='form-group d-flex justify-content-center mb-5'>
                         <div class='col-sm-offset-2 col-sm-10' style='padding-top:15px;'>
                             <input name='answer[$pqid]' class='grade_bar' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='1'>
                         </div>

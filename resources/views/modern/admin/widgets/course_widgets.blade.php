@@ -82,7 +82,7 @@
                                                     </div>
                                                     <div class="panel-footer clearfix">
                                                         <div class="float-end">
-                                                            <form action='{{ $_SERVER['SCRIPT_NAME'] }}' id="uninstallForm{{ $key }}" method="post">
+                                                            <form class='mb-0 mt-0' action='{{ $_SERVER['SCRIPT_NAME'] }}' id="uninstallForm{{ $key }}" method="post">
                                                                 <input type="hidden" name='widgetClassName' value='{{ get_class($installed_widget) }}'>
                                                                 <input type="hidden" name='widgetAction' value='uninstall'>
                                                             </form>

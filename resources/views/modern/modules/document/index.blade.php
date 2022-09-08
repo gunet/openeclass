@@ -142,7 +142,7 @@
                                         <tr class="{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}">
 
 
-                                            <td class='text-left'>
+                                            <td class='text-start'>
                                                 @if($file->visible == 1)
                                                     <span class='visibleFile fa {{ $file->icon }}'></span>
                                                 @else
@@ -275,7 +275,7 @@
                         </div>
 
                     @else
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-2'><div class='alert alert-warning'>{{ trans('langNoDocuments') }}</div></div>
+                        <div class='col-sm-12 mt-2'><div class='alert alert-warning'>{{ trans('langNoDocuments') }}</div></div>
                     @endif
                 </div>
             </div>

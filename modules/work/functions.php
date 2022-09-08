@@ -396,21 +396,21 @@ function show_submission_details($id) {
     $tool_content .= "
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
         <div class='panel panel-default'>
-            <div class='panel-heading mb-3'>
+            <div class='panel-heading'>
                 <h4 class='panel-title'>$m[SubmissionWorkInfo]</h4>
             </div>
-            <div class='panel-body' style='margin-top:-10px;'>
+            <div class='panel-body'>
                 <div class='row p-2 margin-bottom-fat'>
-                    <div class='col-sm-3'>
+                    <div class='col-sm-4'>
                         <strong class='control-label-notes'>".$m['SubmissionStatusWorkInfo'].":</strong>
                     </div>
-                    <div class='col-sm-9'>$notice</div>
+                    <div class='col-sm-8'>$notice</div>
                 </div>
                 <div class='row p-2 margin-bottom-fat'>
-                    <div class='col-sm-3'>
+                    <div class='col-sm-4'>
                         <strong class='control-label-notes'>" . $langGradebookGrade . ":</strong>
                     </div>
-                   <div class='col-sm-9'>";
+                   <div class='col-sm-8'>";
     if ($preview_rubric == 1 AND $points_to_graded == 1) {
         $tool_content .= "
                         <a role='button' data-bs-toggle='collapse' href='#collapseGrade' aria-expanded='false' aria-controls='collapseGrade'>"
@@ -448,17 +448,17 @@ function show_submission_details($id) {
     $tool_content .= "</div>
                 </div>
                 <div class='row p-2 margin-bottom-fat'>
-                    <div class='col-sm-3'>
+                    <div class='col-sm-4'>
                         <strong class='control-label-notes'>" . $m['gradecomments'] . ":</strong>
                     </div>
-                    <div class='col-sm-9' style='white-space: pre-wrap'>" . q($sub->grade_comments) . $file_comments_link . "
+                    <div class='col-sm-8' style='white-space: pre-wrap'>" . q($sub->grade_comments) . $file_comments_link . "
                     </div>
                 </div>
                 <div class='row p-2 margin-bottom-fat'>
-                    <div class='col-sm-3'>
+                    <div class='col-sm-4'>
                         <strong class='control-label-notes'>" . $m['sub_date'] . ":</strong>
                     </div>
-                    <div class='col-sm-9'>" . format_locale_date(strtotime($sub->submission_date)) . "</div>
+                    <div class='col-sm-8'>" . format_locale_date(strtotime($sub->submission_date)) . "</div>
                 </div>";
 
     if ($assignment->submission_type == ASSIGNMENT_RUBRIC_GRADE) {
@@ -476,10 +476,10 @@ function show_submission_details($id) {
                     WHERE assignment_id = ?d AND uid = ?d AND group_id = ?d ORDER BY id',
                     $sub->assignment_id, $sub->uid, $sub->group_id)));
         $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
+                <div class='col-sm-4'>
                     <strong class='control-label-notes'>$langOpenCoursesFiles:</strong>
                 </div>
-                <div class='col-sm-9'>$links</div>";
+                <div class='col-sm-8'>$links</div>";
     } elseif ($assignment->submission_type == ASSIGNMENT_STANDARD_GRADE) {
         // single file
         if (isset($_GET['unit'])) {
@@ -489,17 +489,17 @@ function show_submission_details($id) {
         }
         $filelink = MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name);
         $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                    <div class='col-sm-3'>
+                    <div class='col-sm-4'>
                         <strong class='control-label-notes'>$langFileName:</strong>
                     </div>
-                    <div class='col-sm-9'>$filelink</div>";
+                    <div class='col-sm-8'>$filelink</div>";
     } else {
         // online text
         $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                    <div class='col-sm-3'>
+                    <div class='col-sm-4'>
                         <strong class='control-label-notes'>$langWorkOnlineText:</strong>
                     </div>
-                    <div class='col-sm-9'>
+                    <div class='col-sm-8'>
                         <a href='#' class='onlineText btn btn-xs btn-secondary' data-id='$sub->id'>$langQuestionView</a>
                     </div>";
     }
@@ -509,10 +509,10 @@ function show_submission_details($id) {
         $reportlink = $urlServer."modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
         $tool_content .= "
                     <div class='row p-2 margin-bottom-fat'>
-                        <div class='col-sm-3'>
+                        <div class='col-sm-4'>
                             <strong class='control-label-notes'>" . $langAutoJudgeEnable . ":</strong>
                         </div>
-                        <div class='col-sm-9'><a href='$reportlink'> $langAutoJudgeShowWorkResultRpt</a>
+                        <div class='col-sm-8'><a href='$reportlink'> $langAutoJudgeShowWorkResultRpt</a>
                         </div>
                     </div>";
     }

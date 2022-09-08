@@ -136,7 +136,7 @@ if ($is_editor) {
 $tool_content .= "<div class='col-sm-12'><div class='panel panel-primary NoBorders'>
     <div class='panel panel-heading text-white'>" . q_math($exerciseTitle) . "</div>";
 if ($exerciseDescription_temp) {
-    $tool_content .= "<div class='panel panel-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
+    $tool_content .= "<div class='panel panel-body NoBorders'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
 }
 $tool_content .= "</div></div>";
 

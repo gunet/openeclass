@@ -903,11 +903,11 @@ input[type="checkbox"]{
     background: #fafafa;
   }
 
-  tr.active td span,strong{
+  /* tr.active td span,strong{
     color:#003F87;
-  }
+  } */
   tr.active th span,strong{
-    color:#003F87;
+    /* color:#003F87; */
     padding-right: 10px;
   }
 
@@ -1463,6 +1463,9 @@ input[type="checkbox"]{
     color:white;
     width:35px;
     height:30px;
+  }
+  .modal-title{
+    font-size: 18px;
   }
   
   /* -------------------------------------------- BUTTONS  ------------------------------------------*/

@@ -107,7 +107,7 @@ $tool_content .= "
             <h3 class='panel-title'>$langSurvey</h3>
         </div>
         <div class='panel-body'>
-            <div class='row margin-bottom-thin'>
+            <div class='row margin-bottom-thin p-2'>
                 <div class='col-sm-3'>
                     <strong>$langTitle:</strong>
                 </div>
@@ -115,7 +115,7 @@ $tool_content .= "
                     " . q($poll->name) . "
                 </div>
             </div>" . ($poll->start_date? ("
-            <div class='row margin-bottom-thin'>
+            <div class='row margin-bottom-thin p-2'>
                 <div class='col-sm-3'>
                     <strong>$langStart:</strong>
                 </div>
@@ -123,7 +123,7 @@ $tool_content .= "
                     " . format_locale_date(strtotime($poll->start_date)) . "
                 </div>
             </div>"): '') . ($poll->end_date? ("
-            <div class='row margin-bottom-thin'>
+            <div class='row margin-bottom-thin p-2'>
                 <div class='col-sm-3'>
                     <strong>$langPollEnd:</strong>
                 </div>
@@ -131,7 +131,7 @@ $tool_content .= "
                     " . format_locale_date(strtotime($poll->end_date)) . "
                 </div>
             </div>"): '') . "
-            <div class='row margin-bottom-thin'>
+            <div class='row margin-bottom-thin p-2'>
                 <div class='col-sm-3'>
                     <strong>$m[WorkAssignTo]:</strong>
                 </div>
@@ -139,7 +139,7 @@ $tool_content .= "
                     $assign_details
                 </div>
             </div>
-            <div class='row margin-bottom-thin'>
+            <div class='row margin-bottom-thin p-2'>
                 <div class='col-sm-3'>
                     <strong>$langParticipants:</strong>
                 </div>
@@ -147,7 +147,7 @@ $tool_content .= "
                     count($polledUsers) . ' / ' . count($allUsers) . " $langUsersS
                 </div>
             </div>
-            <div class='row'>
+            <div class='row p-2'>
                 <div class='col-sm-3'>
                     <strong>$langShow:</strong>
                 </div>
@@ -165,7 +165,7 @@ $tool_content .= "
     <div class='table-responsive'>
         <table id='users' class='table-default'>
             <thead>
-                <tr>
+                <tr class='list-header'>
                     <th>$m[username]</th>
                     <th>$langEmail</th>
                     <th>$langAm</th>

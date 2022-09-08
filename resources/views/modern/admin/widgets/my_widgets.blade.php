@@ -51,9 +51,9 @@
                                                 <div class="panel-body text-muted NoBorders">
                                                     {{ $installed_widget->getDesc() }}
                                                 </div>
-                                                <div class="panel-footer clearfix">
-                                                    <div class="float-end">
-                                                        <form action='{{ $_SERVER['SCRIPT_NAME'] }}' id="uninstallForm{{ $key }}" method="post">
+                                                <div class="panel-footer">
+                                                    <div class="text-end">
+                                                        <form class='mt-0 mb-0' action='{{ $_SERVER['SCRIPT_NAME'] }}' id="uninstallForm{{ $key }}" method="post">
                                                             <input type="hidden" name='widgetClassName' value='{{ get_class($installed_widget) }}'>
                                                             <input type="hidden" name='widgetAction' value='uninstall'>
                                                         </form>

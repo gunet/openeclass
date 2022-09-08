@@ -231,14 +231,16 @@ $head_content .= "
                             '<form class=\"form-horizontal\"> ' +
                                 '<h4>$langSelectionRule</h4>' +
                                     '<div class=\"form-group\">' +
-                                        '<div class=\"col-sm-3\">' +
-                                            '<select name=\"category\" class=\"form-control\" id=\"cat\">$cat_options</select>' +
-                                        '</div>' +
-                                        '<div class=\"col-sm-4\">' +
-                                            '<select name=\"difficulty\" class=\"form-control\" id=\"diff\">$diff_options</select>' +
-                                        '</div>' +
-                                        '<div class=\"col-sm-2\">' +
-                                            '<input class=\"form-control\" type=\"text\" id=\"q_num\" name=\"q_num\" value=\"\"> $langQuestions' +
+                                        '<div class=\"row\">'+
+                                            '<div class=\"col-sm-4\">' +
+                                                '<select name=\"category\" class=\"form-control\" id=\"cat\">$cat_options</select>' +
+                                            '</div>' +
+                                            '<div class=\"col-sm-4\">' +
+                                                '<select name=\"difficulty\" class=\"form-control\" id=\"diff\">$diff_options</select>' +
+                                            '</div>' +
+                                            '<div class=\"col-sm-4\">' +
+                                                '<input class=\"form-control\" type=\"text\" id=\"q_num\" name=\"q_num\" value=\"\"> $langQuestions' +
+                                            '</div>' +
                                         '</div>' +
                                     '</div>' +
                             '</form>' +
@@ -285,26 +287,28 @@ $head_content .= "
                         '<div class=\"col-md-12\">' +
                             '<form class=\"form-horizontal\">' +                                
                                 '<div class=\"row\" style=\"margin-bottom: 10px;\">' +
-                                '<span class=\"col-sm-5\">$langQuestionDiffGrade</span>' +
-                                '<span class=\"col-sm-5\">$langQuestionCats</span>' +
-                                '<span class=\"col-sm-2\">$langNumQuestions</span>' +
+                                '<span class=\"col-sm-4\">$langQuestionDiffGrade</span>' +
+                                '<span class=\"col-sm-4\">$langQuestionCats</span>' +
+                                '<span class=\"col-sm-4\">$langNumQuestions</span>' +
                                 '</div>'+
                                 '<div class=\"form-group\">' +
-                                    '<div class=\"col-sm-5\">' +
-                                        '<select id=\"difficultyId\" class=\"form-select\">' +
-                                            '<option value=\"0\">  ----  </option>' +
-                                            '<option value=\"1\">$langQuestionVeryEasy</option>' +
-                                            '<option value=\"2\">$langQuestionEasy</option>' +
-                                            '<option value=\"3\">$langQuestionModerate</option>' +
-                                            '<option value=\"4\">$langQuestionDifficult</option>' +
-                                            '<option value=\"5\">$langQuestionVeryDifficult</option>' +
-                                        '</select>' +
-                                    '</div>' +                                
-                                    '<div class=\"col-sm-5\">' +
-                                        '<select id=\"categoryId\" class=\"form-select\">$cat_options_2</select>' +
-                                    '</div>' +                                    
-                                    '<div class=\"col-sm-2\">' +
-                                        '<input class=\"form-control\" type=\"text\" id=\"questionRandomDrawn\" value=\"\">' +
+                                    '<div class=\"row\">'+
+                                        '<div class=\"col-sm-4\">' +
+                                            '<select id=\"difficultyId\" class=\"form-select\">' +
+                                                '<option value=\"0\">  ----  </option>' +
+                                                '<option value=\"1\">$langQuestionVeryEasy</option>' +
+                                                '<option value=\"2\">$langQuestionEasy</option>' +
+                                                '<option value=\"3\">$langQuestionModerate</option>' +
+                                                '<option value=\"4\">$langQuestionDifficult</option>' +
+                                                '<option value=\"5\">$langQuestionVeryDifficult</option>' +
+                                            '</select>' +
+                                        '</div>' +                                
+                                        '<div class=\"col-sm-4\">' +
+                                            '<select id=\"categoryId\" class=\"form-select\">$cat_options_2</select>' +
+                                        '</div>' +                                    
+                                        '<div class=\"col-sm-4\">' +
+                                            '<input class=\"form-control\" type=\"text\" id=\"questionRandomDrawn\" value=\"\">' +
+                                        '</div>' +
                                     '</div>' +
                                 '</div>' +                                
                             '</form>' +

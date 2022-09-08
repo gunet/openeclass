@@ -234,9 +234,9 @@ if (isset($_GET['rubric_id'])) {
                     <label class='col-sm-6 control-label-notes'>$langScales:</label>
                     <div class='col-sm-12'>
                     <div class='table-responsive'>
-                        <table class='announcements_table' id='scale_table$crit'>
-                                <thead class='notes_thead' style='height:45px;'>
-                                    <tr>
+                        <table class='table-default' id='scale_table$crit'>
+                                <thead>
+                                    <tr class='list-header'>
                                         <th class='text-white' style='width:47% padding-left:15px;'>$langWording</th>
                                         <th class='text-white' style='width:47%'>$langValue</th>
                                         <th class='text-center option-btn-cell' style='width:5%'><span class='fas fa-cogs'></span></th>
@@ -470,9 +470,9 @@ if (isset($_GET['rubric_id'])) {
                         </tr>";
             }
             $tool_content .= "<div class='table-responsive '>
-                <table class='announcements_table'>
-                    <thead class='notes_thead' style='height:45px;'>
-                        <tr>
+                <table class='table-default'>
+                    <thead>
+                        <tr class='list-header'>
                             <th class='text-white' style='padding-left:15px;'>$langName</th>
                             <th class='text-white'>$langDescription</th>
                             <th class='text-end text-white' style='padding-right:15px;'>" . icon('fa-cogs') . "</th>
@@ -528,7 +528,7 @@ function show_rubric ($rubric_id) {
         $tool_content .= "
         <div class='table-responsive'>
         <table class='announcements_table'>
-            <thead class='notes_thead' style='height:45px;'>
+            <thead class='notes_thead'>
                 <th class='text-white' style='padding-left:15px;'>$langName</th> 
                 <th class='text-white'>$langDescription</th>
                 <th class='text-white'>$langRubricCriteria</th>

@@ -96,7 +96,7 @@ class References {
          * values: general module ids or -1 for course
          */
         $gen_type_selected = (is_null($course_selected))? $module_selected:-1;
-        $object_select_fields = "<span id='refobjgentypecont'><select class='form-control' id='refobjgentype' name='refobjgentype'>";
+        $object_select_fields = "<span id='refobjgentypecont'><select class='form-select' id='refobjgentype' name='refobjgentype'>";
         $objgentypes = array(0 => $langSelectFromMenu) + self::get_object_general_types();
         foreach($objgentypes as $k => $v){
              $selected = ($k == $gen_type_selected)? " selected":"";
@@ -109,7 +109,7 @@ class References {
         $display = (is_null($course_selected))? "none":"block";
         $course = (is_null($course_selected))? null:"course:$course_selected";
         $object_select_fields .= "</select></span>"
-             ."<span id='refcoursecont' style=\"display:$display;float:left;\"><select class='form-control' id='refcourse' name='refcourse'>";
+             ."<span id='refcoursecont' style=\"display:$display;float:left;\"><select class='form-select' id='refcourse' name='refcourse'>";
         $refcourses = array(0 => $langSelectFromMenu) + self::get_user_courselist();
         foreach($refcourses as $k => $v){
             $selected = ($k == $course)? " selected":"";
@@ -121,7 +121,7 @@ class References {
          */
         $display = (is_null($type_selected) || is_null($course_selected))? "none":"block";
         $object_select_fields .= "</select></span>"
-            ."<span id='refobjtypecont' style=\"display:$display;float:left;\"><select class='form-control' id='refobjtype' name='refobjtype'>";
+            ."<span id='refobjtypecont' style=\"display:$display;float:left;\"><select class='form-select' id='refobjtype' name='refobjtype'>";
         $objtypes = array(0 => $langSelectFromMenu) + self::get_course_modules($course_selected);
         foreach($objtypes as $k => $v){
             $selected = ($k == $module_selected)? " selected":"";
@@ -133,7 +133,7 @@ class References {
          */
         $display = (is_null($object_selected) || $module_selected == -1)? "none":"block";
         $object_select_fields .= "</select></span>"
-            ."<span id='refobjidcont' style=\"display:$display;float:left;\"><select class='form-control' id='refobjid' name='refobjid'>";
+            ."<span id='refobjidcont' style=\"display:$display;float:left;\"><select class='form-select' id='refobjid' name='refobjid'>";
         $objids = array(0 => $langSelectFromMenu);
         if(!is_null($module_selected) && $module_selected != -1){
             $objids += self::get_module_items($module_selected,$course_selected);

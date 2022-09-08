@@ -505,13 +505,13 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='radio'>
                       <label>
                         <input type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == POLL_COLLES ? " checked" : "").">
-                        <span>$langCollesSurvey</span>&nbsp;&nbsp;<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$colles_desc'></span>
+                        <span>$langCollesSurvey</span>&nbsp;&nbsp;<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$colles_desc'></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == POLL_ATTLS ? " checked" : "").">
-                        <span>$langATTLSSurvey</span>&nbsp;&nbsp;<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$rate_scale'></span>
+                        <span>$langATTLSSurvey</span>&nbsp;&nbsp;<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$rate_scale'></span>
                       </label>
                     </div>
                 </div>
@@ -868,7 +868,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-           
+            <div class='row p-2'></div>
 
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>

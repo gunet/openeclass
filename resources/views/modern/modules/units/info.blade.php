@@ -114,18 +114,14 @@
                                         </div>
                                     </div>
 
-                                    <div class="row p-2"></div>
-
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                         <label for='unitdescr' class='col-sm-6 control-label-notes'>{{ trans('langUnitDescr') }}</label>
                                         <div class='col-sm-12'>
                                             {!! $descriptionEditor !!}
                                         </div>
                                     </div>
-
-                                    <div class="row p-2"></div>
                                     
-                                    <div class='form-group'>
+                                    <div class='form-group mt-3'>
                                         <label for='unitduration' class='col-sm-6 control-label-notes'>{{ trans('langDuration') }}
                                             <span class='help-block'>{{ trans('langOptional') }}</span>
                                         </label>
@@ -155,15 +151,13 @@
                                         </div>                     
                                     </div>
 
-                                    <div class="row p-2"></div>
+                                    <div class="mt-3"></div>
                                     
                                     {!! $tagInput !!}
 
-                                    <div class="row p-2"></div>
-
                                     
-                                    <div class='form-group'>
-                                        <div class='col-xs-offset-2 col-xs-10'>
+                                    <div class='form-group mt-3'>
+                                        <div class='col-offset-2 col-10'>
                                             <button class='btn btn-primary' type='submit' name='edit_submit'>{{ trans('langSubmit') }}</button>
                                             <a class='btn btn-secondary' href='{{ $postUrl }}'>{{ trans('langCancel') }}</a>
                                         </div>

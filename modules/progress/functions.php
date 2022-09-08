@@ -2263,7 +2263,7 @@ function student_view_progress() {
                                         <strong>$langCourseCompletion</strong>
                                     </div>
                                 </div>
-                            </div>
+                            </div><hr>
                             <div class='res-table-wrapper'>
                                 <div class='row p-2 res-table-row border-0'>
                                     <div class='col-sm-2'>
@@ -2320,7 +2320,7 @@ function student_view_progress() {
                                             <strong>$langBadges</strong>
                                         </div>
                                     </div>
-                                </div>";
+                                </div><hr>";
 
             foreach ($game_badge as $key => $badge) {
                 // badge icon

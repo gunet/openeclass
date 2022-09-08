@@ -658,7 +658,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
 
     $exerciseDescription = trim($exerciseDescription);
     if ($exerciseDescription !== '') {
-        $exerciseDescription = "<div class='col-sm-12 ps-3 pe-3 pt-3 pb-3'><span class='control-label-notes'>$langDescription :</span>" .
+        $exerciseDescription = "<div class='col-sm-12 ps-3 pe-3 pt-3 pb-3'>" .
             standard_text_escape($exerciseDescription) . '</div><hr>';
     }
 

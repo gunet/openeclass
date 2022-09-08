@@ -4606,35 +4606,35 @@ function assignment_details($id, $row, $x =false) {
                 $m[WorkInfo] &nbsp;
                 ". (($is_editor) ?
                 "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit'>
-                    <span class='fa fa-edit' title='' data-bs-toggle='tooltip' data-original-title='$langEditChange'></span>
+                    <span class='fa fa-edit text-white' title='' data-bs-toggle='tooltip' data-original-title='$langEditChange'></span>
                 </a>" : "")."
             </h4>
         </div>
         <div class='panel-body ps-3 pb-3 pt-3 pe-3'>
             <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
+                <div class='col-sm-4'>
                     <strong class='control-label-notes'>$langTitle:</strong>
                 </div>
-                <div class='col-sm-9' id='assignment_title'>
+                <div class='col-sm-8' id='assignment_title'>
                     " . q($row->title) . "
                 </div>
             </div>";
         if (!empty($row->description)) {
             $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
+                <div class='col-sm-4'>
                     <strong class='control-label-notes'>$langDescription:</strong>
                 </div>
-                <div class='col-sm-9'>
+                <div class='col-sm-8'>
                     " . mathfilter($row->description, 12 , "../../courses/mathimg/") . "
                 </div>
             </div>";
         }
         if (!empty($row->comments)) {
             $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
+                <div class='col-sm-4'>
                     <strong class='control-label-notes'>$m[comments]:</strong>
                 </div>
-                <div class='col-sm-9' style='white-space: pre-wrap'>
+                <div class='col-sm-8' style='white-space: pre-wrap'>
                     $row->comments
                 </div>
             </div>";
@@ -4648,28 +4648,28 @@ function assignment_details($id, $row, $x =false) {
         if (!empty($row->file_name)) {
             $filelink = MultimediaHelper::chooseMediaAhrefRaw($fileUrl, $fileUrl, $row->file_name, $row->file_name);
             $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
+                <div class='col-sm-4'>
                     <strong class='control-label-notes'>$langWorkFile:</strong>
                 </div>
-                <div class='col-sm-9'>
+                <div class='col-sm-8'>
                     $filelink
                 </div>
             </div>";
         }
         $tool_content .= "
             <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
+                <div class='col-sm-4'>
                     <strong class='control-label-notes'>$m[max_grade]:</strong>
                 </div>
-                <div class='col-sm-9'>
+                <div class='col-sm-8'>
                     $row->max_grade
                 </div>
             </div>
             <div class='row p-2 margin-bottom-fat'>
-            <div class='col-sm-3'>
+            <div class='col-sm-4'>
                 <strong class='control-label-notes'>$langGradeType:</strong>
             </div>
-            <div class='col-sm-9'>";
+            <div class='col-sm-8'>";
             if ($preview_rubric == 1) {
                 $tool_content .= "
                     <a class='' role='button' data-bs-toggle='collapse' href='#collapseRubric' aria-expanded='false' aria-controls='collapseRubric'>
@@ -4698,26 +4698,26 @@ function assignment_details($id, $row, $x =false) {
                     </div></div>";
             }
         $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
+                <div class='col-sm-4'>
                     <strong class='control-label-notes'>$m[start_date]:</strong>
                 </div>
-                <div class='col-sm-9'>
+                <div class='col-sm-8'>
                     " . format_locale_date(strtotime($row->submission_date)) . "
                 </div>
             </div>
             <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
+                <div class='col-sm-4'>
                     <strong class='control-label-notes'>$langGroupWorkDeadline_of_Submission:</strong>
                 </div>
-                <div class='col-sm-9'>
+                <div class='col-sm-8'>
                     $deadline ".(isset($deadline_notice) ? $deadline_notice : "")."
                 </div>
             </div>
             <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
+                <div class='col-sm-4'>
                     <strong class='control-label-notes'>$m[group_or_user]:</strong>
                 </div>
-                <div class='col-sm-9'>
+                <div class='col-sm-8'>
                     ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."
                 </div>
             </div>";
@@ -4725,10 +4725,10 @@ function assignment_details($id, $row, $x =false) {
         if ($tags_list) {
             $tool_content .= "
             <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
+                <div class='col-sm-4'>
                     <strong class='control-label-notes'>$langTags:</strong>
                 </div>
-                <div class='col-sm-9'>
+                <div class='col-sm-8'>
                     $tags_list
                 </div>
             </div> ";
@@ -4737,18 +4737,18 @@ function assignment_details($id, $row, $x =false) {
 		if ($grade_type == 3 && !$x){
 			$tool_content .= "
 				<div class='row p-2 margin-bottom-fat'>
-					<div class='col-sm-3'>
+					<div class='col-sm-4'>
 						<strong class='control-label-notes'>$langReviewStart:</strong>
 					</div>
-					<div class='col-sm-9'>
+					<div class='col-sm-8'>
 						$start_date_review ".(isset($start_date_review_notice) ? $start_date_review_notice: "")."
 					</div>
 				</div>
 				<div class='row p-2 margin-bottom-fat'>
-					<div class='col-sm-3'>
+					<div class='col-sm-4'>
 						<strong class='control-label-notes'>$langReviewEnd:</strong>
 					</div>
-					<div class='col-sm-9'>
+					<div class='col-sm-8'>
 						$due_date_review ".(isset($due_date_review_notice) ? $due_date_review_notice: "")."
 					</div>
 				</div>

@@ -121,15 +121,9 @@
 
                     <div class='col-sm-12 mt-3'>
                         <div class='panel panel-default panel-action-btn-default'>
-                            <div class='panel-heading'>
-                                <div class='float-end pt-3 pb-2 pe-3'>
-                                    <div id='operations_container'>
-                                        <a class='btn btn-success btn-sm mt-1 ms-md-0 ms-3' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> <span class='hidden-xs'>{{ trans('langAddExtLink') }}</span></a>
-                                    </div>
-                                </div>
-                                <div class='p-3'>
-                                    <h3 class='panel-title control-label-notes pt-2'> {{ trans('langOperations') }}</h3>
-                                </div>
+                            <div class='panel-heading p-3'>
+                                <span class='panel-title control-label-notes pt-2'> {{ trans('langOperations') }}</span>
+                                <a class='btn btn-success btn-sm float-end' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> <span class='hidden-xs'>{{ trans('langAddExtLink') }}</span></a>
                             </div>
                             <div class='panel-body'>
                                 <table class='announcements_table mb-2 bg-light'>

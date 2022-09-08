@@ -186,7 +186,7 @@ function getLinksOfCategory($cat_id, $is_editor, $filterv, $order, $course_id, $
                 $resultObj->extradescription = '';
 
                 if (!$is_in_tinymce and ( !empty($myrow->creator) or ! empty($myrow->publisher))) {
-                    $resultObj->extradescription .= '<br><small class="text-warning p-3">';
+                    $resultObj->extradescription .= '<br><small class="text-warning">';
                     if ($myrow->creator == $myrow->publisher) {
                         $resultObj->extradescription .= $GLOBALS['langCreator'] . ": " . q($myrow->creator);
                     } else {
