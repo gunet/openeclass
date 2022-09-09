@@ -508,8 +508,22 @@ if ($total_cunits > 0) {
     $cunits_content .= "";
     $count_index = 0;
     $counterUnits = 0;
-    $cunits_content .= "<div id='carouselUnitsControls' class='carousel slide' data-bs-ride='carousel'>
-    <div class='carousel-inner'>";
+    $cunits_content .= "<div id='carouselUnitsControls' class='carousel slide' data-bs-ride='carousel'>";
+
+    //this is foreach for indicatoras carousel-units
+    $counterIndicator = 0;
+    $cunits_content .=  "<div class='carousel-indicators h-auto mb-1'>"; 
+    foreach ($all_units as $cu) {   
+        if($counterIndicator == 0){
+            $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' class='active' aria-current='true'></button>";
+        }else{
+            $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' aria-current='true'></button>";
+        }
+        $counterIndicator++;
+    }
+    $cunits_content .=  "</div>";
+
+    $cunits_content .= "<div class='carousel-inner'>";
     foreach ($all_units as $cu) {
         $not_shown = false;
         $icon = '';
@@ -633,14 +647,12 @@ if ($total_cunits > 0) {
         $cunits_content .= "<hr>
                     <div class='col-sm-12 bg-transparent'>
 
-                        <button class='btn btn-sm btn-primary' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='prev'>
-                            <span class='carousel-control-prev-icon' aria-hidden='true'></span>
-                            <span class='visually-hidden'>Previous</span>
+                        <button class='carousel-prev-btn' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='prev'>
+                            <span class='fa fa-arrow-left text-danger'></span>
                         </button>";
 
-        $cunits_content .=  "<button class='btn btn-sm btn-primary float-end' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='next'>
-                            <span class='carousel-control-next-icon' aria-hidden='true'></span>
-                            <span class='visually-hidden'>Next</span>
+        $cunits_content .=  "<button class='carousel-next-btn float-end' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='next'>
+                                  <span class='fa fa-arrow-right text-danger'></span>
                         </button>
                 
                     </div>";
@@ -652,18 +664,7 @@ if ($total_cunits > 0) {
     // end carousel-inner
     $cunits_content .= "</div>";
 
-    //this is foreach for indicatoras carousel-units
-    $counterIndicator = 0;
-    $cunits_content .=  "<div class='carousel-indicators h-auto mb-1 bg-transparent'>"; 
-    foreach ($all_units as $cu) {   
-        if($counterIndicator == 0){
-            $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' class='active btn btn-secondary' aria-current='true'></button>";
-        }else{
-            $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' class='btn btn-secondary' aria-current='true'></button>";
-        }
-        $counterIndicator++;
-    }
-    $cunits_content .=  "</div>";
+    
 
     //end courseUnitsControls
     $cunits_content .= "</div>";

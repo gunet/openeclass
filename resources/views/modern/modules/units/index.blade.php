@@ -171,11 +171,13 @@
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                         <div class='panel panel-default'>
                             <div class='panel-heading'>
-                                <div class='panel-title h5'>{{ $pageName }}
+                                <div class='panel-title'>{{ $pageName }}
+                                    @if($course_start_week or $course_finish_week)
                                     <h6 class='text-muted text-warning'>
                                         {{ $course_start_week }}
                                         {{ $course_finish_week }}
                                     </h6>
+                                    @endif
                                 </div>
                             </div>
                             <div class='panel-body'>

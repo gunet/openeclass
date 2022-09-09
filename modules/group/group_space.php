@@ -269,14 +269,14 @@ if (isset($_GET['group_as'])) {
     // members
     if (count($members) > 0) {
         $tool_content .= "
-                        <div class='col-sm-12 mt-3'>
+                        <div class='col-sm-12 mt-3' style='overflow-y:auto;'>
                           <ul class='list-group'>
                               <li class='list-group-item list-header'>
                                   <div class='row'>";
         if ($is_editor or $is_tutor) {
-            $tool_content .= "        <div class='col-6'>$langSurnameName</div>
-                                      <div class='col-3'>$langAm</div>
-                                      <div class='col-3'>$langEmail</div>";
+            $tool_content .= "        <div class='col-4'>$langSurnameName</div>
+                                      <div class='col-4'>$langAm</div>
+                                      <div class='col-4'>$langEmail</div>";
         } else {
             $tool_content .= "        <div class='col-12'>$langSurnameName</div>";
         }
@@ -290,15 +290,15 @@ if (isset($_GET['group_as'])) {
                                   <div class='row'>";
             if ($is_editor or $is_tutor) {
                 $email = q($member->email);
-                $tool_content .= "    <div class='col-6'>" .
+                $tool_content .= "    <div class='col-4'>" .
                                            display_user($member->id, false, true) .
                                            ($user_group_description?
                                             ("<br>" . $user_group_description): '') . "
                                       </div>
-                                      <div class='col-3'>" .
+                                      <div class='col-4'>" .
                                            ($member->am? q($member->am): '-') . "
                                       </div>
-                                      <div class='col-3'>" .
+                                      <div class='col-4'>" .
                                            ($email? "<a href='mailto:$email'>$email</a>": '-') . "
                                       </div>
                                  </div>

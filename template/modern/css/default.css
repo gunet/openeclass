@@ -560,12 +560,6 @@ input[type="checkbox"]{
   .rateit,.rateit-info,.ratestar{
     display: inline-block;
   }
-  /* .rateit-info{
-    display: inline-block;
-  }
-  .ratestar{
-    display: inline-block;
-  } */
   .course_commenting{
     cursor: pointer;
   }
@@ -573,7 +567,6 @@ input[type="checkbox"]{
   #collapseDescription{
       background-color: #f5f5f5;
       margin-top: 20px; padding-top: 20px;
-      /* min-height: 450px; */
   }
   
   #collapseDescription > div {
@@ -601,11 +594,14 @@ input[type="checkbox"]{
       color: #11D888;
   }
 
-  /* .desCourse li{
-    list-style-type:circle; 
-  } */
-
-
+  .carousel-indicators>button:not(:has(.active)) {background-color: #888;}
+  .carousel-indicators>button.active {background-color: #FF0000;}
+  .carousel-prev-btn,.carousel-next-btn{
+    width:30px;
+    height:30px;
+    border-radius: 50%;
+    border:0px;
+  }
 
   
 
