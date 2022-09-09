@@ -47,7 +47,7 @@ if(isset($ann_id)){
                                             ".standard_text_escape($announcement->title)."
                                     </span>
                                 </div>
-                                <div class='panel-body NoBorderBottom'>
+                                <div class='panel-body'>
                                     <div class='single_announcement'>
                                         <div class='announcement-main'>
                                             ".standard_text_escape($announcement->body)."

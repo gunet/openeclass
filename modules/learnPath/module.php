@@ -194,9 +194,9 @@ $tool_content .=
             <h3 class='panel-title'>$langLearningObjectData</h3>
         </div>
         <div class='panel-body'>
-            <div class='row margin-bottom-fat'>
+            <div class='row margin-bottom-fat p-2'>
                 <div class='col-sm-3'>
-                    <strong>$langTitle:</strong>
+                    <strong class='control-label-notes'>$langTitle:</strong>
                 </div>
                 <div class='col-sm-9'>";
 if (isset($_REQUEST['cmd']) and $_REQUEST['cmd'] == 'updateName') {
@@ -239,9 +239,9 @@ if ($module->contentType != CTLABEL_) { //
 
         //display type of the module
 
-        $tool_content .= "<div class='row margin-bottom-fat'>
+        $tool_content .= "<div class='row margin-bottom-fat p-2'>
                             <div class='col-sm-3'>
-                                <strong>$langTypeOfModule:</strong>
+                                <strong class='control-label-notes'>$langTypeOfModule:</strong>
                             </div>
                             <div class='col-sm-9'>
                                 <i class='fa $contentType_img'></i> $contentDescType
@@ -251,9 +251,9 @@ if ($module->contentType != CTLABEL_) { //
 
         //display total time already spent in the module
 
-        $tool_content .= "<div class='row margin-bottom-fat'>
+        $tool_content .= "<div class='row margin-bottom-fat p-2'>
                             <div class='col-sm-3'>
-                                <strong>$langTotalTimeSpent:</strong>
+                                <strong class='control-label-notes'>$langTotalTimeSpent:</strong>
                             </div>
                             <div class='col-sm-9'>
                                 $resultBrowsed->total_time
@@ -263,9 +263,9 @@ if ($module->contentType != CTLABEL_) { //
 
         //display time passed in last session
 
-        $tool_content .= "<div class='row margin-bottom-fat'>
+        $tool_content .= "<div class='row margin-bottom-fat p-2'>
                             <div class='col-sm-3'>
-                                <strong>$langLastSessionTimeSpent:</strong>
+                                <strong class='control-label-notes'>$langLastSessionTimeSpent:</strong>
                             </div>
                             <div class='col-sm-9'>
                                 $resultBrowsed->session_time
@@ -305,9 +305,9 @@ if ($module->contentType != CTLABEL_) { //
             $statusToDisplay = $resultBrowsed->lesson_status;
         }
 
-        $tool_content .= "<div class='row margin-bottom-fat'>
+        $tool_content .= "<div class='row margin-bottom-fat p-2'>
                             <div class='col-sm-3'>
-                                <strong>$langLessonStatus:</strong>
+                                <strong class='control-label-notes'>$langLessonStatus:</strong>
                             </div>
                             <div class='col-sm-9'>
                                 $statusToDisplay
@@ -325,9 +325,9 @@ if ($module->contentType != CTLABEL_) { //
                AND `module_id` = ?d", $module->startAsset_id, $_SESSION['lp_module_id']);
 
     $tool_content .="
-    <div class='row'>
+    <div class='row margin-bottom-fat p-2'>
         <div class='col-sm-3'>
-            <strong>$langPreview:</strong>
+            <strong class='control-label-notes'>$langPreview:</strong>
         </div>
         <div class='col-sm-9'>";
     if ($module->startAsset_id != "" && $asset->asset_id == $module->startAsset_id) {

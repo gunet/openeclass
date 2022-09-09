@@ -656,7 +656,7 @@ if ($action == "showPost") {
                                     ".q($post->getTitle())."
                                 </h3>
                             </div>
-                            <div class='panel-body ps-3 panel-body-blog NoBorders'><button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($post->getTime())). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
+                            <div class='panel-body ps-3 panel-body-blog'><button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($post->getTime())). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
                             <div class='panel-footer ps-3 panel-footer-blog'>
 
                                 <div class='row'>
@@ -781,7 +781,7 @@ if ($action == "showBlog") {
                                         <a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
                                     </h3>
                                 </div>
-                                <div class='panel-body ps-3 panel-body-blog NoBorders'>
+                                <div class='panel-body ps-3 panel-body-blog'>
                                     <button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($post->getTime())) . "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     $comment_content
                                 </div>

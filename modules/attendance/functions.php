@@ -42,11 +42,11 @@ function display_attendances() {
     if (count($result) == 0) { // no attendances
         $tool_content .= "
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                <div class='alert alert-info'>$langNoAttendances</div></div>";
+                <div class='alert alert-warning'>$langNoAttendances</div></div>";
     } else {
         $tool_content .= "<div class='table-responsive'>";
-        $tool_content .= "<table class='announcements_table'>";
-        $tool_content .= "<tr class='notes_thead'>
+        $tool_content .= "<table class='table-default'>";
+        $tool_content .= "<tr class='list-header'>
                             <th class='text-white'>$langAvailableAttendances</th>
                             <th class='text-white'>$langStart</th>
                             <th class='text-white'>$langEnd</th>";
@@ -275,9 +275,9 @@ function display_attendance_activities($attendance_id) {
     $result = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
     if (count($result) > 0) {
         $tool_content .= "<div class='table-responsive'>
-                        <table class='announcements_table'>
-                        <tr class='bg-light' style='height:45px;'><th class='control-label-notes text-center' colspan='5'>$langAttendanceActList</th></tr>
-                        <tr class='notes_thead'>
+                        <table class='table-default'>
+                        <tr class='bg-light'><th class='control-label-notes text-center' colspan='5'>$langAttendanceActList</th></tr>
+                        <tr class='list-header'>
                             <th class='text-white'>$langTitle</th>
                             <th class='text-white'>$langDate</th>
                             <th class='text-white'>$langType</th>
@@ -352,15 +352,15 @@ function attendance_display_available_exercises($attendance_id) {
     $checkForExerNumber = count($checkForExer);
     if ($checkForExerNumber > 0) {
         $tool_content .= "<div class='table-responsive'>";
-        $tool_content .= "<table class='announcements_table'>";
-        $tool_content .= "<tr class='notes_thead'><th class='text-white'>$langTitle</th><th class='text-white'>$langGradebookActivityDate2</th><th class='text-white'>$langDescription</th>";
+        $tool_content .= "<table class='table-default'>";
+        $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th><th class='text-white'>$langDescription</th>";
         $tool_content .= "<th class='text-white text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
 
         foreach ($checkForExer as $newExerToGradebook) {
             $content = ellipsize_html($newExerToGradebook->description, 50);
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
+            $tool_content .= "<td class='text-start'><a href='${urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
             $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2");
             $tool_content .= "</td></tr>";
@@ -393,9 +393,9 @@ function attendance_display_available_assignments($attendance_id) {
 
     if ($checkForAssNumber > 0) {
         $tool_content .= "<div class='table-responsive'>
-                            <table class='announcements_table'";
-        $tool_content .= "<tr><th style='background-color:#003F87; height:45px;' class='text-white'>$langTitle</th><th style='background-color:#003F87; height:45px;' class='text-white'>$m[deadline]</th><th style='background-color:#003F87; height:45px;' class='text-white'>$langDescription</th>";
-        $tool_content .= "<th style='background-color:#003F87; height:45px;' class='text-white text-center'><i class='fa fa-cogs'></i></th>";
+                            <table class='table-default'>";
+        $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th><th class='text-white'>$langDescription</th>";
+        $tool_content .= "<th class='text-white text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
         foreach ($checkForAss as $newAssToGradebook) {
             $content = ellipsize_html($newAssToGradebook->description, 50);
@@ -442,8 +442,8 @@ function attendance_display_available_tc($attendance_id) {
 
     if ($checkForTcNumber > 0) {
         $tool_content .= "<div class='table-responsive'>
-                            <table class='announcements_table'";
-        $tool_content .= "<tr class='notes_thead'><th class='text-white'>$langTitle</th><th class='text-white'>$langGradebookActivityDate</th>";
+                            <table class='table-default'";
+        $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th><th class='text-white'>$langGradebookActivityDate</th>";
         $tool_content .= "<th class='text-white text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
         foreach ($checkForTc as $data) {

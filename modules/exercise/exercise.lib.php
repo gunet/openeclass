@@ -317,7 +317,7 @@ function display_exercise($exercise_id) {
 
 
     $tool_content .= "
-    <div class='col-sm-12'><div class='panel panel-primary NoBorders'>
+    <div class='col-sm-12'><div class='panel panel-primary'>
             <div class='panel-heading'>
               <h3 class='panel-title'>" . q_math($exercise->selectTitle()) . "
                 <a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes'>
@@ -325,7 +325,7 @@ function display_exercise($exercise_id) {
                 </a>
               </h3>
             </div>
-            <div class='panel-body NoBorders'>" . standard_text_escape($exercise->selectDescription()) . "</div>
+            <div class='panel-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>
         </div>
     </div>";
 

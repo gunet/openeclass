@@ -56,7 +56,7 @@ function display_certificates() {
             
                 <div class='col-12 mt-3'>
                     <div class='panel panel-default'>
-                        <div class='panel-body Borders'>
+                        <div class='panel-body'>
                             <div class='inner-heading'>
                                 <div class='row'>
                                     <div class='col-md-7 col-sm-6 text-md-start text-center'>
@@ -164,7 +164,7 @@ function display_badges() {
         $tool_content .= "
                 <div class='col-12 mt-3'>
                     <div class='panel panel-default'>
-                        <div class='panel-body Borders'>
+                        <div class='panel-body'>
                             <div class='inner-heading'>
                                 <div class='row'>
                                     <div class='col-md-7 col-sm-6 text-md-start text-center'>
@@ -256,7 +256,7 @@ function display_course_completion() {
         $tool_content .= "
                 <div class='col-12'>
                     <div class='panel panel-default'>
-                        <div class='panel-body Borders'>
+                        <div class='panel-body'>
                             <div class='inner-heading'>
                                 <div class='row'>
                                     <div class='col-sm-7 text-md-start text-center'>
@@ -514,7 +514,7 @@ function display_activities($element, $id, $unit_id = 0) {
         $tool_content .= "
             <div class='col-12 mt-3'>
                 <div class='panel panel-default'>
-                    <div class='panel-body Borders'>
+                    <div class='panel-body'>
                         <div class='inner-heading'>
                             <div class='row'>
                                 <div class='col-sm-9'>
@@ -585,7 +585,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                 <div class='col-sm-12'>
                                     
                                         <div class='panel panel-default'>
-                                            <div class='panel-body Borders'>
+                                            <div class='panel-body'>
                                                 <div class='inner-heading'>
                                                     <div class='row'>
                                                         <div class='col-sm-7'>
@@ -682,7 +682,7 @@ function display_activities($element, $id, $unit_id = 0) {
         $tool_content .= "  
                
                     <div class='panel panel-default mt-3'>
-                        <div class='panel-body Borders'>
+                        <div class='panel-body'>
                             <div class='inner-heading'>
                                 <div class='row'>
                                     <div class='col-md-7 col-sm-6'>
@@ -2001,7 +2001,7 @@ function display_settings($element, $element_id, $unit_id = 0) {
         $tool_content .= "
                 <div class='col-12'>
                     <div class='panel panel-default'>
-                        <div class='panel-body Borders'>
+                        <div class='panel-body'>
                             <div class='inner-heading'>
                                 <div class='row'>
                                     <div class='col-md-7 col-sm-6 text-md-start text-center'>
@@ -2065,7 +2065,7 @@ function display_settings($element, $element_id, $unit_id = 0) {
             $tool_content .= "
             <div class='col-12'>
                 <div class='panel panel-default'>
-                    <div class='panel-body bg-light Borders'>
+                    <div class='panel-body bg-light'>
                         <div class='row'>
                             <div class='col-sm-12 text-center'>
                                 <h4><strong>$langCourseCompletion</strong></h4>
@@ -2256,7 +2256,7 @@ function student_view_progress() {
         $tool_content .= "
                 <div class='col-12'>
                     <div class='panel panel-default'>
-                        <div class='panel-body Borders'>
+                        <div class='panel-body'>
                             <div class='inner-heading'>
                                 <div class='row'>
                                     <div class='col-sm-7'>
@@ -2313,7 +2313,7 @@ function student_view_progress() {
             $tool_content .= "
                     <div class='col-12 mt-3'>
                         <div class='panel panel-default'>
-                            <div class='panel-body Borders'>
+                            <div class='panel-body'>
                                 <div class='inner-heading'>
                                     <div class='row'>
                                         <div class='col-sm-7'>
@@ -2358,7 +2358,7 @@ function student_view_progress() {
             $tool_content .= "
                     <div class='col-12 mt-3'>
                         <div class='panel panel-default'>
-                            <div class='panel-body Borders'>
+                            <div class='panel-body'>
                                 <div class='inner-heading'>
                                     <div class='row'>
                                         <div class='col-sm-7'>
@@ -2575,7 +2575,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
 	$tool_content .= "
             <div class='col-12'>
                 <div class='panel panel-default'>
-                    <div class='panel-body Borders'>
+                    <div class='panel-body'>
                         <div class='inner-heading'>
                             <div class='row'>
                                 <div class='col-sm-7'>
@@ -2623,7 +2623,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
 	$tool_content .= "
             <div class='col-12 mt-3'>
                 <div class='panel panel-default'>
-                    <div class='panel-body Borders'>
+                    <div class='panel-body'>
                         <div class='inner-heading'>
                             <div class='row'>
                                 <div class='col-sm-10'>

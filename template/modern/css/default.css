@@ -125,6 +125,11 @@ a{
   box-shadow: none;
 }
 
+.info-date{
+  color:#36a3f7; 
+}
+
+
 /* ----------------------------- LABELS -INPUTS -MARGIN ------------------------------------ */
 /* ---------------------------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------------------------- */
@@ -1550,77 +1555,253 @@ input[type="checkbox"]{
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/  
-  .panel-title{
-    font-weight: 600;
-    font-size: 17px;
-    padding-top: 10px;
-  }
+ 
 
   .panel-admin{
     border-radius:15px;
     background: #1d4e89;
     border:solid 1px #6c757d;
   }
-  .panel-admin .panel-title{
+  .panel-admin>.panel-heading{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     color:#fafafa;
   }
+  .panel-admin>.panel-heading>.panel-title{
+    color:#fafafa;
+  }
+  .panel-admin:has(.panel-footer) .panel-body{
+    border:0px;
+  }
+  .panel-admin:not(:has(.panel-footer)) .panel-body{
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+  }
+  .panel-admin:not(:has(.panel-footer,.panel-heading)) .panel-body{
+    border-radius: 14px;
+  }
+  .panel-admin>.panel-footer{
+    padding:10px;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
+  }
+  .panel-admin:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
+
+
 
   .panel-primary,.panel-action-btn-primary{
     border-radius:15px;
-    background: #428bca;
-    border:solid 1px #428bca;
+    background: #337ab7;
+    border:solid 1px #337ab7;
+    border-color: #337ab7;
   }
-  .panel-primary .panel-title{
+  .panel-primary>.panel-heading, .panel-action-btn-primary>.panel-heading{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     color:#fafafa;
   }
-  .panel-action-btn-primary .panel-title{
+  .panel-primary>.panel-heading>.panel-title, .panel-action-btn-primary>.panel-heading>.panel-title{
     color:#fafafa;
   }
+  .panel-primary:has(.panel-footer) .panel-body{
+    border:0px;
+  }
+  .panel-action-btn-primary:has(.panel-footer) .panel-body{
+    border:0px;
+  }
+  .panel-primary:not(:has(.panel-footer)) .panel-body{
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+  }
+  .panel-action-btn-primary:not(:has(.panel-footer)) .panel-body{
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+  }
+  .panel-primary:not(:has(.panel-footer,.panel-heading)) .panel-body{
+    border-radius: 14px;
+  }
+  .panel-action-btn-primary:not(:has(.panel-footer,.panel-heading)) .panel-body{
+    border-radius: 14px;
+  }
+  .panel-primary>.panel-footer, .panel-action-btn-primary>.panel-footer{
+    padding:10px;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
+  }
+  .panel-primary:not(:has(.panel-heading)):has(.panel-footer) .panel-body, .panel-action-btn-primary:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
 
   .panel-success{
     border-radius:15px;
     background: #7dcfb6;
     border:solid 1px #7dcfb6;
   }
-  .panel-success .panel-title{
+  .panel-success>.panel-heading{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     color:#fafafa;
   }
+  .panel-success>.panel-heading>.panel-title{
+    color:#fafafa;
+  }
+  .panel-success:has(.panel-footer) .panel-body{
+    border:0px;
+  }
+  .panel-success:not(:has(.panel-footer)) .panel-body{
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+  }
+  .panel-success:not(:has(.panel-footer,.panel-heading)) .panel-body{
+    border-radius: 14px;
+  }
+  .panel-success>.panel-footer{
+    padding:10px;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
+  }
+  .panel-success:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
 
   .panel-default,.panel-action-btn-default{
-    border-radius: 15px;
-    background:  #F5F5F5;
+    border-radius: 17px;
     border:solid 2px #F5F5F5;
   }
-  .panel-default .panel-title{
-    color:#001146;
+  .panel-default>.panel-heading, .panel-action-btn-default>.panel-heading {
+    color: #333;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
   }
-  .panel-action-btn-default .panel-title{
-    color:#001146;
+  .panel-default>.panel-heading>.panel-title, .panel-action-btn-default>.panel-heading>.panel-title{
+    color: #333;
+  }
+  .panel-default:has(.panel-footer) .panel-body{
+     border-radius:0px;
+  }
+  .panel-action-btn-default:has(.panel-footer) .panel-body{
+    border-radius:0px;
+  }
+  .panel-default:not(:has(.panel-footer)) .panel-body{
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+  .panel-action-btn-default:not(:has(.panel-footer)) .panel-body{
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+  .panel-default:not(:has(.panel-heading,.panel-footer)) .panel-body{
+    border-radius: 15px;
+  }
+  .panel-action-btn-default:not(:has(.panel-heading,.panel-footer)) .panel-body{
+    border-radius: 15px;
+  }
+  .panel-default>.panel-footer, .panel-action-btn-default>.panel-footer{
+    color: #333;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+    background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
+    padding:10px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+  }
+  .panel-default:not(:has(.panel-heading)):has(.panel-footer) .panel-body, .panel-action-btn-default:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
   }
 
-  .panel-warning{
-    border-radius:15px;
-    background:#fbd1a2;
-    border:solid 1px #fbd1a2;
-  }
+
 
   .panel-info{
     border-radius:15px;
     background: #00b2ca;
     border:solid 1px #00b2ca;
   }
-  .panel-info .panel-title{
+  .panel-info>.panel-heading{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     color:#fafafa;
   }
+  .panel-info>.panel-heading>.panel-title{
+    color:#fafafa;
+  }
+  .panel-info:has(.panel-footer) .panel-body{
+    border:0px;
+  }
+  .panel-info:not(:has(.panel-footer)) .panel-body{
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+  }
+  .panel-info:not(:has(.panel-footer,.panel-heading)) .panel-body{
+    border-radius: 14px;
+  }
+  .panel-info>.panel-footer{
+    padding:10px;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
+  }
+  .panel-info:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
 
   .panel-danger{
     border-radius:15px;
     background: #dc3545;
     border:solid 1px #dc3545;
   }
-  .panel-danger .panel-title{
+  .panel-danger>.panel-heading{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     color:#fafafa;
   }
+  .panel-danger>.panel-heading>.panel-title{
+    color:#fafafa;
+  }
+  .panel-danger:has(.panel-footer) .panel-body{
+    border:0px;
+  }
+  .panel-danger:not(:has(.panel-footer)) .panel-body{
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+  }
+  .panel-danger:not(:has(.panel-footer,.panel-heading)) .panel-body{
+    border-radius: 14px;
+  }
+  .panel-danger>.panel-footer{
+    padding:10px;
+    border-bottom-right-radius: 14px;
+    border-bottom-left-radius: 14px;
+  }
+  .panel-danger:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
 
   .media{
     border-radius: 15px;
@@ -1631,17 +1812,6 @@ input[type="checkbox"]{
   .panel-heading,.media-left{
     padding:10px 15px;
   }
-  .panel-heading-login{
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
-    padding:10px 15px;
-    background: #F5F5F4;
-    -webkit-box-shadow: inset 0 0 2px rgba(127,132,153,0.35);
-      -moz-box-shadow: inset 0 0 2px rgba(127,132,153,0.35);
-      box-shadow: inset 0 0 2px rgba(127,132,153,0.35);
-  }
-  
-  
   .panel-heading.notes_thead{
     background: #EEEEEE;
     padding: 10px 15px;
@@ -1652,31 +1822,24 @@ input[type="checkbox"]{
     padding: 10px 15px;
     height: auto;
   }
-
   .panel-body,.media-body{
     padding:15px;
     background: #ffffff;
-    border-bottom-left-radius:13px;
-    border-bottom-right-radius:13px;
   }
-
-  .borderBody{
-    border-top-right-radius:15px; border-top-left-radius:15px;
+  .panel-title{
+    font-weight: 600;
+    font-size: 18px;
+    padding-top: 10px;
   }
-  
-  .panel-title .fa-edit{
-    color:#ffc107;
-  }
+  /* .panel-default .fa-edit{
+    color:rgba(38, 38, 38, 0.8);
+  } */
   .panel-footer{
-    background-color: transparent;
     padding:10px;
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
   }
   .inner-heading{
     height: auto;
   }
-
   .detailscontainer .panel-body{
     border-radius: 15px;
   }
@@ -1694,12 +1857,10 @@ input[type="checkbox"]{
   .Borders{
     border-radius:15px;
   }
-  
   .BordersTop{
     border-top-left-radius:15px;
     border-top-right-radius:15px;
   }
-  
   .BordersBottom{
     border-bottom-left-radius:15px;
     border-bottom-right-radius:15px;
@@ -1708,16 +1869,13 @@ input[type="checkbox"]{
     border-bottom-left-radius:13px;
     border-bottom-right-radius:13px;
   }
-  
   .NoBorders{
     border-radius:0px;
   }
-  
   .NoBorderTop{
      border-top-left-radius:0px;
      border-top-right-radius:0px;
   }
-  
   .NoBorderBottom{
     border-bottom-left-radius:0px;
     border-bottom-right-radius:0px;

@@ -107,7 +107,7 @@
                                                 
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formphpMyAdminURL' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langphpMyAdminURL') }}:</label>
+                                                    <label for='formphpMyAdminURL' class='col-sm-12 control-label-notes'>{{ trans('langphpMyAdminURL') }}:</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='formphpMyAdminURL' id='formphpMyAdminURL' value='{{ get_config('phpMyAdminURL') }}'>
                                                     </div>
@@ -116,7 +116,7 @@
                                               
 
                                                 <div class='form-group mt-3'>
-                                                <label for='formphpSysInfoURL' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langSystemInfoURL') }}:</label>
+                                                <label for='formphpSysInfoURL' class='col-sm-12 control-label-notes'>{{ trans('langSystemInfoURL') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formphpSysInfoURL' id='formphpSysInfoURL' value='{{ get_config('phpSysInfoURL') }}'>
                                                     </div>
@@ -125,7 +125,7 @@
                                           
 
                                                 <div class='form-group mt-3'>
-                                                <label for='formemailAdministrator' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langAdminEmail') }}:</label>
+                                                <label for='formemailAdministrator' class='col-sm-12 control-label-notes'>{{ trans('langAdminEmail') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formemailAdministrator' id='formemailAdministrator' value='{{ get_config('email_sender') }}'>
                                                     </div>
@@ -134,7 +134,7 @@
                                         
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formemailAdministrator' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langDefaultAdminName') }}:</label>
+                                                    <label for='formemailAdministrator' class='col-sm-12 control-label-notes'>{{ trans('langDefaultAdminName') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formadministratorName' id='formadministratorName' value='{{ get_config('admin_name') }}'>
                                                     </div>
@@ -143,7 +143,7 @@
                                              
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formsiteName' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langCampusName') }}:</label>
+                                                    <label for='formsiteName' class='col-sm-12 control-label-notes'>{{ trans('langCampusName') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formsiteName' id='formsiteName' value='{{ get_config('site_name') }}'>
                                                     </div>
@@ -152,7 +152,7 @@
                                            
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formpostaddress' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langPostMail') }}</label>
+                                                    <label for='formpostaddress' class='col-sm-12 control-label-notes'>{{ trans('langPostMail') }}</label>
                                                     <div class='col-sm-12'>
                                                         <textarea class='form-control form-control-admin' name='formpostaddress' id='formpostaddress'>{{ get_config('postaddress') }}</textarea>
                                                     </div>
@@ -161,7 +161,7 @@
                                      
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formtelephone' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langPhone') }}:</label>
+                                                    <label for='formtelephone' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formtelephone' id='formtelephone' value='{{ get_config('phone') }}'>
                                                     </div>
@@ -170,7 +170,7 @@
                                                 
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formfax' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langFax') }}</label>
+                                                    <label for='formfax' class='col-sm-12 control-label-notes'>{{ trans('langFax') }}</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formfax' id='formfax' value='{{ get_config('fax') }}'>
                                                     </div>
@@ -179,7 +179,7 @@
                                                
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formemailhelpdesk' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langHelpDeskEmail') }}:</label>
+                                                    <label for='formemailhelpdesk' class='col-sm-12 control-label-notes'>{{ trans('langHelpDeskEmail') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formemailhelpdesk' id='formemailhelpdesk' value='{{ get_config('email_helpdesk') }}'>
                                                     </div>
@@ -188,7 +188,7 @@
                                               
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formInstitution' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langInstituteShortName') }}:</label>
+                                                    <label for='formInstitution' class='col-sm-12 control-label-notes'>{{ trans('langInstituteShortName') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formInstitution' id='formInstitution' value='{{ get_config('institution') }}'>
                                                     </div>
@@ -197,7 +197,7 @@
                                                 
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formInstitutionUrl' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langInstituteName') }}:</label>
+                                                    <label for='formInstitutionUrl' class='col-sm-12 control-label-notes'>{{ trans('langInstituteName') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='{{ get_config('institution_url') }}'>
                                                     </div>
@@ -206,7 +206,7 @@
                                                
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formLandingName' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langLandingPageName') }}:</label>
+                                                    <label for='formLandingName' class='col-sm-12 control-label-notes'>{{ trans('langLandingPageName') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formLandingName' id='formLandingName' value='{{ get_config('landing_name') }}'>
                                                     </div>
@@ -215,7 +215,7 @@
                                              
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formLandingUrl' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langLandingPageUrl') }}:</label>
+                                                    <label for='formLandingUrl' class='col-sm-12 control-label-notes'>{{ trans('langLandingPageUrl') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formLandingUrl' id='formLandingUrl' value='{{ get_config('landing_url') }}'>
                                                     </div>
@@ -242,7 +242,7 @@
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                                             <fieldset>
                                                 <div class='form-group mt-3'>
-                                                    <label for='user_registration' class='col-sm-6 control-label-notes'>{{ trans('langUserRegistration') }}:</label>
+                                                    <label for='user_registration' class='col-sm-12 control-label-notes'>{{ trans('langUserRegistration') }}:</label>
                                                     <div class='col-sm-12'>
                                                             {!! selection(
                                                                             [
@@ -259,7 +259,7 @@
                                                 
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='registration_link' class='col-sm-6 control-label-notes'>{{ trans('langRegistrationLink') }}:</label>
+                                                    <label for='registration_link' class='col-sm-12 control-label-notes'>{{ trans('langRegistrationLink') }}:</label>
                                                     <div class='col-sm-12'>
                                                             {!! selection(
                                                                             $registration_link_options,
@@ -272,7 +272,7 @@
 
                                                 
                                                 <div class='form-group mt-3' id='registration-info-block'>
-                                                    <label for='registration_info' class='col-sm-6 control-label-notes'>{{ trans('langRegistrationInfo') }}:</label>
+                                                    <label for='registration_info' class='col-sm-12 control-label-notes'>{{ trans('langRegistrationInfo') }}:</label>
                                                     <div class='col-sm-12'>
                                                         {!! $registration_info_textarea !!}
                                                     </div>
@@ -281,7 +281,7 @@
                                              
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='eclass_stud_reg' class='col-sm-6 control-label-notes'>{{ trans('langUserAccount') }}  {{ trans('langViaeClass') }}:</label>
+                                                    <label for='eclass_stud_reg' class='col-sm-12 control-label-notes'>{{ trans('langUserAccount') }}  {{ trans('langViaeClass') }}:</label>
                                                     <div class='col-sm-12'>
                                                             {!! selection(
                                                                             [
@@ -299,7 +299,7 @@
                                              
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='alt_auth_stud_reg' class='col-sm-6 control-label-notes'>{{ trans('langUserAccount') }} {{ trans('langViaAltAuthMethods') }}:</label>
+                                                    <label for='alt_auth_stud_reg' class='col-sm-12 control-label-notes'>{{ trans('langUserAccount') }} {{ trans('langViaAltAuthMethods') }}:</label>
                                                     <div class='col-sm-12'>
                                                             {!! selection(
                                                                         [
@@ -317,7 +317,7 @@
                                              
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='eclass_prof_reg' class='col-sm-6 control-label-notes'>{{ trans('langProfAccount') }} {{ trans('langViaeClass') }}:</label>
+                                                    <label for='eclass_prof_reg' class='col-sm-12 control-label-notes'>{{ trans('langProfAccount') }} {{ trans('langViaeClass') }}:</label>
                                                     <div class='col-sm-12'>
                                                                 {!! selection(
                                                                     array(
@@ -334,7 +334,7 @@
                                           
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='alt_auth_prof_reg' class='col-sm-6 control-label-notes'>{{ trans('langProfAccount') }} {{ trans('langViaAltAuthMethods') }}:</label>
+                                                    <label for='alt_auth_prof_reg' class='col-sm-12 control-label-notes'>{{ trans('langProfAccount') }} {{ trans('langViaAltAuthMethods') }}:</label>
                                                     <div class='col-sm-12'>
                                                             {!! selection(
                                                                     array(
@@ -351,7 +351,7 @@
                                                 
 
                                                 <div class='form-group mt-3'>
-                                                    <label class='col-sm-6 control-label-notes'>{{ trans('lang_block_duration_account') }}:</label>
+                                                    <label class='col-sm-12 control-label-notes'>{{ trans('lang_block_duration_account') }}:</label>
                                                     <div class='checkbox col-sm-12'>
                                                         <label>
                                                             <input type='checkbox' name='block_duration_account' value='1' {{ $cbox_block_duration_account }}>
@@ -363,7 +363,7 @@
                                            
 
                                                 <div class='form-group mt-3'>
-                                                    <label class='col-sm-6 control-label-notes'>{{ trans('lang_block_duration_alt_account') }}:</label>
+                                                    <label class='col-sm-12 control-label-notes'>{{ trans('lang_block_duration_alt_account') }}:</label>
                                                     <div class='checkbox col-sm-12'>
                                                     <label>
                                                         <input type='checkbox' name='block_duration_alt_account' value='1' {{ $cbox_block_duration_alt_account }}>
@@ -375,7 +375,7 @@
                                                
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formdurationAccount' class='col-sm-6 control-label-notes'>{{ trans('langUserDurationAccount') }} ({{ trans('langMonthsUnit') }}): </label>
+                                                    <label for='formdurationAccount' class='col-sm-12 control-label-notes'>{{ trans('langUserDurationAccount') }} ({{ trans('langMonthsUnit') }}): </label>
                                                     <div class='col-sm-12'>
                                                             <input type='text' class='form-control form-control-admin' name='formdurationAccount' id='formdurationAccount' maxlength='3' value='{{ get_config('account_duration') / MONTHS }}'>
                                                     </div>
@@ -384,7 +384,7 @@
                                           
 
                                                 <div class='form-group mt-3'>
-                                                    <label class='col-sm-6 control-label-notes'>{{ trans('lang_display_captcha_label') }}:</label>
+                                                    <label class='col-sm-12 control-label-notes'>{{ trans('lang_display_captcha_label') }}:</label>
                                                     <div class='checkbox col-sm-12'>
                                                         <label>
                                                             <input type='checkbox' name='display_captcha' value='1' {{ $cbox_display_captcha }} {{ $disable_display_captcha }}>
@@ -397,7 +397,7 @@
                                             
 
                                                 <div class='form-group mt-3'>
-                                                    <label class='col-sm-6 control-label-notes'>{{ trans('langGuestLoginLabel') }}:</label>
+                                                    <label class='col-sm-12 control-label-notes'>{{ trans('langGuestLoginLabel') }}:</label>
                                                     <div class='col-sm-12'>
                                                         {{-- {!! selection([
                                                                         'off' => trans('m[deactivate]'),
@@ -433,7 +433,7 @@
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                                             <fieldset>
                                                 <div class='form-group mt-3'>
-                                                    <label for='default_language' class='col-sm-6 control-label-notes'>{{ trans('langMainLang') }}: </label>
+                                                    <label for='default_language' class='col-sm-12 control-label-notes'>{{ trans('langMainLang') }}: </label>
                                                     <div class='col-sm-12'>
                                                         {!! selection(
                                                                             $selectable_langs,
@@ -447,7 +447,7 @@
                                               
 
                                                 <div class='form-group mt-3'>
-                                                    <label class='col-sm-6 control-label-notes'>{{ trans('langSupportedLanguages') }}:</label>
+                                                    <label class='col-sm-12 control-label-notes'>{{ trans('langSupportedLanguages') }}:</label>
                                                     <div class='col-sm-12'>
                                                     {!! implode(' ', $sel) !!}
                                                     </div>
@@ -476,28 +476,28 @@
                                                     <div id='collapse-defaultHomepage' class='collapse homepage-inputs margin-bottom-fat show'>
                                                         <hr class='margin-bottom-fat'>
                                                         <div class='form-group mt-3'>
-                                                            <label for='defaultHomepageTitle' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
+                                                            <label for='defaultHomepageTitle' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='homepage_title' id='defaultHomepageTitle' value="{!! q(get_config('homepage_title', $langEclass)) !!}">
                                                                 <p class='help-block'>{{trans('langHomePageTitleHelpText')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
-                                                            <label for='defaultHomepageBcrmp' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
+                                                            <label for='defaultHomepageBcrmp' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='homepage_name' id='defaultHomepageBcrmp' value="{!! q(get_config('homepage_name', $langHomePage)) !!}">
                                                                 <p class='help-block'>{{trans('langHomePageNavTitleHelp')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
-                                                            <label for='defaultHomepageIntro' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
+                                                            <label for='defaultHomepageIntro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
                                                             <div class='col-sm-12'>
                                                                 {!! rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro', $langInfoAbout)) !!}
                                                                 <p class='help-block'>{{trans('langHomePageIntroTextHelp')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group'>
-                                                            <label for='theme' class='col-sm-6 control-label-notes'>{{trans('lang_login_form')}}: </label>
+                                                            <label for='theme' class='col-sm-12 control-label-notes'>{{trans('lang_login_form')}}: </label>
                                                             <div class='col-sm-9'>
                                                                     <div class='checkbox'>
                                                                         <label>
@@ -526,21 +526,21 @@
                                                     <div id='collapse-toolboxHomepage' class='collapse homepage-inputs margin-bottom-fat'>
                                                         <hr class='margin-bottom-fat'>
                                                         <div class='form-group mt-3'>
-                                                            <label for='toolboxHomepageTitle' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
+                                                            <label for='toolboxHomepageTitle' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='toolbox_title' id='toolboxHomepageTitle' value="{!! q(get_config('toolbox_title', $langEclass)) !!}">
                                                                 <p class='help-block'>{{trans('langHomePageTitleHelpText')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
-                                                            <label for='toolboxHomepageBcrmp' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
+                                                            <label for='toolboxHomepageBcrmp' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='toolbox_name' id='toolboxHomepageBcrmp' value="{!! q(get_config('toolbox_name', $langHomePage)) !!}">
                                                                 <p class='help-block'>{{trans('langHomePageNavTitleHelp')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
-                                                            <label for='toolboxHomepageIntro' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
+                                                            <label for='toolboxHomepageIntro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
                                                             <div class='col-sm-12'>
                                                                 {!! rich_text_editor('toolbox_intro', 5, 20, get_config('toolbox_intro', $langInfoAbout)) !!}
                                                                 <p class='help-block'>{{trans('langHomePageIntroTextHelp')}}</p>
@@ -559,14 +559,14 @@
                                                     <div id='collapse-externalHomepage' class='collapse homepage-inputs margin-bottom-fat'>
                                                         <hr class='margin-bottom-fat'>
                                                         <div class='form-group mt-3'>
-                                                            <label for='externalHomepageBcrmp' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}:</label>
+                                                            <label for='externalHomepageBcrmp' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}:</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='landing_name' id='externalHomepageBcrmp' value="{!! q(get_config('landing_name')) !!}">
                                                                 <p class='help-block'>{{trans('langHomePageNavTitleHelp')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
-                                                            <label for='externalHomepageUrl' class='col-sm-6 control-label-notes'>{{trans('langHomePageIntroUrl')}}:</label>
+                                                            <label for='externalHomepageUrl' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroUrl')}}:</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='landing_url' id='externalHomepageUrl' value="{!! q(get_config('landing_url')) !!}">
                                                                 <p class='help-block'>{{trans('langHomePageExtUrlHelp')}}</p>
@@ -607,7 +607,7 @@
                                                 </div>
 
                                                 <div class='form-group mt-3' id='formEmailAnnounceGroup'>
-                                                    <label for='formEmailAnnounce' class='col-sm-6 control-label-notes'>{{ trans('langEmailAnnounce') }}:</label>
+                                                    <label for='formEmailAnnounce' class='col-sm-12 control-label-notes'>{{ trans('langEmailAnnounce') }}:</label>
                                                     <div class='col-sm-12'>
                                                             <input type='text' class='form-control' name='email_announce' id='formEmailAnnounce' value="{!! q(get_var('email_announce')) !!}">
                                                             <span class='help-block' id='emailSendWarn'>{{ trans('langEmailSendWarn') }}</span>
@@ -615,14 +615,14 @@
                                                 </div>
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formEmailBounces' class='col-sm-6 control-label-notes'>{{ trans('langEmailBounces') }}:</label>
+                                                    <label for='formEmailBounces' class='col-sm-12 control-label-notes'>{{ trans('langEmailBounces') }}:</label>
                                                     <div class='col-sm-12'>
                                                             <input type='text' class='form-control' name='email_bounces' id='formEmailBounces' value="{!! q(get_var('email_bounces')) !!}">
                                                     </div>
                                                 </div>
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='formEmailTransport' class='col-sm-6 control-label-notes'>{{ trans('langEmailTransport') }}:</label>
+                                                    <label for='formEmailTransport' class='col-sm-12 control-label-notes'>{{ trans('langEmailTransport') }}:</label>
                                                     <div class='col-sm-12'>
                                                         {!! selection($emailTransports, 'email_transport', $email_transport,
                                                                     "class='form-select' id='formEmailTransport'") !!}
@@ -630,21 +630,21 @@
                                                 </div>
 
                                                 <div class='form-group SMTP-settings mt-3'>
-                                                    <label for='formSMTPServer' class='col-sm-6 control-label-notes'>{{ trans('langEmailSMTPServer') }}:</label>
+                                                    <label for='formSMTPServer' class='col-sm-12 control-label-notes'>{{ trans('langEmailSMTPServer') }}:</label>
                                                     <div class='col-sm-12'>
                                                             <input type='text' class='form-control' name='smtp_server' id='formSMTPServer' value="{!! q(get_var('smtp_server')) !!}">
                                                     </div>
                                                 </div>
 
                                                 <div class='form-group SMTP-settings mt-3'>
-                                                    <label for='formSMTPPort' class='col-sm-6 control-label-notes'>{{trans('langEmailSMTPPort')}}:</label>
+                                                    <label for='formSMTPPort' class='col-sm-12 control-label-notes'>{{trans('langEmailSMTPPort')}}:</label>
                                                     <div class='col-sm-12'>
                                                             <input type='text' class='form-control' name='smtp_port' id='formSMTPPort' value="{!! q(get_var('smtp_port', 25)) !!}">
                                                     </div>
                                                 </div>
 
                                                 <div class='form-group SMTP-settings mt-3'>
-                                                    <label for='formEmailEncryption' class='col-sm-6 control-label-notes'>{{ trans('langEmailEncryption') }}:</label>
+                                                    <label for='formEmailEncryption' class='col-sm-12 control-label-notes'>{{ trans('langEmailEncryption') }}:</label>
                                                     <div class='col-sm-12'>
                                                         {!! selection($emailEncryption, 'smtp_encryption', $smtp_encryption,
                                                                     "class='form-select' id='formEmailEncryption'") !!}
@@ -652,14 +652,14 @@
                                                 </div>
 
                                                 <div class='form-group SMTP-settings mt-3'>
-                                                    <label for='formSMTPUsername' class='col-sm-6 control-label-notes'>{{trans('langUsername')}}:</label>
+                                                    <label for='formSMTPUsername' class='col-sm-12 control-label-notes'>{{trans('langUsername')}}:</label>
                                                     <div class='col-sm-12'>
                                                             <input type='text' class='form-control' name='smtp_username' id='formSMTPUsername' value="{!! q(get_var('smtp_username')) !!}">
                                                     </div>
                                                 </div>
 
                                                 <div class='form-group SMTP-settings mt-3'>
-                                                    <label for='formSMTPPassword' class='col-sm-6 control-label-notes'>{{trans('langPassword')}}:</label>
+                                                    <label for='formSMTPPassword' class='col-sm-12 control-label-notes'>{{trans('langPassword')}}:</label>
                                                     <div class='col-sm-12'>
                                                             <div class='input-group'>
                                                                 <input type='password' class='form-control' name='smtp_password' id='formSMTPPassword' value="{!! q(get_var('smtp_password')) !!}"><span id='revealPass' class='input-group-addon'><span class='fa fa-eye'></span></span>
@@ -668,7 +668,7 @@
                                                 </div>
 
                                                 <div class='form-group Sendmail-settings mt-3'>
-                                                    <label for='formSendmailCommand' class='col-sm-6 control-label-notes'>{{trans('langEmailSendmail')}}:</label>
+                                                    <label for='formSendmailCommand' class='col-sm-12 control-label-notes'>{{trans('langEmailSendmail')}}:</label>
                                                     <div class='col-sm-12'>
                                                             <input type='text' class='form-control' name='sendmail_command' id='formSendmailCommand' value="{!! q(get_var('sendmail_command', ini_get('sendmail_path'))) !!}">
                                                             <span class='help-text'>{{trans('langEG')}} <code>/usr/sbin/sendmail -t -i</code></span>
@@ -886,7 +886,7 @@
                                                 </div>
                                                 <hr><br>
                                                 <div class='form-group mt-3'>
-                                                    <label for='min_password_len' class='col-sm-6 control-label-notes'>{{ trans('langMinPasswordLen') }}: </label>
+                                                    <label for='min_password_len' class='col-sm-12 control-label-notes'>{{ trans('langMinPasswordLen') }}: </label>
                                                     <div class='col-sm-12'>
                                                             <input type='text' class='form-control form-control-admin' name='min_password_len' id='min_password_len' value='{{ get_config('min_password_len') }}'>
                                                     </div>
@@ -895,7 +895,7 @@
                                      
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='min_password_len' class='col-sm-6 control-label-notes'>{{ trans('lang_max_glossary_terms') }} </label>
+                                                    <label for='min_password_len' class='col-sm-12 control-label-notes'>{{ trans('lang_max_glossary_terms') }} </label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='max_glossary_terms' value='{{ $max_glossary_terms }}'>
                                                     </div>
@@ -904,7 +904,7 @@
                                                 
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='min_password_len' class='col-sm-8 control-label-notes'>{{ trans('langActionsExpireInterval') }} ({{ trans('langMonthsUnit') }}):</label>
+                                                    <label for='min_password_len' class='col-sm-12 control-label-notes'>{{ trans('langActionsExpireInterval') }} ({{ trans('langMonthsUnit') }}):</label>
                                                     <div class='col-sm-12'>
                                                             <input type='text' class='form-control form-control-admin' name='actions_expire_interval' value='{{ get_config('actions_expire_interval') }}'>
                                                     </div>
@@ -920,7 +920,7 @@
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                                             <fieldset>
                                                 <div class='form-group mt-3'>
-                                                <label class='col-sm-6 control-label-notes'>{{ trans('langEnableMyDocs') }}:</label>
+                                                <label class='col-sm-12 control-label-notes'>{{ trans('langEnableMyDocs') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
                                                             <label>
@@ -940,7 +940,7 @@
                                            
 
                                                 <div class='form-group mt-3'>
-                                                    <label class='col-sm-6 control-label-notes'>{{ trans('langMyDocsQuota') }} (MB):</label>
+                                                    <label class='col-sm-12 control-label-notes'>{{ trans('langMyDocsQuota') }} (MB):</label>
                                                     <div class='col-sm-12'>
                                                             <label>
                                                                 <input type='text' name='mydocs_teacher_quota' id='mydocs_teacher_quota_id' value='{{ $mydocs_teacher_quota }}'>
@@ -956,7 +956,7 @@
                                               
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='bio_quota' class='col-sm-6 control-label-notes'>{{ trans('langBioQuota') }} (MB):</label>
+                                                    <label for='bio_quota' class='col-sm-12 control-label-notes'>{{ trans('langBioQuota') }} (MB):</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='bio_quota' id='bio_quota' value='{{ get_config('bio_quota') }}'>
                                                     </div>
@@ -984,25 +984,25 @@
                                         <div class='panel-body panel-body-admin ps-3 pb-3 pt-3 pe-3'>
                                             <fieldset>
                                                 <div class='form-group'>
-                                                    <label for='doc_quota' class='col-sm-6 control-label-notes'>{{ trans('langDocQuota') }} (MB):</label>
+                                                    <label for='doc_quota' class='col-sm-12 control-label-notes'>{{ trans('langDocQuota') }} (MB):</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='doc_quota' id='doc_quota' value='{{ get_config('doc_quota') }}'>
                                                     </div>
                                                 </div>
                                                 <div class='form-group'>
-                                                    <label for='video_quota' class='col-sm-6 control-label-notes'>{{ trans('langVideoQuota') }} (MB):</label>
+                                                    <label for='video_quota' class='col-sm-12 control-label-notes'>{{ trans('langVideoQuota') }} (MB):</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='video_quota' id='video_quota' value='{{ get_config('video_quota') }}'>
                                                     </div>
                                                 </div>
                                                 <div class='form-group'>
-                                                    <label for='group_quota' class='col-sm-6 control-label-notes'>{{ trans('langGroupQuota') }} (MB):</label>
+                                                    <label for='group_quota' class='col-sm-12 control-label-notes'>{{ trans('langGroupQuota') }} (MB):</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='group_quota' id='group_quota' value='{{ get_config('group_quota') }}'>
                                                     </div>
                                                 </div>
                                                 <div class='form-group'>
-                                                    <label for='dropbox_quota' class='col-sm-6 control-label-notes'>{{ trans('langDropboxQuota') }} (MB):</label>
+                                                    <label for='dropbox_quota' class='col-sm-12 control-label-notes'>{{ trans('langDropboxQuota') }} (MB):</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='dropbox_quota' id='dropbox_quota' value='{{ get_config('dropbox_quota') }}'>
                                                     </div>
@@ -1069,7 +1069,7 @@
 
                                                 <hr><br>
                                                 <div class='form-group mt-3'>
-                                                    <label for='log_expire_interval' class='col-sm-6 control-label-notes'>{{ trans('langLogExpireInterval') }} ({{ trans('langMonthsUnit') }}):</label>
+                                                    <label for='log_expire_interval' class='col-sm-12 control-label-notes'>{{ trans('langLogExpireInterval') }} ({{ trans('langMonthsUnit') }}):</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='log_expire_interval' id='log_expire_interval' value='{{ get_config('log_expire_interval') }}'>
                                                     </div>
@@ -1078,7 +1078,7 @@
                                                
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='log_purge_interval' class='col-sm-6 control-label-notes'>{{ trans('langLogPurgeInterval') }} ({{ trans('langMonthsUnit') }}):</label>
+                                                    <label for='log_purge_interval' class='col-sm-12 control-label-notes'>{{ trans('langLogPurgeInterval') }} ({{ trans('langMonthsUnit') }}):</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='log_purge_interval' id='log_purge_interval' value='{{ get_config('log_purge_interval') }}'>
                                                     </div>
@@ -1108,7 +1108,7 @@
                                                 
 
                                                 <div class='form-group mt-3' id='login_fail_threshold'>
-                                                    <label for='login_fail_threshold' class='col-sm-6 control-label-notes'>{{ trans('langLoginFailThreshold') }}:</label>
+                                                    <label for='login_fail_threshold' class='col-sm-12 control-label-notes'>{{ trans('langLoginFailThreshold') }}:</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='login_fail_threshold' id='login_fail_threshold' value='{{ get_config('login_fail_threshold') }}'>
                                                     </div>
@@ -1117,7 +1117,7 @@
                                                 
 
                                                 <div class='form-group mt-3' id='login_fail_deny_interval'>
-                                                    <label for='login_fail_deny_interval' class='col-sm-6 control-label-notes'>{{ trans('langLoginFailDenyInterval') }} ({{ trans('langMinute') }}):</label>
+                                                    <label for='login_fail_deny_interval' class='col-sm-12 control-label-notes'>{{ trans('langLoginFailDenyInterval') }} ({{ trans('langMinute') }}):</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='login_fail_deny_interval' id='login_fail_deny_interval' value='{{ get_config('login_fail_deny_interval') }}'>
                                                     </div>
@@ -1126,7 +1126,7 @@
                                                
 
                                                 <div class='form-group mt-3' id='login_fail_forgive_interval'>
-                                                    <label for='login_fail_forgive_interval' class='col-sm-6 control-label-notes'>{{ trans('langLoginFailForgiveInterval') }} ({{ trans('langHours') }}):</label>
+                                                    <label for='login_fail_forgive_interval' class='col-sm-12 control-label-notes'>{{ trans('langLoginFailForgiveInterval') }} ({{ trans('langHours') }}):</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='login_fail_forgive_interval' id='login_fail_forgive_interval' value='{{ get_config('login_fail_forgive_interval') }}'>
                                                     </div>
@@ -1158,7 +1158,7 @@
                                                
 
                                                 <div class='form-group mt-3'>
-                                                    <label for='theme' class='col-sm-6 control-label-notes'>{{ trans('langViewShow') }}: </label>
+                                                    <label for='theme' class='col-sm-12 control-label-notes'>{{ trans('langViewShow') }}: </label>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
                                                             <label>

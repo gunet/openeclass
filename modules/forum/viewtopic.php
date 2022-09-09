@@ -671,7 +671,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
             </h5>
         </div>";
         if ($rate_str or $parent_post_link or $reply_button) {
-            $content .= "<div class='panel-body NoBorders'>";
+            $content .= "<div class='panel-body'>";
         }else{
             $content .= "<div class='panel-body'>";
         }

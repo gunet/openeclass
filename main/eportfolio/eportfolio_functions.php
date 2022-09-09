@@ -89,7 +89,7 @@ function render_eportfolio_fields_content($uid) {
                     $showCat = true;
                     $showAll = true;
                     $cat_return_string['panels'] .= '<div class="profile-pers-info form-group">';
-                    $cat_return_string['panels'] .= '<div class="row p-2"><div class="col-sm-6"><span class="tag"><strong class="panel-title">'.q($f->name).': </strong></span></div>';
+                    $cat_return_string['panels'] .= '<div class="row p-2"><div class="col-sm-6"><span class="tag"><strong class="panel-title control-label-notes">'.q($f->name).': </strong></span></div>';
                     $cat_return_string['panels'] .= '<div class="col-sm-6"><span>';
                     
                     switch ($f->datatype) {

@@ -217,30 +217,30 @@ if (isset($_POST['user_date_start']) && isset($_POST['user_date_end'])) {
 
 //    $tool_content .= "<div class='alert alert-warning'>$langNoStatistics</div>";
 
-$tool_content .= '<div class="form-wrapper"><form class="form-horizontal" role="form" method="post">';
+$tool_content .= '<div class="col-sm-12 mt-3"><div class="form-wrapper shadow-sm p-3 rounded"><form class="form-horizontal" role="form" method="post">';
 $tool_content .= "<div class='input-append date form-group' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-2 control-label' for='user_date_start'>$langStartDate:</label>
-        <div class='col-xs-10 col-sm-9'>               
+    <label class='col-sm-6 control-label-notes' for='user_date_start'>$langStartDate:</label>
+        <div class='col-10 col-sm-9'>               
             <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
         </div>
-        <div class='col-xs-2 col-sm-1'>
+        <div class='col-2 col-sm-1'>
             <span class='add-on'><i class='fa fa-times'></i></span>
             <span class='add-on'><i class='fa fa-calendar'></i></span>
         </div>
         </div>";
-$tool_content .= "<div class='input-append date form-group' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-        <label class='col-sm-2 control-label' for='user_date_end'>$langEndDate:</label>
-            <div class='col-xs-10 col-sm-9'>
+$tool_content .= "<div class='input-append date form-group mt-3' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+        <label class='col-sm-6 control-label-notes' for='user_date_end'>$langEndDate:</label>
+            <div class='col-10 col-sm-9'>
                 <input class='form-control' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
             </div>
-        <div class='col-xs-2 col-sm-1'>
+        <div class='col-2 col-sm-1'>
             <span class='add-on'><i class='fa fa-times'></i></span>
             <span class='add-on'><i class='fa fa-calendar'></i></span>
         </div>
         </div>";
-$tool_content .= '<div class="col-sm-offset-2 col-sm-10">    
+$tool_content .= '<div class="col-sm-offset-2 col-sm-10 mt-3">    
     <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
     </div>  
-</form></div>';
+</form></div></div>';
 
 draw($tool_content, 3, null, $head_content);

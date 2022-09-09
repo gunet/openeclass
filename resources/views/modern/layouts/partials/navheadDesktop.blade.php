@@ -32,7 +32,7 @@
 
                     <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
                         @if(!get_config('hide_login_link'))
-                            <a class="eclass-nav-link text-white pt-5" href="{{ $urlServer }}"> <i class="fa fa-home"></i> {!! get_config('homepage_name') !!}</a>
+                            <a class="eclass-nav-link text-white pt-5" href="{{ $urlServer }}"> <i class="fa fa-home"></i> {{ trans('langHome') }}</a>
                         @endif
                         <a class="eclass-nav-link text-white @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib"></i> {{ trans('langRegistration') }}</a>
                         <a class="eclass-nav-link text-white" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-university"></i> {{ trans('langCourses') }}</a>

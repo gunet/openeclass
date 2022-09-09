@@ -19,7 +19,7 @@
         <div class='panel-heading text-center'>
             <span class='colorPalette'>{{trans('langAdministratorTools')}}</span>
         </div>
-        <div class='panel-body NoBorderTop'>
+        <div class='panel-body'>
             <ul class="list-group list-group-flush">
                 @if ($is_power_user or $is_departmentmanage_user)
                     @if ($is_admin)
@@ -52,7 +52,7 @@
         <div class='panel-heading text-center'>
             <span class='colorPalette'>{{ $tool_group[0]['text'] }}</span>
         </div>
-        <div class='panel-body NoBorderTop'>
+        <div class='panel-body'>
             <ul class="list-group list-group-flush">
                 @foreach ($tool_group[1] as $key2 => $tool)
                     <li class="list-group-item border-0 admin-list-group">
@@ -74,7 +74,7 @@
                     <div class='panel-heading text-center'>
                         <span class='colorPalette'>{{trans('langFaculties')}}</span>
                     </div>
-                    <div class='panel-body NoBorderTop'>
+                    <div class='panel-body'>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item border-0 admin-list-group">
                                 <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='list-group-item'>

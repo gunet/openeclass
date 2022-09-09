@@ -49,7 +49,7 @@
                                                 </a>                     
                                             </div>
                                             <div id="widget_desc_{{ $key }}" class="panel-collapse collapse">
-                                                <div class="panel-body text-muted NoBorders">
+                                                <div class="panel-body text-muted">
                                                     {{ $installed_widget->getDesc() }}
                                                 </div>
                                                 <div class="panel-footer clearfix">
@@ -100,7 +100,7 @@
                                             </span>
 
                                         </div>
-                                        <div class="panel-body NoBorders">
+                                        <div class="panel-body">
                                             <span class="text-secondary">
                                             {{ $uninstalled_widget->getDesc() }}
                                             </span>

@@ -905,7 +905,7 @@ function display_gradebooks() {
                 . "AND gradebook.id = gradebook_users.gradebook_id AND gradebook_users.uid = ?d", $course_id, $uid);
     }
     if (count($result) == 0) { // no gradebooks
-        $tool_content .= "<div class='alert alert-info'>$langNoGradeBooks</div>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoGradeBooks</div>";
     } else {
         
         $tool_content .= "<div class='col-sm-12'>";

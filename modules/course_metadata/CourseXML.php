@@ -86,7 +86,7 @@ class CourseXMLElement extends SimpleXMLElement {
         $out .= "
                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
                 <ul class='nav nav-tabs' role='tablist'>
-                   <li class='nav-item active'><a class='nav-link' href='#tabs-1' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['courseGroup'] . "</a></li>
+                   <li class='nav-item'><a class='nav-link active' href='#tabs-1' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['courseGroup'] . "</a></li>
                    <li class='nav-item'><a class='nav-link' href='#tabs-2' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['instructorGroup'] . "</a></li>
                    <li class='nav-item'><a class='nav-link' href='#tabs-3' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['curriculumGroup'] . "</a></li>
                    <li class='nav-item'><a class='nav-link' href='#tabs-4' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
@@ -113,7 +113,7 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public function asDiv($data = null) {
         $out = "<ul class='nav nav-tabs' role='tablist'>
-                   <li class='nav-item active'><a class='nav-link' href='#tabs-1' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['courseGroup'] . "</a></li>
+                   <li class='nav-item'><a class='nav-link active' href='#tabs-1' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['courseGroup'] . "</a></li>
                    <li class='nav-item'><a class='nav-link' href='#tabs-2' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['instructorGroup'] . "</a></li>
                    <li class='nav-item'><a class='nav-link' href='#tabs-3' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['curriculumGroup'] . "</a></li>
                    <li class='nav-item'><a class='nav-link' href='#tabs-4' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>

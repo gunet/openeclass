@@ -228,7 +228,9 @@ if (isset($_POST['newTitle'])) {
             Session::flash('message', $langEventModify); 
             Session::flash('alert-class', 'alert-success');
         } else {
-            Session::Messages($resp['message']);
+            //Session::Messages($resp['message']);
+            Session::flash('message', $resp['message']); 
+            Session::flash('alert-class', 'alert-warning');
         }
         redirect_to_home_page('main/personal_calendar/index.php');
     } else { // new event
@@ -242,7 +244,9 @@ if (isset($_POST['newTitle'])) {
             Session::flash('message', $langEventAdd); 
             Session::flash('alert-class', 'alert-success');
         } else {
-            Session::Messages($resp['message']);
+            //Session::Messages($resp['message']);
+            Session::flash('message', $resp['message']); 
+            Session::flash('alert-class', 'alert-warning');
         }
         redirect_to_home_page('main/personal_calendar/index.php');
     }
@@ -261,7 +265,9 @@ if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' 
         Session::flash('message', $langEventDel); 
         Session::flash('alert-class', 'alert-success');
     } else {
-        Session::Messages($resp['message']);
+        //Session::Messages($resp['message']);
+        Session::flash('message', $resp['message']); 
+        Session::flash('alert-class', 'alert-warning');
     }
     redirect_to_home_page('main/personal_calendar/index.php');
 }

@@ -48,7 +48,7 @@
                                                 </a>                     
                                             </div>
                                             <div id="widget_desc_{{ $key }}" class="panel-collapse collapse">
-                                                <div class="panel-body text-muted NoBorders">
+                                                <div class="panel-body text-muted">
                                                     {{ $installed_widget->getDesc() }}
                                                 </div>
                                                 <div class="panel-footer">
@@ -64,7 +64,7 @@
                                                 </div>                        
                                             </div>
                                             <div class="panel-collapse collapse in hidden">
-                                                <div class="panel-body NoBorders">
+                                                <div class="panel-body">
 
                                                 </div>
                                                 <div class="panel-footer clearfix">

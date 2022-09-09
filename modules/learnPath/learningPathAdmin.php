@@ -380,8 +380,8 @@ $tool_content .= action_bar(array(
         ),false);
 
 $tool_content .= "<div class='col-sm-12'>
-                    <div class='panel panel-default NoBorders'>
-                    <div class='panel-heading list-header'>
+                    <div class='panel panel-default rounded-0'>
+                    <div class='panel-heading list-header rounded-0'>
                         <h3 class='panel-title'>$langLearningPathData</h3>
                     </div>";
 $tool_content .= "<table class='table-default'>";
@@ -485,11 +485,11 @@ $lp_action_button = action_button(array(
     )
 );
 $tool_content .= "<div class='col-sm-12 mt-3'>
-                    <div class='panel panel-default panel-action-btn-default NoBorders' style='overflow-y:auto;'>
+                    <div class='panel panel-default panel-action-btn-default rounded-0' style='overflow-y:auto;'>
                         <div class='float-end' style='padding:8px;'>
                             $lp_action_button
                         </div>
-                        <div class='panel-heading list-header'>
+                        <div class='panel-heading list-header rounded-0'>
                             <h3 class='panel-title'>$langLearningPathStructure</h3>
                         </div>";
 

@@ -25,13 +25,13 @@
                                 <div class="panel-heading">                   
                                     <span class='control-label-notes'>{{$announcementsID->title}}</span>
                                 </div>
-                                <div class="panel-body NoBorders">
+                                <div class="panel-body">
                                     <span class="text-secondary">
                                         {!! $announcementsID->body !!}
                                     </span>
                                 </div>
                                 <div class='panel-footer'>
-                                    <div class='text-primary text-end'>{{trans('langDate')}}: <span class='text-secondary'>{{ $announcementsID->date }}</span></div>
+                                    <div class='text-dark fw-bold text-end'>{{trans('langDate')}}: <span class='info-date fw-normal'>{{ $announcementsID->date }}</span></div>
                                 </div>
                             </div>
                         </div>

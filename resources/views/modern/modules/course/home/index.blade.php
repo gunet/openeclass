@@ -60,9 +60,7 @@
 
                     <div class='col-sm-12'>
                         <div class='panel panel-default mt-3 col_maincontent_coursePage border border-secondary-4 shadow-sm'>
-                            <div class='panel-body borderBody
-                                        @if(isset($rating_content) or isset($social_content) or isset($comment_content)) NoBorderBottom
-                                        @else Borders @endif'>
+                            <div class='panel-body'>
                                 <div class='row'>
                                     <div class='col-12 pb-2'>
                                         <ul class="nav navbar navbar-left d-flex d-inline-flex float-end">
@@ -256,7 +254,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class='panel-body bg-white BordersBottom2'>
+                            <div class='panel-body bg-white'>
                                 <ul class='list-group list-group-flush'>
                                     {!! course_announcements() !!}
                                 </ul>

@@ -32,9 +32,9 @@
                     {!! isset($action_bar) ?  $action_bar : '' !!}
                     <div class='row margin-top-thin margin-bottom-fat'>
                         <div class='col-md-12'>
-                            <div class='panel panel-default border border-secondary-4 shadow-sm Borders'>
+                            <div class='panel panel-default border border-secondary-4 shadow-sm'>
 
-                                <div class='panel-body Borders'>
+                                <div class='panel-body'>
                                     <div id='course-title-wrapper' class='course-info-title clearfix'>
                                         <div class='text-start h4'>
                                             {{ trans('langDescription') }}

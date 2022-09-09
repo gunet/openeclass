@@ -235,7 +235,7 @@
                         @foreach ($comments as $comment)
                             <div class='col-sm-12 mt-3'>
                                 <div class='panel panel-default'>
-                                    <div class='panel-body Borders'>
+                                    <div class='panel-body'>
                                         
                                         <div class='d-inline-flex align-items-center'>
                                             <b class='control-label-notes pe-2'>{{ trans('langFrom') }}:</b>

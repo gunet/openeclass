@@ -83,7 +83,7 @@ if (isset($_GET['mid'])) {
         <div id='del_msg'></div>
                 <div id='msg_area'>
                     <div class='panel panel-primary'>
-                        <div class='panel-body Borders'>
+                        <div class='panel-body'>
                             <div class='row p-2 margin-bottom-thin'>
                                 <div class='col-sm-2'>
                                     <strong class='control-label-notes'>$langSubject:</strong>

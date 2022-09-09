@@ -26,7 +26,7 @@
                                 <span class='control-label-notes'>{!! $title !!}</span>
                             </div>
                         
-                            <div class="panel-body NoBorderBottom">
+                            <div class="panel-body">
                                 <div class="single_announcement">
                                     <div class='announcement-main'>
                                         {!! $body !!}
@@ -34,7 +34,7 @@
                                 </div>
                             </div>
                             <div class='panel-footer d-flex justify-content-end'>
-                                <div class="text-end text-success">
+                                <div class="text-end info-date">
                                      {!! $date !!} 
                                 </div>
                             </div>

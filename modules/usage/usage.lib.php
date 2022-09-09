@@ -781,7 +781,7 @@ function user_friendly_seconds($seconds){
 */
 function plot_placeholder($plot_id, $title = null){
     //$p = "<ul class='list-group'>";
-    $p = "<div class='panel panel-default'><div class='panel-body Borders'>";
+    $p = "<div class='panel panel-default'><div class='panel-body'>";
     if(!is_null($title)){
         $p .= "<div class='inner-heading'><span id='{$plot_id}_title'>"
             . $title

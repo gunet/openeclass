@@ -27,7 +27,7 @@
                                     {{trans('langAnalyticsEditElements')}}
                                 </div>
                             </div>
-                            <div class="panel-body NoBorderTop">
+                            <div class="panel-body">
                                 <div class="inner-heading clearfix">
                                     {!! $action_bar !!}
                                     @if(Session::has('message'))
@@ -70,11 +70,11 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-md-6 col-sm-12">
-                                        <div class="panel panel-default NoBorders">
+                                        <div class="panel panel-default">
                                             <div class="panel-heading text-dark text-center">
                                                 {{ trans('langProfilePersInfo') }}
                                             </div>
-                                            <div class='panel-body NoBorders'>
+                                            <div class='panel-body'>
                                                 <div class="profile-content-panel-text">
                                                     @if (!empty($userdata->email) and allow_access($userdata->email_public))
                                                         <span class='text-secondary fw-bold'>{{ trans('langEmail') }}:</span>
@@ -133,11 +133,11 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-sm-12 mt-md-0 mt-3">
-                                        <div class="panel panel-default NoBorders">
+                                        <div class="panel panel-default">
                                             <div class="panel-heading text-center text-dark">
                                                 {{ trans('langProfileAboutMe') }}
                                             </div>
-                                            <div class='panel-body NoBorders'>
+                                            <div class='panel-body'>
                                                 <div class="profile-content-panel-text">
                                                     <p>
                                                     @if (!empty($userdata->description))
@@ -163,7 +163,7 @@
                                          {{ trans('langMyCertificates') }}
                                     </div>
                                 </div>
-                                <div class="panel-body NoBorderTop">
+                                <div class="panel-body">
                                     <div class='row'>
                                         <div class='badge-container'>
                                             <div class='clearfix'>
@@ -208,13 +208,13 @@
 
                         @if (count($badge_completed) > 0)
                         <div class='col-sm-6 mt-3'>
-                            <div class="panel panel-success Borders">
+                            <div class="panel panel-success">
                                 <div class='panel-heading'>
                                     <div class='panel-title text-center text-white p-0'>
                                         {{ trans('langBadges') }}
                                     </div>
                                 </div>
-                                <div class="panel-body NoBorderTop">
+                                <div class="panel-body">
                                     <div class='row'>
                                         <div class='badge-container'>
                                             <div class='clearfix'>
@@ -258,7 +258,7 @@
                                             {{trans('langUnregUser')}}
                                         </div>
                                     </div>
-                                    <div class="panel-body NoBorderTop">
+                                    <div class="panel-body">
                                         <div class="row">
                                             <div class="col-sm-9">
                                                 <div class="profile-content-panel-text">

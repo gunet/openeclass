@@ -73,7 +73,7 @@
                                                     <div class='panel-heading text-center'>
                                                         <span class='colorPalette'>{{ trans('langQuickLinks') }}</span>
                                                     </div>
-                                                    <div class='panel-body NoBorderTop'>
+                                                    <div class='panel-body'>
                                                         <ul class="list-group list-group-flush">
                                                             <li class="list-group-item border-0 admin-list-group">
                                                                 <a href="search_user.php" class='list-group-item'>
@@ -114,7 +114,7 @@
                                                     <div class='panel-heading text-center'>
                                                         <span class='colorPalette'>{{ trans('langPlatformIdentity') }}</span>
                                                     </div>
-                                                    <div class='panel-body NoBorderTop'>
+                                                    <div class='panel-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
                                                             <div class='col-sm-6'>
                                                                 {!! icon('fa-check') !!} <strong class='control-label-notes'>{{ trans('langWebServerVersion') }}</strong>
@@ -164,7 +164,7 @@
                                                     <div class='panel-heading text-center'>
                                                         <span class='colorPalette'>{{ trans('langIndexInfo') }}</span>
                                                     </div>
-                                                    <div class='panel-body NoBorderTop'>
+                                                    <div class='panel-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
                                                             <div class='col-sm-6'>
                                                             <strong class='control-label-notes'>{{ trans('langIndexNumDocs') }}:</strong>
@@ -222,7 +222,7 @@
                                             <div class='panel-heading'>
                                                 <div class='panel-title text-center pb-2'>{{ trans('langInfoAdmin') }}</div>
                                             </div>
-                                            <div class='panel-body panel-body-admin NoBorderTop'>
+                                            <div class='panel-body panel-body-admin'>
                                                 <div class='row p-2 margin-bottom-thin'>
                                                     <div class='col-sm-5'>
                                                         <strong class='control-label-notes'>{{ trans('langOpenRequests') }}:</strong>
@@ -296,7 +296,7 @@
                                             <div class='panel-heading'>
                                                 <div class='panel-title text-center pb-2'>{{ trans('langCronInfo') }}</div>
                                             </div>
-                                            <div class='panel-body panel-body-admin NoBorderTop'>
+                                            <div class='panel-body panel-body-admin'>
                                                 <div class='row p-2 margin-bottom-thin'>
                                                     <div class='col-sm-5'>
                                                     <strong class='control-label-notes'>{{ trans('langCronName') }}</strong>

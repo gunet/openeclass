@@ -362,12 +362,12 @@ function render_profile_fields_content($context) {
 
         if (count($res) > 0) { //category start
             $return_str .= "<div class='col-sm-6'>
-                            <div class='panel panel-default NoBorders mt-3'>
+                            <div class='panel panel-default mt-3'>
                                     <div class='panel-heading text-center text-dark'>".$cat->name."</div>";
         }
 
         foreach ($res as $f) { //get user data for each field
-            $return_str .= "<div class='panel-body NoBorders'><div class='profile-pers-info-data'>";
+            $return_str .= "<div class='panel-body'><div class='profile-pers-info-data'>";
 
             $fdata_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields_data
                                                        WHERE user_id = ?d AND field_id = ?d", $context['user_id'], $f->id);

@@ -221,9 +221,9 @@ if ($is_editor) {
     //delete user from attendance list
     if (isset($_GET['deleteuser']) and isset($_GET['ruid'])) {
         delete_attendance_user($_GET['at'], $_GET['ruid']);
-        $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($_GET['at']), 'action' => 'delete user', 'user_name' => uid_to_name($_GET['ruid']));
+        $log_details = array('id' => $_GET['at'], 'title' => get_attendance_title($_GET['at']), 'action' => 'delete user', 'user_name' => uid_to_name($_GET['ruid']));
         Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
-        redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=".urlencode($_GET[at])."&attendanceBook=1");
+        redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=".urlencode($_GET['at'])."&attendanceBook=1");
     }
 
     //reset attendance users
