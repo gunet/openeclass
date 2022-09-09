@@ -220,7 +220,7 @@
 
                                         <div class='panel panel-info mt-3'>
                                             <div class='panel-heading'>
-                                                <div class='panel-title text-center pb-2'>{{ trans('langInfoAdmin') }}</div>
+                                                <div class='panel-title text-center'>{{ trans('langInfoAdmin') }}</div>
                                             </div>
                                             <div class='panel-body panel-body-admin'>
                                                 <div class='row p-2 margin-bottom-thin'>
@@ -294,7 +294,7 @@
                                         @if (count($cronParams) > 0)
                                         <div class='panel panel-info mt-3'>
                                             <div class='panel-heading'>
-                                                <div class='panel-title text-center pb-2'>{{ trans('langCronInfo') }}</div>
+                                                <div class='panel-title text-center'>{{ trans('langCronInfo') }}</div>
                                             </div>
                                             <div class='panel-body panel-body-admin'>
                                                 <div class='row p-2 margin-bottom-thin'>

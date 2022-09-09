@@ -119,7 +119,7 @@
 
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                             <div class='table-responsive'>
-                                <table class='table' id="document_table">
+                                <table class='table-default' id="document_table">
 
                                     <thead class="notes_thead text-light">
                                         <tr>

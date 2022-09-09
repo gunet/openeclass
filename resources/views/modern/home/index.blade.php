@@ -29,7 +29,7 @@
                                         </div>
                                     </form>
                                     <div class='col-sm-12 d-flex justify-content-center'>
-                                        <a class="text-primary fw-bold btnlostpass mb-2" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
+                                        <a class="text-primary fw-bold btnlostpass mb-2 mt-md-4" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
                                     </div>
                                 </div>
                             </div>

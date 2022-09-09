@@ -12,7 +12,7 @@ body{
   /* background-color: #f5f5f5; */
   background-color: #eaeaea;
   font-family: 'FontAwesome';
-  font-size: 18px;
+  font-size: 17px;
 }
 
 @media (max-width:1023px){
@@ -879,6 +879,7 @@ input[type="checkbox"]{
 
   .announcements_table .list-header th{
     color:#ffffff;
+    font-size: 17px;
   }
 
   .table-default{
@@ -888,6 +889,7 @@ input[type="checkbox"]{
 
   .table-default .list-header th{
      color:#ffffff;
+     font-size: 17px;
   }
 
   /* .announcements_table tr td{
@@ -1569,6 +1571,8 @@ input[type="checkbox"]{
   }
   .panel-admin>.panel-heading>.panel-title{
     color:#fafafa;
+    margin-bottom:0px;
+    padding:0px;
   }
   .panel-admin:has(.panel-footer) .panel-body{
     border:0px;
@@ -1608,6 +1612,8 @@ input[type="checkbox"]{
   }
   .panel-primary>.panel-heading>.panel-title, .panel-action-btn-primary>.panel-heading>.panel-title{
     color:#fafafa;
+    margin-bottom:0px;
+    padding:0px;
   }
   .panel-primary:has(.panel-footer) .panel-body{
     border:0px;
@@ -1654,6 +1660,8 @@ input[type="checkbox"]{
   }
   .panel-success>.panel-heading>.panel-title{
     color:#fafafa;
+    margin-bottom:0px;
+    padding:0px;
   }
   .panel-success:has(.panel-footer) .panel-body{
     border:0px;
@@ -1692,6 +1700,8 @@ input[type="checkbox"]{
   }
   .panel-default>.panel-heading>.panel-title, .panel-action-btn-default>.panel-heading>.panel-title{
     color: #333;
+    margin-bottom:0px;
+    padding:0px;
   }
   .panel-default:has(.panel-footer) .panel-body{
      border-radius:0px;
@@ -1743,6 +1753,8 @@ input[type="checkbox"]{
   }
   .panel-info>.panel-heading>.panel-title{
     color:#fafafa;
+    margin-bottom:0px;
+    padding:0px;
   }
   .panel-info:has(.panel-footer) .panel-body{
     border:0px;
@@ -1779,6 +1791,8 @@ input[type="checkbox"]{
   }
   .panel-danger>.panel-heading>.panel-title{
     color:#fafafa;
+    margin-bottom:0px;
+    padding:0px;
   }
   .panel-danger:has(.panel-footer) .panel-body{
     border:0px;
@@ -1822,14 +1836,17 @@ input[type="checkbox"]{
     padding: 10px 15px;
     height: auto;
   }
+  .panel-heading:has(.btn-group) .panel-title{
+    padding-bottom: 6px;
+    padding-top: 5px;
+  }
   .panel-body,.media-body{
     padding:15px;
     background: #ffffff;
   }
   .panel-title{
     font-weight: 600;
-    font-size: 18px;
-    padding-top: 10px;
+    font-size: 17px;
   }
   /* .panel-default .fa-edit{
     color:rgba(38, 38, 38, 0.8);

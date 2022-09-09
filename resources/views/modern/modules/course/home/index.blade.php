@@ -205,23 +205,18 @@
                     <div class="col-xl-8 col-lg-6 col-md-12 col_maincontent_unit mt-4">
                         @if (!$alter_layout)
                             <div class='panel panel-admin border border-secondary-4 shadow-sm'>
-                                <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
-                                    <div class='row'>
-
-                                        <div class='col-sm-12'>
-                                            <span class='text-white'>
-                                                {{ trans('langCourseUnits') }}
-                                            </span>
-                                            @if ($is_editor and $course_info->view_type == 'units')
-                                                <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn float-end mt-1' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
-                                                    <span class='fa fa-plus-circle text-white'></span>
-                                                </a>
-                                            @endif
-                                            <a class='add-unit-btn float-end pe-2 mt-1' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
-                                                <span class='fa fa-question-circle text-white'></span>
-                                            </a>
-                                        </div>
-                                    </div>
+                                <div class='panel-heading'>
+                                    <span class='panel-title'>
+                                        {{ trans('langCourseUnits') }}
+                                    </span>
+                                    @if ($is_editor and $course_info->view_type == 'units')
+                                        <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn float-end p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
+                                            <span class='fa fa-plus-circle text-white'></span>
+                                        </a>
+                                    @endif
+                                    <a class='add-unit-btn float-end pe-2' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                        <span class='fa fa-question-circle text-white'></span>
+                                    </a>
                                 </div>
 
                                 <div class='panel-body'>
@@ -244,15 +239,11 @@
                         @endif
 
                         <div class="panel panel-admin mt-4 border border-secondary-4 shadow-sm">
-                            <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
-                                <div class='row'>
-                                    <div class='col-sm-12'>
-                                        <span class='text-white text-start'>{{ trans('langAnnouncements') }}</span>
-                                        <a class='btn btn-sm btn-transparent float-end' href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}'>
-                                            <small class='text-white text-lowercase'>{{ trans('langAllAnnouncements') }}&hellip;</small>
-                                        </a>
-                                    </div>
-                                </div>
+                            <div class='panel-heading'>
+                                <span class='panel-title text-start'>{{ trans('langAnnouncements') }}</span>
+                                <a class='btn btn-sm btn-transparent float-end p-0' href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}'>
+                                    <small class='text-white text-lowercase'>{{ trans('langAllAnnouncements') }}&hellip;</small>
+                                </a>
                             </div>
                             <div class='panel-body bg-white'>
                                 <ul class='list-group list-group-flush'>

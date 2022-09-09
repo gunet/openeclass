@@ -375,7 +375,7 @@ if ($userdata) {
             }
             $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
                                     <div class='panel-heading'>
-                                        <div class='float-end mt-1'>
+                                        <div class='float-end'>
                                             ". action_button(array(
                                                                 array(
                                                                         'title' => $langePortfolioRemoveResource,
@@ -477,7 +477,7 @@ if ($userdata) {
                 }
                 $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
                                     <div class='panel-heading'>
-                                        <div class='float-end mt-1'>
+                                        <div class='float-end'>
                                             ". action_button(array(
                                                     array(
                                                         'title' => $langePortfolioRemoveResource,
@@ -521,7 +521,7 @@ if ($userdata) {
                 } else {
                     $assignment_type = $m['group_work'];
                 }
-                $submission_header_content = "<div><h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3></div>";
+                $submission_header_content = "<h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3>";
                 $submission->course_title = $langCourse.': '.$submission->course_title;
                 $submission_content = "<div class='well'>";
                 $submission_content .= "<div><button type='button' class='btn btn-primary btn-sm' data-bs-toggle='collapse' data-bs-target='#header_more_$submission->id'>$langMore</button></div>
@@ -548,7 +548,7 @@ if ($userdata) {
                                       </div>";
                 $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
                                     <div class='panel-heading'>
-                                        <div class='float-end mt-1'>
+                                        <div class='float-end'>
                                             ". action_button(array(
                                                         array(
                                                                 'title' => $langePortfolioRemoveResource,
