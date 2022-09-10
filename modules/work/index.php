@@ -5070,7 +5070,7 @@ function show_assignment($id, $display_graph_results = false) {
                 $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
                 $am_field = '';
                 if (trim($stud_am) != '') {
-                    $am_field = "<h6>$langAmShort: " . q($stud_am) . "</h6>";
+                    $am_field = "<span>$langAmShort: " . q($stud_am) . "</span>";
                 }
                 $tool_content .= "<tr>
                                 <td class='text-end count-col'>$i.</td>

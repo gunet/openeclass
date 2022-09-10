@@ -101,7 +101,7 @@
   }
   .table-condensed thead tr th.next::after{
     content: '>';
-    font-size: 40px;
+    font-size: 20px;
     font-weight: 500;
   }
   .table-condensed thead tr th.next:hover{
@@ -127,7 +127,7 @@
   }
   .table-condensed thead tr th.prev::before{
     content: '<';
-    font-size: 40px;
+    font-size: 20px;
     font-weight: 500;
   }
   .table-condensed thead tr th.prev:hover{

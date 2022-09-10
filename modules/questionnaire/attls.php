@@ -333,7 +333,7 @@ $tool_content .= "
         <h3 class='panel-title'>$lang_result_summary</h3>
     </div>
     <div class='panel-body'>
-        <h5>$lang_ckw_skw_chart</h5>";
+        <h6>$lang_ckw_skw_chart</h6>";
 
 $this_chart_data['category'][] = $langConnected;
 $this_chart_data['category'][] = $langSeparated;

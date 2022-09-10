@@ -32,10 +32,10 @@
 
                     <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
                         @if(!get_config('hide_login_link'))
-                            <a class="eclass-nav-link text-white pt-5" href="{{ $urlServer }}"> <i class="fa fa-home"></i> {{ trans('langHome') }}</a>
+                            <a class="eclass-nav-link fs-6 text-white pt-5" href="{{ $urlServer }}"> <i class="fa fa-home"></i> {{ trans('langHome') }}</a>
                         @endif
-                        <a class="eclass-nav-link text-white @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib"></i> {{ trans('langRegistration') }}</a>
-                        <a class="eclass-nav-link text-white" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-university"></i> {{ trans('langCourses') }}</a>
+                        <a class="eclass-nav-link fs-6 text-white @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib"></i> {{ trans('langRegistration') }}</a>
+                        <a class="eclass-nav-link fs-6 text-white" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-university"></i> {{ trans('langCourses') }}</a>
                     </div>
 
 
@@ -67,7 +67,7 @@
                                                         <span class="fas fa-plus-circle text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fs-6 fw-bold'>
+                                                        <span class='fw-bold'>
                                                             {{ trans('langCourseCreate') }}
                                                         </span>
                                                     </div>
@@ -82,7 +82,7 @@
                                                         <span class="fas fa-home bg-transparent text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fs-6 fw-bold'>
+                                                        <span class='fw-bold'>
                                                             {{ trans('langMyPortfolio') }}
                                                         </span>
                                                     </div>
@@ -97,7 +97,7 @@
                                                         <span class="fas fa-graduation-cap text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fs-6 fw-bold'>
+                                                        <span class='fw-bold'>
                                                             {{ trans('langMyCoursesSide') }}
                                                         </span>
                                                     </div>
@@ -112,7 +112,7 @@
                                                         <span class="fas fa-bell text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fs-6 fw-bold'>
+                                                        <span class='fw-bold'>
                                                             {{ trans('langMyAnnouncements') }}
                                                         </span>
                                                     </div>
@@ -127,7 +127,7 @@
                                                         <span class="fas fa-sticky-note text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fs-6 fw-bold'>
+                                                        <span class='fw-bold'>
                                                             {{ trans('langNotes') }}
                                                         </span>
                                                     </div>
@@ -142,7 +142,7 @@
                                                             <span class="fas fa-briefcase text-warning pt-1"></span>
                                                         </div>
                                                         <div class='col-10 ps-3 pe-3'>
-                                                            <span class='fs-6 fw-bold'>
+                                                            <span class='fw-bold'>
                                                                 {{ trans('langMyePortfolio') }}
                                                             </span>
                                                         </div>
@@ -157,7 +157,7 @@
                                                         <span class="fas fa-chart-bar text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fs-6 fw-bold'>
+                                                        <span class='fw-bold'>
                                                             {{ trans('langMyStats') }}
                                                         </span>
                                                     </div>
@@ -172,7 +172,7 @@
                                                             <span class="fas fa-location-arrow text-warning pt-1"></span>
                                                         </div>
                                                         <div class='col-10 ps-3 pe-3'>
-                                                            <span class='fs-6 fw-bold'>
+                                                            <span class='fw-bold'>
                                                                 {{ trans('langMyBlog') }}
                                                             </span>
                                                         </div>
@@ -187,7 +187,7 @@
                                                         <span class="fas fa-envelope text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fs-6 fw-bold'>
+                                                        <span class='fw-bold'>
                                                             {{ trans('langMyDropBox') }}
                                                         </span>
                                                     </div>
@@ -201,7 +201,7 @@
                                                         <span class="fas fa-bell text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fs-6 fw-bold'>
+                                                        <span class='fw-bold'>
                                                             {{ trans('langMyAgenda') }}
                                                         </span>
                                                     </div>
@@ -215,7 +215,7 @@
                                                         <span class="fas fa-user text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fs-6 fw-bold'>
+                                                        <span class='fw-bold'>
                                                             {{ trans('langMyProfile') }}
                                                         </span>
                                                     </div>
@@ -229,7 +229,7 @@
                                                         <span class="fa fa-magic fa-fw text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fs-6 fw-bold'>
+                                                        <span class='fw-bold'>
                                                             {{ trans('langMyWidgets') }}
                                                         </span>
                                                     </div>
@@ -243,7 +243,7 @@
                                                         <span class="fa fa-sort-numeric-desc fa-fw text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fs-6 fw-bold'>
+                                                        <span class='fw-bold'>
                                                             {{ trans('langGradeTotal') }}
                                                         </span>
                                                     </div>
@@ -257,7 +257,7 @@
                                                         <span class="fa fa-trophy fa-fw text-warning pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fs-6 fw-bold'>
+                                                        <span class='fw-bold'>
                                                             {{ trans('langMyCertificates') }}
                                                         </span>
                                                     </div>
@@ -272,7 +272,7 @@
                                                             <span class="fas fa-folder text-warning pt-1"></span>
                                                         </div>
                                                         <div class='col-10 ps-3 pe-3'>
-                                                            <span class='fs-6 fw-bold'>
+                                                            <span class='fw-bold'>
                                                                 {{ trans('langMyDocs') }}
                                                             </span>
                                                         </div>
@@ -287,7 +287,7 @@
                                                 <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
                                                 <button class='w-100 list-group-item border border-top-0 border-bottom-0 bg-light text-end bg-light' type='submit' name='submit'>
                                                     <i class="fas fa-sign-out-alt fw-bold text-primary"></i>
-                                                    <span class='fs-6 fw-bold text-dark'>{{ trans('langLogout') }}</span>
+                                                    <span class='fw-bold text-dark'>{{ trans('langLogout') }}</span>
                                                 </button>
                                             </form>
                                         </li>

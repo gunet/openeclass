@@ -70,9 +70,9 @@ function sort_link($title, $opt, $attrib = '') {
         } else {
             $r = 1;
         }
-        $tool_content .= "<th $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt&rev=$r$i'>" . "$title</a></th>";
+        $tool_content .= "<th $attrib><a class='text-white' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt&rev=$r$i'>" . "$title</a></th>";
     } else {
-        $tool_content .= "<th $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt$i'>$title</a></th>";
+        $tool_content .= "<th $attrib><a class='text-white' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt$i'>$title</a></th>";
     }
 }
 

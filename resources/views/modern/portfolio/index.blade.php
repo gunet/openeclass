@@ -214,8 +214,8 @@
         <div class="col-12 col-lg-8 user-courses pt-lg-5 ps-lg-5 pe-lg-5 pb-lg-5 p-md-5 p-3">
             <div class="row rowMedium">
 
-                <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-8 col-8">
-                    <span class="text-primary fs-4">{{ trans('langMyCoursesSide') }}</span>
+                <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-8 col-8 pt-2">
+                    <span class="text-primary fw-bold fs-lg-5 fs-6 mb-0">{{ trans('langMyCoursesSide') }}</span>
                 </div>
 
                 <div class="col-xxl-7 col-xl-7 col-lg-7 col-md-7 col-sm-4 col-4">
@@ -274,8 +274,8 @@
                         <div class="col-12">
                             <div class="lesson">
                                 <h3 class="lesson-title">
-                                    <a class="lesson_title_a" style="text-decoration:none; font-size:18px;" href="{{$urlAppend}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
-                                    <span class="lesson-id" style="font-size:17px;">({{ $cource->code }})</span>
+                                    <a class="lesson_title_a" style="text-decoration:none;" href="{{$urlAppend}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
+                                    <span class="lesson-id">({{ $cource->code }})</span>
                                 </h3>
                                 <div class="lesson-professor">{{ $cource->prof_names }}</div>
                             </div>
@@ -313,11 +313,11 @@
                                         @endif
                                     </picture>
                                 </figure>
-                                <h3 class="lesson-title">
-                                    <a class="fs-5" href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
-                                    <span class="lesson-id fs-5 text-secondary">({{ $cource->public_code }})</span>
-                                </h3>
-                                <div class="lesson-professor fs-5 text-secondary">{{ $cource->professor }}</div>
+                                <h6 class="lesson-title">
+                                    <a href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
+                                    <span class="lesson-id text-secondary">({{ $cource->public_code }})</span>
+                                </h6>
+                                <div class="lesson-professor text-secondary">{{ $cource->professor }}</div>
                             </div>
                             <hr>
                         </div>

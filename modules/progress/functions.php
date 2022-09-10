@@ -2068,7 +2068,7 @@ function display_settings($element, $element_id, $unit_id = 0) {
                     <div class='panel-body bg-light'>
                         <div class='row'>
                             <div class='col-sm-12 text-center'>
-                                <h4><strong>$langCourseCompletion</strong></h4>
+                                <h6 class='mt-2'><strong>$langCourseCompletion</strong></h6>
                             </div>
                         </div>
                     </div>

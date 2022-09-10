@@ -1436,7 +1436,7 @@ function headlink($label, $this_sort) {
         $this_reverse = $reverse;
         $indicator = '';
     }
-    return '<a href="' . $base_url . 'openDir=' . $path .
+    return '<a class="text-white" href="' . $base_url . 'openDir=' . $path .
             '&amp;sort=' . $this_sort . ($this_reverse ? '&amp;rev=1' : '') .
             '">' . $label . $indicator . '</a>';
 }

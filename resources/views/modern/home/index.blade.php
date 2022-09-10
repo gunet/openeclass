@@ -192,11 +192,11 @@
         <div class="row rowMedium">
             <div class="col-lg-12 border-15px Announcements-Homepage">
                 <div class="news">
-                    <h2 class="block-title">{{ trans('langAnnouncements') }}
-                        <a href='{{ $urlServer }}rss.php' style='padding-left:5px;'>
+                    <h3 class="block-title">{{ trans('langAnnouncements') }}
+                        <a href='{{ $urlServer }}rss.php'>
                             <span class='fa fa-rss-square'></span>
                         </a>
-                    </h2>
+                    </h3>
                     <div class="row news-list m-auto">
                         @php $counterAn = 0; @endphp
                         @foreach ($announcements as $announcement)

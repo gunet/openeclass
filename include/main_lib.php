@@ -3584,7 +3584,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             if (isset($option['icon'])) {
                 $iconTag = "<span class='fa $option[icon] space-after-icon'></span>";
                 $link_attrs .= " title='$title'";
-                $title = "<span class='hidden-xs'>$title</span>";
+                $title = "<span class='hidden-xs text-white'>$title</span>";
             }
             array_unshift($out_primary,
                 "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
@@ -3617,7 +3617,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-cogs";
     if (count($out_secondary)) {
-        $action_button .= "<button data-bs-display='static' type='button' id='toolDropdown' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span><span class='hidden-xs'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
+        $action_button .= "<button data-bs-display='static' type='button' id='toolDropdown' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span><span class='hidden-xs text-dark'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
         $action_button .= "<ul class='dropdown-menu dropdown-menu-end p-0 m-0 mydropdowns shadow-lg' role='menu' aria-labelledby='toolDropdown'>
                      ".implode('', $out_secondary)."
                   </ul>";
@@ -3729,8 +3729,8 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
         $action_button = "
-                <a tabindex='1' role='button' class='menu-popover btn btn-secondary dropdown-toggle' data-bs-toogle='popover' data-bs-container='body' data-bs-placement='left' data-bs-html='true' data-bs-trigger='manual' data-bs-content='$action_list'>
-                    <span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
+                <a tabindex='1' role='button' class='menu-popover btn btn-default' data-bs-toogle='popover' data-bs-container='body' data-bs-placement='left' data-bs-html='true' data-bs-trigger='manual' data-bs-content='$action_list'>
+                    <span class='fa $secondary_icon'></span> <span class='hidden-xs text-dark'>$secondary_title</span> <span class='caret'></span>
                 </a>";
     }
 

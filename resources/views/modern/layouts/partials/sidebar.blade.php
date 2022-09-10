@@ -1,7 +1,7 @@
 <div id="leftnav" class="sidebar float-menu">
     @php $is_course_teacher = check_editor($uid,$course_id); @endphp 
     @if(($is_editor or $is_power_user or $is_departmentmanage_user or $is_usermanage_user or $is_course_teacher) && $course_code)
-        <p class="text-center text-light fs-6 mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
+        <p class="text-center text-light mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
         <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center'>
             <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}' data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}">
                 <span class="on">{{ trans('langCStudent2') }}</span>
@@ -12,7 +12,7 @@
         </form>
 
     @else
-        <p class="text-center text-light fs-6 mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
+        <p class="text-center text-light mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
         <div class='d-flex justify-content-center'>
             <a class='w-100 btn btn-primary pe-none text-white text-center'>
                 @php $is_course_teacher = check_editor($uid,$course_id); @endphp 
@@ -44,8 +44,8 @@
                     <div class="panel-sidebar-heading">
                         <div class="panel-title h3">
                             <div class='d-inline-flex align-items-center'>
-                                <span class="fa fa-chevron-right ms-1 fs-6 text-warning" style='font-size:12px;'></span>
-                                <span class='text-wrap text-white fs-6 mt-1 ps-2'>{{ $tool_group[0]['text'] }}</span>
+                                <span class="fa fa-chevron-right ms-1 text-warning"></span>
+                                <span class='text-wrap text-white mt-1 ps-2'>{{ $tool_group[0]['text'] }}</span>
                             </div>
                         </div><hr class='text-white'>
                     </div>

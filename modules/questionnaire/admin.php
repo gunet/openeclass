@@ -799,7 +799,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
         <div class='panel panel-primary'>
           <div class='panel-heading'>
-            <h5 class='panel-title'>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h5>
+            <h6 class='panel-title'>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h6>
           </div>
 
           <div class='panel-body'>

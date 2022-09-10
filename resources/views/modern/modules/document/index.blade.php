@@ -121,14 +121,14 @@
                             <div class='table-responsive'>
                                 <table class='table-default' id="document_table">
 
-                                    <thead class="notes_thead text-light">
-                                        <tr>
-                                            <th scope="col"><span>{!! headlink(trans('langType'), 'type') !!}</span></th>
-                                            <th scope="col"><span>{!! headlink(trans('langName'), 'name') !!}</span></th>
-                                            <th scope="col"><span>{{trans('langCurrentStatus')}}</span></th>
-                                            <th scope="col"><span>{{ trans('langSize') }}</span></th>
-                                            <th scope="col"><span>{!! headlink(trans('langDate'), 'date') !!}</span></th>
-                                            <th scope="col"><span>{{trans('langShow')}}</span></th>
+                                    <thead>
+                                        <tr class="list-header">
+                                            <th>{!! headlink(trans('langType'), 'type') !!}</th>
+                                            <th>{!! headlink(trans('langName'), 'name') !!}</th>
+                                            <th>{{trans('langCurrentStatus')}}</th>
+                                            <th>{{ trans('langSize') }}</th>
+                                            <th>{!! headlink(trans('langDate'), 'date') !!}</th>
+                                            <th>{{trans('langShow')}}</th>
                                             @unless ($is_in_tinymce)
                                                 <th class='text-center'>{!! icon('fa-cogs', trans('langCommands')) !!}</th>
                                             @endif
