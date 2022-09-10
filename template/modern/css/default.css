@@ -221,16 +221,15 @@ input[type="checkbox"]{
 
 .testimonials {
   background: #f5f5f5;
-  padding: 80px 0;
+  padding: 40px 0;
   position: relative;
   height:auto;
   border-radius:15px;
 }
-
 .testimonials .testimonial {
   position: relative;
   margin: 0 40px;
-  padding: 100px 60px 60px 100px;
+  padding: 60px;
   border-radius: 15px;
   background: #fff;
   color: #001146;
@@ -239,12 +238,10 @@ input[type="checkbox"]{
   max-height:400px;
   overflow-y: hidden;
 }
-
 .testimonials .testimonial>div {
   position: relative;
   z-index: 2;
 }
-
 .testimonials .testimonial:before {
   background: url(../images/testimonials-quote.png) no-repeat center;
   background-size: contain;
@@ -257,58 +254,79 @@ input[type="checkbox"]{
   opacity: 0.2;
   z-index: 0;
 }
-
-.testimonials .testimonial.slick-current {
+.owl-nav, .owl-dots{
+  display: none;
+}
+.item.testimonial:before{
+  opacity: 1;
+}
+.owl-item .item.testimonial{
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+}
+.owl-item.cloned .item.testimonial{
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+}
+.owl-item.active .item.testimonial{
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+} 
+.owl-item.active.center .item.testimonial{
   background: #003e87;
   color: #fff;
   max-height:400px;
-  overflow-y: hidden;
+  overflow-y: scroll;
+  filter: blur(0);
+  -webkit-filter: blur(0);
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-
-.testimonials .testimonial.slick-current:before {
-  opacity: 1;
-}
-
-.testimonials .testimonial .testimonial-person {
-  margin-top: 15px;
-  font-style: italic;
-}
-
-.testimonials .slick-arrow {
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 50%;
-  left: 15%;
-  transform: translate(-50%, -50%);
-  background: url(../images/prev.svg) no-repeat center;
-  background-size: contain;
-  z-index: 99;
-}
-
-.testimonials .slick-arrow:before {
+.owl-item.active.center .item.testimonial::-webkit-scrollbar{
   display: none;
 }
 
-.testimonials .slick-arrow.slick-next {
-  left: 85%;
-  background: url(../images/next.svg) no-repeat center;
-  background-size: contain;
+@media(max-width:991px){
+  .testimonials{
+    border-radius:0px;
+  }
 }
-
 @media (max-width:767px){
   .testimonial{
     height:300px;
     overflow-y: auto;
-    margin: 0 20px !important;
-    padding: 40px !important;
+    margin: 0 20px;
+    padding: 40px;
   }
-  .testimonials .testimonial.slick-current {
-    height:300px;
+  .owl-item.active.center .item.testimonial {
+    max-height:300px;
     overflow-y: auto;
   }
 }
-
+@media (min-width:992px) and (max-width:1023px){
+  .testimonials .testimonial {
+    width:250px;
+    height:300px;
+  }
+}
+@media (min-width:1024px) and (max-width:1199px){
+  .testimonials .testimonial {
+    width:250px;
+    height:300px;
+  }
+}
+@media (min-width:1200px) and (max-width:1399px){
+  .testimonials .testimonial {
+    width:300px;
+    height:300px;
+  }
+}
+@media (min-width:1400px){
+  .testimonials .testimonial {
+    width:350px;
+    height:350px;
+  }
+}
 
 /*---------------------------------------- NOT VISIBLE CLASSES ---------------------------------*/
 /*---------------------------------------------------------------------------------------------*/

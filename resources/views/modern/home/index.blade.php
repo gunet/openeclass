@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 <div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
 
     <div class="container-fluid main-container">
@@ -176,15 +177,6 @@
                             </div>
                         </div>
                     @endif
-
-
-
-
-                    {{--<div class="col-lg-12 d-flex justify-content-end ms-1 mb-3 mt-4">
-                        <button class="btnMoreHomePage" data-bs-toggle="collapse" data-bs-target="#collapse_main_section" aria-expanded="false" aria-controls="collapse_main_section">
-                            <span class='fa fa-arrow-down'></span>
-                        </button>
-                    </div>--}}
                 </div>
             </div>
         </div>
@@ -195,7 +187,6 @@
 
 <!-- collapse menu -->
 
-{{--<div class="collapse" id="collapse_main_section">--}}
     @if ($announcements)
     <div class="container-fluid main-section">
         <div class="row rowMedium">
@@ -248,9 +239,7 @@
                     </div>
                     <div class="col-sm-4 text-center">
                             <i class="fas fa-user"></i>
-                            <div class="num">{{ getOnlineUsers() }}
-                                <!-- <span>K+</span> -->
-                            </div>
+                            <div class="num">{{ getOnlineUsers() }}</div>
                             <div class="num-text">{{trans('langOnlineUsers')}}</div>
                     </div>
                 </div>
@@ -259,46 +248,64 @@
     </div>
 
     <div class="d-flex justify-content-center mt-lg-3 mb-lg-3">
-        <div class="container-fluid testimonials mt-lg-0 mb-lg-0 mt-2 mb-2 bg-light">
-            <div class="testimonial">
-                <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                <div class="testimonial-person">- Λυδία Καλομοίρη -</div>
-            </div>
-            <div class="testimonial">
-                <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                <div class="testimonial-person">- Γιάννης Ιωάννου -</div>
-            </div>
-            <div class="testimonial">
-                <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                <div class="testimonial-person">- Νίκος Παπαδάκης -</div>
+        <div class="container-fluid testimonials mt-lg-0 mb-lg-0 mt-0 mb-0 bg-light">
+            <div class="owl-carousel owl-theme p-3">
+                <div class="item testimonial">
+                    <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+                    <div class="testimonial-person">- Λυδία Καλομοίρη -</div>
+                </div>
+                <div class="item testimonial">
+                    <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+                    <div class="testimonial-person">- Γιάννης Ιωάννου -</div>
+                </div>
+                <div class="item testimonial">
+                    <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+                    <div class="testimonial-person">- Νίκος Παπαδάκης -</div>
+                </div>
             </div>
         </div>
     </div>
 
-{{--</div>--}}
-
 <script>
-    $('.testimonials').slick({
-		autoplay:true,
-		autoplaySpeed:1500,
-		centerMode: true,
-		centerPadding: '25vw',
-		slidesToShow: 1,
-		responsive: [{
-			breakpoint: 4000,
-			settings: { centerPadding: '15vw', }
-		}]
-	});
-    // var moreCounter = 0;
-    // $('.btnMoreHomePage').on('click',function(){
-    //     moreCounter++;
-    //     if(moreCounter % 2 == 1){
-    //         $('.btnMoreHomePage .fa').css('transform','rotate(180deg)');
-    //     }else{
-    //         $('.btnMoreHomePage .fa').css('transform','rotate(0deg)');
-    //     }
+    // $('.testimonials').slick({
+	// 	autoplay:true,
+	// 	autoplaySpeed:1500,
+	// 	centerMode: true,
+	// 	centerPadding: '25vw',
+	// 	slidesToShow: 1,
+	// 	responsive: [{
+	// 		breakpoint: 4000,
+	// 		settings: { centerPadding: '15vw', }
+	// 	}]
+	// });
 
-    // });
+
+    $('.owl-carousel').owlCarousel({
+            center: true,
+            loop:true,
+            margin:0,
+            autoplay: true,
+            autoPlaySpeed: 5000,
+            autoPlayTimeout: 5000,
+            autoplayHoverPause: true,
+            nav:true,
+            items: 3,
+            smartSpeed: 750,
+            navText: ['<span class="fa fa-angle-left"></span>', '<span class="fa fa-angle-right"></span>'],
+            responsive : {
+            0 : {
+                items: 1
+            },
+            991 : {
+                items: 1
+            },
+            992 : {
+                items: 3
+            }
+        }
+
+    });
+
 </script>
 
 @endsection

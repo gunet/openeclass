@@ -26,6 +26,10 @@
     <!-- DataTables and Checkitor -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 
+    <!-- Owl-carousel -->
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-carousel.css">
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-theme-default.css">
+
     <!-- Our css modern if we need it -->
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick.css"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick-theme.css"/>
@@ -83,6 +87,10 @@
             locale: "{{ $language }}"
         });
     </script>
+
+    <!-- owl-carousel js -->
+    <script src="{{ $urlAppend }}js/owl-carousel.min.js"></script>
+
 
     <!-- Our js modern -->
     <script type="text/javascript" src="{{ $urlAppend }}js/slick.min.js"></script>
