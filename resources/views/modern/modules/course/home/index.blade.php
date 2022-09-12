@@ -246,12 +246,12 @@
 
                         <div class="panel panel-admin mt-4 border border-secondary-4 shadow-sm">
                             <div class='panel-heading'>
-                                <div class='col-12 d-inline-flex'>
-                                    <div class='col-6'>
+                                <div class='row'>
+                                    <div class='col-6 text-start pt-1'>
                                         <span class='panel-title'>{{ trans('langAnnouncements') }}</span>
                                     </div>
-                                    <div class='col-6'>
-                                        <a class='btn btn-sm btn-transparent float-end mt-0' href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}'>
+                                    <div class='col-6 text-end'>
+                                        <a class='btn btn-sm btn-primary' href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}'>
                                             <small class='text-white text-lowercase'>{{ trans('langAllAnnouncements') }}&hellip;</small>
                                         </a>
                                     </div>

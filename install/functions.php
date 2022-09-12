@@ -199,17 +199,17 @@ function touch_try($filename) {
 
 function form_entry($name, $input, $label) {
     return "
-    <div class='form-group'>
-      <label for='$name' class='col-sm-2 control-label'>" . q($label) . "</label>
-      <div class='col-sm-10'>$input</div>
+    <div class='form-group mt-3'>
+      <label for='$name' class='col-sm-6 control-label-notes'>" . q($label) . "</label>
+      <div class='col-sm-12'>$input</div>
     </div>";
 }
 
 function display_entry($input, $label) {
     return "
-    <div class='form-group'>
-      <label class='col-sm-4 control-label'>" . q($label) . "</label>
-      <div class='col-sm-8'><p class='form-control-static'>$input</p></div>
+    <div class='form-group mt-3'>
+      <label class='col-sm-6 control-label-notes'>" . q($label) . "</label>
+      <div class='col-sm-12'><p class='form-control-static'>$input</p></div>
     </div>";
 }
 

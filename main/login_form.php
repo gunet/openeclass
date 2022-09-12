@@ -70,10 +70,10 @@ foreach ($q as $l) {
             <div class='form-group mt-3'>
               <div class='row'>
                 <div class='col-md-3 col-12 text-md-start text-center'>
-                  <button class='btn btn-primary w-100 margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+                  <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
                 </div>
                 <div class='col-md-9 col-12 text-md-end text-center mt-md-0 mt-3'>
-                  <a class='btn btn-secondary fs-6' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
+                  <a class='btn btn-transparent text-primary fw-bold fs-6' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
                 </div>
               </div>
            </div>
@@ -82,7 +82,6 @@ foreach ($q as $l) {
 }
 
 $columns = 12 / count($authLink);
-
 $pageName = $langUserLogin;
 $tool_content .= action_bar(array(
     array('title' => $langBack,
@@ -94,9 +93,9 @@ $tool_content .= "<div class='login-page'>";
 foreach ($authLink as $authInfo) {
     $tool_content .= "
       <div class='col-sm-$columns'>
-        <div class='panel panel-admin panel_default'>
+        <div class='panel panel-admin rounded-0'>
           <div class='panel-heading'><div class='panel-title p-0 text-white text-center'>" . q($authInfo[2]) . "</div></div>
-            <div class='panel-body login-page-option'>" .
+            <div class='panel-body login-page-option rounded-0'>" .
               $authInfo[1];
     if (Session::has('login_error') and $authInfo[0]) {
         $tool_content .= "<div class='alert alert-warning' role='alert'>".Session::get('login_error')."</div>";

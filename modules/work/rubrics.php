@@ -267,7 +267,7 @@ if (isset($_GET['rubric_id'])) {
                             </div>
                         </div>
                         <div class='col-xs-offset-2 col-sm-10'>
-                            <a class='btn btn-xs btn-success margin-top-thin' id='addScale$crit'>$langAdd</a>
+                            <a class='btn btn-sm btn-success margin-top-thin' id='addScale$crit'>$langAdd</a>
                         </div>
                 </div>	
             </div>";

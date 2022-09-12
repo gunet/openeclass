@@ -176,7 +176,7 @@
                         @if (count($sql) > 0)
                             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                                 <div class='shadow-lg p-3 bg-body rounded bg-primary'>
-                                    <h4>{{ trans('langStudentParticipation') }}</h4>
+                                    <h6>{{ trans('langStudentParticipation') }}</h6>
                                     <div class='table-responsive'>
                                         <table class='announcements_table'>
                                             <tr class='notes_thead'>

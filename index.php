@@ -177,7 +177,7 @@ if (!$upgrade_begin and $uid) {
                                 <label for='uname' class='sr-only'>$langUsername</label>
                                 <input type='text' id='uname' name='uname' placeholder='$langUsername' $autofocus><span class='col-xs-2 col-sm-2 col-md-2 fa fa-user'></span>
                              </div>
-                             <div class='form-group'>
+                             <div class='form-group mt-3'>
                                 <label for='pass' class='sr-only'>$langPass</label>
                                 <input type='password' id='pass' name='pass' placeholder='$langPass'><span id='revealPass' class='fa fa-eye' style='margin-left: -20px; color: black;'></span>&nbsp;&nbsp;<span class='col-xs-2 col-sm-2 col-md-2 fa fa-lock'></span>
                              </div>

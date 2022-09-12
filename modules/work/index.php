@@ -2090,7 +2090,7 @@ function new_assignment() {
                 </div>
             </div>
 
-            <div class='container-fluid form-group hidden' id='lti_label' style='margin-top: 30px; margin-bottom:30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px;'>
+            <div class='container-fluid form-group hidden' id='lti_label' style='margin-top: 30px; margin-bottom:30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px; padding-top:10px; padding-bottom:10px;'>
                 <h4 class='col-sm-offset-1'>$langLTIOptions</h4>
                 <div class='form-group hidden mt-3' style='margin-top: 30px;'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTiiApp:</label>
@@ -4880,8 +4880,8 @@ function show_assignment($id, $display_graph_results = false) {
             $tool_content .= "<form action='{$urlServer}modules/work/index.php?course=$course_code' method='post' class='form-inline'>
                 <input type='hidden' name='grades_id' value='$id' />
                 <br>
-                <div class='margin-bottom-thin'>
-                    <strong class='control-label-notes ps-1'>$langSubmissions:</strong>&nbsp; $count_of_assignments";
+                <div class='margin-bottom-thin bg-light p-2 text-center'>
+                    <strong class='fw-bold'>$langSubmissions:</strong>&nbsp; $count_of_assignments";
                 // button for transferring student peer review grades to teacher grades
                 if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && ($count_of_ass > 0)) {
                     $tool_content .= "<div class='text-end' style='margin-bottom: 15px;'><a class='btn btn-primary' href='$_SERVER[SCRIPT_NAME]?course=$course_code' id='transfer_grades'>$langTransferGrades</a></div>";
@@ -4889,7 +4889,7 @@ function show_assignment($id, $display_graph_results = false) {
                 $tool_content .= "</div>";
 
             $tool_content .= "
-                <div class='table-responsive'>
+                <div class='table-responsive mt-0'>
                 <table class='table'>
                 <tbody>
                 <tr class='list-header'>
@@ -5215,7 +5215,7 @@ function show_assignment($id, $display_graph_results = false) {
                 }
             }
     } else { // no submissions
-        $tool_content .= "<div class='col-12'><p class='sub_title1 ms-1 mt-1'>$langSubmissions:</p><div class='alert alert-warning'>$langNoSubmissions</div></div>";
+        $tool_content .= "<div class='col-12 mt-3 bg-light'><p class='sub_title1 text-center fw-bold mb-0 pt-2'>$langSubmissions:</p><div class='alert alert-warning'>$langNoSubmissions</div></div>";
     }
 }
 
@@ -5289,10 +5289,10 @@ function show_non_submitted($id) {
                 $num_of_submissions = sprintf("$m[more_non_submissions]", $num_results);
             }
                 $tool_content .= "
-                            <p><div class='sub_title1'>$m[WorkUserNoSubmission]:</div><p>
-                            <p>$num_of_submissions</p>
+                            <p><div class='sub_title1 bg-light p-2 text-center fw-bold'>$m[WorkUserNoSubmission]:</div><p>
+                            <p class='text-center'>$num_of_submissions</p>
                             <div class='row'><div class='col-sm-12'>
-                            <div class='table-responsive'>
+                            <div class='table-responsive mt-0'>
                             <table class='table-default'>
                             <tr class='list-header'>
                           <th width='3'>&nbsp;</th>";

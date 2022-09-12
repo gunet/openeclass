@@ -27,117 +27,6 @@
 
 /* ------------------------ LEFT MENU view page as teacher-student form --------------------- */
 
-/* input[type=checkbox].toggles + label{
-  display:inline-block;
-  height:35px;
-  width:180px;
-  position: relative;
-  font-size: 20px;
-  border: 2px solid blue;
-  padding:0;
-  margin:0;
-  cursor: pointer;
-  box-sizing: border-box;
-  transition: all 0.3s ease;
-  border-radius:30px;
-}
-
-input[type=checkbox].toggles{
-  display:none;
-}
-
-input[type=checkbox].toggles + label::before{
-  position: absolute;
-  top: 4px;
-  height: 44px;
-  width:44px;
-
-  transition: all 0.3s ease;
-  z-index: 3;
-  content: '';
-} */
-
-/* apo pisw otan patisei kai paei deksia */
-/* input[type=checkbox].toggles + label::after{
-  width:140px;
-  text-align: center;
-  z-index: 2;
-  text-transform: uppercase;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  text-overflow: ellipsis;
-  overflow: hidden;
-  content: attr(data-checked);
-  font-size:10px;
-}
-
-input[type=checkbox].toggles:not(:checked) + label{
-  background-color: transparent;
-  text-align: right;
-} */
-
-/* apo pisw prin pathsei mathitis*/
-/* input[type=checkbox].toggles:not(:checked) + label::after{
-  content: attr(data-unchecked);
-  font-size: 11px;
-  right: 0;
-  left: auto;
-  opacity: 1;
-  color: white;
-  padding-left:60px;
-}
-input[type=checkbox].toggles:not(:checked) + label::before{
-  left: 0px;
-  background-color: white;
-  content: attr(data-checked);
-}
-input[type=checkbox].toggles:checked + label::before{
-  left: 0px;
-  background-color: white;
-  content: attr(data-unchecked);
-}
-
-input[type=checkbox].toggles:checked + label{
-  text-align: left;
-  border-color: blue;
-}
-input[type=checkbox].toggles:checked + label::after{
-  background-color: transparent;
-  font-size: 13px;
-  left: 4px;
-  right:auto;
-  opacity: 1;
-  font-size: 11px;
-  color: white;
-  text-align: left;
- 
-}
-input[type=checkbox].toggles:checked + label::before{
-  left:81px;
-  font-size: 15px;
-  color: white;
-  text-align: center;
-}
-
-input[type="checkbox"].toggles + label.rounded{
-  border-radius: 30px;
-  content: attr(data-checked);
-}
-input[type="checkbox"].toggles + label.rounded::before{
-  border-radius: 50%;
-  padding-top:8px;
-  padding-bottom: 10px;
-  height:32.5px;
-  width:95px;
-  margin-top:-5px;
-  border-radius:30px;
-  background-color: blue;
-  color:white;
-  font-size: 11px;
-  text-align: center;
-} */
-
 .on2{
   margin-right:-95px;
   font-size: 12px;
@@ -150,7 +39,6 @@ input[type="checkbox"].toggles + label.rounded::before{
   font-size: 12px;
   margin-left:-95px;
 }
-
 
 .btn-toggle{
   position: relative;
@@ -193,8 +81,6 @@ input[type="checkbox"].toggles + label.rounded::before{
   display: inline-block;
 }
 
-
-
 /* --------------------------------------- Basic classes ------------------------------- */
 
 .nav-link{
@@ -220,8 +106,6 @@ input[type="checkbox"].toggles + label.rounded::before{
   background-color: white; 
   border-radius:15px;
 }
-
-
 
 .col_maincontent_active_unit{
   transition: 0.4s;
@@ -278,28 +162,27 @@ input[type="checkbox"].toggles + label.rounded::before{
      background-color:white;
    }
 
-    .offcanvas-start.d-lg-none.mr-auto.show{
-      width:280px;
-      overflow-y: scroll;
-      background-color: #003F87;
-    }
+  .offcanvas-start.d-lg-none.mr-auto.show{
+    width:280px;
+    overflow-y: scroll;
+    background-color: #003F87;
+  }
 
-    .nav-link{
-      font-size:13px;
-      border-bottom: solid 1px white;
-    }
+  .nav-link{
+    font-size:13px;
+    border-bottom: solid 1px white;
+  }
 
-    .active-nav{
-      opacity:1;
-    }
+  .active-nav{
+    opacity:1;
+  }
 
-    .menu_btn_button{
-      display:none;
-      pointer-events: none;
-    }
+  .menu_btn_button{
+    display:none;
+    pointer-events: none;
+  }
 
 }
-
 
 /* mobile L */
 
@@ -313,9 +196,7 @@ input[type="checkbox"].toggles + label.rounded::before{
 
 /* tablet */
 @media (min-width: 768px) and (max-width: 1023px){ 
-  /* .table-responsive{
-    overflow: inherit;
-  } */
+
    .btn-close.text-reset{
     background-color:white;
   }
@@ -344,9 +225,7 @@ input[type="checkbox"].toggles + label.rounded::before{
 }
 
 @media(min-width:992px) and (max-width:1023px){
-  /* .table-responsive{
-    overflow: inherit;
-  } */
+
   .menu_btn_button{
     display:block;
     pointer-events: all;
@@ -371,11 +250,8 @@ input[type="checkbox"].toggles + label.rounded::before{
     width: 100%;
     align-items: end;
     margin: 0px 0px 0px auto;
-
-    
     background-color: white;
     border-radius:15px;
-    /* background-color: red !important; */
   }
 }
 
@@ -400,11 +276,8 @@ input[type="checkbox"].toggles + label.rounded::before{
     width: 100%;
     align-items: end;
     margin: 0px 0px 0px auto;
-
-    
     background-color: white;
     border-radius:15px;
-    /* background-color: red !important; */
   }
 
 }
@@ -478,17 +351,18 @@ input[type="checkbox"].toggles + label.rounded::before{
 }
 
 @media (min-width:1400px){
-  /* .table-responsive{
-    overflow: inherit;
-  } */
   .btn-toggle{
       width: 12rem;
   }
+  .btn-toggle> .off2{
+    padding-top: 1px;
+  }
+  .btn-toggle> .on2{
+    padding-top: 15px;
+  }
 }
 @media (min-width: 1200px) and (max-width: 1399px){ 
-  /* .table-responsive{
-    overflow: inherit;
-  } */
+
   .btn-toggle{
       width: 11.5rem;
   }
@@ -503,44 +377,35 @@ input[type="checkbox"].toggles + label.rounded::before{
   }
   .btn-toggle> .off2{
     padding-left: 32px;
+    padding-top: 1px;
   }
   .btn-toggle> .on2{
-    padding-top: 14px;
+    padding-top: 15px;
   }
-  /* .on{
-    font-size:10px !important;
-  }
-  .off{
-    font-size:10px !important;
-  }
-  .on2{
-    font-size:10px !important;
-    padding-top: 15px !important;
-  }
-  .off2{
-    margin-left:-90px;
-    font-size:10px;
-    padding-left: 15px;
-    padding-top: 3px;
-  } */
 }
 @media (min-width: 1024px) and (max-width: 1199px){ 
-  /* .table-responsive{
-    overflow: inherit;
-  } */
+ 
   .btn-toggle{
       width: 12.3rem;
   }
-  .off2{
+  .btn-toggle> .off2{
     margin-left:-85px;
+    padding-top: 1px;
+  }
+  .btn-toggle> .on2{
+    padding-top: 15px;
   }
 }
 @media (min-width: 768px) and (max-width: 1023px){ 
   .btn-toggle{
     width: 12rem;
   }
-  .off2{
+  .btn-toggle> .off2{
     margin-left:-85px;
+    padding-top: 1px;
+  }
+  .btn-toggle> .on2{
+    padding-top: 15px;
   }
 }
 @media (max-width: 767px){ 
@@ -558,9 +423,10 @@ input[type="checkbox"].toggles + label.rounded::before{
   }
   .btn-toggle> .off2{
     padding-left: 32px;
+    padding-top: 1px;
   }
   .btn-toggle> .on2{
-    padding-top: 14px;
+    padding-top: 15px;
   }
 }
 

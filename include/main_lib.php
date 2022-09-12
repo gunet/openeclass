@@ -2525,12 +2525,12 @@ function glossary_expand_callback($matches) {
     if (!empty($_SESSION['glossary'][$term])) {
         $term_notes = isset($_SESSION['glossary_notes'][$term]) ? q('<hr><small class="text-muted">'.$langComments.': '.$_SESSION['glossary_notes'][$term].'</small>') : '';
         $term_url = isset($_SESSION['glossary_url'][$term]) ? q('<hr><a href="'.$_SESSION['glossary_url'][$term].'">'.$langGlossaryUrl.'</a>') : '';
-        $definition = ' title="'.$matches[0].'" data-trigger="focus" data-html="true" data-content="' . q($_SESSION['glossary'][$term]) . $term_notes . $term_url .'"';
+        $definition = ' title="'.$matches[0].'" data-bs-trigger="focus" data-bs-html="true" data-bs-content="' . q($_SESSION['glossary'][$term]) . $term_notes . $term_url .'"';
     } else {
         $definition = '';
     }
 
-    return '<a href="#" data-toggle="popover"' .
+    return '<a href="#" data-bs-="popover"' .
             $definition . '>' . $matches[0] . '</a>';
 }
 
@@ -3519,7 +3519,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $i=0;
     $page_title = "";
     if (isset($pageName) and !empty($pageName) and $page_title_flag) {
-        $page_title = "<div class='pull-left'><h5 class='text-secondary pt-2'>".q($pageName)."</h5></div>";
+        $page_title = "<div class='pull-left'><h6 class='text-secondary pt-2'>".q($pageName)."</h6></div>";
     }
     foreach (array_reverse($options) as $option) {
         // skip items with show=false

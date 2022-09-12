@@ -67,7 +67,7 @@ function getUserLessonInfo($uid) {
     $student_courses_count = 0;
     if ($myCourses) {
         $lesson_content .= "<table id='portfolio_lessons' class='table table-striped'>";
-        $lesson_content .= "<thead class='sr-only'><tr class='notes_thead'><th>$langCourse</th><th>$langActions</th></tr></thead>";
+        $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
             $visclass = '';
@@ -84,10 +84,10 @@ function getUserLessonInfo($uid) {
                 $fav_message = $langFavorite;
             }
             $lesson_content .= "<tr class='$visclass'>
-			  <td class='text-left'>
+			  <td class='text-start'>
 			  <strong><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></strong>&nbsp;(" . q($data->public_code) . ")
 			  <div><small>" . q($data->professor) . "</small></div></td>";
-            $lesson_content .= "<td class='text-center'><div class='col-6 m-auto d-block'><div class='row'><div class='col-12 col-md-6'>";
+            $lesson_content .= "<td class='text-center'><div class='col-4 m-auto d-block'><div class='row'><div class='col-12 col-md-6'>";
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
             $lesson_content .= "</div><div class='col-12 col-md-6 mt-md-0 mt-3'>";
             if ($data->status == USER_STUDENT) {

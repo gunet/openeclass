@@ -10,9 +10,7 @@ html{
 }
 body{
   background-color: #eaeaea;
-  font-family: 'FontAwesome';
   font-family: 'FontAwesome','Open Sans', Arial, sans-serif;
-  /* font-size: 18px; */
   font-size: 14px;
   line-height: 1.42857143;
 }
@@ -57,10 +55,6 @@ img {
   max-width: 100%;
   height: auto;
 }
-
-/* ul,li{
-  list-style-type: none;
-} */
 
 .border-15px{
   border-radius:15px;
@@ -362,105 +356,13 @@ input[type="checkbox"]{
     opacity:0.3;
   }
 
-  
-/* ----------------------------------- checkboxes---------------------------------------- */
-/* -------------------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------------------- */
-
-/* .checkbox_container2 {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  font-size: 22px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-} */
-
-/* Hide the browser's default checkbox */
-/* .checkbox_container2 input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-} */
-
-/* Create a custom checkbox */
-/* .checkmark2 {
-  position: absolute;
-  height: 25px;
-  width: 25px;
-  background-color: #ccc;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  margin-top:0px;
-  margin-left:-35px;
-}
-
-.checkmark2--bordered{
-  background: transparent;
-  border: 1px solid #fff;
-  right: 20px;
-}
-
-.checkmark2--bordered::after{
-  left: 8px !important;
-  top: 3px !important;
-} */
-
-/* On mouse-over, add a grey background color */
-
-
-/* When the checkbox is checked, add a blue background */
-/* .checkbox_container2 input:checked ~ .checkmark2 {
-  background-color: #003F87;
-} */
-
-/* Create the checkmark/indicator (hidden when not checked) */
-/* .checkmark2:after {
-  content: "";
-  position: absolute;
-  display: none;
-} */
-
-/* Show the checkmark when checked */
-/* .checkbox_container2 input:checked ~ .checkmark2:after {
-  display: block;
-} */
-
-/* Style the checkmark/indicator */
-/* .checkbox_container2 .checkmark2:after {
-  left: 9px;
-  top: 5px;
-  width: 8px;
-  height: 14px;
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
-} */
-
-
   /* ---------------------------------------------Default ----------------------------------------*/
   /* ---------------------------------------------------------------------------------------------*/
   /* ---------------------------------------------------------------------------------------------*/
   /* ---------------------------------------------------------------------------------------------*/
   /* ---------------------------------------------------------------------------------------------*/
   /* ---------------------------------------------------------------------------------------------*/
+
   .BtnMoreInfoAdmin{
     width:200px;
     height:200px;
@@ -510,14 +412,6 @@ input[type="checkbox"]{
     background-color: #1d4e89;
     color:white;
   }
-
-  /* .fab.fa-facebook-f{
-      height: 30px; padding-top:7px;
-  }
-  
-  .fab.fa-twitter{
-      height: 30px; padding-top:7px;
-  } */
   
   .fab.fa-linkedin-in,.fa-twitter,.fa-facebook-f{
       height: 30px; padding-top:7px;
@@ -629,9 +523,6 @@ input[type="checkbox"]{
     border-radius: 50%;
     border:0px;
   }
-
-  
-
   
   /* --------------------------------------------- MyDropdowns ----------------------------------------*/
   /* ------------------------------------------------------------------------------------------------- */
@@ -678,12 +569,12 @@ input[type="checkbox"]{
   .mydropdownsSecond{
     background-color: #fafafa;
     width:200px;
+    font-size:14px;
   }  
   .mydropdownsSecond .list-group-item:hover{
     background-color: #1d4e89;
     color:white;
   }
-
 
   /* after close modal , display none from body and block inside mydropdowns for form-action-button-mydropdowns */
   body .form-action-button-mydropdowns{
@@ -693,8 +584,6 @@ input[type="checkbox"]{
     display: block;
   }
 
-
-  
   /* --------------------------------------------- Datepicker-datetimepicker --------------------------*/
   /* ------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------------------------------------------------- */
@@ -759,7 +648,6 @@ input[type="checkbox"]{
       margin-top:-30px;
   }
 
-  
   /* --------------------------------------------- Portfolio ----------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -880,7 +768,6 @@ input[type="checkbox"]{
       font-size:13px;
   }
       
-  
   /* -------------------------------------------- AllTables ------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -916,18 +803,7 @@ input[type="checkbox"]{
      font-size: 14px;
   }
 
-  /* .announcements_table tr td{
-    padding:20px ;
-  } */
-
-  /* .table-default tr td{
-    padding:20px ;
-  } */
-
   .list-header{
-    /* height:40px; */
-    /* background: rgb(199,212,210);
-    background: radial-gradient(circle, #003F87 0%, #003F87 100%); */
     background: #466289;
   }
 
@@ -935,11 +811,7 @@ input[type="checkbox"]{
     background: #fafafa;
   }
 
-  /* tr.active td span,strong{
-    color:#003F87;
-  } */
   tr.active th span,strong{
-    /* color:#003F87; */
     padding-right: 10px;
   }
 
@@ -965,12 +837,6 @@ input[type="checkbox"]{
   .title1 td{
     color:white;
   }
-  /* .announcements_table tr td{
-      padding-left: 15px;
-  } */
-  /* .announcements_table tr th{
-     padding-left: 15px;
-  } */
 
   /* -------------------------------------------- Glossary ------------------------------------------ */
   /* -------------------------------------------------------------------------------------------------*/
@@ -1348,12 +1214,6 @@ input[type="checkbox"]{
   /* -------------------------------------------------------------------------------------------------*/
 
   .notes_thead{
-    /* height:40px; */
-    /* background: rgb(199,212,210);
-    background: radial-gradient(circle, #003F87 0%, #003F87 100%);
-    -webkit-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
-    -moz-box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35);
-    box-shadow: inset -2px 3px 25px 8px rgba(127,132,153,0.35); */
     background: #466289;;
   }
 
@@ -1368,32 +1228,6 @@ input[type="checkbox"]{
     }
   }
   
-   
-  /* -------------------------------------------- Video ----------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  /* -------------------------------------------------------------------------------------------------*/
-  
-  /* .first-item-col{
-      padding-left:15px;
-  }
-  .cogsClass{
-      float:right;
-      padding-right:15px;
-      padding-top:10px;
-  }
-  .modify_note_button{
-    border:0;
-    background-color: transparent;
-    padding-left:40px;
-  } */
-
-  
   /* -------------------------------------------- Forum ----------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1404,30 +1238,27 @@ input[type="checkbox"]{
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   
-  .profile-name
-  {
+  .profile-name{
       font-size: larger;
       font-weight: bold;
       line-height: 3;
   }
   
-  .profile-content-panel
-  {
+  .profile-content-panel{
       font-size: 14px;
       margin: 25px 0;
       padding: 25px;
       background-color: #f5f5f5;
   }
   
-  .profile-content-panel-title
-  {
+  .profile-content-panel-title{
       font-size: larger;
       color: #888;
       margin-bottom: 40px;
   }
   
   
-  /* -------------------------------------------- BootBox MenuPopover Modals ---------------------------------*/
+  /* ---------------------------------------- BootBox MenuPopover Modals --------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1445,8 +1276,6 @@ input[type="checkbox"]{
       width:35px;
   }
   .menu-popover{
-    /* border-color: rgb(93, 97, 95);
-    background: linear-gradient(180deg,#DCDCDC 0%,rgb(93, 97, 95) 49%, rgb(93, 97, 95) 51%,rgba(93, 97, 95, 0.963) 100%); */
     background: #DCDCDC;
     border-radius: 5px;
   }
@@ -1457,11 +1286,6 @@ input[type="checkbox"]{
   }
 
   .menu-popover .list-group-item{
-    /* border-color: rgb(93, 97, 95);
-    background: linear-gradient(180deg,#DCDCDC 0%,rgb(93, 97, 95) 49%, rgb(93, 97, 95) 51%,rgba(93, 97, 95, 0.963) 100%);
-    border-radius: 5px;
-    border:solid 1px black ;
-    color:#fafafa; */
     background: #466289;
     color:#DBE8F9;
   }
@@ -1624,9 +1448,6 @@ input[type="checkbox"]{
     border-bottom-right-radius: 0px;
   }
 
-
-
-
   .panel-primary,.panel-action-btn-primary{
     border-radius:15px;
     background: #337ab7;
@@ -1675,7 +1496,6 @@ input[type="checkbox"]{
     border-bottom-right-radius: 0px;
   }
 
-
   .panel-success{
     border-radius:15px;
     background: #7dcfb6;
@@ -1712,7 +1532,6 @@ input[type="checkbox"]{
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
   }
-
 
   .panel-default,.panel-action-btn-default{
     border-radius: 17px;
@@ -1767,8 +1586,6 @@ input[type="checkbox"]{
     border-bottom-right-radius: 0px;
   }
 
-
-
   .panel-info{
     border-radius:15px;
     background: #00b2ca;
@@ -1805,7 +1622,6 @@ input[type="checkbox"]{
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
   }
-
 
   .panel-danger{
     border-radius:15px;
@@ -1844,7 +1660,6 @@ input[type="checkbox"]{
     border-bottom-right-radius: 0px;
   }
 
-
   .media{
     border-radius: 15px;
     -moz-box-shadow: 0 0 2px rgb(101, 102, 133);
@@ -1876,9 +1691,7 @@ input[type="checkbox"]{
     font-weight: 600;
     font-size: 14px;
   }
-  /* .panel-default .fa-edit{
-    color:rgba(38, 38, 38, 0.8);
-  } */
+
   .panel-footer{
     padding:10px;
   }
@@ -1936,7 +1749,6 @@ input[type="checkbox"]{
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/  
-  
   
   .nocategory-link a {
       padding-left:17px ;
@@ -2052,13 +1864,6 @@ input[type="checkbox"]{
       font-size:12px; border:0; pointer-events:none; opacity:0.5;
   }
   
-  /* .panel-title.text-white{
-    font-size:17px;
-    padding-top:12px ;
-    padding-bottom:12px ;
-    padding-left:15px;
-  } */
-  
   /* ------------------------------------- Questionaire ------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -2074,7 +1879,6 @@ input[type="checkbox"]{
       padding-top:10px;
       padding-bottom:10px;
   }
-  
 
   /* ------------------------------------- wall ------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -2088,7 +1892,6 @@ input[type="checkbox"]{
   .media-body.bubble{
     padding:15px;
   }
-
 
  /* ------------------------------------- progress ------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -2108,7 +1911,8 @@ input[type="checkbox"]{
     height:15px;
     padding-bottom:15px;
   }
- /* ------------------------------------- Comments ------------------------------------------------*/
+
+  /* ------------------------------------- Comments ------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -2122,8 +1926,7 @@ input[type="checkbox"]{
       padding-bottom:25px;
   }
 
-
-/* ------------------------------------- TERMS ------------------------------------------------*/
+  /* ------------------------------------- TERMS ------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -2142,7 +1945,7 @@ input[type="checkbox"]{
     padding: 10px 20px 10px 40px;
   }
 
-/* -------------------------------------     CHAT     ------------------------------------------------*/
+  /* -------------------------------------     CHAT     ------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -2155,7 +1958,8 @@ input[type="checkbox"]{
   .embed-responsive-item{
     height:300px;
   }
-/* -------------------------------------     LTI COURSE     ------------------------------------------------*/
+
+  /* -------------------------------------     LTI COURSE     ------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -2164,6 +1968,7 @@ input[type="checkbox"]{
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
+
   .iframeLti{
     height: 500px !important;
   }
@@ -2260,7 +2065,8 @@ input[type="checkbox"]{
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */
-  /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------*/
+  /* ------------------------------------------------------- ultra small mobile - portrait----------------------------------*/
+
   @media (max-width: 320px){
 
     .login-form-Homepage{
@@ -2298,11 +2104,6 @@ input[type="checkbox"]{
       -webkit-box-shadow: 0 0 3px #ccc;
       box-shadow: 0 0 3px #ccc;
     }
-
-    /* .col_maincontent_active{
-      border-bottom-left-radius: 15px;
-      border-top-left-radius: 15px;
-    } */
 
     .col_maincontent_active_unit{
       -moz-box-shadow:none;
@@ -2354,6 +2155,7 @@ input[type="checkbox"]{
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- small mobile - portrait-----------------------------------*/
+
   @media (min-width:321px) and (max-width: 375px){
 
     .login-form-Homepage{
@@ -2391,11 +2193,6 @@ input[type="checkbox"]{
       -webkit-box-shadow: 0 0 3px #ccc;
       box-shadow: 0 0 3px #ccc;
     }
-
-    /* .col_maincontent_active{
-      border-bottom-left-radius: 15px;
-      border-top-left-radius: 15px;
-    } */
 
     .col_maincontent_active_unit{
       -moz-box-shadow:none;
@@ -2484,11 +2281,6 @@ input[type="checkbox"]{
       -webkit-box-shadow: 0 0 3px #ccc;
       box-shadow: 0 0 3px #ccc;
     }
-
-    /* .col_maincontent_active{
-      border-bottom-left-radius: 15px;
-      border-top-left-radius: 15px;
-    } */
 
     .col_maincontent_active_unit{
       -moz-box-shadow:none;
@@ -2603,11 +2395,6 @@ input[type="checkbox"]{
       box-shadow: 0 0 3px #ccc;
     }
 
-    /* .col_maincontent_active{
-      border-bottom-left-radius: 15px;
-      border-top-left-radius: 15px;
-    } */
-
     .col_maincontent_active_unit{
       -moz-box-shadow:none;
       -webkit-box-shadow:none;
@@ -2670,11 +2457,6 @@ input[type="checkbox"]{
       -webkit-box-shadow: 0 0 3px #ccc;
       box-shadow: 0 0 3px #ccc;
     }
-
-    /* .col_maincontent_active{
-      border-bottom-left-radius: 15px;
-      border-top-left-radius: 15px;
-    } */
 
     .col_maincontent_active_unit{
       -moz-box-shadow:none;
@@ -2785,7 +2567,6 @@ input[type="checkbox"]{
     .active-cont-unit{
         width: 100% ;
         align-items: end;
-        /* margin: 0px 0px 0px auto; */
         background-color: white;
         border-radius:15px;
     }

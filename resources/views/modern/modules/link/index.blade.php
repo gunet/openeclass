@@ -118,7 +118,7 @@
                                         </th>
                                     </tr>
                                     <tr>
-                                        <td class='text-center not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
+                                        <td class='not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
                                     </tr>
                                 @endif
                                 </table>

@@ -422,7 +422,7 @@ if (isset($_GET['modifyAnswers'])) {
                             icon('fa-edit text-white', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code".(isset($exerciseId) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . $questionId)."</h3>
                       </div>
                       <div class='panel-body'>
-                            <h4><small>$questionTypeWord</small><br>" . nl2br(q_math($questionName)) . "</h4>
+                            <h6><small class='fw-bold'>$questionTypeWord</small><br>" . nl2br(q_math($questionName)) . "</h6>
                                 <p>$questionDescription</p>
                                 ".(($okPicture)? "<div class='text-center'><img src='../../$picturePath/quiz-$questionId'></div>":"")."
                       </div>
@@ -449,6 +449,7 @@ if (isset($_GET['modifyAnswers'])) {
                 <input type='hidden' name='formSent' value='1'>
                 <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>
                 <fieldset>
+                <div class='table-responsive'>
                 <table class='table table-striped table-hover'>";
             $tool_content .= "<tr>
                           <th class='text-end'></th>
@@ -503,7 +504,7 @@ if (isset($_GET['modifyAnswers'])) {
                     </td>
                     <td colspan='2'>&nbsp;</td>
                   </tr>
-                </table>";
+                </table></div>";
         } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
              $setId = isset($exerciseId)? "&amp;exerciseId=$exerciseId" : '';
              $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$setId&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>";

@@ -175,62 +175,62 @@ function mail_settings_form() {
                                 </div>
                            </div>
                         </div>
-                        <div class='form-group' id='formEmailAnnounceGroup'>
-                           <label for='formEmailAnnounce' class='col-sm-3 control-label'>$langEmailAnnounce:</label>
-                           <div class='col-sm-9'>
+                        <div class='form-group mt-3' id='formEmailAnnounceGroup'>
+                           <label for='formEmailAnnounce' class='col-sm-6 control-label-notes'>$langEmailAnnounce:</label>
+                           <div class='col-sm-12'>
                                 <input type='text' class='form-control' name='email_announce' id='formEmailAnnounce' value='".q(get_var('email_announce'))."'>
                                 <span class='help-block' id='emailSendWarn'>$langEmailSendWarn</span>
                            </div>
                         </div>
-                        <div class='form-group'>
-                           <label for='formEmailBounces' class='col-sm-3 control-label'>$langEmailBounces:</label>
-                           <div class='col-sm-9'>
+                        <div class='form-group mt-3'>
+                           <label for='formEmailBounces' class='col-sm-6 control-label-notes'>$langEmailBounces:</label>
+                           <div class='col-sm-12'>
                                 <input type='text' class='form-control' name='email_bounces' id='formEmailBounces' value='".q(get_var('email_bounces'))."'>
                            </div>
                         </div>
-                        <div class='form-group'>
-                           <label for='formEmailTransport' class='col-sm-3 control-label'>$langEmailTransport:</label>
-                           <div class='col-sm-9'>" .
+                        <div class='form-group mt-3'>
+                           <label for='formEmailTransport' class='col-sm-6 control-label-notes'>$langEmailTransport:</label>
+                           <div class='col-sm-12'>" .
                                selection($emailTransports, 'email_transport', $email_transport,
-                                         "class='form-control' id='formEmailTransport'") . "
+                                         "class='form-select' id='formEmailTransport'") . "
                            </div>
                         </div>
-                        <div class='form-group SMTP-settings'>
-                           <label for='formSMTPServer' class='col-sm-3 control-label'>$langEmailSMTPServer:</label>
-                           <div class='col-sm-9'>
+                        <div class='form-group SMTP-settings mt-3'>
+                           <label for='formSMTPServer' class='col-sm-6 control-label-notes'>$langEmailSMTPServer:</label>
+                           <div class='col-sm-12'>
                                 <input type='text' class='form-control' name='smtp_server' id='formSMTPServer' value='".q(get_var('smtp_server'))."'>
                            </div>
                         </div>
-                        <div class='form-group SMTP-settings'>
-                           <label for='formSMTPPort' class='col-sm-3 control-label'>$langEmailSMTPPort:</label>
-                           <div class='col-sm-9'>
+                        <div class='form-group SMTP-settings mt-3'>
+                           <label for='formSMTPPort' class='col-sm-6 control-label-notes'>$langEmailSMTPPort:</label>
+                           <div class='col-sm-12'>
                                 <input type='text' class='form-control' name='smtp_port' id='formSMTPPort' value='".q(get_var('smtp_port', 25))."'>
                            </div>
                         </div>
-                        <div class='form-group SMTP-settings'>
-                           <label for='formEmailEncryption' class='col-sm-3 control-label'>$langEmailEncryption:</label>
-                           <div class='col-sm-9'>" .
+                        <div class='form-group SMTP-settings mt-3'>
+                           <label for='formEmailEncryption' class='col-sm-6 control-label-notes'>$langEmailEncryption:</label>
+                           <div class='col-sm-12'>" .
                                selection($emailEncryption, 'smtp_encryption', $smtp_encryption,
-                                         "class='form-control' id='formEmailEncryption'") . "
+                                         "class='form-select' id='formEmailEncryption'") . "
                            </div>
                         </div>
-                        <div class='form-group SMTP-settings'>
-                           <label for='formSMTPUsername' class='col-sm-3 control-label'>$langUsername:</label>
-                           <div class='col-sm-9'>
+                        <div class='form-group SMTP-settings mt-3'>
+                           <label for='formSMTPUsername' class='col-sm-6 control-label-notes'>$langUsername:</label>
+                           <div class='col-sm-12'>
                                 <input type='text' class='form-control' name='smtp_username' id='formSMTPUsername' value='".q(get_var('smtp_username'))."'>
                            </div>
                         </div>
-                        <div class='form-group SMTP-settings'>
-                           <label for='formSMTPPassword' class='col-sm-3 control-label'>$langPassword:</label>
-                           <div class='col-sm-9'>
+                        <div class='form-group SMTP-settings mt-3'>
+                           <label for='formSMTPPassword' class='col-sm-6 control-label-notes'>$langPassword:</label>
+                           <div class='col-sm-12'>
                                 <div class='input-group'>
                                     <input type='password' class='form-control' name='smtp_password' id='formSMTPPassword' value='".q(get_var('smtp_password'))."'><span id='revealPass' class='input-group-addon'><span class='fa fa-eye'></span></span>
                                 </div>
                            </div>
                         </div>
-                        <div class='form-group Sendmail-settings'>
-                           <label for='formSendmailCommand' class='col-sm-3 control-label'>$langEmailSendmail:</label>
-                           <div class='col-sm-9'>
+                        <div class='form-group Sendmail-settings mt-3'>
+                           <label for='formSendmailCommand' class='col-sm-6 control-label-notes'>$langEmailSendmail:</label>
+                           <div class='col-sm-12'>
                                 <input type='text' class='form-control' name='sendmail_command' id='formSendmailCommand' value='".q(get_var('sendmail_command', ini_get('sendmail_path')))."'>
                                 <span class='help-text'>$langEG <code>/usr/sbin/sendmail -t -i</code></span>
                            </div>
@@ -238,7 +238,7 @@ function mail_settings_form() {
                         <hr>";
                         if (!$install) { // not to be displayed in install screen
                             $tool_content .= "
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <div class='col-sm-12'>
                                     <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                                 </div>
