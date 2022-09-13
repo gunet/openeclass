@@ -68,11 +68,11 @@
                             <div class="container-fluid">
                                 <div class="row justify-content-center">
                                     <div class="user-detals-photo-2 text-md-start text-center">
-                                        <img class='rounded-circle ps-4' src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
+                                        <img class='rounded-circle m-auto d-block' src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                                     </div>
                                 </div>
-                                <div class="row justify-content-center text-center" >
-                                    <h5> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h5>
+                                <div class="row justify-content-center text-center mt-2" >
+                                    <h6> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h6>
                                     <p>
                                         @if(($session->status == USER_TEACHER))
                                         {{ trans('langMetaTeacher') }}

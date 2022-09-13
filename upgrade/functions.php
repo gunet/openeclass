@@ -2516,7 +2516,7 @@ function upgrade_to_4_0($tbl_options): void {
 
     if (!DBHelper::tableExists('request_field_data')) {
         Database::get()->query("CREATE TABLE IF NOT EXISTS `request_field_data` (
-            `id` INT(11) UNSIGNED NULL AUTO_INCREMENT PRIMARY KEY,
+            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `request_id` INT(11) UNSIGNED NOT NULL,
             `field_id` INT(11) UNSIGNED NOT NULL,
             `data` TEXT NOT NULL,

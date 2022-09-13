@@ -52,7 +52,7 @@
                                             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 d-flex justify-content-center">
                                                 <div id='profile-avatar'>{!! $profile_img !!}</div>
                                             </div>
-                                            <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
+                                            <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 text-md-start text-center">
                                                 <div class="profile-name">{{ $userdata->givenname }} {{ $userdata->surname }}</div>
                                                 <div class='not_visible'><strong>{{ $userdata->username }}</strong></div>
                                             </div>

@@ -28,9 +28,13 @@ require_once '../include/main_lib.php';
 require_once '../include/lib/pwgen.inc.php';
 require_once '../include/mailconfig.php';
 require_once '../modules/db/database.php';
-require_once '../modules/h5p/classes/H5PHubUpdater.php';
 require_once '../upgrade/functions.php';
 require_once 'functions.php';
+
+chdir('..');
+$webDir = getcwd();
+
+require_once 'modules/h5p/classes/H5PHubUpdater.php';
 
 $tool_content = '';
 if (!isset($siteName)) {
@@ -66,19 +70,19 @@ if ($lang == 'el') {
 }
 
 // include_messages
-require_once "../lang/$lang/common.inc.php";
-$extra_messages = "../config/{$language_codes[$lang]}.inc.php";
+require_once "lang/$lang/common.inc.php";
+$extra_messages = "config/{$language_codes[$lang]}.inc.php";
 if (file_exists($extra_messages)) {
     include $extra_messages;
 } else {
     $extra_messages = false;
 }
-require_once "../lang/$lang/messages.inc.php";
+require_once "lang/$lang/messages.inc.php";
 if ($extra_messages) {
     include $extra_messages;
 }
 
-if (file_exists('../config/config.php')) {
+if (file_exists('config/config.php')) {
     // title = $langWelcomeWizard
     $tool_content .= "
         <div class='panel panel-info'>
@@ -107,13 +111,13 @@ if (isset($_POST['welcomeScreen'])) {
         $dbPassForm = '';
     }
     $dbNameForm = 'eclass';
-    $dbMyAdmin = $emailForm = '';     
+    $dbMyAdmin = $emailForm = '';
     $urlForm = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS']) ? 'https://' : 'http://') .
             $_SERVER['SERVER_NAME'] .
             str_replace('/install/index.php', '/', $_SERVER['SCRIPT_NAME']);
     if (isset($_SERVER['SERVER_ADMIN'])) { // only for apache
         $emailForm = $_SERVER['SERVER_ADMIN'];
-    }    
+    }
     $nameForm = $langDefaultAdminName;
     $loginForm = 'admin';
     $passForm = genPass();
@@ -248,7 +252,7 @@ if (isset($_POST['install2'])) {
        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>
            <div class='form-group'>
-             <pre class='pre-scrollable' style='col-sm-12'>" . q(wordwrap(file_get_contents('../info/license/gpl.txt'))) . "</pre>
+             <pre class='pre-scrollable' style='col-sm-12'>" . q(wordwrap(file_get_contents('info/license/gpl.txt'))) . "</pre>
            </div>
            <div class='form-group mt-3'>
              <div class='col-sm-12'>" . icon('fa-print') . " <a href='$gpl_link'>$langPrintVers</a></div>
@@ -278,7 +282,7 @@ elseif (isset($_POST['install3'])) {
              <div class='row'>
               <div class='col-sm-8'>" . text_input('dbHostForm', 25) . "</div>
               <div class='col-sm-2'>$langEG localhost</div>
-            </div>
+             </div>
            </div>
            <div class='form-group mt-3'>
              <label for='dbUsernameForm' class='col-sm-6 control-label-notes'>$langDBLogin</label>
@@ -296,14 +300,14 @@ elseif (isset($_POST['install3'])) {
              <div class='row'>
               <div class='col-sm-8'>" . text_input('dbNameForm', 25) . "</div>
               <div class='col-sm-2'>$langNeedChangeDB</div>
-             </div>
+            </div>
            </div>
            <div class='form-group mt-3'>
              <label for='dbMyAdmin' class='col-sm-6 control-label-notes'>$langphpMyAdminURL</label>
              <div class='row'>
               <div class='col-sm-8'>" . text_input('dbMyAdmin', 25) . "</div>
               <div class='col-sm-2'>$langOptional</div>
-             </div>
+          </div>
            </div>
            <div class='form-group mt-3'>
              <input type='submit' class='btn btn-default' name='install2' value='&laquo; $langPreviousStep'>
@@ -465,7 +469,6 @@ elseif (isset($_POST['install7'])) {
     $langStep = sprintf($langStep1, 7, 7);
     $_SESSION['step'] = 7;
     $mysqlMainDb = $dbNameForm;
-    //$active_ui_languages = implode(' ', active_subdirs('../lang', 'messages.inc.php'));
     $active_ui_languages = 'el en';
 
     // create main database
@@ -483,7 +486,7 @@ $mysqlUser = ' . quote($dbUsernameForm) . ';
 $mysqlPassword = ' . quote($dbPassForm) . ';
 $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 ';
-    $fd = @fopen("../config/config.php", "w");
+    $fd = @fopen('config/config.php', 'w');
     if (!$fd) {
         $config_dir = dirname(__DIR__) . '/config';
         $tool_content .= "<p class='alert'>$langErrorConfig</p>" .
@@ -503,6 +506,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         $hubUpdater = new H5PHubUpdater();
         $hubUpdater->fetchLatestContentTypes();
         set_config('h5p_update_content_ts', date('Y-m-d H:i', time()));
+        chdir('..');
         // message
         $tool_content .= "
         <div class='alert alert-success'>$langInstallSuccess</div>
@@ -550,9 +554,8 @@ elseif (isset($_POST['install1'])) {
     touch_try('courses/eportfolio/work_submissions/index.php');
     mkdir_try('courses/eportfolio/mydocs');
     touch_try('courses/eportfolio/mydocs/index.php');
-    mkdir_try('storage');
-    mkdir_try('storage/views');
-
+    // mkdir_try('storage');
+    // mkdir_try('storage/views');
     if ($configErrorExists) {
         $tool_content .= "<div class='alert alert-danger'>" . implode('', $errorContent) . "</div>" .
             "<div class='alert alert-warning'>$langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</div>";
@@ -564,7 +567,7 @@ elseif (isset($_POST['install1'])) {
     <h3>$langCheckReq</h3>
     <ul class='list-unstyled'>
         <li>" . icon('fa-check') . " <b>Webserver</b> $langFoundIt <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em></li>";
-    if (version_compare(PHP_VERSION, '7.2') >= 0) {
+    if (version_compare(PHP_VERSION, '7.4') >= 0) {
         $info_icon = icon('fa-check');
         $info_text = '';
     } else {
@@ -576,6 +579,7 @@ elseif (isset($_POST['install1'])) {
     $tool_content .= $info_text;
     $tool_content .= "<h3>$langRequiredPHP</h3>";
     $tool_content .= "<ul class='list-unstyled'>";
+    warnIfExtNotLoaded('standard');
     warnIfExtNotLoaded('session');
     warnIfExtNotLoaded('pdo');
     warnIfExtNotLoaded('pdo_mysql');
@@ -587,7 +591,7 @@ elseif (isset($_POST['install1'])) {
     warnIfExtNotLoaded('pcre');
     warnIfExtNotLoaded('curl');
     warnIfExtNotLoaded('zip');
-    warnIfExtNotLoaded('intl');
+    warnIfExtNotLoaded('intl');    
     $tool_content .= "</ul><h3>$langOptionalPHP</h3>";
     $tool_content .= "<ul class='list-unstyled'>";
     warnIfExtNotLoaded('soap');
@@ -622,8 +626,8 @@ elseif (isset($_POST['install1'])) {
         <img src='welcome.png' alt=''>
         <h1>$langWelcomeWizard</h1>
         <div class='panel panel-info text-left'>
-          <div class='notes_thead'>$langThisWizard</div>
-          <div class='panel-body Borders'>
+          <div class='panel-heading'>$langThisWizard</div>
+          <div class='panel-body'>
              <ul>
                 <li>$langWizardHelp1</li>
                 <li>$langWizardHelp2</li>
@@ -635,7 +639,7 @@ elseif (isset($_POST['install1'])) {
           <fieldset>
             <div class='form-group'>
               <label for='lang' class='col-sm-6 control-label-notes'>$langChooseLang:</label>
-              <div class='col-sm-12'>" . selection($langLanguages, 'lang', $lang, 'class="form-select" onChange=\"document.langform.submit();\"') . "</div>
+              <div class='col-sm-12'>" . selection($langLanguages, 'lang', $lang, 'class="form-control" onChange=\"document.langform.submit();\"') . "</div>
             </div>
             <div class='form-group mt-3'>
               <div class='col-sm-offset-2 col-sm-10 text-left'>
@@ -649,4 +653,3 @@ elseif (isset($_POST['install1'])) {
     </div>";
     draw($tool_content, array('no-menu' => true));
 }
-

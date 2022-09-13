@@ -17,6 +17,9 @@ body{
 span{
   font-size: 14px;
 }
+input::placeholder , .form-select, .form-control{
+  font-size: 13px;
+}
 
 @media (max-width:1023px){
   body{
@@ -442,6 +445,7 @@ input[type="checkbox"]{
   .inputSearch::placeholder { 
       color: white;
       text-align: center;
+      font-size:15px;
   }
   
   /* --------------------------------------------- ManageCourse-Partials ----------------------------------------*/

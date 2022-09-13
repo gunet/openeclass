@@ -251,8 +251,8 @@
                                         <span class='panel-title'>{{ trans('langAnnouncements') }}</span>
                                     </div>
                                     <div class='col-6 text-end'>
-                                        <a class='btn btn-sm btn-primary' href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}'>
-                                            <small class='text-white text-lowercase'>{{ trans('langAllAnnouncements') }}&hellip;</small>
+                                        <a class='btn btn-sm btn-primary' href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}' data-bs-toogle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllAnnouncements') }}">
+                                            <span class='fa fa-arrow-right text-white'></span>
                                         </a>
                                     </div>
                                 </div>

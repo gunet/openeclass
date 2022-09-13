@@ -173,10 +173,10 @@
                             <div class='panel-heading'>
                                 <div class='panel-title'>{{ $pageName }}
                                     @if($course_start_week or $course_finish_week)
-                                    <h6 class='text-muted text-warning'>
-                                        {{ $course_start_week }}
-                                        {{ $course_finish_week }}
-                                    </h6>
+                                    <span class='text-warning fs-6'>
+                                        <small>{{ $course_start_week }}
+                                        {{ $course_finish_week }}</small>
+                                    </span>
                                     @endif
                                 </div>
                             </div>

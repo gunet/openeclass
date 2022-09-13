@@ -1509,9 +1509,9 @@ $default_config = array(
     'account_duration', '126144000',
     'language', $lang,
     'active_ui_languages', $active_ui_languages,
-    'student_upload_whitelist', $student_upload_whitelist,
-    'teacher_upload_whitelist', $teacher_upload_whitelist,
-    'theme', 'default',
+    // 'student_upload_whitelist', $student_upload_whitelist,
+    // 'teacher_upload_whitelist', $teacher_upload_whitelist,
+    'theme', 'modern',
     'theme_options_id', 0,
     'login_fail_check', 1,
     'login_fail_threshold', 15,
@@ -2267,11 +2267,11 @@ $db->query("CREATE TABLE h5p_content_dependency (
     dependency_type VARCHAR(10) NOT NULL,
   PRIMARY KEY(id)) $tbl_options");
 
-$_SESSION['theme'] = 'default';
+$_SESSION['theme'] = 'modern';
 
 importThemes();
 
-set_config('theme_options_id', $db->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2020 - Default')->id);
+set_config('theme_options_id', $db->querySingle('SELECT id FROM theme_options WHERE name = ?s', '---- Open eClass Default ----')->id);
 
 // create indices
 $db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");

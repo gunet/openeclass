@@ -42,7 +42,7 @@ function draw($toolContent, $options=null, $head_content ='') {
     }
 
 	$t = new Template();
-	$t->set_file('fh', '../template/default/theme.html');
+	$t->set_file('fh', 'template/default/theme.html');
 	$t->set_block('fh', 'mainBlock', 'main');
 
     $t->set_var('SITE_NAME', 'Open eClass');
@@ -51,11 +51,11 @@ function draw($toolContent, $options=null, $head_content ='') {
     $t->set_block('mainBlock', 'LoggedOutBlock', 'delete');
     $t->set_block('mainBlock', 'toolTitleBlock', 'delete');
     $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
-    $t->set_var('logo_img', '../template/default/img/logo_eclass.png');
-    $t->set_var('logo_img_small', '../template/default/img/logo_eclass_small.png');
-    $t->set_var('template_base', '../template/default');
+    $t->set_var('logo_img', '../template/modern/img/logo_eclass.png');
+    $t->set_var('logo_img_small', '../template/modern/img/logo_eclass_small.png');
+    $t->set_var('template_base', '../template/modern');
     $t->set_var('HEAD_EXTRAS', $head_content);
-    
+
     if (isset($options['no-menu'])) {
         $t->set_block('mainBlock', 'leftNavBlock', 'delete');
         $t->set_block('mainBlock', 'breadCrumbs', 'delete');
@@ -97,7 +97,7 @@ function draw($toolContent, $options=null, $head_content ='') {
             $t->parse('breadCrumbLink', 'breadCrumbLinkBlock', true);
             $t->set_var('BREAD_TEXT',  $langStepTitle);
             $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
-            
+
             $t->set_var('THIRD_BAR_TEXT', $langInstallProgress);
             $t->set_var('FOUR_BAR_TEXT', $langTitleInstall);
 
@@ -113,11 +113,11 @@ function draw($toolContent, $options=null, $head_content ='') {
 }
 
 /**
- * @brief installation right menu 
+ * @brief installation right menu
  * @global type $langRequirements
  * @global type $langLicense
  * @global type $langDBSetting
- * @global type $langBasicCfgSetting 
+ * @global type $langBasicCfgSetting
  * @global type $langLastCheck
  * @global type $langInstallEnd
  * @return array
@@ -172,9 +172,9 @@ function installerMenu() {
  */
 function mkdir_try($dirname) {
     global $errorContent, $configErrorExists, $langWarningInstall3;
-    
-    if (!is_dir('../' . $dirname)) {
-        if (!make_dir('../' . $dirname)) {
+
+    if (!is_dir($dirname)) {
+        if (!make_dir($dirname)) {
             $errorContent[] = sprintf("<p>$langWarningInstall3</p>", $dirname);
             $configErrorExists = true;
         }
@@ -185,13 +185,13 @@ function mkdir_try($dirname) {
  * @brief create files
  * @global type $errorContent
  * @global boolean $configErrorExists
- * @global type $langWarningInstall3 
+ * @global type $langWarningInstall3
  * @param type $filename
  */
 function touch_try($filename) {
     global $errorContent, $configErrorExists, $langWarningInstall3;
-    
-    if (!@touch('../' . $filename)) {
+
+    if (!@touch($filename)) {
         $errorContent[] = sprintf("<p>$langWarningInstall3</p>", $filename);
         $configErrorExists = true;
     }
@@ -212,4 +212,3 @@ function display_entry($input, $label) {
       <div class='col-sm-12'><p class='form-control-static'>$input</p></div>
     </div>";
 }
-
