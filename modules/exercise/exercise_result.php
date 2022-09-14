@@ -256,12 +256,12 @@ if ($exerciseRange > 0) { // exercise grade range (if any)
 }
 
 if ($showScore) {
-    $tool_content .= "<h5>$langYourTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</h5>";
+    $tool_content .= "<h6>$langYourTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</h6>";
 }
 $tool_content .= "
-    <h5>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em></h5>
-    <h5>$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>" .
-    ($user && $exerciseAttemptsAllowed ? "<h5>$langAttempt: <em>{$exercise_user_record->attempt}</em></h5>" : '') . "
+    <h6>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em></h6>
+    <h6>$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h6>" .
+    ($user && $exerciseAttemptsAllowed ? "<h6>$langAttempt: <em>{$exercise_user_record->attempt}</em></h6>" : '') . "
   </div></div>";
 
 $tool_content .= "<div class='col-sm-12'><div class='panel panel-default rounded-0'>

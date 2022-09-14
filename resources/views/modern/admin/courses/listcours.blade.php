@@ -34,13 +34,13 @@
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
-                    <table id='course_results_table' class='announcements_table'>
+                    <table id='course_results_table' class='table-default'>
                         <thead>
-                            <tr class='notes_thead'>
+                            <tr class='list-header'>
                             <th class='text-white'>{{ trans('langCourseCode') }}</th>
                             <th class='text-white'>{{ trans('langGroupAccess') }}</th>
                             <th class='text-white'>{{ trans('langFaculty') }}</th>
-                            <th class='text-white'>{!! icon('fa-cogs') !!}</th>
+                            <th class='text-white text-center'>{!! icon('fa-cogs') !!}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,7 +48,7 @@
                         </tbody>
                     </table>
                     @if (isset($_GET['formsearchfaculte']) and $_GET['formsearchfaculte'] and is_numeric(getDirectReference($_GET['formsearchfaculte'])))
-                        <div align='right' style='margin-top: 60px; margin-bottom:10px;'>
+                        <div class='col-12 mt-3'>
                             <form action='multieditcourse.php' method='post'>
                                 <!--redirect all request vars towards action-->
                                 @foreach ($_REQUEST as $key => $value)

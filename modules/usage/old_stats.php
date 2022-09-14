@@ -292,7 +292,7 @@ $tool_content .= "<div class='input-append date form-group mt-3' id='user_date_e
         </div>";
 $tool_content .= '<div class="form-group mt-3">
         <label class="col-sm-6 control-label-notes">' . $langModule . ':</label>
-        <div class="col-sm-12"><select name="u_module_id" id="u_module_id" class="form-control">' . $mod_opts . '</select></div>
+        <div class="col-sm-12"><select name="u_module_id" id="u_module_id" class="form-select">' . $mod_opts . '</select></div>
   </div>
   <div class="form-group mt-3">
     <div class="col-sm-offset-2 col-sm-10">

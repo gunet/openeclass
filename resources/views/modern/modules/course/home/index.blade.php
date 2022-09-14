@@ -1,4 +1,3 @@
-<?php //print_a($all_units)?>
 @extends('layouts.default')
 
 @section('content')
@@ -226,9 +225,7 @@
                                 </div>
 
                                 <div class='panel-body'>
-                                    {{--<div id='boxlistSort'>--}}
-                                        {!! $cunits_content !!}
-                                    {{--</div>--}}
+                                    {!! $cunits_content !!}
                                 </div>
 
                             </div>
@@ -247,11 +244,12 @@
                         <div class="panel panel-admin mt-4 border border-secondary-4 shadow-sm">
                             <div class='panel-heading'>
                                 <div class='row'>
-                                    <div class='col-6 text-start pt-1'>
+                                    <div class='col-6 text-start'>
                                         <span class='panel-title'>{{ trans('langAnnouncements') }}</span>
                                     </div>
                                     <div class='col-6 text-end'>
-                                        <a class='btn btn-sm btn-primary' href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}' data-bs-toogle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllAnnouncements') }}">
+                                        <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}' 
+                                           class='mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllAnnouncements') }}">
                                             <span class='fa fa-arrow-right text-white'></span>
                                         </a>
                                     </div>
@@ -273,29 +271,29 @@
 
                         <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar border border-secondary-4 shadow-sm">
                             {!! $user_personal_calendar !!}
-                            <div class='col-sm-12 mt-4 pb-2'>
+                            <div class='col-12 mt-4 pb-2'>
                                 <div class='row rowMedium'>
-                                    <div class='col-sm-12 event-legend'>
+                                    <div class='col-12 event-legend'>
                                         <div class='d-inline-flex align-items-center'>
                                             <span class='event event-important'></span>
                                             <span>{{ trans('langAgendaDueDay') }}</span>
                                         </div>
                                     </div>
 
-                                    <div class='col-sm-12 event-legend'>
+                                    <div class='col-12 event-legend'>
                                         <div class='d-inline-flex align-items-center'>
                                             <span class='event event-info'></span>
                                             <span>{{ trans('langAgendaCourseEvent') }}</span>
                                         </div>
                                     </div>
 
-                                    <div class='col-sm-12 event-legend'>
+                                    <div class='col-12 event-legend'>
                                         <div class='d-inline-flex align-items-center'>
                                             <span class='event event-success'></span>
                                             <span>{{ trans('langAgendaSystemEvent') }}</span>
                                         </div>
                                     </div>
-                                    <div class='col-sm-12 event-legend pb-3'>
+                                    <div class='col-12 event-legend pb-3'>
                                         <div class='d-inline-flex align-items-center'>
                                             <span class='event event-special'></span>
                                             <span>{{ trans('langAgendaPersonalEvent') }}</span>
@@ -313,8 +311,8 @@
                                 <div class='panel-body'>
                                     <div class='text-center'>
                                         <div class='col-sm-12'>
-                                            <div class="center-block" style="display:inline-block;">
-                                                <a style="text-decoration:none" href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
+                                            <div class="center-block d-inline-block">
+                                                <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
                                             @if ($percentage == '100%')
                                                 <i class='fa fa-check-circle fa-5x state_success'></i>
                                             @else

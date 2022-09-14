@@ -5564,3 +5564,4 @@ $langDumpPDF = 'Export to PDF';
 $langViewAs = "View page as";
 $langCTeacher = "TEACHER";
 $langCStudent2 = "STUDENT";
+$langSummaryProfile = "SUMMARY PROFILE";

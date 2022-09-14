@@ -40,22 +40,24 @@
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                             <div class='panel panel-info'>
                                 <div class='panel-heading'>
-                                    {{ trans('langAutoEnrollRule') }} {{ $key + 1 }}
-                                    <div class='float-end'>
-                                    {!! action_button([
-                                        [
-                                            'title' => trans('langEditChange'),
-                                            'icon' => 'fa-edit',
-                                            'url' => "autoenroll.php?edit=" . getIndirectReference($rule['id'])
-                                        ],
-                                        [
-                                            'title' => trans('langDelete'),
-                                            'icon' => 'fa-times',
-                                            'url' => "autoenroll.php?delete=" . getIndirectReference($rule['id']),
-                                            'confirm' => trans('langSureToDelRule'),
-                                            'btn-class' => 'delete_btn btn-default'
-                                        ],
-                                    ]) !!}
+                                    <div class='row'>
+                                        <div class='col-6'><div class='panel-title'>{{ trans('langAutoEnrollRule') }} {{ $key + 1 }}</div></div>
+                                        <div class='col-6'><div class='text-end'>
+                                        {!! action_button([
+                                            [
+                                                'title' => trans('langEditChange'),
+                                                'icon' => 'fa-edit',
+                                                'url' => "autoenroll.php?edit=" . getIndirectReference($rule['id'])
+                                            ],
+                                            [
+                                                'title' => trans('langDelete'),
+                                                'icon' => 'fa-times',
+                                                'url' => "autoenroll.php?delete=" . getIndirectReference($rule['id']),
+                                                'confirm' => trans('langSureToDelRule'),
+                                                'btn-class' => 'delete_btn btn-default'
+                                            ],
+                                        ]) !!}
+                                        </div></div>
                                     </div>
                                 </div>
                                 <div class='panel-body'>

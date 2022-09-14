@@ -36,7 +36,7 @@ $data['action_bar'] = action_bar(
                                     'url' => 'registration.php',
                                     'icon' => 'fa-reply',
                                     'level' => 'primary-label',
-                                    'button-class' => 'btn-default'
+                                    'button-class' => 'btn-secondary'
                                 ]], false);
 
 $data['user_registration'] = get_config('user_registration');

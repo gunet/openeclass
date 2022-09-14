@@ -69,118 +69,118 @@
                                 </div>
                             </div>
 
-                            <div class="row p-2"></div>
+                            
 
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <label for='SurName' class='col-sm-6 control-label-notes'>{{ trans('langSurname') }}:</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' type='text' name='surname_form' size='30' maxlength='100' value = '{{ $user_data_lastname }}' placeholder='{{ trans('langSurname') }}'>
                                 </div>
                             </div>
 
-                            <div class="row p-2"></div>
+                            
 
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <label for='UserName' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}:</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' type='text' name='uname' value = '{{ $user_data_displayName }}' accept="" size='30' maxlength='100' autocomplete='off' placeholder='{{ trans('langUserNotice') }}'>
                                 </div>
                             </div>
 
-                            <div class="row p-2"></div>
+                            
 
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <label for='UserPass' class='col-sm-6 control-label-notes'>{{ trans('langPass') }}:</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off' id='password' placeholder='{{ trans('langUserNotice') }}'><span id='result'></span>
                                 </div>
                             </div>
 
-                            <div class="row p-2"></div>
+                            
 
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                             <label for='UserPass2' class='col-sm-6 control-label-notes'>{{ trans('langConfirmation') }}:</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' type='password' name='password' size='30' maxlength='30' autocomplete='off'/>
                                 </div>
                             </div>
 
-                            <div class="row p-2"></div>
+                            
 
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <label for='UserEmail' class='col-sm-6 control-label-notes'>{{ trans('langEmail') }}:</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' type='text' name='email' size='30' maxlength='100' value = '{{ $user_data_email }}' placeholder='{{ trans('email_message') }}'>
                                 </div>
                             </div>
 
-                            <div class="row p-2"></div>
+                            
 
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <label for='UserAm' class='col-sm-6 control-label-notes'>{{ trans('langAm') }}:</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' type='text' name='am' size='20' maxlength='20' value = '{{ $user_data_am }}' placeholder='{{trans ('am_message') }}'>
                                 </div>
                             </div>
 
-                            <div class="row p-2"></div>
+                            
 
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                                 <label for='UserPhone' class='col-sm-6 control-label-notes'>{{ trans('langPhone') }}:</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' type='text' name='phone' size='20' maxlength='20' value = '{{ $user_data_phone }}' placeholder='{{ trans('langOptional') }}'>
                                 </div>
                             </div>
 
-                            <div class="row p-2"></div>
+                           
 
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                             <label for='UserFac' class='col-sm-6 control-label-notes'>{{ trans('langFaculty') }}:</label>
                                 <div class='col-sm-12'>
                                     {!! $buildusernode !!}
                                 </div>
                             </div>
 
-                            <div class="row p-2"></div>
+                            
 
-                            <div class='form-group'>
+                            <div class='form-group mt-3'>
                             <label for='UserLang' class='col-sm-6 control-label-notes'>{{ trans('langLanguage') }}:</label>
                                 <div class='col-sm-12'>
                                     {!! $lang_select_options !!}
                                 </div>
                             </div>
                             @if ($display_captcha)
-                            <div class="row p-2"></div>
-                                <div class='form-group'>
+                            
+                                <div class='form-group mt-3'>
                                     <label for='captcha_code' class='col-sm-6 control-label-notes'>{{ trans('langCaptcha') }}:</label>
                                     <div class='col-sm-12'>{!! $captcha !!}</div>
                                 </div>
                             @endif
                             <!-- add custom profile fields -->
-                            <div class="row p-2"></div>
+
                             {!! $render_profile_fields_form !!}
 
                             <!-- check if provider_id from an authenticated user and a valid provider name are set so as to show the relevant form -->
                             @if(!empty($provider_name) && !empty($provider_id))
-                            <div class="row p-2"></div>
-                                <div class='form-group'>
+                            
+                                <div class='form-group mt-3'>
                                 <label for='UserLang' class='col-sm-6 control-label-notes'>{{ trans('langProviderConnectWith') }}:</label>
                                 <div class='col-sm-12'><p class='form-control-static'>
                                     <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "'>&nbsp;" . q(ucfirst($provider_name)) . "<br /><small>{{ trans('langProviderConnectWithTooltip') }}</small></p>
                                 </div>
 
-                                <div class="row p-2"></div>
+                               
 
-                                <div class='col-sm-offset-2 col-sm-10'>
+                                <div class='col-sm-offset-2 col-sm-10 mt-3'>
                                     <input type='hidden' name='provider' value= ' {{ $provider_name }}'>
                                     <input type='hidden' name='provider_id' value=' {{ $provider_id }}'>
                                 </div>
                                 </div>
                             @endif
 
-                            <div class="row p-2"></div>
                             
-                            <div class='form-group'>
+                            
+                            <div class='form-group mt-3'>
                                 <div class='col-sm-offset-2 col-sm-10'>
                                     <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
                                 </div>

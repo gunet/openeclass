@@ -28,7 +28,7 @@
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">{{ trans('langLogModules') }}:</label>
-                <div class="col-sm-10">{!! selection($module_names, 'u_module_id', '', "class='form-control'") !!}</div>
+                <div class="col-sm-10">{!! selection($module_names, 'u_module_id', '', "class='form-select'") !!}</div>
             </div>
             <div class="form-group">
                 <div class="col-sm-10 col-sm-offset-9">

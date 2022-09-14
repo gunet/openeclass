@@ -98,7 +98,7 @@
                                     <div class='panel panel-default'>
                                         <div class='panel-body Borders'>
                                             <a href="http://www.openeclass.org/" target="_blank">
-                                                <img class="img-responsive center-block m-auto d-block" src="/template/modern/img/open_eclass_banner.png" alt="Open eClass Banner">
+                                                <img class="img-responsive center-block m-auto d-block" src="{{ $themeimg }}/open_eclass_banner.png" alt="Open eClass Banner">
                                             </a>
                                         </div>
                                     </div>
@@ -137,7 +137,7 @@
                                     <div class='panel panel-default'>
                                         <div class='panel-body Borders'>
                                             <a href="http://www.openeclass.org/" target="_blank">
-                                                <img class="img-responsive center-block m-auto d-block" src="/template/modern/img/open_eclass_banner.png" alt="Open eClass Banner">
+                                                <img class="img-responsive center-block m-auto d-block" src="{{ $themeimg }}/open_eclass_banner.png" alt="Open eClass Banner">
                                             </a>
                                         </div>
                                     </div>
@@ -219,7 +219,7 @@
     @endif
 
 
-    <div class="container-fluid statistics mt-lg-3 mt-0">
+    <div class="container-fluid statistics @if($announcements) mt-lg-3 @else mt-lg-0 @endif mt-0">
         <div class='row rowMedium'>
             <div class="statistics-wrapper">
                 <h2 class="text-center pt-lg-0 pt-4">

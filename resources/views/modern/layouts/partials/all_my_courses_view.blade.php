@@ -7,12 +7,11 @@
 
             <div class='d-none d-md-block'>
                 <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-                    <div class='shadow-lg p-3 bg-body rounded bg-primary' style='height:70px;'>
+                    <div class='shadow-lg p-3 bg-body rounded' style='height:65px;'>
                         <span class='float-md-start pt-1'><i class="fas fa-graduation-cap text-warning"></i> <span class='control-label-notes'>{{ trans('langMyCourses') }}</span></span>
                         <span class='float-md-end'>
-                            <span class='text-secondary'>{{ trans('langRegCourses') }}:</span>
-                            <a class='btn btn-primary' href="{{ $urlAppend }}modules/auth/courses.php">
-                                <span class='fa fa-plus'></span>
+                            <a class='btn btn-sm btn-success rounded-5' href="{{ $urlAppend }}modules/auth/courses.php">
+                                <span class='fa fa-plus pe-2'></span>{{ trans('langRegCourses') }}
                             </a>
                         </span>
                     </div> 
@@ -116,7 +115,7 @@
                                             </span><span class="sr-only">{{trans('langAdm')}}</span>
                                         </a>
                                         @else
-                                        <button class='btn btn-danger' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
+                                        <button class='btn btn-sm btn-danger' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
                                             <i class="fas fa-remove-format"></i>
                                         </button>
                                         @endif

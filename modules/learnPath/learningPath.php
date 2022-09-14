@@ -210,12 +210,12 @@ $tool_content .= "</table></div></div>";
 // --------------------------- module table header --------------------------
 $tool_content .= "<div class='table-responsive'>";
 $tool_content .= "<table class='table-default'>";
-$tool_content .= "<tr class='list-header'><th class='text-white' colspan=\"" . ($maxDeep + 2) . "\"><div align=\"left\">&nbsp;&nbsp;<b>" . $langLearningPathStructure . "</b></div></th>\n";
+$tool_content .= "<tr class='list-header'><th class='text-white' colspan=\"" . ($maxDeep + 2) . "\"><div align=\"left\">" . $langLearningPathStructure . "</div></th>\n";
 
 
 // show only progress column for authenticated users
 if ($uid) {
-    $tool_content .= '<th class="text-white text-center"><b>' . $langProgress . '</b></th>' . "\n";
+    $tool_content .= '<th class="text-white text-center">' . $langProgress . '</th>' . "\n";
 }
 
 $tool_content .= "</tr>\n";

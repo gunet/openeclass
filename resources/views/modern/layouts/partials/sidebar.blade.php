@@ -54,8 +54,8 @@
                     @foreach ($tool_group[1] as $key2 => $tool)
                         <a href="{!! $tool_group[2][$key2] !!}" class='leftMenuToolCourse list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                             <div class='d-inline-flex align-items-center'>
-                                <span class="fa {{ $tool_group[3][$key2] }} fa-fw mt-1 colorOrange toolSidebarTxt pe-2"></span>
-                                <span class='toolSidebarTxt pt-1'>{!! $tool !!}</span>
+                                <span class="fa {{ $tool_group[3][$key2] }} fa-fw colorOrange toolSidebarTxt pe-2"></span>
+                                <span class='toolSidebarTxt'>{!! $tool !!}</span>
                             </div>
                                 
                         </a>

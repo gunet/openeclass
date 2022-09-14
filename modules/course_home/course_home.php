@@ -670,7 +670,7 @@ if ($total_cunits > 0) {
     $cunits_content .= "</div>";
 
 } else {
-    $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible text-center'> - $langNoUnits - </div></div></div>";
+    $cunits_content .= "<div class='not_visible text-center'> - $langNoUnits - </div>";
 }
 
 $data['cunits_content'] = $cunits_content;

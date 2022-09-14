@@ -50,8 +50,16 @@ input::placeholder , .form-select, .form-control{
 .colorPaletteBasic{
   color : #1d4e89;
 }
+.eclass-bg{
+  background-color : #1d4e89;
+  border-radius: 50%;
+}
 .colorOrange{
   color: #f79256;
+}
+
+.panel-phpinfo{
+  overflow-y: auto;
 }
 
 img {
@@ -122,7 +130,7 @@ a{
     width:100%;
 }
 
-.btn:focus,.btn:active{
+.btn:focus, .btn:active{
   outline: none !important;
   box-shadow: none;
 }

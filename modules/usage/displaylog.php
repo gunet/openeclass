@@ -199,7 +199,7 @@ if (isset($_GET['from_other'])) {
 if (!isset($_GET['from_other'])) {
     $tool_content .= '<div class="form-group mt-3">
             <label class="col-sm-6 control-label-notes">' . $langLogModules . ':</label>
-            <div class="col-sm-12"><select name="u_module_id" class="form-control">';
+            <div class="col-sm-12"><select name="u_module_id" class="form-select">';
     $tool_content .= "<option value='-1'>$langAllModules</option>";
     foreach ($modules as $m => $mid) {
         $extra = '';
@@ -274,7 +274,7 @@ if (!isset($_GET['from_other'])) {
       </div>
       <div class="form-group mt-3">  
         <label class="col-sm-6 control-label-notes">' . $langUser . ':</label>
-         <div class="col-sm-12"><select name="u_user_id" class="form-control">' . $user_opts . '</select></div>
+         <div class="col-sm-12"><select name="u_user_id" class="form-select">' . $user_opts . '</select></div>
       </div>';
 }
 

@@ -2333,11 +2333,11 @@ function new_assignment() {
                          $langWorkFile
                       </label>
                     </div>
-                    <div class='radio form-inline'>
-                      <label>
-                        <input type='radio' id='online_button' name='submission_type' value='2'" .
+                    <div class='radio'>
+                      <label class='col-12 radio d-inline-flex'>
+                        <input class='col-2' type='radio' id='online_button' name='submission_type' value='2'" .
                         ($submission_type == 2 ? ' checked' : '') .">
-                        $langWorkMultipleFiles " . selection(fileCountOptions(), 'fileCount', $fileCount) . "
+                        <div class='col-5'>$langWorkMultipleFiles</div><div class='col-5'>" . selection(fileCountOptions(), 'fileCount', $fileCount) . "</div>
                       </label>
                     </div>
                     <div class='radio'>
@@ -2460,13 +2460,13 @@ function new_assignment() {
                             </tr>
                             <tr>
                               <td>
-                                <select class='form-control' id='assign_box' size='10' multiple></select>
+                                <select class='form-select' id='assign_box' size='10' multiple></select>
                               </td>
                               <td class='text-center'>
                                 <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                               </td>
                               <td width='40%'>
-                                <select class='form-control' id='assignee_box' name='ingroup[]' size='10' multiple></select>
+                                <select class='form-select' id='assignee_box' name='ingroup[]' size='10' multiple></select>
                               </td>
                             </tr>
                         </table>
@@ -3512,7 +3512,7 @@ function show_edit_assignment($id) {
                             </tr>
                             <tr>
                               <td>
-                                <select class='form-control' id='assign_box' size='10' multiple>
+                                <select class='form-select' id='assign_box' size='10' multiple>
                                 ".((isset($unassigned_options)) ? $unassigned_options : '')."
                                 </select>
                               </td>
@@ -3520,7 +3520,7 @@ function show_edit_assignment($id) {
                                 <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                               </td>
                               <td>
-                                <select class='form-control' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                <select class='form-select' id='assignee_box' name='ingroup[]' size='10' multiple>
                                 ".((isset($assignee_options)) ? $assignee_options : '')."
                                 </select>
                               </td>

@@ -79,11 +79,11 @@ $tool_content .= '<div class="form-group mt-3">
   </div>
   <div class="form-group mt-3">  
     <label class="col-sm-6 control-label-notes">' . $langUser . ':</label>
-     <div class="col-sm-12"><select name="u_user_id" class="form-control">' . $user_opts . '</select></div>
+     <div class="col-sm-12"><select name="u_user_id" class="form-select">' . $user_opts . '</select></div>
   </div>
   <div class="form-group mt-3">  
     <label class="col-sm-6 control-label-notes">' . $langInterval . ':</label>
-     <div class="col-sm-12"><select name="u_interval" class="form-control">' . $statsIntervalOptions . '</select></div>
+     <div class="col-sm-12"><select name="u_interval" class="form-select">' . $statsIntervalOptions . '</select></div>
   </div>
   <div class="col-sm-offset-2 col-sm-10">    
     <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">

@@ -19,7 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== 
  */
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 require_once 'include/lib/course.class.php';
@@ -37,9 +39,9 @@ load_js('jstree3');
 
 if (isset($_POST['submit'])) { 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();   
-    $newdepip = isset($_POST['newdepid']) ? arrayValuesDirect($_POST['newdepid']) : array();
+    $newdepip = isset($_POST['newdepid']) ? $_POST['newdepid'] : array();
     foreach ($_POST['lessons'] as $cId) {
-        $course->refresh($cId, arrayValuesDirect($_POST['newdepid']));
+        $course->refresh($cId, $_POST['newdepid']);
     }
     //Session::Messages($langModifDone, 'alert-success');
     Session::flash('message',$langModifDone); 

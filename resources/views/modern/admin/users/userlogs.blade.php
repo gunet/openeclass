@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="form-group mt-3">
                                     <label class="col-sm-6 control-label-notes">{{ trans('langLogModules') }}:</label>
-                                    <div class="col-sm-12">{!! selection($module_names, 'u_module_id', '', "class='form-control'") !!}</div>
+                                    <div class="col-sm-12">{!! selection($module_names, 'u_module_id', '', "class='form-select'") !!}</div>
                                 </div>
                                 <div class="form-group mt-3">
                                     <div class="col-sm-10 col-sm-offset-9">

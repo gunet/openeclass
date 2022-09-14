@@ -17,7 +17,7 @@
                         </div>
                         <div class="col-xl-4 col-md-7 col-2 pe-0">
                             <div class="collapse-details-button" data-bs-toggle="collapse" data-bs-target=".user-details-collapse" aria-expanded="false" onclick="switch_user_details_toggle()" >
-                                <span class="user-details-collapse-more fs-lg-5 fs-6 float-end"> <span class='hidden-xs text-primary mt-2'>{{ trans('langMoreInfo') }}</span> <i class="fas fa-chevron-down"></i> </span>
+                                <span class="user-details-collapse-more fs-lg-5 fs-6 float-end"> <span class='hidden-xs text-primary text-uppercase mt-2'>{{ trans('langMore') }}</span> <i class="fas fa-chevron-down"></i> </span>
                                 <span class="user-details-collapse-less fs-lg-5 fs-6 float-end"> <span class='hidden-xs text-primary text-uppercase mt-2'>{{ trans('langViewHide') }}</span> <i class="fas fa-chevron-up"></i> </span>
                             </div>
                         </div>
@@ -262,33 +262,10 @@
                 </div>
                 @endif
 
-                {{-- Courses List --}}
-
                 <div id="cources-bars" class="container-fluid">
                     <div class='row rowMedium'>
 
                     {!! $perso_tool_content['lessons_content'] !!}
-
-                    {{-- <div class="row cources-bars-page" id="cources-bars-page-1">
-                        @foreach($_SESSION['courses'] as $i => $cource )
-                        <div class="col-12">
-                            <div class="lesson">
-                                <h3 class="lesson-title">
-                                    <a class="lesson_title_a" style="text-decoration:none;" href="{{$urlAppend}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
-                                    <span class="lesson-id">({{ $cource->code }})</span>
-                                </h3>
-                                <div class="lesson-professor">{{ $cource->prof_names }}</div>
-                            </div>
-                            <hr>
-                        </div>
-                            @if( $i>0 && ($i+1)%$items_per_page==0 )
-                    </div>
-                    <div class="row cources-bars-page" style="display:none" id="cources-bars-page-{{ceil($i/$items_per_page)+1}}" >
-                            @endif
-                        @endforeach
-                    </div>
-                    @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'bars', 'cource_pages' => $cource_pages])
-                        --}}
 
                     <div class='d-flex justify-content-center'>
                         <a class="BtnCourseRegister mt-5" href="{{$urlServer}}modules/auth/courses.php">{{ trans('langRegCourses') }} <span class="ps-1 fa fa-arrow-right"></span></a>
@@ -307,9 +284,9 @@
                                     <a href="{{$urlServer}}courses/{{$cource->code}}/index.php">
                                     <picture>
                                         @if($cource->course_image == NULL)
-                                            <img class="imageCourse" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $cource->course_image }}" /></a>
+                                            <img class="imageCourse mb-md-2 mb-0" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $cource->course_image }}" /></a>
                                         @else
-                                            <img class="imageCourse" src="{{$urlAppend}}courses/{{$cource->code}}/image/{{$cource->course_image}}" alt="{{ $cource->course_image }}" /></a>
+                                            <img class="imageCourse mb-md-2 mb-0" src="{{$urlAppend}}courses/{{$cource->code}}/image/{{$cource->course_image}}" alt="{{ $cource->course_image }}" /></a>
                                         @endif
                                     </picture>
                                 </figure>
@@ -317,7 +294,7 @@
                                     <a href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
                                     <span class="lesson-id text-secondary">({{ $cource->public_code }})</span>
                                 </h6>
-                                <div class="lesson-professor text-secondary">{{ $cource->professor }}</div>
+                                <div class="lesson-professor text-secondary mt-0">{{ $cource->professor }}</div>
                             </div>
                             <hr>
                         </div>
@@ -343,18 +320,21 @@
 
             <div class="container-fluid user-announcements-portfolio bg-white border border-secondary-4 shadow-sm mt-lg-3 mt-md-4 mt-4">
                 <div class='row rowMedium'>
-                    <div class='control-label-notes text-center p-2'>{{ trans('langMyPersoAnnouncements') }}</div>
-                    <hr class='text-primary mt-0'>
-                    <div class='ps-3 pb-3 pe-3'>
+                    <div class='control-label-notes text-center p-2 fw-bold'>{{ trans('langMyPersoAnnouncements') }}</div>
+                    <hr class='text-primary mt-0 mb-0'>
+                    <div class='ps-3 pe-3'>
                         @if($user_announcements_exist)
                            {!! $user_announcements !!}
                         @else
-                           <div class='text-center'><span class='text-title not_visible'> - {{trans('langNoRecentAnnounce')}} - </span></div>
+                           <div class='text-center p-2'><span class='text-title not_visible'> - {{trans('langNoRecentAnnounce')}} - </span></div>
                         @endif
                     </div>
                     <hr class='text-primary mb-0'>
-                    <div class='text-center text-primary fw-bold fs-6 p-2'>
-                        <a href="{{$urlAppend}}modules/announcements/myannouncements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span></a>
+                    <div class='p-2'>
+                        <a href="{{$urlAppend}}modules/announcements/myannouncements.php" class='btn btn-sm eclass-bg mt-0 float-end' data-bs-toggle='tooltip' 
+                        data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllAnnouncements') }}">
+                            <span class='fa fa-arrow-right text-white'></span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -362,14 +342,17 @@
 
             <div class="container-fluid user-messages-portfolio bg-white border border-secondary-4 shadow-sm mt-lg-3 mt-md-4 mt-4">
                 <div class='row rowMedium'>
-                    <div class='control-label-notes text-center p-2'>{{ trans('langMyPersoMessages') }}</div>
-                    <hr class='text-primary mt-0'>
-                    <div class='ps-3 pb-3 pe-3'>
+                    <div class='control-label-notes text-center p-2 fw-bold'>{{ trans('langMyPersoMessages') }}</div>
+                    <hr class='text-primary mt-0 mb-0'>
+                    <div class='ps-3 pe-3'>
                             {!! $user_messages !!}
                     </div>
                     <hr class='text-primary mb-0'>
-                    <div class='text-center text-primary fw-bold fs-6 p-2'>
-                        <a href="{{$urlAppend}}modules/message/index.php">{{ trans('langAllMessages') }} <span class='fa fa-arrow-right'></span></a>
+                    <div class='p-2'>
+                        <a href="{{$urlAppend}}modules/message/index.php" class='btn btn-sm eclass-bg mt-0 float-end' data-bs-toggle='tooltip' 
+                        data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllMessages') }}">
+                            <span class='fa fa-arrow-right text-white'></span>
+                        </a>
                     </div>
                 </div>
             </div>

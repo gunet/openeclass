@@ -190,7 +190,7 @@ load_js('datatables');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#course_results_table').DataTable ({
-                ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
+                ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell text-center', 'aTargets':[-1]}],":"")."
                 'bProcessing': true,
                 'bServerSide': true,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',

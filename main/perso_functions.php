@@ -241,7 +241,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
  */
 function getUserMessages() {
 
-    global $uid, $urlServer, $langFrom, $dateFormatLong;
+    global $uid, $urlServer, $langFrom, $dateFormatLong, $langDropboxNoMessage;
 
     $message_content = '';
 
@@ -259,7 +259,7 @@ function getUserMessages() {
             $message_date = format_locale_date($message->timestamp);
             $message_content .= "<li class='list-group-item p-2'>
                                     <div class='item-wholeline'>
-                                        <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
+                                        <div class='text-title'>$langFrom: ".display_user($message->author_id, false, false)."<br>
                                             <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
                                         </div>
                                         <div class='text-secondary'>$course_title</div>
@@ -273,7 +273,7 @@ function getUserMessages() {
         $message_content .= "<li class='list-group-item p-2'>
             <div class='item-wholeline'>
                 <div class='text-title text-center'>
-                     - Δεν υπάρχουν πρόσφατα μηνύματα -
+                     - $langDropboxNoMessage -
                 </div>
             </div>
         </li>";

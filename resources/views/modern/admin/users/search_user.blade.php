@@ -79,26 +79,27 @@
                             <div class='form-group mt-3'>
                                 <label class='col-sm-6 control-label-notes'>{{ trans('langUserType') }}:</label>
                                 <div class='col-sm-12'>
-                                    {!! selection($usertype_data, 'user_type', 0, 'class="form-control"') !!}
+                                    {!! selection($usertype_data, 'user_type', 0, 'class="form-select"') !!}
                                 </div>
                             </div>
                       
                             <div class='form-group mt-3'>
                                 <label class='col-sm-6 control-label-notes'>{{ trans('langAuthMethod') }}:</label>
                                 <div class='col-sm-12'>
-                                    {!! selection($authtype_data, 'auth_type', 0, 'class="form-control"') !!}
+                                    {!! selection($authtype_data, 'auth_type', 0, 'class="form-select"') !!}
                                 </div>
                             </div>
                    
                             <div class='form-group mt-3'>
                                 <label class='col-sm-6 control-label-notes'>{{ trans('langRegistrationDate') }}:</label>
-                                
-                                    <div class='col-sm-12'>
-                                        {!! selection(['1' => trans('langAfter'), '2' => trans('langBefore')], 'reg_flag', $reg_flag, 'class="form-control"') !!}
-                                    </div>
-                                    <div class='mt-2 col-sm-12'>       
-                                        <input class='form-control' name='user_registered_at' id='id_user_registered_at' type='text' value='{{ $user_registered_at }}' placeholder='{{ trans('langRegistrationDate') }}'>
-                                    </div>   
+                                    <div class='row'>
+                                        <div class='col-6'>
+                                            {!! selection(['1' => trans('langAfter'), '2' => trans('langBefore')], 'reg_flag', $reg_flag, 'class="form-select"') !!}
+                                        </div>
+                                        <div class='col-6'>       
+                                            <input class='form-control' name='user_registered_at' id='id_user_registered_at' type='text' value='{{ $user_registered_at }}' placeholder='{{ trans('langRegistrationDate') }}'>
+                                        </div> 
+                                    </div> 
                                 
                             </div>
                          
@@ -112,7 +113,7 @@
                             <div class='form-group mt-3'>
                                 <label class='col-sm-6 control-label-notes'>{{ trans('langEmailVerified') }}:</label>
                                 <div class='col-sm-12'>
-                                    {!! selection($verified_mail_data, 'verified_mail', $verified_mail, 'class="form-control"') !!}
+                                    {!! selection($verified_mail_data, 'verified_mail', $verified_mail, 'class="form-select"') !!}
                                 </div>
                             </div>
                       

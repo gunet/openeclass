@@ -38,11 +38,11 @@ function table_row($title, $content, $html = false) {
     $extra = $html? '': ' style="white-space: pre-wrap"';
     if (strlen(trim($content))) {
         $tool_content .= "
-                        <div class='row margin-bottom-fat'>
-                            <div class='col-sm-3'>
-                                <strong>$title:</strong>
+                        <div class='row p-2 margin-bottom-fat'>
+                            <div class='col-sm-4'>
+                                <strong class='control-label-notes'>$title:</strong>
                             </div>
-                            <div class='col-sm-9'$extra>$content
+                            <div class='col-sm-8'$extra>$content
                             </div>
                         </div>";
     }

@@ -77,32 +77,50 @@
                                                         <ul class="list-group list-group-flush">
                                                             <li class="list-group-item border-0 admin-list-group">
                                                                 <a href="search_user.php" class='list-group-item'>
-                                                                    <span class='toolAdminText'>{{ trans('langSearchUser') }}</span>      
+                                                                    <div class='d-inline-flex'>
+                                                                        <span class='fa fa-caret-right fa-fw mt-1 text-warning'></span>
+                                                                        <span class='toolAdminText'>{{ trans('langSearchUser') }}</span>
+                                                                    </div>     
                                                                 </a>
                                                             </li>
                                                             <li class="list-group-item border-0 admin-list-group">
                                                                 <a href="searchcours.php" class='list-group-item'>
-                                                                    <span class='toolAdminText'>{{ trans('langSearchCourse') }}</span>      
+                                                                    <div class='d-inline-flex'>
+                                                                        <span class='fa fa-caret-right fa-fw mt-1 text-warning'></span>
+                                                                        <span class='toolAdminText'>{{ trans('langSearchCourse') }}</span> 
+                                                                    </div>     
                                                                 </a>
                                                             </li>
                                                             <li class="list-group-item border-0 admin-list-group">
                                                                 <a href="hierarchy.php" class='list-group-item'>
-                                                                    <span class='toolAdminText'>{{ trans('langHierarchy') }}</span>      
+                                                                    <div class='d-inline-flex'>
+                                                                        <span class='fa fa-caret-right fa-fw mt-1 text-warning'></span>
+                                                                        <span class='toolAdminText'>{{ trans('langHierarchy') }}</span>  
+                                                                    </div>    
                                                                 </a>
                                                             </li>
                                                             <li class="list-group-item border-0 admin-list-group">
                                                                 <a href="eclassconf.php" class='list-group-item'>
-                                                                    <span class='toolAdminText'>{{ trans('langConfig') }}</span>      
+                                                                    <div class='d-inline-flex'>
+                                                                        <span class='fa fa-caret-right fa-fw mt-1 text-warning'></span>
+                                                                        <span class='toolAdminText'>{{ trans('langConfig') }}</span>   
+                                                                    </div>   
                                                                 </a>
                                                             </li>
                                                             <li class="list-group-item border-0 admin-list-group">
                                                                 <a href="theme_options.php" class='list-group-item'>
-                                                                    <span class='toolAdminText'>{{ trans('langThemeSettings') }}</span>      
+                                                                    <div class='d-inline-flex'>
+                                                                        <span class='fa fa-caret-right fa-fw mt-1 text-warning'></span>
+                                                                        <span class='toolAdminText'>{{ trans('langThemeSettings') }}</span>  
+                                                                    </div>    
                                                                 </a>
                                                             </li>
                                                             <li class="list-group-item border-0 admin-list-group">
                                                                 <a href="extapp.php" class='list-group-item'>
-                                                                    <span class='toolAdminText'>{{ trans('langExternalTools') }}</span>      
+                                                                    <div class='d-inline-flex'>
+                                                                        <span class='fa fa-caret-right fa-fw mt-1 text-warning'></span>
+                                                                        <span class='toolAdminText'>{{ trans('langExternalTools') }}</span>  
+                                                                    </div>    
                                                                 </a>
                                                             </li>
                                                         </ul>

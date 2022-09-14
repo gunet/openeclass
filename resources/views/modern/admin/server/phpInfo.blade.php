@@ -15,7 +15,7 @@
             @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
             
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                <div class='alert alert-danger'>
+                <div class='alert alert-danger panel-phpinfo'>
                     {!! phpinfo() !!}
                 </div>
             </div>

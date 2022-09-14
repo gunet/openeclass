@@ -212,10 +212,10 @@ if (isset($_GET['all'])) {
                           </td>
                           <td class='text-center'>
                               <div class='form-group'>
-                                  <input class='btn btn-default' type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' />
+                                  <input class='btn btn-sm btn-secondary' type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' />
                               </div>
-                              <div class='form-group'>
-                                  <input class='btn btn-default' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
+                              <div class='form-group mt-2'>
+                                  <input class='btn btn-sm btn-secondary' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
                               </div>
                           </td>
                           <td class='text-end'>
