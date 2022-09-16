@@ -169,7 +169,7 @@
                         <div class='col-12 ps-md-5 pe-md-5 pt-md-0 mb-5'>
                             <div class='row rowMedium'>
                                 <div class='col-12'>
-                                    <div class='panel panel-default bg-dark text-center p-2'>
+                                    <div class='panel panel-default openCoursesPanel text-center p-2'>
                                         <a class='text-white' href='http://opencourses.gr' target='_blank'>
                                             {{ trans('langNationalOpenCourses') }}
                                         </a>

@@ -301,6 +301,7 @@ function view($view_file, $view_data = array()) {
             .notes_thead, .list-header{background: $theme_options_styles[leftNavBgColor];} 
             .menu-popover .list-group-item{background: $theme_options_styles[leftNavBgColor];}
             .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{background: red;}
+            .openCoursesPanel{background:$theme_options_styles[leftNavBgColor];}
             @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
         }
         if (!empty($theme_options_styles['linkColor'])) $styles_str .= "a {color: $theme_options_styles[linkColor];}";
@@ -325,7 +326,8 @@ function view($view_file, $view_data = array()) {
         .notes_thead, .list-header{background: #1d4e89;}
         .menu-popover .list-group-item{background: #1d4e89; color:#DBE8F9;}
         .menu-popover .list-group-item:hover{background: blue;}
-        .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{background: red;}";
+        .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{background: red;}
+        .openCoursesPanel{background:#1d4e89;}";
     }
 
     $sidebar_courses = Database::get()->queryArray("SELECT id, code, title, prof_names, public_code
