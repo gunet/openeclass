@@ -188,13 +188,6 @@ $data['action_bar'] = action_bar(array(
 $data['perso_tool_content'] = $perso_tool_content;
 $data['user_announcements'] = $user_announcements;
 
-if(!empty($user_announcements)){
-   $data['user_announcements_exist'] = true;
-}else{
-    $data['user_announcements_exist'] = false;
-}
-
-
 $data['portfolio_page_main_widgets'] = '';
 $portfolio_page_main = new \Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
 foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {

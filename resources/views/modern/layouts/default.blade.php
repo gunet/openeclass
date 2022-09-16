@@ -103,7 +103,7 @@
     @stack('head_scripts')
 
 </head>
-
+<?php //print_r($styles_str); echo('<br>'); print_r('leftsideIMG:'.$leftsideImg);?>
 <body>
 
     <div class="d-flex flex-column min-vh-100 {{ $container }}">

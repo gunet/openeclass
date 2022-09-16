@@ -39,6 +39,12 @@ input::placeholder , .form-select, .form-control{
   line-height: 25px;
 }
 
+.tool-sidebar{
+  color: #f79256;
+}
+.tool-sidebar-text{
+  color:white;
+}
 .text-warning{
   color:#f79256 !important;
 }
@@ -77,6 +83,10 @@ img {
   border: 0 none;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
+  min-height:147px;
+}
+.eclass-nav-icon{
+  width:132px; height:123px;
 }
 
 .bg-eclass-default{
@@ -381,9 +391,9 @@ input[type="checkbox"]{
     border:solid 2px #1d4e89;
     background-color: #1d4e89;
     color:#fbd1a2;
-    display:flex;
+    /* display:flex;
     justify-content:center;
-    align-items:center;
+    align-items:center; */
   }
   .BtnMoreInfoAdmin.collapsed .fa-arrow-down{
     transform: rotate(180deg);
@@ -535,7 +545,7 @@ input[type="checkbox"]{
     border-radius: 50%;
     border:0px;
   }
-  
+
   /* --------------------------------------------- MyDropdowns ----------------------------------------*/
   /* ------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------------------------------------------------- */
@@ -816,7 +826,7 @@ input[type="checkbox"]{
   }
 
   .list-header{
-    background: #466289;
+    background:#1d4e89;
   }
 
   tr.active{
@@ -881,7 +891,6 @@ input[type="checkbox"]{
   .jumbotron.jumbotron-login{
       background-repeat: no-repeat; background-size: cover;
       background-image: url(../images/books.jpeg);
-      /* background-image: url('/courses/theme_data/7/dhmiourgia-e-class-psd.jpg'), radial-gradient(closest-corner at 30% 60%, rgb(0, 11, 255), rgb(139, 131, 169)) */
   }
 
   .login-form-Homepage{
@@ -908,7 +917,7 @@ input[type="checkbox"]{
   .homepageIntroPanel img{
      margin:auto;
      display: block;
-     padding: 15px;
+     padding: 10px;
   }
   /******************************************************************************************************/
   /******************************************************************************************************/
@@ -1071,7 +1080,7 @@ input[type="checkbox"]{
     border-radius:15px;
   }
   @media(max-width:991px){
-    .statistics:before {border-radius:0px;}
+    .statistics:before{border-radius:0px;}
   }
   
   .statistics i {
@@ -1180,7 +1189,7 @@ input[type="checkbox"]{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
   }
-  
+
   .site-footerMobile {
     background: #001146;
     border-top-left-radius: 15px;
@@ -1226,7 +1235,7 @@ input[type="checkbox"]{
   /* -------------------------------------------------------------------------------------------------*/
 
   .notes_thead{
-    background: #466289;;
+    background:#1d4e89;
   }
 
   .control-label-notes{
@@ -1280,12 +1289,10 @@ input[type="checkbox"]{
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/  
   
-  .bootbox-close-button.close{
-      background-color: black;
-      color:white;
-      font-size:18px;
-      border:0;
-      width:35px;
+  .bootbox-close-button{
+     display: flex;
+     align-items: center;
+     justify-content: center;
   }
   .menu-popover{
     background: #DCDCDC;
@@ -1298,12 +1305,12 @@ input[type="checkbox"]{
   }
 
   .menu-popover .list-group-item{
-    background: #466289;
+    background: #1d4e89;
     color:#DBE8F9;
   }
   
   .menu-popover .list-group-item:hover{
-      background: #333;
+      background: blue;
   }
   .menu-popover .delete.confirmAction:hover{
     background: red;
@@ -1338,7 +1345,11 @@ input[type="checkbox"]{
   .modal-title{
     font-size: 18px;
   }
-  
+
+  .rating{
+    margin-bottom: 0px !important;
+  }
+
   /* -------------------------------------------- BUTTONS  ------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1387,7 +1398,7 @@ input[type="checkbox"]{
     background: linear-gradient(180deg,#DCDCDC 0%,rgb(255, 0, 0) 49%, rgb(255, 0, 0) 51%,rgba(255, 0, 0, 0.963) 100%);
     border-radius: 0px;
     width: 100%;
-    text-align: center;
+    text-align: left;
   }
 
   .btn.btn-success{
@@ -1998,8 +2009,15 @@ input[type="checkbox"]{
 
   @media (max-width:991px){
     .col_maincontent_active, .col_maincontent_active_Homepage{
-      min-height: calc(100vh - 50px - 46px);
+      min-height: calc(100vh - 56px - 54px);
       border-radius:0px;
+    }
+    .navbar-eclass{
+      border-radius: 0px;
+      min-height: 56px;
+    }
+    .eclass-nav-icon{
+      width:46px; height:34px;
     }
     .container, .container-fluid{
       padding: 0;
@@ -2011,7 +2029,7 @@ input[type="checkbox"]{
       border: 1px solid #001146;
     }
 
-    .navbar-eclass, .site-footerMobile, .border-15px, .BordersTop, .user-courses{
+    .site-footerMobile, .border-15px, .BordersTop, .user-courses{
       border-radius: 0px;
     }
     .Announcements-Homepage{
@@ -2254,7 +2272,11 @@ input[type="checkbox"]{
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* -------------------------------------------------------mobile - portrait-----------------------------------------------*/
-  
+  @media(max-width:425px){
+    .login-main-form{
+      width:252px;
+    }
+  }
   @media (min-width:376px) and (max-width: 425px){
 
     .login-form-Homepage{

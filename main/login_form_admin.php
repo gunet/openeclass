@@ -27,11 +27,11 @@ $pageName = $langAdminLoginPage;
 
 $tool_content .= "  
 <div class='col-sm-12'>  
-  <div class='panel panel-admin login-page'>
+  <div class='panel panel-admin login-page rounded-0'>
     <div class='panel-heading'>
       <div class='panel-title p-0 text-white text-center'>$langUpgDetails</div>
     </div>
-    <div class='panel-body login-page-option'>
+    <div class='panel-body login-page-option rounded-0'>
       <form class='form-horizontal' role='form' action='$urlServer' method='post'>
         <div class='form-group mt-3'>
           <div class='col-12'>
@@ -44,7 +44,7 @@ $tool_content .= "
           </div>
         </div>
         <div class='form-group mt-3'>
-          <div class='col-12'>
+          <div class='col-12 d-flex justify-content-md-start justify-content-center'>
             <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit' value='submit'>$langAdminLoginPage</button>
           </div>
         </div>

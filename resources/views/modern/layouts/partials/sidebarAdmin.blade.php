@@ -51,7 +51,7 @@
                             <a href="{{$urlAppend}}modules/admin/adminannouncements.php" class='list-group-item'>
                                 <div class='d-inline-flex'>
                                     <span class='fa fa-caret-right fa-fw mt-1 text-warning'></span>
-                                    <span class='toolAdminText'>{!!  $GLOBALS['langAdminAn'] !!}</span>  \
+                                    <span class='toolAdminText'>{!!  $GLOBALS['langAdminAn'] !!}</span>
                                 </div>    
                             </a>
                         </li>

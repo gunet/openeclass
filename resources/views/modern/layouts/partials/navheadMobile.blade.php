@@ -5,7 +5,7 @@
             <div class="btn-group w-100" role="group" aria-label="Basic example">
 
                 @if(!get_config('hide_login_link'))
-                <a type="button" href="{{ $urlServer }}"><img class="eclass-nav-icon ps-1 pe-2" src={{$logo_img_small}}></a>
+                <a class='d-flex justify-content-center align-items-center' type="button" href="{{ $urlServer }}"><img class="eclass-nav-icon ps-1 pe-2" src="{{$logo_img_small}}"></a>
                 @endif
                 <a type="button" class="btn btn-transparent text-white pt-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib"></i></a>
                 <a type='button' class="btn btn-transparent text-white pt-2" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-university"></i></a>

@@ -38,14 +38,14 @@
     @endif
 
     <div class="panel-group accordion mt-5" id="sidebar-accordion">
-        <div class="panel bg-transparent">
+        <div class="panel">
             @foreach ($toolArr as $key => $tool_group)
                 <a id="Tool{{$key}}" class="collapsed parent-menu mt-5" data-bs-toggle="collapse" href="#collapse{{ $key }}">
                     <div class="panel-sidebar-heading">
                         <div class="panel-title h3">
                             <div class='d-inline-flex align-items-center'>
-                                <span class="fa fa-chevron-right ms-1 text-warning"></span>
-                                <span class='text-wrap text-white mt-1 ps-2'>{{ $tool_group[0]['text'] }}</span>
+                                <span class="fa fa-chevron-right ms-1 tool-sidebar"></span>
+                                <span class='text-wrap tool-sidebar-text mt-1 ps-2'>{{ $tool_group[0]['text'] }}</span>
                             </div>
                         </div><hr class='text-white'>
                     </div>
@@ -54,7 +54,7 @@
                     @foreach ($tool_group[1] as $key2 => $tool)
                         <a href="{!! $tool_group[2][$key2] !!}" class='leftMenuToolCourse list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                             <div class='d-inline-flex align-items-center'>
-                                <span class="fa {{ $tool_group[3][$key2] }} fa-fw colorOrange toolSidebarTxt pe-2"></span>
+                                <span class="fa {{ $tool_group[3][$key2] }} fa-fw tool-sidebar toolSidebarTxt pe-2"></span>
                                 <span class='toolSidebarTxt'>{!! $tool !!}</span>
                             </div>
                                 

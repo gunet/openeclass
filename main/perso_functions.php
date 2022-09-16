@@ -121,7 +121,7 @@ function getUserLessonInfo($uid) {
  */
 function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') {
 
-    global $urlAppend, $dateFormatLong, $langAdminAn;
+    global $urlAppend, $dateFormatLong, $langAdminAn, $langNoRecentAnnounce;
 
     if ($type == 'more') {
         $sql_append = '';
@@ -194,7 +194,9 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
         // Ολες οι τελευταιες ανακοινωσεις εμφανιζονται οταν πατησει ο χρηστης το κουμπι.
         $counterAn = 0;
         $ann_content = '';
-        $ann_content .= "<ul class='list-group list-group-flush'>";
+        if($q){
+           $ann_content .= "<ul class='list-group list-group-flush'>";
+        }
         foreach ($q as $ann) {
             if ($counterAn <= 1){
                 if (isset($ann->code) & $ann->code != '') {
@@ -230,7 +232,9 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
             }
             $counterAn++;
         }
-        $ann_content .= "</ul>";
+        if($q){
+            $ann_content .= "</ul>";
+        }
         return $ann_content;
     }
 }

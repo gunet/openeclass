@@ -222,7 +222,7 @@
                                 @endif
 
                                 <div class='col-sm-12 d-flex justify-content-center mt-5'>
-                                    <a class="BtnMoreInfoAdmin" data-bs-toggle="collapse" href="#collapseMoreInfoAdmin" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    <a class="d-flex justify-content-center align-items-center BtnMoreInfoAdmin" data-bs-toggle="collapse" href="#collapseMoreInfoAdmin" role="button" aria-expanded="false" aria-controls="collapseExample">
                                         <span class='text-uppercase'>{{trans('langMore')}} <span class='fa fa-arrow-down'></span>
                                     </a>
                                 </div>

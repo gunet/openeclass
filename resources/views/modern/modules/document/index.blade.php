@@ -96,22 +96,24 @@
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
                             <div class='panel'>
                                 <div class='panel-body bg-light'>
-                                    @if ($curDirName)
-                                        <div class='float-end'>
-                                            <a href='{{$parentLink}}' type='button' class='btn btn-success btn-sm'>
-                                                <span class='fa fa-level-up'></span>&nbsp;{{ trans('langUp') }}
-                                            </a>
+                                    <div class='row'>
+                                        <div class='col-9 d-flex justidy-content-center align-items-center'>
+                                            {!! make_clickable_path($curDirPath) !!}
+                                            @if ($downloadPath)
+                                                &nbsp;&nbsp;{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
+                                            @endif
+                                            @if ($curDirName and $dirComment)
+                                                {{ $dirComment }}
+                                            @endif
                                         </div>
-                                    @endif
-                                    <div>
-                                        {!! make_clickable_path($curDirPath) !!}
-                                        @if ($downloadPath)
-                                        &nbsp;&nbsp;{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
-                                        @endif
+                                        <div class='col-3 text-end'>
+                                            @if ($curDirName)
+                                                <a href='{{$parentLink}}' type='button' class='btn btn-success btn-sm'>
+                                                    <span class='fa fa-level-up'></span>&nbsp;{{ trans('langUp') }}
+                                                </a>
+                                            @endif
+                                        </div>
                                     </div>
-                                    @if ($curDirName and $dirComment)
-                                        <div>{{ $dirComment }}</div>
-                                    @endif
                                 </div>
                             </div>
                         </div>

@@ -60,7 +60,7 @@ function view($view_file, $view_data = array()) {
             $require_help, $professor, $helpTopic, $helpSubTopic, $head_content, $toolName, $themeimg, $navigation,
             $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
             $require_editor, $langHomePage,
-            $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user;
+            $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg;
 
     if (!isset($course_id) or !$course_id) {
         $course_id = $course_code = null;
@@ -254,12 +254,13 @@ function view($view_file, $view_data = array()) {
     $container = 'container';
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
     $styles_str = '';
-    if ($theme_id) {
+    $leftsideImg = '';
+    if ($theme_id and $theme_id!=0) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
 
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
-        $styles_str = '';
+        $styles_str .= ".colorPalette{color:#ffffff;} .menu-popover .delete.confirmAction{background: red;}";
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
             $background_type = "";
             if (isset($theme_options_styles['bgType']) && $theme_options_styles['bgType'] == 'stretch') {
@@ -273,10 +274,13 @@ function view($view_file, $view_data = array()) {
         }
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
-        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str }";
+        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; border:solid 1px #000000;}";
         if (isset($theme_options_styles['loginImgPlacement']) && $theme_options_styles['loginImgPlacement']=='full-width') {
             // $styles_str .= ".jumbotron.jumbotron-login {background-size: cover, cover; background-position: 0% 0%;}";
-            $styles_str .= ".jumbotron.jumbotron-login {background-repeat: no-repeat; background-size: cover; border-top-left-radius:15px border-bottom-left-radius-15xp;}";
+            $styles_str .= ".jumbotron.jumbotron-login {background-repeat: no-repeat; background-size: cover;}";
+        }else{
+            $leftsideImg .= "1";
+            $styles_str .= ".jumbotron.jumbotron-login{border-top-right-radius:0px;}";
         }
         //$styles_str .= ".jumbotron.jumbotron-login {  background-size: 353px, cover; background-position: 10% 60%;}";
         if (isset($theme_options_styles['fluidContainerWidth'])){
@@ -290,19 +294,38 @@ function view($view_file, $view_data = array()) {
             $rgba_no_alpha = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
             $rgba_no_alpha[3] = '1';
             $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
-            $styles_str .= "#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer, #collapseTools{background:$theme_options_styles[leftNavBgColor];} @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
+            $styles_str .= ".offcanvas-header,.offcanvas-body,#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer, #collapseTools, .panel-admin, #cal-header,
+            .admin-list-group .list-group-item:hover{background:$theme_options_styles[leftNavBgColor];}
+            .tool-sidebar{color:#ffffff;} 
+            .statistics:before{background: $theme_options_styles[leftNavBgColor];}
+            .notes_thead, .list-header{background: $theme_options_styles[leftNavBgColor];} 
+            .menu-popover .list-group-item{background: $theme_options_styles[leftNavBgColor];}
+            .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{background: red;}
+            @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
         }
         if (!empty($theme_options_styles['linkColor'])) $styles_str .= "a {color: $theme_options_styles[linkColor];}";
         if (!empty($theme_options_styles['linkHoverColor'])) $styles_str .= "a:hover, a:focus {color: $theme_options_styles[linkHoverColor];}";
         if (!empty($theme_options_styles['leftSubMenuFontColor'])) $styles_str .= "#leftnav .panel a {color: $theme_options_styles[leftSubMenuFontColor];}";
-        if (!empty($theme_options_styles['leftSubMenuHoverBgColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{background: $theme_options_styles[leftSubMenuHoverBgColor];}";
+        if (!empty($theme_options_styles['leftSubMenuHoverBgColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover, .menu-popover .list-group-item:hover{background: $theme_options_styles[leftSubMenuHoverBgColor];} #leftnav .panel a.list-group-item.active:hover{background:#ccc;}";
         if (!empty($theme_options_styles['leftSubMenuHoverFontColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{color: $theme_options_styles[leftSubMenuHoverFontColor];}";
         if (!empty($theme_options_styles['leftMenuFontColor'])) $styles_str .= "#leftnav .panel a.parent-menu{color: $theme_options_styles[leftMenuFontColor];}";
         if (!empty($theme_options_styles['leftMenuBgColor'])) $styles_str .= "#leftnav .panel a.parent-menu{background: $theme_options_styles[leftMenuBgColor];}";
-        if (!empty($theme_options_styles['leftMenuHoverFontColor'])) $styles_str .= "#leftnav .panel .panel-heading:hover {color: $theme_options_styles[leftMenuHoverFontColor];}";
+        if (!empty($theme_options_styles['leftMenuHoverFontColor'])) $styles_str .= "#leftnav .panel .panel-sidebar-heading:hover {color: $theme_options_styles[leftMenuHoverFontColor];}";
         if (!empty($theme_options_styles['leftMenuSelectedFontColor'])) $styles_str .= "#leftnav .panel a.parent-menu:not(.collapsed){color: $theme_options_styles[leftMenuSelectedFontColor];}";
         if (isset($theme_options_styles['imageUpload'])) $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
         if (isset($theme_options_styles['imageUploadSmall'])) $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
+    }else{
+        $styles_str .= "#background-cheat-leftnav,#bgr-cheat-header{background:#1d4e89;}
+        #leftnav{background:transparent;}
+        #bgr-cheat-footer{background: #001146;} a{color:#0275d8;}
+        #leftnav .panel a.list-group-item:hover{background: blue;}
+        #leftnav .panel a.list-group-item.active:hover{background: #ccc;}
+        .offcanvas{background:#1d4e89;}
+        .statistics:before{background: #001146;}
+        .notes_thead, .list-header{background: #1d4e89;}
+        .menu-popover .list-group-item{background: #1d4e89; color:#DBE8F9;}
+        .menu-popover .list-group-item:hover{background: blue;}
+        .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{background: red;}";
     }
 
     $sidebar_courses = Database::get()->queryArray("SELECT id, code, title, prof_names, public_code
@@ -349,7 +372,7 @@ function view($view_file, $view_data = array()) {
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
-            'logo_url_path');
+            'logo_url_path','leftsideImg');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();
@@ -514,8 +537,8 @@ function lang_selections() {
         return ('&nbsp;');
     }
     $lang_select = "
-      <a class='d-none d-sm-none d-md-none d-lg-block btn btn-primary' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
-          <span class='fa fa-globe pt-1'></span>
+      <a class='d-none d-sm-none d-md-none d-lg-block d-flex justify-content-center align-items-center btn btn-primary' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
+          <span class='fa fa-globe'></span>
       </a>
       <a class='d-block d-sm-block d-md-block d-lg-none btn btn-transparent text-white pt-2' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
           <span class='fa fa-globe'></span>

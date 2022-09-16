@@ -323,11 +323,12 @@
                     <div class='control-label-notes text-center p-2 fw-bold'>{{ trans('langMyPersoAnnouncements') }}</div>
                     <hr class='text-primary mt-0 mb-0'>
                     <div class='ps-3 pe-3'>
-                        @if($user_announcements_exist)
-                           {!! $user_announcements !!}
+                        @if(empty($user_announcements))
+                            <div class='text-center p-2'><span class='text-title not_visible'> - {{ trans('langNoRecentAnnounce') }} - </span></div>
                         @else
-                           <div class='text-center p-2'><span class='text-title not_visible'> - {{trans('langNoRecentAnnounce')}} - </span></div>
+                            {!! $user_announcements !!}
                         @endif
+                      
                     </div>
                     <hr class='text-primary mb-0'>
                     <div class='p-2'>

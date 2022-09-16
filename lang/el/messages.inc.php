@@ -5584,7 +5584,7 @@ $langLoginConfiguration = "Ρυθμίσεις Οθόνης Σύνδεσης";
 $langLoginBgGradient = "Gradient φόντου οθόνης σύνδεσης";
 $langLoginImg = "Εικόνα οθόνης σύνδεσης";
 $langLoginBanner = "Banner Open eClass Οθόνης Σύνδεσης";
-$langLoginImgPlacementSmall = "Μικρή (αριστερή στοίχιση)";
+$langLoginImgPlacementSmall = "Μικρή (κεντρική στοίχιση)";
 $langLoginImgPlacementFull = "Πλήρους Πλάτους (πλάτος: 1091px, ύψος: 315px)";
 $langThemeOptionsName = "Όνομα Ρυθμίσεων Θέματος";
 

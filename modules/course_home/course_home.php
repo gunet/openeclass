@@ -648,11 +648,11 @@ if ($total_cunits > 0) {
                     <div class='col-sm-12 bg-transparent'>
 
                         <button class='carousel-prev-btn' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='prev'>
-                            <span class='fa fa-arrow-left text-danger'></span>
+                            <span class='d-flex justify-content-center align-items-center fa fa-arrow-left text-danger'></span>
                         </button>";
 
         $cunits_content .=  "<button class='carousel-next-btn float-end' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='next'>
-                                  <span class='fa fa-arrow-right text-danger'></span>
+                                  <span class='d-flex justify-content-center align-items-center fa fa-arrow-right text-danger'></span>
                         </button>
                 
                     </div>";

@@ -2,23 +2,23 @@
 
     <div class="container-fluid">
 
-            <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0">
+            <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 pb-2">
                 <a class="navbar-brand" href="{{ $urlAppend }}"><img class="eclass-nav-icon" src="{{ $logo_img }}"/></a>
             </div>
 
             <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-0 col-sm-0 col-0">
 
-                <div class='row p-2'>
+                <div class='row pt-0 ps-2 pe-2 pb-0'>
                     <div class='d-flex justify-content-end'>
                         <div class="col-lg-4 col-xl-3 d-flex justify-content-end">
                             <form action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
                                 <div class="input-group mb-3">
                                     @if(get_config('enable_search'))
                                         <input id="search_terms" type="text" class="border-0 form-control outline-0 text-white inputSearch " name="search_terms" placeholder="{{ trans('langSearch') }}..." aria-describedby="basic-inputSearch">
-                                        <button id="btn-search" class="btn btn-primary" type="submit" name="quickSearch"><i class="fa fa-search text-white"></i></button>
+                                        <button id="btn-search" class="d-flex justify-content-center align-items-center btn btn-primary" type="submit" name="quickSearch"><i class="fa fa-search text-white"></i></button>
                                     @endif
                                     @if (!isset($_SESSION['uid']))
-                                        <a class='btn btn-primary' href="{{$urlAppend}}main/login_form.php"><span class="fa fa-lock pt-1"></span></a>
+                                        <a class='d-flex justify-content-center align-items-center btn btn-primary' href="{{$urlAppend}}main/login_form.php"><span class="fa fa-lock"></span></a>
                                     @endif
                                     {!! lang_selections() !!}
                                 </div>
@@ -28,7 +28,7 @@
                 </div>
 
 
-                <div class='row p-2 mt-3'>
+                <div class='row ps-2 pt-2 pe-2 pb-1 mt-3'>
 
                     <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 @if (isset($_SESSION['uid'])) mt-2 @else mt-1 @endif">
                         @if(!get_config('hide_login_link'))
@@ -46,14 +46,14 @@
                                     (isset($is_power_user) and $is_power_user) or
                                     (isset($is_usermanage_user) and ($is_usermanage_user)) or
                                     (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                                    <a id="AdminToolBtn" type="button" class="btn btn-primary" aria-haspopup="true"
+                                    <a id="AdminToolBtn" type="button" class="btn btn-primary d-flex justify-content-center align-items-center" aria-haspopup="true"
                                             aria-expanded="false" data-bs-toggle="tooltip" data-bs-placement="left"
-                                            title="{{trans('langAdminTool')}}" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench text-white pt-1"></i>
+                                            title="{{trans('langAdminTool')}}" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench text-white"></i>
                                     </a>
                                 @endif
 
                                 <div class="btn-group" role="group">
-                                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle user-menu-btn"
+                                    <button id="btnGroupDrop1" type="button" class="d-flex justify-content-center align-items-center btn btn-primary dropdown-toggle user-menu-btn"
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                         <span><img class="user-icon-filename" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}"
                                                 alt="{{ $uname }}">{{ $uname }}</span>

@@ -138,7 +138,7 @@
                                     <div class='col-12 course-below-wrapper mt-2'>
                                         <div class='row text-muted course-below-info'>
 
-                                            <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-12 d-flex justify-content-md-start justify-content-center">
+                                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 d-flex justify-content-md-start justify-content-center">
                                                 <a role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
                                                     <span class='fa fa-chevron-right fa-fw'></span>
                                                     <span class='ps-1'>{{ trans('langCourseDescription') }}</span>
@@ -151,7 +151,7 @@
 
 
                                             @if ($course_info->course_license)
-                                                <div class="col-12 d-flex justify-content-end mt-2">{!! copyright_info($course_id) !!}</div>
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mt-md-0 mt-2 d-flex justify-content-end">{!! copyright_info($course_id) !!}</div>
                                             @endif
                                             <div class='col-12'>
                                                 <div class='collapse shadow-sm p-3 bg-body rounded' id='collapseDescription'>
@@ -172,27 +172,62 @@
                                         </div>
                                     </div>
                                 @endif
-
                             </div>
 
-
                             @if(isset($rating_content) || isset($social_content) || isset($comment_content))
-                                <div class='panel-footer p-0'>
+                                <div class='panel-footer mt-0 mb-0 p-0'>
                                     <div class='row'>
-                                        @if(isset($rating_content))
-                                            <div class='col-xl-4 col-lg-4 col-md-4 col-12 mt-md-3 mt-3'>
-                                                <div class='p-2 d-flex justify-content-lg-start justify-content-center'>{!! $rating_content !!}</div>
+                                        @if(isset($rating_content) and isset($social_content) and isset($comment_content))
+                                            <div class='col-md-4 col-12 d-flex justify-content-md-start justify-content-center align-items-center'>
+                                                <div class='ps-3 pb-2 pt-2 pe-2'>{!! $rating_content !!}</div>
                                             </div>
-                                        @endif
-                                        @if(isset($comment_content))
-                                            <div class='col-xl-4 col-lg-3 col-md-3 col-12 mt-md-3 mt-3 @if(!isset($social_content)) mb-md-0 mb-3 @endif'>
-                                                <div class='p-2 d-flex justify-content-center'>{!! $comment_content !!}</div>
+                                            <div class='col-md-4 col-12 d-flex justify-content-center align-items-center'>
+                                                <div class='p-2'>{!! $comment_content !!}</div>
                                             </div>
-                                        @endif
-                                        @if(isset($social_content))
-                                            <div class='col-xl-4 col-lg-5 col-md-5 col-12 mt-md-2 mt-3'>
-                                                <div class='p-2 d-flex justify-content-lg-end justify-content-center'>{!! $social_content !!}</div>
+                                            <div class='col-md-4 col-12 d-flex justify-content-md-end justify-content-center align-items-center'>
+                                                <div class='p-2'>{!! $social_content !!}</div>
                                             </div>
+
+                                        @elseif(isset($rating_content) and isset($comment_content) and !isset($social_content))
+                                            <div class='col-md-8 col-12 d-flex justify-content-md-start justify-content-center align-items-center'>
+                                                <div class='ps-3 pt-2 pb-2 pe-2'>{!! $rating_content !!}</div>
+                                            </div>
+                                            <div class='col-md-4 col-12 d-flex justify-content-md-end justify-content-center align-items-center'>
+                                                <div class='ps-3 pt-2 pb-2 pe-3'>{!! $comment_content !!}</div>
+                                            </div>
+
+                                        @elseif(isset($rating_content) and isset($social_content) and !isset($comment_content))
+                                            <div class='col-md-7 col-12 d-flex justify-content-md-start justify-content-center align-items-center'>
+                                                <div class='ps-3 pt-2 pb-2 pe-2'>{!! $rating_content !!}</div>
+                                            </div>
+                                            <div class='col-md-5 col-12 col-12 d-flex justify-content-md-end justify-content-center align-items-center'>
+                                                <div class='ps-3 pt-2 pb-2 pe-2'>{!! $social_content !!}</div>
+                                            </div>
+
+                                        @elseif(isset($comment_content) and isset($social_content) and !isset($rating_content))
+                                            <div class='col-md-6 col-12 d-flex justify-content-md-start justify-content-center align-items-center'>
+                                                <div class='ps-3 pt-2 pb-2 pe-2'>{!! $comment_content !!}</div>
+                                            </div>
+                                            <div class='col-md-6 col-12 col-12 d-flex justify-content-md-end justify-content-center align-items-center'>
+                                                <div class='ps-3 pt-2 pb-2 pe-2'>{!! $social_content !!}</div>
+                                            </div>
+
+                                        @else
+                                            @if(isset($rating_content))
+                                                <div class='col-12 d-flex justify-content-md-start justify-content-center align-items-center'>
+                                                    <div class='ps-3 pt-2 pb-2 pe-2'>{!! $rating_content !!}</div>
+                                                </div>
+                                            @endif
+                                            @if(isset($comment_content))
+                                                <div class='col-12 d-flex justify-content-md-start justify-content-center align-items-center'>
+                                                    <div class='ps-3 pt-2 pb-2 pe-2'>{!! $comment_content !!}</div>
+                                                </div>
+                                            @endif
+                                            @if(isset($social_content))
+                                                <div class='col-12 d-flex justify-content-md-start justify-content-center align-items-center'>
+                                                    <div class='ps-3 pt-2 pb-2 pe-2'>{!! $social_content !!}</div>
+                                                </div>
+                                            @endif
                                         @endif
                                     </div>
                                 </div>

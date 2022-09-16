@@ -5,8 +5,8 @@
     </button>
     <ul class="p-0 m-0 dropdown-menu manage-course-ul shadow-lg border border-secondary" aria-labelledby="dropdownManageCourse">
         <li class='manage-course-li-active border-bottom border-secondary text-center p-2'>
-            <span class="d-inline fas fa-bank fs-6 colorPalette"></span>
-            <span class="d-inline fs-6 fw-bold colorPalette"> {{trans('langModifyInfo')}}</span>
+            <span class="d-inline fas fa-bank fs-6 text-white"></span>
+            <span class="d-inline fs-6 text-white"> {{trans('langModifyInfo')}}</span>
         </li>
         <li class="manage-course-li border-0">
             <a href="{{ $urlAppend }}modules/course_info/index.php?course={{$coursePrivateCode}}" class="list-group-item border border-top-0 border-bottom-secondary text-dark fw-bold">
