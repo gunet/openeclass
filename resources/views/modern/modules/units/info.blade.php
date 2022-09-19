@@ -139,15 +139,6 @@
                                                     <input type="text" class="form-control" id='unitdurationto' name='unitdurationto' value='{{ $finish_week }}' aria-label="{{ $finish_week }}" aria-describedby="basic-addon2">
                                                 </div>
                                             </div>
-
-                                            <!-- <label for='unitduration' class='control-label-notes'>{{ trans('langFrom2') }}</label>
-                                            <div class='col-sm-5'>
-                                                <input type='text' class='form-control' id='unitdurationfrom' name='unitdurationfrom' value='{{ $start_week }}'>
-                                            </div>
-                                            <label for='unitduration' class='control-label-notes'>{{ trans('langUntil') }}</label>
-                                            <div class='col-sm-5'>
-                                                <input type='text' class='form-control' id='unitdurationto' name='unitdurationto' value='{{ $finish_week }}'>
-                                            </div>    -->
                                         </div>                     
                                     </div>
 

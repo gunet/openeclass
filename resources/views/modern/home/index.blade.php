@@ -270,18 +270,6 @@
     </div>
 
 <script>
-    // $('.testimonials').slick({
-	// 	autoplay:true,
-	// 	autoplaySpeed:1500,
-	// 	centerMode: true,
-	// 	centerPadding: '25vw',
-	// 	slidesToShow: 1,
-	// 	responsive: [{
-	// 		breakpoint: 4000,
-	// 		settings: { centerPadding: '15vw', }
-	// 	}]
-	// });
-
 
     $('.owl-carousel').owlCarousel({
             center: true,

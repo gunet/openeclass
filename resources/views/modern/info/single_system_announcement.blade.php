@@ -21,19 +21,19 @@
 
                     
                     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="panel panel-default">
-                            <div class='panel-heading'>
+                        <div class="panel panel-default rounded-0">
+                            <div class='panel-heading rounded-0'>
                                 <span class='control-label-notes'>{!! $title !!}</span>
                             </div>
                         
-                            <div class="panel-body">
+                            <div class="panel-body rounded-0">
                                 <div class="single_announcement">
                                     <div class='announcement-main'>
                                         {!! $body !!}
                                     </div>
                                 </div>
                             </div>
-                            <div class='panel-footer d-flex justify-content-end'>
+                            <div class='panel-footer d-flex justify-content-end rounded-0'>
                                 <div class="text-end info-date">
                                      {!! $date !!} 
                                 </div>

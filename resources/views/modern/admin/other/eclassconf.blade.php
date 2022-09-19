@@ -1286,10 +1286,6 @@
 
     $(function() {
         
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!! IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // AFIX DOESNT EXIST IN BOOTSTRAP 5 ANYMORE. SHOW WE WILL USE SCROLLSPY //
-        /////////////////////////////////////////////////////////////////////////
-
         /* Check if we are in safari and fix Bootstrap Affix*/
         if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
             var stickywidget = $('#floatMenu');
@@ -1503,16 +1499,6 @@
             $('#collapse-toolboxHomepage').collapse('hide');
             $('#collapse-externalHomepage').collapse('hide');
         })
-        // $('.checkbox_toolbox').on('click',function(){
-        //     $('#collapse-toolboxHomepage').collapse('show');
-        //     $('#collapse-defaultHomepage').collapse('hide');
-        //     $('#collapse-externalHomepage').collapse('hide');
-        // })
-        // $('.checkbox_external').on('click',function(){
-        //     $('#collapse-externalHomepage').collapse('show');
-        //     $('#collapse-defaultHomepage').collapse('hide');
-        //     $('#collapse-toolboxHomepage').collapse('hide');
-        // })
     });
 
 </script>

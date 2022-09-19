@@ -1,8 +1,3 @@
-<?php 
-    $lesson = Database::get()->querySingle("SELECT * FROM `course` WHERE `course`.`title`='{$title_course}' ");
-    $course_code_title = $lesson->code;  
-    $course_Teacher = $lesson->prof_names;
-?>
 @extends('layouts.default')
 
 @section('content')

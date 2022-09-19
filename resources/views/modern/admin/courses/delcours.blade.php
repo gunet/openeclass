@@ -47,7 +47,6 @@
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                         <ul class='list-group'>
                             <li class='list-group-item'>
-                                <!-- <a href='{{ $_SERVER['SCRIPT_NAME'] }}?c={{ getIndirectReference($course_id) }}&amp;delete=yes&amp;{{ generate_csrf_token_link_parameter() }}' {!! $asktotp !!}> -->
                                 <a href='{{ $_SERVER['SCRIPT_NAME'] }}?c={{ $course_id }}&amp;delete=yes&amp;{{ generate_csrf_token_link_parameter() }}' {!! $asktotp !!}>
                                 <b>{{ trans('langYes') }}</b>
                                 </a>

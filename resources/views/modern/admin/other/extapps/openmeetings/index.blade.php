@@ -75,7 +75,7 @@
                         </table>
                     </div>
                     @else
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                        <div class='col-12'>
                             <div class='alert alert-warning'>{{ trans('langNoAvailableBBBServers') }}</div>
                         </div>
                     @endif  

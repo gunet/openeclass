@@ -35,47 +35,18 @@ $(document).ready(function(){
         javascript:window.history.back();
     });
 	
-
-    /////////////////////////////// play testinomonials ////////////////////////////////////////////////////////////////////////
-
-  	// $('.testimonials').slick({
-	// 	autoplay:true,
-	// 	autoplaySpeed:1500,
-	// 	centerMode: true,
-	// 	centerPadding: '25vw',
-	// 	slidesToShow: 1,
-	// 	responsive: [{
-	// 		breakpoint: 3840,
-	// 		settings: { centerPadding: '15vw', }
-	// 	}]
-	// });
-
-
     
     /////////////////////////////////////////////////// initial datatable /////////////////////////////////////////////////
 
-	// $('#cources-bars-button2').trigger('click');
 	$('#courses_table_pag').DataTable();
-	// $('#mynotes_table').DataTable();
-	// $('#myannouncements_table').DataTable();
-	// $('#glossary_table').DataTable();
-	// $('.user-menu-collapse-more').trigger('click');
-	// $('.user-menu-collapse-less').show();
-	// $('.user-menu-collapse-more').hide();
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     /////////////////////////////////////////////////////// call functions /////////////////////////////////////////////////
 
 	act_confirm();
     tooltip_init();
     popover_init();
-	//open_document();
     truncate_toggle('.more_less_btn', '#truncated', '#not_truncated', '#descr_content');
     validator_rubric();
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 });
 

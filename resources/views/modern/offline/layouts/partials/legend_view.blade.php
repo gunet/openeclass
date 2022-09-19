@@ -14,7 +14,6 @@
                                 </div>
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <!-- <span class='fas fa-university text-warning pe-2'></span>{{$currentCourseName}} -->
                                         <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                     </span>
                                 </div>
@@ -27,7 +26,6 @@
                             @else
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <!-- <span class='fas fa-university text-warning pe-2'></span>{{$currentCourseName}} -->
                                         <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                     </span>
                                 </div>
@@ -51,7 +49,6 @@
                                 </div>
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <!-- <span class='fas fa-university text-warning pe-2'></span>{{$currentCourseName}} -->
                                         <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                     </span>
                                 </div>
@@ -64,7 +61,6 @@
                             @else
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <!-- <span class='fas fa-university text-warning pe-2'></span>{{$currentCourseName}} -->
                                         <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                     </span>
                                 </div>
@@ -129,7 +125,6 @@
                                                     </div>
                                                     <div class='col-10'>
                                                         <span class='control-label-notes fs-6'>
-                                                            <!-- {{$currentCourseName}} -->
                                                             <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                                         </span>
                                                     </div>
@@ -215,7 +210,6 @@
                                                     </div>
                                                     <div class='col-10'>
                                                         <span class='control-label-notes fs-6'>
-                                                            <!-- {{$currentCourseName}} -->
                                                             <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                                         </span>
                                                     </div>

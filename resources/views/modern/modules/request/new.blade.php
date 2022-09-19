@@ -77,7 +77,6 @@
                                             <span class="text-black-50 form-control-static">{{ $creatorName }}</span>
 
                                         </label>
-                                        <!-- <p class='form-control-static'>{{ $creatorName }}</p>  -->
                                     </div>
                                 </div>
 

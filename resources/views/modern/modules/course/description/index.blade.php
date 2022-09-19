@@ -101,15 +101,6 @@
                                                         )
                                                 ) !!}
 
-                                                <!-- <div class="btn-group" role="group" aria-label="Basic example">
-                                                    <a type="button" class="btn btn-secondary" href="edit.php?course={{$course_code}}&amp;id={{getIndirectReference($course_desc->id)}}"><i class="fas fa-edit" style="color:white"></i> {{trans('langEditChange')}}</a>
-                                                    <a type="button" class="btn btn-secondary" href="index.php?course={{$course_code}}&amp;vis={{getIndirectReference($course_desc->id)}}">@if($course_desc->visible == 0)<i class="fas fa-eye"></i>{{trans('langAddToCourseHome')}}@else<i class="fas fa-eye-slash"></i>{{trans('langRemoveFromCourseHome')}}@endif</a>
-                                                    <a type="button" class="btn btn-danger" href="index.php?course={{$course_code}}&amp;del={{getIndirectReference($course_desc->id)}}"><i class="fas fa-trash" style="color:white"></i> {{trans('langDelete')}}</a>
-                                                    <a type="button" class="btn btn-secondary" href="index.php?course={{$course_code}}&amp;up={{getIndirectReference($course_desc->id)}}"><i class="fas fa-arrow-up"></i> {{trans('langUp')}}</a>
-                                                    <a type="button" class="btn btn-secondary" href="index.php?course={{$course_code}}&amp;down={{getIndirectReference($course_desc->id)}}"><i class="fas fa-arrow-down"></i> {{trans('langDown')}}</a>
-                                                </div> -->
-
-
                                                 </div>
                                             @endif
                                             <h3 class='panel-title'>

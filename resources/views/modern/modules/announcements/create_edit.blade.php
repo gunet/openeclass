@@ -113,16 +113,16 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row p-2"></div>
+                                        
 
-                                                    <div class='form-group'>
+                                                    <div class='form-group mt-3'>
                                                         <label for='AnnBody' class='col-sm-4 control-label-notes'>{{ trans('langAnnBody') }}:</label>
                                                         <div class='col-sm-12'>{!! $contentToModify !!}</div>
                                                     </div>
 
-                                                    <div class="row p-2"></div>
+                                                  
 
-                                                    <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-12 control-label-notes'>{{ trans('langEmailOption') }}:</label></div>
+                                                    <div class='form-group mt-3'><label for='Email' class='col-sm-offset-2 col-sm-12 control-label-notes'>{{ trans('langEmailOption') }}:</label></div>
                                                     <div class='form-group'>
                                                         <div class='col-sm-offset-2 col-sm-12'>
                                                             <select class='form-select' name='recipients[]' multiple='multiple' id='select-recipients'>
@@ -135,17 +135,11 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row p-2"></div>
+                                                    <div class="mt-3"></div>
                                                     {!! $tags !!}
-                                                    <div class="row p-2"></div>
+                                                    
 
-                                                    <!-- <div class='form-group'>
-                                                        <label for='Email' class='col-sm-offset-2 col-sm-12 control-panel'>{{ trans('langAnnouncementActivePeriod') }}:</label>
-                                                    </div>
-
-                                                    <div class="row p-2"></div> -->
-
-                                                    <div class='form-group {{ $startdate_error }}'>
+                                                    <div class='form-group {{ $startdate_error }} mt-3'>
                                                         <label for='startdate' class='col-sm-4 control-label-notes'>{{ trans('langStartDate') }} :</label>
                                                         <div class='col-sm-12'>
                                                             <div class='input-group'> 
@@ -158,9 +152,9 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row p-2"></div>
+                                                   
 
-                                                    <div class='form-group {{ $enddate_error }}'>
+                                                    <div class='form-group {{ $enddate_error }} mt-3'>
                                                         <label for='enddate' class='col-sm-4 control-label-notes'>{{ trans('langEndDate') }} :</label>
                                                         <div class='col-sm-12'>
                                                             <div class='input-group'>
@@ -173,9 +167,9 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row p-2"></div>
+                                                  
 
-                                                    <div class='form-group'>
+                                                    <div class='form-group mt-3'>
                                                         <div class='col-sm-12 col-sm-offset-2'>
                                                             <div class='checkbox'>
                                                                 <label>
@@ -185,9 +179,9 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row p-2"></div>
+                                          
 
-                                                    <div class='form-group'>
+                                                    <div class='form-group mt-3'>
 
                                                         <input type='hidden' name='id' value='{{ $announce_id }}'>
                                                         <input type='hidden' name='course' value='{{ $course_code }}'>

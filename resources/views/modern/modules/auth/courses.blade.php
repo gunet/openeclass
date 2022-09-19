@@ -1,9 +1,7 @@
-
-<?php //echo "<hr>"; //var_dump($data_all[5]);?>
 <?php
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////// Nα μην σβηστει //////////////////////////////////////////////////
+    ////////////////////////////////////////////////// WARNING!!! //////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       $all_registered_courses = array(); 
@@ -35,13 +33,6 @@
             }
       }
 
-      //print_r($myCourses[0]) 
-      //print_r($all_password[2]);
-      //print_r($all_registered_courses[0]);
-      //print_r($vis_class);
-      //print_r(strval( $all_registered_courses[0][0] ) )
-
-      
 ?>
 
 
@@ -262,14 +253,6 @@
                                 </form>
                             @endif
                                         
-                            
-                            <!-- <div class="col-xxl-4 col-xl-3 col-md-4 col-sm-6 col-xs-6 back_col_registerCourse">   
-                                <div class="row h-100">
-                                    <div class="col-sm-12 my-auto">
-                                            <button class="btn btn-dark back_btn_announcements1">{!! $action_bar !!}</button>
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
                     @endif
                         

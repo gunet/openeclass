@@ -4,7 +4,6 @@
 @section('content')
 
 <link rel='stylesheet' href='{{ $urlAppend }}js/bootstrap-select/bootstrap-select.min.css'>
-<!-- <script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-select/bootstrap-select.min.js'></script> -->
 <script src="{{ $urlAppend }}js/bootstrap-select/bootstrap5-select.min.js"></script>
 
 <script type='text/javascript'>
