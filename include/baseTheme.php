@@ -255,6 +255,7 @@ function view($view_file, $view_data = array()) {
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
     $styles_str = '';
     $leftsideImg = '';
+    $eclass_banner_value = 1;
     if ($theme_id and $theme_id!=0) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
@@ -289,6 +290,7 @@ function view($view_file, $view_data = array()) {
         }
         if (isset($theme_options_styles['openeclassBanner'])){
              $styles_str .= "#openeclass-banner {display: none;}";
+             $eclass_banner_value = 0;
         }
         if (!empty($theme_options_styles['leftNavBgColor'])) {
             $rgba_no_alpha = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
@@ -374,7 +376,7 @@ function view($view_file, $view_data = array()) {
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
-            'logo_url_path','leftsideImg');
+            'logo_url_path','leftsideImg','eclass_banner_value');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();

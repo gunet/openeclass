@@ -1192,6 +1192,9 @@ input[type="checkbox"]{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
   }
+  @media(min-width:992px){
+    .site-footer { min-height: 188.56px; }
+  }
 
   .site-footerMobile {
     background: #001146;
@@ -1446,11 +1449,13 @@ input[type="checkbox"]{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
+    font-weight:700;
   }
   .panel-admin>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
+    font-weight:700;
   }
   .panel-admin:has(.panel-footer) .panel-body{
     border:0px;
@@ -1484,11 +1489,13 @@ input[type="checkbox"]{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
+    font-weight:700;
   }
   .panel-primary>.panel-heading>.panel-title, .panel-action-btn-primary>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
+    font-weight:700;
   }
   .panel-primary:has(.panel-footer) .panel-body{
     border:0px;
@@ -1531,11 +1538,13 @@ input[type="checkbox"]{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
+    font-weight:700;
   }
   .panel-success>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
+    font-weight:700;
   }
   .panel-success:has(.panel-footer) .panel-body{
     border:0px;
@@ -1570,11 +1579,13 @@ input[type="checkbox"]{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
+    font-weight:700;
   }
   .panel-default>.panel-heading>.panel-title, .panel-action-btn-default>.panel-heading>.panel-title{
     color: #333;
     margin-bottom:0px;
     padding:0px;
+    font-weight:700;
   }
   .panel-default:has(.panel-footer) .panel-body{
      border-radius:0px;
@@ -1621,11 +1632,13 @@ input[type="checkbox"]{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
+    font-weight:700;
   }
   .panel-info>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
+    font-weight:700;
   }
   .panel-info:has(.panel-footer) .panel-body{
     border:0px;
@@ -1658,11 +1671,13 @@ input[type="checkbox"]{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
+    font-weight:700;
   }
   .panel-danger>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
+    font-weight:700;
   }
   .panel-danger:has(.panel-footer) .panel-body{
     border:0px;
@@ -1714,7 +1729,7 @@ input[type="checkbox"]{
     background: #ffffff;
   }
   .panel-title{
-    font-weight: 600;
+    font-weight: 700;
     font-size: 14px;
   }
 
@@ -1845,10 +1860,7 @@ input[type="checkbox"]{
      padding-left: 15px;
      padding-right: 15px;
      margin-top: 5px;
-     border-top-right-radius: 7px;
-     border-top-left-radius: 7px;
-     border-bottom-right-radius: 7px;
-     border-bottom-left-radius: 7px;
+     border-radius: 7px;
   }
   .float-end.label.label-success{
     width:125px;

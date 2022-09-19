@@ -56,13 +56,13 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
     $tool_content .= "
             <div class='panel panel-default qPanel mt-3' id='qPanel$questionId'>
               <div class='panel-heading'>
-                <h5 class='panel-title'>$langQuestion $qNumber
+                <h6 class='panel-title'>$langQuestion $qNumber
                     <small>($questionTypeWord &mdash; $questionWeight $message)</small>&nbsp;
                     <span title='$langHasAnswered' id='qCheck$question_number'></span>
-                </h5>
+                </h6>
             </div>
             <div class='panel-body'>
-                <h5>" . q_math($questionName) . "</h5>
+                <h6>" . q_math($questionName) . "</h6>
                 $questionDescription
                 <div class='text-center'>" .
                     (file_exists($picturePath . '/quiz-' . $questionId) ?

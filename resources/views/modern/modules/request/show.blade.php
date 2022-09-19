@@ -73,17 +73,17 @@
                             <div class='panel-heading'>
                                 <div class='row'>
                                     <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
-                                        <h5 class='text-dark text-start pt-1'>
+                                        <div class='panel-title text-start'>
                                             <span>
                                             {{ $request->title }}
                                             @if ($request->type_id)
                                                 <small> -> {{ $type->name }}</small>
                                             @endif
                                             </span>
-                                        </h5>
+                                        </div>
                                     </div>
                                     <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
-                                        <div class='announcement-date text-end text-success pt-1'>{{
+                                        <div class='announcement-date text-end info-date'>{{
                                             format_locale_date(strtotime($request->open_date)) }}
                                         </div>
                                     </div>

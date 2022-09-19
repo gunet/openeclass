@@ -113,7 +113,7 @@
                                                     <input class='form-control' type='text' name='URL'>
                                                 </div>
                                             @elseif (isset($_GET['id']) && isset($_GET['table_edit']) && $table_edit == 'videolink')
-                                                <label for='Url' class='col-sm-6 control-label-notes'>{{ trans('langURL') }}:</label>
+                                                <label for='Url' class='col-sm-12 control-label-notes'>{{ trans('langURL') }}:</label>
                                                 <div class='col-sm-12'>
                                                     <input class='form-control' type='text' name='url' value='{{ $edititem->url }}'>
                                                 </div>

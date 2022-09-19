@@ -52,7 +52,7 @@
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                             <div class='panel panel-default rounded-0'>
                                 <div class='panel-heading rounded-0'>
-                                   <div class='panel-title'>{!! $title !!}</div>
+                                   <div class='panel-title fw-bold'>{!! $title !!}</div>
                                 </div>
                                 <div class='panel-body rounded-0'>
                                     <span class='text-secondary'>{!! $content !!}</span>

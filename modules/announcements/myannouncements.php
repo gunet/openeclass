@@ -26,6 +26,13 @@ require_once 'main/perso.php';
 
 $pageName = $langMyPersoAnnouncements;
 
+if (isset($_GET['an_id'])) {
+    $head_content .= "<script type='text/javascript'>
+    $(document).ready(function() {
+        alert('okkkkkkkk');
+    }";
+}
+
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
     $limit = intval($_GET['iDisplayLength']);
@@ -83,7 +90,7 @@ $data['action_bar'] = action_bar([
         'url' => $urlAppend,
         'icon' => 'fa-reply',
         'level' => 'primary-label',
-        'button-class' => 'btn-default']
+        'button-class' => 'btn-secondary']
 ],false);
 
 
@@ -107,7 +114,7 @@ $head_content .= "
                 $('.table_td_body').each(function() {
                     $(this).trunk8({
                         lines: '3',
-                        fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"$_SERVER[SCRIPT_NAME] ? an_id = '+ $(this).data('id')+'\">$langMore</div>'
+                        fill: '&hellip;<div class=\"clearfix\"></div><a class=\"float-end\" href=\"$_SERVER[SCRIPT_NAME]?more=yes&an_id='+$(this).data('id')+'\">$langMore...</div>'
                     })
                 });
                 $('#ann_table_admin_logout_filter label input').attr({
@@ -140,4 +147,22 @@ $head_content .= "
 
 $data['menuTypeID'] = 1;
 
-view('modules.announcements.myann_index', $data);
+if(isset($_GET['more']) and $_GET['more'] == 'yes'){
+    $data['action_bar'] = action_bar([
+        ['title' => $langBack,
+            'url' => $_SERVER['SCRIPT_NAME'],
+            'icon' => 'fa-reply',
+            'level' => 'primary-label',
+            'button-class' => 'btn-secondary']
+    ],false);
+   $all_announcements = getUserAnnouncements($lesson_ids, 'more', 'to_ajax', $_GET['sSearch']);
+   foreach($all_announcements as $myann){
+        if($myann->id == $_GET['an_id']){
+            $data['announcement'] = $myann;
+        }
+   }
+   view('modules.announcements.more_announce',$data);
+}else{
+   view('modules.announcements.myann_index', $data); 
+}
+

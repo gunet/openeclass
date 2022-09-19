@@ -23,7 +23,7 @@
                         <div class='col-sm-12'>
                             <div class="panel panel-default rounded-0">
                                 <div class="panel-heading rounded-0">                   
-                                    <div class='panel-title'>{{$announcementsID->title}}</div>
+                                    <div class='panel-title fw-bold'>{{$announcementsID->title}}</div>
                                 </div>
                                 <div class="panel-body rounded-0">
                                     <span class="text-secondary">

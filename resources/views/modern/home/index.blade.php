@@ -14,7 +14,7 @@
                 <div class="row">
 
                     @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
-                        <div class='@if($leftsideImg) col-md-8 offset-md-2 col-12 mt-md-5 mt-0 rounded-0 border-0 @else BordersTop col-12 @endif card jumbotron jumbotron-login'>
+                        <div class='@if($leftsideImg) col-md-8 offset-md-2 col-12 mt-md-5 mt-0 rounded-0 border-0 @else @if(!get_config("homepage_title") and !get_config("homepage_intro") and !get_config("enable_mobileapi") and !get_config("opencourses_enable") and $eclass_banner_value == 0) Borders @else BordersTop @endif col-12 @endif card jumbotron jumbotron-login'>
                             <div class='row'>
                                 @if($warning)<div class='col-12 mt-4 mb-0'>{!! $warning !!}</div>@endif
                                 <div class='@if($leftsideImg) col-12 @else col-xl-6 col-lg-7 col-md-8 col-12 @endif'>
@@ -95,7 +95,7 @@
                         <div class='col-12 ps-md-5 pe-md-5 pt-md-0 pt-5 mb-5'>
                         @endif
                             <div class='row rowMedium'>
-                                <div class='col-md-6 col-12'>
+                                <div class='col-md-6 col-12' id='openeclass-banner'>
                                     <div class='panel panel-default'>
                                         <div class='panel-body Borders'>
                                             <a href="http://www.openeclass.org/" target="_blank">
@@ -104,7 +104,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class='col-md-6 col-12 mt-md-0 pt-md-0 pt-5'>
+                                <div class='@if($eclass_banner_value != 0) col-md-6 col-12 @else col-12 @endif mt-md-0 pt-md-0 pt-5'>
                                     <div class='panel panel-default'>
                                         <div class='panel-body Borders'>
                                             <div class='col-12'>
@@ -129,9 +129,9 @@
                         </div>
                     @else
                         @if(!get_config('homepage_title') and !get_config('homepage_intro'))
-                        <div class='col-12 ps-md-5 pe-md-5 pt-md-5 pt-5 mb-5'>
+                        <div class='col-12 ps-md-5 pe-md-5 pt-md-5 pt-5 mb-5' id='openeclass-banner'>
                         @else
-                        <div class='col-12 ps-md-5 pe-md-5 pt-md-0 pt-5 mb-5'>
+                        <div class='col-12 ps-md-5 pe-md-5 pt-md-0 pt-5 mb-5' id='openeclass-banner'>
                         @endif
                             <div class='row rowMedium'>
                                 <div class='col-12'>
@@ -206,7 +206,7 @@
                                 <div class="date">
                                     {{ format_locale_date(strtotime($announcement->date)) }}
                                 </div>
-                                <div class="title"><a class="announcement-title-a" href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>{{$announcement->title}}</a></div>
+                                <div class="title"><a class="fs-6" href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>{{$announcement->title}}</a></div>
                             </div>
                             @endif
                         @php $counterAn++; @endphp
