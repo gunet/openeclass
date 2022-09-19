@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="row">
-    <div class="col-xs-4">
+    <div class="col-4">
         <h3 class="content-title">{{ trans('langInstalledWidgets') }}</h3>
         <hr>
         @if (count($installed_widgets))
@@ -56,7 +56,7 @@
         </div>       
         @endif      
     </div>    
-    <div class="col-xs-8">
+    <div class="col-8">
         @include('admin.widgets.common.courseHomeMain')
         @include('admin.widgets.common.courseHomeSide')                   
     </div>    

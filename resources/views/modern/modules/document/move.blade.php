@@ -20,7 +20,7 @@
                     </div>
                     <div class="row p-2"></div>
                     <div class='form-group'>
-                        <div class='col-xs-offset-2 col-xs-10'>
+                        <div class='col-offset-2 col-10'>
                             <button class='btn btn-primary' type='submit'>{{ trans('langMove') }}</button>
                             <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                         </div>
