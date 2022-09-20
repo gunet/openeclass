@@ -37,11 +37,11 @@ $pageName = $langCourseProgram;
 
 $course = Database::get()->querySingle('SELECT description, home_layout, course_image FROM course WHERE id = ?d', $course_id);
 
-if (isset($_GET['delete_image'])) { 
+if (isset($_GET['delete_image'])) {
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     Database::get()->query("UPDATE course SET course_image = NULL WHERE id = ?d", $course_id);
     unlink("$webDir/courses/$course_code/image/$course->course_image");
-    redirect_to_home_page('modules/course_home/editdesc.php');
+    redirect_to_home_page('modules/course_home/editdesc.php?course=$course_code');
 } elseif (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $db_vars = array(purify($_POST['description']), $_POST['layout']);
@@ -55,7 +55,7 @@ if (isset($_GET['delete_image'])) {
             $name = pathinfo($file_name, PATHINFO_FILENAME);
             $ext =  get_file_extension($file_name);
             $file_name = "$name-$i.$ext";
-        }        
+        }
         move_uploaded_file($_FILES['course_image']['tmp_name'], "$webDir/courses/$course_code/image/$file_name");
         require_once 'modules/admin/extconfig/externals.php';
         $connector = AntivirusApp::getAntivirus();
@@ -88,7 +88,7 @@ if (isset($_GET['delete_image'])) {
                 }
             });          
         });
-    </script>";        
+    </script>";
 $layouts = array(1 => $langCourseLayout1, 3 => $langCourseLayout3);
 $description = $course->description;
 $layout = $course->home_layout;
@@ -101,7 +101,7 @@ if (isset($course->course_image)) {
     ";
 } else {
     enableCheckFileSize();
-    $course_image = fileSizeHidenInput() . "<input type='file' name='course_image' id='course_image'>"; 
+    $course_image = fileSizeHidenInput() . "<input type='file' name='course_image' id='course_image'>";
 }
 
 

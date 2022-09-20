@@ -512,8 +512,8 @@ if ($total_cunits > 0) {
 
     //this is foreach for indicatoras carousel-units
     $counterIndicator = 0;
-    $cunits_content .=  "<div class='carousel-indicators h-auto mb-1'>"; 
-    foreach ($all_units as $cu) {   
+    $cunits_content .=  "<div class='carousel-indicators h-auto mb-1'>";
+    foreach ($all_units as $cu) {
         if($counterIndicator == 0){
             $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' class='active' aria-current='true'></button>";
         }else{
@@ -587,7 +587,9 @@ if ($total_cunits > 0) {
 
         $cunits_content .= "</div>
             <div class='item-body'>";
-        $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
+        if (!is_null($cu->comments)) {
+            $cunits_content .= standard_text_escape($cu->comments);
+        }
         $cunits_content .= "</div>";
 
         if ($is_editor) {
@@ -664,7 +666,7 @@ if ($total_cunits > 0) {
     // end carousel-inner
     $cunits_content .= "</div>";
 
-    
+
 
     //end courseUnitsControls
     $cunits_content .= "</div>";

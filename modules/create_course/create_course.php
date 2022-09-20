@@ -79,7 +79,7 @@ if (!isset($_POST['create_course'])) {
         list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
         $head_content .= $js;
         $data['buildusernode'] = $html;
-        $public_code = $title = '';
+        $public_code = $title = $description = '';
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
                 $cc_license[$id] = $l_info['title'];
@@ -100,7 +100,7 @@ if (!isset($_POST['create_course'])) {
         $data['icon_course_closed'] = course_access_icon(COURSE_CLOSED);
         $data['icon_course_inactive'] = course_access_icon(COURSE_INACTIVE);
         $data['lang_select_options'] = lang_select_options('localize', "class='form-control'");
-        $data['rich_text_editor'] = rich_text_editor('description', 4, 20, @$description);
+        $data['rich_text_editor'] = rich_text_editor('description', 4, 20, $description);
         $data['selection_license'] = selection($cc_license, 'cc_use', "",'class="form-control"');
         $data['cancel_link'] = "{$urlServer}main/portfolio.php";
         generate_csrf_token_form_field();
