@@ -1,9 +1,8 @@
 <?php
 
-
-
-$require_login = TRUE;
-$require_help = TRUE;
+$require_current_course = true;
+$require_login = true;
+$require_help = true;
 $helpTopic = 'portfolio';
 $helpSubTopic = 'edit_course';
 
@@ -18,8 +17,6 @@ require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'functions.php';
-
-
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -38,23 +35,23 @@ $head_content .= <<<hContent
 
 $(document).ready(function() {
     var goals = document.getElementsByName('goals[]');
-    var units = document.getElementsByName('units[]'); 
-    
+    var units = document.getElementsByName('units[]');
+
     var i = parseInt(goals.length) + 1;
     var j= parseInt(units.length) +1;
     $('#add_g').click(function() {
-       
+
         if (i <= 20) {
-              
+
             $('#dynamic_goals').append('<div id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\" class="col-sm-3 control-label">' + i + ':</label><div class="col-sm-8"><input type=\"text\" name=\"goals[]\" class=\"form-control\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle\"></span></a></div></div>')
             i++;
         }
         document.getElementById('goal_count').value = i-1;
     });
     $('#add_u').click(function() {
-        
+
         if (j <= 20) {
-           
+
             $('#dynamic_units').append('<div id=\"row_u_' + j + '\"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="col-sm-3 control-label">' + j + ':</label><div class="col-sm-8"><input type=\"text\" name=\"units[]\" class=\"form-control\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div></div>')
             j++;
         }
@@ -63,23 +60,23 @@ $(document).ready(function() {
     $(document).on('click', '.btn_remove', function() {
         var button_id = $(this).attr('id');
         var buttonName = $(this).attr('name');
-        
+
         if (buttonName=="remove_g"){
             var confirm = window.confirm('$langConfirmDeleteGoal');
             if(confirm){
                 var nrlz_button_id = button_id.split("_")
-            
+
                 i--;
-                
+
                 document.getElementById('goal_count').value = i-1;
                 $('#row_g_' + nrlz_button_id[2] + '').remove();
                 for (let k=parseInt(nrlz_button_id[2])+1; k <= i ; k++){
                     document.getElementById('rm_g_'+String(k)).setAttribute('id','rm_g_'+String(k-1));
                     document.getElementById('row_g_'+String(k)).setAttribute('id','row_g_'+String(k-1));
-                    document.getElementById('gtitle_'+String(k)).setAttribute('for', 'goal_' + String(k-1));           
+                    document.getElementById('gtitle_'+String(k)).setAttribute('for', 'goal_' + String(k-1));
                     document.getElementById('gtitle_'+String(k)).innerHTML = String(k-1) + ':';
                     document.getElementById('gtitle_'+String(k)).setAttribute('id', 'gtitle_' + String(k-1));
-                
+
                 }
             }
         }else{
@@ -92,19 +89,19 @@ $(document).ready(function() {
                 for (let k=parseInt(nrlz_button_id[2])+1; k <= j ; k++){
                     document.getElementById('rm_u_'+String(k)).setAttribute('id','rm_u_'+String(k-1));
                     document.getElementById('row_u_'+String(k)).setAttribute('id','row_u_'+String(k-1));
-                    document.getElementById('utitle_'+String(k)).setAttribute('for', 'unit_' + String(k-1));           
+                    document.getElementById('utitle_'+String(k)).setAttribute('for', 'unit_' + String(k-1));
                     document.getElementById('utitle_'+String(k)).innerHTML = String(k-1) + ':';
                     document.getElementById('utitle_'+String(k)).setAttribute('id', 'utitle_' + String(k-1));
-                
+
                 }
             }
 
         }
-        
-        
+
+
     });
-    
-    
+
+
 });
 
 
@@ -130,7 +127,7 @@ function checkedBoxes() {
             checked_in_class.push(checkboxes[i].attr('id'));
         }
     }
-    
+
     for(let j=1; j<parseInt(checkboxes_in_home.length); j++) {
         if(checkboxes_in_home[j].checked){
             checked_in_home.push(checkboxes[j].attr('id'));
@@ -142,19 +139,17 @@ function checkedBoxes() {
             checked_after_class.push(checkboxes[k].attr('id'));
         }
     }
-    
+
     document.getElementsByName('checked_in_class').value=checked_in_class;
     document.getElementsByName('checked_in_home').value=checked_in_home;
     document.getElementsByName('checked_after_class').value=checked_after_class;
 
-   
+
 }
 
 /* ]]> */
 </script>
 hContent;
-
-$course_code =$_SESSION['dbname'];
 
 register_posted_variables(array('title' => true, 'password' => true, 'prof_names' => true));
 if (empty($prof_names)) {
@@ -165,7 +160,7 @@ if (!isset($_POST['next'])) {
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
-            'url' => $urlServer."courses/$course_code",
+            'url' => $urlServer."courses/$course_code/",
             'icon' => 'fa-reply',
             'level' => 'primary-label',
             'button-class' => 'btn-default'
@@ -175,7 +170,7 @@ if (!isset($_POST['next'])) {
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
-            'url' => $urlServer."modules/create_course/edit_flipped_classroom.php?$course_code",
+            'url' => $urlServer."modules/create_course/edit_flipped_classroom.php?course=$course_code",
             'icon' => 'fa-reply',
             'level' => 'primary-label',
             'button-class' => 'btn-default'
@@ -187,32 +182,32 @@ if (!isset($_POST['next'])) {
 //Get all the user's info
 //Get Class Info
 
-$q1 = Database::get()->querySingle("SELECT student_number,lessons_number,lesson_hours,home_hours,total_hours FROM course_class_info WHERE course_code=?s",$course_code);
+$q1 = Database::get()->querySingle("SELECT student_number,lessons_number,lesson_hours,home_hours,total_hours FROM course_class_info WHERE course_code = ?s", $course_code);
 
-$q2 = Database::get()->queryArray("SELECT title FROM course_learning_objectives WHERE course_code=?s",$course_code);
+$q2 = Database::get()->queryArray("SELECT title FROM course_learning_objectives WHERE course_code = ?s", $course_code);
 
-$q3 = Database::get()->queryArray("SELECT count(ID) as num_goals FROM course_learning_objectives WHERE course_code=?s",$course_code);
+$q3 = Database::get()->queryArray("SELECT count(*) as num_goals FROM course_learning_objectives WHERE course_code = ?s", $course_code);
 
-$q4 = Database::get()->querySingle("SELECT title,`description`,lectures_model FROM course WHERE public_code=?s",$course_code);
+$q4 = Database::get()->querySingle("SELECT title,`description`,lectures_model FROM course WHERE id = ?d", $course_id);
 
-$q5_a =  Database::get()->querySingle("SELECT ID, lang, visible FROM course WHERE public_code=?s",$course_code);
+$q5_a =  Database::get()->querySingle("SELECT id, lang, visible FROM course WHERE id=?s", $course_id);
 
-$q5_b =  Database::get()->queryArray("SELECT ID, title FROM course_units WHERE course_id=?d",$q5_a->ID);
+$q5_b =  Database::get()->queryArray("SELECT id, title FROM course_units WHERE course_id = ?d", $course_id);
 
-$q7 = Database::get()->querySingle("SELECT count(ID) as num_units FROM course_units WHERE course_id=?s",$q5_a->ID);
+$q7 = Database::get()->querySingle("SELECT count(*) as num_units FROM course_units WHERE course_id = ?d", $course_id);
 
-$q8 = Database::get()->queryArray("SELECT ID, title, comments, start_week, finish_week, visible, public, `order`, course_id FROM course_units WHERE course_id=?d",$q5_a->ID);
+$q8 = Database::get()->queryArray("SELECT id, title, comments, start_week, finish_week, visible, public, `order`, course_id FROM course_units WHERE course_id = ?d", $course_id);
 
-$q9 = Database::get()->queryArray("SELECT course_code, activity_id, unit_id, tool_ids, activity_type, visible FROM course_units_activities WHERE course_code=?s",$course_code);
+$q9 = Database::get()->queryArray("SELECT course_code, activity_id, unit_id, tool_ids, activity_type, visible FROM course_units_activities WHERE course_code = ?s", $course_code);
 
-$num_of_new_units="";
+$num_of_new_units = 0;
 
 if(!isset($_POST['next'])){
 
-    $stuNum = $lectNum = $lectHours = $homeHours = $lectTotalHours ='';
+    $stuNum = $lectNum = $lectHours = $homeHours = $lectTotalHours = '';
      $tool_content .= "
         <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
+        <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return validateNodePickerForm();\">
             <fieldset>
                 <div class='form-group'>
                     <label for='title' class='col-sm-3 control-label'>$langTitle:</label>
@@ -245,18 +240,18 @@ if(!isset($_POST['next'])){
                     <div class='col-sm-8'>
                         <input name='homehours' id='homehours' type='number' min='1' max='150' class='form-control' value='".q($q1->home_hours)."' onchange='hoursSum()' >
                     </div>
-                </div>        
+                </div>
                 <div class='form-group'>
                     <label for='totalhours' class='col-sm-3 control-label'>$langTotalHours : </label>
                     <div class='col-sm-8'>
                         <input name='totalhours' id='totalhours' type='number' min='1' max='650' class='form-control' value='".q($q1->total_hours)."' readonly>
                     </div>
                 </div>
-            
+
                 <div class='form-group'>
                     <label for='goals' class='col-sm-3 control-label'>$langGoals:</label>
                 </div>
-                
+
                 <div class='form-group'>
                     <div id='row_g_1'>
                                 ";
@@ -286,15 +281,15 @@ if(!isset($_POST['next'])){
                     }
 
                     $tool_content.="
-                               
+
                             </div>
                             <div id='dynamic_goals'>
                             </div>
-                            
+
                         <input id='goal_count' type='hidden' name='goal_count' value='1'>
                     </div>
-                    
-                
+
+
                 <div class='form-group'>
                     <label for='description' class='col-sm-3 control-label'>$langCont <small>$langOptional</small>:</label>
                     <div class='col-sm-8'>
@@ -353,7 +348,7 @@ if(!isset($_POST['next'])){
                                 <label for='unit_$count_units' id='utitle_$count_units' class= 'col-sm-3 control-label'>$count_units: </label>
                                 <div class='col-sm-8'>
                                     <input name='units[]' id='unit_$count_units' type='text' class='form-control' value='".$unit->title."' placeholder='$langUnits'>
-                                    <input name='ids[]' type='hidden' value='$unit->ID'>
+                                    <input name='ids[]' type='hidden' value='$unit->id'>
                                     ";
 
                                     if($count_units ==1){
@@ -366,7 +361,7 @@ if(!isset($_POST['next'])){
                                     }else{
 
                                         $tool_content.="<a href='#!' class='btn_remove btn disabled' name='remove_u' id='rm_u_".$count_units."' disabled>
-                                               
+
                                             </a>
                                         ";
                                     }
@@ -374,15 +369,15 @@ if(!isset($_POST['next'])){
                                 $count_units +=1;
                         }
                             $tool_content .="
-                            
+
                             <div id='dynamic_units'>
                             </div>
-                    
-                        
+
+
                         <input id='unit_count' type='hidden' name='unit_count' value='1'>
-                    
-                    
-                </div>             
+
+
+                </div>
             </div>
 
             <div class='form-group'>
@@ -390,7 +385,7 @@ if(!isset($_POST['next'])){
                     <input class='btn btn-primary' type='submit' name='next' value='" . q($langNext) . "'>
                     <a href='{$urlServer}courses/".$course_code."' class='btn btn-default'>$langCancel</a>
                 </div>
-            </div>     
+            </div>
             </fieldset>" . generate_csrf_token_form_field() . "
         </form>
         </div>";
@@ -415,13 +410,11 @@ if(!isset($_POST['next'])){
     $_SESSION['title'] = $_POST['title'];
     $_SESSION['description'] = purify($_POST['description']);
 
-    $_SESSION['units_old']= $_SESSION['units'];
+    $_SESSION['units_old'] = $_SESSION['units'];
 
-    $num_of_new_units =count($_SESSION['units']);
+    $num_of_new_units = count($_SESSION['units']);
 
-
-
-    if($num_of_new_units > $q7->num_units){ //new unit is added
+    if ($num_of_new_units > $q7->num_units) { //new unit is added
 
             if (empty($_SESSION['goals']) or array_search("",$_SESSION['goals'])) {
                 Session::Messages($langEmptyGoal);
@@ -433,16 +426,12 @@ if(!isset($_POST['next'])){
                 $validationFailed = true;
             }
 
-
             if ($validationFailed) {
-
-                redirect_to_home_page('modules/create_course/edit_flipped_classroom.php?'.$course_code);
+                redirect_to_home_page("modules/create_course/edit_flipped_classroom.php?course=$course_code");
             }
             $mtitles_in_home = $mtitles_in_class = $mtitles_after_class = $mids_in_home = $mids_in_class = $mids_after_class = array();
 
-
             $maxUnitId = Database::get()->querySingle("SELECT MAX(id) as muid FROM course_units");
-
 
             $act_list_in_home = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_IN_HOME."'");
 
@@ -484,10 +473,8 @@ if(!isset($_POST['next'])){
 
             }
 
-
-
-            $tool_content .= " <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
+            $tool_content .= "<div class='form-wrapper'>
+                <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <div class='panel panel-default'>
                     <div class='panel-heading'>
                         <div class='paenel-title h4'>
@@ -496,7 +483,6 @@ if(!isset($_POST['next'])){
                     </div>
                 </div>
 
-                
                 <fieldset>
                     <div class='table-responsive'>
                         <table class='table table-bordered table-striped'>
@@ -511,9 +497,9 @@ if(!isset($_POST['next'])){
                 if(!isset($_SESSION['ids'][$count_ids])){
 
                     $tool_content .= "
-                    
+
                         <th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-md-10' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>
-            
+
                     ";
                     $i++;
 
@@ -522,7 +508,7 @@ if(!isset($_POST['next'])){
             }
 
 
-                $tool_content .= "
+            $tool_content .= "
                                 </tr>
                                 <tr>
                                     <th scope='row' style='color:#31708f;'>$langActInHome:</th>
@@ -664,12 +650,12 @@ if(!isset($_POST['next'])){
                     <input name='checked_in_home' type='hidden' value='2'></input>
                     <input name='checked_after_class' type='hidden' value='3'></input>
 
-                </fieldset>". generate_csrf_token_form_field() ." 
+                </fieldset>". generate_csrf_token_form_field() ."
             </form>
         </div>
         ";
 
-    }else {
+    } else {
         if (empty($_SESSION['goals']) or array_search("",$_SESSION['goals'])) {
             Session::Messages($langEmptyGoal);
             $validationFailed = true;
@@ -696,12 +682,10 @@ if(!isset($_POST['next'])){
         $validationFailed = false;
 
         $validationFailed = false;
-        if(empty($stunum)||empty($lectnum)||empty($lecthours)||empty($homehours)){
+        if (empty($stunum)||empty($lectnum)||empty($lecthours)||empty($homehours)){
             Session::Messages($langFieldsMissing);
             $validationFailed = true;
-
         }
-
 
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
@@ -716,49 +700,46 @@ if(!isset($_POST['next'])){
 
         $result = Database::get()->query(
             "UPDATE course SET
-                            lectures_model = ?d, `description`=?s where `code`=?s",
-            $_SESSION['lectures_model'], $_SESSION['description'], $course_code
+                            lectures_model = ?d, `description`=?s where id = ?d",
+            $_SESSION['lectures_model'], $_SESSION['description'], $course_id
         );
 
         $result = Database::get()->query(
-            "DELETE FROM course_learning_objectives WHERE course_code=?s",
+            "DELETE FROM course_learning_objectives WHERE course_code = ?s",
             $course_code
         );
 
         $result = Database::get()->query(
-            "DELETE FROM course_description WHERE course_id=?d",
-            $q5_a->ID
+            "DELETE FROM course_description WHERE course_id = ?d",
+            $course_id
         );
 
         $result = Database::get()->query(
-            "DELETE FROM course_class_info WHERE course_code=?s",
+            "DELETE FROM course_class_info WHERE course_code = ?s",
             $course_code
         );
 
 
-        $i=0;
-        foreach($q8 as $unit_info){
-
-
+        $i = 0;
+        foreach ($q8 as $unit_info) {
             Database::get()->query(
-                "UPDATE course_units SET title = ?s WHERE ID =?d",
+                "UPDATE course_units SET title = ?s WHERE id = ?d",
                 $_POST['units'][$i],
-                $unit_info->ID,
+                $unit_info->id,
             );
-            $i+=1;
+            $i += 1;
 
         }
-        $maxOrderGoal = Database::get()->querySingle("SELECT MAX(`order`) as morder FROM course_description WHERE course_id=?d",$q5_a->ID);
+        $maxOrderGoal = Database::get()->querySingle("SELECT MAX(`order`) as morder FROM course_description WHERE course_id=?d", $course_id);
 
 
-        if(empty($maxOrderGoal->morder)){
-
+        if (empty($maxOrderGoal->morder)) {
             $maxOrderGoal->morder = 1;
         }
 
         $commentsGoals .= "<ul>";
         foreach ($_SESSION['goals'] as $goal){
-            $commentsGoals .= "<li>".$goal."</li>";
+            $commentsGoals .= "<li>$goal</li>";
             Database::get()->query("INSERT INTO course_learning_objectives SET
                     course_code = ?s,
                     title = ?s", $course_code, $goal
@@ -783,7 +764,7 @@ if(!isset($_POST['next'])){
                                 <li>$langLectHours: $lecthours </li>
                                 <li>$langHomeHours: $homehours </li>
                                 <li>$langTotalHours: $totalhours</li>
-                            </ul>   
+                            </ul>
         ";
 
 
@@ -795,7 +776,7 @@ if(!isset($_POST['next'])){
                     type = ?d,
                     `order` = ?d,
                     `visible` =?d,
-                    update_dt = NOW()", $q5_a->ID, $langGoals, purify($commentsGoals), 2, $maxOrderGoal->morder, 1
+                    update_dt = NOW()", $course_id, $langGoals, purify($commentsGoals), 2, $maxOrderGoal->morder, 1
         );
 
         Database::get()->query("INSERT INTO course_description SET
@@ -805,7 +786,7 @@ if(!isset($_POST['next'])){
                     type = ?d,
                     `order` = ?d,
                     `visible` =?d,
-                    update_dt = NOW()", $q5_a->ID, $langLectModel, purify($commentLectModel), 10, $maxOrderGoal->morder, 1
+                    update_dt = NOW()", $course_id, $langLectModel, purify($commentLectModel), 10, $maxOrderGoal->morder, 1
         );
 
         Database::get()->query("INSERT INTO course_description SET
@@ -815,7 +796,7 @@ if(!isset($_POST['next'])){
                     type = ?d,
                     `order` = ?d,
                     `visible` =?d,
-                    update_dt = NOW()", $q5_a->ID, $langClassInfoTitle, purify($commentsClassInfo), 10, $maxOrderGoal->morder, 1
+                    update_dt = NOW()", $course_id, $langClassInfoTitle, purify($commentsClassInfo), 10, $maxOrderGoal->morder, 1
         );
 
         Database::get()->query("INSERT INTO course_class_info SET
@@ -840,7 +821,7 @@ if(!isset($_POST['next'])){
 
         // logging
         Log::record(0, 0, LOG_MODIFY_COURSE, array(
-            'id' => $q5_a->ID,
+            'id' => $course_id,
             'code' => $course_code,
             'title' => $_SESSION['title'],
             'language' => $q5_a->lang,
@@ -882,87 +863,70 @@ if(!isset($_POST['next'])){
             redirect_to_home_page('modules/create_course/edit_flipped_classroom.php');
         }
 
-
-
         $result = Database::get()->query(
-            "UPDATE course SET
-                            lectures_model = ?d, `description`=?s",
-            $_SESSION['lectures_model'], $_SESSION['description']
+            "UPDATE course SET lectures_model = ?d, `description`=?s
+                    WHERE id = ?d",
+            $_SESSION['lectures_model'], $_SESSION['description'], $course_id
         );
 
         $result = Database::get()->query(
-            "DELETE FROM course_learning_objectives WHERE course_code=?s",
+            "DELETE FROM course_learning_objectives WHERE course_code = ?s",
             $course_code
         );
 
         $result = Database::get()->query(
-            "DELETE FROM course_description WHERE course_id=?d",
-            $q5_a->ID
+            "DELETE FROM course_description WHERE course_id = ?d",
+            $course_id
         );
 
         $result = Database::get()->query(
-            "DELETE FROM course_class_info WHERE course_code=?s",
+            "DELETE FROM course_class_info WHERE course_code = ?s",
             $course_code
         );
 
+        $maxOrderUnit = Database::get()->querySingle("SELECT MAX(`order`) as morder FROM course_units WHERE course_id=?d",$course_id);
 
-
-
-        $maxOrderUnit = Database::get()->querySingle("SELECT MAX(`order`) as morder FROM course_units WHERE course_id=?d",$q5_a->ID);
-
-        if ($maxOrderUnit->morder ==NULL){
+        if (is_null($maxOrderUnit->morder)) {
             $maxOrderUnit->morder = 1;
         }
 
-        $existing_units=0;
+        $existing_units = 0;
         $changed_units = array("start");
-        foreach($q5_b as $unit){
-
-            if($unit->title != $_SESSION['units'][$existing_units]){
-
-
+        foreach ($q5_b as $unit){
+            if ($unit->title != $_SESSION['units'][$existing_units]){
                 $result = Database::get()->query(
                     "UPDATE course_units SET
                                     title = ?s WHERE (title=?s AND course_id=?d)",
-                    $_SESSION['units'][$existing_units], $unit->title, $q5_a->ID
+                    $_SESSION['units'][$existing_units], $unit->title, $course_id
                 );
                 array_push($changed_units,$_SESSION['units'][$existing_units]);
             }
-
-            $existing_units+=1;
+            $existing_units += 1;
         }
 
-
-
-
         foreach ($_SESSION['units'] as $unit){
-
-            if(!array_search($unit,$changed_units)){
-
-                $q=  Database::get()->querySingle("SELECT id FROM course_units WHERE title=?s and course_id=?d",$unit,$q5_a->ID);
-
-                if(!$q){
-
+            if (!array_search($unit, $changed_units)){
+                $q = Database::get()->querySingle("SELECT id FROM course_units WHERE title=?s and course_id=?d",$unit,$course_id);
+                if (!$q){
                     $maxOrderUnit->morder += 1;
                     Database::get()->query(
                         "INSERT INTO course_units SET
                                                 title = ?s,
                                                 visible = 1,
                                                 public = 1,
-                                                `order` =".$maxOrderUnit->morder.",
+                                                `order` = ?d,
                                                 course_id = ?d",
-                    $unit,
-                    $q5_a->ID
+                        $unit,
+                        $maxOrderUnit->morder,
+                        $course_id,
                     );
                 }
             }
         }
 
-        $maxOrderGoal = Database::get()->querySingle("SELECT MAX(`order`) as morder FROM course_description WHERE course_id=?d",$q5_a->ID);
+        $maxOrderGoal = Database::get()->querySingle("SELECT MAX(`order`) as morder FROM course_description WHERE course_id=?d",$course_id);
 
-
-        if(empty($maxOrderGoal->morder)){
-
+        if (empty($maxOrderGoal->morder)){
             $maxOrderGoal->morder = 1;
         }
 
@@ -976,16 +940,14 @@ if(!isset($_POST['next'])){
         }
         $commentsGoals .= "</ul>";
 
-        $commentLectModel ="<p>";
+        $commentLectModel = "<p>";
 
-        if($_SESSION['lectures_model']==1){
+        if ($_SESSION['lectures_model']==1){
             $commentLectModel .="$langLectMixed";
 
-        }else if($_SESSION['lectures_model']==2){
+        } else if($_SESSION['lectures_model']==2) {
             $commentLectModel .="$langLectFromHome";
         }
-
-
 
         $commentsClassInfo ="<ul>
                                 <li>$langStuNum: $stunum </li>
@@ -993,11 +955,9 @@ if(!isset($_POST['next'])){
                                 <li>$langLectHours: $lecthours </li>
                                 <li>$langHomeHours: $homehours </li>
                                 <li>$langTotalHours: $totalhours</li>
-                            </ul>   
+                            </ul>
         ";
 
-
-
         Database::get()->query("INSERT INTO course_description SET
                     course_id = ?d,
                     title = ?s,
@@ -1005,7 +965,7 @@ if(!isset($_POST['next'])){
                     type = ?d,
                     `order` = ?d,
                     `visible` =?d,
-                    update_dt = NOW()", $q5_a->ID, $langGoals, purify($commentsGoals), 2, $maxOrderGoal->morder, 1
+                    update_dt = NOW()", $course_id, $langGoals, purify($commentsGoals), 2, $maxOrderGoal->morder, 1
         );
 
         Database::get()->query("INSERT INTO course_description SET
@@ -1015,7 +975,7 @@ if(!isset($_POST['next'])){
                     type = ?d,
                     `order` = ?d,
                     `visible` =?d,
-                    update_dt = NOW()", $q5_a->ID, $langLectModel, purify($commentLectModel), 10, $maxOrderGoal->morder, 1
+                    update_dt = NOW()", $course_id, $langLectModel, purify($commentLectModel), 10, $maxOrderGoal->morder, 1
         );
 
         Database::get()->query("INSERT INTO course_description SET
@@ -1025,7 +985,7 @@ if(!isset($_POST['next'])){
                     type = ?d,
                     `order` = ?d,
                     `visible` =?d,
-                    update_dt = NOW()", $q5_a->ID, $langClassInfoTitle, purify($commentsClassInfo), 10, $maxOrderGoal->morder, 1
+                    update_dt = NOW()", $course_id, $langClassInfoTitle, purify($commentsClassInfo), 10, $maxOrderGoal->morder, 1
         );
 
         Database::get()->query("INSERT INTO course_class_info SET
@@ -1034,7 +994,7 @@ if(!isset($_POST['next'])){
                     lesson_hours = ?d,
                     home_hours = ?d,
                     total_hours = ?d,
-                    course_code =?s", $stunum, $lectnum, $lecthours, $homehours, $totalhours, $course_code
+                    course_code = ?s", $stunum, $lectnum, $lecthours, $homehours, $totalhours, $course_code
         );
 
         $nrlz_tools_in_class ="";
@@ -1062,8 +1022,8 @@ if(!isset($_POST['next'])){
                                                 activity_id = ?s,
                                                 unit_id = ?d,
                                                 tool_ids = ?s,
-                                                activity_type=?d,
-                                                visible=?d",
+                                                activity_type = ?d,
+                                                visible = ?d",
                     $course_code,
                     $activity_id,
                     $unit_id,
@@ -1156,7 +1116,7 @@ if(!isset($_POST['next'])){
 
         // logging
         Log::record(0, 0, LOG_MODIFY_COURSE, array(
-            'id' => $q5_a->ID,
+            'id' => $course_id,
             'code' => $course_code,
             'title' => $_SESSION['title'],
             'language' => $q5_a->lang,
@@ -1164,10 +1124,4 @@ if(!isset($_POST['next'])){
         ));
 }
 
-
 draw($tool_content, 1, null, $head_content);
-
-
-
-
-?>
