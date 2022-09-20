@@ -171,7 +171,7 @@ if (!isset($_POST['create_course'])) {
     // set skip_preloaded_defaults in order to not over-bloat pre-populating nodepicker with defaults in case of multiple allowance
     list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
     $head_content .= $js;
-    $public_code = $title = '';
+    $public_code = $title = $description = '';
     foreach ($license as $id => $l_info) {
         if ($id and $id < 10) {
             $cc_license[$id] = $l_info['title'];
@@ -226,7 +226,7 @@ if (!isset($_POST['create_course'])) {
             <div class='form-group'>
                 <label for='description' class='col-sm-2 control-label'>$langDescrInfo <small>$langOptional</small>:</label>
                 <div class='col-sm-10'>
-                      ".  rich_text_editor('description', 4, 20, @$description)."
+                      ".  rich_text_editor('description', 4, 20, $description)."
                 </div>
             </div>
             <div class='form-group'>
@@ -385,7 +385,7 @@ if (!isset($_POST['create_course'])) {
 
 }else  { // create the course and the course database
     // validation in case it skipped JS validation
-    
+
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $validationFailed = false;
     if (count($departments) < 1 || empty($departments[0])) {
