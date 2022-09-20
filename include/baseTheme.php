@@ -378,7 +378,7 @@ function view($view_file, $view_data = array()) {
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
             'logo_url_path','leftsideImg','eclass_banner_value');
     $data = array_merge($global_data, $view_data);
-    //echo '  '.get_config('theme').'  -  '.$view_file;
+    echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();
 }
 

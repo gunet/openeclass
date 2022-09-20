@@ -120,7 +120,7 @@ if (isset($_GET['delete'])) {
     }
 
     $data['tree'] = $tree = new Hierarchy();
-    list($jsTree, $data['htmlTree']) = $tree->buildUserNodePickerIndirect(array('defaults' => $department, 'multiple' => true));
+    list($jsTree, $data['htmlTree']) = $tree->buildUserNodePicker(array('defaults' => $department, 'multiple' => true));
 
     // The following code is modified from Hierarchy::buildJSNodePicker()
     $options = array('defaults' => $data['deps'], 'where' => 'AND node.allow_course = true');

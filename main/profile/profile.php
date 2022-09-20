@@ -516,7 +516,7 @@ if (get_config('email_verification_required')) {
     }
 }
 if (!get_config('restrict_owndep')) {
-    list($js, $html) = $tree->buildUserNodePickerIndirect(array('defaults' => $userObj->getDepartmentIds($uid)));
+    list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $userObj->getDepartmentIds($uid)));
     $head_content .= $js;
     $data['html'] = $html;
 }

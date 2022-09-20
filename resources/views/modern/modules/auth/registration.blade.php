@@ -44,9 +44,9 @@
                                 <!-- student registration -->
                                 @if ($eclass_stud_reg != FALSE or $alt_auth_stud_reg != FALSE)
                                     <div class='table-responsive mt-3'>
-                                        <table class="announcements_table table">
+                                        <table class="table-default">
                                             
-                                            <tr class='notes_thead'>
+                                            <tr class='list-header'>
                                                 <th class='text-white'># {{ trans('langOfStudent') }}</th>
                                             </tr>
                             
@@ -102,9 +102,9 @@
                                 <!--  teacher registration -->
                                 @if ($eclass_prof_reg or $alt_auth_prof_reg)  <!-- allow teacher registration -->
                                     <div class='table-responsive'>
-                                        <table class="announcements_table table">
+                                        <table class="table-default">
                                             
-                                            <tr class='notes_thead'>
+                                            <tr class='list-header'>
                                                 <th class='text-white'># {{ trans('langOfTeacher') }}</th>
                                             </tr>
                                             

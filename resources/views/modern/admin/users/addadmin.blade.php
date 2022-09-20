@@ -86,8 +86,7 @@
                                     </div>
 
                                     <div class='form-group hidden' id='departmentPicker'>
-                                        <label class='col-sm-2 control-label'>{{$langFaculties}}</label>
-                                        <div class='col-sm-10' style='padding-top: 7px;'>
+                                        <div class='col-sm-12 mt-2'>
                                             {!! $pickerHtml !!}
                                         </div>
                                     </div>

@@ -229,9 +229,9 @@ if (isset($_GET['stats_submit'])) {
     $tool_content .= "<div class='form-group mt-3'><label class='col-sm-6 control-label-notes'>$langFaculty:</label>";
     $tool_content .= "<div class='col-sm-12'>";
     if (isDepartmentAdmin()) {
-        list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
     } else {
-        list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false));
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false));
     }
 
     $head_content .= $js;

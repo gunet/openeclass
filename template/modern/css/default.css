@@ -152,6 +152,10 @@ a{
   color:#36a3f7; 
 }
 
+.jstree-disabled{
+  opacity: 0.3;
+}
+
 
 /* ----------------------------- LABELS -INPUTS -MARGIN ------------------------------------ */
 /* ---------------------------------------------------------------------------------------- */
@@ -2025,6 +2029,9 @@ input[type="checkbox"]{
   @media (max-width:991px){
     .col_maincontent_active, .col_maincontent_active_Homepage{
       min-height: calc(100vh - 56px - 54px);
+      border-radius:0px;
+    }
+    .col_maincontent_active_HomepageStart{
       border-radius:0px;
     }
     .navbar-eclass{

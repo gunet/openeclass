@@ -26,13 +26,6 @@ require_once 'main/perso.php';
 
 $pageName = $langMyPersoAnnouncements;
 
-if (isset($_GET['an_id'])) {
-    $head_content .= "<script type='text/javascript'>
-    $(document).ready(function() {
-        alert('okkkkkkkk');
-    }";
-}
-
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
     $limit = intval($_GET['iDisplayLength']);

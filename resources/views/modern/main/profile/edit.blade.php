@@ -185,14 +185,14 @@
                                 <div class='form-group mt-3'>
                                     <label class='col-sm-6 control-label-notes'>{{ trans('langProviderConnectWith') }}:</label>
                                     <div class='col-sm-12'>
-                                        <div class='row'>";
+                                        <div class='row'>
                                         @foreach ($allProviders as $provider => $settings)
-                                            $lcProvider = strtolower($provider);
-                                            <div class='col-xs-2 text-center'>
-                                                <img src='$themeimg/{{ strtolower($provider) }}.png' alt="{{ trans('langLoginVia') }}"><br>{{ $provider }}<br>";
+                                            @php $lcProvider = strtolower($provider); @endphp
+                                            <div class='col-2 text-center'>
+                                                <img src='$themeimg/{{ strtolower($provider) }}.png' alt="{{ trans('langLoginVia') }}"><br>{{ $provider }}<br>
                                         @if ($userProviders[strtolower($provider)])
                                             <img src='{{ $themeimg }}/tick.png' alt='{{ trans('langProviderConnectWith') }} {{ $provider }}'>
-                                            <a href='{{ $data[sec] }}?action=delete&provider={{ $provider }}'>{{ trans('langProviderDeleteConnection') }}</a>";
+                                            <a href='{{ $data[sec] }}?action=delete&provider={{ $provider }}'>{{ trans('langProviderDeleteConnection') }}</a>
                                         @else
                                             <a href='{{ $data[sec] }}?action=connect&provider={{ $provider }}'>{{ trans('langProviderConnect') }}</a>
                                         @endif
@@ -202,11 +202,11 @@
                                     </div>
                                 </div>
                             @endif
-                            <div class="row p-2"></div>
+                            <div class="mt-3"></div>
                                 {{ $SecFactorProfile }}
-                                <div class="row p-2"></div>
+                                <div class="mt-3"></div>
                                 {{ $SecFactorChallenge }}
-                                <div class='col-sm-offset-2 col-sm-10'>
+                                <div class='col-sm-offset-2 col-sm-10 mt-3'>
                                     <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                                     <a href='display_profile.php' class='btn btn-secondary'>{{ trans('langCancel') }}</a>
                                 </div>

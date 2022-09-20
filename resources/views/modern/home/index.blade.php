@@ -9,7 +9,7 @@
 
         <div class="row rowMedium">
 
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_Homepage">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_HomepageStart">
 
                 <div class="row">
 
@@ -76,7 +76,7 @@
                     @if(get_config('homepage_title') or get_config('homepage_intro'))
                         <div class='d-block d-md-none'>
                             <div class='row rowMedium'>
-                                <div class='col-12 pt-5'>
+                                <div class='col-12 pt-5 @if(!get_config("enable_mobileapi") and $eclass_banner_value == 0) pb-5 @endif)'>
                                     <div class="panel panel-default w-100">
                                         <div class='panel-body Borders'>
                                             {!! get_config('homepage_intro') !!}
@@ -104,7 +104,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class='@if($eclass_banner_value != 0) col-md-6 col-12 @else col-12 @endif mt-md-0 pt-md-0 pt-5'>
+                                <div class='@if($eclass_banner_value != 0) col-md-6 col-12 @else col-12 @endif mt-md-0 pt-md-0 @if($eclass_banner_value == 0) pt-0 @else pt-5 @endif'>
                                     <div class='panel panel-default'>
                                         <div class='panel-body Borders'>
                                             <div class='col-12'>
@@ -153,6 +153,9 @@
                         {!! setOpenCoursesExtraHTML() !!}
                     @endif
                     @if (get_config('opencourses_enable'))
+                        @if(!get_config("homepage_title") and !get_config("homepage_intro") and !get_config("enable_mobileapi") and $eclass_banner_value == 0)
+                          <div class='mt-5'></div>
+                        @endif
                         @if ($openCoursesExtraHTML)
                         <div class='col-12 ps-md-5 pe-md-5 pt-md-0 mb-5'>
                             <div class='row rowMedium'>

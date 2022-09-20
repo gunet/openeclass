@@ -107,6 +107,12 @@
   border-radius:15px;
 }
 
+.col_maincontent_active_HomepageStart{
+  transition: 0.4s;
+  background-color: white; 
+  border-radius:15px;
+}
+
 .col_maincontent_active_unit{
   transition: 0.4s;
   height:auto;

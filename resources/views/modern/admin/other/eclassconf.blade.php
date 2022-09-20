@@ -1179,11 +1179,11 @@
 
                                                
 
-                                                <div class='form-group mt-3'>
+                                                {{--<div class='form-group mt-3'>
                                                     <div class='col-sm-12'>
                                                         <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSave') }}'>
                                                     </div>
-                                                </div>
+                                                </div>--}}
                                             </fieldset>
                                         </div>
                                     </div>

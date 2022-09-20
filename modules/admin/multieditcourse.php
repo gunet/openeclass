@@ -97,7 +97,7 @@ $data['sql'] = Database::get()->queryArray("SELECT DISTINCT course.code, course.
 
 
 
-list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="newdepid[]"', 
+list($js, $html) = $tree->buildNodePicker(array('params' => 'name="newdepid[]"', 
                                                 'defaults' => $course->getDepartmentIds($searchfaculte),                                                            
                                                 'multiple' => false));        
 $head_content .= $js;
