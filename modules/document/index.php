@@ -154,7 +154,7 @@ if (isset($_GET['mindmap'])) {
             $filename, $title, $file_creator,
             $file_date, $file_date, $file_creator, $file_format,
             $language, $uid);
-            Session::flash('message',$langMindMapSaved); 
+            Session::flash('message',$langMindMapSaved);
             Session::flash('alert-class', 'alert-success');
     }
     redirect_to_home_page('modules/document/index.php?course=' . $course_code);
@@ -289,10 +289,10 @@ if ($can_upload or $user_upload) {
       UPLOAD FILE
      * ******************************************************************** */
 
-    $dialogBox = '';
+    $dialogBox = $metaDataBox = '';
     $extra_path = '';
     if (isset($_POST['fileCloudInfo']) or isset($_FILES['userFile'])) {
-        
+
         if (isset($_POST['fileCloudInfo'])) { // upload cloud file
             $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
             $uploaded = true;
@@ -305,7 +305,7 @@ if ($can_upload or $user_upload) {
         validateUploadedFile($fileName, $menuTypeID);
         // check for disk quotas
         if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
-            Session::flash('message',$langNoSpace); 
+            Session::flash('message',$langNoSpace);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_current_dir();
         } elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1 and preg_match('/\.zip$/i', $fileName)) {
@@ -327,7 +327,7 @@ if ($can_upload or $user_upload) {
                     $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
                     $realFileSize += $stat["size"]; // check for free space
                     if ($diskUsed + $realFileSize > $diskQuotaDocument) {
-                        Session::flash('message',$langNoSpace); 
+                        Session::flash('message',$langNoSpace);
                         Session::flash('alert-class', 'alert-danger');
                         redirect_to_current_dir();
                     }
@@ -339,12 +339,12 @@ if ($can_upload or $user_upload) {
                 }
                 $zipFile->close();
             } else {
-                Session::flash('message',$langErrorFileMustBeZip); 
+                Session::flash('message',$langErrorFileMustBeZip);
                 Session::flash('alert-class', 'alert-warning');
                 redirect_to_current_dir();
             }
             $session->setDocumentTimestamp($course_id);
-            Session::flash('message',$langDownloadAndZipEnd); 
+            Session::flash('message',$langDownloadAndZipEnd);
             Session::flash('alert-class', 'alert-success');
             redirect_to_current_dir();
         } else {
@@ -354,7 +354,7 @@ if ($can_upload or $user_upload) {
     } elseif (isset($_POST['fileURL']) and ($fileURL = trim($_POST['fileURL']))) {
         $extra_path = canonicalize_url($fileURL);
         if (preg_match('/^javascript/', $extra_path)) {
-            Session::flash('message',$langUnwantedFiletype . ': ' . q($extra_path)); 
+            Session::flash('message',$langUnwantedFiletype . ': ' . q($extra_path));
             Session::flash('alert-class', 'alert-danger');
             redirect_to_current_dir();
         } else {
@@ -365,7 +365,7 @@ if ($can_upload or $user_upload) {
     } elseif (isset($_POST['file_content'])) {
 
         if ($diskUsed + strlen($_POST['file_content']) > $diskQuotaDocument) {
-            Session::flash('message',$langNoSpace); 
+            Session::flash('message',$langNoSpace);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_current_dir();
         } else {
@@ -401,7 +401,7 @@ if ($can_upload or $user_upload) {
         }
     }
     if ($error) {
-        Session::flash('message',$error); 
+        Session::flash('message',$error);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_current_dir();
     } elseif ($uploaded) {
@@ -422,7 +422,7 @@ if ($can_upload or $user_upload) {
             try {
                 $fileUploadOK = ($cloudfile->storeToLocalFile($basedir . $file_path) == CloudDriveResponse::OK);
             } catch (Exception $e) {
-                Session::flash('message',$langCloudFileError); 
+                Session::flash('message',$langCloudFileError);
                 Session::flash('alert-class', 'alert-danger');
             }
         } elseif (isset($userFile)) {
@@ -472,7 +472,7 @@ if ($can_upload or $user_upload) {
                 'filename' => $fileName,
                 'comment' => $_POST['file_comment'],
                 'title' => $_POST['file_title']));
-                Session::flash('message',$langDownloadEnd); 
+                Session::flash('message',$langDownloadEnd);
                 Session::flash('alert-class', 'alert-success');
             $session->setDocumentTimestamp($course_id);
             redirect_to_current_dir();
@@ -565,7 +565,7 @@ if ($can_upload or $user_upload) {
                         "\n</body>\n</html>\n");
                     $session->setDocumentTimestamp($course_id);
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
-                    Session::flash('message',$langDownloadEnd); 
+                    Session::flash('message',$langDownloadEnd);
                     Session::flash('alert-class', 'alert-success');
                     if (isset($_GET['from']) and $_GET['from'] == 'ebookEdit') {
                         $redirect_url = "modules/ebook/edit.php?course=$course_code&id=$ebook_id";
@@ -611,12 +611,12 @@ if ($can_upload or $user_upload) {
             } else {
                 update_db_info('document', 'update', $source, $filename, $moveTo . '/' . my_basename($source));
             }
-            Session::flash('message',$langDirMv); 
+            Session::flash('message',$langDirMv);
             Session::flash('alert-class', 'alert-success');
             $curDirPath = $moveTo;
             redirect_to_current_dir();
         } else {
-            Session::flash('message',$langImpossible); 
+            Session::flash('message',$langImpossible);
             Session::flash('alert-class', 'alert-danger');
             // return to step 1
             $_GET['move'] = $source;
@@ -625,7 +625,7 @@ if ($can_upload or $user_upload) {
 
     // Move file or directory: Step 1
     if (isset($_GET['move'])) {
-        $file = $_GET['file'];       
+        $file = $_GET['file'];
         $dialogBox = 'move';
         $movePath = getDirectReference($_GET['move']);
         $curDirPath = my_dirname($movePath);
@@ -652,7 +652,7 @@ if ($can_upload or $user_upload) {
         $delete_ok = true;
         if ($r and (!$uploading_as_user or $r->lock_user_id == $uid)) {
             if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
-                Session::flash('message',$langResourceBelongsToCert); 
+                Session::flash('message',$langResourceBelongsToCert);
                 Session::flash('alert-class', 'alert-warning');
             } else {
                 // remove from index if relevant (except non-main sysbsystems and metadata)
@@ -661,7 +661,7 @@ if ($can_upload or $user_upload) {
                     function ($r2) use($langResourceBelongsToCert) {
                         Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
                         if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {
-                            Session::flash('message',$langResourceBelongsToCert); 
+                            Session::flash('message',$langResourceBelongsToCert);
                             Session::flash('alert-class', 'alert-warning');
                             redirect_to_current_dir();
                         }
@@ -682,10 +682,10 @@ if ($can_upload or $user_upload) {
                     Database::get()->query("DELETE FROM ebook_subsection WHERE file_id = ?d", $r->id);
                 }
                 if ($delete_ok) {
-                    Session::flash('message',$langDocDeleted); 
+                    Session::flash('message',$langDocDeleted);
                     Session::flash('alert-class', 'alert-success');
                 } else {
-                    Session::flash('message',$langGeneralError); 
+                    Session::flash('message',$langGeneralError);
                     Session::flash('alert-class', 'alert-danger');
                 }
                 redirect_to_current_dir();
@@ -725,7 +725,7 @@ if ($can_upload or $user_upload) {
             }
         }
         $curDirPath = my_dirname($sourceFile);
-        Session::flash('message',$langElRen); 
+        Session::flash('message',$langElRen);
         Session::flash('alert-class', 'alert-success');
         redirect_to_current_dir();
     }
@@ -756,13 +756,13 @@ if ($can_upload or $user_upload) {
             $newDirPath = make_path($_POST['newDirPath'], array($newDirName));
             // $path_already_exists: global variable set by make_path()
             if ($path_already_exists) {
-                Session::flash('message',$langFileExists); 
+                Session::flash('message',$langFileExists);
                 Session::flash('alert-class', 'alert-danger');
             } else {
                 $session->setDocumentTimestamp($course_id);
                 $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $newDirPath);
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-                Session::flash('message',$langDirCr); 
+                Session::flash('message',$langDirCr);
                 Session::flash('alert-class', 'alert-success');
             }
             $curDirPath = $_POST['newDirPath'];
@@ -813,7 +813,7 @@ if ($can_upload or $user_upload) {
                 'title' => $_POST['file_title']));
             }
             $curDirPath = my_dirname($commentPath);
-            Session::flash('message',$langComMod); 
+            Session::flash('message',$langComMod);
             Session::flash('alert-class', 'alert-success');
             redirect_to_current_dir();
         }
@@ -860,7 +860,7 @@ if ($can_upload or $user_upload) {
                 $file_format, $_POST['meta_language'], $uid);
         }
 
-        Session::flash('message',$langMetadataMod); 
+        Session::flash('message',$langMetadataMod);
         Session::flash('alert-class', 'alert-success');
         redirect_to_current_dir();
     }
@@ -882,7 +882,7 @@ if ($can_upload or $user_upload) {
             $curDirPath = $_POST['curDirPathAfterReplace'];
             // check for disk quota
             if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
-                Session::flash('message',$langNoSpace); 
+                Session::flash('message',$langNoSpace);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_current_dir();
             } else {
@@ -894,7 +894,7 @@ if ($can_upload or $user_upload) {
                           WHERE $group_sql AND path = ?s"
                                 , $newpath, $newformat, ($_FILES['newFile']['name']), $oldpath)->affectedRows;
                 if (!copy($_FILES['newFile']['tmp_name'], $basedir . $newpath) or $affectedRows == 0) {
-                    Session::flash('message',$langGeneralError); 
+                    Session::flash('message',$langGeneralError);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_current_dir();
                 } else {
@@ -916,7 +916,7 @@ if ($can_upload or $user_upload) {
                     Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldpath' => $oldpath,
                         'newpath' => $newpath,
                         'filename' => $_FILES['newFile']['name']));
-                        Session::flash('message',$langReplaceOK); 
+                        Session::flash('message',$langReplaceOK);
                         Session::flash('alert-class', 'alert-success');
                     redirect_to_current_dir();
                 }
@@ -964,7 +964,7 @@ if ($can_upload or $user_upload) {
                 'categories' => $fileCategoryNames,
                 'copyrightTitles' => $copyright_titles);
         } else {
-            Session::flash('message',$langFileNotFound); 
+            Session::flash('message',$langFileNotFound);
             Session::flash('alert-class', 'alert-danger');
             view('layouts.default', $data);
             exit;
@@ -985,7 +985,7 @@ if ($can_upload or $user_upload) {
             // $dialogBox .= metaCreateForm($metadata, $oldFilename, $real_filename);
             $metaDataBox .= metaCreateForm($metadata, $oldFilename, $real_filename);
         } else {
-            Session::flash('message',$langFileNotFound); 
+            Session::flash('message',$langFileNotFound);
             Session::flash('alert-class', 'alert-danger');
         }
     }
@@ -1003,14 +1003,14 @@ if ($can_upload or $user_upload) {
             }
             $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $visibilityPath);
             if (($newVisibilityStatus == 0) and resource_belongs_to_progress_data(MODULE_ID_DOCS, $r->id)) {
-                Session::flash('message',$langResourceBelongsToCert); 
+                Session::flash('message',$langResourceBelongsToCert);
                 Session::flash('alert-class', 'alert-warning');
             } else {
                 Database::get()->query("UPDATE document SET visible = ?d
                                                   WHERE $group_sql AND
                                                         path = ?s", $newVisibilityStatus, $visibilityPath);
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-                Session::flash('message',$langViMod); 
+                Session::flash('message',$langViMod);
                 Session::flash('alert-class', 'alert-success');
                 $curDirPath = my_dirname($visibilityPath);
                 redirect_to_current_dir();
@@ -1026,7 +1026,7 @@ if ($can_upload or $user_upload) {
                                                     path = ?s", $new_public_status, $path);
             $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-            Session::flash('message',$langViMod); 
+            Session::flash('message',$langViMod);
             Session::flash('alert-class', 'alert-success');
             $curDirPath = my_dirname($path);
             redirect_to_current_dir();
@@ -1047,7 +1047,7 @@ $curDirName = my_basename($curDirPath);
 $parentDir = my_dirname($curDirPath);
 try {
     if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
-        Session::flash('message',$langInvalidDir); 
+        Session::flash('message',$langInvalidDir);
     Session::flash('alert-class', 'alert-danger');
         view('layouts.default', $data);
         exit;
@@ -1087,7 +1087,7 @@ if ($curDirPath) {
     $dirInfo = Database::get()->querySingle("SELECT visible, public
         FROM document WHERE $group_sql AND path = ?s", $curDirPath);
     if (!$dirInfo) {
-        Session::flash('message',$langInvalidDir); 
+        Session::flash('message',$langInvalidDir);
         Session::flash('alert-class', 'alert-danger');
         view('layouts.default', $data);
         exit;
@@ -1098,7 +1098,7 @@ if ($curDirPath) {
             header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
         } else {
             // Logged in but access forbidden
-            Session::flash('message',$langInvalidDir); 
+            Session::flash('message',$langInvalidDir);
             Session::flash('alert-class', 'alert-danger');
             view('layouts.default', $data);
         }
