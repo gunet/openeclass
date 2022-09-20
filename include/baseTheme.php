@@ -280,7 +280,7 @@ function view($view_file, $view_data = array()) {
             // $styles_str .= ".jumbotron.jumbotron-login {background-size: cover, cover; background-position: 0% 0%;}";
             $styles_str .= ".jumbotron.jumbotron-login {background-repeat: no-repeat; background-size: cover;}";
         }else{
-            $leftsideImg .= "1";
+            $leftsideImg = "1";
             $styles_str .= ".jumbotron.jumbotron-login{border-top-right-radius:0px;}";
         }
         //$styles_str .= ".jumbotron.jumbotron-login {  background-size: 353px, cover; background-position: 10% 60%;}";
@@ -378,7 +378,7 @@ function view($view_file, $view_data = array()) {
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
             'logo_url_path','leftsideImg','eclass_banner_value');
     $data = array_merge($global_data, $view_data);
-    echo '  '.get_config('theme').'  -  '.$view_file;
+    //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();
 }
 

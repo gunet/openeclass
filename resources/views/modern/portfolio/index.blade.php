@@ -99,7 +99,7 @@
 
                         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
 
-                                <div class="row">
+                                {{--<div class="row">
                                     <div class="col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
                                         <div class="shadow-sm bg-body rounded bg-primary">
                                             <p class='text-center ps-2 pe-2 pb-2 pt-2 control-label-notes'>{{ trans('langCourseDescription') }}</p>
@@ -116,9 +116,30 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>--}}
+
+                                <div class='panel panel-default rounded-0 shadow-sm mt-md-0 mt-3'>
+                                    <div class='panel-heading rounded-0'>
+                                        <div class='panel-title text-center'>
+                                            {{ trans('langCourseDescription') }}
+                                        </div>
+                                    </div>
+                                    <div class='panel-body rounded-0'>
+                                        <div class="row mt-0">
+                                            <div class="col-lg-6 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
+                                                <p class='text-lg-start text-start text-secondary'>{{ trans('langSumCoursesEnrolled') }}: <span class='text-primary'>{{ $student_courses_count }}  </span></p>
+                                                <p class='text-lg-start text-start text-secondary mb-lg-0'>{{ trans('langSumCoursesSupport') }}:  <span class='text-primary'>{{ $teacher_courses_count }}</span></p>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
+                                                <p class='text-lg-start text-start text-secondary mb-0'>{{ trans('langProfileLastVisit') }}:
+                                                    <span class='text-primary'>{{ format_locale_date(strtotime($lastVisit->when)) }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="row">
+                                {{--<div class="row">
 
                                     <div class="col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
 
@@ -170,9 +191,63 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>--}}
+
+                                <div class='panel panel-default mt-3 rounded-0 shadow-sm'>
+                                    <div class='panel-heading rounded-0'>
+                                        <div class='panel-title text-center'>
+                                            {{ trans('langPersInfo') }}
+                                        </div>
+                                    </div>
+                                    <div class='panel-body rounded-0'>
+                                        <div class="row mt-0">
+                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
+                                                <p id="info" class="text-lg-start text-start text-secondary font-weight-bold" >E-mail: <span class='text-primary'>{{ $_SESSION['email'] }}</span></p>
+                                            </div>
+                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
+                                                <p id="info" class="text-lg-start text-start text-secondary font-weight-bold" >{{ trans('langStatus') }}:
+                                                    <span class='text-primary text-lowercase'>
+                                                        @if(($session->status == USER_TEACHER))
+                                                        {{ trans('langMetaTeacher') }}
+                                                        @elseif(($session->status == USER_STUDENT))
+                                                        {{ trans('langCStudent') }}
+                                                        @else
+                                                        {{ trans('langAdministrator')}}
+                                                        @endif
+
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
+                                                <p id="info" class="text-lg-start text-start text-secondary font-weight-bold" >{{ trans('langFaculty') }}:
+                                                    <span class='text-primary'>
+                                                        @php
+                                                            $user = new User();
+                                                            $departments = $user->getDepartmentIds($uid);
+                                                        @endphp
+                                                        @foreach ($departments as $dep)
+                                                            {!! $tree->getFullPath($dep) !!}
+                                                        @endforeach
+                                                    </span>
+                                                </p>
+                                            </div>
+
+                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
+                                                <p id="info" class="text-lg-start text-start text-secondary font-weight-bold mb-lg-0" >{{trans('langPhone')}}: <span class='text-primary'>{{ $userdata->phone }}</span></p>
+                                            </div>
+                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
+
+                                                <p id="info" class="text-lg-start text-start text-secondary font-weight-bold mb-lg-0">{{ trans('langAm') }}: <span class='text-primary'>{{ $userdata->am }}</span></p>
+                                            </div>
+                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
+
+                                                <p id="info" class="text-lg-start text-start text-secondary font-weight-bold mb-lg-0 mb-0" >{{ trans('langProfileMemberSince') }}: <span class='text-primary'>{{ $userdata->registered_at }}</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="row">
+                                {{--<div class="row">
                                     <div class="col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
                                         <div class="shadow-sm bg-body rounded bg-primary">
                                             <p class='text-center ps-2 pe-2 pb-2 pt-2 control-label-notes'>{{ trans('langAboutMe') }}</p>
@@ -184,6 +259,21 @@
                                             <p class='text-center'>{{ trans('langNoInfoAvailable') }}</p>
                                         @endif
 
+                                    </div>
+                                </div>--}}
+
+                                <div class='panel panel-default mt-3 rounded-0 shadow-sm'>
+                                    <div class='panel-heading rounded-0'>
+                                        <div class='panel-title text-center'>
+                                            {{ trans('langAboutMe') }}
+                                        </div>
+                                    </div>
+                                    <div class='panel-body panel-body-about-me rounded-0'>
+                                        @if (!empty($userdata->description))
+                                            {!! standard_text_escape($userdata->description) !!}
+                                        @else
+                                            <p class='text-center mb-0'>{{ trans('langNoInfoAvailable') }}</p>
+                                        @endif
                                     </div>
                                 </div>
 

@@ -14,7 +14,7 @@
                 <div class="row">
 
                     @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
-                        <div class='@if($leftsideImg) col-md-8 offset-md-2 col-12 mt-md-5 mt-0 rounded-0 border-0 @else @if(!get_config("homepage_title") and !get_config("homepage_intro") and !get_config("enable_mobileapi") and !get_config("opencourses_enable") and $eclass_banner_value == 0) Borders @else BordersTop @endif col-12 @endif card jumbotron jumbotron-login'>
+                        <div class='@if($leftsideImg) col-md-8 offset-md-2 col-12 @if(!get_config("homepage_title") and !get_config("homepage_intro") and !get_config("enable_mobileapi") and !get_config("opencourses_enable") and $eclass_banner_value == 0) mb-md-5 @endif mt-md-5 mt-0 rounded-0 border-0 @else @if(!get_config("homepage_title") and !get_config("homepage_intro") and !get_config("enable_mobileapi") and !get_config("opencourses_enable") and $eclass_banner_value == 0) Borders @else BordersTop @endif col-12 @endif card jumbotron jumbotron-login'>
                             <div class='row'>
                                 @if($warning)<div class='col-12 mt-4 mb-0'>{!! $warning !!}</div>@endif
                                 <div class='@if($leftsideImg) col-12 @else col-xl-6 col-lg-7 col-md-8 col-12 @endif'>
