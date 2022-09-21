@@ -38,7 +38,7 @@ if ($language == 'el') {
 }
 
 // check PHP version
-if (version_compare(PHP_VERSION, '7.4') < 0) {
+if (version_compare(PHP_VERSION, '8.0') < 0) {
     $tool_content .= "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
 }
 
