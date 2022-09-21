@@ -362,7 +362,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  <div class='form-group mt-3'>
                     <label class='col-sm-6 control-label-notes'>$langExerciseScaleGrade:</label>
                     <div class='col-sm-12'>
-                        <select name='exerciseRange' class='form-control'>
+                        <select name='exerciseRange' class='form-select'>
                             <option value".($exerciseRange == 0 ? ' selected' : '').">-- $langExerciseNoScaleGrade --</option>
                             <option value='10'" . ($exerciseRange == 10 ? " selected" : "") .">0-10</option>
                             <option value='20'" . ($exerciseRange == 20 ? " selected" : "") .">0-20</option>
@@ -570,7 +570,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")." mt-3'>
                         <label for='exerciseIPLock' class='col-sm-6 control-label-notes'>$langIPUnlock:</label>
                         <div class='col-sm-12'>
-                            <select name='exerciseIPLock[]' class='form-control' id='exerciseIPLock' multiple>
+                            <select name='exerciseIPLock[]' class='form-select' id='exerciseIPLock' multiple>
                                 $exerciseIPLockOptions
                             </select>
                             <span class='help-block'>".Session::getError('exerciseIPLock')."</span>

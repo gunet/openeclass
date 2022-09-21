@@ -249,7 +249,7 @@ function bbb_session_form($session_id = 0) {
         $tool_content .= "<div class='form-group mt-3'>
                 <label for='select-groups' class='col-sm-6 control-label-notes'>$langParticipants:</label>
                 <div class='col-sm-12'>
-                <select name='groups[]' multiple='multiple' class='form-control' id='select-groups'>";
+                <select name='groups[]' multiple='multiple' class='form-select' id='select-groups'>";
 
         if (empty($r_group) or (count($r_group)>=1 and in_array("0", $r_group))) {
             $tool_content .= "<option value='0' selected><h2>$langAllUsers</h2></option>";
@@ -311,7 +311,7 @@ function bbb_session_form($session_id = 0) {
         <div class='form-group mt-3'>
             <label for='tags_1' class='col-sm-6 control-label-notes'>$langBBBExternalUsers:</label>
             <div class='col-sm-12'>
-                <select id='tags_1' class='form-control' name='external_users[]' multiple></select>
+                <select id='tags_1' class='form-select' name='external_users[]' multiple></select>
                 <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBNotifyExternalUsersHelpBlock</span>
             </div>
         </div>

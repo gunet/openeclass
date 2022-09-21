@@ -128,7 +128,7 @@ jQuery(document).ready(function() {
            }
        }
   });
- // $('div.all_courses').html('<a class=\"btn btn-xs btn-secondary\" href=\"{$urlServer}main/my_courses.php\">$langAllCourses <span class=\"fa fa-arrow-right\"></span></a>');
+ // $('div.all_courses').html('<a class=\"btn btn-sm btn-secondary\" href=\"{$urlServer}main/my_courses.php\">$langAllCourses <span class=\"fa fa-arrow-right\"></span></a>');
   jQuery('.panel_title').click(function()
   {
     var mypanel = $(this).next();

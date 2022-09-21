@@ -186,7 +186,7 @@ if (isset($_GET['mid'])) {
             <div class='form-group mt-3'>
             <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
             <div class='col-sm-12'>
-                <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
+                <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
 
             // mail sender
             $out .= "<option value='$msg->author_id' selected>". uid_to_name($msg->author_id) . "</option>";
@@ -286,7 +286,7 @@ if (isset($_GET['mid'])) {
                 <div class='form-group mt-3'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
                 <div class='col-sm-12'>
-                    <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients-forward'>";
+                    <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients-forward'>";
 
             addRecipientOptions();
 

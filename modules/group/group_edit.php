@@ -188,7 +188,7 @@ if ($is_editor) {
     $checked['documents'] = ($group->documents?'checked':'');
     $checked['wiki'] = ($group->wiki?'checked':'');
 
-    $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-control'>\n";
+    $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-select'>\n";
     $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
                                    user.id IN (SELECT user_id FROM group_members
                                                               WHERE group_id = ?d AND
@@ -313,7 +313,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
                     <tbody>
                         <tr>
                           <td>
-                            <select class='form-control' id='users_box' name='nogroup[]' size='15' multiple>
+                            <select class='form-select' id='users_box' name='nogroup[]' size='15' multiple>
                               $tool_content_not_Member
                             </select>
                           </td>
@@ -326,7 +326,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
                               </div>
                           </td>
                           <td class='text-end'>
-                            <select class='form-control' id='members_box' name='ingroup[]' size='15' multiple>
+                            <select class='form-select' id='members_box' name='ingroup[]' size='15' multiple>
                               $tool_content_group_members
                             </select>
                           </td>
@@ -339,7 +339,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
     <div class='form-group mt-3'>
             <label for='selectcategory' class='col-sm-6 control-label-notes'>$langCategory:</label>
             <div class='col-sm-12'>
-                <select class='form-control' name='selectcategory' id='selectcategory'>
+                <select class='form-select' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
         $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
         foreach ($resultcategories as $myrow) {

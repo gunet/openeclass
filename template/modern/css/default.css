@@ -219,6 +219,34 @@ input[type="checkbox"]{
   min-width: 17px;
 }
 
+
+.form-wrapper input[type=text], .form-wrapper input[type=password], .form-wrapper .form-select{
+  border-radius: 0px;
+  border:none;
+  border-bottom:1px solid rgba(170, 181, 201, 0.5);;
+}
+.form-wrapper textarea:focus,
+.form-wrapper input[type="text"]:focus,
+.form-wrapper input[type="password"]:focus,
+.form-wrapper input[type="datetime"]:focus,
+.form-wrapper input[type="datetime-local"]:focus,
+.form-wrapper input[type="date"]:focus,
+.form-wrapper input[type="month"]:focus,
+.form-wrapper input[type="time"]:focus,
+.form-wrapper input[type="week"]:focus,
+.form-wrapper input[type="number"]:focus,
+.form-wrapper input[type="email"]:focus,
+.form-wrapper input[type="url"]:focus,
+.form-wrapper input[type="search"]:focus,
+.form-wrapper input[type="tel"]:focus,
+.form-wrapper input[type="color"]:focus,
+.form-wrapper .form-select:focus, .form-wrapper .form-control:focus,
+.uneditable-input:focus {   
+  border-color: white;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(107, 141, 185, 0.6);
+  outline: 0 none;
+}
+
 /* ------------------------------------- alerts ------------------------------------------ */
 /* ---------------------------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------------------------- */

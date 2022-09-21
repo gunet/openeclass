@@ -121,7 +121,7 @@ if ($is_editor) {
         $tool_content .= "<div class='form-group mt-3'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel control-labe-notes'>$langChatToSpecUsers:</label></div>
             <div class='form-group mt-3'>
                 <div class='col-sm-12'>
-                    <select class='form-control' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
+                    <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
             $chat_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.username
                                                         FROM course_user cu
                                                             JOIN user u ON cu.user_id=u.id
@@ -270,7 +270,7 @@ if ($is_editor) {
         $tool_content .= "<div class='form-group mt-3'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langChatToSpecUsers:</label></div>
         <div class='form-group mt-3'>
             <div class='col-sm-12'>
-                <select class='form-control' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
+                <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
 
         if ($conf->user_id > 0) { // existing chat users (if exist)
             $existing_chat_users = explode(',', $conf->user_id);

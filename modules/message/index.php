@@ -261,7 +261,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
             <div class='form-group mt-3'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langCourse:</label>
                 <div class='col-sm-12'>
-                    <select id='courseselect' class='form-control' name='course'>
+                    <select id='courseselect' class='form-select' name='course'>
                         <option value='-1'>&nbsp;</option>";
         foreach ($res as $course) {
             $tool_content .="<option value='".$course->code."'>".q($course->title)."</option>";
@@ -277,7 +277,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
         <div class='form-group mt-3'>
             <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
             <div class='col-sm-12'>
-                <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
+                <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
 
         if ($course_id != 0) {//course messages
             $student_to_student_allow = get_config('dropbox_allow_student_to_student');
@@ -412,7 +412,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                             <div class='form-group mt-3'>
                                 <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
                                 <div class='col-sm-12'>
-                                    <select name='recipients' class='form-control' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
+                                    <select name='recipients' class='form-select' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
                                 </div>
                             </div>";
         }

@@ -10,7 +10,7 @@
             <form method='post' action='{{ $targetUrl }}'>
                 {!! generate_csrf_token_form_field() !!}
                 <div class='modal-body'>
-                    <select class='form-control' name='assignTo[]' multiple id='assignTo'>
+                    <select class='form-select' name='assignTo[]' multiple id='assignTo'>
                         @foreach ($course_users as $cu)
                             <option value='{{ $cu->user_id }}'
                             @if (in_array($cu->user_id, $assigned))
@@ -40,7 +40,7 @@
             <form method='post' action='{{ $targetUrl }}'>
                 {!! generate_csrf_token_form_field() !!}
                 <div class='modal-body'>
-                    <select class='form-control' name='watchers[]' multiple id='watchersInput'>
+                    <select class='form-select' name='watchers[]' multiple id='watchersInput'>
                         @foreach ($course_users as $cu)
                             @unless (in_array($cu->user_id, $assigned))
                                 <option value='{{ $cu->user_id }}'

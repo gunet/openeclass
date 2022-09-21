@@ -117,7 +117,7 @@ hContent;
                     <div class='form-group mt-3'>
                     <label for='courses-select' class='col-sm-6 control-label-notes'>$langCourse:</label>
                     <div class='col-sm-12'>
-                        <select id='courses-select' class='form-control' name='prerequisite_course'></select>
+                        <select id='courses-select' class='form-select' name='prerequisite_course'></select>
                     </div>
                     </div>
                     <div class='form-group mt-3'>

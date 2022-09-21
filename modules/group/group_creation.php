@@ -85,7 +85,7 @@ if (isset($_GET['all'])) {
         <div class='form-group mt-3'>
             <label for='selectcategory' class='col-sm-6 control-label-notes'>$langCategory:</label>
             <div class='col-sm-2'>
-                <select class='form-control' name='selectcategory' id='selectcategory'>
+                <select class='form-select' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
         if ($social_bookmarks_enabled) {
             $tool_content .= "<option value='-2'";
@@ -118,7 +118,7 @@ if (isset($_GET['all'])) {
     </div></div>";
 } else {
     if ($is_editor) {
-            $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-control'>";
+            $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-select'>";
             $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname
                                                 FROM course_user, user
                                                 WHERE course_user.user_id = user.id AND
@@ -206,7 +206,7 @@ if (isset($_GET['all'])) {
                     <tbody>
                         <tr>
                           <td>
-                            <select class='form-control' id='users_box' name='nogroup[]' size='15' multiple>
+                            <select class='form-select' id='users_box' name='nogroup[]' size='15' multiple>
                               $tool_content_not_Member
                             </select>
                           </td>
@@ -219,7 +219,7 @@ if (isset($_GET['all'])) {
                               </div>
                           </td>
                           <td class='text-end'>
-                            <select class='form-control' id='members_box' name='ingroup[]' size='15' multiple>
+                            <select class='form-select' id='members_box' name='ingroup[]' size='15' multiple>
                               $tool_content_group_members
                             </select>
                           </td>
@@ -232,7 +232,7 @@ if (isset($_GET['all'])) {
     <div class='form-group mt-3'>
             <label for='selectcategory' class='col-sm-6 control-label-notes'>$langCategory:</label>
             <div class='col-sm-12'>
-                <select class='form-control' name='selectcategory' id='selectcategory'>
+                <select class='form-select' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
         if ($social_bookmarks_enabled) {
             $tool_content .= "<option value='-2'";

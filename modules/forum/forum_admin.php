@@ -160,7 +160,7 @@ elseif (isset($_GET['forumgoedit'])) {
         $tool_content .= "
                     <label for='cat_id' class='col-sm-6 control-label-notes'>$langChangeCat:</label>
                     <div class='col-sm-12'>
-                    <select name='cat_id' id='cat_id' class='form-control'>";
+                    <select name='cat_id' id='cat_id' class='form-select'>";
         $result = Database::get()->queryArray("SELECT `id`, `cat_title` FROM `forum_category` WHERE `course_id` = ?d AND `cat_order` <> ?d", $course_id, -1);
         //cat_order <> -1: temp solution to exclude group categories and avoid triple join
         foreach ($result as $result_row) {
@@ -452,7 +452,7 @@ elseif (isset($_GET['forumgodel'])) {
        <fieldset>
        <div class='form-group mt-3'>
         <div class='col-sm-12'>
-        <select name='forum_id' class='form-control'>";
+        <select name='forum_id' class='form-select'>";
         $result = Database::get()->queryArray("SELECT f.`id` as `forum_id`, f.`name` as `forum_name`, fc.`cat_title` as `cat_title` FROM `forum` AS `f`, `forum_category` AS `fc` WHERE f.`course_id` = ?d AND f.`cat_id` = fc.`id`", $course_id);
         foreach ($result as $result_row) {
            $forum_id = $result_row->forum_id;

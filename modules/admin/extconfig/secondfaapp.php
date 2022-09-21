@@ -193,7 +193,7 @@ class secondfaApp extends ExtApp {
 
     public static function getUnitialize(){
         global $langSFAkeep,$langSFAremove;
-        return "<select name='sfaremove' class='form-control'><option value='KEEP' selected>$langSFAkeep</option><option value='REMOVE'>$langSFAremove</option></select>";
+        return "<select name='sfaremove' class='form-select'><option value='KEEP' selected>$langSFAkeep</option><option value='REMOVE'>$langSFAremove</option></select>";
     }
 
     public static function setUnitialize($userid){

@@ -696,7 +696,7 @@ if ($is_editor) {
             bootbox.dialog({
                 title: '" . js_escape($langCreateDuplicateIn) . "',
                 message: '<form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"clone_form\">'+
-                            '<select class=\"form-control\" id=\"course_id\" name=\"clone_to_course_id\">'+
+                            '<select class=\"form-select\" id=\"course_id\" name=\"clone_to_course_id\">'+
                                 '<option value=\"$course_id\">--- " . js_escape($langCurrentCourse) . " ---</option>'+
                                 $courses_options
                             '</select>'+

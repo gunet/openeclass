@@ -233,10 +233,10 @@ $head_content .= "
                                     '<div class=\"form-group\">' +
                                         '<div class=\"row\">'+
                                             '<div class=\"col-sm-4\">' +
-                                                '<select name=\"category\" class=\"form-control\" id=\"cat\">$cat_options</select>' +
+                                                '<select name=\"category\" class=\"form-select\" id=\"cat\">$cat_options</select>' +
                                             '</div>' +
                                             '<div class=\"col-sm-4\">' +
-                                                '<select name=\"difficulty\" class=\"form-control\" id=\"diff\">$diff_options</select>' +
+                                                '<select name=\"difficulty\" class=\"form-select\" id=\"diff\">$diff_options</select>' +
                                             '</div>' +
                                             '<div class=\"col-sm-4\">' +
                                                 '<input class=\"form-control\" type=\"text\" id=\"q_num\" name=\"q_num\" value=\"\"> $langQuestions' +

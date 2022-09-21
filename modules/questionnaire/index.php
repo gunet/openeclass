@@ -427,7 +427,7 @@ function printPolls() {
                     </div>
                     <div class='modal-body'>
                         <div class='form-group'>
-                          <select class='form-control' id='course_id' name='clone_to_course_id'>
+                          <select class='form-select' id='course_id' name='clone_to_course_id'>
                             <option value='$course_id' selected>--- $langCurrentCourse ---</option>
                           </select>
                         </div>

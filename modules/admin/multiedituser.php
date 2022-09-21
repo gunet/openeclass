@@ -98,7 +98,7 @@ if (isset($_POST['submit'])) {
             $line = strtok("\n");
         }
     }
-    if (isset($error_mgs)) { 
+    if (isset($success_mgs)) { 
         //Session::Messages($success_mgs, 'alert-success');
         Session::flash('message',$success_mgs); 
         Session::flash('alert-class', 'alert-success'); }

@@ -166,7 +166,7 @@
                                                 <div class='form-group'>
                                                     <label for='Category' class='col-sm-2 control-label'>{{ trans('langCategory') }}:</label>
                                                     <div class='col-sm-10'>
-                                                        <select class='form-control' name='selectcategory'>
+                                                        <select class='form-select' name='selectcategory'>
                                                             <option value='0'>--</option>
                                                             @foreach ($resultcategories as $category)
                                                                 <option value='{{ $category->id }}'>{{ $category->name }}</option>

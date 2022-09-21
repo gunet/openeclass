@@ -124,7 +124,7 @@ $head_content .= "<script>
                     bootbox.dialog({
                         title: '" . js_escape($langCreateDuplicateIn) . "',
                         message: '<form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"clone_pool_form\">'+
-                                    '<select class=\"form-control\" id=\"course_id\" name=\"clone_pool_to_course_id\">'+
+                                    '<select class=\"form-select\" id=\"course_id\" name=\"clone_pool_to_course_id\">'+
                                         $courses_options
                                     '</select>'+
                                   '</form>',

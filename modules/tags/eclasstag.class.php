@@ -92,7 +92,7 @@ class eClassTag {
                 <div class='form-group mt-3'>
                     <label for='tags' class='col-sm-6 control-label-notes'>$langTags:</label>
                     <div class='col-sm-12'>
-                        <select id='tags' class='form-control' name='tags[]' multiple>
+                        <select id='tags' class='form-select' name='tags[]' multiple>
                         </select>
                     </div>
                 </div>

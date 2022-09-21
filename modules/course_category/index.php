@@ -131,14 +131,14 @@ foreach ($categories as $category) {
         $tool_content .= "
                 <tr>
                     <td class='text-center'>
-                        <select class='form-control' name='" . $selectInactive . "' id='" . $idInactive . "' size='17' multiple>" . $inactiveOpts . "</select>
+                        <select class='form-select' name='" . $selectInactive . "' id='" . $idInactive . "' size='17' multiple>" . $inactiveOpts . "</select>
                     </td>
                     <td class='text-center' style='vertical-align: middle;'>
                         <button type='button' class='btn btn-default' onClick=\"move('" . $idInactive . "','" . $idActive . "')\"><span class='fa fa-arrow-right'></span></button><br><br>
                         <button type='button' class='btn btn-default' onClick=\"move('" . $idActive . "','" . $idInactive . "')\"><span class='fa fa-arrow-left'></span></button>
                     </td>
                     <td class='text-center'>
-                        <select class='form-control' name='" . $selectActive . "' id='" . $idActive . "' size='17' multiple>" . $activeOpts . "</select>
+                        <select class='form-select' name='" . $selectActive . "' id='" . $idActive . "' size='17' multiple>" . $activeOpts . "</select>
                     </td>
                 </tr>";
 

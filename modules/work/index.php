@@ -2095,7 +2095,7 @@ function new_assignment() {
                 <div class='form-group hidden mt-3' style='margin-top: 30px;'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTiiApp:</label>
                     <div class='col-sm-12'>
-                      <select name='lti_template' class='form-control' id='lti_templates' disabled>
+                      <select name='lti_template' class='form-select' id='lti_templates' disabled>
                             $lti_template_options
                       </select>
                     </div>
@@ -2108,7 +2108,7 @@ function new_assignment() {
             <!-- <div class='form-group hidden mt-3'>
                 <label for='tii_submit_papers_to' class='col-sm-6 control-label-notes'>$langTiiSubmissionSettings:</label>
                 <div class='col-sm-12'>
-                  <select name='tii_submit_papers_to' class='form-control' id='tii_submit_papers_to' disabled>
+                  <select name='tii_submit_papers_to' class='form-select' id='tii_submit_papers_to' disabled>
                         <option value='0'>$langTiiSubmissionNoStore</option>
                         <option value='1' selected>$langTiiSubmissionStandard</option>
                         <option value='2'>$langTiiSubmissionInstitutional</option>
@@ -2147,7 +2147,7 @@ function new_assignment() {
             <div class='form-group hidden mt-3'>
                 <label class='col-sm-6 control-label-notes'>$langTiiSimilarityReport:</label>
                 <div class='col-sm-12'>
-                  <select name='tii_report_gen_speed' class='form-control' id='tii_report_gen_speed' disabled>
+                  <select name='tii_report_gen_speed' class='form-select' id='tii_report_gen_speed' disabled>
                         <option value='0' selected>$langTiiReportGenImmediatelyNoResubmit</option>
                         <option value='1'>$langTiiReportGenImmediatelyWithResubmit</option>
                         <option value='2'>$langTiiReportGenOnDue</option>
@@ -2263,7 +2263,7 @@ function new_assignment() {
             <div class='form-group".($scale_error ? " has-error" : "").($grading_type==ASSIGNMENT_SCALING_GRADE ? "" : " hidden")." mt-3'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langGradeScales:</label>
                 <div class='col-sm-12'>
-                  <select name='scale' class='form-control' id='scales' disabled>
+                  <select name='scale' class='form-select' id='scales' disabled>
                         $scale_options
                   </select>
                   <span class='help-block'>$scale_error</span>
@@ -2272,7 +2272,7 @@ function new_assignment() {
             <div class='form-group".($rubric_error ? " has-error" : "").($grading_type==ASSIGNMENT_RUBRIC_GRADE ? "" : " hidden")." mt-3'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langGradeRubrics:</label>
                 <div class='col-sm-12'>
-                  <select name='rubric' class='form-control' id='rubrics' disabled>
+                  <select name='rubric' class='form-select' id='rubrics' disabled>
                         $rubric_options
                   </select>
                   <span class='help-block'>$rubric_error</span>
@@ -2564,7 +2564,7 @@ function new_assignment() {
             <div class='form-group ".(Session::getError('assignmentIPLock') ? 'has-error' : '')." mt-3'>
                 <label for='assignmentIPLock' class='col-sm-6 control-label-notes'>$langIPUnlock:</label>
                 <div class='col-sm-12'>
-                    <select name='assignmentIPLock[]' class='form-control' id='assignmentIPLock' multiple>
+                    <select name='assignmentIPLock[]' class='form-select' id='assignmentIPLock' multiple>
                         $assignmentIPLockOptions
                     </select>
                 </div>
@@ -3160,7 +3160,7 @@ function show_edit_assignment($id) {
                 <!--<div class='form-group $lti_hidden mt-3'>
                     <label for='tii_submit_papers_to' class='col-sm-6 control-label-notes'>$langTiiSubmissionSettings:</label>
                     <div class='col-sm-12'>
-                      <select name='tii_submit_papers_to' class='form-control' id='tii_submit_papers_to' $lti_disabled>
+                      <select name='tii_submit_papers_to' class='form-select' id='tii_submit_papers_to' $lti_disabled>
                             <option value='0' " . (($row->tii_submit_papers_to == 0) ? 'selected' : '') . ">$langTiiSubmissionNoStore</option>
                             <option value='1' " . (($row->tii_submit_papers_to == 1) ? 'selected' : '') . ">$langTiiSubmissionStandard</option>
                             <option value='2' " . (($row->tii_submit_papers_to == 2) ? 'selected' : '') . ">$langTiiSubmissionInstitutional</option>
@@ -3313,7 +3313,7 @@ function show_edit_assignment($id) {
                 <div class='form-group".($scale_error ? " has-error" : "").($grading_type==1 ? "" : " hidden")." mt-3'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langGradeScales:</label>
                     <div class='col-sm-12'>
-                      <select name='scale' class='form-control' id='scales'".(!$grading_type ? " disabled" : "").">
+                      <select name='scale' class='form-select' id='scales'".(!$grading_type ? " disabled" : "").">
                             $scale_options
                       </select>
                       <span class='help-block'>$scale_error</span>
@@ -3322,7 +3322,7 @@ function show_edit_assignment($id) {
                 <div class='form-group".($rubric_error ? " has-error" : "").($grading_type==2 ? "" : " hidden")." mt-3'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langGradeRubrics:</label>
                     <div class='col-sm-12'>
-                      <select name='rubric' class='form-control' id='rubrics'".(!$grading_type ? " disabled" : "").">
+                      <select name='rubric' class='form-select' id='rubrics'".(!$grading_type ? " disabled" : "").">
                             $rubric_options
                       </select>
                       <span class='help-block'>$rubric_error</span>
@@ -3341,7 +3341,7 @@ function show_edit_assignment($id) {
                 <div class='form-group".($review_error_rubric ? " has-error" : "").($grading_type==3 ? "" : " hidden")." mt-3' >
 				   <label for='title' class='col-sm-6 control-label-notes'>$langGradeRubrics:</label>
                     <div class='col-sm-12'>
-                     <select name='rubric_review' class='form-control' id='reviews'".(!$grading_type ? " disabled" : "").">
+                     <select name='rubric_review' class='form-select' id='reviews'".(!$grading_type ? " disabled" : "").">
                             $rubric_option_review
                       </select>
                       <span class='help-block'>&nbsp;$review_error_rubric</span>
@@ -3669,7 +3669,7 @@ function show_edit_assignment($id) {
                 <div class='form-group ".(Session::getError('assignmentIPLock') ? 'has-error' : '')." mt-3'>
                     <label for='assignmentIPLock' class='col-sm-6 control-label-notes'>$langIPUnlock:</label>
                     <div class='col-sm-12'>
-                        <select name='assignmentIPLock[]' class='form-control' id='assignmentIPLock' multiple>
+                        <select name='assignmentIPLock[]' class='form-select' id='assignmentIPLock' multiple>
                             $assignmentIPLockOptions
                         </select>
                     </div>
@@ -4048,7 +4048,7 @@ function show_assignment_review($id, $display_graph_results = false) {
         foreach ($result as $row) {
             $tool_content .="<input type='hidden' name='assignment' value='$row->id'>";
             if ($assign->submission_type) {
-                $filelink = "<a href='#' class='onlineText btn btn-xs btn-default' data-id='$row->id'>$langQuestionView</a>";
+                $filelink = "<a href='#' class='onlineText btn btn-sm btn-default' data-id='$row->id'>$langQuestionView</a>";
             } else {
                 if (empty($row->file_name)) {
                     $filelink = '&nbsp;';
@@ -4252,7 +4252,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
         foreach ($scales as $scale) {
             $scale_options .= "<option value='$scale[scale_item_value]'>$scale[scale_item_name]</option>";
         }
-        $grade_field = "<select name='grade' class='form-control' id='scales'>$scale_options</select>";
+        $grade_field = "<select name='grade' class='form-select' id='scales'>$scale_options</select>";
     } elseif ($assignment->grading_type == ASSIGNMENT_RUBRIC_GRADE) {
         $valuegrade = (isset($grade)) ? $grade : '';
         $grade_field = "<input class='form-control' type='text' value='$valuegrade' name='grade' maxlength='4' size='3' readonly>";
@@ -4302,7 +4302,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 $maxFiles = $assignment->max_submissions;
                 $inputName = 'userfile[]';
                 $moreButton = "<div class='float-end'>
-                                 <button class='btn btn-info btn-xs moreFiles'>
+                                 <button class='btn btn-info btn-sm moreFiles'>
                                    <span class='fa fa-plus text-white'></span>
                                  </button>
                                </div>";
@@ -4983,7 +4983,7 @@ function show_assignment($id, $display_graph_results = false) {
                 $name = empty($row->group_id) ? display_user($row->uid) : display_group($row->group_id);
                 $stud_am = uid_to_am($row->uid);
                 if ($assign->submission_type == 1) {
-                    $filelink = "<button class='onlineText btn btn-xs btn-secondary' data-id='$row->id'>$langQuestionView</button>";
+                    $filelink = "<button class='onlineText btn btn-sm btn-secondary' data-id='$row->id'>$langQuestionView</button>";
                 } else {
                     if (empty($row->file_name)) {
                         $filelink = '&nbsp;';
@@ -5037,7 +5037,7 @@ function show_assignment($id, $display_graph_results = false) {
                     foreach ($scales as $scale) {
                         $scale_options .= "<option value='$scale[scale_item_value]'".($scale['scale_item_value'] == $grade ? " selected" : "").">$scale[scale_item_name]</option>";
                     }
-                    $grade_field = "<select name='grades[$row->id][grade]' class='form-control' id='scales'>$scale_options</select>";
+                    $grade_field = "<select name='grades[$row->id][grade]' class='form-select' id='scales'>$scale_options</select>";
                 }
                 else if ($row->grading_scale_id && $row->grading_type == ASSIGNMENT_RUBRIC_GRADE) {
                     $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $row->grading_scale_id);

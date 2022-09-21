@@ -88,7 +88,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="text-center">
-                                                    <select class="form-control" name="toolStatInactive[]" id='inactive_box' size='17' multiple>
+                                                    <select class="form-select" name="toolStatInactive[]" id='inactive_box' size='17' multiple>
                                                         @foreach($toolSelection[0] as $item)
                                                             <option value="{{ $item->id }}">{{ $item->title }}</option>
                                                         @endforeach
@@ -99,7 +99,7 @@
                                                     <button type="button" class="btn btn-secondary" onClick="move('active_box','inactive_box')"><span class="fa fa-arrow-left"></span></button>
                                                 </td>
                                                 <td class="text-center">
-                                                    <select class="form-control" name="toolStatActive[]" id='active_box' size='17' multiple>
+                                                    <select class="form-select" name="toolStatActive[]" id='active_box' size='17' multiple>
                                                         @foreach($toolSelection[1] as $item)
                                                             <option value="{{ $item->id }}">{{ $item->title }}</option>
                                                         @endforeach

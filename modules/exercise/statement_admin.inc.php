@@ -235,7 +235,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 <div class='form-group mt-3'>
                     <label for='questionCat' class='col-sm-6 control-label-notes'>$langQuestionCat:</label>
                     <div class='col-sm-12'>
-                        <select name='category' id='questionCat' class='form-control'>
+                        <select name='category' id='questionCat' class='form-select'>
                             $options
                         </select>
                     </div>

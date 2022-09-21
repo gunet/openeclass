@@ -204,7 +204,7 @@
                                             <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
                                                 <p id="info" class="text-lg-start text-start text-secondary font-weight-bold" >E-mail: <span class='text-primary'>{{ $_SESSION['email'] }}</span></p>
                                             </div>
-                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
+                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ps-xl-3 @if($_SESSION['email']) ps-lg-5 @else ps-lg-3 @endif pe-lg-2 ps-3 pe-2">
                                                 <p id="info" class="text-lg-start text-start text-secondary font-weight-bold" >{{ trans('langStatus') }}:
                                                     <span class='text-primary text-lowercase'>
                                                         @if(($session->status == USER_TEACHER))

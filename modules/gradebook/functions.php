@@ -189,7 +189,7 @@ function new_gradebook() {
                 <div class='form-group".($degreerange_error ? " has-error" : "")." mt-3'>
                     <label class='col-12 control-label-notes'>$langGradebookRange</label>
                     <div class='col-12'>
-                        <select name='degreerange' class='form-control'>
+                        <select name='degreerange' class='form-select'>
                             <option value".($degreerange == 0 ? ' selected' : '').">-- $langGradeScalesSelect --</option>
                             <option value='5'".($degreerange == 5 ? ' selected' : '').">0-5</option>
                             <option value='10'".($degreerange == 10 ? ' selected' : '').">0-10</option>
@@ -468,14 +468,14 @@ function user_gradebook_settings() {
                                     </tr>
                                     <tr>
                                       <td>
-                                        <select class='form-control' id='users_box' size='10' multiple></select>
+                                        <select class='form-select' id='users_box' size='10' multiple></select>
                                       </td>
                                       <td class='text-center'>
                                         <input type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' /><br />
                                         <input type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
                                       </td>
                                       <td width='40%'>
-                                        <select class='form-control' id='participants_box' name='specific[]' size='10' multiple></select>
+                                        <select class='form-select' id='participants_box' name='specific[]' size='10' multiple></select>
                                       </td>
                                     </tr>
                                 </table>
