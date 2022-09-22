@@ -157,33 +157,47 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             'url' => $_SERVER['SCRIPT_NAME']
         )
     )). "
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+
+<div class='row'>
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+            <div class='col-12 h-100 left-form'></div>
+        </div>
+    <div class='col-lg-6 col-12'>
         <div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <fieldset>
                 <div class='form-group".(Session::getError('newTitle') ? " has-error" : "")." mt-3'>
-                    <label for='newTitle' class='col-sm-6 control-label-notes'>$langTitle:</label>
+                    <label for='newTitle' class='col-sm-12 control-label-notes'>$langTitle</label>
                     <div class='col-sm-12'>
                         <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . $titleToModify . "' placeholder='$langTitle'>
                         <span class='help-block'>".Session::getError('newTitle')."</span>
                     </div>
                 </div>
                 <div class='form-group mt-3'>
-                  <label for='newContent' class='col-sm-6 control-label-notes'>$langNoteBody:</label>
+                  <label for='newContent' class='col-sm-12 control-label-notes'>$langNoteBody</label>
                   <div class='col-sm-12'>
                     " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
                   </div>
                 </div>
                 <div class='form-group mt-3'>
-                  <label for='refobjgentype' class='col-sm-6 control-label-notes'>$langReferencedObject:</label>
+                  <label for='refobjgentype' class='col-sm-12 control-label-notes'>$langReferencedObject</label>
                   <div class='col-sm-12'>
                     ".References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected). "
                   </div>
                 </div>
-                <div class='form-group mt-5'>
-                  <div class='col-sm-10 col-sm-offset-2'>
-                    <input class='btn btn-primary' type='submit' name='submitNote' value='$langAdd'> 
-                    <a class='btn btn-secondary' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
+                <div class='form-group mt-3'>
+                  <div class='col-12'>
+                  <div class='row'>
+                    <div class='col-6'>
+                     <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submitNote' value='$langAdd'> 
+                    </div>
+                    <div class='col-6'>
+                     <a class='btn btn-secondary cancelAdminBtn w-100' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
+                    </div>
+                  
+                  </div>
+                   
+                    
                   </div>
                 </div>";
                 if($noteToModify!=""){
@@ -193,7 +207,8 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 ". generate_csrf_token_form_field() ."
             </form>
         </div>
-    </div>";
+    </div>
+</div>";
 
 } elseif (isset($_GET['nid'])) {
     $tool_content .= action_bar(array(

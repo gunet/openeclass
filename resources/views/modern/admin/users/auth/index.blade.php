@@ -65,8 +65,8 @@
                     </div>
 
                     <div class='table-responsive'>
-                        <table class='announcements_table'>
-                            <thead class='notes_thead'>
+                        <table class='table-default'>
+                            <thead class='list-header'>
                                 <th class='text-white'>{{ trans('langAllAuthTypes') }}</th>
                                 <th class='text-white text-center'>{!! icon('fa-gears', trans('langActions')) !!}</th>
                             </thead>

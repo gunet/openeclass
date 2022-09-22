@@ -36,31 +36,36 @@
 
                     
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                             
                             <form role='form' class='form-horizontal' action='{{ $_SERVER['SCRIPT_NAME'] }}?c={{ $course->code }}' method='post' onsubmit='return validateNodePickerForm();'>
                                 <fieldset>
                                     <div class='form-group mt-3'>
-                                        <label for='Faculty' class='col-sm-6 control-label-notes'>{{ trans('langFaculty') }}:</label>
+                                        <label for='Faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                         <div class='col-sm-12'>
                                             {!! $node_picker !!}
                                         </div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <label for='fcode' class='col-sm-6 control-label-notes'>{{ trans('langCode') }}</label>
+                                        <label for='fcode' class='col-sm-12 control-label-notes'>{{ trans('langCode') }}</label>
                                         <div class='col-sm-12'>
                                             <input type='text' class='form-control' name='fcode' id='fcode' value='{{ $course->code }}'>
                                         </div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <label for='title' class='col-sm-6 control-label-notes'>{{ trans('langCourseTitle') }}:</label>
+                                        <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langCourseTitle') }}</label>
                                         <div class='col-sm-12'>
                                             <input type='text' class='form-control' name='title' id='title' value='{{ $course->title }}'>
                                         </div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <label for='titulary' class='col-sm-6 control-label-notes'>{{ trans('langTeachers') }}:</label>
+                                        <label for='titulary' class='col-sm-12 control-label-notes'>{{ trans('langTeachers') }}</label>
                                         <div class='col-sm-12'>
                                             <input type='text' class='form-control' name='titulary' id='titulary' value='{{ $course->prof_name }}'>
                                         </div>
@@ -68,8 +73,8 @@
                                     {!! showSecondFactorChallenge() !!}
                                     {!! generate_csrf_token_form_field() !!}    
                                     <div class='form-group mt-3'>
-                                        <div class='col-sm-10 col-sm-offset-4'>
-                                            <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                        <div class='col-12'>
+                                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                         </div>
                                     </div>
                                 </fieldset>

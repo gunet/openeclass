@@ -34,22 +34,27 @@
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                         
                         <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             
                             <div class='form-group mt-3'>
-                            <label for = 'username' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}:</label>
+                            <label for = 'username' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                 <div class='col-sm-12'>
-                                    <input id='username' class='form-control' type='text' name='username' placeholder='{{ trans('langUsername') }}'>
+                                    <input id='username' class='form-control' type='text' name='username' placeholder='{{ trans('langUsername') }}...'>
                                 </div>
                             </div>
                          
                             <div class='form-group mt-3'>
-                                <div class='col-sm-9 col-sm-offset-3'>
+                                <div class='col-12'>
                                     {!! showSecondFactorChallenge() !!}
-                                    <input class='btn btn-primary' type='submit' value='{{ trans('langSubmit') }}'>
+                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' value='{{ trans('langSubmit') }}'>
                                 </div>
                             </div>
                             {!! generate_csrf_token_form_field() !!}            

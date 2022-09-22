@@ -36,9 +36,9 @@
 
                     @if (count($bbb_servers) > 0)
                         <div class='table-responsive'>
-                            <table class='announcements_table'>
+                            <table class='table-default'>
                                 <thead>
-                                <tr class='notes_thead'>
+                                <tr class='list-header'>
                                     <th class = 'text-white text-center'>API URL</th>
                                     <th class = 'text-white text-center'>{{ trans('langBBBEnabled') }}</th>
                                     <th class = 'text-white text-center'>{{ trans('langOnlineUsers') }}</th>

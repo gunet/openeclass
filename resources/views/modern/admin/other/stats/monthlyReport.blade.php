@@ -34,8 +34,13 @@
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class="form-wrapper shadow-sm p-3 mt-5 rounded">
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
+                        <div class="form-wrapper shadow-sm p-3 rounded">
                             
                             <form class="form-horizontal" role="form" method="post">
                                 <div class="form-group mt-3">
@@ -47,7 +52,7 @@
                                         </select> --}}
                                         <select name="selectedMonth" class="form-select">{!! $months !!}</select>
                                     </div>
-                                    <input class="btn btn-primary mt-2" type="submit" name="btnUsage" value="{{ trans('langSubmit') }}">
+                                    <input class="btn btn-primary mt-2 submitAdminBtn w-100" type="submit" name="btnUsage" value="{{ trans('langSubmit') }}">
                                 </div>
                             </form>
                         </div>
@@ -56,9 +61,9 @@
                         @if (isset($monthly_data))
                             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                                 <div class='table-responsive mt-3'>
-                                    <table class="announcements_table">
+                                    <table class="table-default">
                                         <tbody>		
-                                            <tr class='notes_thead'>
+                                            <tr class='list-header'>
                                                 <th colspan="2" class="text-center text-white">{{ trans('langReport') }}: {{ $msg_of_month }} {{ $y }}</th>
                                             </tr>
                                             <tr>

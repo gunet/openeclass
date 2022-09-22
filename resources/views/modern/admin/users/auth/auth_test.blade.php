@@ -33,8 +33,13 @@
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
+                        <div class='form-wrapper shadow-sm p-3 rounded'>
                         
                     <form class='form-horizontal' name='authmenu' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                         <input type='hidden' name='auth' value='{{ $auth }}'>
@@ -42,7 +47,7 @@
                             <div class='alert alert-info'>{{ trans('langTestAccount') }} ({{ $auth_ids[$auth] }})</div>
                             
                             <div class='form-group mt-3'>
-                                <label for='test_username' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}:</label>
+                                <label for='test_username' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}:</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' type='text' name='test_username' id='test_username' value='{{ canonicalize_whitespace($test_username) }}' autocomplete='off'>
                                 </div>
@@ -51,7 +56,7 @@
                           
 
                             <div class='form-group mt-3'>
-                                <label for='test_password' class='col-sm-6 control-label-notes'>{{ trans('langPass') }}:</label>
+                                <label for='test_password' class='col-sm-12 control-label-notes'>{{ trans('langPass') }}:</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' type='password' name='test_password' id='test_password' value='{{ $test_password }}' autocomplete='off'>
                                 </div>
@@ -60,9 +65,17 @@
                             
 
                             <div class='form-group mt-3'>
-                                <div class='col-sm-10 col-sm-offset-2'>
-                                    <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langConnTest') }}'>
-                                    <a class='btn btn-secondary' href='auth.php'>{{ trans('langCancel') }}</a>
+                                <div class='col-12'>
+                                    <div class='row'>
+                                        <div class='col-6'>
+                                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langConnTest') }}'>
+                                        </div>
+                                        <div class='col-6'>
+                                            <a class='btn btn-secondary cancelAdminBtn w-100' href='auth.php'>{{ trans('langCancel') }}</a>
+                                        </div>
+                                    </div>
+                                    
+                                    
                                 </div>
                             </div>
                         </fieldset>

@@ -34,20 +34,25 @@
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                             
                             <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                 <fieldset>
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langEditAuthMethod') }}:</label>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langEditAuthMethod') }}:</label>
                                         <div class='col-sm-12'>
                                             {!! selection($auth_names, 'auth', intval($current_auth), "class='form-control'") !!}
                                         </div>
                                     </div>
                                     {!! showSecondFactorChallenge() !!}
-                                    <div class='col-sm-offset-2 col-sm-10 mt-3'>
-                                        <input class='btn btn-primary' type='submit' name='submit_editauth' value='{{ trans('langModify') }}'>
+                                    <div class='col-12 mt-3'>
+                                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_editauth' value='{{ trans('langModify') }}'>
                                     </div>
                                     <input type='hidden' name='u' value='{{ $u }}'>
                                 </fieldset>

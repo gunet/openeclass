@@ -64,6 +64,7 @@ $uploading_as_user = !$can_upload && $user_upload;
 
 if (defined('COMMON_DOCUMENTS')) {
     $menuTypeID = 3;
+    $data['menuTypeID'] = $menuTypeID;
     $toolName = $langCommonDocs;
     $diskQuotaDocument = $diskUsed + parseSize(ini_get('upload_max_filesize'));
 } elseif (defined('MY_DOCUMENTS')) {
@@ -74,6 +75,7 @@ if (defined('COMMON_DOCUMENTS')) {
         redirect_to_home_page();
     }
     $menuTypeID = 1;
+    $data['menuTypeID'] = $menuTypeID;
     $toolName = $langMyDocs;
     if ($session->status == USER_TEACHER) {
         $diskQuotaDocument = get_config('mydocs_teacher_quota') * 1024 * 1024;
@@ -940,7 +942,7 @@ if ($can_upload or $user_upload) {
                 'filename' => $result->filename,
                 'curDirPath' => $curDirPath,
                 'replacePath' => $_GET['replace'],
-                'replaceMessage' => sprintf($langReplaceFile, '<b>' . q($result->filename) . '</b>'));
+                'replaceMessage' => sprintf($langReplaceFile, '<span class="text-primary">' . q($result->filename) . '</span>'));
         }
     }
 

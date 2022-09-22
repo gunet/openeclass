@@ -37,8 +37,8 @@
 
                     <form name='mail_verification' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                         <div class='table-responsive'>
-                    <table class='announcements_table'>
-                        <tr class='notes_thead'>
+                    <table class='table-default'>
+                        <tr class='list-header'>
                                     <td class='text-white text-left' colspan='3'>
                                         <b>{{ trans('langMailVerificationSettings') }}</b>
                                     </td>

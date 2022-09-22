@@ -72,7 +72,15 @@
                         {!! $backButton !!}
                         
                         @if ($can_upload == 1)
-                            <div class='col-12'>
+                            @if($menuTypeID == 3 or $menuTypeID == 1)
+                                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                                    <div class='col-12 h-100 left-form'></div>
+                                </div>
+                                <div class='col-lg-6 col-12'>
+                            @else
+                                <div class='col-12'>
+                            @endif
+                            
                                 <div class='form-wrapper shadow-sm p-3 mt-2 rounded'>
                                 
                                     <form class='form-horizontal' role='form' action='{{ $upload_target_url }}' method='post'>
@@ -83,55 +91,68 @@
                                         @endif
                                         @if ($sections)
                                             <div class='form-group'>
-                                                <label for='section' class='col-sm-2 control-label-notes'>{{ trans('langSection') }}:</label>
+                                                <label for='section' class='col-sm-12 control-label-notes'>{{ trans('langSection') }}</label>
                                                 <div class='col-sm-12'>
                                                     {!! selection($sections, 'section_id', $section_id) !!}
                                                 </div>
                                             </div>
                                         @endif
 
-                                        <div class="row p-2"></div>
+                                        
 
                                         @if ($filename)
-                                            <div class='form-group'>
-                                                <label for='file_name' class='col-sm-6 control-label-notes'>{{ trans('langFileName') }}:</label>
+                                            <div class='form-group mt-3'>
+                                                <label for='file_name' class='col-sm-12 control-label-notes'>{{ trans('langFileName') }}</label>
                                                 <div class='col-sm-12'>
                                                     <p class='form-control-static'>{{ $filename }}</p>
                                                 </div>
                                             </div>
                                         @endif
 
-                                        <div class="row p-2"></div>
+                                     
 
-                                        <div class='form-group{{ Session::getError('file_title') ? ' has-error' : '' }}'>
-                                            <label for='file_title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
+                                        <div class='form-group{{ Session::getError('file_title') ? ' has-error' : '' }} mt-3'>
+                                            <label for='file_title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                             <div class='col-sm-12'>
-                                                <input type='text' class='form-control' id='file_title' name='file_title' value='{{ $title }}'>
+                                                <input type='text' class='form-control' placeholder="{{ trans('langTitle') }}..." id='file_title' name='file_title' value='{{ $title }}'>
                                                 <span class='help-block'>{{ Session::getError('file_title') }}</span>
                                             </div>
                                         </div>
 
-                                        <div class="row p-2"></div>
+                                        
 
-                                        <div class='form-group'>
-                                            <label for='file_title' class='col-sm-6 control-label-notes'>{{ trans('langContent') }}:</label>
+                                        <div class='form-group mt-3'>
+                                            <label for='file_title' class='col-sm-12 control-label-notes'>{{ trans('langContent') }}</label>
                                             <div class='col-sm-12'>
                                                 {!! $rich_text_editor !!}
                                             </div>
                                         </div>
 
-                                        <div class="row p-2"></div>
+                                       
 
-                                        <div class='form-group'>
-                                            <div class='col-xs-offset-2 col-xs-10'>
+                                        <div class='form-group mt-3'>
+                                            @if($menuTypeID == 3 or $menuTypeID == 1)
+                                            <div class='col-12'>
+                                                <div class='row'>
+                                                    <div class='col-6'>
+                                                       <button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit'>{{ trans('langSave') }}</button>
+                                                    </div>
+                                                    <div class='col-6'>
+                                                       <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @else
+                                            <div class='col-offset-2 col-10'>
                                                 <div class='form-group'>
-                                                    <div class='col-xs-offset-2 col-xs-10'>
-                                                        <button class='btn btn-primary' type='submit'>{{ trans('langSave') }}</button>
-                                                        <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                                    <div class='col-offset-2 col-10'>
+                                                        <button class='btn btn-primary btn-sm' type='submit'>{{ trans('langSave') }}</button>
+                                                        <a class='btn btn-secondary btn-sm' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                                                     </div>
                                                 </div>
                                                 {!! generate_csrf_token_form_field() !!}
                                             </div>
+                                            @endif
                                         </div>
                                     </form>
                                 </div>

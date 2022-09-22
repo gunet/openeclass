@@ -40,7 +40,7 @@
 
                     @if ($user_requests)
                         <div class='table-responsive'>
-                            <table id='requests_table' class='announcements_table'>
+                            <table id='requests_table' class='table-default'>
                                 {!! table_header() !!}
                                 <tbody>
                                 @foreach ($user_requests as $user_request)

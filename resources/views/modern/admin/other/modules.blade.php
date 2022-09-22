@@ -39,30 +39,43 @@
                   </div>
 
                   {!! isset($action_bar) ?  $action_bar : '' !!}
-                  <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+
+                  <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                      <div class='col-12 h-100 left-form'></div>
+                  </div>
+
+                  <div class='col-lg-6 col-12'>
                     <div class='form-wrapper shadow-sm p-3 rounded'>
                       
                       <form class='form-horizontal' role='form' action='modules.php' method='post'>
-                      @foreach ($modules as $mid => $minfo)
-                      <div class='form-group mt-3'>
-                        <div class='col-12 checkbox'>
-                          <label>
-                            <input type='checkbox' name='moduleDisable[{{ $mid }}]' value='1'{{ in_array($mid, $disabled)? ' checked': '' }}>
-                              {!! icon($minfo['image']) !!} &nbsp;
-                              {{ $minfo['title'] }}
-                          </label>
+                        <div class='row'>
+                          @foreach ($modules as $mid => $minfo)
+                          
+                            <div class='col-md-6 col-12'>
+                              <div class='form-group mt-3'>
+                                <div class='col-12 checkbox'>
+                                  <label>
+                                    <input type='checkbox' name='moduleDisable[{{ $mid }}]' value='1'{{ in_array($mid, $disabled)? ' checked': '' }}>
+                                      {!! icon($minfo['image']) !!} &nbsp;
+                                      {{ $minfo['title'] }}
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          
+                          @endforeach  
                         </div>
-                      </div>
-                      @endforeach  
-                      <div class='mt-3'></div>
-                      {!! showSecondFactorChallenge() !!}
-                      <div class='form-group mt-3'>
-                        <div class='col-12'>
-                          <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSubmitChanges') }}'>
+
+                        <div class='mt-3'></div>
+                        
+                        {!! showSecondFactorChallenge() !!}
+                        <div class='form-group mt-3'>
+                          <div class='col-12'>
+                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmitChanges') }}'>
+                          </div>
                         </div>
-                      </div>
-                      {!! generate_csrf_token_form_field() !!}
-                    </form>
+                        {!! generate_csrf_token_form_field() !!}
+                      </form>
                   </div>
                   </div>
                 </div>

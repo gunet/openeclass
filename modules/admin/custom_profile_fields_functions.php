@@ -98,7 +98,7 @@ function render_profile_fields_form($context, $valitron = false) {
                         $form_class = 'form-group has-error mt-3';
                         $help_block = '<span class="help-block">' . Session::getError('cpf_'.$f->shortname) . '</span>';
                     } else {
-                        $form_class = 'form-group mt-3';
+                        $form_class = 'input-group mt-3';
                         $help_block = '';
                     }
                 } else {
@@ -106,8 +106,8 @@ function render_profile_fields_form($context, $valitron = false) {
                     $help_block = '';
                 }
                 $return_string .= '<div class="'.$form_class.'">';
-                $return_string .= '<label class="col-sm-6 control-label-notes" for="'.$f->shortname.'">'.q($f->name).'</label>';
-                $return_string .= '<div class="col-sm-12">';
+                $return_string .= '<label class="col-sm-12 control-label-notes" for="'.$f->shortname.'">'.q($f->name).'</label>';
+               
 
                 //get data to prefill fields
                 if ($context['origin'] == 'edit_profile' || $context['origin'] == 'admin_edit_profile') {
@@ -216,7 +216,7 @@ function render_profile_fields_form($context, $valitron = false) {
                 } elseif (isset($req_label)) {
                     $return_string .= '<small><em>'.$req_label.'</em></small>';
                 }
-                $return_string .= $help_block.'</div></div>';
+                $return_string .= $help_block.'</div>';
                 unset($req_label);
             }
         }

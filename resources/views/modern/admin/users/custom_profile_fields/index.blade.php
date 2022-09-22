@@ -40,7 +40,7 @@
                         
                         @foreach ($result as $res)
                             <div id='cat_{{ getIndirectReference($res->id) }}' class='overflow-auto tile' style='margin-bottom:30px;'>
-                                <table class='announcements_table'>
+                                <table class='table-default'>
                                 <caption class='tile__name'>
                                     <strong>{{ trans('langCategory') }} :</strong> {{ $res->name }}
                                     <div class='float-end'>
@@ -67,7 +67,7 @@
                                     </div>
                                 </caption>            
                                 <thead>
-                                    <tr class='notes_thead'>
+                                    <tr class='list-header'>
                                         <td class='text-white'>{{ trans('langName') }}</td>
                                         <td class='text-white'>{{ trans('langCPFShortName') }}</td>
                                         <td class='text-white'>{{ trans('langDescription') }}</td>

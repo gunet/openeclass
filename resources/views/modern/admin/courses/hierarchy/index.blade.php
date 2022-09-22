@@ -35,9 +35,9 @@
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='table-respansive'>
-                            <table class='announcements_table'>
-                                <tr class='notes_thead'>
+                        <div class='table-responsive'>
+                            <table class='table-default'>
+                                <tr class='list-header'>
                                     <td colspan='{{ $maxdepth + 4 }}' class='right text-white'>
                                             {{ trans('langThereAre') }}: <b>{{ $nodesCount }}</b> {{ trans('langFaculties') }}
                                     </td>

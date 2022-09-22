@@ -34,25 +34,30 @@
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+
+                        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                            <div class='col-12 h-100 left-form'></div>
+                        </div>
+
+                        <div class='col-lg-6 col-12'>
                             <div class='form-wrapper shadow-sm p-3 rounded'>
 
                                 <form class='form-horizontal' role='form' name='edituser' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' onsubmit='return validateNodePickerForm();'>
                                     <fieldset>
                                         <div class='form-group mt-3'>
-                                            <label class='col-sm-6 control-label-notes'>{{ trans('langSurname') }}</label>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langSurname') }}</label>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='lname' size='50' value='{{ $info->surname }}'>
                                             </div>
                                         </div>
                                         <div class='form-group mt-3'>
-                                            <label class='col-sm-6 control-label-notes'>{{ trans('langName') }}</label>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
                                             <div class='col-sm-12'>
                                                 <input  class='form-control' type='text' name='fname' size='50' value='{{ $info->givenname }}'>
                                             </div>
                                         </div>
                                         <div class='form-group mt-3'>
-                                            <label class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}</label>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                             @if (!in_array($info->password, $auth_ids))
                                                 <div class='col-sm-12'>
                                                     <input  class='form-control' type='text' name='username' size='50' value='{{ $info->username }}'>
@@ -67,37 +72,37 @@
                                             @endif
                                         </div>
                                         <div class='form-group mt-3'>
-                                            <label class='col-sm-6 control-label-notes'>e-mail</label>
+                                            <label class='col-sm-12 control-label-notes'>e-mail</label>
                                             <div class='col-sm-12'>
                                                 <input  class='form-control' type='text' name='email' size='50' value='{{ mb_strtolower(trim($info->email)) }}'>
                                             </div>
                                         </div>
                                         <div class='form-group mt-3'>
-                                            <label class='col-sm-6 control-label-notes'>{{ trans('langEmailVerified') }}: </label>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langEmailVerified') }}: </label>
                                             <div class='col-sm-12'>
                                                 {!! selection($verified_mail_data, "verified_mail", intval($info->verified_mail), "class='form-control'") !!}
                                             </div>
                                         </div>
                                         <div class='form-group mt-3'>
-                                            <label class='col-sm-6 control-label-notes'>{{ trans('langAm') }}: </label>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langAm') }}: </label>
                                             <div class='col-sm-12'>
                                                 <input  class='form-control' type='text' name='am' value='{{ $info->am }}'>
                                             </div>
                                         </div>
                                         <div class='form-group mt-3'>
-                                            <label class='col-sm-6 control-label-notes'>{{ trans('langTel') }}: </label>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langTel') }}: </label>
                                             <div class='col-sm-12'>
                                                 <input  class='form-control' type='text' name='phone' value='{{ $info->phone }}'>
                                             </div>
                                         </div>
                                         <div class='form-group mt-3'>
-                                            <label class='col-sm-6 control-label-notes'>{{ trans('langFaculty') }}:</label>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</label>
                                             <div class='col-sm-12'>
                                                 {!! $html !!}
                                             </div>
                                         </div>
                                         <div class='form-group mt-3'>
-                                            <label class='col-sm-6 control-label-notes'>{{ trans('langProperty') }}:</label>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langProperty') }}:</label>
                                             <div class='col-sm-12'>
                                                 @if ($info->status == USER_GUEST)
                                                     {!! selection(array(USER_GUEST => trans('langGuest')), 'newstatus', intval($info->status), "class='form-control'") !!}
@@ -108,13 +113,13 @@
                                             </div>
                                         </div>
                                         <div class='form-group mt-3'>
-                                            <label class='col-sm-6 control-label-notes'>{{ trans('langRegistrationDate') }}:</label>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langRegistrationDate') }}:</label>
                                             <div class='col-sm-12'>
                                                 <p class='form-control-static'>{{ $reg_date->format("d-m-Y H:i") }}</p>
                                             </div>
                                         </div>
                                         <div class='input-append date form-group mt-3'>
-                                            <label class='col-sm-6 control-label-notes'>{{ trans('langExpirationDate') }}:</label>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langExpirationDate') }}:</label>
                                             <div class='col-sm-12'>
                                                 <div class='input-group'>
                                                     <input class='form-control' id='user_date_expires_at' name='user_date_expires_at' type='text' value='{{ $exp_date->format("d-m-Y H:i") }}'>
@@ -123,20 +128,20 @@
                                             </div>
                                         </div>
                                         <div class='form-group mt-3'>
-                                            <label class='col-sm-6 control-label-notes'>{{ trans('langUserID') }}: </label>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langUserID') }}: </label>
                                             <div class='col-sm-12'>
                                                 <p class='form-control-static'>{{ $u }}</p>
                                             </div>
                                         </div>
                                         <div class='form-group mt-3'>
-                                            <label class='col-sm-6 control-label-notes'>{{ trans('langUserWhitelist') }}</label>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langUserWhitelist') }}</label>
                                             <div class='col-sm-12'>
-                                                <textarea rows='6' cols='60' name='user_upload_whitelist'>{{ $info->whitelist }}</textarea>
+                                                <textarea class='w-100' rows='6' name='user_upload_whitelist'>{{ $info->whitelist }}</textarea>
                                             </div>
                                         </div>
                                         @if ($ext_uid)
                                             <div class='form-group mt-3'>
-                                                <label class='col-sm-6 control-label-notes'>{{trans('langProviderConnectWith')}}:</label>
+                                                <label class='col-sm-12 control-label-notes'>{{trans('langProviderConnectWith')}}:</label>
                                                 <div class='col-sm-12'>
                                                     <div class='row'>
                                                     @foreach ($ext_uid as $ext_uid_item)
@@ -163,8 +168,8 @@
                                         <input type='hidden' name='u_submitted' value='1'>
                                         <input type='hidden' name='registered_at' value='{{ $info->registered_at }}'>
                                         {!! showSecondFactorChallenge() !!}
-                                        <div class='col-sm-offset-2 col-sm-10 mt-3'>
-                                            <input class='btn btn-primary' type='submit' name='submit_edituser' value='{{ trans('langModify') }}'>
+                                        <div class='col-12 mt-3'>
+                                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_edituser' value='{{ trans('langModify') }}'>
                                         </div>
                                     </fieldset>
                                     {!! generate_csrf_token_form_field() !!}
@@ -175,11 +180,11 @@
                         <!--user is registered to courses-->
                         @if (count($sql) > 0)
                             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-                                <div class='shadow-lg p-3 bg-body rounded bg-primary'>
-                                    <h6>{{ trans('langStudentParticipation') }}</h6>
+                                <div class='shadow-sm p-3 rounded'>
+                                    <h6 class='text-center text-uppercase text-primary fw-bold w-auto p-2 bg-light'>{{ trans('langStudentParticipation') }}</h6>
                                     <div class='table-responsive'>
-                                        <table class='announcements_table'>
-                                            <tr class='notes_thead'>
+                                        <table class='table-default'>
+                                            <tr class='list-header'>
                                                 <th class='text-left text-white'>{{ trans('langCode') }}</th>
                                                 <th class='text-left text-white'>{{ trans('langLessonName') }}</th>
                                                 <th class='text-white'>{{ trans('langCourseRegistrationDate') }}</th>
@@ -200,7 +205,7 @@
                                                             @if (!$logs->reg_date)
                                                                 {{ trans('langUnknownDate') }}
                                                             @else
-                                                                {{ format_locale_date(strtotime($logs->reg_date), 'short', false) }};
+                                                                {{ format_locale_date(strtotime($logs->reg_date), 'short', false) }}
                                                             @endif
                                                         </td>
                                                         @if ($logs->status == USER_TEACHER)
@@ -217,7 +222,7 @@
                                                                 @endif
                                                             </td>
                                                             <td class='text-center'>
-                                                                {!! icon('fa-ban', trans('langUnregCourse'), "unreguser.php?u=$u&amp;c=$logs->id") !!}
+                                                                {!! icon('fa-ban text-danger', trans('langUnregCourse'), "unreguser.php?u=$u&amp;c=$logs->id") !!}
                                                             </td>
                                                         @endif
                                                     </tr>

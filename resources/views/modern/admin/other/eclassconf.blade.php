@@ -205,7 +205,7 @@
 
                                                
 
-                                                <div class='form-group mt-3'>
+                                                {{--<div class='form-group mt-3'>
                                                     <label for='formLandingName' class='col-sm-12 control-label-notes'>{{ trans('langLandingPageName') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control form-control-admin' type='text' name='formLandingName' id='formLandingName' value='{{ get_config('landing_name') }}'>
@@ -228,7 +228,7 @@
                                                     <div class='col-sm-12'>
                                                         <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSave') }}'>
                                                     </div>
-                                                </div>
+                                                </div>--}}
                                             </fieldset>
                                         </div>
                                     </div>
@@ -241,7 +241,7 @@
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
                                             <fieldset>
-                                                <div class='form-group mt-3'>
+                                                <div class='form-group'>
                                                     <label for='user_registration' class='col-sm-12 control-label-notes'>{{ trans('langUserRegistration') }}:</label>
                                                     <div class='col-sm-12'>
                                                             {!! selection(

@@ -5,17 +5,30 @@
                 {!! $group_hidden_input !!}
                 <input type='hidden' name='newDirPath' value='{{ $curDirPath }}'>
                 <div class='form-group'>
-                    <label for='newDirName' class='col-sm-6 control-label-notes'>{{ trans('langNameDir') }}:</label>
+                    <label for='newDirName' class='col-sm-12 control-label-notes'>{{ trans('langNameDir') }}</label>
                     <div class='col-12'>
-                        <input type='text' class='form-control' id='newDirName' name='newDirName'>
+                        <input type='text' class='form-control' placeholder="{{ trans('langNameDir') }}..." id='newDirName' name='newDirName'>
                     </div>
                 </div>
-                <div class="row p-2"></div>
-                <div class='form-group'>
-                    <div class='col-offset-2 col-10'>
-                        <button class='btn btn-primary' type='submit'>{{ trans('langCreate') }}</button>
-                        <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+
+                <div class='form-group mt-3'>
+                    @if($menuTypeID == 3 or $menuTypeID == 1)
+                    <div class='col-12'>
+                        <div class='row'>
+                            <div class='col-6'>
+                                <button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit'>{{ trans('langCreate') }}</button>
+                            </div>
+                            <div class='col-6'>
+                                <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                            </div>
+                        </div>
                     </div>
+                    @else
+                    <div class='col-offset-2 col-10'>
+                        <button class='btn btn-primary btn-sm' type='submit'>{{ trans('langCreate') }}</button>
+                        <a class='btn btn-secondary btn-sm' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                    </div>
+                    @endif
                 </div>
                 {!! generate_csrf_token_form_field() !!}
             </form>

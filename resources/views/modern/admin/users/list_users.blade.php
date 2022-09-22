@@ -35,8 +35,8 @@
                     @endif
 
                     <div class="overflow-auto">
-                        <table id='search_results_table' class='announcements_table display'>
-                            <thead class='notes_thead'>
+                        <table id='search_results_table' class='table-default display'>
+                            <thead class='list-header'>
                                 <tr>
                                 <th class='text-white' width='150'>{{ trans('langSurname') }}</th>
                                 <th class='text-white' width='100'>{{ trans('langName') }}</th>

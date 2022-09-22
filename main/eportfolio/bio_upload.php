@@ -109,12 +109,12 @@ if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
 }
 $tool_content .= 
     "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langBioPermFileType ".sprintf($langBioMaxSize, get_config('bio_quota'))."</div></div>
-     <div class='form-group'>
-        <label for='bio' class='col-sm-6 control-label-notes'>$label</label>
-        <div class='col-sm-12'>
+     <div class='input-group'>
+        <label for='bio' class='input-group-text ps-2 pe-2 pt-0 pb-0 fs-6 textFileUpload'>$label</label>
+        
             $bio" . fileSizeHidenInput() . "
-            <input type='file' name='bio' size='30'>
-        </div>
+            <input type='file' name='bio' class='form-control'>
+        
     </div>
 
 

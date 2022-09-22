@@ -130,7 +130,11 @@ $tool_content .= action_bar(array(
 
 $boolean_field = "";
 $tool_content .= "
-    <div class='extapp'><div class='col-12'>
+    <div class='row'>
+    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+            <div class='col-12 h-100 left-form'></div>
+        </div>
+        <div class='col-lg-6 col-12'>
       <div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
 
@@ -142,7 +146,7 @@ foreach ($app->getParams() as $param) {
         $boolean_field .= "</div></div></div>";
     } else if ($param->name() == LtiPublishApp::FRAMEANCESTORS) {
         $tool_content .= "<div class='form-group mt-3'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-6 control-label-notes'>" . $param->display() . "&nbsp;&nbsp;";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "&nbsp;&nbsp;";
         $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langLtiPublishFrameAncestorsTooltip'></span></label>";
         $tool_content .= "<div class='col-sm-12'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='https://url1, https://url2'></div>";
         $tool_content .= "</div>";
@@ -159,7 +163,7 @@ foreach ($app->getParams() as $param) {
             $selected = "selected";
         }
         $tool_content .= "<div class='form-group mt-3' id='courses-list'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-6 control-label-notes'>$langUseOfApp&nbsp;&nbsp;";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>$langUseOfApp&nbsp;&nbsp;";
         $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langUseOfAppInfo'></span></label>";
         $tool_content .= "<div class='col-sm-12'><select id='select-courses' class='form-select' name='lti_courses[]' multiple>";
         $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";
@@ -171,7 +175,7 @@ foreach ($app->getParams() as $param) {
         $tool_content .= "<input type='hidden' id='enabled-courses' name='" . $param->name() . "'>";
     } else {
         $tool_content .= "<div class='form-group mt-3'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-6 control-label-notes'>" . $param->display() . "</label>";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "</label>";
         $tool_content .= "<div class='col-sm-12'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
         $tool_content .= "</div>";
     }
@@ -180,10 +184,18 @@ foreach ($app->getParams() as $param) {
 $tool_content .= $boolean_field;
 $tool_content .= "
             <div class='form-group mt-3'>
-              <div class='col-sm-offset-2 col-sm-10'>
-                <button class='btn btn-primary' type='submit' name='submit'>$langSubmit</button>
-                <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>
-                <a href='extapp.php' class='btn btn-default'>$langCancel</a>
+              <div class='col-12'>
+              <div class='row'>
+                <div class='col-4'>
+                    <button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit'>$langSubmit</button>
+                </div>
+                <div class='col-4'>
+                    <button class='btn btn-danger btn-sm submitAdminBtn w-100' type='submit' name='submit' value='clear'>$langClearSettings</button>
+                </div>
+                <div class='col-4'>
+                    <a href='extapp.php' class='btn btn-secondary btn-sm cancelAdminBtn w-100'>$langCancel</a>
+                </div>
+                </div>
               </div>
             </div>" .
           generate_csrf_token_form_field() . "

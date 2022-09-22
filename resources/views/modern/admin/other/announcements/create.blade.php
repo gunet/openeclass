@@ -33,26 +33,31 @@
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='form-wrapper shadow-sm p-3 mt-4 rounded'> 
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
+                        <div class='form-wrapper shadow-sm p-3 rounded'> 
                             
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                 @if (isset($announcement))
                                     <input type='hidden' name='id' value='{{ $announcement->id }}'>
                                 @endif    
                                 <div class='mt-3 form-group{{ Session::hasError('title') ? " has-error" : "" }}'>
-                                    <label for='title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
+                                    <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='title' value='{{ isset($announcement) ? $announcement->title : "" }}'>
+                                        <input class='form-control' placeholder="{{ trans('langTitle') }}..." type='text' name='title' value='{{ isset($announcement) ? $announcement->title : "" }}'>
                                         {!! Session::getError('title', "<span class='help-block'>:message</span>") !!}
                                     </div>
                                 </div>
                                 <div class='mt-3 form-group'>
-                                    <label for='newContent' class='col-sm-6 control-label-notes'>{{ trans('langAnnouncement') }}:</label>
+                                    <label for='newContent' class='col-sm-12 control-label-notes'>{{ trans('langAnnouncement') }}</label>
                                     <div class='col-sm-12'>{!! $newContentTextarea !!}</div>
                                 </div>
                                 <div class='mt-3 form-group'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langLanguage') }}:</label>    
+                                    <label class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>    
                                     <div class='col-sm-12'>
                                         {!! lang_select_options('lang_admin_ann', "class='form-control'", isset($announcement) ? $announcement->lang : false) !!}
                                     </div>
@@ -61,7 +66,7 @@
                                     </small>
                                 </div>
                                 <div class='mt-3 form-group'>
-                                    <label for='startdate' class='col-sm-6 control-label-notes'>{{ trans('langStartDate') }} :</label>
+                                    <label for='startdate' class='col-sm-12 control-label-notes'>{{ trans('langStartDate') }}</label>
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
                                             <span class='input-group-addon'>
@@ -72,7 +77,7 @@
                                     </div>
                                 </div>
                                 <div class='mt-3 form-group'>
-                                    <label for='enddate' class='col-sm-6 control-label-notes'>{{ trans('langEndDate') }} :</label>
+                                    <label for='enddate' class='col-sm-12 control-label-notes'>{{ trans('langEndDate') }}</label>
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
                                             <span class='input-group-addon'>
@@ -92,8 +97,8 @@
                                     </div>
                                 </div>
                                 <div class='mt-3 form-group'>
-                                    <div class='col-sm-offset-2 col-sm-10'>
-                                        <input id='submitAnnouncement' class='btn btn-primary' type='submit' name='submitAnnouncement' value='{{ trans('langSubmit') }}'>
+                                    <div class='col-12'>
+                                        <input id='submitAnnouncement' class='btn btn-primary submitAdminBtn w-100' type='submit' name='submitAnnouncement' value='{{ trans('langSubmit') }}'>
                                     </div>
                                 </div>
                                 {!! generate_csrf_token_form_field() !!}

@@ -36,9 +36,9 @@
 
                     @if (count($om_servers) > 0)
                         <div class='table-responsive'>
-                            <table class='announcements_table'>
+                            <table class='table-default'>
                                 <thead>
-                                    <tr class='notes_thead'>
+                                    <tr class='list-header'>
                                         <th class='text-white text-center'>{{ trans('langOpenMeetingsServer') }}</th>
                                         <th class='text-white text-center'>{{ trans('langOpenMeetingsPort') }}</th>
                                         <th class='text-white text-center'>{{ trans('langOpenMeetingsAdminUser') }}</th>

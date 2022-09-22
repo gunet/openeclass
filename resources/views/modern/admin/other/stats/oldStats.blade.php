@@ -46,12 +46,16 @@
                     </div>   
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class="form-wrapper shadow-sm p-3 mt-5 rounded">
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
+                        <div class="form-wrapper shadow-sm p-3 rounded">
                             
                             <form class="form-horizontal" role="form" method="post">
                                 <div class='input-append date form-group mt-3' data-date='{{ $user_date_start }}' data-date-format='dd-mm-yyyy'>
-                                    <label class='col-sm-6 control-label-notes' for='user_date_start'>{{ trans('langStartDate') }}:</label>
+                                    <label class='col-sm-12 control-label-notes' for='user_date_start'>{{ trans('langStartDate') }}</label>
                                     <div class='row'>
                                         <div class='col-10 col-sm-11'>               
                                             <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '{{ $user_date_start }}'>
@@ -63,7 +67,7 @@
                                     </div>
                                 </div>       
                                 <div class='input-append date form-group mt-3' data-date='{{ $user_date_end }}' data-date-format='dd-mm-yyyy'>
-                                    <label class='col-sm-6 control-label-notes' for='user_date_end'>{{ trans('langEndDate') }}:</label>
+                                    <label class='col-sm-12 control-label-notes' for='user_date_end'>{{ trans('langEndDate') }}</label>
                                     <div class='row'>
                                         <div class='col-10 col-sm-11'>
                                             <input class='form-control' id='user_date_end' name='user_date_end' type='text' value='{{ $user_date_end }}'>
@@ -75,8 +79,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group mt-3">
-                                    <div class="col-sm-offset-2 col-sm-10">    
-                                        <input class="btn btn-primary" type="submit" name="btnUsage" value="{{ trans('langSubmit') }}">
+                                    <div class="col-12">    
+                                        <input class="btn btn-primary submitAdminBtn w-100" type="submit" name="btnUsage" value="{{ trans('langSubmit') }}">
                                     </div>
                                 </div>
                             </form>

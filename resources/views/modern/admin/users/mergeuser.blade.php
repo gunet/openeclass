@@ -38,30 +38,33 @@
                     @if(!$merge_completed){!! isset($action_bar) ?  $action_bar : '' !!}@endif
                     
                     @if (isset($_REQUEST['u']) and !$merge_completed)
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                            <div class='col-12 h-100 left-form'></div>
+                        </div>
+                        <div class='col-lg-6 col-12'>
                             <div class='form-wrapper shadow-sm p-3 rounded'>
                                 
                                 <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                 <fieldset>                                    
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langUser') }}:</label>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langUser') }}</label>
                                         <div class='col-sm-12'>
                                             {!! display_user($info['id']) !!}
                                         </div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langEditAuthMethod') }}:</label>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langEditAuthMethod') }}</label>
                                         <div class='col-sm-12'>{!! get_auth_info($auth_id) !!}</div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langProperty') }}:</label>                     
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langProperty') }}</label>                     
                                         <div class='col-sm-12'>{!! $status_names[$info['status']] !!}</div>
                                     </div>                    
                                     {!! $target_field !!}
                                     <input type='hidden' name='u' value='{{ intval($u) }}'>
                                     {!! showSecondFactorChallenge() !!}
-                                    <div class='col-sm-offset-3 col-sm-9 mt-3'>                                                  
-                                        <input class='btn btn-primary' type='submit' name='submit' value='{{ $submit_button }}'>
+                                    <div class='col-12 mt-3'>                                                  
+                                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ $submit_button }}'>
                                     </div>                                                  
                                 </fieldset>
                                 {!! $target_user_input !!}

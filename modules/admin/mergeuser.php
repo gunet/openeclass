@@ -92,12 +92,12 @@ if (isset($_REQUEST['u'])) {
             } else {
                 $target_auth_id = 1; // eclass default method
             }
-            $data['target_field'] .= "<div class='form-group mt-3'><label class='col-sm-6 control-label-notes'>$langUserMergeTarget:</label>
+            $data['target_field'] .= "<div class='form-group mt-3'><label class='col-sm-12 control-label-notes'>$langUserMergeTarget:</label>
                                               <div class='col-sm-12'><p class='form-control-static'>" . display_user($target['id']) .
                     " (" . q($target['username']) . ")</p></div></div>
-                <div class='form-group mt-3'><label class='col-sm-6 control-label-notes'>$langEditAuthMethod:</label>
+                <div class='form-group mt-3'><label class='col-sm-12 control-label-notes'>$langEditAuthMethod:</label>
                           <div class='col-sm-12'>" . get_auth_info($target_auth_id) . "</div></div>
-                              <div class='form-group mt-3'><label class='col-sm-6 control-label-notes'>$langProperty:</label>                                          
+                              <div class='form-group mt-3'><label class='col-sm-12 control-label-notes'>$langProperty:</label>                                          
                           <div class='col-sm-12'>" . q($status_names[$target['status']]) . "</div></div>";
             if ($info['status'] == USER_TEACHER and $target['status'] != USER_TEACHER) {
                 $target = false;
@@ -115,7 +115,7 @@ if (isset($_REQUEST['u'])) {
             }
         }
         if (!$target) {
-            $data['target_field'] .= "<div class='form-group mt-3'><label class='col-sm-6 control-label-notes'>$langUserMergeTarget:</label>
+            $data['target_field'] .= "<div class='form-group mt-3'><label class='col-sm-12 control-label-notes'>$langUserMergeTarget:</label>
                                               <div class='col-sm-12'><input type='text' name='target' size='30'></div></div>";
         }
     }

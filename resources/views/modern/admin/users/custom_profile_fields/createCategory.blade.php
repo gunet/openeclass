@@ -32,7 +32,10 @@
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+                    <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                         
                         <form class='form-horizontal' role='form' name='catForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
@@ -41,15 +44,15 @@
                             <input type='hidden' name='cat_id' value='{{ getIndirectReference($catid) }}'>
                             @endif
                             <div class='form-group mt-3'>
-                                <label for='catname' class='col-sm-6 control-label-notes'>{{ trans('langName') }}</label>
+                                <label for='catname' class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
                                 <div class='col-sm-12'>
-                                    <input id='catname' class="form-control" type='text' name='cat_name' value="{{ $cat_name ?: '' }}">
+                                    <input id='catname' placeholder="{{ trans('langName') }}..." class="form-control" type='text' name='cat_name' value="{{ $cat_name ?: '' }}">
                                 </div>
                             </div>
                      
-                            <div class='col-sm-offset-2 col-sm-10 mt-3'>
+                            <div class='col-12 mt-3'>
                                 {!! showSecondFactorChallenge() !!}
-                                <input class='btn btn-primary' type='submit' name='submit_cat' value='{{ trans('langAdd') }}'>
+                                <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_cat' value='{{ trans('langAdd') }}'>
                             </div>
                         </fieldset>
                         {!! generate_csrf_token_form_field() !!}

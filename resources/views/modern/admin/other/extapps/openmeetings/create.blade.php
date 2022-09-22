@@ -33,63 +33,67 @@
                     @endif
                     
                         {!! isset($action_bar) ?  $action_bar : '' !!}
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+
+                        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                            <div class='col-12 h-100 left-form'></div>
+                        </div>
+                        <div class='col-lg-6 col-12'>
                            <div class='form-wrapper shadow-sm p-3 rounded'>
                             
                             <form class='form-horizontal' role='form' name='serverForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                                 <fieldset>        
                                     <div class='form-group mt-3'>
-                                    <label for='host' class='col-sm-6 control-label-notes'>{{ trans('langOpenMeetingsServer') }}:</label>
+                                    <label for='host' class='col-sm-12 control-label-notes'>{{ trans('langOpenMeetingsServer') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' id='host' type='text' name='hostname_form' value='{{ isset($server) ? $server->hostname : "" }}'>
+                                        <input class='form-control' id='host' type='text' placeholder="{{ trans('langOpenMeetingsServer') }}..." name='hostname_form' value='{{ isset($server) ? $server->hostname : "" }}'>
                                     </div>
                                 </div>
                                 <div class='form-group mt-3'>
-                                    <label for='ip_form' class='col-sm-6 control-label-notes'>{{ trans('langPort') }}:</label>
+                                    <label for='ip_form' class='col-sm-12 control-label-notes'>{{ trans('langPort') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='text' id='ip_form' name='port_form' value='{{ isset($server) ? $server->port : "" }}'>
+                                        <input class='form-control' type='text' placeholder="{{ trans('langPort') }}..." id='ip_form' name='port_form' value='{{ isset($server) ? $server->port : "" }}'>
                                     </div>
                                 </div>
                                 <div class='form-group mt-3'>
-                                    <label for='key_form' class='col-sm-6 control-label-notes'>{{ trans('langOpenMeetingsAdminUser') }}:</label>
+                                    <label for='key_form' class='col-sm-12 control-label-notes'>{{ trans('langOpenMeetingsAdminUser') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='username_form' value='{{ isset($server) ? $server->username : "" }}'>
+                                        <input class='form-control' type='text' placeholder="{{ trans('langOpenMeetingsAdminUser') }}..." name='username_form' value='{{ isset($server) ? $server->username : "" }}'>
                                     </div>
                                 </div>
                                 <div class='form-group mt-3'>
-                                    <label for='api_url_form' class='col-sm-6 control-label-notes'>{{ trans('langOpenMeetingsAdminPass') }}:</label>
+                                    <label for='api_url_form' class='col-sm-12 control-label-notes'>{{ trans('langOpenMeetingsAdminPass') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='password_form' value='{{ isset($server) ? $server->password : "" }}'>
+                                        <input class='form-control' type='text' placeholder="{{ trans('langOpenMeetingsAdminPass') }}..." name='password_form' value='{{ isset($server) ? $server->password : "" }}'>
                                     </div>
                                 </div>            
                                 <div class='form-group mt-3'>
-                                    <label for='webapp_form' class='col-sm-6 control-label-notes'>{{ trans('langOpenMeetingsWebApp') }}:</label>
+                                    <label for='webapp_form' class='col-sm-12 control-label-notes'>{{ trans('langOpenMeetingsWebApp') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='webapp_form' value='{{ isset($server) ? $server->webapp : "" }}'>
+                                        <input class='form-control' type='text' placeholder="{{ trans('langOpenMeetingsWebApp') }}..." name='webapp_form' value='{{ isset($server) ? $server->webapp : "" }}'>
                                     </div>
                                 </div>
                                 <div class='form-group mt-3'>
-                                    <label for='max_rooms_form' class='col-sm-6 control-label-notes'>{{ trans('langMaxRooms') }}:</label>
+                                    <label for='max_rooms_form' class='col-sm-12 control-label-notes'>{{ trans('langMaxRooms') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='text' id='max_rooms_for' name='max_rooms_form' value='{{ isset($server) ? $server->max_rooms : "" }}'>
+                                        <input class='form-control' type='text' placeholder="{{ trans('langMaxRooms') }}..." id='max_rooms_for' name='max_rooms_form' value='{{ isset($server) ? $server->max_rooms : "" }}'>
                                     </div>
                                 </div>
                                 <div class='form-group mt-3'>
-                                    <label for='max_rooms_form' class='col-sm-6 control-label-notes'>{{ trans('langMaxUsers') }}:</label>
+                                    <label for='max_rooms_form' class='col-sm-12 control-label-notes'>{{ trans('langMaxUsers') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='text' id='max_users_form' name='max_users_form' value='{{ isset($server) ? $server->max_users : "" }}'>
+                                        <input class='form-control' type='text' placeholder="{{ trans('langMaxUsers') }}..." id='max_users_form' name='max_users_form' value='{{ isset($server) ? $server->max_users : "" }}'>
                                     </div>
                                 </div>
-                                <div class='form-group mt'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langBBBEnableRecordings') }}:</label>
-                                    <div class="col-sm-12">
+                                <div class='form-group mt-3'>
+                                    <label class='col-sm-12 control-label-notes'>{{ trans('langBBBEnableRecordings') }}</label>
+                                    <div class="col-sm-12 d-inline-flex">
                                         <div class='radio'>
                                             <label>
                                                 <input  type='radio' id='recordings_on' name='enable_recordings' value='true'{{ $enabled_recordings ? ' checked' : '' }}>
                                                 {{ trans('langYes') }}
                                             </label>
                                         </div>                
-                                        <div class='radio'>
+                                        <div class='radio ms-2'>
                                             <label>
                                                 <input  type='radio' id='recordings_off' name='enable_recordings' value='false'{{ $enabled_recordings ? '' : ' checked' }}>
                                                 {{ trans('langNo') }}
@@ -98,15 +102,15 @@
                                     </div>
                                 </div>            
                                 <div class='form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langActivate') }}:</label>
-                                    <div class="col-sm-12">
+                                    <label class='col-sm-12 control-label-notes'>{{ trans('langActivate') }}</label>
+                                    <div class="col-sm-12 d-inline-flex">
                                         <div class='radio'>
                                             <label>
                                                 <input  type='radio' id='enabled_true' name='enabled' value='true'{{ $enabled ? ' checked' : '' }}>
                                                 {{ trans('langYes') }}
                                             </label>
                                         </div>                
-                                        <div class='radio'>
+                                        <div class='radio ms-2'>
                                             <label>
                                                 <input  type='radio' id='enabled_false' name='enabled' value='false'{{ $enabled ? '' : ' checked' }}>
                                                 {{ trans('langNo') }}
@@ -115,13 +119,13 @@
                                     </div>
                                 </div>
                                 <div class='form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langBBBServerOrder') }}:</label>
+                                    <label class='col-sm-12 control-label-notes'>{{ trans('langBBBServerOrder') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='weight' value='{{ isset($server) ? $server->weight : "" }}'>
+                                        <input class='form-control' type='text' placeholder="{{ trans('langBBBServerOrder') }}..." name='weight' value='{{ isset($server) ? $server->weight : "" }}'>
                                     </div>
                                 </div>
-                                <div class='form-group mt3'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langUseOfTc') }}:</label>
+                                <div class='form-group mt-3'>
+                                    <label class='col-sm-12 control-label-notes'>{{ trans('langUseOfTc') }}</label>
                                     <div class="col-sm-12">
                                         <select class='form-select' name='tc_courses[]' multiple class='form-control' id='select-courses'>                        
                                             {!! $listcourses !!}
@@ -133,8 +137,8 @@
                                     <input class='form-control' type='hidden' name='id_form' value='{{ getIndirectReference($om_server) }}'>
                                 @endif            
                                 <div class='form-group mt-3'>
-                                    <div class='col-sm-offset-3 col-sm-9'>
-                                        <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langAddModify') }}'>
+                                    <div class='col-12'>
+                                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langAddModify') }}'>
                                     </div>
                                 </div>
                                 </fieldset>

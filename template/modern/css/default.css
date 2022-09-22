@@ -17,13 +17,13 @@ body{
 span{
   font-size: 14px;
 }
-input::placeholder , .form-select, .form-control{
-  font-size: 13px;
-}
 
 @media (max-width:1023px){
   body{
     font-size:15px;
+  }
+  select{
+    overflow-y:auto !important;
   }
 }
 
@@ -156,6 +156,17 @@ a{
   opacity: 0.3;
 }
 
+.textFileUpload{
+  font-size:17px;
+  color:#1d4e89;
+  font-weight: 600;
+}
+@media (max-width:1023px){
+  .textFileUpload{
+    font-size: 16px;
+  }
+}
+
 
 /* ----------------------------- LABELS -INPUTS -MARGIN ------------------------------------ */
 /* ---------------------------------------------------------------------------------------- */
@@ -219,15 +230,38 @@ input[type="checkbox"]{
   min-width: 17px;
 }
 
+input::placeholder , .form-select, .form-control{
+  font-size: 13px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.left-form{
+  background-repeat: no-repeat; background-size: cover;
+  background-image: url(../images/form-wrapper-bg.jpg);
+}
 
 .form-wrapper input[type=text], .form-wrapper input[type=password], .form-wrapper .form-select{
   border-radius: 0px;
   border:none;
-  border-bottom:1px solid rgba(170, 181, 201, 0.5);;
+  border-bottom:1px solid rgba(170, 181, 201, 0.5); 
 }
+textarea{
+  border:1px solid rgba(170, 181, 201, 0.5); 
+}
+
+/* rich-text-editor bg-tools */
+.mce-toolbar-grp{
+  background: #f8f9fa;
+}
+
 .form-wrapper textarea:focus,
 .form-wrapper input[type="text"]:focus,
-.form-wrapper input[type="password"]:focus,
 .form-wrapper input[type="datetime"]:focus,
 .form-wrapper input[type="datetime-local"]:focus,
 .form-wrapper input[type="date"]:focus,
@@ -243,7 +277,7 @@ input[type="checkbox"]{
 .form-wrapper .form-select:focus, .form-wrapper .form-control:focus,
 .uneditable-input:focus {   
   border-color: white;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(107, 141, 185, 0.6);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(12, 103, 222, 0.6);
   outline: 0 none;
 }
 
@@ -261,7 +295,6 @@ input[type="checkbox"]{
 .alert-warning, .alert-info, .alert-danger, .alert-success{
   margin-top:10px;
 }
-
 
 /* -------------------------------- testimonials ------------------------------------------ */
 /* ---------------------------------------------------------------------------------------- */
@@ -1289,6 +1322,15 @@ input[type="checkbox"]{
     .control-label-notes{
       font-size: 16px;
     }
+  }
+  .form-wrapper.shadow-sm .control-label-notes{
+    /* color:#1d4e89; */
+    color:#6c757d;
+    font-weight: bold;
+  }
+
+  .submitAdminBtn, .cancelAdminBtn{
+    border-radius: 35px !important;
   }
   
   /* -------------------------------------------- Forum ----------------------------------------------*/

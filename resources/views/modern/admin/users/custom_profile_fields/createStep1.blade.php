@@ -32,21 +32,25 @@
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
+                        <div class='form-wrapper shadow-sm p-3 rounded'>
                             
                             <form class='form-horizontal' role='form' name='fieldForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                                 <fieldset>
                                 <input type='hidden' name='catid' value='{{ getIndirectReference($catid) }}'>
                                 <div class='form-group mt-3'>
-                                    <label for='datatype' class='col-sm-6 control-label-notes'>{{ trans('langCPFFieldDatatype') }}</label>
+                                    <label for='datatype' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldDatatype') }}</label>
                                     <div class='col-sm-12'>
                                         {!! selection($field_types, 'datatype', 1, 'class="form-control"') !!}
                                     </div>
                                 </div>
                              
-                                <div class='col-sm-offset-2 col-sm-10 mt-3'>
-                                    <input class='btn btn-primary' type='submit' name='add_field_proceed_step2' value='{{ trans('langNext') }}'>
+                                <div class='col-12 mt-3'>
+                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='add_field_proceed_step2' value='{{ trans('langNext') }}'>
                                 </div>
                                 </fieldset>
                                 {!! generate_csrf_token_form_field() !!}

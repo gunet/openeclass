@@ -34,8 +34,12 @@
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <form class='shadow-lg p-3 mb-5 bg-body rounded bg-primary' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
+                        <form class='form-wrapper shadow-sm p-3 rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             <fieldset>
                                 <table class='table table-bordered'>
                                     <tr>
@@ -46,7 +50,7 @@
                                     </tr>
                                     @foreach($connectorClasses as $curConnectorClass)
                                         @foreach((new $curConnectorClass())->getConfigFields() as $curField => $curLabel)
-                                            <tr class='connector-config connector-{{ $curConnectorClass }}' style='display: none;'>
+                                            <tr class='connector-config connector-{{ $curConnectorClass }} d-none'>
                                                 <th width='200' class='left'><b>{{ $curLabel }}</b></th>
                                                 <td><input class='FormData_InputText' type='text' name='form$curField' size='40' value='{{ get_config($curField) }}'></td>
                                             </tr>
@@ -65,7 +69,7 @@
                                 <li><a href='http://apps.microsoft.com/windows/en-us/app/google-authenticator/7ea6de74-dddb-47df-92cb-40afac4d38bb%22'>Google Authenticator (port) on Windows app store</a></li>
                             </ul>
                             <br>
-                            <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
                             {!! generate_csrf_token_form_field() !!}
                         </form>
                     </div>

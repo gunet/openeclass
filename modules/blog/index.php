@@ -215,8 +215,8 @@ if ($blog_type == 'course_blog' && $is_editor) {
                         <form class='form-horizontal' action='' role='form' method='post'>
                             <fieldset>                               
                                 <div class='form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>$langBlogPerm</label>
-                                    <div class='col-sm-9'> 
+                                    <label class='col-sm-12 control-label-notes'>$langBlogPerm</label>
+                                    <div class='col-sm-12'> 
                                         <div class='radio'>
                                             <label>
                                                 <input type='radio' value='0' name='1_radio' $checkTeach> $langBlogPermTeacher
@@ -232,8 +232,8 @@ if ($blog_type == 'course_blog' && $is_editor) {
                             </fieldset>
                             <fieldset>
                                 <div class='form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>$langBlogCommenting</label>
-                                    <div class='col-sm-9'>
+                                    <label class='col-sm-12 control-label-notes'>$langBlogCommenting</label>
+                                    <div class='col-sm-12'>
                                         <div class='radio'>
                                             <label>
                                                 <input type='radio' value='1' name='2_radio' $checkCommentEn> $langCommentsEn
@@ -247,8 +247,8 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                     </div>
                                 </div>
                                 <div class='form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>$langBlogRating:</label>
-                                    <div class='col-sm-9'>
+                                    <label class='col-sm-12 control-label-notes'>$langBlogRating:</label>
+                                    <div class='col-sm-12'>
                                         <div class='radio'>
                                             <label>
                                                 <input type='radio' value='1' name='3_radio' $checkRatingEn> $langRatingEn
@@ -262,8 +262,8 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                     </div>
                                 </div>
                                 <div class='form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>$langBlogSharing:</label>
-                                    <div class='col-sm-9'>
+                                    <label class='col-sm-12 control-label-notes'>$langBlogSharing:</label>
+                                    <div class='col-sm-12'>
                                         <div class='radio'>
                                             <label>
                                                 <input type='radio' value='1' name='4_radio' $checkSharingEn $sharing_radio_dis> $langSharingEn
@@ -278,7 +278,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                 </div>
                             </fieldset>
                             <div class='form-group mt-3'>
-                                <div class='col-sm-9 col-sm-offset-3'>".
+                                <div class='col-12'>".
                                     form_buttons(array(
                                         array(
                                             'text'  =>  $langSave,

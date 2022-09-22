@@ -39,23 +39,36 @@
                     </div>
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                             
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                 <fieldset>
                                     {!! $monthsField !!}
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langMultiDelUserData') }}:</label>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langMultiDelUserData') }}:</label>
                                         <div class='col-sm-12'>
                                             <textarea class='auth_input form-control' name='user_names' rows='30'>{{ $usernames }}</textarea>
                                         </div>
                                     </div>
                                     {!! showSecondFactorChallenge() !!}
                                     <div class='form-group mt-3'>
-                                        <div class='col-sm-10 col-sm-offset-2'>
-                                            <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSubmit') }}'{!! $confirm !!}>
-                                            <a href='index.php' class='btn btn-secondary'>{{ trans('langCancel') }}</a>
+                                        <div class='col-12'>
+                                            <div class='row'>
+                                                <div class='col-6'>
+                                                     <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmit') }}'{!! $confirm !!}>
+                                                </div>
+                                                <div class='col-6'>
+                                                    <a href='index.php' class='btn btn-secondary cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>
+                                                </div>
+                                            </div>
+                                           
+                                            
                                         </div>
                                     </div>
                                 </fieldset>

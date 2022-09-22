@@ -33,12 +33,17 @@
                     @endif
                     
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                      <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
+                      <div class='form-wrapper shadow-sm p-3 rounded'>
                           
                           <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}?c={{$course->code}}" method='post'>                
                               <div class='form-group'>
-                                      <label for='localize' class='col-sm-6 control-label-notes'>{{ trans('langAvailableTypes') }}:</label>
+                                      <label for='localize' class='col-sm-6 control-label-notes'>{{ trans('langAvailableTypes') }}</label>
                                   
                                       
                                       <div class='row mt-3'>
@@ -98,8 +103,8 @@
                                  
                               </div>
                               <div class='form-group mt-3'>
-                                  <div class='col-sm-10 col-sm-offset-2'>
-                                      <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                  <div class='col-12'>
+                                      <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                   </div>
                               </div>
                           </form>

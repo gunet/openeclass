@@ -37,13 +37,16 @@
                         <div class='alert alert-info'>{{ trans('langMultiMoveCourseInfo') }}</div>
                     </div>
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+                    <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>        
                             
                             <form role='form' class='form-horizontal' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post' onsubmit='return validateNodePickerForm();'>
                                 <fieldset>
                                     <div class='form-group mt-3'>
-                                        <label for='Faculty' class='col-sm-6 control-label-notes'>{{ trans('langFaculty') }}:</label>
+                                        <label for='Faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                         <div class='col-sm-12'>    
                                         {!! $html !!}
                                         </div>
@@ -52,9 +55,17 @@
                                         <input type='hidden' name='lessons[]' value='{{ $results->id }}'>
                                     @endforeach
                                     <div class='form-group mt-3'>
-                                        <div class='col-sm-10 col-sm-offset-2'>
-                                            <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSubmit') }}' onclick='return confirmation("{{ trans('langConfirmMultiMoveCourses') }}");'>
-                                            <a href='index.php' class='btn btn-secondary'>{{ trans('langCancel') }}</a>
+                                        <div class='col-12'>
+                                            <div class='row'>
+                                                <div class='col-6'>
+                                                     <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmit') }}' onclick='return confirmation("{{ trans('langConfirmMultiMoveCourses') }}");'>
+                                                </div>
+                                                <div class='col-6'>
+                                                     <a href='index.php' class='btn btn-secondary cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>
+                                                </div>
+                                            </div>
+                                           
+                                           
                                         </div>
                                     </div>
                                 </fieldset>

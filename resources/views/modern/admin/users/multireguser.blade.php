@@ -39,28 +39,32 @@
 
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
                     
-                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                     <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                         
                         <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' onsubmit='return validateNodePickerForm();' >
                         <fieldset>        
                         <div class='form-group mt-3'>
-                            <label for='fields' class='col-sm-6 control-label-notes'>{{ trans('langMultiRegFields') }}:</label>
-                            <div class='col-sm-2'>
+                            <label for='fields' class='col-sm-12 control-label-notes'>{{ trans('langMultiRegFields') }}</label>
+                            <div class='col-sm-12'>
                                 <input class='form-control' id='fields' type='text' name='fields' value='first last id email phone'>
                             </div>
                         </div>
                        
                         <div class='form-group mt-3'>
-                            <label for='user_info' class='col-sm-6 control-label-notes'>{{ trans('langUsersData') }}:</label>
+                            <label for='user_info' class='col-sm-12 control-label-notes'>{{ trans('langUsersData') }}</label>
                             <div class='col-sm-12'>
                                 <textarea class='auth_input form-control' name='user_info' id='user_info' rows='10'></textarea>
                             </div>
                         </div>
                     
                         <div class='form-group mt-3'>
-                            <label for='type' class='col-sm-6 control-label-notes'>{{ trans('langMultiRegType') }}:</label>
+                            <label for='type' class='col-sm-12 control-label-notes'>{{ trans('langMultiRegType') }}</label>
                             <div class='col-sm-12'>
                                 <select class='form-select' name='type' id='type'>
                                     <option value='stud'>{{ trans('langsOfStudents') }}</option>
@@ -71,7 +75,7 @@
                         @if (!$eclass_method_unique)
                         
                             <div class='form-group mt-3'>
-                                <label for='passsword' class='col-sm-6 control-label-notes'>{{ trans('langMethods') }}</label>
+                                <label for='passsword' class='col-sm-12 control-label-notes'>{{ trans('langMethods') }}</label>
                                 <div class='col-sm-12'>
                                     {!! selection($auth_m, "auth_methods_form", '', "class='form-control'") !!}
                                 </div>
@@ -79,48 +83,48 @@
                         @endif
                       
                         <div class='form-group mt-3'>
-                            <label for='prefix' class='col-sm-6 control-label-notes'>{{ trans('langMultiRegPrefix') }}:</label>
+                            <label for='prefix' class='col-sm-12 control-label-notes'>{{ trans('langMultiRegPrefix') }}</label>
                             <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='prefix' id='prefix' value='user'>
                             </div>
                         </div>
                       
                         <div class='form-group mt-3'>
-                            <label class='col-sm-6 control-label-notes'>{{ trans('langFaculty') }}:</label>
+                            <label class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</label>
                             <div class='col-sm-12'>
                                 {!! $html !!}
                             </div>
                         </div>
                         
                         <div class='form-group mt-3'>
-                            <label for='am' class='col-sm-6 control-label-notes'>{{ trans('langAm') }}:</label>
+                            <label for='am' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                             <div class='col-sm-12'>
-                                <input class='form-control' type='text' name='am' id='am'>
+                                <input class='form-control' placeholder="{{ trans('langAm') }}..." type='text' name='am' id='am'>
                             </div>
                         </div>
                       
                         <div class='form-group mt-3'>
-                            <label for='lang' class='col-sm-6 control-label-notes'>{{ trans('langLanguage') }}:</label>
+                            <label for='lang' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
                             <div class='col-sm-12'>{!! lang_select_options('lang', 'class="form-control"') !!}</div>
                         </div>
                         
                         <div class='form-group mt-3'>
-                        <label for='email_public' class='col-sm-6 control-label-notes'>{{ trans('langEmail') }}</label>
+                        <label for='email_public' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
                             <div class='col-sm-12'>{!! selection($access_options, 'email_public', ACCESS_PROFS, 'class="form-control"') !!}</div>
                         </div>
                     
                         <div class='form-group mt-3'>
-                        <label for='am_public' class='col-sm-6 control-label-notes'>{{ trans('langAm') }}</label>
+                        <label for='am_public' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                             <div class='col-sm-12'>{!! selection($access_options, 'am_public', ACCESS_PROFS, 'class="form-control"') !!}</div>
                         </div>
                     
                         <div class='form-group mt-3'>
-                        <label for='phone_public' class='col-sm-6 control-label-notes'>{{ trans('langPhone') }}</label>
+                        <label for='phone_public' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}</label>
                             <div class='col-sm-12'>{!! selection($access_options, 'phone_public', ACCESS_PROFS, 'class="form-control"') !!}</div>
                         </div>
                
                         <div class='form-group mt-3'>
-                        <label for='send_mail' class='col-sm-6 control-label-notes'>{{ trans('langInfoMail') }}</label>
+                        <label for='send_mail' class='col-sm-12 control-label-notes'>{{ trans('langInfoMail') }}</label>
                             <div class='col-sm-12'>
                                 <div class='checkbox'>
                                     <label>
@@ -132,9 +136,17 @@
                        
                         <div class='form-group mt-3'>
                             {!! showSecondFactorChallenge() !!}
-                            <div class='col-sm-9 col-sm-offset-3'>
-                                <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
-                                <a class='btn btn-secondary' href='index.php'>{{ trans('langCancel') }}</a>
+                            <div class='col-12'>
+                                <div class='row'>
+                                    <div class='col-6'>
+                                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                    </div>
+                                    <div class='col-6'>
+                                        <a class='btn btn-secondary cancelAdminBtn w-100' href='index.php'>{{ trans('langCancel') }}</a>
+                                    </div>
+                                </div>
+                                
+                                
                             </div>
                         </div>       
                         </fieldset>

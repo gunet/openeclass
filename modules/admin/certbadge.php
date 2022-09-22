@@ -188,40 +188,43 @@ if (isset($_GET['action'])) {
             $cert_hidden_id = "<input type='hidden' name='cert_id' value='$cert_id'>";
         }
         $tool_content .= "
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='row'>
+            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                <div class='col-12 h-100 left-form'></div>
+            </div>
+                        <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>
-                            <div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>$langZipFile:</label>
-                                <div class='col-sm-12'>
-                                    <input type='file' name='filename' value=''>
-                                </div>
+                            <div class='input-group mt-3'>
+                                <label class='input-group-text control-label-notes p-0 f-6 ps-2 pe-2'>$langZipFile</label>
+                                <input type='file' class='form-control' name='filename' value=''>
+                               
                             </div>
                            
                             <div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>$langHtmlFile:</label>
+                                <label class='col-sm-12 control-label-notes'>$langHtmlFile</label>
                                 <div class='col-sm-12'>
-                                    <input type='text' class='form-control' name='certhtmlfile' value='$cert_htmlfile'>
+                                    <input type='text' placeholder='$langHtmlFile...' class='form-control' name='certhtmlfile' value='$cert_htmlfile'>
                                 </div>
                             </div>
                             
                             <div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>$langTemplateName:</label>
+                                <label class='col-sm-12 control-label-notes'>$langTemplateName</label>
                                 <div class='col-sm-12'>
-                                    <input type='text' class='form-control' name='name' value='$cert_name'>
+                                    <input type='text' placeholder='$langTemplateName...' class='form-control' name='name' value='$cert_name'>
                                 </div>
                             </div>
                        
                             <div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>$langOrientation:</label>
-                                    <div class='col-sm-12'>
-                                        <label class='radio-inline'><input type='radio' name='orientation' $cert_orientation_l value='L'>$langLandscape</label>
-                                        <label class='radio-inline'><input type='radio' name='orientation' $cert_orientation_p value='P'>$langPortrait</label>
-                                    </div>                                
+                                <label class='col-sm-12 control-label-notes'>$langOrientation</label>
+                                <div class='col-sm-12 d-inline-flex'>
+                                    <label class='radio'><input type='radio' name='orientation' $cert_orientation_l value='L'>$langLandscape</label>
+                                    <label class='radio ms-2'><input type='radio' name='orientation' $cert_orientation_p value='P'>$langPortrait</label>
+                                </div>                                
                             </div>
                           
                             <div class='form-group mt-3'>
-                            <label for='description' class='col-sm-6 control-label-notes'>$langDescription: </label>
+                            <label for='description' class='col-sm-12 control-label-notes'>$langDescription</label>
                                 <div class='col-sm-12'>
                                     " . rich_text_editor('description', 2, 60, $cert_description) . "
                                 </div>
@@ -229,14 +232,22 @@ if (isset($_GET['action'])) {
                             $cert_hidden_id
                            
                             <div class='form-group mt-3'>
-                                <div class='col-offset-2 col-xs-10'>
-                                    <button class='btn btn-primary' type ='submit' name='submit_cert_template'>$langUpload</button>
-                                    <a class='btn btn-secondary' href='index.php'>$langCancel</a>
+                                <div class='col-12'>
+                                    <div class='row'>
+                                        <div class='col-6'>
+                                           <button class='btn btn-primary submitAdminBtn w-100' type ='submit' name='submit_cert_template'>$langUpload</button>
+                                        </div>
+                                        <div class='col-6'>
+                                           <a class='btn btn-secondary cancelAdminBtn w-100' href='index.php'>$langCancel</a>
+                                        </div>
+                                        
+                                        
+                                    </div>
                                 </div>
                             </div>
                             </form>
                             </div>
-                        </div>";
+                        </div></div>";
     } elseif (($_GET['action'] == 'add_badge') or  ($_GET['action'] == 'edit_badge')) { // add badge icons
         $badge_name = $badge_description = $badge_hidden_id = '';
         if (isset($_GET['bid'])) {
@@ -248,13 +259,17 @@ if (isset($_GET['action'])) {
         }
  
         $tool_content .= "
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='row'>
+            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                <div class='col-12 h-100 left-form'></div>
+            </div>
+                    <div class='col-lg-6 col-12'>
                     <div class='form-wrapper shadow-sm p-3 rounded'>
                         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>";
                         if (isset($_GET['bid'])) {
                             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_data->filename";
-                            $tool_content .= "<div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>$langReplace:</label>
+                            $tool_content .= "<div class='form-group'>
+                                <label class='col-sm-12 control-label-notes'>$langReplace:</label>
                                 <div class='col-sm-12'>
                                     <img src='$icon_link' width='60' height='60'>
                                     <input type='file' name='icon' value=''>
@@ -262,21 +277,21 @@ if (isset($_GET['action'])) {
                             </div>";
                         } else {
                             $tool_content .= "<div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>$langIcon:</label>
+                                <label class='col-sm-12 control-label-notes'>$langIcon:</label>
                                 <div class='col-sm-12'>
                                     <input type='file' name='icon' value=''>
                                 </div>
                             </div>";
                         }
                         $tool_content .= "<div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>$langName:</label>
+                                <label class='col-sm-12 control-label-notes'>$langName</label>
                                 <div class='col-sm-12'>
-                                    <input type='text' class='form-control' name='name' value='$badge_name'>
+                                    <input type='text' class='form-control' placeholder='$langName...' name='name' value='$badge_name'>
                                 </div>
                             </div>
                             
                             <div class='form-group mt-3'>
-                            <label for='description' class='col-sm-6 control-label-notes'>$langDescription: </label>
+                            <label for='description' class='col-sm-12 control-label-notes'>$langDescription: </label>
                                 <div class='col-sm-12'>
                                     " . rich_text_editor('description', 2, 60, $badge_description) . "
                                 </div>
@@ -284,14 +299,21 @@ if (isset($_GET['action'])) {
                             $badge_hidden_id
                             
                             <div class='form-group mt-3'>
-                                <div class='col-offset-2 col-xs-10'>
-                                    <button class='btn btn-primary' type ='submit' name='submit_badge_icon'>$langUpload</button>
-                                    <a class='btn btn-secondary' href='index.php'>$langCancel</a>
+                                <div class='col-12'>
+                                <div class='row'>
+                                <div class='col-6'>
+                                <button class='btn btn-primary submitAdminBtn w-100' type ='submit' name='submit_badge_icon'>$langUpload</button>
+                                </div>
+                                <div class='col-6'>
+                                <a class='btn btn-secondary cancelAdminBtn w-100' href='index.php'>$langCancel</a>
+                                </div>
+                                    
+                                    
                                 </div>
                             </div>
                             </form>
-                            </div>
-                        </div>";
+                            </div></div>
+                        </div></div>";
     }
 } else { // display available certificates / badges
     $sql1 = Database::get()->queryArray("SELECT * FROM certificate_template");
@@ -327,9 +349,9 @@ if (isset($_GET['action'])) {
     $sql2 = Database::get()->queryArray("SELECT * FROM badge_icon");
     
     $tool_content .= "<div class='table-responsive'>
-                        <table class='announcements_table'>
+                        <table class='table-default'>
                         <tr class='bg-light'><th class='text-center text-uppercase' colspan='5'>$langAvailableBadges</th></tr>
-                        <tr class='notes_thead'>
+                        <tr class='list-header'>
                             <th class='text-white'>$langTitle</th>
                             <th class='text-white'>$langDescription</th>
                             <th width='70' class='text-white text-center'>$langIcon</th>

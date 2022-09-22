@@ -34,10 +34,10 @@
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <form class='shadow-lg p-3 mb-5 bg-body rounded bg-primary' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                    <div class='col-12'>
+                        <form class='form-wrapper shadow-sm p-3 rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             <fieldset>
-                                <legend>{{ trans('langBasicCfgSetting') }}</legend>
+                                <legend class='text-center'>{{ trans('langBasicCfgSetting') }}</legend>
                                 <table class='table table-bordered' width='100%'>
                                     <tr>
                                         <th width='200' class='left'>
@@ -81,7 +81,7 @@
                                     @endforeach           
                                 </table>
                             </fieldset>
-                            <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
                             {!! generate_csrf_token_form_field() !!}
                         </form>
                     </div>

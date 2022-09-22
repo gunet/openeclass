@@ -34,8 +34,13 @@
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
+                        <div class='form-wrapper shadow-sm p-3 rounded'>
                         
                         <form class='form-horizontal' role='form' name='fieldForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                         <fieldset>
@@ -46,14 +51,14 @@
                             @endif
                             <input type='hidden' name='datatype' value='{{ $datatype }}'>
                             <div class='form-group mt-3'>
-                                <label for='name' class='col-sm-6 control-label-notes'>{{ trans('langName') }}</label>
+                                <label for='name' class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
                                 <div class='col-sm-12'>
                                     <input id='name' type='text' name='field_name' class="form-control" value="{{ isset($name) ? $name : '' }}">
                                 </div>
                             </div>
                  
                             <div class='form-group mt-3'>
-                                <label for='shortname' class='col-sm-6 control-label-notes'>
+                                <label for='shortname' class='col-sm-12 control-label-notes'>
                                     {{ trans('langCPFShortName') }} <small>({{ trans('langCPFUniqueShortname') }})</small>
                                 </label>
                                 <div class='col-sm-12'>
@@ -63,7 +68,7 @@
                
 
                             <div class='form-group mt-3'>
-                                <label for='fielddescr' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}</label>
+                                <label for='fielddescr' class='col-sm-12 control-label-notes'>{{ trans('langDescription') }}</label>
                                 <div class='col-sm-12'>
                                     {!! $fielddescr_rich_text !!}
                                 </div>
@@ -71,7 +76,7 @@
                             @if (isset($_GET['edit_field']))
                     
                                 <div class='form-group mt-3'>
-                                    <label for='datatype' class='col-sm-6 control-label-notes'>{{ trans('langCPFFieldDatatype') }}</label>
+                                    <label for='datatype' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldDatatype') }}</label>
                                     <div class='col-sm-12'>
                                         {!! selection($field_types, 'datatype_disabled', $datatype, 'class="form-control" disabled') !!}
                                     </div>
@@ -79,7 +84,7 @@
                             @endif
                      
                             <div class='form-group mt-3'>
-                                <label for='required' class='col-sm-6 control-label-notes'>{{ trans('langCPFFieldRequired') }}</label>
+                                <label for='required' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldRequired') }}</label>
                                 <div class='col-sm-12'>
                                     {!! selection($yes_no, 'required', isset($required) ? $required : '', 'class="form-control"') !!}
                                 </div>
@@ -87,7 +92,7 @@
                             @if ($datatype == CPF_MENU)
                  
                                 <div class='form-group mt-3'>
-                                    <label for='options' class='col-sm-6 control-label-notes'>
+                                    <label for='options' class='col-sm-12 control-label-notes'>
                                         {{ trans('langCPFMenuOptions') }} <small>({{ trans('langCPFMenuOptionsExplan') }})</small>
                                     </label>
                                     <div class='col-sm-12'>
@@ -97,29 +102,29 @@
                             @endif
                        
                             <div class='form-group mt-3'>
-                                <label for='registration' class='col-sm-6 control-label-notes'>{{ trans('langCPFFieldRegistration') }}</label>
+                                <label for='registration' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldRegistration') }}</label>
                                 <div class='col-sm-12'>
                                     {!! selection($yes_no, 'registration', isset($registration) ? $registration : '', 'class="form-control"') !!}
                                 </div>
                             </div>
                        
                             <div class='form-group mt-3'>
-                                <label for='user_type' class='col-sm-6 control-label-notes'>{{ trans('langCPFFieldUserType') }}</label>
+                                <label for='user_type' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldUserType') }}</label>
                                 <div class='col-sm-12'>
                                     {!! selection($user_type, 'user_type', isset($utype) ? $utype : 10, 'class="form-control"') !!}
                                 </div>
                             </div>
              
                             <div class='form-group mt-3'>
-                                <label for='visibility' class='col-sm-6 control-label-notes'>{{ trans('langCPFFieldVisibility') }}</label>
+                                <label for='visibility' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldVisibility') }}</label>
                                 <div class='col-sm-12'>
                                     {!! selection($visibility, 'visibility', isset($vis) ? $vis : 10, 'class="form-control"') !!}
                                 </div>
                             </div>
                          
-                            <div class='col-sm-offset-2 col-sm-10 mt-3'>
+                            <div class='col-12 mt-3'>
                                 {!! showSecondFactorChallenge() !!}
-                                <input class='btn btn-primary' type='submit' name='submit_field' value='{{ trans('langAdd') }}'>
+                                <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_field' value='{{ trans('langAdd') }}'>
                             </div>
                         </fieldset>
                         {!! generate_csrf_token_form_field() !!}

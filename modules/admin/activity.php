@@ -85,7 +85,11 @@ if (isset($_POST['toReorder'])) {
               'url' => 'activity.php',
               'icon' => 'fa-reply',
               'level' => 'primary-label'))) . "
-       <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+              <div class='row'>
+              <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                <div class='col-12 h-100 left-form'></div>
+            </div>
+       <div class='col-lg-6 col-12'>
         <div class='form-wrapper shadow-sm p-3 rounded'>
         <form role='form' class='form-horizontal' method='post' action='activity.php'>
           $idInput
@@ -99,9 +103,9 @@ if (isset($_POST['toReorder'])) {
         }
         $tool_content .= "
             <div class='form-group mt-3'>
-              <label class='col-sm-6 control-label-notes' for='heading-$langcode'>$langTitle (" . $langNameOfLang[langcode_to_name($langcode)] . "):</label>
+              <label class='col-sm-12 control-label-notes' for='heading-$langcode'>$langTitle (" . $langNameOfLang[langcode_to_name($langcode)] . ")</label>
               <div class='col-sm-12'>
-                <input class='form-control' type='text' name='heading[$langcode]' id='heading-$langcode' value='$value'>
+                <input class='form-control' type='text' name='heading[$langcode]' id='heading-$langcode' value='$value' placeholder='$langTitle...'>
               </div>
             </div>";
     }
@@ -120,15 +124,23 @@ if (isset($_POST['toReorder'])) {
             
 
             <div class='form-group mt-3'>
-               <div class='col-sm-10 col-sm-offset-2'>
-                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                <a href='activity.php' class='btn btn-secondary'>$langCancel</a>
+               <div class='col-12'>
+               <div class='row'>
+                  <div class='col-6'>
+                   <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                  </div>
+                  <div class='col-6'>
+                   <a href='activity.php' class='btn btn-secondary cancelAdminBtn w-100'>$langCancel</a>
+                  </div>
+               </div>
+               
+               
               </div>
             </div>
           </fieldset>
           ". generate_csrf_token_form_field() ."
         </form>
-      </div></div>";
+      </div></div></div>";
 } else {
     load_js('sortable/Sortable.min.js');
     $head_content .= "

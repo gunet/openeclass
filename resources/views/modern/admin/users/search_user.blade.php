@@ -34,64 +34,68 @@
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
                     
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                    <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                         
                         <form class='form-horizontal' role='form' action='listusers.php' method='get' name='user_search'>
                         <fieldset>
                          
                             <div class='form-group mt-3'>
-                                <label for='uname' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}:</label>
+                                <label for='uname' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                 <div class='col-sm-12'>
-                                    <input class='form-control' type='text' name='uname' id='uname' value='{{ $uname }}'>
+                                    <input class='form-control' placeholder="{{ trans('langUsername') }}..." type='text' name='uname' id='uname' value='{{ $uname }}'>
                                 </div>
                             </div>
                           
                             <div class='form-group mt-3'>
-                                <label for='fname' class='col-sm-6 control-label-notes'>{{ trans('langName') }}:</label>
+                                <label for='fname' class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
                                 <div class='col-sm-12'>
-                                    <input class='form-control' type='text' name='fname' id='fname' value='{{ $fname }}'>
+                                    <input class='form-control' placeholder="{{ trans('langName') }}..." type='text' name='fname' id='fname' value='{{ $fname }}'>
                                 </div>
                             </div>
                          
                             <div class='form-group mt-3'>
-                                <label for='lname' class='col-sm-6 control-label-notes'>{{ trans('langSurname') }}:</label>
+                                <label for='lname' class='col-sm-12 control-label-notes'>{{ trans('langSurname') }}</label>
                                 <div class='col-sm-12'>
-                                    <input class='form-control' type='text' name='lname' id='lname' value='{{ $lname }}'>
+                                    <input class='form-control' placeholder="{{ trans('langSurname') }}..." type='text' name='lname' id='lname' value='{{ $lname }}'>
                                 </div>
                             </div>
                           
                             <div class='form-group mt-3'>
-                                <label for='email' class='col-sm-6 control-label-notes'>{{ trans('langEmail') }}:</label>
+                                <label for='email' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
                                 <div class='col-sm-12'>
-                                    <input class='form-control' type='text' name='email' id='email' value='{{ $email }}'>
+                                    <input class='form-control' placeholder="{{ trans('langEmail') }}..." type='text' name='email' id='email' value='{{ $email }}'>
                                 </div>
                             </div>  
                      
                             <div class='form-group mt-3'>
-                                <label for='am' class='col-sm-6 control-label-notes'>{{ trans('langAm') }}:</label>
+                                <label for='am' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                                 <div class='col-sm-12'>
-                                    <input class='form-control' type='text' name='am' id='am' value='{{ $am }}'>
+                                    <input class='form-control' placeholder="{{ trans('langAm') }}..." type='text' name='am' id='am' value='{{ $am }}'>
                                 </div>
                             </div>
                       
                             <div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>{{ trans('langUserType') }}:</label>
+                                <label class='col-sm-12 control-label-notes'>{{ trans('langUserType') }}</label>
                                 <div class='col-sm-12'>
                                     {!! selection($usertype_data, 'user_type', 0, 'class="form-select"') !!}
                                 </div>
                             </div>
                       
                             <div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>{{ trans('langAuthMethod') }}:</label>
+                                <label class='col-sm-12 control-label-notes'>{{ trans('langAuthMethod') }}</label>
                                 <div class='col-sm-12'>
                                     {!! selection($authtype_data, 'auth_type', 0, 'class="form-select"') !!}
                                 </div>
                             </div>
                    
                             <div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>{{ trans('langRegistrationDate') }}:</label>
+                                <label class='col-sm-12 control-label-notes'>{{ trans('langRegistrationDate') }}</label>
                                     <div class='row'>
                                         <div class='col-6'>
                                             {!! selection(['1' => trans('langAfter'), '2' => trans('langBefore')], 'reg_flag', $reg_flag, 'class="form-select"') !!}
@@ -104,28 +108,28 @@
                             </div>
                          
                             <div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>{{ trans('langExpirationDate') }}:</label>
+                                <label class='col-sm-12 control-label-notes'>{{ trans('langExpirationDate') }}</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' name='user_expires_until' id='id_user_expires_until' type='text' value='{{ $user_expires_until }}' data-date-format='dd-mm-yyyy' placeholder='{{ trans('langUntil') }}'>
                                 </div>
                             </div>
                           
                             <div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>{{ trans('langEmailVerified') }}:</label>
+                                <label class='col-sm-12 control-label-notes'>{{ trans('langEmailVerified') }}</label>
                                 <div class='col-sm-12'>
                                     {!! selection($verified_mail_data, 'verified_mail', $verified_mail, 'class="form-select"') !!}
                                 </div>
                             </div>
                       
                             <div class='form-group mt-3'>
-                                <label for='dialog-set-value' class='col-sm-6 control-label-notes'>{{ trans('langFaculty') }}:</label>
+                                <label for='dialog-set-value' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</label>
                                 <div class='col-sm-12'>
                                     {!! $html !!}
                                 </div>
                             </div>
                            
                             <div class='form-group mt-3'>
-                                <label for='search_type' class='col-sm-6 control-label-notes'>{{ trans('langSearchFor') }}:</label>
+                                <label for='search_type' class='col-sm-12 control-label-notes'>{{ trans('langSearchFor') }}</label>
                                 <div class='col-sm-12'>
                                     <select class='form-select' name='search_type' id='search_type'>
                                     <option value='exact'>{{ trans('langSearchExact') }}</option>
@@ -147,9 +151,13 @@
                             </div>    
                        
                             <div class='form-group mt-3'>
-                                <div class='col-sm-10 col-sm-offset-2'>
-                                    <input class='btn btn-primary' type='submit' value='{{ trans('langSearch') }}'>
-                                    <a class='btn btn-secondary' href='index.php'>{{ trans('langCancel') }}</a>
+                                <div class='row'>
+                                    <div class='col-6'>
+                                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' value='{{ trans('langSearch') }}'>
+                                    </div>
+                                    <div class='col-6'>
+                                        <a class='btn btn-secondary cancelAdminBtn w-100' href='index.php'>{{ trans('langCancel') }}</a>
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>

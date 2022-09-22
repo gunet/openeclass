@@ -39,8 +39,11 @@
                            <div class='text-center alert alert-warning'>Δεν έχει υλοποιηθεί ακόμα.</div>
                         </div>
                     @else
-                        <div class='extapp'>
-                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                        
+                            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                                <div class='col-12 h-100 left-form'></div>
+                            </div>
+                            <div class='col-lg-6 col-12'>
                                 <div class='form-wrapper shadow-sm p-3 rounded'>
                                     
                                     <form class='form-horizontal' role='form' action='extapp.php?edit={{ $appName }}' method='post'>
@@ -52,7 +55,7 @@
                                             @elseif ($param->getType() == ExtParam::TYPE_MULTILINE)
                                                 
                                                 <div class='form-group mt-3'>
-                                                    <label for='{{ $param->name() }}' class='col-sm-6 control-label-notes'>{{ $param->display() }}</label>
+                                                    <label for='{{ $param->name() }}' class='col-sm-12 control-label-notes'>{{ $param->display() }}</label>
                                                     <div class='col-sm-12'>
                                                         <textarea class='form-control' rows='3' cols='40' name='{{ $param->name() }}'>
                                                             {{ $param->value() }}
@@ -61,7 +64,7 @@
                                                 </div>
                                             @else
                                                 <div class='form-group mt-3'>
-                                                    <label for='{{ $param->name() }}' class='col-sm-6 control-label-notes'>{{ $param->display() }}</label>
+                                                    <label for='{{ $param->name() }}' class='col-sm-12 control-label-notes'>{{ $param->display() }}</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control' type='text' name='{{ $param->name() }}' value='{{ $param->value() }}'>
                                                     </div>
@@ -81,13 +84,21 @@
                                                 </div>
                                         @endforeach
                                             <div class='form-group mt-3'>
-                                                <div class='col-sm-offset-2 col-sm-10'>
-                                                    <button class='btn btn-primary' type='submit' name='submit' value='{{ trans('langModify') }}'>
-                                                        {{ trans('langModify') }}
-                                                    </button> 
-                                                    <button class='btn btn-danger' type='submit' name='submit' value='clear'>
-                                                        {{ trans('langClearSettings') }}
-                                                    </button>
+                                                <div class='col-12'>
+                                                    <div class='row'>
+                                                        <div class='col-6'>
+                                                             <button class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                                                {{ trans('langModify') }}
+                                                            </button> 
+                                                        </div>
+                                                        <div class='col-6'>
+                                                            <button class='btn btn-danger cancelAdminBtn w-100' type='submit' name='submit' value='clear'>
+                                                                {{ trans('langClearSettings') }}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                   
+                                                    
                                                 </div>
                                             </div>
                                         </fieldset>
@@ -95,7 +106,7 @@
                                     </form>
                                 </div>
                             </div>
-                        </div>
+                        
                     @endif
                 </div>
             </div>

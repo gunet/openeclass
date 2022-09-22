@@ -40,6 +40,7 @@ if ($subsystem == MAIN and get_config('enable_docs_public_write') and
 
 if (defined('COMMON_DOCUMENTS')) {
     $menuTypeID = 3;
+    $data['menuTypeID'] = $menuTypeID;
     $toolName = $langCommonDocs;
 } elseif (defined('MY_DOCUMENTS')) {
     if ($session->status == USER_TEACHER and !get_config('mydocs_teacher_enable')) {

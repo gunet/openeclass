@@ -36,19 +36,22 @@
                     @if (isset($auth_methods_active) == 0)
                         <div class='col-12'><div class='alert alert-warning'>{{ trans('langAuthChangeno') }}</div></div>
                     @else
-                    <div class='col-12'>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+                    <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                             <form class='form-horizontal' role='form' name='authchange' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>   
                             <fieldset>
                                 <div class='form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langAuthChangeto') }}:</label>
+                                    <label class='col-sm-12 control-label-notes'>{{ trans('langAuthChangeto') }}</label>
                                     <div class='col-sm-12'>
                                         {!! selection($auth_methods_active, 'auth_change', '', "class='form-control'") !!}
                                     </div>
                                 </div>
                                 <input type='hidden' name='auth' value='{{ getIndirectReference(intval($auth)) }}'>  
-                                <div class='col-sm-offset-2 col-sm-10 mt-3'>
-                                    <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                <div class='col-12 mt-3'>
+                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                 </div>
                             </fieldset>
                             {!! generate_csrf_token_form_field() !!}    

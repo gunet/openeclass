@@ -35,7 +35,7 @@
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
                     <div class='table-responsive'>
-                        <table id = 'requests_table' class='announcements_table'>
+                        <table id = 'requests_table' class='table-default'>
                         {!! table_header(2, trans('langDateClosed_small')) !!}
                         @foreach ($user_requests as $user_request)
                             <tr>

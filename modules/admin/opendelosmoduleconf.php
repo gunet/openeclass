@@ -82,7 +82,11 @@ $tool_content .= action_bar(array(
 
 $boolean_field = "";
 
-$tool_content .= "<div class='extapp'><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>";
+$tool_content .= "<div class='row'>
+<div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+            <div class='col-12 h-100 left-form'></div>
+        </div>
+<div class='col-lg-6 col-12'>";
 $tool_content .= "<div class='form-wrapper shadow-sm p-3 rounded'>";
 $tool_content .= "<form class='form-horizontal' role='form' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>";
 $tool_content .= "<fieldset>";
@@ -96,13 +100,13 @@ foreach ($app->getParams() as $param) {
         $boolean_field .= "</div></div></div>";
     } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
         $tool_content .= "<div class='form-group mt-3'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-6 control-label-notes'>" . $param->display() . "</label>";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "</label>";
         $tool_content .= "<div class='col-sm-12'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
             q($param->value()) . "</textarea></div>";
         $tool_content .= "</div>";
     } else {
         $tool_content .= "<div class='form-group mt-3'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-6 control-label-notes'>" . $param->display() . "</label>";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "</label>";
         $tool_content .= "<div class='col-sm-12'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
         $tool_content .= "</div>";
     }
@@ -110,8 +114,10 @@ foreach ($app->getParams() as $param) {
 
 $tool_content .= $boolean_field;
 $tool_content .= "<div class='form-group mt-3'>";
-$tool_content .= "<div class='col-sm-offset-2 col-sm-10'>";
-$tool_content .= "<button class='btn btn-primary' type='submit' name='submit' value='$langModify'>$langModify</button> <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>";
+$tool_content .= "<div class='col-12'>";
+$tool_content .= "<div class='row'>
+<div class='col-6'><button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit' value='$langModify'>$langModify</button></div>
+<div class='col-6'><button class='btn btn-danger btn-sm submitAdminBtn w-100' type='submit' name='submit' value='clear'>$langClearSettings</button></div></div>";
 $tool_content .= "</div>";
 $tool_content .= "</div>";
 $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."";

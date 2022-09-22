@@ -33,8 +33,13 @@
                     @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
+                        <div class='form-wrapper shadow-sm p-3 rounded'>
                             
                             <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}?c={{ $course->code }}" method='post'>
                                 <fieldset>                    
@@ -42,28 +47,28 @@
                                         {{ trans('langTheCourse') }} <b>{{ $course->title }}</b> {{ trans('langMaxQuota') }}
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langLegend') }} {{ trans('langDoc') }}:</label>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langDoc') }}</label>
                                             <div class='col-sm-12'><input type='text' name='dq' value='{{ $dq }}' size='4' maxlength='4'> MB</div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langLegend') }} {{ trans('langVideo') }}:</label>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langVideo') }}</label>
                                             <div class='col-sm-12'><input type='text' name='vq' value='{{ $vq }}' size='4' maxlength='4'> MB</div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langLegend') }} <b>{{ trans('langGroups') }}</b>:</label>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langGroups') }}</label>
                                         <div class='col-sm-12'>
                                             <input type='text' name='gq' value='{{ $gq }}' size='4' maxlength='4'> MB
                                         </div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langLegend') }} <b>{{ trans('langDropBox') }}</b>:</label>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langDropBox') }}</label>
                                         <div class='col-sm-12'>
                                             <input type='text' name='drq' value='{{ $drq }}' size='4' maxlength='4'> MB
                                         </div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <div class='col-sm-10 col-sm-offset-4'>
-                                            <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                        <div class='col-12'>
+                                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                         </div>
                                     </div>
                                 </fieldset>

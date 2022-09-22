@@ -39,7 +39,12 @@
 
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                         
                         <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
@@ -62,8 +67,8 @@
                                 </div>
                                 {!! showSecondFactorChallenge() !!}
                                 <div class='mt-3'></div>
-                                <div class='col-sm-10 col-sm-offset-2'>
-                                    <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
+                                <div class='col-12'>
+                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
                                 </div>
                             </fieldset>
                             {!! generate_csrf_token_form_field() !!}

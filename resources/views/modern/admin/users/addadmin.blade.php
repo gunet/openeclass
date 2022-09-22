@@ -38,21 +38,25 @@
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
                     @if($showFormAdmin)
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
 
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                         
                             <form class='form-horizontal' role='form' method='post' name='makeadmin' action='{{ $_SERVER['SCRIPT_NAME']  }}'>
                                 <fieldset>
                                     <div class='form-group mt-3'>
-                                        <label for='username' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}</label>
+                                        <label for='username' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                         <div class='col-sm-12'>
-                                            <input class='form-control' type='text' name='username' size='30' maxlength='30' placeholder="{{ trans('langUsername') }}" {!! $usernameValue !!}>
+                                            <input class='form-control' type='text' name='username' size='30' maxlength='30' placeholder="{{ trans('langUsername') }}..." {!! $usernameValue !!}>
                                         </div>
                                     </div>
 
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langAddRole') }}</label>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langAddRole') }}</label>
                                             <div class='col-sm-12'>
                                                 <div class='radio'>
                                                     <input type='radio' name='adminrights' value='admin' {{$checked['admin']}}> {{ trans('langAdministrator') }}
@@ -94,8 +98,8 @@
                                     {!! showSecondFactorChallenge() !!}
 
                                     <div class='form-group mt-3'>
-                                        <div class='col-sm-10 col-sm-offset-2'>
-                                            <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langAdd') }}'>
+                                        <div class='col-12'>
+                                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langAdd') }}'>
                                         </div>
                                     </div>       
                                 </fieldset>

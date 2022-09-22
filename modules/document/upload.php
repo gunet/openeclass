@@ -83,7 +83,7 @@ if ($can_upload) {
         $pageName = $langDownloadFile;
         $fileinput = "
         <div class='form-group mt-3'>
-          <label for='fileCloudName' class='col-sm-6 control-label-notes'>$langCloudFile</label>
+          <label for='fileCloudName' class='col-sm-12 control-label-notes'>$langCloudFile</label>
           <div class='col-sm-12'>
             <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='".q($pendingCloudUpload)."'>
             <input type='text' class='form-control' name='fileCloudName' value='" . q(CloudFile::fromJSON($pendingCloudUpload)->name()) . "' readonly>
@@ -94,7 +94,7 @@ if ($can_upload) {
         $pageName = $langExternalFile;
         $fileinput = "
         <div class='form-group mt-3'>
-          <label for='fileURL' class='col-sm-6 control-label-notes'>$langExternalFileInfo:</label>
+          <label for='fileURL' class='col-sm-12 control-label-notes'>$langExternalFileInfo:</label>
           <div class='col-sm-12'>
             <input type='text' class='form-control' id='fileURL' name='fileURL'>
           </div>
@@ -102,12 +102,12 @@ if ($can_upload) {
     } else {
         $pageName = $langDownloadFile;
         $fileinput = "
-        <div class='form-group mt-3'>
-          <label for='userFile' class='col-sm-6 control-label-notes'>$langPathUploadFile:</label>
-          <div class='col-sm-12'>" .
+        <div class='input-group mt-3'>
+          <label for='userFile' class='input-group-text control-label-notes p-0 ps-2 pe-2 fs-6'>$langPathUploadFile:</label>
+          " .
                 fileSizeHidenInput() .
-                CloudDriveManager::renderAsButtons() . "<input type='file' id='userFile' name='userFile'></span>
-          </div>
+                CloudDriveManager::renderAsButtons() . "<input class='form-control' type='file' id='userFile' name='userFile'></span>
+          
         </div>";
     }
     $tool_content .= action_bar(array(
@@ -115,31 +115,41 @@ if ($can_upload) {
             'url' => $backUrl,
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
-    $tool_content .= "
-
-            <div class='col-sm-12'>
-                <div class='form-wrapper shadow-sm p-3 rounded'>
+    
+      
+    if($menuTypeID == 3 or $menuTypeID == 1){
+      $tool_content .= "<div class='row'>
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+            <div class='col-12 h-100 left-form'></div>
+        </div>
+        <div class='col-lg-6 col-12'>";
+    }else{
+        $tool_content .= "<div class='col-sm-12'>";
+    }
+    
+            
+    $tool_content .= "<div class='form-wrapper shadow-sm p-3 rounded'>
 
         <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>
           <input type='hidden' name='uploadPath' value='$uploadPath' />
           $group_hidden_input
           $fileinput
       <div class='form-group mt-3'>
-        <label for='inputFileTitle' class='col-sm-6 control-label-notes'>$langTitle:</label>
+        <label for='inputFileTitle' class='col-sm-12 control-label-notes'>$langTitle</label>
         <div class='col-sm-12'>
-          <input type='text' class='form-control' id='inputFileTitle' name='file_title'>
+          <input type='text' class='form-control' placeholder='$langTitle...' id='inputFileTitle' name='file_title'>
         </div>
       </div>
 
       <div class='form-group mt-3'>
-        <label for='inputFileComment' class='col-sm-6 control-label-notes'>$langComment:</label>
+        <label for='inputFileComment' class='col-sm-12 control-label-notes'>$langComment</label>
         <div class='col-sm-12'>
-          <input type='text' class='form-control' id='inputFileComment' name='file_comment'>
+          <input type='text' class='form-control' placeholder='$langComment...' id='inputFileComment' name='file_comment'>
         </div>
       </div>
 
       <div class='form-group mt-3'>
-        <label for='inputFileCategory' class='col-sm-6 control-label-notes'>$langCategory:</label>
+        <label for='inputFileCategory' class='col-sm-12 control-label-notes'>$langCategory</label>
         <div class='col-sm-12'>
           <select class='form-select' name='file_category'>
             <option selected='selected' value='0'>$langCategoryOther</option>
@@ -157,23 +167,23 @@ if ($can_upload) {
       </div>
 
       <div class='form-group mt-3'>
-        <label for='inputFileSubject' class='col-sm-6 control-label-notes'>$langSubject:</label>
+        <label for='inputFileSubject' class='col-sm-12 control-label-notes'>$langSubject</label>
         <div class='col-sm-12'>
-          <input type='text' class='form-control' id='inputFileSubject' name='file_subject'>
+          <input type='text' class='form-control' placeholder='$langSubject...' id='inputFileSubject' name='file_subject'>
         </div>
       </div>
 
       <div class='form-group mt-3'>
-        <label for='inputFileDescription' class='col-sm-6 control-label-notes'>$langDescription:</label>
+        <label for='inputFileDescription' class='col-sm-12 control-label-notes'>$langDescription</label>
         <div class='col-sm-12'>
-          <input type='text' class='form-control' id='inputFileDescription' name='file_description'>
+          <input type='text' class='form-control' placeholder='$langDescription...' id='inputFileDescription' name='file_description'>
         </div>
       </div>
 
       <div class='form-group mt-3'>
-        <label for='inputFileAuthor' class='col-sm-6 control-label-notes'>$langAuthor:</label>
+        <label for='inputFileAuthor' class='col-sm-12 control-label-notes'>$langAuthor</label>
         <div class='col-sm-12'>
-          <input type='text' class='form-control' id='inputFileAuthor' name='file_author'>
+          <input type='text' class='form-control' placeholder='$langAuthor...' id='inputFileAuthor' name='file_author'>
         </div>
       </div>
 
@@ -181,14 +191,14 @@ if ($can_upload) {
         <input type='hidden' name='file_date' value='' size='40' />
         <input type='hidden' name='file_format' value='' size='40' />
 
-        <label for='inputFileLanguage' class='col-sm-6 control-label-notes'>$langLanguage:</label>
+        <label for='inputFileLanguage' class='col-sm-12 control-label-notes'>$langLanguage:</label>
         <div class='col-sm-12'>          
             " . lang_select_options('file_language', "class='form_control'") . "
         </div>
       </div>
 
       <div class='form-group mt-3'>
-        <label for='inputFileCopyright' class='col-sm-6 control-label-notes'>$langCopyrighted:</label>
+        <label for='inputFileCopyright' class='col-sm-12 control-label-notes'>$langCopyrighted:</label>
         <div class='col-sm-12'>
           " .
             selection(array('0' => $langCopyrightedUnknown,
@@ -232,10 +242,41 @@ if ($can_upload) {
     }
 
     $tool_content .= "
-    <div class='row'>
-        <div class='infotext col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+    <div class='row mt-3'>
+        <div class='infotext col-12 margin-bottom-fat text-success fw-bold'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
     </div>";
 
+    if($menuTypeID == 3 or $menuTypeID == 1){
+      $tool_content .= "
+      <div class='form-group mt-3'>
+        <div class='col-12'>
+          <div class='row'>
+             <div class='col-6'>"
+                .
+                form_buttons(array(
+                    array(
+                        'class' => 'btn-primary submitAdminBtn w-100',
+                        'text' => $langUpload
+                    )
+                ))
+                .
+             "</div>
+             <div class='col-6'>"
+                .
+                form_buttons(array(
+                    array(
+                        'class' => 'btn-secondary cancelAdminBtn w-100',
+                        'href' => "index.php?course=$course_code",
+                    )
+                ))
+                .
+             "</div>
+          </div>
+        </div>
+      </div>
+    </form>
+    </div></div>";
+    }else{
     $tool_content .= "
       <div class='form-group mt-3'>
         <div class='col-xs-offset-2 col-xs-10'>".
@@ -251,8 +292,11 @@ if ($can_upload) {
         </div>
       </div>
     </form>
+    </div></div>";}
 
-    </div></div>";
+    if($menuTypeID == 3 or $menuTypeID == 1){
+      $tool_content .= "</div>";
+    }
 } else {
     $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNotAllowed</div></div>";
 }

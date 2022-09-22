@@ -34,17 +34,21 @@
                     @endif
                     
                      {!! isset($action_bar) ?  $action_bar : '' !!}
+
+                     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
                      
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                    <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                        
                         <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] . $params }}' method='post' onsubmit='return validateNodePickerForm();'>
                         <fieldset>
                            
                             <div class="form-group{{ Session::hasError('givenname_form') ? ' has-error' : '' }} mt-3">
-                                <label for="givenname_form" class="col-sm-6 control-label-notes">{{ trans('langName') }}:</label>
+                                <label for="givenname_form" class="col-sm-12 control-label-notes">{{ trans('langName') }}</label>
                                 <div class="col-sm-12">
-                                    <input class='form-control' id='givenname_form' type='text' name='givenname_form' value='{{ getValue('givenname_form', $pn) }}' placeholder="{{ trans('langName') }}">
+                                    <input class='form-control' placeholder="{{ trans('langName') }}..." id='givenname_form' type='text' name='givenname_form' value='{{ getValue('givenname_form', $pn) }}'>
                                     @if (Session::hasError('givenname_form'))
                                     <span class="help-block">{{ Session::getError('givenname_form') }}</span>
                                     @endif
@@ -52,9 +56,9 @@
                             </div>
                            
                             <div class="form-group{{ Session::hasError('surname_form') ? ' has-error' : '' }} mt-3">
-                                <label for="surname_form" class="col-sm-6 control-label-notes">{{ trans('langSurname') }}:</label>
+                                <label for="surname_form" class="col-sm-12 control-label-notes">{{ trans('langSurname') }}</label>
                                 <div class="col-sm-12">
-                                    <input class='form-control' id='surname_form' type='text' name='surname_form' value='{{ getValue('surname_form', $ps) }}' placeholder="{{ trans('langSurname') }}">
+                                    <input class='form-control' id='surname_form' type='text' name='surname_form' value='{{ getValue('surname_form', $ps) }}' placeholder="{{ trans('langSurname') }}...">
                                     @if (Session::hasError('surname_form'))
                                     <span class="help-block">{{ Session::getError('surname_form') }}</span>
                                     @endif
@@ -62,9 +66,9 @@
                             </div>
                          
                             <div class="form-group{{ Session::hasError('uname_form') ? ' has-error' : '' }} mt-3">
-                                <label for="uname_form" class="col-sm-6 control-label-notes">{{ trans('langUsername') }}:</label>
+                                <label for="uname_form" class="col-sm-12 control-label-notes">{{ trans('langUsername') }}</label>
                                 <div class="col-sm-12">
-                                    <input class='form-control' id='uname_form' type='text' name='uname_form' value='{{ getValue('uname_form', $pu) }}' placeholder="{{ trans('langUsername') }}">
+                                    <input class='form-control' id='uname_form' type='text' name='uname_form' value='{{ getValue('uname_form', $pu) }}' placeholder="{{ trans('langUsername') }}...">
                                     @if (Session::hasError('uname_form'))
                                     <span class="help-block">{{ Session::getError('uname_form') }}</span>
                                     @endif
@@ -75,7 +79,7 @@
                             @else
                         
                                 <div class="form-group{{ Session::hasError('auth_selection') ? ' has-error' : '' }} mt-3">
-                                    <label for="auth_selection" class="col-sm-6 control-label-notes">{{ trans('langEditAuthMethod') }}:</label>
+                                    <label for="auth_selection" class="col-sm-12 control-label-notes">{{ trans('langEditAuthMethod') }}</label>
                                     <div class="col-sm-12">
                                     {!! selection($auth_m, 'auth_form', '', "id='auth_selection' class='form-control'") !!}
                                         @if (Session::hasError('auth_selection'))
@@ -86,9 +90,9 @@
                             @endif
                             
                             <div class="form-group{{ Session::hasError('password') ? ' has-error' : '' }} mt-3">
-                                <label for="passsword_form" class="col-sm-6 control-label-notes">{{ trans('langPass') }}:</label>
+                                <label for="passsword_form" class="col-sm-12 control-label-notes">{{ trans('langPass') }}</label>
                                 <div class="col-sm-12">
-                                    <input class='form-control' id='passsword_form' type='text' name='password' value='{{ getValue('password', choose_password_strength()) }}' autocomplete='off' placeholder="{{ trans('langPass') }}">
+                                    <input class='form-control' id='passsword_form' type='text' name='password' value='{{ getValue('password', choose_password_strength()) }}' autocomplete='off' placeholder="{{ trans('langPass') }}...">
                                     @if (Session::hasError('password'))
                                     <span class="help-block">{{ Session::getError('password') }}</span>
                                     @endif
@@ -96,7 +100,7 @@
                             </div>
                  
                             <div class="form-group{{ Session::hasError('email_form') ? ' has-error' : '' }} mt-3">
-                                <label for="email_form" class="col-sm-6 control-label-notes">{{ trans('langEmail') }}:</label>
+                                <label for="email_form" class="col-sm-12 control-label-notes">{{ trans('langEmail') }}</label>
                                 <div class="col-sm-12">
                                     <input class='form-control' id='email_form' type='text' name='email_form' value='{{ getValue('email_form', $pe) }}' autocomplete='off' placeholder="{{ trans('langEmail') }} {{ get_config('email_required') ? trans('langCompulsory') : trans('langOptional') }}">
                                     @if (Session::hasError('email_form'))
@@ -106,7 +110,7 @@
                             </div>
                    
                             <div class="form-group{{ Session::hasError('verified_mail_form') ? ' has-error' : '' }} mt-3">
-                                <label for="verified_mail_form" class="col-sm-6 control-label-notes">{{ trans('langEmailVerified') }}:</label>
+                                <label for="verified_mail_form" class="col-sm-12 control-label-notes">{{ trans('langEmailVerified') }}</label>
                                 <div class="col-sm-12">
                                     {!! selection($verified_mail_data, "verified_mail_form", $pv, "class='form-control'") !!}
                                     @if (Session::hasError('verified_mail_form'))
@@ -116,9 +120,9 @@
                             </div>
                            
                             <div class="form-group{{ Session::hasError('phone_form') ? ' has-error' : '' }} mt-3">
-                                <label for="phone_form" class="col-sm-6 control-label-notes">{{ trans('langPhone') }}:</label>
+                                <label for="phone_form" class="col-sm-12 control-label-notes">{{ trans('langPhone') }}</label>
                                 <div class="col-sm-12">
-                                    <input class='form-control' id='phone_form' type='text' name='phone_form' value='{{ getValue('phone_form', $pphone) }}' placeholder="{{ trans('langPhone') }}">
+                                    <input class='form-control' id='phone_form' type='text' name='phone_form' value='{{ getValue('phone_form', $pphone) }}' placeholder="{{ trans('langPhone') }}...">
                                     @if (Session::hasError('phone_form'))
                                     <span class="help-block">{{ Session::getError('phone_form') }}</span>
                                     @endif
@@ -126,7 +130,7 @@
                             </div>  
                                     
                             <div class="form-group{{ Session::hasError('faculty') ? ' has-error' : '' }} mt-3">
-                                <label for="faculty" class="col-sm-6 control-label-notes">{{ trans('langFaculty') }}:</label>
+                                <label for="faculty" class="col-sm-12 control-label-notes">{{ trans('langFaculty') }}</label>
                                 <div class="col-sm-12">
                                     {!! $tree_html !!}
                                     @if (Session::hasError('faculty'))
@@ -138,7 +142,7 @@
                                 <!--only for students-->
                        
                                 <div class="form-group{{ Session::hasError('am_form') ? ' has-error' : '' }} mt-3">
-                                    <label for="am_form" class="col-sm-6 control-label-notes">{{ trans('langAm') }}:</label>
+                                    <label for="am_form" class="col-sm-12 control-label-notes">{{ trans('langAm') }}</label>
                                     <div class="col-sm-12">
                                         <input class='form-control' id='am_form' type='text' name='am_form' value='{{ getValue('am_form', $pam) }}' placeholder="{{ get_config('am_required') ? trans('langCompulsory') : trans('langOptional') }}">
                                         @if (Session::hasError('am_form'))
@@ -150,7 +154,7 @@
                             @if (get_config('block_duration_account'))
                             
                                 <div class='input-append date form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langExpirationDate') }}:</label>
+                                    <label class='col-sm-12 control-label-notes'>{{ trans('langExpirationDate') }}</label>
                                     <div class='col-sm-12'>
                                         <span class='help-block'>{{ trans('lang_message_block_duration_account') }}</span>
                                     </div>
@@ -158,7 +162,7 @@
                             @else
                
                                 <div class='input-append date form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langExpirationDate') }}:</label>
+                                    <label class='col-sm-12 control-label-notes'>{{ trans('langExpirationDate') }}</label>
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
                                             <input class='form-control' id='user_date_expires_at' name='user_date_expires_at' type='text' value='{{ $expirationDatevalue }}'>
@@ -169,7 +173,7 @@
                             @endif
                          
                             <div class="form-group{{ Session::hasError('language_form') ? ' has-error' : '' }} mt-3">
-                                <label for="language_form" class="col-sm-6 control-label-notes">{{ trans('langLanguage') }}:</label>
+                                <label for="language_form" class="col-sm-12 control-label-notes">{{ trans('langLanguage') }}</label>
                                 <div class="col-sm-12">
                                     {!! lang_select_options('language_form', "class='form-control'", Session::has('language_form') ? Session::get('language_form'): $language) !!}
                                     @if (Session::hasError('language_form'))
@@ -180,7 +184,7 @@
                             @if ($ext_uid)
                    
                                 <div class="form-group mt-3">
-                                    <label for="provider" class="col-sm-6 control-label-notes">{{ trans('langProviderConnectWith') }}:</label>
+                                    <label for="provider" class="col-sm-12 control-label-notes">{{ trans('langProviderConnectWith') }}</label>
                                     <div class="col-sm-12">
                                         <p class='form-control-static'>
                                             <img src='{{ $themeimg }}/{{ $auth_ids[$ext_uid->auth_id] . '.png' }}'>&nbsp;
@@ -194,7 +198,7 @@
                             @if (isset($_GET['id']))
                       
                                 <div class="form-group mt-3">
-                                    <label for="comments" class="col-sm-6 control-label-notes">{{ trans('langComments') }}:</label>
+                                    <label for="comments" class="col-sm-12 control-label-notes">{{ trans('langComments') }}</label>
                                     <div class="col-sm-12">
                                         <p class='form-control-static'>
                                             {{ $pcom }}
@@ -203,7 +207,7 @@
                                 </div>
                                
                                 <div class="form-group mt-3">
-                                    <label for="date" class="col-sm-6 control-label-notes">{{ trans('langDate') }}:</label>
+                                    <label for="date" class="col-sm-12 control-label-notes">{{ trans('langDate') }}</label>
                                     <div class="col-sm-12">
                                         <p class='form-control-static'>
                                             {{ $pdate }}
@@ -219,8 +223,8 @@
                             {!! render_profile_fields_form($cpf_context, true) !!}
                             {!! showSecondFactorChallenge() !!}
                            
-                            <div class='col-sm-offset-2 col-sm-10 mt-3'>
-                            <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
+                            <div class='col-12 mt-3'>
+                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
                             </div>        
                         </fieldset>
                         {!! generate_csrf_token_form_field() !!}

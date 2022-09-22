@@ -36,8 +36,8 @@
 
                     <div class="extapp">
                         <div class='col-12'>
-                            <table class="announcements_table dataTable no-footer extapp-table">
-                                <thead class='notes_thead'>
+                            <table class="table-default dataTable no-footer extapp-table">
+                                <thead class='list-header'>
                                     <td class='text-white'>{{ trans('langExtAppName') }}</td>
                                     <td class='text-white'>{{ trans('langDescription') }}</td>
                                 </thead>

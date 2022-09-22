@@ -33,25 +33,30 @@
                     @endif
                     
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                             
                             <form role='form' class='form-horizontal' action='listcours.php?search=yes' method='get'>
                                 <fieldset>      
                                     <div class='form-group mt-3'>
-                                        <label for='formsearchtitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
+                                        <label for='formsearchtitle' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                         <div class='col-sm-12'>
-                                            <input type='text' class='form-control' id='formsearchtitle' name='formsearchtitle' value=''>
+                                            <input type='text' placeholder="{{ trans('langTitle') }}..." class='form-control' id='formsearchtitle' name='formsearchtitle' value=''>
                                         </div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <label for='formsearchcode' class='col-sm-6 control-label-notes'>{{ trans('langCourseCode') }}:</label>
+                                        <label for='formsearchcode' class='col-sm-12 control-label-notes'>{{ trans('langCourseCode') }}</label>
                                         <div class='col-sm-12'>
-                                            <input type='text' class='form-control' name='formsearchcode' value=''>           
+                                            <input type='text' placeholder="{{ trans('langCourseCode') }}..." class='form-control' name='formsearchcode' value=''>           
                                         </div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <label for='formsearchtype' class='col-sm-6 control-label-notes'>{{ trans('langCourseVis') }}:</label>
+                                        <label for='formsearchtype' class='col-sm-12 control-label-notes'>{{ trans('langCourseVis') }}</label>
                                         <div class='col-sm-12'>
                                             <select class='form-select' name='formsearchtype'>
                                                 <option value='-1'>{{ trans('langAllTypes') }}</option>
@@ -64,26 +69,32 @@
                                     </div>
                                     
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langCreationDate') }}:</label>      
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langCreationDate') }}</label>      
                                         <div class='row'>
-                                            <div class='col-sm-6'>
+                                            <div class='col-6'>
                                                 {!! selection($reg_flag_data, 'reg_flag', '', 'class="form-control"') !!}
                                             </div>
-                                            <div class='col-sm-6'>
+                                            <div class='col-6'>
                                                 <input class='form-control' id='id_date' name='date' type='text' value='' data-date-format='dd-mm-yyyy' placeholder='{{ trans('langCreationDate') }}'>                    
                                             </div>
                                         </div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langFaculty') }}:</label>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                         <div class='col-sm-12'>
                                             {!! $html !!}
                                         </div>
                                     </div>
                                     <div class='form-group mt-3'>
-                                        <div class='col-sm-10 col-sm-offset-2'>
-                                            <input class='btn btn-primary' type='submit' name='search_submit' value='{{ trans('langSearch') }}'>
-                                            <a href='index.php' class='btn btn-secondary'>{{ trans('langCancel') }}</a>        
+                                        <div class='col-12'>
+                                            <div class='row'>
+                                                <div class='col-6'>
+                                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='search_submit' value='{{ trans('langSearch') }}'> 
+                                                </div>
+                                                <div class='col-6'>
+                                                   <a href='index.php' class='btn btn-secondary cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>   
+                                                </div>
+                                            </div>     
                                         </div>
                                     </div>                
                                 </fieldset>

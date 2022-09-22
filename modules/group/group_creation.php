@@ -291,32 +291,38 @@ if (isset($_GET['all'])) {
                 </div>
             </div>
             <div class='form-group mt-3'>
-             <label class='col-sm-6 control-label-notes'>$langGroupForum:</label>
-                <div class='col-sm-12'>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='forum'>
-                      </label>
+                <div class='row'>
+                    <label class='col-auto control-label-notes'>$langGroupForum:</label>
+                    <div class='col-auto pt-1'>
+                        <div class='checkbox'>
+                        <label>
+                            <input type='checkbox' name='forum'>
+                        </label>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class='form-group mt-3'>
-             <label class='col-sm-6 control-label-notes'>$langDoc:</label>
-                <div class='col-sm-12'>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='documents'>
-                      </label>
+               <div class='row'>
+                    <label class='col-auto control-label-notes'>$langDoc:</label>
+                    <div class='col-auto pt-1'>
+                        <div class='checkbox'>
+                        <label>
+                            <input type='checkbox' name='documents'>
+                        </label>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class='form-group mt-3'>
-             <label class='col-sm-6 control-label-notes'>$langWiki:</label>
-                <div class='col-sm-12'>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='wiki'>
-                      </label>
+                <div class='row'>
+                    <label class='col-auto control-label-notes'>$langWiki:</label>
+                    <div class='col-auto pt-1'>
+                        <div class='checkbox'>
+                        <label>
+                            <input type='checkbox' name='wiki'>
+                        </label>
+                        </div>
                     </div>
                 </div>
             </div>";

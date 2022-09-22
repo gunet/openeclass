@@ -34,38 +34,41 @@
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
-                    <div class='extapp'>
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                            <form class='form-wrapper shadow-sm p-3 rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
-                                <fieldset>
-                                    <table class='table table-bordered' width='100%'>
-                                        <tr>
-                                        <th width='200' class='left'>
-                                            <b>{{ trans('langAntivirusConnector') }}</b>
-                                        </th>
-                                        <td>
-                                            <select name='formconnector'>{!! implode('', $connectorOptions) !!}</select>
-                                        </td>
-                                        </tr>
-                                        @foreach($connectorClasses as $curConnectorClass)
-                                            @foreach((new $curConnectorClass())->getConfigFields() as $curField => $curLabel)
-                                                <tr class='connector-config connector-{{ $curConnectorClass }}' style='display: none;'>
-                                                    <th width='200' class='left'>
-                                                        <b>{{ $curLabel }}</b>
-                                                    </th>
-                                                    <td>
-                                                        <input class='FormData_InputText' type='text' name='form{{ $curField }}' size='40' value='{{ get_config($curField) }}'>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endforeach
-                                    </table>
-                                </fieldset>
-                                {!! generate_csrf_token_form_field() !!}
-                                <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langModify') }}'>
-                            </form>
-                        </div>
+                    
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
                     </div>
+                    <div class='col-lg-6 col-12'>
+                        <form class='form-wrapper shadow-sm p-3 rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                            <fieldset>
+                                <table class='table table-bordered' width='100%'>
+                                    <tr>
+                                    <th width='200' class='left'>
+                                        <b>{{ trans('langAntivirusConnector') }}</b>
+                                    </th>
+                                    <td>
+                                        <select name='formconnector'>{!! implode('', $connectorOptions) !!}</select>
+                                    </td>
+                                    </tr>
+                                    @foreach($connectorClasses as $curConnectorClass)
+                                        @foreach((new $curConnectorClass())->getConfigFields() as $curField => $curLabel)
+                                            <tr class='connector-config connector-{{ $curConnectorClass }}' style='display: none;'>
+                                                <th width='200' class='left'>
+                                                    <b>{{ $curLabel }}</b>
+                                                </th>
+                                                <td>
+                                                    <input class='FormData_InputText' type='text' name='form{{ $curField }}' size='40' value='{{ get_config($curField) }}'>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                </table>
+                            </fieldset>
+                            {!! generate_csrf_token_form_field() !!}
+                            <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                        </form>
+                    </div>
+                   
                 </div>
             </div>
         </div>

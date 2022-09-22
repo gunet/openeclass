@@ -35,21 +35,27 @@
                     @endif
                     
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+
+
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+
+                    <div class='col-lg-6 col-12'>
                         <div class='form-wrapper shadow-sm p-3 rounded'>
                             
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}{{ isset($mynode) ? '?action=edit' : '?action=add' }}' onsubmit='return validateNodePickerForm();'>
                             <fieldset>
                                 <div class='form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langNodeCode1') }}:</label>
+                                    <label class='col-sm-12 control-label-notes'>{{ trans('langNodeCode1') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='code' value='{{ isset($mynode) ? $mynode->code : "" }}'>
+                                        <input class='form-control' placeholder="{{ trans('langNodeCode1') }}..." type='text' name='code' value='{{ isset($mynode) ? $mynode->code : "" }}'>
                                         &nbsp;<i>{{ trans('langCodeFaculte2') }}</i>
                                     </div>
                                 </div>
                                 @foreach ($session->active_ui_languages as $key => $langcode)
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langNodeName') }}:</label>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langNodeName') }}</label>
                                         <div class='col-sm-12'>
                                                 @if (isset($is_serialized) && $is_serialized && isset($names[$langcode]))
                                                     <input class='form-control' type='text' name='name-{{ $langcode }}' value='{{ $names[$langcode] }}' placeholder='{{ trans('langFaculte2') }} ({{ trans("langNameOfLang['".langcode_to_name($langcode)."']")}})'>
@@ -63,14 +69,14 @@
                                 @endforeach
                                 @foreach ($session->active_ui_languages as $key => $langcode)
                                     <div class='form-group mt-3'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langNodeDescription') }}:</label>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langNodeDescription') }}</label>
                                         <div class='col-sm-12'>
                                             {!! rich_text_editor('description-' . $langcode, 8, 20, $descriptions[$langcode]) !!}
                                         </div>
                                     </div>
                                 @endforeach
                                 <div class='form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langNodeParent') }}:</label>
+                                    <label class='col-sm-12 control-label-notes'>{{ trans('langNodeParent') }}</label>
                                     <div class='col-sm-12'>
                                         {!! $html !!}
                                         <span class='help-block'>
@@ -79,7 +85,7 @@
                                     </div>
                                 </div>
                                 <div class='form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langNodeAllowCourse') }}:</label>
+                                    <label class='col-sm-12 control-label-notes'>{{ trans('langNodeAllowCourse') }}</label>
                                     <div class='col-sm-12'>
                                         <input type='checkbox' name='allow_course' value='1'{!! isset($mynode) && $mynode->allow_course == 1 ? " checked" : '' !!}>
                                         <span class='help-block'>
@@ -88,7 +94,7 @@
                                     </div>
                                 </div>
                                 <div class='form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langNodeAllowUser') }}</label>
+                                    <label class='col-sm-12 control-label-notes'>{{ trans('langNodeAllowUser') }}</label>
                                     <div class='col-sm-12'>
                                         <input type='checkbox' name='allow_user' value='1'{!! isset($mynode) && $mynode->allow_user == 1 ? " checked" : '' !!}>
                                         <span class='help-block'>
@@ -97,7 +103,7 @@
                                     </div>
                                 </div>
                             <div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>{{ trans('langNodeOrderPriority') }}</label>
+                                <label class='col-sm-12 control-label-notes'>{{ trans('langNodeOrderPriority') }}</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' type='text' name='order_priority' value='{{ isset($mynode) ? $mynode->order_priority : '' }}'>
                                     <span class='help-block'>
@@ -107,14 +113,14 @@
                             </div>
 
                             <div class='form-group mt-3'>
-                                <label class='col-sm-6 control-label-notes'>{{ trans('langAvailableTypes') }}</label>
+                                <label class='col-sm-12 control-label-notes'>{{ trans('langAvailableTypes') }}</label>
                                 <div class='col-sm-12'>
                                     <div class='radio'>
                                         <label>
                                             <input id='nodeopen' type='radio' name='visible' value='2' {{ $visibleChecked[2] }}>
                                             <span class='fa fa-unlock fa-fw' style='font-size:23px;'></span>&nbsp;{{ trans('langNodePublic') }}
-                                            <span class='help-block'><small>{{ trans('langNodePublic2') }}</small></span>
                                         </label>
+                                        <br><span class='help-block'><small>{{ trans('langNodePublic2') }}</small></span>
                                     </div>
                                     <div class='radio'>
                                         <label>
@@ -122,15 +128,15 @@
                                             <span class='fa fa-lock fa-fw'  style='font-size:23px;'>
                                                 <span class='fa fa-pencil text-danger fa-custom-lock' style='font-size:16px; position:absolute; top:13px; left:35px;'></span>
                                             </span>&nbsp;{{ trans('langNodeSubscribed') }}
-                                            <span class='help-block'><small>{{ trans('langNodeSubscribed2') }}</small></span>
                                         </label>
+                                        <br><span class='help-block'><small>{{ trans('langNodeSubscribed2') }}</small></span>
                                     </div>
                                     <div class='radio'>
                                         <label>
                                             <input id='nodehidden' type='radio' name='visible' value='0' {{ $visibleChecked[0] }}>
                                             <span class='fa fa-lock fa-fw' style='font-size:23px;'></span>&nbsp;{{ trans('langNodeHidden') }}
-                                            <span class='help-block'><small>{{ trans('langNodeHidden2') }}</small></span>
                                         </label>
+                                        <br><span class='help-block'><small>{{ trans('langNodeHidden2') }}</small></span>
                                     </div>
                                 </div>
                             </div>
@@ -143,17 +149,27 @@
                             @endif
                             {!! showSecondFactorChallenge() !!}
                             <div class='form-group mt-3'>
-                                <div class='col-sm-9 col-sm-offset-3'>
-                                    {!! form_buttons([
-                                        [
-                                            'text' => trans('langSave'),
-                                            'name' => isset($mynode) ? 'edit' : 'add',
-                                            'value'=> isset($mynode) ? trans('langAcceptChanges') : trans('langAdd')
-                                        ],
-                                        [
-                                            'href' => $_SERVER['SCRIPT_NAME']
-                                        ]
-                                    ]) !!}
+                                <div class='col-12'>
+                                    <div class='row'>
+                                        <div class='col-6'>
+                                            {!! form_buttons([
+                                                [
+                                                    'class' => 'btn-primary submitAdminBtn w-100',
+                                                    'text' => trans('langSave'),
+                                                    'name' => isset($mynode) ? 'edit' : 'add',
+                                                    'value'=> isset($mynode) ? trans('langAcceptChanges') : trans('langAdd')
+                                                ]
+                                            ]) !!}
+                                        </div>
+                                        <div class='col-6'>
+                                        {!! form_buttons([
+                                            [
+                                                'class' => 'btn-secondary cancelAdminBtn w-100',
+                                                'href' => $_SERVER['SCRIPT_NAME']
+                                            ]
+                                        ]) !!}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             </fieldset>
