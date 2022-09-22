@@ -40,7 +40,7 @@ if (!get_config('enable_search')) {
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
+                                      'button-class' => 'btn-secondary')
                             ),false);
     $tool_content .= "<div class='alert alert-info'>$langSearchDisabled</div>";
     draw($tool_content, $menuTypeId, null, $head_content);

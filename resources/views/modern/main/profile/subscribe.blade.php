@@ -37,23 +37,37 @@
                             <input type='checkbox' id='unsub' name='unsub' value='1'>&nbsp;{{ trans('langEmailFromCourses') }}
                         @endif
                         <div class='alert alert-info'>{!! trans('langInfoUnsubscribe') !!}</div>
-                        <div class='col-sm-12'>
-                            <div class='form-wrapper shadow-sm p-3 rounded'>
-                                <div id='unsubscontrols'>
-                                @if(isset($_REQUEST['cid']))
-                                    <input type='checkbox' name='c_unsub' value='1' {{ $selected }}>&nbsp;{{ $course_title }}<br />
-                                    <input type='hidden' name='cid' value='{{ getIndirectReference($cid) }}'>
-                                @else
-                                    @foreach($_SESSION['courses'] as $code => $status)
-                                        @if (course_status(course_code_to_id($code)) != COURSE_INACTIVE)
-                                            <input type='checkbox' name='c_unsub[{{ $code }}]' value='1' {{ get_user_email_notification($uid, course_code_to_id($code)) ? 'checked' : '' }}>&nbsp;{{ course_code_to_title($code) }}<br>
-                                        @endif
-                                    @endforeach
-                                @endif
+
+                        <div class='row'>
+                            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                                <div class='col-12 h-100 left-form'></div>
+                            </div>
+                            <div class='col-lg-6 col-12'>
+                                <div class='form-wrapper shadow-sm p-3 rounded'>
+                                    <div id='unsubscontrols'>
+                                    @if(isset($_REQUEST['cid']))
+                                        <input type='checkbox' name='c_unsub' value='1' {{ $selected }}>&nbsp;{{ $course_title }}<br />
+                                        <input type='hidden' name='cid' value='{{ getIndirectReference($cid) }}'>
+                                    @else
+                                        @foreach($_SESSION['courses'] as $code => $status)
+                                            @if (course_status(course_code_to_id($code)) != COURSE_INACTIVE)
+                                                <input type='checkbox' name='c_unsub[{{ $code }}]' value='1' {{ get_user_email_notification($uid, course_code_to_id($code)) ? 'checked' : '' }}>&nbsp;{{ course_code_to_title($code) }}<br>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                    </div>
+                                    <br>
+                                    <div class='row'>
+                                        <div class='col-6'>
+                                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                        </div>
+                                        <div class='col-6'>
+                                             <a class='btn btn-secondary cancelAdminBtn w-100' href='display_profile.php'>{{ trans('langCancel') }}</a>
+                                        </div>
+                                    </div>
+                                    
+                                   
                                 </div>
-                                <br>
-                                <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
-                                <a class='btn btn-secondary' href='display_profile.php'>{{ trans('langCancel') }}</a>
                             </div>
                         </div>
                         {!! generate_csrf_token_form_field() !!}
