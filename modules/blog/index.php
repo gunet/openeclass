@@ -751,8 +751,8 @@ if ($action == "showBlog") {
             } else {
                 $comment_content = "<div class=\"blog_post_empty_space\"></div>";
             }
-            $tool_content .= "<div class='panel panel-action-btn-default'>
-                                <div class='panel-heading'>
+            $tool_content .= "<div class='panel panel-action-btn-default rounded-0'>
+                                <div class='panel-heading rounded-0'>
                                     <div class='float-end'>
                                         ". action_button(array(
                                             array(
@@ -781,11 +781,11 @@ if ($action == "showBlog") {
                                         <a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
                                     </h3>
                                 </div>
-                                <div class='panel-body ps-3 panel-body-blog'>
+                                <div class='panel-body ps-3 panel-body-blog rounded-0'>
                                     <button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($post->getTime())) . "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     $comment_content
                                 </div>
-                                <div class='panel-footer panel-footer-blog'>
+                                <div class='panel-footer panel-footer-blog rounded-0'>
                                     <div class='row'>
                                         <div class='col-sm-6'>$rating_content</div>
                                         <div class='col-sm-6 text-end'>$sharing_content</div>

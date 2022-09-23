@@ -102,7 +102,7 @@
                                       </div>                   
                                  
                               </div>
-                              <div class='form-group mt-3'>
+                              <div class='form-group mt-5'>
                                   <div class='col-12'>
                                       <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                   </div>

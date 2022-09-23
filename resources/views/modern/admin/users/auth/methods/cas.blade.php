@@ -2,43 +2,43 @@
            
                 
                 <div class='form-group mt-3'>
-                    <label for='cas_host' class='col-sm-12 control-label-notes'>{{ trans('langcas_host') }}:</label>
+                    <label for='cas_host' class='col-sm-12 control-label-notes'>{{ trans('langcas_host') }}</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' name='cas_host' id='cas_host' type='text' value='{{ isset($auth_data['cas_host']) ? $auth_data['cas_host'] : '' }}'>
+                        <input class='form-control' placeholder="{{ trans('langcas_host') }}..." name='cas_host' id='cas_host' type='text' value='{{ isset($auth_data['cas_host']) ? $auth_data['cas_host'] : '' }}'>
                     </div>
                 </div>
 
             
 
                 <div class='form-group mt-3'>
-                    <label for='cas_port' class='col-sm-12 control-label-notes'>{{ trans('langcas_port') }}:</label>
+                    <label for='cas_port' class='col-sm-12 control-label-notes'>{{ trans('langcas_port') }}</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' name='cas_port' id='cas_port' type='text' value='{{ isset($auth_data['cas_port']) ? $auth_data['cas_port'] : '443' }}'>
+                        <input class='form-control' placeholder="{{ trans('langcas_port') }}..." name='cas_port' id='cas_port' type='text' value='{{ isset($auth_data['cas_port']) ? $auth_data['cas_port'] : '443' }}'>
                     </div>
                 </div>    
 
   
 
                 <div class='form-group mt-3'>
-                    <label for='cas_context' class='col-sm-12 control-label-notes'>{{ trans('langcas_context') }}:</label>
+                    <label for='cas_context' class='col-sm-12 control-label-notes'>{{ trans('langcas_context') }}</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' name='cas_context' id='cas_context' type='text' value='{{ isset($auth_data['cas_context']) ? $auth_data['cas_context'] : '' }}'>
+                        <input class='form-control' placeholder="{{ trans('langcas_context') }}..." name='cas_context' id='cas_context' type='text' value='{{ isset($auth_data['cas_context']) ? $auth_data['cas_context'] : '' }}'>
                     </div>
                 </div> 
 
           
 
                 <div class='form-group mt-3'>
-                    <label for='cas_logout' class='col-sm-12 control-label-notes'>{{ trans('langcas_logout') }}:</label>
+                    <label for='cas_logout' class='col-sm-12 control-label-notes'>{{ trans('langcas_logout') }}</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' name='cas_logout' id='cas_logout' type='text' value='{{ isset($auth_data['cas_logout']) ? $auth_data['cas_logout'] : '' }}'>
+                        <input class='form-control' placeholder="{{ trans('langcas_logout') }}..." name='cas_logout' id='cas_logout' type='text' value='{{ isset($auth_data['cas_logout']) ? $auth_data['cas_logout'] : '' }}'>
                     </div>
                 </div>
 
     
 
                 <div class='form-group mt-3'>
-                    <label for='cas_logout' class='col-sm-12 control-label-notes'>{{ trans('langcas_ssout') }}:</label>
+                    <label for='cas_logout' class='col-sm-12 control-label-notes'>{{ trans('langcas_ssout') }}</label>
                     <div class='col-sm-12'>
                         {!! selection(
                             [
@@ -52,45 +52,45 @@
            
 
                 <div class='form-group mt-3'>
-                    <label for='cas_cachain' class='col-sm-12 control-label-notes'>{{ trans('langcas_cachain') }}:</label>
+                    <label for='cas_cachain' class='col-sm-12 control-label-notes'>{{ trans('langcas_cachain') }}</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' name='cas_cachain' id='cas_cachain' type='text' value='{{ isset($auth_data['cas_cachain']) ? $auth_data['cas_cachain'] : '' }}'>
+                        <input class='form-control' placeholder="{{ trans('langcas_cachain') }}..." name='cas_cachain' id='cas_cachain' type='text' value='{{ isset($auth_data['cas_cachain']) ? $auth_data['cas_cachain'] : '' }}'>
                     </div>
                 </div>  
 
       
 
                 <div class='form-group mt-3'>
-                    <label for='casusermailattr' class='col-sm-12 control-label-notes'>{{ trans('langcasusermailattr') }}:</label>
+                    <label for='casusermailattr' class='col-sm-12 control-label-notes'>{{ trans('langcasusermailattr') }}</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' name='casusermailattr' id='casusermailattr' type='text' value='{{ isset($auth_data['casusermailattr']) ? $auth_data['casusermailattr'] : 'mail' }}'>
+                        <input class='form-control' placeholder="{{ trans('langcasusermailattr') }}..." name='casusermailattr' id='casusermailattr' type='text' value='{{ isset($auth_data['casusermailattr']) ? $auth_data['casusermailattr'] : 'mail' }}'>
                     </div>
                 </div>      
                 
          
 
                 <div class='form-group mt-3'>
-                    <label for='casuserfirstattr' class='col-sm-12 control-label-notes'>{{ trans('langcasuserfirstattr') }}:</label>
+                    <label for='casuserfirstattr' class='col-sm-12 control-label-notes'>{{ trans('langcasuserfirstattr') }}</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' name='casuserfirstattr' id='casuserfirstattr' type='text' value='{{ isset($auth_data['casuserfirstattr']) ? $auth_data['casuserfirstattr'] : 'givenName' }}'>
+                        <input class='form-control' placeholder="{{ trans('langcasuserfirstattr') }}..." name='casuserfirstattr' id='casuserfirstattr' type='text' value='{{ isset($auth_data['casuserfirstattr']) ? $auth_data['casuserfirstattr'] : 'givenName' }}'>
                     </div>
                 </div> 
 
            
 
                 <div class='form-group mt-3'>
-                    <label for='casuserlastattr' class='col-sm-12 control-label-notes'>{{ trans('langcasuserlastattr') }}:</label>
+                    <label for='casuserlastattr' class='col-sm-12 control-label-notes'>{{ trans('langcasuserlastattr') }}</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' name='casuserlastattr' id='casuserlastattr' type='text' value='{{ isset($auth_data['casuserlastattr']) ? $auth_data['casuserlastattr'] : 'sn' }}'>
+                        <input class='form-control' placeholder="{{ trans('langcasuserlastattr') }}..." name='casuserlastattr' id='casuserlastattr' type='text' value='{{ isset($auth_data['casuserlastattr']) ? $auth_data['casuserlastattr'] : 'sn' }}'>
                     </div>
                 </div>
 
             
 
                 <div class='form-group mt-3'>
-                    <label for='casuserstudentid' class='col-sm-12 control-label-notes'>{{ trans('langcasuserstudentid') }}:</label>
+                    <label for='casuserstudentid' class='col-sm-12 control-label-notes'>{{ trans('langcasuserstudentid') }}</label>
                     <div class='col-sm-12'>
-                        <input class='form-control' name='casuserstudentid' id='casuserstudentid' type='text' value='{{ isset($auth_data['casuserstudentid']) ? $auth_data['casuserstudentid'] : '' }}'>
+                        <input class='form-control' placeholder="{{ trans('langcasuserstudentid') }}..." name='casuserstudentid' id='casuserstudentid' type='text' value='{{ isset($auth_data['casuserstudentid']) ? $auth_data['casuserstudentid'] : '' }}'>
                     </div>
                 </div>
 

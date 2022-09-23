@@ -51,7 +51,7 @@
                                         </div>
                                     </div>
                                     {!! showSecondFactorChallenge() !!}
-                                    <div class='col-12 mt-3'>
+                                    <div class='col-12 mt-5'>
                                         <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_editauth' value='{{ trans('langModify') }}'>
                                     </div>
                                     <input type='hidden' name='u' value='{{ $u }}'>

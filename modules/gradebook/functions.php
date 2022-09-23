@@ -164,26 +164,32 @@ function new_gradebook() {
                         <label class='control-label-notes'>$langTitle</label>
                     </div>
                     <div class='col-12'>
-                        <input class='form-control' type='text' name='title' value='$title'>
+                        <input class='form-control' placeholder='$langTitle...' type='text' name='title' value='$title'>
                         <span class='help-block'>$title_error</span>
                     </div>
                 </div>
-                <div class='form-group".($start_date_error ? " has-error" : "")." mt-3'>
-                    <div class='col-12'>
-                        <label class='control-label-notes'>$langStart</label>
+                <div class='row'>
+                    <div class='col-md-6 col-12'>
+                        <div class='form-group".($start_date_error ? " has-error" : "")." mt-3'>
+                            <div class='col-12'>
+                                <label class='control-label-notes'>$langStart</label>
+                            </div>
+                            <div class='col-12'>
+                                <input class='form-control' placeholder='$langStart...' type='text' name='start_date' id='start_date' value='$start_date'>
+                                <span class='help-block'>$start_date_error</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class='col-12'>
-                        <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
-                        <span class='help-block'>$start_date_error</span>
-                    </div>
-                </div>
-                <div class='form-group".($end_date_error ? " has-error" : "")." mt-3'>
-                    <div class='col-12'>
-                        <label class='control-label-notes'>$langEnd</label>
-                    </div>
-                    <div class='col-12'>
-                        <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
-                        <span class='help-block'>$end_date_error</span>
+                    <div class='col-md-6 col-12'>
+                        <div class='form-group".($end_date_error ? " has-error" : "")." mt-3'>
+                            <div class='col-12'>
+                                <label class='control-label-notes'>$langEnd</label>
+                            </div>
+                            <div class='col-12'>
+                                <input class='form-control' placeholder='$langEnd...' type='text' name='end_date' id='end_date' value='$end_date'>
+                                <span class='help-block'>$end_date_error</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class='form-group".($degreerange_error ? " has-error" : "")." mt-3'>
@@ -199,17 +205,28 @@ function new_gradebook() {
                         <span class='help-block'>$degreerange_error</span>
                     </div>
                 </div>
-                <div class='form-group mt-3'>
-                    <div class='col-12'>".form_buttons(array(
-                        array(
-                                'text' => $langSave,
-                                'name' => 'newGradebook',
-                                'value'=> $langInsert
-                            ),
-                        array(
-                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                            )
-                        ))."
+                <div class='form-group mt-5'>
+                    <div class='col-12'>
+                        <div class='row'>
+                           <div class='col-6'>" 
+                                .form_buttons(array(
+                                    array(
+                                            'class' => 'btn-primary submitAdminBtn w-100',
+                                            'text' => $langSave,
+                                            'name' => 'newGradebook',
+                                            'value'=> $langInsert
+                                        )
+                                    )). 
+                            "</div>
+                            <div class='col-6'>"
+                            .form_buttons(array(
+                                array(
+                                    'class' => 'btn-secondary cancelAdminBtn w-100',
+                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                                    )
+                                )).
+                            "</div>
+                        </div>
                     </div>
                 </div>
             ". generate_csrf_token_form_field() ."

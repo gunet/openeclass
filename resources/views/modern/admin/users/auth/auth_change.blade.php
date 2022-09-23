@@ -50,7 +50,7 @@
                                     </div>
                                 </div>
                                 <input type='hidden' name='auth' value='{{ getIndirectReference(intval($auth)) }}'>  
-                                <div class='col-12 mt-3'>
+                                <div class='col-12 mt-5'>
                                     <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                 </div>
                             </fieldset>

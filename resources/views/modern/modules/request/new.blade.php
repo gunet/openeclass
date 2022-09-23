@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
 
     <div class="container-fluid main-container">
@@ -82,26 +81,29 @@
 
                                 
 
-                                @if ($request_types)
-                                    <div class='form-group mt-3'>
-                                        <label for='requestType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}:</label>
-                                        <div class='col-sm-12'>
-                                            <select class='form-select' name='requestType' id='requestType'>
-                                                <option value='0'>{{ trans('langRequestBasicType') }}</option>
-                                                @foreach ($request_types as $type)
-                                                    <option value='{{ $type->id }}'>{{ getSerializedMessage($type->name) }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                <div class='row'>
+                                    <div class='col-md-6 col-12'>
+                                        @if ($request_types)
+                                            <div class='form-group mt-3'>
+                                                <label for='requestType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}</label>
+                                                <div class='col-sm-12'>
+                                                    <select class='form-select' name='requestType' id='requestType'>
+                                                        <option value='0'>{{ trans('langRequestBasicType') }}</option>
+                                                        @foreach ($request_types as $type)
+                                                            <option value='{{ $type->id }}'>{{ getSerializedMessage($type->name) }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
-                                @endif
-
-                                
-
-                                <div class='form-group mt-3'>
-                                    <label for='requestTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
-                                    <div class='col-sm-12'>
-                                        <input type='text' class='form-control' id='requestTitle' name='requestTitle' required>
+                                    <div class='col-md-6 col-12'>
+                                        <div class='form-group mt-3'>
+                                            <label for='requestTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
+                                            <div class='col-sm-12'>
+                                                <input type='text' class='form-control' placeholder="{{ trans('langTitle') }}..." id='requestTitle' name='requestTitle' required>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -116,29 +118,32 @@
 
                              
 
-                                <div class='form-group mt-3'>
-                                    <label for='assignTo' class='col-sm-6 control-label-notes'>{{ trans("m['WorkAssignTo']") }}:</label>
-                                    <div class='col-sm-12'>
-                                        <select class='form-select' name='assignTo[]' multiple id='assignTo'>
-                                            @foreach ($course_users as $cu)
-                                                <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
-                                            @endforeach
-                                        </select>
+                                <div class='row'>
+                                    <div class='col-md-6 col-12'>
+                                        <div class='form-group mt-3'>
+                                            <label for='assignTo' class='col-sm-6 control-label-notes'>{{ trans("m['WorkAssignTo']") }}:</label>
+                                            <div class='col-sm-12'>
+                                                <select class='form-select' name='assignTo[]' multiple id='assignTo'>
+                                                    @foreach ($course_users as $cu)
+                                                        <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-
-                                
-
-                                <div class='form-group mt-3'>
-                                    <label for='requestWatchers' class='col-sm-6 control-label-notes'>{{ trans('langWatchers') }}:</label>
-                                    <div class='col-sm-12'>
-                                        <select class='form-select' name='requestWatchers[]' multiple id='requestWatchers'>
-                                            @foreach ($course_users as $cu)
-                                                @if ($uid != $cu->user_id)
-                                                    <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
+                                    <div class='col-md-6 col-12'>
+                                        <div class='form-group mt-3'>
+                                            <label for='requestWatchers' class='col-sm-6 control-label-notes'>{{ trans('langWatchers') }}:</label>
+                                            <div class='col-sm-12'>
+                                                <select class='form-select' name='requestWatchers[]' multiple id='requestWatchers'>
+                                                    @foreach ($course_users as $cu)
+                                                        @if ($uid != $cu->user_id)
+                                                            <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -167,9 +172,17 @@
                                 
 
                                 <div class='form-group mt-3'>
-                                    <div class='col-offset-2 col-10'>
-                                        <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
-                                        <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                    <div class='col-12'>
+                                        <div class='row'>
+                                            <div class='col-6'>
+                                                 <button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit'>{{ trans('langSubmit') }}</button>
+                                            </div>
+                                            <div class='col-6'>
+                                                 <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                            </div>
+                                        </div>
+                                       
+                                       
                                     </div>
                                 </div>
 

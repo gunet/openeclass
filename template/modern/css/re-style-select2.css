@@ -1,0 +1,36 @@
+.select2-selection.select2-selection--multiple{
+    border:none;
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(0.25turn, rgb(31, 180, 226), rgb(79, 125, 165), rgba(249, 145, 0, 0));
+    border-image-slice: 1;
+    overflow-y: auto !important;
+    background: transparent;
+}
+.select2-selection--multiple:before {
+    content: "";
+    position: absolute;
+    right: 7px;
+    top: 42%;
+    border-top: 5px solid #888;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    background: transparent;
+}
+.select2-selection__rendered{
+    overflow-y: auto !important;
+    background: transparent;
+}
+.select2.select2-container{
+  width:100% !important;
+  background: transparent;
+}
+/* rich-text-editor bg-tools */
+
+.mce-container{
+  /* border: 0px !important; */
+  background: #F5F5F5;
+}
+.mce-toolbar-grp{
+    background: #fff;
+    border-bottom:0px !important;
+}

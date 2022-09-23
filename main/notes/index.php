@@ -185,7 +185,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                     ".References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected). "
                   </div>
                 </div>
-                <div class='form-group mt-3'>
+                <div class='form-group mt-5'>
                   <div class='col-12'>
                   <div class='row'>
                     <div class='col-6'>

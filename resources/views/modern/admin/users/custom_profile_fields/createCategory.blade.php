@@ -50,7 +50,7 @@
                                 </div>
                             </div>
                      
-                            <div class='col-12 mt-3'>
+                            <div class='col-12 mt-5'>
                                 {!! showSecondFactorChallenge() !!}
                                 <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_cat' value='{{ trans('langAdd') }}'>
                             </div>

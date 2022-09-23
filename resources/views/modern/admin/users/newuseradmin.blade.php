@@ -223,7 +223,7 @@
                             {!! render_profile_fields_form($cpf_context, true) !!}
                             {!! showSecondFactorChallenge() !!}
                            
-                            <div class='col-12 mt-3'>
+                            <div class='col-12 mt-5'>
                             <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
                             </div>        
                         </fieldset>

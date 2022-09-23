@@ -88,7 +88,7 @@
                     @endif
                     
                     
-                        <div class='col-xxl-9 col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12'>
+                        <div class='col-xl-9 col-lg-8 col-md-12 col-sm-12 col-12'>
                             <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>  
                                 <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">  
                                     <div class='panel panel-admin' id='one'>
@@ -1205,7 +1205,7 @@
                         </div>
 
 
-                        <div class='col-xxl-3 col-xl-3 col-lg-3 col-md-0 col-sm-0 col-0 d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block float-end hidden-xs' id='affixedSideNav'>
+                        <div class='col-xl-3 col-lg-4 col-md-0 col-sm-0 col-0 d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block float-end hidden-xs' id='affixedSideNav'>
 
 
                             <nav id="navbar-example3" class="navbar navbar-light bg-light flex-column align-items-stretch p-3 sticky-top shadow-lg" style='z-index:1;'>

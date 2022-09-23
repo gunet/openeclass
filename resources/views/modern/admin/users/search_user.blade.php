@@ -150,7 +150,7 @@
                                 </div>
                             </div>    
                        
-                            <div class='form-group mt-3'>
+                            <div class='form-group mt-5'>
                                 <div class='row'>
                                     <div class='col-6'>
                                         <input class='btn btn-primary submitAdminBtn w-100' type='submit' value='{{ trans('langSearch') }}'>

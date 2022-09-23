@@ -426,7 +426,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             
             
             <div class='form-group mt-3'>
-              <label for='PollEndMessage' class='col-sm-2 control-label-notes'>$langPollEndMessage:</label>
+              <label for='PollEndMessage' class='col-sm-6 control-label-notes'>$langPollEndMessage:</label>
               <div class='col-sm-12'>
                 ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."
               </div>

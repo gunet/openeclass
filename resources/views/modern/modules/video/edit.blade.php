@@ -127,12 +127,12 @@
                                         
 
                                         <div class='form-group mt-3'>
-                                            <label for='Title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
+                                            <label for='Title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
                                             <div class='col-sm-12'>
                                                 @if (isset($edititem))
-                                                    <input class='form-control' type='text' name='title' value='{{ $edititem->title }}'>
+                                                    <input class='form-control' placeholder="{{ trans('langTitle') }}..." type='text' name='title' value='{{ $edititem->title }}'>
                                                 @else
-                                                    <input class='form-control' type='text' name='title' size='55'>
+                                                    <input class='form-control' placeholder="{{ trans('langTitle') }}..." type='text' name='title' size='55'>
                                                 @endif
                                             </div>
                                         </div>
@@ -143,118 +143,153 @@
                                         <div class='form-group mt-3'>
                                             <label for='Desc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
                                             <div class='col-sm-12'>
-                                                <textarea class='form-control' rows='3' name='description'>@if (isset($_GET['id']) && isset($_GET['table_edit'])){{ $edititem->description }}@endif</textarea>
+                                                <textarea class='form-control' placeholder="{{ trans('langGiveText') }}..." rows='3' name='description'>@if (isset($_GET['id']) && isset($_GET['table_edit'])){{ $edititem->description }}@endif</textarea>
+                                            </div>
+                                        </div>
+
+                                     
+
+                                        <div class='row'>
+                                            <div class='col-md-6 col-12'>
+                                                <div class='form-group mt-3'>
+                                                    <label for='Creator' class='col-sm-12 control-label-notes'>{{ trans('langCreator') }}:</label>
+                                                    <div class='col-sm-12'>
+                                                        @if (isset($form_input))
+                                                            <input class='form-control' type='text' name='creator' value='{{ $nick }}'>
+                                                        @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
+                                                            <input class='form-control' type='text' name='creator' value='{{ $edititem->creator }}'>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class='col-md-6 col-12'>
+                                                <div class='form-group mt-3'>
+                                                    <label for='Publisher' class='col-sm-12 control-label-notes'>{{ trans('langpublisher') }}:</label>
+                                                    <div class='col-sm-12'>
+                                                        @if (isset($form_input))
+                                                            <input class='form-control' type='text' name='publisher' value='{{ $nick }}'>
+                                                        @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
+                                                            <input class='form-control' type='text' name='publisher' value='{{ $edititem->publisher }}'>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class='row'>
+                                            @if (isset($form_input))
+                                            <div class='col-md-6 col-12'>
+                                                <div class='form-group mt-3'>
+                                                    <label for='Date' class='col-sm-6 control-label-notes'>{{ trans('langDate') }}:</label>
+                                                    <div class='col-sm-12'><input class='form-control' type='text' name='date' value='{{ date('Y-m-d G:i') }}'></div>
+                                                </div>
+                                            </div>
+                                            @endif
+                                            <div class='col-md-6 col-12'>
+                                                <div class='form-group mt-3'>
+                                                    <label for='Category' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}:</label>
+                                                    <div class='col-sm-12'>
+                                                        <select class='form-select' name='selectcategory'>
+                                                            <option value='0'>--</option>
+                                                        @foreach ($resultcategories as $cat)
+                                                            <?php
+                                                                if (isset($form_input)) {
+                                                                    $selected = '';
+                                                                } else if (isset($_GET['id']) && isset($_GET['table_edit'])) {
+                                                                    $selected = '';
+                                                                    if (isset($edititem->category) && $edititem->category == $cat->id) {
+                                                                        $selected = " selected='selected'";
+                                                                    }
+                                                                }
+                                                            ?>
+                                                            <option value='{{ $cat->id }}' {{ $selected }}>{{ $cat->name }}</option>
+                                                        @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
                                      
 
 
-                                        <div class='form-group mt-3'>
-                                            <label for='Creator' class='col-sm-6 control-label-notes'>{{ trans('langCreator') }}:</label>
-                                            <div class='col-sm-12'>
-                                                @if (isset($form_input))
-                                                    <input class='form-control' type='text' name='creator' value='{{ $nick }}'>
-                                                @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
-                                                    <input class='form-control' type='text' name='creator' value='{{ $edititem->creator }}'>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                    
-
-
-                                        <div class='form-group mt-3'>
-                                            <label for='Publisher' class='col-sm-6 control-label-notes'>{{ trans('langpublisher') }}:</label>
-                                            <div class='col-sm-12'>
-                                                @if (isset($form_input))
-                                                    <input class='form-control' type='text' name='publisher' value='{{ $nick }}'>
-                                                @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
-                                                    <input class='form-control' type='text' name='publisher' value='{{ $edititem->publisher }}'>
-                                                @endif
-                                            </div>
-                                        </div>
-
-
-                                        @if (isset($form_input))
-                                      
-                                            <div class='form-group mt-3'>
-                                                <label for='Date' class='col-sm-6 control-label-notes'>{{ trans('langDate') }}:</label>
-                                                <div class='col-sm-12'><input class='form-control' type='text' name='date' value='{{ date('Y-m-d G:i') }}'></div>
-                                            </div>
-                                        @endif
-
-                                    
-
-                                        <div class='form-group mt-3'>
-                                            <label for='Category' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}:</label>
-                                            <div class='col-sm-12'>
-                                                <select class='form-select' name='selectcategory'>
-                                                    <option value='0'>--</option>
-                                                @foreach ($resultcategories as $cat)
-                                                    <?php
-                                                        if (isset($form_input)) {
-                                                            $selected = '';
-                                                        } else if (isset($_GET['id']) && isset($_GET['table_edit'])) {
-                                                            $selected = '';
-                                                            if (isset($edititem->category) && $edititem->category == $cat->id) {
-                                                                $selected = " selected='selected'";
-                                                            }
-                                                        }
-                                                    ?>
-                                                    <option value='{{ $cat->id }}' {{ $selected }}>{{ $cat->name }}</option>
-                                                @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                     
-
-
-                                        <div class='form-group mt-3'>
-                                            <div class='col-sm-offset-2 col-sm-10'>
-                                                @if ($form_input === 'file')
-                                                    {!!
-                                                    form_buttons(array(
-                                                        array(
-                                                            'text'  =>  $GLOBALS['langUpload'],
-                                                            'name'  =>  'add_submit',
-                                                            'value' =>  $GLOBALS['langUpload']
-                                                        ),
-                                                        array(
-                                                            'href'  =>  $backPath
-                                                        )
-                                                    ))
-                                                    !!}
-                                                @elseif ($form_input === 'url')
-                                                    {!!
-                                                    form_buttons(array(
-                                                        array(
-                                                            'text'  =>  $GLOBALS['langSave'],
-                                                            'name'  =>  'add_submit',
-                                                            'value' =>  $GLOBALS['langAdd']
-                                                        ),
-                                                        array(
-                                                            'href'  =>  $backPath
-                                                        )
-                                                    ))
-                                                    !!}
-                                                @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
-                                                    {!!
-                                                    form_buttons(array(
-                                                        array(
-                                                            'text'  =>  $GLOBALS['langSave'],
-                                                            'name'  =>  'edit_submit',
-                                                            'value' =>  $GLOBALS['langEditChange']
-                                                        ),
-                                                        array(
-                                                            'href'  =>  $backPath
-                                                        )
-                                                    ))
-                                                    !!}
-                                                    <input type='hidden' name='id' value='{{ $edititem->id }}'>
-                                                    <input type='hidden' name='table' value='{{ $table_edit }}'>
-                                                @endif
+                                        <div class='form-group mt-5'>
+                                            <div class='col-12'>
+                                                <div class='row'>
+                                                    @if ($form_input === 'file')
+                                                        <div class='col-6'>
+                                                            {!!
+                                                            form_buttons(array(
+                                                                array(
+                                                                    'class' => 'btn-primary submitAdminBtn w-100',
+                                                                    'text'  =>  $GLOBALS['langUpload'],
+                                                                    'name'  =>  'add_submit',
+                                                                    'value' =>  $GLOBALS['langUpload']
+                                                                )
+                                                            ))
+                                                            !!}
+                                                        </div>
+                                                        <div class='col-6'>
+                                                        {!! form_buttons(array(
+                                                                array(
+                                                                    'class' => 'btn-secondary cancelAdminBtn w-100',
+                                                                    'href'  =>  $backPath
+                                                                )
+                                                            ))
+                                                            !!}
+                                                        </div>
+                                                    @elseif ($form_input === 'url')
+                                                        <div class='col-6'>
+                                                            {!!
+                                                            form_buttons(array(
+                                                                array(
+                                                                    'class' => 'btn-primary submitAdminBtn w-100',
+                                                                    'text'  =>  $GLOBALS['langSave'],
+                                                                    'name'  =>  'add_submit',
+                                                                    'value' =>  $GLOBALS['langAdd']
+                                                                )
+                                                            ))
+                                                            !!}
+                                                        </div>
+                                                        <div class='col-6'>
+                                                            {!!
+                                                            form_buttons(array(
+                                                                array(
+                                                                    'class' => 'btn-secondary cancelAdminBtn w-100',
+                                                                    'href'  =>  $backPath
+                                                                )
+                                                            ))
+                                                        !!}
+                                                        </div>
+                                                    @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
+                                                        <div class='col-6'>
+                                                            {!!
+                                                            form_buttons(array(
+                                                                array(
+                                                                    'class' => 'btn-primary submitAdminBtn w-100',
+                                                                    'text'  =>  $GLOBALS['langSave'],
+                                                                    'name'  =>  'edit_submit',
+                                                                    'value' =>  $GLOBALS['langEditChange']
+                                                                )
+                                                            ))
+                                                            !!}
+                                                        </div>
+                                                        <div class='col-6'>
+                                                            {!!
+                                                            form_buttons(array(
+                                                                array(
+                                                                    'class' => 'btn-secondary cancelAdminBtn w-100',
+                                                                    'href'  =>  $backPath
+                                                                )
+                                                            ))
+                                                            !!}
+                                                        </div>
+                                                        <input type='hidden' name='id' value='{{ $edititem->id }}'>
+                                                        <input type='hidden' name='table' value='{{ $table_edit }}'>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </fieldset>

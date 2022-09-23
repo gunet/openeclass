@@ -102,8 +102,11 @@
 
     @stack('head_scripts')
 
+    <!-- change select2 style -->
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/re-style-select2.css"/>
+
 </head>
-<?php //print_r($styles_str);?>
+
 <body>
 
     <div class="d-flex flex-column min-vh-100 {{ $container }}">

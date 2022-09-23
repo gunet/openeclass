@@ -221,6 +221,7 @@ input[type="radio"]:disabled {
 .checkbox label p{
   margin-top:15px;
 } 
+
 /* this is space between input-checkbox and texts */
 input[type="checkbox"]{
   margin: 0 5px 0 0px;
@@ -232,6 +233,7 @@ input[type="checkbox"]{
 
 input::placeholder , .form-select, .form-control{
   font-size: 13px;
+  background: transparent;
 }
 
 input:-webkit-autofill,
@@ -246,20 +248,24 @@ input:-webkit-autofill:active {
   background-image: url(../images/form-wrapper-bg.jpg);
 }
 
+/* dates checkboxes inside form-wrapper */
+.form-wrapper.shadow-sm .input-group-addon input[type=checkbox]{
+  margin-top:10px;
+}
+.form-wrapper.shadow-sm{
+  border: solid 3px #F5F5F5;
+}
+.form-wrapper.shadow-sm textarea{
+  background: #FFFFFF;
+  border: solid 1px #eaeaea;
+}
 .form-wrapper input[type=text], .form-wrapper input[type=password], .form-wrapper .form-select{
   border-radius: 0px;
   border:none;
-  border-bottom:1px solid rgba(170, 181, 201, 0.5); 
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(0.25turn, rgb(31, 180, 226), rgb(79, 125, 165), rgba(249, 145, 0, 0));
+  border-image-slice: 1;
 }
-textarea{
-  border:1px solid rgba(170, 181, 201, 0.5); 
-}
-
-/* rich-text-editor bg-tools */
-.mce-toolbar-grp{
-  background: #f8f9fa;
-}
-
 .form-wrapper textarea:focus,
 .form-wrapper input[type="text"]:focus,
 .form-wrapper input[type="datetime"]:focus,
@@ -279,6 +285,14 @@ textarea{
   border-color: white;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(12, 103, 222, 0.6);
   outline: 0 none;
+  background: transparent;
+}
+select.form-select { -webkit-appearance: menulist; }
+.form-wrapper .form-control:disabled{
+  opacity: 0.5;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(0.25turn, rgb(226, 31, 31), rgb(223, 63, 0), rgba(255, 1, 1, 0));
+  border-image-slice: 1;
 }
 
 /* ------------------------------------- alerts ------------------------------------------ */
@@ -438,8 +452,9 @@ textarea{
     opacity:1;
   }
   .help-block{
-    color:#ffc107;
-    font-size: 14px;
+    color:#44b6c8;
+    font-size: 13px;
+    font-style: italic;
   }
   .InvisibleCourse, .InvisibleAuth{
     opacity:0.3;
@@ -1324,8 +1339,8 @@ textarea{
     }
   }
   .form-wrapper.shadow-sm .control-label-notes{
-    /* color:#1d4e89; */
-    color:#6c757d;
+    color:#1d4e89;
+    /* color:#6c757d; */
     font-weight: bold;
   }
 
@@ -1658,6 +1673,7 @@ textarea{
     border-top-right-radius: 15px;
     background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
     font-weight:700;
+    border-bottom: solid 1px #eee7e7;
   }
   .panel-default>.panel-heading>.panel-title, .panel-action-btn-default>.panel-heading>.panel-title{
     color: #333;

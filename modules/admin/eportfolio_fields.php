@@ -55,7 +55,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName</label>
                       <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' placeholder='$langName...'></div>";
     $tool_content .= "</div><div class='row p-2'>";
-    $tool_content .= "<div class='col-12 mt-3'>".showSecondFactorChallenge()."<input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_cat' value='$langAdd'></div>";
+    $tool_content .= "<div class='col-12 mt-5'>".showSecondFactorChallenge()."<input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_cat' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[
@@ -106,7 +106,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName</label>
                       <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' value='$cat_name'></div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='col-12 mt-3'>".showSecondFactorChallenge()."<input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_cat' value='$langAdd'></div>";
+    $tool_content .= "<div class='col-12 mt-5'>".showSecondFactorChallenge()."<input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_cat' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
@@ -140,7 +140,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<label for='datatype' class='col-sm-12 control-label-notes'>$langCPFFieldDatatype</label>
                       <div class='col-sm-12'>".selection($field_types, 'datatype', 1, 'class="form-control"')."</div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='col-12 mt-3'><input class='btn btn-primary submitAdminBtn w-100' type='submit' name='add_field_proceed_step2' value='$langNext'></div>";
+    $tool_content .= "<div class='col-12 mt-5'><input class='btn btn-primary submitAdminBtn w-100' type='submit' name='add_field_proceed_step2' value='$langNext'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div></div>";
     
 } elseif (isset($_POST['add_field_proceed_step2'])) { //add new field form 2nd step
@@ -193,7 +193,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                           <div class='col-sm-12'><textarea name='options' rows='8' class='w-100'></textarea></div>";
         $tool_content .= "</div>";
     }
-    $tool_content .= "<div class='col-12 mt-3'>".showSecondFactorChallenge()."<input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_field' value='$langAdd'></div>";
+    $tool_content .= "<div class='col-12 mt-5'>".showSecondFactorChallenge()."<input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_field' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div></div>";
     
     $tool_content .='<script language="javaScript" type="text/javascript">
@@ -367,7 +367,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                               <div class='col-sm-12'><textarea name='options' rows='8' class='w-100'>$textarea_val</textarea></div>";
             $tool_content .= "</div>";
         }
-        $tool_content .= "<div class='col-12 mt-3'><input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_field' value='$langSave'></div>";
+        $tool_content .= "<div class='col-12 mt-5'><input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_field' value='$langSave'></div>";
         $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div></div>";
         
         $tool_content .='<script language="javaScript" type="text/javascript">

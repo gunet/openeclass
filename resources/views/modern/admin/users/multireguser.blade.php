@@ -134,7 +134,7 @@
                             </div>
                         </div>
                        
-                        <div class='form-group mt-3'>
+                        <div class='form-group mt-5'>
                             {!! showSecondFactorChallenge() !!}
                             <div class='col-12'>
                                 <div class='row'>

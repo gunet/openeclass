@@ -119,7 +119,7 @@
                                       <div class='form-group'>
                                           <h3 for='title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</h3>
                                           <div class='col-sm-12'>
-                                            <input name='title' id='title' type='text' class='form-control' value=" {{ trans('title') }} " placeholder="{{ trans('langTitle') }}">
+                                            <input name='title' id='title' type='text' class='form-control' value="{{ trans('title') }}" placeholder="{{ trans('langTitle') }}...">
                                           </div>
                                       </div>
                                     </div>
@@ -128,7 +128,7 @@
                                       <div class='form-group'>
                                           <h3 for='title' class='col-sm-6 control-label-notes'>{{ trans('langCode') }}:</h3>
                                           <div class='col-sm-12'>
-                                            <input name='public_code' id='public_code' type='text' class='form-control' value = "{{ trans('public_code') }}"  placeholder="{{ trans('langOptional') }}">
+                                            <input name='public_code' id='public_code' type='text' class='form-control' value = "{{ trans('public_code') }}"  placeholder="{{ trans('langOptional') }}...">
                                           </div>
                                       </div>
                                     </div>
@@ -253,15 +253,15 @@
                                   </div>
 
                                   <div class='form-group mt-3'>
-                                    <label for='localize' class='col-sm-6 control-label-notes'>{{trans('langFlippedClassroom')}}</label>
-                                    <div class='col-sm-12'>
+                                    <label for='localize' class='col-sm-6 control-label-notes'>{{trans('langFlippedClassroom')}}:</label>
+                                    <div class='col-sm-12 d-inline-flex'>
                                         <div class='radio'>
                                           <label>
                                             <input id='flippedenabled' type='radio' name='flippedclassroom' value='2'>
                                                 {{trans('langCΕnabled')}}
                                           </label>
                                         </div>
-                                        <div class='radio'>
+                                        <div class='radio ms-3'>
                                           <label>
                                             <input id='flippeddisabled' type='radio' name='flippedclassroom' value='1' checked>
                                                 {{trans('langTypeInactive')}}

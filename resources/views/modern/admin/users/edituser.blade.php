@@ -168,7 +168,7 @@
                                         <input type='hidden' name='u_submitted' value='1'>
                                         <input type='hidden' name='registered_at' value='{{ $info->registered_at }}'>
                                         {!! showSecondFactorChallenge() !!}
-                                        <div class='col-12 mt-3'>
+                                        <div class='col-12 mt-5'>
                                             <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_edituser' value='{{ trans('langModify') }}'>
                                         </div>
                                     </fieldset>

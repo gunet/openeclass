@@ -60,7 +60,7 @@
                                     <input class='form-control' placeholder="{{ trans('langNewPass2') }}..." type='password' size='40' name='password_form1' value='' autocomplete='off'>
                                 </div>
                               </div>
-                              <div class='col-12 mt-3'>
+                              <div class='col-12 mt-5'>
                                 {!! showSecondFactorChallenge() !!}
                                 <div class='row'>
                                     <div class='col-6'>

@@ -167,12 +167,12 @@
                                 <p>
                                 {!! generate_csrf_token_form_field() !!}
                                 @if ($can_assign_to_self)
-                                    <button class='btn btn-secondary' type='submit' name='assignToSelf'>{{ trans('langTakeRequest') }}</button>
+                                    <button class='btn btn-secondary btn-sm' type='submit' name='assignToSelf'>{{ trans('langTakeRequest') }}</button>
                                 @endif
                                 @if ($can_modify)
-                                    <button class='btn btn-secondary' type='button' data-bs-toggle='modal' data-bs-target='#assigneesModal'>{{ trans("m['WorkAssignTo']") }}...</button>
-                                    <button class='btn btn-secondary' type='button' data-bs-toggle='modal' data-bs-target='#watchersModal'>{{ trans("langWatchers") }}...</button>
-                                    <a class='btn btn-secondary' href='{{ $editUrl }}'>{{ trans("langElaboration") }}...</a>
+                                    <button class='btn btn-secondary btn-sm' type='button' data-bs-toggle='modal' data-bs-target='#assigneesModal'>{{ trans("m['WorkAssignTo']") }}...</button>
+                                    <button class='btn btn-secondary btn-sm' type='button' data-bs-toggle='modal' data-bs-target='#watchersModal'>{{ trans("langWatchers") }}...</button>
+                                    <a class='btn btn-secondary btn-sm' href='{{ $editUrl }}'>{{ trans("langElaboration") }}...</a>
                                 @endif
                                 </p>
                             </form>
@@ -181,7 +181,7 @@
 
                     @if ($can_comment)
                         <div class='col-sm-12'>
-                            <div class='form-wrapper shadow-sm p-3 rounded'>
+                            <div class='form-wrapper shadow-lg p-3 rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='{{ $targetUrl }}' enctype='multipart/form-data'>
                                     <fieldset>
                                         @if ($can_modify)
@@ -218,10 +218,17 @@
 
 
 
-                                        <div class='form-group mt-3'>
-                                            <div class='col-xs-offset-2 col-xs-10'>
-                                                <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
-                                                <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                        <div class='form-group mt-5'>
+                                            <div class='col-12'>
+                                                <div class='row'>
+                                                    <div class='col-6'>
+                                                        <button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit'>{{ trans('langSubmit') }}</button>
+                                                    </div>
+                                                    <div class='col-6'>
+                                                        <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a> 
+                                                    </div>
+                                                </div>
+                                                
                                             </div>
                                         </div>
                                         {!! generate_csrf_token_form_field() !!}

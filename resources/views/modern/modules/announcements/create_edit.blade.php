@@ -106,9 +106,9 @@
                                             <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">
                                                     
                                                     <div class="form-group {{ $antitle_error }}">
-                                                        <label for="AnnTitle" class="col-sm-4 control-label-notes">{{ trans('langAnnTitle') }}:</label>
+                                                        <label for="AnnTitle" class="col-sm-4 control-label-notes">{{ trans('langAnnTitle') }}</label>
                                                         <div class="col-sm-12 ">
-                                                            <input class="form-control" type="text" name="antitle" value="{{ $titleToModify }}"/>
+                                                            <input class="form-control" placeholder="{{ trans('langAnnTitle') }}..." type="text" name="antitle" value="{{ $titleToModify }}"/>
                                                             <span class='help-block'>{{ Session::getError('antitle') }}</span>
                                                         </div>
                                                     </div>
@@ -122,48 +122,56 @@
 
                                                   
 
-                                                    <div class='form-group mt-3'><label for='Email' class='col-sm-offset-2 col-sm-12 control-label-notes'>{{ trans('langEmailOption') }}:</label></div>
-                                                    <div class='form-group'>
-                                                        <div class='col-sm-offset-2 col-sm-12'>
-                                                            <select class='form-select' name='recipients[]' multiple='multiple' id='select-recipients'>
-                                                                <option value='-1' selected>{{ trans('langAllUsers') }}</option>
-                                                                @foreach ($course_users as $cu)
-                                                                    <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
-                                                                @endforeach
-                                                            </select>
-                                                            <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
+                                                    <div class='row'>
+                                                        <div class='col-md-6 col-12'>
+                                                            <div class='form-group mt-3'><label for='Email' class='col-sm-offset-2 col-sm-12 control-label-notes'>{{ trans('langEmailOption') }}:</label></div>
+                                                            <div class='form-group'>
+                                                                <div class='col-sm-offset-2 col-sm-12'>
+                                                                    <select class='form-select' name='recipients[]' multiple='multiple' id='select-recipients'>
+                                                                        <option value='-1' selected>{{ trans('langAllUsers') }}</option>
+                                                                        @foreach ($course_users as $cu)
+                                                                            <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class='col-md-6 col-12'>
+                                                            <div class="mt-3"></div>
+                                                            {!! $tags !!}
                                                         </div>
                                                     </div>
-
-                                                    <div class="mt-3"></div>
-                                                    {!! $tags !!}
                                                     
 
-                                                    <div class='form-group {{ $startdate_error }} mt-3'>
-                                                        <label for='startdate' class='col-sm-4 control-label-notes'>{{ trans('langStartDate') }} :</label>
-                                                        <div class='col-sm-12'>
-                                                            <div class='input-group'> 
-                                                                <span class='input-group-addon'>
-                                                                    <input type='checkbox' name='startdate_active' {{ $start_checkbox }}>
-                                                                </span>
-                                                                <input class='form-control' name='startdate' id='startdate' type='text' value = '{{ $showFrom }}'>
+                                                    <div class='row'>
+                                                        <div class='col-md-6 col-12'>
+                                                            <div class='form-group {{ $startdate_error }} mt-3'>
+                                                                <label for='startdate' class='col-sm-12 control-label-notes'>{{ trans('langStartDate') }} :</label>
+                                                                <div class='col-sm-12'>
+                                                                    <div class='input-group'> 
+                                                                        <span class='input-group-addon mt-3'>
+                                                                            <input type='checkbox' name='startdate_active' {{ $start_checkbox }}>
+                                                                        </span>
+                                                                        <input class='form-control' name='startdate' id='startdate' type='text' value = '{{ $showFrom }}'>
+                                                                    </div>
+                                                                    <span class='help-block'>{{ $startdate_error }}</span>
+                                                                </div>
                                                             </div>
-                                                            <span class='help-block'>{{ $startdate_error }}</span>
                                                         </div>
-                                                    </div>
-
-                                                   
-
-                                                    <div class='form-group {{ $enddate_error }} mt-3'>
-                                                        <label for='enddate' class='col-sm-4 control-label-notes'>{{ trans('langEndDate') }} :</label>
-                                                        <div class='col-sm-12'>
-                                                            <div class='input-group'>
-                                                                <span class='input-group-addon'>
-                                                                    <input type='checkbox' name='enddate_active' {{ $end_checkbox}} {{ $end_disabled}}>
-                                                                </span>
-                                                                <input class='form-control' name='enddate' id='enddate' type='text' value = '{{ $showUntil }}'>
+                                                        <div class='col-md-6 col-12'>
+                                                            <div class='form-group {{ $enddate_error }} mt-3'>
+                                                                <label for='enddate' class='col-sm-12 control-label-notes'>{{ trans('langEndDate') }} :</label>
+                                                                <div class='col-sm-12'>
+                                                                    <div class='input-group'>
+                                                                        <span class='input-group-addon mt-3'>
+                                                                            <input type='checkbox' name='enddate_active' {{ $end_checkbox}} {{ $end_disabled}}>
+                                                                        </span>
+                                                                        <input class='form-control' name='enddate' id='enddate' type='text' value = '{{ $showUntil }}'>
+                                                                    </div>
+                                                                    <span class='help-block'>{{ $enddate_error }}</span>
+                                                                </div>
                                                             </div>
-                                                            <span class='help-block'>{{ $enddate_error }}</span>
                                                         </div>
                                                     </div>
 
@@ -181,17 +189,20 @@
 
                                           
 
-                                                    <div class='form-group mt-3'>
-
+                                                    <div class='form-group mt-5'>
                                                         <input type='hidden' name='id' value='{{ $announce_id }}'>
                                                         <input type='hidden' name='course' value='{{ $course_code }}'>
                                                         <input type='hidden' name='editorFromCreateEditAnnouncement' value='{{$is_editor}}'>
-                                                        
-                                                        <div class='col-sm-offset-2 col-sm-12'>
-                                                            <button type="submit" class="btn btn-primary" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
-                                                            <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn btn-secondary">{{ trans('langCancel') }}</a>
+                                                        <div class='col-12'>
+                                                            <div class='row'>
+                                                                <div class='col-6'>
+                                                                     <button type="submit" class="btn btn-primary btn-sm submitAdminBtn w-100" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
+                                                                </div>
+                                                                <div class='col-6'>
+                                                                    <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn btn-secondary btn-sm cancelAdminBtn w-100">{{ trans('langCancel') }}</a>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        
                                                     </div>
                                                     
                                                 

@@ -397,14 +397,14 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  </div>
                  <div class='form-group mt-3'>
                      <label for='exerciseTempSave' class='col-sm-6 control-label-notes'>$langTemporarySave:</label>
-                     <div class='col-sm-12'>
+                     <div class='col-sm-12 d-inline-flex mt-2'>
                          <div class='radio'>
                            <label>
                              <input type='radio' name='exerciseTempSave' value='0' ".(($exerciseTempSave==0)? 'checked' : '').">
                              $langDeactivate
                            </label>
                          </div>
-                         <div class='radio'>
+                         <div class='radio ms-3'>
                            <label>
                              <input type='radio' name='exerciseTempSave' value='1' ".(($exerciseTempSave==1)? 'checked' : '').">
                              $langActivate
@@ -412,20 +412,26 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>
-                 <div class='form-group ".(Session::getError('exerciseTimeConstraint') ? "has-error" : "")." mt-3'>
-                   <label for='exerciseTimeConstraint' class='col-sm-6 control-label-notes'>$langExerciseConstrain:</label>
-                   <div class='col-sm-12'>
-                     <input type='text' class='form-control' name='exerciseTimeConstraint' id='exerciseTimeConstraint' value='$exerciseTimeConstraint' placeholder='$langExerciseConstrain'>
-                     <span class='help-block'>".(Session::getError('exerciseTimeConstraint') ? Session::getError('exerciseTimeConstraint') : "$langExerciseConstrainUnit ($langExerciseConstrainExplanation)")."</span>
-                   </div>
-                 </div>
-                 <div class='form-group ".(Session::getError('exerciseAttemptsAllowed') ? "has-error" : "")." mt-3'>
-                   <label for='exerciseAttemptsAllowed' class='col-sm-6 control-label-notes'>$langExerciseAttemptsAllowed:</label>
-                   <div class='col-sm-12'>
-                     <input type='text' class='form-control' name='exerciseAttemptsAllowed' id='exerciseAttemptsAllowed' value='$exerciseAttemptsAllowed' placeholder='$langExerciseConstrain'>
-                     <span class='help-block'>".(Session::getError('exerciseAttemptsAllowed') ? Session::getError('exerciseAttemptsAllowed') : "$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)")."</span>
-                   </div>
-                 </div>";
+                 <div class='row'>
+                    <div class='col-md-6 col-12'>
+                        <div class='form-group ".(Session::getError('exerciseTimeConstraint') ? "has-error" : "")." mt-3'>
+                            <label for='exerciseTimeConstraint' class='col-sm-12 control-label-notes'>$langExerciseConstrain:</label>
+                            <div class='col-sm-12'>
+                                <input type='text' class='form-control' name='exerciseTimeConstraint' id='exerciseTimeConstraint' value='$exerciseTimeConstraint' placeholder='$langExerciseConstrain'>
+                                <span class='help-block'>".(Session::getError('exerciseTimeConstraint') ? Session::getError('exerciseTimeConstraint') : "$langExerciseConstrainUnit ($langExerciseConstrainExplanation)")."</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-6 col-12'>
+                        <div class='form-group ".(Session::getError('exerciseAttemptsAllowed') ? "has-error" : "")." mt-3'>
+                            <label for='exerciseAttemptsAllowed' class='col-sm-12 control-label-notes'>$langExerciseAttemptsAllowed:</label>
+                            <div class='col-sm-12'>
+                                <input type='text' class='form-control' name='exerciseAttemptsAllowed' id='exerciseAttemptsAllowed' value='$exerciseAttemptsAllowed' placeholder='$langExerciseConstrain'>
+                                <span class='help-block'>".(Session::getError('exerciseAttemptsAllowed') ? Session::getError('exerciseAttemptsAllowed') : "$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)")."</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>";
 
                 $tool_content .= "<div class='form-group mt-3'>
                      <label for='dispresults' class='col-sm-6 control-label-notes'>$langAnswers:</label>

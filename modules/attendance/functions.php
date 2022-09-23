@@ -744,46 +744,66 @@ function new_attendance() {
                     <label class='col-12 control-label-notes'>$langNewAttendance2</label></div>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
                         <div class='col-12'>
-                            <input class='form-control' type='text' placeholder='$langTitle' name='title'>
+                            <input class='form-control' type='text' placeholder='$langTitle...' name='title'>
                             <span class='help-block'>$title_error</span>
                         </div>
                     </div>
-                    <div class='form-group mt-3".($start_date_error ? " has-error" : "")."'>
-                        <div class='col-12'>
-                            <label class='control-label-notes'>$langStart</label>
+                    <div class='row'>
+                        <div class='col-md-6 col-12'>
+                            <div class='form-group mt-3".($start_date_error ? " has-error" : "")."'>
+                                <div class='col-12'>
+                                    <label class='control-label-notes'>$langStart</label>
+                                </div>
+                                <div class='col-12'>
+                                    <input class='form-control' placeholder='$langStart...' type='text' name='start_date' id='start_date' value='$start_date'>
+                                    <span class='help-block'>$start_date_error</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class='col-12'>
-                            <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
-                            <span class='help-block'>$start_date_error</span>
-                        </div>
-                    </div>
-                    <div class='form-group mt-3".($end_date_error ? " has-error" : "")."'>
-                        <div class='col-12'>
-                            <label class='control-label-notes'>$langEnd</label>
-                        </div>
-                        <div class='col-12'>
-                            <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
-                            <span class='help-block'>$end_date_error</span>
+                        <div class='col-md-6 col-12'>
+                            <div class='form-group mt-3".($end_date_error ? " has-error" : "")."'>
+                                <div class='col-12'>
+                                    <label class='control-label-notes'>$langEnd</label>
+                                </div>
+                                <div class='col-12'>
+                                    <input class='form-control' placeholder='$langEnd...' type='text' name='end_date' id='end_date' value='$end_date'>
+                                    <span class='help-block'>$end_date_error</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class='form-group mt-3".($limit_error ? " has-error" : "")."'>
-                        <label class='col-12 control-label-notes'>$langAttendanceLimitNumber:</label>
+                        <label class='col-12 control-label-notes'>$langAttendanceLimitNumber</label>
                         <div class='col-sm-12'>
-                            <input class='form-control' type='text' name='limit' value='$attendance_limit'>
+                            <input class='form-control' placeholder='$langAttendanceLimitNumber...' type='text' name='limit' value='$attendance_limit'>
                             <span class='help-block'>$limit_error</span>
                         </div>
                     </div>
-                    <div class='form-group mt-3'>
-                        <div class='col-12'>".form_buttons(array(
-                            array(
-                                    'text' => $langSave,
-                                    'name' => 'newAttendance',
-                                    'value'=> $langInsert
-                                ),
-                            array(
-                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                                )
-                            ))."</div>
+                    <div class='form-group mt-5'>
+                        <div class='col-12'>
+                            <div class='row'>
+                                <div class='col-6'>"
+                                
+                                    .form_buttons(array(
+                                        array(
+                                                'class'=> 'btn-primary submitAdminBtn w-100',
+                                                'text' => $langSave,
+                                                'name' => 'newAttendance',
+                                                'value'=> $langInsert
+                                            )
+                                        )).
+                                "</div>
+                                <div class='col-6'>"
+                                    
+                                    .form_buttons(array(
+                                        array(
+                                            'class'=> 'btn-secondary cancelAdminBtn w-100',
+                                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                                            )
+                                        )).
+                                "</div>
+                            </div>
+                        </div>
                     </div>
             </form>
         </div></div>";
@@ -1119,7 +1139,7 @@ function user_attendance_settings($attendance_id) {
                         </div>
                        
                         <div class='input-append date form-group mt-3' id='enddatepicker'>
-                            <label for='UsersEnd' class='col-sm-2 control-label-notes'>$langTill:</label>
+                            <label for='UsersEnd' class='col-sm-6 control-label-notes'>$langTill:</label>
                             <div class='row'>
                                 <div class='col-10 col-sm-9'>
                                     <input class='form-control' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>

@@ -173,6 +173,11 @@ if(!isset($_POST['next'])){
 
     $stuNum = $lectNum = $lectHours = $homeHours = $lectTotalHours ='';
      $tool_content .= "
+     <div class='row'>
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+            <div class='col-12 h-100 left-form'></div>
+        </div>
+        <div class='col-lg-6 col-12'>
         <div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
             <fieldset>
@@ -185,43 +190,43 @@ if(!isset($_POST['next'])){
 
                 
                 <div class='form-group mt-3'>
-                    <label for='stunum' class='col-sm-6 control-label-notes'>$langStuNum : </label>
+                    <label for='stunum' class='col-sm-12 control-label-notes'>$langStuNum : </label>
                     <div class='col-sm-12'>  
                             <input name='stunum' id='stunum' type='text' class='form-control' value='".q($stuNum)."' >
                     </div>
                 </div>
                 <div class='form-group mt-3'>
                     
-                    <label for='lectnum' class='col-sm-6 control-label-notes'>$langLectNum : </label>
+                    <label for='lectnum' class='col-sm-12 control-label-notes'>$langLectNum : </label>
                     <div class='col-sm-12'>
                         <input name='lectnum' id='lectnum' type='number' min='1' max='50' class='form-control' value='".q($lectNum)."' >
                     </div>
                 </div>
                 <div class='form-group mt-3'>
-                    <label for='lecthours' class='col-sm-6 control-label-notes'>$langLectHours <small>($langHoursSmall)</small> : </label>
+                    <label for='lecthours' class='col-sm-12 control-label-notes'>$langLectHours <small>($langHoursSmall)</small> : </label>
                     <div class='col-sm-12'>
                         <input name='lecthours' id='lecthours' type='number' min='1' max='150' class='form-control' value='".q($lectHours)."' onchange='hoursSum()' >
                     </div>
                 </div>
                 <div class='form-group mt-3'>
-                    <label for='homehours' class='col-sm-6 control-label-notes'>$langHomeHours <small>($langHoursSmall)</small> : </label>
+                    <label for='homehours' class='col-sm-12 control-label-notes'>$langHomeHours <small>($langHoursSmall)</small> : </label>
                     <div class='col-sm-12'>
                         <input name='homehours' id='homehours' type='number' min='1' max='150' class='form-control' value='".q($homeHours)."' onchange='hoursSum()' >
                     </div>
                 </div>
                 <div class='form-group mt-3'>
-                    <label for='totalhours' class='col-sm-6 control-label-notes'>$langTotalHours : </label>
+                    <label for='totalhours' class='col-sm-12 control-label-notes'>$langTotalHours : </label>
                     <div class='col-sm-12'>
                         <input name='totalhours' id='totalhours' type='number' min='1' max='650' class='form-control' value='".q($lectTotalHours)."' readonly><input type='hidden' id= 'total_hours_hid' name='total_hours_hid' value=''>
                     </div>
                 </div>
                 <div class='form-group mt-3'>
-                    <label for='goals' class='col-sm-6 control-label-notes'>$langGoals:</label>
+                    <label for='goals' class='col-sm-12 control-label-notes'>$langGoals:</label>
                 </div>
                 <div class='form-group mt-3'>
                     <div  id='row_g_1'>
-                        <label for='goal_1' id='gtitle_1' class= 'col-sm-6 control-label'>1: </label>
-                        <div class='col-sm-8'>
+                        <label for='goal_1' id='gtitle_1' class= 'col-sm-12 control-label'>1: </label>
+                        <div class='col-sm-12'>
                             <input name='goals[]' id='goal_1' type='text' class='form-control' value='"."' placeholder='$langGoals'>
                             <a href='#!' name='add_g' id='add_g'>
                                 <span class='fa fa-plus-circle add-unit-btn'>
@@ -236,22 +241,22 @@ if(!isset($_POST['next'])){
                     
                 
                 <div class='form-group mt-3'>
-                    <label for='description' class='col-sm-6 control-label-notes'>$langCont <small>$langOptional</small>:</label>
+                    <label for='description' class='col-sm-12 control-label-notes'>$langCont <small>$langOptional</small>:</label>
                     <div class='col-sm-12'>
                           " .  rich_text_editor('description', 4, 20, purify($_SESSION['description'])) . "
                     </div>
                 </div>
 
                 <div class='form-group mt-3'>
-                    <label for='localize' class='col-sm-6 control-label-notes'>$langLectModel:</label>
-                    <div class='col-sm-12'>
+                    <label for='localize' class='col-sm-12 control-label-notes'>$langLectModel:</label>
+                    <div class='col-12 d-inline-flex pt-2'>
                         <div class='radio'>
                             <label>
                                 <input id='fromHome' type='radio' name='lectModel' value='2'>
                                     $langLectFromHome
                             </label>
                         </div>
-                        <div class='radio'>
+                        <div class='radio ms-3'>
                             <label>
                                 <input id='eLearn' type='radio' name='lectModel' value='1' checked>
                                     $langLectMixed
@@ -261,12 +266,12 @@ if(!isset($_POST['next'])){
                 </div>
 
                 <div class='form-group mt-3'>
-                    <label for='units' class='col-sm-6 control-label-notes'>$langUnits:</label>
+                    <label for='units' class='col-sm-12 control-label-notes'>$langUnits:</label>
                 </div>
                 <div class='form-group mt-3'>
                     <div id='row_u_1'>
                         <label for='unit_1' id='utitle_1' class= 'col-sm-6 control-label-notes'>1: </label>
-                        <div class='col-sm-8'>
+                        <div class='col-sm-12'>
                             <input name='units[]' id='unit_1' type='text' class='form-control' value='"."' placeholder='$langUnits'>
                             <a href='#!' name='add_u' id='add_u'>
                                 <span class='fa fa-plus-circle add-unit-btn'>
@@ -279,15 +284,21 @@ if(!isset($_POST['next'])){
                     </div>
                 </div>
 
-                <div class='form-group mt-3'>
-                   <div class='col-sm-10 col-sm-offset-2'>                        
-                        <a href='{$urlServer}main/portfolio.php' class='btn btn-default'>$langCancel</a>
-                        <input class='btn btn-primary' type='submit' name='next' value='" . q($langNext) . "&nbsp;&nbsp;&raquo;'>
+                <div class='form-group mt-5'>
+                   <div class='col-12'>           
+                        <div class='row'>
+                           <div class='col-6'>             
+                               <a href='{$urlServer}main/portfolio.php' class='btn btn-secondary cancelAdminBtn w-100'>$langCancel</a>
+                            </div>
+                            <div class='col-6'>
+                                <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='next' value='" . q($langNext) . "&nbsp;&nbsp;&raquo;'>
+                            </div>
+                        </div>
                     </div>
                 </div>     
             </fieldset>" . generate_csrf_token_form_field() . "
         </form>
-        </div>";
+        </div></div></div>";
 
 } else if(!isset($_POST['final_submit'])){
 

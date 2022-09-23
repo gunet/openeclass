@@ -66,8 +66,7 @@
                                     <div class='col-sm-12'>{!! text_area('courses_codes', 10, 30, '') !!}</div>
                                 </div>
                                 {!! showSecondFactorChallenge() !!}
-                                <div class='mt-3'></div>
-                                <div class='col-12'>
+                                <div class='col-12 mt-5'>
                                     <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
                                 </div>
                             </fieldset>

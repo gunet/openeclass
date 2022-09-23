@@ -209,7 +209,7 @@
                                 {{ $SecFactorProfile }}
                                 <div class="mt-3"></div>
                                 {{ $SecFactorChallenge }}
-                                <div class='col-12 mt-3'>
+                                <div class='col-12 mt-5'>
                                     <div class='row'>
                                         <div class='col-6'>
                                             <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmit') }}'>

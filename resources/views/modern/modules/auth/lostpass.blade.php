@@ -69,27 +69,30 @@
                                 </div>
                             @endif
                             @if(!$change_ok)
-                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                                    <div class='col-12 h-100 left-form'></div>
+                                </div>
+                                <div class='col-lg-6 col-12'>
                                     <div class='form-wrapper shadow-sm p-3 rounded'>
 
                                         <form class="form-horizontal" role="form" method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                             <input type='hidden' name='u' value='{{ $userUID }}'>
                                             <input type='hidden' name='h' value='{{ q($_REQUEST['h']) }}'>
                                             <div class="form-group mt-3">
-                                                <label  class='col-sm-6 control-label-notes'>{!! trans('langNewPass1') !!}</label>
+                                                <label  class='col-sm-12 control-label-notes'>{!! trans('langNewPass1') !!}</label>
                                                 <div class="col-sm-12">
-                                                    <input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'>&nbsp;<span id='result'></span>
+                                                    <input type='password' placeholder="{!! trans('langNewPass1') !!}..." class='form-control' size='40' name='newpass' value='' id='password' autocomplete='off'>&nbsp;<span id='result'></span>
                                                 </div>
                                             </div>
                                             <div class="form-group mt-3">
-                                                <label class="col-sm-6 control-label-notes">{!! trans('langNewPass2') !!}</label>
+                                                <label class="col-sm-12 control-label-notes">{!! trans('langNewPass2') !!}</label>
                                                 <div class="col-sm-12">
-                                                    <input type='password' size='40' name='newpass1' value='' autocomplete='off'>
+                                                    <input type='password' placeholder="{!! trans('langNewPass2') !!}..." class='form-control' size='40' name='newpass1' value='' autocomplete='off'>
                                                 </div>
                                             </div>
-                                            <div class='form-group mt-3'>
-                                                <div class='col-sm-offset-2 col-sm-10'>
-                                                    <input class='btn btn-primary' type='submit' name='submit' value="{!! trans('langModify') !!}">
+                                            <div class='form-group mt-5'>
+                                                <div class='col-12'>
+                                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value="{!! trans('langModify') !!}">
                                                 </div>
                                             </div>
                                         </form>

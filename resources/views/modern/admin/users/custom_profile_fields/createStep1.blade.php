@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                              
-                                <div class='col-12 mt-3'>
+                                <div class='col-12 mt-5'>
                                     <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='add_field_proceed_step2' value='{{ trans('langNext') }}'>
                                 </div>
                                 </fieldset>
