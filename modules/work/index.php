@@ -2073,24 +2073,26 @@ function new_assignment() {
         $tool_content .= "
             <div class='form-group mt-3'>
                 <label class='col-sm-6 control-label-notes'>$langAssignmentType:</label>
-                <div class='col-sm-12'>
+                <div class='col-sm-12 d-inline-flex mb-1'>
                     <div class='radio'>
                       <label>
                         <input type='radio' name='assignment_type' value='0'" . ($assignment_type == 0 ? " checked" : "") . ">
                          $langAssignmentTypeEclass
                       </label>
                     </div>
-                    <div class='radio'>
+                    <div class='radio ms-3'>
                       <label>
                         <input type='radio' name='assignment_type' value='1'" . ($assignment_type == 1 ? " checked" : "") . ">
                         $langAssignmentTypeTurnitin
                       </label>
                     </div>
+                </div>
+                <div class='col-12'>
                     <span class='help-block'>&nbsp;&nbsp;&nbsp;$langTurnitinNewAssignNotice</span>
                 </div>
             </div>
 
-            <div class='container-fluid form-group hidden' id='lti_label' style='margin-top: 30px; margin-bottom:30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px; padding-top:10px; padding-bottom:10px;'>
+            <div class='container-fluid form-group hidden mt-3 mb-3 bg-light p-3' id='lti_label' style='margin:auto; diplay:block; border:1px solid #cab4b4; padding-top:10px; padding-bottom:10px;'>
                 <h4 class='col-sm-offset-1'>$langLTIOptions</h4>
                 <div class='form-group hidden mt-3' style='margin-top: 30px;'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTiiApp:</label>
@@ -2571,20 +2573,32 @@ function new_assignment() {
             </div>" .
             eClassTag::tagInput();
     $tool_content .= "
-        <div class='form-group mt-3'>
-            <div class='col-sm-offset-2 col-sm-10'>".
+        <div class='form-group mt-5'>
+            <div class='col-12'>
+                <div class='row'>
+                    <div class='col-6'>"
+                    .
                 form_buttons(array(
                     array(
-                        'class'         => 'btn-primary',
+                        'class'         => 'btn-primary btn-sm submitAdminBtn w-100',
                         'name'          => 'new_assign',
                         'value'         => $langSubmit,
                         'javascript'    => "selectAll('assignee_box',true)"
-                    ),
-                    array(
-                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                     )
                 ))
-                ."</div>
+                .
+                    "</div>
+                    <div class='col-6'>
+                    ".
+                    form_buttons(array(
+                        array(
+                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                            'class' => 'btn-secondary btn-sm cancelAdminBtn w-100'
+                        )
+                    ))
+                    . "
+                    </div>
+                </div>
             </div>
         </fieldset>
         </form></div></div>";
@@ -3124,24 +3138,26 @@ function show_edit_assignment($id) {
         $tool_content .= "
                 <div class='form-group mt-3'>
                     <label class='col-sm-6 control-label-notes'>$langAssignmentType:</label>
-                    <div class='col-sm-12'>
+                    <div class='col-sm-12 d-inline-flex'>
                         <div class='radio'>
                           <label>
                             <input type='radio' name='assignment_type' value='0'" . ($assignment_type == 0 ? " checked" : "") . ">
                              $langAssignmentTypeEclass
                           </label>
                         </div>
-                        <div class='radio'>
+                        <div class='radio ms-3'>
                           <label>
                             <input type='radio' name='assignment_type' value='1'" . ($assignment_type == 1 ? " checked" : "") . ">
                             $langAssignmentTypeTurnitin
                           </label>
                         </div>
+                    </div>
+                    <div class='col-12 mt-1 mb-1'>
                         <span class='help-block'>&nbsp;&nbsp;&nbsp;$langTurnitinNewAssignNotice</span>
                     </div>
                 </div>
 
-                <div class='container-fluid form-group " . ($assignment_type == 0 ? " hidden" : "") . "' id='lti_label' style='margin-top: 30px; margin-bottom:30px; margin-left:10px; margin-right:10px; border:1px solid #cab4b4; border-radius:10px;'>
+                <div class='container-fluid form-group " . ($assignment_type == 0 ? " hidden" : "") . " p-3' id='lti_label' style='margin-top: 30px; margin-bottom:30px; margin:auto; displayu:block; border:1px solid #cab4b4;'>
                     <h4 class='col-sm-offset-1'>$langLTIOptions</h4>
                     <div class='form-group $lti_hidden mt-3'>
                         <label for='title' class='col-sm-6 control-label-notes'>$langTiiApp:</label>
@@ -3676,20 +3692,33 @@ function show_edit_assignment($id) {
                 </div>" .
                 eClassTag::tagInput($id);
         $tool_content .= "
-            <div class='form-group mt-3'>
-                <div class='col-sm-offset-2 col-sm-10'>".
-                    form_buttons(array(
-                        array(
-                            'class'         => 'btn-primary',
-                            'name'          => 'do_edit',
-                            'value'         => $langModify,
-                            'javascript'    => "selectAll('assignee_box',true)"
-                        ),
-                        array(
-                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                        )
-                    ))
-                    ."</div>
+            <div class='form-group mt-5'>
+                <div class='col-12'>
+                   <div class='row'>
+                      <div class='col-6'>
+                        ".
+                        form_buttons(array(
+                            array(
+                                'class'         => 'btn-primary btn-sm submitAdminBtn w-100',
+                                'name'          => 'do_edit',
+                                'value'         => $langModify,
+                                'javascript'    => "selectAll('assignee_box',true)"
+                            )
+                        ))
+                        ."
+                      </div>
+                      <div class='col-6'>
+                        ".
+                        form_buttons(array(
+                            array(
+                                'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                            )
+                        ))
+                        ."
+                      </div>
+                   </div>
+                </div>
             </div>
     </fieldset>
     </form></div></div>";

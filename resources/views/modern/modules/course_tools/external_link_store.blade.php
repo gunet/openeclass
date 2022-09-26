@@ -88,9 +88,9 @@
                                
 
 
-                                <div class='form-group mt-3'>
-                                    <div class='col-sm-offset-2 col-sm-10'>
-                                    <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langAdd') }}'>
+                                <div class='form-group mt-5'>
+                                    <div class='col-12'>
+                                    <input class='btn btn-primary btn-sm m-auto d-block submitAdminBtn w-50' type='submit' name='submit' value='{{ trans('langAdd') }}'>
                                     </div>
                                 </div>
                                 {!! $csrf !!}

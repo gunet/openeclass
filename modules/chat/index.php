@@ -137,7 +137,7 @@ if ($is_editor) {
                 </div>
             </div>";
 
-        $tool_content .= "<div class='col-sm-offset-2 col-sm-10 mt-3'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
+        $tool_content .= "<div class='col-12 mt-5'><input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit' value='$langAddModify'></div>";
         $tool_content .= "</form></div></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
             //<![CDATA[
@@ -332,7 +332,7 @@ if ($is_editor) {
         }
 
         $tool_content .= "<input type = 'hidden' name = 'conference_id' value='$conf_id'>";
-        $tool_content .= "<div class='col-sm-offset-2 col-sm-10 mt-3'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></div>";
+        $tool_content .= "<div class='col-12 mt-5'><input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit' value='$langSubmit'></div>";
         $tool_content .= "</fieldset></form></div></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
                 //<![CDATA[

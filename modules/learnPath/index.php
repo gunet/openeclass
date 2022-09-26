@@ -291,7 +291,7 @@ if ($is_editor) {
                                     .
                                         form_buttons(array(
                                             array(
-                                                'class' => 'btn-primary submitAdminBtn w-100',
+                                                'class' => 'btn-primary btn-sm submitAdminBtn w-100',
                                                 'text' => $langSave,
                                                 'value' => $langCreate
                                             )
@@ -302,7 +302,7 @@ if ($is_editor) {
                                 .
                                 form_buttons(array(
                                     array(
-                                        'class' => 'btn-secondary cancelAdminBtn w-100',
+                                        'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
                                         'href' => "index.php?course=$course_code",
                                     )
                                 ))

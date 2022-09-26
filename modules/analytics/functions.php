@@ -875,17 +875,29 @@ function edit_analytics_settings ($analytics_id = 0)
                 <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsEndDescription</span>
             </div>
         </div> $id_input
-        <div class='form-group mt-3'>
-            <div class='col-10 col-offset-2'>".form_buttons(array(
-                array(
-                        'text' => $langSave,
-                        'name' => $action,
-                        'value'=> $langAdd
-                    ),
-                array(
-                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                    )
-                ))."</div>
+        <div class='form-group mt-5'>
+            <div class='col-12'>
+              <div class='row'>
+                <div class='col-6'>
+                  ".form_buttons(array(
+                    array(
+                            'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                            'text' => $langSave,
+                            'name' => $action,
+                            'value'=> $langAdd
+                        )
+                    ))."
+                </div>
+                <div class='col-6'>
+                  ".form_buttons(array(
+                    array(
+                        'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                        )
+                    ))."
+                </div>
+              </div>
+            </div>
         </div>
     </form>
 </div></div>";
@@ -972,17 +984,29 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
         </div>";
 
         $tool_content .= get_available_resources($type, $analytics_element_id);
-        $tool_content .= "<div class='form-group mt-3'>
-            <div class='col-10 col-offset-2'>".form_buttons(array(
-                array(
-                        'text' => $langSave,
-                        'name' => $action,
-                        'value'=> $langAdd
-                    ),
-                array(
-                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showElements"
-                    )
-                ))."</div>
+        $tool_content .= "<div class='form-group mt-5'>
+            <div class='col-12'>
+              <div class='row'>
+                <div class='col-6'>
+                 ".form_buttons(array(
+                    array(
+                            'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                            'text' => $langSave,
+                            'name' => $action,
+                            'value'=> $langAdd
+                        )
+                    ))."
+                </div>
+                <div class='col-6'>
+                 ".form_buttons(array(
+                    array(
+                        'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showElements"
+                        )
+                    ))."
+                </div>
+              </div>
+            </div>
         </div>
     </form></div></div>";
 }

@@ -126,9 +126,9 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
                 $tool_content .= "<input type='hidden' name='lti_courses[]' value='$course_id'>";
             }
 
-        $tool_content .= "<div class='form-group mt-3'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                <input class='btn btn-primary' type='submit' name='new_lti_app' value='$langAdd'>
+        $tool_content .= "<div class='form-group mt-5'>
+            <div class='col-12'>
+                <input class='btn btn-primary btn-sm m-auto d-block submitAdminBtn w-50' type='submit' name='new_lti_app' value='$langAdd'>
             </div>
         </div>
         </fieldset>
@@ -299,9 +299,9 @@ function edit_lti_app($session_id) {
                         $tool_content .= "<input type='hidden' name='lti_courses[]' value='$course_id'>";
                     }
 
-                    $tool_content .= "<div class='form-group mt-3'>
-                        <div class='col-sm-10 col-sm-offset-2'>
-                            <input class='btn btn-primary' type='submit' name='update_lti_app' value='$langModify'>
+                    $tool_content .= "<div class='form-group mt-5'>
+                        <div class='col-12'>
+                            <input class='btn btn-primary btn-sm m-auto d-block submitAdminBtn w-50' type='submit' name='update_lti_app' value='$langModify'>
                         </div>
                     </div>
                     </fieldset>

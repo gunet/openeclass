@@ -99,12 +99,12 @@ $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12
             </div>
                  
             <div class='form-group mt-3'>
-                <textarea class='auth_input' name='user_info' rows='10'></textarea>
+                <textarea class='auth_input w-100' name='user_info' rows='10'></textarea>
             </div>
             ".showSecondFactorChallenge()." 
                
-            <div class='col-sm-offset-2 col-sm-10 mt-3'>
-                <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
+            <div class='col-12 mt-5'>
+                <input class='btn btn-primary btn-sm submitAdminBtn m-auto d-block w-50' type='submit' name='submit' value='$langAdd'>
             </div>                       
         </fieldset>
         ". generate_csrf_token_form_field() ."  

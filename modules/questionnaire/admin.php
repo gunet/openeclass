@@ -520,20 +520,35 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
            
 
 
-            <div class='form-group mt-3'>
-              <div class='col-sm-offset-2 col-sm-10'>".
-            form_buttons(array(
-                array(
-                    'text'  => $langSave,
-                    'name'  => 'submitPoll',
-                    'value' => (isset($_GET['newPoll']) ? $langCreate : $langModify),
-                    'javascript' => "selectAll('assignee_box',true)"
-                ),
-                array(
-                    'href' => "index.php?course=$course_code",
-                )
-            ))
-            ."
+            <div class='form-group mt-5'>
+              <div class='col-12'>
+                <div class='row'>
+                   <div class='col-6'>
+                     "
+                     .
+                                 form_buttons(array(
+                                     array(
+                                         'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                         'text'  => $langSave,
+                                         'name'  => 'submitPoll',
+                                         'value' => (isset($_GET['newPoll']) ? $langCreate : $langModify),
+                                         'javascript' => "selectAll('assignee_box',true)"
+                                     )
+                                 ))
+                                 ."
+                   </div>
+                   <div class='col-6'>
+                        "
+                        .
+                                    form_buttons(array(
+                                        array(
+                                            'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                            'href' => "index.php?course=$course_code",
+                                        )
+                                    ))
+                                    ."
+                   </div>
+                </div>
               </div>
             </div>        
         </form>
@@ -655,19 +670,33 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
    
 
-            <div class='form-group mt-3'>
-                <div class='col-md-10 col-md-offset-2'>".
-                    form_buttons(array(
-                        array(
-                            'text'  => $langSave,
-                            'name'  => 'submitQuestion',
-                            'value' => (isset($_GET['newQuestion']) ? $langCreate : $langModify)
-                        ),
-                        array(
-                            'href' => "admin.php?course=$course_code&pid=$pid".(isset($_GET['modifyQuestion']) ? "&modifyAnswers=".$_GET['modifyQuestion'] : "")
-                        )
-                    ))
-                ."</div>
+            <div class='form-group mt-5'>
+                <div class='col-12'>
+                   <div class='row'>
+                      <div class='col-6'>
+                         ".
+                         form_buttons(array(
+                             array(
+                                 'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                 'text'  => $langSave,
+                                 'name'  => 'submitQuestion',
+                                 'value' => (isset($_GET['newQuestion']) ? $langCreate : $langModify)
+                             )
+                         ))
+                     ."
+                      </div>
+                      <div class='col-6'>
+                         ".
+                         form_buttons(array(
+                             array(
+                                'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                'href' => "admin.php?course=$course_code&pid=$pid".(isset($_GET['modifyQuestion']) ? "&modifyAnswers=".$_GET['modifyQuestion'] : "")
+                             )
+                         ))
+                     ."
+                      </div>
+                   </div>
+                </div>
             </div>
     </form></div></div>";
 

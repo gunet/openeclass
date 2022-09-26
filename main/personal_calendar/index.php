@@ -382,25 +382,29 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         </div>
 
         
+        <div class='row'>
+            <div class='col-md-6 col-12'>
+                <div class='input-append date form-group mt-3' name='startdatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+                    <label for='startdate' class='col-sm-12 control-label-notes'>$langDate:</label>
+                    <div class='col-sm-12'>
+                        <div class='input-group'>
+                            <input class='form-control' type='text' name='startdate' id='startdate' value='$datetimeToModify'>
+                            <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div class='input-append date form-group mt-3' name='startdatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
-              <label for='startdate' class='col-sm-6 control-label-notes'>$langDate:</label>
-              <div class='col-sm-12'>
-                  <div class='input-group'>
-                     <input class='form-control' type='text' name='startdate' id='startdate' value='$datetimeToModify'>
-                     <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
-                  </div>
-              </div>
-        </div>
-
-       
-
-        <div class='input-append bootstrap-timepicker form-group mt-3'>
-            <label for='durationcal' class='col-sm-6 control-label-notes'>$langDuration <small>$langInHour</small></label>
-            <div class='col-sm-12'>
-                <div class='input-group add-on'>
-                    <input class='form-control' name='duration' id='duration' type='text' class='input-small' value='" . $durationToModify . "'>
-                    <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
+        
+            <div class='col-md-6 col-12 mt-md-0 mt-3'>
+                <div class='input-append bootstrap-timepicker form-group mt-3'>
+                    <label for='durationcal' class='col-sm-12 control-label-notes'>$langDuration <small>$langInHour</small></label>
+                    <div class='col-sm-12'>
+                        <div class='input-group add-on'>
+                            <input class='form-control' name='duration' id='duration' type='text' class='input-small' value='" . $durationToModify . "'>
+                            <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -411,7 +415,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         
             <div class='form-group mt-3'>
               <label for='frequencynumber' class='col-sm-6 control-label-notes'>$langRepeat $langEvery:</label>
-              <div class='col-sm-12'>
+              <div class='row'>
+              <div class='col-md-6 col-12'>
                     <select class='form-select' name='frequencynumber' id='frequencynumber'>
                         <option value='0'>$langSelectFromMenu</option>";
                 for ($i = 1; $i < 10; $i++) {
@@ -426,13 +431,14 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                     $selected[$repeatperiod] = ' selected';
                 }
                 $tool_content .= "</select></div>
-                <div class='col-sm-12 mt-2'>
+                <div class='col-md-6 col-12 mt-md-0 mt-3'>
                       <select class='form-select' name='frequencyperiod' id='frequencyperiod'>
                         <option value=\"\">$langSelectFromMenu...</option>
                         <option value=\"D\"{$selected['D']}>$langDays</option>
                         <option value=\"W\"{$selected['W']}>$langWeeks</option>
                         <option value=\"M\"{$selected['M']}>$langMonthsAbstract</option>
                     </select>
+              </div>
               </div>
 
               
@@ -485,9 +491,15 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         
 
             <div class='form-group mt-5'>
-              <div class='col-sm-10 col-sm-offset-2'>
-                   <input class='btn btn-primary' type='button' id='submitEvent' name='submitEvent' value='$langSubmit'>
-                   <a class='btn btn-secondary' href='index.php'>$langCancel</a>
+              <div class='col-12'>
+                <div class='row'>
+                   <div class='col-6'>
+                    <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='button' id='submitEvent' name='submitEvent' value='$langSubmit'>
+                  </div>
+                  <div class='col-6'>
+                   <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='index.php'>$langCancel</a>
+                  </div>
+                </div>
               </div>
             </div>
             </form>

@@ -130,7 +130,7 @@
 
                                        
 
-                                        <div class='form-group mt-3'>
+                                        <div class='form-group mt-5'>
                                             @if($menuTypeID == 3 or $menuTypeID == 1)
                                             <div class='col-12'>
                                                 <div class='row'>
@@ -143,13 +143,17 @@
                                                 </div>
                                             </div>
                                             @else
-                                            <div class='col-offset-2 col-10'>
-                                                <div class='form-group'>
-                                                    <div class='col-offset-2 col-10'>
-                                                        <button class='btn btn-primary btn-sm' type='submit'>{{ trans('langSave') }}</button>
-                                                        <a class='btn btn-secondary btn-sm' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                            <div class='col-12'>
+                                               
+                                                <div class='row'>
+                                                    <div class='col-6'>
+                                                        <button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit'>{{ trans('langSave') }}</button>
+                                                    </div>
+                                                    <div class='col-6'>
+                                                      <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                                                     </div>
                                                 </div>
+                                               
                                                 {!! generate_csrf_token_form_field() !!}
                                             </div>
                                             @endif

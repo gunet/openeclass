@@ -277,19 +277,33 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                     </div>
                                 </div>
                             </fieldset>
-                            <div class='form-group mt-3'>
-                                <div class='col-12'>".
-                                    form_buttons(array(
-                                        array(
-                                            'text'  =>  $langSave,
-                                            'name'  =>  'submitSettings',
-                                            'value' =>  $langSubmit
-                                        ),
-                                        array(
-                                            'href'  =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog"
-                                        )
-                                    ))
-                                    ."</div>
+                            <div class='form-group mt-5'>
+                                <div class='col-12'>
+                                   <div class='row'>
+                                       <div class='col-6'>
+                                         ".
+                                         form_buttons(array(
+                                             array(
+                                                 'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                                 'text'  =>  $langSave,
+                                                 'name'  =>  'submitSettings',
+                                                 'value' =>  $langSubmit
+                                             )
+                                         ))
+                                         ."
+                                       </div>
+                                       <div class='col-6'>
+                                         ".
+                                         form_buttons(array(
+                                             array(
+                                                'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                                 'href'  =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog"
+                                             )
+                                         ))
+                                         ."
+                                       </div>
+                                   </div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -394,19 +408,33 @@ if ($action == "createPost") {
                 </div>
                 $commenting_setting
                 
-                <div class='form-group mt-3'>
-                    <div class='col-sm-10 col-sm-offset-2'>".
-                        form_buttons(array(
-                            array(
-                                'text'  =>  $langSave,
-                                'name'  =>  'submitBlogPost',
-                                'value' =>  $langAdd
-                            ),
-                            array(
-                                'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
-                            )
-                        ))
-                        ."</div>
+                <div class='form-group mt-5'>
+                    <div class='col-12'>
+                       <div class='row'>
+                          <div class='col-6'>
+                            ".
+                            form_buttons(array(
+                                array(
+                                    'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                    'text'  =>  $langSave,
+                                    'name'  =>  'submitBlogPost',
+                                    'value' =>  $langAdd
+                                )
+                            ))
+                            ."
+                          </div>
+                          <div class='col-6'>
+                          ".
+                          form_buttons(array(
+                              array(
+                                  'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                  'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
+                              )
+                          ))
+                          ."
+                          </div>
+                       </div>
+                    </div>
                 </div>
                 <input type='hidden' name='action' value='savePost' />
             </fieldset>
@@ -485,19 +513,33 @@ if ($action == "editPost") {
 
                 
 
-                <div class='form-group mt-3'>
-                    <div class='col-sm-10 col-sm-offset-2'>".
-                        form_buttons(array(
-                            array(
-                                'text'  =>  $langSave,
-                                'name'  =>  'submitBlogPost',
-                                'value' =>  $langModifBlogPost
-                            ),
-                            array(
-                                'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
-                            )
-                        ))
-                        ."</div>
+                <div class='form-group mt-5'>
+                    <div class='col-12'>
+                       <div class='row'>
+                         <div class='col-6'>
+                           ".
+                           form_buttons(array(
+                               array(
+                                   'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                   'text'  =>  $langSave,
+                                   'name'  =>  'submitBlogPost',
+                                   'value' =>  $langModifBlogPost
+                               )
+                           ))
+                           ."
+                         </div>
+                         <div class='col-6'>
+                            ".
+                            form_buttons(array(
+                                array(
+                                    'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                    'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
+                                )
+                            ))
+                            ."
+                         </div>
+                       </div>
+                    </div>
                 </div>
                 <input type='hidden' name='action' value='savePost'>
                 <input type='hidden' name='pId' value='".$post->getId()."'>

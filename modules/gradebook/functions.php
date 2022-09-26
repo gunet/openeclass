@@ -211,7 +211,7 @@ function new_gradebook() {
                            <div class='col-6'>" 
                                 .form_buttons(array(
                                     array(
-                                            'class' => 'btn-primary submitAdminBtn w-100',
+                                            'class' => 'btn-primary btn-sm submitAdminBtn w-100',
                                             'text' => $langSave,
                                             'name' => 'newGradebook',
                                             'value'=> $langInsert
@@ -221,7 +221,7 @@ function new_gradebook() {
                             <div class='col-6'>"
                             .form_buttons(array(
                                 array(
-                                    'class' => 'btn-secondary cancelAdminBtn w-100',
+                                    'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
                                     'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                     )
                                 )).
@@ -348,22 +348,28 @@ function gradebook_settings($gradebook_id) {
                             <span class='help-block'>$title_error</span>
                         </div>
                     </div>
-                    <div class='form-group".($start_date_error ? " has-error" : "")." mt-3'>
-                        <div class='col-12'>
-                            <label clas='control-label-notes'>$langStart</label>
+                    <div class='row'>
+                        <div class='col-md-6 col-12'>
+                            <div class='form-group".($start_date_error ? " has-error" : "")." mt-3'>
+                                <div class='col-12'>
+                                    <label class='control-label-notes'>$langStart</label>
+                                </div>
+                                <div class='col-12'>
+                                    <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
+                                    <span class='help-block'>$start_date_error</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class='col-12'>
-                            <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
-                            <span class='help-block'>$start_date_error</span>
-                        </div>
-                    </div>
-                    <div class='form-group".($end_date_error ? " has-error" : "")." mt-3'>
-                        <div class='col-12'>
-                            <label clas='control-label-notes'>$langEnd</label>
-                        </div>
-                        <div class='col-12'>
-                            <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
-                            <span class='help-block'>$end_date_error</span>
+                        <div class='col-md-6 col-12'>
+                            <div class='form-group".($end_date_error ? " has-error" : "")." mt-3'>
+                                <div class='col-12'>
+                                    <label class='control-label-notes'>$langEnd</label>
+                                </div>
+                                <div class='col-12'>
+                                    <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
+                                    <span class='help-block'>$end_date_error</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class='form-group".($degreerange_error ? " has-error" : "")." mt-3'><label class='col-12 control-label-notes'>$langGradebookRange</label>
@@ -378,17 +384,29 @@ function gradebook_settings($gradebook_id) {
                                 <span class='help-block'>$degreerange_error</span>
                             </div>
                         </div>
-                        <div class='form-group mt-3'>
-                            <div class='col-12'>".form_buttons(array(
-                                array(
-                                    'text' => $langSave,
-                                    'name' => 'submitGradebookSettings',
-                                    'value'=> $langGradebookUpdate
-                                ),
-                                array(
-                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . ""
-                                )
-                            ))."</div>
+                        <div class='form-group mt-5'>
+                            <div class='col-12'>
+                                <div class='row'>
+                                   <div class='col-6'>
+                                      ".form_buttons(array(
+                                        array(
+                                            'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                            'text' => $langSave,
+                                            'name' => 'submitGradebookSettings',
+                                            'value'=> $langGradebookUpdate
+                                        )
+                                    ))."
+                                   </div>
+                                   <div class='col-6'>
+                                      ".form_buttons(array(
+                                        array(
+                                            'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . ""
+                                        )
+                                    ))."
+                                   </div>
+                                </div>
+                            </div>
                         </div>
                     </fieldset>
                 ". generate_csrf_token_form_field() ."

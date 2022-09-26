@@ -319,10 +319,10 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
                           </td>
                           <td class='text-center'>
                               <div class='form-group'>
-                                  <input class='btn btn-default' type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' />
+                                  <input class='btn btn-secondary btn-sm' type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' />
                               </div>
                               <div class='form-group'>
-                                  <input class='btn btn-default' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
+                                  <input class='btn btn-secondary btn-sm mt-2' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
                               </div>
                           </td>
                           <td class='text-end'>
@@ -395,9 +395,9 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
                     </div>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langGroupForum:</label>
-                <div class='col-sm-12'>
+            <div class='form-group mt-3 d-inline-flex'>
+                <label class='col-auto control-label-notes'>$langGroupForum:</label>
+                <div class='col-auto ms-2'>
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='forum' $checked[has_forum]>
@@ -405,9 +405,9 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
                     </div>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langDoc:</label>
-                <div class='col-sm-12'>
+            <div class='form-group mt-3 d-inline-flex'>
+                <label class='col-auto control-label-notes'>$langDoc:</label>
+                <div class='col-auto ms-2'>
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='documents' $checked[documents]>
@@ -415,9 +415,9 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
                     </div>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langWiki:</label>
-                <div class='col-sm-12'>
+            <div class='form-group mt-3 d-inline-flex'>
+            <label class='col-auto control-label-notes'>$langWiki:</label>
+                <div class='col-auto ms-2'>
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='wiki' $checked[wiki]>
@@ -426,20 +426,34 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rou
                 </div>
             </div>
             <input type='hidden' name='group_id' value=$group_id></input>
-        <div class='form-group mt-3'>
-        <div class='col-sm-10 col-sm-offset-2'>".
-            form_buttons(array(
-                array(
-                    'text'  =>  $langSave,
-                    'name'  =>  'modify',
-                    'value' =>  $langModify,
-                    'javascript' => "selectAll('members_box',true)"
-                ),
-                array(
-                    'href'  =>  "index.php?course=$course_code"
-                )
-            ))
-            ."</div>
+        <div class='form-group mt-5'>
+            <div class='col-12'>
+               <div class='row'>
+                  <div class='col-6'>
+                      ".
+                      form_buttons(array(
+                          array(
+                              'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                              'text'  =>  $langSave,
+                              'name'  =>  'modify',
+                              'value' =>  $langModify,
+                              'javascript' => "selectAll('members_box',true)"
+                          )
+                      ))
+                      ."
+                  </div>
+                  <div class='col-6'>
+                     ".
+                     form_buttons(array(
+                         array(
+                            'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                             'href'  =>  "index.php?course=$course_code"
+                         )
+                     ))
+                     ."
+                  </div>
+               </div>
+            </div>
         </div>
         </fieldset>
         </form>

@@ -76,9 +76,16 @@
 
                                                     
 
-                                                    <div class='form-group mt-3'>    
-                                                        <div class='col-sm-12 col-sm-offset-2'>
-                                                            {!! $form_buttons !!}
+                                                    <div class='form-group mt-5'>    
+                                                        <div class='col-12'>
+                                                            <div class='row'>
+                                                                <div class='col-6'>
+                                                                  {!! $form_buttons !!}
+                                                                </div>
+                                                                <div class='col-6'>
+                                                                    <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href="{{$cat_url}}">{{trans('langCancel')}}</a>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     {!! generate_csrf_token_form_field() !!}   

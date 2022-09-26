@@ -126,9 +126,17 @@ if (isset($_POST['submit'])) {
                 <span id='result'></span>
             </div>
         </div>
-        <div class='col-sm-offset-2 col-sm-10 mt-3'>
-          <input class='btn btn-primary' type='submit' name='submit' value='$submit_label'>
-          <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>
+        <div class='col-12 mt-5'>
+          <div class='row'>
+             <div class='col-6'>
+             <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit' value='$submit_label'>
+             </div>
+             <div class='col-6'>
+              <a href='index.php?course=$course_code' class='btn btn-secondary cancelAdminBtn w-100'>$langCancel</a>
+             </div>
+          </div>
+          
+         
         </div>
         </fieldset>
         ". generate_csrf_token_form_field() ."

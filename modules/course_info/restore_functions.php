@@ -400,9 +400,9 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                             <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
                         </div>
                     </div>") . "
-                    <div class='form-group mt-3'>
-                        <div class='col-sm-offset-3 col-sm-9'>
-                        <input class='btn btn-primary' type='submit' name='create_restored_course' value='$langOk' />
+                    <div class='form-group mt-5'>
+                        <div class='col-12'>
+                        <input class='btn btn-primary btn-sm m-auto d-block submitAdminBtn w-50' type='submit' name='create_restored_course' value='$langOk' />
                       <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' />
                           </div>
                     </div>

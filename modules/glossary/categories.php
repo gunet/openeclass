@@ -165,12 +165,10 @@ if ($is_editor) {
         $data['description_rich'] = rich_text_editor('description', 4, 60, $description);
         $data['form_buttons'] = form_buttons(array(
                                     array(
+                                        'class' => 'btn-primary btn-sm submitAdminBtn w-100',
                                         'text' => $langSave,
                                         'value'=> $submit_value,
                                         'name' => 'submit_category'
-                                    ),
-                                    array(
-                                        'href' => $cat_url
                                     )
                                 ));
         view('modules.glossary.createCategory', $data);                

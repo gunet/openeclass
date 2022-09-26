@@ -278,16 +278,28 @@ if (!isset($_GET['from_other'])) {
       </div>';
 }
 
-$tool_content .= "<div class='form-group mt-3'><div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
-                array(
-                    'text' => $langSubmit,
-                    'name' => 'submit',
-                    'value'=> $langSubmit
-                ),
-                array(
-                    'href' => "index.php?course=$course_code",
-                )
-            ))."</div></div></form></div></div>";
+$tool_content .= "<div class='form-group mt-5'><div class='col-12'>
+<div class='row'>
+  <div class='col-6'>
+    ".form_buttons(array(
+        array(
+            'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+            'text' => $langSubmit,
+            'name' => 'submit',
+            'value'=> $langSubmit
+        )
+    ))."
+  </div>
+  <div class='col-6'>
+    ".form_buttons(array(
+        array(
+            'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+            'href' => "index.php?course=$course_code",
+        )
+    ))."
+  </div>
+</div>
+</div></div></form></div></div>";
 
 if (isset($_GET['from_admin']) or isset($_GET['from_other'])) {
     draw($tool_content, 3, null, $head_content);

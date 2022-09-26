@@ -2208,17 +2208,29 @@ function certificate_settings($element, $element_id = 0) {
                     </div>
                 </div>
                 $cert_id";
-                $tool_content .= "<div class='form-group mt-3'>
-                    <div class='col-10 col-offset-2'>".form_buttons(array(
-                        array(
-                                'text' => $langSave,
-                                'name' => $name,
-                                'value'=> $langInsert
-                            ),
-                        array(
-                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                            )
-                        ))."</div>
+                $tool_content .= "<div class='form-group mt-5'>
+                    <div class='col-12'>
+                      <div class='row'>
+                         <div class='col-6'>
+                           ".form_buttons(array(
+                            array(
+                                    'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                    'text' => $langSave,
+                                    'name' => $name,
+                                    'value'=> $langInsert
+                                )
+                            ))."
+                         </div>
+                         <div class='col-6'>
+                           ".form_buttons(array(
+                            array(
+                                'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                                )
+                            ))."
+                         </div>
+                      </div>
+                    </div>
                 </div>
             </form>
         </div></div>";

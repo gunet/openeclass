@@ -485,9 +485,9 @@
 
                                  
                                     
-                                    <div class='form-group mt-3'>
-                                        <div class='col-sm-10 col-sm-offset-2'>
-                                            <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                    <div class='form-group mt-5'>
+                                        <div class='col-12'>
+                                            <input class='btn btn-primary btn-sm submitAdminBtn w-50 m-auto d-block' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                                         </div>
                                     </div>
                                 </fieldset>

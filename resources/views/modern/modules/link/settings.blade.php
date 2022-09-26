@@ -91,10 +91,18 @@
 
                             
                                     
-                                    <div class='form-group mt-3'>
-                                        <div class='col-sm-9 col-sm-offset-3'>
-                                            <input type='submit' class='btn btn-primary' name='submitSettings' value='{{ trans('langSubmit') }}' />
-                                            <a href='index.php?course={{ $course_code }}' class='btn btn-secondary'>{{ trans('langCancel') }}</a>
+                                    <div class='form-group mt-5'>
+                                        <div class='col-12'>
+                                            <div class='row'>
+                                                <div class='col-6'>
+                                                    <input type='submit' class='btn btn-primary btn-sm submitAdminBtn w-100' name='submitSettings' value='{{ trans('langSubmit') }}' />
+                                                </div>
+                                                <div class='col-6'>
+                                                    <a href='index.php?course={{ $course_code }}' class='btn btn-secondary btn-sm cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>
+                                                </div>
+                                            </div>
+                                            
+                                            
                                         </div>
                                     </div>
                                 </fieldset>

@@ -1,4 +1,3 @@
-
 @extends('layouts.default')
 
 @section('content')
@@ -91,9 +90,18 @@
                                                 <div class="mt-3">{!! isset($category_selection) ? $category_selection : "" !!}</div>
 
                                                                                     
-                                                <div class='form-group mt-3'>    
-                                                    <div class='col-sm-12 col-sm-offset-2'>
-                                                        {!! $form_buttons !!}
+                                                <div class='form-group mt-5'>    
+                                                    <div class='col-12'>
+                                                        <div class='row'>
+                                                            <div class='col-6'>
+                                                                {!! $form_buttons !!}
+                                                            </div>
+                                                            <div class='col-6'>
+                                                                <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href="{{$base_url}}">
+                                                                    {{trans('langCancel')}}
+                                                                </a>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 

@@ -105,18 +105,31 @@ if (isset($_POST['submit'])) {
                              </div>
                          </div>
                      </div>                    
-                    <div class='form-group mt-3'>
-                        <div class='col-sm-12'>".form_buttons(array(
-                                array(
-                                    'text' => $langSave,
-                                    'name' => 'submit',
-                                    'value'=> $langSubmit
-                                ),
-                                array(
-                                    'href' => "index.php?course=$course_code"
-                                )
-                            ))
-                            ."</div>
+                    <div class='form-group mt-5'>
+                        <div class='col-12'>
+                           <div class='row'>
+                              <div class='col-6'>
+                                ".form_buttons(array(
+                                    array(
+                                        'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                        'text' => $langSave,
+                                        'name' => 'submit',
+                                        'value'=> $langSubmit
+                                    )
+                                ))
+                                ."
+                              </div>
+                              <div class='col-6'>
+                                  ".form_buttons(array(
+                                    array(
+                                        'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                        'href' => "index.php?course=$course_code"
+                                    )
+                                ))
+                                ."
+                              </div>
+                           </div>
+                        </div>
                     </div>
                 ". generate_csrf_token_form_field() ."
                 </form>

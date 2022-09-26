@@ -223,7 +223,7 @@
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-primary submitAdminBtn w-100',
+                                                                    'class' => 'btn-primary btn-sm submitAdminBtn w-100',
                                                                     'text'  =>  $GLOBALS['langUpload'],
                                                                     'name'  =>  'add_submit',
                                                                     'value' =>  $GLOBALS['langUpload']
@@ -234,7 +234,7 @@
                                                         <div class='col-6'>
                                                         {!! form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-secondary cancelAdminBtn w-100',
+                                                                    'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
                                                                     'href'  =>  $backPath
                                                                 )
                                                             ))
@@ -245,7 +245,7 @@
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-primary submitAdminBtn w-100',
+                                                                    'class' => 'btn-primary btn-sm submitAdminBtn w-100',
                                                                     'text'  =>  $GLOBALS['langSave'],
                                                                     'name'  =>  'add_submit',
                                                                     'value' =>  $GLOBALS['langAdd']
@@ -257,7 +257,7 @@
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-secondary cancelAdminBtn w-100',
+                                                                    'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
                                                                     'href'  =>  $backPath
                                                                 )
                                                             ))
@@ -268,7 +268,7 @@
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-primary submitAdminBtn w-100',
+                                                                    'class' => 'btn-primary btn-sm submitAdminBtn w-100',
                                                                     'text'  =>  $GLOBALS['langSave'],
                                                                     'name'  =>  'edit_submit',
                                                                     'value' =>  $GLOBALS['langEditChange']
@@ -280,7 +280,7 @@
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-secondary cancelAdminBtn w-100',
+                                                                    'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
                                                                     'href'  =>  $backPath
                                                                 )
                                                             ))

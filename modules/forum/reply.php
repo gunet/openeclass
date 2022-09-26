@@ -216,10 +216,17 @@ if (isset($_POST['submit'])) {
                     " . fileSizeHidenInput() . "
                 </div>
             </div>
-            <div class='form-group mt-3'>
-                <div class='col-sm-10 col-sm-offset-2'>
-                    <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-                    <a class='btn btn-default' href='$cancel_url'>$langCancel</a>
+            <div class='form-group mt-5'>
+                <div class='col-12'>
+                    <div class='row'>
+                        <div class='col-6'>
+                            <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit' value='$langSubmit'>
+                        </div>
+                        <div class='col-6'>
+                            <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='$cancel_url'>$langCancel</a>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
 	</form>

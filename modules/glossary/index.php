@@ -307,14 +307,13 @@ if ($is_editor) {
         }
         $data['notes_rich'] = rich_text_editor('notes', 4, 60, $notes);
         $data['form_buttons'] =
+        
             form_buttons(array(
                     array(
+                        'class' => 'btn-primary btn-sm submitAdminBtn w-100',
                         'text' => $langSave,
                         'value'=> $submit_value,
                         'name' => 'submit'
-                    ),
-                    array(
-                        'href' => $base_url,
                     )
                 ));
         view('modules.glossary.create', $data);

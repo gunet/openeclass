@@ -298,6 +298,8 @@ if ($is_editor) {
         /**** Recursion paramneters *****/
              $tool_content .= "<div class='form-group mt-3'>
                                     <label for='Repeat' class='col-sm-6 control-label-notes'>$langRepeat $langEvery</label>
+                                    <div class='row'>
+                                    <div class='col-md-6 col-12'>
                                 <div class='col-sm-12'>
                                     <select class='form-select' name='frequencynumber' id='frequencynumber'>
                                     <option value='0'>$langSelectFromMenu</option>";
@@ -309,19 +311,19 @@ if ($is_editor) {
                 $tool_content .= ">$i</option>";
             }
             
-            $tool_content .= "</select></div>";            
+            $tool_content .= "</select></div></div>";            
             $selected = array('D'=>'', 'W'=>'','M'=>'');
             if($is_recursive_event){
                 $selected[$repeatperiod] = ' selected';
             }
-            $tool_content .= "<div class='col-sm-12 mt-2'>
+            $tool_content .= "<div class='col-md-6 col-12 mt-md-0 mt-3'><div class='col-sm-12'>
                         <select class='form-select' name='frequencyperiod' id='frequencyperiod'>
                             <option value=\"\">$langSelectFromMenu...</option>
                             <option value=\"D\"{$selected['D']}>$langDays</option>
                             <option value=\"W\"{$selected['W']}>$langWeeks</option>
                             <option value=\"M\"{$selected['M']}>$langMonthsAbstract</option>
-                        </select>
-                        </div>
+                        </select></div>
+                        </div></div>
                     ";
             $tool_content .= "<div class='input-append date mt-3' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                 <label for='Enddate' class='col-sm-6 control-label-notes'>$langUntil :</label>
@@ -341,20 +343,33 @@ if ($is_editor) {
                       
                       
 
-                      <div class='form-group mt-3'>
-                        <div class='col-sm-offset-2 col-sm-10'>".
-                            form_buttons(array(
-                                array(
-                                    'text'  => $langSave,
-                                    'name'  => 'submitbtn',
-                                    'value' => $langAddModify,
-                                    'id' => 'submitbtn'
-                                ),
-                                array(
-                                    'href' => "index.php?course=$course_code",
-                                )
-                            ))
-                            ."
+                      <div class='form-group mt-5'>
+                        <div class='col-12'>
+                            <div class='row'>
+                               <div class='col-6'>
+                                  ".
+                                  form_buttons(array(
+                                      array(
+                                          'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                          'text'  => $langSave,
+                                          'name'  => 'submitbtn',
+                                          'value' => $langAddModify,
+                                          'id' => 'submitbtn'
+                                      )
+                                  ))
+                                  ."
+                               </div>
+                               <div class='col-6'>
+                                   ".
+                                   form_buttons(array(
+                                       array(
+                                           'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                           'href' => "index.php?course=$course_code",
+                                       )
+                                   ))
+                                   ."
+                               </div>
+                            </div>
                         </div>
                       </div>                
             </form></div></div>";

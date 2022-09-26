@@ -62,7 +62,7 @@
 
 
                         <div class='col-12'>
-                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                        <div class='form-wrapper shadow-sm p-3 rounded'>
                           <form class='form-horizontal' role='form' action='{{ $base_url }}' method='post'>
                               <div class='form-group'>
                                   <div class='col-sm-12'>            
@@ -73,8 +73,8 @@
                                       </div>
                                   </div>
                               </div>
-                              <div class="row p-2"></div>
-                              <div class='form-group'>
+
+                              <div class='form-group mt-3'>
                                   <div class='col-sm-12'>            
                                       <div class='checkbox'>
                                         <label>
@@ -83,8 +83,8 @@
                                       </div>
                                   </div>
                               </div>
-                              <div class="row p-2"></div>
-                              <div class='form-group'>
+
+                              <div class='form-group mt-3'>
                                   <div class='col-sm-12'>{!! $form_buttons !!}</div>
                               </div>   
                               {!! generate_csrf_token_form_field() !!}                

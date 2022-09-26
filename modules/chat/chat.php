@@ -161,13 +161,13 @@ if (!$conference_activity) {
        <fieldset>
         <div class='col-12'>
             <div class='input-group'>
-              <input type='text' name='msg' size='80' class='form-control'>
+              <input type='text' placeholder='$typeyourmessage...' name='msg' size='80' class='form-control'>
               <input type='hidden' name='chatLine'>
               <span class='input-group-btn'>
                 <input class='btn btn-primary' type='submit' value='&raquo;'>
               </span>
             </div>
-            <div class='embed-responsive embed-responsive-4by3 margin-top-fat'>
+            <div class='embed-responsive embed-responsive-4by3 margin-top-fat mt-3'>
               <iframe class='embed-responsive-item' id='iframe' src='$iframe_file' name='messageList' style='border: 1px solid #CAC3B5;width:100%;overflow-x: hidden;'></iframe>
             </div>       
         </div>   

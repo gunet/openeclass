@@ -327,17 +327,25 @@
 
 
 
-                                    <div class='form-group mt-3'>
-                                          <div class='col-sm-10 col-sm-offset-2'>
-                                                <input class='btn btn-primary' type='submit' name='create_course' value='{{ trans('langCourseCreate') }}'>                          
-                                                <a href='{{ $cancel_link }}' class='btn btn-secondary'>{{ trans('langCancel') }}</a>
+                                    <div class='form-group mt-5'>
+                                          <div class='col-12'>
+                                            <div class='row'>
+                                              <div class='col-6'>
+                                                <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='create_course' value='{{ trans('langCourseCreate') }}'>                          
+                                              </div>
+                                              <div class='col-6'>
+                                                <a href='{{ $cancel_link }}' class='btn btn-secondary btn-sm cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>
+                                              </div>
+                                            </div>
+                                                
+                                                
                                           </div>
                                     </div>     
                                       
                                       
                                   </div>
 
-                              <div class='text-end'><small>{{ trans('langFieldsOptionalNote') }}</small></div>
+                              <div class='text-end mt-3 fw-bold'><small>{{ trans('langFieldsOptionalNote') }}</small></div>
                      
                           {!! generate_csrf_token_form_field() !!}
                         </form></div></div>

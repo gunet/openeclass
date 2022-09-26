@@ -107,10 +107,16 @@ if (isset($_GET['all'])) {
             </div>
         </div>";
         $tool_content .= "<input type='hidden' name='all' value='$_GET[all]'>";
-        $tool_content .= "<div class='form-group mt-3'>
-        <div class='col-sm-10 col-sm-offset-2'>
-            <input class='btn btn-primary' type='submit' value='$langCreate' name='creation'>
-            <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+        $tool_content .= "<div class='form-group mt-5'>
+        <div class='col-12'>
+            <div class='row'>
+                <div class='col-6'>
+                   <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' value='$langCreate' name='creation'>
+                </div>
+                <div class='col-6'>
+                   <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='index.php?course=$course_code'>$langCancel</a>
+                </div>
+            </div>
         </div>
         </div>
         </fieldset>
@@ -147,19 +153,24 @@ if (isset($_GET['all'])) {
           <label class='col-sm-6 control-label-notes'>$langDescription $langOptional:</label>
           <div class='col-sm-12'><textarea class='form-control' name='description' rows='2' cols='60'></textarea></div>
         </div>
-        <div class='form-group".(Session::getError('group_max') ? " has-error" : "")." mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langNewGroupMembers:</label>
+        <div class='row'>
+            <div class='col-md-6 col-12'>
+                <div class='form-group".(Session::getError('group_max') ? " has-error" : "")." mt-3'>
+                    <label class='col-sm-6 control-label-notes'>$langNewGroupMembers:</label>
+                    <div class='col-sm-12'>
+                        <input class='form-control' type=text name='group_max' value='$group_max_value' size=2>
+                        <span class='help-block'>".(Session::getError('group_max') ?: "$langGroupInfiniteUsers")."</span>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-6 col-12'>
+            <div class='form-group mt-3'>
+            <label class='col-sm-6 control-label-notes'>$langGroupTutor:</label>
             <div class='col-sm-12'>
-                <input class='form-control' type=text name='group_max' value='$group_max_value' size=2>
-                <span class='help-block'>".(Session::getError('group_max') ?: "$langGroupInfiniteUsers")."</span>
+                $tool_content_tutor
             </div>
         </div>
-        <div class='form-group mt-3'>
-          <label class='col-sm-6 control-label-notes'>$langGroupTutor:</label>
-          <div class='col-sm-12'>
-              $tool_content_tutor
-          </div>
-        </div>";
+        </div></div>";
 
     $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 
@@ -274,7 +285,7 @@ if (isset($_GET['all'])) {
                 </div>
             </div>
             <div class='form-group mt-3'>
-                 <label class='col-sm-6 control-label-notes'>$langPrivate_1:</label>
+                 <label class='col-sm-12 control-label-notes'>$langPrivate_1:</label>
                 <div class='col-sm-12'>
                     <div class='radio'>
                       <label>
@@ -328,9 +339,17 @@ if (isset($_GET['all'])) {
             </div>";
         $tool_content .= "<input type='hidden' name='group_quantity' value='1'>";
         $tool_content .= "<div class='form-group mt-3'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                <input class='btn btn-primary' type='submit' value='$langCreate' name='creation' onClick=\"selectAll('members_box', true)\" >
-                <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+            <div class='col-12'>
+                <div class='row'>
+                    <div class='col-6'>
+                    <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' value='$langCreate' name='creation' onClick=\"selectAll('members_box', true)\" >
+                    </div>
+                    <div class='col-6'>
+                     <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='index.php?course=$course_code'>$langCancel</a>
+                    </div>
+                </div>
+                
+               
             </div>
         </div>
         </fieldset>

@@ -244,8 +244,8 @@ $(function() {
                                     {{ showSecondFactorChallenge() }}
 
                                
-                                    <div class='col-sm-offset-2 col-sm-10 mt-3'>
-                                        <input class='btn btn-primary' type='submit' value='{{ trans('langSubmitActions') }}' name='submit'>
+                                    <div class='col-12 mt-5'>
+                                        <input class='btn btn-primary btn-sm m-auto d-block submitAdminBtn w-50' type='submit' value='{{ trans('langSubmitActions') }}' name='submit'>
                                     </div>
 
                                 </fieldset>

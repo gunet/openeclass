@@ -584,19 +584,31 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     </div>" .
                     eClassTag::tagInput($exerciseId) . "
                 </div>
-                <div class='form-group mt-3'>
-                    <div class='col-sm-offset-2 col-sm-10'>" .
-                        form_buttons([
-                            [ 'text'  => $langSave,
-                              'name'  => 'submitExercise',
-                              'value' => (isset($_GET['NewExercise']) ? $langCreate : $langModify),
-                              'javascript' => "selectAll('assignee_box',true)"
-                            ],
-                            [ 'href' => $exerciseId ?
-                                "admin.php?course=$course_code&exerciseId=$exerciseId" :
-                                "index.php?course=$course_code",
-                            ]
-                        ]) . "
+                <div class='form-group mt-5'>
+                    <div class='col-12'>
+                       <div class='row'>
+                           <div class='col-6'>
+                             ".
+                             form_buttons([
+                                 [ 'text'  => $langSave,
+                                   'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                   'name'  => 'submitExercise',
+                                   'value' => (isset($_GET['NewExercise']) ? $langCreate : $langModify),
+                                   'javascript' => "selectAll('assignee_box',true)"
+                                 ]
+                             ]) . "
+                           </div>
+                           <div class='col-6'>
+                             " .
+                             form_buttons([
+                                 [ 'href' => $exerciseId ?
+                                     "admin.php?course=$course_code&exerciseId=$exerciseId" :
+                                     "index.php?course=$course_code",
+                                     'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                 ]
+                             ]) ."
+                           </div>
+                       </div>
                     </div>
                  </div>
              </fieldset>

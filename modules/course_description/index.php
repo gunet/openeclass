@@ -39,21 +39,6 @@ $toolName = $langCourseDescription;
 
 ModalBoxHelper::loadModalBox();
 
-
-//////////////////////////////////////////////  My changes /////////////////////////////////////////////////////////////////////
-// $course_code = $_GET['course'];
-// $course_id = course_code_to_id($course_code);
-// $title_course = course_id_to_title($course_id);
-// $course_code_title = course_id_to_code($course_id);
-// $course_Teacher = course_id_to_prof($course_id);
-// $data['title_course'] = $title_course;
-// $data['course_code_title'] = $course_code_title;
-// $data['course_Teacher'] = $course_Teacher;
-// $data['is_editor'] = $is_editor;
-// print_r('the_editor: '.$is_editor);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 if ($is_editor) {
     load_js('tools.js');
     $data['action_bar'] = action_bar(array(
