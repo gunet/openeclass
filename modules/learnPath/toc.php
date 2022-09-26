@@ -30,6 +30,7 @@
 $require_current_course = TRUE;
 
 require_once '../../include/init.php';
+require_once 'include/constants.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
@@ -38,7 +39,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <head><title>-</title>
     <meta http-equiv='Content-Type' content='text/html; charset=$charset'>
     <!-- jQuery -->
-    <script type='text/javascript' src='$urlAppend}js/jquery-'" . JQUERY_VERSION . "'.js'></script>
+    <script type='text/javascript' src='{$urlAppend}js/jquery-" . JQUERY_VERSION . ".js'></script>
 
     <!-- Latest compiled and minified JavaScript -->
     <script src='{$urlAppend}template/default/js/bootstrap.min.js'></script>

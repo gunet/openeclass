@@ -40,6 +40,7 @@
 
 $require_current_course = TRUE;
 require_once '../../include/init.php';
+require_once 'include/constants.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/gradebook/functions.php';
@@ -191,7 +192,8 @@ echo "<!DOCTYPE HTML>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
     <title>-</title>
     <!-- jQuery -->
-    <script type='text/javascript' src='{$urlAppend}js/jquery-2.1.1.min.js'></script>
+    <script type='text/javascript' src='{$urlAppend}js/jquery-" . JQUERY_VERSION . ".js'></script>
+    <!-- <script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.js'></script> -->
 
     <!-- Latest compiled and minified JavaScript -->
     <script src='{$urlAppend}template/default/js/bootstrap.min.js'></script>
