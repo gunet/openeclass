@@ -113,6 +113,8 @@ if (isset($_GET['showQuota'])) {
     exit;
 }
 
+$dialogBox = $metaDataBox = '';
+
 // ---------------------------
 // Mindmap save button
 // ---------------------------
@@ -291,7 +293,6 @@ if ($can_upload or $user_upload) {
       UPLOAD FILE
      * ******************************************************************** */
 
-    $dialogBox = $metaDataBox = '';
     $extra_path = '';
     if (isset($_POST['fileCloudInfo']) or isset($_FILES['userFile'])) {
 

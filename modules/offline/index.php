@@ -94,6 +94,7 @@ $data = [
     'themeimg' => './template/modern/img',
     'is_mobile' => false,
     'eclass_version' => ECLASS_VERSION,
+    'jquery_version' => JQUERY_VERSION,
     'course_info_popover' => null,
     'lessonStatus' => null,
     'departments' => null,

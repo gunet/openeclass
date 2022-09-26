@@ -236,9 +236,9 @@ function submission_grade($subid) {
                                                 FROM assignment_submit
                                                 WHERE id = ?d", $subid);
     if ($res) {
-        $grade = trim($res->grade);
+        $grade = $res->grade;
         if (!empty($grade)) {
-            return $grade;
+            return trim($grade);
         } elseif (!empty($res->grade_comments)) {
             return $langYes;
         } else {

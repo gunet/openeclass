@@ -1,5 +1,5 @@
 <div id="leftnav" class="sidebar float-menu">
-    @php $is_course_teacher = check_editor($uid,$course_id); @endphp 
+    @php $is_course_teacher = check_editor($uid,$course_id); @endphp
     @if(($is_editor or $is_power_user or $is_departmentmanage_user or $is_usermanage_user or $is_course_teacher) && $course_code)
         <p class="text-center text-light mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
         <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center'>
@@ -10,33 +10,7 @@
                 <p class="off2">{{ trans('langCTeacher') }}</p>
             </button>
         </form>
-
-    @else
-        <p class="text-center text-light mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
-        <div class='d-flex justify-content-center'>
-            <a class='w-100 btn btn-primary pe-none text-white text-center'>
-                @php $is_course_teacher = check_editor($uid,$course_id); @endphp 
-                @if (isset($_SESSION['uid']))
-                    @if(($session->status == USER_TEACHER) and $is_course_teacher)
-                    <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{trans('langCTeacher')}}</span>
-                    @elseif($session->status == USER_STUDENT or ($session->status == USER_TEACHER and !$is_course_teacher))
-                    <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langCStudent2') }}</span>
-                    @elseif($session->status == USERMANAGE_USER)
-                    <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langManageUser') }}</span>
-                    @elseif($session->status == USER_DEPARTMENTMANAGER)
-                    <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langManageDepartment') }}</span>
-                    @elseif($session->status == USER_GUEST)
-                    <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langVisitor') }}</span>
-                    @else
-                    <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langAdministrator') }}</span>
-                    @endif
-                @else
-                <span class='text-uppercase'><span class='fa fa-user text-warning pe-2'></span>{{ trans('langCStudent2') }}</span>
-                @endif
-            </a>
-        </div>
     @endif
-
     <div class="panel-group accordion mt-5" id="sidebar-accordion">
         <div class="panel">
             @foreach ($toolArr as $key => $tool_group)
@@ -57,7 +31,7 @@
                                 <span class="fa {{ $tool_group[3][$key2] }} fa-fw tool-sidebar toolSidebarTxt pe-2"></span>
                                 <span class='toolSidebarTxt'>{!! $tool !!}</span>
                             </div>
-                                
+
                         </a>
                     @endforeach
                 </div>
