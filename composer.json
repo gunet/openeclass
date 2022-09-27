@@ -25,9 +25,6 @@
     "autoload": {
         "psr-0": {
             "install\\Installer": ""
-        },
-        "psr-4": {
-            "Widgets\\": "Widgets"
         }
     },
     "scripts": {
@@ -35,10 +32,5 @@
     "post-update-cmd":  ["install\\Installer::ensureHtaccess"],
     "post-package-install": ["install\\Installer::vendorTestCodeCleanup"],
     "post-package-update": ["install\\Installer::vendorTestCodeCleanup"]
-  },
-    "config": {
-        "allow-plugins": {
-            "kylekatarnls/update-helper": true
-        }
-    }
+  }
 }
