@@ -71,6 +71,10 @@ span{
   overflow-y: auto;
 }
 
+.lightColor{
+  background: #f2f2f2;
+}
+
 img {
   max-width: 100%;
   height: auto;
@@ -1666,12 +1670,14 @@ select.form-select { -webkit-appearance: menulist; }
 
   .panel-default,.panel-action-btn-default{
     border-radius: 17px;
-    border:solid 2px #F5F5F5;
+    /* border:solid 2px #F5F5F5; */
+    border: solid 2px #f2f2f2;
   }
   .panel-default>.panel-heading, .panel-action-btn-default>.panel-heading {
     color: #333;
-    background-color: #f5f5f5;
-    border-color: #ddd;
+    /* background-color: #f5f5f5; */
+    background: #f2f2f2;
+    border-color: #f2f2f2;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);

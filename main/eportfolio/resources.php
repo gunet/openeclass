@@ -373,8 +373,8 @@ if ($userdata) {
             } else {
                 $post->course_title = $langUserBlog;
             }
-            $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
-                                    <div class='panel-heading'>
+            $tool_content .= "<div class='panel panel-action-btn-default mt-3 rounded-0'>
+                                    <div class='panel-heading rounded-0'>
                                         <div class='float-end'>
                                             ". action_button(array(
                                                                 array(
@@ -388,10 +388,10 @@ if ($userdata) {
                                          </div>
                                             <h3 class='panel-title'>".q($data['title'])."</h3>
                                     </div>
-                                    <div class='panel-body'>
+                                    <div class='panel-body rounded-0'>
                                         <button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($data['timestamp'])) . "</button><br><br>".standard_text_escape($data['content'])."
                                     </div>
-                                    <div class='panel-footer'>
+                                    <div class='panel-footer rounded-0'>
                                         <div class='row'>
                                             <div class='col-sm-6'>$post->course_title</div>
                                         </div>
@@ -475,8 +475,8 @@ if ($userdata) {
                 } else {
                     $post->course_title = $langUserBlog;
                 }
-                $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
-                                    <div class='panel-heading'>
+                $tool_content .= "<div class='panel panel-action-btn-default mt-3 rounded-0'>
+                                    <div class='panel-heading rounded-0'>
                                         <div class='float-end'>
                                             ". action_button(array(
                                                     array(
@@ -490,10 +490,10 @@ if ($userdata) {
                                          </div>
                                             <h3 class='panel-title'>".q($data['title'])."</h3>
                                     </div>
-                                    <div class='panel-body'>
+                                    <div class='panel-body rounded-0'>
                                         <button class='btn btn-success btn-sm pe-none'>" . format_locale_date(strtotime($data['timestamp'])) . "</button><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     </div>
-                                    <div class='panel-footer'>
+                                    <div class='panel-footer rounded-0'>
                                         <div class='row'>
                                             <div class='col-sm-6'>$post->course_title</div>
                                         </div>
@@ -541,13 +541,13 @@ if ($userdata) {
                 } else {
                    $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 }
-                $submission_footer = "<div class='panel-footer'>
+                $submission_footer = "<div class='panel-footer rounded-0'>
                                           <div class='row'>
                                               <div class='col-sm-6'>$submission->course_title</div>
                                           </div>
                                       </div>";
-                $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
-                                    <div class='panel-heading'>
+                $tool_content .= "<div class='panel panel-action-btn-default mt-3 rounded-0'>
+                                    <div class='panel-heading rounded-0'>
                                         <div class='float-end'>
                                             ". action_button(array(
                                                         array(
@@ -561,7 +561,7 @@ if ($userdata) {
                                          </div>
                                             $submission_header_content
                                     </div>
-                                    <div class='panel-body'>
+                                    <div class='panel-body rounded-0'>
                                     $submission_content    
                                     </div>
                                     $submission_footer

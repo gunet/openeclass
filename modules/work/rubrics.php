@@ -145,7 +145,7 @@ if (isset($_GET['rubric_id'])) {
             '      <input name=\'title[]\' class=\'form-control\' id=\'title\' value=\'\' type=\'text\'> '+     
             '    </div>'+
                 '<label for=\'weight\' class=\'col-sm-6 control-label-notes\'>" . js_escape($langGradebookWeight). " (%):</label>'+
-            '    <div class=\'col-sm-12\'>'+
+            '    <div class=\'col-sm-12 mt-3\'>'+
             '      <input name=\'weight[]\' class=\'form-control\' id=\'weight\' value=\'\' type=\'number\'> '+     
             '    </div>'+
             '    <div class=\'col-sm-1\'><a href=\'#\' id=\'remCrit'+j+'\'><span class=\'fa fa-times\' style=\'color:red\'></span></a></div>'+
@@ -177,8 +177,8 @@ if (isset($_GET['rubric_id'])) {
             '            </table>'+
             '        </div>'+
             '    </div>'+
-            '    <div class=\'col-offset-2 col-sm-10 mt-2\'>'+
-            '         <a class=\'btn btn-sm btn-success margin-top-thin\' id=\'addScale'+ j +'\'>" . js_escape($langAdd) . "</a>'+
+            '    <div class=\'col-12 mt-5 d-flex justify-content-center\'>'+
+            '         <a class=\'btn btn-sm btn-success submitAdminBtn w-50 margin-top-thin\' id=\'addScale'+ j +'\'>" . js_escape($langAdd) . "</a>'+
             '    </div>'+
             '	</div>'+
             '</div>'
@@ -356,8 +356,8 @@ if (isset($_GET['rubric_id'])) {
                 </div>";
             if (!$rubric_used) {
                 $tool_content .= "
-                    <div class='col-offset-2 col-sm-10 mt-2'>
-                         <a class='btn btn-sm btn-success margin-top-thin' id='addScale0'>$langAdd</a>
+                    <div class='col-12 mt-5 d-flex justify-content-center'>
+                         <a class='btn btn-sm btn-success submitAdminBtn w-50 margin-top-thin' id='addScale0'>$langAdd</a>
                     </div>
                 </div>";
             }
@@ -370,9 +370,9 @@ if (isset($_GET['rubric_id'])) {
         $sel_opt2 = ($opt2==1?"checked=\"checked\"":"");
     }
     $tool_content .= "<div id='inserthere' class=''>
-                        <div class='form-group mt-3'>
-                            <div class='col-offset-2 col-sm-10'>
-                                <a class='btn btn-sm btn-success margin-top-thin' id='addCriteria'>$langAddRubricCriteria</a>
+                        <div class='form-group mt-5'>
+                            <div class='col-12 d-flex justify-content-center'>
+                                <a class='btn btn-sm btn-success submitAdminBtn w-50 margin-top-thin' id='addCriteria'>$langAddRubricCriteria</a>
                             </div>
                         </div>
                     </div>
@@ -396,19 +396,33 @@ if (isset($_GET['rubric_id'])) {
                         </div>
                     </div>";
     if (!$rubric_used) {
-        $tool_content .= "<div class='form-group mt-3'>
-                        <div class='col-sm-offset-2 col-sm-10'>".
-                            form_buttons(array(
-                                array(
-                                    'text' => $langSave,
-                                    'name' => 'submitRubric',
-                                    'value' => 1
-                                ),
-                                array(
-                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                                )
-                            ))
-                            ."</div>
+        $tool_content .= "<div class='form-group mt-5'>
+                        <div class='col-12'>
+                          <div class='row'>
+                            <div class='col-6'>
+                              ".
+                              form_buttons(array(
+                                  array(
+                                      'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                      'text' => $langSave,
+                                      'name' => 'submitRubric',
+                                      'value' => 1
+                                  )
+                              ))
+                              ."
+                            </div>
+                            <div class='col-6'>
+                              ".
+                              form_buttons(array(
+                                  array(
+                                      'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                      'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                                  )
+                              ))
+                              ."
+                            </div>
+                          </div>
+                        </div>
                         </div>";
     }
     $tool_content .= "</fieldset>

@@ -12,7 +12,7 @@
         "guzzlehttp/oauth-subscriber": "^0.3.0",
         "hybridauth/hybridauth": "~3.0",
         "mpdf/mpdf": "^8.0",
-	"hiqdev/hoa-ruler": "~1.0",
+        "hoa/ruler": "~2.0",
         "egulias/email-validator": "^2.1",
         "bacon/bacon-qr-code": "^2.0",
         "phpoffice/phpspreadsheet": "^1.9",

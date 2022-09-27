@@ -1518,9 +1518,9 @@ function add_gradebook_other_activity($gradebook_id) {
                                 <span class='help-block'>". ($weight_error ? $weight_error :  "($langGradebookRemainingGrade: " . weightleft($gradebook_id, '') . "%)")."</span>
                             </div>
                         </div>
-                        <div class='form-group mt-3'>
-                            <label for='visible' class='col-sm-6 control-label-notes'>$langGradeVisible:</label>
-                            <div class='col-sm-12'>
+                        <div class='form-group mt-3 d-inline-flex'>
+                            <label for='visible' class='col-sm-auto control-label-notes pe-2'>$langGradeVisible:</label>
+                            <div class='col-auto'>
                                 <input type='checkbox' id='visible' name='visible' value='1'";
                                 if ($visible == 1) {
                                     $tool_content .= " checked";
@@ -1534,9 +1534,9 @@ function add_gradebook_other_activity($gradebook_id) {
                             </div>
                         </div>";
                         if (isset($module_auto_id) && $module_auto_id != 0) { //accept the auto booking mechanism
-                            $tool_content .= "<div class='form-group mt-3'>
-                                <label for='weight' class='col-sm-6 control-label-notes'>$langGradebookInsAut:</label>
-                                    <div class='col-sm-12'><input type='checkbox' value='1' name='auto' ";
+                            $tool_content .= "<div class='form-group mt-3 d-inline-flex'>
+                                <label for='weight' class='col-sm-auto control-label-notes pe-2'>$langGradebookInsAut:</label>
+                                    <div class='col-auto'><input type='checkbox' value='1' name='auto' ";
                             if ($auto) {
                                 $tool_content .= " checked";
                             }

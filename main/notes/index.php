@@ -225,8 +225,8 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     $pageName = q($note->title);
     $tool_content .= "
     <div class='col-sm-12'>
-        <div class='panel panel-action-btn-default'>
-            <div class='panel-heading'>
+        <div class='panel panel-action-btn-default rounded-0'>
+            <div class='panel-heading rounded-0'>
                 <div class='float-end'>".
                     action_button(array(
                         array('title' => $langEditChange,
@@ -241,7 +241,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                ."</div>
                 <h3 class='panel-title'>".q($note->title)."</h3>
             </div>
-            <div class='panel-body'>
+            <div class='panel-body rounded-0'>
                 <div class='btn btn-success btn-sm pe-none'>". format_locale_date(strtotime($note->date_time)). "</div><br><br>
                 $note->content
             </div>

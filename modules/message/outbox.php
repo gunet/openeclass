@@ -121,11 +121,11 @@ if (isset($_GET['mid'])) {
                         </div>
                     </div>
                     <div class='col-sm-12 mt-3'>
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>$langMessage</div>
-                        <div class='panel-body'>
+                    <div class='panel panel-default rounded-0'>
+                        <div class='panel-heading rounded-0'>$langMessage</div>
+                        <div class='panel-body rounded-0'>
                             <div class='row p-2 margin-bottom-thin'>
-                                <div class='col-xs-12'>
+                                <div class='col-12'>
                                     ".standard_text_escape($msg->body)."
                                 </div>
                             </div>";

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa1ce6e35e223f8bd28a24e778fa05c4",
+    "content-hash": "cf087fbf781c600a370b5cf056705683",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -997,56 +997,6 @@
             "time": "2022-01-20T10:17:49+00:00"
         },
         {
-            "name": "hiqdev/hoa-ruler",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hiqdev/hoa-ruler.git",
-                "reference": "d60a74027092639ad61ef7507f37061bf213a03a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hiqdev/hoa-ruler/zipball/d60a74027092639ad61ef7507f37061bf213a03a",
-                "reference": "d60a74027092639ad61ef7507f37061bf213a03a",
-                "shasum": ""
-            },
-            "require": {
-                "hoa/compiler": "~3.0",
-                "hoa/consistency": "~1.0",
-                "hoa/exception": "~1.0",
-                "hoa/file": "~1.0",
-                "hoa/protocol": "~1.0",
-                "hoa/visitor": "~2.0",
-                "php": ">=7.4"
-            },
-            "replace": {
-                "hoa/ruler": "~2.0"
-            },
-            "require-dev": {
-                "hoa/test": "~2.0",
-                "phpunit/phpunit": "^9.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Hoa\\Ruler\\": "."
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "The Hiqdev Hoa\\Ruler library.",
-            "keywords": [
-                "library",
-                "ruler"
-            ],
-            "support": {
-                "source": "https://github.com/hiqdev/hoa-ruler/tree/1.0.1"
-            },
-            "time": "2022-07-07T14:54:14+00:00"
-        },
-        {
             "name": "hoa/compiler",
             "version": "3.17.08.08",
             "source": {
@@ -1678,6 +1628,73 @@
             },
             "abandoned": true,
             "time": "2017-01-13T16:10:24+00:00"
+        },
+        {
+            "name": "hoa/ruler",
+            "version": "2.17.05.16",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hoaproject/Ruler.git",
+                "reference": "696835daf8336dfd490f032da7af444050e52dfc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hoaproject/Ruler/zipball/696835daf8336dfd490f032da7af444050e52dfc",
+                "reference": "696835daf8336dfd490f032da7af444050e52dfc",
+                "shasum": ""
+            },
+            "require": {
+                "hoa/compiler": "~3.0",
+                "hoa/consistency": "~1.0",
+                "hoa/exception": "~1.0",
+                "hoa/file": "~1.0",
+                "hoa/protocol": "~1.0",
+                "hoa/visitor": "~2.0"
+            },
+            "require-dev": {
+                "hoa/test": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hoa\\Ruler\\": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Enderlin",
+                    "email": "ivan.enderlin@hoa-project.net"
+                },
+                {
+                    "name": "Hoa community",
+                    "homepage": "https://hoa-project.net/"
+                }
+            ],
+            "description": "The Hoa\\Ruler library.",
+            "homepage": "https://hoa-project.net/",
+            "keywords": [
+                "library",
+                "ruler"
+            ],
+            "support": {
+                "docs": "https://central.hoa-project.net/Documentation/Library/Ruler",
+                "email": "support@hoa-project.net",
+                "forum": "https://users.hoa-project.net/",
+                "irc": "irc://chat.freenode.net/hoaproject",
+                "issues": "https://github.com/hoaproject/Ruler/issues",
+                "source": "https://central.hoa-project.net/Resource/Library/Ruler"
+            },
+            "abandoned": true,
+            "time": "2017-05-16T07:52:21+00:00"
         },
         {
             "name": "hoa/stream",
@@ -5432,5 +5449,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.1.0"
 }

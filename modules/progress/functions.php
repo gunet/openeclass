@@ -82,7 +82,7 @@ function display_certificates() {
             $thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
             $template_thumbnail = $urlServer . CERT_TEMPLATE_PATH . $thumbnail_filename;
             $tool_content .= "
-            <div class='row res-table-row border-0 bg-light p-3 mt-2'>
+            <div class='row res-table-row border-0 lightColor p-3 mt-2'>
                 <div class='col-2 text-md-start text-center'>
                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1' target=_blank>
                     <img class='mt-md-0 mt-4' src='$template_thumbnail' title='$template_name'>
@@ -190,7 +190,7 @@ function display_badges() {
             $badge_icon = $badge_details[$badge_name];
             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_icon";
             $tool_content .= "
-                                <div class='row res-table-row border-0 bg-light p-3 mt-2'>
+                                <div class='row res-table-row border-0 lightColor p-3 mt-2'>
                                     <div class='col-3 text-md-start text-center'>
                                         <img class='' src='$icon_link'>
                                     </div>

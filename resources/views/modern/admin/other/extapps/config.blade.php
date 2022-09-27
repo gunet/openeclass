@@ -86,13 +86,13 @@
                                             <div class='form-group mt-5'>
                                                 <div class='col-12'>
                                                     <div class='row'>
-                                                        <div class='col-6'>
-                                                             <button class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                                        <div class='col-5'>
+                                                             <button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                                                 {{ trans('langModify') }}
                                                             </button> 
                                                         </div>
-                                                        <div class='col-6'>
-                                                            <button class='btn btn-danger cancelAdminBtn w-100' type='submit' name='submit' value='clear'>
+                                                        <div class='col-7'>
+                                                            <button class='btn btn-danger btn-sm cancelAdminBtn w-100' type='submit' name='submit' value='clear'>
                                                                 {{ trans('langClearSettings') }}
                                                             </button>
                                                         </div>

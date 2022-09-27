@@ -309,9 +309,9 @@ function printPollForm() {
         } else {
             $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='".q($langSubmit)."'>";
             if (isset($_REQUEST['unit_id'])) {
-                $tool_content .= "<a class='btn btn-secondary' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
+                $tool_content .= "<a class='btn btn-secondary ms-3' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
             } else {
-                $tool_content .= "<a class='btn btn-secondary' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
+                $tool_content .= "<a class='btn btn-secondary ms-3' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
             }
         }
         $tool_content .= "</div></form>";
@@ -426,9 +426,9 @@ function submitPoll() {
         }
         if ($poll->show_results) {
             if (isset($_REQUEST['unit_id'])) {
-                $tool_content .= "<a class='btn btn-primary' href='../units/view.php?course=$course_code&amp;res_type=questionnaire_results&amp;unit_id=$_REQUEST[unit_id]&amp;pid=$pid'>$langUsage</a>";
+                $tool_content .= "<a class='btn btn-primary ms-3' href='../units/view.php?course=$course_code&amp;res_type=questionnaire_results&amp;unit_id=$_REQUEST[unit_id]&amp;pid=$pid'>$langUsage</a>";
             } else {
-                $tool_content .= "<a class='btn btn-primary' href='pollresults.php?course=$course_code&amp;pid=$pid'>$langUsage</a>";
+                $tool_content .= "<a class='btn btn-primary ms-3' href='pollresults.php?course=$course_code&amp;pid=$pid'>$langUsage</a>";
             }
         }
         $tool_content .= "</div>";

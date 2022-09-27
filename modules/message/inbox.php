@@ -132,11 +132,11 @@ if (isset($_GET['mid'])) {
                         </div>
                     </div>
                     <div class='col-sm-12 mt-3'>
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>$langMessage</div>
-                        <div class='panel-body'>
+                    <div class='panel panel-default rounded-0'>
+                        <div class='panel-heading rounded-0'>$langMessage</div>
+                        <div class='panel-body rounded-0'>
                             <div class='row p-2 margin-bottom-thin'>
-                                <div class='col-xs-12'>
+                                <div class='col-12'>
                                     ".standard_text_escape($msg->body)."
                                 </div>
                             </div>";
@@ -161,7 +161,16 @@ if (isset($_GET['mid'])) {
         if ($msg->course_id == 0 && !$personal_msgs_allowed) {
             //do not show reply form when personal messages are not allowed
         } else {
-            $out .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded mt-3' id='replyBox' style='display:none;'>";
+            if($course_id == 0){
+                $out .= "<div class='row'>
+                        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                            <div class='col-12 h-100 left-form'></div>
+                        </div>
+                        <div class='col-lg-6 col-12'>";
+            }else{
+                $out .= "<div class='col-12'>";
+            }
+            $out .= "<div class='form-wrapper shadow-sm p-3 rounded mt-3' id='replyBox' style='display:none;'>";
             if ($course_id == 0) {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
                 if ($msg->course_id != 0) {//thread belonging to a course viewed from the central ui
@@ -240,20 +249,33 @@ if (isset($_GET['mid'])) {
                     </div>
                 </div>
               
-                <div class='form-group mt-3'>
-                    <div class='col-sm-10 col-sm-offset-2'>".
-                        form_buttons(array(
-                            array(
-                                'text'  => $langSend,
-                                'name'  => 'submit',
-                                'value' => $langAddModify
-                            ),
-                            array(
-                                'href' => "javascript:void(0)",
-                                'id'   => "cancelReply"
-                            )
-                        ))
-                        ."
+                <div class='form-group mt-5'>
+                    <div class='col-12'>
+                       <div class='row'>
+                          <div class='col-6'>
+                            ".
+                            form_buttons(array(
+                                array(
+                                    'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                    'text'  => $langSend,
+                                    'name'  => 'submit',
+                                    'value' => $langAddModify
+                                )
+                            ))
+                            ."
+                          </div>
+                          <div class='col-6'>
+                             ".
+                             form_buttons(array(
+                                 array(
+                                     'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                     'href' => "javascript:void(0)",
+                                     'id'   => "cancelReply"
+                                 )
+                             ))
+                             ."
+                          </div>
+                       </div>
                     </div>
                 </div>
             </fieldset>";
@@ -261,9 +283,21 @@ if (isset($_GET['mid'])) {
             $out .= "
                 <div class='float-end'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                </form></div></div>";
+            if ($course_id == 0) {
+                $out .= "</div>";
+            }
 
             // forward form
-            $out .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded mt-3' id='forwardBox' style='display:none;'>";
+            if($course_id == 0){
+                $out .= "<div class='row'>
+                        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                            <div class='col-12 h-100 left-form'></div>
+                        </div>
+                        <div class='col-lg-6 col-12'>";
+            }else{
+                $out .= "<div class='col-12'>";
+            }
+            $out .= "<div class='form-wrapper shadow-sm p-3 rounded mt-3' id='forwardBox' style='display:none;'>";
             if ($course_id == 0) {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
                 if ($msg->course_id != 0) { // thread belonging to a course viewed from the central ui
@@ -351,26 +385,42 @@ if (isset($_GET['mid'])) {
                         </div>
                     </div>
                    
-                    <div class='form-group mt-3'>
-                        <div class='col-sm-10 col-sm-offset-2'>".
-                            form_buttons(array(
-                                array(
-                                    'text'  => $langSend,
-                                    'name'  => 'submit',
-                                    'value' => $langAddModify
-                                ),
-                                array(
-                                    'href' => "javascript:void(0)",
-                                    'id'   => "cancelReply"
-                                )
-                            ))
-                            ."
+                    <div class='form-group mt-5'>
+                        <div class='col-12'>
+                           <div class='row'>
+                              <div class='col-6'>
+                                 ".
+                                 form_buttons(array(
+                                     array(
+                                         'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                         'text'  => $langSend,
+                                         'name'  => 'submit',
+                                         'value' => $langAddModify
+                                     )
+                                 ))
+                                 ."
+                              </div>
+                              <div class='col-6'>
+                                 ".
+                                 form_buttons(array(
+                                     array(
+                                         'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                         'href' => "javascript:void(0)",
+                                         'id'   => "cancelReply"
+                                     )
+                                 ))
+                                 ."
+                              </div>
+                           </div>
                         </div>
                     </div>
                 </fieldset>";
 
             $out .= "<div class='float-end'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                </form></div></div>";
+            if ($course_id == 0) {
+                $out .= "</div>";
+            }
 
             // ************* End of forward form ******************
 

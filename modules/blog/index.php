@@ -373,8 +373,8 @@ if ($action == "createPost") {
         if ($comments_enabled) {
             $commenting_setting = "<div class='form-group mt-3'>
                                        <label class='col-sm-6 control-label-notes'>$langBlogPostCommenting:</label>
-                                       <div class='col-sm-12'>
-                                           <div>
+                                       <div class='col-12'>
+                                           <div class='mt-2'>
                                                 <input type='radio' value='1' name='commenting' checked>
                                                 $langCommentsEn
                                            </div>
@@ -385,8 +385,21 @@ if ($action == "createPost") {
                                        </div>
                                    </div>";
         }
+        if(!$course_code){
+            $tool_content .= "
+            <div class='row'>
+                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                    <div class='col-12 h-100 left-form'></div>
+                </div>
+                <div class='col-lg-6 col-12'>
+            ";
+        }else{
+            $tool_content .= "
+                <div class='col-12'>
+            ";
+        }
         $tool_content .= "
-        <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+        <div class='form-wrapper shadow-sm p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
             <fieldset>
                 
@@ -440,6 +453,9 @@ if ($action == "createPost") {
             </fieldset>
             </form>
         </div></div>";
+        if(!$course_code){
+            $tool_content .= "</div>";
+        }
     } else {
         //Session::Messages($langBlogPostNotAllowedCreate);
         Session::flash('message',$langBlogPostNotAllowedCreate);
@@ -487,8 +503,22 @@ if ($action == "editPost") {
                                            </div>
                                        </div>";
             }
+            if(!$course_code){
+                $tool_content .= "
+                <div class='row'>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
+                    <div class='col-lg-6 col-12'>
+                ";
+            }else{
+                $tool_content .= "
+                    <div class='col-12'>
+                ";
+            }
             $tool_content .= "
-            <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+
+            <div class='form-wrapper shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
                 <fieldset>
 
@@ -546,6 +576,9 @@ if ($action == "editPost") {
                 </fieldset>
             </form>
         </div></div>";
+            if(!$course_code){
+                $tool_content .= "</div>";
+            }
         } else {
             //Session::Messages($langBlogPostNotAllowedEdit);
             Session::flash('message',$langBlogPostNotAllowedEdit);
@@ -668,8 +701,8 @@ if ($action == "showPost") {
         }
         $tool_content .= "
         <div class='col-sm-12'>
-                        <div class='panel panel-action-btn-default'>
-                            <div class='panel-heading'>
+                        <div class='panel panel-action-btn-default rounded-0'>
+                            <div class='panel-heading rounded-0'>
                                 <div class='float-end'>
                                     ". action_button(array(
                                         array(
@@ -699,7 +732,7 @@ if ($action == "showPost") {
                                 </h3>
                             </div>
                             <div class='panel-body ps-3 panel-body-blog'><button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($post->getTime())). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
-                            <div class='panel-footer ps-3 panel-footer-blog'>
+                            <div class='panel-footer ps-3 panel-footer-blog rounded-0'>
 
                                 <div class='row'>
                                     <div class='col-sm-6'>$rating_content</div>

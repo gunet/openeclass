@@ -569,7 +569,7 @@ if ($total_cunits > 0) {
         $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
             <div class='item-content'>
                 <div class='item-header clearfix'>
-                    <div class='item-title h4 $class_vis text-primary fs-5'>";
+                    <div class='item-title h4 $class_vis text-primary fs-6'>";
         if ($not_shown) {
             $cunits_content .= q($cu->title) ;
         } else {
