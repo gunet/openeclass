@@ -186,7 +186,7 @@ a{
 /* this is d-inline-flex between inputs-radio and texts */
 .radio label{
   display:inline-flex;
-  align-items: center;
+  align-items: top;
 } 
 .radio label p{
   margin-top:15px;
@@ -199,6 +199,7 @@ input[type="radio"]{
   width:17px;
   height:17px;
   min-width: 17px;
+  vertical-align: middle;
 
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -206,7 +207,7 @@ input[type="radio"]{
   border: 2px solid #003F87;
   transition: 0.2s all linear;
   position: relative;
-  top: 0px;
+  top: 2px;
 }
 input[type="radio"]:checked {
   border: 6px solid #003F87;
@@ -220,7 +221,7 @@ input[type="radio"]:disabled {
 /* this is d-inline-flex between inputs-checkbox and texts */
 .checkbox label{
   display:inline-flex;
-  align-items: center;
+  align-items: top;
 } 
 .checkbox label p{
   margin-top:15px;
@@ -233,6 +234,9 @@ input[type="checkbox"]{
   width:17px;
   height:17px;
   min-width: 17px;
+  vertical-align: middle;
+  position: relative;
+  top: 2px;
 }
 
 input::placeholder , .form-select, .form-control{

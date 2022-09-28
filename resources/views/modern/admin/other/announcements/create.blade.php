@@ -98,7 +98,7 @@
                                 </div>
                                 <div class='mt-5 form-group'>
                                     <div class='col-12'>
-                                        <input id='submitAnnouncement' class='btn btn-primary submitAdminBtn w-100' type='submit' name='submitAnnouncement' value='{{ trans('langSubmit') }}'>
+                                        <input id='submitAnnouncement' class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submitAnnouncement' value='{{ trans('langSubmit') }}'>
                                     </div>
                                 </div>
                                 {!! generate_csrf_token_form_field() !!}

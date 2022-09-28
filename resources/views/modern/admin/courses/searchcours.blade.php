@@ -89,10 +89,10 @@
                                         <div class='col-12'>
                                             <div class='row'>
                                                 <div class='col-6'>
-                                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='search_submit' value='{{ trans('langSearch') }}'> 
+                                                    <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='search_submit' value='{{ trans('langSearch') }}'> 
                                                 </div>
                                                 <div class='col-6'>
-                                                   <a href='index.php' class='btn btn-secondary cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>   
+                                                   <a href='index.php' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>   
                                                 </div>
                                             </div>     
                                         </div>

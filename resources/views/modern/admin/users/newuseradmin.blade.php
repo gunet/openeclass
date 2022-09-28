@@ -224,7 +224,7 @@
                             {!! showSecondFactorChallenge() !!}
                            
                             <div class='col-12 mt-5'>
-                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
+                            <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
                             </div>        
                         </fieldset>
                         {!! generate_csrf_token_form_field() !!}

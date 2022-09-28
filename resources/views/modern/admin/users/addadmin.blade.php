@@ -58,32 +58,33 @@
                                     <div class='form-group mt-3'>
                                         <label class='col-sm-12 control-label-notes'>{{ trans('langAddRole') }}</label>
                                             <div class='col-sm-12'>
-                                                <div class='radio'>
+                                                <div class='radio d-inline-flex align-items-top'>
                                                     <input type='radio' name='adminrights' value='admin' {{$checked['admin']}}> {{ trans('langAdministrator') }}
-                                                    <span class='help-block'>
-                                                        <br><small class='text-warning'>{{ trans('langHelpAdministrator') }}</small>
-                                                    </span>
+                                                </div>
+                                                <div class='col-12'>
+                                                    <small class='help-block text-warning'>{{ trans('langHelpAdministrator') }}</small>
                                                 </div>
                                                 
-                                                <div class='radio mt-3'>
-                                                    <input type='radio' name='adminrights' value='poweruser' {{$checked['poweruser']}}> {{ trans('langPowerUser') }}
-                                                    <span class='help-block'>
-                                                        <br><small class='text-warning'>{{ trans('langHelpPowerUser') }}&nbsp;</small>
-                                                    </span>
+                                                <div class='radio mt-3 d-inline-flex align-items-top'>
+                                                    <input type='radio' name='adminrights' value='poweruser' {{$checked['poweruser']}}> {{ trans('langPowerUser') }}   
+                                                </div>
+                                                <div class='col-12'>
+                                                    <small class='help-block text-warning'>{{ trans('langHelpPowerUser') }}</small>
                                                 </div>
                                                
-                                                <div class='radio mt-3'>
-                                                    <input type='radio' name='adminrights' value='manageuser' {{$checked['manageuser']}}> {{ trans('langManageUser') }}
-                                                    <span class='help-block'>
-                                                        <br><small class='text-warning'>{{ trans('langHelpManageUser') }}</small>
-                                                    </span>
+                                                <div class='radio mt-3 d-inline-flex align-items-top'>
+                                                    <input type='radio' name='adminrights' value='manageuser' {{$checked['manageuser']}}> {{ trans('langManageUser') }}                                                  
+                                                </div>
+                                                <div class='col-12'>
+                                                    <small class='help-block text-warning'>{{ trans('langHelpManageUser') }}</small>
                                                 </div>
                                               
-                                                <div class='radio mt-3'>
+                                                <div class='radio mt-3 d-inline-flex align-items-top'>
                                                     <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio' {{$checked['managedepartment']}}> {{ trans('langManageDepartment') }}
-                                                    <span class='help-block'>
-                                                        <br><small class='text-warning'>{{ trans('langHelpManageDepartment') }}</small>
-                                                    </span>
+                                                    
+                                                </div>
+                                                <div class='col-12'>
+                                                    <small class='help-block text-warning'>{{ trans('langHelpManageDepartment') }}</small>
                                                 </div>
                                             </div>
                                         </label>
@@ -99,7 +100,7 @@
 
                                     <div class='form-group mt-5'>
                                         <div class='col-12'>
-                                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langAdd') }}'>
+                                            <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langAdd') }}'>
                                         </div>
                                     </div>       
                                 </fieldset>

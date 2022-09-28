@@ -278,7 +278,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
               <div class='col-6'>"
                     . form_buttons(array(
                         array(
-                            'class' => 'btn-primary submitAdminBtn w-100',
+                            'class' => 'btn-primary btn-sm submitAdminBtn w-100',
                             'text' => $GLOBALS['langSave'],
                             'name' => $action,
                             'value'=> $actionValue
@@ -288,7 +288,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
               <div class='col-6'>"
                     . form_buttons(array(
                         array(
-                            'class' => 'btn-secondary cancelAdminBtn w-100',
+                            'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
                             'href' =>  $_SERVER['SCRIPT_NAME'] . "?category=" . $catId
                         )
                     )) .

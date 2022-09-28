@@ -127,10 +127,10 @@ if (isset($_POST['toReorder'])) {
                <div class='col-12'>
                <div class='row'>
                   <div class='col-6'>
-                   <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                   <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='" . q($langSubmit) . "'>
                   </div>
                   <div class='col-6'>
-                   <a href='activity.php' class='btn btn-secondary cancelAdminBtn w-100'>$langCancel</a>
+                   <a href='activity.php' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
                   </div>
                </div>
                

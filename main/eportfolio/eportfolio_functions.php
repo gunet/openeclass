@@ -200,7 +200,7 @@ function render_eportfolio_fields_form() {
                 }
                 
                 $return_string['panels'] .= '<div class="'.$form_class.'">';
-                $return_string['panels'] .= '<label class="col-sm-6 control-label-notes" for="'.$f->shortname.'">'.q($f->name).'</label>';
+                $return_string['panels'] .= '<label class="col-sm-12 control-label-notes" for="'.$f->shortname.'">'.q($f->name).'</label>';
                 $return_string['panels'] .= '<div class="col-sm-12">';
 
                 //get data to prefill fields

@@ -56,12 +56,13 @@
                         <div class='col-md-6 col-12'>
                           <div class='form-group mt-3'>
                             <div class='col-12 checkbox'>
-                                <label @if (in_array($mid, $disabled)) class='not_visible' @endif>
-                                <input type='checkbox' name='module[{{ $mid }}]' value='1'
+                                <label class='d-inline-flex align-items-top @if(in_array($mid, $disabled)) not_visible @endif'>
+                                   <input type='checkbox' name='module[{{ $mid }}]' value='1'
                                     @if (in_array($mid, $default)) checked @endif
                                     @if (in_array($mid, $disabled)) disabled @endif>
-                                {!! icon($minfo['image']) !!} &nbsp; <div class='col-12'>{{ $minfo['title'] }}</div>
-                              </label>
+                                    <div class='mt-1 me-1'>{!! icon($minfo['image']) !!}</div>
+                                    {{ $minfo['title'] }}
+                                </label>
                             </div>
                           </div>
                         </div>
@@ -71,7 +72,7 @@
                       {!! showSecondFactorChallenge() !!}
                       <div class='form-group mt-5'>
                         <div class='col-12'>
-                          <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmitChanges') }}'>
+                          <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmitChanges') }}'>
                         </div>
                       </div>
                       {!! generate_csrf_token_form_field() !!}

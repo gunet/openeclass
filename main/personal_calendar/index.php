@@ -370,7 +370,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         <input type='hidden' id='id' name='id' value='$eventToModify'>
         <input type='hidden' name='rep' id='rep' value='$applytogroup'>
         <div class='form-group mt-3'>
-          <label for='newTitle' class='col-sm-6 control-label-notes'>$langTitle:</label>
+          <label for='newTitle' class='col-sm-12 control-label-notes'>$langTitle:</label>
           <div class='col-sm-12'>
                <input class='form-control' type='text' name='newTitle' id='newTitle' value='$titleToModify' placeholder='$langTitle'>
           </div>
@@ -379,7 +379,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         
 
         <div class='form-group mt-3'>
-          <label for='newContent' class='col-sm-6 control-label-notes'>$langDescription:</label>
+          <label for='newContent' class='col-sm-12 control-label-notes'>$langDescription:</label>
           <div class='col-sm-12'>
                " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
           </div>
@@ -418,7 +418,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
         
             <div class='form-group mt-3'>
-              <label for='frequencynumber' class='col-sm-6 control-label-notes'>$langRepeat $langEvery:</label>
+              <label for='frequencynumber' class='col-sm-12 control-label-notes'>$langRepeat $langEvery:</label>
               <div class='row'>
               <div class='col-md-6 col-12'>
                     <select class='form-select' name='frequencynumber' id='frequencynumber'>

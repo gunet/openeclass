@@ -1094,7 +1094,7 @@
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pe-3 pb-3 pt-3'>
                                             <fieldset>
-                                                <div class='form-group mt-3'>
+                                                <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
                                                             <label>
@@ -1177,13 +1177,6 @@
                                                     </div>
                                                 </div>
 
-                                               
-
-                                                {{--<div class='form-group mt-3'>
-                                                    <div class='col-sm-12'>
-                                                        <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSave') }}'>
-                                                    </div>
-                                                </div>--}}
                                             </fieldset>
                                         </div>
                                     </div>

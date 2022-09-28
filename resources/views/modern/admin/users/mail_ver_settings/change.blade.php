@@ -52,7 +52,7 @@
                                     {!! showSecondFactorChallenge() !!}
                              
                                     <div class='col-12 mt-5'>
-                                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langEdit') }}'>
+                                        <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langEdit') }}'>
                                     </div>
                                     <input type='hidden' name='old_mail_ver' value='{{ $sub }}'>		
                             </fieldset>

@@ -217,10 +217,12 @@ if (isset($_GET['action'])) {
                        
                             <div class='form-group mt-3'>
                                 <label class='col-sm-12 control-label-notes'>$langOrientation</label>
-                                <div class='col-sm-12 d-inline-flex'>
-                                    <label class='radio'><input type='radio' name='orientation' $cert_orientation_l value='L'>$langLandscape</label>
-                                    <label class='radio ms-2'><input type='radio' name='orientation' $cert_orientation_p value='P'>$langPortrait</label>
-                                </div>                                
+                                <div class='radio'>
+                                    <div class='col-sm-12 d-inline-flex align-items-top'>
+                                        <label class='radio'><input type='radio' name='orientation' $cert_orientation_l value='L'>$langLandscape</label>
+                                        <label class='radio ms-2'><input type='radio' name='orientation' $cert_orientation_p value='P'>$langPortrait</label>
+                                    </div> 
+                                </div>                               
                             </div>
                           
                             <div class='form-group mt-3'>
@@ -235,10 +237,10 @@ if (isset($_GET['action'])) {
                                 <div class='col-12'>
                                     <div class='row'>
                                         <div class='col-6'>
-                                           <button class='btn btn-primary submitAdminBtn w-100' type ='submit' name='submit_cert_template'>$langUpload</button>
+                                           <button class='btn btn-sm btn-primary submitAdminBtn w-100' type ='submit' name='submit_cert_template'>$langUpload</button>
                                         </div>
                                         <div class='col-6'>
-                                           <a class='btn btn-secondary cancelAdminBtn w-100' href='index.php'>$langCancel</a>
+                                           <a class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='index.php'>$langCancel</a>
                                         </div>
                                         
                                         
@@ -302,10 +304,10 @@ if (isset($_GET['action'])) {
                                 <div class='col-12'>
                                 <div class='row'>
                                 <div class='col-6'>
-                                <button class='btn btn-primary submitAdminBtn w-100' type ='submit' name='submit_badge_icon'>$langUpload</button>
+                                <button class='btn btn-sm btn-primary submitAdminBtn w-100' type ='submit' name='submit_badge_icon'>$langUpload</button>
                                 </div>
                                 <div class='col-6'>
-                                <a class='btn btn-secondary cancelAdminBtn w-100' href='index.php'>$langCancel</a>
+                                <a class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='index.php'>$langCancel</a>
                                 </div>
                                     
                                     

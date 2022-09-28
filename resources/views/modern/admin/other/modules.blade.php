@@ -54,9 +54,9 @@
                             <div class='col-md-6 col-12'>
                               <div class='form-group mt-3'>
                                 <div class='col-12 checkbox'>
-                                  <label>
+                                  <label class='d-inline-flex align-items-top'>
                                     <input type='checkbox' name='moduleDisable[{{ $mid }}]' value='1'{{ in_array($mid, $disabled)? ' checked': '' }}>
-                                      {!! icon($minfo['image']) !!} &nbsp;
+                                      <div class='mt-1 me-1'>{!! icon($minfo['image']) !!}</div>
                                       {{ $minfo['title'] }}
                                   </label>
                                 </div>
@@ -71,7 +71,7 @@
                         {!! showSecondFactorChallenge() !!}
                         <div class='form-group mt-5'>
                           <div class='col-12'>
-                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmitChanges') }}'>
+                            <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmitChanges') }}'>
                           </div>
                         </div>
                         {!! generate_csrf_token_form_field() !!}

@@ -372,7 +372,7 @@ if ($action == "createPost") {
         $commenting_setting = '';
         if ($comments_enabled) {
             $commenting_setting = "<div class='form-group mt-3'>
-                                       <label class='col-sm-6 control-label-notes'>$langBlogPostCommenting:</label>
+                                       <label class='col-sm-12 control-label-notes'>$langBlogPostCommenting:</label>
                                        <div class='col-12'>
                                            <div class='mt-2'>
                                                 <input type='radio' value='1' name='commenting' checked>
@@ -405,7 +405,7 @@ if ($action == "createPost") {
                 
 
                 <div class='form-group mt-3'>
-                    <label for='blogPostTitle' class='col-sm-6 control-label-notes'>$langBlogPostTitle:</label>
+                    <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle:</label>
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' placeholder='$langBlogPostTitle'>
                     </div>
@@ -414,7 +414,7 @@ if ($action == "createPost") {
              
 
                 <div class='form-group mt-3'>
-                    <label for='newContent' class='col-sm-6 control-label-notes'>$langBlogPostBody:</label>
+                    <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
                     <div class='col-sm-12'>
                         ".rich_text_editor('newContent', 4, 20, '')."
                     </div>
@@ -490,7 +490,7 @@ if ($action == "editPost") {
                 $commenting_setting = "
                 
                                         <div class='form-group mt-3'>
-                                           <label class='col-sm-6 control-label-notes'>$langBlogPostCommenting:</label>
+                                           <label class='col-sm-12 control-label-notes'>$langBlogPostCommenting:</label>
                                            <div class='col-sm-12'>
                                                <div>
                                                    <input type='radio' value='1' name='commenting' $checkCommentEn>
@@ -525,7 +525,7 @@ if ($action == "editPost") {
                
 
                 <div class='form-group mt-3'>
-                    <label for='blogPostTitle' class='col-sm-6 control-label-notes'>$langBlogPostTitle:</label>
+                    <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle:</label>
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' value='".q($post->getTitle())."' placeholder='$langBlogPostTitle'>
                     </div>
@@ -534,7 +534,7 @@ if ($action == "editPost") {
                
 
                 <div class='form-group mt-3'>
-                    <label for='newContent' class='col-sm-6 control-label-notes'>$langBlogPostBody:</label>
+                    <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
                     <div class='col-sm-12'>
                         ".rich_text_editor('newContent', 4, 20, $post->getContent())."
                     </div>

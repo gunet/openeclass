@@ -81,7 +81,7 @@
                                     @endforeach           
                                 </table>
                             </fieldset>
-                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                            <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
                             {!! generate_csrf_token_form_field() !!}
                         </form>
                     </div>

@@ -64,7 +64,7 @@
                                     <input type='hidden' name='u' value='{{ intval($u) }}'>
                                     {!! showSecondFactorChallenge() !!}
                                     <div class='col-12 mt-5'>                                                  
-                                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ $submit_button }}'>
+                                        <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ $submit_button }}'>
                                     </div>                                                  
                                 </fieldset>
                                 {!! $target_user_input !!}

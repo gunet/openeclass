@@ -64,10 +64,10 @@
                                         <div class='col-12'>
                                             <div class='row'>
                                                 <div class='col-6'>
-                                                    <button type="submit" class="btn btn-primary submitAdminBtn w-100" name="{{ $new? "submitFaq" : "modifyFaq" }}" value="{{ trans('submitBtnValue') }}">{{ trans('langSave') }}</button>
+                                                    <button type="submit" class="btn btn-sm btn-primary submitAdminBtn w-100" name="{{ $new? "submitFaq" : "modifyFaq" }}" value="{{ trans('submitBtnValue') }}">{{ trans('langSave') }}</button>
                                                 </div>
                                                 <div class='col-6'>
-                                                     <a href="{{ $_SERVER['SCRIPT_NAME'] }}" class="btn btn-secondary cancelAdminBtn w-100">{{ trans('langCancel') }}</a>
+                                                     <a href="{{ $_SERVER['SCRIPT_NAME'] }}" class="btn btn-sm btn-secondary cancelAdminBtn w-100">{{ trans('langCancel') }}</a>
                                                 </div>
                                             </div>
                                             
