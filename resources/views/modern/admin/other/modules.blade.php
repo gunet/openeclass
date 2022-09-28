@@ -56,7 +56,7 @@
                                 <div class='col-12 checkbox'>
                                   <label class='d-inline-flex align-items-top'>
                                     <input type='checkbox' name='moduleDisable[{{ $mid }}]' value='1'{{ in_array($mid, $disabled)? ' checked': '' }}>
-                                      <div class='mt-1 me-1'>{!! icon($minfo['image']) !!}</div>
+                                      <div class='mt-0 me-1'>{!! icon($minfo['image']) !!}</div>
                                       {{ $minfo['title'] }}
                                   </label>
                                 </div>

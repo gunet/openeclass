@@ -29,7 +29,7 @@
                                 <div class='d-flex justify-content-center'>
                                     <span>
                                         <span class='text-secondary'>{{ trans('langRegCourses') }}:</span>
-                                        <a class='btn btn-primary' href="{{ $urlAppend }}modules/auth/courses.php">
+                                        <a class='btn btn-sm btn-success' href="{{ $urlAppend }}modules/auth/courses.php">
                                             <span class='fa fa-plus'></span>
                                         </a>
                                     </span>

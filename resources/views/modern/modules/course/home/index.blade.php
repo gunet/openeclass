@@ -62,40 +62,47 @@
                             <div class='panel-body'>
                                 <div class='row'>
                                     <div class='col-12 pb-2'>
-                                        <ul class="nav navbar navbar-left d-flex d-inline-flex float-end">
-                                            <li class='nav-item d-inline-flex  align-items-center mr-2 ps-3 pe-3'>
-                                                <a href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation'>
-                                                    <span class='fa fa-paperclip fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langCitation') }}"></span>
-                                                </a>
-                                            </li>
-                                            @if($uid)
-                                                @if ($is_course_admin)
-                                                    <li class='nav-item d-inline-flex  align-items-center mr-2 ps-3 pe-3'>
-                                                        <a href="{{ $urlAppend }}modules/user/index.php?course={{$course_code}}">
-                                                            <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
+                                        <div class='row'>
+                                            <div class='col-md-6 d-none d-md-block d-flex justify-content-start align-items-center'>
+                                                <div class="d-none d-md-block p-2 text-white text-center fw-bold descCoursePanel">{{ trans('langCourseProgram') }}</div>
+                                            </div>
+                                            <div class='col-md-6 col-12'>
+                                                <ul class="nav navbar navbar-left d-flex d-inline-flex float-end">
+                                                    <li class='nav-item d-inline-flex align-items-center me-2 ps-3 pe-3'>
+                                                        <a href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation'>
+                                                            <span class='fa fa-paperclip fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langCitation') }}"></span>
                                                         </a>
                                                     </li>
-                                                @else
-                                                    @if ($visible == COURSE_CLOSED)
-                                                        <li class='nav-item d-inline-flex  align-items-center mr-2 ps-3 pe-3'>
-                                                            <a href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}">
-                                                                <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
+                                                    @if($uid)
+                                                        @if ($is_course_admin)
+                                                            <li class='nav-item d-inline-flex align-items-center me-2 ps-3 pe-3'>
+                                                                <a href="{{ $urlAppend }}modules/user/index.php?course={{$course_code}}">
+                                                                    <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
+                                                                </a>
+                                                            </li>
+                                                        @else
+                                                            @if ($visible == COURSE_CLOSED)
+                                                                <li class='nav-item d-inline-flex align-items-center me-2 ps-3 pe-3'>
+                                                                    <a href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}">
+                                                                        <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
+                                                                    </a>
+                                                                </li>
+                                                            @endif
+                                                        @endif
+                                                    @endif
+                                                    @if ($offline_course)
+                                                        <li class='nav-item d-inline-flex align-items-center me-2 ps-3 pe-3'>
+                                                            <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}">
+                                                                <span class="fa fa-download fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langDownloadCourse') }}"></span>
                                                             </a>
                                                         </li>
                                                     @endif
-                                                @endif
-                                            @endif
-                                            @if ($offline_course)
-                                                <li class='nav-item d-inline-flex  align-items-center mr-2 ps-3 pe-3'>
-                                                    <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}">
-                                                        <span class="fa fa-download fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langDownloadCourse') }}"></span>
-                                                    </a>
-                                                </li>
-                                            @endif
-                                        </ul>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div><hr>
                                     @if($course_info->home_layout == 1)
-                                        <div class='col-lg-6 col-12'>
+                                        <div class='col-md-6 col-12'>
                                             <figure>
                                                 <picture>
                                                     @if($course_info->course_image)
@@ -106,7 +113,7 @@
                                                 </picture>
                                             </figure>
                                         </div>
-                                        <div class='col-lg-6 col-12'>
+                                        <div class='col-md-6 col-12'>
                                             <div class='course_info'>
                                                 @if ($course_info->description)
                                                         {!! $course_info->description !!}
@@ -119,7 +126,6 @@
                                         <div class='col-12'>
                                             <div class='course_info'>
                                                 @if ($course_info->description)
-                                                        <div class="control-label-notes">{{ trans('langDescription') }}</div>
                                                         {!! $course_info->description !!}
                                                 @else
                                                     <p class='not_visible text-center'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
@@ -236,7 +242,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-8 col-lg-6 col-md-12 col_maincontent_unit mt-4">
+                    <div class="col-xl-8 col-lg-12 col-md-12 col_maincontent_unit mt-4">
                         @if (!$alter_layout)
                             <div class='panel panel-admin border border-secondary-4 shadow-sm'>
                                 <div class='panel-heading'>
@@ -302,33 +308,33 @@
 
                     </div><!-- end col units -->
 
-                    <div class="col-xl-4 col-lg-6 col-md-12 mt-lg-4 mt-4 float-end ">
+                    <div class="col-xl-4 col-lg-12 col-md-12 mt-lg-4 mt-4 float-end ">
 
                         <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar border border-secondary-4 shadow-sm">
                             {!! $user_personal_calendar !!}
                             <div class='col-12 mt-4 pb-2'>
                                 <div class='row rowMedium'>
-                                    <div class='col-12 event-legend'>
+                                    <div class='col-xl-12 col-md-6 col-12 event-legend'>
                                         <div class='d-inline-flex align-items-center'>
                                             <span class='event event-important'></span>
                                             <span>{{ trans('langAgendaDueDay') }}</span>
                                         </div>
                                     </div>
 
-                                    <div class='col-12 event-legend'>
+                                    <div class='col-xl-12 col-md-6 col-12 event-legend'>
                                         <div class='d-inline-flex align-items-center'>
                                             <span class='event event-info'></span>
                                             <span>{{ trans('langAgendaCourseEvent') }}</span>
                                         </div>
                                     </div>
 
-                                    <div class='col-12 event-legend'>
+                                    <div class='col-xl-12 col-md-6 col-12 event-legend'>
                                         <div class='d-inline-flex align-items-center'>
                                             <span class='event event-success'></span>
                                             <span>{{ trans('langAgendaSystemEvent') }}</span>
                                         </div>
                                     </div>
-                                    <div class='col-12 event-legend pb-3'>
+                                    <div class='col-xl-12 col-md-6 col-12 event-legend pb-3'>
                                         <div class='d-inline-flex align-items-center'>
                                             <span class='event event-special'></span>
                                             <span>{{ trans('langAgendaPersonalEvent') }}</span>

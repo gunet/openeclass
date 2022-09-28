@@ -5,57 +5,37 @@
 /*---------------------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------------------*/
 
-html{
-  height:100%;
-}
+html{height:100%;}
+
 body{
   background-color: #eaeaea;
   font-family: 'FontAwesome','Open Sans', Arial, sans-serif;
   font-size: 14px;
   line-height: 1.42857143;
 }
-span{
-  font-size: 14px;
-}
+span{font-size: 14px;}
 
 @media (max-width:1023px){
-  body{
-    font-size:15px;
-  }
-  select{
-    overflow-y:auto !important;
-  }
+  body{ font-size:15px; }
+  select{ overflow-y:auto !important; }
 }
 
-#menu-btn{
-   border-radius: 50%;
-}
+#menu-btn{ border-radius: 50%;}
 
-.h-400px{
-  height:400px;
-}
+.h-400px{ height:400px; }
 
-.lh-25px{
-  line-height: 25px;
-}
+.lh-25px{ line-height: 25px; }
 
-.tool-sidebar{
-  color: #f79256;
-}
-.tool-sidebar-text{
-  color:white;
-}
-.text-warning{
-  color:#f79256 !important;
-}
+.tool-sidebar{ color: #f79256; }
 
-.colorPalette{
-  color: #fbd1a2;
-}
+.tool-sidebar-text{color:white;}
 
-.colorPaletteBasic{
-  color : #1d4e89;
-}
+.text-warning{color:#f79256 !important;}
+
+.colorPalette{color: #fbd1a2;}
+
+.colorPaletteBasic{color : #1d4e89;}
+
 .eclass-bg{
   background-color : #1d4e89;
   border-radius: 50%;
@@ -66,24 +46,19 @@ span{
 .colorOrange{
   color: #f79256;
 }
-
 .panel-phpinfo{
   overflow-y: auto;
 }
-
 .lightColor{
   background: #f2f2f2;
 }
-
 img {
   max-width: 100%;
   height: auto;
 }
-
 .border-15px{
   border-radius:15px;
 }
-
 .navbar-eclass {
   overflow: visible;
   background:#1d4e89;
@@ -95,11 +70,9 @@ img {
 .eclass-nav-icon{
   width:132px; height:123px;
 }
-
 .bg-eclass-default{
   background:#1d4e89;
 }
-
 .eclass-nav-link {
   background: none;
   color: #fff;
@@ -107,13 +80,11 @@ img {
   padding-left: 10px;
   padding-right: 10px;
 }
-
 .eclass-nav-link:hover {
   background: none;
   color: #fff;
   text-decoration: underline;
 }
-
 .eclass-nav-link i {
   width: 30px;
   line-height: 30px;
@@ -122,18 +93,15 @@ img {
   margin-right: 10px;
   border-radius: 50%;
 }
-
 .eclass-nav-link i.active {
   border-color: #005ed7;
   background: #005ed7;
 }
-
 .modal-header .close{
   background-color: transparent;
   border-radius: 50%;
   color:#003F87;
 }
-
 a{
     text-decoration: none;
 }
@@ -142,24 +110,19 @@ a{
     font-size: 15px;
   }
 }
-
 .main-container{
     width:100%;
 }
-
 .btn:focus, .btn:active{
   outline: none !important;
   box-shadow: none;
 }
-
 .info-date{
   color:#36a3f7; 
 }
-
 .jstree-disabled{
   opacity: 0.3;
 }
-
 .textFileUpload{
   font-size:17px;
   color:#1d4e89;
@@ -638,6 +601,11 @@ select.form-select { -webkit-appearance: menulist; }
     height:30px;
     border-radius: 50%;
     border:0px;
+  }
+  .descCoursePanel{
+    border-radius: 35px 0px 35px 0px;
+    background: #003e87;
+    opacity: 0.7;
   }
 
   /* --------------------------------------------- MyDropdowns ----------------------------------------*/

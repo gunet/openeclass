@@ -731,7 +731,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 "</h4>
             </div>
             <div class='panel-body'>
-                  <h4>$question->question_text<br><small><em>".$aType[$question->qtype - 1]."</em></small></h4>
+                  <h6>$question->question_text<br><small><em>".$aType[$question->qtype - 1]."</em></small></h6>
             </div>
         </div>
     </div>";
@@ -750,7 +750,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                        
                             
                             <div class='col-9 control-label-notes'>
-                               <span>$langPollAddAnswer: </span><input class='btn btn-primary' type='submit' name='MoreAnswers' value='+'>
+                               <span>$langPollAddAnswer: </span><input class='btn btn-sm btn-primary' type='submit' name='MoreAnswers' value='+'>
                             </div>
                        
                     </div><hr><br>";
@@ -793,10 +793,18 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         }
         $tool_content .= "
        
-                    <div class='form-group mt-3'>
-                        <div class='col-sm-10 col-sm-offset-2'>
-                            <input class='btn btn-primary' type='submit' name='submitAnswers' value='$langCreate'>
-                            <a class='btn btn-secondary' href='admin.php?course=$course_code&amp;pid=$pid'>$langCancel</a>
+                    <div class='form-group mt-5'>
+                        <div class='col-12'>
+                            <div class='row'>
+                               <div class='col-6'>
+                                 <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submitAnswers' value='$langCreate'>
+                               </div>
+                               <div class='col-6'>
+                                 <a class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='admin.php?course=$course_code&amp;pid=$pid'>$langCancel</a>
+                               </div>
+                            </div>
+                            
+                            
                         </div>
                     </div>                    
                     </form>

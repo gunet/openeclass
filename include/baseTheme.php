@@ -296,7 +296,7 @@ function view($view_file, $view_data = array()) {
             $rgba_no_alpha = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
             $rgba_no_alpha[3] = '1';
             $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
-            $styles_str .= ".offcanvas-header,.offcanvas-body,#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer, #collapseTools, .panel-admin, #cal-header,
+            $styles_str .= ".offcanvas-header,.offcanvas-body,#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer, #collapseTools, .panel-admin, .descCoursePanel, #cal-header,
             .admin-list-group .list-group-item:hover{background:$theme_options_styles[leftNavBgColor];}
             .tool-sidebar{color:#ffffff;} 
             .statistics:before{background: $theme_options_styles[leftNavBgColor];}

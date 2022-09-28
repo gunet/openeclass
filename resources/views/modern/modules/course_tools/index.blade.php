@@ -95,8 +95,8 @@
                                                     </select>
                                                 </td>
                                                 <td class="text-center" style="vertical-align: middle;">
-                                                    <button type="button" class="btn btn-secondary" onClick="move('inactive_box','active_box')"><span class="fa fa-arrow-right"></span></button><br><br>
-                                                    <button type="button" class="btn btn-secondary" onClick="move('active_box','inactive_box')"><span class="fa fa-arrow-left"></span></button>
+                                                    <button type="button" class="btn btn-sm btn-secondary" onClick="move('inactive_box','active_box')"><span class="fa fa-arrow-right"></span></button><br><br>
+                                                    <button type="button" class="btn btn-sm btn-secondary" onClick="move('active_box','inactive_box')"><span class="fa fa-arrow-left"></span></button>
                                                 </td>
                                                 <td class="text-center">
                                                     <select class="form-select" name="toolStatActive[]" id='active_box' size='17' multiple>

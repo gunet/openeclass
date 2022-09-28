@@ -432,7 +432,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                                                     <button class="btn btn-secondary btn-sm" data-calendar-view="day">' . $langDay . '</button>
                                             </div>
                                         </div>
-                                        <h4></h4>
+                                        <h6></h6>
                                     </div>
                                 
                             </div>'
@@ -450,7 +450,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                 events_source: "' . $urlAppend . 'modules/agenda/calendar_data.php?course='.$course_code.'",
                 language: "el-GR",
                 onAfterViewLoad: function(view) {
-                            $(".calendar-header h4").text(this.getTitle());
+                            $(".calendar-header h6").text(this.getTitle());
                             $(".btn-group button").removeClass("active");
                             $("button[data-calendar-view=\'" + view + "\']").addClass("active");
                             $("button[data-calendar-nav=\'today\']").text(this.getTitle());

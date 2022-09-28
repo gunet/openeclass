@@ -60,7 +60,7 @@
                                    <input type='checkbox' name='module[{{ $mid }}]' value='1'
                                     @if (in_array($mid, $default)) checked @endif
                                     @if (in_array($mid, $disabled)) disabled @endif>
-                                    <div class='mt-1 me-1'>{!! icon($minfo['image']) !!}</div>
+                                    <div class='mt-0 me-1'>{!! icon($minfo['image']) !!}</div>
                                     {{ $minfo['title'] }}
                                 </label>
                             </div>

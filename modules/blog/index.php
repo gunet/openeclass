@@ -374,11 +374,11 @@ if ($action == "createPost") {
             $commenting_setting = "<div class='form-group mt-3'>
                                        <label class='col-sm-12 control-label-notes'>$langBlogPostCommenting:</label>
                                        <div class='col-12'>
-                                           <div class='mt-2'>
+                                           <div class='radio d-inline-flex align-items-top'>
                                                 <input type='radio' value='1' name='commenting' checked>
                                                 $langCommentsEn
                                            </div>
-                                           <div>
+                                           <div class='radio d-inline-flex align-items-top ms-xl-3 ms-lg-0 ms-md-3 ms-0'>
                                                 <input type='radio' value='0' name='commenting'>
                                                 $langCommentsDis
                                            </div>

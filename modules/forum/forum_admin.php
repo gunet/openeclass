@@ -544,7 +544,7 @@ elseif (isset($_GET['forumgodel'])) {
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;settings=yes' method='post'>
         <fieldset>
         <div class='form-group mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langForumPostRating:</label>
+            <label class='col-sm-12 control-label-notes'>$langForumPostRating:</label>
             <div class='col-sm-9'>
                 <div class='radio'>
                     <label><input type='radio' value='1' name='r_radio' $checkEn/>$langRatingEn</label>

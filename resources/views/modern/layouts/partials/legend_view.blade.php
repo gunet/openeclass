@@ -103,7 +103,7 @@
                                             <tr class='border-0'>
                                                 <th class='border-0'>
                                                     <div class='row'>
-                                                        <div class='col-2'>
+                                                        <div class='col-1'>
                                                             <span class='control-label-notes'>
                                                                 <span class="fas fa-tools text-warning pe-2" aria-hidden="true"></span>
                                                             </span>
@@ -121,7 +121,7 @@
                                         <tr class='border-0'>
                                             <th class='border-0'>
                                                 <div class='row'>
-                                                    <div class='col-2'>
+                                                    <div class='col-1'>
                                                         <span class='control-label-notes'>
                                                             <span class="fas fa-university text-warning pe-2" aria-hidden="true"></span>
                                                         </span>
@@ -139,7 +139,7 @@
                                         <tr class='border-0'>
                                             <th class='border-0'>
                                                 <div class='row'>
-                                                    <div class='col-2'>
+                                                    <div class='col-1'>
                                                         <span class='control-label-notes'>
                                                             <span class="fas fa-user text-warning pe-2" aria-hidden="true"></span>
                                                         </span>
@@ -156,7 +156,7 @@
                                         <tr class='border-0'>
                                             <th class='border-0'>
                                                 <div class='row'>
-                                                    <div class='col-2'>
+                                                    <div class='col-1'>
                                                         <span class='control-label-notes'>
                                                             <span class="fas fa-code text-warning pe-2" aria-hidden="true"></span>
                                                         </span>
@@ -191,7 +191,7 @@
                                             <tr class='border-0'>
                                                 <th class='border-0'>
                                                     <div class='row'>
-                                                        <div class='col-2'>
+                                                        <div class='col-1'>
                                                             <span class='control-label-notes'>
                                                                 <span class="fas fa-tools text-warning pe-2" aria-hidden="true"></span>
                                                             </span>
@@ -209,7 +209,7 @@
                                         <tr class='border-0'>
                                             <th class='border-0'>
                                                 <div class='row'>
-                                                    <div class='col-2'>
+                                                    <div class='col-1'>
                                                         <span class='control-label-notes'>
                                                             <span class="fas fa-university text-warning pe-2" aria-hidden="true"></span>
                                                         </span>
@@ -227,7 +227,7 @@
                                         <tr class='border-0'>
                                             <th class='border-0'>
                                                 <div class='row'>
-                                                    <div class='col-2'>
+                                                    <div class='col-1'>
                                                         <span class='control-label-notes'>
                                                             <span class="fas fa-user text-warning pe-2" aria-hidden="true"></span>
                                                         </span>
@@ -244,7 +244,7 @@
                                         <tr class='border-0'>
                                             <th class='border-0'>
                                                 <div class='row'>
-                                                    <div class='col-2'>
+                                                    <div class='col-1'>
                                                         <span class='control-label-notes'>
                                                             <span class="fas fa-code text-warning pe-2" aria-hidden="true"></span>
                                                         </span>
