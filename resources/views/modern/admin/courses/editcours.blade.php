@@ -39,7 +39,7 @@
                     <!--Display course information and link to edit-->
                     <div class='table-responsive'>
                         <table class='table-default'>
-                            <th class='list-header text-white' colspan='2'>{{ trans('langCourseInfo') }}{!! icon('fa-gear text-warning ps-2',trans('langModify'), "infocours.php?c=".$c) !!}</th>
+                            <th class='list-header text-white' colspan='2'>{{ trans('langCourseInfo') }}{!! icon('fa-gear orangeText ps-2',trans('langModify'), "infocours.php?c=".$c) !!}</th>
                             <tr>
                                 <th width='250'>{{ trans('langFaculty') }}</th>
                                 <td>
@@ -71,7 +71,7 @@
                     <!--Display course quota and link to edit-->
                     <div class='table-responsive mt-3'>
                         <table class='table-default'>
-                            <th class='list-header text-white' colspan='2'>{{ trans('langQuota') }}  {!! icon('fa-gear text-warning ps-2', trans('langModify'), "quotacours.php?c=".$c) !!}</th>
+                            <th class='list-header text-white' colspan='2'>{{ trans('langQuota') }}  {!! icon('fa-gear orangeText ps-2', trans('langModify'), "quotacours.php?c=".$c) !!}</th>
                             <tr>
                                 <td colspan='2'>
                                     <div class='sub_title1'>{{ trans('langTheCourse') }} {{ $course->title }}  {{ trans('langMaxQuota') }}</div>
@@ -100,7 +100,7 @@
                     <div class='table-responsive mt-3'>
                         <table class='table-default'>
                             <th class='list-header text-white' colspan='2'>
-                                {{ trans('langCourseStatus') }} {!! icon('fa-gear text-warning ps-2', trans('langModify'), "statuscours.php?c=".$c) !!}
+                                {{ trans('langCourseStatus') }} {!! icon('fa-gear orangeText ps-2', trans('langModify'), "statuscours.php?c=".$c) !!}
                             </th>
                             <tr>
                                 <th width='250'>{{ trans('langCurrentStatus') }}:</th>

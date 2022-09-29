@@ -36,7 +36,7 @@
                                                     <a class='control-label-notes' role='button' data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
                                                         <span>{{ $key+1 }}.</span>{!! $faq->title !!} <span class='caret'></span>
                                                     </a>
-                                                    <span class='fa fa-arrow-down text-warning ps-2 fs-6'></span>
+                                                    <span class='fa fa-arrow-down orangeText ps-2 fs-6'></span>
                                                 
                                             </div>
                                             <div id='faq-{{ $faq->id }}' class='panel-collapse accordion-collapse collapse' role='tabpanel' aria-labelledby='heading{{ $faq->id }}' data-bs-parent='#accordion'>

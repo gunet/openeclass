@@ -8,7 +8,7 @@
             <div class='d-none d-md-block'>
                 <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
                     <div class='shadow-lg p-3 bg-body rounded' style='height:65px;'>
-                        <span class='float-md-start pt-1'><i class="fas fa-graduation-cap text-warning"></i> <span class='control-label-notes'>{{ trans('langMyCourses') }}</span></span>
+                        <span class='float-md-start pt-1'><i class="fas fa-graduation-cap orangeText"></i> <span class='control-label-notes'>{{ trans('langMyCourses') }}</span></span>
                         <span class='float-md-end'>
                             <a class='btn btn-sm btn-success rounded-5' href="{{ $urlAppend }}modules/auth/courses.php">
                                 <span class='fa fa-plus pe-2'></span>{{ trans('langRegCourses') }}
@@ -23,7 +23,7 @@
                     <div class='h-100 shadow-lg p-3 bg-body rounded bg-primary'>
                         <div class='row'>
                             <div class='col-12'>
-                                <p class='text-center'><i class="fas fa-graduation-cap text-warning"></i> <span class='control-label-notes'>{{ trans('langMyCourses') }}</span></p>
+                                <p class='text-center'><i class="fas fa-graduation-cap orangeText"></i> <span class='control-label-notes'>{{ trans('langMyCourses') }}</span></p>
                             </div>
                             <div class='col-12 mt-2'>
                                 <div class='d-flex justify-content-center'>
@@ -92,7 +92,7 @@
                                         @endif
                                         @if($course->visible == 0) 
                                             <button type="button" class="btn btn-transparent" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langClosedCourse')}}">
-                                              <span class='fa fa-lock text-warning'></span>
+                                              <span class='fa fa-lock orangeText'></span>
                                             </button>
                                         @endif
                                         @if($course->visible == 3) 
@@ -133,7 +133,7 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    {{ trans('langConfirmUnregCours') }}<strong class="text-warning"> {{$course->title}}</strong>;
+                                                    {{ trans('langConfirmUnregCours') }}<strong class="orangeText"> {{$course->title}}</strong>;
                                                     <input type='hidden' name='fromMyCoursesPage' value="1">
                                                 </div>
                                                 <div class="modal-footer">

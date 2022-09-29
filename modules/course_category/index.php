@@ -70,7 +70,7 @@ $tool_content .= "
 <div class='col-sm-12'>
 <div class='panel panel-default panel-action-btn-default mt-3'>
     <div class='panel-heading'>
-        <h3 class='panel-title text-center'><span class='fas fa-tools text-warning pe-2'></span>" . $langCourseCategoryActions . "</h3>
+        <h3 class='panel-title text-center'><span class='fas fa-tools orangeText pe-2'></span>" . $langCourseCategoryActions . "</h3>
 
     </div>
     <form name='courseCategories' action='" . $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "' method='post' enctype='multipart/form-data'>

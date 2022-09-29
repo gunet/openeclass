@@ -123,11 +123,6 @@
 
                           @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-
-                          
-
-                          
-
                           @if(Session::has('message'))
                           <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
                               <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
@@ -153,44 +148,46 @@
                               
                               <form class='form-horizontal' role='form' method='post' action="{{ $form_url }}" onsubmit='return validateNodePickerForm();'>
                                 <fieldset>
-                                    <div class='form-group mt-3'>
-                                        <label for='fcode' class='col-sm-6 control-label-notes'>{{ trans('langCode') }}</label>
-                                        <div class='col-sm-12'>
-                                            <input type='text' class='form-control' name='fcode' id='fcode' value='{{ $public_code }}'>
+                                    <div class='row'>
+                                        <div class='col-md-6 col-12'>
+                                            <div class='form-group mt-3'>
+                                                <label for='fcode' class='col-sm-6 control-label-notes'>{{ trans('langCode') }}</label>
+                                                <div class='col-sm-12'>
+                                                    <input type='text' class='form-control' name='fcode' id='fcode' value='{{ $public_code }}'>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-
-        
-
-
-                                    <div class='form-group mt-3'>
-                                        <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langCourseTitle') }}:</label>
-                                        <div class='col-sm-12'>
-                                            <input type='text' class='form-control' name='title' id='title' value='{{ q($title) }}'>
+                                        <div class='col-md-6 col-12'>
+                                            <div class='form-group mt-3'>
+                                                <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langCourseTitle') }}:</label>
+                                                <div class='col-sm-12'>
+                                                    <input type='text' class='form-control' name='title' id='title' value='{{ q($title) }}'>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
                                   
 
+                                    <div class='row'>
+                                        <div class='col-md-6 col-12'>
+                                            <div class='form-group mt-3'>
+                                                <label for='teacher_name' class='col-sm-12 control-label-notes'>{{ trans('langTeachers') }}:</label>
+                                                <div class='col-sm-12'>
+                                                    <input type='text' class='form-control' name='teacher_name' id='teacher_name' value='{{ $teacher_name }} '>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                    <div class='form-group mt-3'>
-                                        <label for='teacher_name' class='col-sm-12 control-label-notes'>{{ trans('langTeachers') }}:</label>
-                                        <div class='col-sm-12'>
-                                            <input type='text' class='form-control' name='teacher_name' id='teacher_name' value='{{ $teacher_name }} '>
+                                        <div class='col-md-6 col-12'>
+                                            <div class='form-group mt-3'>
+                                                <label for='Faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</label>
+                                                <div class='col-sm-12'>
+                                                    {!! $buildusernode !!}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-
-                                
-
-
-                                    <div class='form-group mt-3'>
-                                        <label for='Faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</label>
-                                        <div class='col-sm-12'>
-                                            {!! $buildusernode !!}
-                                        </div>
-                                    </div>
-
-                                    
 
 
                                     <div class='form-group mt-3'>
@@ -199,8 +196,6 @@
                                             <input type='text' class='form-control' name='course_keywords' id='course_keywords' value='{{ $course_keywords }}'>
                                         </div>
                                     </div>
-
-                                
 
 
                                     <div class='form-group mt-3'>
@@ -232,7 +227,6 @@
                                     @endif
 
                                     
-
                                     <div class='form-group mt-3'>
                                         <label class='col-sm-12 control-label-notes'>{{ trans('langOpenCoursesLicense') }}:</label>
                                         <div class='col-sm-12'>
@@ -257,8 +251,6 @@
                                         </div>
                                     </div>
 
-                                    
-
 
                                     <div class='form-group mt-3'>
                                         <div class='col-sm-12 col-sm-offset-2' id='cc'>
@@ -266,9 +258,7 @@
                                         </div>
                                     </div>
 
-                                    
-
-
+ 
                                     <div class='form-group mt-3'>
                                         <label class='col-sm-12 control-label-notes'>{{ trans('langConfidentiality') }}:</label>
                                         <div class='col-sm-12'>
@@ -280,7 +270,7 @@
                                                     <span class='ps-2 pe-2 mt-1'>{{ trans('langOpenCourse') }}</span>
                                                 </div>
                                             </div>
-                                            <small class='text-warning'>{{ trans('langPublic') }}</small>
+                                            <small class='orangeText'>{{ trans('langPublic') }}</small>
 
                                             <div class='radio'>
                                                 <div class='d-inline-flex align-items-top mt-3'>
@@ -290,7 +280,7 @@
                                                     
                                                 </div>
                                             </div>
-                                            <small class='ps-2 text-warning'>{{ trans('langPrivOpen') }}</small>
+                                            <small class='ps-2 orangeText'>{{ trans('langPrivOpen') }}</small>
 
                                             <div class='radio'>
                                                 <div class='d-inline-flex align-items-top mt-3'>
@@ -299,7 +289,7 @@
                                                     <span class='ps-2 pe-2 mt-1'>{{ trans('langClosedCourse') }}</span>
                                                 </div>
                                             </div>
-                                            <small class='text-warning'>{{ trans('langClosedCourseShort') }}</small>
+                                            <small class='orangeText'>{{ trans('langClosedCourseShort') }}</small>
 
                                             <div class='radio'>
                                                 <div class='d-inline-flex align-items-top mt-3'>                                        
@@ -308,10 +298,9 @@
                                                     <span class='ps-2 pe-2 mt-1'>{!! trans('langInactiveCourse') !!}</span>
                                                 </div>
                                             </div>
-                                            <small class='text-warning'>{{ trans('langCourseInactive') }}</small>
+                                            <small class='orangeText'>{{ trans('langCourseInactive') }}</small>
                                         </div>
                                     </div>
-
 
 
                                     <div class='form-group mt-3'>
@@ -325,15 +314,12 @@
                                     </div>
 
 
-
                                     <div class='form-group mt-3'>
                                         <label for='Options' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}:</label>
                                         <div class='col-sm-12'>
                                             {!! $lang_select_options !!}
                                         </div>
                                     </div>
-
-
 
 
                                     <div class='form-group mt-3'>
@@ -352,8 +338,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-
 
 
                                     <div class='form-group mt-3'>

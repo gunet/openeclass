@@ -82,15 +82,15 @@ if ($userdata) {
         } elseif ($userdata->eportfolio_enable == 1) {
             load_js('clipboard.js');
             $clipboard_link = "
-                            <div class='margin-bottom-fat mt-3'>
-                                <div class='margin-bottom-thin'><strong>$langPageLink</strong></div>
-                                <div class='input-group'>
+                            <div class='panel panel-default mt-3'>
+                                <div class='panel-heading'>$langPageLink</div>
+                                <div class='panel-body'>
                                     <input class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?id=$id&token=$token'>
-                                    <span class='input-group-btn'>
-                                        <button class='btn btn-primary' id='copy-btn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-clipboard-target='#page-link'>
+                                    <div class='input-group-btn text-end mt-2'>
+                                        <button class='btn btn-sm btn-primary' id='copy-btn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-clipboard-target='#page-link'>
                                             <span class='fa fa-clipboard'></span>&nbsp;&nbsp;&nbsp;$langCopy
                                         </button>
-                                    </span>
+                                    </div>
                                 </div>                              
                             </div>";
             $tool_content .= "<script type='text/javascript'>

@@ -168,7 +168,7 @@
                                                         <i class="fas fa-up-down-left-right text-primary"></i>
                                                         <i class="fas fa-eye-slash text-secondary"></i>
                                                         <i class="fas fa-pen text-primary"></i>
-                                                        <i class="ms-auto fas fa-trash text-warning"></i> </div>
+                                                        <i class="ms-auto fas fa-trash orangeText"></i> </div>
                                                     <h5 class="text-primary my-courses-diastimata">Εισαγωγή στο Διαδικτυακό Ραδιόφωνο και τηλεόραση</h5>
 
                                                     <p>Μια σειρά απο υπηρεσίες Web και ελεύθερο λογισμικό επιτρέπουν στους χρήστες να δημιουργήσουν το δικό τους διαδικτυακό ραδιόφωνο ή τηλεοπτικό
@@ -184,7 +184,7 @@
                                                         <i class="fas fa-arrows-up-down-left-right text-primary"></i>
                                                         <i class="fas fa-eye-slash text-secondary"></i>
                                                         <i class="fas fa-pen text-primary"></i>
-                                                        <i class="ms-auto fas fa-trash text-warning"></i></div>
+                                                        <i class="ms-auto fas fa-trash orangeText"></i></div>
 
 
 
@@ -204,7 +204,7 @@
                                                         <i class="fas fa-up-down-left-right text-primary"></i>
                                                         <i class="fas fa-eye-slash text-secondary"></i>
                                                         <i class="fas fa-pen text-primary"></i>
-                                                        <i class="ms-auto fas fa-trash text-warning"></i>
+                                                        <i class="ms-auto fas fa-trash orangeText"></i>
                                                     </div>
 
                                                     <div class="text-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample1" aria-expanded="false" aria-controls="collapseExample">

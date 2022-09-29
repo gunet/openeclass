@@ -281,7 +281,7 @@ if (isset($_GET['mid'])) {
             </fieldset>";
 
             $out .= "
-                <div class='float-end'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+                <div class='text-end'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                </form></div></div>";
             if ($course_id == 0) {
                 $out .= "</div>";
@@ -416,7 +416,7 @@ if (isset($_GET['mid'])) {
                     </div>
                 </fieldset>";
 
-            $out .= "<div class='float-end'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+            $out .= "<div class='text-end'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                </form></div></div>";
             if ($course_id == 0) {
                 $out .= "</div>";

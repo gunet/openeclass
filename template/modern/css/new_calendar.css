@@ -1,60 +1,31 @@
 
 /* header-calendar */
-.cal-row-fluid.cal-row-head{
-    color:blue;
-    background-color: white;
-    border-bottom: 1px solid blue;
-}
+.cal-row-fluid.cal-row-head{ color:blue;  background-color: white;  border-bottom: 1px solid blue; }
 
-#cal-header{
-    background-color: #003F87;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    margin-left:-25px;
-    margin-right:-25px;
-}
+#cal-header{ background-color: #003F87;  border-top-left-radius: 15px; border-top-right-radius: 15px;  margin-left:-25px; margin-right:-25px; }
 
 @media (max-width: 991px){
-    #cal-header{
-       margin-left:0px;
-       margin-right:0px;
-    }
+    #cal-header{  margin-left:0px;  margin-right:0px; }
 }
 
 /* month-row */
-.cal-month-box{
-    border: 0px;
-    background-color: white ;
-}
-#current-month{
-    color:white;
-}
-#cal-header .fa-chevron-left{
-    color:white;
-   
-}
-#cal-header .fa-chevron-right{
-    color:white;
-   
-}
-.container_fluid_calendar{
-    border-radius: 15px;
-    height:auto;
-}
-.cal-month-day{
-    margin-left: 10px;
-    font-size: 13px;
-}
-.cal-day-today{
-    margin-left: 0px;
-}
-.cal-day-today span[data-bs-original-title] {
-    margin-right:4px;
-}
+.cal-month-box{  border: 0px;  background-color: white ; }
 
-.events-list{
-    margin-left: -5px;
-}
+#current-month{  color:white; }
+
+#cal-header .fa-chevron-left{ color:white; }
+
+#cal-header .fa-chevron-right{ color:white; }
+
+.container_fluid_calendar{ border-radius: 15px; height:auto; }
+
+.cal-month-day{ margin-left: 10px; font-size: 13px; }
+
+.cal-day-today{ margin-left: 0px; }
+
+.cal-day-today span[data-bs-original-title] { margin-right:4px; }
+
+.events-list{ margin-left: -5px; }
 
 /*****************************************/
 /*****************************************/
@@ -64,14 +35,9 @@
 /*****************************************/
 /*****************************************/
 
- .table-condensed{
-    width:100%;
- }
+ .table-condensed{ width:100%; }
 
- .table-condensed th,
-  .table-condensed td {
-    padding: 4px 15px;
-  }
+ .table-condensed th, .table-condensed td { padding: 4px 15px; }
 
   .table-condensed thead > tr > th,
   .table-condensed tbody > tr > th,
@@ -82,44 +48,16 @@
      padding: 5px;
   }
 
-  .table-condensed thead tr th.next{
-    height: auto;
-    width: auto;
-    border: 2px solid #003F87;
-    border-radius: 50%;
-    visibility: visible;
-  }
-  .table-condensed thead tr th.next::after{
-    content: '>';
-    font-size: 20px;
-    font-weight: 500;
-  }
-  .table-condensed thead tr th.next:hover{
-    background-color: transparent;
-  }
+  .table-condensed thead tr th.next{ height: auto;  width: auto; border: 2px solid #003F87; border-radius: 50%; visibility: visible; }
 
-  .table-condensed thead tr th.switch{
-    height: auto;
-    width: auto;
-    border: 2px solid #003F87;
-    margin-left:30px;
-    margin-right:30px;
-    visibility: visible;
-    color: orange;
-  }
+  .table-condensed thead tr th.next::after{ content: '>'; font-size: 20px; font-weight: 500; }
 
-  .table-condensed thead tr th.prev{
-    height: auto;
-    width: auto;
-    border: 2px solid #003F87;
-    border-radius: 50%;
-    visibility: visible;
-  }
-  .table-condensed thead tr th.prev::before{
-    content: '<';
-    font-size: 20px;
-    font-weight: 500;
-  }
-  .table-condensed thead tr th.prev:hover{
-    background-color: transparent;
-  }
+  .table-condensed thead tr th.next:hover{ background-color: transparent; }
+
+  .table-condensed thead tr th.switch{ height: auto; width: auto; border: 2px solid #003F87; margin-left:30px; margin-right:30px; visibility: visible; color: orange; }
+
+  .table-condensed thead tr th.prev{ height: auto; width: auto; border: 2px solid #003F87;border-radius: 50%; visibility: visible; }
+
+  .table-condensed thead tr th.prev::before{ content: '<'; font-size: 20px; font-weight: 500; }
+
+  .table-condensed thead tr th.prev:hover{ background-color: transparent; }

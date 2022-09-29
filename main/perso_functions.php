@@ -210,7 +210,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                         <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                                     </div>
                                 <div class='text-secondary'>$course_title</div>
-                                <div class='text-warning'>$ann_date</div>
+                                <div class='orangeText'>$ann_date</div>
                             </div>
                         </li>";
                 } else {
@@ -225,7 +225,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
 
                             <div class='text-secondary'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></div>
 
-                            <div class='text-warning'>$ann_date</div>
+                            <div class='orangeText'>$ann_date</div>
                         </div>
                     </li>";
                 }
@@ -267,7 +267,7 @@ function getUserMessages() {
                                             <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
                                         </div>
                                         <div class='text-secondary'>$course_title</div>
-                                        <div class='text-warning'>$message_date</div>
+                                        <div class='orangeText'>$message_date</div>
                                     </div>
                                 </li>";
         }

@@ -64,7 +64,7 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/create_course/create_course.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-plus-circle text-warning pt-1"></span>
+                                                        <span class="fas fa-plus-circle orangeText pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
                                                         <span class='fw-bold'>
@@ -79,7 +79,7 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/portfolio.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-home bg-transparent text-warning pt-1"></span>
+                                                        <span class="fas fa-home bg-transparent orangeText pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
                                                         <span class='fw-bold'>
@@ -94,7 +94,7 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/my_courses.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-graduation-cap text-warning pt-1"></span>
+                                                        <span class="fas fa-graduation-cap orangeText pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
                                                         <span class='fw-bold'>
@@ -109,7 +109,7 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/announcements/myannouncements.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-bell text-warning pt-1"></span>
+                                                        <span class="fas fa-bell orangeText pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
                                                         <span class='fw-bold'>
@@ -124,7 +124,7 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/notes/index.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-sticky-note text-warning pt-1"></span>
+                                                        <span class="fas fa-sticky-note orangeText pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
                                                         <span class='fw-bold'>
@@ -139,7 +139,7 @@
                                                 <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}">
                                                     <div class='row'>
                                                         <div class='col-1'>
-                                                            <span class="fas fa-briefcase text-warning pt-1"></span>
+                                                            <span class="fas fa-briefcase orangeText pt-1"></span>
                                                         </div>
                                                         <div class='col-10 ps-3 pe-3'>
                                                             <span class='fw-bold'>
@@ -154,7 +154,7 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/usage/index.php?t=u">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-chart-bar text-warning pt-1"></span>
+                                                        <span class="fas fa-chart-bar orangeText pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
                                                         <span class='fw-bold'>
@@ -169,7 +169,7 @@
                                                 <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}">
                                                     <div class='row'>
                                                         <div class='col-1'>
-                                                            <span class="fas fa-location-arrow text-warning pt-1"></span>
+                                                            <span class="fas fa-location-arrow orangeText pt-1"></span>
                                                         </div>
                                                         <div class='col-10 ps-3 pe-3'>
                                                             <span class='fw-bold'>
@@ -184,7 +184,7 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/message/index.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-envelope text-warning pt-1"></span>
+                                                        <span class="fas fa-envelope orangeText pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
                                                         <span class='fw-bold'>
@@ -198,7 +198,7 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/personal_calendar/index.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-bell text-warning pt-1"></span>
+                                                        <span class="fas fa-bell orangeText pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
                                                         <span class='fw-bold'>
@@ -212,7 +212,7 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/profile/display_profile.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-user text-warning pt-1"></span>
+                                                        <span class="fas fa-user orangeText pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
                                                         <span class='fw-bold'>
@@ -226,7 +226,7 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/my_widgets.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fa fa-magic fa-fw text-warning pt-1"></span>
+                                                        <span class="fa fa-magic fa-fw orangeText pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
                                                         <span class='fw-bold'>
@@ -240,7 +240,7 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/gradebookUserTotal/index.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fa fa-sort-numeric-desc fa-fw text-warning pt-1"></span>
+                                                        <span class="fa fa-sort-numeric-desc fa-fw orangeText pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
                                                         <span class='fw-bold'>
@@ -254,7 +254,7 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/mycertificates.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fa fa-trophy fa-fw text-warning pt-1"></span>
+                                                        <span class="fa fa-trophy fa-fw orangeText pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
                                                         <span class='fw-bold'>
@@ -269,7 +269,7 @@
                                                 <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/mydocs/index.php">
                                                     <div class='row'>
                                                         <div class='col-1'>
-                                                            <span class="fas fa-folder text-warning pt-1"></span>
+                                                            <span class="fas fa-folder orangeText pt-1"></span>
                                                         </div>
                                                         <div class='col-10 ps-3 pe-3'>
                                                             <span class='fw-bold'>

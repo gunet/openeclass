@@ -16,7 +16,7 @@
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 shadow p-3 pb-3 bg-body rounded bg-primary'>
                         <div class='d-flex justify-content-center ps-1 pt-1 pb-2'>
                             <span class="control-label-notes">
-                                <i class="fas fa-tools text-warning" aria-hidden="true"></i> 
+                                <i class="fas fa-tools orangeText" aria-hidden="true"></i> 
                                 Copyright
                             </span>
                         </div>

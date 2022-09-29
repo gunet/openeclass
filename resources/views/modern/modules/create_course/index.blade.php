@@ -281,7 +281,7 @@
                                             <span class='ps-2'>{!! $icon_course_open !!}</span> 
                                             <span class='ps-2'>{{ trans('langOpenCourse') }}</span>
                                           </div><br>
-                                          <small class='text-warning'>{{ trans('langPublic') }}</small>
+                                          <small class='orangeText'>{{ trans('langPublic') }}</small>
                                         </div>
 
                                         <div class="col-xl-3 col-md-3 col-12 mt-md-0 mt-3">
@@ -290,7 +290,7 @@
                                             <span class='ps-2'>{!! $icon_course_registration !!}</span>
                                             <span class='ps-3'>{{ trans('langRegCourse') }}</span>
                                           </div><br>
-                                          <small class='text-warning'>{{ trans('langPrivOpen') }}</small>
+                                          <small class='orangeText'>{{ trans('langPrivOpen') }}</small>
                                         </div>
 
                                         <div class="col-xl-3 col-md-3 col-12 mt-md-0 mt-3">
@@ -299,7 +299,7 @@
                                             <span class='ps-2'>{!! $icon_course_closed !!}</span>
                                             <span class='ps-2'>{{ trans('langClosedCourse') }}</span>
                                           </div><br>
-                                          <small class='text-warning'>{{ trans('langClosedCourseShort') }}</small>
+                                          <small class='orangeText'>{{ trans('langClosedCourseShort') }}</small>
                                         </div>
 
                                         <div class="col-xl-3 col-md-3 col-12 mt-md-0 mt-3">
@@ -308,7 +308,7 @@
                                                 <span class='ps-2'>{!! $icon_course_inactive !!}</span>
                                                 <span class='ps-2'>{{ trans('langInactiveCourse') }}</span>
                                             </div><br>
-                                            <small class='text-warning'>{{ trans('langCourseInactive') }}</small>
+                                            <small class='orangeText'>{{ trans('langCourseInactive') }}</small>
                                         </div>                   
                                       </div>
                                     </div>

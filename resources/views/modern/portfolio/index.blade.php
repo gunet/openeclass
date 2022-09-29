@@ -387,7 +387,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-4 bg-white calendar_announce_message_col mt-0 ps-lg-0 pe-lg-5 pt-lg-5 pb-lg-5 ps-md-5 pe-md-5 pt-md-3 pb-md-5 ps-3 pe-3 pt-3 pb-5">
+        <div class="col-12 col-lg-4 calendar_announce_message_col mt-0 ps-lg-0 pe-lg-5 pt-lg-5 pb-lg-5 ps-md-5 pe-md-5 pt-md-3 pb-md-5 ps-3 pe-3 pt-3 pb-5">
 
 
             <div class="container-fluid container_fluid_calendar container_fluid_calendar_portfolio bg-white border border-secondary-4 shadow-sm mt-lg-0 mt-md-4 mt-4">

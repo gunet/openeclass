@@ -34,7 +34,7 @@
                         <li class="list-group-item border-0 admin-list-group">
                             <a href="{{$urlAppend}}modules/admin/addadmin.php" class='list-group-item'>
                                 <div class='d-inline-flex'>
-                                    <span class='fa fa-caret-right fa-fw mt-1 text-warning'></span>
+                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
                                     <span class='toolAdminText'>{!!  $GLOBALS['langAdmins'] !!}</span>   
                                  </div>  
                             </a>
@@ -44,7 +44,7 @@
                         <li class="list-group-item border-0 admin-list-group">
                             <a href="{{$urlAppend}}modules/admin/adminannouncements.php" class='list-group-item'>
                                 <div class='d-inline-flex'>
-                                    <span class='fa fa-caret-right fa-fw mt-1 text-warning'></span>
+                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
                                     <span class='toolAdminText'>{!!  $GLOBALS['langAdminAn'] !!}</span>
                                 </div>    
                             </a>
@@ -53,7 +53,7 @@
                         <li class="list-group-item border-0 admin-list-group">
                             <a href="http://docs.openeclass.org/{{$manual_language}}/admin" class='list-group-item'>
                                 <div class='d-inline-flex'>
-                                    <span class='fa fa-caret-right fa-fw mt-1 text-warning'></span>
+                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
                                     <span class='toolAdminText'>{!!  $GLOBALS['langAdminManual'] !!}</span>      
                                 </div>
                             </a>
@@ -75,7 +75,7 @@
                     <li class="list-group-item border-0 admin-list-group">
                         <a href="{!! $tool_group[2][$key2] !!}" class='list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                             <div class='d-inline-flex'>
-                                <span class='fa fa-caret-right fa-fw mt-1 text-warning'></span>
+                                <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
                                 <span class='toolAdminText'>{!! $tool !!}</span>
                             </div>
                                
@@ -98,7 +98,7 @@
                             <li class="list-group-item border-0 admin-list-group">
                                 <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='list-group-item'>
                                     <div class='d-inline-flex'>
-                                        <span class='fa fa-caret-right fa-fw mt-1 text-warning'></span>
+                                        <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
                                         <span class='toolAdminText'>{!!  $GLOBALS['langHierarchy'] !!}</span>   
                                     </div>   
                                 </a>
@@ -106,7 +106,7 @@
                             <li class="list-group-item border-0 admin-list-group">
                                 <a href="{{$urlAppend}}modules/admin/coursecategory.php" class='list-group-item'>
                                         <div class='d-inline-flex'>
-                                            <span class='fa fa-caret-right fa-fw mt-1 text-warning'></span>
+                                            <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
                                             <span class='toolAdminText'>{!!  $GLOBALS['langCourseCategoryActions'] !!}</span>
                                         </div>      
                                 </a>

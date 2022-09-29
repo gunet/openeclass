@@ -51,7 +51,7 @@
            @endforeach
         </div>   
         @else
-        <div class='text-warning margin-bottom-fat'>
+        <div class='orangeText margin-bottom-fat'>
             {{ trans('langNoInstalledWidgets') }}
         </div>       
         @endif
@@ -88,7 +88,7 @@
             @endforeach
         </div>
         @else
-        <div class='text-warning margin-bottom-fat'>
+        <div class='orangeText margin-bottom-fat'>
             {{ trans('langNoAvailableWidgets') }}
         </div>       
         @endif        

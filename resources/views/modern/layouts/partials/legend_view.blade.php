@@ -9,30 +9,30 @@
                             @if($toolName)
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span class="fas fa-tools text-warning pe-2" aria-hidden="true"></span>{{$toolName}}
+                                        <span class="fas fa-tools orangeText pe-2" aria-hidden="true"></span>{{$toolName}}
                                     </span>
                                 </div>
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span class='fas fa-university text-warning pe-2'></span>{{$currentCourseName}}
+                                        <span class='fas fa-university orangeText pe-2'></span>{{$currentCourseName}}
                                     </span>
                                 </div>
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span class='fas fa-user text-warning pe-1'></span><span class='text-secondary fs-6 ms-1'>{{course_id_to_prof($course_id)}}</span>
-                                        <span class="fas fa-code text-warning pe-1"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                                     
+                                        <span class='fas fa-user orangeText pe-1'></span><span class='text-secondary fs-6 ms-1'>{{course_id_to_prof($course_id)}}</span>
+                                        <span class="fas fa-code orangeText pe-1"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                                     
                                     </span>
                                 </div>
                             @else
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span class='fas fa-university text-warning pe-2'></span>{{$currentCourseName}}
+                                        <span class='fas fa-university orangeText pe-2'></span>{{$currentCourseName}}
                                     </span>
                                 </div>
                                 <div class='row'>      
                                     <span class='control-label-notes'>
-                                        <span class='fas fa-user text-warning pe-2'></span><span class='text-secondary fs-6'>{{course_id_to_prof($course_id)}}</span> 
-                                        <span class="fas fa-code text-warning pe-2"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                              
+                                        <span class='fas fa-user orangeText pe-2'></span><span class='text-secondary fs-6'>{{course_id_to_prof($course_id)}}</span> 
+                                        <span class="fas fa-code orangeText pe-2"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                              
                                     </span>
                                 </div>
                             @endif
@@ -47,30 +47,30 @@
                             @if($toolName)
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span class="fas fa-tools text-warning pe-2" aria-hidden="true"></span>{{$toolName}}
+                                        <span class="fas fa-tools orangeText pe-2" aria-hidden="true"></span>{{$toolName}}
                                     </span>
                                 </div>
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span class='fas fa-university text-warning pe-2'></span>{{$currentCourseName}}
+                                        <span class='fas fa-university orangeText pe-2'></span>{{$currentCourseName}}
                                     </span>
                                 </div>
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span class='fas fa-user text-warning pe-1'></span><span class='text-secondary fs-6 ms-1'>{{course_id_to_prof($course_id)}}</span>
-                                        <span class="fas fa-code text-warning pe-1"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                                     
+                                        <span class='fas fa-user orangeText pe-1'></span><span class='text-secondary fs-6 ms-1'>{{course_id_to_prof($course_id)}}</span>
+                                        <span class="fas fa-code orangeText pe-1"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                                     
                                     </span>
                                 </div>
                             @else
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span class='fas fa-university text-warning pe-2'></span>{{$currentCourseName}}
+                                        <span class='fas fa-university orangeText pe-2'></span>{{$currentCourseName}}
                                     </span>
                                 </div>
                                 <div class='row'>      
                                     <span class='control-label-notes'>
-                                        <span class='fas fa-user text-warning pe-2'></span><span class='text-secondary fs-6'>{{course_id_to_prof($course_id)}}</span> 
-                                        <span class="fas fa-code text-warning pe-2"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                              
+                                        <span class='fas fa-user orangeText pe-2'></span><span class='text-secondary fs-6'>{{course_id_to_prof($course_id)}}</span> 
+                                        <span class="fas fa-code orangeText pe-2"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                              
                                     </span>
                                 </div>
                             @endif
@@ -80,7 +80,7 @@
             @else
                 <div class='d-flex justify-content-center ps-1 pt-1 pb-2'>
                     <span class="control-label-notes">
-                        <i class="fas fa-tools text-warning" aria-hidden="true"></i> 
+                        <i class="fas fa-tools orangeText" aria-hidden="true"></i> 
                         {{$toolName}} 
                     </span>
                 </div>
@@ -105,7 +105,7 @@
                                                     <div class='row'>
                                                         <div class='col-1'>
                                                             <span class='control-label-notes'>
-                                                                <span class="fas fa-tools text-warning pe-2" aria-hidden="true"></span>
+                                                                <span class="fas fa-tools orangeText pe-2" aria-hidden="true"></span>
                                                             </span>
                                                         </div>
                                                         <div class='col-10'>
@@ -123,7 +123,7 @@
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class='control-label-notes'>
-                                                            <span class="fas fa-university text-warning pe-2" aria-hidden="true"></span>
+                                                            <span class="fas fa-university orangeText pe-2" aria-hidden="true"></span>
                                                         </span>
                                                     </div>
                                                     <div class='col-10'>
@@ -141,7 +141,7 @@
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class='control-label-notes'>
-                                                            <span class="fas fa-user text-warning pe-2" aria-hidden="true"></span>
+                                                            <span class="fas fa-user orangeText pe-2" aria-hidden="true"></span>
                                                         </span>
                                                     </div>
                                                     <div class='col-10'>
@@ -158,7 +158,7 @@
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class='control-label-notes'>
-                                                            <span class="fas fa-code text-warning pe-2" aria-hidden="true"></span>
+                                                            <span class="fas fa-code orangeText pe-2" aria-hidden="true"></span>
                                                         </span>
                                                     </div>
                                                     <div class='col-10'>
@@ -193,7 +193,7 @@
                                                     <div class='row'>
                                                         <div class='col-1'>
                                                             <span class='control-label-notes'>
-                                                                <span class="fas fa-tools text-warning pe-2" aria-hidden="true"></span>
+                                                                <span class="fas fa-tools orangeText pe-2" aria-hidden="true"></span>
                                                             </span>
                                                         </div>
                                                         <div class='col-10'>
@@ -211,7 +211,7 @@
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class='control-label-notes'>
-                                                            <span class="fas fa-university text-warning pe-2" aria-hidden="true"></span>
+                                                            <span class="fas fa-university orangeText pe-2" aria-hidden="true"></span>
                                                         </span>
                                                     </div>
                                                     <div class='col-10'>
@@ -229,7 +229,7 @@
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class='control-label-notes'>
-                                                            <span class="fas fa-user text-warning pe-2" aria-hidden="true"></span>
+                                                            <span class="fas fa-user orangeText pe-2" aria-hidden="true"></span>
                                                         </span>
                                                     </div>
                                                     <div class='col-10'>
@@ -246,7 +246,7 @@
                                                 <div class='row'>
                                                     <div class='col-1'>
                                                         <span class='control-label-notes'>
-                                                            <span class="fas fa-code text-warning pe-2" aria-hidden="true"></span>
+                                                            <span class="fas fa-code orangeText pe-2" aria-hidden="true"></span>
                                                         </span>
                                                     </div>
                                                     <div class='col-10'>
@@ -270,7 +270,7 @@
             @else
                 <div class='d-flex justify-content-center ps-1 pt-1 pb-2'>
                     <span class="control-label-notes">
-                        <i class="fas fa-tools text-warning text-center" aria-hidden="true"></i> 
+                        <i class="fas fa-tools orangeText text-center" aria-hidden="true"></i> 
                         {{$toolName}} 
                     </span>
                 </div>

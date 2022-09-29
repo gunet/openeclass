@@ -65,7 +65,7 @@
                     
                     <div class='col-12 mt-4'>
                         <ul class='list-group'>
-                            <li class='list-group-item bg-light'>{!! trans('langFaculty') !!}: <strong class='text-warning'>{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</strong>
+                            <li class='list-group-item bg-light'>{!! trans('langFaculty') !!}: <strong class='orangeText'>{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</strong>
                             {!! $childHTML !!}
                         </ul>
                     </div>

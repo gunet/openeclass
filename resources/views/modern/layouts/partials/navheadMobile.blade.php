@@ -21,7 +21,7 @@
 
                 @if(isset($_SESSION['uid']))
 
-                        <button class="btn btn-transparent dropdown-toogle text-warning pt-2" type="button"
+                        <button class="btn btn-transparent dropdown-toogle orangeText pt-2" type="button"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-user"></i>
                         </button>
@@ -35,58 +35,58 @@
                                 (isset($is_usermanage_user) and ($is_usermanage_user)) or
                                 (isset($is_departmentmanage_user) and $is_departmentmanage_user))
                                 <li>
-                                    <a id="AdminToolBtn" type="button" class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench fs-6 text-warning pe-2"></i>{{trans('langAdminTool')}}</a>
+                                    <a id="AdminToolBtn" type="button" class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench fs-6 orangeText pe-2"></i>{{trans('langAdminTool')}}</a>
                                 </li>
                             @endif
                             @if($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == ADMIN_USER)
-                               <li><a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/create_course/create_course.php"><i class="fas fa-plus-circle fs-6 text-warning pe-2"></i>{{ trans('langCourseCreate') }}</a></li>
+                               <li><a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/create_course/create_course.php"><i class="fas fa-plus-circle fs-6 orangeText pe-2"></i>{{ trans('langCourseCreate') }}</a></li>
                             @endif
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/portfolio.php"><i class="fa fa-home fs-6 text-warning pe-2"></i>{{ trans('langMyPortfolio') }}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/portfolio.php"><i class="fa fa-home fs-6 orangeText pe-2"></i>{{ trans('langMyPortfolio') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/my_courses.php"><i class="fas fa-graduation-cap fs-6 text-warning pe-2"></i>{{trans('langMyCoursesSide')}}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/my_courses.php"><i class="fas fa-graduation-cap fs-6 orangeText pe-2"></i>{{trans('langMyCoursesSide')}}</a>
                             </li>
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/announcements/myannouncements.php"><i class="fas fa-bell fs-6 text-warning pe-2"></i>{{ trans('langMyAnnouncements') }}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/announcements/myannouncements.php"><i class="fas fa-bell fs-6 orangeText pe-2"></i>{{ trans('langMyAnnouncements') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/notes/index.php"><i class="fas fa-sticky-note fs-6 text-warning pe-2"></i>{{ trans('langNotes') }}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/notes/index.php"><i class="fas fa-sticky-note fs-6 orangeText pe-2"></i>{{ trans('langNotes') }}</a>
                             </li>
                             @if (get_config('eportfolio_enable'))
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}"><i class="fas fa-briefcase fs-6 text-warning pe-2"></i>{{ trans('langMyePortfolio') }}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}"><i class="fas fa-briefcase fs-6 orangeText pe-2"></i>{{ trans('langMyePortfolio') }}</a>
                             </li>
                             @endif
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/usage/index.php?t=u"><i class="fas fa-chart-bar fs-6 text-warning pe-2"></i>{{ trans('langMyStats') }}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/usage/index.php?t=u"><i class="fas fa-chart-bar fs-6 orangeText pe-2"></i>{{ trans('langMyStats') }}</a>
                             </li>
                             @if (get_config('personal_blog'))
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}"><i class="fas fa-location-arrow fs-6 text-warning pe-2"></i>{{ trans('langMyBlog') }}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}"><i class="fas fa-location-arrow fs-6 orangeText pe-2"></i>{{ trans('langMyBlog') }}</a>
                             </li>
                             @endif
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/message/index.php"><i class="fas fa-envelope fs-6 text-warning pe-2"></i>{{ trans('langMyDropBox') }}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/message/index.php"><i class="fas fa-envelope fs-6 orangeText pe-2"></i>{{ trans('langMyDropBox') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/personal_calendar/index.php"><i class="fas fa-bell fs-6 text-warning pe-2"></i>{{ trans('langMyAgenda') }}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/personal_calendar/index.php"><i class="fas fa-bell fs-6 orangeText pe-2"></i>{{ trans('langMyAgenda') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/profile/display_profile.php"><i class="fas fa-user fs-6 text-warning pe-2"></i> {{ trans('langMyProfile') }}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/profile/display_profile.php"><i class="fas fa-user fs-6 orangeText pe-2"></i> {{ trans('langMyProfile') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/my_widgets.php"><i class="fa fa-magic fa-fw fs-6 text-warning pe-2"></i> {{ trans('langMyWidgets') }}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/my_widgets.php"><i class="fa fa-magic fa-fw fs-6 orangeText pe-2"></i> {{ trans('langMyWidgets') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/gradebookUserTotal/index.php"><i class="fa fa-sort-numeric-desc fa-fw fs-6 text-warning pe-2"></i> {{ trans('langGradeTotal') }}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/gradebookUserTotal/index.php"><i class="fa fa-sort-numeric-desc fa-fw fs-6 orangeText pe-2"></i> {{ trans('langGradeTotal') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/mycertificates.php"><i class="fa fa-trophy fa-fw fs-6 text-warning pe-2"></i> {{ trans('langMyCertificates') }}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/mycertificates.php"><i class="fa fa-trophy fa-fw fs-6 orangeText pe-2"></i> {{ trans('langMyCertificates') }}</a>
                             </li>
                             @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')) or ($session->status == ADMIN_USER and get_config('mydocs_teacher_enable')))
                             <li>
-                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/mydocs/index.php"><i class="fas fa-folder fs-6 text-warning pe-2"></i> {{ trans('langMyDocs') }}</a>
+                                <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/mydocs/index.php"><i class="fas fa-folder fs-6 orangeText pe-2"></i> {{ trans('langMyDocs') }}</a>
                             </li>
                             @endif
                             <li>

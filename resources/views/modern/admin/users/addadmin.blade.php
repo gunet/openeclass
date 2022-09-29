@@ -62,21 +62,21 @@
                                                     <input type='radio' name='adminrights' value='admin' {{$checked['admin']}}> {{ trans('langAdministrator') }}
                                                 </div>
                                                 <div class='col-12'>
-                                                    <small class='help-block text-warning'>{{ trans('langHelpAdministrator') }}</small>
+                                                    <small class='help-block orangeText'>{{ trans('langHelpAdministrator') }}</small>
                                                 </div>
                                                 
                                                 <div class='radio mt-3 d-inline-flex align-items-top'>
                                                     <input type='radio' name='adminrights' value='poweruser' {{$checked['poweruser']}}> {{ trans('langPowerUser') }}   
                                                 </div>
                                                 <div class='col-12'>
-                                                    <small class='help-block text-warning'>{{ trans('langHelpPowerUser') }}</small>
+                                                    <small class='help-block orangeText'>{{ trans('langHelpPowerUser') }}</small>
                                                 </div>
                                                
                                                 <div class='radio mt-3 d-inline-flex align-items-top'>
                                                     <input type='radio' name='adminrights' value='manageuser' {{$checked['manageuser']}}> {{ trans('langManageUser') }}                                                  
                                                 </div>
                                                 <div class='col-12'>
-                                                    <small class='help-block text-warning'>{{ trans('langHelpManageUser') }}</small>
+                                                    <small class='help-block orangeText'>{{ trans('langHelpManageUser') }}</small>
                                                 </div>
                                               
                                                 <div class='radio mt-3 d-inline-flex align-items-top'>
@@ -84,7 +84,7 @@
                                                     
                                                 </div>
                                                 <div class='col-12'>
-                                                    <small class='help-block text-warning'>{{ trans('langHelpManageDepartment') }}</small>
+                                                    <small class='help-block orangeText'>{{ trans('langHelpManageDepartment') }}</small>
                                                 </div>
                                             </div>
                                         </label>

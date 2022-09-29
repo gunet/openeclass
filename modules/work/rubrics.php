@@ -383,13 +383,13 @@ if (isset($_GET['rubric_id'])) {
                             <tr class='title1 bg-light'>
                                 <td colspan='2'>
                                         <input type='checkbox' id='user_button0' name='options0' value='$opt1' $sel_opt1 />
-                                        <span class='text-warning'>$langRubricOption1</span>
+                                        <span class='orangeText'>$langRubricOption1</span>
                                 </td>
                             </tr>
                             <tr class='title1 bg-light'>
                                 <td colspan='2'>
                                         <input type='checkbox' id='user_button1' name='options1' value='$opt2' $sel_opt2/>
-                                        <span class='text-warning'>$langRubricOption2</span>
+                                        <span class='orangeText'>$langRubricOption2</span>
                                 </td>
                             </tr>
                         </table>
