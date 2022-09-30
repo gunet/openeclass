@@ -503,173 +503,251 @@ if (!$is_editor) {
     }
 }
 
+/****************** TEST CAROUSEL OR ROW UNITS PREFERASION ******************/
+if ($is_editor){
+    if (isset($_GET['viewUnit'])){
+        Database::get()->query("UPDATE course SET view_units = ?d  WHERE id = ?d", $_GET['viewUnit'], $course_id);
+    }
+}
+$show_course = Database::get()->querySingle("SELECT view_units FROM course WHERE id =  ?d", $course_id);
+$carousel_or_row = $show_course->view_units; 
+// print_r('the courousel_or_row:'.$carousel_or_row);
+/**********************************************************************/
+
 $total_cunits = count($all_units);
 if ($total_cunits > 0) {
     $cunits_content .= "";
     $count_index = 0;
     $counterUnits = 0;
-    $cunits_content .= "<div id='carouselUnitsControls' class='carousel slide' data-bs-ride='carousel'>";
 
-    //this is foreach for indicatoras carousel-units
-    $counterIndicator = 0;
-    $cunits_content .=  "<div class='carousel-indicators h-auto mb-1'>";
-    foreach ($all_units as $cu) {
-        if($counterIndicator == 0){
-            $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' class='active' aria-current='true'></button>";
-        }else{
-            $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' aria-current='true'></button>";
+    if($carousel_or_row == 0){
+        $cunits_content .= "<div id='carouselUnitsControls' class='carousel slide' data-bs-ride='carousel'>";
+
+        //this is foreach for indicatoras carousel-units
+        $counterIndicator = 0;
+
+        $cunits_content .=  "<div class='carousel-indicators h-auto mb-1'>";
+        foreach ($all_units as $cu) {
+            if($counterIndicator == 0){
+                $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' class='active' aria-current='true'></button>";
+            }else{
+                $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' aria-current='true'></button>";
+            }
+            $counterIndicator++;
         }
-        $counterIndicator++;
-    }
-    $cunits_content .=  "</div>";
+        $cunits_content .=  "</div>";
 
-    $cunits_content .= "<div class='carousel-inner'>";
-    foreach ($all_units as $cu) {
-        $not_shown = false;
-        $icon = '';
-            // check if course unit has started
-        if (!$is_editor) {
-            if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
-                $not_shown = true;
-                $icon = icon('fa-clock-o', $langUnitNotStarted);
-            // or has completed units (if any)
-            } else if (!in_array($cu->id, $visible_units_id)) {
-                $not_shown = true;
-                $icon = icon('fa-minus-circle', $langUnitNotCompleted);
-            } else {
+        $cunits_content .= "<div class='carousel-inner'>";
+        foreach ($all_units as $cu) {
+            $not_shown = false;
+            $icon = '';
+                // check if course unit has started
+            if (!$is_editor) {
+                if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
+                    $not_shown = true;
+                    $icon = icon('fa-clock-o', $langUnitNotStarted);
+                // or has completed units (if any)
+                } else if (!in_array($cu->id, $visible_units_id)) {
+                    $not_shown = true;
+                    $icon = icon('fa-minus-circle', $langUnitNotCompleted);
+                } else {
 
-                if (in_array($cu->id, $visible_units_id)) {
-                    $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
-                    if ($sql_badge) {
-                        $badge_id = $sql_badge->id;
-                        $per = get_cert_percentage_completion('badge', $badge_id);
-                        if ($per == 100) {
-                            $icon = icon('fa-check-circle', $langInstallEnd);
-                        } else {
-                            $icon = icon('fa-hourglass-2', $per . "%");
+                    if (in_array($cu->id, $visible_units_id)) {
+                        $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
+                        if ($sql_badge) {
+                            $badge_id = $sql_badge->id;
+                            $per = get_cert_percentage_completion('badge', $badge_id);
+                            if ($per == 100) {
+                                $icon = icon('fa-check-circle', $langInstallEnd);
+                            } else {
+                                $icon = icon('fa-hourglass-2', $per . "%");
+                            }
                         }
                     }
                 }
             }
-        }
-        // check visibility
-        if ($cu->visible == 1) {
-            $count_index++;
-        }
-        $access = $cu->public;
-        $vis = $cu->visible;
-        $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
-        $cu_indirect = getIndirectReference($cu->id);
+            // check visibility
+            if ($cu->visible == 1) {
+                $count_index++;
+            }
+            $access = $cu->public;
+            $vis = $cu->visible;
+            $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
+            $cu_indirect = getIndirectReference($cu->id);
 
-        if($counterUnits == 0){
-            $cunits_content .= "<div class='carousel-item active'>";
-        }else{
-            $cunits_content .= "<div class='carousel-item'>";
-        }
-        $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
-            <div class='item-content'>
-                <div class='item-header clearfix'>
-                    <div class='item-title h4 $class_vis text-primary fs-6'>";
-        if ($not_shown) {
-            $cunits_content .= q($cu->title) ;
-        } else {
-            $cunits_content .= "<a class='$class_vis' href='${urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
-        }
-        $cunits_content .= "<br><small><span class='help-block'>";
-        if (!(is_null($cu->start_week))) {
-            $cunits_content .= "$langFrom2 " . format_locale_date(strtotime($cu->start_week), 'short', false);
-        }
-        if (!(is_null($cu->finish_week))) {
-            $cunits_content .= " $langTill " . format_locale_date(strtotime($cu->finish_week), 'short', false);
-        }
-        $cunits_content .= "</span></small>";
-        $cunits_content .= "</div>";
-
-        $cunits_content .= "</div>
-            <div class='item-body'>";
-        if (!is_null($cu->comments)) {
-            $cunits_content .= standard_text_escape($cu->comments);
-        }
-        $cunits_content .= "</div>";
-
-        if ($is_editor) {
-            //     $cunits_content .= "<div class='dropdown float-end'>
-            //                           <div class='reorder-btn'>
-            //                             <span class='fa-arrows ms-4' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
-            //                               </div>";
-            //     $cunits_content .= "<div class='dropdown float-end'>
-            //                     <button class='btn btn-primary dropdown-toggle mt-2' type='button' id='dropdownMenuButton$cu->id' data-bs-toggle='dropdown' aria-expanded='false'>
-            //                         <i class='fa-cogs'></i>
-            //                     </button>";
-
-            //     $cunits_content .= "<ul class='row p-4 dropdown-menu myuls' aria-labelledby='dropdownMenuButton$cu->id->id'>
-            //         <li><a href='{$urlAppend}modules/units/info.php?course=$course_code&amp;edit=$cu->id->id'><i class='fa-edit'></i>&nbsp;&nbsp;$langEditChange</a></li>
-            //         <li><a href='$_SERVER[REQUEST_URI]?vis=$cu->id'><i class='fa-eye'></i>";
-
-            //     if ($cu->visible == 1) {
-            //         $cunits_content .= "&nbsp;&nbsp;$langViewHide";
-            //     } else {
-            //         $cunits_content .= "&nbsp;&nbsp;$langViewShow";
-            //     }
-            //     $cunits_content .= "</a></li>";
-            //     $cunits_content .= "<li><a href='$_SERVER[REQUEST_URI]?access=$cu->id'><i class='fa-lock'></i>";
-            //     if ($cu->public == 1) {
-            //         $cunits_content .= "&nbsp;&nbsp;$langResourceAccessLock";
-            //     } else {
-            //          $cunits_content .= "&nbsp;&nbsp;$langResourceAccessUnlock";
-            //     }
-            //     $cunits_content .= "</a></li>
-            //         <li><a href='$_SERVER[REQUEST_URI]?del='" .$cu_indirect . "'&order='.$cu->order' data-bs-toggle='modal' data-bs-target='#unit$cu->id'><i class='fa-trash'></i>&nbsp;&nbsp;$langDelete</a></li>
-            //     </ul>";
-
-            // $cunits_content .= "</div>";
-
-            $cunits_content .= "<div class='col-sm-12 mt-3 text-end'>".action_button(array(
-                array('title' => $langEditChange,
-                      'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
-                      'icon' => 'fa-edit'),
-                array('title' => $vis == 1? $langViewHide : $langViewShow,
-                      'url' => "$_SERVER[REQUEST_URI]?vis=$cu_indirect",
-                      'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
-                array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
-                      'url' => "$_SERVER[REQUEST_URI]?access=$cu_indirect",
-                      'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
-                      'show' => $visible == COURSE_OPEN),
-                array('title' => $langDelete,
-                      'url' => "$_SERVER[REQUEST_URI]?del=$cu_indirect&order=".$cu->order,
-                      'icon' => 'fa-trash',
-                      'class' => 'delete',
-                      'confirm' => $langCourseUnitDeleteConfirm)))."</div>";
-        } else {
-            $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
-            $cunits_content .= $icon;
+            if($counterUnits == 0){
+                $cunits_content .= "<div class='carousel-item active'>";
+            }else{
+                $cunits_content .= "<div class='carousel-item'>";
+            }
+            $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
+                <div class='item-content'>
+                    <div class='item-header clearfix'>
+                        <div class='item-title h4 $class_vis text-primary fs-6'>";
+            if ($not_shown) {
+                $cunits_content .= q($cu->title) ;
+            } else {
+                $cunits_content .= "<a class='$class_vis' href='${urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+            }
+            $cunits_content .= "<br><small><span class='help-block'>";
+            if (!(is_null($cu->start_week))) {
+                $cunits_content .= "$langFrom2 " . format_locale_date(strtotime($cu->start_week), 'short', false);
+            }
+            if (!(is_null($cu->finish_week))) {
+                $cunits_content .= " $langTill " . format_locale_date(strtotime($cu->finish_week), 'short', false);
+            }
+            $cunits_content .= "</span></small>";
             $cunits_content .= "</div>";
+
+            $cunits_content .= "</div>
+                <div class='item-body'>";
+            if (!is_null($cu->comments)) {
+                $cunits_content .= standard_text_escape($cu->comments);
+            }
+            $cunits_content .= "</div>";
+
+            if ($is_editor) {
+
+                $cunits_content .= "<div class='col-sm-12 mt-3 text-end'>".action_button(array(
+                    array('title' => $langEditChange,
+                        'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
+                        'icon' => 'fa-edit'),
+                    array('title' => $vis == 1? $langViewHide : $langViewShow,
+                        'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;vis=$cu_indirect",
+                        'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                    array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
+                        'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;access=$cu_indirect",
+                        'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
+                        'show' => $visible == COURSE_OPEN),
+                    array('title' => $langDelete,
+                        'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;del=$cu_indirect&amp;order=".$cu->order,
+                        'icon' => 'fa-trash',
+                        'class' => 'delete',
+                        'confirm' => $langCourseUnitDeleteConfirm)))."</div>";
+            } else {
+                $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
+                $cunits_content .= $icon;
+                $cunits_content .= "</div>";
+            }
+
+            $cunits_content .= "<hr>
+                        <div class='col-sm-12 bg-transparent'>
+
+                            <button class='carousel-prev-btn' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='prev'>
+                                <span class='d-flex justify-content-center align-items-center fa fa-arrow-left text-danger'></span>
+                            </button>";
+
+            $cunits_content .=  "<button class='carousel-next-btn float-end' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='next'>
+                                    <span class='d-flex justify-content-center align-items-center fa fa-arrow-right text-danger'></span>
+                            </button>
+                    
+                        </div>";
+
+            $cunits_content .= "</div></div></div></div></div>";
+            $counterUnits++;
         }
 
-        $cunits_content .= "<hr>
-                    <div class='col-sm-12 bg-transparent'>
+        // end carousel-inner
+        $cunits_content .= "</div>";
 
-                        <button class='carousel-prev-btn' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='prev'>
-                            <span class='d-flex justify-content-center align-items-center fa fa-arrow-left text-danger'></span>
-                        </button>";
 
-        $cunits_content .=  "<button class='carousel-next-btn float-end' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='next'>
-                                  <span class='d-flex justify-content-center align-items-center fa fa-arrow-right text-danger'></span>
-                        </button>
-                
-                    </div>";
 
-        $cunits_content .= "</div></div></div></div></div>";
-        $counterUnits++;
+        //end courseUnitsControls
+        $cunits_content .= "</div>";
+    }else{
+        $counter_hr = 0;
+        foreach ($all_units as $cu) {
+            $counter_hr++;
+            $not_shown = false;
+            $icon = '';
+                // check if course unit has started
+            if (!$is_editor) {
+                if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
+                    $not_shown = true;
+                    $icon = icon('fa-clock-o', $langUnitNotStarted);
+                // or has completed units (if any)
+                } else if (!in_array($cu->id, $visible_units_id)) {
+                    $not_shown = true;
+                    $icon = icon('fa-minus-circle', $langUnitNotCompleted);
+                } else {
+
+                    if (in_array($cu->id, $visible_units_id)) {
+                        $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
+                        if ($sql_badge) {
+                            $badge_id = $sql_badge->id;
+                            $per = get_cert_percentage_completion('badge', $badge_id);
+                            if ($per == 100) {
+                                $icon = icon('fa-check-circle', $langInstallEnd);
+                            } else {
+                                $icon = icon('fa-hourglass-2', $per . "%");
+                            }
+                        }
+                    }
+                }
+            }
+            // check visibility
+            if ($cu->visible == 1) {
+                $count_index++;
+            }
+            $access = $cu->public;
+            $vis = $cu->visible;
+            $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
+            $cu_indirect = getIndirectReference($cu->id);
+            $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
+                <div class='item-content'>
+                    <div class='item-header clearfix'>
+                        <div class='item-title h4 $class_vis text-primary fs-6'>";
+            if ($not_shown) {
+                $cunits_content .= q($cu->title) ;
+            } else {
+                $cunits_content .= "<a class='$class_vis' href='${urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+            }
+            $cunits_content .= "<br><small><span class='help-block'>";
+            if (!(is_null($cu->start_week))) {
+                $cunits_content .= "$langFrom2 " . format_locale_date(strtotime($cu->start_week), 'short', false);
+            }
+            if (!(is_null($cu->finish_week))) {
+                $cunits_content .= " $langTill " . format_locale_date(strtotime($cu->finish_week), 'short', false);
+            }
+            $cunits_content .= "</span></small>";
+            $cunits_content .= "</div>";
+
+            $cunits_content .= "</div>
+                <div class='item-body'>";
+            $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
+            $cunits_content .= "</div>";
+
+            if ($is_editor) {
+
+                $cunits_content .= "<div class='float-end'>".action_button(array(
+                    array('title' => $langEditChange,
+                        'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
+                        'icon' => 'fa-edit'),
+                    array('title' => $vis == 1? $langViewHide : $langViewShow,
+                        'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;vis=$cu_indirect",
+                        'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                    array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
+                        'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;access=$cu_indirect",
+                        'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
+                        'show' => $visible == COURSE_OPEN),
+                    array('title' => $langDelete,
+                        'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;del=$cu_indirect&amp;order=".$cu->order,
+                        'icon' => 'fa-trash',
+                        'class' => 'delete',
+                        'confirm' => $langCourseUnitDeleteConfirm)))."</div>";
+
+            } else {
+                $cunits_content .= "<div class='item-side' style='font-size: 20px;'>";
+                $cunits_content .= $icon;
+                $cunits_content .= "</div>";
+            }
+
+            $cunits_content .= "</div></div></div></div>";
+            if($counter_hr <= count($all_units)-1){
+                $cunits_content .= "<hr>";
+            }
+        }
     }
-
-    // end carousel-inner
-    $cunits_content .= "</div>";
-
-
-
-    //end courseUnitsControls
-    $cunits_content .= "</div>";
 
 } else {
     $cunits_content .= "<div class='not_visible text-center'> - $langNoUnits - </div>";

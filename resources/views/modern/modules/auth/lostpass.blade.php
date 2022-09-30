@@ -164,12 +164,14 @@
                         @endif
                     @else
 
-                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                            <div class='col-12'>
                                 <div class='alert alert-info'>{!! trans('lang_pass_intro') !!}</div>
                             </div>
 
-
-                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                                <div class='col-12 h-100 left-form'></div>
+                            </div>
+                            <div class='col-lg-6 col-12'>
                                 <div class='form-wrapper shadow-sm p-3 rounded'>
                                     <form class='form-horizontal' role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
                                         <div class='row'><div class='col-sm-8'><h4 class='control-label-notes ps-1 mt-1'>{!! trans('langUserData') !!}</h4></div></div>
@@ -183,10 +185,18 @@
                                                 <input class='form-control' type='text' name='email' id='email' autocomplete='off' placeholder='{!! trans('lang_email') !!}'>
                                             </div>
                                         </div>
-                                        <div class='form-group mt-3'>
-                                            <div class='col-sm-8'>
-                                                <button class='btn btn-primary' type='submit' name='send_link' value='{{ trans('langSend') }}'>{!! trans('langSend') !!}</button>
-                                                <button class='btn btn-secondary' href='{{ $urlServer }}'>{!! trans('langCancel') !!}</button>
+                                        <div class='form-group mt-5'>
+                                            <div class='col-12'>
+                                                <div class='row'>
+                                                    <div class='col-6'>
+                                                        <button class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='send_link' value='{{ trans('langSend') }}'>{!! trans('langSend') !!}</button>
+                                                    </div>
+                                                    <div class='col-6'>
+                                                        <button class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='{{ $urlServer }}'>{!! trans('langCancel') !!}</button>
+                                                    </div>
+                                                </div>
+                                                
+                                                
                                             </div>
                                         </div>
                                     </form>

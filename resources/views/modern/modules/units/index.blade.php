@@ -131,7 +131,7 @@
                     @endif
 
                     @if(Session::has('message'))
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
+                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
                             <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                                 @if(is_array(Session::get('message')))
                                     @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
@@ -149,7 +149,7 @@
                     @if ($previousLink or $nextLink)
 
                         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-                            <div class='form-wrapper course_units_pager bg-light p-3 clearfix'>
+                            <div class='form-wrapper course_units_pager docPanel p-3 clearfix'>
                                 @if ($previousLink)
                                     <a class='pull-left' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
                                         <span class='fa fa-arrow-left space-after-icon'></span>

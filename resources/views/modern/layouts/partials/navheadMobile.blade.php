@@ -21,7 +21,7 @@
 
                 @if(isset($_SESSION['uid']))
 
-                        <button class="btn btn-transparent dropdown-toogle orangeText pt-2" type="button"
+                        <button class="btn btn-transparent dropdown-toogle text-warning pt-2" type="button"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-user"></i>
                         </button>

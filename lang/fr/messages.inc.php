@@ -2348,6 +2348,8 @@ $langUpdates = "mises à jours";
 $langNoChanges = "Aucun changement n'a été effectué."
 ;
 $langAddUnit = "Ajouter une nouvelle unité thématique";
+$langShowUnitCarousel = "Afficher la section sur une ligne par colonne";
+$langShowUnitRow = "Afficher section par ligne";
 $langEditUnit = "Modifier l'unité thématique";
 $langUnitTitle = "Titre de l'unité thématique";
 $langUnitDescr = "Brève description"

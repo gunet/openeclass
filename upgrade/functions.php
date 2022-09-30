@@ -2553,6 +2553,10 @@ function upgrade_to_4_0($tbl_options): void {
             FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
     }
 
+    if (!DBHelper::fieldExists('course','view_units')) {
+        Database::get()->query("ALTER table course ADD `view_units` INT(11) NOT NULL DEFAULT 0");
+    }
+
 }
 
 

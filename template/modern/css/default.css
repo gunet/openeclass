@@ -147,7 +147,7 @@ input:-webkit-autofill:active {
 /**********************************************************************************************/
 .form-wrapper.shadow-sm{ border: solid 15px #f2f2f2; background: white; }
 
-.form-wrapper.shadow-sm textarea{ background: white; border: solid 1px #f2f2f2;; }
+.form-wrapper.shadow-sm textarea{ background: white; border: solid 1px #f1f1f1; margin-top:10px;}
 
 .form-wrapper input[type=text], .form-wrapper input[type=password], .form-wrapper .form-select{
   border-radius: 0px;
@@ -201,19 +201,11 @@ select.form-select { -webkit-appearance: menulist; }
 
 .alert-success { border: 1px solid rgb(214,233,198); background-color: rgb(223,240,216); color: rgb(70,136,71); }
 
-.alert-success .close { color: rgb(70,136,71); }
-
 .alert-info { border: 1px solid rgb(188,232,241); background-color: rgb(217,237,247); color: rgb(58,135,173);}
-
-.alert-info .close { color: rgb(58,135,173); }
 
 .alert-warning { border: 1px solid rgb(251,238,213); background-color: rgb(252,248,227); color: rgb(192,152,83); }
 
-.alert-warning .close { color: rgb(192,152,83); }
-
 .alert-danger { border: 1px solid rgb(238,211,215); background-color: rgb(242,222,222); color: rgb(185,74,72);}
-
-.alert-danger .close{ color: rgb(185,74,72); }
 
 /* -------------------------------- testimonials-OWL_CAROUSEL ----------------------------- */
 /* ---------------------------------------------------------------------------------------- */
@@ -1954,4 +1946,3 @@ select.form-select { -webkit-appearance: menulist; }
 
     .user-icon-filename{ width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px; }
   }
-

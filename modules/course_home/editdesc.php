@@ -118,19 +118,19 @@ $tool_content = action_bar(array(
                 <form class='form-horizontal' role='form' method='post' action='editdesc.php?course=$course_code' enctype='multipart/form-data'>
                     <fieldset>
                     <div class='form-group mt-3'>
-                        <label for='description' class='col-sm-6 control-label-notes'>$langCourseLayout:</label>
+                        <label for='description' class='col-sm-12 control-label-notes'>$langCourseLayout:</label>
                         <div class='col-sm-12'>
                             ".  selection($layouts, 'layout', $layout, 'class="form-control"')."
                         </div>
                     </div>
                     <div id='image_field' class='form-group".(($layout == 1)?"":" hidden")." mt-3'>
-                        <label for='course_image' class='col-sm-6 control-label-notes'>$langCourseImage:</label>
+                        <label for='course_image' class='col-sm-12 control-label-notes'>$langCourseImage:</label>
                         <div class='col-sm-12'>
                             $course_image
                         </div>
                     </div>                  
                     <div class='form-group mt-3'>
-                        <label for='description' class='col-sm-6 control-label-notes'>$langDescription:</label>
+                        <label for='description' class='col-sm-12 control-label-notes'>$langDescription:</label>
                         <div class='col-sm-12'>
                             " . rich_text_editor('description', 8, 20, $description) . "
                         </div>

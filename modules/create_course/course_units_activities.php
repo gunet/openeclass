@@ -202,7 +202,7 @@ if(!isset($_POST['final_submit'])){
                     ";
                 $i=1;
                 foreach ($_SESSION['units'] as $utitle) {
-                    $tool_content .= "<th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-md-10 ' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>";
+                    $tool_content .= "<th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-md-12 ' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>";
                     $i++;
                 }
                     $tool_content .= "
