@@ -3221,7 +3221,7 @@ function show_edit_assignment($id) {
                             <option value='2' " . (($row->tii_report_gen_speed == 2) ? 'selected' : '') . ">$langTiiReportGenOnDue</option>
                       </select>
                     </div>
-                <div class='col-sm-10'>
+                <div class='col-sm-12 mt-3'>
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' " . (($row->tii_s_view_reports == 1) ? 'checked' : '') . " $lti_disabled>
