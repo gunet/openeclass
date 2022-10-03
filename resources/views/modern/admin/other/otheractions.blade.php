@@ -101,7 +101,7 @@
                                         <tr>
                                             <td class='text-end' colspan='2'>
                                                 <b>
-                                                    <span style='color: #FF0000'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
+                                                    <span class='text-dark'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
                                                 </b>
                                             </td>
                                         </tr>
@@ -128,7 +128,7 @@
                                         <tr>
                                             <td class='text-end' colspan='2'>
                                                 <b>
-                                                    <span style='color: #FF0000'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
+                                                    <span class='text-dark'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
                                                 </b>
                                             </td>
                                         </tr>
@@ -157,7 +157,7 @@
                                         <tr>
                                             <td class='text-end' colspan='2'>
                                                 <b>
-                                                    <span style='color: #FF0000'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
+                                                    <span class='text-dark'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
                                                 </b>
                                             </td>
                                         </tr>

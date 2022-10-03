@@ -61,7 +61,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div align='right' style='margin-top: 60px; margin-bottom:10px;'>
+                    <div class='col-12 mt-3'>
                         <!--Edit all function-->
                         <form action='multiedituser.php' method='post'> 
                         <!--redirect all request vars towards delete all action-->
@@ -72,7 +72,7 @@
                             <input class='btn btn-primary' type='submit' name='move_submit' value='{{ trans('langChangeDepartment') }}'>
                         @endif
                         <input class='btn btn-primary' type='submit' name='dellall_submit' value='{{ trans('langDelList') }}'>
-                        <input class='btn btn-primary' type='submit' name='activate_submit' value='{{ trans('langAddSixMonths') }}'>
+                        <input class='btn btn-primary mt-md-0 mt-3' type='submit' name='activate_submit' value='{{ trans('langAddSixMonths') }}'>
                         {!! generate_csrf_token_form_field() !!}
                         </form>
                     </div>   

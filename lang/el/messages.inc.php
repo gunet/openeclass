@@ -2165,6 +2165,7 @@ $langNodePublic = "Δημόσια προβολή";
 $langNodePublic2 = "Η $langsFaculty θα εμφανίζεται για όλους τους χρήστες";
 $langNodeSubscribed = "Προβολή Εγγεγραμμένων";
 $langNodeSubscribed2 = "Η $langsFaculty θα εμφανίζεται μόνο για τους εγγεγραμμένους σε αυτήν χρήστες";
+$langNodeHidden = "Απόκρυψη";
 $langNodeHidden2 = "Η $langsFaculty θα παραμένει κρυμμένη από όλους τους χρήστες";
 $langNodeOrderPriority = "Προτεραιότητα Ταξινόμησης";
 $langNodeOrderPriority2 = "(όσο ψηλότερη τιμή, τόσο ψηλότερα στην ταξινόμηση)";

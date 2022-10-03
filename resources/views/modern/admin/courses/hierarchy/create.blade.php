@@ -115,29 +115,32 @@
                             <div class='form-group mt-3'>
                                 <label class='col-sm-12 control-label-notes'>{{ trans('langAvailableTypes') }}</label>
                                 <div class='col-sm-12'>
-                                    <div class='radio'>
+                                    <div class='radio d-inline-flex align-items-top'>
                                         <label>
                                             <input id='nodeopen' type='radio' name='visible' value='2' {{ $visibleChecked[2] }}>
-                                            <span class='fa fa-unlock fa-fw' style='font-size:23px;'></span>&nbsp;{{ trans('langNodePublic') }}
+                                            <span class='fa fa-unlock fa-fw mt-1'></span>&nbsp;{{ trans('langNodePublic') }}
                                         </label>
-                                        <br><span class='help-block'><small>{{ trans('langNodePublic2') }}</small></span>
-                                    </div>
-                                    <div class='radio'>
+
+                                    </div> 
+                                    <div class='help-block'><small>{{ trans('langNodePublic2') }}</small></div>
+
+                                    <div class='radio d-inline-flex align-items-top mt-3'>
                                         <label>
                                             <input id='nodeforsubscribed' type='radio' name='visible' value='1' {{ $visibleChecked[1] }}>
-                                            <span class='fa fa-lock fa-fw'  style='font-size:23px;'>
-                                                <span class='fa fa-pencil text-danger fa-custom-lock' style='font-size:16px; position:absolute; top:13px; left:35px;'></span>
-                                            </span>&nbsp;{{ trans('langNodeSubscribed') }}
+                                            <span class='fa fa-lock fa-fw mt-1'></span>
+                                            <span class='fa fa-pencil text-danger fa-custom-lock pen-hierarchy'></span>
+                                            <span class='ms-3'>{{ trans('langNodeSubscribed') }}</span>
                                         </label>
-                                        <br><span class='help-block'><small>{{ trans('langNodeSubscribed2') }}</small></span>
                                     </div>
-                                    <div class='radio'>
+                                    <div class='help-block'><small>{{ trans('langNodeSubscribed2') }}</small></div>
+
+                                    <div class='radio d-inline-flex align-items-top mt-3'>
                                         <label>
                                             <input id='nodehidden' type='radio' name='visible' value='0' {{ $visibleChecked[0] }}>
-                                            <span class='fa fa-lock fa-fw' style='font-size:23px;'></span>&nbsp;{{ trans('langNodeHidden') }}
+                                            <span class='fa fa-lock fa-fw mt-1'></span>{{ trans('langNodeHidden') }}
                                         </label>
-                                        <br><span class='help-block'><small>{{ trans('langNodeHidden2') }}</small></span>
                                     </div>
+                                    <div class='help-block'><small>{{ trans('langNodeHidden2') }}</small></div>
                                 </div>
                             </div>
 

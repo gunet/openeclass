@@ -78,7 +78,7 @@
 
    .btn-close.text-reset{ background-color:white; }
 
-  .offcanvas-start.d-lg-none.mr-auto.show{ width:280px; overflow-y: scroll; background-color: #003F87; }
+  .offcanvas-start.d-lg-none.show{ width:280px; overflow-y: scroll; background-color: #003F87; }
 
   .nav-link{  font-size:13px;  border-bottom: solid 1px white; }
 
@@ -92,7 +92,7 @@
 
 @media (min-width: 426px) and (max-width: 767px){ 
 
-  .offcanvas-start.d-lg-none.mr-auto.show{ width:285px; overflow-y: scroll; background-color: #003F87; }
+  .offcanvas-start.d-lg-none.show{ width:285px; overflow-y: scroll; background-color: #003F87; }
 }
 
 /* tablet */
@@ -100,7 +100,7 @@
 
    .btn-close.text-reset{ background-color:white; }
 
-   .offcanvas-start.d-lg-none.mr-auto.show{ width:285px; overflow-y: scroll; background-color: #003F87; }
+   .offcanvas-start.d-lg-none.show{ width:285px; overflow-y: scroll; background-color: #003F87; }
 
    .nav-link{ font-size:13px; border-bottom: solid 1px white; }
 

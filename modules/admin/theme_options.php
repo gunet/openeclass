@@ -363,7 +363,7 @@ if (isset($_POST['optionsSave'])) {
     $del_class = ($theme_id != 0) ? "" : " hidden";
     $delete_btn = "
                     <form class='form-inline' style='display:inline;' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=$theme_id'>
-                        <a class='confirmAction btn btn-danger btn-sm$del_class' id='theme_delete' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
+                        <a class='confirmAction mt-md-0 mt-3 btn btn-danger btn-sm$del_class' id='theme_delete' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
                     </form>";
     $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
     if (isset($theme_options_styles['imageUpload'])) {
@@ -446,7 +446,7 @@ if (isset($_POST['optionsSave'])) {
             ". generate_csrf_token_form_field() ."
         </form>
         <div class='form-group mt-3 margin-bottom-fat mt-3'>
-            <div class='col-sm-9 col-sm-offset-3'>
+            <div class='col-sm-12 col-sm-offset-3'>
                 $activate_btn
                 $preview_btn
                 $delete_btn
