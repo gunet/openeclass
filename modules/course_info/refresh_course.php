@@ -109,8 +109,9 @@ if (isset($_POST['submit'])) {
     list($js, $html) = $tree->buildUserNodePicker(array('multiple' => true));
     $head_content .= $js;
     $data['buildusernode'] = $html;
+    $data['reg_flag'] = $reg_flag;
 
-    $data['selection_date'] = selection(array('before' => $langBefore, 'after' => $langAfter), 'reg_flag', $reg_flag, 'class="form-control"');
+    $data['selection_date'] = selection(array('before' => $langBefore, 'after' => $langAfter), 'reg_flag', $reg_flag);
     $data['selection_department'] = selection(array('yes' => $langWithDepartment, 'no' => $langWithoutDepartment), 'dept_flag', 'yes');
     $data['selection_am'] = selection(array('am' => $langWithStudentId, 'uname' => $langWithUsernames), 'id_flag', 'am');
     $data['date_format'] = date("d-m-Y", time());
