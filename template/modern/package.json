@@ -18,7 +18,7 @@
     "bootstrap-sass": "^3.4.1"
   },
   "devDependencies": {
-    "browser-sync": "^2.24.7",
+    "browser-sync": "^2.27.10",
     "del": "^3.0.0",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^8.0.0",
@@ -33,7 +33,7 @@
     "gulp-uglify": "^3.0.0",
     "merge-stream": "^1.0.1",
     "gulp-load-plugins": "^2.0.4",
-    "postcss-inline-svg": "^4.1.0",
+    "postcss-inline-svg": "^5.0.0",
     "postcss-pxtorem": "^5.1.1"
   }
 }
