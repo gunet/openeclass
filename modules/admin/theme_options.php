@@ -429,10 +429,10 @@ if (isset($_POST['optionsSave'])) {
     <div class='col-sm-12 mb-3'>
     <div class='form-wrapper shadow-sm p-3 rounded'>
         <div class='row p-2 margin-bottom-fat'>
-            <div class='col-sm-3'>
+            <div class='col-sm-4'>
                 <strong class='control-label-notes'>$langActiveTheme:</strong>
             </div>
-            <div class='col-sm-9'>
+            <div class='col-sm-8'>
             ".$themes_arr[$active_theme]."
             </div>
         </div>
@@ -608,7 +608,7 @@ $tool_content .= "
                 </div>
             </div>
             <div class='form-group mt-3'>
-                <label for='loginImg' class='col-sm-6 control-label-notes'>$langLoginBanner:</label>
+                <label for='loginImg' class='col-sm-12 control-label-notes'>$langLoginBanner:</label>
                 <div class='col-sm-12'>
                       <div class='checkbox'>
                         <label>
@@ -688,7 +688,7 @@ $tool_content .= "
     <div class='form-group mt-3'>
         <div class='col-sm-9 col-sm-offset-3'>
             ".($theme_id ? "<input class='btn btn-primary' name='optionsSave' type='submit' value='$langSave'>" : "")."
-            <input class='btn btn-success' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
+            <input class='btn btn-success mb-md-0 mb-2' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
             ".($theme_id ? "<a class='btn btn-info' href='theme_options.php?export=true'>$langExport</a>" : "")."
         </div>
     </div>

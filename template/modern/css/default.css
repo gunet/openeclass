@@ -345,6 +345,8 @@ select.form-select { -webkit-appearance: menulist; }
 
   .user-language-menu{ background: #ffffff; width:200px; }
 
+  @media(min-width:860px) and (max-width:991px){.user-language-menu{margin-right: 100px !important;}}
+
   .user-language-menu .list-group-item:hover{ background-color: #1d4e89; color:white; }
   
   .fab.fa-linkedin-in,.fa-twitter,.fa-facebook-f{ height: 30px; padding-top:7px; }

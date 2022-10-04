@@ -35,7 +35,7 @@ require_once 'modules/message/class.msg.php';
 function getUserLessonInfo($uid) {
     global $teacher_courses_count, $student_courses_count, $langCourse, $langActions;
     global $session, $lesson_ids, $courses, $urlServer, $langUnregCourse, $langAdm, $langFavorite;
-    global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
+    global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect, $langCode;
 
     $lesson_content = '';
     $lesson_ids = array();
@@ -84,8 +84,15 @@ function getUserLessonInfo($uid) {
                 $fav_message = $langFavorite;
             }
             $lesson_content .= "<tr class='$visclass'>
-			  <td class='text-start'>
-			  <strong><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></strong>&nbsp;(" . q($data->public_code) . ")
+			  <td>
+			  <div class='row'>
+                <div class='col-md-6 col-12'>
+                    <strong><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></strong>
+                </div>
+                <div class='col-md-6 col-12'>
+                    <div class='text-md-end text-start'><small>$langCode</small>: <span class='text-secondary'>(" . q($data->public_code) . ")</span></div>
+                </div>
+              </div>
 			  <div><small>" . q($data->professor) . "</small></div></td>";
             $lesson_content .= "<td class='text-center'><div class='col-4 m-auto d-block'><div class='row'><div class='col-12 col-md-6'>";
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");

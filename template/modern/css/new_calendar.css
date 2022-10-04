@@ -48,7 +48,7 @@
      padding: 5px;
   }
 
-  .table-condensed thead tr th.next{ height: auto;  width: auto; border: 2px solid #003F87; border-radius: 50%; visibility: visible; }
+  /* .table-condensed thead tr th.next{ height: auto;  width: auto; border: 2px solid #003F87; border-radius: 50%; visibility: visible; }
 
   .table-condensed thead tr th.next::after{ content: '>'; font-size: 20px; font-weight: 500; }
 
@@ -60,4 +60,4 @@
 
   .table-condensed thead tr th.prev::before{ content: '<'; font-size: 20px; font-weight: 500; }
 
-  .table-condensed thead tr th.prev:hover{ background-color: transparent; }
+  .table-condensed thead tr th.prev:hover{ background-color: transparent; } */
