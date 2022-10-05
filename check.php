@@ -42,7 +42,7 @@ ul.menu {
 
 li.mie {
 	height: 20px;
-	background-image: url(template/default/img/check/ie.png);
+	background-image: url(template/modern/img/check/ie.png);
 	background-repeat: no-repeat;
 	background-position: 0 .1em;
 	padding: 0px 0px 0px 20px;
@@ -54,7 +54,7 @@ li.mie {
 
 li.mfir {
 	height: 20px;
-	background-image: url(template/default/img/check/firefox.png);
+	background-image: url(template/modern/img/check/firefox.png);
 	background-repeat: no-repeat;
 	background-position: 0 .1em;
 	padding: 0px 0px 0px 20px;
@@ -66,7 +66,7 @@ li.mfir {
 
 li.msaf {
 	height: 20px;
-	background-image: url(template/default/img/check/safari.png);
+	background-image: url(template/modern/img/check/safari.png);
 	background-repeat: no-repeat;
 	background-position: 0 .06em;
 	padding: 0px 0px 0px 20px;
@@ -78,7 +78,7 @@ li.msaf {
 
 li.mchr {
 	height: 20px;
-	background-image: url(template/default/img/check/chrome.png);
+	background-image: url(template/modern/img/check/chrome.png);
 	background-repeat: no-repeat;
 	background-position: 0 .05em;
 	padding: 0px 0px 0px 20px;
@@ -90,7 +90,7 @@ li.mchr {
 
 li.moper {
 	height: 20px;
-	background-image: url(template/default/img/check/opera.png);
+	background-image: url(template/modern/img/check/opera.png);
 	background-repeat: no-repeat;
 	background-position: 0 .09em;
 	padding: 0px 0px 0px 20px;
@@ -115,7 +115,7 @@ ul.fmenu {
 
 li.mflash {
 	height: 20px;
-	background-image: url(template/default/img/check/FlashPlayer.png);
+	background-image: url(template/modern/img/check/FlashPlayer.png);
 	background-repeat: no-repeat;
 	background-position: 0 .1em;
 	padding: 0px 0px 0px 20px;
@@ -137,7 +137,7 @@ ul.smenu {
 
 li.sflash {
 	height: 20px;
-	background-image: url(template/default/img/check/Shockwave.png);
+	background-image: url(template/modern/img/check/Shockwave.png);
 	background-repeat: no-repeat;
 	background-position: 0 .1em;
 	padding: 0px 0px 0px 20px;
@@ -162,7 +162,7 @@ ul.pdfmenu {
 
 li.mpdf {
 	height: 20px;
-	background-image: url(template/default/img/check/acrobat_reader.png);
+	background-image: url(template/modern/img/check/acrobat_reader.png);
 	background-repeat: no-repeat;
 	background-position: 0 .1em;
 	padding: 0px 0px 0px 20px;

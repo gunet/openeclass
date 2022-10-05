@@ -29,7 +29,7 @@
 require_once 'template/template.inc.php';
 
 function installation_error($eng_msg, $el_msg) {
-    $t = new Template('template/default');
+    $t = new Template('template/modern');
 
     $t->set_file('fh', 'theme.html');
     $t->set_block('fh', 'mainBlock', 'main');
@@ -42,7 +42,7 @@ function installation_error($eng_msg, $el_msg) {
     $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
     $t->set_block('mainBlock', 'breadCrumbs', 'delete');
     $t->set_block('mainBlock', 'normalViewOpenDiv', 'delete');
-    $t->set_var('template_base', 'template/default');
+    $t->set_var('template_base', 'template/modern');
     $t->set_var('PAGE_TITLE', 'Open eClass eLearning Platform / Πλατφόρμα Τηλεκπαίδευσης Open eClass');
     $t->set_var('TOOL_CONTENT', "
         <div class='row'>

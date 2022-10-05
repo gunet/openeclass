@@ -31,7 +31,7 @@ require_once '../../../include/init.php';
         <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>">
         <title>-</title>
         <link href="../../../template/<?php echo $theme ?>/CSS/lp.css" rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" href="../../../template/default/CSS/bootstrap-custom.css">
+        <link rel="stylesheet" href="../../../template/modern/css/bootstrap.min.css">
         <script src="../../../js/bootstrap.bundle.min.js"></script>                
     </head>
     <body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">

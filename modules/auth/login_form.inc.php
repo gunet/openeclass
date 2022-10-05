@@ -101,7 +101,7 @@ function login_form($format='main') {
         }
 
         if (count($hybridProviders) or ($format != 'main' and count($authLink))) {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/default/CSS/bootstrap-social.css'>";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/modern/css/bootstrap-social.css'>";
         }
         if ($format == 'main' and count($hybridProviders)) {
             $authLink[$hybridLinkId]['html'] = '<div style="padding-top: 10px;">';

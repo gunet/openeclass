@@ -36,11 +36,11 @@
                         </td>
                         <td>
                             <p id="browsersupported" style="display: none; color: green; font-size: 11px;">
-                                <img src="template/default/img/tick.png" border="0" alt="browser supported"> 
+                                <img src="template/modern/img/tick.png" border="0" alt="browser supported"> 
                                 {{ trans('langBrowserSupported') }}
                             </p>
                             <p id="browsernotsupported" style="display: none; color: red; font-size: 11px;">
-                                <img src="template/default/img/delete.png" border="0" alt="browser not supported"> 
+                                <img src="template/modern/img/delete.png" border="0" alt="browser not supported"> 
                                 {{ trans('langBrowserNotSupported') }}:
                                 <br><br>
                                 <a href="http://www.microsoft.com/windows/internet-explorer/worldwide-sites.aspx" target="_blank">Internet Explorer</a>
@@ -66,11 +66,11 @@
                         </td>
                         <td>
                             <p id="acrobatreaderinstalled" style="display: none; color: green; font-size: 11px;">
-                                <img src="template/default/img/tick.png" border="0" alt="acrobat reader installed"> 
+                                <img src="template/modern/img/tick.png" border="0" alt="acrobat reader installed"> 
                                 {{ trans('langAcrobatReaderInstalled') }}
                             </p>
                             <p id="acrobatreadernotinstalled" style="display: none; color: red; font-size: 11px;">
-                                <img src="template/default/img/delete.png" border="0" alt="acrobat reader not installed"> 
+                                <img src="template/modern/img/delete.png" border="0" alt="acrobat reader not installed"> 
                                 {{ trans('langAcrobatReaderNotInstalled') }}
                                 <a href="http://get.adobe.com/reader/" target="_blank">{{ trans('langHere') }}</a>.
                                 {{ trans('langAgreeAndInstall') }}
@@ -90,11 +90,11 @@
                         </td>
                         <td>
                             <p id="flashplayerinstalled" style="display: none; color: green; font-size: 11px;">
-                                <img src="template/default/img/tick.png" border="0" alt="flash player installed"> 
+                                <img src="template/modern/img/tick.png" border="0" alt="flash player installed"> 
                                 {{ trans('langFlashPlayer') }}
                             </p>
                             <p id="flashplayernotinstalled" style="display: none; color: red; font-size: 11px;">
-                                <img src="template/default/img/delete.png" border="0" alt="flash player not installed"> 
+                                <img src="template/modern/img/delete.png" border="0" alt="flash player not installed"> 
                                 {{ trans('langFlashPlayerNotInstalled') }} 
                                 <a href="http://get.adobe.com/flashplayer/" target="_blank">{{ trans('langHere') }}</a>.
                                 {{ trans('langAgreeAndInstall') }}
@@ -114,11 +114,11 @@
                         </td>
                         <td>
                             <p id="shockinstalled" style="display: none; color: green; font-size: 11px;">
-                                <img src="template/default/img/tick.png" border="0" alt="shockwave installed"> 
+                                <img src="template/modern/img/tick.png" border="0" alt="shockwave installed"> 
                                 {{ trans('langShockInstalled') }}
                             </p>
                             <p id="shocknotinstalled" style="display: none; color: red; font-size: 11px;">
-                                    <img src="template/default/img/delete.png" border="0" alt="shockwave not installed"> 
+                                    <img src="template/modern/img/delete.png" border="0" alt="shockwave not installed"> 
                                     {{ trans('langShockNotInstalled') }}
                                     <a href="http://get.adobe.com/shockwave/" target="_blank">{{ trans('langHere') }}</a>.
                                     {{ trans('langAgreeAndInstall') }}

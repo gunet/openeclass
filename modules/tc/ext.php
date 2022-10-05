@@ -129,14 +129,14 @@ function display_message($message) {
         <head>            
             <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
             <title>$langBBBWelcomeMsg</title>
-            <link rel='stylesheet' href='{$urlServer}template/default/CSS/bootstrap-custom.css'>
+            <link rel='stylesheet' href='{$urlServer}template/modern/css/bootstrap.min.css'>
         </head>        
         <body style='background-color: white;'>
             <div class='container'>
                 <div class='row'>
-                    <div class='col-xs-12 text-center'>
+                    <div class='col-12 text-center'>
                         <div style='padding-top: 10px; padding-bottom: 10px;'>
-                            <img style = 'filter: invert(100%);' src='{$urlServer}template/default/img/logo_eclass.png' alt=''>
+                            <img style = 'filter: invert(100%);' src='{$urlServer}template/modern/img/logo_eclass.png' alt=''>
                         </div>                        
                         <div class='panel-body'>
                             <div class='alert alert-warning'>

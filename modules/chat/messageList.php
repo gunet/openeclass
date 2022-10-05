@@ -150,10 +150,10 @@ if (isset($_GET['store']) && $is_editor) {
     <script src="<?php echo $urlServer;?>js/jquery<?php echo JQUERY_VERSION; ?>.min.js"></script>
 
     <!-- Latest compiled and minified JavaScript -->
-    <script src="<?php echo $urlServer;?>template/default/js/bootstrap.min.js"></script>
+    <script src="<?php echo $urlServer;?>js/bootstrap.bundle.min.js"></script>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="<?php echo $urlServer;?>template/default/CSS/bootstrap-custom.css">
+    <link rel="stylesheet" href="<?php echo $urlServer;?>template/modern/css/bootstrap.min.css">
 
     <style type="text/css">
         span { color: #727266; font-size: 11px; }
@@ -186,7 +186,7 @@ if (isset($_GET['store']) && $is_editor) {
                     $class = 'alert-info';
                 }
                 echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
-                            <div class='col-xs-12'>
+                            <div class='col-12 mt-3 p-3'>
                                 <div class='alert $class text-center'>
                                     $str_1[0]
                                 </div>
@@ -205,8 +205,8 @@ if (isset($_GET['store']) && $is_editor) {
                 }
                 $token = token_generate($user_id, true);
                 echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
-                            <div class='col-xs-12'>
-                                <div class='media'>
+                            <div class='col-12 mt-3 p-3'>
+                                <div class='media p-3' style='background:#f2f2f2;'>
                                     <a class='media-left' href='{$urlServer}main/profile/display_profile.php?id=$user_id&amp;token=$token'>
                                         ". profile_image($user_id, IMAGESIZE_SMALL) ."
                                     </a>
@@ -223,7 +223,7 @@ if (isset($_GET['store']) && $is_editor) {
             }
         } else { //prior to version 3.0 generated conferences
                 echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
-                            <div class='col-xs-12'>
+                            <div class='col-12 mt-3 p-3'>
                                 <div class='alert alert-default'>
                                     $str_1[0]
                                 </div>

@@ -39,16 +39,19 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <head><title>-</title>
     <meta http-equiv='Content-Type' content='text/html; charset=$charset'>
     <!-- jQuery -->
-    <script type='text/javascript' src='{$urlAppend}js/jquery-" . JQUERY_VERSION . ".js'></script>
+    <script type='text/javascript' src='{$urlAppend}js/jquery" . JQUERY_VERSION . ".min.js'></script>
     
     <!-- Latest compiled and minified JavaScript -->
     <script src='{$urlAppend}js/bootstrap.bundle.min.js'></script>
+
+    <!-- DataTables and Checkitor js-->
+    <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
         
     <!-- Latest compiled and minified CSS -->
-    <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css'>
+    <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css'>
 
     <!-- Font Awesome - A font of icons -->
-    <link href='{$urlAppend}template/default/CSS/font-awesome-4.7.0/css/font-awesome.css' rel='stylesheet'>  
+    <link href='{$urlAppend}template/modern/css/font-awesome-4.7.0/css/font-awesome.css' rel='stylesheet'>  
         
     <link href='{$urlAppend}template/$theme/CSS/lp.css?v=".ECLASS_VERSION."' rel='stylesheet' type='text/css' />
     

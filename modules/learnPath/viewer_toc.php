@@ -192,7 +192,7 @@ echo "<!DOCTYPE HTML>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
     <title>-</title>
     <!-- jQuery -->
-    <script type='text/javascript' src='{$urlAppend}js/jquery-" . JQUERY_VERSION . ".js'></script>
+    <script type='text/javascript' src='{$urlAppend}js/jquery" . JQUERY_VERSION . ".min.js'></script>
 
     <!-- Latest compiled and minified JavaScript -->
     <script src='{$urlAppend}js/bootstrap.bundle.min.js'></script>
@@ -200,16 +200,19 @@ echo "<!DOCTYPE HTML>
     <script type='text/javascript' src='{$urlAppend}js/jquery.cookie.js'></script>
 
     <!-- Our javascript -->
-    <script type='text/javascript' src='{$urlAppend}template/default/js/main.js'></script>
+    <script type='text/javascript' src='{$urlAppend}js/custom.js'></script>
 
     <!-- SlimScroll -->
     <script src='{$urlAppend}js/jquery.slimscroll.min.js'></script>
 
+    <!-- DataTables and Checkitor js-->
+    <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
+
     <!-- Latest compiled and minified CSS -->
-    <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css?v=".ECLASS_VERSION."'>
+    <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?v=".ECLASS_VERSION."'>
 
     <!-- Font Awesome - A font of icons -->
-    <link href='{$urlAppend}template/default/CSS/font-awesome-4.7.0/css/font-awesome.css' rel='stylesheet'>
+    <link href='{$urlAppend}template/modern/css/font-awesome-4.7.0/css/font-awesome.css' rel='stylesheet'>
 
     <style>
         .navbar-inverse .navbar-nav > li > a {color: whitesmoke;}
@@ -313,16 +316,16 @@ echo "<!DOCTYPE HTML>
 </head>
 <body>
 
-    <nav class='navbar navbar-inverse navbar-static-top' role='navigation'>
+    <nav class='navbar navbar-inverse navbar-static-top bg-dark' role='navigation'>
             <div class='container-fluid'>
-                <div class='navbar-header col-xs-2'>
-                  <a id='leftTOCtoggler' class='btn pull-left'><span class='fa fa-bars fa-lg'></span></a>
+                <div class='navbar-header col-2'>
+                  <a id='leftTOCtoggler' class='btn mt-0'><span class='fa fa-bars fa-lg'></span></a>
                   <a id='toc_logo' class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='$logoUrl' alt='Logo'></a>
                 </div>
-                <div class='navbar-header col-xs-10 float-end'>
+                <div class='navbar-header col-10 float-end'>
                     <ul id='navigation-btns' class='nav navbar-nav navbar-right '>
                         $prevNextString
-                        <li id='close-btn' style='padding-top: 15px;'><a href='$returl' target='_top'><span class='fa fa-times fa-lg'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></li>
+                        <li id='close-btn'><a href='$returl' target='_top'><span class='fa fa-times fa-lg'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></li>
                     </ul>
                     <div class='float-end progressbar-plr'>";
 
