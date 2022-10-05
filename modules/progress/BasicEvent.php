@@ -45,6 +45,13 @@ class BasicEvent implements Sabre\Event\EventEmitterInterface {
     }
     
     public function __construct() {
+        // fix for hiqdev protocol
+        if (!array_key_exists('argv', $_SERVER)) {
+            $_SERVER['argv'] = array();
+            $_SERVER['argv'][0] = '';
+            $_SERVER['argc'] = 0;
+        }
+
         $this->preDataListeners();
     }
     
