@@ -207,7 +207,7 @@
                                 </div>
 
                                 <div class="collapse" id="collapseMoreInfoAdmin">
-                                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 all-alerts'>
+                                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
 
                                         <div class='panel panel-admin'>
                                             <div class='panel-heading ps-3 pt-2 pb-2 colorPalette text-center'>

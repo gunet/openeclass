@@ -24,7 +24,7 @@ $mail_ver_excluded = true;
 require_once '../include/baseTheme.php';
 $toolName = $contactpoint;
 
-$data['postaddress'] = nl2br(get_config('postaddress'));
+$data['postaddress'] = get_config('postaddress');
 $data['Institution'] = get_config('institution');
 $data['phone'] = get_config('phone');
 $data['fax'] = get_config('fax');

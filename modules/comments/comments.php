@@ -71,8 +71,8 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                                 ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
                             <div class='media-body bubble panel-body'>
-                                <button class='btn btn-success btn-sm mt-2 media-heading'>".format_locale_date(strtotime($comment->getTime())).'</buton>'.
-                                    "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
+                                <button class='w-100 btn btn-light mt-2 media-heading'>".format_locale_date(strtotime($comment->getTime())).'</buton>'.
+                                    "<br><small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
                                     $post_actions
                                     ."<div class='margin-top-thin mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
                             </div>

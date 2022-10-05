@@ -42,7 +42,7 @@ function draw($toolContent, $options=null, $head_content ='') {
     }
 
 	$t = new Template();
-	$t->set_file('fh', 'template/default/theme.html');
+	$t->set_file('fh', 'template/modern/theme.html');
 	$t->set_block('fh', 'mainBlock', 'main');
 
     $t->set_var('SITE_NAME', 'Open eClass');
@@ -51,9 +51,9 @@ function draw($toolContent, $options=null, $head_content ='') {
     $t->set_block('mainBlock', 'LoggedOutBlock', 'delete');
     $t->set_block('mainBlock', 'toolTitleBlock', 'delete');
     $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
-    $t->set_var('logo_img', '../template/default/img/logo_eclass.png');
-    $t->set_var('logo_img_small', '../template/default/img/logo_eclass_small.png');
-    $t->set_var('template_base', '../template/default');
+    $t->set_var('logo_img', '../template/modern/img/logo_eclass.png');
+    $t->set_var('logo_img_small', '../template/modern/img/logo_eclass_small.png');
+    $t->set_var('template_base', '../template/modern');
     $t->set_var('HEAD_EXTRAS', $head_content);
 
     if (isset($options['no-menu'])) {
@@ -200,7 +200,7 @@ function touch_try($filename) {
 function form_entry($name, $input, $label) {
     return "
     <div class='form-group mt-3'>
-      <label for='$name' class='col-sm-6 control-label-notes'>" . q($label) . "</label>
+      <label for='$name' class='col-sm-12 control-label-notes'>" . q($label) . "</label>
       <div class='col-sm-12'>$input</div>
     </div>";
 }
@@ -208,7 +208,7 @@ function form_entry($name, $input, $label) {
 function display_entry($input, $label) {
     return "
     <div class='form-group mt-3'>
-      <label class='col-sm-6 control-label-notes'>" . q($label) . "</label>
+      <label class='col-sm-12 control-label-notes'>" . q($label) . "</label>
       <div class='col-sm-12'><p class='form-control-static'>$input</p></div>
     </div>";
 }

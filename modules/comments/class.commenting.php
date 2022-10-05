@@ -76,7 +76,7 @@ Class Commenting {
      */
     public function put($courseCode, $isEditor, $uid, $always_open = false) {
         global $langComments, $langBlogPostUser, $langSubmit, $langModify, $langDelete,
-        $langCommentsDelConfirm, $langCommentsSaveConfirm, $urlServer, $head_content;
+        $langCommentsDelConfirm, $langCommentsSaveConfirm, $urlServer, $head_content, $langClose;
 
         $commentsNum = $this->getCommentsNum();
 
@@ -145,7 +145,7 @@ Class Commenting {
                             ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
                             <div class='media-body bubble panel-body'>
-                             <button class='btn btn-success btn-sm mt-2 media-heading'>".format_locale_date(strtotime($comment->getTime())).'</button>'.
+                             <button class='btn btn-sm btn-success mt-2 media-heading'>".format_locale_date(strtotime($comment->getTime())).'</button>'.
                               "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
                                $post_actions
                                ."<div class='margin-top-thin mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
@@ -175,7 +175,7 @@ Class Commenting {
 
         if (!$always_open) {
             $out .= '<div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">'.$langClose.'</button>
                      </div>';
             $out .= '</div>';
         }

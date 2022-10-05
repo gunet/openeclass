@@ -1,3 +1,16 @@
+/*---------------------------------------- INSTALL ECLASS --------------------------------------*/
+/*---------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------*/
+
+.header_container{ background:#1d4e89; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;}
+
+.logo-install {background:#1d4e89;}
+
+.col_maincontent_active_Install{border-radius: 15px;}
+
+.step2-form{ max-height:450px; overflow-y: auto;}
 
 /*---------------------------------------------- Basic -----------------------------------------*/
 /*---------------------------------------------------------------------------------------------*/
@@ -7,7 +20,8 @@
 
 html{height:100%;}
 
-body{ background-color: #eaeaea; font-family: 'FontAwesome','Open Sans', Arial, sans-serif; font-size: 14px; line-height: 1.42857143; }
+body{ background-color: #eaeaea; font-family: 'FontAwesome','Open Sans', Arial, sans-serif; font-size: 14px; line-height: 1.42857143; 
+  background: linear-gradient(170deg, rgba(49, 57, 73, 0.8) 20%, rgba(49, 57, 73, 0.5) 20%, rgba(49, 57, 73, 0.5) 35%, rgba(41, 48, 61, 0.6) 35%, rgba(41, 48, 61, 0.8) 45%, rgba(31, 36, 46, 0.5) 45%, rgba(31, 36, 46, 0.8) 75%, rgba(49, 57, 73, 0.5) 75%), linear-gradient(45deg, rgba(20, 24, 31, 0.8) 0%, rgba(41, 48, 61, 0.8) 50%, rgba(82, 95, 122, 0.8) 50%, rgba(133, 146, 173, 0.8) 100%) #313949;}
 
 span{font-size: 14px;}
 
@@ -571,6 +585,68 @@ select.form-select { -webkit-appearance: menulist; }
   .agenda-comment{ font-size:13px; }
 
   .panel-body-about-me p{ margin-bottom: 0px; }
+
+  .btn-slide { 
+    position: relative;
+    display: inline-block; 
+    height: 50px;
+    width: 320px;
+    line-height: 50px;
+    margin: 25px 0;
+    padding: 0px;
+    border-radius: 25px;
+    box-shadow: 0 10px 20px -8px rgba(0, 0, 0,0.7);
+    background: linear-gradient(135deg, #083475 0%,#7fa1a5 100%);
+  }
+        
+  .btn-slide:active { 
+      box-shadow: 0 8px 16px -8px rgba(0, 0, 0,0.7);
+      -webkit-transform: scale(0.98);
+      transform: scale(0.96); }
+      
+  @media (min-width:992px){
+     .btn-slide:hover { background: linear-gradient(-135deg, #10395a 0%,#79f1fc 100%); }
+  }
+ 
+          
+  .btn-slide span.circle { 
+      display: block;
+      background-color: #fff;
+      color: #337ab7;
+      position: absolute;
+      margin: 5px;
+      height: 40px; 
+      width: 40px;
+      top: 0; left: 0;
+      border-radius: 50%;
+      transition: all 1.5s ease;
+  }
+   
+  @media (min-width:992px){
+    .btn-slide:hover span.circle { 
+        left: 100%;
+        margin-left: -45px;
+        background-color: #fff;
+        color: #79f1fc; }
+  }
+          
+  .btn-slide span.title { 
+      position: absolute;
+      left: 85px;
+      font-size: 17px;
+      font-weight: bold;
+      color: #fff;
+      transition: all 1.5s linear; 
+  }
+  
+  .btn-slide span.title-hover { opacity: 0;}   
+
+  @media (min-width:992px){
+    .btn-slide:hover span.title { opacity: 0; }
+    .btn-slide:hover span.title-hover { opacity: 1; left: 60px; } 
+  }
+
+
       
   /* -------------------------------------------- AllTables ------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -643,7 +719,7 @@ select.form-select { -webkit-appearance: menulist; }
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
   
-  .jumbotron.jumbotron-login{ background-repeat: no-repeat; background-size: cover; background-image: url(../images/books.jpeg); }
+  .jumbotron.jumbotron-login{ background-repeat: no-repeat; background-size: cover; background-image: url(../images/books.jpeg); border:solid 1px #000000;}
 
   .login-form-Homepage{ border-top-right-radius: 15px; border-bottom-right-radius: 15px; background:#F5F5F5; }
 

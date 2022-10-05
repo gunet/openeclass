@@ -23,34 +23,52 @@
                     </div>
 
                     
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-                        <div class='panel shadow-sm p-3 bg-body rounded'>
+                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                        <div class='panel shadow-lg p-3 bg-body rounded'>
                             <div class='panel-body'>
-                                <strong class='control-label-notes'>{{ trans('langPostMail') }}</strong>&nbsp;{{ $Institution }}
-                                <br> {!! $postaddress !!}
+                                <div class='p-1'>
+                                    <strong class='control-label-notes'>{{ trans('langPostMail') }}</strong>&nbsp;{{ $Institution }}
+                                </div>
+                                @if(!empty($postaddress))
+                                <div class='p-1'>
+                                    <strong class='control-label-notes'>{{ trans('langInstitutePostAddress') }}: </strong>&nbsp;{!! $postaddress !!}
+                                </div>
+                                @endif
 
                                 @if (empty($phone))
-                                    <strong class='control-label-notes'>{{ trans('langPhone') }}:</strong>
-                                    <span class='not_visible'> - {{ trans('langProfileNotAvailable') }} - </span><br>
+                                    <div class='p-1'>
+                                        <strong class='control-label-notes'>{{ trans('langPhone') }}:</strong>
+                                        <span class='not_visible'> - {{ trans('langProfileNotAvailable') }} - </span>
+                                    </div>
                                 @else
+                                <div class='p-1'>
                                     <strong class='control-label-notes'>{{ trans('langPhone') }}:&nbsp;</strong>
-                                    {{ $phone }}<br>
+                                    {{ $phone }}
+                                </div>
                                 @endif
 
                                 @if (empty($fax))
+                                <div class='p-1'>
                                     <strong class='control-label-notes'>{{ trans('langFax') }}</strong>
-                                    <span class='not_visible'> - {{ trans('langProfileNotAvailable') }} - </span><br>
+                                    <span class='not_visible'> - {{ trans('langProfileNotAvailable') }} - </span>
+                                </div>
                                 @else
+                                <div class='p-1'>
                                     <strong class='control-label-notes'>{{ trans('langFax') }}&nbsp;</strong>
-                                    {{ $fax }}<br>
+                                    {{ $fax }}
+                                </div>
                                 @endif
 
                                 @if (empty($emailhelpdesk))
+                                <div class='p-1'>
                                     <strong class='control-label-notes'>{{ trans('langEmail') }}:</strong>
-                                    <span class='not_visible'> - {{ trans('langProfileNotAvailable') }} - </span><br>
+                                    <span class='not_visible'> - {{ trans('langProfileNotAvailable') }} - </span>
+                                </div>
                                 @else
+                                <div class='p-1'>
                                     <strong class='control-label-notes'>{{ trans('langEmail') }}: </strong>
                                     <a href='mailto:$emailhelpdesk'>{{ $emailhelpdesk }}</a>
+                                </div>
                                 @endif
                             </div>
                         </div>

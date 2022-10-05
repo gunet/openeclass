@@ -4,9 +4,7 @@
 
 #cal-header{ background-color: #003F87;  border-top-left-radius: 15px; border-top-right-radius: 15px;  margin-left:-25px; margin-right:-25px; }
 
-@media (max-width: 991px){
-    #cal-header{  margin-left:0px;  margin-right:0px; }
-}
+@media (max-width: 991px){ #cal-header{  margin-left:0px;  margin-right:0px; } }
 
 /* month-row */
 .cal-month-box{  border: 0px;  background-color: white ; }
@@ -27,37 +25,27 @@
 
 .events-list{ margin-left: -5px; }
 
-/*****************************************/
-/*****************************************/
-/*****************************************/
-/* this is calendar-table for all inputs */
-/*****************************************/
-/*****************************************/
-/*****************************************/
+/****************************************************************************************************/
+/*************************************** this is input-calendar *************************************/
+/****************************************************************************************************/
 
- .table-condensed{ width:100%; }
+ .datetimepicker .table-condensed{ width:240px; }
 
- .table-condensed th, .table-condensed td { padding: 4px 15px; }
+ .datetimepicker .table-condensed th,.datetimepicker .table-condensed td { padding: 4px 15px; }
 
-  .table-condensed thead > tr > th,
-  .table-condensed tbody > tr > th,
-  .table-condensed tfoot > tr > th,
-  .table-condensed thead > tr > td,
-  .table-condensed tbody > tr > td,
-  .table-condensed tfoot > tr > td {
-     padding: 5px;
+ .datetimepicker .table-condensed thead > tr > th,
+ .datetimepicker .table-condensed tbody > tr > th,
+ .datetimepicker .table-condensed tfoot > tr > th,
+ .datetimepicker .table-condensed thead > tr > td,
+ .datetimepicker .table-condensed tbody > tr > td,
+ .datetimepicker .table-condensed tfoot > tr > td {
+    font-size: 14px; padding: 5px; color:'555555';
   }
 
-  /* .table-condensed thead tr th.next{ height: auto;  width: auto; border: 2px solid #003F87; border-radius: 50%; visibility: visible; }
+  .datetimepicker .table-condensed thead > tr , .datetimepicker .table-condensed tbody > tr , .datetimepicker .table-condensed tbody , .datetimepicker .table-condensed tfoot > tr {border:0;}
 
-  .table-condensed thead tr th.next::after{ content: '>'; font-size: 20px; font-weight: 500; }
+  .datetimepicker .table-condensed thead tr th.next::after{ content: '\f178'; font-size: 15px; font-weight: 700; color:black;}
 
-  .table-condensed thead tr th.next:hover{ background-color: transparent; }
+  .datetimepicker .table-condensed thead tr th.switch{ font-size: 14px; padding: 5px; font-family: 'Open Sans','Arial','sans-serif'; color:'555555';}
 
-  .table-condensed thead tr th.switch{ height: auto; width: auto; border: 2px solid #003F87; margin-left:30px; margin-right:30px; visibility: visible; color: orange; }
-
-  .table-condensed thead tr th.prev{ height: auto; width: auto; border: 2px solid #003F87;border-radius: 50%; visibility: visible; }
-
-  .table-condensed thead tr th.prev::before{ content: '<'; font-size: 20px; font-weight: 500; }
-
-  .table-condensed thead tr th.prev:hover{ background-color: transparent; } */
+  .datetimepicker .table-condensed thead tr th.prev::before{ content: '\f177'; font-size: 15px; font-weight: 700; color:black;}
