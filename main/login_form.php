@@ -29,7 +29,7 @@ foreach ($q as $l) {
             $authUrl .= '?next=' . urlencode($_GET['next']);
         }
         $authLink[] = array(false, "
-            <div class='col-sm-8 col-sm-offset-2' style='padding-top:40px;'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
                 <a class='btn btn-primary btn-block' href='$authUrl' style='line-height:40px;'>$langEnter</a>
             </div>", $authTitle);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) {

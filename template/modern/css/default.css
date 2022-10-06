@@ -21,7 +21,8 @@
 html{height:100%;}
 
 body{ background-color: #eaeaea; font-family: 'FontAwesome','Open Sans', Arial, sans-serif; font-size: 14px; line-height: 1.42857143; 
-  background: linear-gradient(170deg, rgba(49, 57, 73, 0.8) 20%, rgba(49, 57, 73, 0.5) 20%, rgba(49, 57, 73, 0.5) 35%, rgba(41, 48, 61, 0.6) 35%, rgba(41, 48, 61, 0.8) 45%, rgba(31, 36, 46, 0.5) 45%, rgba(31, 36, 46, 0.8) 75%, rgba(49, 57, 73, 0.5) 75%), linear-gradient(45deg, rgba(20, 24, 31, 0.8) 0%, rgba(41, 48, 61, 0.8) 50%, rgba(82, 95, 122, 0.8) 50%, rgba(133, 146, 173, 0.8) 100%) #313949;}
+  background: linear-gradient(170deg, rgba(49, 57, 73, 0.8) 20%, rgba(49, 57, 73, 0.5) 20%, rgba(49, 57, 73, 0.5) 35%, rgba(41, 48, 61, 0.6) 35%, rgba(41, 48, 61, 0.8) 45%, rgba(31, 36, 46, 0.5) 45%, rgba(31, 36, 46, 0.8) 75%, rgba(49, 57, 73, 0.5) 75%), linear-gradient(45deg, rgba(20, 24, 31, 0.8) 0%, rgba(41, 48, 61, 0.8) 50%, rgba(82, 95, 122, 0.8) 50%, rgba(133, 146, 173, 0.8) 100%) #313949;
+}
 
 span{font-size: 14px;}
 
@@ -520,7 +521,7 @@ select.form-select { -webkit-appearance: menulist; }
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
 
-  .calendar_announce_message_col{ background: white; border-top-right-radius: 15px; border-bottom-right-radius:15px; }
+  .calendar_announce_message_col{ background: white; border-top-right-radius: 15px; border-bottom-right-radius:15px;}
   
   .BtnCourseRegister{
     width:200px;
@@ -1602,7 +1603,10 @@ select.form-select { -webkit-appearance: menulist; }
 
     .eclass-nav-icon{ width:46px; height:34px; }
 
-    .container, .container-fluid{ padding: 0; }
+    .container-fluid{ padding: 0; }
+
+    /* full-width-container to mobile and tablet */
+    .container {max-width:100%; padding: 0;}
 
     .rowMedium, .cources-pics-page{ margin: auto; }
 

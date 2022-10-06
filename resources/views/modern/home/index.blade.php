@@ -33,6 +33,31 @@
                                             <a class="text-primary fw-bold btnlostpass mb-2 mt-md-4" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
                                         </div>
                                     </div>
+                                    
+                                    @php 
+                                        $q = Database::get()->queryArray("SELECT auth_id, auth_name, auth_default, auth_title
+                                             FROM auth WHERE auth_default <> 0
+                                             ORDER BY auth_default DESC, auth_id");
+                                    @endphp
+                                    @if($q)
+                                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                                            <div class='row'>
+                                                @foreach($q as $l)
+                                                    @if($l->auth_name == 'cas' and $l->auth_default == 1)
+                                                        <div class='col-12 col-md-6 mb-5 d-flex justify-content-md-start justify-content-center'>
+                                                            <a class='btn btn-success' href='{{$urlAppend}}modules/auth/cas.php'>{!! q(getSerializedMessage($l->auth_title)) !!}</a>
+                                                        </div>
+                                                    @endif
+                                                    @if($l->auth_name == 'shibboleth' and $l->auth_default == 1)
+                                                        <div class='col-12 col-md-6 mb-5 d-flex justify-content-md-start justify-content-center'>
+                                                            <a class='btn btn-success' href='{{$urlAppend}}secure/'>{!! q(getSerializedMessage($l->auth_title)) !!}</a>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endif
+                                    
                                 </div>
                                 <div class='@if($leftsideImg) col-0 @else col-xl-6 col-lg-5 col-md-4 col-0 @endif'></div>
                             </div>

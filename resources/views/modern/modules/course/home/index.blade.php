@@ -326,29 +326,29 @@
                             {!! $user_personal_calendar !!}
                             <div class='col-12 mt-4 pb-2'>
                                 <div class='row rowMedium'>
-                                    <div class='col-xl-12 col-md-6 col-12 event-legend'>
-                                        <div class='d-inline-flex align-items-center'>
-                                            <span class='event event-important'></span>
+                                    <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
+                                        <div class='d-inline-flex align-items-top'>
+                                            <span class='event event-important mt-1'></span>
                                             <span>{{ trans('langAgendaDueDay') }}</span>
                                         </div>
                                     </div>
 
-                                    <div class='col-xl-12 col-md-6 col-12 event-legend'>
-                                        <div class='d-inline-flex align-items-center'>
-                                            <span class='event event-info'></span>
+                                    <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
+                                        <div class='d-inline-flex align-items-top'>
+                                            <span class='event event-info mt-1'></span>
                                             <span>{{ trans('langAgendaCourseEvent') }}</span>
                                         </div>
                                     </div>
 
-                                    <div class='col-xl-12 col-md-6 col-12 event-legend'>
-                                        <div class='d-inline-flex align-items-center'>
-                                            <span class='event event-success'></span>
+                                    <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
+                                        <div class='d-inline-flex align-items-top'>
+                                            <span class='event event-success mt-1'></span>
                                             <span>{{ trans('langAgendaSystemEvent') }}</span>
                                         </div>
                                     </div>
-                                    <div class='col-xl-12 col-md-6 col-12 event-legend pb-3'>
-                                        <div class='d-inline-flex align-items-center'>
-                                            <span class='event event-special'></span>
+                                    <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend pb-3'>
+                                        <div class='d-inline-flex align-items-top'>
+                                            <span class='event event-special mt-1'></span>
                                             <span>{{ trans('langAgendaPersonalEvent') }}</span>
                                         </div>
                                     </div>

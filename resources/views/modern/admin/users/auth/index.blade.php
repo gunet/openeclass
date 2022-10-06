@@ -47,10 +47,10 @@
                                         @if ($auth_count == 0)
                                             0
                                         @else
-                                            <a href='listusers.php?fname=&amp;lname=&amp;am=&amp;user_type=0&amp;auth_type={{ $auth_id }}&amp;reg_flag=1&amp;user_registered_at=&verified_mail=3&amp;email=&amp;uname=&amp;department={{ getIndirectReference(0) }}'>{{ $auth_count }}</a>
+                                            <a href='listusers.php?fname=&amp;lname=&amp;am=&amp;user_type=0&amp;auth_type={{ $auth_id }}&amp;reg_flag=1&amp;user_registered_at=&verified_mail=3&amp;email=&amp;uname=&amp;department=0'>{{ $auth_count }}</a>
                                         @endif
                                         @if ($auth_id != 1 and $auth_count > 0)
-                                            - <a href='auth_change.php?auth={{ getIndirectReference($auth_id) }}'>{{ trans('langAuthChangeUser') }}</a>
+                                            - <a href='auth_change.php?auth={{ $auth_id }}'>{{ trans('langAuthChangeUser') }}</a>
                                         @endif
                                         )
                                         @if (!in_array($auth_id, $auth_active_ids))
@@ -87,7 +87,7 @@
                                         [
                                             [
                                                 'title' => $authMethod->auth_default ? trans('langDeactivate') : trans('langActivate'),
-                                                'url' => "$_SERVER[PHP_SELF]?auth=" . getIndirectReference($authMethod->auth_id) . "&amp;q=" . !$authMethod->auth_default,
+                                                'url' => "$_SERVER[PHP_SELF]?auth=" . $authMethod->auth_id . "&amp;q=" . !$authMethod->auth_default,
                                                 'icon' => $authMethod->auth_default ? 'fa-toggle-off' : 'fa-toggle-on',
                                                 'show' => $authMethod->auth_id == 1 || $authMethod->auth_settings
                                             ],

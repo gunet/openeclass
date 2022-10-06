@@ -54,25 +54,25 @@
         </div>
         <div class='panel-footer'>
             <div class='row'>
-                <div class='col-12 event-legend'>
+                <div class='col-xxl-6 col-lg-12 col-md-3 col-12 event-legend'>
                     <div class='d-inline-flex align-items-center'>
                         <div class='event event-important'></div>
                         <div class="agenda-comment"> {{ trans('langAgendaDueDay') }}</div>
                     </div>
                 </div>
-                <div class='col-12 event-legend'>
+                <div class='col-xxl-6 col-lg-12 col-md-3 col-12 event-legend'>
                     <div class='d-inline-flex align-items-center'>
                         <span class='event event-info'></span>
                         <span class="agenda-comment">{{ trans('langAgendaCourseEvent') }}</span>
                     </div>
                 </div>
-                <div class='col-12 event-legend'>
+                <div class='col-xxl-6 col-lg-12 col-md-3 col-12 event-legend'>
                     <div class='d-inline-flex align-items-center'>
                         <span class='event event-success'></span>
                         <span class="agenda-comment">{{ trans('langAgendaSystemEvent') }}</span>
                     </div>
                 </div>
-                <div class='col-12 event-legend'>
+                <div class='col-xxl-6 col-lg-12 col-md-3 col-12 event-legend'>
                     <div class='d-inline-flex align-items-center'>
                         <span class='event event-special'></span>
                         <span class="agenda-comment">{{ trans('langAgendaPersonalEvent') }}</span>

@@ -42,7 +42,7 @@
                         
                         <form class='form-horizontal' name='authmenu' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                         <fieldset>	
-                            <input type='hidden' name='auth' value='{{ getIndirectReference($auth) }}'>
+                            <input type='hidden' name='auth' value='{{ intval($auth) }}'>
                             @if ($auth == 1)
                                 @include('admin.users.auth.methods.eclass')
                             @elseif ($auth == 2)

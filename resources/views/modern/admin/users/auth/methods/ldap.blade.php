@@ -60,6 +60,21 @@
                 </div>
             </div>  
 
+            <div class='form-group mt-3'>
+                <label for='ldap_firstname_attr' class='col-sm-12 control-label-notes'>{{ trans('langldapfirstnameattr') }}</label>
+                <div class='col-sm-12'>
+                    <input class='form-control' name='ldap_firstname_attr' id='ldap_firstname_attr' type='text'  value='{{ isset($auth_data['ldap_firstname_attr']) ? $auth_data['ldap_firstname_attr'] : '' }}'>
+                </div>
+            </div>
+
+
+            <div class='form-group mt-3'>
+                <label for='ldap_surname_attr' class='col-sm-12 control-label-notes'>{{ trans('langldapsurnameattr') }}</label>
+                <div class='col-sm-12'>
+                    <input class='form-control' name='ldap_surname_attr' id='ldap_surname_attr' type='text' value='{{ isset($auth_data['ldap_surname_attr']) ? $auth_data['ldap_surname_attr'] : '' }}'>
+                </div>
+            </div>
+
             
 
             <div class='form-group mt-3'>

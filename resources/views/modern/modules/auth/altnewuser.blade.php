@@ -49,7 +49,7 @@
                                             <div class='form-group mt-3'>
                                                 <label for='UserName' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}</label>
                                                 <div class='col-sm-12'>
-                                                    <input class='form-control' type='text' size='30' maxlength='30' name='uname' autocomplete='off' {{ $set_uname }} placeholder='{{ trans('langUserNotice') }}'>
+                                                    <input class='form-control' type='text' size='30' maxlength='30' placeholder="{{ trans('langUserNotice') }}" name='uname' autocomplete='off' {{ $set_uname }}>
                                                 </div>
                                             </div>
                                             <div class='form-group mt-3'>

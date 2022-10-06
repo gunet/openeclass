@@ -77,7 +77,7 @@
                                                         @if ($v != 1)  <!--  bypass the eclass auth method -->
                                                             <!-- hybridauth registration is performed in newuser.php of formuser.php rather than altnewuser.php -->
                                                             @if ($v < 8) 
-                                                                <a class="text-primary fs-6"  href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
+                                                                <br><a class="text-primary fs-6"  href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
                                                             @else
                                                                 @if($eclass_stud_reg == 1) 
                                                                     <a class="text-primary fs-6" href='formuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
@@ -132,9 +132,9 @@
                                                                 <!-- hybridauth registration is performed in newuser.php rather than altnewuser -->
                                                                 @if ($v < 8) 
                                                                     @if ($alt_auth_prof_reg) 
-                                                                    <a class="text-primary fs-6"  href='altnewuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a>
+                                                                    <br><a class="text-primary fs-6"  href='altnewuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a>
                                                                     @else 
-                                                                    <a class="text-primary fs-6"  href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
+                                                                    <br><a class="text-primary fs-6"  href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
                                                                     @endif
                                                                 @else 
                                                                     @if ($alt_auth_prof_reg) 

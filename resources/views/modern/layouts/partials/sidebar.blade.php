@@ -17,9 +17,9 @@
                 <a id="Tool{{$key}}" class="collapsed parent-menu mt-5" data-bs-toggle="collapse" href="#collapse{{ $key }}">
                     <div class="panel-sidebar-heading">
                         <div class="panel-title h3">
-                            <div class='d-inline-flex align-items-center'>
-                                <span class="fa fa-chevron-right ms-1 tool-sidebar"></span>
-                                <span class='text-wrap tool-sidebar-text mt-1 ps-2'>{{ $tool_group[0]['text'] }}</span>
+                            <div class='d-inline-flex align-items-top'>
+                                <span class="fa fa-chevron-right tool-sidebar"></span>
+                                <span class='text-wrap tool-sidebar-text ps-2'>{{ $tool_group[0]['text'] }}</span>
                             </div>
                         </div><hr class='text-white'>
                     </div>

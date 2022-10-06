@@ -46,12 +46,16 @@
                                 <div class='form-wrapper shadow-sm p-3 rounded'>
                                     <div id='unsubscontrols'>
                                     @if(isset($_REQUEST['cid']))
+                                    <div class='col-12 mb-3 label d-inline-flex align-items-top'>
                                         <input type='checkbox' name='c_unsub' value='1' {{ $selected }}>&nbsp;{{ $course_title }}<br />
                                         <input type='hidden' name='cid' value='{{ getIndirectReference($cid) }}'>
+                                    </div>
                                     @else
                                         @foreach($_SESSION['courses'] as $code => $status)
                                             @if (course_status(course_code_to_id($code)) != COURSE_INACTIVE)
+                                            <div class='col-12 mb-3 label d-inline-flex align-items-top'>
                                                 <input type='checkbox' name='c_unsub[{{ $code }}]' value='1' {{ get_user_email_notification($uid, course_code_to_id($code)) ? 'checked' : '' }}>&nbsp;{{ course_code_to_title($code) }}<br>
+                                            </div>
                                             @endif
                                         @endforeach
                                     @endif
@@ -59,10 +63,10 @@
                                     <br>
                                     <div class='row'>
                                         <div class='col-6'>
-                                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                            <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                                         </div>
                                         <div class='col-6'>
-                                             <a class='btn btn-secondary cancelAdminBtn w-100' href='display_profile.php'>{{ trans('langCancel') }}</a>
+                                             <a class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='display_profile.php'>{{ trans('langCancel') }}</a>
                                         </div>
                                     </div>
                                     

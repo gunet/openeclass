@@ -93,7 +93,7 @@ Class Commenting {
                           <div class='modal-body' id='comments-$this->rid'>";
         } else {
             $comments_title = "<h5 id='comments_title'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h5><br>";
-            $out = "<div class='commenting bg-light p-3 mt-3'>
+            $out = "<div class='commenting p-3 mt-3' style='background:#f2f2f2;'>
                         $comments_title
                     <div class='commentArea' id='commentArea-$this->rid'>
                     <div id='comments-$this->rid'>";
