@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cf087fbf781c600a370b5cf056705683",
+    "content-hash": "b5a69bf28745aa0199fd79ff2b8b2015",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -997,6 +997,278 @@
             "time": "2022-01-20T10:17:49+00:00"
         },
         {
+            "name": "hiqdev/hoa-file",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hiqdev/hoa-file.git",
+                "reference": "521badf171db97ccd9157e2e009323f0ad2cb806"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hiqdev/hoa-file/zipball/521badf171db97ccd9157e2e009323f0ad2cb806",
+                "reference": "521badf171db97ccd9157e2e009323f0ad2cb806",
+                "shasum": ""
+            },
+            "require": {
+                "hiqdev/hoa-iterator": "~1.0",
+                "hiqdev/hoa-stream": "~1.0",
+                "hoa/consistency": "~1.0",
+                "hoa/event": "~1.0",
+                "hoa/exception": "~1.0",
+                "php": ">=7.4"
+            },
+            "replace": {
+                "hoa/file": "~1.17"
+            },
+            "require-dev": {
+                "hoa/test": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hoa\\File\\": "Source"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "The Hiqdev Hoa\\File library.",
+            "keywords": [
+                "Socket",
+                "directory",
+                "file",
+                "finder",
+                "library",
+                "link",
+                "temporary"
+            ],
+            "support": {
+                "source": "https://github.com/hiqdev/hoa-file/tree/1.0"
+            },
+            "time": "2022-09-14T14:15:07+00:00"
+        },
+        {
+            "name": "hiqdev/hoa-iterator",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hiqdev/hoa-iterator.git",
+                "reference": "fa95b5fd0ee8d2a844294cbe918e5448603dad6c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hiqdev/hoa-iterator/zipball/fa95b5fd0ee8d2a844294cbe918e5448603dad6c",
+                "reference": "fa95b5fd0ee8d2a844294cbe918e5448603dad6c",
+                "shasum": ""
+            },
+            "require": {
+                "hiqdev/hoa-stream": "~1.0",
+                "hoa/consistency": "~1.0",
+                "hoa/exception": "~1.0",
+                "php": ">=7.4"
+            },
+            "replace": {
+                "hoa/iterator": "~2.0"
+            },
+            "require-dev": {
+                "hoa/test": "~2.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hoa\\Iterator\\": "Source",
+                    "Hoa\\Iterator\\Test\\": "Test"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "The Hiqdev Hoa\\Compiler library.",
+            "keywords": [
+                "iterator",
+                "library"
+            ],
+            "support": {
+                "source": "https://github.com/hiqdev/hoa-iterator/tree/1.0.1"
+            },
+            "time": "2022-09-15T11:52:11+00:00"
+        },
+        {
+            "name": "hiqdev/hoa-protocol",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hiqdev/hoa-protocol.git",
+                "reference": "70ac2105c5b9206822b16963583143d799324636"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hiqdev/hoa-protocol/zipball/70ac2105c5b9206822b16963583143d799324636",
+                "reference": "70ac2105c5b9206822b16963583143d799324636",
+                "shasum": ""
+            },
+            "require": {
+                "hoa/consistency": "~1.0",
+                "hoa/exception": "~1.0",
+                "php": ">=7.4"
+            },
+            "replace": {
+                "hoa/protocol": "~1.0"
+            },
+            "require-dev": {
+                "hoa/test": "~2.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "Source/Wrapper.php"
+                ],
+                "psr-4": {
+                    "Hoa\\Protocol\\": "Source",
+                    "Hoa\\Protocol\\Bin\\": "Bin",
+                    "Hoa\\Protocol\\Test\\": "Test"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "The Hiqdev Hoa\\Protocol library.",
+            "keywords": [
+                "library",
+                "protocol",
+                "resource",
+                "stream",
+                "wrapper"
+            ],
+            "support": {
+                "source": "https://github.com/hiqdev/hoa-protocol/tree/1.0.1"
+            },
+            "time": "2022-07-12T07:31:36+00:00"
+        },
+        {
+            "name": "hiqdev/hoa-ruler",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hiqdev/hoa-ruler.git",
+                "reference": "d60a74027092639ad61ef7507f37061bf213a03a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hiqdev/hoa-ruler/zipball/d60a74027092639ad61ef7507f37061bf213a03a",
+                "reference": "d60a74027092639ad61ef7507f37061bf213a03a",
+                "shasum": ""
+            },
+            "require": {
+                "hoa/compiler": "~3.0",
+                "hoa/consistency": "~1.0",
+                "hoa/exception": "~1.0",
+                "hoa/file": "~1.0",
+                "hoa/protocol": "~1.0",
+                "hoa/visitor": "~2.0",
+                "php": ">=7.4"
+            },
+            "replace": {
+                "hoa/ruler": "~2.0"
+            },
+            "require-dev": {
+                "hoa/test": "~2.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hoa\\Ruler\\": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "The Hiqdev Hoa\\Ruler library.",
+            "keywords": [
+                "library",
+                "ruler"
+            ],
+            "support": {
+                "source": "https://github.com/hiqdev/hoa-ruler/tree/1.0.1"
+            },
+            "time": "2022-07-07T14:54:14+00:00"
+        },
+        {
+            "name": "hiqdev/hoa-stream",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hiqdev/hoa-stream.git",
+                "reference": "07b11966d3cc2238b1828266ea78e86b465571dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hiqdev/hoa-stream/zipball/07b11966d3cc2238b1828266ea78e86b465571dc",
+                "reference": "07b11966d3cc2238b1828266ea78e86b465571dc",
+                "shasum": ""
+            },
+            "require": {
+                "hiqdev/hoa-protocol": "~1.0",
+                "hoa/consistency": "~1.0",
+                "hoa/event": "~1.0",
+                "hoa/exception": "~1.0",
+                "php": ">=7.4"
+            },
+            "replace": {
+                "hoa/stream": "~1.17"
+            },
+            "require-dev": {
+                "hoa/test": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hoa\\Stream\\": "Source",
+                    "Hoa\\Stream\\Test\\": "Test"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "The Hiqdev Hoa\\Stream library.",
+            "keywords": [
+                "Context",
+                "bucket",
+                "composite",
+                "filter",
+                "in",
+                "library",
+                "out",
+                "protocol",
+                "stream",
+                "wrapper"
+            ],
+            "support": {
+                "issues": "https://github.com/hiqdev/hoa-stream/issues",
+                "source": "https://github.com/hiqdev/hoa-stream/tree/1.0"
+            },
+            "time": "2022-09-14T12:46:35+00:00"
+        },
+        {
             "name": "hoa/compiler",
             "version": "3.17.08.08",
             "source": {
@@ -1288,140 +1560,6 @@
             "time": "2017-01-16T07:53:27+00:00"
         },
         {
-            "name": "hoa/file",
-            "version": "1.17.07.11",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hoaproject/File.git",
-                "reference": "35cb979b779bc54918d2f9a4e02ed6c7a1fa67ca"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hoaproject/File/zipball/35cb979b779bc54918d2f9a4e02ed6c7a1fa67ca",
-                "reference": "35cb979b779bc54918d2f9a4e02ed6c7a1fa67ca",
-                "shasum": ""
-            },
-            "require": {
-                "hoa/consistency": "~1.0",
-                "hoa/event": "~1.0",
-                "hoa/exception": "~1.0",
-                "hoa/iterator": "~2.0",
-                "hoa/stream": "~1.0"
-            },
-            "require-dev": {
-                "hoa/test": "~2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Hoa\\File\\": "."
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Ivan Enderlin",
-                    "email": "ivan.enderlin@hoa-project.net"
-                },
-                {
-                    "name": "Hoa community",
-                    "homepage": "https://hoa-project.net/"
-                }
-            ],
-            "description": "The Hoa\\File library.",
-            "homepage": "https://hoa-project.net/",
-            "keywords": [
-                "Socket",
-                "directory",
-                "file",
-                "finder",
-                "library",
-                "link",
-                "temporary"
-            ],
-            "support": {
-                "docs": "https://central.hoa-project.net/Documentation/Library/File",
-                "email": "support@hoa-project.net",
-                "forum": "https://users.hoa-project.net/",
-                "irc": "irc://chat.freenode.net/hoaproject",
-                "issues": "https://github.com/hoaproject/File/issues",
-                "source": "https://central.hoa-project.net/Resource/Library/File"
-            },
-            "abandoned": true,
-            "time": "2017-07-11T07:42:15+00:00"
-        },
-        {
-            "name": "hoa/iterator",
-            "version": "2.17.01.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hoaproject/Iterator.git",
-                "reference": "d1120ba09cb4ccd049c86d10058ab94af245f0cc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hoaproject/Iterator/zipball/d1120ba09cb4ccd049c86d10058ab94af245f0cc",
-                "reference": "d1120ba09cb4ccd049c86d10058ab94af245f0cc",
-                "shasum": ""
-            },
-            "require": {
-                "hoa/consistency": "~1.0",
-                "hoa/exception": "~1.0"
-            },
-            "require-dev": {
-                "hoa/test": "~2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Hoa\\Iterator\\": "."
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Ivan Enderlin",
-                    "email": "ivan.enderlin@hoa-project.net"
-                },
-                {
-                    "name": "Hoa community",
-                    "homepage": "https://hoa-project.net/"
-                }
-            ],
-            "description": "The Hoa\\Iterator library.",
-            "homepage": "https://hoa-project.net/",
-            "keywords": [
-                "iterator",
-                "library"
-            ],
-            "support": {
-                "docs": "https://central.hoa-project.net/Documentation/Library/Iterator",
-                "email": "support@hoa-project.net",
-                "forum": "https://users.hoa-project.net/",
-                "irc": "irc://chat.freenode.net/hoaproject",
-                "issues": "https://github.com/hoaproject/Iterator/issues",
-                "source": "https://central.hoa-project.net/Resource/Library/Iterator"
-            },
-            "abandoned": true,
-            "time": "2017-01-10T10:34:47+00:00"
-        },
-        {
             "name": "hoa/math",
             "version": "1.17.05.16",
             "source": {
@@ -1496,75 +1634,6 @@
             "time": "2017-05-16T08:02:17+00:00"
         },
         {
-            "name": "hoa/protocol",
-            "version": "1.17.01.14",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hoaproject/Protocol.git",
-                "reference": "5c2cf972151c45f373230da170ea015deecf19e2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hoaproject/Protocol/zipball/5c2cf972151c45f373230da170ea015deecf19e2",
-                "reference": "5c2cf972151c45f373230da170ea015deecf19e2",
-                "shasum": ""
-            },
-            "require": {
-                "hoa/consistency": "~1.0",
-                "hoa/exception": "~1.0"
-            },
-            "require-dev": {
-                "hoa/test": "~2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Hoa\\Protocol\\": "."
-                },
-                "files": [
-                    "Wrapper.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Ivan Enderlin",
-                    "email": "ivan.enderlin@hoa-project.net"
-                },
-                {
-                    "name": "Hoa community",
-                    "homepage": "https://hoa-project.net/"
-                }
-            ],
-            "description": "The Hoa\\Protocol library.",
-            "homepage": "https://hoa-project.net/",
-            "keywords": [
-                "library",
-                "protocol",
-                "resource",
-                "stream",
-                "wrapper"
-            ],
-            "support": {
-                "docs": "https://central.hoa-project.net/Documentation/Library/Protocol",
-                "email": "support@hoa-project.net",
-                "forum": "https://users.hoa-project.net/",
-                "irc": "irc://chat.freenode.net/hoaproject",
-                "issues": "https://github.com/hoaproject/Protocol/issues",
-                "source": "https://central.hoa-project.net/Resource/Library/Protocol"
-            },
-            "abandoned": true,
-            "time": "2017-01-14T12:26:10+00:00"
-        },
-        {
             "name": "hoa/regex",
             "version": "1.17.01.13",
             "source": {
@@ -1628,146 +1697,6 @@
             },
             "abandoned": true,
             "time": "2017-01-13T16:10:24+00:00"
-        },
-        {
-            "name": "hoa/ruler",
-            "version": "2.17.05.16",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hoaproject/Ruler.git",
-                "reference": "696835daf8336dfd490f032da7af444050e52dfc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hoaproject/Ruler/zipball/696835daf8336dfd490f032da7af444050e52dfc",
-                "reference": "696835daf8336dfd490f032da7af444050e52dfc",
-                "shasum": ""
-            },
-            "require": {
-                "hoa/compiler": "~3.0",
-                "hoa/consistency": "~1.0",
-                "hoa/exception": "~1.0",
-                "hoa/file": "~1.0",
-                "hoa/protocol": "~1.0",
-                "hoa/visitor": "~2.0"
-            },
-            "require-dev": {
-                "hoa/test": "~2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Hoa\\Ruler\\": "."
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Ivan Enderlin",
-                    "email": "ivan.enderlin@hoa-project.net"
-                },
-                {
-                    "name": "Hoa community",
-                    "homepage": "https://hoa-project.net/"
-                }
-            ],
-            "description": "The Hoa\\Ruler library.",
-            "homepage": "https://hoa-project.net/",
-            "keywords": [
-                "library",
-                "ruler"
-            ],
-            "support": {
-                "docs": "https://central.hoa-project.net/Documentation/Library/Ruler",
-                "email": "support@hoa-project.net",
-                "forum": "https://users.hoa-project.net/",
-                "irc": "irc://chat.freenode.net/hoaproject",
-                "issues": "https://github.com/hoaproject/Ruler/issues",
-                "source": "https://central.hoa-project.net/Resource/Library/Ruler"
-            },
-            "abandoned": true,
-            "time": "2017-05-16T07:52:21+00:00"
-        },
-        {
-            "name": "hoa/stream",
-            "version": "1.17.02.21",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hoaproject/Stream.git",
-                "reference": "3293cfffca2de10525df51436adf88a559151d82"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hoaproject/Stream/zipball/3293cfffca2de10525df51436adf88a559151d82",
-                "reference": "3293cfffca2de10525df51436adf88a559151d82",
-                "shasum": ""
-            },
-            "require": {
-                "hoa/consistency": "~1.0",
-                "hoa/event": "~1.0",
-                "hoa/exception": "~1.0",
-                "hoa/protocol": "~1.0"
-            },
-            "require-dev": {
-                "hoa/test": "~2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Hoa\\Stream\\": "."
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Ivan Enderlin",
-                    "email": "ivan.enderlin@hoa-project.net"
-                },
-                {
-                    "name": "Hoa community",
-                    "homepage": "https://hoa-project.net/"
-                }
-            ],
-            "description": "The Hoa\\Stream library.",
-            "homepage": "https://hoa-project.net/",
-            "keywords": [
-                "Context",
-                "bucket",
-                "composite",
-                "filter",
-                "in",
-                "library",
-                "out",
-                "protocol",
-                "stream",
-                "wrapper"
-            ],
-            "support": {
-                "docs": "https://central.hoa-project.net/Documentation/Library/Stream",
-                "email": "support@hoa-project.net",
-                "forum": "https://users.hoa-project.net/",
-                "irc": "irc://chat.freenode.net/hoaproject",
-                "issues": "https://github.com/hoaproject/Stream/issues",
-                "source": "https://central.hoa-project.net/Resource/Library/Stream"
-            },
-            "abandoned": true,
-            "time": "2017-02-21T16:01:06+00:00"
         },
         {
             "name": "hoa/ustring",
@@ -5449,5 +5378,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }

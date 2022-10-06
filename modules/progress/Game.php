@@ -26,6 +26,13 @@ class Game extends GameAbstract {
 
     public function __construct() {
         $this->ruler = new Hoa\Ruler\Ruler();
+
+        // fix for hiqdev protocol
+        if (!array_key_exists('argv', $_SERVER)) {
+            $_SERVER['argv'] = array();
+            $_SERVER['argv'][0] = '';
+            $_SERVER['argc'] = 0;
+        }
     }
 
     protected function buildRule() {
