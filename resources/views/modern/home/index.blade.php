@@ -221,26 +221,31 @@
         <div class="row rowMedium">
             <div class="col-lg-12 border-15px Announcements-Homepage">
                 <div class="news">
-                    <h3 class="block-title">{{ trans('langAnnouncements') }}
+                    <h4 class="block-title">{{ trans('langAnnouncements') }}
                         <a href='{{ $urlServer }}rss.php'>
                             <span class='fa fa-rss-square'></span>
                         </a>
-                    </h3>
+                    </h4>
                     <div class="row news-list m-auto">
                         @php $counterAn = 0; @endphp
                         @foreach ($announcements as $announcement)
                             @if($counterAn < 6)
                             <div class="col-sm-12 news-list-item">
-                                <div class="date">
+                                <div class="title">
+                                    <a class="d-inline-flex align-items-top fs-6" href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
+                                        <span class='fs-5 me-2'>{{$counterAn + 1}})</span>
+                                        <span class='fs-6 mt-1'>{{$announcement->title}}</span>
+                                    </a>
+                                </div>
+                                <div class="date ms-4">
                                     {{ format_locale_date(strtotime($announcement->date)) }}
                                 </div>
-                                <div class="title"><a class="fs-6" href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>{{$announcement->title}}</a></div>
                             </div>
                             @endif
                         @php $counterAn++; @endphp
                         @endforeach
                     </div>
-                    <div class="more-link"><a class="all_announcements mt-3 float-end" href="{{ $urlServer }}main/system_announcements.php">ΟΛΕΣ ΟΙ ΑΝΑΚΟΙΝΩΣΕΙΣ <span class='fa fa-arrow-right'></span></a></div>
+                    <div class="more-link"><a class="all_announcements mt-3 float-end" href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span></a></div>
                 </div>
             </div>
         </div>
@@ -264,7 +269,7 @@
                     </div>
                     <div class="col-sm-4 text-center">
                             <i class="fas fa-mouse-pointer"></i>
-                            <div class="num">10<span>K+</span></div>
+                            <div class="num">10K<sup>+</sup></div>
                             <div class="num-text">{{trans('langUserLogins')}}/{{trans('langWeek')}}</div>
                     </div>
                     <div class="col-sm-4 text-center">
@@ -283,15 +288,15 @@
             <div class="owl-carousel owl-theme p-3">
                 <div class="item testimonial">
                     <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                    <div class="testimonial-person">- Λυδία Καλομοίρη -</div>
+                    <div class="testimonial-person mt-3">- Λυδία Καλομοίρη -</div>
                 </div>
                 <div class="item testimonial">
                     <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                    <div class="testimonial-person">- Γιάννης Ιωάννου -</div>
+                    <div class="testimonial-person mt-3">- Γιάννης Ιωάννου -</div>
                 </div>
                 <div class="item testimonial">
                     <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                    <div class="testimonial-person">- Νίκος Παπαδάκης -</div>
+                    <div class="testimonial-person mt-3">- Νίκος Παπαδάκης -</div>
                 </div>
             </div>
         </div>

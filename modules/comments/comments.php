@@ -66,15 +66,15 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                 $response[3] = "
                 <div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
                     <div class='col-12'>
-                        <div class='media panel-default p-1'>
+                        <div class='media panel-default p-1 rounded-0'>
                             <a class='media-left' href='#'>
                                 ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
-                            <div class='media-body bubble panel-body'>
+                            <div class='media-body bubble panel-body rounded-0'>
                                 <button class='w-100 btn btn-light mt-2 media-heading'>".format_locale_date(strtotime($comment->getTime())).'</buton>'.
                                     "<br><small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
                                     $post_actions
-                                    ."<div class='margin-top-thin mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
+                                    ."<div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
                             </div>
                         </div>
                     </div>

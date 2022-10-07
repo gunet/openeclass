@@ -879,6 +879,7 @@ $langFax = "<b>Fax:</b>";
 $langForm = "Ausfüllen des Formulars";
 $langReturn = "Zurück";
 $langAddPage = "Eine Seite hinzufügen";
+$langAllAnnouncements = "ALLE ANKÜNDIGUNGEN";
 $langPageAdded = "Die Seite wurde hinzugefügt";
 $langPageTitleModified = "Der Titel der Seite wurde geändert";
 $langSendPage = "Dateiname der Seite";

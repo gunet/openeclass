@@ -23,6 +23,7 @@ $langCoursesHeader = "Cursos";
 $langClosed = "cerrado";
 $langOpen = "abierto";
 $langSemiopen = "registro requerido";
+$langAllAnnouncements = "TODOS LOS ANUNCIOS";
 $langUsers = "usuarios";
 $langUsersS = "usuarios";
 $langUser = "Usuario";

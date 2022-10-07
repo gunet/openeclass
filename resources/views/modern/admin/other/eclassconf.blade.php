@@ -498,8 +498,8 @@
                                                         </div>
                                                         <div class='form-group'>
                                                             <label for='theme' class='col-sm-12 control-label-notes'>{{trans('lang_login_form')}}: </label>
-                                                            <div class='col-sm-9'>
-                                                                    <div class='checkbox'>
+                                                            <div class='col-sm-12'>
+                                                                    <div class='checkbox mb-md-0 mb-2'>
                                                                         <label>
                                                                             <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' {{ $cbox_dont_display_login_form }}>
                                                                             <span class='text-danger fs-6'>{{trans('lang_dont_display_login_form')}}</span>

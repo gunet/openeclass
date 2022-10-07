@@ -900,6 +900,7 @@ $langForm = "Compilare un modulo";
 $langReturn = "Indietro";
 $langAddPage = "Aggiungere una pagina";
 $langPageAdded = "La pagina è aggiunta";
+$langAllAnnouncements = "TUTTI GLI ANNUNCI";
 $langPageTitleModified = "Il titolo della pagina è modificato";
 $langSendPage = "Nome del file della pagina";
 $langCouldNotSendPage = "Il file non è in formato HTML e non si può inviare. Se desideri inviare i file che non sono in formato HTML (ad esempio PDF, Word, Power Point, video, ecc.) utilizza i <a href='./document/document.php'>Documenti</a>.";

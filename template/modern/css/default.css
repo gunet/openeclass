@@ -302,6 +302,9 @@ select.form-select { -webkit-appearance: menulist; }
   .owl-item.active.center .item.testimonial { max-height:300px; overflow-y: auto; }
 }
 
+@media (min-width:768px) and (max-width:991px){
+  .owl-item.active.center .item.testimonial { width:656px; height:270px; overflow-y: auto; overflow-x: auto; margin:auto; display:block;}
+}
 @media (min-width:992px) and (max-width:1023px){
   .testimonials .testimonial { width:250px; height:300px; }
 }
@@ -870,7 +873,7 @@ select.form-select { -webkit-appearance: menulist; }
   
   .main-section>.row>div.sidebar { background: #f5f5f5; }
 
-  .news-list .news-list-item { padding: 15px 0; border-bottom: 1px solid #dadada; }
+  .news-list .news-list-item { padding: 15px 0; }
   
   .news-list .news-list-item .date { color: #9d9d9c; font-weight: 600; }
   
@@ -1614,7 +1617,7 @@ select.form-select { -webkit-appearance: menulist; }
 
     .site-footerMobile, .border-15px, .BordersTop, .user-courses{ border-radius: 0px; }
 
-    .Announcements-Homepage{ background: #DCDCDC; }
+    .Announcements-Homepage{ background: #f2f2f2; }
 
     .calendar_announce_message_col, .user-details, .cources-section{ border-radius:0px; }
 

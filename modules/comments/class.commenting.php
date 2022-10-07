@@ -84,7 +84,7 @@ Class Commenting {
             $comments_title = "<span class='fa fa-comments'></span>&nbsp;&nbsp;<a class='course_commenting' data-bs-toggle='modal' data-bs-target='#commentArea-$this->rid'><span id='commentsNum-$this->rid'>$commentsNum</span> $langComments</a>";
             $out = "$comments_title
                     <div class='modal fade text-left' id='commentArea-$this->rid' role='dialog'>
-                      <div class='modal-dialog modal-lg'>
+                      <div class='modal-dialog'>
                         <div class='modal-content' style='padding:1%'>
                           <div class='modal-header'>
                             <button type='button' class='close' data-bs-dismiss='modal'>&times;</button>
@@ -140,15 +140,15 @@ Class Commenting {
                 }
                 $out .= "<div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
                           <div class='col-12'>
-                           <div class='media panel-default p-1'>
+                           <div class='media panel-default p-1 rounded-0'>
                             <a class='media-left' href='#'>
                             ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
-                            <div class='media-body bubble panel-body'>
+                            <div class='media-body bubble panel-body rounded-0'>
                              <button class='btn btn-sm btn-success mt-2 media-heading'>".format_locale_date(strtotime($comment->getTime())).'</button>'.
                               "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
                                $post_actions
-                               ."<div class='margin-top-thin mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
+                               ."<div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
                                </div>
                             </div>
                           </div>

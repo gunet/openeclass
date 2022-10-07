@@ -911,6 +911,7 @@ $introcontact = "You can contact with the Asynchronous eLearning Group of <b>".$
 $langPostMail = "<b>Postal Address:</b>";
 $langPhone = "Telephone";
 $langFax = "<b>Fax:</b>";
+$langAllAnnouncements = "ALL ANNOUNCEMENTS";
 $langForm = "Form Completion";
 $langReturn = "Back";
 $langAddPage = "Add a page";

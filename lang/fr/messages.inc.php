@@ -967,6 +967,7 @@ $langPhone = "Téléphone";
 $langFax = "<b>Fax:</b>";
 $langForm = "Remplir le formulaire";
 $langReturn = "Retour";
+$langAllAnnouncements = "TOUTES LES ANNONCES";
 $langAddPage = "Ajouter une page";
 $langPageAdded = "La page a été ajoutée";
 $langPageTitleModified = "Le titre de la page a été modifié";

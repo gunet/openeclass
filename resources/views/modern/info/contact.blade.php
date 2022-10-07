@@ -27,47 +27,47 @@
                         <div class='panel shadow-lg p-3 bg-body rounded'>
                             <div class='panel-body'>
                                 <div class='p-1'>
-                                    <strong class='control-label-notes'>{{ trans('langPostMail') }}</strong>&nbsp;{{ $Institution }}
+                                    <strong class='control-label-notes'>{!! trans('langPostMail') !!}</strong>&nbsp;{!! $Institution !!}
                                 </div>
                                 @if(!empty($postaddress))
                                 <div class='p-1'>
-                                    <strong class='control-label-notes'>{{ trans('langInstitutePostAddress') }}: </strong>&nbsp;{!! $postaddress !!}
+                                    <strong class='control-label-notes'>{!! trans('langInstitutePostAddress') !!}: </strong>&nbsp;{!! $postaddress !!}
                                 </div>
                                 @endif
 
                                 @if (empty($phone))
                                     <div class='p-1'>
-                                        <strong class='control-label-notes'>{{ trans('langPhone') }}:</strong>
-                                        <span class='not_visible'> - {{ trans('langProfileNotAvailable') }} - </span>
+                                        <strong class='control-label-notes'>{!! trans('langPhone') !!}:</strong>
+                                        <span class='not_visible'> - {!! trans('langProfileNotAvailable') !!} - </span>
                                     </div>
                                 @else
                                 <div class='p-1'>
-                                    <strong class='control-label-notes'>{{ trans('langPhone') }}:&nbsp;</strong>
+                                    <strong class='control-label-notes'>{!! trans('langPhone') !!}:&nbsp;</strong>
                                     {{ $phone }}
                                 </div>
                                 @endif
 
                                 @if (empty($fax))
                                 <div class='p-1'>
-                                    <strong class='control-label-notes'>{{ trans('langFax') }}</strong>
-                                    <span class='not_visible'> - {{ trans('langProfileNotAvailable') }} - </span>
+                                    <strong class='control-label-notes'>{!! trans('langFax') !!}</strong>
+                                    <span class='not_visible'> - {!! trans('langProfileNotAvailable') !!} - </span>
                                 </div>
                                 @else
                                 <div class='p-1'>
-                                    <strong class='control-label-notes'>{{ trans('langFax') }}&nbsp;</strong>
+                                    <strong class='control-label-notes'>{!! trans('langFax') !!}&nbsp;</strong>
                                     {{ $fax }}
                                 </div>
                                 @endif
 
                                 @if (empty($emailhelpdesk))
                                 <div class='p-1'>
-                                    <strong class='control-label-notes'>{{ trans('langEmail') }}:</strong>
-                                    <span class='not_visible'> - {{ trans('langProfileNotAvailable') }} - </span>
+                                    <strong class='control-label-notes'>{!! trans('langEmail') !!}:</strong>
+                                    <span class='not_visible'> - {!! trans('langProfileNotAvailable') !!} - </span>
                                 </div>
                                 @else
                                 <div class='p-1'>
-                                    <strong class='control-label-notes'>{{ trans('langEmail') }}: </strong>
-                                    <a href='mailto:$emailhelpdesk'>{{ $emailhelpdesk }}</a>
+                                    <strong class='control-label-notes'>{!! trans('langEmail') !!}: </strong>
+                                    <a href='mailto:$emailhelpdesk'>{!! $emailhelpdesk !!}</a>
                                 </div>
                                 @endif
                             </div>
