@@ -254,7 +254,7 @@ function generate_infinite_container_html($posts, $next_page) {
                           });
                       </script>';
     $ret = '
-    <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
+    <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
     <div class="infinite-container">';
 

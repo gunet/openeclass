@@ -116,8 +116,8 @@ $tool_content .= $boolean_field;
 $tool_content .= "<div class='form-group mt-5'>";
 $tool_content .= "<div class='col-12'>";
 $tool_content .= "<div class='row'>
-<div class='col-6'><button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit' value='$langModify'>$langModify</button></div>
-<div class='col-6'><button class='btn btn-danger btn-sm submitAdminBtn w-100' type='submit' name='submit' value='clear'>$langClearSettings</button></div></div>";
+<div class='col-md-6 col-4'><button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit' value='$langModify'>$langModify</button></div>
+<div class='col-md-6 col-8'><button class='btn btn-danger btn-sm submitAdminBtn w-100' type='submit' name='submit' value='clear'>$langClearSettings</button></div></div>";
 $tool_content .= "</div>";
 $tool_content .= "</div>";
 $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."";

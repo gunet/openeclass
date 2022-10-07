@@ -303,7 +303,8 @@ function view($view_file, $view_data = array()) {
             .notes_thead, .list-header{background: $theme_options_styles[leftNavBgColor];} 
             .menu-popover .list-group-item{background: $theme_options_styles[leftNavBgColor];}
             .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{background: red;}
-            .openCoursesPanel{background:$theme_options_styles[leftNavBgColor];}
+            .openCoursesPanel, .BtnMoreInfoAdmin{background:$theme_options_styles[leftNavBgColor];}
+            .BtnMoreInfoAdmin{color:#f2f2f2;}
             @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
         }
         if (!empty($theme_options_styles['linkColor'])) $styles_str .= "a {color: $theme_options_styles[linkColor];}";

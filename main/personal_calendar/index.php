@@ -556,7 +556,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         $tool_content .= '<div class="row p-2"></div>
                 <div id="calendar_wrapper" class="row">
                     <div class="col-md-12">
-                        <div class="row calendar-header">
+                        <div class="row calendar-header mb-4">
                         <div class="col-md-12">
                         <div id="calendar-header">
                             <div class="float-end form-inline">

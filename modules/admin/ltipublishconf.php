@@ -186,13 +186,13 @@ $tool_content .= "
             <div class='form-group mt-5'>
               <div class='col-12'>
               <div class='row'>
-                <div class='col-4'>
+                <div class='col-md-4 col-12'>
                     <button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit'>$langSubmit</button>
                 </div>
-                <div class='col-4'>
+                <div class='col-md-4 col-12 mt-md-0 mt-3'>
                     <button class='btn btn-danger btn-sm submitAdminBtn w-100' type='submit' name='submit' value='clear'>$langClearSettings</button>
                 </div>
-                <div class='col-4'>
+                <div class='col-md-4 col-12 mt-md-0 mt-3'>
                     <a href='extapp.php' class='btn btn-secondary btn-sm cancelAdminBtn w-100'>$langCancel</a>
                 </div>
                 </div>

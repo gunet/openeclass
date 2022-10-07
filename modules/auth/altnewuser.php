@@ -65,6 +65,7 @@ if (($auth != 7) and ($auth != 6)) {
     $data['set_uname'] = isset($_GET['uname']) ? (" value=" . q(canonicalize_whitespace($_GET['uname'])) . "") : '';
     $data['form_buttons'] = form_buttons(array(
                                 array(
+                                    'class' => 'btn-primary btn-sm submitAdminBtn w-50',
                                     'text' => q($langSubmit),
                                     'name' => 'is_submit',
                                     'value'=> q($langSubmit)

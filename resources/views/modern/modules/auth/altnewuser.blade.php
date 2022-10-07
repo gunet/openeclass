@@ -10,7 +10,7 @@
 
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_Homepage">
                     
-                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
+                <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -42,25 +42,28 @@
                         @elseif ($_SESSION['u_prof'] and !$alt_auth_prof_reg)
                             <div class='col-12'><div class='alert alert-danger'>{{ trans('langCannotRegister') }}</div></div>
                         @else
-                        <div class='col-12'>
+                        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                            <div class='col-12 h-100 left-form'></div>
+                        </div>
+                        <div class='col-lg-6 col-12'>
                             <div class='form-wrapper shadow-sm p-3 rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='altsearch.php'>
                                     <fieldset> {{ $auth_instructions }}
                                             <div class='form-group mt-3'>
-                                                <label for='UserName' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }}</label>
+                                                <label for='UserName' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                                 <div class='col-sm-12'>
                                                     <input class='form-control' type='text' size='30' maxlength='30' placeholder="{{ trans('langUserNotice') }}" name='uname' autocomplete='off' {{ $set_uname }}>
                                                 </div>
                                             </div>
                                             <div class='form-group mt-3'>
-                                                <label for='Pass' class='col-sm-6 control-label-notes'>{{ trans('langPass') }}</label>
+                                                <label for='Pass' class='col-sm-12 control-label-notes'>{{ trans('langPass') }}</label>
                                                 <div class='col-sm-12'>
                                                     <input class='form-control' type='password' size='30' maxlength='30' name='passwd' autocomplete='off' placeholder='{{ trans('langPass') }}'>
                                                 </div>
                                             </div>                    
                                         <input type='hidden' name='auth' value='{{ $auth }}'>
-                                        <div class='form-group mt-3'>
-                                            <div class='col-sm-offset-2 col-sm-10'>
+                                        <div class='form-group mt-5'>
+                                            <div class='col-12 d-flex justify-content-center'>
                                                 {!! $form_buttons !!}
                                                 @if (isset($_SESSION['prof']) and $_SESSION['prof']) 
                                                     <input type='hidden' name='p' value='1'>

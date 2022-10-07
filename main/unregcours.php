@@ -39,7 +39,7 @@ if (!isset($_POST['doit'])) {
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
       <div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?u=$_SESSION[uid]&amp;cid=$cid'>
-          <div class='form-group mt-3'>
+          <div class='form-group'>
             <div class='col-sm-12'>
               $langConfirmUnregCours: <b>" . q(course_id_to_title($cid)) . "</b>
             </div>
@@ -47,13 +47,13 @@ if (!isset($_POST['doit'])) {
           <div class='form-group mt-3'>
             <div class='d-inline-flex align-items-center'>
               <label class='control-label-notes'>$langYes:</label>
-              <button class='btn btn-danger ms-2' name='doit'> $langUnCourse</button>
+              <button class='btn btn-sm btn-danger ms-2' name='doit'> $langUnCourse</button>
             </div>
           </div>
           <div class='form-group mt-3'>
             <div class='d-inline-flex align-items-center'>
               <label class='control-label-notes'>$langNo:</label>
-              <a href='{$urlAppend}main/portfolio.php' class='btn btn-secondary ms-2'> $langCancel</a>
+              <a href='{$urlAppend}main/portfolio.php' class='btn btn-sm btn-secondary ms-2'> $langCancel</a>
             </div>
           </div>
         </form>

@@ -416,7 +416,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                  . '<div class="row p-2"></div>
                     <div id="calendar_wrapper">
                         
-                            <div class="row calendar-header">
+                            <div class="row calendar-header mb-4">
                                 
                                     <div id="calendar-header">
                                         <div class="float-end form-inline">

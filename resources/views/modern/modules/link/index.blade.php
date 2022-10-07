@@ -17,7 +17,7 @@
 
             <div class="col-xl-10 col-lg-9 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
                     
-                <div class="row p-lg-5 p-md-5 ps-1 pe-2 pt-5 pb-5">
+                <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @if(!$is_in_tinymce)
                         <nav class="navbar navbar-expand-lg navrbar_menu_btn">
@@ -27,8 +27,8 @@
                             </button>
                             
                             
-                            <a class="btn btn-primary btn-sm d-lg-none" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools">
-                                <i class="fas fa-tools"></i>
+                            <a class="btn btn-primary d-lg-none" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools">
+                                <i class="fa fa-bars"></i>
                             </a>
 
                         </nav>
