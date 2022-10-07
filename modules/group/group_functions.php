@@ -303,7 +303,7 @@ function showgroupsofcategory($catid) {
                 array('title' => $langDelete,
                       'icon' => 'fa-times',
                       'class' => 'delete',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;deletegroup=1&amp;id=$group_id",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group_id",
                       'confirm' => $langGroupDelconfirm)
             ));
             $tool_content .= "</td>";

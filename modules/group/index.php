@@ -81,11 +81,6 @@ if ($is_editor) {
         delete_group_category($id);
         Session::Messages($langGroupCategoryDeleted, 'alert-success');
         redirect_to_home_page("modules/group/index.php");
-    } elseif (isset($_GET['deletegroup'])) { // delete group
-        $id = $_GET['id'];
-        delete_group($id);
-        Session::Messages($langGroupDeleted, 'alert-success');
-        redirect_to_home_page("modules/group/index.php");
     }
     if (isset($_POST['creation'])) { // groups creation
         $v = new Valitron\Validator($_POST);
