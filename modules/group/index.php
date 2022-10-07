@@ -83,13 +83,6 @@ if ($is_editor) {
         Session::flash('message',$langGroupCategoryDeleted);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/group/index.php");
-    } elseif (isset($_GET['deletegroup'])) { // delete group
-        $id = $_GET['id'];
-        delete_group($id);
-        //Session::Messages($langGroupDeleted, 'alert-success');
-        Session::flash('message',$langGroupDeleted);
-        Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("modules/group/index.php");
     }
     if (isset($_POST['creation'])) { // groups creation
         $v = new Valitron\Validator($_POST);
