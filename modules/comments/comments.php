@@ -70,7 +70,7 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                             <a class='media-left' href='#'>
                                 ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
-                            <div class='media-body bubble panel-body rounded-0'>
+                            <div class='media-body bubble panel-body rounded-0 overflow-auto'>
                                 <button class='w-100 btn btn-light mt-2 media-heading'>".format_locale_date(strtotime($comment->getTime())).'</buton>'.
                                     "<br><small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
                                     $post_actions

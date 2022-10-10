@@ -55,19 +55,18 @@ function display_certificates() {
         $tool_content .= "
             
                 <div class='col-12 mt-3'>
-                    <div class='panel panel-default'>
-                        <div class='panel-body'>
-                            <div class='inner-heading'>
-                                <div class='row'>
-                                    <div class='col-md-7 col-6 text-start'>
-                                        <strong>$langCertificates</strong>
-                                    </div>
-                                    <div class='col-md-5 col-6 text-md-end text-end'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> <span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate</span></a>
-                                    </div>
+                    <div class='panel panel-default rounded-0'>
+                        <div class='panel-heading rounded-0'>
+                            <div class='row'>
+                                <div class='col-md-7 col-6 text-start mt-1'>
+                                    $langCertificates
+                                </div>
+                                <div class='col-md-5 col-6 text-md-end text-end'>
+                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> <span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate</span></a>
                                 </div>
                             </div>
-                            <hr>
+                        </div>
+                        <div class='panel-body rounded-0'>
                             <div class='res-table-wrapper shadow-sm p-3 rounded'>";
     if (count($sql_cer) == 0) { // If no certificates
         $tool_content .= "<p class='text-center text-muted'>$langNoCertificates</p>";
@@ -163,19 +162,18 @@ function display_badges() {
     }
         $tool_content .= "
                 <div class='col-12 mt-3'>
-                    <div class='panel panel-default'>
-                        <div class='panel-body'>
-                            <div class='inner-heading'>
-                                <div class='row'>
-                                    <div class='col-md-7 col-6 text-start'>
-                                        <strong>$langBadges</strong>
-                                    </div>
-                                    <div class='col-md-5 col-6 text-end'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
-                                    </div>
+                    <div class='panel panel-default rounded-0'>
+                        <div class='panel-heading rounded-0'>
+                            <div class='row'>
+                                <div class='col-md-7 col-6 text-start mt-1'>
+                                    $langBadges
+                                </div>
+                                <div class='col-md-5 col-6 text-end'>
+                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
                                 </div>
                             </div>
-                            <hr>
+                        </div>
+                        <div class='panel-body rounded-0'>
                             <div class='res-table-wrapper shadow-sm p-3 rounded'>";
 
     if (count($sql_cer) == 0) { // no badges
@@ -255,16 +253,15 @@ function display_course_completion() {
     if ($data) {
         $tool_content .= "
                 <div class='col-12'>
-                    <div class='panel panel-default'>
-                        <div class='panel-body'>
-                            <div class='inner-heading'>
-                                <div class='row'>
-                                    <div class='col-sm-7 text-md-start text-center'>
-                                        <strong>$langCourseCompletion</strong>
-                                    </div>
+                    <div class='panel panel-success rounded-0'>
+                        <div class='panel-heading rounded-0'>
+                            <div class='row'>
+                                <div class='col-sm-7 text-md-start text-center'>
+                                    $langCourseCompletion
                                 </div>
                             </div>
-                            <hr>
+                        </div>
+                        <div class='panel-body rounded-0'>
                             <div class='res-table-wrapper shadow-sm p-3 rounded'>";
 
             $vis_status = $data->active ? "text-success" : "text-danger";
@@ -513,73 +510,76 @@ function display_activities($element, $id, $unit_id = 0) {
     if (!$unit_id) {
         $tool_content .= "
             <div class='col-12 mt-3'>
-                <div class='panel panel-default'>
-                    <div class='panel-body'>
-                        <div class='inner-heading'>
-                            <div class='row'>
-                                <div class='col-sm-9'>
-                                    <strong>$langAttendanceActList</strong>
-                                </div>
-                                <div class='col-sm-3 text-end'>
-                                    $addActivityBtn
-                                </div>
+                <div class='panel panel-default rounded-0'>
+                    <div class='panel-heading rounded-0'>
+                        <div class='row'>
+                            <div class='col-9 mt-1'>
+                                $langAttendanceActList
+                            </div>
+                            <div class='col-3 text-end'>
+                                $addActivityBtn
                             </div>
                         </div>
-                        <hr>
-                        <div class='res-table-wrapper'>
-                                <div class='res-table-header list-header p-1 h-auto'>
-                                    <div class='row'>
-                                        <div class='col-sm-6 text-white text-start'>
-                                            $langTitle
-                                        </div>
-                                        <div class='col-sm-2 text-white text-start'>
-                                            $langType
-                                        </div>
-                                        <div class='col-sm-2 text-white text-start'>
-                                            $langValue
-                                        </div>
-                                        <div class='col-sm-2 text-end text-white pt-1'>
-                                            <i class='fa fa-cogs'></i>
-                                        </div>
+                    </div>
+                    <div class='panel-body'>
+                        <div class='table-responsive mt-0'>
+                            <table class='table-default'>
+                                <tr class='list-header'>
+                                    <th>
+                                        $langTitle
+                                    </th>
+                                    <th>
+                                        $langType
+                                    </th>
+                                    <th>
+                                        $langValue
                                     </div>
-                                </div>";
+                                    <th class='text-center'>
+                                        <i class='fa fa-cogs'></i>
+                                    </th>
+                                    
+                                </tr>";
         if (count($result) == 0) {
             $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
         } else {
             foreach ($result as $details) {
                 $resource_data = get_resource_details($element, $details->id);
                 $tool_content .= "
-                <div class='res-table-row'>
-                    <div class='row p-2'>
-                        <div class='col-sm-6 text-start'>".$resource_data['title']."</div>
-                        <div class='col-sm-2 text-start'>". $resource_data['type']."</div>
-                        <div class='col-sm-2 text-start'>";
-                if (!empty($details->operator)) {
-                    $op = get_operators();
-                    $tool_content .= $op[$details->operator];
-                } else {
-                    $tool_content .= "&mdash;";
-                }
-                $tool_content .= "&nbsp;$details->threshold</div>";
-                $tool_content .= "<div class='col-sm-2 text-end'>".
-                    action_button(array(
-                        array('title' => $langEditChange,
-                            'icon' => 'fa-edit',
-                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
-                            'show' => in_array($details->activity_type, criteria_with_operators())
-                        ),
-                        array('title' => $langDelete,
-                            'icon' => 'fa-times',
-                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
-                            'confirm' => $langConfirmDelete,
-                            'class' => 'delete'))).
-                    "</div></div></div>";
+                <tr>
+                    <td>".$resource_data['title']."</td>
+                    <td>". $resource_data['type']."</td>
+                    <td>";
+                        if (!empty($details->operator)) {
+                            $op = get_operators();
+                            $tool_content .= $op[$details->operator];
+                        } else {
+                            $tool_content .= "&mdash;";
+                        }
+                        $tool_content .= "$details->threshold</td>";
+                        $tool_content .= "<td>";
+                        $tool_content .= "<div class='text-center'>".
+                            action_button(array(
+                                array('title' => $langEditChange,
+                                    'icon' => 'fa-edit',
+                                    'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
+                                    'show' => in_array($details->activity_type, criteria_with_operators())
+                                ),
+                                array('title' => $langDelete,
+                                    'icon' => 'fa-times',
+                                    'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
+                                    'confirm' => $langConfirmDelete,
+                                    'class' => 'delete'))).
+                        "</div>
+                    </td>
+                </tr>";
             }
         }
-        $tool_content .= "</div>
-                    </div>
-                </div>
-            </div>";
+        $tool_content .= "
+                </table>
+            </div>
+        </div>
+        </div>
+        </div>";
     } else {
             $tool_content .= "<div class='main-content'>
                                 <div class='col-sm-12'>
@@ -2000,58 +2000,57 @@ function display_settings($element, $element_id, $unit_id = 0) {
         }
         $tool_content .= "
                 <div class='col-12'>
-                    <div class='panel panel-default'>
-                        <div class='panel-body'>
-                            <div class='inner-heading'>
-                                <div class='row'>
-                                    <div class='col-md-7 col-sm-6 text-md-start text-center'>
-                                        <strong>$langProgressBasicInfo</strong>
-                                    </div>
-                                    <div class='col-md-5 col-sm-6 text-md-end text-center mt-md-0 mt-3'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'>"
-                                                . "<span class='fa fa-pencil'></span> &nbsp;&nbsp;$langEditChange
-                                        </a>
-                                    </div>
+                    <div class='panel panel-default rounded-0'>
+                        <div class='panel-heading rounded-0'>
+                            <div class='row'>
+                                <div class='col-7 mt-1'>
+                                    $langProgressBasicInfo
+                                </div>
+                                <div class='col-5 text-end'>
+                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'>"
+                                            . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
+                                    </a>
                                 </div>
                             </div>
-                            <hr>
+                        </div>
+                        <div class='panel-body rounded-0'>
                             <div class='row'>
-                                <div class='col-sm-4'>
+                                <div class='col-md-4 col-12'>
                                     <img style='box-shadow: 0 0 15px 1px #bbb' class='img-responsive center-block m-md-0 m-auto d-block' src='$icon_link'>
                                 </div>
-                                <div class='col-sm-8'>
+                                <div class='col-md-8 col-12 mt-md-0 mt-3'>
                                     <div class='row p-2'>
-                                        <div class='col-sm-6'>
-                                            <div class='pn-info-title-sct control-label-notes'>$langTitle</div>
+                                        <div class='col-md-4 col-12'>
+                                            <div class='pn-info-title-sct control-label-notes'>$langTitle:</div>
                                         </div>
-                                        <div class='col-sm-6 text-start'>
+                                        <div class='col-md-8 col-12 text-start'>
                                             <div class='pn-info-text-sct'>$title</div>
                                         </div>
                                     </div>
 
                                     <div class='row p-2'>
-                                        <div class='col-sm-6'>
-                                            <div class='pn-info-title-sct control-label-notes'>$langDescription</div>
+                                        <div class='col-md-4 col-12'>
+                                            <div class='pn-info-title-sct control-label-notes'>$langDescription:</div>
                                         </div>
-                                        <div class='col-sm-6 text-start'>
+                                        <div class='col-md-8 col-12 text-start'>
                                             <div class='pn-info-text-sct'>$description</div>
                                         </div>
                                     </div>
 
                                     <div class='row p-2'>
-                                        <div class='col-sm-6'>
-                                            <div class='pn-info-title-sct control-label-notes'>$langMessage</div>
+                                        <div class='col-md-4 col-12'>
+                                            <div class='pn-info-title-sct control-label-notes'>$langMessage:</div>
                                         </div>
-                                        <div class='col-sm-6'>
+                                        <div class='col-md-8 col-12'>
                                             <div class='pn-info-text-sct text-start'>$message</div>
                                         </div>
                                     </div>
 
                                     <div class='row p-2'>
-                                        <div class='col-sm-6'>
-                                            <div class='pn-info-title-sct control-label-notes'>$langpublisher</div>
+                                        <div class='col-md-4 col-12'>
+                                            <div class='pn-info-title-sct control-label-notes'>$langpublisher:</div>
                                         </div>
-                                        <div class='col-sm-6'>
+                                        <div class='col-md-8 col-12'>
                                             <div class='pn-info-text-sct text-start'>$issuer</div>
                                         </div>
                                     </div>
@@ -2064,13 +2063,11 @@ function display_settings($element, $element_id, $unit_id = 0) {
         if (!$unit_id) {
             $tool_content .= "
             <div class='col-12'>
-                <div class='panel panel-default'>
-                    <div class='panel-body bg-light'>
-                        <div class='row'>
-                            <div class='col-sm-12 text-center'>
-                                <h6 class='mt-2'><strong>$langCourseCompletion</strong></h6>
-                            </div>
-                        </div>
+                <div class='panel panel-info rounded-0'>
+                    <div class='panel-body rounded-0 bg-light'>
+
+                        <h6 class='mb-0 text-center'><strong>$langCourseCompletion</strong></h6>
+                            
                     </div>
                 </div>
             </div>";
@@ -2267,15 +2264,11 @@ function student_view_progress() {
 
         $tool_content .= "
                 <div class='col-12'>
-                    <div class='panel panel-default'>
-                        <div class='panel-body'>
-                            <div class='inner-heading'>
-                                <div class='row'>
-                                    <div class='col-sm-7'>
-                                        <strong>$langCourseCompletion</strong>
-                                    </div>
-                                </div>
-                            </div><hr>
+                    <div class='panel panel-success rounded-0'>
+                        <div class='panel-heading rounded-0'>
+                            $langCourseCompletion
+                        </div>
+                        <div class='panel-body rounded-0'>
                             <div class='res-table-wrapper'>
                                 <div class='row p-2 res-table-row border-0'>
                                     <div class='col-sm-2'>
@@ -2324,15 +2317,11 @@ function student_view_progress() {
 
             $tool_content .= "
                     <div class='col-12 mt-3'>
-                        <div class='panel panel-default'>
-                            <div class='panel-body'>
-                                <div class='inner-heading'>
-                                    <div class='row'>
-                                        <div class='col-sm-7'>
-                                            <strong>$langBadges</strong>
-                                        </div>
-                                    </div>
-                                </div><hr>";
+                        <div class='panel panel-default rounded-0'>
+                            <div class='panel-heading rounded-0'>
+                                $langBadges
+                            </div>
+                            <div class='panel-body rounded-0'>";
 
             foreach ($game_badge as $key => $badge) {
                 // badge icon
@@ -2369,15 +2358,11 @@ function student_view_progress() {
 
             $tool_content .= "
                     <div class='col-12 mt-3'>
-                        <div class='panel panel-default'>
-                            <div class='panel-body'>
-                                <div class='inner-heading'>
-                                    <div class='row'>
-                                        <div class='col-sm-7'>
-                                            <strong>$langCertificates</strong>
-                                        </div>
-                                    </div>
-                                </div>";
+                        <div class='panel panel-default rounded-0'>
+                            <div class='panel-heading rounded-0'>
+                               $langCertificates
+                            </div>
+                            <div class='panel-body rounded-0'>";
 
 
             foreach ($game_certificate as $key => $certificate) {
@@ -2387,11 +2372,11 @@ function student_view_progress() {
                     $dateAssigned = '';
                 }
 
-                $tool_content .= "<hr><div class='res-table-wrapper'>";
+                $tool_content .= "<div class='res-table-wrapper'>";
 
                 $tool_content .= "<div class='col-12'>";
                 $tool_content .= "<a style='display:inline-block; width: 100%' href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user'>";
-                $tool_content .= "<div class='col-8 certificate_panel border border-secondary-4 m-auto d-block bg-light shadow-lg p-3'>
+                $tool_content .= "<div class='col-12 certificate_panel border border-secondary-4 m-auto d-block bg-light shadow-lg p-3'>
                         <h4 class='certificate_panel_title text-center'>$certificate->title</h4><br>
                         <div class='row'>
                             <div class='col-sm-12 certificate_panel_date text-success text-center'>$dateAssigned</div>
@@ -2550,7 +2535,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
         }
         // create public link if user has completed certificate and there is cert identifier
         if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) != null) {
-            $cert_public_link = "<div class='pn-info-title-sct'>$langCertAddress</div>
+            $cert_public_link = "<div class='pn-info-title-sct control-label-notes'>$langCertAddress:</div>
                                 <div class='pn-info-text-sct'>" . certificate_link($element_id, $user_id) . "</div>";
         }
         $sql = Database::get()->queryArray("SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion
@@ -2586,46 +2571,44 @@ function display_user_progress_details($element, $element_id, $user_id) {
 
 	$tool_content .= "
             <div class='col-12'>
-                <div class='panel panel-default'>
-                    <div class='panel-body'>
-                        <div class='inner-heading'>
-                            <div class='row'>
-                                <div class='col-sm-7'>
-                                    <strong>$element_title</strong>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
+                <div class='panel panel-default rounded-0'>
+                    <div class='panel-heading rounded-0'>
+                        $element_title     
+                    </div>
+                    <div class='panel-body rounded-0'>
+                        
                         <div class='row'>
                             <div class='col-sm-12'>
                                 <div class='row p-2'>
-                                <div class='col-6'>
-                                        <div class='pn-info-title-sct control-label-notes'>$langTotalPercentCompleteness</div></div>";
-                                        $tool_content .= "<div class='col-6'>";
+                                <div class='col-md-6 col-12'>
+                                        <div class='pn-info-title-sct control-label-notes'>$langTotalPercentCompleteness:</div></div>";
+                                        $tool_content .= "<div class='col-md-6 col-12'>";
                                         if ($user_data) {
-                                            $tool_content .= "<div class='pn-info-text-sct text-end'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</div>";
+                                            $tool_content .= "<div class='pn-info-text-sct text-md-end'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</div>";
                                         } else {
-                                            $tool_content .= "<div class='pn-info-text-sct text-end'>0%</div>";
+                                            $tool_content .= "<div class='pn-info-text-sct text-md-end'>0%</div>";
                                         }
                                 $tool_content .="</div></div>";
                                 $tool_content .= "
                                 <div class='row p-2'>
-                                    <div class='col-6'>
-                                        <div class='pn-info-title-sct control-label-notes'>$langDescription</div>
+                                    <div class='col-md-6 col-12'>
+                                        <div class='pn-info-title-sct control-label-notes'>$langDescription:</div>
                                     </div>
-                                    <div class='col-6'>
-                                        <div class='pn-info-text-sct text-end'>" . get_cert_desc($element, $element_id) . "</div>
+                                    <div class='col-md-6 col-12'>
+                                        <div class='pn-info-text-sct text-md-end'>" . get_cert_desc($element, $element_id) . "</div>
                                     </div>
                                 </div>
                                 <div class='row p-2'>
-                                    <div class='col-6'>
-                                        <div class='pn-info-title-sct control-label-notes'>$langpublisher</div>
+                                    <div class='col-md-6 col-12'>
+                                        <div class='pn-info-title-sct control-label-notes'>$langpublisher:</div>
                                     </div>
-                                    <div class='col-6'>
-                                        <div class='pn-info-text-sct text-end'>" . get_cert_issuer($element, $element_id) . "</div>
+                                    <div class='col-md-6 col-12'>
+                                        <div class='pn-info-text-sct text-md-end'>" . get_cert_issuer($element, $element_id) . "</div>
                                     </div>
                                 </div>
-                                $cert_public_link
+                                <div class='row p-2'>
+                                    $cert_public_link
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2634,22 +2617,17 @@ function display_user_progress_details($element, $element_id, $user_id) {
 
 	$tool_content .= "
             <div class='col-12 mt-3'>
-                <div class='panel panel-default'>
-                    <div class='panel-body'>
-                        <div class='inner-heading'>
-                            <div class='row'>
-                                <div class='col-sm-10'>
-                                    <strong>$langAttendanceActivity</strong>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
+                <div class='panel panel-default rounded-0'>
+                    <div class='panel-heading rounded-0'>
+                        $langAttendanceActivity
+                    </div>
+                    <div class='panel-body rounded-0'>
                         <div class='res-table-wrapper'>
                             <div class='row p-2 res-table-header'>
-                                <div class='col-sm-9 control-label-notes'>
-                                    $langTitle
+                                <div class='col-md-9 col-12 control-label-notes'>
+                                    $langTitle:
                                 </div>
-                                <div class='col-sm-3 text-center'>
+                                <div class='col-md-3 col-12 text-md-center'>
                                     $langInstallEnd
                                 </div>
                             </div>";
@@ -2660,8 +2638,8 @@ function display_user_progress_details($element, $element_id, $user_id) {
 		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
 		$tool_content .= "
                 <div class='row p-2 res-table-row border-0'>
-                    <div class='col-sm-9 control-label-notes'>$activity</div>
-                    <div class='col-sm-3 text-center'>" . icon('fa-check-circle') . "</div>
+                    <div class='col-md-9 col-12 control-label-notes'>$activity:</div>
+                    <div class='col-md-3 col-12 text-md-center'>" . icon('fa-check-circle') . "</div>
                 </div>";
 	}
 	foreach ($sql2 as $user_criterion) {
@@ -2676,17 +2654,17 @@ function display_user_progress_details($element, $element_id, $user_id) {
                 }
 		$tool_content .= "
                 <div class='row p-2 res-table-row not_visible border-0'>
-                    <div class='col-sm-9 control-label-notes'>$activity</div>
-                    <div class='col-sm-3 text-center'>$op_content&nbsp;" . $user_criterion->threshold . "</div>
+                    <div class='col-md-9 control-label-notes'>$activity:</div>
+                    <div class='col-md-3 text-md-center'>$op_content&nbsp;" . $user_criterion->threshold . "</div>
                 </div>";
 	}
 	$tool_content .= "
-            <hr><div class='row p-2 res-table-header'>
-                <div class='col-sm-9 control-label-notes'>$langTotalPercentCompleteness</div>";
+            <div class='row p-2 res-table-header'>
+                <div class='col-md-9 col-12 control-label-notes'>$langTotalPercentCompleteness:</div>";
                 if ($user_data) {
-                    $tool_content .= "<div class='col-sm-3 text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></div>";
+                    $tool_content .= "<div class='col-md-3 col-12 text-md-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></div>";
                 } else {
-                    $tool_content .= "<div class='col-sm-3 text-center'><em>0%</em></div>";
+                    $tool_content .= "<div class='col-md-3 col-12 text-md-center'><em>0%</em></div>";
                 }
             $tool_content .= "</div>";
             $tool_content .= "

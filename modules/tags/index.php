@@ -49,11 +49,11 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
         if ($tag->module_id !== $latest_module_id){
             $tool_content .= "
             <div class='col-sm-12 mt-3'>
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>
+                    <div class='panel panel-default rounded-0'>
+                        <div class='panel-heading rounded-0'>
                             " . $modules[$tag->module_id]['title'] . "
                         </div>
-                        <div class='panel-body'>";
+                        <div class='panel-body rounded-0'>";
         }
         if ($tag->module_id == MODULE_ID_ANNOUNCE){
             $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $tag->element_id);
@@ -72,7 +72,7 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
             $link = "<a href='../../modules/units/index.php?course=".$course_code."&amp;id=".$tag->element_id."'>$unit->title</a><br>";
         }
         $tool_content .= "
-                    <ul>
+                    <ul class='mb-0'>
                         <li>$link</li>
                     </ul>
                 ";

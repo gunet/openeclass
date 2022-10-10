@@ -395,11 +395,11 @@ function show_submission_details($id) {
 
     $tool_content .= "
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-        <div class='panel panel-default'>
-            <div class='panel-heading'>
+        <div class='panel panel-default rounded-0'>
+            <div class='panel-heading rounded-0'>
                 <h4 class='panel-title'>$m[SubmissionWorkInfo]</h4>
             </div>
-            <div class='panel-body'>
+            <div class='panel-body rounded-0'>
                 <div class='row p-2 margin-bottom-fat'>
                     <div class='col-sm-4'>
                         <strong class='control-label-notes'>".$m['SubmissionStatusWorkInfo'].":</strong>

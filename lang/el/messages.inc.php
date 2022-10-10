@@ -394,6 +394,7 @@ $langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην �
 $langCloseConf = "Επιβεβαίωση κλεισίματος αίτησης";
 $langReintroductionApplication = "Η επαναφορά της αίτησης ολοκληρώθηκε με επιτυχία!";
 $langBackRequests = "Επιστροφή στις αιτήσεις";
+$langElaboration = "Επεξεργασία";
 
 // mailtoprof.php
 $langSendMessageTo = "Αποστολή μηνύματος";
@@ -5967,6 +5968,7 @@ $langAnalyticsElementUpdateSuccess = "Η αλλαγή έγινε με επιτυ
 $langAnalyticsElementInsertSuccess = "Η προσθήκη έγινε με επιτυχία!";
 $langAnalyticsTotalAnalytics = 'Συνολικά Αποτελέσματα';
 $langAnalyticsViewPerUserGeneral = 'Προβολή ανά χρήστη';
+$langAnalyticsType = 'Τύπος';
 $langAnalyticsPageNotAvailableForUsers = 'Η σελίδα δεν είναι διαθέσιμη για χρήστες';
 $langAnalyticsNoAnalytics = 'Δεν έχουν οριστεί δραστηριότητες.';
 $langAnalyticsConfirm = 'Επιβεβαίωση';
@@ -5992,6 +5994,7 @@ $langAnalyticsEndDescription = 'Ημερομηνία μέχρι την οποί�
 $langAnalyticsMinValue = 'Κατώτερη τιμή';
 $langAnalyticsMaxValue = 'Ανώτερη τιμή';
 $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμες πηγές.';
+$langAnalyticsStatus = 'Επίπεδο';
 
 // h5p
 $langH5p = "Διαδραστικό περιεχόμενο";

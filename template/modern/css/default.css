@@ -48,7 +48,7 @@ span{font-size: 14px;}
 
 .panel-phpinfo{ overflow-y: auto; }
 
-.lightColor{ background: #f2f2f2; }
+.lightColor{ background: #f5f5f5; }
 
 img { max-width: 100%; height: auto; }
 
@@ -104,7 +104,7 @@ a{ text-decoration: none; }
 /* this is d-inline-flex between inputs-radio and texts */
 .radio label{ display:inline-flex; align-items: top; } 
 
-.radio label p{ margin-top:15px; } 
+.radio label p{ margin-top:0px; } 
 
 /* this is space between input-radio and texts */
 input[type="radio"]{
@@ -131,7 +131,7 @@ input[type="radio"]:disabled { opacity: 0.3; }
 /* this is d-inline-flex between inputs-checkbox and texts */
 .checkbox label{ display:inline-flex; align-items: top; } 
 
-.checkbox label p{ margin-top:15px; } 
+.checkbox label p{ margin-top:0px; } 
 
 /* this is space between input-checkbox and texts */
 input[type="checkbox"]{
@@ -166,7 +166,7 @@ input:-webkit-autofill:active {
 
 .form-wrapper.shadow-sm textarea{ background: white; border: solid 1px #f1f1f1; margin-top:10px;}
 
-.form-wrapper input[type=text], .form-wrapper input[type=password], .form-wrapper .form-select{
+.form-wrapper input[type=text], .form-wrapper input[type=password], .form-wrapper input[type=number], .form-wrapper .form-select{
   border-radius: 0px;
   border:none;
   border-bottom: 2px solid transparent;
@@ -194,7 +194,7 @@ input:-webkit-autofill:active {
   outline: 0 none;
   background: white;
 }
-select.form-select { -webkit-appearance: menulist; }
+select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 .form-wrapper .form-control:disabled{
   opacity: 0.5;
   border-bottom: 2px solid white;
@@ -366,8 +366,6 @@ select.form-select { -webkit-appearance: menulist; }
   @media(min-width:860px) and (max-width:991px){.user-language-menu{margin-right: 100px !important;}}
 
   .user-language-menu .list-group-item:hover{ background-color: #1d4e89; color:white; }
-  
-  .fab.fa-linkedin-in,.fa-twitter,.fa-facebook-f{ height: 30px; padding-top:7px; }
   
   .inputSearch{ font-family:Arial; font-family:FontAwesome; background-color: #005ed7; }
 
@@ -541,10 +539,6 @@ select.form-select { -webkit-appearance: menulist; }
   .BtnCourseRegister:hover{ border:solid 2px #1d4e89; background-color: #F8F8FF; color:#1d4e89; }
 
   .lesson-image:hover{ opacity:0.5; }
-  
-  .fa.fa-replay.space-after-icon{ color:white; }
-  
-  .fas.fa-graduation-cap.fa-3x{ color:#003F87; margin-left:20px; }
 
   .user-details-collapse-more{ cursor: pointer; }
   
@@ -576,13 +570,13 @@ select.form-select { -webkit-appearance: menulist; }
   
   .block-title-2 { font-weight: bold; color: #0d6efd; border-bottom: thin solid #0d6efd; margin-bottom: 25px; }
 
-  .fa-custom-size { font-size: 1.6em; }
+  .custom-font { font-size: 1.6em; }
   
   .btn_left_rigth{ height:30px; width:30px; border-radius:50%; border:solid 1px blue; }
 
-  .arrow-left{ color:blue; margin-left:8px; margin-top:5px; }
+  .cources-paging-arrow.arrow-left{ color:blue; margin-left:8px; margin-top:6px; }
 
-  .arrow-right{ padding-left:10px; color:blue; margin-top:5px; }
+  .cources-paging-arrow.arrow-right{ padding-left:10px; color:blue; margin-top:6px; }
 
   .event-important, .event-info, .event-success, .event-special{ float:left; }
 
@@ -777,10 +771,6 @@ select.form-select { -webkit-appearance: menulist; }
 
   .user-icon { width: 40px; height: 40px; border-radius: 50%; }
 
-  .homes.fas.fa-chevron-up{ color:white; margin-left:17px; margin-top:15px; }
-  
-  .homes.fas.fa-chevron-down{ color:white; margin-left:17px; margin-top:15px; }
-  
   .news-list{ margin-left: 5px; }
   
   .row_pad_courses{ padding-top: 40px; }
@@ -892,6 +882,8 @@ select.form-select { -webkit-appearance: menulist; }
   .copyright{ float:right; text-decoration: none; line-height: 30px; }
   
   .social_meadia_ul li{ display: inline; float:right; padding: 5px; }
+
+  .social-icon-tool{ height: 30px; padding-top:7px; font-size:19px;}
   
   .ul_tools_site_footer li{ line-height: 30px; }
   
@@ -905,12 +897,6 @@ select.form-select { -webkit-appearance: menulist; }
     padding-top: 3px;
     padding-left: 12px;
   }
-  
-  .fab.fa-linkedin-in{ font-size:19px; }
-  
-  .fab.fa-twitter{ font-size:19px; }
-  
-  .fab.fa-facebook-f{ font-size:19px; }
   
   .site-footer {
     padding: 45px 40px;
@@ -1623,7 +1609,7 @@ select.form-select { -webkit-appearance: menulist; }
 
     .dropdown_menu_user{ width:250px; max-height:435px; overflow-x: auto; background: #fafafa; }
 
-    .dropdown_menu_user::-webkit-scrollbar { -webkit-appearance: none; width: 10px; background-color: #c5c5c5; }
+    .dropdown_menu_user::-webkit-scrollbar { -webkit-appearance: none; appearance: none; width: 10px; background-color: #c5c5c5; }
 
     .dropdown_menu_user::-webkit-scrollbar-thumb {
       height: 12px;
@@ -1788,7 +1774,7 @@ select.form-select { -webkit-appearance: menulist; }
 
     .navrbar_menu_btn{ margin-left:0px; }
 
-    .fas.fa-pen-nib{ transform: rotate(265deg); }
+    .pen-nib-navhead{ transform: rotate(265deg); }
   
     /* modal frame */
     .modal-dialog.modal-lg .modal-content{ width:300px ; }
@@ -1865,7 +1851,7 @@ select.form-select { -webkit-appearance: menulist; }
 
     .navrbar_menu_btn{ margin-left:0px; }
 
-    .fas.fa-pen-nib{ transform: rotate(265deg); }
+    .pen-nib-navhead{ transform: rotate(265deg); }
         
     /* modal frame */
     .modal-dialog.modal-lg .modal-content{ width:500px ; }
@@ -1972,8 +1958,6 @@ select.form-select { -webkit-appearance: menulist; }
 
     .span_add_course_a{ float:right; margin-right:-14px; margin-top:-60px; color:orange; font-size:35px; filter: brightness(100%);  font-weight: 600; }
     
-    .fa.fa-reply.space-after-icon{ color:orange ; }
-
     .user-icon-filename{ width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px; }
   }
   
@@ -2024,8 +2008,6 @@ select.form-select { -webkit-appearance: menulist; }
     .add_course_a{ text-decoration:none; margin-left:-32px; margin-top:-15px; color:black ; }
 
     .span_add_course_a{ float:right; margin-right:-14px; margin-top:-60px; color:orange; font-size:35px; filter: brightness(100%);  font-weight: 600;  }
-
-    .fa.fa-reply.space-after-icon{ color:orange ; }
 
     .input_search_col_default{  width:300px ; }
 

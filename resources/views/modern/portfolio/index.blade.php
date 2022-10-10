@@ -299,12 +299,12 @@
                     <div id="bars-active" type='button' class='float-end mt-0' style="display:flex;">
                         <div id="cources-bars-button"
                             class="collapse-cources-button text-primary" >
-                            <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars mt-2"></i></span>
+                            <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars mt-2 custom-font"></i></span>
                         </div>
                         <div id="cources-pics-button"
                             class="collapse-cources-button text-secondary collapse-cources-button-deactivated"
                             onclick="switch_cources_toggle()">
-                            <span class="grid-style"><i class="fas fa-custom-size fa-th-large mt-2"></i></span>
+                            <span class="grid-style"><i class="fas fa-custom-size fa-th-large mt-2 custom-font"></i></span>
                         </div>
                     </div>
 
@@ -312,10 +312,10 @@
                         <div id="cources-bars-button"
                             class="collapse-cources-button text-secondary collapse-cources-button-deactivated"
                             onclick="switch_cources_toggle()">
-                            <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars mt-2"></i></span>
+                            <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars mt-2 custom-font"></i></span>
                         </div>
                         <div id="cources-pics-button" class="collapse-cources-button text-primary">
-                            <span class="grid-style"><i class="fas fa-custom-size fa-th-large mt-2"></i></span>
+                            <span class="grid-style"><i class="fas fa-custom-size fa-th-large mt-2 custom-font"></i></span>
                         </div>
                     </div>
 

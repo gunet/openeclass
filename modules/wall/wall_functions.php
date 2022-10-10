@@ -213,13 +213,13 @@ function generate_single_post_html($post) {
     }
     $ret = '
     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-        <div class="row p-2 margin-right-thin margin-left-thin margin-top-thin m-auto">                              
-                                  <div class="media">
+        <div class="row p-0 margin-right-thin margin-left-thin margin-top-thin m-auto">                              
+                                  <div class="media rounded-0 p-0">
                                       <div class="row p-2"></div>
                                       <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
                                         '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
                                       </a>
-                                      <div class="media-body bubble">
+                                      <div class="media-body bubble overflow-auto">
                                           <button class="btn btn-success btn-sm pe-none mt-2 media-heading text-white mt-1 ps-3 pe-2">'.$datetime.'</button>
                                           <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                                           '.$post_actions.'
@@ -254,7 +254,7 @@ function generate_infinite_container_html($posts, $next_page) {
                           });
                       </script>';
     $ret = '
-    <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
+    <div class="form-wrapper shadow-sm rounded mt-3">
     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
     <div class="infinite-container">';
 
@@ -287,7 +287,7 @@ function generate_infinite_container_html($posts, $next_page) {
         $rating_content = $rating->put($is_editor, $uid, $course_id);
 
         $comm = new Commenting('wallpost', $id);
-        $comm_content = "<a style='margin-top:-35px;' class='pe-3 btn btn-primary btn-sm float-end' href='index.php?course=$course_code&amp;showPost=".$id."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
+        $comm_content = "<a class='btn btn-sm btn-primary float-end' href='index.php?course=$course_code&amp;showPost=".$id."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
 
 
         if (allow_to_edit($id, $uid, $is_editor)) {
@@ -334,8 +334,8 @@ function generate_infinite_container_html($posts, $next_page) {
         $ret .= '<div class="row p-2 margin-right-thin margin-left-thin margin-top-thin">
 
                               <div class="col-sm-12">
-                                  <div class="media">
-                                        <div class="row p-2">
+                                  <div class="media rounded-0 p-0">
+                                        <div class="row pt-2 pb-2">
                                             <div class=col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12>
                                                 <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
                                                     '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
@@ -343,7 +343,7 @@ function generate_infinite_container_html($posts, $next_page) {
                                             </div>
                                             
                                             <div class=col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 >
-                                                <div class="media-body bubble ps-2 pe-2">
+                                                <div class="media-body bubble overflow-auto">
                                                     <button class="btn btn-success btn-sm pe-none mt-2 media-heading mt-1 text-white ps-3 pe-2">'.$datetime.'</button>
                                                     <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                                                     '.$post_actions.'
@@ -352,8 +352,14 @@ function generate_infinite_container_html($posts, $next_page) {
                                                         <div class="userContent control-label-notes">'.nl2br(standard_text_escape($content)).'</div>
                                                     </div>
                                                     '.show_resources($id).'
-                                                    '.$rating_content.'
-                                                    '.$comm_content.'
+                                                    <div class="row">
+                                                        <div class="col-md-9 col-12">
+                                                            '.$rating_content.'
+                                                        </div>
+                                                        <div class="col-md-3 col-12 mt-md-0 mt-3">
+                                                            '.$comm_content.'
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

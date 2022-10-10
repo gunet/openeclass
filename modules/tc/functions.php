@@ -416,9 +416,9 @@ function bbb_session_form($session_id = 0) {
 
         $tool_content .= "</div>
         $submit_id
-        <div class='form-group mt-3'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                <input class='btn btn-primary' type='submit' name='$submit_name' value='$value_message'>
+        <div class='form-group mt-5'>
+            <div class='col-12'>
+                <input class='btn btn-sm btn-primary submitAdminBtn w-50 m-auto d-block' type='submit' name='$submit_name' value='$value_message'>
             </div>
         </div>
         </fieldset>
@@ -782,7 +782,7 @@ function bbb_session_details() {
             }
 
             if ($record == 'false' or has_enable_recordings($server_id) == 'false') {
-                $warning_message_record = "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBNoServerForRecording'></span>";
+                $warning_message_record = "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langBBBNoServerForRecording'></span>";
             } else {
                 $warning_message_record = '';
             }
@@ -811,7 +811,7 @@ function bbb_session_details() {
                     </td>
 
                     <td style='width: 20%'>$participants</td>
-                    <td class='option-btn-cell'>".
+                    <td class='option-btn-cell text-center'>".
                         action_button(array(
                             array(  'title' => $langEditChange,
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",

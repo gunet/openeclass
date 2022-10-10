@@ -133,10 +133,10 @@ if ($is_editor) {
     ]);
 }
 
-$tool_content .= "<div class='col-sm-12'><div class='panel panel-primary'>
-    <div class='panel panel-heading text-white'>" . q_math($exerciseTitle) . "</div>";
+$tool_content .= "<div class='col-sm-12'><div class='panel panel-primary rounded-0'>
+    <div class='panel panel-heading rounded-0'>" . q_math($exerciseTitle) . "</div>";
 if ($exerciseDescription_temp) {
-    $tool_content .= "<div class='panel panel-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
+    $tool_content .= "<div class='panel panel-body rounded-0'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
 }
 $tool_content .= "</div></div>";
 

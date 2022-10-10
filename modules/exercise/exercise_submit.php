@@ -621,7 +621,7 @@ if (isset($timeleft)) { // time remaining
 }
 
 if (!empty($exerciseDescription)) { // description
-    $tool_content .= "<div class='col-sm-12'><div class='margin-bottom-fat form-wrapper shadow-sm p-2 mb-5 rounded'>";
+    $tool_content .= "<div class='col-sm-12'><div class='margin-bottom-fat form-wrapper shadow-sm p-2 mb-3 rounded'>";
     $tool_content .= "<div class='col-sm-12 p-3'><em>" . standard_text_escape($exerciseDescription) . "</em></div>";
     $tool_content .= "</div></div>";
 }
@@ -719,7 +719,7 @@ if ($questionList) {
 
         if ($exerciseType == MULTIPLE_PAGE_TYPE) {
             // display question numbering buttons
-            $tool_content .= "<div style='margin-bottom: 20px;'>";
+            $tool_content .= "<div class='d-flex justify-content-center lightColor p-2'>";
             foreach ($questionList as $k => $q_id) {
                 $answered = in_array($q_id, $answeredIds);
                 if ($answered) {
@@ -735,7 +735,7 @@ if ($questionList) {
                     $extra_style = '';
                 }
                 $tool_content .= "
-                    <div style='display: inline-block; margin-right: 10px; margin-bottom: 15px;'>
+                    <div style='display: inline-block; margin-right: 10px;'>
                         <input class='btn $class' $extra_style type='submit' name='q_id' id='q_num$k' value='$k' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$title'>
                     </div>";
             }

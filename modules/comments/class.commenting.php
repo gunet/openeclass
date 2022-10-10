@@ -92,7 +92,7 @@ Class Commenting {
                           </div>
                           <div class='modal-body' id='comments-$this->rid'>";
         } else {
-            $comments_title = "<h5 id='comments_title'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h5><br>";
+            $comments_title = "<h5 id='comments_title'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h5>";
             $out = "<div class='commenting p-3 mt-3' style='background:#f2f2f2;'>
                         $comments_title
                     <div class='commentArea' id='commentArea-$this->rid'>
@@ -140,11 +140,11 @@ Class Commenting {
                 }
                 $out .= "<div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
                           <div class='col-12'>
-                           <div class='media panel-default p-1 rounded-0'>
+                           <div class='media panel-default rounded-0'>
                             <a class='media-left' href='#'>
                             ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>
-                            <div class='media-body bubble panel-body rounded-0'>
+                            <div class='media-body bubble panel-body rounded-0 overflow-auto'>
                              <button class='btn btn-sm btn-success mt-2 media-heading'>".format_locale_date(strtotime($comment->getTime())).'</button>'.
                               "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
                                $post_actions
@@ -161,14 +161,14 @@ Class Commenting {
             if (isset($_SESSION['uid'])) {
                 $out .= '<div class="col-12"><div class="form-wrapper shadow-sm p-3 rounded"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
                 $out .= '<textarea class="form-control" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
-                $out .= '<input class="btn btn-primary" name="send_button" type="submit" value="'.$langSubmit.'" />';
+                $out .= '<input class="btn btn-sm btn-primary submitAdminBtn w-50 m-auto d-block" name="send_button" type="submit" value="'.$langSubmit.'" />';
                 $out .= '</form></div></div>';
             }
         } else {
             if (Commenting::permCreate($isEditor, $uid, course_code_to_id($courseCode))) {
                 $out .= '<div class="col-12"><div class="form-wrapper shadow-sm p-3 rounded"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
                 $out .= '<textarea class="form-control" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
-                $out .= '<input class="btn btn-primary" name="send_button" type="submit" value="'.$langSubmit.'" />';
+                $out .= '<input class="btn btn-sm btn-primary submitAdminBtn w-50 m-auto d-block" name="send_button" type="submit" value="'.$langSubmit.'" />';
                 $out .= '</form></div></div>';
             }
         }

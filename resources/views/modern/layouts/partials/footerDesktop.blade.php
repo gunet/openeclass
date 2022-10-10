@@ -21,13 +21,13 @@
                 @if(get_config('enable_social_sharing_links'))
                 <ul class="social_meadia_ul">
                     <li>
-                        <div class="div_social"><a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a></div>
+                        <div class="div_social"><a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f social-icon-tool"></i></a></div>
                     </li>
                     <li>
-                        <div class="div_social"><a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter"></i></a></div>
+                        <div class="div_social"><a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter social-icon-tool"></i></a></div>
                     </li>
                     <li>
-                        <div class="div_social"><a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a></div>
+                        <div class="div_social"><a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin-in social-icon-tool"></i></a></div>
                     </li>
                 </ul>
                 <br><br><br><br>

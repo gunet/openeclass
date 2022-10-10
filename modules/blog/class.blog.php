@@ -159,7 +159,7 @@ Class Blog {
             $url_params = "user_id=$this->user_id";
         }
         $posts = $this->getPopularBlogPostsDB($num);
-        $out = "<h5><strong>$langBlogPopular</strong></h5>
+        $out = "<h6><strong>$langBlogPopular</strong></h6>
                     <div class='list-group'>";
         foreach ($posts as $post) {
             if (!$post->getVisible()) {
@@ -273,7 +273,7 @@ Class Blog {
             }
 
             $out .= "
-                    <h5><strong>$langBlogPostHistory</strong></h5>
+                    <h6 class='mt-3'><strong>$langBlogPostHistory</strong></h6>
                     <div id='blog_tree'>
                       <ul>";
             foreach ($tree as $year => $yearard) {

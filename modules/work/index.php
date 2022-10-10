@@ -4629,7 +4629,7 @@ function assignment_details($id, $row, $x =false) {
     $moduleTag = new ModuleElement($id);
     $tool_content .= "
     <div class='col-sm-12'>
-    <div class='panel panel-action-btn-primary'>
+    <div class='panel panel-action-btn-primary rounded-0'>
         <div class='panel-heading'>
             <h4 class='panel-title'>
                 $m[WorkInfo] &nbsp;
@@ -4639,7 +4639,7 @@ function assignment_details($id, $row, $x =false) {
                 </a>" : "")."
             </h4>
         </div>
-        <div class='panel-body ps-3 pb-3 pt-3 pe-3'>
+        <div class='panel-body ps-3 pb-3 pt-3 pe-3 rounded-0'>
             <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-4'>
                     <strong class='control-label-notes'>$langTitle:</strong>

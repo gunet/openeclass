@@ -26,11 +26,7 @@ function display_learning_analytics() {
             
             $results .= "
             <div class='row res-table-row border-0'>
-                <div class='col-sm-3'>
-                    <strong>$title</strong> <span class='$active_vis'>($active_msg)</span><br/>
-                    <small class='text-left text-muted'>$description</small>
-                </div>
-                <div class='col-sm-9 text-left'>".
+                <div class='col-12 text-start'>".
                 action_bar(array(
                     array('title' => $langAnalyticsTotalAnalytics,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=courseStatistics",
@@ -57,6 +53,10 @@ function display_learning_analytics() {
                         'confirm' => $langAnalyticsConfirm)
                 ))
                 ."</div>
+                <div class='col-12 mt-3'>
+                    <strong>$title</strong> <span class='$active_vis'>($active_msg)</span><br/>
+                    <small class='text-start text-muted'>$description</small>
+                </div>
             </div>";
         }
     }
@@ -64,19 +64,18 @@ function display_learning_analytics() {
     $tool_content .= "
 
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                <div class='panel panel-default'>
-                    <div class='panel-body'>
-                        <div class='inner-heading'>
-                            <div class='row'>
-                                <div class='col-xl-7 col-lg-7 col-md-7 col-sm-6 col-6'>
-                                    <strong>$langLearningAnalytics</strong>
-                                </div>
-                                <div class='col-xl-5 col-lg-5 col-md-5 col-sm-6 col-6 text-end'>
-                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> &nbsp;&nbsp;&nbsp;$langAdd</a>
-                                </div>
+                <div class='panel panel-default rounded-0'>
+                    <div class='panel-heading rounded-0'>
+                        <div class='row'>
+                            <div class='col-xl-7 col-lg-7 col-md-7 col-sm-9 col-9 mt-1'>
+                                $langLearningAnalytics
+                            </div>
+                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-3 col-3 text-end'>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span><span class='hidden-xs'>$langAdd</span></a>
                             </div>
                         </div>
-                        <hr>
+                    </div>
+                    <div class='panel-body rounded-0'>
                         <div class='res-table-wrapper'>
                             $results
                         </div>  
@@ -125,7 +124,7 @@ function display_general_lists($analytics_id) {
             $message_critical = $langAnalyticsCriticalLevel;
             foreach ($critical as $crit) {
                 $userid = $crit['id'];
-                $bad_results .="<div class='res-table-row row'>
+                $bad_results .="<div class='res-table-row row pt-2'>
                     <div class='col-sm-5'>". display_user($userid) ."</div>
                     <div class='col-sm-7'>".
                 action_bar(
@@ -149,7 +148,7 @@ function display_general_lists($analytics_id) {
             $message_advanced = $langAnalyticsAdvancedLevel;
             foreach ($advanced as $adv) {
                 $userid = $adv['id'];
-                $good_results .= "<div class='res-table-row row'>
+                $good_results .= "<div class='res-table-row row pt-2 mb-3'>
                     <div class='col-sm-5'>". display_user($userid) ."</div>
                         <div class='col-sm-7'>".
                         action_bar(
@@ -172,25 +171,24 @@ function display_general_lists($analytics_id) {
 
         $tool_content .= "
                 <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-                    <div class='panel panel-default'>
-                        <div class='panel-body'>
-                            <div class='inner-heading'>
-                                <div class='row'>
-                                    <div class='col-sm-12'>
-                                        <strong>
-                                            <a class='ps-3' data-bs-toggle='collapse' href='#LearnAnalyticsResource$module_id' aria-expanded='false' aria-controls='LearnAnalyticsResource$module_id'>
-                                            <i class='fa fa-arrow-down'>" . get_resource_info($resource, $module_id) . "</a></i>
-                                        </strong>
-                                    </div>
+                    <div class='panel panel-default rounded-0'>
+                        <div class='panel-heading rounded-0'>
+                            <div class='row'>
+                                <div class='col-sm-12'>
+                                    <strong>
+                                        <a data-bs-toggle='collapse' href='#LearnAnalyticsResource$module_id' aria-expanded='false' aria-controls='LearnAnalyticsResource$module_id'>
+                                        <i class='fa fa-arrow-down'>" . get_resource_info($resource, $module_id) . "</a></i>
+                                    </strong>
                                 </div>
-                            </div>       
-                            <hr>                 
-                            <div class='col-sm-12 collapse ps-4 pe-4 pt-3 pb-3 mt-4' id='LearnAnalyticsResource$module_id'>
+                            </div>
+                        </div>          
+                        <div class='panel-body rounded-0'>         
+                            <div class='col-sm-12 collapse' id='LearnAnalyticsResource$module_id'>
                                 <h6 class='text-success'>$message_advanced</h6>
                                 <div class='res-table-wrapper'>
                                     $good_results
-                                </div>                                                        
-                                <h6 class='text-danger mt-4'>$message_critical</h6>
+                                </div>                                                    
+                                <h6 class='text-danger'>$message_critical</h6>
                                 <div class='res-table-wrapper'>
                                     $bad_results
                                 </div>                            
@@ -236,23 +234,24 @@ function display_analytics_elements($analytics_id) {
     if (count($sql_data) == 0) {
         $results = "<p class='text-center text-muted'>$langAnalyticsNoElements</p>";
     } else {
-        $results ="<div class='row p-2 res-table-header'>
-                        <div class='col-sm-2'>
-                            <span class='control-label-notes'>$langAnalyticsType</span>
-                        </div>
-                        <div class='col-sm-3'>
-                        <span class='control-label-notes'>$langAnalyticsGradeLimits</span>
-                        </div>
-                        <div class='col-sm-4'>
-                        <span class='control-label-notes'>$langAnalyticsThresholds</span>
-                        </div>
-                        <div class='col-sm-2'>
-                        <span class='control-label-notes'>$langAnalyticsWeight</span>
-                        </div>
-                        <div class='col-sm-1 text-center'>
-                            <span class='control-label-notes'><i class='fa fa-cogs'></i></span>
-                        </div>
-                    </div>";
+        $results ="<table class='table-default'>
+                    <tr class='list-header'>
+                        <th>
+                            $langAnalyticsType
+                        </th>
+                        <th>
+                            $langAnalyticsGradeLimits
+                        </th>
+                        <th>
+                            $langAnalyticsThresholds
+                        </th>
+                        <th>
+                            $langAnalyticsWeight
+                        </th>
+                        <th class='text-center'>
+                            <i class='fa fa-cogs'></i>
+                        </th>
+                    </tr>";
         foreach ($sql_data as $result) {
             $id = $result->id;
             $lower_threshold = $result->lower_threshold;
@@ -263,17 +262,21 @@ function display_analytics_elements($analytics_id) {
             $resource = $result->resource;
             $module_id = $result->module_id;
             $results .= "
-                <div class='row p-2 res-table-row border-0'>
-                    <div class='col-sm-3'><em>
-                        " . get_resource_info($resource, $module_id) . "</em>
-                        </div>
-                    <div class='col-sm-2 col-sm-offset-2'><span class='text-danger'>$min_value</span> - <span class='text-success'>$max_value</span></div>
-                    <div class='col-sm-4'>
+                <tr>
+                    <td>
+                       <em>
+                            " . get_resource_info($resource, $module_id) . 
+                        "</em>
+                    </td>
+                    <td>
+                        <span class='text-danger'>$min_value</span> - <span class='text-success'>$max_value</span>
+                    </td>
+                    <td>
                         <span class='text-danger'>$langAnalyticsCriticalLevel: $min_value - $lower_threshold</span><br/>
                         <span class='text-success'>$langAnalyticsAdvancedLevel: $upper_threshold - $max_value</span>
-                    </div>
-                    <div class='col-sm-2'>$weight</div>
-                    <div class='col-sm-1 text-center'>".
+                    </td>
+                    <td>$weight</td>
+                    <td class='text-center'>".
                         action_button(array(
                             array('title' => $langModify,
                                 'icon' => 'fa-edit',
@@ -285,27 +288,28 @@ function display_analytics_elements($analytics_id) {
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;analytics_element_id=$id&amp;delete_analytics_element=1",
                                 'confirm' => $langAnalyticsConfirmDeletion,
                                 'class' => 'delete'))).
-                    "</div>
-                </div>";
+                    "</td>
+                </tr>";
         }
+
+        $results .= "</table>";
     }
 
     $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-            <div class='panel panel-default'>
-                <div class='panel-body'>
-                    <div class='inner-heading'>
-                        <div class='row'>
-                            <div class='col-xl-7 col-lg-7 col-md-7 col-sm-6 col-6'>
-                                <strong>$langAnalyticsParameters</strong>
-                            </div>
-                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-6 col-6 text-end'>
-                                <div style='margin-top:-3px;'>$addParametersBtn</div>
-                            </div>
+            <div class='panel panel-default rounded-0'>
+                <div class='panel-heading rounded-0'>
+                    <div class='row'>
+                        <div class='col-xl-7 col-lg-7 col-md-7 col-sm-9 col-9 mt-1'>
+                            $langAnalyticsParameters
+                        </div>
+                        <div class='col-xl-5 col-lg-5 col-md-5 col-sm-9 col-3 text-end'>
+                            $addParametersBtn
                         </div>
                     </div>
-                    <hr>
-                    <div class='res-table-wrapper'>
+                </div>
+                <div class='panel-body rounded-0'>
+                    <div class='table-responsive mt-0'>
                         $results
                     </div>  
                 </div>
@@ -334,31 +338,32 @@ function display_analytics_information($analytics_id) {
 
     $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-            <div class='panel panel-default'>
-                <div class='panel-body'>
-                    <div class='inner-heading'>
-                        <div class='row'>
-                            <div class='col-xl-7 col-lg-7 col-md-7 col-sm-6 col-6'>
-                                <strong>$title</strong> <span class='$active_vis'>($active_msg)</span>
-                            </div>
-                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-6 col-6 text-end'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn btn-primary btn-sm'>"
-                                        . "<span class='fa fa-pencil'></span> &nbsp;&nbsp;$langModify
-                                </a>
-                            </div>
+            <div class='panel panel-default rounded-0'>
+                <div class='panel-heading rounded-0'>
+                    <div class='row'>
+                        <div class='col-xl-7 col-lg-7 col-md-7 col-sm-9 col-9'>
+                            <strong>$title</strong> <span class='$active_vis'>($active_msg)</span>
+                        </div>
+                        <div class='col-xl-5 col-lg-5 col-md-5 col-sm-3 col-3 text-end'>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn btn-primary btn-sm'>"
+                                    . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langModify</span>
+                            </a>
                         </div>
                     </div>
-                    <hr>
+                </div>
+                <div class='panel-body rounded-'>
                     <div class='panel-body'>
                         <div class='row'>
-                            <div class='col-sm-7'>
+                            <div class='col-md-4 col-12'>
                                 <div class='control-label-notes pn-info-title-sct'>$langDescription</div>
                                 <div class='pn-info-text-sct'>$description</div>
                             </div>
-                            <div class='col-sm-5'>
+                            <div class='col-md-4 col-12 mt-md-0 mt-3'>
                                 <div class='control-label-notes pn-info-title-sct'>$langAnalyticsTimeFrame</div>
                                 <div class='pn-info-text-sct'>$langFrom $start_date $langTill $end_date</div>
-                                <div class='mt-4 control-label-notes pn-info-title-sct'>$langAnalyticsCalculation</div>
+                            </div>
+                            <div class='col-md-4 col-12 mt-md-0 mt-3'>
+                                <div class='control-label-notes pn-info-title-sct'>$langAnalyticsCalculation</div>
                                 <div class='pn-info-text-sct'>$periodType</div>
                             </div>
                         </div>
@@ -419,28 +424,28 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
         }
 
         $results = "
-                <div class='inner-heading'>
-                    <div class='row p-2 res-table-header'>
-                        <div class='col-sm-3'>
-                            <h6>$langSurnameName <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=surname&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionName fa-fw' aria-hidden='true'></i></a></h6>
-                        </div>
-                        <div class='col-sm-3'>
-                            <h6>$langPercentage <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=percentage&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionPercentage fa-fw' aria-hidden='true'></i></a></h6>
-                        </div>
-                        <div class='col-sm-2'>
-                            <h6>$langAnalyticsStatus</h6> 
-                        </div>
-                        <div class='col-sm-4' >
-                            <h6>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
-                                " . format_locale_date(strtotime($startdate), 'short', false) . " &mdash; " . format_locale_date(strtotime($enddate), 'short', false)  . "
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$next&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
-                            </h6>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <div class='res-table-wrapper'>";
+        <div class='table-responsive mt-0'>
+            <table class='table-default'>
+                <tr class='list-header'>
+                    
+                    <th>
+                        <h6 class='mb-0'>$langSurnameName <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=surname&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionName fa-fw' aria-hidden='true'></i></a></h6>
+                    </th>
+                    <th>
+                        <h6 class='mb-0'>$langPercentage <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=percentage&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionPercentage fa-fw' aria-hidden='true'></i></a></h6>
+                    </th>
+                    <th>
+                        <h6 class='mb-0'>$langAnalyticsStatus</h6> 
+                    </th>
+                    <th>
+                        <h6 class='mb-0 text-center'>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
+                            " . format_locale_date(strtotime($startdate), 'short', false) . " &mdash; " . format_locale_date(strtotime($enddate), 'short', false)  . "
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$next&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
+                        </h6>
+                    </th>
+                   
+                </tr>";
 
         $peruserarray = array();
 
@@ -449,53 +454,55 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
             $values = compute_general_analytics_foruser($userid, $analytics_id, $startdate, $enddate);
             $percentage = $values['percentage'];
 
-            /*if ($orderby == 'percentage'){
-                $peruserarray[(string)$percentage + (string)$userid] = array('givenname' => $givenname, 'surname' => $surname, 'userid' => $userid, 'percentage'=>$percentage, 'values' =>$values);
-            }  else {
-                $peruserarray[$surname] = array('givenname' => $givenname, 'surname' => $surname, 'userid' => $userid, 'percentage'=>$percentage, 'values' =>$values);
-            } */
-        //}
-        /*
-        if($reverse == 'false') {
-            ksort($peruserarray);
-        } else {
-            krsort($peruserarray);
+                    /*if ($orderby == 'percentage'){
+                        $peruserarray[(string)$percentage + (string)$userid] = array('givenname' => $givenname, 'surname' => $surname, 'userid' => $userid, 'percentage'=>$percentage, 'values' =>$values);
+                    }  else {
+                        $peruserarray[$surname] = array('givenname' => $givenname, 'surname' => $surname, 'userid' => $userid, 'percentage'=>$percentage, 'values' =>$values);
+                    } */
+                //}
+                /*
+                if($reverse == 'false') {
+                    ksort($peruserarray);
+                } else {
+                    krsort($peruserarray);
+                }
+                */
+                //foreach ($peruserarray as $peruser) {
+            $results .="<tr>
+                            <td>
+                                <div>". display_user($userid). "</div>
+                            </td>
+                            <td>
+                                <div class='progress mt-md-0 mt-2' style='display: inline-block; width: 120px; margin-bottom:0px;'>
+                                    <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: " .$percentage ."%; min-width: 2em;'>
+                                    " .$percentage ."%
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <span class='text-success'>$langAnalyticsAdvancedLevel: " . $values['text-success'] . "</span><br/>
+                                    <span class='text-warning'>$langAnalyticsMiddleLevel: " . $values['text-warning'] . "</span><br/>
+                                    <span class='text-danger'>$langAnalyticsCriticalLevel: " . $values['text-danger'] . "</span>
+                                </div>
+                            </td>
+                            <td>" . action_bar(
+                                array(                  
+                                    array('title' => $langAnalyticsDetails,
+                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$period",
+                                            'icon' => 'fa-user-o',
+                                            'level' => 'primary-label'
+                                        ),
+                                    array('title' => $langMessage,
+                                        'url' => "../message/index.php?course=$course_code&upload=1&type=cm&user_id=$userid",
+                                        'icon' => 'fa-envelope',
+                                        'level' => 'primary-label')
+                                )
+                            ) . "</td>
+                        </tr>";
         }
-        */
-        //foreach ($peruserarray as $peruser) {
-            $results .="<div class='row p-2 res-table-row border-0'>
-            <div class='col-sm-3'>
-                <div >". display_user($userid). "</div>
-            </div>
-            <div class='col-sm-3'>
-                <div class='progress mt-md-0 mt-2' style='display: inline-block; width: 120px; margin-bottom:0px;'>
-                    <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: " .$percentage ."%; min-width: 2em;'>
-                    " .$percentage ."%
-                    </div>
-                </div>
-            </div>
-            <div class='col-sm-2'>
-                <div>
-                <span class='text-success'>$langAnalyticsAdvancedLevel: " . $values['text-success'] . "</span><br/>
-                <span class='text-warning'>$langAnalyticsMiddleLevel: " . $values['text-warning'] . "</span><br/>
-                <span class='text-danger'>$langAnalyticsCriticalLevel: " . $values['text-danger'] . "</span>
-                </div>
-            </div>
-            <div class='col-sm-4'>" . action_bar(
-                array(                  
-                    array('title' => $langAnalyticsDetails,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$period",
-                            'icon' => 'fa-user-o',
-                            'level' => 'primary-label'
-                        ),
-                    array('title' => $langMessage,
-                        'url' => "../message/index.php?course=$course_code&upload=1&type=cm&user_id=$userid",
-                        'icon' => 'fa-envelope',
-                        'level' => 'primary-label')
-                )
-            ) . "</div>
-            </div>";
-        }
+
+        $results .= "</table></div>";
     }
     $analytics_title = Database::get()->querySingle("SELECT title FROM analytics WHERE id=?d", $analytics_id);
 
@@ -505,16 +512,16 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
 
     $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>                 
-            <div class='panel panel-default'>
-                <div class='panel-heading'>             
+            <div class='panel panel-default rounded-0'>
+                <div class='panel-heading rounded-0'>             
                     <div class='control-label-notes text-center'>$analytics_title->title</div>
                 </div>
-                <div class='panel-body'>
+                <div class='panel-body rounded-0'>
                      $results
                 </div>
             </div>
         </div>";
-    $tool_content .= "</div>";
+    
 }
 
 
@@ -566,24 +573,21 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
         $nextclass = 'style="display:none"';
     }
     $results = "
-        <div class='inner-heading notes_thead mt-3'>
-            <h5>
-                <div class='row p-2 res-table-header'>
-                    <div class='col-sm-5 text-white'>
-                        $langType 
-                    </div>
-                    <div class='col-sm-3 text-white'>
-                        $langPercentage
-                    </div>
-                    <div class='col-sm-4 text-white'>
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$previous'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>"
-                            . format_locale_date(strtotime($start), 'short', false) . " &mdash; " . format_locale_date(strtotime($end), 'short', false) .
-                            "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$next'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
-                    </div>
-                </div>
-            </h5>
-        </div>
-    <div class='res-table-wrapper'>";
+    <div class='table-responsive mt-0'>
+        <table class='table-default'>
+            <tr class='list-header'>
+                <th>
+                   $langType 
+                </th>
+                <th>
+                    $langPercentage
+                </th>
+                <th>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$previous'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>"
+                        . format_locale_date(strtotime($start), 'short', false) . " &mdash; " . format_locale_date(strtotime($end), 'short', false) .
+                        "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$next'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
+                </th>
+            </tr>";
 
     $elements_data = Database::get()->queryArray("SELECT id, module_id, resource, upper_threshold, lower_threshold, max_value, min_value 
                                             FROM analytics_element
@@ -630,29 +634,32 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
         $percentage_value = (($total_value - $min_value) * 100) / ($max_value - $min_value);
         $percentage_value = number_format($percentage_value , 2, '.', '') + 0;
 
-        $results .="<div class='m-auto row p-2 res-table-row'>
-                        <div class='col-sm-5'>
+        $results .="<tr'>
+                        <td>
                             <div >". ElementTypes::elements[$module_id]['title'] . "</div>
-                        </div>
-                        <div class='col-sm-3'>
+                        </td>
+                        <td>
                             <div class='$class'>$percentage_value%</div>
-                        </div>
-                    </div>";
+                        </td>
+                    </tr>";
 
     }
+
+    $results .= "</table></div>";
+
     $analytics_title = Database::get()->querySingle("SELECT title FROM analytics WHERE id=?d", $analytics_id);
 
     $tool_content .= "
-            <div class='col-12 mt-3'>
-                    <div class='panel panel-default'>
-                        <h4 class='control-label-notes text-center pt-3'>$analytics_title->title</h4>
-                        <hr>
-                        <div class='panel-body'>
-                        $results
+                <div class='col-12 mt-3'>
+                    <div class='panel panel-default rounded-0'>
+                        <div class='panel-heading rounded-0'>
+                            $analytics_title->title
+                        </div>
+                        <div class='panel-body rounded-0'>
+                            $results
                         </div>
                     </div>
-                </div>
-            </div>";
+                </div>";
 }
 
 
@@ -677,28 +684,24 @@ function display_user_info($user_id) {
     
     $tool_content .= "
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-            <div class='panel panel-default'>
-                <div class='panel-body'>
-                    <div class='inner-heading'>
-                        <div class='row'>
-                            <div class='col-sm-12'>
-                                <strong>$givenname $surname</strong>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
+            <div class='panel panel-default rounded-0'>
+                <div class='panel-heading rounded-0'>
+                    $givenname $surname
+                </div>
+                <div class='panel-body rounded-0'>
                     <div class='panel-body'>
-                        <div class='row p-2'>
-                            <div class='col-sm-7'>
+                        <div class='row'>
+                            <div class='col-md-5 col-12'>
                                 <div class='pn-info-title-sct control-label-notes'>$langEmail</div>
                                 $email
                             </div>
-                            <div class='col-sm-5'>
+                            <div class='col-md-3 col-12 mt-md-0 mt-3'>
                                 <div class='pn-info-title-sct control-label-notes'>$langAm</div>
                                 $am
-                                <div class='mt-4 pn-info-title-sct control-label-notes'>$langPhone</div>
+                            </div>
+                            <div class='col-md-4 col-12 mt-md-0 mt-3'>
+                                <div class='pn-info-title-sct control-label-notes'>$langPhone</div>
                                 $phone
-
                             </div>
                         </div>
                     </div>
@@ -952,32 +955,40 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
         <input type='hidden' name='analytics_element_id' value='$analytics_element_id'>
         <div class='form-group mt-4'>
             <div class='row'>
-                <label for='title' class='col-sm-4 control-label-notes' style='text-align:left'>$langAnalyticsCriticalLevel:</label>
-                <label for='title' class='col-sm-2 control-label'>$langAnalyticsMinValue</label>
-                <div class='col-sm-2'>
-                    <input class='form-control' type='number' name='min_value' value='$min_value'>
+                <label for='title' class='col-sm-12 control-label-notes mb-2'>$langAnalyticsCriticalLevel:</label>
+                <div class='col-md-6 col-12'>
+                    <label for='title' class='col-sm-12 control-label'>$langAnalyticsMinValue</label>
+                    <div class='col-sm-12'>
+                        <input class='form-control' type='number' name='min_value' value='$min_value'>
+                    </div>
                 </div>
-                <label for='title' class='col-sm-2 control-label'>$langAnalyticsMaxValue</label>
-                <div class='col-sm-2'>
-                    <input class='form-control' type='number' name='lower_threshold' value='$lower_threshold'>
+                <div class='col-md-6 col-12'>
+                    <label for='title' class='col-sm-12 control-label'>$langAnalyticsMaxValue</label>
+                    <div class='col-sm-12'>
+                        <input class='form-control' type='number' name='lower_threshold' value='$lower_threshold'>
+                    </div>
                 </div>
             </div>
         </div>
         <div class='form-group mt-3'>
             <div class='row'>
-                <label for='title' class='col-sm-4 control-label-notes' style='text-align:left'>$langAnalyticsAdvancedLevel:</label>
-                <label for='title' class='col-sm-2 control-label'>$langAnalyticsMinValue</label>
-                <div class='col-sm-2'>
-                    <input class='form-control' type='number' name='upper_threshold' value='$upper_threshold'>
+                <label for='title' class='col-sm-12 control-label-notes mb-2'>$langAnalyticsAdvancedLevel:</label>
+                <div class='col-md-6 col-12'>
+                    <label for='title' class='col-sm-12 control-label'>$langAnalyticsMinValue</label>
+                    <div class='col-sm-12'>
+                        <input class='form-control' type='number' name='upper_threshold' value='$upper_threshold'>
+                    </div>
                 </div>
-                <label for='title' class='col-sm-2 control-label'>$langAnalyticsMaxValue</label>
-                <div class='col-sm-2'>
-                    <input class='form-control' type='number' name='max_value' value='$max_value'>
+                <div class='col-md-6 col-12'>
+                    <label for='title' class='col-sm-12 control-label'>$langAnalyticsMaxValue</label>
+                    <div class='col-sm-12'>
+                        <input class='form-control' type='number' name='max_value' value='$max_value'>
+                    </div>
                 </div>
             </div>
         </div>
         <div class='form-group mt-3'>   
-            <label for='title' class='col-sm-6 control-label-notes'  style='text-align:left'>$langAnalyticsWeight:</label>
+            <label for='title' class='col-sm-12 control-label-notes'>$langAnalyticsWeight:</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='number' placeholder='' name='weight' value='$weight'>
             </div>

@@ -54,14 +54,14 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
         $qNumber = "$question_number / $nbrQuestions";
     }
     $tool_content .= "
-            <div class='panel panel-default qPanel mt-3' id='qPanel$questionId'>
-              <div class='panel-heading'>
+            <div class='panel panel-default qPanel mt-3 rounded-0' id='qPanel$questionId'>
+              <div class='panel-heading rounded-0'>
                 <h6 class='panel-title'>$langQuestion $qNumber
                     <small>($questionTypeWord &mdash; $questionWeight $message)</small>&nbsp;
                     <span title='$langHasAnswered' id='qCheck$question_number'></span>
                 </h6>
             </div>
-            <div class='panel-body'>
+            <div class='panel-body rounded-0'>
                 <h6>" . q_math($questionName) . "</h6>
                 $questionDescription
                 <div class='text-center'>" .

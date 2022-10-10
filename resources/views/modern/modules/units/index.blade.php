@@ -169,8 +169,8 @@
 
 
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-                        <div class='panel panel-default'>
-                            <div class='panel-heading'>
+                        <div class='panel panel-default rounded-0'>
+                            <div class='panel-heading rounded-0'>
                                 <div class='panel-title'>{{ $pageName }}
                                     @if($course_start_week or $course_finish_week)
                                     <span class='orangeText fs-6'>
@@ -180,7 +180,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class='panel-body'>
+                            <div class='panel-body rounded-0'>
                                 <div>
                                     {!! standard_text_escape($comments) !!}
                                 </div>
@@ -199,12 +199,12 @@
 
 
                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-                        <div class='panel panel-default'>
-                            <div class='panel-body'>
-                                <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
+                        <div class='panel panel-default rounded-0'>
+                            <div class='panel-heading rounded-0'>{{ trans('langCourseUnits') }}</div>
+                            <div class='panel-body rounded-0'>
+                                <form class='form-horizontal form-wrapper shadow-lg' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
                                     <input type='hidden' name='course' value='{{ $course_code }}'>
                                     <div class='form-group'>
-                                        <label class='col-sm-8 control-label-notes'>{{ trans('langCourseUnits') }}</label>
                                         <div class='col-sm-12'>
                                             <label class='sr-only' for='id'>{{ trans('langCourseUnits') }}</label>
                                             <select name='id' id='id' class='form-select' onchange='document.unitselect.submit()'>

@@ -106,10 +106,16 @@
 
                         
 
-                                <div class='form-group mt-3'>
-                                    <div class='col-offset-2 col-10'>
-                                        <button class='btn btn-primary' type='submit'>{{ trans('langSubmit') }}</button>
-                                        <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                <div class='form-group mt-5'>
+                                    <div class='col-12'>
+                                        <div class='row'>
+                                            <div class='col-6'>
+                                                 <button class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit'>{{ trans('langSubmit') }}</button>
+                                            </div>
+                                            <div class='col-6'>
+                                                 <a class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 

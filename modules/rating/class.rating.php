@@ -426,7 +426,7 @@ Class Rating {
             $out .= "</div>";
             
         } elseif ($this->widget == 'thumbs_up') {
-            $out = "<div class=\"rating\">";
+            $out = "<div class=\"rating d-inline-flex align-items-top\">";
             
             $onclick_up = "";
             
@@ -444,15 +444,15 @@ Class Rating {
                 $img_up = 'thumbs_up_inactive.png';
             }
             
-            $out .= "<img id=\"rate_".$this->rid."_img\" src=\"".$urlServer."modules/rating/".$img_up."\" ".$onclick_up."/>&nbsp;";
-            $out .= "<span id=\"rate_".$this->rid."_up\">".$this->getThumbsUpRating()."</span>";
-            $out .= "<div class=\"smaller\" id=\"rate_msg_".$this->rid."\">";
+            $out .= "<img id=\"rate_".$this->rid."_img\" src=\"".$urlServer."modules/rating/".$img_up."\" ".$onclick_up."/>";
+            $out .= "<span class=\"me-2 mt-1\" id=\"rate_".$this->rid."_up\">".$this->getThumbsUpRating()."</span>";
+            $out .= "<span class=\"smaller mt-1\" id=\"rate_msg_".$this->rid."\">";
             
             if ($has_rated) {
                 $out .= $langUserHasRated;
             }
             
-            $out .= "</div>";
+            $out .= "</span>";
             $out .= "</div>";
         } elseif ($this->widget == 'fivestar') {
             $out = "<div class=\"rating\">";

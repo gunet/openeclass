@@ -76,7 +76,7 @@
 
 @media(max-width: 425px){ 
 
-   .btn-close.text-reset{ background-color:white; }
+  .btn-close.text-reset{ background-color:white; }
 
   .offcanvas-start.d-lg-none.show{ width:280px; overflow-y: scroll; background-color: #003F87; }
 
@@ -98,11 +98,11 @@
 /* tablet */
 @media (min-width: 768px) and (max-width: 1023px){ 
 
-   .btn-close.text-reset{ background-color:white; }
+  .btn-close.text-reset{ background-color:white; }
 
-   .offcanvas-start.d-lg-none.show{ width:285px; overflow-y: scroll; background-color: #003F87; }
+  .offcanvas-start.d-lg-none.show{ width:285px; overflow-y: scroll; background-color: #003F87; }
 
-   .nav-link{ font-size:13px; border-bottom: solid 1px white; }
+  .nav-link{ font-size:13px; border-bottom: solid 1px white; }
 
   .active-nav{ opacity:1; }
 
