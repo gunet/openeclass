@@ -887,7 +887,7 @@ if ($course_info->view_type == 'activity') {
                    course_id = ?d
         ORDER BY `order`", $course_id);
     foreach ($items as $item) {
-        if (trim($item->content)) {
+        if (!is_null($item->content) and trim($item->content)) {
             $tool_content .= "
                     <div class='panel panel-default clearfix'>
                         <div class='panel-heading'><h4>" . q(getSerializedMessage($item->heading)) ."</h4></div>
