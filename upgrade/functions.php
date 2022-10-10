@@ -1077,6 +1077,7 @@ function upgrade_to_3_3($tbl_options): void
  */
 function upgrade_to_3_4($tbl_options): void
 {
+    global $webDir;
 
     // Conference table
     Database::get()->query("CREATE TABLE IF NOT EXISTS `conference` (
