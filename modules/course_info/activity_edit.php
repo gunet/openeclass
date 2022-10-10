@@ -69,10 +69,10 @@ $tool_content .= "
             <div class='col-md-12'>";
 foreach ($items as $item) {
     $tool_content .= "
-                <div class='panel clearfix'>
-                    <div class='panel-heading h4'>" . q(getSerializedMessage($item->heading)) . "</div>
+                <div class='panel panel-default clearfix'>
+                    <div class='panel-heading'>" . q(getSerializedMessage($item->heading)) . "</div>
                     <div class='panel-body'>" .
-                        rich_text_editor("content[{$item->heading_id}]", 5, 40, $item->content, true) . "</div>";
+                        rich_text_editor("content[{$item->heading_id}]", 5, 40, (string) $item->content, true) . "</div>";
     $resources = Database::get()->queryArray("SELECT * FROM unit_resources
             WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $item->id);
     if ($resources) {
