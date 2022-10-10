@@ -75,7 +75,7 @@ foreach ($items as $item) {
                         rich_text_editor("content[{$item->heading_id}]", 5, 40, $item->content, true) . "</div>";
     $resources = Database::get()->queryArray("SELECT * FROM unit_resources
             WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $item->id);
-    if (count($resources > 0)) {
+    if ($resources) {
         $tool_content .= "
                     <div class='table-responsive'>
                         <table class='table table-striped table-hover'>
@@ -106,4 +106,3 @@ $tool_content .= "
 ";
 
 draw($tool_content, 2, null, $head_content);
-
