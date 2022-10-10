@@ -131,16 +131,18 @@ class H5PHubUpdater {
         }
 
         $libraryKey = H5PCore::libraryToString($library);
-        $libraryId = $this->h5pStorage->h5pC->librariesJsonData[$libraryKey]["libraryId"];
-        error_log("endpoint: " . $endpoint . ", librarykey: " . $libraryKey . ", libraryid: " . $libraryId); // TODO: remove
+        $libraryId = $this->h5pStorage->h5pC->librariesJsonData[$libraryKey]["libraryId"] ?? null;
+        if ($libraryId) {
+            error_log("endpoint: " . $endpoint . ", librarykey: " . $libraryKey . ", libraryid: " . $libraryId); // TODO: remove
 
-        // Update example and tutorial (if any of them are defined in $library).
-        $example = $library['example'] ?? null;
-        $tutorial = $library['tutorial'] ?? null;
-        $sql = "UPDATE h5p_library 
-                       SET example = ?s, tutorial = ?s
-                     WHERE id = ?d";
-        Database::get()->query($sql, $example, $tutorial, $libraryId);
+            // Update example and tutorial (if any of them are defined in $library).
+            $example = $library['example'] ?? null;
+            $tutorial = $library['tutorial'] ?? null;
+            $sql = "UPDATE h5p_library
+                           SET example = ?s, tutorial = ?s
+                         WHERE id = ?d";
+            Database::get()->query($sql, $example, $tutorial, $libraryId);
+        }
 
         return $libraryId;
     }
