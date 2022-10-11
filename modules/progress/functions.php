@@ -584,20 +584,20 @@ function display_activities($element, $id, $unit_id = 0) {
             $tool_content .= "<div class='main-content'>
                                 <div class='col-sm-12'>
                                     
-                                        <div class='panel panel-default'>
-                                            <div class='panel-body'>
-                                                <div class='inner-heading'>
-                                                    <div class='row'>
-                                                        <div class='col-sm-7'>
-                                                            <strong>$langUnitCompletion</strong>
-                                                        </div>
-                                                        <div class='col-sm-5 text-end'>
-                                                            <div class='text-end'>
-                                                                $addActivityBtn
-                                                            </div>
+                                        <div class='panel panel-default rounded-0'>
+                                            <div class='panel-heading rounded-0'>
+                                                <div class='row'>
+                                                    <div class='col-md-7 col-9 mt-1'>
+                                                        $langUnitCompletion
+                                                    </div>
+                                                    <div class='col-md-5 col-3 text-end'>
+                                                        <div class='text-end'>
+                                                            $addActivityBtn
                                                         </div>
                                                     </div>
-                                                </div><hr>
+                                                </div>
+                                            </div>
+                                            <div class='panel-body rounded-0'>
                                                 <div class='res-table-wrapper'>
                                                     <div class='table-responsive'>
                                                         <table class='table-default'>
@@ -617,7 +617,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                             </tr>";
 
         if (count($result) == 0) {
-            $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
+            $tool_content .= "<p class='margin-top-fat text-center text-muted mb-3'>$langNoActivCert</p>";
         } else {
             foreach ($result as $details) {
                 $resource_data = get_resource_details($element, $details->id, $unit_id);
@@ -676,23 +676,23 @@ function display_activities($element, $id, $unit_id = 0) {
         $addPrereqBtn = action_button($action_button_content,
             array(
                 'secondary_title' => $langNewUnitPrerequisite,
-                'secondary_icon' => '',
+                'secondary_icon' => 'fa-plus',
                 'secondary_btn_class' => 'btn-success btn-sm',
             ));
         $tool_content .= "  
                
-                    <div class='panel panel-default mt-3'>
-                        <div class='panel-body'>
-                            <div class='inner-heading'>
-                                <div class='row'>
-                                    <div class='col-md-7 col-sm-6'>
-                                        <strong>$langUnitPrerequisites</strong>
-                                    </div>
-                                    <div class='col-md-5 col-sm-6 text-end'>
-                                    $addPrereqBtn
-                                    </div>
+                    <div class='panel panel-default mt-3 rounded-0'>
+                        <div class='panel-heading rounded-0'>
+                            <div class='row'>
+                                <div class='col-md-7 col-9 mt-1'>
+                                    $langUnitPrerequisites
                                 </div>
-                            </div><hr>
+                                <div class='col-md-5 col-3 text-end'>
+                                $addPrereqBtn
+                                </div>
+                            </div>
+                        </div>
+                        <div class='panel-body rounded-0'>
                             <div class='res-table-wrapper'>";
 
 
@@ -711,7 +711,7 @@ function display_activities($element, $id, $unit_id = 0) {
             <div class='table-responsive'>
                 <table class='table-default'>
                 <tr>
-                    <td><p class='text-left'>$prereq_unit_title</p></td>
+                    <td><p class='text-start'>$prereq_unit_title</p></td>
                 
                     <td>$delPrereqBtn</td>
                 </tr>

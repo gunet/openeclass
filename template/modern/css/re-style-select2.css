@@ -29,4 +29,6 @@
 /****************************************** rich-text-editor bg-tools ******************************************/
 .mce-container{ background: #F5F5F5; }
 
+.form-wrapper.shadow-sm .form-group:has(.mce-container) .control-label-notes{margin-bottom: 5px;}
+
 .mce-toolbar-grp{  background: #fff;  border-bottom:0px !important; }

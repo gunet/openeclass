@@ -1,3 +1,4 @@
+<?php //print_r($alter_layout); ?>
 @extends('layouts.default')
 
 @section('content')
@@ -165,9 +166,9 @@
                                                 <div class='collapse shadow-sm p-3 bg-body rounded' id='collapseDescription'>
                                                     <div class='col-12'>
                                                         @foreach ($course_descriptions as $row)
-                                                            <div class='row'>
+                                                            <div class='row mb-3'>
                                                                 <div class='col-xl-6 col-12'>
-                                                                    <p class='control-label-notes text-start'>{{$row->title}}</p>
+                                                                    <p class='control-label-notes text-start'>{{$row->title}}:</p>
                                                                 </div>
                                                                 <div class='col-xl-6 col-12 desCourse'>
                                                                     {!! standard_text_escape($row->comments) !!}
@@ -245,56 +246,147 @@
                     </div>
 
                     <div class="col-xl-8 col-lg-12 col-md-12 col_maincontent_unit mt-4">
-                        @if (!$alter_layout)
-                            <div class='panel panel-admin border border-secondary-4 shadow-sm'>
-                                <div class='panel-heading'>
-                                    <div class='col-12 d-inline-flex'>
-                                        <div class='col-6'>
-                                            <span class='panel-title'>
-                                                {{ trans('langCourseUnits') }}
-                                            </span>
-                                        </div>
-                                        <div class='col-6'>
-                                            @if ($is_editor and $course_info->view_type == 'units')
+                        
+                        @if($course_info->view_type == 'units')
+                            @if($total_cunits > 0)
+                                <div class='panel panel-admin border border-secondary-4 shadow-sm'>
+                                    <div class='panel-heading'>
+                                        <div class='col-12 d-inline-flex'>
+                                            <div class='col-6'>
+                                                <span class='panel-title'>
+                                                    {{ trans('langCourseUnits') }}
+                                                    @if($is_editor)
+                                                        @php $q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE id = ?d", $course_id); @endphp
+                                                        @if($q->flipped_flag==2)
+                                                            <a href='{{ $urlServer }}modules/create_course/edit_flipped_classroom.php?course={{ $course_code }}' class='add-unit-btn' data-bs-toggle='tooltip' data-bs-placement='bottom' title='{{ trans("langFlippedEdit") }}'>
+                                                            <span class='fa fa-pencil text-warning'></span></a>
+                                                        @endif
+                                                    @endif
+                                                </span>
+                                            </div>
+                                            <div class='col-6'>
+                                                @if ($is_editor and $course_info->view_type == 'units')
 
-                                                <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
-                                                    <span class='fa fa-plus-circle text-white'></span>
-                                                </a>
+                                                    <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
+                                                        <span class='fa fa-plus-circle text-white'></span>
+                                                    </a>
+                                                    
+                                                    <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=0' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitCarousel') }}">
+                                                        <span class='fa fa-columns pe-2 text-white'></span>
+                                                    </a>
                                                 
-                                                <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=0' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitCarousel') }}">
-                                                    <span class='fa fa-columns pe-2 text-white'></span>
+                                                    <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=1' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitRow') }}">
+                                                        <span class='fa fa-list pe-2 mb-0 text-white'></span>
+                                                    </a>
+                                                
+                                                @endif
+                                                <a class='add-unit-btn mt-0 float-end' id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                                    <span class='fa fa-question-circle @if($is_editor) pe-2 @endif text-white'></span>
                                                 </a>
-                                            
-                                                <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=1' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitRow') }}">
-                                                    <span class='fa fa-list pe-2 mb-0 text-white'></span>
-                                                </a>
-                                               
-                                            @endif
-                                            <a class='add-unit-btn mt-0 float-end' id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
-                                                <span class='fa fa-question-circle pe-2 text-white'></span>
-                                            </a>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class='panel-body'>
+                                        {!! $cunits_content !!}
+                                    </div>
                                 </div>
+                            @else
+                                <div class='panel panel-admin shadow-sm'>
+                                    <div class='panel-heading text-start text-white ps-3 pe-3 pb-2 pt-2'>
+                                        <div class='row'>
+                                            <div class='col-6'>
+                                                {{ trans('langCourseUnits') }}
+                                            </div>
+                                            <div class='col-6'>
+                                                @if($is_editor)
+                                                    
+                                                    <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
+                                                        <span class='fa fa-plus-circle text-white'></span>
+                                                    </a>
+                                                                                                       
+                                                @endif
+                                                <a class='add-unit-btn mt-0 float-end' id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                                    <span class='fa fa-question-circle @if($is_editor) pe-2 @endif text-white'></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class='panel-body'>
+                                        <div class='not_visible text-center'> - {{ trans('langNoUnits') }} - </div>
+                                    </div>
+                                </div>
+                            @endif
+                        @endif
+                            
+                        
 
-                                <div class='panel-body'>
-                                    {!! $cunits_content !!}
-                                </div>
 
-                            </div>
-                            {!! $course_home_main_area_widgets !!}
-                        @else
-                            <div class='panel panel-admin shadow-sm'>
-                                <div class='panel-heading text-center text-white ps-3 pe-3 pb-2 pt-2'>
-                                    {{ trans('langCourseUnits') }}
+                        @if($course_info->view_type == 'activity')
+                            @if($is_editor)
+                                <div class='col-12 d-flex justify-content-center mb-3'>
+                                    <a class='btn btn-sm Borders bg-primary w-75 mt-0 mb-0 text-white' href="{{$urlAppend}}modules/course_info/activity_edit.php?course{{$course_code}}"><span class='fa fa-edit me-2'></span>{{trans('langActivityEdit')}}</a>
                                 </div>
-                                <div class='panel-body'>
-                                    <div class='not_visible text-center'> - {{ trans('langNoUnits') }} - </div>
-                                </div>
+                            @endif
+                            <div class='col-12'>
+                                @php 
+                                    $qVisible = ($is_editor? '': 'AND visible = 1');
+                                    $items = Database::get()->queryArray("SELECT activity_content.id, heading, content
+                                        FROM activity_heading
+                                            LEFT JOIN activity_content
+                                                ON activity_heading.id = activity_content.heading_id AND
+                                                course_id = ?d
+                                        ORDER BY `order`", $course_id);
+                                @endphp
+
+                                @foreach ($items as $item)
+                                    @if (trim($item->content))
+                                        <div class='panel panel-default mb-3'>
+                                            <div class='panel-heading'>
+                                                {!! q(getSerializedMessage($item->heading)) !!}
+                                            </div>
+                                            <div class='panel-body'>
+                                                {!! standard_text_escape($item->content) !!}
+                                            </div>
+
+                                            @php
+                                                $resources = Database::get()->queryArray("SELECT * FROM unit_resources
+                                                    WHERE unit_id = ?d AND `order` >= 0 $qVisible ORDER BY `order`", $item->id);
+                                            @endphp
+
+                                            @if (count($resources))
+                                                <div class='table-responsive'>
+                                                    <table class='table table-striped table-hover'>
+                                                        <tbody>
+                                                            @foreach ($resources as $info)
+                                                                @php $info->comments = standard_text_escape($info->comments); @endphp
+                                                                {!! show_resourceWeek($info) !!}
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endif
+                                @endforeach
                             </div>
                         @endif
 
-                        <div class="panel panel-admin mt-4 border border-secondary-4 shadow-sm">
+
+                        @if($course_info->view_type == 'wall')
+                            @include('layouts.partials.course_wall_functions',['is_editor' => $is_editor])
+                            {!! show_wall_posts() !!}
+                        @endif
+
+
+
+
+
+
+
+
+
+                        <div class="panel panel-admin @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif border border-secondary-4 shadow-sm">
                             <div class='panel-heading'>
                                 <div class='row'>
                                     <div class='col-6 text-start'>
@@ -315,6 +407,12 @@
                             </div>
                             {!! $course_home_sidebar_widgets !!}
                         </div>
+
+                        @if (!$alter_layout)
+                           <div class='col-12 mt-4'>
+                                {!! $course_home_main_area_widgets !!}
+                           </div>
+                        @endif
 
                         
 

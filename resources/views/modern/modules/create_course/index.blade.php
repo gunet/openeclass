@@ -181,7 +181,7 @@
                                       <label class='col-sm-12 control-label-notes'>{{ trans('langCourseFormat') }}:</label>
                                       <div class="row p-2">
 
-                                        <div class="col-xl-4 col-md-4 col-12">
+                                        <div class="col-xl-3 col-md-3 col-12">
                                           
                                           <div class='radio'>
                                             <div class='d-inline-flex align-items-top'>
@@ -191,7 +191,7 @@
                                           </div>
                                         </div>
 
-                                        <div class="col-xl-4 col-md-4 col-12">
+                                        <div class="col-xl-3 col-md-3 col-12">
                                           <div class='radio'>
                                             <div class='d-inline-flex align-items-top'>
                                               <input type='radio' name='view_type' value='units' id='units' checked>
@@ -200,7 +200,16 @@
                                           </div>
                                         </div>
 
-                                        <div class="col-xl-4 col-md-4 col-12 d-flex justify-content-md-end justify-content-start">
+                                        <div class="col-xl-3 col-md-3 col-12">
+                                          <div class="radio">
+                                            <div class='d-inline-flex align-items-top'>
+                                              <input type="radio" name="view_type" value="activity" id="activity">
+                                              <span class='ps-2'>{{trans('langCourseActivityFormat') }}</span>
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        <div class="col-xl-3 col-md-3 col-12 d-flex justify-content-md-end justify-content-start">
                                           <div class='radio'>
                                             <div class='d-inline-flex align-items-top'>
                                               <input type='radio' name='view_type' value='wall' id='wall'>

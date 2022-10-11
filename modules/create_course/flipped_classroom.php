@@ -41,7 +41,7 @@ $(document).ready(function() {
     $('#add_g').click(function() {
         if (i <= 20) {
             
-            $('#dynamic_goals').append('<div id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\"  class= "col-sm-3 control-label" >' + i + ':</label><div class="col-sm-8"><input type=\"text\" name=\"goals[]\" class=\"form-control\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle \"></span></a></div></div>')
+            $('#dynamic_goals').append('<div id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\"  class= "col-sm-6 control-label-notes" >' + i + ':</label><div class="col-sm-12"><input type=\"text\" name=\"goals[]\" class=\"form-control\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle \"></span></a></div></div>')
             i++;
         }
         document.getElementById('goal_count').value = i-1;
@@ -49,7 +49,7 @@ $(document).ready(function() {
     $('#add_u').click(function() {
         if (j <= 20) {
             
-            $('#dynamic_units').append('<div id=\"row_u_' + j + '\"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\"class= "col-sm-3 control-label"  >' + j + ':</label><div class="col-sm-8"><input type=\"text\" name=\"units[]\" class=\"form-control\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div></div>')
+            $('#dynamic_units').append('<div id=\"row_u_' + j + '\"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\"class= "col-sm-12 control-label-notes"  >' + j + ':</label><div class="col-sm-12"><input type=\"text\" name=\"units[]\" class=\"form-control\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div></div>')
             j++;
         }
         document.getElementById('unit_count').value = j-1;
@@ -288,10 +288,10 @@ if(!isset($_POST['next'])){
                    <div class='col-12'>           
                         <div class='row'>
                            <div class='col-6'>             
-                               <a href='{$urlServer}main/portfolio.php' class='btn btn-secondary cancelAdminBtn w-100'>$langCancel</a>
+                               <a href='{$urlServer}main/portfolio.php' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
                             </div>
                             <div class='col-6'>
-                                <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='next' value='" . q($langNext) . "&nbsp;&nbsp;&raquo;'>
+                                <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='next' value='" . q($langNext) . "&nbsp;&nbsp;&raquo;'>
                             </div>
                         </div>
                     </div>

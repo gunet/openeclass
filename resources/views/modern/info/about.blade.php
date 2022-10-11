@@ -38,18 +38,18 @@
                         <div class='row'>
                             <div class='col-sm-6'>
                                 <ul class='list-group'>
-                                    <li class='list-group-item'><strong class='text-dark'>{{ trans('langCourses') }}</strong><span class='badge text-secondary float-end'>{{ $course_inactive }}</span></li>
-                                    <li class='list-group-item'>{{ trans('langOpenCoursesShort') }}<span class='badge text-secondary float-end'>{{ $course_open }}</span></li>
-                                    <li class='list-group-item'>{{ trans('langOpenCourseWithRegistration') }}<span class='badge text-secondary float-end'>{{ $course_registration }}</span></li>
-                                    <li class='list-group-item'>{{ trans('langClosedCourses') }}<span class='badge text-secondary float-end'>{{ $course_closed }}</span></li>
+                                    <li class='list-group-item'><strong class='text-dark'>{{ trans('langCourses') }}</strong><span class='badge bg-success text-white float-end'>{{ $course_inactive }}</span></li>
+                                    <li class='list-group-item'>{{ trans('langOpenCoursesShort') }}<span class='badge bg-success text-white float-end'>{{ $course_open }}</span></li>
+                                    <li class='list-group-item'>{{ trans('langOpenCourseWithRegistration') }}<span class='badge bg-success text-white float-end'>{{ $course_registration }}</span></li>
+                                    <li class='list-group-item'>{{ trans('langClosedCourses') }}<span class='badge bg-success text-white float-end'>{{ $course_closed }}</span></li>
                                 </ul>
                             </div>
                             <div class='col-sm-6'>
                                 <ul class='list-group'>
-                                    <li class='list-group-item'><label>{{ trans('langUsers') }}</label><span class='badge text-secondary float-end'>{{ $count_total }}</span></li>
-                                    <li class='list-group-item'>{{ trans('langTeachers') }}<span class='badge text-secondary float-end'>{{ $count_status[USER_TEACHER] }}</span></li>
-                                    <li class='list-group-item'>{{ trans('langStudents') }}<span class='badge text-secondary float-end'>{{ $count_status[USER_STUDENT] }}</span></li>
-                                    <li class='list-group-item'>{{ trans('langGuest') }}<span class='badge text-secondary float-end'>{{ $count_status[USER_GUEST] }}</span> </li>
+                                    <li class='list-group-item'><label>{{ trans('langUsers') }}</label><span class='badge bg-success text-white float-end'>{{ $count_total }}</span></li>
+                                    <li class='list-group-item'>{{ trans('langTeachers') }}<span class='badge bg-success text-white float-end'>{{ $count_status[USER_TEACHER] }}</span></li>
+                                    <li class='list-group-item'>{{ trans('langStudents') }}<span class='badge bg-success text-white float-end'>{{ $count_status[USER_STUDENT] }}</span></li>
+                                    <li class='list-group-item'>{{ trans('langGuest') }}<span class='badge bg-success text-white float-end'>{{ $count_status[USER_GUEST] }}</span> </li>
                                 </ul>
                             </div>
                         </div>

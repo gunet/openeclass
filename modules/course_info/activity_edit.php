@@ -73,9 +73,9 @@ $tool_content .= "
             <div class='col-md-12'>";
 foreach ($items as $item) {
     $tool_content .= "
-                <div class='panel clearfix'>
-                    <div class='panel-heading h4'>" . q(getSerializedMessage($item->heading)) . "</div>
-                    <div class='panel-body'>" .
+                <div class='panel panel-default clearfix mb-3 rounded-0'>
+                    <div class='panel-heading rounded-0'>" . q(getSerializedMessage($item->heading)) . "</div>
+                    <div class='panel-body rounded-0'>" .
                         rich_text_editor("content[{$item->heading_id}]", 5, 40, $item->content, true) . "</div>";
     $resources = Database::get()->queryArray("SELECT * FROM unit_resources
             WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $item->id);
@@ -100,9 +100,17 @@ $tool_content .= "
             </div>
         </div>
         <div class='row'>
-            <div class='col-sm-12'>
-                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                <a href='" . q($courseHome) . "' class='btn btn-default'>" . q($langCancel) . "</a>
+            <div class='col-12'>
+                <div class='row'>
+                   <div class='col-6'>
+                        <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                   </div>
+                   <div class='col-6'>
+                        <a href='" . q($courseHome) . "' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>" . q($langCancel) . "</a>
+                   </div>
+                </div>
+               
+                
             </div>
         </div>
     </div>

@@ -26,6 +26,9 @@ body{ background-color: #eaeaea; font-family: 'FontAwesome','Open Sans', Arial, 
 
 span{font-size: 14px;}
 
+/* margin tag <p> for tables and panels */
+table p, .panel p, .margin-bottom-fat.form-wrapper.shadow-sm.p-2.mb-3.rounded p {margin-bottom: 0px;}
+
 @media (max-width:1023px){ body{ font-size:15px; } select{ overflow-y:auto !important; } }
 
 #menu-btn{ border-radius: 50%;}

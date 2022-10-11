@@ -298,7 +298,7 @@ function decide_wall_redirect() {
     global $course_code;
 
     if (strpos($_SERVER['HTTP_REFERER'], "courses/".$course_code)) {
-        redirect_to_home_page("courses/$course_code");
+        redirect_to_home_page("courses/$course_code/");
     } else {
         redirect_to_home_page("modules/wall/index.php?course=$course_code");
     }

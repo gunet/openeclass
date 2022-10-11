@@ -306,10 +306,18 @@ if(!isset($_POST['final_submit'])){
                         </div>
                         
 
-                        <div class='form-group'>
-                            <div class='col-sm-10 col-sm-offset-2'>
-                                <input id='final_sub' class='btn btn-primary' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
-                                <a href='{$urlServer}main/portfolio.php' class='btn btn-default'>$langCancel</a>
+                        <div class='form-group mt-5'>
+                            <div class='col-12'>
+                                <div class='row'>
+                                   <div class='col-md-6 col-7'>
+                                    <input id='final_sub' class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
+                                   </div>
+                                   <div class='col-md-6 col-5'>
+                                        <a href='{$urlServer}main/portfolio.php' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
+                                   </div>
+                                </div>
+                                
+
                             </div>
                         </div>
                         <input type='hidden' name='next'>
@@ -495,10 +503,18 @@ if(!isset($_POST['final_submit'])){
                 $tool_content .= "</tr>
                         </table>
                     </div>
-                    <div class='form-group'>
-                        <div class='col-sm-10 col-sm-offset-2'>                            
-                            <a href='{$urlServer}modules/units/?course=".$course_code."&id=".$unit_id."' class='btn btn-default'>$langCancel</a>
-                            <input id='final_sub' class='btn btn-primary' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
+                    <div class='form-group mt-5'>
+                        <div class='col-12'>    
+                            <div class='row'>
+                               <div class='col-md-6 col-7'>
+                                    <input id='final_sub' class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
+                               </div>
+                               <div class='col-md-6 col-5'>
+                                    <a href='{$urlServer}modules/units/?course=".$course_code."&id=".$unit_id."' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
+                               </div>
+                            </div>                        
+                            
+                           
                         </div>
                     </div>
                     <input type='hidden' name='next'>

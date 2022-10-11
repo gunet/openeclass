@@ -511,10 +511,10 @@ if ($is_editor){
 }
 $show_course = Database::get()->querySingle("SELECT view_units FROM course WHERE id =  ?d", $course_id);
 $carousel_or_row = $show_course->view_units; 
-// print_r('the courousel_or_row:'.$carousel_or_row);
-/**********************************************************************/
+/***************************************************************************/
 
 $total_cunits = count($all_units);
+$data['total_cunits'] = $total_cunits;
 if ($total_cunits > 0) {
     $cunits_content .= "";
     $count_index = 0;

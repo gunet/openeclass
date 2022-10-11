@@ -46,7 +46,7 @@ $(document).ready(function() {
        
         if (i <= 20) {
               
-            $('#dynamic_goals').append('<div id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\" class="col-sm-3 control-label">' + i + ':</label><div class="col-sm-8"><input type=\"text\" name=\"goals[]\" class=\"form-control\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle\"></span></a></div></div>')
+            $('#dynamic_goals').append('<div id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\" class="col-sm-12 control-label-notes">' + i + ':</label><div class="col-sm-12"><input type=\"text\" name=\"goals[]\" class=\"form-control\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle\"></span></a></div></div>')
             i++;
         }
         document.getElementById('goal_count').value = i-1;
@@ -55,7 +55,7 @@ $(document).ready(function() {
         
         if (j <= 20) {
            
-            $('#dynamic_units').append('<div id=\"row_u_' + j + '\"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="col-sm-3 control-label">' + j + ':</label><div class="col-sm-8"><input type=\"text\" name=\"units[]\" class=\"form-control\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div></div>')
+            $('#dynamic_units').append('<div id=\"row_u_' + j + '\"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="col-sm-12 control-label-notes">' + j + ':</label><div class="col-sm-12"><input type=\"text\" name=\"units[]\" class=\"form-control\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div></div>')
             j++;
         }
         document.getElementById('unit_count').value = j-1;
@@ -168,7 +168,7 @@ if (!isset($_POST['next'])) {
             'url' => $urlServer."courses/$course_code",
             'icon' => 'fa-reply',
             'level' => 'primary-label',
-            'button-class' => 'btn-default'
+            'button-class' => 'btn-secondary'
         )
     ), false);
 }else if(!isset($_POST['final_submit'])){
@@ -211,7 +211,12 @@ if(!isset($_POST['next'])){
 
     $stuNum = $lectNum = $lectHours = $homeHours = $lectTotalHours ='';
      $tool_content .= "
-        <div class='form-wrapper'>
+     <div class='row'>
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+            <div class='col-12 h-100 left-form'></div>
+        </div>
+        <div class='col-lg-6 col-12'>
+        <div class='form-wrapper shadow-sm p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
             <fieldset>
                 <div class='form-group'>
@@ -264,8 +269,8 @@ if(!isset($_POST['next'])){
                     foreach($q2 as $goal){
 
                         $tool_content .="<div id='row_g_".$count_goals."'>
-                                            <label for='goal_$count_goals' class='col-sm-3 control-label' id='gtitle_$count_goals'>$count_goals: </label>
-                                            <div class='col-sm-8'><input name='goals[]' id='goal_$count_goals' type='text' class='form-control' value='".$goal->title."' placeholder='$langGoals'>
+                                            <label for='goal_$count_goals' class='col-sm-12 control-label-notes' id='gtitle_$count_goals'>$count_goals: </label>
+                                            <div class='col-sm-12'><input name='goals[]' id='goal_$count_goals' type='text' class='form-control' value='".$goal->title."' placeholder='$langGoals'>
                                         ";
                                     if($count_goals ==1){
 
@@ -350,8 +355,8 @@ if(!isset($_POST['next'])){
                         foreach($q5_b as $unit){
 
                             $tool_content .= "
-                                <label for='unit_$count_units' id='utitle_$count_units' class= 'col-sm-3 control-label'>$count_units: </label>
-                                <div class='col-sm-8'>
+                                <label for='unit_$count_units' id='utitle_$count_units' class= 'col-sm-12 control-label'>$count_units: </label>
+                                <div class='col-sm-12'>
                                     <input name='units[]' id='unit_$count_units' type='text' class='form-control' value='".$unit->title."' placeholder='$langUnits'>
                                     <input name='ids[]' type='hidden' value='$unit->ID'>
                                     ";
@@ -385,14 +390,24 @@ if(!isset($_POST['next'])){
                 </div>             
             </div>
 
-            <div class='form-group mt-3'>
-                <div class='col-sm-10 col-sm-offset-2'>
-                    <input class='btn btn-primary' type='submit' name='next' value='" . q($langNext) . "'>
-                    <a href='{$urlServer}courses/".$course_code."' class='btn btn-default'>$langCancel</a>
+            <div class='form-group mt-5'>
+                <div class='col-12'>
+                    <div class='row'>
+                       <div class='col-6'>
+                        <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='next' value='" . q($langNext) . "'>
+                       </div>
+                       <div class='col-6'>
+                        <a href='{$urlServer}courses/".$course_code."' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
+                       </div>
+                    </div>
+                    
+                    
                 </div>
             </div>     
             </fieldset>" . generate_csrf_token_form_field() . "
         </form>
+        </div>
+        </div>
         </div>";
 
 }else if(!isset($_POST['final_submit'])){
@@ -492,15 +507,15 @@ if(!isset($_POST['next'])){
 
             $tool_content .= " <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
-                <div class='panel panel-default'>
-                    <div class='panel-heading'>
-                        <div class='panel-title h4'>
+                <div class='panel panel-default rounded-0'>
+                    <div class='panel-heading rounded-0'>
+                        <div class='panel-title'>
                             $langActSelect:
                         </div>
                     </div>
-                </div>
+               
 
-                
+                <div class='panel-body overflow-auto rounded-0'>
                 <fieldset>
                     <div class='table-responsive'>
                         <table class='table table-bordered table-striped'>
@@ -657,10 +672,16 @@ if(!isset($_POST['next'])){
                 $tool_content .= "</tr>
                         </table>
                     </div>
-                    <div class='form-group'>
-                        <div class='col-sm-10 col-sm-offset-2'>
-                            <input id='final_sub' class='btn btn-primary' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "'>
-                            <a href='{$urlServer}courses/".$course_code."' class='btn btn-default'>$langCancel</a>
+                    <div class='form-group mt-5'>
+                        <div class='col-12 align-items-center'>
+                            <div class='row'>
+                                <div class='col-md-6 col-7'>
+                                    <input id='final_sub' class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "'>
+                                </div>
+                                <div class='col-md-6 col-5'>
+                                    <a href='{$urlServer}courses/".$course_code."' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <input type='hidden' name='next'>
@@ -668,7 +689,7 @@ if(!isset($_POST['next'])){
                     <input name='checked_in_home' type='hidden' value='2'></input>
                     <input name='checked_after_class' type='hidden' value='3'></input>
 
-                </fieldset>". generate_csrf_token_form_field() ." 
+                </fieldset></div></div>". generate_csrf_token_form_field() ." 
             </form>
         </div>
         ";

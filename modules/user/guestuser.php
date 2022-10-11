@@ -132,7 +132,7 @@ if (isset($_POST['submit'])) {
              <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit' value='$submit_label'>
              </div>
              <div class='col-6'>
-              <a href='index.php?course=$course_code' class='btn btn-secondary cancelAdminBtn w-100'>$langCancel</a>
+              <a href='index.php?course=$course_code' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
              </div>
           </div>
           
