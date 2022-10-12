@@ -144,6 +144,10 @@ $module_names[-1] = $langAllModules;
 foreach ($modules as $mid => $info) {
     $module_names[$mid] = $info['title'];
 }
+$module_names[MODULE_ID_USERS] = $langAdminUsers;
+$module_names[MODULE_ID_COURSEINFO] = $langConfig;
+$module_names[MODULE_ID_TOOLADMIN] = $langExternalLinks;
+$module_names[MODULE_ID_ABUSE_REPORT] = $langAbuseReport;
 
 $i = html_entity_decode('&nbsp;&nbsp;&nbsp;', ENT_QUOTES, 'UTF-8');
 $log_types = array(0 => $langAllActions,
@@ -195,7 +199,7 @@ $tool_content .= '<div class="form-group">
   <input type="hidden" name="u" value="'. $u .'">
   <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <input class="btn btn-primary" type="submit" name="submit" value="' . $langSubmit . '">            
+            <input class="btn btn-primary" type="submit" name="submit" value="' . $langSubmit . '">
         </div>
     </div>
 

@@ -23,7 +23,8 @@ $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
-require_once 'hierarchy_validations.php';
+require_once 'include/log.class.php';
+require_once 'modules/admin/hierarchy_validations.php';
 
 $tree = new Hierarchy();
 $user = new User();
@@ -37,7 +38,7 @@ $c = isset($_GET['c']) ? intval($_GET['c']) : false;
 $doit = isset($_GET['doit']);
 
 if (isset($doti)) {
-    $tool_content .= action_bar(array(    
+    $tool_content .= action_bar(array(
         array('title' => $langBackAdmin,
               'url' => "index.php",
               'icon' => 'fa-reply',
@@ -72,36 +73,33 @@ if (!$doit) {
     } else {
         $tool_content .= "<div class='alert alert-danger'>$langErrorUnreguser</div>";
     }
-   
+
 } else {
     if ($c and $u) {
         $q = Database::get()->query("DELETE from course_user WHERE user_id = ?d AND course_id = ?d", $u, $c);
-        if ($q->affectedRows>0) {
+        if ($q->affectedRows > 0) {
             Database::get()->query("DELETE FROM group_members
                             WHERE user_id = ?d AND
                             group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $u, $c);
-            Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d AND 
+            Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d AND
                                     badge_criterion IN
                                            (SELECT id FROM badge_criterion WHERE badge IN
                                            (SELECT id FROM badge WHERE course_id = ?d))", $u, $c);
-            Database::get()->query("DELETE FROM user_badge WHERE user = ?d AND                 
+            Database::get()->query("DELETE FROM user_badge WHERE user = ?d AND
                                       badge IN (SELECT id FROM badge WHERE course_id = ?d)", $u, $c);
-            Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d AND 
+            Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d AND
                                     certificate_criterion IN
                                     (SELECT id FROM certificate_criterion WHERE certificate IN
                                         (SELECT id FROM certificate WHERE course_id = ?d))", $u, $c);
-            Database::get()->query("DELETE FROM user_certificate WHERE user = ?d AND 
+            Database::get()->query("DELETE FROM user_certificate WHERE user = ?d AND
                                  certificate IN (SELECT id FROM certificate WHERE course_id = ?d)", $u, $c);
-            $tool_content .= "<div class='alert alert-info'>$langWithUsername \"$u_account\" $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em></div>";
-            $m = 1;
+            Log::record($c, MODULE_ID_USERS, LOG_DELETE, ['uid' => $u, 'right' => '-5']);
+            Session::Messages("$langWithUsername \"$u_account\" $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em>", 'alert-info');
+            redirect_to_home_page("modules/admin/edituser.php?u=$u");
         }
     } else {
         $tool_content .= "<div class='alert alert-danger'>$langErrorDelete</div>";
     }
-    $tool_content .= "<br>&nbsp;";
-    if ((isset($m)) && (!empty($m))) {
-        $tool_content .= "<br><a href='edituser.php?u=$u'>$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;";
-    }    
 }
 
 draw($tool_content, 3);
