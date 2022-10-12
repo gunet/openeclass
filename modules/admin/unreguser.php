@@ -24,6 +24,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
+require_once 'include/log.class.php';
 
 $tree = new Hierarchy();
 $user = new User();
@@ -37,7 +38,7 @@ $data['c'] = $c = isset($_GET['c']) ? intval($_GET['c']) : false;
 $doit = isset($_GET['doit']);
 
 if (isset($doti)) {
-    $data['action_bar'] = action_bar(array(    
+    $data['action_bar'] = action_bar(array(
         array('title' => $langBackAdmin,
               'url' => "index.php",
               'icon' => 'fa-reply',
@@ -75,20 +76,17 @@ if ($doit) {
             Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM user_certificate WHERE user = ?d", $u);
             $message = "$langWithUsername $u_accoun $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em>";
+            Log::record($c, MODULE_ID_USERS, LOG_DELETE, ['uid' => $u, 'right' => '-5']);
             //Session::Messages($message, 'alert-info');
-            Session::flash('message',$message); 
+            Session::flash('message',$message);
             Session::flash('alert-class', 'alert-info');
-            $m = 1;
+            redirect_to_home_page("modules/admin/edituser.php?u=$u");
         }
     } else {
         //Session::Messages($langErrorDelete, 'alert-danger');
-        Session::flash('message',$langErrorDelete); 
+        Session::flash('message',$langErrorDelete);
         Session::flash('alert-class', 'alert-danger');
     }
-    if ((isset($m)) && (!empty($m))) {
-        redirect_to_home_page("modules/admin/edituser.php?u=$u");
-    }  
-   
 }
 
 $data['menuTypeID'] = 3;

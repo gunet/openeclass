@@ -89,25 +89,25 @@ $pageName = "$langUserLog: " . uid_to_name($u);
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsers);
 
-if (isset($_POST['user_date_start'])) {    
+if (isset($_POST['user_date_start'])) {
     $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
-    $u_date_start = $uds->format('Y-m-d H:i');    
+    $u_date_start = $uds->format('Y-m-d H:i');
     $data['user_date_start'] = $uds->format('d-m-Y H:i');
 } else {
     $date_start = new DateTime();
-    $date_start->sub(new DateInterval('P15D'));    
+    $date_start->sub(new DateInterval('P15D'));
     $u_date_start = $date_start->format('Y-m-d H:i');
-    $data['user_date_start'] = $date_start->format('d-m-Y H:i');       
+    $data['user_date_start'] = $date_start->format('d-m-Y H:i');
 }
 if (isset($_POST['user_date_end'])) {
-    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);    
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);
     $u_date_end = $ude->format('Y-m-d H:i');
-    $data['user_date_end'] = $ude->format('d-m-Y H:i');        
+    $data['user_date_end'] = $ude->format('d-m-Y H:i');
 } else {
     $date_end = new DateTime();
     $u_date_end = $date_end->format('Y-m-d H:i');
     $date_end->add(new DateInterval('P1D'));
-    $data['user_date_end'] = $date_end->format('d-m-Y H:i');        
+    $data['user_date_end'] = $date_end->format('d-m-Y H:i');
 }
 
 $data['logtype'] = $logtype = isset($_GET['logtype']) ? intval($_GET['logtype']) : '0';
@@ -125,7 +125,7 @@ $data['action_bar'] = action_bar(array(
 $log = new Log();
 // display logs
 if (isset($_GET['submit'])) {  // display course modules logging
-    $data['users_login_data'] = $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);        
+    $data['users_login_data'] = $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
 } else {
     $data['users_login_data'] = $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
 }
@@ -145,6 +145,10 @@ $data['module_names'][-1] = $langAllModules;
 foreach ($modules as $mid => $info) {
     $data['module_names'][$mid] = $info['title'];
 }
+$data['module_names'][MODULE_ID_USERS] = $langAdminUsers;
+$data['module_names'][MODULE_ID_COURSEINFO] = $langConfig;
+$data['module_names'][MODULE_ID_TOOLADMIN] = $langExternalLinks;
+$data['module_names'][MODULE_ID_ABUSE_REPORT] = $langAbuseReport;
 
 $i = html_entity_decode('&nbsp;&nbsp;&nbsp;', ENT_QUOTES, 'UTF-8');
 $data['log_types'] = [
