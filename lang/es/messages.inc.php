@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2022-07-04 12:23:05
+// Generated 2022-10-12 13:09:37
 
 $langYes = "Si";
 $langNo = "No";
@@ -570,7 +570,7 @@ $langDate = "Fecha";
 $langMoveFrom = "Mover";
 $langRename = "Renombrar";
 $langOkComment = "Añadir / Modificar un Comentario";
-$langVisible = "Visible/invisible";
+$langVisible = "Visible";
 $langCopy = "Copiar";
 $langNoSpace = "La carga ha fallado. Has excedido el espacio máximo disponible en el disco. Para más información, por favor contacta con el administrador del sistema You have exceeded the maximum available disk space.";
 $langUnwantedFiletype = 'Tipo de archivo inaceptable';
@@ -3888,7 +3888,7 @@ $langOwnCloudLongDescription = "Long description about own cloud";
 $langWebDAVShortDescription = "Short Description about web dav";
 $langWebDAVLongDescription = "Long Description about web dav";
 $langBBBNotifyExternalUsersHelpBlock = "Add email addresses of external participants";
-$langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP version >= 7.0 is required. You can continue with the installation but PHP needs to be upgraded. Otherwise, some modules will not function correctly.";
+$langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP version >= 7.4 is required. You can continue with the installation but PHP needs to be upgraded. Otherwise, some modules will not function correctly.";
 $langPHPVersion = 'PHP version';
 $langGuestLoginLabel = "$langCourse guest accounts";
 $langGuestLogin = 'Login with guest account';

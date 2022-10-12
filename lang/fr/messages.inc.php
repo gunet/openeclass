@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2022-07-04 12:23:07
+// Generated 2022-10-12 13:09:39
 
 $langYes = "Oui";
 $langNo = "Non";
@@ -222,7 +222,7 @@ $langReintroductionApplication = "La récupération de la demande a été compl�
 $langBackRequests = "Retour à la liste des demandes";
 $langSendMessageTo = "Εnvoyer un message";
 $langToAllUsers = "à tous les utilisateurs";
-$langProfOnly = "seulement aux ".$langsTeachers."";
+$langProfOnly = "seulement aux $langsTeachers.";
 $langSearchCourse = "Recherche des cours";
 $langNewSearch = "Nouvelle recherche";
 $langSearchCriteria = "Critères de recherche";
@@ -1075,9 +1075,9 @@ $langDBSetting = "Paramètres de MySQL";
 $langMainLang = "Langue Principale de l'installation";
 $langLastCheck = "Dernière vérification avant l'installation";
 $langRequirements = "Exigences du système";
-$langInstallEnd = "Installation terminée"
+$langInstallEnd = "Installation terminée" 
 ;
-$langModuleNotInstalled = "Non installé"
+$langModuleNotInstalled = "Non installé" 
 ;
 $langReadHelp = "Lire plus";
 $langWarnConfig = "Warning !! File <b>config.php</b> exists !! Installation cannot proceed. If you want to rerun installation, first delete config.php file!";
@@ -1109,7 +1109,7 @@ $langLDAPBaseDn = "Base DN du Serveur LDAP";
 $langChooseLang = "Choisissez la langue";
 $langBeforeInstall1 = "Avant de procéder à l'installation, veuillez imprimer et lire attentivement les";
 $langBeforeInstall2 = "De plus, vous trouverez des informations générales concernant la plateforme";
-$langInstallInstr = "Instructions d'installation"
+$langInstallInstr = "Instructions d'installation" 
 ;
 $langAddComment = "Ajouter / Modifier un commentaire";
 $langLearningModule = "Section";
@@ -1170,7 +1170,7 @@ $langDocumentAsModule = "Utiliser un document";
 $langDocumentAsModuleLabel = "de Document";
 $langDocumentInModule = "Document dans un module";
 $langEXERCISETypeDesc = "Exercice de la plateforme";
-$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape."
+$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape." 
 ;
 $langErrorAssetNotFound = "Élément introuvable :";
 $langErrorCopyAttachedFile = "Impossible de copier le fichier : ";
@@ -1895,9 +1895,9 @@ $langNewId = "Nouveau identifiant"
 $langUsersWillAdd = "Les utilisateurs du cours seront ajoutés";
 $langErrorLang = "Erreur ! Aucune langue trouvée !"
 ;
-$langDoSearch = "Poursuivre la recherche"
+$langDoSearch = "Poursuivre la recherche" 
 ;
-$langSearch_terms = "Critères de recherche :"
+$langSearch_terms = "Critères de recherche :" 
 ;
 $langSearchIn = "Recherche dans :";
 $langSearchWith = "Recherche selon des critères :";
@@ -2856,7 +2856,7 @@ $langReturnToAddNode = '$langReturnToAddNode';
 $langReturnToEditNode = '$langReturnToEditNode';
 $langEmptyNodeSelect = '$langEmptyNodeSelect';
 $langEmptyAddNode = '$langEmptyAddNode';
-$langSelect = '$langSelect';
+$langSelect = 'Sélectionner';
 $langHierarchy = '$langHierarchy';
 $lang_course_multidep = '$lang_course_multidep';
 $lang_user_multidep = '$lang_user_multidep';
@@ -3717,7 +3717,7 @@ $langNotesDeleted = "Notes deleted.";
 $langNoteTitle = "Title";
 $langPersonalEvent = "Personal event";
 $langReferencedObject = "Refers to";
-$langSelectFromMenu = "Select...";
+$langSelectFromMenu = 'Sélectionner...';
 $langSureToDelNote = "Are you sure about deleting this note?";
 $langSureToDelNoteAll = "Are you sure about deleting all your notes?";
 $langAddAdminEvent = "New system event";
@@ -4099,7 +4099,7 @@ $langOwnCloudLongDescription = "Long description about own cloud";
 $langWebDAVShortDescription = "Short Description about web dav";
 $langWebDAVLongDescription = "Long Description about web dav";
 $langBBBNotifyExternalUsersHelpBlock = "Add email addresses of external participants";
-$langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP version >= 7.0 is required. You can continue with the installation but PHP needs to be upgraded. Otherwise, some modules will not function correctly.";
+$langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP version >= 7.4 is required. You can continue with the installation but PHP needs to be upgraded. Otherwise, some modules will not function correctly.";
 $langPHPVersion = 'PHP version';
 $langGuestLoginLabel = "$langCourse guest accounts";
 $langGuestLogin = 'Login with guest account';
