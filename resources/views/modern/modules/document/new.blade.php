@@ -23,18 +23,6 @@
                 @endif
                     
                     <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
-
-                        @if($course_code)
-                        <nav class="navbar navbar-expand-lg navrbar_menu_btn">
-                            <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn btn-primary menu_btn_button">
-                                <i class="fas fa-align-left"></i>
-                                <span></span>
-                            </button>
-                            <a class="btn btn-primary d-lg-none" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools">
-                                <i class="fa fa-bars"></i>
-                            </a>
-                        </nav>
-                        @endif
                         
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 

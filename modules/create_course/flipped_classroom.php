@@ -41,7 +41,7 @@ $(document).ready(function() {
     $('#add_g').click(function() {
         if (i <= 20) {
             
-            $('#dynamic_goals').append('<div id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\"  class= "col-sm-6 control-label-notes" >' + i + ':</label><div class="col-sm-12"><input type=\"text\" name=\"goals[]\" class=\"form-control\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle \"></span></a></div></div>')
+            $('#dynamic_goals').append('<div id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\"  class= "col-sm-12 control-label-notes" >' + i + ':</label><div class="col-sm-12"><input type=\"text\" name=\"goals[]\" class=\"form-control\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle \"></span></a></div></div>')
             i++;
         }
         document.getElementById('goal_count').value = i-1;

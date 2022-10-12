@@ -17,16 +17,6 @@
 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
-                    <nav class="navbar navbar-expand-lg navrbar_menu_btn">
-                        <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn btn-primary menu_btn_button">
-                            <i class="fas fa-align-left"></i>
-                            <span></span>
-                        </button>
-                        <a class="btn btn-primary d-lg-none" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools">
-                            <i class="fa fa-bars"></i>
-                        </a>
-                    </nav>
-
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
@@ -375,17 +365,9 @@
 
                         @if($course_info->view_type == 'wall')
                             @include('layouts.partials.course_wall_functions',['is_editor' => $is_editor])
-                            {!! show_wall_posts() !!}
                         @endif
 
-
-
-
-
-
-
-
-
+                        
                         <div class="panel panel-admin @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif border border-secondary-4 shadow-sm">
                             <div class='panel-heading'>
                                 <div class='row'>
@@ -409,9 +391,7 @@
                         </div>
 
                         @if (!$alter_layout)
-                           <div class='col-12 mt-4'>
-                                {!! $course_home_main_area_widgets !!}
-                           </div>
+                           {!! $course_home_main_area_widgets !!}
                         @endif
 
                         
