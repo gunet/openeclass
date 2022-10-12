@@ -217,7 +217,7 @@ function showgroupsofcategory($catid) {
 
     $q = Database::get()->queryArray("SELECT id FROM `group`
                                    WHERE course_id = ?d AND category_id = ?d
-                                   ORDER BY `id`", $course_id, $catid);
+                                   ORDER BY `name`", $course_id, $catid);
 
     foreach ($q as $row) {
         $group_id = $row->id;
