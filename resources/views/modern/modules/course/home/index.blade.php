@@ -239,7 +239,7 @@
                         
                         @if($course_info->view_type == 'units')
                             @if($total_cunits > 0)
-                                <div class='panel panel-admin border border-secondary-4 shadow-sm'>
+                                <div class='panel panel-admin border border-secondary-4 shadow-lg'>
                                     <div class='panel-heading'>
                                         <div class='col-12 d-inline-flex'>
                                             <div class='col-6'>
@@ -281,7 +281,7 @@
                                     </div>
                                 </div>
                             @else
-                                <div class='panel panel-admin shadow-sm'>
+                                <div class='panel panel-admin shadow-lg'>
                                     <div class='panel-heading text-start text-white ps-3 pe-3 pb-2 pt-2'>
                                         <div class='row'>
                                             <div class='col-6'>
@@ -368,7 +368,7 @@
                         @endif
 
                         
-                        <div class="panel panel-admin @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif border border-secondary-4 shadow-sm">
+                        <div class="panel panel-admin @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif border border-secondary-4 shadow-lg">
                             <div class='panel-heading'>
                                 <div class='row'>
                                     <div class='col-6 text-start'>
@@ -382,8 +382,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class='panel-body bg-white'>
-                                <ul class='list-group list-group-flush'>
+                            <div class='panel-body bg-white ps-0 pe-0 pt-1 pb-1'>
+                                <ul class='list-group list-group-flush Borders ps-3 pe-3'>
                                     {!! course_announcements() !!}
                                 </ul>
                             </div>
@@ -400,7 +400,7 @@
 
                     <div class="col-xl-4 col-lg-12 col-md-12 mt-lg-4 mt-4 float-end ">
 
-                        <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar border border-secondary-4 shadow-sm">
+                        <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar border border-secondary-4 shadow-lg">
                             {!! $user_personal_calendar !!}
                             <div class='col-12 mt-4 pb-2'>
                                 <div class='row rowMedium'>
@@ -435,7 +435,7 @@
                         </div>
 
                         @if(isset($course_completion_id) and $course_completion_id > 0)
-                            <div class="panel panel-admin mt-4 border border-secondary-4 shadow-sm">
+                            <div class="panel panel-admin mt-4 border border-secondary-4 shadow-lg">
                                 <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                     <div class='text-white text-center'>{{ trans('langCourseCompletion') }}</div>
                                 </div>
@@ -460,7 +460,7 @@
                         @endif
 
                         @if (isset($level) && !empty($level))
-                            <div class='panel panel-admin mt-4 border border-secondary-4 shadow-sm'>
+                            <div class='panel panel-admin mt-4 border border-secondary-4 shadow-lg'>
                                 <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
                                     <div class='text-white text-center'>{{ trans('langOpenCourseShort') }}</div>
                                 </div>

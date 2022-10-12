@@ -147,11 +147,11 @@ $tool_content .= action_bar(array(
             )
         ))."
 $export_box
-<div class='panel panel-primary'>
-    <div class='panel-heading'>
+<div class='panel panel-primary rounded-0'>
+    <div class='panel-heading rounded-0'>
         <h3 class='panel-title'>$langInfoPoll</h3>
     </div>
-    <div class='panel-body'>
+    <div class='panel-body rounded-0'>
         <div class='row  margin-bottom-fat p-2'>
             <div class='col-sm-4'>
                 <strong>$langTitle:</strong>
@@ -328,11 +328,11 @@ $this_chart_data = array();
 
 $tool_content .= "
 <div class='col-sm-12 mt-3'>
-<div class='panel panel-success'>
-    <div class='panel-heading'>
+<div class='panel panel-success rounded-0'>
+    <div class='panel-heading rounded-0'>
         <h3 class='panel-title'>$lang_result_summary</h3>
     </div>
-    <div class='panel-body'>
+    <div class='panel-body rounded-0'>
         <h6>$lang_ckw_skw_chart</h6>";
 
 $this_chart_data['category'][] = $langConnected;

@@ -724,13 +724,13 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
  
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-        <div class='panel panel-primary'>
-            <div class='panel-heading'>
+        <div class='panel panel-primary rounded-0'>
+            <div class='panel-heading rounded-0'>
                 <h4 class='panel-title'>$langQuestion&nbsp;"
                     . icon('fa-edit', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid") .
                 "</h4>
             </div>
-            <div class='panel-body'>
+            <div class='panel-body rounded-0'>
                   <h6>$question->question_text<br><small><em>".$aType[$question->qtype - 1]."</em></small></h6>
             </div>
         </div>
@@ -739,11 +739,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $tool_content .= "
     
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
-        <div class='panel panel-info'>
-            <div class='panel-heading'>
+        <div class='panel panel-info rounded-0'>
+            <div class='panel-heading rounded-0'>
                 <h4 class='panel-title'>$langQuestionAnswers</h4>
             </div>
-            <div class='panel-body' style='padding-left:15px; padding-right:15px;'>
+            <div class='panel-body rounded-0' style='padding-left:15px; padding-right:15px;'>
                     <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id' method='post'>                    
                     
                     <div class='form-group'>
@@ -834,12 +834,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     <div class='row p-2'></div>
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-        <div class='panel panel-primary'>
-          <div class='panel-heading'>
-            <h6 class='panel-title'>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h6>
+        <div class='panel panel-primary rounded-0'>
+          <div class='panel-heading rounded-0'>
+            <h6 class='panel-title'>$langInfoPoll &nbsp;".icon('fa-edit text-white', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h6>
           </div>
 
-          <div class='panel-body'>
+          <div class='panel-body rounded-0'>
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langTitle:</strong>

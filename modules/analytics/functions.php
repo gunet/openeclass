@@ -341,8 +341,8 @@ function display_analytics_information($analytics_id) {
             <div class='panel panel-default rounded-0'>
                 <div class='panel-heading rounded-0'>
                     <div class='row'>
-                        <div class='col-xl-7 col-lg-7 col-md-7 col-sm-9 col-9'>
-                            <strong>$title</strong> <span class='$active_vis'>($active_msg)</span>
+                        <div class='col-xl-7 col-lg-7 col-md-7 col-sm-9 col-9 mt-md-1 mt-0'>
+                            $title<span class='$active_vis'>($active_msg)</span>
                         </div>
                         <div class='col-xl-5 col-lg-5 col-md-5 col-sm-3 col-3 text-end'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn btn-primary btn-sm'>"

@@ -106,19 +106,12 @@ a{ text-decoration: none; }
 /* -------------------------------------------------------------------------------------------------*/
 /* -------------------------------------------------------------------------------------------------*/
 
-.breadcrumb-item::before{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 19px;
-}
+.breadcrumb-item::before{ display: flex; align-items: center; justify-content: center; font-size: 19px; }
 
-@media(max-width:767px){
-  .breadcrumbs-container{margin-top: -20px;}
-}
-@media(min-width:768px){
-  .breadcrumbs-container{margin-top: -10px;}
-}
+@media(max-width:767px){ .breadcrumbs-container {margin-top: -25px;} .breadcrumb-item > a {font-size: 10px;} .breadcrumb-content {margin-top:3px;} 
+.breadcrumb-item::before{margin-top: -3px;} }
+
+@media(min-width:768px){ .breadcrumbs-container{margin-top: -10px;} .breadcrumb-item > a {font-size: 13px;} }
 
 
 /* ----------------------------- LABELS -INPUTS -MARGIN ------------------------------------ */
@@ -1123,10 +1116,11 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .panel-admin{
     border-radius:15px;
-    background: #1d4e89;
-    border:solid 1px #6c757d;
+    border:solid 1px #DCDCDC;
   }
   .panel-admin>.panel-heading{
+    background: #1d4e89;
+    border:solid 1px #DCDCDC;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;

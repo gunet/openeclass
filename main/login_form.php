@@ -95,7 +95,7 @@ foreach ($authLink as $authInfo) {
    
       <div class='col-md-$columns col-12'>
         <div class='panel panel-admin rounded-0 mt-md-0 mt-3'>
-          <div class='panel-heading'><div class='panel-title p-0 text-white text-center'>" . q($authInfo[2]) . "</div></div>
+          <div class='panel-heading rounded-0'><div class='panel-title p-0 text-white text-center'>" . q($authInfo[2]) . "</div></div>
             <div class='panel-body login-page-option rounded-0'>" .
               $authInfo[1];
     if (Session::has('login_error') and $authInfo[0]) {

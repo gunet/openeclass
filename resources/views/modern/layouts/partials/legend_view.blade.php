@@ -7,13 +7,13 @@
                     <div class='row'>
                         <div class='col-10'>
                             @if($toolName)
-                                <div class='col-12 mb-2'>
+                                <div class='col-12 mb-1'>
                                     <div class='d-inline-flex align-items-top'>
                                         <span class="fas fa-tools orangeText pe-2 mt-1 fs-6" aria-hidden="true"></span>
                                         <span class='control-label-notes fs-6'>{{$toolName}}</span>
                                     </div>
                                 </div>
-                                <div class='col-12 mb-2'>
+                                <div class='col-12 mb-1'>
                                     <div class='d-inline-flex align-items-top'>
                                         <span class='fas fa-university orangeText pe-2 mt-1'></span>
                                         <span class='control-label-notes fs-6'>{{$currentCourseName}}</span>
@@ -28,7 +28,7 @@
                                     </div>
                                 </div>
                             @else
-                                <div class='col-12 mb-2'>
+                                <div class='col-12 mb-1'>
                                     <div class='d-inline-flex align-items-top'>
                                         <span class='fas fa-university orangeText pe-2 mt-1'></span>
                                         <span class='control-label-notes fs-6'>{{$currentCourseName}}</span>
@@ -52,13 +52,13 @@
                     <div class='row'>
                         <div class='col-12'>
                             @if($toolName)
-                                <div class='col-12 mb-2'>
+                                <div class='col-12 mb-1'>
                                     <div class='d-inline-flex align-items-top'>
                                         <span class="fas fa-tools orangeText pe-2 mt-1" aria-hidden="true"></span>
                                         <span class='control-label-notes fs-6'>{{$toolName}}</span>
                                     </div>
                                 </div>
-                                <div class='col-12 mb-2'>
+                                <div class='col-12 mb-1'>
                                     <div class='d-inline-flex align-items-top'>
                                         <span class='fas fa-university orangeText pe-2 mt-1'></span>
                                         <span class='control-label-notes fs-6'>{{$currentCourseName}}</span>
@@ -73,7 +73,7 @@
                                     </div>
                                 </div>
                             @else
-                                <div class='col-12 mb-2'>
+                                <div class='col-12 mb-1'>
                                     <div class='d-inline-flex align-items-top'>
                                         <span class='fas fa-university orangeText pe-2 mt-1'></span>
                                         <span class='control-label-notes fs-6'>{{$currentCourseName}}</span>
@@ -93,10 +93,10 @@
                 @endif
             @else
                 <div class='d-flex justify-content-center ps-1 pt-1 pb-2'>
-                    <span class="control-label-notes">
-                        <i class="fas fa-tools orangeText" aria-hidden="true"></i> 
-                        {{$toolName}} 
-                    </span>
+                    <div class="d-inline-flex align-items-top">
+                        <i class="fas fa-tools orangeText me-2 mt-1" aria-hidden="true"></i> 
+                        <span class="control-label-notes">{{$toolName}}</spa>
+                    </div>
                 </div>
             @endif
         
@@ -180,7 +180,7 @@
                                         @if($toolName)
                                             <tr class='border-0'>
                                                 <th class='border-0'>
-                                                    <div class='d-inline-flex aling-items-top mb-2'>
+                                                    <div class='d-inline-flex aling-items-top'>
                                                         <span class="fas fa-tools orangeText pe-2 mt-1" aria-hidden="true"></span>
                                                         <span class='control-label-notes fs-6'>
                                                             {{$toolName}}
@@ -192,7 +192,7 @@
                                        
                                         <tr class='border-0'>
                                             <th class='border-0'>
-                                                <div class='d-inline-flex aling-items-top mb-2'>
+                                                <div class='d-inline-flex aling-items-top'>
                                                     <span class="fas fa-university orangeText pe-2 mt-1" aria-hidden="true"></span>
                                                     <span class='control-label-notes fs-6'>
                                                         {{$currentCourseName}}
@@ -204,7 +204,7 @@
                                             
                                         <tr class='border-0'>
                                             <th class='border-0'>
-                                                <div class='d-inline-flex aling-items-top mb-2'>
+                                                <div class='d-inline-flex aling-items-top'>
                                                     <span class="fas fa-user orangeText pe-2 mt-1" aria-hidden="true"></span>
                                                     <span class='control-label-notes fs-6'>
                                                         {{course_id_to_prof($course_id)}}
@@ -235,10 +235,10 @@
                 @endif
             @else
                 <div class='d-flex justify-content-center ps-1 pt-1 pb-2'>
-                    <span class="control-label-notes">
-                        <i class="fas fa-tools orangeText text-center" aria-hidden="true"></i> 
-                        {{$toolName}} 
-                    </span>
+                    <div class="d-inline-flex align-items-top">
+                        <i class="fas fa-tools orangeText text-center me-2 mt-1" aria-hidden="true"></i> 
+                        <span class="control-label-notes">{{$toolName}}</span>
+                    </div>
                 </div>
             @endif
         

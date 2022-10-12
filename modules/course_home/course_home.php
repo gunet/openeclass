@@ -835,7 +835,7 @@ view('modules.course.home.index', $data);
  * @return string
  */
 function course_announcements() {
-    global $course_id, $course_code, $langNoAnnounce, $urlAppend, $dateFormatLong;
+    global $course_id, $course_code, $langNoAnnounce, $urlAppend, $dateFormatLong, $indexOfAnnounce;
 
     if (visible_module(MODULE_ID_ANNOUNCE)) {
         $q = Database::get()->queryArray("SELECT title, `date`, id
@@ -845,14 +845,26 @@ function course_announcements() {
                                 AND (start_display <= NOW() OR start_display IS NULL)
                                 AND (stop_display >= NOW() OR stop_display IS NULL)
                             ORDER BY `date` DESC LIMIT 5", $course_id);
+
+        $typeViewOfCourse = Database::get()->queryArray("SELECT view_type FROM course WHERE id = ?d", $course_id);
+        foreach($typeViewOfCourse as $t){
+            $type_course = $t->view_type;
+        }
+        if($type_course == 'simple'){
+            $indexOfAnnounce = 5;
+        }else{
+            $indexOfAnnounce = 3;
+        }
+        
+
         if ($q) { // if announcements exist
             $ann_content = '';
-            $counter_ann =0;
+            $counter_ann = 1;
             foreach ($q as $ann) {
-                if($counter_ann<=1){
+                if($counter_ann <= $indexOfAnnounce){
                 $ann_url = $urlAppend . "modules/announcements/index.php?course=$course_code&amp;an_id=" . $ann->id;
                 $ann_date = format_locale_date(strtotime($ann->date));
-                $ann_content .= "<li class='list-group-item p-2'>
+                $ann_content .= "<li class='list-group-item ps-0 pe-0'>
                                     <span class='item-wholeline'><div class='text-title'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>$ann_date</span>
                                 </li>";
                 }
@@ -861,5 +873,5 @@ function course_announcements() {
             return $ann_content;
         }
     }
-    return "<li style='list-style-type: none;' class='list-item'><span class='item-wholeline'><div class='text-title text-center not_visible'> - $langNoAnnounce - </div></span></li>";
+    return "<li style='list-style-type: none;' class='list-item pt-3 pb-3'><span class='item-wholeline'><div class='text-title text-center not_visible'> - $langNoAnnounce - </div></span></li>";
 }

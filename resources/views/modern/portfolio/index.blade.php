@@ -85,10 +85,10 @@
                                 </div>
                                 <div class="row justify-content-center text-center">
                                     <div class="py-1" >
-                                        <a href="{{ $urlAppend }}main/profile/profile.php" class="btn btn-outline-primary btn-rounded"><i class="fas fa-pen"></i>{{ trans('langModProfile') }}</a>
+                                        <a href="{{ $urlAppend }}main/profile/profile.php" class="btn btn-outline-primary btn-rounded"><i class="fas fa-pen me-2"></i>{{ trans('langModProfile') }}</a>
                                     </div>
                                     <div class="py-1">
-                                        <a href="{{$urlAppend}}main/unreguser.php" class="btn btn-outline-danger btn-rounded"><i class="fa fa-trash-o"></i>{{ trans('langUnregUser') }} </a>
+                                        <a href="{{$urlAppend}}main/unreguser.php" class="btn btn-outline-danger btn-rounded"><i class="fa fa-trash-o me-2"></i>{{ trans('langUnregUser') }} </a>
                                     </div>
                                     <div class="py-1">
                                         {{ trans('langExplain') }}

@@ -18,125 +18,131 @@
     @endphp
 
     <div class="col-12 mb-4">
-        <div class="form-wrapper shadow-sm p-3 rounded">
-            <form id="wall_form" method="post" action="{{$urlServer}}modules/wall/index.php?course={{$course_code}}&fromCoursePage" enctype="multipart/form-data">
-                <fieldset> 
-                    <div class="form-group">
-                        <label for="message_input">{{ trans('langMessage') }}</label>
-                        <textarea id="textr" onfocus="expand_form();" class="form-control" rows="1" name="message" id="message_input">{!! $content !!}</textarea>
-                    </div>
-                    <div id="resources_panel" class="panel panel-default collapse mt-3">
-                        <div class="panel-body">
-                            <ul class="nav nav-tabs">
-                                <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">{{ trans('langWallExtVideo') }}</a></li>
-                                @if ($is_editor || visible_module(MODULE_ID_VIDEO))
-                                    <li><a id="nav_video" class="nav-link" data-bs-toggle="tab" href="#videos_div">{{ trans('langVideo') }}</a></li>
-                                @endif
-                                @if ($is_editor || visible_module(MODULE_ID_DOCS))
-                                    <li><a id="nav_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div">{{ trans('langDoc') }}</a></li>
-                                @endif
-                                @if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable')))
-                                    <li><a id="nav_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div">{{ trans('langMyDocs') }}</a></li>
-                                @endif
-                                @if ($is_editor || visible_module(MODULE_ID_LINKS))
-                                    <li><a id="nav_links" class="nav-link" data-bs-toggle="tab" href="#links_div">{{ trans('langLinks') }}</a></li>
-                                @endif
-                                @if ($is_editor || visible_module(MODULE_ID_EXERCISE))
-                                    <li><a id="nav_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div">{{ trans('langExercises') }}</a></li>
-                                @endif
-                                @if ($is_editor || visible_module(MODULE_ID_ASSIGN))
-                                    <li><a id="nav_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div">{{ trans('langWorks') }}</a></li>
-                                @endif
-                                @if ($is_editor || visible_module(MODULE_ID_CHAT))
-                                    <li><a id="nav_chats" class="nav-link" data-bs-toggle="tab" href="#chats_div">{{ trans('langChat') }}</a></li>
-                                @endif
-                                @if ($is_editor || visible_module(MODULE_ID_QUESTIONNAIRE))
-                                    <li><a id="nav_polls" class="nav-link" data-bs-toggle="tab" href="#polls_div">{{ trans('langQuestionnaire') }}</a></li>
-                                @endif
-                                @if ($is_editor || visible_module(MODULE_ID_FORUM))
-                                    <li><a id="nav_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div">{{ trans('langForum') }}</a></li>
-                                @endif
-                            </ul>
-                            <div class="tab-content">
-                                <div class="form-group tab-pane fade show active" id="extvideo_video_div" role="tabpanel" aria-labelledby="nav_extvideo" style="padding:10px">
-                                    <label for="extvideo_video">{{ trans('langWallExtVideoLink') }}</label>
-                                    <input class="form-control" type="url" name="extvideo" id="extvideo_video" value="{!! $extvideo !!}">
-                                </div>
-
-                                @if ($is_editor || visible_module(MODULE_ID_VIDEO))
-                                    <div class="form-group tab-pane fade" id="videos_div" role="tabpanel" aria-labelledby="nav_video" style="padding:10px">
-                                        {!! list_videos() !!}
-                                    </div>
-                                @endif
-
-                                @if ($is_editor || visible_module(MODULE_ID_DOCS))
-                                    <div class="form-group tab-pane fade" id="docs_div" role="tabpanel" aria-labelledby="nav_docs" style="padding:10px">
-                                        <input type="hidden" name="doc_ids" id="docs">
-                                        {!! list_docs() !!}
-                                    </div>
-                                
-                                @endif
-
-                                @if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable')))
-                                    <div class="form-group tab-pane fade" id="mydocs_div" role="tabpanel" aria-labelledby="nav_mydocs" style="padding:10px">
-                                        <input type="hidden" name="mydoc_ids" id="mydocs">
-                                            {!! list_docs(NULL,'mydocs') !!}
-                                    </div>
-                                @endif
-
-                                @if ($is_editor || visible_module(MODULE_ID_LINKS))
-                                    <div class="form-group tab-pane fade" id="links_div" role="tabpanel" aria-labelledby="nav_links" style="padding:10px">
-                                        {!! list_links() !!}
-                                    </div>
-                                @endif
-
-                                @if ($is_editor || visible_module(MODULE_ID_EXERCISE))
-                                    <div class="form-group tab-pane fade" id="exercises_div" role="tabpanel" aria-labelledby="nav_exercises" style="padding:10px">
-                                        {!! list_exercises() !!}
-                                    </div>
-                                @endif
-
-                                @if ($is_editor || visible_module(MODULE_ID_ASSIGN))
-                                    <div class="form-group tab-pane fade" id="assignments_div" role="tabpanel" aria-labelledby="nav_assigments" style="padding:10px">
-                                        {!! list_assignments() !!}
-                                    </div>
-
-                                @endif
-
-                                @if ($is_editor || visible_module(MODULE_ID_CHAT))
-                                    <div class="form-group tab-pane fade" id="chats_div" role="tabpanel" aria-labelledby="nav_chats" style="padding:10px">
-                                        {!! list_chats() !!}
-                                    </div>
-
-                                @endif
-
-                                @if ($is_editor || visible_module(MODULE_ID_QUESTIONNAIRE))
-                                    <div class="form-group tab-pane fade" id="polls_div" role="tabpanel" aria-labelledby="nav_polls" style="padding:10px">
-                                        {!! list_polls() !!}
-                                    </div>
-                                @endif
-
-                                @if ($is_editor || visible_module(MODULE_ID_FORUM)) 
-                                    <div class="form-group tab-pane fade" id="forums_div" role="tabpanel" aria-labelledby="nav_forums" style="padding:10px">
-                                        {!! list_forums() !!}
-                                    </div>
-                                @endif
+        <div class='panel panel-admin border border-secondary-4 shadow-lg'>
+            <div class='panel-heading'>{{trans('langWall')}}</div>
+            <div class='panel-body Borders'>
+                <div class="shadow-sm p-3 rounded">
+                    <form id="wall_form" method="post" action="{{$urlServer}}modules/wall/index.php?course={{$course_code}}&fromCoursePage" enctype="multipart/form-data">
+                        <fieldset> 
+                            <div class="form-group">
+                                <label for="message_input">{{ trans('langMessage') }}</label>
+                                <textarea id="textr" onfocus="expand_form();" class="form-control" rows="1" name="message" id="message_input">{!! $content !!}</textarea>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group mt-3">
-                        {!!
-                            form_buttons(array(
-                                array(
-                                    'text'  =>  trans('langSubmit'),
-                                    'name'  =>  'submit',
-                                    'value' =>  trans('langSubmit')
-                                )
-                            ))
-                        !!} 
-                    </div>  
-                </fieldset>      
-            </form>
+                            <div id="resources_panel" class="panel panel-default collapse mt-3">
+                                <div class="panel-body">
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">{{ trans('langWallExtVideo') }}</a></li>
+                                        @if ($is_editor || visible_module(MODULE_ID_VIDEO))
+                                            <li><a id="nav_video" class="nav-link" data-bs-toggle="tab" href="#videos_div">{{ trans('langVideo') }}</a></li>
+                                        @endif
+                                        @if ($is_editor || visible_module(MODULE_ID_DOCS))
+                                            <li><a id="nav_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div">{{ trans('langDoc') }}</a></li>
+                                        @endif
+                                        @if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable')))
+                                            <li><a id="nav_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div">{{ trans('langMyDocs') }}</a></li>
+                                        @endif
+                                        @if ($is_editor || visible_module(MODULE_ID_LINKS))
+                                            <li><a id="nav_links" class="nav-link" data-bs-toggle="tab" href="#links_div">{{ trans('langLinks') }}</a></li>
+                                        @endif
+                                        @if ($is_editor || visible_module(MODULE_ID_EXERCISE))
+                                            <li><a id="nav_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div">{{ trans('langExercises') }}</a></li>
+                                        @endif
+                                        @if ($is_editor || visible_module(MODULE_ID_ASSIGN))
+                                            <li><a id="nav_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div">{{ trans('langWorks') }}</a></li>
+                                        @endif
+                                        @if ($is_editor || visible_module(MODULE_ID_CHAT))
+                                            <li><a id="nav_chats" class="nav-link" data-bs-toggle="tab" href="#chats_div">{{ trans('langChat') }}</a></li>
+                                        @endif
+                                        @if ($is_editor || visible_module(MODULE_ID_QUESTIONNAIRE))
+                                            <li><a id="nav_polls" class="nav-link" data-bs-toggle="tab" href="#polls_div">{{ trans('langQuestionnaire') }}</a></li>
+                                        @endif
+                                        @if ($is_editor || visible_module(MODULE_ID_FORUM))
+                                            <li><a id="nav_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div">{{ trans('langForum') }}</a></li>
+                                        @endif
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="form-group tab-pane fade show active" id="extvideo_video_div" role="tabpanel" aria-labelledby="nav_extvideo" style="padding:10px">
+                                            <label for="extvideo_video">{{ trans('langWallExtVideoLink') }}</label>
+                                            <input class="form-control" type="url" name="extvideo" id="extvideo_video" value="{!! $extvideo !!}">
+                                        </div>
+
+                                        @if ($is_editor || visible_module(MODULE_ID_VIDEO))
+                                            <div class="form-group tab-pane fade" id="videos_div" role="tabpanel" aria-labelledby="nav_video" style="padding:10px">
+                                                {!! list_videos() !!}
+                                            </div>
+                                        @endif
+
+                                        @if ($is_editor || visible_module(MODULE_ID_DOCS))
+                                            <div class="form-group tab-pane fade" id="docs_div" role="tabpanel" aria-labelledby="nav_docs" style="padding:10px">
+                                                <input type="hidden" name="doc_ids" id="docs">
+                                                {!! list_docs() !!}
+                                            </div>
+                                        
+                                        @endif
+
+                                        @if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable')))
+                                            <div class="form-group tab-pane fade" id="mydocs_div" role="tabpanel" aria-labelledby="nav_mydocs" style="padding:10px">
+                                                <input type="hidden" name="mydoc_ids" id="mydocs">
+                                                    {!! list_docs(NULL,'mydocs') !!}
+                                            </div>
+                                        @endif
+
+                                        @if ($is_editor || visible_module(MODULE_ID_LINKS))
+                                            <div class="form-group tab-pane fade" id="links_div" role="tabpanel" aria-labelledby="nav_links" style="padding:10px">
+                                                {!! list_links() !!}
+                                            </div>
+                                        @endif
+
+                                        @if ($is_editor || visible_module(MODULE_ID_EXERCISE))
+                                            <div class="form-group tab-pane fade" id="exercises_div" role="tabpanel" aria-labelledby="nav_exercises" style="padding:10px">
+                                                {!! list_exercises() !!}
+                                            </div>
+                                        @endif
+
+                                        @if ($is_editor || visible_module(MODULE_ID_ASSIGN))
+                                            <div class="form-group tab-pane fade" id="assignments_div" role="tabpanel" aria-labelledby="nav_assigments" style="padding:10px">
+                                                {!! list_assignments() !!}
+                                            </div>
+
+                                        @endif
+
+                                        @if ($is_editor || visible_module(MODULE_ID_CHAT))
+                                            <div class="form-group tab-pane fade" id="chats_div" role="tabpanel" aria-labelledby="nav_chats" style="padding:10px">
+                                                {!! list_chats() !!}
+                                            </div>
+
+                                        @endif
+
+                                        @if ($is_editor || visible_module(MODULE_ID_QUESTIONNAIRE))
+                                            <div class="form-group tab-pane fade" id="polls_div" role="tabpanel" aria-labelledby="nav_polls" style="padding:10px">
+                                                {!! list_polls() !!}
+                                            </div>
+                                        @endif
+
+                                        @if ($is_editor || visible_module(MODULE_ID_FORUM)) 
+                                            <div class="form-group tab-pane fade" id="forums_div" role="tabpanel" aria-labelledby="nav_forums" style="padding:10px">
+                                                {!! list_forums() !!}
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3">
+                                {!!
+                                    form_buttons(array(
+                                        array(
+                                            'class' => 'btn-primary btn-sm',
+                                            'text'  =>  trans('langSubmit'),
+                                            'name'  =>  'submit',
+                                            'value' =>  trans('langSubmit')
+                                        )
+                                    ))
+                                !!} 
+                            </div>  
+                        </fieldset>      
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
