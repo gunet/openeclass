@@ -67,8 +67,8 @@ if (!$uid || !$userProgressionDetails) {
     $sco['student_name'] = "Anonymous, User";
     $sco['lesson_location'] = "";
     $sco['credit'] = "no-credit";
-    $sco['lesson_status'] = "not attempted";
-    $sco['entry'] = "ab-initio";
+    $sco['lesson_status'] = "NOT ATTEMPTED";
+    $sco['entry'] = "AB-INITIO";
     $sco['raw'] = "";
     $sco['scoreMin'] = "";
     $sco['scoreMax'] = "";
@@ -182,7 +182,7 @@ $sco['session_time'] = "0000:00:00.00";
     }
 	function LMSInitialize2004(arg) {
 		isSCORM2004 = true;
-		
+
 		return LMSInitialize(arg);
 	}
     // Finish
@@ -217,12 +217,12 @@ $sco['session_time'] = "0000:00:00.00";
         if (debug_)
             alert("LMSGetValue : \n" + ele);
         if (APIInitialized) {
-		
+
 			//SCORM2004
 			if(ele=="" && isSCORM2004) {
 				APIError("301"); // read only
                 return "false";
-			}		
+			}
 
             var i = array_indexOf(elements, ele);
             if (i != -1) { // ele is implemented -> handle it
@@ -279,7 +279,7 @@ $sco['session_time'] = "0000:00:00.00";
                         values[i] = item_objectives.length;
                         return item_objectives.length;
                         break;
-					
+
                     case 'cmi.interactions._count' :
                         APIError("0");
                         values[i] = interactions.length;
@@ -297,15 +297,15 @@ $sco['session_time'] = "0000:00:00.00";
 					case 'cmi.learner_preference.audio_level':
 				case 'cmi.student_preference.audio':
                                     APIError("0");
-                    return values[i];	
-					case 'cmi.learner_preference.language':						
+                    return values[i];
+					case 'cmi.learner_preference.language':
 				case 'cmi.student_preference.language':
                                     APIError("0");
                     return values[i];
 					case 'cmi.learner_preference.delivery_speed':
 				case 'cmi.student_preference.speed':
                                     APIError("0");
-                    return values[i];	
+                    return values[i];
 					case 'cmi.learner_preference.audio_captioning':
 				case 'cmi.student_preference.text':
                                     APIError("0");
@@ -317,7 +317,7 @@ $sco['session_time'] = "0000:00:00.00";
                                 APIError("0");
                     return values[i];
                             }
-            } else { 
+            } else {
 
                 var pos = ele.indexOf("cmi.interactions");
                 if (pos >= 0) {
@@ -329,7 +329,7 @@ $sco['session_time'] = "0000:00:00.00";
                                 }
 
                 // ignore _children if not explicitly defined
-				
+
 				/*
                 var pos = ele.indexOf("_children");
                 if (pos >= 0) {
@@ -376,13 +376,13 @@ $sco['session_time'] = "0000:00:00.00";
         }
 
         if (APIInitialized) {
-		
+
 			//SCORM2004
 			if(ele=="" && isSCORM2004) {
 				APIError("351"); // read only
                 return "false";
 			}
-		
+
             var i = array_indexOf(elements, ele);
             if (i != -1) { // ele is implemented -> handle it
 
@@ -429,7 +429,7 @@ $sco['session_time'] = "0000:00:00.00";
                             APIError("405");
                             return "false";
                         }
-                    /*	
+                    /*
                         var upperCaseVal = val.toUpperCase();
                         if (upperCaseVal != "PASSED" && upperCaseVal != "FAILED"
                                 && upperCaseVal != "COMPLETED" && upperCaseVal != "INCOMPLETE"
@@ -633,7 +633,7 @@ $sco['session_time'] = "0000:00:00.00";
 							APIError("407");
 							return "false";
 						}
-						
+
 						values[i] = val;
 						APIError("0");
 						return "true";
@@ -659,7 +659,7 @@ $sco['session_time'] = "0000:00:00.00";
                         return "true";
                         break;
                     //SCORM2004
-					case 'cmi.learner_preference.delivery_speed':	
+					case 'cmi.learner_preference.delivery_speed':
 						if (!checkDataType(val, 'CMIDecimal')) {
 							APIError("406");
 							return "false";
@@ -670,7 +670,7 @@ $sco['session_time'] = "0000:00:00.00";
 						values[i] = val;
 						APIError("0");
 						return "true";
-						break;					
+						break;
                     case 'cmi.student_preference.speed':
                         if (!checkDataType(val, 'CMISInteger') || val < -100 || val > 100) {
                             APIError("405");
@@ -934,19 +934,19 @@ $sco['session_time'] = "0000:00:00.00";
 	elements[32] = "cmi.student_preference.text";
 	elements[33] = "cmi.comments";
 	elements[34] = "cmi.comments";
-	
+
 	elements[35] = "cmi.comments_from_lms";
 	elements[36] = "cmi._version";
 	elements[37] = "cmi.location";
 	elements[38] = "cmi.learner_id";
 	elements[39] = "cmi.learner_name";
-	
+
 	elements[40] = "cmi.learner_preference._children";
 	elements[41] = "cmi.learner_preference.audio_level";
 	elements[42] = "cmi.learner_preference.language";
 	elements[43] = "cmi.learner_preference.delivery_speed";
 	elements[44] = "cmi.learner_preference.audio_captioning";
-	
+
 
     var values = new Array();
     values[0] = "<?php echo js_escape($sco['_children']); ?>";
@@ -988,7 +988,7 @@ $sco['session_time'] = "0000:00:00.00";
 	values[43] = 1;
 	values[44] = 0;
 
-	
+
 
     // ====================================================
     //
@@ -999,7 +999,7 @@ $sco['session_time'] = "0000:00:00.00";
         // user module progress id
         cmiform.ump_id.value = "<?php echo $userProgressionDetails->user_module_progress_id ?>";
         // values to set in DB
-		
+
 		if (isSCORM2004) {
 			cmiform.lesson_location.value = values[37];
 		} else {
@@ -1046,7 +1046,7 @@ $sco['session_time'] = "0000:00:00.00";
 
 	API_1484_11.version = "1.0";
 	api_1484_11.version = "1.0";
-	
+
 	isSCORM2004 = false;
 
     var CMIDataModel = {
@@ -1087,7 +1087,7 @@ $sco['session_time'] = "0000:00:00.00";
 
         return result;
     }
-	
+
     function handleGetInteractions(ele, interactions) {
 
         var myres = '';
@@ -1099,17 +1099,17 @@ $sco['session_time'] = "0000:00:00.00";
             if (interactions[elem_id] == null) {
 
                 myres = ele.match(/objectives.(_children|_count)/);
-                if (myres != null) {						
+                if (myres != null) {
                     if (myres[1] == "_count") {
-                        APIError("0"); 
+                        APIError("0");
                         return 0;
                     }
                 }
 
                 myres = ele.match(/correct_responses.(_count)/);
-                if (myres != null) {						
+                if (myres != null) {
                     if (myres[1] == "_count") {
-                        APIError("0"); 
+                        APIError("0");
                         return 0;
                     }
                 }
@@ -1120,20 +1120,20 @@ $sco['session_time'] = "0000:00:00.00";
             } else {
                 if (req_type == 'correct_responses') {
                     myres = ele.match(/correct_responses.(_count)/);
-                    if (myres != null) {						
+                    if (myres != null) {
                         if (myres[1] == "_count") {
-                            APIError("0"); 
+                            APIError("0");
 
                             if(interactions[elem_id][3] != []) {
                                 return interactions[elem_id][3].length;
                             } else {
-                                APIError("402"); 
+                                APIError("402");
                                 return "";
                             }
                         }
                     }
-                }				
-                if (req_type == 'objectives') {				
+                }
+                if (req_type == 'objectives') {
                     return handleGetObjectives(ele, interactions[elem_id][8]);
                 } else {
                     APIError("0");
@@ -1142,7 +1142,7 @@ $sco['session_time'] = "0000:00:00.00";
             }
         }
     }
-			
+
     function handleGetObjectives(ele, item_objectives) {
         var myres = '';
         if (myres = ele.match(/objectives.(\d+).(id|score|status|_children|_count)(.*)/)) {
@@ -1237,23 +1237,23 @@ $sco['session_time'] = "0000:00:00.00";
         }
 
 		myres = ele.match(/objectives.(_count)/);
-				
+
 		if (myres != null) {
 			if(item_objectives == null) {
-				APIError("0"); 
+				APIError("0");
 				return 0;
 			} else {
-				APIError("0"); 
+				APIError("0");
 				return item_objectives.length;
 			}
-		}		
+		}
 	}
-		
+
 	function handleSetCorrectResponses(ele, val, correct_responses) {
 
 		var myres = new Array();
 		if (myres = ele.match(/correct_responses.(\d+).(pattern)(.*)/)) {
-		
+
 			updatetable_to_list['correct_responses'] = 'true';
 			elem_id = myres[1];
 			elem_attrib = myres[2];
@@ -1262,7 +1262,7 @@ $sco['session_time'] = "0000:00:00.00";
 				APIError("201"); // invalid argument
 				return "false";
 			} else {
-			
+
 				if (correct_responses[elem_id] == null) {
 					correct_responses[elem_id] = [];
 				}
@@ -1286,7 +1286,7 @@ $sco['session_time'] = "0000:00:00.00";
 			return "false";
 		}
 	}
-		
+
 	function handleSetInteractions(ele, val, interactions) {
 
 		var myres = new Array();
@@ -1390,7 +1390,7 @@ $sco['session_time'] = "0000:00:00.00";
 			}
 		}
 	}
-		
+
     function handleSetObjectives(ele, val, item_objectives) {
         if (myres = ele.match(/objectives.(\d+).(id|score|status)(.*)/)) {
             obj_id = myres[1];
@@ -1400,7 +1400,7 @@ $sco['session_time'] = "0000:00:00.00";
 				alert(ele);
                 return "false";
             } else {
-			
+
 			   if (item_objectives[obj_id] == null) {
 					item_objectives[obj_id] = ['', '', '', '', ''];
 				}
@@ -1423,7 +1423,7 @@ $sco['session_time'] = "0000:00:00.00";
                             APIError("402"); // invalid set value
                             return "false";
                         } else if (myres[3] == '.raw') {
-                            /* 
+                            /*
 							if(val<0) {
 								APIError("405"); // invalid set value
 								return "false";
@@ -1455,7 +1455,7 @@ $sco['session_time'] = "0000:00:00.00";
                             }
 
 							item_objectives[obj_id][4] = val;
-                           
+
                             APIError("0");
                             return "true";
                         } else {
@@ -1463,7 +1463,7 @@ $sco['session_time'] = "0000:00:00.00";
                             return "";
                         }
                     } else if (req_type == "status") {
-					
+
 					     if (!checkDataType(val, 'CMIVocabulary', 'Status')) {
                             APIError("405");
                             return "false";

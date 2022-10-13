@@ -53,12 +53,12 @@ doc_init();
 
 function directly_pass_lp_module($table, $userid, $lpmid) {
     global $course_id;
-    
+
     // if credit was already set this query changes nothing else it update the query made at the beginning of this script
     $sql = "UPDATE `" . $table . "`
                SET `credit` = 1,
                    `raw` = 100,
-                   `lesson_status` = 'completed',
+                   `lesson_status` = 'COMPLETED',
                    `scoreMin` = 0,
                    `scoreMax` = 100
              WHERE `user_id` = ?d
@@ -184,7 +184,7 @@ switch ($module->contentType) {
             $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=" . urlencode($assetPath) . "&amp;viewModule_id=$_SESSION[lp_module_id]";
         } else {
             $moduleStartAssetPage = $assetPath;
-        }        
+        }
         break;
 } // end switch
 
