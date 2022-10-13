@@ -37,7 +37,7 @@ $data['display_captcha'] = $display_captcha;
 if ($display_captcha) {
     $securimage = new Securimage();
     $data['captcha'] = $securimage->getCaptchaHtml([
-        'securimage_path' => $urlAppend . 'vendor/dapphp/securimage',
+        'securimage_path' => $urlAppend . 'modules/auth/securimage',
         'input_text' => '',
     ]);
 }

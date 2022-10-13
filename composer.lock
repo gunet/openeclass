@@ -1,10 +1,10 @@
-{
+widg
     "_readme": [
         "This file locks the dependencies of your project to a known state",
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b5a69bf28745aa0199fd79ff2b8b2015",
+    "content-hash": "8dc0068abd9c8b68aaacb07c21d1dbec",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -62,16 +62,16 @@
         },
         {
             "name": "dapphp/securimage",
-            "version": "4.0.2",
+            "version": "dev-mantis",
             "source": {
                 "type": "git",
-                "url": "https://github.com/dapphp/securimage.git",
-                "reference": "aabde76d839d75a238970661187f83312c2eeda7"
+                "url": "https://github.com/mantisbt/securimage",
+                "reference": "17a390243d831017f9ce9ee23c9dc481e7554ea0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dapphp/securimage/zipball/aabde76d839d75a238970661187f83312c2eeda7",
-                "reference": "aabde76d839d75a238970661187f83312c2eeda7",
+                "url": "https://api.github.com/repos/mantisbt/securimage/zipball/17a390243d831017f9ce9ee23c9dc481e7554ea0",
+                "reference": "17a390243d831017f9ce9ee23c9dc481e7554ea0",
                 "shasum": ""
             },
             "require": {
@@ -83,16 +83,13 @@
                 "ext-pdo_mysql": "For MySQL database support",
                 "ext-pdo_sqlite": "For SQLite3 database support"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "Securimage\\": "./"
-                },
                 "classmap": [
                     "securimage.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -105,17 +102,12 @@
             "description": "PHP CAPTCHA Library",
             "homepage": "https://www.phpcaptcha.org",
             "keywords": [
-                "Forms",
                 "anti-spam",
                 "captcha",
+                "forms",
                 "security"
             ],
-            "support": {
-                "issues": "https://github.com/dapphp/securimage/issues",
-                "source": "https://github.com/dapphp/securimage/tree/4.0.2"
-            },
-            "abandoned": true,
-            "time": "2020-05-30T10:05:48+00:00"
+            "time": "2022-07-24T17:11:14+00:00"
         },
         {
             "name": "dasprid/enum",
@@ -1104,16 +1096,16 @@
         },
         {
             "name": "hiqdev/hoa-protocol",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hiqdev/hoa-protocol.git",
-                "reference": "70ac2105c5b9206822b16963583143d799324636"
+                "reference": "48176b09d76a0e4a1c31b57d7383cd546b283dc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hiqdev/hoa-protocol/zipball/70ac2105c5b9206822b16963583143d799324636",
-                "reference": "70ac2105c5b9206822b16963583143d799324636",
+                "url": "https://api.github.com/repos/hiqdev/hoa-protocol/zipball/48176b09d76a0e4a1c31b57d7383cd546b283dc8",
+                "reference": "48176b09d76a0e4a1c31b57d7383cd546b283dc8",
                 "shasum": ""
             },
             "require": {
@@ -1152,9 +1144,9 @@
                 "wrapper"
             ],
             "support": {
-                "source": "https://github.com/hiqdev/hoa-protocol/tree/1.0.1"
+                "source": "https://github.com/hiqdev/hoa-protocol/tree/1.0.2"
             },
-            "time": "2022-07-12T07:31:36+00:00"
+            "time": "2022-07-29T16:51:45+00:00"
         },
         {
             "name": "hiqdev/hoa-ruler",
@@ -5057,16 +5049,16 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v6.1.4",
+            "version": "v6.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "45d0f5bb8df7255651ca91c122fab604e776af03"
+                "reference": "e6cd330e5a072518f88d65148f3f165541807494"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/45d0f5bb8df7255651ca91c122fab604e776af03",
-                "reference": "45d0f5bb8df7255651ca91c122fab604e776af03",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/e6cd330e5a072518f88d65148f3f165541807494",
+                "reference": "e6cd330e5a072518f88d65148f3f165541807494",
                 "shasum": ""
             },
             "require": {
@@ -5133,7 +5125,7 @@
             "description": "Provides tools to internationalize your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/translation/tree/v6.1.4"
+                "source": "https://github.com/symfony/translation/tree/v6.1.6"
             },
             "funding": [
                 {
@@ -5149,7 +5141,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-02T16:17:38+00:00"
+            "time": "2022-10-07T08:04:03+00:00"
         },
         {
             "name": "symfony/translation-contracts",
@@ -5372,7 +5364,8 @@
     "stability-flags": {
         "ezyang/htmlpurifier": 20,
         "phpids/phpids": 20,
-        "google/apiclient": 10
+        "google/apiclient": 10,
+        "dapphp/securimage": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
