@@ -49,7 +49,7 @@
 
 
                     <div class='col-sm-12'>
-                        <div class='panel panel-default mt-3 col_maincontent_coursePage border border-secondary-4 shadow-sm'>
+                        <div class='panel panel-default mt-3 col_maincontent_coursePage border border-secondary-4'>
                             <div class='panel-heading'>
                                 <div class='col-12'>
                                     <div class='row'>

@@ -118,7 +118,7 @@
                                     </div>
                                 </div>--}}
 
-                                <div class='panel panel-default rounded-0 shadow-sm mt-md-0 mt-3'>
+                                <div class='panel panel-default rounded-0 mt-md-0 mt-3'>
                                     <div class='panel-heading rounded-0'>
                                         <div class='panel-title text-center'>
                                             {{ trans('langCourseDescription') }}
@@ -193,7 +193,7 @@
                                     </div>
                                 </div>--}}
 
-                                <div class='panel panel-default mt-3 rounded-0 shadow-sm'>
+                                <div class='panel panel-default mt-md-5 mt-3 rounded-0'>
                                     <div class='panel-heading rounded-0'>
                                         <div class='panel-title text-center'>
                                             {{ trans('langPersInfo') }}
@@ -262,7 +262,7 @@
                                     </div>
                                 </div>--}}
 
-                                <div class='panel panel-default mt-3 rounded-0 shadow-sm'>
+                                <div class='panel panel-default mt-md-5 mt-3 rounded-0'>
                                     <div class='panel-heading rounded-0'>
                                         <div class='panel-title text-center'>
                                             {{ trans('langAboutMe') }}

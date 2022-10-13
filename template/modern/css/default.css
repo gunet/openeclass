@@ -48,6 +48,8 @@ table p, .panel p, .margin-bottom-fat.form-wrapper.shadow-sm.p-2.mb-3.rounded p 
 
 .eclass-bg{ background-color : #1d4e89; border-radius: 50%; }
 
+.bg-whiteColor{ background-color : #ffffff}
+
 .colorOrange{ color: #f79256; }
 
 .panel-phpinfo{ overflow-y: auto; }
@@ -187,6 +189,7 @@ input:-webkit-autofill:active {
 /********************************* FIRST CHOICE OF INPUTS FORMS *******************************/
 /**********************************************************************************************/
 .form-wrapper.shadow-sm{ border: solid 15px #f2f2f2; background: white; }
+.form-wrapper.shadow-sm { border:0px !important; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2) !important; }
 @media(max-width:767px){ .form-wrapper.shadow-sm{overflow-y: auto;} }
 
 .form-wrapper.shadow-sm textarea{ background: white; border: solid 1px #f1f1f1; margin-top:10px;}
@@ -1118,6 +1121,9 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .panel-admin{
     border-radius:15px;
     border:solid 1px #DCDCDC;
+
+    border:0px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
   }
   .panel-admin>.panel-heading{
     background: #1d4e89;
@@ -1158,6 +1164,11 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     background: #337ab7;
     border:solid 1px #337ab7;
     border-color: #337ab7;
+
+
+    border:0px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+
   }
   .panel-primary>.panel-heading, .panel-action-btn-primary>.panel-heading{
     border-top-left-radius: 15px;
@@ -1204,6 +1215,11 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     border-radius:15px;
     background: #7dcfb6;
     border:solid 1px #7dcfb6;
+
+
+    border:0px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+
   }
   .panel-success>.panel-heading{
     border-top-left-radius: 15px;
@@ -1243,6 +1259,10 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     border-radius: 17px;
     /* border:solid 2px #F5F5F5; */
     border: solid 2px #f2f2f2;
+
+
+    border:0px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
   }
   .panel-default>.panel-heading, .panel-action-btn-default>.panel-heading {
     color: #333;
@@ -1283,12 +1303,12 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   }
   .panel-default>.panel-footer, .panel-action-btn-default>.panel-footer{
     color: #333;
-    background-color: #f5f5f5;
     border-color: #ddd;
-    background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
+    /* background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%); */
     padding:10px;
     border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px;
+    background-color: #ffffff;
   }
   .panel-default:not(:has(.panel-heading)):has(.panel-footer) .panel-body, .panel-action-btn-default:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
     border-top-left-radius: 15px;
@@ -1301,6 +1321,10 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     border-radius:15px;
     background: #00b2ca;
     border:solid 1px #00b2ca;
+
+
+    border:0px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
   }
   .panel-info>.panel-heading{
     border-top-left-radius: 15px;
@@ -1340,6 +1364,10 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     border-radius:15px;
     background: #dc3545;
     border:solid 1px #dc3545;
+
+
+    border:0px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
   }
   .panel-danger>.panel-heading{
     border-top-left-radius: 15px;

@@ -48,7 +48,7 @@
                                     <div class='col-lg-6 col-12 mt-3'>
                                         <div class='row'>
                                             <div class='col-sm-12'>
-                                                <div class='panel panel-admin shadow-lg'>
+                                                <div class='panel panel-admin'>
                                                     <div class='panel-heading text-center'>
                                                         <span class='colorPalette'>{{ trans('langQuickLinks') }}</span>
                                                     </div>
@@ -210,7 +210,7 @@
                                     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>
 
                                         <div class='panel panel-admin'>
-                                            <div class='panel-heading ps-3 pt-2 pb-2 colorPalette text-center'>
+                                            <div class='panel-heading ps-3 pt-2 pb-2 colorPalette text-center Borders'>
                                             {{ trans('langOnlineUsers') }} : <b>{{ getOnlineUsers() }}</b>
                                             </div>
                                         </div>

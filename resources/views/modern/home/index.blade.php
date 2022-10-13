@@ -81,15 +81,15 @@
                         <div class='d-none d-sm-none d-md-block'>
                             <div class='row rowMedium'>
                                 <div class='col-12 ps-md-5 pe-md-5 pt-md-5 pb-md-5'>
-                                    <div class="panel panel-default homepageIntroPanel w-100">
+                                    <div class="panel panel-default homepageIntroPanel w-100 shadow-sm border-0 rounded-0">
                                         @if(get_config('homepage_title'))
-                                        <div class="panel-heading text-center p-3">
+                                        <div class="panel-heading text-center p-3 rounded-0">
                                             <span class='fs-5 control-label-notes'>
                                                 {!! get_config('homepage_title') !!}
                                             </span>
                                         </div>
                                         @endif
-                                        <div class="panel-body bg-body @if(get_config('homepage_title')) NoBorderTop @else Borders @endif">
+                                        <div class="panel-body bg-body @if(get_config('homepage_title')) NoBorderTop @else Borders @endif rounded-0">
                                             {!! get_config('homepage_intro') !!}
                                         </div>
                                     </div>
@@ -102,8 +102,8 @@
                         <div class='d-block d-md-none'>
                             <div class='row rowMedium'>
                                 <div class='col-12 pt-5 @if(!get_config("enable_mobileapi") and $eclass_banner_value == 0) pb-5 @endif)'>
-                                    <div class="panel panel-default w-100">
-                                        <div class='panel-body Borders'>
+                                    <div class="panel panel-default w-100 shadow-sm border-0 rounded-0">
+                                        <div class='panel-body rounded-0'>
                                             {!! get_config('homepage_intro') !!}
                                         </div>
                                     </div>
@@ -121,8 +121,8 @@
                         @endif
                             <div class='row rowMedium'>
                                 <div class='col-md-6 col-12' id='openeclass-banner'>
-                                    <div class='panel panel-default'>
-                                        <div class='panel-body Borders'>
+                                    <div class='panel panel-default shadow-sm border-0 rounded-0'>
+                                        <div class='panel-body rounded-0'>
                                             <a href="http://www.openeclass.org/" target="_blank">
                                                 <img class="img-responsive center-block m-auto d-block" src="{{ $themeimg }}/open_eclass_banner.png" alt="Open eClass Banner">
                                             </a>
@@ -130,8 +130,8 @@
                                     </div>
                                 </div>
                                 <div class='@if($eclass_banner_value != 0) col-md-6 col-12 @else col-12 @endif mt-md-0 pt-md-0 @if($eclass_banner_value == 0) pt-0 @else pt-5 @endif'>
-                                    <div class='panel panel-default'>
-                                        <div class='panel-body Borders'>
+                                    <div class='panel panel-default shadow-sm border-0 rounded-0'>
+                                        <div class='panel-body rounded-0'>
                                             <div class='col-12'>
                                                 <div class='row'>
                                                     <div class='col-6'>
@@ -160,8 +160,8 @@
                         @endif
                             <div class='row rowMedium'>
                                 <div class='col-12'>
-                                    <div class='panel panel-default'>
-                                        <div class='panel-body Borders'>
+                                    <div class='panel panel-default shadow-sm border-0 rounded-0'>
+                                        <div class='panel-body rounded-0'>
                                             <a href="http://www.openeclass.org/" target="_blank">
                                                 <img class="img-responsive center-block m-auto d-block" src="{{ $themeimg }}/open_eclass_banner.png" alt="Open eClass Banner">
                                             </a>
@@ -185,8 +185,8 @@
                         <div class='col-12 ps-md-5 pe-md-5 pt-md-0 mb-5'>
                             <div class='row rowMedium'>
                                 <div class='col-12'>
-                                    <div class='panel panel-default'>
-                                        <div class='panel-body Borders'>
+                                    <div class='panel panel-default shadow-sm border-0 rounded-0'>
+                                        <div class='panel-body rounded-0'>
                                             {!! $openCoursesExtraHTML !!}
                                         </div>
                                     </div>
@@ -197,7 +197,7 @@
                         <div class='col-12 ps-md-5 pe-md-5 pt-md-0 mb-5'>
                             <div class='row rowMedium'>
                                 <div class='col-12'>
-                                    <div class='panel panel-default openCoursesPanel text-center p-2'>
+                                    <div class='panel panel-default openCoursesPanel text-center p-2 shadow-sm border-0'>
                                         <a class='text-white' href='http://opencourses.gr' target='_blank'>
                                             {{ trans('langNationalOpenCourses') }}
                                         </a>

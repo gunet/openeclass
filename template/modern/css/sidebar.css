@@ -41,7 +41,7 @@
   background-color: blue;
   color: white;
   font-size:12px;
-  padding: 0px 25px 0px 5px;
+  justify-content: center;
 }
 
 .btn-toggle span.off, .btn-toggle.btn-toggle-on span.on { display: inline-block; }
@@ -168,58 +168,93 @@
 
 }
 
-@media (min-width:1400px){
+@media (min-width:1751px){
 
-  .btn-toggle{ width: 12rem; }
+  .btn-toggle> .off {width: 50%; padding-left: 0px;}
 
-  .btn-toggle> .off2{ padding-top: 1px; }
+  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
 
-  .btn-toggle> .on2{  padding-top: 15px; }
+  .btn-toggle> .off2{ margin-left:-90px; padding-left:0px; padding-right:0px; padding-top: 1px;}
+
+  .btn-toggle> .on2{ margin-left:15px; padding-top: 15px; padding-left:0px; padding-right:0px;}
+}
+
+@media (min-width:1551px) and (max-width:1750px){
+
+  .btn-toggle> .off {width: 50%; padding-left: 0px;}
+
+  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
+
+  .btn-toggle> .off2{ margin-left:-90px; padding-left:0px; padding-right:0px; padding-top: 1px;}
+
+  .btn-toggle> .on2{ margin-left:15px; padding-top: 15px; padding-left:0px; padding-right:0px;}
+}
+
+@media (min-width:1400px) and (max-width:1550px){
+
+  .btn-toggle> .off {width: 50%; padding-left: 0px;}
+
+  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
+
+  .btn-toggle> .off2{ padding-left:0px; padding-right:0px; padding-top: 2px;}
+
+  .btn-toggle> .on2{ padding-top: 14px; padding-left:0px; padding-right:0px;}
 }
 
 @media (min-width: 1200px) and (max-width: 1399px){ 
 
-  .btn-toggle{  width: 11.5rem; }
-
-  .btn-toggle> .off { width: 60%; }
+  .btn-toggle> .off { width: 55%; }
 
   .btn-toggle> .on { right: 0; left: auto; padding: 0px 0px 0px 5px; width:42%; }
 
-  .btn-toggle> .off2{  padding-left: 32px;  padding-top: 1px; }
+  .btn-toggle> .off2{  padding-left: 30px;  padding-top: 1px; }
 
-  .btn-toggle> .on2{  padding-top: 15px; }
+  .btn-toggle> .on2{  padding-top: 15px; padding-left:0px;}
 }
 
 @media (min-width: 1024px) and (max-width: 1199px){ 
  
-  .btn-toggle{ width: 12.3rem; }
+  .btn-toggle> .off {width: 50%; padding-left: 0px;}
 
-  .btn-toggle> .off2{ margin-left:-85px; padding-top: 1px; }
+  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
 
-  .btn-toggle> .on2{ padding-top: 15px; }
+  .btn-toggle> .off2{ padding-left:0px; padding-top: 1px; }
+
+  .btn-toggle> .on2{ padding-top: 15px; padding-left: 20px;}
 
 }
 
-@media (min-width: 768px) and (max-width: 1023px){ 
+@media (min-width: 992px) and (max-width:1023px){ 
 
-  .btn-toggle{ width: 12rem; }
+  .btn-toggle> .off {width: 50%; padding-left: 0px;}
 
-  .btn-toggle> .off2{ margin-left:-85px; padding-top: 1px; }
+  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
 
-  .btn-toggle> .on2{ padding-top: 15px; }
+  .btn-toggle> .off2{ padding-left:0px; padding-top: 0px; }
+
+  .btn-toggle> .on2{ padding-top: 15px; padding-left: 20px;}
+}
+
+@media (min-width: 768px) and (max-width:991px){ 
+
+  .btn-toggle> .off {width: 50%; padding-left: 0px;}
+
+  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
+
+  .btn-toggle> .off2{ padding-right:15px; padding-top: 0px; }
+
+  .btn-toggle> .on2{ padding-top: 14px; padding-left: 25px;}
 }
 
 @media (max-width: 767px){ 
 
-  .btn-toggle{ width: 10rem; }
+  .btn-toggle> .off {width: 50%; padding-left: 0px;}
 
-  .btn-toggle> .off {  width: 60%; }
+  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
 
-  .btn-toggle> .on { right: 0; left: auto; padding: 0px 0px 0px 5px; width:42%; }
+  .btn-toggle> .off2{ padding-left: 0px; padding-top: 1px}
 
-  .btn-toggle> .off2{ padding-left: 32px; padding-top: 1px; }
-
-  .btn-toggle> .on2{ padding-top: 15px; }
+  .btn-toggle> .on2{ padding-top: 14px; padding-left: 25px;}
 }
 
 

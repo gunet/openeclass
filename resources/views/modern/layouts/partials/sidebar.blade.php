@@ -3,7 +3,7 @@
     @if(($is_editor or $is_power_user or $is_departmentmanage_user or $is_usermanage_user or $is_course_teacher) && $course_code)
         <p class="text-center text-light mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
         <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center'>
-            <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}' data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}">
+            <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }} w-100' data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}">
                 <span class="on">{{ trans('langCStudent2') }}</span>
                 <span class="off">{{ trans('langCTeacher') }}</span>
                 <p class="on2">{{ trans('langCStudent2') }}</p>
