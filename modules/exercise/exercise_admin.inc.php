@@ -557,7 +557,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     </div>
                 </div>
 
-                <div class='course-info-title clearfix'>
+                <div class='course-info-title clearfix bg-light mt-3'>
                     <a role='button' data-bs-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
                         <h5 class='panel-heading'>
                             <span class='fa fa-chevron-down fa-fw'></span> $langCheckAccess

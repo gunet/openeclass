@@ -187,6 +187,7 @@ input:-webkit-autofill:active {
 /********************************* FIRST CHOICE OF INPUTS FORMS *******************************/
 /**********************************************************************************************/
 .form-wrapper.shadow-sm{ border: solid 15px #f2f2f2; background: white; }
+@media(max-width:767px){ .form-wrapper.shadow-sm{overflow-y: auto;} }
 
 .form-wrapper.shadow-sm textarea{ background: white; border: solid 1px #f1f1f1; margin-top:10px;}
 
@@ -1389,6 +1390,8 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .panel-heading:has(.btn-group) .panel-title{ padding-bottom: 6px; padding-top: 5px; }
 
   .panel-body,.media-body{ padding:15px; background: #ffffff; }
+
+  @media(max-width:767px){.panel-body{overflow-y: auto;}}
 
   .panel-title{ font-weight: 700; font-size: 14px; }
 

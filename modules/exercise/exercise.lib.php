@@ -62,8 +62,8 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
                 </h6>
             </div>
             <div class='panel-body rounded-0'>
-                <h6>" . q_math($questionName) . "</h6>
-                $questionDescription
+                <h6 class='mb-2'>" . q_math($questionName) . "</h6>
+                <div class='mb-2'>$questionDescription</div>
                 <div class='text-center'>" .
                     (file_exists($picturePath . '/quiz-' . $questionId) ?
                         "<img src='../../$picturePath/quiz-$questionId'>" : "") . "
@@ -317,15 +317,15 @@ function display_exercise($exercise_id) {
 
 
     $tool_content .= "
-    <div class='col-sm-12'><div class='panel panel-primary'>
-            <div class='panel-heading'>
+    <div class='col-sm-12'><div class='panel panel-primary rounded-0'>
+            <div class='panel-heading rounded-0'>
               <h3 class='panel-title'>" . q_math($exercise->selectTitle()) . "
                 <a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes'>
                   <span class='fa fa-edit text-white' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
                 </a>
               </h3>
             </div>
-            <div class='panel-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>
+            <div class='panel-body rounded-0'>" . standard_text_escape($exercise->selectDescription()) . "</div>
         </div>
     </div>";
 
@@ -349,7 +349,7 @@ function display_exercise($exercise_id) {
             $colspan = 1;
         }
 
-        $tool_content .= "<div class='col-sm-12 mt-3'><div class='table-responsive'><table class = 'table-default'>";
+        $tool_content .= "<div class='col-sm-12 mt-3'><div class='table-responsive shadow-lg'><table class = 'table-default'>";
         if (is_array($qid)) { // placeholder for random questions (if any)
             $hasRandomQuestions = true;
             $tool_content .= "<tr class='active'>
@@ -506,6 +506,6 @@ function display_exercise($exercise_id) {
         }
     }
     if (!$hasRandomQuestions) {
-        $tool_content .= "<div class='col-sm-12'><span class='float-end'><strong>$langYourTotalScore: $totalWeighting</strong></span></div>";
+        $tool_content .= "<div class='col-sm-12 mt-2'><span class='float-end'><strong class='text-success'>$langYourTotalScore: $totalWeighting</strong></span></div>";
     }
 }

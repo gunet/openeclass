@@ -126,16 +126,18 @@ function show_assignments() {
                     <input type='hidden' name='group_id' value='$group_id'>
                     <div class='form-group mt-3'>
                         <label for='title' class='col-sm-2 control-label'>$langWorks ($langSelect):</label>
-                        <div class='col-sm-12'>
-                            <table class='table-default'>
-                                <tr class='list-header'>
-                                    <th class='left text-white ps-3' colspan='2'>$langTitle</th>
-                                    <th class='text-white' align='center' width='30%'>$langGroupWorkDeadline_of_Submission</th>
-                                    <th class='text-white' align='center' width='10%'>$m[submitted]</th>
-                                    <th class='text-white' align='center' width='10%'>$langSelect</th>
-                                </tr>
-                                $table_content
-                            </table>
+                        <div class='col-12'>
+                            <div class='table-responsive'>
+                                <table class='table-default'>
+                                    <tr class='list-header'>
+                                        <th class='text-white ps-3' colspan='2'>$langTitle</th>
+                                        <th class='text-white' align='center' width='30%'>$langGroupWorkDeadline_of_Submission</th>
+                                        <th class='text-white' align='center' width='10%'>$m[submitted]</th>
+                                        <th class='text-white' align='center' width='10%'>$langSelect</th>
+                                    </tr>
+                                    $table_content
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class='form-group mt-3'>
@@ -144,10 +146,18 @@ function show_assignments() {
                             <textarea name='comments' rows='4' cols='60' class='form-control'></textarea>
                         </div>
                     </div>
-                    <div class='form-group mt-3'>
-                        <div class='col-sm-10 col-sm-offset-2'>
-                            <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-                            <a class='btn btn-default' href='$urlServer/modules/group/document.php?course=$course_code&group_id=$group_id'>$langCancel</a>
+                    <div class='form-group mt-5'>
+                        <div class='col-12'>
+                            <div class='row'>
+                                <div class='col-6'>
+                                    <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='$langSubmit'>
+                                </div>
+                                <div class='col-6'>
+                                    <a class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='$urlServer/modules/group/document.php?course=$course_code&group_id=$group_id'>$langCancel</a>
+                                </div>
+                            </div>
+                               
+                               
                         </div>
                     </div>
                 </fieldset>

@@ -84,7 +84,7 @@ if (isset($_GET['all'])) {
         </div>
         <div class='form-group mt-3'>
             <label for='selectcategory' class='col-sm-6 control-label-notes'>$langCategory:</label>
-            <div class='col-sm-2'>
+            <div class='col-12'>
                 <select class='form-select' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
         if ($social_bookmarks_enabled) {

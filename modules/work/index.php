@@ -2155,7 +2155,7 @@ function new_assignment() {
                         <option value='2'>$langTiiReportGenOnDue</option>
                   </select>
                 </div>
-                <div class='col-sm-12'>
+                <div class='col-sm-12 mt-3'>
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' disabled>
@@ -3221,32 +3221,32 @@ function show_edit_assignment($id) {
                             <option value='2' " . (($row->tii_report_gen_speed == 2) ? 'selected' : '') . ">$langTiiReportGenOnDue</option>
                       </select>
                     </div>
-                <div class='col-sm-12 mt-3'>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' " . (($row->tii_s_view_reports == 1) ? 'checked' : '') . " $lti_disabled>
-                        $langTiiSViewReports
-                      </label>
+                    <div class='col-sm-12 mt-3'>
+                        <div class='checkbox'>
+                        <label>
+                            <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' " . (($row->tii_s_view_reports == 1) ? 'checked' : '') . " $lti_disabled>
+                            $langTiiSViewReports
+                        </label>
+                        </div>
+                        <div class='checkbox'>
+                        <label>
+                            <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' value='1' " . (($row->tii_use_biblio_exclusion == 1) ? 'checked' : '') . " $lti_disabled>
+                            $langTiiExcludeBiblio
+                        </label>
+                        </div>
+                        <div class='checkbox'>
+                        <label>
+                            <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' value='1' " . (($row->tii_use_quoted_exclusion == 1) ? 'checked' : '') . " $lti_disabled>
+                        $langTiiExcludeQuoted
+                        </label>
+                        </div>
+                        <div class='checkbox'>
+                        <label>
+                            <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' value='1' " . (($row->tii_exclude_type != 'none') ? 'checked' : '') . " $lti_disabled>
+                        $langTiiExcludeSmall
+                        </label>
+                        </div>
                     </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' value='1' " . (($row->tii_use_biblio_exclusion == 1) ? 'checked' : '') . " $lti_disabled>
-                        $langTiiExcludeBiblio
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' value='1' " . (($row->tii_use_quoted_exclusion == 1) ? 'checked' : '') . " $lti_disabled>
-                       $langTiiExcludeQuoted
-                      </label>
-                    </div>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' value='1' " . (($row->tii_exclude_type != 'none') ? 'checked' : '') . " $lti_disabled>
-                       $langTiiExcludeSmall
-                      </label>
-                    </div>
-                </div>
                 </div>
                     <div class='form-group " . (($row->tii_exclude_type == 'none') ? 'hidden' : '') . " mt-3'>
                         <label class='col-sm-6 control-label-notes'>$langTiiExcludeType:</label>
@@ -5455,7 +5455,7 @@ function show_student_assignments() {
                         $lock_description .= "<li>$langIPUnlock</li>";
                     }
                     $lock_description .= "</ul>";
-                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-title='$lock_description'></span>";
+                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-title='$lock_description' data-bs-original-title='$lock_description'></span>";
                 }
             }
 
@@ -5628,7 +5628,7 @@ function show_assignments() {
                     $lock_description .= "<li>$langIPUnlock</li>";
                 }
                 $lock_description .= "</ul>";
-                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-title='$lock_description'></span>";
+                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-title='$lock_description' data-bs-original-title='$lock_description'></span>";
             }
 
             // Check if assignment contains submissions

@@ -458,8 +458,8 @@ $tool_content .= "
         $langUsedInSeveralExercises
       </div>
       <div class='modal-footer'>
-        <a href='#' id='modifyAll' class='btn btn-primary'>$langModifyInAllExercises</a>
-        <a href='#' id='modifyOne' class='btn btn-success'>$langModifyInQuestionPool</a>
+        <a href='#' id='modifyAll' class='btn btn-sm btn-primary'>$langModifyInAllExercises</a>
+        <a href='#' id='modifyOne' class='btn btn-sm btn-success'>$langModifyInQuestionPool</a>
       </div>
     </div>
   </div>

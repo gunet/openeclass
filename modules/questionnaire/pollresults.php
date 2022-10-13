@@ -158,42 +158,42 @@ $export_box
     </div>
     <div class='panel-body rounded-0'>
         <div class='row p-2 margin-bottom-fat'>
-            <div class='col-sm-3'>
+            <div class='col-md-5 col-12'>
                 <strong class='control-label-notes'>$langTitle:</strong>
             </div>
-            <div class='col-sm-9'>
+            <div class='col-md-7 col-12'>
                 " . q_math($thePoll->name) . "
             </div>
         </div>
         <div class='row p-2 margin-bottom-fat'>
-            <div class='col-sm-3'>
+            <div class='col-md-5 col-12'>
                 <strong class='control-label-notes'>$langPollCreation:</strong>
             </div>
-            <div class='col-sm-9'>
+            <div class='col-md-7 col-12'>
                 " . format_locale_date(strtotime($thePoll->creation_date)) . "
             </div>
         </div>
         <div class='row p-2 margin-bottom-fat'>
-            <div class='col-sm-3'>
+            <div class='col-md-5 col-12'>
                 <strong class='control-label-notes'>$langStart:</strong>
             </div>
-            <div class='col-sm-9'>
+            <div class='col-md-7 col-12'>
                 " . format_locale_date(strtotime($thePoll->start_date)) . "
             </div>
         </div>
         <div class='row p-2 margin-bottom-fat'>
-            <div class='col-sm-3'>
+            <div class='col-md-5 col-12'>
                 <strong class='control-label-notes'>$langPollEnd:</strong>
             </div>
-            <div class='col-sm-9'>
+            <div class='col-md-7 col-12'>
                 " . format_locale_date(strtotime($thePoll->end_date)) . "
             </div>
         </div>
         <div class='row p-2 margin-bottom-fat'>
-            <div class='col-sm-3'>
+            <div class='col-md-5 col-12'>
                 <strong class='control-label-notes'>$langPollTotalAnswers:</strong>
             </div>
-            <div class='col-sm-9'>
+            <div class='col-md-7 col-12'>
                 $total_participants
             </div>
         </div>
@@ -247,10 +247,10 @@ if ($PollType == POLL_NORMAL) {
                                                                         AND qid= ?d", $theQuestion->pqid)->total;
 
                 $answers_table = "
-                    <table class='announcements_table'>
-                        <tr class='notes_thead'>
+                    <table class='table-default'>
+                        <tr class='list-header'>
                             <th class='text-white'>$langAnswer</th>
-                            <th class='text-white'>$langSurveyTotalAnswers</th>".(($thePoll->anonymized) ? '' : '<th>' . $langStudents . '</th>')."</tr>";
+                            <th class='text-white'>$langSurveyTotalAnswers</th>".(($thePoll->anonymized) ? '' : '<th class="text-white">' . $langStudents . '</th>')."</tr>";
                 foreach ($answers as $answer) {
                     $percentage = round(100 * ($answer->count / $answer_total),2);
                     if (isset($answer->answer_text)) {
@@ -326,8 +326,8 @@ if ($PollType == POLL_NORMAL) {
                                                                         AND qid= ?d", $theQuestion->pqid)->total;
 
                 $answers_table = "
-                    <table class='announcements_table'>
-                        <tr class='notes_thead'>
+                    <table class='table-default'>
+                        <tr class='list-header'>
                             <th class='text-white'>$langAnswer</th>
                             <th class='text-white'>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";
                 foreach ($answers as $answer) {
@@ -399,9 +399,9 @@ if ($PollType == POLL_NORMAL) {
                                             AND a.poll_user_record_id = b.id
                                             AND (b.email_verification = 1 OR b.email_verification IS NULL)
                                             GROUP BY a.answer_text ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid);
-                $tool_content .= "<table class='announcements_table'>
+                $tool_content .= "<table class='table-default'>
                         <tbody>
-                        <tr class='notes_thead'>
+                        <tr class='list-header'>
                                 <th class='text-white'>$langAnswer</th>
                                 <th class='text-white'>$langSurveyTotalAnswers</th>
                                 ".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."

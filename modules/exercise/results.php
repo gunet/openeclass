@@ -192,20 +192,20 @@ foreach ($result as $row) {
 
     if (count($result2) > 0) { // if users found
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<tr><td class='text-center' style='background:#4682B4' colspan='".($is_editor ? 5 : 4)."'>";
+        $tool_content .= "<tr><td class='text-center' style='background:#f2f2f2' colspan='".($is_editor ? 5 : 4)."'>";
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";
         } else {
             $user_group = $studentam = '';
             $ug = user_groups($course_id, $sid, 'txt');
             if ($ug != '-') {
-                $user_group = "$langGroup: $ug";
+                $user_group = "<span class='fw-bold'>$langGroup</span>: $ug";
             }
             if (uid_to_am($sid) != '') {
-                $studentam = "$langAmShort: " . uid_to_am($sid);
+                $studentam = "<span class='fw-bold'>$langAmShort</span>: " . uid_to_am($sid);
             }
-            $tool_content .= "<strong class='text-white'>$langUser:</strong> " . uid_to_name($sid,'surname'). " " . uid_to_name($sid, 'givenname') . "
-                            <div><small class='text-white'>$studentam<span style='padding-left: 10px;'>$user_group</span></small></div>";
+            $tool_content .= "<strong class='text-dark'>$langUser:</strong> " . uid_to_name($sid,'surname'). " " . uid_to_name($sid, 'givenname') . "
+                            <div><small class='text-dark'>$studentam<span style='padding-left: 10px;'>$user_group</span></small></div>";
         }
         $tool_content .= "</td>
                 </tr>

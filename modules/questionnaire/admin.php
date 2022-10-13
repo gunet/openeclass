@@ -963,9 +963,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             $tool_content .= "
             <div class='row p-2'></div>
             <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-            <table class='announcements_table'>
+            <table class='table-default'>
                         <tbody id='pollAnswers'>
-                            <tr class='notes_thead'>
+                            <tr class='list-header'>
                               <th class='text-white' colspan='2'>$langQuesList</th>
                               <th class='text-white text-center'>".icon('fa-gears', $langCommands)."</th>
                             </tr>";
