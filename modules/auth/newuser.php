@@ -285,7 +285,7 @@ if (!isset($_POST['submit'])) {
                 if ($display_captcha) {
                     $securimage = new Securimage();
                     $captchaHtml = $securimage->getCaptchaHtml([
-                        'securimage_path' => $urlAppend . 'vendor/dapphp/securimage',
+                        'securimage_path' => $urlAppend . 'modules/auth/securimage',
                         'input_text' => '',
                     ]);
                     $tool_content .= "<div class='form-group'>
