@@ -3476,18 +3476,23 @@ function update_upload_whitelists() {
         'ypr', 'mw2', 'h5p', 'dtd', 'xsd', 'woff2', 'ppsm', 'jqz', 'jm',
         'data', 'jar'];
 
-    // add default whitelists to current whitelists, remove duplicates
-    $student_upload_whitelist = array_unique(array_merge($default_student_upload_whitelist,
-        explode(',', preg_replace('/\s+/', '', get_config('student_upload_whitelist')))));
-    $teacher_upload_whitelist = array_unique(array_merge($default_teacher_upload_whitelist,
-        explode(',', preg_replace('/\s+/', '', get_config('student_upload_whitelist')))));
+    if (get_config('student_upload_whitelist')) { // upgrade
+        // add default whitelists to current whitelists, remove duplicates
+        $student_upload_whitelist = array_unique(array_merge($default_student_upload_whitelist,
+            explode(',', preg_replace('/\s+/', '', get_config('student_upload_whitelist')))));
+        $teacher_upload_whitelist = array_unique(array_merge($default_teacher_upload_whitelist,
+            explode(',', preg_replace('/\s+/', '', get_config('student_upload_whitelist')))));
 
-    // restrict web files to teachers, remove from student whitelist
-    $student_upload_whitelist = array_diff($student_upload_whitelist, ['svg', 'html', 'htm', 'js', 'css']);
+        // restrict web files to teachers, remove from student whitelist
+        $student_upload_whitelist = array_diff($student_upload_whitelist, ['svg', 'html', 'htm', 'js', 'css']);
 
-    // remove student whitelist extensions from teacher whitelist
-    $teacher_upload_whitelist = array_diff($teacher_upload_whitelist, $student_upload_whitelist);
+        // remove student whitelist extensions from teacher whitelist
+        $teacher_upload_whitelist = array_diff($teacher_upload_whitelist, $student_upload_whitelist);
+        set_config('student_upload_whitelist', implode(', ', $student_upload_whitelist));
+        set_config('teacher_upload_whitelist', implode(', ', $teacher_upload_whitelist));
+    } else { // install
+        set_config('student_upload_whitelist', implode(', ', $default_student_upload_whitelist));
+        set_config('teacher_upload_whitelist', implode(', ', $default_teacher_upload_whitelist));
+    }
 
-    set_config('student_upload_whitelist', implode(', ', $student_upload_whitelist));
-    set_config('teacher_upload_whitelist', implode(', ', $teacher_upload_whitelist));
 }
