@@ -270,7 +270,7 @@ $tool_content .= action_bar(array(
             'icon' => 'fa-reply',
             'url' => $back_url)));
 
-$tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+$tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id'>
         <fieldset>
         <div class='form-group".(Session::getError('name') ? " has-error" : "")." mt-3'>

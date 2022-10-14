@@ -58,7 +58,7 @@
                     </div>
 
                     <div class='col-12 mt-4'>
-                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                        <div class='form-wrapper form-edit p-3 mt-5 rounded'>
                             {!! $action_bar !!}
                             <form class='form-horizontal' role='form' action='save.php' method='post' enctype='multipart/form-data'>
                                 <label for='userFile' class='col-sm-6 control-label-notes'>Αρχείο : </label>

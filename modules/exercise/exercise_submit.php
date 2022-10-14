@@ -621,7 +621,7 @@ if (isset($timeleft)) { // time remaining
 }
 
 if (!empty($exerciseDescription)) { // description
-    $tool_content .= "<div class='col-sm-12'><div class='margin-bottom-fat form-wrapper shadow-sm p-2 mb-3 rounded'>";
+    $tool_content .= "<div class='col-sm-12'><div class='margin-bottom-fat form-wrapper form-edit p-2 mb-3 rounded'>";
     $tool_content .= "<div class='col-sm-12 p-3'><em>" . standard_text_escape($exerciseDescription) . "</em></div>";
     $tool_content .= "</div></div>";
 }

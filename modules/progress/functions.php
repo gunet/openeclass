@@ -852,7 +852,7 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
         }
         $operators = get_operators();
 
-        $tool_content .= "<form action=$action method='post'><div class='form-wrapper shadow-sm p-3 rounded'>";
+        $tool_content .= "<form action=$action method='post'><div class='form-wrapper form-edit p-3 rounded'>";
         $tool_content .= "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
         $tool_content .= "<div class='form-group mt-3'>";
@@ -2158,7 +2158,7 @@ function certificate_settings($element, $element_id = 0) {
         $check_certdeadline = '';
         $statuscertdeadline = '';
     }
-    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <div class='form-group mt-3'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>

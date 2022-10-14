@@ -53,7 +53,7 @@ function new_publish_ltiapp() {
     $key = random_secret(8);
     $secret = random_secret();
     $tool_content .= "<div class='col-sm-12'>
-        <div class='form-wrapper shadow-sm p-3 rounded'>
+        <div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
         <fieldset>
         <div class='form-group'>
@@ -132,7 +132,7 @@ function edit_publish_ltiapp($id) {
     $secret = $row->lti_provider_secret;
 
     $tool_content .= "<div class='col-sm-12'>
-        <div class='form-wrapper shadow-sm p-3 rounded'>
+        <div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
         <fieldset>
         <div class='form-group'>
@@ -210,7 +210,7 @@ function show_publish_ltiapp($id) {
     $secret = $row->lti_provider_secret;
     $cartridgeurl = $urlServer . "modules/lti/cartridge.php?id=" . $id . "&token=" . LtiEnrolHelper::generate_cartridge_token($id);
 
-    $tool_content .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal'><fieldset>
+    $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal'><fieldset>
             <div class='form-group'>
                 <label class='col-sm-6 control-label-notes'>$langLTIProviderUrl</label>
                 <div class='col-sm-12'>

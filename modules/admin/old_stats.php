@@ -217,7 +217,7 @@ if (isset($_POST['user_date_start']) && isset($_POST['user_date_end'])) {
 
 //    $tool_content .= "<div class='alert alert-warning'>$langNoStatistics</div>";
 
-$tool_content .= '<div class="col-sm-12 mt-3"><div class="form-wrapper shadow-sm p-3 rounded"><form class="form-horizontal" role="form" method="post">';
+$tool_content .= '<div class="col-sm-12 mt-3"><div class="form-wrapper form-edit p-3 rounded"><form class="form-horizontal" role="form" method="post">';
 $tool_content .= "<div class='input-append date form-group' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
     <label class='col-sm-6 control-label-notes' for='user_date_start'>$langStartDate:</label>
         <div class='col-10 col-sm-9'>               

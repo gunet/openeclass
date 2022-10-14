@@ -35,7 +35,7 @@
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
                     <div class='col-12'>
-                        <form class='form-wrapper shadow-sm p-3 rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                        <form class='form-wrapper form-edit p-3 rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             <fieldset>
                                 <legend class='text-center'>{{ trans('langBasicCfgSetting') }}</legend>
                                 <table class='table table-bordered' width='100%'>

@@ -193,7 +193,7 @@ if (isset($_GET['action'])) {
                 <div class='col-12 h-100 left-form'></div>
             </div>
                         <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper shadow-sm p-3 rounded'>
+                        <div class='form-wrapper form-edit p-3 rounded'>
                         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>
                             <div class='input-group mt-3'>
                                 <label class='input-group-text control-label-notes p-0 f-6 ps-2 pe-2'>$langZipFile</label>
@@ -266,7 +266,7 @@ if (isset($_GET['action'])) {
                 <div class='col-12 h-100 left-form'></div>
             </div>
                     <div class='col-lg-6 col-12'>
-                    <div class='form-wrapper shadow-sm p-3 rounded'>
+                    <div class='form-wrapper form-edit p-3 rounded'>
                         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>";
                         if (isset($_GET['bid'])) {
                             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_data->filename";

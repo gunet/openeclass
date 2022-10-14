@@ -353,7 +353,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     <div class='col-12'>
 
-    <div class='form-wrapper shadow-sm p-3 rounded'>
+    <div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>            
             <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")." mt-3'>
               <label for='PollName' class='col-sm-6 control-label-notes'>$langTitle:</label>
@@ -599,7 +599,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     $tool_content .= "
     <div class='col-12'>
-    <div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' action='$action_url' method='post'>    
+    <div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' action='$action_url' method='post'>    
             <div class='form-group $questionNameErrorClass'>
                 <label for='questionName' class='col-sm-6 control-label-notes'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion).":</label>
                 <div class='col-sm-12'>

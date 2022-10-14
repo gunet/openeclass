@@ -146,7 +146,7 @@ if (!$field) {
     $checked_am = ($field == 'am')? 'checked': '';
 }
 $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langGroupManyUsers</div></div>
-    <div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    <div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id'>
         <fieldset>
             <div class='form-group mt-3'>

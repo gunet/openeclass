@@ -281,7 +281,7 @@ elseif (isset($_POST['install3'])) {
     $_SESSION['step'] = 3;
     $tool_content .= "
        <div class='alert alert-info'>$langWillWrite $langDBSettingIntro</div>
-       <form class='form-horizontal form-wrapper shadow-sm p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+       <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>
            <div class='form-group'>
              <label for='dbHostForm' class='col-sm-12 control-label-notes'>$langdbhost</label>
@@ -344,7 +344,7 @@ elseif (isset($_POST['install4'])) {
         $helpdeskmail = '';
     }
     $tool_content .= "
-       <form class='form-horizontal form-wrapper shadow-sm p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+       <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>" .
            form_entry('urlForm', text_input('urlForm', 40), "$langSiteUrl (*)") .
            form_entry('nameForm', text_input('nameForm', 40), "$langAdminName (*)") .
@@ -401,7 +401,7 @@ elseif (isset($_POST['install5'])) {
                    'smtp_username', 'smtp_password', 'sendmail_command') as $name) {
        $GLOBALS['input_fields'][$name] = true;
     }
-    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>";
     mail_settings_form();
@@ -464,7 +464,7 @@ elseif (isset($_POST['install6'])) {
     ";
     $tool_content .= "
        <div class='alert alert-info'>$langReviewSettings</div>
-       <form class='form-horizontal form-wrapper shadow-sm p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+       <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>" .
            display_entry(q($dbHostForm), $langdbhost) .
            display_entry(q($dbUsernameForm), $langDBLogin) .

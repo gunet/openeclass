@@ -2046,7 +2046,7 @@ function new_assignment() {
 
     $tool_content .= "
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-md-12 col-sm-12 col-12'>
-        <div class='form-wrapper shadow-sm p-3 rounded'>
+        <div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
             <div class='form-group " . ($title_error ? "has-error" : "") . " mt-3'>
@@ -3098,7 +3098,7 @@ function show_edit_assignment($id) {
 
     $tool_content .= "
     <div class='col-12 mt-3'>
-    <div class='form-wrapper shadow-sm p-3 rounded'>
+    <div class='form-wrapper form-edit p-3 rounded'>
     <form class='form-horizontal' enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
     <input type='hidden' name='id' value='$id' />
     <input type='hidden' name='choice' value='do_edit' />
@@ -4370,7 +4370,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 )
             ))."
                     $notice
-                    <div class='col-12 mt-3'><div class='form-wrapper shadow-sm p-3 rounded'>
+                    <div class='col-12 mt-3'><div class='form-wrapper form-edit p-3 rounded'>
                      <form class='form-horizontal' enctype='multipart/form-data' action='$form_link' method='post'>
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input $course_unit_hidden_input
                         <fieldset>

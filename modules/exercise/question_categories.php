@@ -81,7 +81,7 @@ if (isset($_POST['submitCat'])) {
     ));
     $tool_content .= "
     <div class='col-12'>
-        <div class='form-wrapper shadow-sm p-3 rounded'>
+        <div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' action='$form_action_url' method='post'>
                 <div class='form-group ".(Session::getError('questionCatName') ? "has-error" : "")." mt-3'>
                     <label for='questionCatName' class='col-sm-6 control-label-notes'>$langTitle:</label>

@@ -150,7 +150,7 @@ function bbb_session_form($session_id = 0) {
                                                 AND enabled = 'true' ORDER BY FIELD(enable_recordings, 'true', 'false'), weight ASC LIMIT 1")->id;
 
     $tool_content .= "
-        <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+        <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
         <fieldset>
         <div class='form-group mt-3'>

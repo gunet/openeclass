@@ -223,7 +223,7 @@ if (isset($_GET['stats_submit'])) {
     load_js('jstree3');
     $tool_content .= "
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-        <div class='form-wrapper shadow-sm p-3 rounded'>
+        <div class='form-wrapper form-edit p-3 rounded'>
                         <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='get'>
                     <fieldset>";
     $tool_content .= "<div class='form-group mt-3'><label class='col-sm-6 control-label-notes'>$langFaculty:</label>";

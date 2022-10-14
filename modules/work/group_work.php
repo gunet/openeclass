@@ -119,7 +119,7 @@ function show_assignments() {
     }
     $tool_content .= "
     <div class='col-12 mt-3'>
-            <div class='form-wrapper shadow-sm p-3 rounded'>
+            <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                 <fieldset>
                     <input type='hidden' name='file' value='" . q($_GET['submit']) . "'>

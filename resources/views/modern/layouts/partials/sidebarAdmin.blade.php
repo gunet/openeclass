@@ -6,7 +6,7 @@
 
 @if ($release_info and version_compare($release_info->release, ECLASS_VERSION) > 0)
     <div class='col-12'>
-        <div class='panel panel-info shadow-lg rounded-0 shadow-lg'>
+        <div class='panel panel-info rounded-0'>
             <div class='panel-heading text-center fs-6'>
                 {{ trans('langNewEclassVersion') }}
             </div>
@@ -23,7 +23,7 @@
 <div class='@if(count($toolArr) == 1) and ($is_power_user) col-lg-12 col-12 mt-3 @else col-lg-6 col-12 mt-3 @endif'>
     
     @if($countNewPanel == 2)
-    <div class='panel panel-admin mb-3 shadow-lg'>
+    <div class='panel panel-admin mb-3 shadow'>
         <div class='panel-heading text-center'>
             <span class='colorPalette'>{{trans('langAdministratorTools')}}</span>
         </div>
@@ -65,7 +65,7 @@
     </div>
     @endif
 
-    <div class='panel panel-admin m-auto shadow-lg'>
+    <div class='panel panel-admin m-auto shadow'>
         <div class='panel-heading text-center'>
             <span class='colorPalette'>{{ $tool_group[0]['text'] }}</span>
         </div>
@@ -89,7 +89,7 @@
     @if($countNewPanel == 1)
         @if($is_power_user or $is_departmentmanage_user)
             @if($is_admin)
-                <div class='panel panel-admin mt-3 shadow-lg'>
+                <div class='panel panel-admin mt-3 shadow'>
                     <div class='panel-heading text-center'>
                         <span class='colorPalette'>{{trans('langFaculties')}}</span>
                     </div>

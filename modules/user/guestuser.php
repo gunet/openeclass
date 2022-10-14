@@ -98,7 +98,7 @@ if (isset($_POST['submit'])) {
         $guest_info->username = $default_guest_username;
         $submit_label = $langAdd;
     }
-    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
         <div class='form-group mt-3'>

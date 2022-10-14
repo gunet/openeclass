@@ -36,7 +36,7 @@
                                 {!! $action_bar !!}
                                 
                                 <div class='col-12'>
-                                    <div class='form-wrapper shadow-sm p-3 rounded'>
+                                    <div class='form-wrapper form-edit p-3 rounded'>
                                         <form role='form' action='{{ $edit_url }}' method='post'>
 
                                                 @if(isset($glossary_item))

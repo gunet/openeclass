@@ -88,7 +88,7 @@
                                 !!}
 
                         <div class='col-12'>
-                            <div class='form-wrapper shadow-sm p-3 rounded'>
+                            <div class='form-wrapper form-edit p-3 rounded'>
                                 
                                 <form class='form-horizontal' action='{{ $postUrl }}' method='post' onsubmit="return checkrequired(this, 'unittitle')">
                                     @if ($unitId)

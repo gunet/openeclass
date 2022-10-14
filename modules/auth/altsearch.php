@@ -557,7 +557,7 @@ function user_info_form() {
         $amInput = '<input type="text" class="form-control" id="am_id" name="am" maxlength="20"' .
             set('am') . ' placeholder="' . q($amMessage) . '">';
     }
-    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='post'>
         <fieldset>
         <div class='form-group mt-3'>

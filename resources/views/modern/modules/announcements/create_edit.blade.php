@@ -90,7 +90,7 @@
                                 @endif
                         
                                 <div class='col-12'>
-                                    <div class='form-wrapper shadow-sm p-3 rounded'>    
+                                    <div class='form-wrapper form-edit p-3 rounded'>    
                                             <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">
                                                     
                                                     <div class="form-group {{ $antitle_error }}">

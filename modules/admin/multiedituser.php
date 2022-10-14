@@ -301,7 +301,7 @@ if (isset($_POST['submit'])) {
     $tool_content .= "
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$infoText</div></div>
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-        <div class='form-wrapper shadow-sm p-3 rounded'>
+        <div class='form-wrapper form-edit p-3 rounded'>
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
             <fieldset>
                 $monthsField

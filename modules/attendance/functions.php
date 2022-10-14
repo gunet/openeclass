@@ -148,7 +148,7 @@ function register_user_presences($attendance_id, $actID) {
 
     if ($resultUsers) {
         //table to display the users
-        $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' id='user_attendances_form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($actID) . "'>
         <table id='users_table{$course_id}' class='announcements_table custom_list_order'>
             <thead class='notes_thead'>
@@ -485,7 +485,7 @@ function add_attendance_other_activity($attendance_id) {
     $date_error = Session::getError('date');
     $tool_content .= "
     <div class='col-sm-12'>
-            <div class='form-wrapper shadow-sm p-3 rounded'>
+            <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id'>
                     <fieldset>";
                     if (isset($_GET['modify'])) { // modify an existing attendance activity
@@ -738,7 +738,7 @@ function new_attendance() {
     $limit_error  = Session::getError('limit');
     $limit = Session::has('limit') ? Session::get('limit') : '';
 
-    $tool_content .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
             <div class='form-group mt-3'>
                     <label class='col-12 control-label-notes'>$langNewAttendance2</label></div>
@@ -1015,7 +1015,7 @@ function attendance_settings($attendance_id) {
     $tool_content .= "
 
     <div class='col-sm-12'>
-            <div class='form-wrapper shadow-sm p-3 rounded'>
+            <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id'>
                     <div class='form-group".($title_error ? " has-error" : "")." mt-3'>
                         <label class='col-12 control-label-notes'>$langTitle</label>
@@ -1115,7 +1115,7 @@ function user_attendance_settings($attendance_id) {
     $tool_content .= "
     
     <div class='col-sm-12'>
-            <div class='form-wrapper shadow-sm p-3 rounded'>
+            <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id&editUsers=1'>
                     <div class='form-group mt-3'>
                         <label class='col-12 text-secondary'><span class='help-block'>$langAttendanceInfoForUsers</span></label>

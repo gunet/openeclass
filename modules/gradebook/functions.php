@@ -157,7 +157,7 @@ function new_gradebook() {
     $degreerange_error  = Session::getError('degreerange');
     $degreerange = Session::has('degreerange') ? Session::get('degreerange') : 0;
     $tool_content .=
-        "<div class='form-wrapper shadow-sm p-3 rounded'>
+        "<div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&newGradebook=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <div class='form-group".($title_error ? " has-error" : "")."'>
                     <div class='col-12'>
@@ -339,7 +339,7 @@ function gradebook_settings($gradebook_id) {
     // update gradebook title
     $tool_content .= "
         <div class='col-sm-12'>
-            <div class='form-wrapper shadow-sm p-3 rounded'>
+            <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id) . "'>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
                         <label class='col-12 control-label-notes'>$langTitle</label>
@@ -444,7 +444,7 @@ function user_gradebook_settings() {
     $tool_content .= "
 
         <div class='col-sm-12'>
-            <div class='form-wrapper shadow-sm p-3 rounded'>
+            <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook->id) . "&editUsers=1'>
                     <div class='form-group'>
                         <label class='col-12'><span class='help-block'>$langGradebookInfoForUsers</span></label>
@@ -1139,7 +1139,7 @@ function register_user_grades($gradebook_id, $actID) {
                                                             ORDER BY surname,name", $gradebook_id, $course_id);
 
     if ($resultUsers) {
-        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' id='user_grades_form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($actID) . "'>
         <div class='col-12'>
         <div class='table-responsive'>
@@ -1433,7 +1433,7 @@ function add_gradebook_other_activity($gradebook_id) {
     $date_error = Session::getError('date');
     $tool_content .= "
         <div class='col-sm-12'>
-            <div class='form-wrapper shadow-sm p-3 rounded'>
+            <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "'>";
                         if (isset($_GET['modify'])) { // modify an existing gradebook activity
                             $id  = filter_var(getDirectReference($_GET['modify']), FILTER_VALIDATE_INT);

@@ -386,7 +386,7 @@ if (isset($_GET['showPost'])) { //show comments case
 
         $tool_content .= '<div class="row">
             <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <div class="form-wrapper shadow-sm p-3 rounded">
+                <div class="form-wrapper form-edit p-3 rounded">
                     <form id="wall_form" method="post" action="" enctype="multipart/form-data">
                         <fieldset>
                             <div class="form-group">

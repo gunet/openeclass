@@ -427,7 +427,7 @@ if (isset($_POST['optionsSave'])) {
     }
     @$tool_content .= "
     <div class='col-sm-12 mb-3'>
-    <div class='form-wrapper shadow-sm p-3 rounded'>
+    <div class='form-wrapper form-edit p-3 rounded'>
         <div class='row p-2 margin-bottom-fat'>
             <div class='col-sm-4'>
                 <strong class='control-label-notes'>$langActiveTheme:</strong>
@@ -466,7 +466,7 @@ $tool_content .= "
   <form id='theme_options_form' class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' enctype='multipart/form-data' method='post'>
   <div class='tab-content'>
     <div role='tabpanel' class='tab-pane fade show active' id='generalsetting'>
-        <div class='form-wrapper shadow-sm p-3 rounded'>
+        <div class='form-wrapper form-edit p-3 rounded'>
             <legend class='theme_options_legend'>$langLayoutConfig</legend>
             <div class='form-group'>
                 <label class='col-sm-6 control-label-notes'>$langLayout:</label>
@@ -621,7 +621,7 @@ $tool_content .= "
         </div>
     </div>
     <div role='tabpanel' class='tab-pane fade' id='navsettings'>
-        <div class='form-wrapper shadow-sm p-3 rounded'>
+        <div class='form-wrapper form-edit p-3 rounded'>
             <legend class='theme_options_legend'>$langBgColorConfig</legend>
             <div class='form-group mt-3'>
               <label for='leftNavBgColor' class='col-sm-6 control-label-notes'>$langBgColor:</label>

@@ -570,7 +570,7 @@ switch ($action) {
             $userInfo = user_get_data($newEditor);
             $newEditorStr = q($userInfo->givenname) . "&nbsp;" . q($userInfo->surname);
 
-            $tool_content .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>";
+            $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>";
             $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>
                              ". sprintf($langWikiDifferencePattern, $oldTime, $oldEditorStr, $newTime, $newEditorStr) ."
                              </div></div>
@@ -760,7 +760,7 @@ switch ($action) {
             if (!isset($content)) {
                 $content = '';
             }
-            $tool_content .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>";
+            $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>";
             $tool_content .= claro_disp_wiki_preview($wikiRenderer, $wiki_title, $content);
             $tool_content .= claro_disp_wiki_preview_buttons($wikiId, $wiki_title, $content, $changelog);
             $tool_content .= "</div></div>";
@@ -934,7 +934,7 @@ switch ($action) {
     {
         $tool_content .= "
         <div class='col-12'>
-            <div class='form-wrapper shadow-sm p-3 rounded'>
+            <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='". htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>
                     <input type='hidden' name='action' value='exSearch'>
                     <div class='form-group mt-3'>

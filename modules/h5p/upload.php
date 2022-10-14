@@ -41,7 +41,7 @@ $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langImpo
 
 $tool_content .= "
     <div class='col-sm-12'>
-        <div class='form-wrapper shadow-sm p-3 rounded'>
+        <div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' action='save.php' method='post' enctype='multipart/form-data'>
                 <div class='form-group mt-3'>
                     <label for='userFile' class='col-sm-6 control-label-notes'>$langPathUploadFile:</label>

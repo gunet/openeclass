@@ -60,7 +60,7 @@
                         {!! $backButton !!}
 
                         <div class='col-12'>
-                            <div class='form-wrapper shadow-sm p-3 mt-2 bg-body rounded'>
+                            <div class='form-wrapper form-edit p-3 mt-2 bg-body rounded'>
                                 <form class='form-horizontal' role='form'>
                                     <div class='form-group'>
                                         <label class='col-sm-4 control-label-notes'>{{ trans('langQuotaUsed') }}:</label>

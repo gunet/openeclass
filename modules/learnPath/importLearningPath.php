@@ -1080,7 +1080,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     $tool_content .="
         <div class='col-12'>
             
-                <div class='form-wrapper shadow-sm p-3 rounded'>
+                <div class='form-wrapper form-edit p-3 rounded'>
                     <h4 class='form-heading'>$langImport</h4>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
                         <div class='form-group mt-3'>

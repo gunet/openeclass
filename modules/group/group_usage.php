@@ -120,7 +120,7 @@ if ($type == 'duration') {
         $u_date_end = $date_end->format('Y-m-d');
         $user_date_end = $date_end->format('d-m-Y');        
     }    
-    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
 
 
 

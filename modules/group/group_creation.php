@@ -65,7 +65,7 @@ $group_quantity_value = Session::has('group_quantity') ? Session::get('group_qua
 
 if (isset($_GET['all'])) {
     $tool_content .= "
-    <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
         <div class='form-group".(Session::getError('group_quantity') ? " has-error":"")." mt-3'>
@@ -139,7 +139,7 @@ if (isset($_GET['all'])) {
     } else {
             $tool_content_tutor = display_user($tutors);
     }
-    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
         <div class='form-group".(Session::getError('group_name') ? " has-error" : "")." mt-3'>

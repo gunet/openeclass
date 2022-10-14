@@ -15,7 +15,7 @@
 
 #cal-header .fa-chevron-right{ color:white; }
 
-.container_fluid_calendar{ border-radius: 15px; height:auto; }
+.container_fluid_calendar{ border-radius: 15px; height:auto; background-color: white ;}
 
 .cal-month-day{ margin-left: 10px; font-size: 13px; }
 

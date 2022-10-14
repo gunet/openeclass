@@ -109,7 +109,7 @@ if (isset($_GET['add'])) {
     $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langAskUser</div></div>
 
     <div class='col-12'>
-                <div class='form-wrapper shadow-sm p-3 rounded'>
+                <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <fieldset>
 

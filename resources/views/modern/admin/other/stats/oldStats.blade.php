@@ -51,7 +51,7 @@
                     </div>
 
                     <div class='col-lg-6 col-12'>
-                        <div class="form-wrapper shadow-sm p-3 rounded">
+                        <div class="form-wrapper form-edit p-3 rounded">
                             
                             <form class="form-horizontal" role="form" method="post">
                                 <div class='input-append date form-group mt-3' data-date='{{ $user_date_start }}' data-date-format='dd-mm-yyyy'>

@@ -146,7 +146,7 @@ $tool_content .= "
 $questionList = $objExercise->selectQuestionList();
 $tool_content .= "
     <div class='col-sm-12 mt-4'>
-        <div class='form-wrapper shadow-sm p-2 rounded'>
+        <div class='form-wrapper form-edit p-2 rounded'>
             <h4 class='text-center control-label-notes pt-2'>$langQuestions</h4>
         </div>
     </div>

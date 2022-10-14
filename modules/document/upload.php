@@ -128,7 +128,7 @@ if ($can_upload) {
     }
     
             
-    $tool_content .= "<div class='form-wrapper shadow-sm p-3 rounded'>
+    $tool_content .= "<div class='form-wrapper form-edit p-3 rounded'>
 
         <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>
           <input type='hidden' name='uploadPath' value='$uploadPath' />

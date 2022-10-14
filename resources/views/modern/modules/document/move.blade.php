@@ -1,5 +1,5 @@
 
-        <div class='form-wrapper shadow-sm p-3 mt-2 rounded'>
+        <div class='form-wrapper form-edit p-3 mt-2 rounded'>
             <form class='form-horizontal' role='form' method='post' action='{{ $base_url }}'>
                 <input type='hidden' name='movePath' value='{{ $file }}'>
                 <fieldset>

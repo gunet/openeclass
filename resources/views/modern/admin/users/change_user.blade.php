@@ -40,7 +40,7 @@
                     </div>
 
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper shadow-sm p-3 rounded'>
+                        <div class='form-wrapper form-edit p-3 rounded'>
                         
                         <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             

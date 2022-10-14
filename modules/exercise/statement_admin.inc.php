@@ -193,7 +193,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     enableCheckFileSize();
     $tool_content .= "
 
-    <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>
                   
             

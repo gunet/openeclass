@@ -102,7 +102,7 @@ if (isset($_GET['rid'])) {
             $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langCourseUserRegError</div></div>";
         }
     } else {
-        $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>";
+        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>";
         $tool_content .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
         <div class='col-sm-12'><label class='control-label-notes'>$langReasonReject</label></div>

@@ -87,7 +87,7 @@ $tool_content .= "<div class='row'>
             <div class='col-12 h-100 left-form'></div>
         </div>
 <div class='col-lg-6 col-12'>";
-$tool_content .= "<div class='form-wrapper shadow-sm p-3 rounded'>";
+$tool_content .= "<div class='form-wrapper form-edit p-3 rounded'>";
 $tool_content .= "<form class='form-horizontal' role='form' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>";
 $tool_content .= "<fieldset>";
 

@@ -260,7 +260,7 @@ if ($is_editor) {
             $startdate = date('d-m-Y H:i', strtotime('now'));
             $enddate = '';
         } 
-        $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>";
+        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>";
         $tool_content .= "<form id='agendaform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <input type='hidden' id = 'id' name='id' value='$id'>"
                 . "<input type='hidden' name='rep' id='rep' value='$applytogroup'>";

@@ -110,7 +110,7 @@ hContent;
         </div>
     
         <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-            <div class='form-wrapper shadow-sm p-3 rounded'>
+            <div class='form-wrapper form-edit p-3 rounded'>
                 <form role='form' class='form-horizontal' method='post' action='index.php?course=" . $course_code . "'>
                 <input type='hidden' name='addcommit' value='1'>
                 <fieldset>

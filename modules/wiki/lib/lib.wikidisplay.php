@@ -55,7 +55,7 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
     $out = "
             <h4>$localtitle</h4>
             <br>
-            <div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+            <div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' method='POST' action='$script' name='editform' id='editform'>";
 
     if ($showWikiToolBar === true) {
@@ -224,7 +224,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
               'level' => 'primary-label',)
     ));
 
-    $form .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    $form .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' method='POST' id='wikiProperties' action='$script'>
                     <fieldset>
                         <input type='hidden' name='wikiId' value='$wikiId'>

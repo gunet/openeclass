@@ -171,7 +171,7 @@ if (isset($_GET['mid'])) {
             }else{
                 $out .= "<div class='col-12'>";
             }
-            $out .= "<div class='form-wrapper shadow-sm p-3 rounded mt-3' id='replyBox' style='display:none;'>";
+            $out .= "<div class='form-wrapper form-edit p-3 rounded mt-3' id='replyBox' style='display:none;'>";
             if ($course_id == 0) {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
                 if ($msg->course_id != 0) {//thread belonging to a course viewed from the central ui
@@ -298,7 +298,7 @@ if (isset($_GET['mid'])) {
             }else{
                 $out .= "<div class='col-12'>";
             }
-            $out .= "<div class='form-wrapper shadow-sm p-3 rounded mt-3' id='forwardBox' style='display:none;'>";
+            $out .= "<div class='form-wrapper form-edit p-3 rounded mt-3' id='forwardBox' style='display:none;'>";
             if ($course_id == 0) {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
                 if ($msg->course_id != 0) { // thread belonging to a course viewed from the central ui

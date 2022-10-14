@@ -1,6 +1,6 @@
 
     <div class='col-12'>
-        <div class='form-wrapper shadow-sm p-3 mt-2 rounded'>
+        <div class='form-wrapper form-edit p-3 mt-2 rounded'>
             <form action='{{ $base_url }}' method='post' class='form-horizontal' role='form'>
                 {!! $group_hidden_input !!}
                 <input type='hidden' name='newDirPath' value='{{ $curDirPath }}'>

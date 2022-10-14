@@ -201,7 +201,7 @@ if ($submit) {
         $pdate = format_locale_date(strtotime($res->date_open), 'short');
     }
 
-    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
         <fieldset>
         <div class='form-group mt-3'>

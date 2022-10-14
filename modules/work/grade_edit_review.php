@@ -145,7 +145,7 @@ function show_form($id, $sid, $assign) {
 					)
 			));
 
-		$tool_content .= "<div class='col-12 mt-3'><div class='form-wrapper shadow-sm p-3 rounded'>
+		$tool_content .= "<div class='col-12 mt-3'><div class='form-wrapper form-edit p-3 rounded'>
 			<form class='form-horizontal' role='form' method='post' action='$form_link'>
                 <input type='hidden' name='assignment' value='$id'>
                 <input type='hidden' name='submission' value='$sid'>			

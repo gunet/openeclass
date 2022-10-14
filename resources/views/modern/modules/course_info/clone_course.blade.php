@@ -104,7 +104,7 @@
 
                        
                         <div class='col-sm-12'>
-                            <div class='form-wrapper shadow-sm p-3 rounded' >
+                            <div class='form-wrapper form-edit p-3 rounded' >
                                 <form class='form-horizontal' role='form' action='{{ $formAction }}' method='post' onsubmit='return validateNodePickerForm();' >
 
                                 <div class='form-group mt-3'>

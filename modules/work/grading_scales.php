@@ -146,7 +146,7 @@ if (isset($_GET['scale_id'])) {
     $tool_content .= "
         
             <div class='col-12 mt-3'>
-                <div class='form-wrapper shadow-sm p-3 rounded'>
+                <div class='form-wrapper form-edit p-3 rounded'>
                     <form class='form-horizontal' role='form' data-bs-toggle='validator' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='scales_form'>
                     <fieldset>
                         $hidden_input

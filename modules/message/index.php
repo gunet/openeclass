@@ -209,7 +209,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                 <div class='col-12 h-100 left-form'></div>
             </div>
             <div class='col-lg-6 col-12'>
-                <div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' id='newmsg' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+                <div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' id='newmsg' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } elseif ($course_id == 0 && $type == 'cm') {
         $tool_content .= "
         <div class='row'>
@@ -218,10 +218,10 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
             </div>
             <div class='col-lg-6 col-12'>
         ";
-        $tool_content .= "<div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } else {
         $type = 'cm'; //only course messages are allowed in the context of a course
-        $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     }
     $tool_content .= "
     

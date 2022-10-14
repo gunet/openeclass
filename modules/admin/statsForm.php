@@ -52,7 +52,7 @@ $statsIntervalOptions = '<option value="daily"   ' . (($u_interval == 'daily') ?
         '<option value="yearly"  ' . (($u_interval == 'yearly') ? ('selected') : ('')) . '>' . $langYearly . "</option>" .
         '<option value="summary" ' . (($u_interval == 'summary') ? ('selected') : ('')) . '>' . $langSummary . "</option>";
 
-$tool_content .= '<div class="col-12"><div class="form-wrapper shadow-sm p-3 rounded"><form class="form-horizontal" role="form" method="post">';   
+$tool_content .= '<div class="col-12"><div class="form-wrapper form-edit p-3 rounded"><form class="form-horizontal" role="form" method="post">';   
 $tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
     <label class='col-sm-6 control-label-notes'>$langStartDate:</label>
         <div class='col-10 col-sm-9'>               

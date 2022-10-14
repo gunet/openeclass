@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
       UPLOAD FORM
       -------------------------------------- */
     $tool_content .= 
-        "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+        "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&importIMSQTI=yes' method='post'>
                 <input type='hidden' name='qtiFormId' value='" . uniqid('') . "' >
                     <h4>$langImport</h4>

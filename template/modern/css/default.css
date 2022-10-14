@@ -27,7 +27,7 @@ body{ background-color: #eaeaea; font-family: 'FontAwesome','Open Sans', Arial, 
 span{font-size: 14px;}
 
 /* margin tag <p> for tables and panels */
-table p, .panel p, .margin-bottom-fat.form-wrapper.shadow-sm.p-2.mb-3.rounded p {margin-bottom: 0px;}
+table p, .panel p, .margin-bottom-fat.form-wrapper.form-edit.p-2.mb-3.rounded p {margin-bottom: 0px;}
 .panel .table-responsive p {margin-bottom: 10px;}
 
 @media (max-width:1023px){ body{ font-size:15px; } select{ overflow-y:auto !important; } }
@@ -183,16 +183,16 @@ input:-webkit-autofill:active {
 .left-form{ background-repeat: no-repeat; background-size: cover; background-image: url(../images/form-wrapper-bg.jpg); }
 
 /* dates checkboxes inside form-wrapper */
-.form-wrapper.shadow-sm .input-group-addon input[type=checkbox]{ margin-top:10px; }
+.form-wrapper.form-edit .input-group-addon input[type=checkbox]{ margin-top:10px; }
 
 
 /********************************* FIRST CHOICE OF INPUTS FORMS *******************************/
 /**********************************************************************************************/
-.form-wrapper.shadow-sm{ border: solid 15px #f2f2f2; background: white; }
-.form-wrapper.shadow-sm { border:0px !important; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2) !important; }
-@media(max-width:767px){ .form-wrapper.shadow-sm{overflow-y: auto;} }
+.form-wrapper.form-edit{ border: solid 15px #f2f2f2; background: white; }
+.form-wrapper.form-edit { border:0px; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); }
+@media(max-width:767px){ .form-wrapper.form-edit{overflow-y: auto;} }
 
-.form-wrapper.shadow-sm textarea{ background: white; border: solid 1px #f1f1f1; margin-top:10px;}
+.form-wrapper.form-edit textarea{ background: white; border: solid 1px #f1f1f1; margin-top:10px;}
 
 .form-wrapper input[type=text], .form-wrapper input[type=password], .form-wrapper input[type=number], .form-wrapper .form-select{
   border-radius: 0px;
@@ -550,7 +550,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
 
-  .calendar_announce_message_col{ background: white; border-top-right-radius: 15px; border-bottom-right-radius:15px;}
+  .calendar_announce_message_col{ background-color: #f8f9fa; border-top-right-radius: 15px; border-bottom-right-radius:15px;}
   
   .BtnCourseRegister{
     width:200px;
@@ -575,7 +575,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .collapse-menu-button:hover{ cursor: pointer; }
 
   .user-courses {
-    background-color: white;
+    background-color: #f8f9fa;
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
     padding-right: 15px;
@@ -583,7 +583,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     height:auto;
   }
   .user-details{
-    background-color: white;
+    background-color: #f8f9fa;
     border-radius: 15px;
     padding-right: 15px;
     padding-left: 15px;
@@ -751,7 +751,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .cardLogin{ -webkit-box-shadow: 0 0 30px black; box-shadow: 0 0 30px black; background-color: rgba(255, 255, 255, 0.776); }
 
-  .Announcements-Homepage{ background: white; }
+  .Announcements-Homepage{ background-color: #f8f9fa; }
 
   /******************************************************************************************************/
   /******************************************************************************************************/
@@ -975,7 +975,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   @media (max-width:1023px){ .control-label-notes{ font-size: 16px; } }
 
   /* first choice of inputs forms */
-  .form-wrapper.shadow-sm .control-label-notes{ color:#1d4e89; font-weight: bold; }
+  .form-wrapper.form-edit .control-label-notes{ color:#1d4e89; font-weight: bold; }
 
   /* first choice of inputs forms */
   .submitAdminBtn, .cancelAdminBtn{ border-radius: 35px !important; }
@@ -1031,6 +1031,8 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .modal .close{ background-color: #dc3545; border: 0; border-radius: 0px; color:white; width:35px; height:30px; }
 
   .modal-title{ font-size: 15px; }
+
+  .modal-body{ background-color: #f8f9fa;}
 
   .rating{ margin-bottom: 0px !important; }
 
@@ -1120,10 +1122,10 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .panel-admin{
     border-radius:15px;
-    border:solid 1px #DCDCDC;
+    /* border:solid 1px #DCDCDC; */
 
     border:0px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
   }
   .panel-admin>.panel-heading{
     background: #1d4e89;
@@ -1151,6 +1153,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     padding:10px;
     border-bottom-right-radius: 14px;
     border-bottom-left-radius: 14px;
+    background-color: white;
   }
   .panel-admin:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
     border-top-left-radius: 15px;
@@ -1162,12 +1165,12 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .panel-primary,.panel-action-btn-primary{
     border-radius:15px;
     background: #337ab7;
-    border:solid 1px #337ab7;
+    /* border:solid 1px #337ab7; */
     border-color: #337ab7;
 
 
     border:0px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
 
   }
   .panel-primary>.panel-heading, .panel-action-btn-primary>.panel-heading{
@@ -1214,11 +1217,11 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .panel-success{
     border-radius:15px;
     background: #7dcfb6;
-    border:solid 1px #7dcfb6;
+    /* border:solid 1px #7dcfb6; */
 
 
     border:0px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
 
   }
   .panel-success>.panel-heading{
@@ -1256,13 +1259,25 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   }
 
   .panel-default,.panel-action-btn-default{
-    border-radius: 17px;
+    border-radius: 15px;
     /* border:solid 2px #F5F5F5; */
-    border: solid 2px #f2f2f2;
+    
 
 
     border:0px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); */
+  }
+  .panel-default:not(:has(.panel-heading)){
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  }
+  .panel-action-btn-default:not(:has(.panel-heading)){
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  }
+  .panel-default:has(.panel-heading){
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  }
+  .panel-action-btn-default:has(.panel-heading){
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
   }
   .panel-default>.panel-heading, .panel-action-btn-default>.panel-heading {
     color: #333;
@@ -1320,11 +1335,11 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .panel-info{
     border-radius:15px;
     background: #00b2ca;
-    border:solid 1px #00b2ca;
+    /* border:solid 1px #00b2ca; */
 
 
     border:0px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
   }
   .panel-info>.panel-heading{
     border-top-left-radius: 15px;
@@ -1363,11 +1378,11 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .panel-danger{
     border-radius:15px;
     background: #dc3545;
-    border:solid 1px #dc3545;
+    /* border:solid 1px #dc3545; */
 
 
     border:0px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
   }
   .panel-danger>.panel-heading{
     border-top-left-radius: 15px;
@@ -1417,7 +1432,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .panel-heading:has(.btn-group) .panel-title{ padding-bottom: 6px; padding-top: 5px; }
 
-  .panel-body,.media-body{ padding:15px; background: #ffffff; }
+  .panel-body,.media-body{ padding:15px; background-color:white; }
 
   @media(max-width:767px){.panel-body{overflow-y: auto;}}
 

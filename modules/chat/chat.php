@@ -154,7 +154,7 @@ if (!$conference_activity) {
         $iframe_file = "messageList.php?course=$course_code&amp;conference_id=$conference_id";
     }
     $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langTypeMessage</div></div>
-       <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+       <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
        <form name='chatForm' action='$action_form' method='POST' target='messageList' onSubmit='return prepare_message();'>
        <input type='hidden' name='course' value='$course_code'>
        <input type='hidden' name='conference_id' value='$conference_id'>

@@ -144,7 +144,7 @@ function show_post_form() {
 
         $tool_content .= '
             <div class="col-12">
-                <div class="form-wrapper shadow-sm p-3 rounded">
+                <div class="form-wrapper form-edit p-3 rounded">
                     <form id="wall_form" method="post" action="'.$urlServer.'modules/wall/index.php?course='.$course_code.'" enctype="multipart/form-data">
                         <fieldset> 
                             <div class="form-group">

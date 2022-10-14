@@ -365,7 +365,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         <div class='col-12 h-100 left-form'></div>
     </div>
     <div class='col-lg-6 col-12'>
-    <div class='form-wrapper shadow-sm p-3 rounded'>
+    <div class='form-wrapper form-edit p-3 rounded'>
         <form id='myeventform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' style='display:inline'>
         <input type='hidden' id='id' name='id' value='$eventToModify'>
         <input type='hidden' name='rep' id='rep' value='$applytogroup'>

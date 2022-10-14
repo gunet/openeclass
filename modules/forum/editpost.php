@@ -154,7 +154,7 @@ if (isset($_POST['submit'])) {
 
 
     $tool_content .= "
-        <div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+        <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                 <input type='hidden' name='post_id' value='$post_id'>
                 <input type='hidden' name='topic' value='$topic_id'>

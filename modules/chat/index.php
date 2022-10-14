@@ -83,7 +83,7 @@ if ($is_editor) {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 
-        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>";
+        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
         $tool_content .= "<div class='form-group mt-3'>";
         $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>";
@@ -250,7 +250,7 @@ if ($is_editor) {
         $conf = Database::get()->querySingle("SELECT * FROM conference WHERE conf_id = ?d", $conf_id);
         $textarea = rich_text_editor('description', 4, 20, $conf->conf_description);
 
-        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper shadow-sm p-3 rounded'>";
+        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
         $tool_content .= "<fieldset>";
         $tool_content .= "<div class='form-group mt-3'>";

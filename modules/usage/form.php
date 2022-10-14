@@ -84,7 +84,7 @@ else{
 
 
 $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-5'>";
-$tool_content .= '<div class="form-wrapper shadow-sm p-3 rounded" data-placement="top">';
+$tool_content .= '<div class="form-wrapper form-edit p-3 rounded" data-placement="top">';
 $tool_content .= '<div class="form-group" data-placement="top">';
 
 $endDate_obj = new DateTime();

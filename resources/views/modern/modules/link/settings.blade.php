@@ -56,7 +56,7 @@
                         @endif
 
                         <div class='col-sm-12'>
-                            <div class='form-wrapper shadow-sm p-3 rounded'>
+                            <div class='form-wrapper form-edit p-3 rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='index.php?course={{ $course_code }}'>
                                 <fieldset>                 
                                              

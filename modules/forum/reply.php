@@ -200,7 +200,7 @@ if (isset($_POST['submit'])) {
     }
 
     $reply = '';
-    $tool_content .= "<div class='col-12'><div class='form-wrapper shadow-sm p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' action='$form_url' method='post' enctype='multipart/form-data'>
             <input type='hidden' name='parent_post' value='$parent_post'>
             <div class='form-group mt-3'>

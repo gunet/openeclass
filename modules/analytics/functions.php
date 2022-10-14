@@ -834,7 +834,7 @@ function edit_analytics_settings ($analytics_id = 0)
     
     $tool_content .= "
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-    <div class='form-wrapper shadow-sm p-3 rounded'>
+    <div class='form-wrapper form-edit p-3 rounded'>
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <div class='form-group mt-3'>
             <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
@@ -949,7 +949,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
 
     $tool_content .="
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-    <div class='form-wrapper shadow-sm p-3 rounded'><form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+    <div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <h4 class='fs-4 control-label-notes text-center'>$elementTypeTitle</h4>
         <input type='hidden' name='analytics_id' value='$analytics_id'>
         <input type='hidden' name='analytics_element_id' value='$analytics_element_id'>

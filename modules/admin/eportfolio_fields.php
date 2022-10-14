@@ -48,7 +48,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                         <div class='col-12 h-100 left-form'></div>
                     </div>
     <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper shadow-sm p-3 rounded'>";
+                      <div class='form-wrapper form-edit p-3 rounded'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
     $tool_content .= "<div class='form-group'>";
@@ -98,7 +98,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                         <div class='col-12 h-100 left-form'></div>
                     </div>
     <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper shadow-sm p-3 rounded'>";
+                      <div class='form-wrapper form-edit p-3 rounded'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<input type='hidden' name='cat_id' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<fieldset>";
@@ -132,7 +132,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                         <div class='col-12 h-100 left-form'></div>
                     </div>
     <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper shadow-sm p-3 rounded'>";
+                      <div class='form-wrapper form-edit p-3 rounded'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
     $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
@@ -167,7 +167,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                         <div class='col-12 h-100 left-form'></div>
                     </div>
     <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper shadow-sm p-3 rounded'>";
+                      <div class='form-wrapper form-edit p-3 rounded'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
     $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
@@ -337,7 +337,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                         <div class='col-12 h-100 left-form'></div>
                     </div>
         <div class='col-lg-6 col-12'>
-                          <div class='form-wrapper shadow-sm p-3 rounded'>";
+                          <div class='form-wrapper form-edit p-3 rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
         $tool_content .= "<fieldset>";
         $tool_content .= "<input type='hidden' name='field_id' value='" . getIndirectReference($fieldid) . "'>";

@@ -211,7 +211,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
         $tool_content .= "
             
                 <div class='col-12'>
-                    <div class='form-wrapper shadow-sm p-3 rounded'>
+                    <div class='form-wrapper form-edit p-3 rounded'>
                         <form class='form-horizontal' action='' role='form' method='post'>
                             <fieldset>                               
                                 <div class='form-group mt-3'>
@@ -399,7 +399,7 @@ if ($action == "createPost") {
             ";
         }
         $tool_content .= "
-        <div class='form-wrapper shadow-sm p-3 rounded'>
+        <div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
             <fieldset>
                 
@@ -518,7 +518,7 @@ if ($action == "editPost") {
             }
             $tool_content .= "
 
-            <div class='form-wrapper shadow-sm p-3 rounded'>
+            <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
                 <fieldset>
 
@@ -732,7 +732,7 @@ if ($action == "showPost") {
                                 </h3>
                             </div>
                             <div class='panel-body ps-3 panel-body-blog'><button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($post->getTime())). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
-                            <div class='panel-footer ps-3 panel-footer-blog rounded-0'>
+                            <div class='panel-footer ps-3 panel-footer-blog rounded-0 pb-4'>
 
                                 <div class='row'>
                                     <div class='col-sm-6'>$rating_content</div>
@@ -860,7 +860,7 @@ if ($action == "showBlog") {
                                     <button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($post->getTime())) . "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     $comment_content
                                 </div>
-                                <div class='panel-footer panel-footer-blog rounded-0'>
+                                <div class='panel-footer panel-footer-blog rounded-0 pb-4'>
                                     <div class='row'>
                                         <div class='col-sm-6'>$rating_content</div>
                                         <div class='col-sm-6 text-end'>$sharing_content</div>

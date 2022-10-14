@@ -60,7 +60,7 @@
                     </div>
 
                     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class='form-wrapper shadow-sm p-3 mt-5 rounded'>
+                        <div class='form-wrapper form-edit p-3 mt-5 rounded'>
                             {!! $action_bar !!}
                             <form class='form-horizontal' role='form' method='post' action=' {{ $form_url }}'>
                                 {{ showSecondFactorChallenge() }}
