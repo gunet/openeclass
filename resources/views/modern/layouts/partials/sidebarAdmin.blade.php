@@ -37,57 +37,102 @@
                         </li>
                     </div>
                     <div class='col-md-6 col-12'>
-                        <li class="list-group-item border-0 admin-list-group">
-                            <a href="searchcours.php" class='list-group-item'>
-                                <div class='d-inline-flex'>
-                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                    <span class='toolAdminText'>{{ trans('langSearchCourse') }}</span> 
-                                </div>     
-                            </a>
+                        <li class="list-group-item border-0 admin-list-group @if($is_admin or $is_departmentmanage_user or $is_power_user) opacity-100 @else opacity-help @endif">
+                            @if($is_admin or $is_departmentmanage_user or $is_power_user)
+                                <a  href="searchcours.php" class='list-group-item'>
+                                    <div class='d-inline-flex'>
+                                        <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
+                                        <span class='toolAdminText'>{{ trans('langSearchCourse') }}</span> 
+                                    </div>     
+                                </a>
+                            @else
+                                <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='list-group-item'>
+                                    <div class='d-inline-flex'>
+                                        <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
+                                        <span class='toolAdminText'>{{ trans('langSearchCourse') }}</span> 
+                                    </div>     
+                                </a>
+                            @endif
                         </li>
                     </div>
                 </div>
                 <div class='row'>
                     <div class='col-md-6 col-12'>
-                        <li class="list-group-item border-0 admin-list-group">
+                        <li class="list-group-item border-0 admin-list-group @if(!$is_admin) opacity-help @endif">
+                            @if($is_admin)
                             <a href="hierarchy.php" class='list-group-item'>
                                 <div class='d-inline-flex'>
                                     <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
                                     <span class='toolAdminText'>{{ trans('langHierarchy') }}</span>  
                                 </div>    
                             </a>
+                            @else
+                            <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='list-group-item'>
+                                <div class='d-inline-flex'>
+                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
+                                    <span class='toolAdminText'>{{ trans('langHierarchy') }}</span>  
+                                </div>    
+                            </a>
+                            @endif
                         </li>
                     </div>
                     <div class='col-md-6 col-12'>
-                        <li class="list-group-item border-0 admin-list-group">
-                            <a href="eclassconf.php" class='list-group-item'>
+                        <li class="list-group-item border-0 admin-list-group @if(!$is_admin) opacity-help @endif">
+                             @if($is_admin)
+                             <a href="eclassconf.php" class='list-group-item'>
                                 <div class='d-inline-flex'>
                                     <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
                                     <span class='toolAdminText'>{{ trans('langConfig') }}</span>   
                                 </div>   
                             </a>
+                            @else
+                            <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='list-group-item'>
+                                <div class='d-inline-flex'>
+                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
+                                    <span class='toolAdminText'>{{ trans('langConfig') }}</span>   
+                                </div>   
+                            </a>
+                            @endif
                         </li>
                     </div>
                 </div>
                 <div class='row'>
                     <div class='col-md-6 col-12'>
-                        <li class="list-group-item border-0 admin-list-group">
+                        <li class="list-group-item border-0 admin-list-group @if(!$is_admin) opacity-help @endif">
+                            @if($is_admin)
                             <a href="theme_options.php" class='list-group-item'>
                                 <div class='d-inline-flex'>
                                     <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
                                     <span class='toolAdminText'>{{ trans('langThemeSettings') }}</span>  
                                 </div>    
                             </a>
+                            @else
+                            <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='list-group-item'>
+                                <div class='d-inline-flex'>
+                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
+                                    <span class='toolAdminText'>{{ trans('langThemeSettings') }}</span>  
+                                </div>    
+                            </a>
+                            @endif
                         </li>
                     </div>
                     <div class='col-md-6 col-12'>
-                        <li class="list-group-item border-0 admin-list-group">
+                        <li class="list-group-item border-0 admin-list-group @if(!$is_admin) opacity-help @endif">
+                            @if($is_admin)
                             <a href="extapp.php" class='list-group-item'>
                                 <div class='d-inline-flex'>
                                     <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
                                     <span class='toolAdminText'>{{ trans('langExternalTools') }}</span>  
                                 </div>    
                             </a>
+                            @else
+                            <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='list-group-item'>
+                                <div class='d-inline-flex'>
+                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
+                                    <span class='toolAdminText'>{{ trans('langExternalTools') }}</span>  
+                                </div>    
+                            </a>
+                            @endif
                         </li>
                     </div>
                 </div>

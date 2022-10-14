@@ -38,7 +38,14 @@
                                     <a id="AdminToolBtn" type="button" class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench fs-6 orangeText pe-2"></i>{{trans('langAdminTool')}}</a>
                                 </li>
                             @endif
-                            @if($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == ADMIN_USER)
+                            <!-- all users can create course except manage_user and student_user -->
+                            @php
+                                $res2 = Database::get()->querySingle("SELECT privilege FROM admin WHERE user_id = ?d", $uid);
+                                if ($res2) {
+                                    $status = $res2->privilege;
+                                }
+                            @endphp
+                            @if ($_SESSION['status'] == USER_TEACHER and $status != 2)
                                <li><a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/create_course/create_course.php"><i class="fas fa-plus-circle fs-6 orangeText pe-2"></i>{{ trans('langCourseCreate') }}</a></li>
                             @endif
                             <li>

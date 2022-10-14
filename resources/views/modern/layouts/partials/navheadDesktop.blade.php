@@ -59,7 +59,15 @@
                                                 alt="{{ $uname }}">{{ $_SESSION['uname'] }}</span>
                                     </button>
                                     <ul class="m-0 p-0 dropdown-menu dropdown-menu-end dropdown_menu_user shadow-lg bg-body border-0" aria-labelledby="btnGroupDrop1">
-                                        @if($_SESSION['status'] == USER_TEACHER)
+                                        
+                                        <!-- all users can create course except manage_user and student_user -->
+                                        @php
+                                            $res2 = Database::get()->querySingle("SELECT privilege FROM admin WHERE user_id = ?d", $uid);
+                                            if ($res2) {
+                                                $status = $res2->privilege;
+                                            }
+                                        @endphp
+                                        @if ($_SESSION['status'] == USER_TEACHER and $status != 2)
                                         <li>
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/create_course/create_course.php">
                                                 <div class='row'>
