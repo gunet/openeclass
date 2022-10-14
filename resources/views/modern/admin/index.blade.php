@@ -47,7 +47,7 @@
                                 @if ($is_admin)
                                     <div class='col-lg-6 col-12 mt-3'>
                                         <div class='row'>
-                                            <div class='col-sm-12'>
+                                            {{--<div class='col-sm-12'>
                                                 <div class='panel panel-admin shadow'>
                                                     <div class='panel-heading text-center'>
                                                         <span class='colorPalette'>{{ trans('langQuickLinks') }}</span>
@@ -105,8 +105,8 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class='col-sm-12 mt-3'>
+                                            </div>--}}
+                                            <div class='col-sm-12'>
                                                 <div class='panel panel-admin shadow'>
                                                     <div class='panel-heading text-center'>
                                                         <span class='colorPalette'>{{ trans('langPlatformIdentity') }}</span>

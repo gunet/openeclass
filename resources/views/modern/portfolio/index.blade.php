@@ -99,25 +99,6 @@
 
                         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
 
-                                {{--<div class="row">
-                                    <div class="col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                        <div class="shadow-sm bg-body rounded bg-primary">
-                                            <p class='text-center ps-2 pe-2 pb-2 pt-2 control-label-notes'>{{ trans('langCourseDescription') }}</p>
-                                        </div>
-                                        <div class="row mt-0">
-                                            <div class="col-lg-6 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p class='text-lg-start text-start text-secondary'>{{ trans('langSumCoursesEnrolled') }}: <strong class='text-primary'>{{ $student_courses_count }}  </strong></p>
-                                                <p class='text-lg-start text-start text-secondary'>{{ trans('langSumCoursesSupport') }}:  <strong class='text-primary'>{{ $teacher_courses_count }}</strong></p>
-                                            </div>
-                                            <div class="col-lg-6 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p class='text-lg-start text-start text-secondary'>{{ trans('langProfileLastVisit') }}:
-                                                    <strong class='text-primary'>{{ format_locale_date(strtotime($lastVisit->when)) }}</strong>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>--}}
-
                                 <div class='panel panel-default rounded-0 mt-md-0 mt-3'>
                                     <div class='panel-heading rounded-0'>
                                         <div class='panel-title text-center'>
@@ -126,74 +107,22 @@
                                     </div>
                                     <div class='panel-body rounded-0'>
                                         <div class="row mt-0">
-                                            <div class="col-lg-6 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p class='text-lg-start text-start text-secondary'>{{ trans('langSumCoursesEnrolled') }}: <span class='text-primary'>{{ $student_courses_count }}  </span></p>
-                                                <p class='text-lg-start text-start text-secondary mb-lg-0'>{{ trans('langSumCoursesSupport') }}:  <span class='text-primary'>{{ $teacher_courses_count }}</span></p>
+                                            <div class="col-12 mb-1">
+                                                <p class='d-inline-flex align-items-top'>{{ trans('langSumCoursesEnrolled') }}: <span class='text-primary fw-bold ps-2'>{{ $student_courses_count }}  </span></p>
                                             </div>
-                                            <div class="col-lg-6 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p class='text-lg-start text-start text-secondary mb-0'>{{ trans('langProfileLastVisit') }}:
-                                                    <span class='text-primary'>{{ format_locale_date(strtotime($lastVisit->when)) }}</span>
+                                            <div class="col-12 mb-1">
+                                                 <p class='d-inline-flex align-items-top'>{{ trans('langSumCoursesSupport') }}:  <span class='text-primary fw-bold ps-2'>{{ $teacher_courses_count }}</span></p>
+                                            </div>
+                                            <div class="col-12">
+                                                <p class='d-inline-flex align-items-top'>{{ trans('langProfileLastVisit') }}:
+                                                    <span class='text-primary fw-bold ps-2'>{{ format_locale_date(strtotime($lastVisit->when)) }}</span>
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                {{--<div class="row">
-
-                                    <div class="col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-
-                                        <div class="shadow-sm bg-body rounded bg-primary">
-                                            <p class='text-center ps-2 pe-2 pb-2 pt-2 control-label-notes'>{{ trans('langPersInfo') }}</p>
-                                        </div>
-                                        <div class="row mt-0">
-                                            <div class="col-xl-5 col-lg-6 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >E-mail: <span class='text-secondary'>{{ $_SESSION['email'] }}</span></p>
-                                            </div>
-                                            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langStatus') }}:
-                                                    <span class='text-secondary text-lowercase'>
-                                                        @if(($session->status == USER_TEACHER))
-                                                        {{ trans('langMetaTeacher') }}
-                                                        @elseif(($session->status == USER_STUDENT))
-                                                        {{ trans('langCStudent') }}
-                                                        @else
-                                                        {{ trans('langAdministrator')}}
-                                                        @endif
-
-                                                    </span>
-                                                </p>
-                                            </div>
-                                            <div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langFaculty') }}:
-                                                    <span class='text-secondary'>
-                                                        @php
-                                                            $user = new User();
-                                                            $departments = $user->getDepartmentIds($uid);
-                                                        @endphp
-                                                        @foreach ($departments as $dep)
-                                                            {!! $tree->getFullPath($dep) !!}
-                                                        @endforeach
-                                                    </span>
-                                                </p>
-                                            </div>
-
-                                            <div class="col-xl-5 col-lg-6 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{trans('langPhone')}}: <span class='text-secondary'>{{ $userdata->phone }}</span></p>
-                                            </div>
-                                            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
-
-                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold">{{ trans('langAm') }}: <span class='text-secondary'>{{ $userdata->am }}</span></p>
-                                            </div>
-                                            <div class="col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
-
-                                                <p id="info" class="text-lg-start text-start text-primary font-weight-bold" >{{ trans('langProfileMemberSince') }}: <span class='text-secondary'>{{ $userdata->registered_at }}</span></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>--}}
-
-                                <div class='panel panel-default mt-md-5 mt-3 rounded-0'>
+                                <div class='panel panel-default mt-md-4 mt-3 rounded-0'>
                                     <div class='panel-heading rounded-0'>
                                         <div class='panel-title text-center'>
                                             {{ trans('langPersInfo') }}
@@ -201,12 +130,12 @@
                                     </div>
                                     <div class='panel-body rounded-0'>
                                         <div class="row mt-0">
-                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p id="info" class="text-lg-start text-start text-secondary font-weight-bold" >E-mail: <span class='text-primary'>{{ $_SESSION['email'] }}</span></p>
+                                            <div class="col-12 mb-1">
+                                                <p id="info" class="d-inline-flex align-items-top" >E-mail: <span class='text-primary fw-bold ps-2'>{{ $_SESSION['email'] }}</span></p>
                                             </div>
-                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ps-xl-3 @if($_SESSION['email']) ps-lg-5 @else ps-lg-3 @endif pe-lg-2 ps-3 pe-2">
-                                                <p id="info" class="text-lg-start text-start text-secondary font-weight-bold" >{{ trans('langStatus') }}:
-                                                    <span class='text-primary text-lowercase'>
+                                            <div class="col-12 mb-1">
+                                                <p id="info" class="d-inline-flex align-items-top" >{{ trans('langStatus') }}:
+                                                    <span class='text-primary text-lowercase fw-bold ps-2'>
                                                         @if(($session->status == USER_TEACHER))
                                                         {{ trans('langMetaTeacher') }}
                                                         @elseif(($session->status == USER_STUDENT))
@@ -218,9 +147,22 @@
                                                     </span>
                                                 </p>
                                             </div>
-                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p id="info" class="text-lg-start text-start text-secondary font-weight-bold" >{{ trans('langFaculty') }}:
-                                                    <span class='text-primary'>
+
+                                            <div class="col-12 mb-1">
+                                                <p id="info" class="d-inline-flex align-items-top mb-lg-0" >{{trans('langPhone')}}: <span class='text-primary fw-bold ps-2'>{{ $userdata->phone }}</span></p>
+                                            </div>
+                                            <div class="col-12 mb-1">
+
+                                                <p id="info" class="d-inline-flex align-items-top mb-lg-0">{{ trans('langAm') }}: <span class='text-primary fw-bold ps-2'>{{ $userdata->am }}</span></p>
+                                            </div>
+                                            <div class="col-12 mb-1">
+
+                                                <p id="info" class="d-inline-flex align-items-top mb-lg-0 mb-0" >{{ trans('langProfileMemberSince') }}: <span class='text-primary fw-bold ps-2'>{{ $userdata->registered_at }}</span></p>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <p id="info" class="d-inline-flex align-items-top" >{{ trans('langFaculty') }}:
+                                                    <span class='text-primary fw-bold ps-2'>
                                                         @php
                                                             $user = new User();
                                                             $departments = $user->getDepartmentIds($uid);
@@ -231,38 +173,11 @@
                                                     </span>
                                                 </p>
                                             </div>
-
-                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                                <p id="info" class="text-lg-start text-start text-secondary font-weight-bold mb-lg-0" >{{trans('langPhone')}}: <span class='text-primary'>{{ $userdata->phone }}</span></p>
-                                            </div>
-                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
-
-                                                <p id="info" class="text-lg-start text-start text-secondary font-weight-bold mb-lg-0">{{ trans('langAm') }}: <span class='text-primary'>{{ $userdata->am }}</span></p>
-                                            </div>
-                                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 mt-lg-2 ps-lg-3 pe-lg-2 ps-3 pe-2">
-
-                                                <p id="info" class="text-lg-start text-start text-secondary font-weight-bold mb-lg-0 mb-0" >{{ trans('langProfileMemberSince') }}: <span class='text-primary'>{{ $userdata->registered_at }}</span></p>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                {{--<div class="row">
-                                    <div class="col-12 ps-lg-3 pe-lg-2 ps-3 pe-2">
-                                        <div class="shadow-sm bg-body rounded bg-primary">
-                                            <p class='text-center ps-2 pe-2 pb-2 pt-2 control-label-notes'>{{ trans('langAboutMe') }}</p>
-                                        </div>
-
-                                        @if (!empty($userdata->description))
-                                        <p class='ps-1'>{!! standard_text_escape($userdata->description) !!}</p>
-                                        @else
-                                            <p class='text-center'>{{ trans('langNoInfoAvailable') }}</p>
-                                        @endif
-
-                                    </div>
-                                </div>--}}
-
-                                <div class='panel panel-default mt-md-5 mt-3 rounded-0'>
+                                <div class='panel panel-default mt-md-4 mt-3 rounded-0'>
                                     <div class='panel-heading rounded-0'>
                                         <div class='panel-title text-center'>
                                             {{ trans('langAboutMe') }}
@@ -343,11 +258,6 @@
                     <div class='row rowMedium'>
 
                         {!! $perso_tool_content['lessons_content'] !!}
-
-                       {{-- <div class='d-flex justify-content-center'>
-                            <a class="BtnCourseRegister mt-5" href="{{$urlServer}}modules/auth/courses.php">{{ trans('langRegCourses') }} <span class="ps-1 fa fa-arrow-right"></span></a>
-                        </div> --}}
-
                         
                         <div class='d-flex justify-content-center'> 
                             <a class="btn-slide" href="{{$urlServer}}modules/auth/courses.php" >
@@ -407,45 +317,42 @@
             </div>
 
 
-            <div class="container-fluid user-announcements-portfolio bg-white border border-secondary-4 shadow-sm mt-lg-3 mt-md-4 mt-4">
-                <div class='row rowMedium'>
-                    <div class='control-label-notes text-center p-2 fw-bold'>{{ trans('langMyPersoAnnouncements') }}</div>
-                    <hr class='text-primary mt-0 mb-0'>
-                    <div class='ps-3 pe-3'>
-                        @if(empty($user_announcements))
-                            <div class='text-center p-2'><span class='text-title not_visible'> - {{ trans('langNoRecentAnnounce') }} - </span></div>
-                        @else
-                            {!! $user_announcements !!}
-                        @endif
-                      
-                    </div>
-                    <hr class='text-primary mb-0'>
-                    <div class='p-2'>
-                        <a href="{{$urlAppend}}modules/announcements/myannouncements.php" class='btn btn-sm eclass-bg mt-0 float-end' data-bs-toggle='tooltip' 
-                        data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllAnnouncements') }}">
-                            <span class='fa fa-arrow-right text-white'></span>
-                        </a>
-                    </div>
+            <div class='panel panel-default mt-4'>
+                <div class='panel-heading text-center'>
+                    {{ trans('langMyPersoAnnouncements') }}
+                </div>
+                <div class='panel-body pt-1 pb-1 ps-3 pe-3'>
+                    @if(empty($user_announcements))
+                        <div class='text-center p-2'><span class='text-title not_visible'> - {{ trans('langNoRecentAnnounce') }} - </span></div>
+                    @else
+                        {!! $user_announcements !!}
+                    @endif
+                </div>
+                <div class='panel-footer d-flex justify-content-end pt-0'>
+                    <a href="{{$urlAppend}}modules/announcements/myannouncements.php" class='btn btn-sm eclass-bg mt-0' data-bs-toggle='tooltip' 
+                    data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllAnnouncements') }}">
+                        <span class='fa fa-arrow-right text-white'></span>
+                    </a>
                 </div>
             </div>
 
 
-            <div class="container-fluid user-messages-portfolio bg-white border border-secondary-4 shadow-sm mt-lg-3 mt-md-4 mt-4">
-                <div class='row rowMedium'>
-                    <div class='control-label-notes text-center p-2 fw-bold'>{{ trans('langMyPersoMessages') }}</div>
-                    <hr class='text-primary mt-0 mb-0'>
-                    <div class='ps-3 pe-3'>
-                            {!! $user_messages !!}
-                    </div>
-                    <hr class='text-primary mb-0'>
-                    <div class='p-2'>
-                        <a href="{{$urlAppend}}modules/message/index.php" class='btn btn-sm eclass-bg mt-0 float-end' data-bs-toggle='tooltip' 
-                        data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllMessages') }}">
-                            <span class='fa fa-arrow-right text-white'></span>
-                        </a>
-                    </div>
+            
+            <div class='panel panel-default mt-4'>
+                <div class='panel-heading text-center'>
+                    {{ trans('langMyPersoMessages') }}
+                </div>
+                <div class='panel-body pt-1 pb-1 ps-3 pe-3'>
+                    {!! $user_messages !!}
+                </div>
+                <div class='panel-footer d-flex justify-content-end pt-0'>
+                    <a href="{{$urlAppend}}modules/message/index.php" class='btn btn-sm eclass-bg mt-0' data-bs-toggle='tooltip' 
+                    data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllMessages') }}">
+                        <span class='fa fa-arrow-right text-white'></span>
+                    </a>
                 </div>
             </div>
+
 
 
         </div>

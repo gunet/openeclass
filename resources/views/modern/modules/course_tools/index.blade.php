@@ -108,14 +108,14 @@
                     </div>
 
                     <div class='col-12 mt-5'>
-                        <div class='panel panel-info border-0 rounded-0'>
+                        <div class='panel panel-default border-0 rounded-0'>
                             <div class='panel-heading rounded-0'>
                                 <div class='row'>
                                     <div class='col-md-6 col-10 text-start pt-md-1 pt-0'>
                                         <span class='panel-title'> {{ trans('langOperations') }}</span>
                                     </div>
                                     <div class='col-md-6 col-2 text-end'>
-                                        <a class='btn btn-info btn-sm' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle text-white'></span> <span class='hidden-xs'>{{ trans('langAddExtLink') }}</span></a>
+                                        <a class='btn btn-success btn-sm' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle text-white'></span> <span class='hidden-xs'>{{ trans('langAddExtLink') }}</span></a>
                                     </div>
                                 </div>
                             </div>
@@ -143,14 +143,14 @@
                     </div>
 
                     <div class='col-12 mt-5'>
-                        <div class='panel panel-info border-0 rounded-0'>
+                        <div class='panel panel-default border-0 rounded-0'>
                             <div class='panel-heading rounded-0'>
                                 <div class='row'>
                                     <div class='col-md-6 col-10 text-start pt-md-1 pt-0'>
                                         <span class='panel-title'>{{ trans('langLtiConsumer') }}</span>
                                     </div>
                                     <div class='col-md-6 col-2 text-end'>
-                                        <a class='btn btn-info btn-sm' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
+                                        <a class='btn btn-success btn-sm' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
                                             <span class='fa fa-plus-circle pe-1 text-white'></span><span class='hidden-xs'>{{ trans('langNewLTITool') }}</span>
                                         </a>
                                     </div>

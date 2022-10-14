@@ -5,18 +5,96 @@
 <!------------------------------------------------------------------------------------------------>
 
 @if ($release_info and version_compare($release_info->release, ECLASS_VERSION) > 0)
-    <div class='col-12'>
-        <div class='panel panel-info rounded-0'>
-            <div class='panel-heading text-center fs-6'>
+    <div class='col-12 mb-3'>
+        <div class='panel panel-info'>
+            <div class='panel-heading text-center'>
                 {{ trans('langNewEclassVersion') }}
             </div>
-            <div class='panel-body rounded-0'>
+            <div class='panel-body'>
                 {!! sprintf( trans('langNewEclassVersionInfo'), "<strong>" . q($release_info->release) . "</strong>",
                             "<a href='https://www.openeclass.org/' target='_blank'>www.openeclass.org</a>") !!}
             </div>
         </div>
     </div>
 @endif
+
+<div class='col-12'>
+    <div class='panel panel-admin shadow'>
+        <div class='panel-heading text-center'>
+            <span class='colorPalette'>{{ trans('langQuickLinks') }}</span>
+        </div>
+        <div class='panel-body'>
+            <ul class="list-group list-group-flush">
+                <div class='row'>
+                    <div class='col-md-6 col-12'>
+                        <li class="list-group-item border-0 admin-list-group">
+                            <a href="search_user.php" class='list-group-item'>
+                                <div class='d-inline-flex'>
+                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
+                                    <span class='toolAdminText'>{{ trans('langSearchUser') }}</span>
+                                </div>     
+                            </a>
+                        </li>
+                    </div>
+                    <div class='col-md-6 col-12'>
+                        <li class="list-group-item border-0 admin-list-group">
+                            <a href="searchcours.php" class='list-group-item'>
+                                <div class='d-inline-flex'>
+                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
+                                    <span class='toolAdminText'>{{ trans('langSearchCourse') }}</span> 
+                                </div>     
+                            </a>
+                        </li>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-md-6 col-12'>
+                        <li class="list-group-item border-0 admin-list-group">
+                            <a href="hierarchy.php" class='list-group-item'>
+                                <div class='d-inline-flex'>
+                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
+                                    <span class='toolAdminText'>{{ trans('langHierarchy') }}</span>  
+                                </div>    
+                            </a>
+                        </li>
+                    </div>
+                    <div class='col-md-6 col-12'>
+                        <li class="list-group-item border-0 admin-list-group">
+                            <a href="eclassconf.php" class='list-group-item'>
+                                <div class='d-inline-flex'>
+                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
+                                    <span class='toolAdminText'>{{ trans('langConfig') }}</span>   
+                                </div>   
+                            </a>
+                        </li>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-md-6 col-12'>
+                        <li class="list-group-item border-0 admin-list-group">
+                            <a href="theme_options.php" class='list-group-item'>
+                                <div class='d-inline-flex'>
+                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
+                                    <span class='toolAdminText'>{{ trans('langThemeSettings') }}</span>  
+                                </div>    
+                            </a>
+                        </li>
+                    </div>
+                    <div class='col-md-6 col-12'>
+                        <li class="list-group-item border-0 admin-list-group">
+                            <a href="extapp.php" class='list-group-item'>
+                                <div class='d-inline-flex'>
+                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
+                                    <span class='toolAdminText'>{{ trans('langExternalTools') }}</span>  
+                                </div>    
+                            </a>
+                        </li>
+                    </div>
+                </div>
+            </ul>
+        </div>
+    </div>
+</div>
 
 @php $countNewPanel = 0; @endphp
 @foreach ($toolArr as $key => $tool_group)

@@ -6,9 +6,6 @@
 
 @media (max-width: 991px){ #cal-header{  margin-left:0px;  margin-right:0px; } }
 
-/* month-row */
-.cal-month-box{  border: 0px;  background-color: white ; }
-
 #current-month{  color:white; }
 
 #cal-header .fa-chevron-left{ color:white; }
@@ -17,13 +14,12 @@
 
 .container_fluid_calendar{ border-radius: 15px; height:auto; background-color: white ;}
 
-.cal-month-day{ margin-left: 10px; font-size: 13px; }
+.number-day-cal{ font-size: 13.5px; color: #003F87;}
 
-.cal-day-today{ margin-left: 0px; }
+.cal-day-outmonth > .number-day-cal {opacity: 0.2;}
 
-.cal-day-today span[data-bs-original-title] { margin-right:4px; }
+.cal-day-today > .number-day-cal{ color:white; padding:6px; border-radius: 50%; background-color: #003F87; }
 
-.events-list{ margin-left: -5px; }
 
 /****************************************************************************************************/
 /*************************************** this is input-calendar *************************************/

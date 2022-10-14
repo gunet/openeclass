@@ -235,7 +235,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-8 col-lg-12 col-md-12 col_maincontent_unit mt-4">
+                    <div class="col-xxl-8 col-xl-7 col-lg-12 col-md-12 col_maincontent_unit mt-4">
                         
                         @if($course_info->view_type == 'units')
                             @if($total_cunits > 0)
@@ -398,7 +398,7 @@
 
                     </div><!-- end col units -->
 
-                    <div class="col-xl-4 col-lg-12 col-md-12 mt-lg-4 mt-4 float-end ">
+                    <div class="col-xxl-4 col-xl-5 col-lg-12 col-md-12 mt-lg-4 mt-4 float-end ">
 
                         <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar border border-secondary-4 shadow">
                             {!! $user_personal_calendar !!}

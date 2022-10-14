@@ -321,8 +321,8 @@ if ($topic_locked == 1) {
         <div class='col-sm-12 mb-3'>
             <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' name='viewselect' action='$selection_url' method='get'>
-                    <div class='form-group mt-3'>
-                        <label class='col-sm-8 control-label'>$langQuestionView</label>
+                    <div class='form-group'>
+                        <label class='col-sm-12 control-label fw-bold'>$langQuestionView</label>
                         <div class='col-sm-12'>
                             $hidden_inputs
                             <input type='hidden' name='course' value='$course_code'>

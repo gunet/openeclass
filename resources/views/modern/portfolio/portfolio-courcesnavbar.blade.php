@@ -39,9 +39,7 @@
             @endif
         @endif
     </div>
-    {{--<div class='d-flex justify-content-center'>    
-        <a class="BtnCourseRegister mt-5" href="{{$urlServer}}modules/auth/courses.php">{{ trans('langRegCourses') }} <span class="ps-1 fa fa-arrow-right"></span></a>
-    </div>--}}
+
     <div class='d-flex justify-content-center'> 
         <a class="btn-slide" href="{{$urlServer}}modules/auth/courses.php" >
             <span class="circle d-flex justify-content-center align-items-center">

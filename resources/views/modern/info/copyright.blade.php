@@ -11,9 +11,7 @@
                 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
-                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 shadow p-3 pb-3 bg-body rounded bg-primary'>
+                    <div class='col-12 mt-3 shadow p-3 pb-3 bg-body rounded bg-primary'>
                         <div class='d-flex justify-content-center ps-1 pt-1 pb-2'>
                             <span class="control-label-notes">
                                 <i class="fas fa-tools orangeText" aria-hidden="true"></i> 
