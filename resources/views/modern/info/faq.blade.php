@@ -30,7 +30,7 @@
                                     </div>
                                 @else
                                     @foreach ($faqs as $key => $faq)
-                                        <div class='panel panel-default mt-3 rounded-0'>
+                                        <div class='panel panel-default mt-3 rounded-0 overflow-auto'>
                                             <div class='panel-heading rounded-0' role='tab' id='heading{{ $faq->id }}' style='border-bottom-right-radius:15px; border-bottom-left-radius:15px;'>
                                                 
                                                 <a class='control-label-notes' role='button' data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>

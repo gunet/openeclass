@@ -18,43 +18,160 @@
                             <div class='row'>
                                 @if($warning)<div class='col-12 mt-4 mb-0'>{!! $warning !!}</div>@endif
                                 <div class='@if($leftsideImg) col-12 @else col-xl-6 col-lg-7 col-md-8 col-12 @endif'>
-                                    <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 Borders cardLogin'>
-                                        <div class='card-header bg-transparent border-0'>
-                                            <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'> {{ trans('langUserLogin') }}</div>
-                                        </div>
-                                        <form action="{{ $urlAppend }}" method="post">
-                                            <div class="login-form-spacing mt-2">
-                                                <input class="login-input bg-body border border-secondary w-100" placeholder="{{ trans('langUsername') }} &#xf007;" type="text" id="uname" name="uname" >
-                                                <input class="login-input bg-body border border-secondary w-100 mt-4" placeholder="{{ trans('langPassword') }} &#xf023;" type="password" id="pass" name="pass">
-                                                <input class="btn text-white w-100 login-form-submit mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
-                                            </div>
-                                        </form>
-                                        <div class='col-sm-12 d-flex justify-content-center'>
-                                            <a class="text-primary fw-bold btnlostpass mb-2 mt-md-4" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
-                                        </div>
-                                    </div>
-                                    
+
                                     @php 
                                         $q = Database::get()->queryArray("SELECT auth_id, auth_name, auth_default, auth_title
                                              FROM auth WHERE auth_default <> 0
                                              ORDER BY auth_default DESC, auth_id");
                                     @endphp
+
                                     @if($q)
-                                        <div class='col-12 d-flex justify-content-center align-items-center'>
-                                            <div class='row'>
+                                        <div id="carouselLoginAuthControls" class="carousel slide" data-bs-ride="carousel">
+                                            @if(count($q)>1)
+                                                <div class="carousel-indicators pb-4">
+                                                    @php $ccount = 0; @endphp
+                                                    @foreach($q as $l)
+                                                        @if($ccount == 0)
+                                                            <button type="button" data-bs-target="#carouselLoginAuthControls" data-bs-slide-to="{{$ccount}}" class="active" aria-current="true" aria-label="Slide {{$ccount}}"></button>
+                                                        @else
+                                                            <button type="button" data-bs-target="#carouselLoginAuthControls" data-bs-slide-to="{{$ccount}}" aria-label="Slide {{$ccount}}"></button>
+                                                        @endif
+                                                        @php $ccount++ @endphp
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                            <div class="carousel-inner">
                                                 @foreach($q as $l)
-                                                    @if($l->auth_name == 'cas' and $l->auth_default == 1)
-                                                        <div class='col-12 col-md-6 mb-5 d-flex justify-content-md-start justify-content-center'>
-                                                            <a class='btn btn-success' href='{{$urlAppend}}modules/auth/cas.php'>{!! q(getSerializedMessage($l->auth_title)) !!}</a>
+                                                    @if($l->auth_name == 'eclass' and $l->auth_default == 1)
+                                                        <div class="carousel-item active">
+                                                            <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 Borders cardLogin'>
+                                                                <div class='card-header bg-transparent border-0' style='margin-top:-5px;'>
+                                                                    <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'> {{ trans('langUserLogin') }}</div>
+                                                                </div>
+                                                                <form action="{{ $urlAppend }}" method="post">
+                                                                    <div class="login-form-spacing mt-2">
+                                                                        <input class="login-input bg-body border border-secondary @if(count($q)>1) w-75 @else w-100 @endif" placeholder="{{ trans('langUsername') }} &#xf007;" type="text" id="uname" name="uname" >
+                                                                        <input class="login-input bg-body border border-secondary @if(count($q)>1) w-75 @else w-100 @endif mt-4" placeholder="{{ trans('langPassword') }} &#xf023;" type="password" id="pass" name="pass">
+                                                                        <input class="btn text-white @if(count($q)>1) w-75 @else w-100 @endif login-form-submit mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
+                                                                    </div>
+                                                                </form>
+                                                                <div class='col-sm-12 d-flex justify-content-center'>
+                                                                    <a class="text-primary fw-bold btnlostpass mb-2 mt-md-4" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                    @if($l->auth_name == 'pop3' and $l->auth_default == 1)
+                                                       
+                                                        <div class="carousel-item">
+                                                            <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 Borders cardLogin d-flex justify-content-center align-items-center'>
+                                                                <div class='row'>
+                                                                    <div class='col-12 mb-3'>
+                                                                        <div class='card-header bg-transparent border-0'>
+                                                                            <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'>{{ get_auth_info(2) }}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class='col-12 text-center'>
+                                                                        <a class="btn btn-primary w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=2'>{{ trans('langUserLogin') }}</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                    @endif
+                                                    @if($l->auth_name == 'ldap' and $l->auth_default == 1)
+                                                       
+                                                        <div class="carousel-item">
+                                                            <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 Borders cardLogin d-flex justify-content-center align-items-center'>
+                                                                <div class='row'>
+                                                                    <div class='col-12 mb-3'>
+                                                                        <div class='card-header bg-transparent border-0'>
+                                                                            <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'>{{ get_auth_info(4) }}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class='col-12 text-center'>
+                                                                        <a class="btn btn-primary w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=4'>{{ trans('langUserLogin') }}</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                    @endif
+                                                    @if($l->auth_name == 'imap' and $l->auth_default == 1)
+                                                        <div class="carousel-item">
+                                                            <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 Borders cardLogin d-flex justify-content-center align-items-center'>
+                                                                <div class='row'>
+                                                                    <div class='col-12 mb-3'>
+                                                                        <div class='card-header bg-transparent border-0'>
+                                                                            <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'>{{ get_auth_info(3) }}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class='col-12 text-center'>
+                                                                        <a class="btn btn-primary w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=3'>{{ trans('langUserLogin') }}</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                    @if($l->auth_name == 'db' and $l->auth_default == 1)
+                                                        <div class="carousel-item">
+                                                            <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 Borders cardLogin d-flex justify-content-center align-items-center'>
+                                                                <div class='row'>
+                                                                    <div class='col-12 mb-3'>
+                                                                        <div class='card-header bg-transparent border-0'>
+                                                                            <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'>{{ get_auth_info(5) }}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class='col-12 text-center'>
+                                                                        <a class="btn btn-primary w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=5'>{{ trans('langUserLogin') }}</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     @endif
                                                     @if($l->auth_name == 'shibboleth' and $l->auth_default == 1)
-                                                        <div class='col-12 col-md-6 mb-5 d-flex justify-content-md-start justify-content-center'>
-                                                            <a class='btn btn-success' href='{{$urlAppend}}secure/'>{!! q(getSerializedMessage($l->auth_title)) !!}</a>
+                                                        <div class="carousel-item">
+                                                            <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 Borders cardLogin d-flex justify-content-center align-items-center'>
+                                                                <div class='row'>
+                                                                    <div class='col-12 mb-3'>
+                                                                        <div class='card-header bg-transparent border-0'>
+                                                                            <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'>{!! q(getSerializedMessage($l->auth_title)) !!}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class='col-12 text-center'>
+                                                                        <a class='btn btn-primary w-75' href='{{$urlAppend}}secure/'>{{ trans('langUserLogin') }}</a>
+                                                                    </div>
+                                                                </div>   
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                    @if($l->auth_name == 'cas' and $l->auth_default == 1)
+                                                        <div class="carousel-item">
+                                                            <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 Borders cardLogin d-flex justify-content-center align-items-center'>
+                                                                 <div class='row'>
+                                                                    <div class='col-12 mb-3'>
+                                                                        <div class='card-header bg-transparent border-0'>
+                                                                            <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'>{!! q(getSerializedMessage($l->auth_title)) !!}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class='col-12 text-center'>
+                                                                        <a class='btn btn-primary w-75' href='{{$urlAppend}}modules/auth/cas.php'>{{ trans('langUserLogin') }}</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     @endif
                                                 @endforeach
+      
                                             </div>
+                                            @if(count($q)>1)
+                                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselLoginAuthControls" data-bs-slide="prev">
+                                                    <span class="carousel-control-prev-icon bg-danger Borders" aria-hidden="true"></span>
+                                                </button>
+                                                <button class="carousel-control-next" type="button" data-bs-target="#carouselLoginAuthControls" data-bs-slide="next">
+                                                    <span class="carousel-control-next-icon bg-danger Borders" aria-hidden="true"></span>
+                                                </button>
+                                            @endif
                                         </div>
                                     @endif
                                     
@@ -81,12 +198,10 @@
                         <div class='d-none d-sm-none d-md-block'>
                             <div class='row rowMedium'>
                                 <div class='col-12 ps-md-5 pe-md-5 pt-md-5 pb-md-5'>
-                                    <div class="panel panel-admin homepageIntroPanel w-100 border-0 rounded-0">
+                                    <div class="panel panel-default homepageIntroPanel w-100 border-0 rounded-0">
                                         @if(get_config('homepage_title'))
-                                        <div class="panel-heading text-center p-3 rounded-0">
-                                            <span class='fs-5 control-label-notes'>
-                                                {!! get_config('homepage_title') !!}
-                                            </span>
+                                        <div class="panel-heading text-center rounded-0">
+                                            {!! get_config('homepage_title') !!}
                                         </div>
                                         @endif
                                         <div class="panel-body bg-body @if(get_config('homepage_title')) NoBorderTop @else Borders @endif rounded-0">
@@ -102,7 +217,12 @@
                         <div class='d-block d-md-none'>
                             <div class='row rowMedium'>
                                 <div class='col-12 pt-5 @if(!get_config("enable_mobileapi") and $eclass_banner_value == 0) pb-5 @endif)'>
-                                    <div class="panel panel-admin w-100 border-0 rounded-0">
+                                    <div class="panel panel-default w-100 border-0 rounded-0">
+                                        @if(get_config('homepage_title'))
+                                        <div class="panel-heading text-center rounded-0">
+                                            {!! get_config('homepage_title') !!}
+                                        </div>
+                                        @endif
                                         <div class='panel-body rounded-0'>
                                             {!! get_config('homepage_intro') !!}
                                         </div>
@@ -247,6 +367,7 @@
                     </div>
                     <div class="more-link"><a class="all_announcements mt-3 float-end" href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span></a></div>
                 </div>
+                
             </div>
         </div>
     </div>

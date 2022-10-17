@@ -91,11 +91,11 @@
                         <div class='col-xl-9 col-lg-8 col-md-12 col-sm-12 col-12'>
                             <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>  
                                 <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">  
-                                    <div class='panel panel-admin' id='one'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-admin rounded-0' id='one'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langBasicCfgSetting') }}</h2>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 rounded-0'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <label for='formurlServer' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langSiteUrl') }}:</label>
@@ -235,11 +235,11 @@
                                     
 
 
-                                    <div class='panel panel-admin mt-3' id='two'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-admin mt-3 rounded-0' id='two'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langUpgReg') }}</h2>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 rounded-0'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <label for='user_registration' class='col-sm-12 control-label-notes'>{{ trans('langUserRegistration') }}:</label>
@@ -426,11 +426,11 @@
 
 
 
-                                    <div class='panel panel-admin mt-3' id='three'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-admin mt-3 rounded-0' id='three'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langEclassThemes') }}</h2>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 rounded-0'>
                                             <fieldset>
                                                 <div class='form-group mt-3'>
                                                     <label for='default_language' class='col-sm-12 control-label-notes'>{{ trans('langMainLang') }}: </label>
@@ -460,11 +460,11 @@
                                     
 
 
-                                    <div class='panel panel-primary mt-3' id='four'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-primary mt-3 rounded-0' id='four'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{trans('langHomePageSettings')}}</h2>
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='panel-body rounded-0'>
                                             <div class='margin-bottom-fat margin-top-fat fs-5 mb-3'><strong>{{trans('langSelectHomePage')}} :</strong></div>
                                             <fieldset>
                                                 <div class='landing-default'>
@@ -582,11 +582,11 @@
 
 
                                     @if(!$install)
-                                    <div class='panel panel-admin mt-3' id='five'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-admin mt-3 rounded-0' id='five'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langEmailSettings') }}</h2>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 rounded-0'>
                                             <fieldset>
                                     @endif
                                                 <div class='form-group mt-3'>
@@ -681,11 +681,11 @@
                                     </div>
                                     @endif
 
-                                    <div class='panel panel-admin mt-3' id='six'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-admin mt-3 rounded-0' id='six'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langCourseSettings') }}</h2>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 rounded-0'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -732,11 +732,11 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3' id='seven'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-admin mt-3 rounded-0' id='seven'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langMetaCommentary') }}</h2>
                                         </div>
-                                        <div class='panel-body panel-body-admin pt-3 ps-3 pb-3 pe-3'>
+                                        <div class='panel-body panel-body-admin pt-3 ps-3 pb-3 pe-3 rounded-0'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -766,11 +766,11 @@
 
 
 
-                                    <div class='panel panel-admin mt-3' id='eight'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-admin mt-3 rounded-0' id='eight'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langOtherOptions') }}</h2>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 rounded-0'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -913,11 +913,11 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-admin mt-3' id='nine'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-admin mt-3 rounded-0' id='nine'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langDocumentSettings') }}</h2>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 rounded-0'>
                                             <fieldset>
                                                 <div class='form-group mt-3'>
                                                 <label class='col-sm-12 control-label-notes'>{{ trans('langEnableMyDocs') }}:</label>
@@ -977,11 +977,11 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-admin mt-3' id='ten'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-admin mt-3 rounded-0' id='ten'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langDefaultQuota') }}</h2>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pb-3 pt-3 pe-3'>
+                                        <div class='panel-body panel-body-admin ps-3 pb-3 pt-3 pe-3 rounded-0'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <label for='doc_quota' class='col-sm-12 control-label-notes'>{{ trans('langDocQuota') }} (MB):</label>
@@ -1012,11 +1012,11 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3' id='eleven'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-admin mt-3 rounded-0' id='eleven'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langUploadWhitelist') }}</h2>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pb-3 pt-3 pe-3'>
+                                        <div class='panel-body panel-body-admin ps-3 pb-3 pt-3 pe-3 rounded-0'>
                                             <fieldset>
                                                 <div class='form-group mt-3'>
                                                     <label for='student_upload_whitelist' class='col-sm-12 control-label-notes'>{{ trans('langStudentUploadWhitelist') }}:</label>
@@ -1038,11 +1038,11 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3' id='twelve'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-admin mt-3 rounded-0' id='twelve'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langLogActions') }}</h2>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 rounded-0'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -1088,11 +1088,11 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3' id='thirteen'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-admin mt-3 rounded-0' id='thirteen'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langLoginFailCheck') }}</h2>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pe-3 pb-3 pt-3'>
+                                        <div class='panel-body panel-body-admin ps-3 pe-3 pb-3 pt-3 rounded-0'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -1136,11 +1136,11 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3' id='fourteen'>
-                                        <div class='panel-heading'>
+                                    <div class='panel panel-admin mt-3 rounded-0' id='fourteen'>
+                                        <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langPrivacyPolicy') }}</h2>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3'>
+                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 rounded-0'>
                                             <div class='margin-bottom-fat margin-top-fat pb-3'><strong>{{ trans('langPrivacyPolicyLegend') }}</strong></div>
                                             <fieldset>
                                                 <div class='landing-default'>
@@ -1201,7 +1201,7 @@
                         <div class='col-xl-3 col-lg-4 col-md-0 col-sm-0 col-0 d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block float-end hidden-xs' id='affixedSideNav'>
 
 
-                            <nav id="navbar-example3" class="navbar navbar-light bg-light flex-column align-items-stretch p-3 sticky-top shadow-lg">
+                            <nav id="navbar-example3" class="navbar navbar-light bg-light flex-column align-items-stretch p-3 sticky-top shadow-lg" style="z-index:2;">
                                 <nav class="nav nav-pills flex-column">
                                     <a class="nav-link nav-link-adminTools" href="#one">{{ trans('langBasicCfgSetting') }}</a>
                                     <a class="nav-link nav-link-adminTools" href="#two">{{ trans('langUpgReg') }}</a>

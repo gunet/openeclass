@@ -54,11 +54,11 @@ $tool_content .= "
 
 
 
-  <div class='panel panel-default login-page'>
-      <div class='panel-heading'>
+  <div class='panel panel-default login-page rounded-0'>
+      <div class='panel-heading rounded-0'>
         <span>$langUpgDetails</span>
       </div>
-      <div class='panel-body login-page-option'>
+      <div class='panel-body login-page-option rounded-0'>
 
         <form class='form-horizontal' role='form' action='upgrade.php' method='post'>
 
@@ -74,9 +74,9 @@ $tool_content .= "
             </div>
           </div>
 
-          <div class='form-group mt-3'>
-            <div class='col-12'>
-              <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit_upgrade2' value='$langUpgrade'>$langUpgrade</button>
+          <div class='form-group mt-5'>
+            <div class='col-12 d-flex justify-content-center'>
+              <button class='btn btn-sm btn-primary submitAdminBtn w-50 margin-bottom-fat' type='submit' name='submit_upgrade2' value='$langUpgrade'>$langUpgrade</button>
             </div>
           </div>
 

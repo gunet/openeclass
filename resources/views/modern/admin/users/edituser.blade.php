@@ -222,7 +222,7 @@
                                                                 @endif
                                                             </td>
                                                             <td class='text-center'>
-                                                                {!! icon('fa-ban text-danger', trans('langUnregCourse'), "unreguser.php?u=$u&amp;c=$logs->id") !!}
+                                                                {!! icon('fa-times text-danger', trans('langUnregCourse'), "unreguser.php?u=$u&amp;c=$logs->id") !!}
                                                             </td>
                                                         @endif
                                                     </tr>

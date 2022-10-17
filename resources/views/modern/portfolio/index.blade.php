@@ -203,7 +203,7 @@
 
 <div class="container-fluid main-container cources-section mt-lg-3 mt-0">
     <div class="row rowMedium">
-        <div class="col-12 col-lg-8 user-courses pt-lg-5 ps-lg-5 pe-lg-5 pb-lg-5 p-md-5 p-3">
+        <div class="col-12 col-lg-8 user-courses pt-lg-5 ps-lg-5 pe-lg-5 pb-lg-5 p-md-5 ps-1 pe-1 pb-3 pt-3">
             <div class="row rowMedium">
 
                 <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-8 col-8 pt-2">
@@ -309,10 +309,10 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-4 calendar_announce_message_col mt-0 ps-lg-0 pe-lg-5 pt-lg-5 pb-lg-5 ps-md-5 pe-md-5 pt-md-3 pb-md-5 ps-3 pe-3 pt-3 pb-5">
+        <div class="col-12 col-lg-4 calendar_announce_message_col mt-0 ps-lg-0 pe-lg-5 pt-lg-5 pb-lg-5 ps-md-5 pe-md-5 pt-md-0 pb-md-5 ps-3 pe-3 pt-3 pb-5">
 
 
-            <div class="container-fluid container_fluid_calendar container_fluid_calendar_portfolio bg-white border border-secondary-4 shadow-sm mt-lg-0 mt-md-4 mt-4">
+            <div class="container-fluid container_fluid_calendar container_fluid_calendar_portfolio bg-white border border-secondary-4 shadow mt-0">
                 @include('portfolio.portfolio-calendar')
             </div>
 

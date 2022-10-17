@@ -69,10 +69,10 @@ foreach ($q as $l) {
             </div>
             <div class='form-group mt-3'>
               <div class='row'>
-                <div class='col-md-3 col-12 text-md-start text-center'>
-                  <button class='login-main-form btn btn-primary margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+                <div class='col-12 text-md-start text-center'>
+                  <button class='login-main-form btn btn-primary w-100 margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
                 </div>
-                <div class='col-md-9 col-12 text-md-end text-center mt-md-0 mt-3'>
+                <div class='col-12 text-center mt-3'>
                   <a class='btn btn-transparent text-primary fw-bold fs-6' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
                 </div>
               </div>
@@ -90,6 +90,13 @@ $tool_content .= action_bar(array(
           'level' => 'primary-label',
           'button-class' => 'btn-secondary')), false);
 $tool_content .= "<div class='login-page'> <div class='row'>";
+if($columns == 12){
+
+  $columns = $columns - 6 ;
+  $tool_content .= "<div class='col-md-6 col-12 d-none d-md-block'>
+                      <div class='col-12 h-100 left-form'></div>
+                    </div>";
+}
 foreach ($authLink as $authInfo) {
     $tool_content .= "
    

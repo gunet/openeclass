@@ -55,9 +55,9 @@
 
                         @if ($course_descs)
                             @foreach ($course_descs as $key => $course_desc)    
-                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>      
-                                    <div class='panel panel-action-btn-default'>
-                                        <div class='panel-heading'>
+                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3'>      
+                                    <div class='panel panel-action-btn-default rounded-0'>
+                                        <div class='panel-heading rounded-0'>
                                             @if ($is_editor) 
                                                 <div class='float-end'>
                                                 {!! action_button(
@@ -101,7 +101,7 @@
                                                 @endif
                                             </h3>      
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='panel-body rounded-0'>
                                             {!! handleType($course_desc->type) !!} 
                                             <br>
                                             <br>

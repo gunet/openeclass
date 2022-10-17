@@ -18,7 +18,7 @@
 
 .cal-day-outmonth > .number-day-cal {opacity: 0.2;}
 
-.cal-day-today > .number-day-cal{ color:white; padding:6px; border-radius: 50%; background-color: #003F87; }
+.cal-day-today > .number-day-cal{ color:white; padding:3px 4px 2px 4px; border-radius: 50%; background-color: #003F87; }
 
 
 /****************************************************************************************************/

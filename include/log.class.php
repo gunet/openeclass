@@ -203,7 +203,7 @@ class Log {
         } else {
             $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoUsersLog</div></div>";
         }
-        return;
+        return $tool_content;
     }
 
     /**
