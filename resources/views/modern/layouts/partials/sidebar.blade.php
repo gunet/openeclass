@@ -2,15 +2,29 @@
     @php $is_course_teacher = check_editor($uid,$course_id); @endphp
     @if(($is_editor or $is_power_user or $is_departmentmanage_user or $is_usermanage_user or $is_course_teacher) && $course_code)
         <p class="text-center text-light mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
-        <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center'>
+
+        <!-- THIS IS FIRST CHOICE OF VIEW-STUDENT-TEACHER TOOGLE-BUTTON -->
+        {{--<form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center'>
             <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }} w-100' data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}">
                 <span class="on">{{ trans('langCStudent2') }}</span>
                 <span class="off">{{ trans('langCTeacher') }}</span>
                 <p class="on2">{{ trans('langCStudent2') }}</p>
                 <p class="off2">{{ trans('langCTeacher') }}</p>
             </button>
+        </form>--}}
+
+         <!-- THIS IS SECOND CHOICE OF VIEW-STUDENT-TEACHER TOOGLE-BUTTON -->
+        <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center'> 
+            <label class="switch-sidebar">
+                <input class="form-check-input slider-btn-on btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}" type="checkbox" id="flexSwitchCheckChecked" {{ !$is_editor ? "checked" : "" }}>
+                <div class="slider round">
+                    <span class="on">{{ trans('langCStudent2') }}</span>
+                    <span class="off">{{ trans('langCTeacher') }}</span>
+                </div>
+            </label>
         </form>
     @endif
+    
     <div class="panel-group accordion mt-5" id="sidebar-accordion">
         <div class="panel">
             @foreach ($toolArr as $key => $tool_group)

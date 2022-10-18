@@ -27,7 +27,7 @@
 
                                     @if($q)
                                         <div id="carouselLoginAuthControls" class="carousel slide" data-bs-ride="carousel">
-                                            @if(count($q)>1)
+                                            {{--@if(count($q)>1)
                                                 <div class="carousel-indicators pb-4">
                                                     @php $ccount = 0; @endphp
                                                     @foreach($q as $l)
@@ -39,13 +39,13 @@
                                                         @php $ccount++ @endphp
                                                     @endforeach
                                                 </div>
-                                            @endif
+                                            @endif--}}
                                             <div class="carousel-inner">
                                                 @foreach($q as $l)
                                                     @if($l->auth_name == 'eclass' and $l->auth_default == 1)
                                                         <div class="carousel-item active">
                                                             <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 Borders cardLogin'>
-                                                                <div class='card-header bg-transparent border-0' style='margin-top:-5px;'>
+                                                                <div class='card-header bg-transparent border-0'>
                                                                     <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'> {{ trans('langUserLogin') }}</div>
                                                                 </div>
                                                                 <form action="{{ $urlAppend }}" method="post">
@@ -166,10 +166,10 @@
                                             </div>
                                             @if(count($q)>1)
                                                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselLoginAuthControls" data-bs-slide="prev">
-                                                    <span class="carousel-control-prev-icon bg-danger Borders" aria-hidden="true"></span>
+                                                    <span class="carousel-control-prev-icon bg-primary Borders" aria-hidden="true"></span>
                                                 </button>
                                                 <button class="carousel-control-next" type="button" data-bs-target="#carouselLoginAuthControls" data-bs-slide="next">
-                                                    <span class="carousel-control-next-icon bg-danger Borders" aria-hidden="true"></span>
+                                                    <span class="carousel-control-next-icon bg-primary Borders" aria-hidden="true"></span>
                                                 </button>
                                             @endif
                                         </div>

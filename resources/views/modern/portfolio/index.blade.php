@@ -203,11 +203,11 @@
 
 <div class="container-fluid main-container cources-section mt-lg-3 mt-0">
     <div class="row rowMedium">
-        <div class="col-12 col-lg-8 user-courses pt-lg-5 ps-lg-5 pe-lg-5 pb-lg-5 p-md-5 ps-1 pe-1 pb-3 pt-3">
+        <div class="col-12 col-lg-8 user-courses pt-lg-5 ps-lg-5 pe-lg-5 pb-lg-5 p-md-5 ps-3 pe-3 pb-3 pt-3">
             <div class="row rowMedium">
 
                 <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-8 col-8 pt-2">
-                    <span class="text-primary fw-bold fs-lg-5 fs-6 mb-0">{{ trans('langMyCoursesSide') }}</span>
+                    <span class="text-primary text-uppercase fw-bold mb-0">{{ trans('langMyCoursesSide') }}</span>
                 </div>
 
                 <div class="col-xxl-7 col-xl-7 col-lg-7 col-md-7 col-sm-4 col-4">

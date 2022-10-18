@@ -32,8 +32,6 @@ table p, .panel p, .margin-bottom-fat.form-wrapper.form-edit.p-2.mb-3.rounded p 
 
 @media (max-width:1023px){ body{ font-size:15px; } select{ overflow-y:auto !important; } }
 
-/* #menu-btn{ border-radius: 50%;} */
-
 .h-400px{ height:400px; }
 
 .lh-25px{ line-height: 25px; }
@@ -456,8 +454,8 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   
   .state_success { color: #11D888; }
 
-  .carousel-indicators>button:not(:has(.active)) {background-color: #000000; height:10px; margin-bottom: 10px;}
-  .carousel-indicators>button.active {background-color: #FF0000;}
+  .carousel-indicators>button:not(:has(.active)) {background-color: #000000; height:10px;}
+  .carousel-indicators>button.active {background-color: #0d6efd;}
   .carousel-prev-btn,.carousel-next-btn{
     width:30px;
     height:30px;
@@ -1028,10 +1026,11 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   /* -------------------------------------------------------------------------------------------------*/  
 
   .btn.btn-default{
-    border-color: #7c7c7c;
-    background: linear-gradient(top, rgba(38, 38, 38, 0.8), #e6e6e6 25%, #ffffff 38%, #c5c5c5 63%, #f7f7f7 87%, rgba(38, 38, 38, 0.8));
-    background: -webkit-linear-gradient(top, rgba(38, 38, 38, 0.5), #e6e6e6 25%, #ffffff 38%, rgba(0, 0, 0, 0.25)  63%, #e6e6e6 87%, rgba(38, 38, 38, 0.4));
-    color:black;
+    border-color: #D3D3D3;
+    text-shadow: 0 1px 0 #fff;
+    background-image: linear-gradient(to bottom, #fff 0%, #e0e0e0 100%);
+    background-repeat: repeat-x;
+    color: #333;
   }
 
   .btn.btn-primary{
@@ -1393,7 +1392,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .panel-body,.media-body{ padding:15px; background-color:white; }
 
-  @media(max-width:767px){.panel-body{overflow-y: auto;}}
+  @media(max-width:991px){.panel-body{overflow-y: auto;}}
 
   .panel-title{ font-weight: 700; font-size: 14px; }
 

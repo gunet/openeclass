@@ -17,13 +17,18 @@
 
 .leftMenuToolCourse.active:hover{ background-color:  #ccc; border: 0; }
 
-/* ------------------------ LEFT MENU view page as teacher-student form --------------------- */
 
-.on2{ margin-right:-95px; font-size: 12px; color:white; padding-top:14px; }
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+/************************************** THIS IS FIRST CHOICE OF VIEW-STUDENT-TEACHER TOOGLE BUTTON **************************************/
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+
+/* .on2{ margin-right:-95px; font-size: 12px; color:white; padding-top:14px; }
 
 .off2{ margin-top:-34px; color:white; font-size: 12px; margin-left:-95px; }
 
-.btn-toggle{ position: relative; height: 3rem; border-radius: 5rem; overflow: hidden; outline: none; border: 2px solid blue; background-color: transparent; }
+.btn-toggle{ position: relative; height: 3rem; border-radius: 5rem; overflow: hidden; outline: none; border: 2px solid blue; background-color: transparent; } 
 
 .btn-toggle span.on, .btn-toggle.btn-toggle-on span.off { display: none; }
 
@@ -46,7 +51,13 @@
   justify-content: center;
 }
 
-.btn-toggle span.off, .btn-toggle.btn-toggle-on span.on { display: inline-block; }
+.btn-toggle span.off, .btn-toggle.btn-toggle-on span.on { display: inline-block; } */
+
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+
+
 
 /* --------------------------------------- Basic classes ------------------------------- */
 
@@ -70,11 +81,7 @@
 
 .navbar_breadcrumb{ margin-left:60px; margin-top:-35px; height:auto; width:95%; }
 
-/* .menu_btn_button{  margin-top:-13px;  margin-left:10px; } */
-
 .breadcrumb li{ white-space:nowrap; }
-
-/* /* mobile - portrait * */
 
 @media(max-width: 425px){ 
 
@@ -170,7 +177,17 @@
 
 }
 
-@media (min-width:1751px){
+
+
+
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+/************************************** THIS IS FIRST CHOICE OF VIEW-STUDENT-TEACHER TOOGLE BUTTON **************************************/
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+
+
+/* @media (min-width:1751px){
 
   .btn-toggle> .off {width: 50%; padding-left: 0px;}
 
@@ -257,27 +274,47 @@
   .btn-toggle> .off2{ padding-left: 0px; padding-top: 1px}
 
   .btn-toggle> .on2{ padding-top: 14px; padding-left: 25px;}
-}
+} */
 
 
 
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
 
 
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+/************************************** THIS IS SECOND CHOICE OF VIEW-STUDENT-TEACHER TOOGLE BUTTON **************************************/
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+.switch-sidebar { position: relative; display: inline-block; height: 34px;  width:165px; }
 
+.slider-btn-on{ width:165px; }
 
+.switch-sidebar input {display:none;}
 
+.slider { position: absolute;  cursor: pointer; top: 0; left: 0; right: 0;
+  bottom: 0; background-color: #ca2222; -webkit-transition: .4s; transition: .4s; }
 
+.slider:before { position: absolute; content: ""; height: 26px; width: 26px;
+  left: 4px; bottom: 4px; background-color: white; -webkit-transition: .4s; transition: .4s; }
 
+input:checked + .slider { background-color: #2ab934; }
 
+input:focus + .slider { box-shadow: 0 0 1px #2196F3; }
 
+input:checked + .slider:before { -webkit-transform: translateX(130px); -ms-transform: translateX(130px); transform: translateX(130px); }
 
+.on { display: none; }
 
+.on, .off {  color: white; position: absolute; transform: translate(-50%,-50%);
+  top: 50%; left: 50%; font-size: 10px; font-family: Verdana, sans-serif; }
 
+input:checked+ .slider .on {display: block;}
 
+input:checked + .slider .off {display: none;}
 
+.slider.round { border-radius: 34px; }
 
-
-
-
-
-
+.slider.round:before { border-radius: 50%;}
