@@ -2558,6 +2558,10 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER table course ADD `view_units` INT(11) NOT NULL DEFAULT 0");
     }
 
+    $current_theme = get_config('theme');
+    if (!$current_theme or $current_theme == 'default') {
+        set_config('theme', 'modern');
+    }
 }
 
 
