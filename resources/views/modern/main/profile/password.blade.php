@@ -61,7 +61,7 @@
                         <form class='form-horizontal' role='form' method='post' action='{{ $passUrl }}'>
                             <fieldset>
 
-                                <div class='form-group{{ $old_pass_error ? " has-error" : "" }} mt-3'>
+                                <div class='form-group{{ $old_pass_error ? " has-error" : "" }}'>
                                     <label for='old_pass' class='col-sm-12 control-label-notes'>{{ trans('langOldPass') }} </label>
                                     <div class='col-sm-12'>
                                         <input type='password' class='form-control' placeholder="{{ trans('langOldPass') }}..." id='old_pass' name='old_pass' value='{{ $old_pass }}' autocomplete='off'>

@@ -114,7 +114,7 @@ hContent;
                 <form role='form' class='form-horizontal' method='post' action='index.php?course=" . $course_code . "'>
                 <input type='hidden' name='addcommit' value='1'>
                 <fieldset>
-                    <div class='form-group mt-3'>
+                    <div class='form-group'>
                     <label for='courses-select' class='col-sm-6 control-label-notes'>$langCourse:</label>
                     <div class='col-sm-12'>
                         <select id='courses-select' class='form-select' name='prerequisite_course'></select>
@@ -122,8 +122,8 @@ hContent;
                     </div>
                     <div class='form-group mt-3'>
                     <div class='col-sm-10 col-sm-offset-2'>
-                        <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                        <a href='index.php?course=" . $course_code . "'' class='btn btn-secondary'>$langCancel</a>
+                        <input class='btn btn-sm btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                        <a href='index.php?course=" . $course_code . "'' class='btn btn-sm btn-secondary'>$langCancel</a>
                     </div>
                     </div>
                 </fieldset>

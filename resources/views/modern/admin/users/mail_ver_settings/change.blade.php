@@ -43,7 +43,7 @@
                             <form class='form-horizontal' role='form' name='mail_verification_change' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                             <fieldset>		
                           
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group'>
                                         <label class='col-sm-12 control-label-notes'>{{ trans('langChangeTo') }}:</label>
                                         <div class='col-sm-12'>
                                             {!! selection($mail_ver_data, "new_mail_ver", $sub, "class='form-control'") !!}

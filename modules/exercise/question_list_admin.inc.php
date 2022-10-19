@@ -414,7 +414,7 @@ if ($nbrQuestions) {
 
     $tool_content .= "<div class='col-12'><div id='RandomizationForm' class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId'>
-                <div class='form-group mt-3'>
+                <div class='form-group'>
                     <div class='col-sm-12'>
                         <div class='checkbox' id='divcheckboxShuffleQuestions'>
                             <label class='form-control-static'>

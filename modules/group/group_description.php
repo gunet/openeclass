@@ -66,7 +66,7 @@ if (isset($_GET['delete'])) {
     <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <input type='hidden' name='group_id' value='$group_id'>
-            <div class='form-group mt-3'>
+            <div class='form-group'>
                 <div class='col-sm-12'>$langGroupDescInfo</div>
             </div>
             <div class='form-group mt-3'>

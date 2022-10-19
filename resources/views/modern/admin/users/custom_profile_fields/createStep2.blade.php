@@ -50,7 +50,7 @@
                                 <input type='hidden' name='catid' value='{{ $catid }}'>
                             @endif
                             <input type='hidden' name='datatype' value='{{ $datatype }}'>
-                            <div class='form-group mt-3'>
+                            <div class='form-group'>
                                 <label for='name' class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
                                 <div class='col-sm-12'>
                                     <input id='name' type='text' name='field_name' class="form-control" value="{{ isset($name) ? $name : '' }}">

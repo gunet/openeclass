@@ -78,7 +78,7 @@
                                         <form class="form-horizontal" role="form" method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                             <input type='hidden' name='u' value='{{ $userUID }}'>
                                             <input type='hidden' name='h' value='{{ q($_REQUEST['h']) }}'>
-                                            <div class="form-group mt-3">
+                                            <div class="form-group">
                                                 <label  class='col-sm-12 control-label-notes'>{!! trans('langNewPass1') !!}</label>
                                                 <div class="col-sm-12">
                                                     <input type='password' placeholder="{!! trans('langNewPass1') !!}..." class='form-control' size='40' name='newpass' value='' id='password' autocomplete='off'>&nbsp;<span id='result'></span>
@@ -175,7 +175,7 @@
                                 <div class='form-wrapper form-edit p-3 rounded'>
                                     <form class='form-horizontal' role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
                                         <div class='row'><div class='col-sm-8'><h4 class='control-label-notes ps-1 mt-1'>{!! trans('langUserData') !!}</h4></div></div>
-                                        <div class='form-group mt-3'>
+                                        <div class='form-group'>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='userName' id='userName' autocomplete='off' placeholder='{!! trans('lang_username') !!}'>
                                             </div>

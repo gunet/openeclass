@@ -404,7 +404,7 @@ if ($action == "createPost") {
             <fieldset>
                 
 
-                <div class='form-group mt-3'>
+                <div class='form-group'>
                     <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle:</label>
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' placeholder='$langBlogPostTitle'>
@@ -490,13 +490,13 @@ if ($action == "editPost") {
                 $commenting_setting = "
                 
                                         <div class='form-group mt-3'>
-                                           <label class='col-sm-12 control-label-notes'>$langBlogPostCommenting:</label>
+                                           <label class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting:</label>
                                            <div class='col-sm-12'>
-                                               <div>
+                                               <div class='d-inline-flex align-items-top'>
                                                    <input type='radio' value='1' name='commenting' $checkCommentEn>
                                                    $langCommentsEn
                                                </div>
-                                               <div>
+                                               <div class='d-inline-flex align-items-top ms-md-3'>
                                                    <input type='radio' value='0' name='commenting' $checkCommentDis>
                                                    $langCommentsDis
                                                </div>
@@ -524,7 +524,7 @@ if ($action == "editPost") {
 
                
 
-                <div class='form-group mt-3'>
+                <div class='form-group'>
                     <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle:</label>
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' value='".q($post->getTitle())."' placeholder='$langBlogPostTitle'>

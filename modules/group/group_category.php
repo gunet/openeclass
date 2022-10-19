@@ -56,7 +56,7 @@ $tool_content .= action_bar(array(
         $form_legend = $langCategoryAdd;
 
         $tool_content .= "<fieldset>
-                        <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")." mt-3'>
+                        <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")."'>
                             <label for='CatName' class='col-sm-6 control-label-notes'>$langCategoryName:</label>
                             <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='categoryname' size='53' placeholder='$langCategoryName'>
@@ -93,7 +93,7 @@ $tool_content .= action_bar(array(
         $tool_content .= "<div class='col-12'><div class = 'form-wrapper form-edit p-3 rounded'>";
         $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;editcategory=1'>";
         $tool_content .= "<fieldset>
-            <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")." mt-3'>
+            <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")."'>
                 <label for='CatName' class='col-sm-6 control-label-notes'>$langCategoryName:</label>
                 <div class='col-sm-12'>
                     <input class='form-control' type='text' name='categoryname' size='53' placeholder='$langCategoryName' $form_name>

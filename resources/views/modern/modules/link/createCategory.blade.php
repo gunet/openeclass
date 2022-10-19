@@ -62,7 +62,7 @@
                                 @endif
                                 <fieldset>
 
-                                    <div class="form-group{{ $categoryNameError ? ' has-error' : ''}} mt-3">
+                                    <div class="form-group{{ $categoryNameError ? ' has-error' : ''}}">
                                     <label for='CatName' class='col-sm-6 control-label-notes'>{{ trans('langCategoryName') }}:</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' type='text' name='categoryname' size='53' placeholder='{{ trans('langCategoryName') }}' value='{{ isset($category) ? $category->name : "" }}'>

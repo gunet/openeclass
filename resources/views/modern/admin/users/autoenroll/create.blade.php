@@ -45,7 +45,7 @@
                                 <input type='hidden' name='id' value='{{ $_GET['edit'] }}'>
                             @endif           
                             <fieldset>
-                                <div class='form-group mt-3'>
+                                <div class='form-group'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langStatus') }}:</label>   
                                     <div class='col-sm-12'>
                                         <p class='form-control-static'>{{ $type == USER_STUDENT ? trans('langStudents') : trans('langTeachers') }}</p>

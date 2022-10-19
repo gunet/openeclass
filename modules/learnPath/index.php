@@ -216,7 +216,7 @@ if ($is_editor) {
                         
                        
 
-                        <div class='form-group mt-3'>
+                        <div class='form-group'>
                             <label for='newPathName' class='col-sm-6 control-label-notes'>$langName:</label>
                             <div class='col-sm-12'>
                               <input name='newPathName' type='text' class='form-control' id='newPathName'>
@@ -265,7 +265,7 @@ if ($is_editor) {
                     <div class='col-12'>
 
                     <div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
-                        <div class='form-group mt-3'>
+                        <div class='form-group'>
                             <label for='newPathName' class='col-sm-6 control-label-notes'>$langName</label>
                             <div class='col-sm-12'>
                               <input name='newPathName' placeholder='$langName...' type='text' class='form-control' id='newPathName'>

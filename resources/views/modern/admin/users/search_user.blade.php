@@ -45,7 +45,7 @@
                         <form class='form-horizontal' role='form' action='listusers.php' method='get' name='user_search'>
                         <fieldset>
                          
-                            <div class='form-group mt-3'>
+                            <div class='form-group'>
                                 <label for='uname' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' placeholder="{{ trans('langUsername') }}..." type='text' name='uname' id='uname' value='{{ $uname }}'>

@@ -45,7 +45,7 @@
                         
                         <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                         <fieldset>
-                            <div class='form-group mt-3'>
+                            <div class='form-group'>
                                 <label for='email_title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' placeholder="{{ trans('langTitle') }}..." type='text' name='email_title' value=''>

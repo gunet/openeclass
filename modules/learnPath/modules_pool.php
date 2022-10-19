@@ -121,7 +121,7 @@ switch ($cmd) {
                         <tr class='list-header'>
                         <td width=\"160\"><label class='text-white' for=\"newName\">" . $langInsertNewModuleName . "</label> :</td>
                         <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"" . q($list->name) . "\"></input>
-                                <input class='btn btn-primary' type=\"submit\" value=\"" . $langModify . "\" name=\"submit\">
+                                <input class='btn btn-sm btn-primary' type=\"submit\" value=\"" . $langModify . "\" name=\"submit\">
                                 <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
                                 <input type=\"hidden\" name=\"module_id\" value=\"" . (int) $_GET['module_id'] . "\">
                         </td>

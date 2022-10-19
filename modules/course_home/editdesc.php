@@ -117,7 +117,7 @@ $tool_content = action_bar(array(
             <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='editdesc.php?course=$course_code' enctype='multipart/form-data'>
                     <fieldset>
-                    <div class='form-group mt-3'>
+                    <div class='form-group'>
                         <label for='description' class='col-sm-12 control-label-notes'>$langCourseLayout:</label>
                         <div class='col-sm-12'>
                             ".  selection($layouts, 'layout', $layout, 'class="form-control"')."

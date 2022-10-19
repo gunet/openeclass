@@ -86,7 +86,7 @@
                                     @endif
                                     <fieldset>
                                         
-                                        <div class='form-group{{ Session::getError("categoryname") ? " has-error" : "" }} mt-3'>
+                                        <div class='form-group{{ Session::getError("categoryname") ? " has-error" : "" }}'>
                                             <label for='CatName' class='col-sm-6 control-label-notes'>{{ trans('langCategoryName') }}:</label>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='categoryname' size='53'{!! $form_name !!} />

@@ -116,7 +116,7 @@ function show_form($id, $sid, $assign) {
 
 			}
 		}
-		$grade_field = "<div class='col-sm-9' id='myModalLabel'><h5>$rubric->name</h5>
+		$grade_field = "<div class='col-sm-12' id='myModalLabel'><h5>$rubric->name</h5>
             <table class='table-default'>
                 <tr>
                     <td>
@@ -150,38 +150,38 @@ function show_form($id, $sid, $assign) {
                 <input type='hidden' name='assignment' value='$id'>
                 <input type='hidden' name='submission' value='$sid'>			
                     <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$m[username]:</label>
-                        <div class='col-sm-9'>
+                        <label class='col-sm-6 control-label-notes'>$m[username]:</label>
+                        <div class='col-sm-12'>
                         $uid_2_name 
                         </div>
                     </div>
-                    <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langReviewStart:</label>
-                        <div class='col-sm-9'>
+                    <div class='form-group mt-3'>
+                        <label class='col-sm-6 control-label-notes'>$langReviewStart:</label>
+                        <div class='col-sm-12'>
                             <span>".q($assign->start_date_review)."</span>
                         </div>
                     </div>
-                    <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langReviewEnd:</label>
-                        <div class='col-sm-9'>
+                    <div class='form-group mt-3'>
+                        <label class='col-sm-6 control-label-notes'>$langReviewEnd:</label>
+                        <div class='col-sm-12'>
                             <span>".q($assign->due_date_review)."</span>
                         </div>
                     </div>
                     $submission
-                    <div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
-                        <label for='grade' class='col-sm-3 control-label'>$langGradebookGrade:</label>                        
+                    <div class='form-group".(Session::getError('grade') ? " has-error" : "")." mt-3'>
+                        <label for='grade' class='col-sm-6 control-label-notes'>$langGradebookGrade:</label>                        
                             $grade_field
                             <span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>                        
                     </div>
-                    <div class='form-group'>
-                        <label for='comments' class='col-sm-3 control-label'>$m[gradecomments]:</label>
-                        <div class='col-sm-9'>
+                    <div class='form-group mt-3'>
+                        <label for='comments' class='col-sm-6 control-label-notes'>$m[gradecomments]:</label>
+                        <div class='col-sm-12'>
                             <textarea class='form-control' rows='3' name='comments'  id='comments'>$comments</textarea>
                         </div>
                     </div>";
                     if ($assign->due_date_review > $cdate) {
                         $tool_content .="
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <div class='col-sm-9 col-sm-offset-3'>
                                 <div class='checkbox'>
                                     <label>
@@ -191,7 +191,7 @@ function show_form($id, $sid, $assign) {
                                 </div>
                             </div>
                         </div>
-                        <div class='form-group'>
+                        <div class='form-group mt-3'>
                             <div class='col-sm-9 col-sm-offset-3'>
                                 <input class='btn btn-primary' type='submit' name='grade_comments_review' value='$langGradeOk'>
                                 <a class='btn btn-default' href='$cancel_link'>$langCancel</a>

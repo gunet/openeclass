@@ -54,13 +54,13 @@
                         <div class="form-wrapper form-edit p-3 rounded">
                             
                             <form class="form-horizontal" role="form" method="post">
-                                <div class='input-append date form-group mt-3' data-date='{{ $user_date_start }}' data-date-format='dd-mm-yyyy'>
+                                <div class='input-append date form-group' data-date='{{ $user_date_start }}' data-date-format='dd-mm-yyyy'>
                                     <label class='col-sm-12 control-label-notes' for='user_date_start'>{{ trans('langStartDate') }}</label>
                                     <div class='row'>
-                                        <div class='col-10 col-sm-11'>               
+                                        <div class='col-10'>               
                                             <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '{{ $user_date_start }}'>
                                         </div>
-                                        <div class='col-2 col-sm-1'>
+                                        <div class='col-2'>
                                             <span class='add-on'><i class='fa fa-times'></i></span>
                                             <span class='add-on'><i class='fa fa-calendar'></i></span>
                                         </div>
@@ -69,10 +69,10 @@
                                 <div class='input-append date form-group mt-3' data-date='{{ $user_date_end }}' data-date-format='dd-mm-yyyy'>
                                     <label class='col-sm-12 control-label-notes' for='user_date_end'>{{ trans('langEndDate') }}</label>
                                     <div class='row'>
-                                        <div class='col-10 col-sm-11'>
+                                        <div class='col-10'>
                                             <input class='form-control' id='user_date_end' name='user_date_end' type='text' value='{{ $user_date_end }}'>
                                         </div>
-                                        <div class='col-2 col-sm-1'>
+                                        <div class='col-2'>
                                             <span class='add-on'><i class='fa fa-times'></i></span>
                                             <span class='add-on'><i class='fa fa-calendar'></i></span>
                                         </div>

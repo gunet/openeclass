@@ -166,7 +166,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
         <div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <fieldset>
-                <div class='form-group".(Session::getError('newTitle') ? " has-error" : "")." mt-3'>
+                <div class='form-group".(Session::getError('newTitle') ? " has-error" : "")."'>
                     <label for='newTitle' class='col-sm-12 control-label-notes'>$langTitle</label>
                     <div class='col-sm-12'>
                         <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . $titleToModify . "' placeholder='$langTitle'>

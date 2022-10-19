@@ -49,7 +49,7 @@
                         
                         <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' onsubmit='return validateNodePickerForm();' >
                         <fieldset>        
-                        <div class='form-group mt-3'>
+                        <div class='form-group'>
                             <label for='fields' class='col-sm-12 control-label-notes'>{{ trans('langMultiRegFields') }}</label>
                             <div class='col-sm-12'>
                                 <input class='form-control' id='fields' type='text' name='fields' value='first last id email phone'>

@@ -115,7 +115,7 @@ if (isset($_GET['add'])) {
 
 
 
-                <div class='form-group mt-3'>
+                <div class='form-group'>
                 <label for='surname' class='col-sm-6 control-label-notes'>$langSurname:</label>
                 <div class='col-sm-12'>
                     <input class='form-control' id='surname' type='text' name='search_surname' value='" . q($search_surname) . "' placeholder='$langSurname'></div>

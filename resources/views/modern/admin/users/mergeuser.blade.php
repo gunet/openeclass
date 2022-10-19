@@ -46,7 +46,7 @@
                                 
                                 <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                 <fieldset>                                    
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group'>
                                         <label class='col-sm-12 control-label-notes'>{{ trans('langUser') }}</label>
                                         <div class='col-sm-12'>
                                             {!! display_user($info['id']) !!}

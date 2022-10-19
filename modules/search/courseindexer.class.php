@@ -192,7 +192,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
                 <div class='form-wrapper form-edit p-3 rounded'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
                         <fieldset>
-                            <div class='form-group mt-3'>
+                            <div class='form-group'>
                                 <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
                                 <div class='col-sm-12'><input id='title' class='form-control' name='search_terms_title' type='text' placeholder='$langTitle_Descr'></div>
                             </div>

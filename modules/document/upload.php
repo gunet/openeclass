@@ -82,7 +82,7 @@ if ($can_upload) {
         $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
         $pageName = $langDownloadFile;
         $fileinput = "
-        <div class='form-group mt-3'>
+        <div class='form-group'>
           <label for='fileCloudName' class='col-sm-12 control-label-notes'>$langCloudFile</label>
           <div class='col-sm-12'>
             <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='".q($pendingCloudUpload)."'>
@@ -93,7 +93,7 @@ if ($can_upload) {
         $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
         $pageName = $langExternalFile;
         $fileinput = "
-        <div class='form-group mt-3'>
+        <div class='form-group'>
           <label for='fileURL' class='col-sm-12 control-label-notes'>$langExternalFileInfo:</label>
           <div class='col-sm-12'>
             <input type='text' class='form-control' id='fileURL' name='fileURL'>
@@ -102,7 +102,7 @@ if ($can_upload) {
     } else {
         $pageName = $langDownloadFile;
         $fileinput = "
-        <div class='input-group mt-3'>
+        <div class='input-group'>
           <label for='userFile' class='input-group-text control-label-notes p-0 ps-2 pe-2 fs-6'>$langPathUploadFile:</label>
           " .
                 fileSizeHidenInput() .

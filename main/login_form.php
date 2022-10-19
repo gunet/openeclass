@@ -30,7 +30,7 @@ foreach ($q as $l) {
         }
         $authLink[] = array(false, "
             <div class='col-12 d-flex justify-content-center align-items-center'>
-                <a class='btn btn-primary btn-block' href='$authUrl' style='line-height:40px;'>$langEnter</a>
+                <a class='btn btn-sm btn-primary btn-block w-50' href='$authUrl'>$langEnter</a>
             </div>", $authTitle);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/modern/css/bootstrap-social.css'>";
@@ -54,13 +54,13 @@ foreach ($q as $l) {
           <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
             $next
             <div class='row'>
-              <div class='col-12'>
+              <div class='col-8 m-auto d-block'>
                 <div class='input-group mt-3'>
                     <span class='input-group-text' id='usernameIcon'><span class='fa fa-user text-dark'></span></span>
                     <input class='form-control' name='uname' aria-describedby='usernameIcon' placeholder='$langUsername'$userValue>
                 </div>
               </div>
-              <div class='col-12'>
+              <div class='col-8 m-auto d-block'>
                 <div class='input-group mt-3'>
                     <span class='input-group-text' id='passwordIcon'><span class='fa fa-lock text-danger'></span></span>
                     <input class='form-control' name='pass' type='password' aria-describedby='passwordIcon' placeholder='$langPass'>
@@ -69,8 +69,8 @@ foreach ($q as $l) {
             </div>
             <div class='form-group mt-3'>
               <div class='row'>
-                <div class='col-12 text-md-start text-center'>
-                  <button class='login-main-form btn btn-primary w-100 margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+                <div class='col-12 text-center'>
+                  <button class='login-main-form btn btn-sm btn-primary w-50 margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
                 </div>
                 <div class='col-12 text-center mt-3'>
                   <a class='btn btn-transparent text-primary fw-bold fs-6' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>

@@ -1,7 +1,7 @@
                 
           
                 
-                <div class='form-group mt-3'>
+                <div class='form-group'>
                     <label for='imaphost' class='col-sm-12 control-label-notes'>{{ trans('langimaphost') }}</label>
                     <div class='col-sm-12'>
                         <input class='form-control' placeholder="{{ trans('langimaphost') }}..." name='imaphost' id='imaphost' type='text' value='{{ isset($auth_data['imaphost']) ? $auth_data['imaphost'] : ''}}'>

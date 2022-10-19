@@ -80,7 +80,7 @@
                                     onsubmit="return checkrequired(this, 'title');">
                                     <fieldset>
                                        
-                                        <div class='form-group mt-3'>
+                                        <div class='form-group'>
                                             @if (isset($pendingCloudUpload))
                                                 <label for='fileCloudName' class='col-sm-12 control-labe-notes'>{{ trans('langCloudFile') }}</label>
                                                 <div class='col-sm-12'>

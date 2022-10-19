@@ -60,7 +60,7 @@
                                 <form class='form-horizontal' role='form' method='post' action='index.php?course={{ $course_code }}'>
                                 <fieldset>                 
                                              
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group'>
                                         <label class='col-sm-6 control-label-notes'>{{ trans('langSocialBookmarksFunct') }}</label>
                                         <div class='col-sm-9'> 
                                             <div class='radio'>

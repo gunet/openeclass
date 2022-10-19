@@ -17,14 +17,14 @@
         <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center'> 
             <label class="switch-sidebar">
                 <input class="form-check-input slider-btn-on btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}" type="checkbox" id="flexSwitchCheckChecked" {{ !$is_editor ? "checked" : "" }}>
-                <div class="slider round">
+                <div class="slider-round">
                     <span class="on">{{ trans('langCStudent2') }}</span>
                     <span class="off">{{ trans('langCTeacher') }}</span>
                 </div>
             </label>
         </form>
     @endif
-    
+
     <div class="panel-group accordion mt-5" id="sidebar-accordion">
         <div class="panel">
             @foreach ($toolArr as $key => $tool_group)

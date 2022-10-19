@@ -43,16 +43,11 @@
                         <div class="form-wrapper form-edit p-3 rounded">
                             
                             <form class="form-horizontal" role="form" method="post">
-                                <div class="form-group mt-3">
+                                <div class="form-group">
                                     <div class="col-sm-12">
-                                       {{-- <select name="selectedMonth" class="form-control">
-                                            @for ($i = 0; $i < 12; $i++)
-                                            <option value="{{ $option_date->modify( '-1 month' )->format('m Y') }}">{{ trans("langMonths['".$option_date->format('m')."']").' '.$option_date->format('Y') }}</option>
-                                            @endfor
-                                        </select> --}}
                                         <select name="selectedMonth" class="form-select">{!! $months !!}</select>
                                     </div>
-                                    <input class="btn btn-sm btn-primary mt-2 submitAdminBtn w-100" type="submit" name="btnUsage" value="{{ trans('langSubmit') }}">
+                                    <input class="btn btn-sm btn-primary mt-5 submitAdminBtn w-100" type="submit" name="btnUsage" value="{{ trans('langSubmit') }}">
                                 </div>
                             </form>
                         </div>

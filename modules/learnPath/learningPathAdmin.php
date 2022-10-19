@@ -480,7 +480,7 @@ $lp_action_button = action_button(array(
 ),
     array(
         'secondary_title' => $langAdd,
-        'secondary_icon' => '',
+        'secondary_icon' => 'fa-plus',
         'secondary_btn_class' => 'btn-success btn-sm'
     )
 );

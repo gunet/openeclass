@@ -153,7 +153,7 @@ function bbb_session_form($session_id = 0) {
         <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
         <fieldset>
-        <div class='form-group mt-3'>
+        <div class='form-group'>
             <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='title' id='title' value='$value_title' placeholder='$langTitle' size='50'>

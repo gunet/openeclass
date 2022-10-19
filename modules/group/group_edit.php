@@ -273,7 +273,7 @@ $tool_content .= action_bar(array(
 $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id'>
         <fieldset>
-        <div class='form-group".(Session::getError('name') ? " has-error" : "")." mt-3'>
+        <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
             <label class='col-sm-6 control-label-notes'>$langGroupName:</label>
             <div class='col-sm-12'>
                 <input class='form-control' type=text name='name' size='40' value='$tool_content_group_name'>

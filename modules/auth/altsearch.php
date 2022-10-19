@@ -560,7 +560,7 @@ function user_info_form() {
     $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='post'>
         <fieldset>
-        <div class='form-group mt-3'>
+        <div class='form-group'>
             <label for='givenname_id' class='col-sm-6 control-label-notes'>$langName:</label>
             <div class='col-sm-12$givennameClass'>$givennameInput</div>
         </div>

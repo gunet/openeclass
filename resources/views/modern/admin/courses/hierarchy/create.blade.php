@@ -46,7 +46,7 @@
                             
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}{{ isset($mynode) ? '?action=edit' : '?action=add' }}' onsubmit='return validateNodePickerForm();'>
                             <fieldset>
-                                <div class='form-group mt-3'>
+                                <div class='form-group'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langNodeCode1') }}</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' placeholder="{{ trans('langNodeCode1') }}..." type='text' name='code' value='{{ isset($mynode) ? $mynode->code : "" }}'>

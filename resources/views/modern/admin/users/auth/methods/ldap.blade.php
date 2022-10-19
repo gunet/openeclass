@@ -1,6 +1,6 @@
           
             
-            <div class='form-group mt-3'>
+            <div class='form-group'>
                 <label for='ldaphost' class='col-sm-12 control-label-notes'>{{ trans('langldap_host_url') }}</label>
                 <div class='col-sm-12'>
                     <input class='form-control' placeholder="{{ trans('langldap_host_url') }}..." name='ldaphost' id='ldaphost' type='text' value='{{ isset($auth_data['ldaphost']) ? $auth_data['ldaphost'] : '' }}'>

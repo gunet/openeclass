@@ -44,7 +44,7 @@
 
                                 <form class='form-horizontal' role='form' name='edituser' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' onsubmit='return validateNodePickerForm();'>
                                     <fieldset>
-                                        <div class='form-group mt-3'>
+                                        <div class='form-group'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langSurname') }}</label>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='lname' size='50' value='{{ $info->surname }}'>

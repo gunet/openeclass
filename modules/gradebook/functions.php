@@ -517,18 +517,30 @@ function user_gradebook_settings() {
                             </div>
                         </div>
                     </div>
-                    <div class='form-group mt-3'>
-                        <div class='col-10 col-sm-offset-2'>".form_buttons(array(
-                        array(
-                            'text' => $langRefreshList,
-                            'name' => 'resetGradebookUsers',
-                            'value'=> $langAttendanceUpdate,
-                            'javascript' => "selectAll('participants_box',true)"
-                        ),
-                        array(
-                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . "&amp;gradebookBook=1"
-                        )
-                    ))."</div>
+                    <div class='form-group mt-5'>
+                        <div class='col-12'>
+                           <div class='row'>
+                              <div class='col-6'>
+                                 ".form_buttons(array(
+                                    array(
+                                        'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                        'text' => $langRefreshList,
+                                        'name' => 'resetGradebookUsers',
+                                        'value'=> $langAttendanceUpdate,
+                                        'javascript' => "selectAll('participants_box',true)"
+                                    )
+                                ))."
+                              </div>
+                              <div class='col-6'>
+                                ".form_buttons(array(
+                                    array(
+                                        'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . "&amp;gradebookBook=1"
+                                    )
+                                ))."
+                              </div>
+                           </div>
+                        </div>
                     </div>
                 ". generate_csrf_token_form_field() ."
                 </form>
@@ -1542,17 +1554,29 @@ function add_gradebook_other_activity($gradebook_id) {
                             }
                             $tool_content .= "/></div></div>";
                         }
-                        $tool_content .= "<div class='form-group mt-3'>
-                                <div class='col-sm-10 col-sm-offset-2'>".form_buttons(array(
-                                    array(
-                                        'text' => $langSave,
-                                        'name' => 'submitGradebookActivity',
-                                        'value'=> $langAdd
-                                    ),
-                                    array(
-                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                                    )
-                                ))."</div></div>";
+                        $tool_content .= "<div class='form-group mt-5'>
+                                <div class='col-12'>
+                                   <div class='row'>
+                                      <div class='col-6'>
+                                        ".form_buttons(array(
+                                            array(
+                                                'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                                'text' => $langSave,
+                                                'name' => 'submitGradebookActivity',
+                                                'value'=> $langAdd
+                                            )
+                                        ))."
+                                      </div>
+                                      <div class='col-6'>
+                                        ".form_buttons(array(
+                                            array(
+                                                'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                                            )
+                                        ))."
+                                      </div>
+                                   </div>
+                                </div></div>";
                         if (isset($_GET['modify'])) {
                             $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($gradebookActivityToModify) . "'>";
                         } else {

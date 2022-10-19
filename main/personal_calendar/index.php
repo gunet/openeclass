@@ -369,7 +369,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         <form id='myeventform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' style='display:inline'>
         <input type='hidden' id='id' name='id' value='$eventToModify'>
         <input type='hidden' name='rep' id='rep' value='$applytogroup'>
-        <div class='form-group mt-3'>
+        <div class='form-group'>
           <label for='newTitle' class='col-sm-12 control-label-notes'>$langTitle:</label>
           <div class='col-sm-12'>
                <input class='form-control' type='text' name='newTitle' id='newTitle' value='$titleToModify' placeholder='$langTitle'>

@@ -90,23 +90,8 @@ $(function() {
                                 @endif
                                 <fieldset>
 
-                       
 
-                                    {{--<div class='form-group mt-3'>
-                                        <label for='delusers' class='col-sm-6 control-label-notes'>{{ trans('langUsers') }}</label>
-                                        <div class='col-sm-12 checkbox'>
-                                            <label><input type='checkbox' name='delusers'> {{ trans('langUserDelCourse') }}:</label>
-                                        </div>
-                                        <div class='col-sm-12'>
-                                            {!! $selection_date !!}
-                                        </div>
-                                        <div class='col-sm-12 mt-3'>
-                                            <input type='text' name='reg_date' id='reg_date' value='{{ $date_format }}'>
-                                        </div>                
-                                    </div>--}}
-
-
-                                    <div class='form-group mt-3 text-center'>
+                                    <div class='form-group text-center'>
                                         <label class='col-sm-6 control-label-notes'>{{trans('langUsers')}}</label>
                                         <div class='col-sm-12'>
                                             <p class='form-control-static'>{{trans('langUserDelCourse')}}</p>

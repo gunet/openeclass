@@ -204,7 +204,7 @@ if ($submit) {
     $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
         <fieldset>
-        <div class='form-group mt-3'>
+        <div class='form-group'>
         <label for='Sur' class='col-sm-6 control-label-notes'>$langSurname:</label>
             <div class='col-sm-12'>" .q($ps) ."
                 <input type='hidden' name='ps' value='" . q($ps) . "'>              

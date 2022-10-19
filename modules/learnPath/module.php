@@ -189,16 +189,16 @@ $tool_content .=
                 'url' => $pathBack . "?course=$course_code",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')),false) . "
-    <div class='panel panel-default'>
-        <div class='panel-heading'>
+    <div class='panel panel-default rounded-0'>
+        <div class='panel-heading rounded-0'>
             <h3 class='panel-title'>$langLearningObjectData</h3>
         </div>
-        <div class='panel-body'>
+        <div class='panel-body rounded-0'>
             <div class='row margin-bottom-fat p-2'>
-                <div class='col-sm-3'>
+                <div class='col-sm-4'>
                     <strong class='control-label-notes'>$langTitle:</strong>
                 </div>
-                <div class='col-sm-9'>";
+                <div class='col-sm-8'>";
 if (isset($_REQUEST['cmd']) and $_REQUEST['cmd'] == 'updateName') {
     $tool_content .= nameBox(MODULE_, UPDATE_, $langModify);
 } else {
@@ -240,10 +240,10 @@ if ($module->contentType != CTLABEL_) { //
         //display type of the module
 
         $tool_content .= "<div class='row margin-bottom-fat p-2'>
-                            <div class='col-sm-3'>
+                            <div class='col-sm-4'>
                                 <strong class='control-label-notes'>$langTypeOfModule:</strong>
                             </div>
-                            <div class='col-sm-9'>
+                            <div class='col-sm-8'>
                                 <i class='fa $contentType_img'></i> $contentDescType
                             </div>
                         </div>
@@ -252,10 +252,10 @@ if ($module->contentType != CTLABEL_) { //
         //display total time already spent in the module
 
         $tool_content .= "<div class='row margin-bottom-fat p-2'>
-                            <div class='col-sm-3'>
+                            <div class='col-sm-4'>
                                 <strong class='control-label-notes'>$langTotalTimeSpent:</strong>
                             </div>
-                            <div class='col-sm-9'>
+                            <div class='col-sm-8'>
                                 $resultBrowsed->total_time
                             </div>
                         </div>
@@ -264,10 +264,10 @@ if ($module->contentType != CTLABEL_) { //
         //display time passed in last session
 
         $tool_content .= "<div class='row margin-bottom-fat p-2'>
-                            <div class='col-sm-3'>
+                            <div class='col-sm-4'>
                                 <strong class='control-label-notes'>$langLastSessionTimeSpent:</strong>
                             </div>
-                            <div class='col-sm-9'>
+                            <div class='col-sm-8'>
                                 $resultBrowsed->session_time
                             </div>
                         </div>
@@ -306,10 +306,10 @@ if ($module->contentType != CTLABEL_) { //
         }
 
         $tool_content .= "<div class='row margin-bottom-fat p-2'>
-                            <div class='col-sm-3'>
+                            <div class='col-sm-4'>
                                 <strong class='control-label-notes'>$langLessonStatus:</strong>
                             </div>
-                            <div class='col-sm-9'>
+                            <div class='col-sm-8'>
                                 $statusToDisplay
                             </div>
                         </div>
@@ -326,13 +326,13 @@ if ($module->contentType != CTLABEL_) { //
 
     $tool_content .="
     <div class='row margin-bottom-fat p-2'>
-        <div class='col-sm-3'>
+        <div class='col-sm-4'>
             <strong class='control-label-notes'>$langPreview:</strong>
         </div>
-        <div class='col-sm-9'>";
+        <div class='col-sm-8'>";
     if ($module->startAsset_id != "" && $asset->asset_id == $module->startAsset_id) {
         $tool_content .= "<form action='./viewer.php?course=$course_code' method='post'> 
-                            <input class='btn btn-primary' type='submit' value='$langStartModule'>
+                            <input class='btn btn-sm btn-primary' type='submit' value='$langStartModule'>
                         </form>";
     } else {
         $tool_content .= "<p style='align:center;'>$langNoStartAsset</p>";

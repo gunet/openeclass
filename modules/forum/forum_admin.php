@@ -100,7 +100,7 @@ if (isset($_GET['forumgo'])) {
         <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
         <fieldset>
-            <div class='form-group mt-3'>
+            <div class='form-group'>
                 <label for='cat_title' class='col-sm-6 control-label-notes'>$langCategory:</label>
                 <div class='col-sm-12'>
                     <input type='text' class='form-control' id='cat_title' value='$ctg' disabled>
@@ -142,7 +142,7 @@ elseif (isset($_GET['forumgoedit'])) {
                 <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgosave=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
                 <input type='hidden' name='forum_id' value='$forum_id'>
                 <fieldset>
-                <div class='form-group mt-3'>
+                <div class='form-group'>
                     <label for='forum_name' class='col-sm-6 control-label-notes'>$langForName:</label>
                     <div class='col-sm-12'>
                         <input name='forum_name' type='text' class='form-control' id='forum_name' value='" . q($forum_name) . "'>
@@ -204,7 +204,7 @@ elseif (isset($_GET['forumcatedit'])) {
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatsave=yes' method='post' onsubmit=\"return checkrequired(this,'cat_title');\">
         <input type='hidden' name='cat_id' value='$cat_id'>
         <fieldset>
-        <div class='form-group mt-3'>
+        <div class='form-group'>
             <label for='cat_title' class='col-sm-6 control-label-notes'>$langCategory:</label>
             <div class='col-sm-12'>
                 <input name='cat_title' type='text' class='form-control' id='cat_title' placeholder='$langCategory' value='$cat_title'>
@@ -462,7 +462,7 @@ elseif (isset($_GET['forumgodel'])) {
        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumtopicsave=yes&amp;topic_id=$topic_id' method='post'>
        <fieldset>
-       <div class='form-group mt-3'>
+       <div class='form-group'>
         <div class='col-sm-12'>
         <select name='forum_id' class='form-select'>";
         $result = Database::get()->queryArray("SELECT f.`id` as `forum_id`, f.`name` as `forum_name`, fc.`cat_title` as `cat_title` FROM `forum` AS `f`, `forum_category` AS `fc` WHERE f.`course_id` = ?d AND f.`cat_id` = fc.`id`", $course_id);
@@ -543,7 +543,7 @@ elseif (isset($_GET['forumgodel'])) {
     $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;settings=yes' method='post'>
         <fieldset>
-        <div class='form-group mt-3'>
+        <div class='form-group'>
             <label class='col-sm-12 control-label-notes'>$langForumPostRating:</label>
             <div class='col-sm-9'>
                 <div class='radio'>
@@ -567,7 +567,7 @@ elseif (isset($_GET['forumgodel'])) {
         <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">
         <fieldset>
-        <div class='form-group mt-3'>
+        <div class='form-group'>
             <label for='categories' class='col-sm-6 control-label-notes'>$langCategory:</label>
             <div class='col-sm-12'>
               <input name='categories' type='text' class='form-control' id='categories' placeholder='$langCategory'>

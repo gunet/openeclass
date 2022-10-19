@@ -45,7 +45,7 @@
                                 @if (isset($announcement))
                                     <input type='hidden' name='id' value='{{ $announcement->id }}'>
                                 @endif    
-                                <div class='mt-3 form-group{{ Session::hasError('title') ? " has-error" : "" }}'>
+                                <div class='form-group{{ Session::hasError('title') ? " has-error" : "" }}'>
                                     <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' placeholder="{{ trans('langTitle') }}..." type='text' name='title' value='{{ isset($announcement) ? $announcement->title : "" }}'>

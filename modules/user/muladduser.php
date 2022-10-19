@@ -93,7 +93,7 @@ $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <fieldset>     
                   
-            <div class='form-group mt-3'>
+            <div class='form-group'>
                <div class='col-sm-12 radio'><label class='control-label-notes'><input type='radio' name='type' value='uname' checked>$langUsername</label></div>
                 <div class='col-sm-12 radio'><label class='control-label-notes'><input type='radio' name='type' value='am'>$langAm</label></div>
             </div>

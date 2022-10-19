@@ -79,7 +79,7 @@ if (empty($search_terms)) {
     <div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
-        <div class='form-group mt-3'>
+        <div class='form-group'>
             <label for='search_terms' class='col-sm-6 control-label-notes'>$langOR:</label>
             <div class='col-sm-12'>
                 <input name='search_terms' type='text' class='form-control'>

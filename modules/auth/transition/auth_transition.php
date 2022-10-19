@@ -75,7 +75,7 @@ function display_sso_exception_form($uid) {
         <div class='col-12 mt-3'><div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?exception=TRUE' method='post'>
             <fieldset>
-                <div class='form-group mt-3'>
+                <div class='form-group'>
                     <label class='col-sm-6 control-label-notes'>$langName:</label>
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='$langName' value='" . q($firstname) . "' disabled  />

@@ -49,7 +49,7 @@
                             <div class='form-wrapper form-edit p-3 rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='altsearch.php'>
                                     <fieldset> {{ $auth_instructions }}
-                                            <div class='form-group mt-3'>
+                                            <div class='form-group'>
                                                 <label for='UserName' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                                 <div class='col-sm-12'>
                                                     <input class='form-control' type='text' size='30' maxlength='30' placeholder="{{ trans('langUserNotice') }}" name='uname' autocomplete='off' {{ $set_uname }}>

@@ -178,7 +178,7 @@ if (isset($_POST['submit'])) {
     <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' action='$action' method='post' enctype='multipart/form-data'>
         <fieldset>
-            <div class='form-group mt-3'>
+            <div class='form-group'>
               <label for='subject' class='col-sm-6 control-label-notes'>$langSubject:</label>
               <div class='col-sm-12'>
                 <input type='text' name='subject' id='subject' class='form-control' maxlength='100'>

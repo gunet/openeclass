@@ -170,14 +170,14 @@ $prevNextString = "";
 if ($moduleNb > 1) {
 
     if ($previousModule != '') {
-        $prevNextString .= '<li class="prevnext" style="padding-top: 15px;"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-left fa-lg"></span> </a></li>';
+        $prevNextString .= '<div class="prevnext ps-3 pe-3"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-left fa-lg text-white"></span> </a></div>';
     } else {
-        $prevNextString .= "<li class='prevnext' style='padding-top: 15px;'><a href='#' class='inactive'><span class='fa fa-arrow-circle-left'></span></a></li>";
+        $prevNextString .= "<div class='prevnext ps-3 pe-3'><a href='#' class='inactive'><span class='fa fa-arrow-circle-left text-white'></span></a></div>";
     }
     if ($nextModule != '') {
-        $prevNextString .= '<li class="prevnext" style="padding-top: 15px;"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-right fa-lg"></span></a></li>';
+        $prevNextString .= '<div class="prevnext ps-3 pe-3"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-right fa-lg text-white"></span></a></div>';
     } else {
-        $prevNextString .= "<li class='prevnext' style='padding-top: 15px;'><a href='#' class='inactive'><span class='fa fa-arrow-circle-right'></span></a></li>";
+        $prevNextString .= "<div class='prevnext ps-3 pe-3'><a href='#' class='inactive'><span class='fa fa-arrow-circle-right text-white'></span></a></div>";
     }
 }
 $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
@@ -214,70 +214,6 @@ echo "<!DOCTYPE HTML>
     <!-- Font Awesome - A font of icons -->
     <link href='{$urlAppend}template/modern/css/font-awesome-4.7.0/css/font-awesome.css' rel='stylesheet'>
 
-    <style>
-        .navbar-inverse .navbar-nav > li > a {color: whitesmoke;}
-        .navbar-inverse .navbar-nav > li > a.inactive, .navbar-inverse .navbar-nav > li > a.inactive:hover, .navbar-inverse .navbar-nav > li > a.inactive:focus {color: #9d9d9d; cursor: default;}
-        .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus { color: #9BCCF7; }
-        a#leftTOCtoggler {
-            color: whitesmoke;
-        }
-        .navbar-collapse.collapse {
-        display: block!important;
-        }
-
-        .navbar-nav>li, .navbar-nav {
-        float: left !important;
-        }
-
-        .navbar-nav.navbar-right:last-child {
-        margin-right: -15px !important;
-        }
-
-        .navbar-right {
-        float: right!important;
-        }
-
-        .progressbar-plr{
-            margin-top: 15px !important;
-        }
-        #navigation-btns li a, #navigation-btns li a span{
-            padding-top: 0px !important;
-            padding-bottom: 0px !important;
-        }
-        #navigation-btns li, #navigation-btns li a i{
-            height: 50px;
-            line-height: 50px;
-        }
-        #navigation-btns li a{
-            padding-right: 0px;
-            padding-left: 0px;
-        }
-        #navigation-btns li:nth-child(1){
-            padding-left: 35px;
-            padding-right: 5px;
-        }
-        #navigation-btns li:nth-child(2){
-            padding-left: 5px;
-            padding-right: 0px;
-        }
-        #navigation-btns #close-btn{
-            padding-right:20px;
-            padding-left:20px;
-            border-left: 2px groove #999;
-            margin-left: 35px;
-        }
-        #navigation-btns #close-btn span{
-            font-size:16px;
-        }
-        #leftTOCtoggler{
-            margin-top: 7px;
-        }
-        #toc_logo{
-            padding-left: 10px;
-            margin-left: 10px;
-            border-left: 2px groove #999;
-        }
-    </style>
     <script type='text/javascript'>
     /* <![CDATA[ */
 
@@ -315,30 +251,32 @@ echo "<!DOCTYPE HTML>
     </script>
 </head>
 <body>
-
-    <nav class='navbar navbar-inverse navbar-static-top bg-dark' role='navigation'>
-            <div class='container-fluid'>
-                <div class='navbar-header col-2'>
-                  <a id='leftTOCtoggler' class='btn mt-0'><span class='fa fa-bars fa-lg'></span></a>
-                  <a id='toc_logo' class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='$logoUrl' alt='Logo'></a>
-                </div>
-                <div class='navbar-header col-10 float-end'>
-                    <ul id='navigation-btns' class='nav navbar-nav navbar-right '>
-                        $prevNextString
-                        <li id='close-btn'><a href='$returl' target='_top'><span class='fa fa-times fa-lg'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></li>
-                    </ul>
-                    <div class='float-end progressbar-plr'>";
-
-                         if ($uid) {
-                            $path_id = (int) $_SESSION['path_id'];
-                            $lpProgress = get_learnPath_progress($path_id, $uid);
-                            update_gradebook_book($uid, $path_id, $lpProgress/100, GRADEBOOK_ACTIVITY_LP);
-                            echo disp_progress_bar($lpProgress, 1);
-                        }
-echo "</div>
-                </div>
+   <nav class='navbar navbar-expand-md navbar-dark fixed-top bg-dark'>
+      <div class='container-fluid'>
+        
+            <div class='col-2'>
+                <a id='leftTOCtoggler' class='btn text-white'><span class='fa fa-bars fa-lg'></span></a>
+                <a id='toc_logo' class='navbar-brand hidden-xs ms-5' href='#'><img class='img-responsive' src='$logoUrl' alt='Logo' style='height:20px;'></a>
             </div>
-    </nav>
-    </body>
+            <div class='col-10'>
+                    <div class='row'>
+                        <div id='navigation-btns' class='col-9 d-inline-flex justify-content-end align-items-top'>
+                            $prevNextString
+                            <div id='close-btn'><a class='ms-5 text-white' href='$returl' target='_top'><span class='fa fa-times fa-lg text-warning'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></div>
+                        </div>
+                        <div class='col-3 d-flex justify-content-end progressbar-plr'>";
+
+                            if ($uid) {
+                                $path_id = (int) $_SESSION['path_id'];
+                                $lpProgress = get_learnPath_progress($path_id, $uid);
+                                update_gradebook_book($uid, $path_id, $lpProgress/100, GRADEBOOK_ACTIVITY_LP);
+                                echo disp_progress_bar($lpProgress, 1);
+                            }
+                echo "</div></div>
+            </div>
+         
+      </div>
+   </nav>
+</body>
 </html>";
 

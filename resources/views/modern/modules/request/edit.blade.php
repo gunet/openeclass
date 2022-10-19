@@ -56,7 +56,7 @@
                     <div class='col-sm-12'>
                         <div class='form-wrapper form-edit p-3 rounded'>
                             <form class='form-horizontal' action='{{ $targetUrl }}' method='post'>
-                                <div class='form-group mt-3'>
+                                <div class='form-group'>
                                     <label for='requestTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
                                     <div class='col-sm-12'>
                                         <input type='text' class='form-control' id='requestTitle' name='requestTitle' value='{{ $request->title }}' required>

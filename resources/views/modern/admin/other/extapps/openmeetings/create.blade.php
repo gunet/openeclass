@@ -42,7 +42,7 @@
                             
                             <form class='form-horizontal' role='form' name='serverForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                                 <fieldset>        
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group'>
                                     <label for='host' class='col-sm-12 control-label-notes'>{{ trans('langOpenMeetingsServer') }}</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' id='host' type='text' placeholder="{{ trans('langOpenMeetingsServer') }}..." name='hostname_form' value='{{ isset($server) ? $server->hostname : "" }}'>

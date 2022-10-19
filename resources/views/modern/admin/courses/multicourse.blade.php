@@ -48,7 +48,7 @@
                             
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' onsubmit="return validateNodePickerForm();">
                                 <fieldset>
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group'>
                                         <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langMultiCourseTitles') }}</label>
                                         <div class='col-sm-12'>{!! text_area('courses', 20, 80, '') !!}</div>
                                     </div>

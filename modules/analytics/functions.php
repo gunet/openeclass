@@ -225,7 +225,7 @@ function display_analytics_elements($analytics_id) {
     $addParametersBtn = action_button($buttons,
         array(
             'secondary_title' => $langAdd,
-            'secondary_icon' => '',
+            'secondary_icon' => 'fa-plus',
             'secondary_btn_class' => 'btn-success btn-sm'
         
     ));
@@ -836,7 +836,7 @@ function edit_analytics_settings ($analytics_id = 0)
     <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
     <div class='form-wrapper form-edit p-3 rounded'>
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-        <div class='form-group mt-3'>
+        <div class='form-group'>
             <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>

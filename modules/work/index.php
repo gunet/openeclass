@@ -2049,7 +2049,7 @@ function new_assignment() {
         <div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
-            <div class='form-group " . ($title_error ? "has-error" : "") . " mt-3'>
+            <div class='form-group " . ($title_error ? "has-error" : "") . "'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
                 <div class='col-sm-12'>
                   <input name='title' type='text' class='form-control' id='title' placeholder='$langTitle' value='" . q($title) . "'>
@@ -3103,7 +3103,7 @@ function show_edit_assignment($id) {
     <input type='hidden' name='id' value='$id' />
     <input type='hidden' name='choice' value='do_edit' />
     <fieldset>
-            <div class='form-group ".($title_error ? "has-error" : "")." mt-3'>
+            <div class='form-group ".($title_error ? "has-error" : "")."'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
                 <div class='col-sm-12'>
                   <input name='title' type='text' class='form-control' id='title' value='".q($row->title)."' placeholder='$langTitle'>

@@ -43,7 +43,7 @@
                             
                             <form role='form' class='form-horizontal' action='listcours.php?search=yes' method='get'>
                                 <fieldset>      
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group'>
                                         <label for='formsearchtitle' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                         <div class='col-sm-12'>
                                             <input type='text' placeholder="{{ trans('langTitle') }}..." class='form-control' id='formsearchtitle' name='formsearchtitle' value=''>

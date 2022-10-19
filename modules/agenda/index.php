@@ -265,7 +265,7 @@ if ($is_editor) {
             <input type='hidden' id = 'id' name='id' value='$id'>"
                 . "<input type='hidden' name='rep' id='rep' value='$applytogroup'>";
         @$tool_content .= "
-            <div class='form-group mt-3'>
+            <div class='form-group'>
                 <label for='event_title' class='col-sm-6 control-label-notes'>$langTitle :</label>
                 <div class='col-sm-12'>
                     <input type='text' class='form-control' id='event_title' name='event_title' placeholder='$langTitle' value='" . q($event_title) . "'>

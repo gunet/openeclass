@@ -46,7 +46,7 @@
                           <form class='form-horizontal' role='form' method='post' action='{{ $urlServer }}modules/admin/password.php'>
                             <fieldset>      
                               <input type='hidden' name='userid' value='{{ $_GET['userid'] }}'>
-                              <div class='form-group mt-3'>
+                              <div class='form-group'>
                               <label class='col-sm-12 control-label-notes'>{{ trans('langNewPass1') }}</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' placeholder="{{ trans('langNewPass1') }}..." type='password' size='40' name='password_form' value='' id='password' autocomplete='off'>

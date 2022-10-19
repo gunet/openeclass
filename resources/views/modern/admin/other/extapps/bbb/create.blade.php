@@ -45,7 +45,7 @@
                             
                             <form class='form-horizontal' role='form' name='serverForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             <fieldset>
-                                <div class='form-group mt-3'>
+                                <div class='form-group'>
                                     <label for='api_url_form' class='col-sm-12 control-label-notes'>API URL</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' placeholder="api url..." type='text' id='api_url_form' name='api_url_form' value='{{ isset($server) ? $server->api_url : "" }}'>

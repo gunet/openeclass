@@ -42,7 +42,7 @@
                             <form class='form-horizontal' role='form' name='fieldForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                                 <fieldset>
                                 <input type='hidden' name='catid' value='{{ getIndirectReference($catid) }}'>
-                                <div class='form-group mt-3'>
+                                <div class='form-group'>
                                     <label for='datatype' class='col-sm-12 control-label-notes'>{{ trans('langCPFFieldDatatype') }}</label>
                                     <div class='col-sm-12'>
                                         {!! selection($field_types, 'datatype', 1, 'class="form-control"') !!}

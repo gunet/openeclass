@@ -56,7 +56,7 @@
                     <div class='col-sm-12'>
                         <div class='form-wrapper form-edit p-3 rounded'>
                             <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code}}&action=true'>
-                                <div class='form-group mt-3'>
+                                <div class='form-group'>
                                     <label for='link' class='col-sm-6 control-label-notes'>{{ trans('langLink') }}:</label>
                                     <div class='col-sm-12'>
                                         <input id='link' class='form-control' type='text' name='link' size='50' value='http://'>

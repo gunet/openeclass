@@ -49,7 +49,7 @@
                             
                             <form class='form-horizontal' role='form' method='get' action='{{ $_SERVER['SCRIPT_NAME'] }}'>  
                                 <input type="hidden" name="u" value="{{ $u }}">
-                                <div class='form-group mt-3' data-date='{{ $user_date_start }}' data-date-format='dd-mm-yyyy'>
+                                <div class='form-group' data-date='{{ $user_date_start }}' data-date-format='dd-mm-yyyy'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langStartDate') }}</label>
                                     <div class='col-sm-12'>               
                                         <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '{{ $user_date_start }}'>

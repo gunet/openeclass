@@ -1081,9 +1081,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         <div class='col-12'>
             
                 <div class='form-wrapper form-edit p-3 rounded'>
-                    <h4 class='form-heading'>$langImport</h4>
+                    <h5 class='form-heading'>$langImport</h5>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
-                        <div class='form-group mt-3'>
+                        <div class='form-group'>
                             <label for='uploadedPackage' class='col-sm-6 control-label-notes'>$langPathUploadFile</label>
                             <div class='col-sm-12'>
                                 <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >" .
@@ -1098,16 +1098,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
 
 
-                        <div class='form-group mt-3'>
-                            <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
+                        <div class='form-group mt-5'>
+                            <div class='col-12'>
+                               <div class='row'>
+                                  <div class='col-6'>
+                                    ".form_buttons(array(
+                                        array(
+                                            'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                            'text' => $langImport,
+                                            'value'=> $langImport
+                                        )
+                                    ))."
+                                  </div>
+                                  <div class='col-6'>
+                                   ".form_buttons(array(
                                     array(
-                                        'text' => $langImport,
-                                        'value'=> $langImport
-                                    ),
-                                    array(
+                                        'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
                                         'href' => "index.php?course=$course_code",
                                     )
-                                ))."</div>
+                                ))."
+                                  </div>
+                               </div>
+                            </div>
                         </div>
                     </form>
                 </div></div>

@@ -46,7 +46,7 @@
                             
                             <form role='form' class='form-horizontal' action='{{ $_SERVER['SCRIPT_NAME'] }}?c={{ $course->code }}' method='post' onsubmit='return validateNodePickerForm();'>
                                 <fieldset>
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group'>
                                         <label for='Faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                         <div class='col-sm-12'>
                                             {!! $node_picker !!}

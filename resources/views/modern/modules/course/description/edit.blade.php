@@ -49,7 +49,7 @@
                                 @if ($editId)
                                     <input type='hidden' name='editId' value='{{ getIndirectReference($editId) }}'>
                                 @endif
-                                <div class='form-group mt-3'>
+                                <div class='form-group'>
                                     <label for='editType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}: </label>
                                     <div class='col-sm-12'>
                                         {!! selection($types, 'editType', $defaultType, 'class="form-control" id="typSel"') !!}
@@ -68,7 +68,7 @@
                                         {!! $text_area_comments !!}
                                     </div>
                                 </div>
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-5'>
                                     <div class='col-sm-10 col-sm-offset-2'>
                                         {!! $form_buttons !!}
                                     </div>

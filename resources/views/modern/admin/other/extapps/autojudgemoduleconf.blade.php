@@ -42,7 +42,7 @@
                         <div class='form-wrapper form-edit p-3 rounded'>
                             
                             <form class='form-horizontal' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
-                                <div class='form-group mt-3'>
+                                <div class='form-group'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langAutoJudgeConnector') }}</label>
                                     <div class='col-sm-12'>
                                         <select class='form-select' name='formconnector'>{!! implode('', $connectorOptions) !!}</select>

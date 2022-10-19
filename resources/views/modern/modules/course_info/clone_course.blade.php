@@ -107,7 +107,7 @@
                             <div class='form-wrapper form-edit p-3 rounded' >
                                 <form class='form-horizontal' role='form' action='{{ $formAction }}' method='post' onsubmit='return validateNodePickerForm();' >
 
-                                <div class='form-group mt-3'>
+                                <div class='form-group'>
                                     <label for='course_code' class='col-sm-6 control-label-notes'>{{ trans('langCourseCode') }}:</label>
                                     <div class='col-sm-12'>
                                         <input type='text' class='form-control' id='course_code' name='course_code' value='{{ $code }}'>

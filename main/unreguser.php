@@ -50,7 +50,7 @@ if (!isset($_POST['doit'])) {
             <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
 
-                  <div class='form-group mt-3'>
+                  <div class='form-group'>
                     <div class='col-sm-12'>
                       $langConfirm
                     </div>

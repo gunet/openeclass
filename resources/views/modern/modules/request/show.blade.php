@@ -58,22 +58,13 @@
                     <div class='col-sm-12'>
                         <div class='panel panel-default rounded-0'>
                             <div class='panel-heading rounded-0'>
-                                <div class='row'>
-                                    <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
-                                        <div class='panel-title text-start'>
-                                            <span>
-                                            {{ $request->title }}
-                                            @if ($request->type_id)
-                                                <small> -> {{ $type->name }}</small>
-                                            @endif
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class='col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6'>
-                                        <div class='announcement-date text-end info-date'>{{
-                                            format_locale_date(strtotime($request->open_date)) }}
-                                        </div>
-                                    </div>
+                                <div class='panel-title text-start'>
+                                    <span>
+                                    {{ $request->title }}
+                                    @if ($request->type_id)
+                                        <small> -> {{ $type->name }}</small>
+                                    @endif
+                                    </span>
                                 </div>
                             </div>
 
@@ -145,6 +136,12 @@
                                 </div>
 
                             </div>
+
+                            <div class='panel-footer'>
+                                <div class='announcement-date text-end info-date'>
+                                    {{ format_locale_date(strtotime($request->open_date)) }}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -172,7 +169,7 @@
                                 <form class='form-horizontal' role='form' method='post' action='{{ $targetUrl }}' enctype='multipart/form-data'>
                                     <fieldset>
                                         @if ($can_modify)
-                                            <div class='form-group mt-3'>
+                                            <div class='form-group'>
                                                 <label for='newState' class='col-sm-6 control-label-notes'>{{ trans('langChangeState') }}:</label>
                                                 <div class='col-sm-12'>
                                                     <select class='form-select' name='newState' id='newState'>
@@ -186,7 +183,7 @@
 
 
 
-                                        <div class='form-group mt-3'>
+                                        <div class='form-group  @if($can_modify) mt-3 @endif'>
                                             <label for='requestComment' class='col-sm-6 control-label-notes'>{{ trans('langComment') }}:</label>
                                             <div class='col-sm-12'>
                                                 {!! $commentEditor !!}

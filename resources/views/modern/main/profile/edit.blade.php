@@ -52,7 +52,7 @@
                     <div class='form-wrapper form-edit p-3 rounded'>
                         <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='{{ $sec }}' onsubmit='return validateNodePickerForm();'>
                             <fieldset>
-                                <div class='form-group mt-3'>
+                                <div class='form-group'>
                                     <label for='givenname_form' class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
                                     <div class='col-sm-12'>
                                     @if ($allow_name_change)

@@ -43,7 +43,7 @@ $tool_content .= "
     <div class='col-sm-12'>
         <div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' action='save.php' method='post' enctype='multipart/form-data'>
-                <div class='form-group mt-3'>
+                <div class='form-group'>
                     <label for='userFile' class='col-sm-6 control-label-notes'>$langPathUploadFile:</label>
                     <div class='col-sm-12'>
                         <input type='file' id='userFile' name='userFile'>
@@ -52,7 +52,7 @@ $tool_content .= "
                 </div>
                 <div class='form-group mt-3'>
                     <div class='col-sm-offset-2 col-sm-10'>
-                        <button class='btn btn-primary' type='submit'>$langUpload</button>
+                        <button class='btn btn-sm btn-primary' type='submit'>$langUpload</button>
                     </div>
                 </div>
             </form>

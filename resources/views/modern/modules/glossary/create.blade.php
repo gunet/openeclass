@@ -44,7 +44,7 @@
                                                 @endif
 
                                             
-                                                <div class='form-group{{ Session::getError('term') ? " has-error" : "" }} mt-3'>
+                                                <div class='form-group{{ Session::getError('term') ? " has-error" : "" }}'>
                                                     <label for='term' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryTerm') }} </label>
                                                     <div class='col-sm-12'>
                                                         <input type='text' class='form-control' placeholder="{{ trans('langGlossaryTerm') }}..." id='term' name='term' placeholder='{{ trans('langGlossaryTerm') }}' value='{{ $term }}'>

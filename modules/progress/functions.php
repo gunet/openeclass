@@ -500,7 +500,7 @@ function display_activities($element, $id, $unit_id = 0) {
             'show' => $cc_enable && !$cc_is_current)),
         array(
             'secondary_title' => $langAdd,
-            'secondary_icon' => '',
+            'secondary_icon' => 'fa-plus',
             'secondary_btn_class' => 'btn-success btn-sm'
         ));
 
@@ -2160,7 +2160,7 @@ function certificate_settings($element, $element_id = 0) {
     }
     $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
-                <div class='form-group mt-3'>
+                <div class='form-group'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>

@@ -203,7 +203,7 @@ if (isset($_POST['submit'])) {
     $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' action='$form_url' method='post' enctype='multipart/form-data'>
             <input type='hidden' name='parent_post' value='$parent_post'>
-            <div class='form-group mt-3'>
+            <div class='form-group'>
               <label for='message' class='col-sm-6 control-label-notes'>$langBodyMessage:</label>
               <div class='col-sm-12'>
                 " . rich_text_editor('message', 15, 70, $reply) . "

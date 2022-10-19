@@ -68,7 +68,7 @@ if (isset($_GET['all'])) {
     <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
-        <div class='form-group".(Session::getError('group_quantity') ? " has-error":"")." mt-3'>
+        <div class='form-group".(Session::getError('group_quantity') ? " has-error":"")."'>
             <label for='group_quantity' class='col-sm-6 control-label-notes'>$langNewGroups:</label>
             <div class='col-sm-12'>
                 <input name='group_quantity' type='text' class='form-control' id='group_quantity' value='$group_quantity_value' placeholder='$langNewGroups'>
@@ -142,7 +142,7 @@ if (isset($_GET['all'])) {
     $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
-        <div class='form-group".(Session::getError('group_name') ? " has-error" : "")." mt-3'>
+        <div class='form-group".(Session::getError('group_name') ? " has-error" : "")."'>
             <label class='col-sm-6 control-label-notes'>$langGroupName:</label>
             <div class='col-sm-12'>
                 <input class='form-control' type=text name='group_name' size='40'>

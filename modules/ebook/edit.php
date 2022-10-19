@@ -66,12 +66,12 @@ if (isset($_GET['delete'])) {
         <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='id' value='$ebook_id' />
-                <div class='form-group mt-3'>
+                <div class='form-group'>
                     <label class='col-sm-6 control-label-notes'>$langTitle:</label>
                     <div class='col-sm-9 input-group'>
                         <input class='form-control' type='text' name='ebook_title' value='" . q($info->title) . "' />
                         <span class='input-group-btn'>
-                            <button class='btn btn-primary' name='title_submit' type='submit' value='$langModify'>$langModify</button>
+                            <button class='btn btn-sm btn-primary' name='title_submit' type='submit' value='$langModify'>$langModify</button>
                         </span>
                     </div>
                 </div>
@@ -82,11 +82,11 @@ if (isset($_GET['delete'])) {
         
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
-        <h5 class='control-label-notes'>$langSections</h5>
+        <h5 class='control-label-notes mt-3'>$langSections</h5>
         <input type='hidden' name='id' value='$ebook_id' />
-        <div class='table-responsive'>
-          <table class='announcements_table'>
-          <tr class='notes_thead'>
+        <div class='table-responsive mt-0'>
+          <table class='table-default'>
+          <tr class='list-header'>
             <th class='text-white text-left'>$langID</th>
             <th class='text-white'>$langTitle</th>
             <th width='75' class='text-white text-center'>$langActions</th>
@@ -118,7 +118,7 @@ if (isset($_GET['delete'])) {
                                 </div>
                                 ";
                 $section_editing = true;
-                $section_tools = "<input class='btn btn-primary' type='submit' name='new_section_submit' value='$langModify' />";
+                $section_tools = "<input class='btn btn-sm btn-primary' type='submit' name='new_section_submit' value='$langModify' />";
             } else {
                 $section_id = q($section->public_id);
                 $section_title = q($section->title);
@@ -154,7 +154,7 @@ if (isset($_GET['delete'])) {
                     </div>
                 </td>
                 <td class='center'>
-                    <input class='btn btn-primary' type='submit' name='new_section_submit' value='$langAdd'>
+                    <input class='btn btn-sm btn-primary' type='submit' name='new_section_submit' value='$langAdd'>
                 </td>
             </tr>";
         }

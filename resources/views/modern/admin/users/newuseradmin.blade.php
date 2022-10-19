@@ -45,7 +45,7 @@
                         <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] . $params }}' method='post' onsubmit='return validateNodePickerForm();'>
                         <fieldset>
                            
-                            <div class="form-group{{ Session::hasError('givenname_form') ? ' has-error' : '' }} mt-3">
+                            <div class="form-group{{ Session::hasError('givenname_form') ? ' has-error' : '' }}">
                                 <label for="givenname_form" class="col-sm-12 control-label-notes">{{ trans('langName') }}</label>
                                 <div class="col-sm-12">
                                     <input class='form-control' placeholder="{{ trans('langName') }}..." id='givenname_form' type='text' name='givenname_form' value='{{ getValue('givenname_form', $pn) }}'>

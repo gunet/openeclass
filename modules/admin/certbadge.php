@@ -195,7 +195,7 @@ if (isset($_GET['action'])) {
                         <div class='col-lg-6 col-12'>
                         <div class='form-wrapper form-edit p-3 rounded'>
                         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>
-                            <div class='input-group mt-3'>
+                            <div class='input-group'>
                                 <label class='input-group-text control-label-notes p-0 f-6 ps-2 pe-2'>$langZipFile</label>
                                 <input type='file' class='form-control' name='filename' value=''>
                                

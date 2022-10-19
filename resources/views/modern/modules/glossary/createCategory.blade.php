@@ -46,7 +46,7 @@
                                                         <input type='hidden' name='category_id' value='{{ getIndirectReference($glossary_cat->id) }}'>
                                                     @endif
 
-                                                    <div class='form-group{{ Session::getError('name') ? " has-error" : "" }} mt-3'>
+                                                    <div class='form-group{{ Session::getError('name') ? " has-error" : "" }}'>
                                                         <label for='name' class='col-sm-4 control-label-notes'>{{ trans('langCategoryName') }}: </label>
                                                         <div class='col-sm-12'>
                                                             <input type='text' class='form-control' id='term' name='name' placeholder='{{ trans('langCategoryName') }}' value='{{ $name }}'>

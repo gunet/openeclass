@@ -250,11 +250,13 @@ if ($is_editor) {
         $data['checked_index'] = $glossary_index ? ' checked="1"' : '';
         $data['form_buttons'] = form_buttons(array(
                             array(
+                                'class' => 'btn-primary btn-sm',
                                 'text' => $langSave,
                                 'name' => 'submit_config',
                                 'value'=> $langSubmit
                             ),
                             array(
+                                'class' => 'btn-secondary btn-sm',
                                 'href' => $base_url
                             )
                         ));

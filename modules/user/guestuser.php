@@ -101,7 +101,7 @@ if (isset($_POST['submit'])) {
     $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
-        <div class='form-group mt-3'>
+        <div class='form-group'>
             <label class='col-sm-6 control-label-notes'>$langName:</label>
             <div class='col-sm-12'>
                 <input class='form-control' value='".q($guest_info->givenname)."' disabled>

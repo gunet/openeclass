@@ -52,7 +52,7 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
         <div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]$urlext' method='post' >
         <fieldset>
-        <div class='form-group mt-3'>
+        <div class='form-group'>
             <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />
@@ -213,7 +213,7 @@ function edit_lti_app($session_id) {
                 <div class='form-wrapper form-edit p-3 rounded'>
                     <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=" . getIndirectReference($session_id) . "' method='post'>
                     <fieldset>
-                    <div class='form-group mt-3'>
+                    <div class='form-group'>
                         <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
                         <div class='col-sm-12'>
                             <input class='form-control' type='text' name='title' id='title' value='".q($row->title)."'>

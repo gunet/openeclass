@@ -48,7 +48,7 @@
                         
                             <form class='form-horizontal' role='form' method='post' name='makeadmin' action='{{ $_SERVER['SCRIPT_NAME']  }}'>
                                 <fieldset>
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group'>
                                         <label for='username' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                         <div class='col-sm-12'>
                                             <input class='form-control' type='text' name='username' size='30' maxlength='30' placeholder="{{ trans('langUsername') }}..." {!! $usernameValue !!}>

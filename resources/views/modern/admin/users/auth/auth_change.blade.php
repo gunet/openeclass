@@ -43,7 +43,7 @@
                         <div class='form-wrapper form-edit p-3 rounded'>
                             <form class='form-horizontal' role='form' name='authchange' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>   
                             <fieldset>
-                                <div class='form-group mt-3'>
+                                <div class='form-group'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langAuthChangeto') }}</label>
                                     <div class='col-sm-12'>
                                         {!! selection($auth_methods_active, 'auth_change', '', "class='form-control'") !!}

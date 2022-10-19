@@ -151,7 +151,7 @@ if (isset($_GET['scale_id'])) {
                     <fieldset>
                         $hidden_input
                         
-                        <div class='form-group".(Session::getError('title') ? " has-error" : "")." mt-3'>
+                        <div class='form-group".(Session::getError('title') ? " has-error" : "")."'>
                             <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
                             <div class='col-sm-12'>
                               <input name='title' type='text' class='form-control' id='title' value='$title'".($scale_used ? " disabled" : "").">
