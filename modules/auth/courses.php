@@ -85,10 +85,10 @@ if (isset($_POST['submit'])) {
     }
 
     if ($errorExists) {
-        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langWrongPassCourse " .
+        $tool_content .= "<div class='col-12'><div class='alert alert-danger'>$langWrongPassCourse " .
                 q(join(', ', $restrictedCourses)) . "</div></div><br />";
     } else {
-        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        $tool_content .= "<div class='col-12'>
         <div class='alert alert-success'>$langRegDone</div></div>";
     }
     $tool_content .= "<div><a href='../../index.php'>$langHome</a></div>";
@@ -139,7 +139,7 @@ if (isset($_POST['submit'])) {
             $tool_content .= expanded_faculte($fc, $uid);
             $tool_content .= "<br /><div align='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>&nbsp;&nbsp;</div>";
         } else if ($childCount <= 0) {
-            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning text-center'>- $langNoCourses -</div></div>\n";
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning text-center'>- $langNoCourses -</div></div>\n";
         }
     } // end of else (department exists)
 }

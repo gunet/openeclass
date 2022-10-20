@@ -329,11 +329,11 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
               'icon' => 'fa-reply',
               'level' => 'primary-label'))) . "
 
-                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                <div class='col-12'>
                     <div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>
                 </div>
                 
-                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                <div class='col-12'>
                 <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
 
@@ -548,7 +548,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         }
 
         course_index($new_course_code);
-        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>" . $GLOBALS['langCopyFiles'] . "</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-info'>" . $GLOBALS['langCopyFiles'] . "</div></div>";
 
         require_once 'upgrade/functions.php';
         load_global_messages();
@@ -1321,7 +1321,7 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
         $u = Database::get()->querySingle("SELECT * FROM user WHERE BINARY username = ?s", $data['username']);
         if ($u) {
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $u->id;
-            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>" .
+            $tool_content .= "<div class='col-12'><div class='alert alert-info'>" .
                 sprintf($langRestoreUserExists,
                     '<b>' . q($data['username']) . '</b>',
                     '<i>' . q(trim($u->givenname . ' ' . $u->surname)) . '</i>',
@@ -1349,7 +1349,7 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
             $user = new User();
             $user->refresh($user_id, $departments);
             user_hook($user_id);
-            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>" .
+            $tool_content .= "<div class='col-12'><div class='alert alert-info'>" .
                 sprintf($langRestoreUserNew,
                     '<b>' . q($data['username']) . '</b>',
                     '<i>' . q($data[$restoreHelper->getField('user', 'givenname')] .

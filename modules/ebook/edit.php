@@ -399,7 +399,7 @@ if (isset($_GET['delete'])) {
              </form>";
         } else {
             $tool_content .= "
-            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langEBookNoPages</div></div>";
+            <div class='col-12'><div class='alert alert-warning'>$langEBookNoPages</div></div>";
         }
     }
 }

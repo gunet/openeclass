@@ -38,7 +38,7 @@
                     
 
                     @if(Session::has('message'))
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 all-alerts'>
+                    <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
@@ -53,13 +53,13 @@
                     </div>
                     @endif
 
-                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="col-12">
                         <div class='alert alert-danger'>
                             {{ trans('langByDel_A') }} <b> {{ q($currentCourseName) }} {{ ($course_code) }} ;</b>
                         </div>
                     </div>
 
-                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="col-12">
                         <div class='form-wrapper form-edit p-3 mt-5 rounded'>
                             {!! $action_bar !!}
                             <form class='form-horizontal' role='form' method='post' action=' {{ $form_url }}'>

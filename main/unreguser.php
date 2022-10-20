@@ -36,7 +36,7 @@ if (!isset($_POST['doit'])) {
                 'url' => "profile/display_profile.php",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
-        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langAdminNo</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-danger'>$langAdminNo</div></div>";
         draw($tool_content, 1);
         exit;
     } else {
@@ -46,7 +46,7 @@ if (!isset($_POST['doit'])) {
                 AND user_id = ?d LIMIT 1", $uid);
         if (!$q) {
             $tool_content .= "
-            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+            <div class='col-12'>
             <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
 
@@ -77,7 +77,7 @@ if (!isset($_POST['doit'])) {
                     'url' => "profile/profile.php",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')));
-            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langNotice:</br>$langExplain</div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-danger'>$langNotice:</br>$langExplain</div></div>";
         }
     }  //endif is admin
 } else {

@@ -184,7 +184,7 @@ function printPollForm() {
         ));
 
         if ($thePoll->description) {
-            $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='panel panel-primary' style='border:0;'>
+            $tool_content .= "<div class='row p-2'></div><div class='col-12'><div class='panel panel-primary' style='border:0;'>
                 <div class='panel-body form-wrapper form-edit rounded'>
                     <p class='text-center'>" . standard_text_escape($thePoll->description) . "</p>
                 </div>

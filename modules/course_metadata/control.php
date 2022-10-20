@@ -176,7 +176,7 @@ $tool_content .= action_bar(array(
             'level' => 'primary-label')),false);
 $tool_content .= "
     <div class='oc-metedata-list'>
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='col-12'>
             <ul class='list-group'>
                 <li class='list-group-item list-header notes_thead'>
                     <span class='text-white'>$langOpenCoursesCharacteristics</span>
@@ -219,7 +219,7 @@ $tool_content .= "
         ";
 
 $tool_content .= "
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+                    <div class='col-12 mt-3'>
                         <div class='list-group'>
                             <form class='horizontal-form' role='form' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>";
 $tool_content .= <<<EOF

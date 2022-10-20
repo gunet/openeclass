@@ -264,7 +264,7 @@ foreach ($result as $row) {
     $mod_opts .= "<option value=" . $mid . " $extra>" . $modules[$mid]['title'] . "</option>";
 }
 
-$tool_content .= '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3"><div class="form-wrapper form-edit p-3 rounded">';
+$tool_content .= '<div class="col-12 mt-3"><div class="form-wrapper form-edit p-3 rounded">';
 $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
 $tool_content .= "<div class='input-append date form-group mt-3' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
     <label class='col-sm-6 control-label-notes'>$langStartDate:</label>

@@ -205,7 +205,7 @@ if ($is_editor) {
                         ));
                         // display error message
                         $dialogBox .= "
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+                        <div class='col-12 mt-3'>
                            <div class='alert alert-warning'>$langErrorNameAlreadyExists</div>
                         </div>";
                         $style = "caution";
@@ -387,7 +387,7 @@ if ($is_editor) {
 $l = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->count;
 if ($l == 0) {
     $tool_content .= "
-                      <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                      <div class='col-12'>
                         <div class='alert alert-warning'>$langNoLearningPath</div>
                       </div>";
     draw($tool_content, 2, null, $head_content);

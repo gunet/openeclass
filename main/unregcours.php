@@ -36,7 +36,7 @@ if (!isset($_GET['cid'])) {
 
 if (!isset($_POST['doit'])) {
     $tool_content .= "
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='col-12'>
       <div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?u=$_SESSION[uid]&amp;cid=$cid'>
           <div class='form-group'>
@@ -97,7 +97,7 @@ if (!isset($_POST['doit'])) {
             }
           
         } else {
-            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langCoursError</div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-danger'>$langCoursError</div></div>";
         }
     }
     $tool_content .= "<br><br><div class='text-end'><a href='../index.php' class=mainpage>$langBack</a></div>";

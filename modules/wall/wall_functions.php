@@ -212,7 +212,7 @@ function generate_single_post_html($post) {
         $post_actions .= '</div>';
     }
     $ret = '
-    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    <div class="col-12">
         <div class="row p-0 margin-right-thin margin-left-thin margin-top-thin m-auto">                              
                                   <div class="media rounded-0 p-0">
                                       <div class="row p-2"></div>
@@ -255,7 +255,7 @@ function generate_infinite_container_html($posts, $next_page) {
                       </script>';
     $ret = '
     <div class="form-wrapper form-edit rounded mt-3">
-    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    <div class="col-12">
     <div class="infinite-container">';
 
     foreach ($posts as $post) {
@@ -336,13 +336,13 @@ function generate_infinite_container_html($posts, $next_page) {
                               <div class="col-sm-12">
                                   <div class="media rounded-0 p-0">
                                         <div class="row pt-2 pb-2">
-                                            <div class=col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12>
+                                            <div class="col-12">
                                                 <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
                                                     '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
                                                 </a>
                                             </div>
                                             
-                                            <div class=col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 >
+                                            <div class="col-12">
                                                 <div class="media-body bubble overflow-auto">
                                                     <button class="btn btn-success btn-sm pe-none mt-2 media-heading mt-1 text-white ps-3 pe-2">'.$datetime.'</button>
                                                     <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>

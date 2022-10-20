@@ -65,13 +65,13 @@ if (count($courses) > 0) {
     }
     $grade_content .= "</table></div>";
     if (!$content) {
-        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        $tool_content .= "<div class='col-12'>
         <div class='alert alert-warning'>$langNoGradebook</div></div>";
     } else {
         $tool_content .= $grade_content;
     }
 } else {
-    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoGradebook</div></div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoGradebook</div></div>";
 }
 
 draw($tool_content, 1, null, $head_content);

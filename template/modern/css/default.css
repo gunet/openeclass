@@ -591,6 +591,8 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .panel-body-about-me p{ margin-bottom: 0px; }
 
+  .viewAllCourseBtn {height:15px; width:30px; margin-top:2px;}
+
   .btn-slide { 
     position: relative;
     display: inline-block; 

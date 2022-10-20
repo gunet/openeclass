@@ -46,7 +46,7 @@ if (!file_exists($groupPath)) {
 $pageName = $langGroupSubmit;
 
 if (isset($_GET['submit'])) {
-    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'><div class='alert alert-info'>$langGroupWorkIntro</div></div>";
+    $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'>$langGroupWorkIntro</div></div>";
     show_assignments();
     draw($tool_content, 2);
 } elseif (isset($_POST['assign'])) {

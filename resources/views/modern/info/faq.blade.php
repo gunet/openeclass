@@ -8,7 +8,7 @@
 
         <div class="row rowMedium">
 
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_Homepage">
+            <div class="col-12 justify-content-center col_maincontent_active_Homepage">
                 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
@@ -16,12 +16,12 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+                    <div class='col-12 mt-3'>
                         <div class='text-start text-secondary'>{{trans('langEclass')}} - {{trans('langFaq')}}</div>
                         @if (count($faqs) != 0){!! $action_bar !!} @endif
                     </div>
 
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                    <div class='col-12'>
                         <div class='panel'>
                             <div class='panel-group faq-section' id='accordion' role='tablist' aria-multiselectable='true'>
                                 @if (count($faqs) == 0)

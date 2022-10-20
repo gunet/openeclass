@@ -52,7 +52,7 @@
                                 <div class="row p-2"></div>
 
                                 @if($is_editor == 1)
-                                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div class="col-12">
                                         <div class='row margin-bottom-fat form-wrapper' style='margin-top: 10px; margin-bottom: 30px; margin-left:0px; margin-right:0px; border:1px solid #cab4b4; border-radius:5px;'>
                                             <div class='col-sm-12'>
                                                 <h4 style='font-weight: bold;'>{{$exerciseTitle}}</h4>
@@ -141,7 +141,7 @@
 
                                     </div>
 
-                                    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div class="col-12">
                                         <div class="btn-group" role="group" aria-label="Basic example">
                                             <a type="button" class="btn btn-success" href="{{$urlAppend}}modules/exercise/admin.php?course={{$course_code}}&exerciseId={{$exId}}&newQuestion=yes"><i class="fas fa-plus"></i> Νέα ερώτηση</a>
                                             <a type="button" class="btn btn-secondary">Δυναμική επιλογή ερωτήσεων</a>

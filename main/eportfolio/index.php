@@ -78,7 +78,7 @@ if ($userdata) {
         }
         
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langePortfolioDisableWarning</div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langePortfolioDisableWarning</div></div>";
         } elseif ($userdata->eportfolio_enable == 1) {
             load_js('clipboard.js');
             $clipboard_link = "
@@ -138,7 +138,7 @@ if ($userdata) {
                                     ));    
     } else {
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content = "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langUserePortfolioDisabled</div></div>";
+            $tool_content = "<div class='col-12'><div class='alert alert-danger'>$langUserePortfolioDisabled</div></div>";
             if ($session->status == 0) {
                 draw($tool_content, 0);
             } else {

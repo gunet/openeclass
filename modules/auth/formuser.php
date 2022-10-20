@@ -347,7 +347,7 @@ if ($all_set) {
                         'icon' => 'fa-reply',
                         'level' => 'primary-label')), false);
 
-    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langUserData</div></div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langUserData</div></div>";
     $tool_content .= "
     <div class='row'>
     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
@@ -357,7 +357,7 @@ if ($all_set) {
     <div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?auth=$auth_id' method='post'>
         <input type='hidden' name='p' value='$prof'>
-        <div class='form-group mt-3'>
+        <div class='form-group'>
             <label for='Name' class='col-sm-12 control-label-notes'>$langName</label>
             <div class='col-sm-12'>";
 

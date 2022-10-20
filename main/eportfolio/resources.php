@@ -73,10 +73,10 @@ if ($userdata) {
         }
 
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langePortfolioDisableWarning</div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langePortfolioDisableWarning</div></div>";
         }
 
-        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info '>
+        $tool_content .= "<div class='col-12'><div class='alert alert-info '>
                             <a href='#' class='close text-danger' data-bs-dismiss='alert' aria-label='close'>&times;</a>
                             $langePortfolioCollectionUserInfo
                           </div></div>";
@@ -162,7 +162,7 @@ if ($userdata) {
                             Session::flash('message', $langePortfolioResourceAdded);
                             Session::flash('alert-class', 'alert-success');
                             $tool_content .= "
-                                              <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                                              <div class='col-12'>
                                                   <div class='alert alert-success alert-dismissible fade show' role='alert'>$langePortfolioResourceAdded</div>
                                                   <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                                               </div>";
@@ -414,7 +414,7 @@ if ($userdata) {
 
     //hide tabs when there are no resources
     if (!$blog_posts && !$submissions && !$docs) {
-        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langePortfolioNoResInCollection</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langePortfolioNoResInCollection</div></div>";
     } else {
 
         $active_class = ' class="nav-item"';
@@ -455,12 +455,12 @@ if ($userdata) {
             $mydocs_li = '';
         }
 
-        $tool_content .= '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><ul class="nav nav-tabs" role="tablist">
+        $tool_content .= '<div class="col-12"><ul class="nav nav-tabs" role="tablist">
                             '.$blog_li.'
                             '.$work_li.'
                             '.$mydocs_li.'
                           </ul></div>';
-        $tool_content .= '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><div class="tab-content">';
+        $tool_content .= '<div class="col-12"><div class="tab-content">';
 
         //show blog_posts
         if ($blog_posts) {

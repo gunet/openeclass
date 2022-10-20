@@ -59,7 +59,7 @@
 
                                             <h3>{{$title}} ({{$course_code->code}})</h3>
                                             <p>{{$course_code->prof_names}}</p>
-                                            <div class="d-flex col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 my-courses-diastimata border-bottom border-secondary">
+                                            <div class="d-flex col-xxcol-12 my-courses-diastimata border-bottom border-secondary">
                                                 <i class="fas fa-star text-primary"></i>
                                                 <i class="fas fa-star text-primary"></i>
                                                 <i class="fas fa-star text-primary"></i>

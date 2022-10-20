@@ -202,7 +202,7 @@ $q = Database::get()->queryArray("SELECT ebook.id, ebook.title, visible, MAX(ebo
                       ORDER BY `order`", $course_id);
 
 if (!$q && !isset($_GET['create'])) {
-    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoEBook</div></div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoEBook</div></div>";
 } else if(!isset($_GET['create'])){
     $tool_content .= "<div class='table-responsive'>";
     $tool_content .= "<table class='announcements_table'><thead>

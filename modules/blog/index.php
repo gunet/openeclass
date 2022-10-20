@@ -57,7 +57,7 @@ if ($blog_type == 'course_blog') {
     $url_params = "course=$course_code";
 } elseif ($blog_type == 'perso_blog') {
     if (!get_config('personal_blog')) {
-        $tool_content = "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langPersoBlogDisabled</div></div>";
+        $tool_content = "<div class='col-12'><div class='alert alert-danger'>$langPersoBlogDisabled</div></div>";
         draw($tool_content, 1);
         exit;
     }
@@ -80,7 +80,7 @@ if ($blog_type == 'course_blog') {
 
     $db_user = Database::get()->querySingle("SELECT surname, givenname FROM user WHERE id = ?d", $user_id);
     if (!$db_user) {
-        $tool_content = "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langBlogUserNotExist</div></div>";
+        $tool_content = "<div class='col-12'><div class='alert alert-danger'>$langBlogUserNotExist</div></div>";
         draw($tool_content, 1);
         exit;
     }
@@ -786,7 +786,7 @@ if ($action == "showBlog") {
     $num_posts = $blog->blogPostsNumber();
     if ($num_posts == 0) {//no blog posts
         $tool_content .= "
-            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langBlogEmpty</div></div>";
+            <div class='col-12'><div class='alert alert-warning'>$langBlogEmpty</div></div>";
     } else {//show blog posts
         //if page num was changed at the url and exceeds pages number show the first page
         if ($page > ceil($num_posts/$posts_per_page)-1) {

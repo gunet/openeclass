@@ -37,8 +37,8 @@
                         {!! isset($action_bar) ?  $action_bar : '' !!}
 
                         @if(Session::has('message'))
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-                            <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                        <div class='col-12 all-alerts'>
+                            <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                                 @if(is_array(Session::get('message')))
                                     @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                     @foreach($messageArray as $message)
@@ -48,14 +48,14 @@
                                     {!! Session::get('message') !!}
                                 @endif
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </p>
+                            </div>
                         </div>
                         @endif
                         
 
                         @if ($course_descs)
                             @foreach ($course_descs as $key => $course_desc)    
-                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3'>      
+                                <div class='col-12 mb-3'>      
                                     <div class='panel panel-action-btn-default rounded-0'>
                                         <div class='panel-heading rounded-0'>
                                             @if ($is_editor) 
@@ -111,7 +111,7 @@
                                 </div>
                             @endforeach
                         @else
-                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>{{ trans('langThisCourseDescriptionIsEmpty') }}</div></div>
+                            <div class='col-12'><div class='alert alert-warning'>{{ trans('langThisCourseDescriptionIsEmpty') }}</div></div>
                         @endif
 
                     </div>

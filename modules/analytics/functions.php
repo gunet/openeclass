@@ -63,7 +63,7 @@ function display_learning_analytics() {
 
     $tool_content .= "
 
-            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+            <div class='col-12'>
                 <div class='panel panel-default rounded-0'>
                     <div class='panel-heading rounded-0'>
                         <div class='row'>
@@ -170,7 +170,7 @@ function display_general_lists($analytics_id) {
         }
 
         $tool_content .= "
-                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+                <div class='col-12 mt-3'>
                     <div class='panel panel-default rounded-0'>
                         <div class='panel-heading rounded-0'>
                             <div class='row'>
@@ -296,7 +296,7 @@ function display_analytics_elements($analytics_id) {
     }
 
     $tool_content .= "
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='col-12'>
             <div class='panel panel-default rounded-0'>
                 <div class='panel-heading rounded-0'>
                     <div class='row'>
@@ -337,7 +337,7 @@ function display_analytics_information($analytics_id) {
     $periodType = periodType::periodType[$sql_data->periodType]['title'];
 
     $tool_content .= "
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='col-12'>
             <div class='panel panel-default rounded-0'>
                 <div class='panel-heading rounded-0'>
                     <div class='row'>
@@ -511,7 +511,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
     }
 
     $tool_content .= "
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>                 
+        <div class='col-12 mt-3'>                 
             <div class='panel panel-default rounded-0'>
                 <div class='panel-heading rounded-0'>             
                     <div class='control-label-notes text-center'>$analytics_title->title</div>
@@ -683,7 +683,7 @@ function display_user_info($user_id) {
         $phone = '<span class="tag-value not_visible"> - ' . $langAnalyticsNotAvailable . ' - </span>'; 
     
     $tool_content .= "
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='col-12'>
             <div class='panel panel-default rounded-0'>
                 <div class='panel-heading rounded-0'>
                     $givenname $surname
@@ -833,7 +833,7 @@ function edit_analytics_settings ($analytics_id = 0)
     //<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
     
     $tool_content .= "
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='col-12'>
     <div class='form-wrapper form-edit p-3 rounded'>
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <div class='form-group'>
@@ -948,7 +948,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
     }
 
     $tool_content .="
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='col-12'>
     <div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <h4 class='fs-4 control-label-notes text-center'>$elementTypeTitle</h4>
         <input type='hidden' name='analytics_id' value='$analytics_id'>

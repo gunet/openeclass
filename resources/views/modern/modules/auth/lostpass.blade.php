@@ -29,7 +29,7 @@
 
         <div class="row rowMedium">
 
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_Homepage">
+            <div class="col-12 justify-content-center col_maincontent_active_Homepage">
 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
@@ -38,7 +38,7 @@
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     @if(Session::has('message'))
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 all-alerts'>
+                    <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
@@ -58,11 +58,11 @@
                     @if(isset($_REQUEST['u']) and isset($_REQUEST['h']))
                         @if(isset($is_valid))
                             @if(isset($user_pass_updated))
-                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                                <div class='col-12'>
                                     <div class="alert alert-success"><p>{!! trans('langAccountResetSuccess1') !!}</p></div>
                                 </div>
                             @elseif(isset($user_pass_notupdate))
-                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                                <div class='col-12'>
                                     <div class='alert alert-warning'>
                                         {!! implode("\n", $error_messages) !!}
                                     </div>
@@ -100,7 +100,7 @@
                                 </div>
                             @endif
                         @else
-                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                            <div class='col-12'>
                                 <div class='alert alert-danger'>{!! trans('langAccountResetInvalidLink') !!}</div>
                             </div>
                         @endif
@@ -109,7 +109,7 @@
                         @if($res_first_attempt)
                             @if(!password_is_editable($res_first_attempt->password))
 
-                                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                                <div class='col-12'>
                                     <div class='alert alert-danger'>
                                         <p><strong>{!! trans('langPassCannotChange1') !!}</strong></p>
                                         <p>
@@ -124,7 +124,7 @@
                             @if($found_editable_password)
                                 @if(!$mail_sent)
 
-                                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                                        <div class='col-12'>
                                             <div class='alert alert-danger'>
                                                 <p><strong>{!! trans('langAccountEmailError1') !!}</strong></p>
                                                 <p>{!! trans('langAccountEmailError2') !!} {{ $email }}.</p>
@@ -134,7 +134,7 @@
 
                                 @elseif(!isset($auth))
 
-                                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                                        <div class='col-12'>
                                             <div class='alert alert-success'>
                                                 {!! trans('lang_pass_email_ok') !!} <strong>{!! q($email) !!}</strong>
                                             </div>
@@ -145,7 +145,7 @@
                         @else
                             @if(isset($res_second_attempt) && $res_second_attempt)
 
-                                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                                    <div class='col-12'>
                                         <div class='alert alert-danger'>
                                             <p>{!! trans('langLostPassPending') !!}</p>
                                         </div>
@@ -153,7 +153,7 @@
 
                             @else
 
-                                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                                    <div class='col-12'>
                                         <div class='alert alert-danger'>
                                             <p><strong>{{ trans('langAccountNotFound1') }} ({{ "$userName / $email" }})</strong></p>
                                             <p>{{ trans('langAccountNotFound2') }} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}</a>, {{ trans('langAccountNotFound3') }}</p>

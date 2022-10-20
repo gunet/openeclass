@@ -8,7 +8,7 @@
 
         <div class="row rowMedium">
 
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_Homepage">
+            <div class="col-12 justify-content-center col_maincontent_active_Homepage">
 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
@@ -18,7 +18,7 @@
 
 
                     @if(Session::has('message'))
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 all-alerts'>
+                    <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
@@ -179,7 +179,7 @@
 
                         <!--user is registered to courses-->
                         @if (count($sql) > 0)
-                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+                            <div class='col-12 mt-3'>
                                 <div class='shadow-sm p-3 rounded'>
                                     <h6 class='text-center text-uppercase text-primary fw-bold w-auto p-2 bg-light'>{{ trans('langStudentParticipation') }}</h6>
                                     <div class='table-responsive'>
@@ -232,7 +232,7 @@
                                 </div>
                             </div>
                         @else
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'><div class='alert alert-warning'>{{ trans('langNoStudentParticipation') }}</div></div>
+                        <div class='col-12 mt-3'><div class='alert alert-warning'>{{ trans('langNoStudentParticipation') }}</div></div>
                         @endif
 
                 </div>

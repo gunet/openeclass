@@ -41,7 +41,7 @@ function display_attendances() {
     }
     if (count($result) == 0) { // no attendances
         $tool_content .= "
-            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+            <div class='col-12'>
                 <div class='alert alert-warning'>$langNoAttendances</div></div>";
     } else {
         $tool_content .= "<div class='table-responsive'>";
@@ -106,7 +106,7 @@ function register_user_presences($attendance_id, $actID) {
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
     $tool_content .= "
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='col-12'>
         <div class='alert alert-info'>" . q($result->title) . "</div></div>";
 
     if (isset($_POST['bookUsersToAct'])) {
@@ -268,7 +268,7 @@ function display_attendance_activities($attendance_id) {
                                             FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
     if ($participantsNumber == 0) {
         $tool_content .= "
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='col-12'>
             <div class='alert alert-warning'>$langNoStudentsInAttendance <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . $attendance->id . "&amp;editUsers=1'>$langHere</a>.</div></div>";
     }
     //get all the available activities
@@ -333,7 +333,7 @@ function display_attendance_activities($attendance_id) {
         $tool_content .= "</table></div>";
     } else {
         $tool_content .= "
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='col-12'>
             <div class='alert alert-warning'>$langAttendanceNoActMessage1 $langAttendanceNoActMessage3</div></div>";
     }
 }
@@ -368,7 +368,7 @@ function attendance_display_available_exercises($attendance_id) {
         $tool_content .= "</table></div>";
     } else {
         $tool_content .= "
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='col-12'>
         <div class='alert alert-warning'>$langAttendanceNoActMessageExe4</div></div>";
     }
 }
@@ -417,7 +417,7 @@ function attendance_display_available_assignments($attendance_id) {
         $tool_content .= "</table></div>";
     } else {
         $tool_content .= "
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='col-12'>
         <div class='alert alert-warning'>$langAttendanceNoActMessageAss4</div></div>";
     }
 }
@@ -454,7 +454,7 @@ function attendance_display_available_tc($attendance_id) {
         $tool_content .= "</tr></table></div>";
     } else {
         $tool_content .= "
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='col-12'>
         <div class='alert alert-warning'>$langAttendanceNoActMessageTc</div></div>";
     }
 }
@@ -841,7 +841,7 @@ function display_user_presences($attendance_id) {
             $tool_content .= "</tr>";
         } else {
             $tool_content .= "
-            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+            <div class='col-12'>
             <div class='alert alert-warning'>$langAttendanceNoActMessage1</div></div>";
         }
 
@@ -976,7 +976,7 @@ function display_all_users_presences($attendance_id) {
         $tool_content .= "</tbody></table>";
     } else {
         $tool_content .= "
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoStudentsInAttendance <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1'>$langHere</a>.</div></div>";
+        <div class='col-12'><div class='alert alert-warning'>$langNoStudentsInAttendance <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1'>$langHere</a>.</div></div>";
     }
 }
 
@@ -1237,7 +1237,7 @@ function student_view_attendance($attendance_id) {
     ));
     if (!$checkForRecords) {
         $tool_content .="
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langAttendanceStudentFailure</div></div>";
+        <div class='col-12'><div class='alert alert-warning'>$langAttendanceStudentFailure</div></div>";
     }
 
     $result = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d ORDER BY `DATE` DESC", $attendance_id);
@@ -1247,12 +1247,12 @@ function student_view_attendance($attendance_id) {
         if ($checkForRecords) {
             $range = Database::get()->querySingle("SELECT `limit` FROM attendance WHERE id = ?d", $attendance_id)->limit;
             $tool_content .= "
-            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>" . userAttendTotal($attendance_id, $uid) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </div></div>";
+            <div class='col-12'><div class='alert alert-info'>" . userAttendTotal($attendance_id, $uid) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </div></div>";
         }
 
-        $tool_content .= " <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
-        <div class='table-responsive'><table class='announcements_table' >";
-        $tool_content .= "<tr class='notes_thead'><th class='text-white'>$langTitle</th>
+        $tool_content .= " <div class='col-12'>
+        <div class='table-responsive'><table class='table-default'>";
+        $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th>
                               <th class='text-white'>$langDate</th>
                               <th class='text-white'>$langDescription</th>
                               <th class='text-white'>$langAttendanceAbsencesYes</th>

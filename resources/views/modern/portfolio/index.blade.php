@@ -206,11 +206,16 @@
         <div class="col-12 col-lg-8 user-courses pt-lg-5 ps-lg-5 pe-lg-5 pb-lg-5 p-md-5 ps-3 pe-3 pb-3 pt-3">
             <div class="row rowMedium">
 
-                <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-8 col-8 pt-2">
+                <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-8 col-8 pt-2 d-inline-flex align-items-top">
                     <span class="text-primary text-uppercase fw-bold mb-0">{{ trans('langMyCoursesSide') }}</span>
+                    <a href="{{$urlAppend}}main/my_courses.php" class='viewAllCourseBtn btn btn-default d-flex justify-content-center align-items-center ms-2' data-bs-toggle='tooltip' 
+                    data-bs-placement='bottom' title data-bs-original-title="{{ trans('langMyCoursesSide') }}">
+                        <span class='fa fa-eye text-dark'></span>
+                    </a>
                 </div>
 
                 <div class="col-xxl-7 col-xl-7 col-lg-7 col-md-7 col-sm-4 col-4">
+
                     <div id="bars-active" type='button' class='float-end mt-0' style="display:flex;">
                         <div id="cources-bars-button"
                             class="collapse-cources-button text-primary" >
@@ -236,10 +241,10 @@
 
                 </div>
 
-                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><hr class='text-primary mt-0 fs-1'></div>
+                <div class='col-12'><hr class='text-primary mt-0 fs-1'></div>
 
                 @if(Session::has('message'))
-                <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                <div class='col-12'>
                     <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                         @if(is_array(Session::get('message')))
                             @php $messageArray = array(); $messageArray = Session::get('message'); @endphp

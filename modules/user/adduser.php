@@ -106,7 +106,7 @@ if (isset($_GET['add'])) {
                   'level' => 'primary-label'
                  )));
 
-    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langAskUser</div></div>
+    $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langAskUser</div></div>
 
     <div class='col-12'>
                 <div class='form-wrapper form-edit p-3 rounded'>
@@ -209,7 +209,7 @@ if (isset($_GET['add'])) {
             }
             $tool_content .= "</table></div></div>";
         } else {
-            $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-danger'>$langNoUsersFound</div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-danger'>$langNoUsersFound</div></div>";
         }
         Database::get()->query("DROP TABLE lala");
     }

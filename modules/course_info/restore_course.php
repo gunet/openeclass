@@ -139,8 +139,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 // -------------------------------------
     enableCheckFileSize();
     $tool_content .= "
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'><label>$langFirstMethod</label> $langRequest1</div></div>
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='col-12'><div class='alert alert-info'><label>$langFirstMethod</label> $langRequest1</div></div>
+    <div class='col-12'>
     <div class='form-wrapper form-edit p-3 rounded'>
             <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>            
             <div class='form-group mt-3'>
@@ -157,9 +157,9 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             </form></div>
         </div> 
         
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'><div class='alert alert-info'>
+        <div class='col-12 mt-3'><div class='alert alert-info'>
         <label>$langSecondMethod</label> $langRequest2</div></div>      
-        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+        <div class='col-12'>
         <div class='form-wrapper form-edit p-3 rounded'>
           <form role='form' class='form-inline' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>
             <div class='form-group mt-3'>

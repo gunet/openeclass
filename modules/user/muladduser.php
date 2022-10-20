@@ -61,7 +61,7 @@ if (isset($_POST['submit'])) {
     }
 
     if (count($not_found)) {
-        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langUsersNotExist<br>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langUsersNotExist<br>";
         foreach ($not_found as $uname) {
             $tool_content .= q($uname) . '<br>';
         }
@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
     }
 
     if (count($ok)) {
-        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-success'>$langUsersRegistered<br>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-success'>$langUsersRegistered<br>";
         foreach ($ok as $userid) {
             $tool_content .= display_user($userid) . '<br>';
         }
@@ -77,7 +77,7 @@ if (isset($_POST['submit'])) {
     }
 
     if (count($existing)) {
-        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langUsersAlreadyRegistered<br>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langUsersAlreadyRegistered<br>";
         foreach ($existing as $userid) {
             $tool_content .= display_user($userid) . '<br>';
         }
@@ -86,7 +86,7 @@ if (isset($_POST['submit'])) {
 }
 
 
-$tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info'>$langAskManyUsers</div></div>
+$tool_content .= "<div class='col-12'><div class='alert alert-info'>$langAskManyUsers</div></div>
         
 <div class='col-12'>
 <div class='form-wrapper form-edit p-3 rounded'>

@@ -22,7 +22,7 @@
             @if($course_code)
             <div class="col-xl-10 col-lg-9 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active">
             @else
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_Homepage">
+            <div class="col-12 justify-content-center col_maincontent_active_Homepage">
             @endif
 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
@@ -50,7 +50,7 @@
                     {!! $actionBar !!}
 
                     @if(Session::has('message'))
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 all-alerts'>
+                    <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
@@ -74,21 +74,21 @@
                             </div>
                             <div class='col-lg-6 col-12'>
                         @else
-                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                            <div class='col-12'>
                         @endif
                             @include("modules.document.$dialogBox", ['menuTypeID' => $menuTypeID])
                         </div>
                     @endif
 
                     @if($metaDataBox)
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                        <div class='col-12'>
                             {!! $metaDataBox !!}
                         </div>
                     @endif
 
                     @if (count($fileInfo) or $curDirName)
 
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+                        <div class='col-12 mt-3'>
                             <div class='panel'>
                                 <div class='panel-body docPanel'>
                                     <div class='row'>
@@ -114,7 +114,7 @@
                         </div>
 
 
-                        <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                        <div class='col-12'>
                             <div class='table-responsive'>
                                 <table class='table-default' id="document_table">
 
@@ -344,7 +344,7 @@
             size: 'large',
             title: fileTitle,
             message: '<div class="row">'+
-                        '<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">'+
+                        '<div class="col-12">'+
                             '<div class="iframe-container" style="height:500px;"><iframe id="fileFrame" src="'+fileURL+'" style="width:100%; height:500px;"></iframe></div>'+
                         '</div>'+
                     '</div>',

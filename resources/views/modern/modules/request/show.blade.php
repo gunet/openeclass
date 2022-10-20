@@ -39,7 +39,7 @@
                     {!! $action_bar !!}
 
                     @if(Session::has('message'))
-                    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 all-alerts'>
+                    <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
@@ -225,8 +225,8 @@
                     @if ($comments)
                         @foreach ($comments as $comment)
                             <div class='col-sm-12 mt-3'>
-                                <div class='panel panel-default'>
-                                    <div class='panel-body'>
+                                <div class='panel panel-default rounded-0'>
+                                    <div class='panel-body rounded-0'>
                                         
                                         <div class='d-inline-flex align-items-center'>
                                             <b class='control-label-notes pe-2'>{{ trans('langFrom') }}:</b>

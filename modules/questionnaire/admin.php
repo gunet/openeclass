@@ -723,7 +723,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $tool_content .= "
 
  
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+    <div class='col-12 mt-3'>
         <div class='panel panel-primary rounded-0'>
             <div class='panel-heading rounded-0'>
                 <h4 class='panel-title'>$langQuestion&nbsp;"
@@ -738,7 +738,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     $tool_content .= "
     
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'>
+    <div class='col-12 mt-3'>
         <div class='panel panel-info rounded-0'>
             <div class='panel-heading rounded-0'>
                 <h4 class='panel-title'>$langQuestionAnswers</h4>
@@ -833,7 +833,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $tool_content .= "
 
     <div class='row p-2'></div>
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='col-12'>
         <div class='panel panel-primary rounded-0'>
           <div class='panel-heading rounded-0'>
             <h6 class='panel-title'>$langInfoPoll &nbsp;".icon('fa-edit text-white', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h6>
@@ -962,7 +962,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
             $tool_content .= "
             <div class='row p-2'></div>
-            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+            <div class='col-12'>
             <table class='table-default'>
                         <tbody id='pollAnswers'>
                             <tr class='list-header'>
@@ -1000,12 +1000,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             }
             $tool_content .= "</tbody></table></div>";
         } else {
-            $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langPollEmpty</div></div>";
+            $tool_content .= "<div class='row p-2'></div><div class='col-12'><div class='alert alert-warning'>$langPollEmpty</div></div>";
         }
     } elseif ($poll->type==1) {
-        $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info' role='alert'>$colles_desc</div></div>";
+        $tool_content .= "<div class='row p-2'></div><div class='col-12'><div class='alert alert-info' role='alert'>$colles_desc</div></div>";
     } elseif ($poll->type==2) {
-        $tool_content .= "<div class='row p-2'></div><div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-info' role='alert'>$rate_scale</div></div>";
+        $tool_content .= "<div class='row p-2'></div><div class='col-12'><div class='alert alert-info' role='alert'>$rate_scale</div></div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

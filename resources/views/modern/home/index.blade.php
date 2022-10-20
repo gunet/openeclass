@@ -9,7 +9,7 @@
 
         <div class="row rowMedium">
 
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active_HomepageStart">
+            <div class="col-12 justify-content-center col_maincontent_active_HomepageStart">
 
                 <div class="row">
 

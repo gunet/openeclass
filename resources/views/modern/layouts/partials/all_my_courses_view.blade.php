@@ -6,12 +6,12 @@
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
             <div class='d-none d-md-block'>
-                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+                <div class="col-12 mt-3">
                     <div class='shadow-lg p-3 bg-body rounded' style='height:65px;'>
                         <span class='float-md-start pt-1'><i class="fas fa-graduation-cap orangeText"></i> <span class='control-label-notes'>{{ trans('langMyCourses') }}</span></span>
                         <span class='float-md-end'>
                             <a class='btn btn-sm btn-success rounded-5' href="{{ $urlAppend }}modules/auth/courses.php">
-                                <span class='fa fa-plus pe-2'></span>{{ trans('langRegCourses') }}
+                                <span class='fa fa-check pe-2'></span>{{ trans('langRegCourses') }}
                             </a>
                         </span>
                     </div> 
@@ -19,30 +19,22 @@
             </div>
 
             <div class='d-md-none d-block'>
-                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
-                    <div class='h-100 shadow-lg p-3 bg-body rounded bg-primary'>
-                        <div class='row'>
-                            <div class='col-12'>
-                                <p class='text-center'><i class="fas fa-graduation-cap orangeText"></i> <span class='control-label-notes'>{{ trans('langMyCourses') }}</span></p>
-                            </div>
-                            <div class='col-12 mt-2'>
-                                <div class='d-flex justify-content-center'>
-                                    <span>
-                                        <span class='text-secondary'>{{ trans('langRegCourses') }}:</span>
-                                        <a class='btn btn-sm btn-success' href="{{ $urlAppend }}modules/auth/courses.php">
-                                            <span class='fa fa-plus'></span>
-                                        </a>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                <div class="mt-3">
+                    <div class='shadow-lg p-3 bg-body rounded bg-primary' style='height:65px;'>
+                        <span class='float-start pt-1'><i class="fas fa-graduation-cap orangeText"></i> <span class='control-label-notes'>{{ trans('langMyCourses') }}</span></span>
+                        <span class='float-end'>
+                            <a class='btn btn-sm btn-success rounded-5' href="{{ $urlAppend }}modules/auth/courses.php">
+                                <span class='fa fa-check'></span>
+                            </a>
+                        </span>
+                        
                     </div>
                 </div>
             </div>
 
            
             @if(Session::has('message'))
-            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 all-alerts'>
+            <div class='col-12 all-alerts'>
                 <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                     @if(is_array(Session::get('message')))
                         @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
@@ -116,7 +108,7 @@
                                         </a>
                                         @else
                                         <button class='btn btn-sm btn-danger' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
-                                            <i class="fas fa-remove-format"></i>
+                                            <i class="fa fa-times text-white"></i>
                                         </button>
                                         @endif
 
@@ -150,7 +142,7 @@
                             @endforeach
                         </div>   
                         @else
-                            <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+                            <div class='col-12'>
                                 <div class='alert alert-warning'>{{ trans('langNoCourses') }}</div>
                             </div> 
                         @endif

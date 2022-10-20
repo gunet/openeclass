@@ -1,5 +1,5 @@
 
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='col-12'>
         <div class='form-wrapper form-edit p-3 mt-2 mb-3 rounded'>
             <form action='{{ $base_url }}' method='post' class='form-horizontal' role='form'>
                 {!! $group_hidden_input !!}

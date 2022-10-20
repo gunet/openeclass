@@ -75,7 +75,7 @@ if (empty($search_terms)) {
     // display form
     $langSearchCriteria;
     $tool_content .= "
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='col-12'>
     <div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>

@@ -3996,16 +3996,16 @@ function show_student_assignment($id) {
                 if ($row->reviews_per_assignment < $count_of_assign && $rows) {
                     show_assignment_review($id);
                 } elseif ($row->reviews_per_assignment < $count_of_assign && empty($rows)) {
-                    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoPeerReview</div></div>";
+                    $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoPeerReview</div></div>";
                 } elseif ($row->reviews_per_assignment > $count_of_assign) {
-                    $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langNoPeerReview</div></div>";
+                    $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoPeerReview</div></div>";
                 }
             }
             else
             {
                 //auto to mnm emfanizetai mexri kai thn hmeromhnia kai wra tou start_date_review
                 $start_date_review = format_locale_date(strtotime($row->start_date_review), 'short'); //hmeromhnia enarkshs aksiologhshs
-                $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'><div class='alert alert-warning'>$langPendingPeerSubmissions</div></div>";
+                $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langPendingPeerSubmissions</div></div>";
             }
         }
     } else {
@@ -4273,7 +4273,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     }
     $notice = $submissions_exist > 1? $langNotice3Multiple: $langNotice3;
     $notice = ($submissions_exist)?
-    "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3'><div class='alert alert-info'>" . icon('fa-info-circle') . " $notice</div></div>": '';
+    "<div class='col-12 mt-3'><div class='alert alert-info'>" . icon('fa-info-circle') . " $notice</div></div>": '';
     if ($assignment->grading_type == ASSIGNMENT_SCALING_GRADE) {
         $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assignment->grading_scale_id, $course_id)->scales;
         $scales = unserialize($serialized_scale_data);

@@ -72,7 +72,7 @@ if (isset($_GET['stats_submit'])) {
 
     // only one course
     if (isset($_GET['c'])) {
-        $tool_content .= "<div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>";
+        $tool_content .= "<div class='col-12'>";
         $name = Database::get()->querySingle("SELECT name FROM hierarchy, course, course_department WHERE hierarchy.id = course_department.department
                                          AND course_department.course = course.id AND course.id = ?d", $_GET['c'])->name;
         $code = course_id_to_code(intval($_GET['c']));
@@ -222,7 +222,7 @@ if (isset($_GET['stats_submit'])) {
 
     load_js('jstree3');
     $tool_content .= "
-    <div class='col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12'>
+    <div class='col-12'>
         <div class='form-wrapper form-edit p-3 rounded'>
                         <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='get'>
                     <fieldset>";
