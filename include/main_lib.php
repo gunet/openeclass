@@ -4254,6 +4254,17 @@ function login_hook($options) {
     }
     $options['accept'] = true;
 
+    if (!isset($_SESSION['courses']) and $options['user_id']) {
+        Database::get()->queryFunc('SELECT course.code, course_user.status
+            FROM course JOIN course_user
+              ON course.id = course_user.course_id
+             AND course_user.user_id = ?d
+             AND (course.visible != ?d OR course_user.status = ?d)',
+            function ($course) {
+                $_SESSION['courses'][$course->code] = $course->status;
+            }, $options['user_id'], COURSE_INACTIVE, USER_TEACHER);
+    }
+
     if (function_exists('local_login_hook')) {
         return local_login_hook($options);
     } else {
