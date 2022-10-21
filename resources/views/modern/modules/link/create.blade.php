@@ -66,7 +66,7 @@
                                 @endif
                                 <fieldset>
                                     
-                                    <div class='form-group{{ $urlLinkError ? " has-error" : "" }} mt-3'>
+                                    <div class='form-group{{ $urlLinkError ? " has-error" : "" }}'>
                                         <label for='urllink' class='col-sm-6 control-label-notes'>URL:</label>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' id='urllink' name='urllink' value="{{ isset($link) ? $link->url : "" }}">

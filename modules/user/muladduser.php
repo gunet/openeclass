@@ -94,8 +94,8 @@ $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langAskMany
             <fieldset>     
                   
             <div class='form-group'>
-               <div class='col-sm-12 radio'><label class='control-label-notes'><input type='radio' name='type' value='uname' checked>$langUsername</label></div>
-                <div class='col-sm-12 radio'><label class='control-label-notes'><input type='radio' name='type' value='am'>$langAm</label></div>
+               <div class='col-sm-12 radio'><label class='control-label'><input type='radio' name='type' value='uname' checked>$langUsername</label></div>
+                <div class='col-sm-12 radio'><label class='control-label'><input type='radio' name='type' value='am'>$langAm</label></div>
             </div>
                  
             <div class='form-group mt-3'>

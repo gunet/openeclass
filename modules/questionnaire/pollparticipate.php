@@ -184,7 +184,7 @@ function printPollForm() {
         ));
 
         if ($thePoll->description) {
-            $tool_content .= "<div class='row p-2'></div><div class='col-12'><div class='panel panel-primary' style='border:0;'>
+            $tool_content .= "<div class='col-12'><div class='panel panel-primary' style='border:0;'>
                 <div class='panel-body form-wrapper form-edit rounded'>
                     <p class='text-center'>" . standard_text_escape($thePoll->description) . "</p>
                 </div>
@@ -196,7 +196,7 @@ function printPollForm() {
             $form_link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
         }
         $tool_content .= "
-        <div class='row p-2'></div>
+        
             <form class='form-horizontal' role='form' action='$form_link' id='poll' method='post'>
             <input type='hidden' value='2' name='UseCase'>
             <input type='hidden' value='$pid' name='pid'>";
@@ -303,7 +303,7 @@ function printPollForm() {
                 $i++;
             }
         }
-        $tool_content .= "<div class='row p-2'></div><div class='row p-2'></div><div class='row p-2'></div><div class='text-center'>";
+        $tool_content .= "<div class='text-center mt-3'>";
         if ($is_editor) {
             $tool_content .= "<a class='btn btn-secondary' href='index.php?course=$course_code'>" . q($langBack). "</a>";
         } else {

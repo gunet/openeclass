@@ -512,7 +512,7 @@ function add_attendance_other_activity($attendance_id) {
                     }
                     if (!isset($contentToModify)) $contentToModify = "";
                     @$tool_content .= "
-                        <div class='form-group mt-3'>
+                        <div class='form-group'>
                             <label for='actTitle' class='col-sm-6 control-label-notes'>$langTitle:</label>
                             <div class='col-sm-12'>
                                 <input type='text' class='form-control' name='actTitle' value='$titleToModify'/>
@@ -1017,7 +1017,7 @@ function attendance_settings($attendance_id) {
     <div class='col-sm-12'>
             <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id'>
-                    <div class='form-group".($title_error ? " has-error" : "")." mt-3'>
+                    <div class='form-group".($title_error ? " has-error" : "")."'>
                         <label class='col-12 control-label-notes'>$langTitle</label>
                         <div class='col-12'>
                             <input class='form-control' type='text' placeholder='$langTitle' name='title' value='".q($title)."'>

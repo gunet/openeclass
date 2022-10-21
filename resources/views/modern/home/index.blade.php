@@ -50,8 +50,8 @@
                                                                 </div>
                                                                 <form action="{{ $urlAppend }}" method="post">
                                                                     <div class="login-form-spacing mt-2">
-                                                                        <input class="login-input bg-body border border-secondary @if(count($q)>1) w-75 @else w-100 @endif" placeholder="{{ trans('langUsername') }} &#xf007;" type="text" id="uname" name="uname" >
-                                                                        <input class="login-input bg-body border border-secondary @if(count($q)>1) w-75 @else w-100 @endif mt-4" placeholder="{{ trans('langPassword') }} &#xf023;" type="password" id="pass" name="pass">
+                                                                        <input class="login-input border @if(count($q)>1) w-75 @else w-100 @endif" placeholder="{{ trans('langUsername') }} &#xf007;" type="text" id="uname" name="uname" >
+                                                                        <input class="login-input border @if(count($q)>1) w-75 @else w-100 @endif mt-4" placeholder="{{ trans('langPassword') }} &#xf023;" type="password" id="pass" name="pass">
                                                                         <input class="btn text-white @if(count($q)>1) w-75 @else w-100 @endif login-form-submit mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
                                                                     </div>
                                                                 </form>

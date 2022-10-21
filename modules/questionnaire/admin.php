@@ -832,15 +832,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               'icon' => 'fa-reply')));
     $tool_content .= "
 
-    <div class='row p-2'></div>
-    <div class='col-12'>
+    <div class='col-12 mb-3'>
         <div class='panel panel-primary rounded-0'>
           <div class='panel-heading rounded-0'>
             <h6 class='panel-title'>$langInfoPoll &nbsp;".icon('fa-edit text-white', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h6>
           </div>
 
           <div class='panel-body rounded-0'>
-            <div class='row margin-bottom-fat'>
+            <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langTitle:</strong>
                 </div>
@@ -849,9 +848,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            <div class='row p-2'></div>
-
-            <div class='row margin-bottom-fat'>
+            <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langPollStart:</strong>
                 </div>
@@ -860,9 +857,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            <div class='row p-2'></div>
-
-            <div class='row margin-bottom-fat'>
+            <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langPollEnd:</strong>
                 </div>
@@ -871,9 +866,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            <div class='row p-2'></div>
-
-            <div class='row margin-bottom-fat'>
+            <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langResults:</strong>
                 </div>
@@ -883,9 +876,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            <div class='row p-2'></div>
-
-            <div class='row margin-bottom-fat'>
+            <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langType:</strong>
                 </div>
@@ -894,9 +885,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            <div class='row p-2'></div>
-
-            <div class='row margin-bottom-fat'>
+            <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langDescription:</strong>
                 </div>
@@ -905,9 +894,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            <div class='row p-2'></div>
-
-            <div class='row margin-bottom-fat'>
+            <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langPollEndMessage:</strong>
                 </div>
@@ -918,7 +905,6 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
           </div>
         </div>
     </div>
-    <div class='row p-2'></div>
     ";
 
     if($poll->type == 0) {
@@ -961,7 +947,6 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </script>";
 
             $tool_content .= "
-            <div class='row p-2'></div>
             <div class='col-12'>
             <table class='table-default'>
                         <tbody id='pollAnswers'>
@@ -1000,12 +985,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             }
             $tool_content .= "</tbody></table></div>";
         } else {
-            $tool_content .= "<div class='row p-2'></div><div class='col-12'><div class='alert alert-warning'>$langPollEmpty</div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langPollEmpty</div></div>";
         }
     } elseif ($poll->type==1) {
-        $tool_content .= "<div class='row p-2'></div><div class='col-12'><div class='alert alert-info' role='alert'>$colles_desc</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-info' role='alert'>$colles_desc</div></div>";
     } elseif ($poll->type==2) {
-        $tool_content .= "<div class='row p-2'></div><div class='col-12'><div class='alert alert-info' role='alert'>$rate_scale</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-info' role='alert'>$rate_scale</div></div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

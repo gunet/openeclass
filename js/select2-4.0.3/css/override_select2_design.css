@@ -1,0 +1,39 @@
+
+                        /* !!!!!!!!!!!!!!!!!!!!!!!!!!! IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+                        /* THIS FILE CONTAINS THE NEW DESIGN OF SELECT2 WITH OVERRIDE CSS-CLASSES */
+
+/*************************************** FIRST CHOICE OF SELECTOR IN FORMS  *********************************************************/
+
+/* .select2-selection.select2-selection--multiple{ border:none; border-bottom: 2px solid transparent; border-image: linear-gradient(0.25turn, rgb(31, 180, 226), rgb(79, 125, 165), rgba(249, 145, 0, 0));
+    border-image-slice: 1; overflow-y: auto !important; background: transparent;
+}
+
+.select2-selection--multiple:before { content: ""; position: absolute; right: 7px; top: 42%; border-top: 5px solid #888;
+    border-left: 4px solid transparent; border-right: 4px solid transparent; background: transparent;
+}
+
+.select2-selection__rendered{ overflow-y: auto ;  background: transparent; }
+
+.select2.select2-container{ width:100% !important; background: transparent; } */
+
+/*************************************** SECOND CHOICE OF SELECTOR IN FORMS  *********************************************************/
+
+.select2-selection.select2-selection--multiple{ 
+    min-height:46px !important;
+    border-radius: 35px !important;
+    border: 0px !important;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.15);
+    margin-top:5px;
+}
+
+.select2-selection--multiple:before { content: ""; position: absolute; right: 7px; top: 42%; border-top: 5px solid #888;
+    border-left: 4px solid transparent; border-right: 4px solid transparent; background: transparent;
+}
+
+.select2-selection__rendered{ overflow-y: auto ;  background: transparent; }
+
+.select2.select2-container{ width:100% !important; background: transparent; }
+
+.select2-selection__rendered{ padding-left: 15px !important; padding-right: 15px !important; }
+
+.select2-dropdown--below{ border: 0px !important; background-color: rgb(245, 220, 187) !important; }

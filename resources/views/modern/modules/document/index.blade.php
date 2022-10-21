@@ -1,4 +1,3 @@
-
 @extends($is_in_tinymce ? 'layouts.embed' : 'layouts.default')
 
 @section('content')
@@ -88,7 +87,7 @@
 
                     @if (count($fileInfo) or $curDirName)
 
-                        <div class='col-12 mt-3'>
+                        <div class='col-12  @if($dialogBox or $metaDataBox) mt-3 @endif'>
                             <div class='panel'>
                                 <div class='panel-body docPanel'>
                                     <div class='row'>

@@ -185,8 +185,8 @@ input:-webkit-autofill:active {
 
 /********************************* FIRST CHOICE OF INPUTS FORMS *******************************/
 /**********************************************************************************************/
-.form-wrapper.form-edit{ border: solid 15px #f2f2f2; background: white; }
-.form-wrapper.form-edit { border:0px; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); }
+
+/* .form-wrapper.form-edit { border:0px; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); background-color: white;}
 @media(max-width:767px){ .form-wrapper.form-edit{overflow-y: auto;} }
 
 .form-wrapper.form-edit textarea{ background: white; border: solid 1px #f1f1f1; margin-top:10px;}
@@ -225,7 +225,63 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   border-bottom: 2px solid white;
   border-image: linear-gradient(0.25turn, rgb(226, 31, 31), rgb(223, 63, 0), rgba(255, 1, 1, 0));
   border-image-slice: 1;
+} */
+
+
+
+/********************************* SECOND CHOICE OF INPUTS FORMS *******************************/
+/**********************************************************************************************/
+
+.form-wrapper.form-edit { border:0px; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); background-color: white;}
+@media(max-width:767px){ .form-wrapper.form-edit{overflow-y: auto;} }
+
+.form-wrapper input[type=text], .form-wrapper input[type=password], .form-wrapper input[type=number], .form-wrapper .form-select,
+.forms-panels-admin input[type=text], .forms-panels-admin input[type=password], .forms-panels-admin input[type=number], .forms-panels-admin .form-select{
+  height:46px;
+  border-radius: 35px;
+  margin-top: 5px;
+  border: 0px;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.15);
+  background-color: white;
 }
+.form-wrapper textarea, .forms-panels-admin textarea{
+   min-height:106px;
+   border-radius: 15px;
+   margin-top: 5px;
+   border: 0px;
+   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.15);
+   background-color: white;
+}
+.form-wrapper textarea:focus, .forms-panels-admin textarea:focus,
+.form-wrapper input[type="text"]:focus, .forms-panels-admin input[type="text"]:focus,
+.form-wrapper input[type="datetime"]:focus, .forms-panels-admin input[type="datetime"]:focus,
+.form-wrapper input[type="datetime-local"]:focus, .forms-panels-admin input[type="datetime-local"]:focus,
+.form-wrapper input[type="date"]:focus, .forms-panels-admin input[type="date"]:focus,
+.form-wrapper input[type="month"]:focus, .forms-panels-admin input[type="month"]:focus,
+.form-wrapper input[type="time"]:focus, .forms-panels-admin input[type="time"]:focus,
+.form-wrapper input[type="week"]:focus, .forms-panels-admin input[type="week"]:focus,
+.form-wrapper input[type="number"]:focus, .forms-panels-admin input[type="number"]:focus,
+.form-wrapper input[type="email"]:focus, .forms-panels-admin input[type="email"]:focus,
+.form-wrapper input[type="url"]:focus, .forms-panels-admin input[type="url"]:focus,
+.form-wrapper input[type="search"]:focus, .forms-panels-admin input[type="search"]:focus,
+.form-wrapper input[type="tel"]:focus, .forms-panels-admin input[type="tel"]:focus,
+.form-wrapper input[type="color"]:focus, .forms-panels-admin input[type="color"]:focus,
+.form-wrapper .form-select:focus, .form-wrapper .form-control:focus, .forms-panels-admin .form-select:focus, .forms-panels-admin .form-control:focus,
+.uneditable-input:focus {   
+  border-color: white;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(12, 103, 222, 0.6);
+  outline: 0 none;
+  background: white;
+}
+select.form-select { -webkit-appearance: menulist; appearance: menulist;}
+.form-wrapper .form-control:disabled{
+  opacity: 0.5;
+  border-bottom: solid 2px #f9f8fa;
+  border-image: none;
+  border-image-slice: 0;
+  background-color: #DCDCDC;
+}
+
 
 
 /* ------------------------------------- alerts ------------------------------------------ */
@@ -239,7 +295,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 /* ---------------------------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------------------------- */
 
-.alert-warning, .alert-info, .alert-danger, .alert-success{ margin-top:10px; }
+.alert-warning, .alert-info, .alert-danger, .alert-success{ margin-top:14px; }
 
 .alert-success { border: 1px solid rgb(214,233,198); background-color: rgb(223,240,216); color: rgb(70,136,71); }
 
@@ -780,6 +836,8 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .user-icon { width: 40px; height: 40px; border-radius: 50%; }
 
+  .user-icon2 { width: 30px; height: 30px; border-radius: 50%; }
+
   .news-list{ margin-left: 5px; }
   
   .row_pad_courses{ padding-top: 40px; }
@@ -803,9 +861,16 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .login-form-spacing { padding-top: 20px; text-align: center; }
   
   .login-form-spacing2 { padding-top: 17px; margin-top:-12px; text-align: center; }
-
-  .login-input { text-align: center; background-color: lightgrey; border: none; border-radius: 15px; height:40px; }
   
+  .login-input { text-align: center; background-color: white; border: none; border-radius: 15px; height:40px; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);}
+
+  .login-input:focus {
+    border-color: white;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(12, 103, 222, 0.6);
+    outline: 0 none;
+    background: white;
+  }
+
   .login-form-submit {
     border: solid thin;
     border-radius: 15px;
@@ -1454,7 +1519,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   /* -------------------------------------------------------------------------------------------------*/  
   /* for all tables */
 
-  .table-responsive{ margin-top:20px; }
+  .table-responsive{ margin-top:14px; }
 
   th, td { padding:10px; }
 
@@ -1674,7 +1739,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   /* ------------------------------------------------------- ADMIN----------------------------------------------------------*/
 
   .admin-list-group .list-group-item:hover{ background: #003e87; color: #fafafa; }
-  
+
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */

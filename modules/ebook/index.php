@@ -121,7 +121,7 @@ if ($is_editor) {
         <div class='form-wrapper form-edit p-3 rounded'>
             <form class='form-horizontal' role='form' method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>" .
                 fileSizeHidenInput() . "
-                <div class='form-group mt-3'>
+                <div class='form-group'>
                     <label for='ebook_title' class='col-sm-6 control-label-notes'>$langTitle: </label>
                     <div class='col-sm-12'>
                         <input type='text' class='form-control' id='ebook_title' name='title' placeholder='$langTitle'>
@@ -205,8 +205,8 @@ if (!$q && !isset($_GET['create'])) {
     $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoEBook</div></div>";
 } else if(!isset($_GET['create'])){
     $tool_content .= "<div class='table-responsive'>";
-    $tool_content .= "<table class='announcements_table'><thead>
-     <tr class='notes_thead'>
+    $tool_content .= "<table class='table-default'><thead>
+     <tr class='list-header'>
        <th class = 'text-white text-left'>$langEBooks</th>" .
             ($is_editor ?
                     "<th class='text-white text-center option-btn-cell'>".icon('fa-cogs')."</th>" :

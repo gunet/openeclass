@@ -78,7 +78,7 @@
                                             <input type='hidden' name='back' value='{{ $back }}'>
                                         @endif
                                         @if ($sections)
-                                            <div class='form-group'>
+                                            <div class='form-group mb-3'>
                                                 <label for='section' class='col-sm-12 control-label-notes'>{{ trans('langSection') }}</label>
                                                 <div class='col-sm-12'>
                                                     {!! selection($sections, 'section_id', $section_id) !!}
@@ -89,7 +89,7 @@
                                         
 
                                         @if ($filename)
-                                            <div class='form-group mt-3'>
+                                            <div class='form-group mb-3'>
                                                 <label for='file_name' class='col-sm-12 control-label-notes'>{{ trans('langFileName') }}</label>
                                                 <div class='col-sm-12'>
                                                     <p class='form-control-static'>{{ $filename }}</p>
@@ -99,7 +99,7 @@
 
                                      
 
-                                        <div class='form-group{{ Session::getError('file_title') ? ' has-error' : '' }} mt-3'>
+                                        <div class="form-group{{ Session::getError('file_title') ? ' has-error' : '' }}">
                                             <label for='file_title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                             <div class='col-sm-12'>
                                                 <input type='text' class='form-control' placeholder="{{ trans('langTitle') }}..." id='file_title' name='file_title' value='{{ $title }}'>

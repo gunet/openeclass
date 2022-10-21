@@ -275,7 +275,7 @@ if (isset($_GET['delete'])) {
                              'level' => 'primary-label')
                         ));
         $tool_content .= "
-        <div class='col-sm-12'>
+        <div class='col-sm-12 mb-3'>
             <div class='panel panel-default rounded-0'>
                 <div class='panel-heading rounded-0'>
                     <h3 class='panel-title'>$langEBookInfo &nbsp;
@@ -346,9 +346,9 @@ if (isset($_GET['delete'])) {
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='id' value='$ebook_id' />
                 <fieldset>
-                <div class='table-responsive'>
-                    <table class='announcements_table'>
-                    <tr class='notes_thead'>
+                <div class='table-responsive mt-0'>
+                    <table class='table-default'>
+                    <tr class='list-header'>
                       <th class='text-white'>$langFileName</th>
                       <th class='text-white'>$langTitle</th>
                       <th class='text-white'>$langSection</th>

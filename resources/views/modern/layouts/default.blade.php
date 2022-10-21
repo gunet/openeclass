@@ -102,8 +102,8 @@
 
     @stack('head_scripts')
 
-    <!-- change select2 style -->
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/re-style-select2.css"/>
+    <!-- change rich-text-editor style -->
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/re-style-richTextEditor.css"/>
 
 </head>
 

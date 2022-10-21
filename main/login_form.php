@@ -54,26 +54,20 @@ foreach ($q as $l) {
           <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
             $next
             <div class='row'>
-              <div class='col-8 m-auto d-block'>
-                <div class='input-group mt-3'>
-                    <span class='input-group-text' id='usernameIcon'><span class='fa fa-user text-dark'></span></span>
-                    <input class='form-control' name='uname' aria-describedby='usernameIcon' placeholder='$langUsername'$userValue>
-                </div>
+              <div class='col-12 login-form-spacing m-auto d-block'>
+                <input class='login-input bg-body w-100' name='uname' aria-describedby='usernameIcon' placeholder='$langUsername &#xf007;'$userValue>
               </div>
-              <div class='col-8 m-auto d-block'>
-                <div class='input-group mt-3'>
-                    <span class='input-group-text' id='passwordIcon'><span class='fa fa-lock text-danger'></span></span>
-                    <input class='form-control' name='pass' type='password' aria-describedby='passwordIcon' placeholder='$langPass'>
-                </div>
+              <div class='col-12 login-form-spacing m-auto d-block'>
+                  <input class='login-input bg-body w-100 mt-2' name='pass' type='password' aria-describedby='passwordIcon' placeholder='$langPass &#xf023;'>
               </div>
             </div>
             <div class='form-group mt-3'>
               <div class='row'>
                 <div class='col-12 text-center'>
-                  <button class='login-main-form btn btn-sm btn-primary w-50 margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+                  <button class='btn btn-default text-dark fw-bold w-100 login-form-submit mt-2' type='submit' name='submit' value='$langEnter'>$langEnter</button>
                 </div>
-                <div class='col-12 text-center mt-3'>
-                  <a class='btn btn-transparent text-primary fw-bold fs-6' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
+                <div class='col-12 text-center mt-4'>
+                  <a class='text-primary fw-bold btnlostpass' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
                 </div>
               </div>
            </div>
@@ -93,17 +87,18 @@ $tool_content .= "<div class='login-page'> <div class='row'>";
 if($columns == 12){
 
   $columns = $columns - 6 ;
-  $tool_content .= "<div class='col-md-6 col-12 d-none d-md-block'>
+  $tool_content .= "<div class='col-lg-6 col-12 d-none d-md-block'>
                       <div class='col-12 h-100 left-form'></div>
                     </div>";
 }
 foreach ($authLink as $authInfo) {
     $tool_content .= "
    
-      <div class='col-md-$columns col-12'>
-        <div class='panel panel-admin rounded-0 mt-md-0 mt-3'>
-          <div class='panel-heading rounded-0'><div class='panel-title p-0 text-white text-center'>" . q($authInfo[2]) . "</div></div>
-            <div class='panel-body login-page-option rounded-0'>" .
+      <div class='col-lg-$columns col-12'>
+        <div class='panel panel-default rounded-0 mt-lg-0 mb-lg-0 mb-3' style='min-height:328px;'>
+          <div class='panel-heading rounded-0'><div class='panel-title p-0 text-dark text-center'>
+          <img src='/template/modern/img/user2.png' class='user-icon2 me-2'>" . q($authInfo[2]) . "</div></div>
+            <div class='panel-body login-page-option rounded-0 bg-light'>" .
               $authInfo[1];
     if (Session::has('login_error') and $authInfo[0]) {
         $tool_content .= "<div class='alert alert-warning' role='alert'>".Session::get('login_error')."</div>";

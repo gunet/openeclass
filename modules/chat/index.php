@@ -85,7 +85,7 @@ if ($is_editor) {
 
         $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
-        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>";
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />";
@@ -253,7 +253,7 @@ if ($is_editor) {
         $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
         $tool_content .= "<fieldset>";
-        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>";
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<input class='form-control' type='text' name='title' id='title' value='$conf->conf_title' size='50' />";
@@ -267,7 +267,7 @@ if ($is_editor) {
         $tool_content .= "</div>";
         $tool_content .= "</div>";
 
-        $tool_content .= "<div class='form-group mt-3'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langChatToSpecUsers:</label></div>
+        $tool_content .= "<div class='form-group mt-3'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel control-label-notes'>$langChatToSpecUsers:</label></div>
         <div class='form-group mt-3'>
             <div class='col-sm-12'>
                 <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";

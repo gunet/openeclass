@@ -7,10 +7,10 @@ $(document).ready(function(){
 
     //////////////////////////////////////////////////////////////////////////////
 
-    var action_bar = $('.action_bar').length;
-    if (!action_bar) {
-        $('div.title-row').css('margin-bottom', '24px');
-    }
+    // var action_bar = $('.action_bar').length;
+    // if (!action_bar) {
+    //     $('div.title-row').css('margin-bottom', '24px');
+    // }
 
 	$(".menu-popover").popover({
 		html: true,

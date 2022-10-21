@@ -185,6 +185,7 @@ function load_js($file, $init='') {
         } elseif ($file == 'select2') {
             $head_content .= css_link('select2-4.0.3/css/select2.min.css') .
             css_link('select2-4.0.3/css/select2-bootstrap.min.css') .
+            css_link('select2-4.0.3/css/override_select2_design.css') .
             js_link('select2-4.0.3/js/select2.full.min.js');
             $file = "select2-4.0.3/js/i18n/$language.js";
         } elseif ($file == 'bootstrap-calendar') {
@@ -2142,7 +2143,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                 init_instance_callback: function(editor) {
                     var parent = $(editor.contentAreaContainer.parentElement);
                     (editorToggleSecondToolbar(editor))();
-                    parent.find('.mce-toolbar-grp, .mce-statusbar').attr('style','border:1px solid #ddd');
+                    parent.find('.mce-toolbar-grp, .mce-statusbar').attr('style','border:0px');
                     if (typeof tinyMceCallback !== 'undefined') {
                         tinyMceCallback(editor);
                     }";
@@ -2174,6 +2175,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                 ";
         }
         load_js('tinymce/tinymce.min.js');
+        $head_content .= css_link('tinymce/css/re-style-richTextEditor.css');
         $head_content .= "
 <script type='text/javascript'>
 
@@ -2217,6 +2219,7 @@ tinymce.init({
     content_css: [
         '{$urlAppend}template/modern/css/bootstrap.min.css',
         '{$urlAppend}template/modern/css/font-awesome-4.7.0/css/font-awesome.css',
+        '{$urlAppend}template/modern/css/re-style-richTextEditor.css',
     ],
     content_style: 'body { margin: 8px; background: none !important; }',
     extended_valid_elements: 'span[*]',
@@ -3513,13 +3516,13 @@ function form_buttons($btnArray) {
  * level is optional and can be 'primary' for primary entries or unset
  */
 function action_bar($options, $page_title_flag = true, $secondary_menu_options = array()) {
-    global $langConfirmDelete, $langCancel, $langDelete, $pageName;
+    global $langConfirmDelete, $langCancel, $langDelete, $pageName, $langVideo;
 
     $out_primary = $out_secondary = array();
     $i=0;
     $page_title = "";
     if (isset($pageName) and !empty($pageName) and $page_title_flag) {
-        $page_title = "<div class='pull-left'><h6 class='text-secondary pt-2'>".q($pageName)."</h6></div>";
+        $page_title = "<h6 class='text-secondary mb-0'><span class='fas fa-check pe-2'></span>".q($pageName)."</h6>";
     }
     foreach (array_reverse($options) as $option) {
         // skip items with show=false
@@ -3622,19 +3625,28 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                      ".implode('', $out_secondary)."
                   </ul>";
     }
+    $pageTitleActive = "";
+    if(!empty($page_title) and $pageName != $langVideo){
+        $pageTitleActive = "<div class='col-12 mt-3'>
+                               <div class='panel panel-default rounded-0'>
+                                  <div class='panel-body rounded-0 text-center'>
+                                        $page_title
+                                  </div>
+                               </div>
+                               
+                            </div>";
+    }
     if ($out && $i!=0) {
-        return "<div class='col-12 clearfix mb-3'>
-                    <div class='action_bar shadow-sm p-3 mt-2 rounded'>  
-                        <div class='col-12 clearfix'>
-                            $page_title
-                            <div class='float-end mt-md-0 mt-2 margin-top-thin margin-bottom-fat hidden-print'>
-                                <div class='btn-group float-end' style='flex-wrap:wrap;'>
-                                $out
-                                $action_button
-                                </div>
+        return "<div class='col-12 mb-3'>
+                    <div class='col-12 action_bar d-flex justify-content-end rounded'>  
+                        <div class='margin-top-thin margin-bottom-fat hidden-print'>
+                            <div class='btn-group btn-group-sm' style=''>
+                            $out
+                            $action_button
                             </div>
                         </div>
                     </div>
+                    $pageTitleActive
                 </div>";
     } else {
         return '';

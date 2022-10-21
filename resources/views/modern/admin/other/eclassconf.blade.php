@@ -88,7 +88,7 @@
                     @endif
                     
                     
-                        <div class='col-xl-9 col-lg-8 col-md-12 col-sm-12 col-12'>
+                        <div class='col-xl-9 col-lg-8 col-md-12 col-sm-12 col-12 forms-panels-admin'>
                             <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>  
                                 <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">  
                                     <div class='panel panel-admin rounded-0' id='one'>
@@ -203,32 +203,7 @@
                                                     </div>
                                                 </div>
 
-                                               
-
-                                                {{--<div class='form-group mt-3'>
-                                                    <label for='formLandingName' class='col-sm-12 control-label-notes'>{{ trans('langLandingPageName') }}:</label>
-                                                    <div class='col-sm-12'>
-                                                        <input class='form-control form-control-admin' type='text' name='formLandingName' id='formLandingName' value='{{ get_config('landing_name') }}'>
-                                                    </div>
-                                                </div>
-
-                                             
-
-                                                <div class='form-group mt-3'>
-                                                    <label for='formLandingUrl' class='col-sm-12 control-label-notes'>{{ trans('langLandingPageUrl') }}:</label>
-                                                    <div class='col-sm-12'>
-                                                        <input class='form-control form-control-admin' type='text' name='formLandingUrl' id='formLandingUrl' value='{{ get_config('landing_url') }}'>
-                                                    </div>
-                                                </div>
-
-                                                <hr>
-                                             
-
-                                                <div class='form-group mt-3'>
-                                                    <div class='col-sm-12'>
-                                                        <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langSave') }}'>
-                                                    </div>
-                                                </div>--}}
+                                    
                                             </fieldset>
                                         </div>
                                     </div>
@@ -432,7 +407,7 @@
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 rounded-0'>
                                             <fieldset>
-                                                <div class='form-group mt-3'>
+                                                <div class='form-group'>
                                                     <label for='default_language' class='col-sm-12 control-label-notes'>{{ trans('langMainLang') }}: </label>
                                                     <div class='col-sm-12'>
                                                         {!! selection(
@@ -469,8 +444,8 @@
                                             <fieldset>
                                                 <div class='landing-default'>
                                                     <div class='radio margin-bottom-fat'>
-                                                        <label>
-                                                            <input {{$defaultHomepage}} class='homepageSet default_checkbox' name='homepageSet' value='default' type='radio'> <span class='text-secondary fs-4'>{{trans('langHomePageDefault')}}</span>
+                                                        <label class='d-inline-flex align-items-top'>
+                                                            <input {{$defaultHomepage}} class='homepageSet default_checkbox' name='homepageSet' value='default' type='radio'> <span class='text-secondary'>{{trans('langHomePageDefault')}}</span>
                                                         </label>
                                                     </div>
                                                     <div id='collapse-defaultHomepage' class='collapse homepage-inputs margin-bottom-fat show'>
@@ -479,24 +454,24 @@
                                                             <label for='defaultHomepageTitle' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='homepage_title' id='defaultHomepageTitle' value="{!! q(get_config('homepage_title', $langEclass)) !!}">
-                                                                <p class='help-block'>{{trans('langHomePageTitleHelpText')}}</p>
+                                                                <p class='help-block mt-1'>{{trans('langHomePageTitleHelpText')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
                                                             <label for='defaultHomepageBcrmp' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
                                                             <div class='col-sm-12'>
                                                                 <input class='form-control' type='text' name='homepage_name' id='defaultHomepageBcrmp' value="{!! q(get_config('homepage_name', $langHomePage)) !!}">
-                                                                <p class='help-block'>{{trans('langHomePageNavTitleHelp')}}</p>
+                                                                <p class='help-block mt-1'>{{trans('langHomePageNavTitleHelp')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
                                                             <label for='defaultHomepageIntro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
                                                             <div class='col-sm-12'>
                                                                 {!! rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro', $langInfoAbout)) !!}
-                                                                <p class='help-block'>{{trans('langHomePageIntroTextHelp')}}</p>
+                                                                <p class='help-block mt-1'>{{trans('langHomePageIntroTextHelp')}}</p>
                                                             </div>
                                                         </div>
-                                                        <div class='form-group'>
+                                                        <div class='form-group mt-3'>
                                                             <label for='theme' class='col-sm-12 control-label-notes'>{{trans('lang_login_form')}}: </label>
                                                             <div class='col-sm-12'>
                                                                     <div class='checkbox mb-md-0 mb-2'>
@@ -589,7 +564,7 @@
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 rounded-0'>
                                             <fieldset>
                                     @endif
-                                                <div class='form-group mt-3'>
+                                                <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                             <div class='checkbox'>
                                                                 <label>
@@ -919,7 +894,7 @@
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 rounded-0'>
                                             <fieldset>
-                                                <div class='form-group mt-3'>
+                                                <div class='form-group'>
                                                 <label class='col-sm-12 control-label-notes'>{{ trans('langEnableMyDocs') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
@@ -946,7 +921,7 @@
                                                                 <input type='text' name='mydocs_teacher_quota' id='mydocs_teacher_quota_id' value='{{ $mydocs_teacher_quota }}'>
                                                                 {{ trans('langTeachers') }}
                                                             </label>
-                                                            <label>
+                                                            <label class='mt-md-0 mt-2 ms-md-3 ms-0'>
                                                                 <input type='text' name='mydocs_student_quota' id='mydocs_student_quota_id' value='{{ $mydocs_student_quota }}'>
                                                                 {{ trans('langStudents') }}
                                                             </label>
@@ -955,7 +930,7 @@
 
                                               
 
-                                                <div class='form-group mt-3'>
+                                                <div class='form-group mt-3 mb-3'>
                                                     <label for='bio_quota' class='col-sm-12 control-label-notes'>{{ trans('langBioQuota') }} (MB):</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='bio_quota' id='bio_quota' value='{{ get_config('bio_quota') }}'>
@@ -989,19 +964,19 @@
                                                             <input class='form-control form-control-admin' type='text' name='doc_quota' id='doc_quota' value='{{ get_config('doc_quota') }}'>
                                                     </div>
                                                 </div>
-                                                <div class='form-group'>
+                                                <div class='form-group mt-3'>
                                                     <label for='video_quota' class='col-sm-12 control-label-notes'>{{ trans('langVideoQuota') }} (MB):</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='video_quota' id='video_quota' value='{{ get_config('video_quota') }}'>
                                                     </div>
                                                 </div>
-                                                <div class='form-group'>
+                                                <div class='form-group mt-3'>
                                                     <label for='group_quota' class='col-sm-12 control-label-notes'>{{ trans('langGroupQuota') }} (MB):</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='group_quota' id='group_quota' value='{{ get_config('group_quota') }}'>
                                                     </div>
                                                 </div>
-                                                <div class='form-group'>
+                                                <div class='form-group mt-3'>
                                                     <label for='dropbox_quota' class='col-sm-12 control-label-notes'>{{ trans('langDropboxQuota') }} (MB):</label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='dropbox_quota' id='dropbox_quota' value='{{ get_config('dropbox_quota') }}'>
@@ -1018,7 +993,7 @@
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pb-3 pt-3 pe-3 rounded-0'>
                                             <fieldset>
-                                                <div class='form-group mt-3'>
+                                                <div class='form-group'>
                                                     <label for='student_upload_whitelist' class='col-sm-12 control-label-notes'>{{ trans('langStudentUploadWhitelist') }}:</label>
                                                     <div class='col-sm-12'>
                                                             <textarea class='form-control form-control-admin' rows='6' name='student_upload_whitelist' id='student_upload_whitelist'>{{ get_config('student_upload_whitelist') }}</textarea>

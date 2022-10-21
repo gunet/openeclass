@@ -1,0 +1,35 @@
+
+/****************************************** rich-text-editor bg-tools ******************************************/
+
+.mce-tinymce.mce-container.mce-panel{
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.15);
+    border-radius: 15px !important;
+    margin-top: 5px;
+}
+
+.mce-toolbar-grp.mce-container.mce-panel.mce-last{
+    border-top-left-radius: 15px !important;
+    border-top-right-radius: 15px !important;
+    border: 0px !important;
+}
+.mce-container-body.mce-stack-layout{
+    border-top-left-radius: 15px !important;
+    border-top-right-radius: 15px !important;
+    border: 0px !important;
+}
+
+.mce-container.mce-menubar.mce-toolbar.mce-first, .mce-toolbar-grp.mce-container.mce-panel.mce-last{
+    border: 0px !important;
+}
+
+
+.mce-edit-area.mce-container.mce-panel.mce-stack-layout-item{
+    border: 0px !important
+}
+
+
+.mce-statusbar.mce-container.mce-panel.mce-stack-layout-item.mce-last{
+    border: 0px !important;
+    border-bottom-left-radius: 15px !important;
+    border-bottom-right-radius: 15px !important;
+}
