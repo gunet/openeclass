@@ -102,9 +102,6 @@
 
     @stack('head_scripts')
 
-    <!-- change rich-text-editor style -->
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/re-style-richTextEditor.css"/>
-
 </head>
 
 <body>
