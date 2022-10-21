@@ -2219,7 +2219,6 @@ tinymce.init({
     content_css: [
         '{$urlAppend}template/modern/css/bootstrap.min.css',
         '{$urlAppend}template/modern/css/font-awesome-4.7.0/css/font-awesome.css',
-        '{$urlAppend}template/modern/css/re-style-richTextEditor.css',
     ],
     content_style: 'body { margin: 8px; background: none !important; }',
     extended_valid_elements: 'span[*]',
