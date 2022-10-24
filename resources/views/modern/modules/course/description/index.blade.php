@@ -103,9 +103,13 @@
                                         </div>
                                         <div class='panel-body rounded-0'>
                                             {!! handleType($course_desc->type) !!} 
-                                            <br>
-                                            <br>
-                                            {!! standard_text_escape($course_desc->comments) !!} 
+                                            @if(!empty($course_desc->type))
+                                                <br>
+                                                <br>
+                                            @endif
+                                            <div class='col-12'>
+                                                {!! standard_text_escape($course_desc->comments) !!} 
+                                            </div>
                                         </div>            
                                     </div>
                                 </div>

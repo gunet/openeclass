@@ -185,6 +185,7 @@ foreach (array('previous', 'next') as $i) {
 }
 
 $moduleTag = new ModuleElement($id);
+$data['thisId'] = $id;
 $data['tags_list'] = $moduleTag->showTags();
 $data['units'] = Database::get()->queryArray("SELECT id, title, start_week FROM course_units
              WHERE course_id = ?d AND `order` > 0

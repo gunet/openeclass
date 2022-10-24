@@ -140,7 +140,7 @@ Class Commenting {
                 }
                 $out .= "<div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
                           <div class='col-12'>
-                           <div class='media panel-default rounded-0'>
+                           <div class='media panel-default rounded-0 mb-3'>
                             <a class='media-left' href='#'>
                             ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                             </a>

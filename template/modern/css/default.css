@@ -1930,6 +1930,8 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
     .user-icon-filename{ width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px; }
 
+    .panel-social-homepage {min-height: 126px;}
+
   }
 
   @media(min-width: 992px) and (max-width: 1023px){

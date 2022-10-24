@@ -163,8 +163,8 @@ if (!$conference_activity) {
             <div class='input-group'>
               <input type='text' placeholder='$typeyourmessage...' name='msg' size='80' class='form-control'>
               <input type='hidden' name='chatLine'>
-              <span class='input-group-btn'>
-                <input class='btn btn-primary' type='submit' value='&raquo;'>
+              <span class='input-group-btn mt-2'>
+                <input class='btn btn-success' type='submit' value='&raquo;'>
               </span>
             </div>
             <div class='embed-responsive embed-responsive-4by3 margin-top-fat mt-3'>

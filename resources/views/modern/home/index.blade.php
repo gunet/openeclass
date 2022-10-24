@@ -250,7 +250,7 @@
                                     </div>
                                 </div>
                                 <div class='@if($eclass_banner_value != 0) col-md-6 col-12 @else col-12 @endif mt-md-0 pt-md-0 @if($eclass_banner_value == 0) pt-0 @else pt-5 @endif'>
-                                    <div class='panel panel-admin border-0 rounded-0'>
+                                    <div class='panel panel-admin border-0 rounded-0 panel-social-homepage'>
                                         <div class='panel-body rounded-0'>
                                             <div class='col-12'>
                                                 <div class='row'>
@@ -339,7 +339,7 @@
     @if ($announcements)
     <div class="container-fluid main-section">
         <div class="row rowMedium">
-            <div class="col-lg-12 border-15px Announcements-Homepage">
+            <div class="col-lg-12 border-15px p-md-5 ps-4 pe-4 pt-5 pb-5 Announcements-Homepage">
                 <div class="news">
                     <h4 class="block-title">{{ trans('langAnnouncements') }}
                         <a href='{{ $urlServer }}rss.php'>
@@ -353,7 +353,7 @@
                             <div class="col-sm-12 news-list-item">
                                 <div class="title">
                                     <a class="d-inline-flex align-items-top fs-6" href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
-                                        <span class='fs-5 me-2'>{{$counterAn + 1}})</span>
+                                        <span class="fa fa-bullhorn fs-5 me-1 mt-1" aria-hidden="true"></span>
                                         <span class='fs-6 mt-1'>{{$announcement->title}}</span>
                                     </a>
                                 </div>

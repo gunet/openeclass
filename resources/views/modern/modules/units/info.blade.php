@@ -115,16 +115,16 @@
                                         </label>
                                         <div class="row">
 
-                                            <div class="col-xl-6">
+                                            <div class="col-lg-6 col-12">
                                                 <div class="input-group mb-3">
                                                     <span class="input-group-text" id="basic-addon1">{{ trans('langFrom2') }}</span>
-                                                    <input type="text" class="form-control" id='unitdurationfrom' name='unitdurationfrom' value='{{ $start_week }}' aria-label="{{ $start_week }}" aria-describedby="basic-addon1">
+                                                    <input type="text" class="form-control mt-0" id='unitdurationfrom' name='unitdurationfrom' value='{{ $start_week }}' aria-label="{{ $start_week }}" aria-describedby="basic-addon1">
                                                 </div>
                                             </div>
-                                            <div class="col-xl-6">
+                                            <div class="col-lg-6 col-12 mt-lg-0 mt-3">
                                                 <div class="input-group mb-3">
                                                     <span class="input-group-text" id="basic-addon2">{{ trans('langUntil') }}</span>
-                                                    <input type="text" class="form-control" id='unitdurationto' name='unitdurationto' value='{{ $finish_week }}' aria-label="{{ $finish_week }}" aria-describedby="basic-addon2">
+                                                    <input type="text" class="form-control mt-0" id='unitdurationto' name='unitdurationto' value='{{ $finish_week }}' aria-label="{{ $finish_week }}" aria-describedby="basic-addon2">
                                                 </div>
                                             </div>
                                         </div>                     

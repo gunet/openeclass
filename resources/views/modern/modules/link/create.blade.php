@@ -95,7 +95,7 @@
 
                                         <div class='form-group mt-3'>
                                             <label for='selectcategory' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}:</label>
-                                            <div class='col-sm-3'>
+                                            <div class='col-sm-12'>
                                                 <select class='form-select' name='selectcategory' id='selectcategory'>
                                                     @if ($is_editor)
                                                         <option value='{{ getIndirectReference(0) }}'>--</option>

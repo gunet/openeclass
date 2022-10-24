@@ -7,8 +7,20 @@
     $(function () {
         var langEmptyGroupName = '{{ js_escape(trans('langEmptyAnTitle')) }}';
 
-        $('input[name=startdate_active]').prop('checked') ? $('input[name=startdate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', true);
-        $('input[name=enddate_active]').prop('checked') ? $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);
+        //$('input[name=startdate_active]').prop('checked') ? $('input[name=startdate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', true);
+        //$('input[name=enddate_active]').prop('checked') ? $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);
+
+        if($('input[name=startdate_active]').prop('checked')){
+            $('input[name=startdate]').attr('disabled', false);
+        }else{
+            $('input[name=startdate]').attr('disabled', true);
+        }
+
+        if($('input[name=enddate_active]').prop('checked')){
+            $('input[name=enddate]').attr('disabled', false);
+        }else{
+            $('input[name=enddate]').attr('disabled', true);
+        }
 
         $('input[name=startdate_active]').on('click', function() {
             if ($('input[name=startdate_active]').prop('checked')) {
@@ -110,26 +122,27 @@
 
                                                   
 
-                                                    <div class='row'>
-                                                        <div class='col-md-6 col-12'>
-                                                            <div class='form-group mt-3'><label for='Email' class='col-sm-offset-2 col-sm-12 control-label-notes'>{{ trans('langEmailOption') }}:</label></div>
-                                                            <div class='form-group'>
-                                                                <div class='col-sm-offset-2 col-sm-12'>
-                                                                    <select class='form-select' name='recipients[]' multiple='multiple' id='select-recipients'>
-                                                                        <option value='-1' selected>{{ trans('langAllUsers') }}</option>
-                                                                        @foreach ($course_users as $cu)
-                                                                            <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                    <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class='col-md-6 col-12'>
-                                                            <div class="mt-3"></div>
-                                                            {!! $tags !!}
+                                                    
+                                                       
+                                                           
+                                                    <div class='form-group mt-3 mb-3'>
+                                                            <label for='Email' class='col-sm-12 control-label-notes'>{{ trans('langEmailOption') }}:</label>
+                                                        <div class='col-sm-12'>
+                                                            <select class='form-select' name='recipients[]' multiple='multiple' id='select-recipients'>
+                                                                <option value='-1' selected>{{ trans('langAllUsers') }}</option>
+                                                                @foreach ($course_users as $cu)
+                                                                    <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
+                                                                @endforeach
+                                                            </select>
+                                                            <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
                                                         </div>
                                                     </div>
+                                                
+                                                
+                                                    
+                                                    {!! $tags !!}
+                                                       
+                                                    
                                                     
 
                                                     <div class='row'>
@@ -138,7 +151,7 @@
                                                                 <label for='startdate' class='col-sm-12 control-label-notes'>{{ trans('langStartDate') }} :</label>
                                                                 <div class='col-sm-12'>
                                                                     <div class='input-group'> 
-                                                                        <span class='input-group-addon mt-3'>
+                                                                        <span class='input-group-addon'>
                                                                             <input type='checkbox' name='startdate_active' {{ $start_checkbox }}>
                                                                         </span>
                                                                         <input class='form-control' name='startdate' id='startdate' type='text' value = '{{ $showFrom }}'>
@@ -152,7 +165,7 @@
                                                                 <label for='enddate' class='col-sm-12 control-label-notes'>{{ trans('langEndDate') }} :</label>
                                                                 <div class='col-sm-12'>
                                                                     <div class='input-group'>
-                                                                        <span class='input-group-addon mt-3'>
+                                                                        <span class='input-group-addon'>
                                                                             <input type='checkbox' name='enddate_active' {{ $end_checkbox}} {{ $end_disabled}}>
                                                                         </span>
                                                                         <input class='form-control' name='enddate' id='enddate' type='text' value = '{{ $showUntil }}'>
