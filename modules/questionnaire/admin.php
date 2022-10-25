@@ -91,7 +91,7 @@ if (isset($_POST['submitPoll'])) {
                     $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollSurveyType, $PollAssignToSpecific, $course_id, $pid);
             Database::get()->query("DELETE FROM poll_to_specific WHERE poll_id = ?d", $pid);
             //Session::Messages($langPollEdited, 'alert-success');
-            Session::flash('message',$langPollEdited); 
+            Session::flash('message',$langPollEdited);
             Session::flash('alert-class', 'alert-success');
         } else {
             $PollActive = 1;
@@ -105,7 +105,7 @@ if (isset($_POST['submitPoll'])) {
                 createattls($pid);
             }
             //Session::Messages($langPollCreated, 'alert-success');
-            Session::flash('message',$langPollCreated); 
+            Session::flash('message',$langPollCreated);
             Session::flash('alert-class', 'alert-success');
         }
         if ($PollAssignToSpecific && !empty($PollAssignees)) {
@@ -132,14 +132,14 @@ if (isset($_POST['submitPoll'])) {
 }
 if (isset($_POST['submitQuestion'])) {
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', array('questionName'));
-    if (!empty($_POST['questionScale'])) {
-        $v->rule('required', array('questionScale'));
-        $v->rule('numeric', array('questionScale'));
-        $v->rule('min', array('questionScale'), 1);
+    $v->rule('required', 'questionName');
+    if (isset($_POST['questionScale'])) {
+        $v->rule('required', 'questionScale');
+        $v->rule('integer', 'questionScale');
+        $v->rule('min', 'questionScale', 1);
         $v->labels(array(
-            'questionName' => "$langTheField $langPollStart",
-            'questionScale' => "$langTheField $langPollEnd"
+            'questionName' => "$langTheField $langQuestion",
+            'questionScale' => "$langTheField $langScale"
         ));
     }
     if($v->validate()) {
@@ -221,7 +221,7 @@ if (isset($_GET['pid'])) {
     $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE pid = ?d", $pid)->count;
     if ($attempt_counter>0) {
         //Session::Messages($langThereAreParticipants);
-        Session::flash('message',$langThereAreParticipants); 
+        Session::flash('message',$langThereAreParticipants);
         Session::flash('alert-class', 'alert-warning');
     }
 } else {
