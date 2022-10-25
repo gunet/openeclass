@@ -334,7 +334,7 @@ if(!isset($_POST['final_submit'])){
         $toolName = $langCourseEdit;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "${urlServer}modules/units/?course=$course_code&id=$unit_id",
+                'url' => "${urlServer}modules/units/index.php?course=$course_code&id=$unit_id",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')),false);
 
@@ -510,7 +510,7 @@ if(!isset($_POST['final_submit'])){
                                     <input id='final_sub' class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
                                </div>
                                <div class='col-md-6 col-5'>
-                                    <a href='{$urlServer}modules/units/?course=".$course_code."&id=".$unit_id."' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
+                                    <a href='{$urlServer}modules/units/index.php?course=".$course_code."&id=".$unit_id."' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
                                </div>
                             </div>                        
                             
@@ -1082,7 +1082,7 @@ if(!isset($_POST['final_submit'])){
         $tool_content .= action_bar(array(
             array(
                 'title' => $langEnter,
-                'url' => $urlAppend . "modules/units/?course=$course_code&id=$unit_id",
+                'url' => $urlAppend . "modules/units/index.php?course=$course_code&id=$unit_id",
                 'icon' => 'fa-arrow-right',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'

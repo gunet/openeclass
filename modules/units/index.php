@@ -185,7 +185,7 @@ foreach (array('previous', 'next') as $i) {
 }
 
 $moduleTag = new ModuleElement($id);
-$data['thisId'] = $id;
+$data['id'] = $id;
 $data['tags_list'] = $moduleTag->showTags();
 $data['units'] = Database::get()->queryArray("SELECT id, title, start_week FROM course_units
              WHERE course_id = ?d AND `order` > 0
@@ -221,6 +221,6 @@ if($is_editor) {
 }
 $cu_indirect = getIndirectReference($id);
 $data['q'] = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
-
+$data['activities'] = $activities;
 
 view('modules.units.index', $data);

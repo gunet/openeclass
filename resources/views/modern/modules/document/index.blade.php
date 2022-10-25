@@ -289,26 +289,20 @@
         var downloadURL = $(this).prev('input').val();
         var fileTitle = $(this).attr('title');
 
-
-
-        if(downloadURL == null){
-            downloadURL = $(this).attr('data-download');
-        }
-
         console.log('the fileURL:'+fileURL);
         console.log('the downloadURL:'+downloadURL);
 
         // BUTTONS declare
         var bts = {
             download: {
-                label: '<span class="fa fa-download"></span> Ληψη',
+                label: '<span class="fa fa-download"></span> {{ trans('langDownload') }}',
                 className: 'btn-success',
                 callback: function (d) {
                     window.location = downloadURL;
                 }
             },
             print: {
-                label: '<span class="fa fa-print"></span> Εκτυπωση',
+                label: '<span class="fa fa-print"></span> {{ trans('langPrint') }}',
                 className: 'btn-primary',
                 callback: function (d) {
                     var iframe = document.getElementById('fileFrame');
@@ -318,7 +312,7 @@
         };
         if (screenfull.enabled) {
             bts.fullscreen = {
-                label: '<span class="fa fa-arrows-alt"></span> Πληρης οθονη',
+                label: '<span class="fa fa-arrows-alt"></span> {{ trans('langFullScreen') }}',
                 className: 'btn-primary',
                 callback: function() {
                     screenfull.request(document.getElementById('fileFrame'));
@@ -327,7 +321,7 @@
             };
         }
         bts.newtab = {
-            label: '<span class="fa fa-plus"></span> Νεο παραθυρο',
+            label: '<span class="fa fa-plus"></span> {{ trans('langNewTab') }}',
             className: 'btn-primary',
             callback: function() {
                 window.open(fileURL);
@@ -335,7 +329,7 @@
             }
         };
         bts.cancel = {
-            label: 'Ακυρωση',
+            label: '{{ trans('langCancel') }}',
             className: 'btn-secondary'
         };
 
