@@ -236,7 +236,7 @@
                     </div>
 
                     <div class="col-xxl-8 col-xl-7 col-lg-12 col-md-12 col_maincontent_unit mt-4">
-                        
+
                         @if($course_info->view_type == 'units')
                             @if($total_cunits > 0)
                                 <div class='panel panel-admin border border-secondary-4 shadow'>
@@ -260,15 +260,15 @@
                                                     <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
                                                         <span class='fa fa-plus-circle text-white'></span>
                                                     </a>
-                                                    
+
                                                     <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=0' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitCarousel') }}">
                                                         <span class='fa fa-columns pe-2 text-white'></span>
                                                     </a>
-                                                
+
                                                     <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=1' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitRow') }}">
                                                         <span class='fa fa-list pe-2 mb-0 text-white'></span>
                                                     </a>
-                                                
+
                                                 @endif
                                                 <a class='add-unit-btn mt-0 float-end' id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
                                                     <span class='fa fa-question-circle @if($is_editor) pe-2 @endif text-white'></span>
@@ -289,18 +289,18 @@
                                             </div>
                                             <div class='col-6'>
                                                 @if($is_editor)
-                                                    
+
                                                     <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
                                                         <span class='fa fa-plus-circle text-white'></span>
                                                     </a>
-                                                                                                       
+
                                                 @endif
                                                 <a class='add-unit-btn mt-0 float-end' id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
                                                     <span class='fa fa-question-circle @if($is_editor) pe-2 @endif text-white'></span>
                                                 </a>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
                                     <div class='panel-body'>
                                         <div class='not_visible text-center'> - {{ trans('langNoUnits') }} - </div>
@@ -308,8 +308,8 @@
                                 </div>
                             @endif
                         @endif
-                            
-                        
+
+
 
 
                         @if($course_info->view_type == 'activity')
@@ -319,7 +319,7 @@
                                 </div>
                             @endif
                             <div class='col-12'>
-                                @php 
+                                @php
                                     $qVisible = ($is_editor? '': 'AND visible = 1');
                                     $items = Database::get()->queryArray("SELECT activity_content.id, heading, content
                                         FROM activity_heading
@@ -367,7 +367,7 @@
                             @include('layouts.partials.course_wall_functions',['is_editor' => $is_editor])
                         @endif
 
-                        
+
                         <div class="panel panel-admin @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif border border-secondary-4 shadow">
                             <div class='panel-heading'>
                                 <div class='row'>
@@ -375,7 +375,7 @@
                                         <span class='panel-title'>{{ trans('langAnnouncements') }}</span>
                                     </div>
                                     <div class='col-6 text-end'>
-                                        <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}' 
+                                        <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}'
                                            class='mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllAnnouncements') }}">
                                             <span class='fa fa-arrow-right text-white'></span>
                                         </a>
@@ -394,7 +394,7 @@
                            {!! $course_home_main_area_widgets !!}
                         @endif
 
-                        
+
 
                     </div><!-- end col units -->
 
