@@ -165,7 +165,7 @@ if (isset($_POST['submitQuestion'])) {
         $v->rule('integer', 'questionScale');
         $v->rule('min', 'questionScale', 1);
         $v->labels(array(
-            'questionName' => "$langTheField $langStart",
+            'questionName' => "$langTheField $langQuestion",
             'questionScale' => "$langTheField $langScale"
         ));
     }
