@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2015  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_mlogin = true;
@@ -46,22 +46,35 @@ $tool->type = 'coursedescription';
 $tool->active = true;
 $toolsArr[0][] = $tool;
 
-$first_unit_id = null;
-$first_unit = Database::get()->querySingle("SELECT id FROM course_units
+$course_info = Database::get()->querySingle("SELECT view_type FROM course WHERE id = ?d", $course_id);
+if ($course_info->view_type == 'units') {
+    $first_unit_id = null;
+    if ($_SESSION['status'] == USER_TEACHER) {
+        $cu = Database::get()->querySingle("SELECT id FROM course_units
                                              WHERE course_id = ?d AND `order` >= 0
-                                          ORDER BY `order` ASC LIMIT 1", intval($course_id));
-if ($first_unit) {
-    $first_unit_id = $first_unit->id;
-}
+                                          ORDER BY `order` ASC LIMIT 1", $course_id);
+        $first_unit_id = $cu->id;
+    } else {
+        $cu = Database::get()->querySingle("SELECT id, start_week FROM course_units 
+                                            WHERE course_id = ?d 
+                                            AND visible = 1 AND `order` >= 0 
+                                            ORDER BY `order` ASC LIMIT 1", $course_id);
+        if (is_null($cu->start_week) or (!(is_null($cu->start_week)) and (date('Y-m-d') >= $cu->start_week))) {
+            $first_unit_id = $cu->id;
+        }
+    }
 
-$tool = new stdClass();
-$tool->id = 1;
-$tool->name = $langCourseUnits;
-$tool->link = $urlAppend . 'modules/units/index.php?course=' . $course_code . '&id=' . $first_unit_id;
-$tool->img = 'courseunits';
-$tool->type = 'courseunits';
-$tool->active = true;
-$toolsArr[0][] = $tool;
+    if (!is_null($first_unit_id)) {
+        $tool = new stdClass();
+        $tool->id = 1;
+        $tool->name = $langCourseUnits;
+        $tool->link = $urlAppend . 'modules/units/index.php?course=' . $course_code . '&id=' . $first_unit_id;
+        $tool->img = 'courseunits';
+        $tool->type = 'courseunits';
+        $tool->active = true;
+        $toolsArr[0][] = $tool;
+    }
+}
 
 $offset = 1;
 
@@ -99,7 +112,7 @@ exit();
 
 function createDom($groupsArr, $toolsArr) {
     global $status;
-    
+
     $dom = new DomDocument('1.0', 'utf-8');
 
     $root = $dom->appendChild($dom->createElement('tools'));
@@ -122,7 +135,7 @@ function createDom($groupsArr, $toolsArr) {
             }
         }
     }
-    
+
     if ($status == USER_TEACHER || $status == USER_STUDENT) {
         $stname = ($status == USER_TEACHER) ? 'teacher' : 'student';
         $st = $root->appendChild($dom->createElement('status'));

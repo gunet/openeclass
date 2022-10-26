@@ -35,13 +35,13 @@ if ($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == USER_STUDENT) 
                course.visible,
                course.prof_names,
                course.public_code,
-               course_user.status AS status
-          FROM course JOIN course_user ON course.id = course_user.course_id
-         WHERE course_user.user_id = ?d
-           AND (course.visible != ?d
-                OR course_user.status = ?d)
-      ORDER BY status, course.title, course.prof_names",
-        $uid, COURSE_INACTIVE, USER_TEACHER);
+               course_user.status AS status,
+               course_user.favorite favorite
+          FROM course JOIN course_user 
+            ON course.id = course_user.course_id 
+            AND course_user.user_id = ?d 
+            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+      ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
 } else {
     echo RESPONSE_FAILED;
     exit();
@@ -100,25 +100,4 @@ function createCoursesDom($coursesArr) {
 
     $dom->formatOutput = true;
     return array($dom, $retroot);
-}
-
-function getVisibleName($value) {
-    global $langRegCourse, $langTypeInactive, $langTypeOpen, $langTypeClosed;
-
-    $visibles = array(COURSE_INACTIVE => $langTypeInactive,
-                      COURSE_OPEN => $langTypeOpen,
-                      COURSE_REGISTRATION => $langRegCourse,
-                      COURSE_CLOSED => $langTypeClosed);
-
-    return $visibles[$value];
-}
-
-function getTypeNames($value) {
-    $ret = array($value, $value);
-
-    $containslang = (substr($value, 0, strlen("lang")) === "lang") ? true : false;
-    if ($containslang)
-        $ret = array($GLOBALS[$value], $GLOBALS[$value . "s"]);
-
-    return $ret;
 }
