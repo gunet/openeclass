@@ -71,6 +71,7 @@ function view($view_file, $view_data = array()) {
 
     $pageTitle = $siteName;
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
+    $is_in_tinymce = false;
 
     // Setting $menuTypeID and Getting Side Menu
     $menuTypeID = isset($view_data['menuTypeID']) ? $view_data['menuTypeID'] : 2;
@@ -377,7 +378,7 @@ function view($view_file, $view_data = array()) {
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
-            'logo_url_path','leftsideImg','eclass_banner_value');
+            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();
