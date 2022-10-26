@@ -62,7 +62,7 @@ function process_actions() {
        // Session::Messages($langResourceUnitModified, 'alert-success');
         Session::flash('message',$langResourceUnitModified);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page('modules/units/index/php?course=' . $course_code . '&id=' . $id);
+        redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $id);
     } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
         $res_id = intval($_GET['del']);
         if (check_admin_unit_resource($res_id)) {
@@ -86,7 +86,7 @@ function process_actions() {
         //CourseXMLElement::refreshCourse($course_id, $course_code);
         Session::flash('message', $langResourceCourseUnitDeleted);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
+        redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $id);
 
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only
         $res_id = intval($_REQUEST['vis']);
@@ -113,7 +113,7 @@ function process_actions() {
         // CourseXMLElement::refreshCourse($course_id, $course_code);
         Session::flash('message', $langViMod);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
+        redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $id);
 
     } elseif (isset($_REQUEST['down'])) { // change order down
         $res_id = intval($_REQUEST['down']);
@@ -169,6 +169,7 @@ function show_resources($unit_id)
            $langFullScreen, $langNewTab, $langActInHome, $langActInClass, $langActAfterClass, $course_code;
 
     $html = '';
+
     $q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
 
     if ($q->flipped_flag == 2) {
@@ -484,8 +485,10 @@ function show_resources($unit_id)
             $html .= "</tbody></table>";
             $html .= "</div>";
         }
-        return $html;
-    }
+       
+    } 
+
+    return $html;
 }
 
 /**
@@ -1714,7 +1717,7 @@ function edit_res($resource_id) {
             "<input type='hidden' name='id' value='$id'>" .
             "<input type='hidden' name='resource_id' value='$resource_id'>";
     if ($resource_type != 'text') {
-        $content .= "<div class='form-group mt-3'>
+        $content .= "<div class='form-group'>
                 <label class='col-sm-6 control-label-notes'>$langTitle:</label>
                 <div class='col-sm-12'><input class='form-control' type='text' name='restitle' size='50' maxlength='255' $restitle></div>
                 </div>";
@@ -1727,8 +1730,8 @@ function edit_res($resource_id) {
                     <label class='col-sm-6 control-label-notes'>$message:</label>
                     <div class='col-sm-12'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
                 </div>
-                <div class='col-sm-offset-2 col-sm-10 mt-3'>
-                    <input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'>
+                <div class='col-12 mt-5 d-flex justify-content-center'>
+                    <input class='btn btn-sm btn-primary submitAdminBtn w-50' type='submit' name='edit_res_submit' value='$langModify'>
                 </div>                
             </form></div>
         </div>";

@@ -413,7 +413,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   
   .not_visible td:last-child{ opacity:1; }
 
-  .InvisibleCourse, .InvisibleAuth{ opacity:0.3; }
+  .InvisibleCourse, .InvisibleAuth , .not_visible_unit { opacity:0.3; }
 
   /* ---------------------------------------------Default ----------------------------------------*/
   /* ---------------------------------------------------------------------------------------------*/
