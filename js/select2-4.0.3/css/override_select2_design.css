@@ -20,9 +20,9 @@
 
 .select2-selection.select2-selection--multiple{ 
     min-height:46px !important;
-    border-radius: 35px !important;
+    /* border-radius: 35px !important; */
     border: 0px !important;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.15);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.13);
     margin-top:5px;
 }
 

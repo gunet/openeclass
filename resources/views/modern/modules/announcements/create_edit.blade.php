@@ -106,7 +106,7 @@
                                             <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">
                                                     
                                                     <div class="form-group {{ $antitle_error }}">
-                                                        <label for="AnnTitle" class="col-sm-4 control-label-notes">{{ trans('langAnnTitle') }}</label>
+                                                        <label for="AnnTitle" class="col-sm-6 control-label-notes">{{ trans('langAnnTitle') }}:</label>
                                                         <div class="col-sm-12 ">
                                                             <input class="form-control" placeholder="{{ trans('langAnnTitle') }}..." type="text" name="antitle" value="{{ $titleToModify }}"/>
                                                             <span class='help-block'>{{ Session::getError('antitle') }}</span>
@@ -116,7 +116,7 @@
                                         
 
                                                     <div class='form-group mt-3'>
-                                                        <label for='AnnBody' class='col-sm-4 control-label-notes'>{{ trans('langAnnBody') }}:</label>
+                                                        <label for='AnnBody' class='col-sm-6 control-label-notes'>{{ trans('langAnnBody') }}:</label>
                                                         <div class='col-sm-12'>{!! $contentToModify !!}</div>
                                                     </div>
 

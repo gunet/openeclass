@@ -1,5 +1,32 @@
-<?php //print_r($alter_layout); ?>
 @extends('layouts.default')
+
+@push('head_scripts')
+<script src="{{ $urlServer }}/js/sortable/Sortable.min.js"></script>
+<script type='text/javascript'>
+
+$(document).ready(function(){
+    Sortable.create(boxlistSort, {
+            animation: 350,
+            handle: '.fa-arrows',
+            animation: 150,
+            onUpdate: function (evt) {
+                var itemEl = $(evt.item);
+                var idReorder = itemEl.attr('data-id');
+                var prevIdReorder = itemEl.prev().attr('data-id');
+
+                $.ajax({
+                  type: 'post',
+                  dataType: 'text',
+                  data: {
+                      toReorder: idReorder,
+                      prevReorder: prevIdReorder,
+                  }
+                });
+            }
+        });
+});
+</script>
+@endpush
 
 @section('content')
 
@@ -276,7 +303,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class='panel-body'>
+                                    <div class='panel-body' id='boxlistSort'>
                                         {!! $cunits_content !!}
                                     </div>
                                 </div>
@@ -559,6 +586,7 @@
                 @endif
             });
         });
+
     </script>
 
 

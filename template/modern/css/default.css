@@ -238,18 +238,18 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 .form-wrapper input[type=text], .form-wrapper input[type=password], .form-wrapper input[type=number], .form-wrapper .form-select,
 .forms-panels-admin input[type=text], .forms-panels-admin input[type=password], .forms-panels-admin input[type=number], .forms-panels-admin .form-select{
   height:46px;
-  border-radius: 35px;
+  border-radius: 0px;
   margin-top: 5px;
   border: 0px;
-  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.15);
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.13);
   background-color: white;
 }
 .form-wrapper textarea, .forms-panels-admin textarea{
    min-height:106px;
-   border-radius: 15px;
+   border-radius: 0px;
    margin-top: 5px;
    border: 0px;
-   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.15);
+   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.13);
    background-color: white;
 }
 .form-wrapper textarea:focus, .forms-panels-admin textarea:focus,
@@ -790,18 +790,8 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .Announcements-Homepage{ background-color: #f8f9fa; }
 
-  /******************************************************************************************************/
-  /******************************************************************************************************/
-  /* to logo pou tha vazei kathe panepisthmio sthn arxikh selida toy eclass mesa sto homepageintropanel */
-  /******************************************************************************************************/
-  /******************************************************************************************************/
-
-  .homepageIntroPanel img{ margin:auto; display: block; padding: 10px; }
-
-  /******************************************************************************************************/
-  /******************************************************************************************************/
-  /******************************************************************************************************/
-  /******************************************************************************************************/
+  /* logo inside panel in homepage */
+  .homepageIntroPanel img{ margin:auto; display:block; padding: 10px; }
 
   .opencourse_triangle{
     float:left;

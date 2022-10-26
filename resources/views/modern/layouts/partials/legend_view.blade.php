@@ -1,5 +1,5 @@
 
-<div class='d-none d-md-none d-lg-block mt-4'>
+<div class='d-none d-md-block mt-4'>
     <div class='col-12 shadow p-3 pb-3 bg-body rounded'>
         
             @if($course_code)
@@ -7,40 +7,19 @@
                     <div class='row'>
                         <div class='col-10'>
                             @if($toolName)
-                                <div class='col-12 mb-1'>
-                                    <div class='d-inline-flex align-items-top'>
-                                        <span class="fas fa-tools orangeText pe-2 mt-1 fs-6" aria-hidden="true"></span>
-                                        <span class='control-label-notes fs-6'>{{$toolName}}</span>
-                                    </div>
-                                </div>
-                                <div class='col-12 mb-1'>
-                                    <div class='d-inline-flex align-items-top'>
-                                        <span class='fas fa-university orangeText pe-2 mt-1'></span>
-                                        <span class='control-label-notes fs-6'>{{$currentCourseName}}</span>
-                                    </div>
+                                <div class='col-12 mb-2'>
+                                    <span class='control-label-notes fs-5 me-1'>{{$currentCourseName}}</span>
+                                    <span class='text-secondary'>({{course_id_to_public_code($course_id)}})</span><br>
+                                    <span class='text-secondary'>{{course_id_to_prof($course_id)}}</span>
                                 </div>
                                 <div class='col-12'>
-                                    <div class='d-inline-flex align-items-top'>
-                                        <span class='fas fa-user orangeText pe-1 mt-1'></span>
-                                        <span class='text-secondary fs-6 ms-1 me-2'>{{course_id_to_prof($course_id)}}</span>
-                                        <span class="fas fa-key orangeText pe-1 mt-1"></span>
-                                        <span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                                     
-                                    </div>
+                                    <span class='text-secondary fst-italic'>{{$toolName}}</span>
                                 </div>
                             @else
-                                <div class='col-12 mb-1'>
-                                    <div class='d-inline-flex align-items-top'>
-                                        <span class='fas fa-university orangeText pe-2 mt-1'></span>
-                                        <span class='control-label-notes fs-6'>{{$currentCourseName}}</span>
-                                    </div>
-                                </div>
                                 <div class='col-12'>
-                                    <div class='d-inline-flex align-items-top'>      
-                                        <span class='fas fa-user orangeText pe-2 mt-1'></span>
-                                        <span class='text-secondary fs-6 me-2'>{{course_id_to_prof($course_id)}}</span> 
-                                        <span class="fas fa-key orangeText pe-2 mt-1"></span>
-                                        <span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                              
-                                    </div>
+                                    <span class='control-label-notes fs-5 me-1'>{{$currentCourseName}}</span>
+                                    <span class='text-secondary'>({{course_id_to_public_code($course_id)}})</span><br>
+                                    <span class='text-secondary'>{{course_id_to_prof($course_id)}}</span> 
                                 </div>
                             @endif
                         </div>
@@ -52,40 +31,19 @@
                     <div class='row'>
                         <div class='col-12'>
                             @if($toolName)
-                                <div class='col-12 mb-1'>
-                                    <div class='d-inline-flex align-items-top'>
-                                        <span class="fas fa-tools orangeText pe-2 mt-1" aria-hidden="true"></span>
-                                        <span class='control-label-notes fs-6'>{{$toolName}}</span>
-                                    </div>
-                                </div>
-                                <div class='col-12 mb-1'>
-                                    <div class='d-inline-flex align-items-top'>
-                                        <span class='fas fa-university orangeText pe-2 mt-1'></span>
-                                        <span class='control-label-notes fs-6'>{{$currentCourseName}}</span>
-                                    </div>
+                                <div class='col-12 mb-2'>
+                                    <span class='control-label-notes fs-5 me-1'>{{$currentCourseName}}</span> 
+                                    <span class='text-secondary'>{{course_id_to_public_code($course_id)}}</span><br>
+                                    <span class='text-secondary'>{{course_id_to_prof($course_id)}}</span>
                                 </div>
                                 <div class='col-12'>
-                                    <div class='d-inline-flex align-items-top'>
-                                        <span class='fas fa-user orangeText pe-1 mt-1'></span>
-                                        <span class='text-secondary fs-6 ms-1 me-2'>{{course_id_to_prof($course_id)}}</span>
-                                        <span class="fas fa-key orangeText pe-1 mt-1"></span>
-                                        <span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                                     
-                                    </div>
+                                    <span class='text-secondary fst-italic'>{{$toolName}}</span>
                                 </div>
                             @else
-                                <div class='col-12 mb-1'>
-                                    <div class='d-inline-flex align-items-top'>
-                                        <span class='fas fa-university orangeText pe-2 mt-1'></span>
-                                        <span class='control-label-notes fs-6'>{{$currentCourseName}}</span>
-                                    </div>
-                                </div>
                                 <div class='col-12'>
-                                    <div class='d-inline-flex align-items-top'>      
-                                        <span class='fas fa-user orangeText pe-2 mt-1'></span>
-                                        <span class='text-secondary fs-6 me-2'>{{course_id_to_prof($course_id)}}</span> 
-                                        <span class="fas fa-key orangeText pe-2 mt-1"></span>
-                                        <span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                              
-                                    </div>
+                                    <span class='control-label-notes fs-5 me-1'>{{$currentCourseName}}</span>
+                                    <span class='text-secondary'>{{course_id_to_public_code($course_id)}}</span><br> 
+                                    <span class='text-secondary'>{{course_id_to_prof($course_id)}}</span>
                                 </div>
                             @endif
                         </div>
@@ -94,7 +52,7 @@
             @else
                 <div class='d-flex justify-content-center ps-1 pt-1 pb-2'>
                     <div class="d-inline-flex align-items-top">
-                        <i class="fas fa-tools orangeText me-2 mt-1" aria-hidden="true"></i> 
+                        <i class="fas fa-tools orangeText text-center me-2 mt-1" aria-hidden="true"></i> 
                         <span class="control-label-notes">{{$toolName}}</spa>
                     </div>
                 </div>
@@ -103,7 +61,7 @@
     </div></br>
 </div>
 
-<div class='d-block d-md-block d-lg-none mt-3'>
+<div class='d-block d-md-none mt-3'>
     <div class='col-12 shadow p-3 bg-body rounded'>
         
             @if($course_code)
@@ -113,54 +71,31 @@
                            
                                 <table class='table'>
                                     <thead>
-                                        @if($toolName)
-                                            <tr class='border-0'>
-                                                <th class='border-0'>
-                                                    <div class='d-inline-flex aling-items-top'>
-                                                        <span class="fas fa-tools orangeText pe-2 mt-1 fs-6" aria-hidden="true"></span>
-                                                        <span class='control-label-notes fs-6'>
-                                                            {{$toolName}}
-                                                        </span>
-                                                    </div>
-                                                </th>
-                                            </tr>
-                                        @endif
-                                       
-                                        <tr class='border-0'>
-                                            <th class='border-0'>
-                                                <div class='d-inline-flex aling-items-top'>
-                                                    <span class="fas fa-university orangeText pe-2 mt-1 fs-6" aria-hidden="true"></span>
-                                                    <span class='control-label-notes fs-6'>
-                                                        {{$currentCourseName}}
-                                                    </span>
-                                                </div>
-                                            </th>
-                                        </tr>
                                         
-                                            
                                         <tr class='border-0'>
                                             <th class='border-0'>
-                                                <div class='d-inline-flex aling-items-top'>
-                                                    <span class="fas fa-user orangeText pe-2 mt-1 fs-6" aria-hidden="true"></span>
-                                                    <span class='control-label-notes fs-6'>
-                                                        {{course_id_to_prof($course_id)}}
-                                                    </span>
-                                                </div>
+                                                <span class='control-label-notes fs-5'>
+                                                    {{$currentCourseName}}
+                                                </span>
+                                                <span class='text-secondary'>
+                                                    ({{course_id_to_public_code($course_id)}})
+                                                </span><br>
+                                                <span class='text-secondary'>
+                                                    {{course_id_to_prof($course_id)}}
+                                                </span>
                                             </th>
                                         </tr>
 
-                                        <tr class='border-0'>
-                                            <th class='border-0'>
-                                                <div class='d-inline-flex aling-items-top'>
-                                                    <span class="fa fa-key orangeText pe-1 mt-1 fs-6" aria-hidden="true"></span>
-                                                    <span class='control-label-notes fs-6'>
-                                                        {{course_id_to_public_code($course_id)}}
+                                        @if($toolName)
+                                            <tr class='border-0'>
+                                                <th class='border-0'>
+                                                    <span class='text-secondary fst-italic'>
+                                                        {{$toolName}}
                                                     </span>
-                                                </div>
-                                            </th>
-                                        </tr>
-                                        
-                                        
+                                                </th>
+                                            </tr>
+                                        @endif
+
                                         <tbody>
                                         </tbody>
                                     </thead>
@@ -177,52 +112,31 @@
                             
                                 <table class='table'>
                                     <thead>
-                                        @if($toolName)
-                                            <tr class='border-0'>
-                                                <th class='border-0'>
-                                                    <div class='d-inline-flex aling-items-top'>
-                                                        <span class="fas fa-tools orangeText pe-2 mt-1" aria-hidden="true"></span>
-                                                        <span class='control-label-notes fs-6'>
-                                                            {{$toolName}}
-                                                        </span>
-                                                    </div>
-                                                </th>
-                                            </tr>
-                                        @endif
+                                       
                                        
                                         <tr class='border-0'>
                                             <th class='border-0'>
-                                                <div class='d-inline-flex aling-items-top'>
-                                                    <span class="fas fa-university orangeText pe-2 mt-1" aria-hidden="true"></span>
-                                                    <span class='control-label-notes fs-6'>
-                                                        {{$currentCourseName}}
-                                                    </span>
-                                                </div>
-                                            </th>
-                                        </tr>
-                                        
-                                            
-                                        <tr class='border-0'>
-                                            <th class='border-0'>
-                                                <div class='d-inline-flex aling-items-top'>
-                                                    <span class="fas fa-user orangeText pe-2 mt-1" aria-hidden="true"></span>
-                                                    <span class='control-label-notes fs-6'>
-                                                        {{course_id_to_prof($course_id)}}
-                                                    </span>
-                                                </div>
+                                                <span class='control-label-notes fs-5'>
+                                                    {{$currentCourseName}}
+                                                </span>
+                                                <span class='text-secondary'>
+                                                    {{course_id_to_public_code($course_id)}}
+                                                </span><br>
+                                                <span class='text-secondary'>
+                                                    {{course_id_to_prof($course_id)}}
+                                                </span>
                                             </th>
                                         </tr>
 
-                                        <tr class='border-0'>
-                                            <th class='border-0'>
-                                                <div class='d-inline-flex aling-items-top'>
-                                                    <span class="fa fa-key orangeText pe-2 mt-1" aria-hidden="true"></span>
-                                                    <span class='control-label-notes fs-6'>
-                                                        {{course_id_to_public_code($course_id)}}
+                                        @if($toolName)
+                                            <tr class='border-0'>
+                                                <th class='border-0'>
+                                                    <span class='text-secondary fst-italic'>
+                                                        {{$toolName}}
                                                     </span>
-                                                </div>
-                                            </th>
-                                        </tr>
+                                                </th>
+                                            </tr>
+                                        @endif
                                         
                                         
                                         <tbody>

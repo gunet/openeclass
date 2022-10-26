@@ -14,16 +14,16 @@
                     </div>
 
                     <div class='row'>
+                        @unless ($is_dir)
                         <div class='col-md-6 col-12'>
-                            @unless ($is_dir)
-                                <div class='form-group mt-3'>
-                                    <label class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
-                                    <div class='col-sm-12'>
-                                        <input class='form-control' type='text' name='file_title' value='{{ $file->title }}'>
-                                    </div>
+                            <div class='form-group mt-3'>
+                                <label class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
+                                <div class='col-sm-12'>
+                                    <input class='form-control' type='text' name='file_title' value='{{ $file->title }}'>
                                 </div>
-                            @endunless
+                            </div>
                         </div>
+                        @endunless
 
                         <div class='col-md-6 col-12'>
                             <div class='form-group mt-3'>

@@ -719,7 +719,12 @@ if ($total_cunits > 0) {
 
             if ($is_editor) {
 
-                $cunits_content .= "<div class='float-end'>".action_button(array(
+                $cunits_content .= "<div class='float-end'>
+                <div class='reorder-btn ms-2 mb-2'>
+                    <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
+                </div>
+
+                ".action_button(array(
                     array('title' => $langEditChange,
                         'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
                         'icon' => 'fa-edit'),

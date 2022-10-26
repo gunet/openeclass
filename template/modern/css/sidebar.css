@@ -13,7 +13,7 @@
 
 .leftMenuToolCourse.active span{ color: #003F87; }
 
-.leftMenuToolCourse:hover{ background-color: blue; }
+.leftMenuToolCourse:hover{ background-color: #4682B4; }
 
 .leftMenuToolCourse.active:hover{ background-color:  #ccc; border: 0; }
 
@@ -123,7 +123,7 @@
 
   .menu_btn_button{ display:block; pointer-events: all; }
 
-  .active-nav{  margin-left:-450px; }
+  .active-nav{ margin-left:-100vw; }
 
   .active-nav2{ margin-left:-218px; }
 
@@ -134,7 +134,7 @@
 
 @media(min-width:1024px) and (max-width:1199px){
 
-  .active-nav{ margin-left:-450px; }
+  .active-nav{ margin-left:-100vw; }
 
   .active-nav2{ margin-left:-218px; }
 
@@ -147,7 +147,7 @@
 /* laptop */
 @media (min-width: 1200px) and (max-width:1399px){
 
-  .active-nav{ margin-left:-450px; }
+  .active-nav{ margin-left:-100vw; }
 
   .active-nav2{ margin-left:-218px; }
 
@@ -161,7 +161,7 @@
 /* large desktop */
 @media (min-width: 1400px){ 
 
-  .active-nav{ margin-left:-550px; }
+  .active-nav{ margin-left:-100vw; }
 
   .active-cont{ width: 100%;  align-items: end;  margin: 0px 0px 0px auto;  background-color: #f8f9fa;  border-radius:15px; }
 
@@ -170,14 +170,6 @@
   .active-cont-completeCourse{  width: 100% ;  align-items: end; margin: 0px 0px 0px auto;  background-color: #f8f9fa; border-radius:15px; }
 
 }
-
-@media (min-width: 2560px){
-  
-  .active-nav{ margin-left:-200%; }
-
-}
-
-
 
 
 /* ************************************************************************************************************************************* */

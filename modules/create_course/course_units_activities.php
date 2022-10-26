@@ -389,8 +389,8 @@ if(!isset($_POST['final_submit'])){
 
             $tool_content .= "<div class='form-wrapper'><fieldset>
                 <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code&edit_act=$unit_id' onsubmit=\"return validateNodePickerForm();\">
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>
+                    <div class='panel panel-default rounded-pill'>
+                        <div class='panel-heading rounded-pill'>
                             <div class='panel-title h4'>
                                 $langActSelect:
                             </div>

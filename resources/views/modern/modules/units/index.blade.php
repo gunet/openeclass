@@ -80,6 +80,29 @@ $(document).ready(function(){
         });
     }
 });
+
+$(document).ready(function(){
+    Sortable.create(unitResources,{
+        handle: '.fa-arrows',
+        animation: 150,
+        onEnd: function (evt) {
+
+        var itemEl = $(evt.item);
+
+        var idReorder = itemEl.attr('data-id');
+        var prevIdReorder = itemEl.prev().attr('data-id');
+
+        $.ajax({
+        type: 'post',
+        dataType: 'text',
+        data: {
+                toReorder: idReorder,
+                prevReorder: prevIdReorder,
+                }
+            });
+        }
+    });
+});
     
 </script>
 <script>
@@ -330,7 +353,7 @@ $(document).ready(function(){
                                         <small><span class='text-muted'>{{ trans('langTags') }}:</span> {!! $tags_list !!}</small>
                                     </div>
                                 @endif
-                                <div class='unit-resources'>
+                                <div class='unit-resources mt-3'>
                                     {!! show_resources($unitId) !!}
                                 </div>
                             </div>

@@ -11,6 +11,12 @@ $(document).ready(function(){
     // if (!action_bar) {
     //     $('div.title-row').css('margin-bottom', '24px');
     // }
+    // $('.panel p .img-responsive').addClass('centerImgPanel');
+    // const imgPanelCenter = document.querySelector(".centerImgPanel");
+    // if (imgPanelCenter.style.marginLeft == 'auto' && imgPanelCenter.style.marginRight == 'auto')
+    // {
+    //     // $('.panel p .img-responsive').addClass('okkkkk');
+    // }
 
 	$(".menu-popover").popover({
 		html: true,

@@ -323,13 +323,13 @@ function view($view_file, $view_data = array()) {
         $styles_str .= "#background-cheat-leftnav,#bgr-cheat-header{background:#1d4e89;}
         #leftnav{background:transparent;}
         #bgr-cheat-footer{background: #001146;} a{color:#0275d8;}
-        #leftnav .panel a.list-group-item:hover{background: blue;}
+        #leftnav .panel a.list-group-item:hover{background: #4682B4;}
         #leftnav .panel a.list-group-item.active:hover{background: #ccc;}
         .offcanvas{background:#1d4e89;}
         .statistics:before{background: #001146;}
         .notes_thead, .list-header{background: #1d4e89;}
         .menu-popover .list-group-item{background: #1d4e89; color:#DBE8F9;}
-        .menu-popover .list-group-item:hover{background: blue;}
+        .menu-popover .list-group-item:hover{background: #4682B4;}
         .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{background: red;}
         .openCoursesPanel{background:#1d4e89;}";
     }

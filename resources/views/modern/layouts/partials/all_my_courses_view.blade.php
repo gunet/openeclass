@@ -55,23 +55,24 @@
                     <table id="courses_table_pag" class="table_my_courses">
                         <thead class="list-header text-light">
                             <tr>
-                                <th scope="col">#</th>
                                 <th>{{ trans('langTitle') }}</th>
                                 <th>{{ trans('langCode') }}</th>
                                 <th>{{ trans('langTeacher') }}</th>
+                                <th>{{ trans('langType') }}</th>
                                 <th class='text-center'>{{ trans('langOptions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                         @if($myCourses)
                         <div class="row cources-bars-page" id="cources-bars-page-1">
-                            @php $i=0; @endphp
                                 @foreach ($myCourses as $course)
-                                @php $i++; @endphp
                                 <tr>
-                                    <th scope="row">{{$i}}</th>
                                     <td>
                                         <a class='@if($course->visible == 3) InvisibleCourse @endif' href="{{$urlServer}}courses/{{$course->code}}/index.php">{{ q($course->title) }}</a>
+                                    </td>
+                                    <td><span class="text-secondary @if($course->visible == 3) InvisibleCourse @endif">({{ q($course->public_code) }})</span></td>
+                                    <td><span class="text-secondary @if($course->visible == 3) InvisibleCourse @endif">{{ q($course->professor) }}</span></td>
+                                    <td class='text-center'>
                                         @if($course->visible == 1) 
                                             <button type="button" class="btn btn-transparent" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langRegCourse')}}">
                                               <span class='fa fa-lock text-secondary'></span>
@@ -93,8 +94,6 @@
                                             </button>
                                         @endif
                                     </td>
-                                    <td><span class="text-secondary @if($course->visible == 3) InvisibleCourse @endif">({{ q($course->public_code) }})</span></td>
-                                    <td><span class="text-secondary @if($course->visible == 3) InvisibleCourse @endif">{{ q($course->professor) }}</span></td>
                                     <td class='text-center'>
                                         <!-- check if uid is editor of course or student -->
                                         <!------------------------------------------------->
