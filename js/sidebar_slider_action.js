@@ -67,8 +67,10 @@ $(document).ready(function(){
         sidebar.classList.toggle("active-nav");
         container.classList.toggle("active-cont");
     }else{
-        sidebar.classList.remove("active-nav");
-        container.classList.remove("active-cont");
+        if(sidebar!=null && container!=null){
+            sidebar.classList.remove("active-nav");
+            container.classList.remove("active-cont");
+        }
         localStorage.removeItem("MenuBtnStorage");
     }
 });

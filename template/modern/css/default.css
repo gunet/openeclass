@@ -791,7 +791,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .Announcements-Homepage{ background-color: #f8f9fa; }
 
   /* logo inside panel in homepage */
-  .homepageIntroPanel img{ margin:auto; display:block; padding: 10px; }
+  .homepageIntroPanel img{ padding: 10px; }
 
   .opencourse_triangle{
     float:left;
@@ -1447,7 +1447,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .panel-heading:has(.btn-group) .panel-title{ padding-bottom: 6px; padding-top: 5px; }
 
-  .panel-body,.media-body{ padding:15px; background-color:white; }
+  .panel-body,.media-body{ padding:15px; background-color:white; height:auto; overflow-y: auto;}
 
   @media(max-width:991px){.panel-body{overflow-y: auto;}}
 

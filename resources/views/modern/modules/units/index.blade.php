@@ -1,171 +1,5 @@
 @extends('layouts.default')
 
-@push('head_scripts')
-<script src="{{ $urlServer }}/js/tools.js"></script>
-<script src="{{ $urlServer }}/js/sortable/Sortable.min.js"></script>
-<script src="{{ $urlServer }}/js/screenfull/screenfull.min.js"></script>
-<script type='text/javascript'>
-
-$(document).ready(function(){
-    var count_1 = $('#unitResources_1').length;
-    var count_2 = $('#unitResources_2').length;
-    var count_3 = $('#unitResources_3').length;
-    
-    if(count_1>0){
-        Sortable.create(unitResources_1,{
-            handle: '.fa-arrows',
-            animation: 150,
-            onEnd: function (evt) {
-
-            var itemEl = $(evt.item);
-
-            var idReorder = itemEl.attr('data-id');
-            var prevIdReorder = itemEl.prev().attr('data-id');
-
-            $.ajax({
-            type: 'post',
-            dataType: 'text',
-            data: {
-                    toReorder: idReorder,
-                    prevReorder: prevIdReorder,
-                    }
-                });
-            }
-        });
-    }
-
-    if(count_2>0){
-        Sortable.create(unitResources_2,{
-            handle: '.fa-arrows',
-            animation: 150,
-            onEnd: function (evt) {
-
-            var itemEl = $(evt.item);
-
-            var idReorder = itemEl.attr('data-id');
-            var prevIdReorder = itemEl.prev().attr('data-id');
-
-            $.ajax({
-            type: 'post',
-            dataType: 'text',
-            data: {
-                    toReorder: idReorder,
-                    prevReorder: prevIdReorder,
-                    }
-                });
-            }
-        });
-    }
-
-    if(count_3>0){
-        Sortable.create(unitResources_3,{
-            handle: '.fa-arrows',
-            animation: 150,
-            onEnd: function (evt) {
-
-            var itemEl = $(evt.item);
-
-            var idReorder = itemEl.attr('data-id');
-            var prevIdReorder = itemEl.prev().attr('data-id');
-
-            $.ajax({
-            type: 'post',
-            dataType: 'text',
-            data: {
-                    toReorder: idReorder,
-                    prevReorder: prevIdReorder,
-                    }
-                });
-            }
-        });
-    }
-});
-
-$(document).ready(function(){
-    Sortable.create(unitResources,{
-        handle: '.fa-arrows',
-        animation: 150,
-        onEnd: function (evt) {
-
-        var itemEl = $(evt.item);
-
-        var idReorder = itemEl.attr('data-id');
-        var prevIdReorder = itemEl.prev().attr('data-id');
-
-        $.ajax({
-        type: 'post',
-        dataType: 'text',
-        data: {
-                toReorder: idReorder,
-                prevReorder: prevIdReorder,
-                }
-            });
-        }
-    });
-});
-    
-</script>
-<script>
-    $(function(){
-        $('.fileModal').click(function (e)
-        {
-            e.preventDefault();
-            var fileURL = $(this).attr('href');
-            var downloadURL = $(this).prev('input').val();
-            var fileTitle = $(this).attr('title');
-
-            console.log('the fileURL:'+fileURL);
-            console.log('the downloadURL:'+downloadURL);
-
-            // BUTTONS declare
-            var bts = {
-                print: {
-                    label: '<span class="fa fa-print"></span> {{ trans('langPrint') }}',
-                    className: 'btn-primary',
-                    callback: function (d) {
-                        var iframe = document.getElementById('fileFrame');
-                        iframe.contentWindow.print();
-                    }
-                }
-            };
-            if (screenfull.enabled) {
-                bts.fullscreen = {
-                    label: '<span class="fa fa-arrows-alt"></span> {{ trans('langFullScreen') }}',
-                    className: 'btn-primary',
-                    callback: function() {
-                        screenfull.request(document.getElementById('fileFrame'));
-                        return false;
-                    }
-                };
-            }
-            bts.newtab = {
-                label: '<span class="fa fa-plus"></span> {{ trans('langNewTab') }}',
-                className: 'btn-primary',
-                callback: function() {
-                    window.open(fileURL);
-                    return false;
-                }
-            };
-            bts.cancel = {
-                label: '{{ trans('langCancel') }}',
-                className: 'btn-secondary'
-            };
-
-            bootbox.dialog({
-                size: 'large',
-                title: fileTitle,
-                message: '<div class="row">'+
-                            '<div class="col-12">'+
-                                '<div class="iframe-container" style="height:500px;"><iframe id="fileFrame" src="'+fileURL+'" style="width:100%; height:500px;"></iframe></div>'+
-                            '</div>'+
-                        '</div>',
-                buttons: bts
-            });
-        });
-    });
-</script>
-@endpush
-
 @section('content')
 
 <div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
@@ -346,15 +180,16 @@ $(document).ready(function(){
                             </div>
                             <div class='panel-body rounded-0'>
                                 <div>
-                                    {!! standard_text_escape($comments) !!}
+                                    {!! $comments !!}
                                 </div>
                                 @if ($tags_list)
                                     <div class='mt-3'>
                                         <small><span class='text-muted'>{{ trans('langTags') }}:</span> {!! $tags_list !!}</small>
                                     </div>
                                 @endif
+                               
                                 <div class='unit-resources mt-3'>
-                                    {!! show_resources($unitId) !!}
+                                    {!! $tool_content_units !!}
                                 </div>
                             </div>
                         </div>

@@ -2219,6 +2219,7 @@ tinymce.init({
     content_css: [
         '{$urlAppend}template/modern/css/bootstrap.min.css',
         '{$urlAppend}template/modern/css/font-awesome-4.7.0/css/font-awesome.css',
+        '{$urlAppend}template/modern/css/default.css',
     ],
     content_style: 'body { margin: 8px; background: none !important; }',
     extended_valid_elements: 'span[*]',
@@ -2232,16 +2233,16 @@ tinymce.init({
     'Open Sans=open sans; Roboto=roboto; Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats',
     image_advtab: true,
     image_class_list: [
-        {title: 'Responsive', value: 'img-responsive'},
-        {title: 'Responsive Center', value: 'img-responsive center-block'},
-        {title: 'Float left', value: 'pull-left'},
-        {title: 'Float left and responsive', value: 'pull-left img-responsive'},
-        {title: 'Float right', value: 'pull-right'},
-        {title: 'Float right and responsive', value: 'pull-right img-responsive'},
+        {title: 'Responsive', value: 'img-responsive mx-auto d-block'},
+        {title: 'Responsive Center', value: 'img-responsive mx-auto d-block'},
+        {title: 'Float left', value: 'float-start'},
+        {title: 'Float left and responsive', value: 'float-start img-responsive'},
+        {title: 'Float right', value: 'float-end'},
+        {title: 'Float right and responsive', value: 'float-end img-responsive'},
         {title: 'Rounded image', value: 'img-rounded'},
-        {title: 'Rounded image and responsive', value: 'img-rounded img-responsive'},
+        {title: 'Rounded image and responsive', value: 'rounded img-responsive'},
         {title: 'Circle image', value: 'img-circle'},
-        {title: 'Circle image and responsive', value: 'img-circle img-responsive'},
+        {title: 'Circle image and responsive', value: 'rounded-circle img-responsive'},
         {title: 'Thumbnail image', value: 'img-thumbnail'},
         {title: 'Thumbnail image and responsive', value: 'img-thumbnail img-responsive'},
         {title: 'None', value: ' '}
@@ -3639,7 +3640,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         return "<div class='col-12 mb-3'>
                     <div class='col-12 action_bar d-flex justify-content-end rounded'>  
                         <div class='margin-top-thin margin-bottom-fat hidden-print'>
-                            <div class='btn-group btn-group-sm' style=''>
+                            <div class='btn-group btn-group-sm' style='flex-wrap: wrap;'>
                             $out
                             $action_button
                             </div>

@@ -115,7 +115,7 @@ if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check $check_start_week", $id, $course_id);
     if ($info) {
         $data['pageName'] = $info->title;
-        $data['comments'] = standard_text_escape(trim($info->comments));
+        $data['comments'] = standard_text_escape($info->comments);
         $data['unitId'] = $info->id;
         $data['course_start_week'] = $data['course_finish_week'] = '';
         if (!(is_null($info->start_week))) {
@@ -222,5 +222,7 @@ if($is_editor) {
 $cu_indirect = getIndirectReference($id);
 $data['q'] = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
 $data['activities'] = $activities;
+
+$data['tool_content_units'] = show_resources($data['unitId']);
 
 view('modules.units.index', $data);

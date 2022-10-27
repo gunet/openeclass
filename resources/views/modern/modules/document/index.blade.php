@@ -148,7 +148,7 @@
 
 
                                             <td>
-                                                <?php $downloadfile = $base_url . "download=" . getIndirectReference($file->path);?>
+                                                @php $downloadfile = $base_url . "download=" . getIndirectReference($file->path); @endphp
                                                 <input type='hidden' value={!!$downloadfile!!}>
 
                                                 @if ($file->is_dir)

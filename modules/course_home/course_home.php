@@ -693,7 +693,7 @@ if ($total_cunits > 0) {
             $vis = $cu->visible;
             $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
             $cu_indirect = getIndirectReference($cu->id);
-            $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
+            $cunits_content .= "<div id='unit_$cu_indirect' class='col-12 shadow-sm p-3 mb-3' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
                 <div class='item-content'>
                     <div class='item-header clearfix'>
                         <div class='item-title h4 $class_vis text-primary fs-6'>";
@@ -748,9 +748,9 @@ if ($total_cunits > 0) {
             }
 
             $cunits_content .= "</div></div></div></div>";
-            if($counter_hr <= count($all_units)-1){
-                $cunits_content .= "<hr>";
-            }
+            // if($counter_hr <= count($all_units)-1){
+            //     $cunits_content .= "<hr>";
+            // }
         }
     }
 
