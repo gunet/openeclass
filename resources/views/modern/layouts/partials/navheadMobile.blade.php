@@ -38,7 +38,7 @@
                                     <a id="AdminToolBtn" type="button" class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench fs-6 orangeText pe-2"></i>{{trans('langAdminTool')}}</a>
                                 </li>
                             @endif
-                            @if ($_SESSION['status'] == USER_TEACHER and !$is_usermanage_user)
+                            @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
                                <li><a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/create_course/create_course.php"><i class="fas fa-plus-circle fs-6 orangeText pe-2"></i>{{ trans('langCourseCreate') }}</a></li>
                             @endif
                             <li>
