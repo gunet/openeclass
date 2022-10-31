@@ -107,9 +107,11 @@
                                                 </div>
                                             </div>--}}
                                             <div class='col-sm-12'>
-                                                <div class='panel panel-admin shadow'>
-                                                    <div class='panel-heading text-center'>
-                                                        <span class='colorPalette'>{{ trans('langPlatformIdentity') }}</span>
+                                                <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white'>
+                                                    <div class='panel-heading bg-body rounded-0'>
+                                                        <div class='col-12 Help-panel-heading rounded-0'>
+                                                            <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langPlatformIdentity') }}</span>
+                                                        </div>
                                                     </div>
                                                     <div class='panel-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
@@ -157,9 +159,11 @@
                                                 </div>
                                             </div>
                                             <div class='col-sm-12 mt-3'>
-                                                <div class='panel panel-admin shadow'>
-                                                    <div class='panel-heading text-center'>
-                                                        <span class='colorPalette'>{{ trans('langIndexInfo') }}</span>
+                                                <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white'>
+                                                    <div class='panel-heading bg-body rounded-0'>
+                                                        <div class='col-12 Help-panel-heading rounded-0'>
+                                                            <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langIndexInfo') }}</span>
+                                                        </div>
                                                     </div>
                                                     <div class='panel-body'>
                                                         <div class='row p-2 margin-bottom-thin'>

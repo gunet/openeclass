@@ -1,6 +1,6 @@
 
 <div class='d-none d-md-block mt-4'>
-    <div class='col-12 shadow p-3 pb-3 bg-body rounded'>
+    <div class='col-12 shadow p-3 pb-3 bg-body rounded-0'>
         
             @if($course_code)
                 @if($is_editor)

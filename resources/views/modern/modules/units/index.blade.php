@@ -116,8 +116,8 @@
                                         'show' => (!is_module_disable(MODULE_ID_TC) && is_configured_tc_server()))
                                     )) !!}
 
-                    
-                    @else
+                    @endif
+                    @if ($is_editor and $q->flipped_flag == 2)
                         {!! action_bar(array(
                             array('title' => trans('langEdit'),
                                 'url' => $editUrl,

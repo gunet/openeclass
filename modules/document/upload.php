@@ -103,7 +103,7 @@ if ($can_upload) {
         $pageName = $langDownloadFile;
         $fileinput = "
         <div class='input-group'>
-          <label for='userFile' class='input-group-text control-label-notes p-0 ps-2 pe-2 fs-6'>$langPathUploadFile:</label>
+          <label for='userFile' class='input-group-text control-label-notes p-0 ps-2 pe-2'>$langPathUploadFile:</label>
           " .
                 fileSizeHidenInput() .
                 CloudDriveManager::renderAsButtons() . "<input class='form-control' type='file' id='userFile' name='userFile'></span>

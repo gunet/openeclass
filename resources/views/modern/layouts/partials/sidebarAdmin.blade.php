@@ -5,12 +5,12 @@
 <!------------------------------------------------------------------------------------------------>
 
 @if ($release_info and version_compare($release_info->release, ECLASS_VERSION) > 0)
-    <div class='col-12 mb-3'>
-        <div class='panel panel-info'>
-            <div class='panel-heading text-center'>
+    <div class='col-12 mb-3 rounded-0'>
+        <div class='panel panel-info rounded-0'>
+            <div class='panel-heading text-center rounded-0'>
                 {{ trans('langNewEclassVersion') }}
             </div>
-            <div class='panel-body'>
+            <div class='panel-body rounded-0'>
                 {!! sprintf( trans('langNewEclassVersionInfo'), "<strong>" . q($release_info->release) . "</strong>",
                             "<a href='https://www.openeclass.org/' target='_blank'>www.openeclass.org</a>") !!}
             </div>
@@ -19,9 +19,11 @@
 @endif
 
 <div class='col-12'>
-    <div class='panel panel-admin shadow'>
-        <div class='panel-heading text-center'>
-            <span class='colorPalette'>{{ trans('langQuickLinks') }}</span>
+    <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white'>
+        <div class='panel-heading bg-body rounded-0'>
+            <div class='col-12 Help-panel-heading rounded-0'>
+                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langQuickLinks') }}</span>
+            </div>
         </div>
         <div class='panel-body'>
             
@@ -138,9 +140,11 @@
 <div class='@if(count($toolArr) == 1) and ($is_power_user) col-lg-12 col-12 mt-3 @else col-lg-6 col-12 mt-3 @endif'>
     
     @if($countNewPanel == 2)
-    <div class='panel panel-admin mb-3 shadow'>
-        <div class='panel-heading text-center'>
-            <span class='colorPalette'>{{trans('langAdministratorTools')}}</span>
+    <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white mb-3'>
+        <div class='panel-heading bg-body rounded-0'>
+            <div class='col-12 Help-panel-heading rounded-0'>
+                <span class='panel-title text-uppercase Help-text-panel-heading'>{{trans('langAdministratorTools')}}</span>
+            </div>
         </div>
         <div class='panel-body'>
             <ul class="list-group list-group-flush">
@@ -180,9 +184,11 @@
     </div>
     @endif
 
-    <div class='panel panel-admin m-auto shadow'>
-        <div class='panel-heading text-center'>
-            <span class='colorPalette'>{{ $tool_group[0]['text'] }}</span>
+    <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white m-auto'>
+        <div class='panel-heading bg-body rounded-0'>
+            <div class='col-12 Help-panel-heading rounded-0'>
+                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ $tool_group[0]['text'] }}</span>
+            </div>
         </div>
         <div class='panel-body'>
             <ul class="list-group list-group-flush">
@@ -204,9 +210,11 @@
     @if($countNewPanel == 1)
         @if($is_power_user or $is_departmentmanage_user)
             @if($is_admin)
-                <div class='panel panel-admin mt-3 shadow'>
-                    <div class='panel-heading text-center'>
-                        <span class='colorPalette'>{{trans('langFaculties')}}</span>
+                <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white mt-3'>
+                    <div class='panel-heading bg-body rounded-0'>
+                        <div class='col-12 Help-panel-heading rounded-0'>
+                            <span class='panel-title text-uppercase Help-text-panel-heading'>{{trans('langFaculties')}}</span>
+                        </div>
                     </div>
                     <div class='panel-body'>
                         <ul class="list-group list-group-flush">

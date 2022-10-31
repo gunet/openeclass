@@ -76,50 +76,40 @@ $(document).ready(function(){
 
 
                     <div class='col-sm-12'>
-                        <div class='panel panel-default mt-3 col_maincontent_coursePage border border-secondary-4'>
-                            <div class='panel-heading'>
-                                <div class='col-12'>
-                                    <div class='row'>
-                                        <div class='col-md-6 d-none d-md-block d-flex justify-content-start align-items-center'>
-                                            <div class="d-none d-md-block p-2 text-white text-center fw-bold descCoursePanel">{{ trans('langCourseProgram') }}</div>
-                                        </div>
-                                        <div class='col-md-6 col-12'>
-                                            <ul class="nav navbar navbar-left d-flex d-inline-flex float-end">
-                                                <li class='nav-item d-inline-flex align-items-center me-2 ps-3 pe-3'>
-                                                    <a href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation'>
-                                                        <span class='fa fa-paperclip fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langCitation') }}"></span>
-                                                    </a>
-                                                </li>
-                                                @if($uid)
-                                                    @if ($is_course_admin)
-                                                        <li class='nav-item d-inline-flex align-items-center me-2 ps-3 pe-3'>
-                                                            <a href="{{ $urlAppend }}modules/user/index.php?course={{$course_code}}">
-                                                                <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
-                                                            </a>
-                                                        </li>
-                                                    @else
-                                                        @if ($visible == COURSE_CLOSED)
-                                                            <li class='nav-item d-inline-flex align-items-center me-2 ps-3 pe-3'>
-                                                                <a href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}">
-                                                                    <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
-                                                                </a>
-                                                            </li>
-                                                        @endif
-                                                    @endif
-                                                @endif
-                                                @if ($offline_course)
-                                                    <li class='nav-item d-inline-flex align-items-center me-2 ps-3 pe-3'>
-                                                        <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}">
-                                                            <span class="fa fa-download fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langDownloadCourse') }}"></span>
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </div>
+                        <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white'>
+                            <div class='panel-heading bg-body rounded-0'>
+                                <div class='col-12 d-inline-flex Help-panel-heading rounded-0'>
+                                    
+                                    <div class='col-9'>
+                                        <span class="panel-title text-uppercase Help-text-panel-heading">{{ trans('langCourseProgram') }}</span>
                                     </div>
+                                    <div class='col-3'>
+                                        <a href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation' class='float-end'>
+                                            <span class='fa fa-paperclip fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langCitation') }}"></span>
+                                        </a>
+                                        @if($uid)
+                                            @if ($is_course_admin)
+                                                <a href="{{ $urlAppend }}modules/user/index.php?course={{$course_code}}" class='float-end me-2'>
+                                                    <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
+                                                </a>
+                                            @else
+                                                @if ($visible == COURSE_CLOSED)
+                                                    <a href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}" class='float-end me-2'>
+                                                        <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
+                                                    </a>
+                                                @endif
+                                            @endif
+                                        @endif
+                                        @if ($offline_course)
+                                            <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}" class='float-end me-2'>
+                                                <span class="fa fa-download fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langDownloadCourse') }}"></span>
+                                            </a>
+                                        @endif
+                                    </div>
+                                    
                                 </div>
                             </div>
-                            <div class='panel-body'>
+                            <div class='panel-body rounded-0'>
                                 <div class='row'>
                                     @if($course_info->home_layout == 1)
                                         <div class='col-md-6 col-12'>
@@ -201,7 +191,7 @@ $(document).ready(function(){
                             </div>
 
                             @if(isset($rating_content) || isset($social_content) || isset($comment_content))
-                                <div class='panel-footer mt-0 mb-0 p-0'>
+                                <div class='panel-footer mt-0 mb-0 p-0 rounded-0'>
                                     <div class='row'>
                                         @if(isset($rating_content) and isset($social_content) and isset($comment_content))
                                             <div class='col-md-4 col-12 d-flex justify-content-md-start justify-content-center align-items-center'>
@@ -266,11 +256,11 @@ $(document).ready(function(){
 
                         @if($course_info->view_type == 'units')
                             @if($total_cunits > 0)
-                                <div class='panel panel-admin border border-secondary-4 shadow'>
-                                    <div class='panel-heading'>
-                                        <div class='col-12 d-inline-flex'>
+                                <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white'>
+                                    <div class='panel-heading bg-body rounded-0'>
+                                        <div class='col-12 d-inline-flex Help-panel-heading rounded-0'>
                                             <div class='col-6'>
-                                                <span class='panel-title'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>
                                                     {{ trans('langCourseUnits') }}
                                                     @if($is_editor)
                                                         @php $q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE id = ?d", $course_id); @endphp
@@ -285,51 +275,51 @@ $(document).ready(function(){
                                                 @if ($is_editor and $course_info->view_type == 'units')
 
                                                     <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
-                                                        <span class='fa fa-plus-circle text-white'></span>
+                                                        <span class='fa fa-plus-circle'></span>
                                                     </a>
 
                                                     <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=0' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitCarousel') }}">
-                                                        <span class='fa fa-columns pe-2 text-white'></span>
+                                                        <span class='fa fa-columns pe-2'></span>
                                                     </a>
 
                                                     <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=1' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitRow') }}">
-                                                        <span class='fa fa-list pe-2 mb-0 text-white'></span>
+                                                        <span class='fa fa-list pe-2 mb-0'></span>
                                                     </a>
 
                                                 @endif
                                                 <a class='add-unit-btn mt-0 float-end' id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
-                                                    <span class='fa fa-question-circle @if($is_editor) pe-2 @endif text-white'></span>
+                                                    <span class='fa fa-question-circle @if($is_editor) pe-2 @endif'></span>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class='panel-body' id='boxlistSort'>
+                                    <div class='panel-body rounded-0' id='boxlistSort'>
                                         {!! $cunits_content !!}
                                     </div>
                                 </div>
                             @else
-                                <div class='panel panel-admin shadow'>
-                                    <div class='panel-heading text-start text-white ps-3 pe-3 pb-2 pt-2'>
-                                        <div class='row'>
-                                            <div class='col-6'>
+                                <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white'>
+                                    <div class='panel-heading bg-body rounded-0'>
+                                        <div class='col-12 d-inline-flex Help-panel-heading rounded-0'>
+                                            <div class='col-6 panel-title text-uppercase Help-text-panel-heading'>
                                                 {{ trans('langCourseUnits') }}
                                             </div>
                                             <div class='col-6'>
                                                 @if($is_editor)
 
                                                     <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
-                                                        <span class='fa fa-plus-circle text-white'></span>
+                                                        <span class='fa fa-plus-circle'></span>
                                                     </a>
 
                                                 @endif
                                                 <a class='add-unit-btn mt-0 float-end' id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
-                                                    <span class='fa fa-question-circle @if($is_editor) pe-2 @endif text-white'></span>
+                                                    <span class='fa fa-question-circle @if($is_editor) pe-2 @endif'></span>
                                                 </a>
                                             </div>
                                         </div>
 
                                     </div>
-                                    <div class='panel-body'>
+                                    <div class='panel-body rounded-0'>
                                         <div class='not_visible text-center'> - {{ trans('langNoUnits') }} - </div>
                                     </div>
                                 </div>
@@ -342,7 +332,7 @@ $(document).ready(function(){
                         @if($course_info->view_type == 'activity')
                             @if($is_editor)
                                 <div class='col-12 d-flex justify-content-center mb-3'>
-                                    <a class='btn btn-sm Borders bg-primary w-75 mt-0 mb-0 text-white' href="{{$urlAppend}}modules/course_info/activity_edit.php?course{{$course_code}}"><span class='fa fa-edit me-2'></span>{{trans('langActivityEdit')}}</a>
+                                    <a class='btn btn-sm btn-default w-100 mt-0 mb-0 text-dark fw-bold' href="{{$urlAppend}}modules/course_info/activity_edit.php?course{{$course_code}}"><span class='fa fa-edit me-2'></span>{{trans('langActivityEdit')}}</a>
                                 </div>
                             @endif
                             <div class='col-12'>
@@ -358,11 +348,15 @@ $(document).ready(function(){
 
                                 @foreach ($items as $item)
                                     @if (trim($item->content))
-                                        <div class='panel panel-default mb-3'>
-                                            <div class='panel-heading'>
-                                                {!! q(getSerializedMessage($item->heading)) !!}
+                                        <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white mb-3'>
+                                            <div class='panel-heading bg-body rounded-0'>
+                                                <div class='col-12 Help-panel-heading rounded-0'>
+                                                    <span class='panel-title text-uppercase Help-text-panel-heading'>
+                                                        {!! q(getSerializedMessage($item->heading)) !!}
+                                                    </span>
+                                                </div>
                                             </div>
-                                            <div class='panel-body'>
+                                            <div class='panel-body rounded-0'>
                                                 {!! standard_text_escape($item->content) !!}
                                             </div>
 
@@ -394,28 +388,29 @@ $(document).ready(function(){
                             @include('layouts.partials.course_wall_functions',['is_editor' => $is_editor])
                         @endif
 
-
-                        <div class="panel panel-admin @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif border border-secondary-4 shadow">
-                            <div class='panel-heading'>
-                                <div class='row'>
-                                    <div class='col-6 text-start'>
-                                        <span class='panel-title'>{{ trans('langAnnouncements') }}</span>
-                                    </div>
-                                    <div class='col-6 text-end'>
-                                        <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}'
-                                           class='mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllAnnouncements') }}">
-                                            <span class='fa fa-arrow-right text-white'></span>
-                                        </a>
+                        @if($course_info->view_type == 'simple')
+                            <div class="panel panel-admin border-0 rounded-0 p-md-3 bg-white @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif">
+                                <div class='panel-heading bg-body rounded-0'>
+                                    <div class='col-12 d-inline-flex Help-panel-heading rounded-0'>
+                                        <div class='col-6'>
+                                            <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langAnnouncements') }}</span>
+                                        </div>
+                                        <div class='col-6 text-end'>
+                                            <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}'
+                                            class='mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllAnnouncements') }}">
+                                                <span class='fa fa-arrow-right'></span>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class='panel-body bg-white ps-0 pe-0 pt-1 pb-1 rounded-0'>
+                                    <ul class='list-group list-group-flush Borders ps-3 pe-3'>
+                                        {!! course_announcements() !!}
+                                    </ul>
+                                </div>
+                                {!! $course_home_sidebar_widgets !!}
                             </div>
-                            <div class='panel-body bg-white ps-0 pe-0 pt-1 pb-1'>
-                                <ul class='list-group list-group-flush Borders ps-3 pe-3'>
-                                    {!! course_announcements() !!}
-                                </ul>
-                            </div>
-                            {!! $course_home_sidebar_widgets !!}
-                        </div>
+                        @endif
 
                         @if (!$alter_layout)
                            {!! $course_home_main_area_widgets !!}
@@ -461,10 +456,36 @@ $(document).ready(function(){
                             </div>
                         </div>
 
+                        @if($course_info->view_type != 'simple')
+                            <div class="panel panel-admin border-0 rounded-0 p-md-3 bg-white mt-4">
+                                <div class='panel-heading bg-body rounded-0'>
+                                    <div class='col-12 d-inline-flex Help-panel-heading rounded-0'>
+                                        <div class='col-6'>
+                                            <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langAnnouncements') }}</span>
+                                        </div>
+                                        <div class='col-6 text-end'>
+                                            <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}'
+                                            class='mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllAnnouncements') }}">
+                                                <span class='fa fa-arrow-right'></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='panel-body bg-white ps-0 pe-0 pt-1 pb-1'>
+                                    <ul class='list-group list-group-flush Borders ps-3 pe-3'>
+                                        {!! course_announcements() !!}
+                                    </ul>
+                                </div>
+                                {!! $course_home_sidebar_widgets !!}
+                            </div>
+                        @endif
+
                         @if(isset($course_completion_id) and $course_completion_id > 0)
-                            <div class="panel panel-admin mt-4 border border-secondary-4 shadow">
-                                <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
-                                    <div class='text-white text-center'>{{ trans('langCourseCompletion') }}</div>
+                            <div class="panel panel-admin border-0 rounded-0 p-md-3 bg-white mt-4">
+                                <div class='panel-heading bg-body rounded-0'>
+                                    <div class='col-12 Help-panel-heading rounded-0'>
+                                        <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langCourseCompletion') }}</span>
+                                    </div>
                                 </div>
                                 <div class='panel-body'>
                                     <div class='text-center'>
@@ -487,9 +508,11 @@ $(document).ready(function(){
                         @endif
 
                         @if (isset($level) && !empty($level))
-                            <div class='panel panel-admin mt-4 border border-secondary-4 shadow'>
-                                <div class='panel-heading ps-3 pe-3 pb-2 pt-2'>
-                                    <div class='text-white text-center'>{{ trans('langOpenCourseShort') }}</div>
+                            <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white mt-4'>
+                                <div class='panel-heading bg-body rounded-0'>
+                                    <div class='col-12 Help-panel-heading rounded-0'>
+                                        <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langOpenCourseShort') }}</span>
+                                    </div>
                                 </div>
                                 <div class='panel-body'>
                                     {!! $opencourses_level !!}

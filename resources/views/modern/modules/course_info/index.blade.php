@@ -203,6 +203,12 @@
                                             </div>
                                             <div class='radio'>
                                               <label>
+                                                <input type='radio' name='view_type' value='activity' id='activity' {{ $course_type_activity }}>
+                                                {{ trans('langCourseActivityFormat') }}
+                                              </label>
+                                            </div>
+                                            <div class='radio'>
+                                              <label>
                                                 <input type='radio' name='view_type' value='wall' id='wall' {{ $course_type_wall }}>
                                                 {{ trans('langCourseWallFormat') }}
                                               </label>
@@ -258,7 +264,7 @@
                                                     <span class='ps-2 pe-2 mt-1'>{{ trans('langOpenCourse') }}</span>
                                                 </div>
                                             </div>
-                                            <small class='orangeText'>{{ trans('langPublic') }}</small>
+                                            <small class='help-block'>{{ trans('langPublic') }}</small>
 
                                             <div class='radio'>
                                                 <div class='d-inline-flex align-items-top mt-3'>
@@ -268,7 +274,7 @@
                                                     
                                                 </div>
                                             </div>
-                                            <small class='ps-2 orangeText'>{{ trans('langPrivOpen') }}</small>
+                                            <small class='ps-2 help-block'>{{ trans('langPrivOpen') }}</small>
 
                                             <div class='radio'>
                                                 <div class='d-inline-flex align-items-top mt-3'>
@@ -277,7 +283,7 @@
                                                     <span class='ps-2 pe-2 mt-1'>{{ trans('langClosedCourse') }}</span>
                                                 </div>
                                             </div>
-                                            <small class='orangeText'>{{ trans('langClosedCourseShort') }}</small>
+                                            <small class='help-block'>{{ trans('langClosedCourseShort') }}</small>
 
                                             <div class='radio'>
                                                 <div class='d-inline-flex align-items-top mt-3'>                                        
@@ -286,7 +292,7 @@
                                                     <span class='ps-2 pe-2 mt-1'>{!! trans('langInactiveCourse') !!}</span>
                                                 </div>
                                             </div>
-                                            <small class='orangeText'>{{ trans('langCourseInactive') }}</small>
+                                            <small class='help-block'>{{ trans('langCourseInactive') }}</small>
                                         </div>
                                     </div>
 

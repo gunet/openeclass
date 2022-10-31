@@ -362,8 +362,8 @@ function render_profile_fields_content($context) {
 
         if (count($res) > 0) { //category start
             $return_str .= "<div class='col-sm-6'>
-                            <div class='panel panel-default mt-3'>
-                                    <div class='panel-heading text-center text-dark'>".$cat->name."</div>";
+                            <div class='panel panel-default mt-3 rounded-0'>
+                                    <div class='panel-heading text-center text-dark rounded-0'>".$cat->name."</div>";
         }
 
         foreach ($res as $f) { //get user data for each field

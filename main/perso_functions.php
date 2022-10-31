@@ -94,9 +94,9 @@ function getUserLessonInfo($uid) {
                 </div>
               </div>
 			  <div><small>" . q($data->professor) . "</small></div></td>";
-            $lesson_content .= "<td class='text-center'><div class='col-4 m-auto d-block'><div class='row'><div class='col-12 col-md-6'>";
+            $lesson_content .= "<td class='text-center align-middle'><div class='col-12'><div class='row'><div class='col-12 col-md-6 text-md-end'>";
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
-            $lesson_content .= "</div><div class='col-12 col-md-6 mt-md-0 mt-3'>";
+            $lesson_content .= "</div><div class='col-12 col-md-6 mt-md-0 mt-3 text-md-start'>";
             if ($data->status == USER_STUDENT) {
                 $lesson_content .= icon('fa-minus-circle', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
                 $student_courses_count++;

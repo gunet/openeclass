@@ -13,7 +13,7 @@
                 <div class="container-fluid">
                     <div class="row block-title-2 rowMedium justify-content-between">
                         <div class="col-xl-8 col-md-5 col-10 ps-0">
-                            <span class='fw-bold mt-2'>{{ trans('langSummaryProfile') }}</span>
+                            <span class='fw-bold mt-2 Help-text-panel-heading'>{{ trans('langSummaryProfile') }}</span>
                         </div>
                         <div class="col-xl-4 col-md-7 col-2 pe-0">
                             <div class="collapse-details-button" data-bs-toggle="collapse" data-bs-target=".user-details-collapse" aria-expanded="false" onclick="switch_user_details_toggle()" >
@@ -102,7 +102,7 @@
                                 <div class='panel panel-default rounded-0 mt-md-0 mt-3'>
                                     <div class='panel-heading rounded-0'>
                                         <div class='panel-title text-center'>
-                                            {{ trans('langCourseDescription') }}
+                                            <span class='Help-text-panel-heading'>{{ trans('langCourseDescription') }}</span>
                                         </div>
                                     </div>
                                     <div class='panel-body rounded-0'>
@@ -125,7 +125,7 @@
                                 <div class='panel panel-default mt-md-4 mt-3 rounded-0'>
                                     <div class='panel-heading rounded-0'>
                                         <div class='panel-title text-center'>
-                                            {{ trans('langPersInfo') }}
+                                            <span class='Help-text-panel-heading'>{{ trans('langPersInfo') }}</span>
                                         </div>
                                     </div>
                                     <div class='panel-body rounded-0'>
@@ -180,7 +180,7 @@
                                 <div class='panel panel-default mt-md-4 mt-3 rounded-0'>
                                     <div class='panel-heading rounded-0'>
                                         <div class='panel-title text-center'>
-                                            {{ trans('langAboutMe') }}
+                                            <span class='Help-text-panel-heading'>{{ trans('langAboutMe') }}</span>
                                         </div>
                                     </div>
                                     <div class='panel-body panel-body-about-me rounded-0'>
@@ -207,7 +207,7 @@
             <div class="row rowMedium">
 
                 <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-8 col-8 pt-2 d-inline-flex align-items-top">
-                    <span class="text-primary text-uppercase fw-bold mb-0">{{ trans('langMyCoursesSide') }}</span>
+                    <span class="text-uppercase fw-bold mb-0 Help-text-panel-heading">{{ trans('langMyCoursesSide') }}</span>
                     <a href="{{$urlAppend}}main/my_courses.php" class='viewAllCourseBtn btn btn-default d-flex justify-content-center align-items-center ms-2' data-bs-toggle='tooltip' 
                     data-bs-placement='bottom' title data-bs-original-title="{{ trans('langMyCoursesSide') }}">
                         <span class='fa fa-eye text-dark'></span>
@@ -241,7 +241,7 @@
 
                 </div>
 
-                <div class='col-12'><hr class='text-primary mt-0 fs-1'></div>
+                <div class='col-12'><div class='Help-panel-heading mt-0 mb-3'></div></div>
 
                 @if(Session::has('message'))
                 <div class='col-12'>
@@ -322,38 +322,40 @@
             </div>
 
 
-            <div class='panel panel-default mt-4'>
-                <div class='panel-heading text-center'>
-                    {{ trans('langMyPersoAnnouncements') }}
+            <div class='panel panel-admin border-0 rounded-0 ps-md-3 pe-md-3 pt-md-2 mb-md-2 bg-white mt-4'>
+                <div class='panel-heading bg-body rounded-0'>
+                    <div class='col-12 Help-panel-heading rounded-0'>
+                        <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoAnnouncements') }}</span>
+                    </div>
                 </div>
-                <div class='panel-body pt-1 pb-1 ps-3 pe-3'>
+                <div class='panel-body pt-1 pb-1 ps-3 pe-3 rounded-0'>
                     @if(empty($user_announcements))
                         <div class='text-center p-2'><span class='text-title not_visible'> - {{ trans('langNoRecentAnnounce') }} - </span></div>
                     @else
                         {!! $user_announcements !!}
                     @endif
                 </div>
-                <div class='panel-footer d-flex justify-content-end pt-0'>
-                    <a href="{{$urlAppend}}modules/announcements/myannouncements.php" class='btn btn-sm eclass-bg mt-0' data-bs-toggle='tooltip' 
-                    data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllAnnouncements') }}">
-                        <span class='fa fa-arrow-right text-white'></span>
+                <div class='panel-footer d-flex justify-content-end pt-0 rounded-0'>
+                    <a href="{{$urlAppend}}modules/announcements/myannouncements.php" class='mt-0'>
+                        {{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span>
                     </a>
                 </div>
             </div>
 
 
             
-            <div class='panel panel-default mt-4'>
-                <div class='panel-heading text-center'>
-                    {{ trans('langMyPersoMessages') }}
+            <div class='panel panel-admin border-0 rounded-0 ps-md-3 pe-md-3 pt-md-2 mb-md-2 bg-white mt-4'>
+                <div class='panel-heading bg-body rounded-0'>
+                    <div class='col-12 Help-panel-heading rounded-0'>
+                     <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoMessages') }}</span>
+                    </div>
                 </div>
-                <div class='panel-body pt-1 pb-1 ps-3 pe-3'>
+                <div class='panel-body pt-1 pb-1 ps-3 pe-3 rounded-0'>
                     {!! $user_messages !!}
                 </div>
-                <div class='panel-footer d-flex justify-content-end pt-0'>
-                    <a href="{{$urlAppend}}modules/message/index.php" class='btn btn-sm eclass-bg mt-0' data-bs-toggle='tooltip' 
-                    data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllMessages') }}">
-                        <span class='fa fa-arrow-right text-white'></span>
+                <div class='panel-footer d-flex justify-content-end pt-0 rounded-0'>
+                    <a href="{{$urlAppend}}modules/message/index.php" class='mt-0'>
+                        {{ trans('langAllMessages') }} <span class='fa fa-arrow-right'></span>
                     </a>
                 </div>
             </div>

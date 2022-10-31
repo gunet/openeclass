@@ -21,13 +21,13 @@
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     <div class="col-12">
-                        <div class="panel panel-admin shadow-lg">
-                            <div class='panel-heading'>
+                        <div class="panel panel-admin shadow-lg rounded-0">
+                            <div class='panel-heading rounded-0'>
                                 <div class='panel-title text-center p-0'>
                                     {{trans('langAnalyticsEditElements')}}
                                 </div>
                             </div>
-                            <div class="panel-body">
+                            <div class="panel-body rounded-0">
                                 <div class="inner-heading clearfix">
                                     {!! $action_bar !!}
                                     @if(Session::has('message'))
@@ -70,11 +70,11 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-md-6 col-sm-12">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading text-dark text-center">
+                                        <div class="panel panel-default rounded-0">
+                                            <div class="panel-heading text-dark text-center rounded-0">
                                                 {{ trans('langProfilePersInfo') }}
                                             </div>
-                                            <div class='panel-body'>
+                                            <div class='panel-body rounded-0'>
                                                 <div class="profile-content-panel-text">
                                                     @if (!empty($userdata->email) and allow_access($userdata->email_public))
                                                         <span class='text-secondary fw-bold'>{{ trans('langEmail') }}:</span>
@@ -133,11 +133,11 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-sm-12 mt-md-0 mt-3">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading text-center text-dark">
+                                        <div class="panel panel-default rounded-0">
+                                            <div class="panel-heading text-center text-dark rounded-0">
                                                 {{ trans('langProfileAboutMe') }}
                                             </div>
-                                            <div class='panel-body'>
+                                            <div class='panel-body rounded-0'>
                                                 <div class="profile-content-panel-text">
                                                     <p>
                                                     @if (!empty($userdata->description))
@@ -157,13 +157,13 @@
 
                         @if (count($cert_completed) > 0)
                         <div class='col-sm-6 mt-3'>
-                            <div class="panel panel-success">
-                                <div class='panel-heading'>
+                            <div class="panel panel-success rounded-0">
+                                <div class='panel-heading rounded-0'>
                                     <div class='panel-title text-center text-white p-0'>
                                          {{ trans('langMyCertificates') }}
                                     </div>
                                 </div>
-                                <div class="panel-body">
+                                <div class="panel-body rounded-0">
                                     <div class='row'>
                                         <div class='badge-container'>
                                             <div class='clearfix'>
@@ -208,13 +208,13 @@
 
                         @if (count($badge_completed) > 0)
                         <div class='col-sm-6 mt-3'>
-                            <div class="panel panel-success">
-                                <div class='panel-heading'>
+                            <div class="panel panel-success rounded-0">
+                                <div class='panel-heading rounded-0'>
                                     <div class='panel-title text-center text-white p-0'>
                                         {{ trans('langBadges') }}
                                     </div>
                                 </div>
-                                <div class="panel-body">
+                                <div class="panel-body rounded-0">
                                     <div class='row'>
                                         <div class='badge-container'>
                                             <div class='clearfix'>
@@ -252,13 +252,13 @@
                     @if ($uid == $id)
 
                             <div class="col-12 mt-3">
-                                <div class="panel panel-danger">
-                                    <div class='panel-heading'>
+                                <div class="panel panel-danger rounded-0">
+                                    <div class='panel-heading rounded-0'>
                                         <div class='panel-title text-center p-0'>
                                             {{trans('langUnregUser')}}
                                         </div>
                                     </div>
-                                    <div class="panel-body">
+                                    <div class="panel-body rounded-0">
                                         <div class="row">
                                             <div class="col-sm-9">
                                                 <div class="profile-content-panel-text">

@@ -96,6 +96,8 @@ a{ text-decoration: none; }
 
 textarea {width:100%;}
 
+.Help-text-panel-heading {color: #4682B4; }
+
 /* --------------------------------------------- BREADCRUMBS ----------------------------------------*/
 /* -------------------------------------------------------------------------------------------------*/
 /* -------------------------------------------------------------------------------------------------*/
@@ -131,7 +133,7 @@ textarea {width:100%;}
 .radio label p{ margin-top:0px; } 
 
 /* this is space between input-radio and texts */
-input[type="radio"]{
+/* input[type="radio"]{
   margin: 0 5px 0 0px;
   accent-color: #003F87;
   border-radius: 50%;
@@ -146,10 +148,28 @@ input[type="radio"]{
   transition: 0.2s all linear;
   position: relative;
   top: 2px;
+} */
+input[type="radio"]{
+  margin: 0 5px 0 0px;
+  accent-color: #003F87;
+  border-radius: 50%;
+  width:19px;
+  height:19px;
+  min-width: 19px;
+  vertical-align: middle;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  transition: 0.2s all linear;
+  position: relative;
+  top: 1px;
+  background: #e6e6e6;
 }
-input[type="radio"]:checked { border: 6px solid #003F87; outline: unset; }
+/* input[type="radio"]:checked { border: 6px solid #003F87; outline: unset; } */
+input[type="radio"]:checked { background: linear-gradient(to right bottom, hsl(154, 97%, 62%), hsl(225, 97%, 62%));}
 
-input[type="radio"]:disabled { opacity: 0.3; }
+/* input[type="radio"]:disabled { opacity: 0.3; } */
+input[type="radio"]:disabled { opacity: 0.1; background: #dc3545;}
 
 
 /* this is d-inline-flex between inputs-checkbox and texts */
@@ -631,7 +651,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   
   .user-detals-photo { min-width: 180px; height: 180px; border-radius: 100%; }
   
-  .block-title-2 { font-weight: bold; color: #0d6efd; border-bottom: thin solid #accdff; margin-bottom: 25px; }
+  .block-title-2 { font-weight: bold; color: #0d6efd; border-bottom: thin solid #4682B4; margin-bottom: 25px; }
 
   .custom-font { font-size: 1.6em; }
   
@@ -1008,13 +1028,14 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .control-label-notes{ font-size:16px; color:#1d4e89; font-weight: 600; }
 
+  /* first choice of inputs forms */
+  .form-wrapper.form-edit .control-label-notes{ font-size: 14px; color:#1d4e89; font-weight: bold; text-transform: uppercase;} 
+  
   @media (max-width:1023px){ .control-label-notes{ font-size: 16px; } }
 
   /* first choice of inputs forms */
-  .form-wrapper.form-edit .control-label-notes{ color:#1d4e89; font-weight: bold; }
+  .submitAdminBtn, .cancelAdminBtn{ border-radius: 35px !important; } 
 
-  /* first choice of inputs forms */
-  .submitAdminBtn, .cancelAdminBtn{ border-radius: 35px !important; }
   
   /* -------------------------------------------- Forum ----------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
@@ -1164,7 +1185,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   }
   .panel-admin>.panel-heading{
     background: #1d4e89;
-    border:solid 1px #DCDCDC;
+    /* border:solid 1px #DCDCDC; */
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
@@ -1189,6 +1210,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     border-bottom-right-radius: 14px;
     border-bottom-left-radius: 14px;
     background-color: white;
+    background-color: #ffffff;
   }
   .panel-admin:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
     border-top-left-radius: 15px;
@@ -1237,6 +1259,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     padding:10px;
     border-bottom-right-radius: 14px;
     border-bottom-left-radius: 14px;
+    background-color: #ffffff;
   }
   .panel-primary:not(:has(.panel-heading)):has(.panel-footer) .panel-body, .panel-action-btn-primary:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
     border-top-left-radius: 15px;
@@ -1277,6 +1300,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     padding:10px;
     border-bottom-right-radius: 14px;
     border-bottom-left-radius: 14px;
+    background-color: #ffffff;
   }
   .panel-success:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
     border-top-left-radius: 15px;
@@ -1385,6 +1409,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     padding:10px;
     border-bottom-right-radius: 14px;
     border-bottom-left-radius: 14px;
+    background-color: #ffffff;
   }
   .panel-info:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
     border-top-left-radius: 15px;
@@ -1425,6 +1450,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     padding:10px;
     border-bottom-right-radius: 14px;
     border-bottom-left-radius: 14px;
+    background-color: #ffffff;
   }
   .panel-danger:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
     border-top-left-radius: 15px;
@@ -1446,6 +1472,10 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .panel-heading.list-header{ background: #EEEEEE; padding: 10px 15px; height: auto; }
 
   .panel-heading:has(.btn-group) .panel-title{ padding-bottom: 6px; padding-top: 5px; }
+
+  .Help-panel-heading {border-bottom:solid 1px #4682B4;}
+
+  .Help-text-panel-heading {color: #4682B4; }
 
   .panel-body,.media-body{ padding:15px; background-color:white; height:auto; overflow-y: auto;}
 
@@ -1728,7 +1758,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ------------------------------------------------------- ADMIN----------------------------------------------------------*/
 
-  .admin-list-group .list-group-item:hover{ background: #003e87; color: #fafafa; }
+  .admin-list-group .list-group-item:hover{ background: #4682B4; color: #fafafa; }
 
   /* ---------------------------------------------------------------------------------------------------------------------- */
   /* ---------------------------------------------------------------------------------------------------------------------- */
@@ -1932,7 +1962,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     
     .course-units{ -moz-box-shadow: none;  -webkit-box-shadow: none; box-shadow: none; border-radius: 25px; padding:25px; }
 
-    .container_fluid_calendar_portfolio{ -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; }
+    .container_fluid_calendar_portfolio{ -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;}
 
     .user-icon-filename{ width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px; }
   }

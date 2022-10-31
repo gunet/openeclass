@@ -117,7 +117,7 @@
                                   <div class="row p-2">
                                     <div class="col-lg-6 col-12">
                                       <div class='form-group'>
-                                          <h3 for='title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</h3>
+                                          <h3 for='title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</h3>
                                           <div class='col-sm-12'>
                                             <input name='title' id='title' type='text' class='form-control' value="{{ trans('title') }}" placeholder="{{ trans('langTitle') }}...">
                                           </div>
@@ -126,7 +126,7 @@
 
                                     <div class="col-lg-6 col-12 mt-lg-0 mt-3">
                                       <div class='form-group'>
-                                          <h3 for='title' class='col-sm-6 control-label-notes'>{{ trans('langCode') }}:</h3>
+                                          <h3 for='title' class='col-sm-6 control-label-notes'>{{ trans('langCode') }}</h3>
                                           <div class='col-sm-12'>
                                             <input name='public_code' id='public_code' type='text' class='form-control' value = "{{ trans('public_code') }}"  placeholder="{{ trans('langOptional') }}...">
                                           </div>
@@ -138,7 +138,7 @@
                                   <div class="row p-2">
                                     <div class="col-lg-4 col-12">
                                       <div class='form-group'>
-                                          <h3  class='col-sm-4 control-label-notes'>{{ trans('langFaculty') }}:</h3>
+                                          <h3  class='col-sm-4 control-label-notes'>{{ trans('langFaculty') }}</h3>
                                           <div class='col-sm-12'>
                                             {!! $buildusernode !!}
                                           </div>
@@ -147,7 +147,7 @@
 
                                     <div class="col-lg-4 col-12 mt-lg-0 mt-3">
                                       <div class='form-group'>
-                                          <h3 for='prof_names' class='col-sm-4 control-label-notes'>{{ trans('langTeachers') }}:</h3>
+                                          <h3 for='prof_names' class='col-sm-4 control-label-notes'>{{ trans('langTeachers') }}</h3>
                                           <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='prof_names' id='prof_names' value= "{{ trans('prof_names') }}">
                                           </div>
@@ -156,7 +156,7 @@
 
                                     <div class="col-lg-4 col-12 mt-lg-0 mt-3">
                                       <div class='form-group'>
-                                          <h3 for='localize' class='col-sm-4 control-label-notes'>{{ trans('langLanguage') }}:</h3>
+                                          <h3 for='localize' class='col-sm-4 control-label-notes'>{{ trans('langLanguage') }}</h3>
                                           <div class='col-sm-12'>
                                                 {!! $lang_select_options !!}
                                           </div>
@@ -178,7 +178,7 @@
 
                                   <div class='form-group mt-3'>
                                     <div class="col-xl-12 col-md-12 col-12">
-                                      <label class='col-sm-12 control-label-notes'>{{ trans('langCourseFormat') }}:</label>
+                                      <label class='col-sm-12 control-label-notes'>{{ trans('langCourseFormat') }}</label>
                                       <div class="row p-2">
 
                                         <div class="col-xl-3 col-md-3 col-12">
@@ -224,7 +224,7 @@
                                   
                                   <div class='form-group mt-3'>
                                     <div class="col-xl-12 col-md-12 col-12">
-                                      <label class='col-sm-12 control-label-notes'>{{ trans('langOpenCoursesLicense') }}:</label>
+                                      <label class='col-sm-12 control-label-notes'>{{ trans('langOpenCoursesLicense') }}</label>
                                       <div class="row p-2">
                                         <div class="col-xl-4 col-md-4 col-12">
                                             <div class='radio'>
@@ -262,7 +262,7 @@
                                   </div>
 
                                   <div class='form-group mt-3'>
-                                    <label for='localize' class='col-sm-6 control-label-notes'>{{trans('langFlippedClassroom')}}:</label>
+                                    <label for='localize' class='col-sm-6 control-label-notes'>{{trans('langFlippedClassroom')}}</label>
                                     <div class='col-sm-12 d-inline-flex'>
                                         <div class='radio'>
                                           <label>
@@ -281,7 +281,7 @@
 
                                   <div class='form-group mt-3'>
                                     <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                      <label for='localize' class='col-sm-12 control-label-notes'>{{ trans('langAvailableTypes') }}:</label>
+                                      <label for='localize' class='col-sm-12 control-label-notes'>{{ trans('langAvailableTypes') }}</label>
                                       <div class='row p-2'>
 
                                         <div class="col-xl-3 col-md-3 col-12">
@@ -324,7 +324,7 @@
 
 
                                     <div class='form-group mt-3'>
-                                          <label for='coursepassword' class='col-sm-12 control-label-notes'>{{ trans('langOptPassword') }}:</label>
+                                          <label for='coursepassword' class='col-sm-12 control-label-notes'>{{ trans('langOptPassword') }}</label>
                                           <div class='col-sm-12'>
                                                 <input class='form-control' id='coursepassword' type='text' name='password' value='{{ trans('password') }}' autocomplete='off'>                        
                                           </div>

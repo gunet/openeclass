@@ -281,11 +281,12 @@ if (isset($_POST['submit'])) {
     $data['start_date'] = $c->start_date ? $c->start_date: '';
     $data['finish_date'] = $c->finish_date ? $c->finish_date: '';
 
-    $course_type = array('simple' => '', 'units' => '', 'wall' => '');
+    $course_type = array('simple' => '', 'units' => '', 'wall' => '', 'activity' => '');
     $course_type[$c->view_type] = 'checked';
     $data['course_type_simple'] = $course_type['simple'];
     $data['course_type_units'] = $course_type['units'];
     $data['course_type_wall'] = $course_type['wall'];
+    $data['course_type_activity'] = $course_type['activity'];
 
     $course_license = $c->course_license;
     if ($course_license > 0 and $course_license < 10) {

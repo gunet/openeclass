@@ -2,7 +2,7 @@
 /* header-calendar */
 .cal-row-fluid.cal-row-head{ color:blue;  background-color: white;  border-bottom: 1px solid blue; }
 
-#cal-header{ background-color: #003F87;  border-top-left-radius: 15px; border-top-right-radius: 15px;  margin-left:-25px; margin-right:-25px; }
+#cal-header{ background-color: #003F87;  border-top-left-radius: 3px; border-top-right-radius: 3px;  margin-left:-25px; margin-right:-25px; }
 
 @media (max-width: 991px){ #cal-header{  margin-left:0px;  margin-right:0px; } }
 
@@ -12,7 +12,7 @@
 
 #cal-header .fa-chevron-right{ color:white; }
 
-.container_fluid_calendar{ border-radius: 15px; height:auto; background-color: white ;}
+.container_fluid_calendar{ height:auto; background-color: white ;}
 
 .number-day-cal{ font-size: 13.5px; color: #003F87;}
 

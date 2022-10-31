@@ -3522,7 +3522,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $i=0;
     $page_title = "";
     if (isset($pageName) and !empty($pageName) and $page_title_flag) {
-        $page_title = "<h6 class='text-secondary mb-0'><span class='fas fa-check pe-2'></span>".q($pageName)."</h6>";
+        $page_title = "<h6 class='text-dark fw-bold text-capitalize mb-0'><span class='fas fa-check text-success pe-2'></span>".q($pageName)."</h6>";
     }
     foreach (array_reverse($options) as $option) {
         // skip items with show=false

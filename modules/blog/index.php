@@ -372,13 +372,13 @@ if ($action == "createPost") {
         $commenting_setting = '';
         if ($comments_enabled) {
             $commenting_setting = "<div class='form-group mt-3'>
-                                       <label class='col-sm-12 control-label-notes'>$langBlogPostCommenting:</label>
+                                       <label class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting:</label>
                                        <div class='col-12'>
                                            <div class='radio d-inline-flex align-items-top'>
                                                 <input type='radio' value='1' name='commenting' checked>
                                                 $langCommentsEn
                                            </div>
-                                           <div class='radio d-inline-flex align-items-top ms-xl-3 ms-lg-0 ms-md-3 ms-0'>
+                                           <div class='radio d-inline-flex align-items-top ms-xl-3 ms-lg-2 ms-md-3 ms-0'>
                                                 <input type='radio' value='0' name='commenting'>
                                                 $langCommentsDis
                                            </div>
@@ -496,7 +496,7 @@ if ($action == "editPost") {
                                                    <input type='radio' value='1' name='commenting' $checkCommentEn>
                                                    $langCommentsEn
                                                </div>
-                                               <div class='d-inline-flex align-items-top ms-md-3'>
+                                               <div class='d-inline-flex align-items-top ms-lg-0 ms-md-3'>
                                                    <input type='radio' value='0' name='commenting' $checkCommentDis>
                                                    $langCommentsDis
                                                </div>

@@ -5,7 +5,7 @@
     $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
 ?>
 
-<div class="calendar calendar-block">
+<div class="calendar calendar-block rounded-0">
     <div class='content-block-items'>
         <div class='panel-calendar-body'>
             <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js?v=4.0-dev"></script>
@@ -52,7 +52,7 @@
             </script>
 
         </div>
-        <div class='panel-footer'>
+        <div class='panel-footer rounded-0'>
             <div class='row'>
                 <div class='col-xxl-6 col-lg-12 col-md-3 col-12 event-legend'>
                     <div class='d-inline-flex align-items-center'>
