@@ -373,15 +373,16 @@ touch_or_error('courses/eportfolio/mydocs/index.php');
 if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     unset($_SESSION['upgrade_logfile_path']);
     unset($_SESSION['upgrade_logfile_name']);
-    if (version_compare(PHP_VERSION, '7.4') < 0) {
-        $tool_content .= "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
-    }
     if (!in_array(get_config('email_transport'), array('smtp', 'sendmail')) and !get_config('email_announce')) {
         $tool_content .= "<div class='alert alert-info'>$langEmailSendWarn</div>";
     }
 
-    $tool_content .= "<h5>$langRequiredPHP</h5>";
     $tool_content .= "<ul class='list-unstyled'>";
+    $tool_content .= "<strong>$langPHPVersion</strong>";
+    checkPHPVersion('8.0');
+    $tool_content .= "</ul>";
+    $tool_content .= "<ul class='list-unstyled'>";
+    $tool_content .= "<strong>$langRequiredPHP</strong>";
     warnIfExtNotLoaded('session');
     warnIfExtNotLoaded('pdo');
     warnIfExtNotLoaded('pdo_mysql');
@@ -394,7 +395,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
     warnIfExtNotLoaded('curl');
     warnIfExtNotLoaded('zip');
     warnIfExtNotLoaded('intl');
-    $tool_content .= "</ul><h5>$langOptionalPHP</h5>";
+    $tool_content .= "</ul><strong>$langOptionalPHP</strong>";
     $tool_content .= "<ul class='list-unstyled'>";
     warnIfExtNotLoaded('soap');
     warnIfExtNotLoaded('ldap');

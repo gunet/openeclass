@@ -9,7 +9,7 @@
             <div class="row rowMedium">
 
                 <div class="col-12 justify-content-center col_maincontent_active_Homepage">
-                    
+
                         <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                                 @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -42,7 +42,7 @@
                                 <!----------------------------------------------------------------------------------------->
                                 <!----------------------------------------------------------------------------------------->
 
-                                
+
 
                                 @if ($is_admin)
                                     <div class='col-lg-6 col-12 mt-3'>
@@ -59,47 +59,47 @@
                                                                     <div class='d-inline-flex'>
                                                                         <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
                                                                         <span class='toolAdminText'>{{ trans('langSearchUser') }}</span>
-                                                                    </div>     
+                                                                    </div>
                                                                 </a>
                                                             </li>
                                                             <li class="list-group-item border-0 admin-list-group">
                                                                 <a href="searchcours.php" class='list-group-item'>
                                                                     <div class='d-inline-flex'>
                                                                         <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                                                        <span class='toolAdminText'>{{ trans('langSearchCourse') }}</span> 
-                                                                    </div>     
+                                                                        <span class='toolAdminText'>{{ trans('langSearchCourse') }}</span>
+                                                                    </div>
                                                                 </a>
                                                             </li>
                                                             <li class="list-group-item border-0 admin-list-group">
                                                                 <a href="hierarchy.php" class='list-group-item'>
                                                                     <div class='d-inline-flex'>
                                                                         <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                                                        <span class='toolAdminText'>{{ trans('langHierarchy') }}</span>  
-                                                                    </div>    
+                                                                        <span class='toolAdminText'>{{ trans('langHierarchy') }}</span>
+                                                                    </div>
                                                                 </a>
                                                             </li>
                                                             <li class="list-group-item border-0 admin-list-group">
                                                                 <a href="eclassconf.php" class='list-group-item'>
                                                                     <div class='d-inline-flex'>
                                                                         <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                                                        <span class='toolAdminText'>{{ trans('langConfig') }}</span>   
-                                                                    </div>   
+                                                                        <span class='toolAdminText'>{{ trans('langConfig') }}</span>
+                                                                    </div>
                                                                 </a>
                                                             </li>
                                                             <li class="list-group-item border-0 admin-list-group">
                                                                 <a href="theme_options.php" class='list-group-item'>
                                                                     <div class='d-inline-flex'>
                                                                         <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                                                        <span class='toolAdminText'>{{ trans('langThemeSettings') }}</span>  
-                                                                    </div>    
+                                                                        <span class='toolAdminText'>{{ trans('langThemeSettings') }}</span>
+                                                                    </div>
                                                                 </a>
                                                             </li>
                                                             <li class="list-group-item border-0 admin-list-group">
                                                                 <a href="extapp.php" class='list-group-item'>
                                                                     <div class='d-inline-flex'>
                                                                         <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                                                        <span class='toolAdminText'>{{ trans('langExternalTools') }}</span>  
-                                                                    </div>    
+                                                                        <span class='toolAdminText'>{{ trans('langExternalTools') }}</span>
+                                                                    </div>
                                                                 </a>
                                                             </li>
                                                         </ul>
@@ -116,7 +116,7 @@
                                                     <div class='panel-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
                                                             <div class='col-sm-6'>
-                                                                {!! icon('fa-check') !!} <strong class='control-label-notes'>{{ trans('langWebServerVersion') }}</strong>
+                                                                <strong class='control-label-notes'>{{ trans('langWebServerVersion') }}</strong>
                                                             </div>
                                                             <div class='col-sm-6'>
                                                                 <em>{{ $_SERVER['SERVER_SOFTWARE'] }}</em>
@@ -124,23 +124,14 @@
                                                         </div>
                                                         <div class='row p-2 margin-bottom-thin'>
                                                             <div class='col-sm-6'>
-                                                                {!! $validPHP ? icon('fa-check') : icon('fa-ban') !!}
                                                                 <strong class='control-label-notes'>{{ trans('langPHPVersion') }}</strong>
                                                             </div>
                                                             <div class='col-sm-6'>
                                                                 <em>{{ PHP_VERSION }}</em>
                                                             </div>
                                                         </div>
-                                                        @if (!$validPHP)
-                                                            <div class='row p-2 margin-bottom-thin'>
-                                                                <div class='col-sm-12'>
-                                                                    <div class='alert alert-danger'>{{ trans('langWarnAboutPHP') }}</div>
-                                                                </div>
-                                                            </div>
-                                                        @endif
                                                         <div class='row p-2 margin-bottom-thin'>
                                                             <div class='col-sm-6'>
-                                                                {!! icon('fa-check') !!}
                                                                 <strong class='control-label-notes'>{{ trans('langMySqlVersion') }}</strong>
                                                             </div>
                                                             <div class='col-sm-6'>
@@ -201,7 +192,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 @endif
 
                                 <div class='col-sm-12 d-flex justify-content-center mt-5'>

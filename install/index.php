@@ -604,20 +604,17 @@ elseif (isset($_POST['install1'])) {
     }
 
     $tool_content .= "<form class='form-wrapper shadow-lg p-3 rounded' action='$_SERVER[SCRIPT_NAME]' method='post'>
-    <h5 class='control-label-notes'>$langCheckReq</h5>
-    <ul class='list-unstyled'>
-        <li>" . icon('fa-check') . " <b>Webserver</b> $langFoundIt <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em></li>";
-    if (version_compare(PHP_VERSION, '7.4') >= 0) {
-        $info_icon = icon('fa-check');
-        $info_text = '';
-    } else {
-        $info_icon = icon('fa-ban');
-        $info_text = "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
-    }
-    $tool_content .= "<li>$info_icon <b>$langPHPVersion</b> $langFoundIt <em>" . PHP_VERSION . "</em></li>";
+    <h3>$langCheckReq</h3>";
+
+    $tool_content .= "<ul class='list-unstyled'>
+        <li>" . icon('fa-check') . " <strong>Webserver</strong> <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em></li>
+    </ul>";
+
+    $tool_content .= "<ul class='list-unstyled'>";
+    $tool_content .= "<strong>$langPHPVersion</strong>";
+    checkPHPVersion('8.0');
     $tool_content .= "</ul>";
-    $tool_content .= $info_text;
-    $tool_content .= "<h5 class='control-label-notes'>$langRequiredPHP</h5>";
+    $tool_content .= "<h3>$langRequiredPHP</h3>";
     $tool_content .= "<ul class='list-unstyled'>";
     warnIfExtNotLoaded('standard');
     warnIfExtNotLoaded('session');
@@ -631,7 +628,7 @@ elseif (isset($_POST['install1'])) {
     warnIfExtNotLoaded('pcre');
     warnIfExtNotLoaded('curl');
     warnIfExtNotLoaded('zip');
-    warnIfExtNotLoaded('intl');    
+    warnIfExtNotLoaded('intl');
     $tool_content .= "</ul><h5 class='control-label-notes'>$langOptionalPHP</h5>";
     $tool_content .= "<ul class='list-unstyled'>";
     warnIfExtNotLoaded('soap');

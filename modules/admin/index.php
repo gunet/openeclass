@@ -41,7 +41,6 @@ $data['action_bar'] = action_bar(array(
         'icon' => 'fa-reply',
         'level' => 'primary-label')),false);
 
-$data['validPHP'] = version_compare(PHP_VERSION, '7.1') >= 0;
 $data['serverVersion'] = Database::get()->attributes()->serverVersion();
 $data['siteName'] = $siteName;
 

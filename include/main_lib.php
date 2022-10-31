@@ -4016,6 +4016,24 @@ function my_dirname($path) {
     return $path;
 }
 
+
+/**
+ * @brief check PHP version
+ * @param $version
+ * @return void
+ */
+function checkPHPVersion($version) {
+
+    global $tool_content;
+
+    if (version_compare(PHP_VERSION, $version) > 0) {
+        $tool_content .= "<li>" . icon('fa-check') . " " . PHP_VERSION . "</li>";
+    } else {
+        $tool_content .= "<li class='bg-danger'>" . icon('fa-times') . " " . PHP_VERSION . "</li>";
+    }
+
+}
+
 /*
  * check extension and  write  if exist  in a  <LI></LI>
  * @params string       $extensionName  name  of  php extension to be checked
