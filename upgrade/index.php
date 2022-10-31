@@ -37,11 +37,6 @@ if ($language == 'el') {
     $link_changes_file = 'https://docs.openeclass.org/el/current';
 }
 
-// check PHP version
-if (version_compare(PHP_VERSION, '8.0') < 0) {
-    $tool_content .= "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
-}
-
 $tool_content .= "
   <div class='alert alert-info'>
     <p class='margin-bottom-thin'>$langExplUpgrade</p>

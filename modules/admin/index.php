@@ -96,33 +96,23 @@ if (isset($is_admin) and $is_admin) { // only for `admin `user
                 <div class='panel-body'>
                     <div class='row margin-bottom-thin'>
                     <div class='col-sm-3'>
-                        " . icon('fa-check') . " <strong>$langWebServerVersion</strong>
+                        <strong>$langWebServerVersion:</strong>
                     </div>
                     <div class='col-sm-9'>
                         <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em>
                     </div>
                 </div>
                 <div class='row margin-bottom-thin'>
-                <div class='col-sm-3'>";
-                if (version_compare(PHP_VERSION, '5.6.0') >= 0) {
-                    $info_icon = icon('fa-check');
-                    $info_text = '';
-                } else {
-                    $info_icon = icon('fa-ban');
-                    $info_text = "<div class='row margin-bottom-thin'>
-                                    <div class='col-sm-12'>
-                                        <div class='alert alert-danger'>$langWarnAboutPHP</div>
-                                    </div>
-                                  </div>";
-                }
-                $tool_content .= "$info_icon <strong>$langPHPVersion</strong></div>";
-                $tool_content .= "<div class='col-sm-9'>";
-                $tool_content .= "<em>" . PHP_VERSION . "</em>";
-                $tool_content .= "</div></div>";
-                $tool_content .= $info_text;
-                $tool_content .= "<div class='row margin-bottom-thin'>
-                    <div class='col-sm-3'>" . icon('fa-check') . "
-                        <strong>$langMySqlVersion</strong>
+                    <div class='col-sm-3'>
+                        <strong>$langPHPVersion:</strong>
+                    </div>
+                    <div class='col-sm-9'>
+                        <em>" . PHP_VERSION . "</em>
+                    </div>
+                </div>
+                <div class='row margin-bottom-thin'>
+                    <div class='col-sm-3'>
+                        <strong>$langMySqlVersion:</strong>
                     </div>
                     <div class='col-sm-9'>
                         <em>" . Database::get()->attributes()->serverVersion() . "</em>
