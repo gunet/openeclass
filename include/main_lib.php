@@ -4159,6 +4159,16 @@ function reindex_array_keys_from_one($a) {
     return array_combine(range(1, count($a)), array_values($a));
 }
 
+
+/**
+ * @brief convert ',' to '.'
+ * @param $str
+ * @return array|string|string[]
+ */
+function fix_float($str) {
+    return str_replace(',', '.', $str);
+}
+
 /**
  * Function called whenever a user is created or changed
  *
