@@ -1964,6 +1964,9 @@ $langModifyInThisExercise = "μόνο στην τρέχουσα άσκηση";
 $langModifyInQuestionPool = "μόνο στην τράπεζα ερωτήσεων";
 $langQuestionView = "Προβολή";
 $langWarnAboutAnsweredQuestion = "Προσοχή! Η ερώτηση έχει ήδη απαντηθεί! Η διαγραφή της θα αλλάξει τα αποτελέσματα της άσκησης.";
+$langQuestionPreview = 'Προεπισκόπιση ερώτησης';
+$langDumpPDF = 'Εξαγωγή σε PDF';
+$langQuestionUsedInExercises = 'Ασκήσεις όπου χρησιμοποιείται';
 
 // statement_admin.php
 $langAnswerType = "Τύπος Απάντησης";
@@ -6056,4 +6059,3 @@ $langCategoryEssay = "Εργασία";
 $langAnalyticsEditElements = 'Επεξεργασία Στοιχείων';
 $langViewStatics = "Στατιστικά Επισκεψιμότητας";
 $langCommands = "Ενέργειες";
-$langDumpPDF = 'Εξαγωγή σε PDF';
