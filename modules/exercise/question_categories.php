@@ -90,16 +90,16 @@ if (isset($_POST['submitCat'])) {
                       <span class='help-block'>".Session::getError('questionCatName')."</span>
                     </div>
                 </div>
-                <div class='form-group mt-5'>
-                    <div class='col-12'>
-                        <div class='row'>
-                           <div class='col-6'>
-                            <input class='btn btn-sm btn-primary submitAdminBtn w-100' name='submitCat' type='submit' value='$langSubmit'>
-                           </div>
-                           <div class='col-6'>
-                            <a href='question_categories.php?course=$course_code' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
-                           </div>
-                        </div>
+                <div class='form-group mt-4'>
+                    <div class='col-12 d-inline-flex'>
+                      
+                          
+                            <input class='btn btn-primary submitAdminBtn' name='submitCat' type='submit' value='$langSubmit'>
+                         
+                          
+                            <a href='question_categories.php?course=$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                           
+                       
                         
                         
                     </div>

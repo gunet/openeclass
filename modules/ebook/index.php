@@ -145,32 +145,27 @@ if ($is_editor) {
 
                
 
-                <div class='form-group mt-5'>
+                <div class='form-group mt-4'>
                     <div class='col-12 '>
-                       <div class='row'>
-                           <div class='col-6'>
+                       
+                          
                               ".
                               form_buttons(array(
                                   array(
-                                      'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                      'class' => 'btn-primary submitAdminBtn',
                                       'text'  => $langCreate,
                                       'name'  => 'submit',
                                       'value' => (isset($_GET['newPoll']) ? $langCreate : $langModify)
-                                  )
-                              ))
-                              ."
-                           </div>
-                           <div class='col-6'>
-                              ".
-                              form_buttons(array(
+                                  ),
                                   array(
-                                      'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
-                                      'href' => "index.php?course=$course_code",
-                                  )
+                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                    'href' => "index.php?course=$course_code",
+                                )
                               ))
                               ."
-                           </div>
-                       </div>
+                           
+                           
+                       
                     </div>
                 </div>
             </form>

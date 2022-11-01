@@ -494,16 +494,16 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
         
 
-            <div class='form-group mt-5'>
-              <div class='col-12'>
-                <div class='row'>
-                   <div class='col-6'>
-                    <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='button' id='submitEvent' name='submitEvent' value='$langSubmit'>
-                  </div>
-                  <div class='col-6'>
-                   <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='index.php'>$langCancel</a>
-                  </div>
-                </div>
+            <div class='form-group mt-4'>
+              <div class='col-12 d-inline-flex'>
+               
+      
+                    <input class='btn btn-primary submitAdminBtn' type='button' id='submitEvent' name='submitEvent' value='$langSubmit'>
+                 
+                
+                   <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
+                 
+               
               </div>
             </div>
             </form>

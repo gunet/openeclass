@@ -861,7 +861,7 @@ function edit_analytics_settings ($analytics_id = 0)
             $tool_content .= "</div>
         </div>
         <div class='form-group mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langStart:</label>
+            <label class='col-sm-6 control-label-notes'>$langStart</label>
             <div class='col-sm-12'>
                 <div class='input'>
                     <input class='form-control' name='start_date' id='start_date' type='text' value='$start_date'>
@@ -870,7 +870,7 @@ function edit_analytics_settings ($analytics_id = 0)
             </div>
         </div>
         <div class='form-group mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langFinish:</label>
+            <label class='col-sm-6 control-label-notes'>$langFinish</label>
             <div class='col-sm-12'>
                 <div class='input'>
                     <input class='form-control' name='end_date' id='end_date' type='text' value='$end_date'>
@@ -878,28 +878,26 @@ function edit_analytics_settings ($analytics_id = 0)
                 <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsEndDescription</span>
             </div>
         </div> $id_input
-        <div class='form-group mt-5'>
-            <div class='col-12'>
-              <div class='row'>
-                <div class='col-6'>
+        <div class='form-group mt-4'>
+            <div class='col-12 d-inline-flex'>
+             
+               
                   ".form_buttons(array(
                     array(
-                            'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                            'class' => 'btn-primary submitAdminBtn',
                             'text' => $langSave,
                             'name' => $action,
                             'value'=> $langAdd
-                        )
-                    ))."
-                </div>
-                <div class='col-6'>
-                  ".form_buttons(array(
+                    ),
                     array(
-                        'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                         )
+                    
                     ))."
-                </div>
-              </div>
+              
+                
+              
             </div>
         </div>
     </form>
@@ -955,7 +953,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
         <input type='hidden' name='analytics_element_id' value='$analytics_element_id'>
         <div class='form-group mt-4'>
             <div class='row'>
-                <label for='title' class='col-sm-12 control-label-notes mb-2'>$langAnalyticsCriticalLevel:</label>
+                <label for='title' class='col-sm-12 control-label-notes mb-2'>$langAnalyticsCriticalLevel</label>
                 <div class='col-md-6 col-12'>
                     <label for='title' class='col-sm-12 control-label'>$langAnalyticsMinValue</label>
                     <div class='col-sm-12'>
@@ -972,7 +970,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
         </div>
         <div class='form-group mt-3'>
             <div class='row'>
-                <label for='title' class='col-sm-12 control-label-notes mb-2'>$langAnalyticsAdvancedLevel:</label>
+                <label for='title' class='col-sm-12 control-label-notes mb-2'>$langAnalyticsAdvancedLevel</label>
                 <div class='col-md-6 col-12'>
                     <label for='title' class='col-sm-12 control-label'>$langAnalyticsMinValue</label>
                     <div class='col-sm-12'>
@@ -988,35 +986,33 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
             </div>
         </div>
         <div class='form-group mt-3'>   
-            <label for='title' class='col-sm-12 control-label-notes'>$langAnalyticsWeight:</label>
+            <label for='title' class='col-sm-12 control-label-notes'>$langAnalyticsWeight</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='number' placeholder='' name='weight' value='$weight'>
             </div>
         </div>";
 
         $tool_content .= get_available_resources($type, $analytics_element_id);
-        $tool_content .= "<div class='form-group mt-5'>
-            <div class='col-12'>
-              <div class='row'>
-                <div class='col-6'>
+        $tool_content .= "
+        <div class='form-group mt-4'>
+            <div class='col-12 d-inline-flex'>
+             
+                
                  ".form_buttons(array(
                     array(
-                            'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                            'class' => 'btn-primary submitAdminBtn',
                             'text' => $langSave,
                             'name' => $action,
                             'value'=> $langAdd
-                        )
-                    ))."
-                </div>
-                <div class='col-6'>
-                 ".form_buttons(array(
+                    ),
                     array(
-                        'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showElements"
                         )
                     ))."
-                </div>
-              </div>
+                
+                
+             
             </div>
         </div>
     </form></div></div>";

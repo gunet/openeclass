@@ -284,16 +284,16 @@ if(!isset($_POST['next'])){
                     </div>
                 </div>
 
-                <div class='form-group mt-5'>
-                   <div class='col-12'>           
-                        <div class='row'>
-                           <div class='col-6'>             
-                               <a href='{$urlServer}main/portfolio.php' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
-                            </div>
-                            <div class='col-6'>
-                                <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='next' value='" . q($langNext) . "&nbsp;&nbsp;&raquo;'>
-                            </div>
-                        </div>
+                <div class='form-group mt-4'>
+                   <div class='col-12 d-inline-flex'>           
+                        
+                                       
+                               <a href='{$urlServer}main/portfolio.php' class='btn btn-outline-secondary cancelAdminBtn me-1'>$langCancel</a>
+                           
+                           
+                                <input class='btn btn-primary submitAdminBtn' type='submit' name='next' value='" . q($langNext) . "&nbsp;&nbsp;&raquo;'>
+                          
+                       
                     </div>
                 </div>     
             </fieldset>" . generate_csrf_token_form_field() . "

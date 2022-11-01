@@ -165,7 +165,7 @@ if ($is_editor) {
         $data['description_rich'] = rich_text_editor('description', 4, 60, $description);
         $data['form_buttons'] = form_buttons(array(
                                     array(
-                                        'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                        'class' => 'btn-primary submitAdminBtn',
                                         'text' => $langSave,
                                         'value'=> $submit_value,
                                         'name' => 'submit_category'

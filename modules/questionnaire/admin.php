@@ -520,35 +520,29 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
            
 
 
-            <div class='form-group mt-5'>
-              <div class='col-12'>
-                <div class='row'>
-                   <div class='col-6'>
+            <div class='form-group mt-4'>
+              <div class='col-12 d-inline-flex'>
+                
+                  
                      "
                      .
                                  form_buttons(array(
                                      array(
-                                         'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                         'class' => 'btn-primary submitAdminBtn',
                                          'text'  => $langSave,
                                          'name'  => 'submitPoll',
                                          'value' => (isset($_GET['newPoll']) ? $langCreate : $langModify),
                                          'javascript' => "selectAll('assignee_box',true)"
-                                     )
+                                     ),
+                                     array(
+                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                        'href' => "index.php?course=$course_code",
+                                    )
                                  ))
                                  ."
-                   </div>
-                   <div class='col-6'>
-                        "
-                        .
-                                    form_buttons(array(
-                                        array(
-                                            'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
-                                            'href' => "index.php?course=$course_code",
-                                        )
-                                    ))
-                                    ."
-                   </div>
-                </div>
+                   
+                   
+               
               </div>
             </div>        
         </form>
@@ -670,32 +664,27 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
    
 
-            <div class='form-group mt-5'>
-                <div class='col-12'>
-                   <div class='row'>
-                      <div class='col-6'>
+            <div class='form-group mt-4'>
+                <div class='col-12 d-inline-flex'>
+                  
+                     
                          ".
                          form_buttons(array(
                              array(
-                                 'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                 'class' => 'btn-primary submitAdminBtn',
                                  'text'  => $langSave,
                                  'name'  => 'submitQuestion',
                                  'value' => (isset($_GET['newQuestion']) ? $langCreate : $langModify)
-                             )
-                         ))
-                     ."
-                      </div>
-                      <div class='col-6'>
-                         ".
-                         form_buttons(array(
+                             ),
                              array(
-                                'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                                 'href' => "admin.php?course=$course_code&pid=$pid".(isset($_GET['modifyQuestion']) ? "&modifyAnswers=".$_GET['modifyQuestion'] : "")
                              )
                          ))
                      ."
-                      </div>
-                   </div>
+                     
+                     
+                   
                 </div>
             </div>
     </form></div></div>";
@@ -793,16 +782,16 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         }
         $tool_content .= "
        
-                    <div class='form-group mt-5'>
-                        <div class='col-12'>
-                            <div class='row'>
-                               <div class='col-6'>
-                                 <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submitAnswers' value='$langCreate'>
-                               </div>
-                               <div class='col-6'>
-                                 <a class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='admin.php?course=$course_code&amp;pid=$pid'>$langCancel</a>
-                               </div>
-                            </div>
+                    <div class='form-group mt-4'>
+                        <div class='col-12 d-inline-flex'>
+                            
+                               
+                                 <input class='btn btn-primary submitAdminBtn' type='submit' name='submitAnswers' value='$langCreate'>
+                              
+                              
+                                 <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='admin.php?course=$course_code&amp;pid=$pid'>$langCancel</a>
+                              
+                          
                             
                             
                         </div>

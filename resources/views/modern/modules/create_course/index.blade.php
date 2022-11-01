@@ -336,16 +336,16 @@
 
 
 
-                                    <div class='form-group mt-5'>
-                                          <div class='col-12'>
-                                            <div class='row d-flex justify-content-center'>
-                                              <div class='col-md-5 col-12'>
-                                                <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='create_course' value='{{ trans('langCourseCreate') }}'>                          
-                                              </div>
-                                              <div class='col-md-5 col-12 mt-md-0 mt-3'>
-                                                <a href='{{ $cancel_link }}' class='btn btn-secondary btn-sm cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>
-                                              </div>
-                                            </div>
+                                    <div class='form-group mt-4'>
+                                          <div class='col-12 d-inline-flex'>
+                                           
+                                              
+                                                <input class='btn btn-primary submitAdminBtn' type='submit' name='create_course' value='{{ trans('langCourseCreate') }}'>                          
+                                             
+                                            
+                                                <a href='{{ $cancel_link }}' class='btn btn-outline-secondary cancelAdminBtn ms-2'>{{ trans('langCancel') }}</a>
+                                             
+                                           
                                                 
                                                 
                                           </div>

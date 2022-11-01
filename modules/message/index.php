@@ -226,7 +226,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     $tool_content .= "
     
         <fieldset>
-            <div class='form-group mt-3'>
+            <div class='form-group'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langSender:</label>
                 <div class='col-sm-12'>
                   <input type='text' class='form-control' value='" . q(uid_to_name($uid)) . "' disabled>
@@ -474,32 +474,27 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
             </div>
         </div>
        
-        <div class='form-group mt-5'>
-            <div class='col-12'>
-              <div class='row'>
-                 <div class='col-6'>
+        <div class='form-group mt-4'>
+            <div class='col-12 d-inline-flex'>
+           
+                 
                     ".
                     form_buttons(array(
                             array(
-                                'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                'class' => 'btn-primary submitAdminBtn',
                                 'text'  => $langSend,
                                 'name'  => 'submit',
                                 'value' => $langSend
+                            ),
+                            array(
+                                'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                'href'  => "$_SERVER[SCRIPT_NAME]".(($course_id != 0)? "?course=$course_code" : "")
                             )
                     ))
                     ."
-                 </div>
-                 <div class='col-6'>
-                   ".
-                   form_buttons(array(
-                           array(
-                               'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
-                               'href'  => "$_SERVER[SCRIPT_NAME]".(($course_id != 0)? "?course=$course_code" : "")
-                           )
-                   ))
-                   ."
-                 </div>
-              </div>
+             
+                 
+              
             </div>
         </div>
         </fieldset>

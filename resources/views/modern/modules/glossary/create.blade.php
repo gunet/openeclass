@@ -78,18 +78,18 @@
                                                 <div class="mt-3">{!! isset($category_selection) ? $category_selection : "" !!}</div>
 
                                                                                     
-                                                <div class='form-group mt-5'>    
-                                                    <div class='col-12'>
-                                                        <div class='row'>
-                                                            <div class='col-6'>
+                                                <div class='form-group mt-4'>    
+                                                    <div class='col-12 d-inline-flex'>
+                                                       
+                                                            
                                                                 {!! $form_buttons !!}
-                                                            </div>
-                                                            <div class='col-6'>
-                                                                <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href="{{$base_url}}">
+                                                           
+                                                           
+                                                                <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href="{{$base_url}}">
                                                                     {{trans('langCancel')}}
                                                                 </a>
-                                                            </div>
-                                                        </div>
+                                                         
+                                                        
                                                     </div>
                                                 </div>
                                                 

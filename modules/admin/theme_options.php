@@ -357,13 +357,13 @@ if (isset($_POST['optionsSave'])) {
     }
     initialize_settings();
     $activate_class = isset($preview_theme) ? '' : ' hidden';
-    $activate_btn = "<a href='#' class='theme_enable btn btn-success btn-sm$activate_class' id='theme_enable'>$langActivate</a>";
+    $activate_btn = "<a href='#' class='theme_enable btn btn-outline-success btn-sm$activate_class' id='theme_enable'>$langActivate</a>";
     $preview_class = ' hidden';
-    $preview_btn = "<a href='#' class='btn btn-primary btn-sm$preview_class' id='theme_preview'>$langSee</a>";
+    $preview_btn = "<a href='#' class='btn btn-outline-primary btn-sm$preview_class' id='theme_preview'>$langSee</a>";
     $del_class = ($theme_id != 0) ? "" : " hidden";
     $delete_btn = "
                     <form class='form-inline' style='display:inline;' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=$theme_id'>
-                        <a class='confirmAction mt-md-0 mt-3 btn btn-danger btn-sm$del_class' id='theme_delete' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
+                        <a class='confirmAction mt-md-0 mt-1 btn btn-outline-danger btn-sm$del_class' id='theme_delete' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
                     </form>";
     $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
     if (isset($theme_options_styles['imageUpload'])) {

@@ -327,13 +327,13 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 </div>
             </div>
             <div class='row'>
-                <div class='col-12 mt-5'>
+                <div class='col-12 mt-4'>
                     <div class='row'>
                        <div class='col-6'>
-                        <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100' name='submitQuestion' value='$langCreate'>
+                        <input type='submit' class='btn btn-primary submitAdminBtn w-100' name='submitQuestion' value='$langCreate'>
                        </div>
                        <div class='col-6'>
-                        <a href='$link_back' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
+                        <a href='$link_back' class='btn btn-outline-secondary cancelAdminBtn w-100'>$langCancel</a>
                        </div>
                     </div>
                     

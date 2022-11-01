@@ -176,16 +176,16 @@ elseif (isset($_GET['forumgoedit'])) {
     }
     $tool_content .= "
        </div>
-        <div class='form-group mt-5'>
-            <div class='col-12'>
-                <div class='row'>
-                    <div class='col-6'>
-                        <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' value='$langModify'>
-                    </div>
-                    <div class='col-6'>
-                         <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='index.php?course=$course_code'>$langCancel</a>
-                    </div>
-                </div>
+        <div class='form-group mt-4'>
+            <div class='col-12 d-inline-flex'>
+                
+                   
+                        <input class='btn btn-primary submitAdminBtn' type='submit' value='$langModify'>
+                
+                   
+                         <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
+                   
+                
             </div>
         </div>
         </fieldset>
@@ -210,16 +210,16 @@ elseif (isset($_GET['forumcatedit'])) {
                 <input name='cat_title' type='text' class='form-control' id='cat_title' placeholder='$langCategory' value='$cat_title'>
             </div>
         </div>
-        <div class='form-group mt-5'>
-            <div class='col-12'>
-                <div class='row'>
-                    <div class='col-6'>
-                        <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' value='$langModify'>
-                    </div>
-                    <div class='col-6'>
-                        <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='index.php?course=$course_code'>$langCancel</a>
-                    </div>
-                </div>
+        <div class='form-group mt-4'>
+            <div class='col-12 d-inline-flex'>
+              
+                    
+                        <input class='btn btn-primary submitAdminBtn' type='submit' value='$langModify'>
+                    
+                  
+                        <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
+                   
+               
             </div>
         </div>
         </fieldset>
@@ -573,16 +573,16 @@ elseif (isset($_GET['forumgodel'])) {
               <input name='categories' type='text' class='form-control' id='categories' placeholder='$langCategory'>
             </div>
         </div>
-        <div class='form-group mt-5'>
-            <div class='col-12'>
-                <div class='row'>
-                    <div class='col-6'>
-                        <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' value='$langAdd'>
-                    </div>
-                    <div class='col-6'>
-                        <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='index.php?course=$course_code'>$langCancel</a>
-                    </div>
-                </div>
+        <div class='form-group mt-4'>
+            <div class='col-12 d-inline-flex'>
+               
+                   
+                        <input class='btn btn-primary submitAdminBtn' type='submit' value='$langAdd'>
+                  
+                   
+                        <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
+                   
+               
             </div>
         </div>
         </fieldset>

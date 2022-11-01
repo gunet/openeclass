@@ -58,10 +58,10 @@
                                         <div class='col-12'>
                                             <div class='row'>
                                                 <div class='col-6'>
-                                                     <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmit') }}' onclick='return confirmation("{{ trans('langConfirmMultiMoveCourses') }}");'>
+                                                     <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmit') }}' onclick='return confirmation("{{ trans('langConfirmMultiMoveCourses') }}");'>
                                                 </div>
                                                 <div class='col-6'>
-                                                     <a href='index.php' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>
+                                                     <a href='index.php' class='btn btn-outline-secondary cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>
                                                 </div>
                                             </div>
                                            

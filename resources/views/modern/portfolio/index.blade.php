@@ -317,25 +317,22 @@
         <div class="col-12 col-lg-4 calendar_announce_message_col mt-0 ps-lg-0 pe-lg-5 pt-lg-5 pb-lg-5 ps-md-5 pe-md-5 pt-md-0 pb-md-5 ps-3 pe-3 pt-3 pb-5">
 
 
-            <div class="container-fluid container_fluid_calendar container_fluid_calendar_portfolio bg-white border border-secondary-4 shadow mt-0">
-                @include('portfolio.portfolio-calendar')
-            </div>
-
-
-            <div class='panel panel-admin border-0 rounded-0 ps-md-3 pe-md-3 pt-md-2 mb-md-2 bg-white mt-4'>
-                <div class='panel-heading bg-body rounded-0'>
-                    <div class='col-12 Help-panel-heading rounded-0'>
+            @include('portfolio.portfolio-calendar')
+            
+            <div class='panel panel-admin border-0 ps-md-3 pe-md-3 pt-md-2 mb-md-2 bg-white mt-4'>
+                <div class='panel-heading bg-body'>
+                    <div class='col-12 Help-panel-heading'>
                         <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoAnnouncements') }}</span>
                     </div>
                 </div>
-                <div class='panel-body pt-1 pb-1 ps-3 pe-3 rounded-0'>
+                <div class='panel-body pt-1 pb-1 ps-3 pe-3'>
                     @if(empty($user_announcements))
                         <div class='text-center p-2'><span class='text-title not_visible'> - {{ trans('langNoRecentAnnounce') }} - </span></div>
                     @else
                         {!! $user_announcements !!}
                     @endif
                 </div>
-                <div class='panel-footer d-flex justify-content-end pt-0 rounded-0'>
+                <div class='panel-footer d-flex justify-content-end pt-0'>
                     <a href="{{$urlAppend}}modules/announcements/myannouncements.php" class='mt-0'>
                         {{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span>
                     </a>
@@ -344,16 +341,16 @@
 
 
             
-            <div class='panel panel-admin border-0 rounded-0 ps-md-3 pe-md-3 pt-md-2 mb-md-2 bg-white mt-4'>
-                <div class='panel-heading bg-body rounded-0'>
-                    <div class='col-12 Help-panel-heading rounded-0'>
+            <div class='panel panel-admin border-0 ps-md-3 pe-md-3 pt-md-2 mb-md-2 bg-white mt-4'>
+                <div class='panel-heading bg-body'>
+                    <div class='col-12 Help-panel-heading'>
                      <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoMessages') }}</span>
                     </div>
                 </div>
-                <div class='panel-body pt-1 pb-1 ps-3 pe-3 rounded-0'>
+                <div class='panel-body pt-1 pb-1 ps-3 pe-3'>
                     {!! $user_messages !!}
                 </div>
-                <div class='panel-footer d-flex justify-content-end pt-0 rounded-0'>
+                <div class='panel-footer d-flex justify-content-end pt-0'>
                     <a href="{{$urlAppend}}modules/message/index.php" class='mt-0'>
                         {{ trans('langAllMessages') }} <span class='fa fa-arrow-right'></span>
                     </a>

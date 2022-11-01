@@ -157,7 +157,7 @@
                                         <div class='col-6'>
                                             {!! form_buttons([
                                                 [
-                                                    'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                                    'class' => 'btn-primary submitAdminBtn w-100',
                                                     'text' => trans('langSave'),
                                                     'name' => isset($mynode) ? 'edit' : 'add',
                                                     'value'=> isset($mynode) ? trans('langAcceptChanges') : trans('langAdd')
@@ -167,7 +167,7 @@
                                         <div class='col-6'>
                                         {!! form_buttons([
                                             [
-                                                'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                                'class' => 'btn-outline-secondary cancelAdminBtn w-100',
                                                 'href' => $_SERVER['SCRIPT_NAME']
                                             ]
                                         ]) !!}

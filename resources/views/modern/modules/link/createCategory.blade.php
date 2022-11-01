@@ -81,16 +81,15 @@
 
                                   
                                     
-                                    <div class='form-group mt-5'>
-                                        <div class='col-12'>
-                                            <div class='row'>
-                                                <div class='col-6'>
-                                                    <input type='submit' class='btn btn-primary btn-sm submitAdminBtn w-100' name='submitCategory' value="{{ $form_legend }}">
-                                                </div>
-                                                <div class='col-6'>
-                                                    <a href='index.php?course={{ $course_code }}' class='btn btn-secondary btn-sm cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>
-                                                </div>
-                                            </div>
+                                    <div class='form-group mt-4'>
+                                        <div class='col-12 d-inline-flex'>
+                                           
+                                                
+                                                    <input type='submit' class='btn btn-primary submitAdminBtn' name='submitCategory' value="{{ $form_legend }}">
+                                               
+                                                    <a href='index.php?course={{ $course_code }}' class='btn btn-outline-secondary cancelAdminBtn ms-2'>{{ trans('langCancel') }}</a>
+                                               
+                                           
                                         </div>
                                     </div>
                                 </fieldset>

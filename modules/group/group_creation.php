@@ -107,16 +107,16 @@ if (isset($_GET['all'])) {
             </div>
         </div>";
         $tool_content .= "<input type='hidden' name='all' value='$_GET[all]'>";
-        $tool_content .= "<div class='form-group mt-5'>
-        <div class='col-12'>
-            <div class='row'>
-                <div class='col-6'>
-                   <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' value='$langCreate' name='creation'>
-                </div>
-                <div class='col-6'>
-                   <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='index.php?course=$course_code'>$langCancel</a>
-                </div>
-            </div>
+        $tool_content .= "<div class='form-group mt-4'>
+        <div class='col-12 d-inline-flex'>
+            
+                
+                   <input class='btn btn-primary submitAdminBtn' type='submit' value='$langCreate' name='creation'>
+              
+               
+                   <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='index.php?course=$course_code'>$langCancel</a>
+              
+           
         </div>
         </div>
         </fieldset>
@@ -338,16 +338,16 @@ if (isset($_GET['all'])) {
                 </div>
             </div>";
         $tool_content .= "<input type='hidden' name='group_quantity' value='1'>";
-        $tool_content .= "<div class='form-group mt-3'>
-            <div class='col-12'>
-                <div class='row'>
-                    <div class='col-6'>
-                    <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' value='$langCreate' name='creation' onClick=\"selectAll('members_box', true)\" >
-                    </div>
-                    <div class='col-6'>
-                     <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='index.php?course=$course_code'>$langCancel</a>
-                    </div>
-                </div>
+        $tool_content .= "<div class='form-group mt-4'>
+            <div class='col-12 d-inline-flex'>
+              
+                    
+                    <input class='btn btn-primary submitAdminBtn' type='submit' value='$langCreate' name='creation' onClick=\"selectAll('members_box', true)\" >
+                   
+                 
+                     <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='index.php?course=$course_code'>$langCancel</a>
+                   
+               
                 
                
             </div>

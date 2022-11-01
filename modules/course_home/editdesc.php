@@ -117,34 +117,35 @@ $tool_content = action_bar(array(
             <div class='form-wrapper form-edit p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' action='editdesc.php?course=$course_code' enctype='multipart/form-data'>
                     <fieldset>
-                    <div class='form-group'>
-                        <label for='description' class='col-sm-12 control-label-notes'>$langCourseLayout:</label>
-                        <div class='col-sm-12'>
+                    <div class='row form-group'>
+                        <label for='description' class='col-md-3 col-12 control-label-notes'>$langCourseLayout:</label>
+                        <div class='col-md-9 col-12'>
                             ".  selection($layouts, 'layout', $layout, 'class="form-control"')."
                         </div>
                     </div>
-                    <div id='image_field' class='form-group".(($layout == 1)?"":" hidden")." mt-3'>
-                        <label for='course_image' class='col-sm-12 control-label-notes'>$langCourseImage:</label>
-                        <div class='col-sm-12'>
+                    <div id='image_field' class='row form-group".(($layout == 1)?"":" hidden")." mt-4'>
+                        <label for='course_image' class='col-md-3 col-12 control-label-notes'>$langCourseImage:</label>
+                        <div class='col-md-9 col-12'>
                             $course_image
                         </div>
                     </div>                  
-                    <div class='form-group mt-3'>
-                        <label for='description' class='col-sm-12 control-label-notes'>$langDescription:</label>
-                        <div class='col-sm-12'>
+                    <div class='row form-group mt-4'>
+                        <label for='description' class='col-md-3 col-12 control-label-notes'>$langDescription:</label>
+                        <div class='col-md-9 col-12'>
                             " . rich_text_editor('description', 8, 20, $description) . "
                         </div>
                     </div>
-                    <div class='form-group mt-5'>
-                        <div class='col-12'>
-                            <div class='row'>
-                              <div class='col-6'>
-                                <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit' value='$langSubmit'>
-                              </div>
-                              <div class='col-6'>
-                                <a href='{$urlAppend}courses/$course_code' class='btn btn-secondary btn-sm cancelAdminBtn w-100'>$langCancel</a>
-                              </div>
-                            </div>
+                    <div class='row form-group mt-4'>
+                        <div class='col-md-3 col-12'></div>
+                        <div class='col-md-9 col-12'>
+                           
+                              
+                                <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
+                            
+                              
+                                <a href='{$urlAppend}courses/$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                             
+                           
                             
                             
                         </div>

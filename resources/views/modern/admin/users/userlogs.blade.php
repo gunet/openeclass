@@ -77,10 +77,10 @@
                                     <div class="col-12">
                                         <div class='row'>
                                             <div class='col-6'>
-                                                <input class="btn btn-sm btn-primary submitAdminBtn w-100" type="submit" name="submit" value="{{ trans('langSubmit') }}">
+                                                <input class="btn btn-primary submitAdminBtn w-100" type="submit" name="submit" value="{{ trans('langSubmit') }}">
                                             </div>
                                             <div class='col-6'>
-                                                <a class="btn btn-sm btn-secondary cancelAdminBtn w-100" href="listusers.php" data-placement="bottom" data-toggle="tooltip" title="" data-original-title="{{ trans('langBack') }}" >
+                                                <a class="btn btn-outline-secondary cancelAdminBtn w-100" href="listusers.php" data-placement="bottom" data-toggle="tooltip" title="" data-original-title="{{ trans('langBack') }}" >
                                                     <span class="fa fa-reply space-after-icon"></span><span class="hidden-xs">{{ trans('langBack') }}</span>
                                                 </a>
                                             </div>

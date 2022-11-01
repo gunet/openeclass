@@ -102,7 +102,7 @@ if (isset($_POST['toReorder'])) {
             $value = '';
         }
         $tool_content .= "
-            <div class='form-group mt-3'>
+            <div class='form-group mb-3'>
               <label class='col-sm-12 control-label-notes' for='heading-$langcode'>$langTitle (" . $langNameOfLang[langcode_to_name($langcode)] . ")</label>
               <div class='col-sm-12'>
                 <input class='form-control' type='text' name='heading[$langcode]' id='heading-$langcode' value='$value' placeholder='$langTitle...'>
@@ -123,16 +123,16 @@ if (isset($_POST['toReorder'])) {
 
             
 
-            <div class='form-group mt-5'>
-               <div class='col-12'>
-               <div class='row'>
-                  <div class='col-6'>
-                   <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                  </div>
-                  <div class='col-6'>
-                   <a href='activity.php' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
-                  </div>
-               </div>
+            <div class='form-group mt-4'>
+               <div class='col-12 d-inline-flex'>
+               
+                 
+                   <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                 
+                 
+                   <a href='activity.php' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                
+             
                
                
               </div>

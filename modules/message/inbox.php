@@ -250,33 +250,28 @@ if (isset($_GET['mid'])) {
                     </div>
                 </div>
               
-                <div class='form-group mt-5'>
-                    <div class='col-12'>
-                       <div class='row'>
-                          <div class='col-6'>
+                <div class='form-group mt-4'>
+                    <div class='col-12 d-inline-flex'>
+                       
+                          
                             ".
                             form_buttons(array(
                                 array(
-                                    'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                    'class' => 'btn-primary submitAdminBtn',
                                     'text'  => $langSend,
                                     'name'  => 'submit',
                                     'value' => $langAddModify
+                                ),
+                                array(
+                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                    'href' => "javascript:void(0)",
+                                    'id'   => "cancelReply"
                                 )
                             ))
                             ."
-                          </div>
-                          <div class='col-6'>
-                             ".
-                             form_buttons(array(
-                                 array(
-                                     'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
-                                     'href' => "javascript:void(0)",
-                                     'id'   => "cancelReply"
-                                 )
-                             ))
-                             ."
-                          </div>
-                       </div>
+                         
+                         
+                       
                     </div>
                 </div>
             </fieldset>";
@@ -386,33 +381,28 @@ if (isset($_GET['mid'])) {
                         </div>
                     </div>
                    
-                    <div class='form-group mt-5'>
-                        <div class='col-12'>
-                           <div class='row'>
-                              <div class='col-6'>
+                    <div class='form-group mt-4'>
+                        <div class='col-12 d-inline-flex'>
+                        
+                             
                                  ".
                                  form_buttons(array(
                                      array(
-                                         'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                         'class' => 'btn-primary submitAdminBtn',
                                          'text'  => $langSend,
                                          'name'  => 'submit',
                                          'value' => $langAddModify
-                                     )
-                                 ))
-                                 ."
-                              </div>
-                              <div class='col-6'>
-                                 ".
-                                 form_buttons(array(
+                                     ),
                                      array(
-                                         'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
-                                         'href' => "javascript:void(0)",
-                                         'id'   => "cancelReply"
-                                     )
+                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                        'href' => "javascript:void(0)",
+                                        'id'   => "cancelReply"
+                                    )
                                  ))
                                  ."
-                              </div>
-                           </div>
+                             
+                              
+                          
                         </div>
                     </div>
                 </fieldset>";

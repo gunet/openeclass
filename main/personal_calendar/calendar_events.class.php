@@ -1461,19 +1461,32 @@ class Calendar_Events {
    }
 
    public static function small_month_bootstrap_calendar() {
-       global $langNextMonth, $langPreviousMonth;
+       global $langNextMonth, $langPreviousMonth, $course_code;
 
-       $calendar = "<div id='cal-header' class='d-flex justify-content-center'>
-       <div class='btn-group w-100' role='group'>
-           
-        <button type='button' class='btn btn-transparent d-flex justify-content-start' data-calendar-nav='prev'><div style='height:40px; width:40px; border-radius:50%; border:solid 1px white;'><i class='fas fa-chevron-left' style='margin-top:12px;'></i></div><span class='sr-only'>$langPreviousMonth</span></button>
-        <button id='current-month' type='button' class='btn btn-transparent' disabled='disabled'>&nbsp;</button>
-        <button type='button' class='btn btn-transparent d-flex justify-content-end' data-calendar-nav='next'><div style='height:40px; width:40px; border-radius:50%; border:solid 1px white;'><i class='fas fa-chevron-right' style='margin-top:12px;'></i></div><span class='sr-only'>$langNextMonth</span></button>
-          
-       </div>
-</div>";
+       if($course_code){
+            $calendar = "<div class='panel-heading p-0'>
+                            <div id='cal-header' class='cal-header-course d-flex justify-content-center'>
+                                <div class='btn-group w-100' role='group'>
+                                    <button type='button' class='btn btn-transparent d-flex justify-content-start' data-calendar-nav='prev'><div style='height:40px; width:40px; border-radius:50%; border:solid 1px white;'><i class='fas fa-chevron-left' style='margin-top:12px;'></i></div><span class='sr-only'>$langPreviousMonth</span></button>
+                                    <button id='current-month' type='button' class='btn btn-transparent' disabled='disabled'>&nbsp;</button>
+                                    <button type='button' class='btn btn-transparent d-flex justify-content-end' data-calendar-nav='next'><div style='height:40px; width:40px; border-radius:50%; border:solid 1px white;'><i class='fas fa-chevron-right' style='margin-top:12px;'></i></div><span class='sr-only'>$langNextMonth</span></button>
+                                </div>
+                            </div>
+                        </div>";
+       }else{
+            $calendar = "<div class='panel-heading p-0'>
+                            <div id='cal-header' class='cal-header-Portfolio d-flex justify-content-center'>
+                                <div class='btn-group w-100' role='group'>
+                                    <button type='button' class='btn btn-transparent d-flex justify-content-start' data-calendar-nav='prev'><div style='height:40px; width:40px; border-radius:50%; border:solid 1px white;'><i class='fas fa-chevron-left' style='margin-top:12px;'></i></div><span class='sr-only'>$langPreviousMonth</span></button>
+                                    <button id='current-month' type='button' class='btn btn-transparent' disabled='disabled'>&nbsp;</button>
+                                    <button type='button' class='btn btn-transparent d-flex justify-content-end' data-calendar-nav='next'><div style='height:40px; width:40px; border-radius:50%; border:solid 1px white;'><i class='fas fa-chevron-right' style='margin-top:12px;'></i></div><span class='sr-only'>$langNextMonth</span></button>
+                                </div>
+                            </div>
+                        </div>";
+       }
+       
 
-       $calendar .= '<div id="bootstrapcalendar"></div><div class="clearfix"></div>';
+       $calendar .= '<div class="panel-body-calendar"><div id="bootstrapcalendar"></div></div>';
 
         return $calendar;
    }

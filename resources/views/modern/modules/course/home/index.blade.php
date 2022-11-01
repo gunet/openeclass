@@ -76,9 +76,9 @@ $(document).ready(function(){
 
 
                     <div class='col-sm-12'>
-                        <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white'>
-                            <div class='panel-heading bg-body rounded-0'>
-                                <div class='col-12 d-inline-flex Help-panel-heading rounded-0'>
+                        <div class='panel panel-admin border-0 p-md-3 bg-white'>
+                            <div class='panel-heading bg-body'>
+                                <div class='col-12 d-inline-flex Help-panel-heading'>
                                     
                                     <div class='col-9'>
                                         <span class="panel-title text-uppercase Help-text-panel-heading">{{ trans('langCourseProgram') }}</span>
@@ -109,7 +109,7 @@ $(document).ready(function(){
                                     
                                 </div>
                             </div>
-                            <div class='panel-body rounded-0'>
+                            <div class='panel-body'>
                                 <div class='row'>
                                     @if($course_info->home_layout == 1)
                                         <div class='col-md-6 col-12'>
@@ -191,7 +191,7 @@ $(document).ready(function(){
                             </div>
 
                             @if(isset($rating_content) || isset($social_content) || isset($comment_content))
-                                <div class='panel-footer mt-0 mb-0 p-0 rounded-0'>
+                                <div class='panel-footer mt-0 mb-0 p-0'>
                                     <div class='row'>
                                         @if(isset($rating_content) and isset($social_content) and isset($comment_content))
                                             <div class='col-md-4 col-12 d-flex justify-content-md-start justify-content-center align-items-center'>
@@ -256,9 +256,9 @@ $(document).ready(function(){
 
                         @if($course_info->view_type == 'units')
                             @if($total_cunits > 0)
-                                <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white'>
-                                    <div class='panel-heading bg-body rounded-0'>
-                                        <div class='col-12 d-inline-flex Help-panel-heading rounded-0'>
+                                <div class='panel panel-admin border-0 p-md-3 bg-white'>
+                                    <div class='panel-heading bg-body'>
+                                        <div class='col-12 d-inline-flex Help-panel-heading'>
                                             <div class='col-6'>
                                                 <span class='panel-title text-uppercase Help-text-panel-heading'>
                                                     {{ trans('langCourseUnits') }}
@@ -293,14 +293,14 @@ $(document).ready(function(){
                                             </div>
                                         </div>
                                     </div>
-                                    <div class='panel-body rounded-0' id='boxlistSort'>
+                                    <div class='panel-body' id='boxlistSort'>
                                         {!! $cunits_content !!}
                                     </div>
                                 </div>
                             @else
-                                <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white'>
-                                    <div class='panel-heading bg-body rounded-0'>
-                                        <div class='col-12 d-inline-flex Help-panel-heading rounded-0'>
+                                <div class='panel panel-admin border-0 p-md-3 bg-white'>
+                                    <div class='panel-heading bg-body'>
+                                        <div class='col-12 d-inline-flex Help-panel-heading'>
                                             <div class='col-6 panel-title text-uppercase Help-text-panel-heading'>
                                                 {{ trans('langCourseUnits') }}
                                             </div>
@@ -319,7 +319,7 @@ $(document).ready(function(){
                                         </div>
 
                                     </div>
-                                    <div class='panel-body rounded-0'>
+                                    <div class='panel-body'>
                                         <div class='not_visible text-center'> - {{ trans('langNoUnits') }} - </div>
                                     </div>
                                 </div>
@@ -348,15 +348,15 @@ $(document).ready(function(){
 
                                 @foreach ($items as $item)
                                     @if (trim($item->content))
-                                        <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white mb-3'>
-                                            <div class='panel-heading bg-body rounded-0'>
-                                                <div class='col-12 Help-panel-heading rounded-0'>
+                                        <div class='panel panel-admin border-0 p-md-3 bg-white mb-3'>
+                                            <div class='panel-heading bg-body'>
+                                                <div class='col-12 Help-panel-heading'>
                                                     <span class='panel-title text-uppercase Help-text-panel-heading'>
                                                         {!! q(getSerializedMessage($item->heading)) !!}
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div class='panel-body rounded-0'>
+                                            <div class='panel-body'>
                                                 {!! standard_text_escape($item->content) !!}
                                             </div>
 
@@ -389,9 +389,9 @@ $(document).ready(function(){
                         @endif
 
                         @if($course_info->view_type == 'simple')
-                            <div class="panel panel-admin border-0 rounded-0 p-md-3 bg-white @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif">
-                                <div class='panel-heading bg-body rounded-0'>
-                                    <div class='col-12 d-inline-flex Help-panel-heading rounded-0'>
+                            <div class="panel panel-admin border-0 p-md-3 bg-white @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif">
+                                <div class='panel-heading bg-body'>
+                                    <div class='col-12 d-inline-flex Help-panel-heading'>
                                         <div class='col-6'>
                                             <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langAnnouncements') }}</span>
                                         </div>
@@ -403,7 +403,7 @@ $(document).ready(function(){
                                         </div>
                                     </div>
                                 </div>
-                                <div class='panel-body bg-white ps-0 pe-0 pt-1 pb-1 rounded-0'>
+                                <div class='panel-body bg-white ps-0 pe-0 pt-1 pb-1'>
                                     <ul class='list-group list-group-flush Borders ps-3 pe-3'>
                                         {!! course_announcements() !!}
                                     </ul>
@@ -422,34 +422,36 @@ $(document).ready(function(){
 
                     <div class="col-xxl-4 col-xl-5 col-lg-12 col-md-12 mt-lg-4 mt-4 float-end ">
 
-                        <div class="container-fluid container_fluid_calendar col_maincontent_active_calendar border border-secondary-4 shadow">
+                        <div class="panel panel-admin border-0 p-0 bg-white">
                             {!! $user_personal_calendar !!}
-                            <div class='col-12 mt-4 pb-2'>
-                                <div class='row rowMedium'>
-                                    <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
-                                        <div class='d-inline-flex align-items-top'>
-                                            <span class='event event-important mt-1'></span>
-                                            <span>{{ trans('langAgendaDueDay') }}</span>
+                            <div class='panel-footer'>
+                                <div class='col-12'>
+                                    <div class='row rowMedium'>
+                                        <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
+                                            <div class='d-inline-flex align-items-top'>
+                                                <span class='event event-important mt-1'></span>
+                                                <span>{{ trans('langAgendaDueDay') }}</span>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
-                                        <div class='d-inline-flex align-items-top'>
-                                            <span class='event event-info mt-1'></span>
-                                            <span>{{ trans('langAgendaCourseEvent') }}</span>
+                                        <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
+                                            <div class='d-inline-flex align-items-top'>
+                                                <span class='event event-info mt-1'></span>
+                                                <span>{{ trans('langAgendaCourseEvent') }}</span>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
-                                        <div class='d-inline-flex align-items-top'>
-                                            <span class='event event-success mt-1'></span>
-                                            <span>{{ trans('langAgendaSystemEvent') }}</span>
+                                        <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
+                                            <div class='d-inline-flex align-items-top'>
+                                                <span class='event event-success mt-1'></span>
+                                                <span>{{ trans('langAgendaSystemEvent') }}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend pb-3'>
-                                        <div class='d-inline-flex align-items-top'>
-                                            <span class='event event-special mt-1'></span>
-                                            <span>{{ trans('langAgendaPersonalEvent') }}</span>
+                                        <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
+                                            <div class='d-inline-flex align-items-top'>
+                                                <span class='event event-special mt-1'></span>
+                                                <span>{{ trans('langAgendaPersonalEvent') }}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -457,9 +459,9 @@ $(document).ready(function(){
                         </div>
 
                         @if($course_info->view_type != 'simple')
-                            <div class="panel panel-admin border-0 rounded-0 p-md-3 bg-white mt-4">
-                                <div class='panel-heading bg-body rounded-0'>
-                                    <div class='col-12 d-inline-flex Help-panel-heading rounded-0'>
+                            <div class="panel panel-admin border-0 p-md-3 bg-white mt-4">
+                                <div class='panel-heading bg-body'>
+                                    <div class='col-12 d-inline-flex Help-panel-heading'>
                                         <div class='col-6'>
                                             <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langAnnouncements') }}</span>
                                         </div>
@@ -481,9 +483,9 @@ $(document).ready(function(){
                         @endif
 
                         @if(isset($course_completion_id) and $course_completion_id > 0)
-                            <div class="panel panel-admin border-0 rounded-0 p-md-3 bg-white mt-4">
-                                <div class='panel-heading bg-body rounded-0'>
-                                    <div class='col-12 Help-panel-heading rounded-0'>
+                            <div class="panel panel-admin border-0 p-md-3 bg-white mt-4">
+                                <div class='panel-heading bg-body'>
+                                    <div class='col-12 Help-panel-heading'>
                                         <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langCourseCompletion') }}</span>
                                     </div>
                                 </div>
@@ -508,7 +510,7 @@ $(document).ready(function(){
                         @endif
 
                         @if (isset($level) && !empty($level))
-                            <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white mt-4'>
+                            <div class='panel panel-admin border-0 p-md-3 bg-white mt-4'>
                                 <div class='panel-heading bg-body rounded-0'>
                                     <div class='col-12 Help-panel-heading rounded-0'>
                                         <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langOpenCourseShort') }}</span>

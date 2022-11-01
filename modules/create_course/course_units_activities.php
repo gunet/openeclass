@@ -306,16 +306,16 @@ if(!isset($_POST['final_submit'])){
                         </div>
                         
 
-                        <div class='form-group mt-5'>
-                            <div class='col-12'>
-                                <div class='row'>
-                                   <div class='col-md-6 col-7'>
-                                    <input id='final_sub' class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
-                                   </div>
-                                   <div class='col-md-6 col-5'>
-                                        <a href='{$urlServer}main/portfolio.php' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
-                                   </div>
-                                </div>
+                        <div class='form-group mt-4'>
+                            <div class='col-12 d-inline-flex'>
+                                
+                                 
+                                    <input id='final_sub' class='btn btn-primary submitAdminBtn' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
+                                 
+                                 
+                                        <a href='{$urlServer}main/portfolio.php' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                                 
+                               
                                 
 
                             </div>
@@ -503,16 +503,16 @@ if(!isset($_POST['final_submit'])){
                 $tool_content .= "</tr>
                         </table>
                     </div>
-                    <div class='form-group mt-5'>
-                        <div class='col-12'>    
-                            <div class='row'>
-                               <div class='col-md-6 col-7'>
-                                    <input id='final_sub' class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
-                               </div>
-                               <div class='col-md-6 col-5'>
-                                    <a href='{$urlServer}modules/units/index.php?course=".$course_code."&id=".$unit_id."' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
-                               </div>
-                            </div>                        
+                    <div class='form-group mt-4'>
+                        <div class='col-12 d-inline-flex'>    
+                            
+                               
+                                    <input id='final_sub' class='btn btn-primary submitAdminBtn' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
+                               
+                              
+                                    <a href='{$urlServer}modules/units/index.php?course=".$course_code."&id=".$unit_id."' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                              
+                                                 
                             
                            
                         </div>

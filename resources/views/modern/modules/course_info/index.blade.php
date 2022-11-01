@@ -138,7 +138,7 @@
                                 <fieldset>
                                     <div class='row'>
                                         <div class='col-md-6 col-12'>
-                                            <div class='form-group mt-3'>
+                                            <div class='form-group'>
                                                 <label for='fcode' class='col-sm-6 control-label-notes'>{{ trans('langCode') }}</label>
                                                 <div class='col-sm-12'>
                                                     <input type='text' class='form-control' name='fcode' id='fcode' value='{{ $public_code }}'>
@@ -146,7 +146,7 @@
                                             </div>
                                         </div>
                                         <div class='col-md-6 col-12'>
-                                            <div class='form-group mt-3'>
+                                            <div class='form-group'>
                                                 <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langCourseTitle') }}:</label>
                                                 <div class='col-sm-12'>
                                                     <input type='text' class='form-control' name='title' id='title' value='{{ q($title) }}'>

@@ -234,7 +234,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
         }
 
         $langSuffix = " (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
-        $html .= "<div class='form-group mt-3'><label class='col-sm-12 control-label-notes'>" . $GLOBALS['langName'] . $langSuffix . "</label>";
+        $html .= "<div class='form-group mb-3'><label class='col-sm-12 control-label-notes'>" . $GLOBALS['langName'] . $langSuffix . "</label>";
         $tdpre = ($i >= 0) ? "<div class='col-sm-12'>" : '';
         $placeholder = $GLOBALS['langCourseCategoryValue2'] . $langSuffix;
         $html .= $tdpre . "<input class='form-control' type='text' name='name-" . q($langcode) . "' " . $nameValue . " placeholder='$placeholder'></div></div>";
@@ -272,28 +272,24 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
     }
 
     $html .= "
-    <div class='form-group mt-5'>
-        <div class='col-12'>
-           <div class='row'>
-              <div class='col-6'>"
+    <div class='form-group mt-4'>
+        <div class='col-12 d-inline-flex'>
+
+              "
                     . form_buttons(array(
                         array(
-                            'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                            'class' => 'btn-primary submitAdminBtn',
                             'text' => $GLOBALS['langSave'],
                             'name' => $action,
                             'value'=> $actionValue
-                        )
-                    )) .
-              "</div>
-              <div class='col-6'>"
-                    . form_buttons(array(
+                        ),
                         array(
-                            'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                            'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                             'href' =>  $_SERVER['SCRIPT_NAME'] . "?category=" . $catId
                         )
                     )) .
-              "</div>
-           </div>
+              "
+           
 
         </div>
     </div>

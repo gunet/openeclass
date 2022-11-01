@@ -390,16 +390,16 @@ if(!isset($_POST['next'])){
                 </div>             
             </div>
 
-            <div class='form-group mt-5'>
-                <div class='col-12'>
-                    <div class='row'>
-                       <div class='col-6'>
-                        <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='next' value='" . q($langNext) . "'>
-                       </div>
-                       <div class='col-6'>
-                        <a href='{$urlServer}courses/".$course_code."' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
-                       </div>
-                    </div>
+            <div class='form-group mt-4'>
+                <div class='col-12 d-inline-flex'>
+                   
+                       
+                        <input class='btn btn-primary submitAdminBtn' type='submit' name='next' value='" . q($langNext) . "'>
+                       
+                       
+                        <a href='{$urlServer}courses/".$course_code."' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                      
+                    
                     
                     
                 </div>
@@ -672,16 +672,16 @@ if(!isset($_POST['next'])){
                 $tool_content .= "</tr>
                         </table>
                     </div>
-                    <div class='form-group mt-5'>
-                        <div class='col-12 align-items-center'>
-                            <div class='row'>
-                                <div class='col-md-6 col-7'>
-                                    <input id='final_sub' class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "'>
-                                </div>
-                                <div class='col-md-6 col-5'>
-                                    <a href='{$urlServer}courses/".$course_code."' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
-                                </div>
-                            </div>
+                    <div class='form-group mt-4'>
+                        <div class='col-12 d-inline-flex'>
+                            
+                               
+                                    <input id='final_sub' class='btn btn-primary submitAdminBtn' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "'>
+                               
+                              
+                                    <a href='{$urlServer}courses/".$course_code."' class='btn btn-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                              
+                           
                         </div>
                     </div>
                     <input type='hidden' name='next'>

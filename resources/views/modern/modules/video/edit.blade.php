@@ -202,81 +202,78 @@
                                      
 
 
-                                        <div class='form-group mt-5'>
-                                            <div class='col-12'>
-                                                <div class='row'>
+                                        <div class='form-group mt-4'>
+                                            <div class='col-12 d-inline-flex'>
+                                                
                                                     @if ($form_input === 'file')
-                                                        <div class='col-6'>
+                                                       
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                                                    'class' => 'btn-primary submitAdminBtn',
                                                                     'text'  =>  $GLOBALS['langUpload'],
                                                                     'name'  =>  'add_submit',
                                                                     'value' =>  $GLOBALS['langUpload']
                                                                 )
                                                             ))
                                                             !!}
-                                                        </div>
-                                                        <div class='col-6'>
+                                                       
                                                         {!! form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-2',
                                                                     'href'  =>  $backPath
                                                                 )
                                                             ))
                                                             !!}
-                                                        </div>
+                                                        
                                                     @elseif ($form_input === 'url')
-                                                        <div class='col-6'>
+                                                        
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                                                    'class' => 'btn-primary submitAdminBtn',
                                                                     'text'  =>  $GLOBALS['langSave'],
                                                                     'name'  =>  'add_submit',
                                                                     'value' =>  $GLOBALS['langAdd']
                                                                 )
                                                             ))
                                                             !!}
-                                                        </div>
-                                                        <div class='col-6'>
+                                                        
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-2',
                                                                     'href'  =>  $backPath
                                                                 )
                                                             ))
                                                         !!}
-                                                        </div>
+                                                        
                                                     @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
-                                                        <div class='col-6'>
+                                                       
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                                                    'class' => 'btn-primary submitAdminBtn',
                                                                     'text'  =>  $GLOBALS['langSave'],
                                                                     'name'  =>  'edit_submit',
                                                                     'value' =>  $GLOBALS['langEditChange']
                                                                 )
                                                             ))
                                                             !!}
-                                                        </div>
-                                                        <div class='col-6'>
+                                                       
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-2',
                                                                     'href'  =>  $backPath
                                                                 )
                                                             ))
                                                             !!}
-                                                        </div>
+                                                       
                                                         <input type='hidden' name='id' value='{{ $edititem->id }}'>
                                                         <input type='hidden' name='table' value='{{ $table_edit }}'>
                                                     @endif
-                                                </div>
+                                                
                                             </div>
                                         </div>
                                     </fieldset>

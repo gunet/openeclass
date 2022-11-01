@@ -192,7 +192,7 @@
                                                         <button class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='send_link' value='{{ trans('langSend') }}'>{!! trans('langSend') !!}</button>
                                                     </div>
                                                     <div class='col-6'>
-                                                        <button class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='{{ $urlServer }}'>{!! trans('langCancel') !!}</button>
+                                                        <button class='btn btn-sm btn-outline-secondary cancelAdminBtn w-100' href='{{ $urlServer }}'>{!! trans('langCancel') !!}</button>
                                                     </div>
                                                 </div>
                                                 

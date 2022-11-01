@@ -153,10 +153,10 @@
                             <div class='form-group mt-5'>
                                 <div class='row'>
                                     <div class='col-6'>
-                                        <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' value='{{ trans('langSearch') }}'>
+                                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' value='{{ trans('langSearch') }}'>
                                     </div>
                                     <div class='col-6'>
-                                        <a class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='index.php'>{{ trans('langCancel') }}</a>
+                                        <a class='btn btn-outline-secondary cancelAdminBtn w-100' href='index.php'>{{ trans('langCancel') }}</a>
                                     </div>
                                 </div>
                             </div>

@@ -190,19 +190,19 @@
 
                                           
 
-                                                    <div class='form-group mt-5'>
+                                                    <div class='form-group mt-4'>
                                                         <input type='hidden' name='id' value='{{ $announce_id }}'>
                                                         <input type='hidden' name='course' value='{{ $course_code }}'>
                                                         <input type='hidden' name='editorFromCreateEditAnnouncement' value='{{$is_editor}}'>
-                                                        <div class='col-12'>
-                                                            <div class='row'>
-                                                                <div class='col-6'>
-                                                                     <button type="submit" class="btn btn-primary btn-sm submitAdminBtn w-100" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
-                                                                </div>
-                                                                <div class='col-6'>
-                                                                    <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn btn-secondary btn-sm cancelAdminBtn w-100">{{ trans('langCancel') }}</a>
-                                                                </div>
-                                                            </div>
+                                                        <div class='col-12 d-inline-flex'>
+                                                           
+                                                              
+                                                                     <button type="submit" class="btn btn-primary submitAdminBtn" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
+                                                               
+                                                               
+                                                                    <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn btn-outline-secondary cancelAdminBtn ms-2">{{ trans('langCancel') }}</a>
+                                                               
+                                                           
                                                         </div>
                                                     </div>
                                                     

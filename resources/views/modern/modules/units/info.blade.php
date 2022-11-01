@@ -135,16 +135,16 @@
                                     {!! $tagInput !!}
 
                                     
-                                    <div class='form-group mt-5'>
-                                        <div class='col-12'>
-                                            <div class='row'>
-                                                <div class='col-6'>
-                                                 <button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='edit_submit'>{{ trans('langSubmit') }}</button>
-                                                </div>
-                                                <div class='col-6'>
-                                                <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='{{ $postUrl }}'>{{ trans('langCancel') }}</a>
-                                                </div>
-                                            </div>
+                                    <div class='form-group mt-4'>
+                                        <div class='col-12 d-inline-flex'>
+                                           
+                                                
+                                                 <button class='btn btn-primary submitAdminBtn' type='submit' name='edit_submit'>{{ trans('langSubmit') }}</button>
+                                           
+                                            
+                                                <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='{{ $postUrl }}'>{{ trans('langCancel') }}</a>
+                                              
+                                           
                                             
                                             
                                         </div>

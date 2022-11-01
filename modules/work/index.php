@@ -2573,31 +2573,26 @@ function new_assignment() {
             </div>" .
             eClassTag::tagInput();
     $tool_content .= "
-        <div class='form-group mt-5'>
-            <div class='col-12'>
-                <div class='row'>
-                    <div class='col-6'>"
+        <div class='form-group mt-4'>
+            <div class='col-12 d-inline-flex'>
+                
+                    "
                     .
                 form_buttons(array(
                     array(
-                        'class'         => 'btn-primary btn-sm submitAdminBtn w-100',
+                        'class'         => 'btn-primary submitAdminBtn',
                         'name'          => 'new_assign',
                         'value'         => $langSubmit,
                         'javascript'    => "selectAll('assignee_box',true)"
+                    ),
+                    array(
+                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1'
                     )
                 ))
                 .
-                    "</div>
-                    <div class='col-6'>
-                    ".
-                    form_buttons(array(
-                        array(
-                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                            'class' => 'btn-secondary btn-sm cancelAdminBtn w-100'
-                        )
-                    ))
-                    . "
-                    </div>
+                    "
+                   
                 </div>
             </div>
         </fieldset>
@@ -3692,32 +3687,27 @@ function show_edit_assignment($id) {
                 </div>" .
                 eClassTag::tagInput($id);
         $tool_content .= "
-            <div class='form-group mt-5'>
-                <div class='col-12'>
-                   <div class='row'>
-                      <div class='col-6'>
+            <div class='form-group mt-4'>
+                <div class='col-12 d-inline-flex'>
+                  
+                     
                         ".
                         form_buttons(array(
                             array(
-                                'class'         => 'btn-primary btn-sm submitAdminBtn w-100',
+                                'class'         => 'btn-primary submitAdminBtn',
                                 'name'          => 'do_edit',
                                 'value'         => $langModify,
                                 'javascript'    => "selectAll('assignee_box',true)"
-                            )
-                        ))
-                        ."
-                      </div>
-                      <div class='col-6'>
-                        ".
-                        form_buttons(array(
+                            ),
                             array(
-                                'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                                 'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                             )
                         ))
                         ."
-                      </div>
-                   </div>
+                    
+                     
+                  
                 </div>
             </div>
     </fieldset>

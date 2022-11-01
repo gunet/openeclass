@@ -118,29 +118,29 @@
 
                                        
 
-                                        <div class='form-group mt-5'>
+                                        <div class='form-group mt-4'>
                                             @if($menuTypeID == 3 or $menuTypeID == 1)
-                                            <div class='col-12'>
-                                                <div class='row'>
-                                                    <div class='col-6'>
-                                                       <button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit'>{{ trans('langSave') }}</button>
-                                                    </div>
-                                                    <div class='col-6'>
-                                                       <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
-                                                    </div>
-                                                </div>
+                                            <div class='col-12 d-inline-flex'>
+                                               
+                                                   
+                                                       <button class='btn btn-primary submitAdminBtn ' type='submit'>{{ trans('langSave') }}</button>
+                                                   
+                                                 
+                                                       <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                                   
+                                                
                                             </div>
                                             @else
-                                            <div class='col-12'>
+                                            <div class='col-12 d-inline-flex'>
                                                
-                                                <div class='row'>
-                                                    <div class='col-6'>
-                                                        <button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit'>{{ trans('langSave') }}</button>
-                                                    </div>
-                                                    <div class='col-6'>
-                                                      <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
-                                                    </div>
-                                                </div>
+                                              
+                                                    
+                                                        <button class='btn btn-primary submitAdminBtn' type='submit'>{{ trans('langSave') }}</button>
+                                                 
+                                                 
+                                                      <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                                  
+                                             
                                                
                                                 {!! generate_csrf_token_form_field() !!}
                                             </div>

@@ -18,13 +18,13 @@
     @endphp
 
     <div class="col-12 mb-4">
-        <div class='panel panel-admin border-0 rounded-0 p-md-3 bg-white'>
-            <div class='panel-heading bg-body rounded-0'>
-                <div class='col-12 Help-panel-heading rounded-0'>
+        <div class='panel panel-admin border-0 p-md-3 bg-white'>
+            <div class='panel-heading bg-body'>
+                <div class='col-12 Help-panel-heading'>
                     <span class='panel-title text-uppercase Help-text-panel-heading'>{{trans('langWall')}}</span>
                  </div>
             </div>
-            <div class='panel-body rounded-0'>
+            <div class='panel-body'>
                 <div class="form-wrapper form-edit p-3 rounded">
                     <form id="wall_form" method="post" action="{{$urlServer}}modules/wall/index.php?course={{$course_code}}&fromCoursePage" enctype="multipart/form-data">
                         <fieldset> 
@@ -32,8 +32,8 @@
                                 <label for="message_input text-dark">{{ trans('langMessage') }}</label>
                                 <textarea id="textr" onfocus="expand_form();" class="form-control" rows="1" name="message" id="message_input">{!! $content !!}</textarea>
                             </div>
-                            <div id="resources_panel" class="panel panel-default collapse mt-3 rounded-0">
-                                <div class="panel-body rounded-0">
+                            <div id="resources_panel" class="panel panel-default collapse mt-3">
+                                <div class="panel-body">
                                     <ul class="nav nav-tabs">
                                         <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">{{ trans('langWallExtVideo') }}</a></li>
                                         @if ($is_editor || visible_module(MODULE_ID_VIDEO))

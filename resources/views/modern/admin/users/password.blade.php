@@ -64,10 +64,10 @@
                                 {!! showSecondFactorChallenge() !!}
                                 <div class='row'>
                                     <div class='col-6'>
-                                        <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='changePass' value='{{ trans('langModify') }}'>
+                                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='changePass' value='{{ trans('langModify') }}'>
                                     </div>
                                     <div class='col-6'>
-                                         <a class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='{{ $urlServer }}modules/admin/edituser.php?u={{ urlencode(getDirectReference($_REQUEST['userid'])) }}'>{{ trans('langCancel') }}</a>
+                                         <a class='btn btn-outline-secondary cancelAdminBtn w-100' href='{{ $urlServer }}modules/admin/edituser.php?u={{ urlencode(getDirectReference($_REQUEST['userid'])) }}'>{{ trans('langCancel') }}</a>
                                     </div>
                                 </div>
                                 

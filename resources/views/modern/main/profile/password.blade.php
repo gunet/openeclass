@@ -97,10 +97,10 @@
                                     <div class='col-12'>
                                         <div class='row'>
                                             <div class='col-6'>
-                                               <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100' name='submit' value='{{ trans('langModify') }}'>
+                                               <input type='submit' class='btn btn-primary submitAdminBtn w-100' name='submit' value='{{ trans('langModify') }}'>
                                             </div>
                                             <div class='col-6'>
-                                                <a href='display_profile.php' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>
+                                                <a href='display_profile.php' class='btn btn-outline-secondary cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>
                                             </div>
                                         </div>
                                        

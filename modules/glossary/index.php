@@ -312,7 +312,7 @@ if ($is_editor) {
         
             form_buttons(array(
                     array(
-                        'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                        'class' => 'btn-primary submitAdminBtn',
                         'text' => $langSave,
                         'value'=> $submit_value,
                         'name' => 'submit'

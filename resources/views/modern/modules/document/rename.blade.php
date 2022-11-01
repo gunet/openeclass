@@ -12,22 +12,22 @@
 						</div>
 					</div>
 
-					<div class='form-group mt-3'>
+					<div class='form-group mt-4'>
 					    @if($menuTypeID == 3 or $menuTypeID == 1)
-                        <div class='col-12'>
-                            <div class='row'>
-                                <div class='col-6'>
-                                    <button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit'>{{ trans('langRename') }}</button>
-                                </div>
-                                <div class='col-6'>
-                                    <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
-                                </div>
-                            </div>
+                        <div class='col-12 d-inline-flex'>
+                            
+                               
+                                    <button class='btn btn-primary submitAdminBtn' type='submit'>{{ trans('langRename') }}</button>
+                               
+                                
+                                    <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                              
+                           
                         </div>
                         @else
 						<div class='col-offset-2 col-10'>
                             <button class='btn btn-primary btn-sm' type='submit'>{{ trans('langRename') }}</button>
-                            <a class='btn btn-secondary btn-sm' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                            <a class='btn btn-outline-secondary btn-sm' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
 						</div>
 						@endif
 					</div>

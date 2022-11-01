@@ -156,13 +156,13 @@ $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langGrou
             <div class='form-group mt-3'>
                 <textarea class='form-control' name='user_info' rows='10'>" . q(Session::get('user_info')) . "</textarea>
             </div>
-            <div class='form-group mt-5'>
+            <div class='form-group mt-4'>
                 <div class='row'>
                    <div class='col-6'>
-                       <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit' value='$langAdd'>
+                       <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='$langAdd'>
                    </div>
                    <div class='col-6'>
-                     <a href='group_space.php?course=$course_code&amp;group_id=$group_id' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
+                     <a href='group_space.php?course=$course_code&amp;group_id=$group_id' class='btn btn-outline-secondary cancelAdminBtn w-100'>$langCancel</a>
                    </div>
                 </div>
                 

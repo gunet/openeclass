@@ -116,7 +116,7 @@ if (isset($_GET['add'])) {
 
 
                 <div class='form-group'>
-                <label for='surname' class='col-sm-6 control-label-notes'>$langSurname:</label>
+                <label for='surname' class='col-sm-6 control-label-notes'>$langSurname</label>
                 <div class='col-sm-12'>
                     <input class='form-control' id='surname' type='text' name='search_surname' value='" . q($search_surname) . "' placeholder='$langSurname'></div>
                 </div>
@@ -124,7 +124,7 @@ if (isset($_GET['add'])) {
 
 
                 <div class='form-group mt-3'>
-                <label for='name' class='col-sm-6 control-label-notes'>$langName:</label>
+                <label for='name' class='col-sm-6 control-label-notes'>$langName</label>
                 <div class='col-sm-12'>
                     <input class='form-control' id='name' type='text' name='search_givenname' value='" . q($search_givenname) . "' placeholder='$langName'></div>
                 </div>
@@ -132,7 +132,7 @@ if (isset($_GET['add'])) {
 
 
                 <div class='form-group mt-3'>
-                <label for='username' class='col-sm-6 control-label-notes'>$langUsername:</label>
+                <label for='username' class='col-sm-6 control-label-notes'>$langUsername</label>
                 <div class='col-sm-12'>
                     <input class='form-control' id='username' type='text' name='search_username' value='" . q($search_username) . "' placeholder='$langUsername'></div>
                 </div>
@@ -140,23 +140,23 @@ if (isset($_GET['add'])) {
 
 
                 <div class='form-group mt-3'>
-                <label for='am' class='col-sm-6 control-label-notes'>$langAm:</label>
+                <label for='am' class='col-sm-6 control-label-notes'>$langAm</label>
                 <div class='col-sm-12'>
                     <input class='form-control' id='am' type='text' name='search_am' value='" . q($search_am) . "' placeholder='$langAm'></div>
                 </div>
 
 
 
-                <div class='form-group mt-5'>
-                <div class='col-12'>
-                    <div class='row'>
-                       <div class='col-6'>
-                          <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='search' value='$langSearch'>
-                       </div>
-                       <div class='col-6'>
-                       <a class='btn btn-secondary btn-sm cancelAdminBtn w-100' href='index.php?course=$course_code'>$langCancel</a>
-                       </div>
-                    </div>
+                <div class='form-group mt-4'>
+                <div class='col-12 d-inline-flex'>
+                   
+                       
+                      <input class='btn btn-primary submitAdminBtn' type='submit' name='search' value='$langSearch'>
+                      
+                      
+                       <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='index.php?course=$course_code'>$langCancel</a>
+                      
+                   
                    
                     
                 </div>

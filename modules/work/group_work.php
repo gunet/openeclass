@@ -146,16 +146,16 @@ function show_assignments() {
                             <textarea name='comments' rows='4' cols='60' class='form-control'></textarea>
                         </div>
                     </div>
-                    <div class='form-group mt-5'>
-                        <div class='col-12'>
-                            <div class='row'>
-                                <div class='col-6'>
-                                    <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='$langSubmit'>
-                                </div>
-                                <div class='col-6'>
-                                    <a class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='$urlServer/modules/group/document.php?course=$course_code&group_id=$group_id'>$langCancel</a>
-                                </div>
-                            </div>
+                    <div class='form-group mt-4'>
+                        <div class='col-12 d-inline-flex'>
+                            
+                               
+                                    <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
+                              
+                                
+                                    <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='$urlServer/modules/group/document.php?course=$course_code&group_id=$group_id'>$langCancel</a>
+                               
+                          
                                
                                
                         </div>

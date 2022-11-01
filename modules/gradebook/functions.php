@@ -205,28 +205,25 @@ function new_gradebook() {
                         <span class='help-block'>$degreerange_error</span>
                     </div>
                 </div>
-                <div class='form-group mt-5'>
-                    <div class='col-12'>
-                        <div class='row'>
-                           <div class='col-6'>" 
+                <div class='form-group mt-4'>
+                    <div class='col-12 d-inline-flex'>
+                       
+                           " 
                                 .form_buttons(array(
                                     array(
-                                            'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                            'class' => 'btn-primary submitAdminBtn',
                                             'text' => $langSave,
                                             'name' => 'newGradebook',
                                             'value'=> $langInsert
+                                    ),
+                                    array(
+                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                         )
                                     )). 
-                            "</div>
-                            <div class='col-6'>"
-                            .form_buttons(array(
-                                array(
-                                    'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
-                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                                    )
-                                )).
-                            "</div>
-                        </div>
+                            "
+                            
+                        
                     </div>
                 </div>
             ". generate_csrf_token_form_field() ."
@@ -384,28 +381,25 @@ function gradebook_settings($gradebook_id) {
                                 <span class='help-block'>$degreerange_error</span>
                             </div>
                         </div>
-                        <div class='form-group mt-5'>
-                            <div class='col-12'>
-                                <div class='row'>
-                                   <div class='col-6'>
+                        <div class='form-group mt-4'>
+                            <div class='col-12 d-inline-flex'>
+                               
+                                 
                                       ".form_buttons(array(
                                         array(
-                                            'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                            'class' => 'btn-primary submitAdminBtn',
                                             'text' => $langSave,
                                             'name' => 'submitGradebookSettings',
                                             'value'=> $langGradebookUpdate
-                                        )
-                                    ))."
-                                   </div>
-                                   <div class='col-6'>
-                                      ".form_buttons(array(
+                                        ),
                                         array(
-                                            'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                            'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                                             'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . ""
                                         )
                                     ))."
-                                   </div>
-                                </div>
+                                  
+                                  
+                               
                             </div>
                         </div>
                     </fieldset>
@@ -517,29 +511,26 @@ function user_gradebook_settings() {
                             </div>
                         </div>
                     </div>
-                    <div class='form-group mt-5'>
-                        <div class='col-12'>
-                           <div class='row'>
-                              <div class='col-6'>
+                    <div class='form-group mt-4'>
+                        <div class='col-12 d-inline-flex'>
+                      
+                            
                                  ".form_buttons(array(
                                     array(
-                                        'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                        'class' => 'btn-primary submitAdminBtn',
                                         'text' => $langRefreshList,
                                         'name' => 'resetGradebookUsers',
                                         'value'=> $langAttendanceUpdate,
                                         'javascript' => "selectAll('participants_box',true)"
-                                    )
-                                ))."
-                              </div>
-                              <div class='col-6'>
-                                ".form_buttons(array(
+                                    ),
                                     array(
-                                        'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . "&amp;gradebookBook=1"
                                     )
                                 ))."
-                              </div>
-                           </div>
+                             
+                             
+                          
                         </div>
                     </div>
                 ". generate_csrf_token_form_field() ."
@@ -1554,28 +1545,25 @@ function add_gradebook_other_activity($gradebook_id) {
                             }
                             $tool_content .= "/></div></div>";
                         }
-                        $tool_content .= "<div class='form-group mt-5'>
-                                <div class='col-12'>
-                                   <div class='row'>
-                                      <div class='col-6'>
+                        $tool_content .= "<div class='form-group mt-4'>
+                                <div class='col-12 d-inline-flex'>
+                                  
+                                    
                                         ".form_buttons(array(
                                             array(
-                                                'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                                'class' => 'btn-primary submitAdminBtn',
                                                 'text' => $langSave,
                                                 'name' => 'submitGradebookActivity',
                                                 'value'=> $langAdd
-                                            )
-                                        ))."
-                                      </div>
-                                      <div class='col-6'>
-                                        ".form_buttons(array(
+                                            ),
                                             array(
-                                                'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
+                                                'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                                                 'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                             )
                                         ))."
-                                      </div>
-                                   </div>
+                                    
+                                     
+                                   
                                 </div></div>";
                         if (isset($_GET['modify'])) {
                             $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($gradebookActivityToModify) . "'>";

@@ -82,9 +82,9 @@ if ($can_upload) {
         $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
         $pageName = $langDownloadFile;
         $fileinput = "
-        <div class='form-group'>
-          <label for='fileCloudName' class='col-sm-12 control-label-notes'>$langCloudFile</label>
-          <div class='col-sm-12'>
+        <div class='row form-group'>
+          <label for='fileCloudName' class='col-12 control-label-notes'>$langCloudFile</label>
+          <div class='col-12'>
             <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='".q($pendingCloudUpload)."'>
             <input type='text' class='form-control' name='fileCloudName' value='" . q(CloudFile::fromJSON($pendingCloudUpload)->name()) . "' readonly>
           </div>
@@ -93,20 +93,21 @@ if ($can_upload) {
         $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
         $pageName = $langExternalFile;
         $fileinput = "
-        <div class='form-group'>
-          <label for='fileURL' class='col-sm-12 control-label-notes'>$langExternalFileInfo:</label>
-          <div class='col-sm-12'>
+        <div class='row form-group'>
+          <label for='fileURL' class='col-12 control-label-notes'>$langExternalFileInfo</label>
+          <div class='col-12'>
             <input type='text' class='form-control' id='fileURL' name='fileURL'>
           </div>
         </div>";
     } else {
         $pageName = $langDownloadFile;
         $fileinput = "
-        <div class='input-group'>
-          <label for='userFile' class='input-group-text control-label-notes p-0 ps-2 pe-2'>$langPathUploadFile:</label>
+        <div class='form-group d-inline-flex'>
+          <label for='userFile' class='control-label-notes me-2 mt-1'>$langPathUploadFile:</label>
+          
           " .
                 fileSizeHidenInput() .
-                CloudDriveManager::renderAsButtons() . "<input class='form-control' type='file' id='userFile' name='userFile'></span>
+                CloudDriveManager::renderAsButtons() . "<input type='file' id='userFile' name='userFile'></span>
           
         </div>";
     }
@@ -270,30 +271,25 @@ if ($can_upload) {
 
 
       $tool_content .= "
-      <div class='form-group mt-5'>
-        <div class='col-12'>
-          <div class='row'>
-             <div class='col-6'>"
+      <div class='form-group mt-4'>
+        <div class='col-12 d-inline-flex'>
+          
+             "
                 .
                 form_buttons(array(
                     array(
-                        'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                        'class' => 'btn-primary submitAdminBtn',
                         'text' => $langUpload
-                    )
-                ))
-                .
-             "</div>
-             <div class='col-6'>"
-                .
-                form_buttons(array(
+                    ),
                     array(
-                        'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
-                        'href' => "index.php?course=$course_code",
-                    )
+                      'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                      'href' => "index.php?course=$course_code",
+                  )
                 ))
                 .
-             "</div>
-          </div>
+             "
+             
+         
         </div>
       </div>
     </form>

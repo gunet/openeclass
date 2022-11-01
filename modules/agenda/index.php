@@ -265,18 +265,18 @@ if ($is_editor) {
             <input type='hidden' id = 'id' name='id' value='$id'>"
                 . "<input type='hidden' name='rep' id='rep' value='$applytogroup'>";
         @$tool_content .= "
-            <div class='form-group'>
-                <label for='event_title' class='col-sm-6 control-label-notes'>$langTitle :</label>
-                <div class='col-sm-12'>
+            <div class='row form-group'>
+                <label for='event_title' class='col-md-3 col-12 control-label-notes text-capitalize'>$langTitle</label>
+                <div class='col-md-9 col-12'>
                     <input type='text' class='form-control' id='event_title' name='event_title' placeholder='$langTitle' value='" . q($event_title) . "'>
                 </div>
             </div>
 
             
 
-            <div class='input-append date form-group mt-3' data-date='$langDate' data-date-format='dd-mm-yyyy'>
-                <label for='startdate' class='col-sm-6 control-label-notes'>$langDate :</label>
-                <div class='col-sm-12'>
+            <div class='row input-append date form-group mt-4' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+                <label for='startdate' class='col-md-3 col-12 control-label-notes text-capitalize'>$langDate</label>
+                <div class='col-md-9 col-12'>
                     <div class='input-group'>
                         <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
                         <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
@@ -286,9 +286,9 @@ if ($is_editor) {
 
            
 
-            <div class='input-append bootstrap-timepicker form-group mt-3'>
-                <label for='durationcal' class='col-sm-6 control-label-notes'>$langDuration <small>$langInHour</small></label>
-                <div class='col-sm-12'>
+            <div class='row input-append bootstrap-timepicker form-group mt-4'>
+                <label for='durationcal' class='col-md-3 col-12 control-label-notes text-capitalize'>$langDuration <small>$langInHour</small></label>
+                <div class='col-md-9 col-12'>
                     <div class='input-group add-on'>
                         <input class='form-control' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
                         <div class='input-group-addon add-on'><span class='fa fa-clock-o fa-fw'></span></div>
@@ -296,11 +296,12 @@ if ($is_editor) {
                 </div>
             </div>";
         /**** Recursion paramneters *****/
-             $tool_content .= "<div class='form-group mt-3'>
-                                    <label for='Repeat' class='col-sm-6 control-label-notes'>$langRepeat $langEvery</label>
+             $tool_content .= "<div class='row form-group mt-4'>
+                                    <label for='Repeat' class='col-md-3 col-12 control-label-notes text-capitalize'>$langRepeat $langEvery</label>
+                                    
+                                    <div class='col-md-9 col-12'>
                                     <div class='row'>
-                                    <div class='col-md-6 col-12'>
-                                <div class='col-sm-12'>
+                                <div class='col-md-6 col-12'>
                                     <select class='form-select' name='frequencynumber' id='frequencynumber'>
                                     <option value='0'>$langSelectFromMenu</option>";
             for($i = 1;$i<10;$i++) {
@@ -311,24 +312,24 @@ if ($is_editor) {
                 $tool_content .= ">$i</option>";
             }
             
-            $tool_content .= "</select></div></div>";            
+            $tool_content .= "</select></div>";            
             $selected = array('D'=>'', 'W'=>'','M'=>'');
             if($is_recursive_event){
                 $selected[$repeatperiod] = ' selected';
             }
-            $tool_content .= "<div class='col-md-6 col-12 mt-md-0 mt-3'><div class='col-sm-12'>
+            $tool_content .= "<div class='col-md-6 col-12 mt-md-0 mt-3'>
                         <select class='form-select' name='frequencyperiod' id='frequencyperiod'>
                             <option value=\"\">$langSelectFromMenu...</option>
                             <option value=\"D\"{$selected['D']}>$langDays</option>
                             <option value=\"W\"{$selected['W']}>$langWeeks</option>
                             <option value=\"M\"{$selected['M']}>$langMonthsAbstract</option>
-                        </select></div>
-                        </div></div>
+                        </select>
+                        </div></div></div>
                     ";
-            $tool_content .= "<div class='input-append date mt-3' data-date='$langDate' data-date-format='dd-mm-yyyy'>
-                <label for='Enddate' class='col-sm-6 control-label-notes'>$langUntil :</label>
-                    <div class='col-sm-12'>
-                        <div class='input-group'>
+            $tool_content .= "<div class='row input-append date mt-4' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+                <label for='Enddate' class='col-md-3 col-12 control-label-notes text-capitalize'>$langUntil</label>
+                    <div class='col-md-9 col-12'>
+                        <div class='input-group ms-md-2'>
                             <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
                             <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                         </div>
@@ -336,40 +337,36 @@ if ($is_editor) {
                 </div>
               </div>";
         /**** end of recursion paramneters *****/
-         $tool_content .= "<div class='form-group mt-3'>
-                        <label for='Detail' class='col-sm-6 control-label-notes'>$langDetail :</label>
-                        <div class='col-sm-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
+         $tool_content .= "<div class='row form-group mt-4'>
+                        <label for='Detail' class='col-md-3 col-12 control-label-notes text-capitalize'>$langDetail</label>
+                        <div class='col-md-9 col-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
                       </div>    
                       
                       
 
-                      <div class='form-group mt-5'>
-                        <div class='col-12'>
-                            <div class='row'>
-                               <div class='col-6'>
+                      <div class='row form-group mt-4'>
+                        <div class='col-md-3 col-12'></div>
+                        <div class='col-md-9 col-12 d-inline-flex'>
+                            
+                              
                                   ".
                                   form_buttons(array(
                                       array(
-                                          'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+                                          'class' => 'btn-primary submitAdminBtn',
                                           'text'  => $langSave,
                                           'name'  => 'submitbtn',
                                           'value' => $langAddModify,
                                           'id' => 'submitbtn'
-                                      )
+                                      ),
+                                      array(
+                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                        'href' => "index.php?course=$course_code",
+                                    )
                                   ))
                                   ."
-                               </div>
-                               <div class='col-6'>
-                                   ".
-                                   form_buttons(array(
-                                       array(
-                                           'class' => 'btn-secondary btn-sm cancelAdminBtn w-100',
-                                           'href' => "index.php?course=$course_code",
-                                       )
-                                   ))
-                                   ."
-                               </div>
-                            </div>
+                               
+                               
+                          
                         </div>
                       </div>                
             </form></div></div>";

@@ -233,18 +233,18 @@ if (isset($_GET['action'])) {
                             </div>
                             $cert_hidden_id
                            
-                            <div class='form-group mt-5'>
-                                <div class='col-12'>
-                                    <div class='row'>
-                                        <div class='col-6'>
-                                           <button class='btn btn-sm btn-primary submitAdminBtn w-100' type ='submit' name='submit_cert_template'>$langUpload</button>
-                                        </div>
-                                        <div class='col-6'>
-                                           <a class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='index.php'>$langCancel</a>
-                                        </div>
+                            <div class='form-group mt-4'>
+                                <div class='col-12 d-inline-flex'>
+                                    
+                                        
+                                           <button class='btn btn-primary submitAdminBtn' type ='submit' name='submit_cert_template'>$langUpload</button>
+                                      
+                                    
+                                           <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
+                                       
                                         
                                         
-                                    </div>
+                                  
                                 </div>
                             </div>
                             </form>
@@ -300,18 +300,18 @@ if (isset($_GET['action'])) {
                             </div>
                             $badge_hidden_id
                             
-                            <div class='form-group mt-5'>
-                                <div class='col-12'>
-                                <div class='row'>
-                                <div class='col-6'>
-                                <button class='btn btn-sm btn-primary submitAdminBtn w-100' type ='submit' name='submit_badge_icon'>$langUpload</button>
-                                </div>
-                                <div class='col-6'>
-                                <a class='btn btn-sm btn-secondary cancelAdminBtn w-100' href='index.php'>$langCancel</a>
-                                </div>
+                            <div class='form-group mt-4'>
+                                <div class='col-12 d-inline-flex'>
+                                
+                               
+                                    <button class='btn btn-primary submitAdminBtn' type ='submit' name='submit_badge_icon'>$langUpload</button>
+                                
+                                
+                                    <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
+                              
                                     
                                     
-                                </div>
+                               
                             </div>
                             </form>
                             </div></div>

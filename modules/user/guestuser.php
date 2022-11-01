@@ -126,15 +126,15 @@ if (isset($_POST['submit'])) {
                 <span id='result'></span>
             </div>
         </div>
-        <div class='col-12 mt-5'>
-          <div class='row'>
-             <div class='col-6'>
-             <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit' value='$submit_label'>
-             </div>
-             <div class='col-6'>
-              <a href='index.php?course=$course_code' class='btn btn-sm btn-secondary cancelAdminBtn w-100'>$langCancel</a>
-             </div>
-          </div>
+        <div class='col-12 mt-4 d-inline-flex'>
+         
+             
+             <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='$submit_label'>
+           
+            
+              <a href='index.php?course=$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-2'>$langCancel</a>
+            
+         
           
          
         </div>
