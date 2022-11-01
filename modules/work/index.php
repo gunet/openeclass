@@ -5632,6 +5632,10 @@ function submit_grade_comments($args) {
     global $langGrades, $course_id, $langTheField, $course_code,
             $langFormErrors, $workPath, $langGradebookGrade;
 
+    if (isset($args['grade'])) {
+        $args['grade'] = fix_float($args['grade']);
+    }
+
     $id = $args['assignment']; // assignment=id_ergasias hidden pedio sto grade_edit arxeio
     $sid = $args['submission'];
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);

@@ -49,9 +49,6 @@ if (isset($_POST['moreAnswers'])) {
     $newAnswer = true;
 }
 
-function fix_float($str) {
-    return str_replace(',', '.', $str);
-}
 // the answer form has been submitted
 if (isset($submitAnswers) || isset($buttonBack)) {
 
