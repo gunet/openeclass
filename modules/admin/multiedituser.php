@@ -300,14 +300,18 @@ if (isset($_POST['submit'])) {
 
     $tool_content .= "
     <div class='col-12'><div class='alert alert-info'>$infoText</div></div>
-        <div class='col-12'>
+    <div class='row'>
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+            <div class='col-12 h-100 left-form'></div>
+        </div>
+        <div class='col-lg-6 col-12'>
         <div class='form-wrapper form-edit p-3 rounded'>
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
             <fieldset>
                 $monthsField
                 
-                <div class='form-group mt-3'>
-                    <label class='col-sm-6 control-label-notes'>$langMultiDelUserData:</label>
+                <div class='form-group'>
+                    <label class='col-sm-12 control-label-notes'>$langMultiDelUserData:</label>
                     <div class='col-sm-12'>
                         <textarea class='auth_input form-control' name='user_names' rows='30'>$usernames</textarea>
                     </div>
@@ -316,15 +320,15 @@ if (isset($_POST['submit'])) {
                 <div class='form-group mt-4'>
                     <div class='col-12 d-inline-flex'>
 
-                            <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='" . $langSubmit . "'$confirm>
-                            <a href='index.php' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                            <input class='col-6 btn btn-primary submitAdminBtn' type='submit' name='submit' value='" . $langSubmit . "'$confirm>
+                            <a href='index.php' class='col-6 btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
                        
                     </div>
                 </div>
             </fieldset>
             ". generate_csrf_token_form_field() ."
         </form>
-    </div></div>";
+    </div></div></div>";
 }
 draw($tool_content, 3, '', $head_content);
 

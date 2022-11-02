@@ -82,7 +82,7 @@
                             <div class='mt-3'></div>
                             {!! showSecondFactorChallenge() !!}
                             <div class='col-12 mt-5'>	
-                            <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSend') }}'>          
+                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSend') }}'>          
                             </div>	
                         </fieldset>
                         {!! generate_csrf_token_form_field() !!}

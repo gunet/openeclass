@@ -127,10 +127,10 @@ if (isset($_POST['toReorder'])) {
                <div class='col-12 d-inline-flex'>
                
                  
-                   <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                   <input class='col-6 btn btn-primary submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
                  
                  
-                   <a href='activity.php' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                   <a href='activity.php' class='col-6 btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
                 
              
                
@@ -222,8 +222,8 @@ $(function() {
             $heading = q($heading);
             $indirectId = getIndirectReference($item->id);
             $tool_content .= "
-      <div class='panel panel-default mt-3' data-id='$indirectId'>
-        <div class='panel-heading'>
+      <div class='panel panel-default mt-3 rounded-0' data-id='$indirectId'>
+        <div class='panel-heading rounded-0'>
           <div class='row'>
             <div class='col-md-6 col-12'>
                 <span class='control-label-notes'>$heading</span>

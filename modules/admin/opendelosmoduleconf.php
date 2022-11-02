@@ -95,17 +95,17 @@ foreach ($app->getParams() as $param) {
 
     if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
         $checked = $param->value() == 1 ? "value='0' checked" : "value='1'";
-        $boolean_field .= "<div class='form-group mt-3'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
+        $boolean_field .= "<div class='form-group mb-3'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
         $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' $checked>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
     } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
-        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<div class='form-group mb-3'>";
         $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "</label>";
         $tool_content .= "<div class='col-sm-12'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
             q($param->value()) . "</textarea></div>";
         $tool_content .= "</div>";
     } else {
-        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<div class='form-group mb-3'>";
         $tool_content .= "<label for='" . $param->name() . "' class='col-sm-12 control-label-notes'>" . $param->display() . "</label>";
         $tool_content .= "<div class='col-sm-12'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
         $tool_content .= "</div>";
@@ -116,8 +116,8 @@ $tool_content .= $boolean_field;
 $tool_content .= "<div class='form-group mt-5'>";
 $tool_content .= "<div class='col-12'>";
 $tool_content .= "<div class='row'>
-<div class='col-md-6 col-4'><button class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='submit' value='$langModify'>$langModify</button></div>
-<div class='col-md-6 col-8'><button class='btn btn-danger btn-sm submitAdminBtn w-100' type='submit' name='submit' value='clear'>$langClearSettings</button></div></div>";
+<div class='col-md-6 col-4'><button class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='$langModify'>$langModify</button></div>
+<div class='col-md-6 col-8'><button class='btn btn-outline-danger submitAdminBtn w-100' type='submit' name='submit' value='clear'>$langClearSettings</button></div></div>";
 $tool_content .= "</div>";
 $tool_content .= "</div>";
 $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."";

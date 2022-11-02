@@ -475,7 +475,7 @@ if ($all_set) {
     // add custom profile fields
     $tool_content .= render_profile_fields_form(array('origin' => 'teacher_register'));
     $tool_content .= "<div class='form-group mt-5'><div class='col-12'>
-                    <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
+                    <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
                     </div></div>
       </form>
       </div></div></div>";

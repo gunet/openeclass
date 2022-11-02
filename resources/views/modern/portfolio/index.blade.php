@@ -4,7 +4,7 @@
 
 <div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
 
-<div class="container-fluid main-container details-section">
+{{--<div class="container-fluid main-container details-section">
 
     <div class="row rowMedium">
         <div class="col-lg-12 user-details" >
@@ -199,7 +199,255 @@
             </div>
         </div>
     </div>
+</div>--}}
+
+
+<div class="container-fluid main-container details-section">
+    <div class="row rowMedium">
+        <div class="col-lg-12 user-details" >
+            <div class="row p-lg-5 ps-md-5 pe-md-5 pt-md-5 pb-md-2 ps-1 pe-2 pt-3 pb-5">
+                <nav>
+                    <div class="nav nav-tabs portfolio-tabs-menu shadow-sm" id="nav-tab" role="tablist">
+                        <button class="nav-link-portfolio nav-link active" id="nav-account-tab" data-bs-toggle="tab" data-bs-target="#nav-account" type="button" role="tab" aria-controls="nav-account" aria-selected="true"><span class='fa fa-user me-1'></span><span class='hidden-xs'>{{trans('langMyAccount')}}</span></button>
+                        <button class="nav-link-portfolio nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false"><span class='fa fa-info-circle me-1'></span><span class='hidden-xs'>{{trans('langMyProfile')}}</span></button>
+                        <button class="nav-link-portfolio nav-link" id="nav-options-tab" data-bs-toggle="tab" data-bs-target="#nav-options" type="button" role="tab" aria-controls="nav-options" aria-selected="false"><span class='fa fa-pencil me-1'></span><span class='hidden-xs'>{{trans('langOptions')}}</span></button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-account" role="tabpanel" aria-labelledby="nav-account-tab">
+                        <div class='row'>
+                            <div class='col-md-3 col-12 mt-5'>
+                                <div class="d-flex justify-content-md-center justify-content-center">
+                                    <img class='rounded-circle userImgAccount ms-md-3' src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
+                                </div>
+                            </div>
+                            <div class='col-md-9 col-12'>
+                                <div class='col-12 mt-5'>
+                                    <div class='row'>
+                                        <div class='col-12'>
+                                            <div class='row'>
+                                                <div class='col-xl-4 col-md-6 col-12'>
+                                                    <div class='panel panel-admin border-0 bg-white min-hg-panel'>
+                                                        <div class='panel-heading bg-body'>
+                                                                <div class='col-12 Help-panel-heading'>
+                                                                    <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{trans('langUsername')}}</span>
+                                                                </div>
+                                                        </div>
+                                                        <div class='panel-body ps-4 pe-3 pt-0'>
+                                                            <span class='text-dark'> {{ $_SESSION['uname'] }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class='col-xl-4 col-md-6 col-12'>
+                                                    <div class='panel panel-admin border-0 bg-white min-hg-panel mt-md-0 mt-3'>
+                                                            <div class='panel-heading bg-body'>
+                                                                <div class='col-12 Help-panel-heading'>
+                                                                    <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>Email</span>
+                                                                </div>
+                                                        </div>
+                                                        <div class='panel-body ps-4 pe-3 pt-0'>
+                                                            <span class='text-dark'> {{ $userdata->email }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class='col-xl-4 col-12'>
+                                                    <div class='panel panel-admin border-0 bg-white min-hg-panel mt-xl-0 mt-3'>
+                                                            <div class='panel-heading bg-body'>
+                                                                <div class='col-12 Help-panel-heading'>
+                                                                    <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langFaculty') }}</span>
+                                                                </div>
+                                                        </div>
+                                                        <div class='panel-body ps-4 pe-3 pt-0'>
+                                                            <span class='text-dark'> 
+                                                                    @php
+                                                                        $user = new User();
+                                                                        $departments = $user->getDepartmentIds($uid);
+                                                                    @endphp
+                                                                    @foreach ($departments as $dep)
+                                                                        {!! $tree->getFullPath($dep) !!}
+                                                                    @endforeach
+                                                                </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='col-12 mt-md-3'>
+                                            <div class='row'>
+                                                <div class='col-xl-4 col-md-6 col-12'>
+                                                    <div class='panel panel-admin border-0 bg-white mt-md-0 mt-3 min-hg-panel'>
+                                                        <div class='panel-heading bg-body'>
+                                                            <div class='col-12 Help-panel-heading'>
+                                                                <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{trans('langName')}}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class='panel-body ps-4 pe-3 pt-0'>
+                                                            <span class='text-dark'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class='col-xl-4 col-md-6 col-12'>
+                                                    <div class='panel panel-admin border-0 bg-white min-hg-panel mt-md-0 mt-3'>
+                                                        <div class='panel-heading bg-body'>
+                                                            <div class='col-12 Help-panel-heading'>
+                                                                <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langStatus') }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class='panel-body ps-4 pe-3 pt-0'>
+                                                            <span class='text-dark'> 
+                                                                @if(($session->status == USER_TEACHER))
+                                                                    {{ trans('langMetaTeacher') }}
+                                                                @elseif(($session->status == USER_STUDENT))
+                                                                    {{ trans('langCStudent') }}
+                                                                @else
+                                                                    {{ trans('langAdministrator')}}
+                                                                @endif
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class='col-xl-4 col-12'>
+                                                    <div class='panel panel-admin border-0 bg-white min-hg-panel mt-xl-0 mt-3'>
+                                                        <div class='panel-heading bg-body'>
+                                                            <div class='col-12 Help-panel-heading'>
+                                                                <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langProfileLastVisit') }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class='panel-body ps-4 pe-3 pt-0'>
+                                                            <span class='text-dark'> {{ format_locale_date(strtotime($lastVisit->when)) }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <div class='row'>
+                            <div class='col-md-3 col-12 mt-5'>
+                                <div class="d-flex justify-content-md-center justify-content-center">
+                                    <img class='rounded-circle userImgAccount ms-md-3' src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
+                                </div>
+                            </div>
+                            <div class='col-md-9 col-12 mt-5'>
+                                <div class='col-12'>
+                                    <div class='row'>
+                                        <div class='col-md-4 col-12'>
+                                            <div class='panel panel-admin border-0 bg-white min-hg-panel'>
+                                                <div class='panel-heading bg-body'>
+                                                    <div class='col-12 Help-panel-heading'>
+                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{trans('langPhone')}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class='panel-body ps-4 pe-3 pt-0'>
+                                                    <span class='text-dark'> 
+                                                        @if(!empty($userdata->phone))
+                                                        {{ $userdata->phone }}
+                                                        @else
+                                                        {{trans('langNoInfoAvailable')}}
+                                                        @endif
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-4 col-12'>
+                                            <div class='panel panel-admin border-0 bg-white mt-md-0 mt-3 min-hg-panel'>
+                                                <div class='panel-heading bg-body'>
+                                                    <div class='col-12 Help-panel-heading'>
+                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langAm') }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class='panel-body ps-4 pe-3 pt-0'>
+                                                    <span class='text-dark'> 
+                                                        @if(!empty($userdata->am))
+                                                        {{ $userdata->am }}
+                                                        @else
+                                                        {{trans('langNoInfoAvailable')}}
+                                                        @endif</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-4 col-12'>
+                                            <div class='panel panel-admin border-0 bg-white mt-md-0 mt-3 min-hg-panel'>
+                                                <div class='panel-heading bg-body'>
+                                                    <div class='col-12 Help-panel-heading'>
+                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langProfileMemberSince') }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class='panel-body ps-4 pe-3 pt-0'>
+                                                    <span class='text-dark'> {{ $userdata->registered_at }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='col-12'>
+                                            <div class='panel panel-admin border-0 bg-white mt-3 min-hg-panel'>
+                                                <div class='panel-heading bg-body'>
+                                                    <div class='col-12 Help-panel-heading'>
+                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langAboutMe') }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class='panel-body ps-4 pe-3 pt-0'>
+                                                    @if (!empty($userdata->description))
+                                                        {!! standard_text_escape($userdata->description) !!}
+                                                    @else
+                                                        <p class='text-center mb-0'>{{ trans('langNoInfoAvailable') }}</p>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-options" role="tabpanel" aria-labelledby="nav-options-tab">
+                        <div class='row'>
+                            <div class='col-md-3 col-12 mt-5'>
+                                <div class="d-flex justify-content-md-center justify-content-center">
+                                    <img class='rounded-circle userImgAccount ms-md-3' src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
+                                </div>
+                            </div>
+                            <div class='col-md-9 col-12 mt-5'>
+                                <div class="row mt-3">
+                                    <div class='col-12'>
+                                        <div class="py-1">
+                                            <span class='text-uppercase fw-bold fst-italic text-warning'>*{{trans('langNotice')}}</span>
+                                            <br>{{ trans('langExplain') }}
+                                        </div>
+                                    </div>
+                                    <div class='col-12 d-inline-flex mt-2'>
+                                        <div class="py-1" >
+                                            <a href="{{ $urlAppend }}main/profile/profile.php" class="btn btn-sm btn-primary btn-rounded"><i class="fas fa-pen me-1"></i>{{ trans('langModProfile') }}</a>
+                                        </div>
+                                        <div class="py-1 ms-2">
+                                            <a href="{{$urlAppend}}main/unreguser.php" class="btn btn-sm btn-outline-danger btn-rounded"><i class="fa fa-trash-o me-1"></i>{{ trans('langUnregUser') }} </a>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div class="container-fluid main-container cources-section mt-lg-3 mt-0">
     <div class="row rowMedium">
@@ -322,7 +570,7 @@
             <div class='panel panel-admin border-0 ps-md-3 pe-md-3 pt-md-2 mb-md-2 bg-white mt-4'>
                 <div class='panel-heading bg-body'>
                     <div class='col-12 Help-panel-heading'>
-                        <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoAnnouncements') }}</span>
+                        <span class='panel-title text-capitalize Help-text-panel-heading'>{{ trans('langMyPersoAnnouncements') }}</span>
                     </div>
                 </div>
                 <div class='panel-body pt-1 pb-1 ps-3 pe-3'>
@@ -333,7 +581,7 @@
                     @endif
                 </div>
                 <div class='panel-footer d-flex justify-content-end pt-0'>
-                    <a href="{{$urlAppend}}modules/announcements/myannouncements.php" class='mt-0'>
+                    <a href="{{$urlAppend}}modules/announcements/myannouncements.php" class='mt-1'>
                         {{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span>
                     </a>
                 </div>
@@ -344,14 +592,14 @@
             <div class='panel panel-admin border-0 ps-md-3 pe-md-3 pt-md-2 mb-md-2 bg-white mt-4'>
                 <div class='panel-heading bg-body'>
                     <div class='col-12 Help-panel-heading'>
-                     <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoMessages') }}</span>
+                     <span class='panel-title text-capitalize Help-text-panel-heading'>{{ trans('langMyPersoMessages') }}</span>
                     </div>
                 </div>
                 <div class='panel-body pt-1 pb-1 ps-3 pe-3'>
                     {!! $user_messages !!}
                 </div>
                 <div class='panel-footer d-flex justify-content-end pt-0'>
-                    <a href="{{$urlAppend}}modules/message/index.php" class='mt-0'>
+                    <a href="{{$urlAppend}}modules/message/index.php" class='mt-1'>
                         {{ trans('langAllMessages') }} <span class='fa fa-arrow-right'></span>
                     </a>
                 </div>

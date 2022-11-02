@@ -51,7 +51,7 @@
                                 </div>
                                 <input type='hidden' name='auth' value='{{ getIndirectReference(intval($auth)) }}'>  
                                 <div class='col-12 mt-5'>
-                                    <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                 </div>
                             </fieldset>
                             {!! generate_csrf_token_form_field() !!}    

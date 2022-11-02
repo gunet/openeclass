@@ -71,7 +71,7 @@
                         {!! showSecondFactorChallenge() !!}
                         <div class='form-group mt-5'>
                           <div class='col-12'>
-                            <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmitChanges') }}'>
+                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmitChanges') }}'>
                           </div>
                         </div>
                         {!! generate_csrf_token_form_field() !!}

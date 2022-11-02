@@ -120,8 +120,8 @@ $tool_content .=
 
     <div class='form-group mt-3'>
         <div class='col-sm-10 col-sm-offset-2'>
-            <input class='btn btn-primary btn-sm' type='submit' name='submit' value='$langSubmit'>
-            <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn btn-secondary btn-sm'>$langCancel</a>
+            <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+            <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn btn-outline-secondary'>$langCancel</a>
         </div>
     </div>";
 

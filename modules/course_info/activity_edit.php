@@ -103,10 +103,10 @@ $tool_content .= "
             <div class='col-12 mt-4'>
                 <div class='row'>
                    <div class='col-6'>
-                        <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='" . q($langSubmit) . "'>
                    </div>
                    <div class='col-6'>
-                        <a href='" . q($courseHome) . "' class='btn btn-sm btn-outline-secondary cancelAdminBtn w-100'>" . q($langCancel) . "</a>
+                        <a href='" . q($courseHome) . "' class='btn btn-outline-secondary cancelAdminBtn w-100'>" . q($langCancel) . "</a>
                    </div>
                 </div>
                

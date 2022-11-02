@@ -189,10 +189,10 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                   <div class='col-12 d-inline-flex'>
 
 
-                     <input class='btn btn-primary submitAdminBtn' type='submit' name='submitNote' value='$langAdd'> 
+                     <input class='col-6 btn btn-primary submitAdminBtn' type='submit' name='submitNote' value='$langAdd'> 
 
 
-                     <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
+                     <a class='col-6 btn btn-outline-secondary cancelAdminBtn ms-1' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
                     
                   
 

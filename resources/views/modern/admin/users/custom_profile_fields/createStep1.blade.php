@@ -50,7 +50,7 @@
                                 </div>
                              
                                 <div class='col-12 mt-5'>
-                                    <input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='add_field_proceed_step2' value='{{ trans('langNext') }}'>
+                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='add_field_proceed_step2' value='{{ trans('langNext') }}'>
                                 </div>
                                 </fieldset>
                                 {!! generate_csrf_token_form_field() !!}

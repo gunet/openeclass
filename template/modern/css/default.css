@@ -96,8 +96,6 @@ a{ text-decoration: none; }
 
 textarea {width:100%;}
 
-.Help-text-panel-heading {color: #4682B4; }
-
 .tool-sidebar { color: #f5f5f5}
 
 /* --------------------------------------------- BREADCRUMBS ----------------------------------------*/
@@ -625,6 +623,22 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   /* -------------------------------------------------------------------------------------------------*/
   /* -------------------------------------------------------------------------------------------------*/
 
+  .userImgAccount { height:200px; width:200px; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); border:solid 2px white;}
+
+  @media(min-width:768px) and (max-width:1199px){
+    .userImgAccount { height:150px; width:150px;}
+  }
+
+  .min-hg-panel{ min-height:100px; }
+
+  .portfolio-tabs-menu{ border: 0;}
+
+  .nav-link-portfolio.nav-link{ color:#000000;} 
+
+  .nav-link-portfolio.nav-link.active{ border:0 ; border-bottom: solid 2px #4682B4 ; background-color:#f8f9fa; color:#4682B4; font-weight: 600;}
+
+  .Help-text-panel-heading-Portfolio {color: #4682B4; font-size:13.5px;}
+
   .calendar_announce_message_col{ background-color: #f8f9fa; border-top-right-radius: 15px; border-bottom-right-radius:15px;}
   
   .lesson-image:hover{ opacity:0.5; }
@@ -864,7 +878,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   }
   
   /* the titles of action_bars */
-  .hidden-xs{ color:white; }
+  /* .hidden-xs{ color:white; } */
 
   .btn-group .hidden-xs{ padding-left: 2px; }
 

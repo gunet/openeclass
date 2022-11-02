@@ -51,22 +51,22 @@ if (!isset($_POST['doit'])) {
                 <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
 
                   <div class='form-group'>
-                    <div class='col-sm-12'>
+                    <div class='col-sm-12 control-label-notes'>
                       $langConfirm
                     </div>
                   </div>
 
                   <div class='form-group mt-3'>
                     <div class='d-inline-flex align-items-center'>
-                      <label class='control-label-notes pe-2'>$langYes:</label>
-                      <button class='btn btn-danger' name='doit'><i class='fa fa-trash-o'></i> $langUnregUser</button>
+                      <label class='pe-2'>$langYes:</label>
+                      <button class='btn btn-sm btn-danger' name='doit'><i class='fa fa-trash-o'></i> $langUnregUser</button>
                     </div>
                   </div>
 
                   <div class='form-group mt-3'>
                     <div class='d-inline-flex align-items-center'>
-                      <label class='control-label-notes pe-2'>$langNo:</label>
-                      <a href='{$urlAppend}main/profile/display_profile.php' class='btn btn-secondary'><i class='fa fa-reply'></i> $langCancel</a>
+                      <label class='pe-2'>$langNo:</label>
+                      <a href='{$urlAppend}main/profile/display_profile.php' class='btn btn-sm btn-outline-secondary'><i class='fa fa-reply'></i> $langCancel</a>
                     </div>
                   </div>
                 </form>

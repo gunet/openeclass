@@ -47,7 +47,7 @@
                                     <div class="col-sm-12">
                                         <select name="selectedMonth" class="form-select">{!! $months !!}</select>
                                     </div>
-                                    <input class="btn btn-sm btn-primary mt-5 submitAdminBtn w-100" type="submit" name="btnUsage" value="{{ trans('langSubmit') }}">
+                                    <input class="btn btn-primary mt-5 submitAdminBtn w-100" type="submit" name="btnUsage" value="{{ trans('langSubmit') }}">
                                 </div>
                             </form>
                         </div>

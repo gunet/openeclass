@@ -283,7 +283,7 @@ $tool_content .= "<div class='form-group mt-5'><div class='col-12'>
   <div class='col-6'>
     ".form_buttons(array(
         array(
-            'class' => 'btn-primary btn-sm submitAdminBtn w-100',
+            'class' => 'btn-primary submitAdminBtn w-100',
             'text' => $langSubmit,
             'name' => 'submit',
             'value'=> $langSubmit
@@ -293,7 +293,7 @@ $tool_content .= "<div class='form-group mt-5'><div class='col-12'>
   <div class='col-6'>
     ".form_buttons(array(
         array(
-            'class' => 'btn-outline-secondary btn-sm cancelAdminBtn w-100',
+            'class' => 'btn-outline-secondary cancelAdminBtn w-100',
             'href' => "index.php?course=$course_code",
         )
     ))."

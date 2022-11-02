@@ -1156,8 +1156,8 @@
 
                                     <div class='form-group mt-3'>
                                         <div class='col-sm-12'>
-                                            <input class='btn btn-primary' type='submit' name='submit' value='{{ trans('langModify') }}'>
-                                            <a class='btn btn-secondary' href='index.php'>{{ trans('langCancel') }}</a>
+                                            <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                            <a class='btn btn-outline-secondary cancelAdminBtn' href='index.php'>{{ trans('langCancel') }}</a>
                                         </div>
                                     </div>
                                     {!! generate_csrf_token_form_field() !!}

@@ -170,7 +170,7 @@
                                 <div class='form-group mt-5'>
                                     <div class='col-12'>
                                         
-                                        <input class='btn btn-primary btn-sm submitAdminBtn w-100' type='submit' name='create_restored_course' value='{{ trans('langOk') }}'>
+                                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='create_restored_course' value='{{ trans('langOk') }}'>
                                         <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' />
                                     </div>
                                 </div>
