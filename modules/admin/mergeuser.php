@@ -33,12 +33,14 @@ $toolName = $langUserMerge;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
 
+$data['merge_completed'] = false;
+
 if (isset($_REQUEST['u'])) {
     $data['u'] = $u = intval($_REQUEST['u']);
     $navigation[] = array('url' => "edituser.php?u=$u", 'name' => $langEditUser);
     if ($u == 1 or get_admin_rights($u) >= 0) {
         //Session::Messages($langUserMergeAdminForbidden, 'alert-danger');
-        Session::flash('message',$langUserMergeAdminForbidden); 
+        Session::flash('message',$langUserMergeAdminForbidden);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/admin/edituser.php?u=$u");
     }
@@ -69,7 +71,7 @@ if (isset($_REQUEST['u'])) {
                 if ($target->id == $u) {
                     $target = false;
                     //Session::Messages($langMergeUserWithSelf, 'alert-warning');
-                    Session::flash('message',$langMergeUserWithSelf); 
+                    Session::flash('message',$langMergeUserWithSelf);
                     Session::flash('alert-class', 'alert-warning');
                 } else {
                     $target = (array) $target;
@@ -77,7 +79,7 @@ if (isset($_REQUEST['u'])) {
             } else {
                 $target = false;
                 //Session::Messages(q(sprintf($langChangeUserNotFound, $_POST['target'])), 'alert-warning');
-                Session::flash('message',q(sprintf($langChangeUserNotFound, $_POST['target']))); 
+                Session::flash('message',q(sprintf($langChangeUserNotFound, $_POST['target'])));
                 Session::flash('alert-class', 'alert-warning');
             }
         }
@@ -150,7 +152,8 @@ function do_user_merge($source, $target) {
                                      MIN(status) AS status, MAX(tutor) AS tutor,
                                      MAX(editor) AS editor, MAX(reviewer) AS reviewer, MIN(reg_date) AS reg_date,
                                      MAX(receive_mail) AS receive_mail,
-                                     MAX(document_timestamp) AS document_timestamp
+                                     MAX(document_timestamp) AS document_timestamp,
+                                     favorite
                                  FROM course_user
                                  WHERE user_id IN ($source_id, $target_id)
                                  GROUP BY course_id");
@@ -189,7 +192,7 @@ function do_user_merge($source, $target) {
 
         // Session::Messages(sprintf($langUserMergeSuccess, '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>
         //     <p><a href=\'search_user.php\'>$langBack</p>'), 'alert-success');
-        Session::flash('message',sprintf($langUserMergeSuccess, '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>')); 
+        Session::flash('message',sprintf($langUserMergeSuccess, '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>'));
         Session::flash('alert-class', 'alert-success');
         // redirect_to_home_page('modules/admin/search_user.php');
     }
