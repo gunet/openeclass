@@ -1,4 +1,4 @@
-<?php 
+<?php
 
     //////////////////////////////////// five ///////////////////////////////////////
     $install = isset($GLOBALS['input_fields']);
@@ -50,11 +50,11 @@
         <div class="row rowMedium">
 
             <div class="col-12 justify-content-center col_maincontent_active_Homepage">
-                    
+
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-                    
+
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     @if(Session::has('message'))
@@ -86,11 +86,11 @@
                             </div>
                         </div>
                     @endif
-                    
-                    
+
+
                         <div class='col-xl-9 col-lg-8 col-md-12 col-sm-12 col-12 forms-panels-admin'>
-                            <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>  
-                                <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">  
+                            <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                                <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">
                                     <div class='panel panel-admin rounded-0' id='one'>
                                         <div class='panel-heading rounded-0'>
                                             <h2 class='panel-title'>{{ trans('langBasicCfgSetting') }}</h2>
@@ -104,7 +104,7 @@
                                                     </div>
                                                 </div>
 
-                                                
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='formphpMyAdminURL' class='col-sm-12 control-label-notes'>{{ trans('langphpMyAdminURL') }}:</label>
@@ -113,7 +113,7 @@
                                                     </div>
                                                 </div>
 
-                                              
+
 
                                                 <div class='form-group mt-3'>
                                                 <label for='formphpSysInfoURL' class='col-sm-12 control-label-notes'>{{ trans('langSystemInfoURL') }}:</label>
@@ -122,7 +122,7 @@
                                                     </div>
                                                 </div>
 
-                                          
+
 
                                                 <div class='form-group mt-3'>
                                                 <label for='formemailAdministrator' class='col-sm-12 control-label-notes'>{{ trans('langAdminEmail') }}:</label>
@@ -131,7 +131,7 @@
                                                     </div>
                                                 </div>
 
-                                        
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='formemailAdministrator' class='col-sm-12 control-label-notes'>{{ trans('langDefaultAdminName') }}:</label>
@@ -140,7 +140,7 @@
                                                     </div>
                                                 </div>
 
-                                             
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='formsiteName' class='col-sm-12 control-label-notes'>{{ trans('langCampusName') }}:</label>
@@ -149,7 +149,7 @@
                                                     </div>
                                                 </div>
 
-                                           
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='formpostaddress' class='col-sm-12 control-label-notes'>{{ trans('langPostMail') }}</label>
@@ -158,7 +158,7 @@
                                                     </div>
                                                 </div>
 
-                                     
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='formtelephone' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}:</label>
@@ -167,7 +167,7 @@
                                                     </div>
                                                 </div>
 
-                                                
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='formfax' class='col-sm-12 control-label-notes'>{{ trans('langFax') }}</label>
@@ -176,7 +176,7 @@
                                                     </div>
                                                 </div>
 
-                                               
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='formemailhelpdesk' class='col-sm-12 control-label-notes'>{{ trans('langHelpDeskEmail') }}:</label>
@@ -185,7 +185,7 @@
                                                     </div>
                                                 </div>
 
-                                              
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='formInstitution' class='col-sm-12 control-label-notes'>{{ trans('langInstituteShortName') }}:</label>
@@ -194,7 +194,7 @@
                                                     </div>
                                                 </div>
 
-                                                
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='formInstitutionUrl' class='col-sm-12 control-label-notes'>{{ trans('langInstituteName') }}:</label>
@@ -203,11 +203,11 @@
                                                     </div>
                                                 </div>
 
-                                    
+
                                             </fieldset>
                                         </div>
                                     </div>
-                                    
+
 
 
                                     <div class='panel panel-admin mt-3 rounded-0' id='two'>
@@ -231,7 +231,7 @@
                                                     </div>
                                                 </div>
 
-                                                
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='registration_link' class='col-sm-12 control-label-notes'>{{ trans('langRegistrationLink') }}:</label>
@@ -245,7 +245,7 @@
                                                     </div>
                                                 </div>
 
-                                                
+
                                                 <div class='form-group mt-3' id='registration-info-block'>
                                                     <label for='registration_info' class='col-sm-12 control-label-notes'>{{ trans('langRegistrationInfo') }}:</label>
                                                     <div class='col-sm-12'>
@@ -253,7 +253,7 @@
                                                     </div>
                                                 </div>
 
-                                             
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='eclass_stud_reg' class='col-sm-12 control-label-notes'>{{ trans('langUserAccount') }}  {{ trans('langViaeClass') }}:</label>
@@ -271,7 +271,7 @@
                                                     </div>
                                                 </div>
 
-                                             
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='alt_auth_stud_reg' class='col-sm-12 control-label-notes'>{{ trans('langUserAccount') }} {{ trans('langViaAltAuthMethods') }}:</label>
@@ -289,7 +289,7 @@
                                                     </div>
                                                 </div>
 
-                                             
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='eclass_prof_reg' class='col-sm-12 control-label-notes'>{{ trans('langProfAccount') }} {{ trans('langViaeClass') }}:</label>
@@ -306,7 +306,7 @@
                                                     </div>
                                                 </div>
 
-                                          
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='alt_auth_prof_reg' class='col-sm-12 control-label-notes'>{{ trans('langProfAccount') }} {{ trans('langViaAltAuthMethods') }}:</label>
@@ -323,7 +323,7 @@
                                                     </div>
                                                 </div>
 
-                                                
+
 
                                                 <div class='form-group mt-3'>
                                                     <label class='col-sm-12 control-label-notes'>{{ trans('lang_block_duration_account') }}:</label>
@@ -335,7 +335,7 @@
                                                     </div>
                                                 </div>
 
-                                           
+
 
                                                 <div class='form-group mt-3'>
                                                     <label class='col-sm-12 control-label-notes'>{{ trans('lang_block_duration_alt_account') }}:</label>
@@ -347,7 +347,7 @@
                                                     </div>
                                                 </div>
 
-                                               
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='formdurationAccount' class='col-sm-12 control-label-notes'>{{ trans('langUserDurationAccount') }} ({{ trans('langMonthsUnit') }}): </label>
@@ -356,7 +356,7 @@
                                                     </div>
                                                 </div>
 
-                                          
+
 
                                                 <div class='form-group mt-3'>
                                                     <label class='col-sm-12 control-label-notes'>{{ trans('lang_display_captcha_label') }}:</label>
@@ -369,7 +369,7 @@
                                                     </div>
                                                 </div>
 
-                                            
+
 
                                                 <div class='form-group mt-3'>
                                                     <label class='col-sm-12 control-label-notes'>{{ trans('langGuestLoginLabel') }}:</label>
@@ -383,7 +383,7 @@
                                                                         get_config('course_guest', 'on'),
                                                                         "class='form-control form-control-admin'"
                                                                     ) !!} --}}
-                                                        
+
                                                         {!! selection([
                                                             'off' => trans('langDeactivate'),
                                                             'on' => trans('langActivate'),
@@ -419,7 +419,7 @@
                                                     </div>
                                                 </div>
 
-                                              
+
 
                                                 <div class='form-group mt-3'>
                                                     <label class='col-sm-12 control-label-notes'>{{ trans('langSupportedLanguages') }}:</label>
@@ -432,7 +432,7 @@
                                     </div>
 
 
-                                    
+
 
 
                                     <div class='panel panel-primary mt-3 rounded-0' id='four'>
@@ -453,21 +453,21 @@
                                                         <div class='form-group mt-3'>
                                                             <label for='defaultHomepageTitle' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
                                                             <div class='col-sm-12'>
-                                                                <input class='form-control' type='text' name='homepage_title' id='defaultHomepageTitle' value="{!! q(get_config('homepage_title', $langEclass)) !!}">
+                                                                <input class='form-control' type='text' name='homepage_title' id='defaultHomepageTitle' value="{!! q(get_config('homepage_title', trans('langEclass'))) !!}">
                                                                 <p class='help-block mt-1'>{{trans('langHomePageTitleHelpText')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
                                                             <label for='defaultHomepageBcrmp' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
                                                             <div class='col-sm-12'>
-                                                                <input class='form-control' type='text' name='homepage_name' id='defaultHomepageBcrmp' value="{!! q(get_config('homepage_name', $langHomePage)) !!}">
+                                                                <input class='form-control' type='text' name='homepage_name' id='defaultHomepageBcrmp' value="{!! q(get_config('homepage_name', trans('langHomePage'))) !!}">
                                                                 <p class='help-block mt-1'>{{trans('langHomePageNavTitleHelp')}}</p>
                                                             </div>
                                                         </div>
                                                         <div class='form-group mt-3'>
                                                             <label for='defaultHomepageIntro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
                                                             <div class='col-sm-12'>
-                                                                {!! rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro', $langInfoAbout)) !!}
+                                                                {!! rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro', trans('langInfoAbout'))) !!}
                                                                 <p class='help-block mt-1'>{{trans('langHomePageIntroTextHelp')}}</p>
                                                             </div>
                                                         </div>
@@ -477,13 +477,13 @@
                                                                     <div class='checkbox mb-md-0 mb-2'>
                                                                         <label>
                                                                             <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' {{ $cbox_dont_display_login_form }}>
-                                                                            <span class='text-danger fs-6'>{{trans('lang_dont_display_login_form')}}</span>
+                                                                            {{trans('lang_dont_display_login_form')}}
                                                                         </label>
                                                                     </div>
                                                                     <div class='checkbox'>
                                                                         <label>
                                                                             <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' {{ $cbox_hide_login_link }}>
-                                                                            <span class='text-danger fs-6'>{{trans('lang_hide_login_link')}}</span>
+                                                                            {{trans('lang_hide_login_link')}}
                                                                         </label>
                                                                     </div>
                                                             </div>
@@ -549,7 +549,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                --}}    
+                                                --}}
 
                                             </fieldset>
                                         </div>
@@ -805,12 +805,6 @@
                                                         </div>
                                                         <div class='checkbox'>
                                                             <label>
-                                                                <input id='personal_blog_public' type='checkbox' name='personal_blog_public' value='1' {{ $cbox_personal_blog_public }}>
-                                                                {{ trans('lang_personal_blog_public') }}
-                                                            </label>
-                                                        </div>
-                                                        <div class='checkbox'>
-                                                            <label>
                                                                 <input id='personal_blog_commenting_enable' type='checkbox' name='personal_blog_commenting' value='1' {{ $cbox_personal_blog_commenting }}>
                                                                 {{ trans('lang_personal_blog_commenting') }}
                                                             </label>
@@ -867,7 +861,7 @@
                                                     </div>
                                                 </div>
 
-                                     
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='min_password_len' class='col-sm-12 control-label-notes'>{{ trans('lang_max_glossary_terms') }} </label>
@@ -876,7 +870,7 @@
                                                     </div>
                                                 </div>
 
-                                                
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='min_password_len' class='col-sm-12 control-label-notes'>{{ trans('langActionsExpireInterval') }} ({{ trans('langMonthsUnit') }}):</label>
@@ -912,7 +906,7 @@
                                                     </div>
                                                 </div>
 
-                                           
+
 
                                                 <div class='form-group mt-3'>
                                                     <label class='col-sm-12 control-label-notes'>{{ trans('langMyDocsQuota') }} (MB):</label>
@@ -928,7 +922,7 @@
                                                     </div>
                                                 </div>
 
-                                              
+
 
                                                 <div class='form-group mt-3 mb-3'>
                                                     <label for='bio_quota' class='col-sm-12 control-label-notes'>{{ trans('langBioQuota') }} (MB):</label>
@@ -1000,7 +994,7 @@
                                                     </div>
                                                 </div>
 
-                                                
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='teacher_upload_whitelist' class='col-sm-12 control-label-notes'>{{ trans('langTeacherUploadWhitelist') }}:</label>
@@ -1050,7 +1044,7 @@
                                                     </div>
                                                 </div>
 
-                                               
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='log_purge_interval' class='col-sm-12 control-label-notes'>{{ trans('langLogPurgeInterval') }} ({{ trans('langMonthsUnit') }}):</label>
@@ -1080,7 +1074,7 @@
                                                     </div>
                                                 </div>
 
-                                                
+
 
                                                 <div class='form-group mt-3' id='login_fail_threshold'>
                                                     <label for='login_fail_threshold' class='col-sm-12 control-label-notes'>{{ trans('langLoginFailThreshold') }}:</label>
@@ -1089,7 +1083,7 @@
                                                     </div>
                                                 </div>
 
-                                                
+
 
                                                 <div class='form-group mt-3' id='login_fail_deny_interval'>
                                                     <label for='login_fail_deny_interval' class='col-sm-12 control-label-notes'>{{ trans('langLoginFailDenyInterval') }} ({{ trans('langMinute') }}):</label>
@@ -1098,7 +1092,7 @@
                                                     </div>
                                                 </div>
 
-                                               
+
 
                                                 <div class='form-group mt-3' id='login_fail_forgive_interval'>
                                                     <label for='login_fail_forgive_interval' class='col-sm-12 control-label-notes'>{{ trans('langLoginFailForgiveInterval') }} ({{ trans('langHours') }}):</label>
@@ -1130,7 +1124,7 @@
                                                     @endforeach
                                                 </div>
 
-                                               
+
 
                                                 <div class='form-group mt-3'>
                                                     <label for='theme' class='col-sm-12 control-label-notes'>{{ trans('langViewShow') }}: </label>
@@ -1158,7 +1152,7 @@
 
                                     {!! showSecondFactorChallenge() !!}
 
-                                    
+
 
                                     <div class='form-group mt-3'>
                                         <div class='col-sm-12'>
@@ -1168,7 +1162,7 @@
                                     </div>
                                     {!! generate_csrf_token_form_field() !!}
                                 </div> <!-- end scroll-spy -->
-                               
+
                             </form>
                         </div>
 
@@ -1196,7 +1190,7 @@
                             </nav>
                         </div>
 
-                    
+
                     {!! modalConfirmation('confirmIndexDialog', 'confirmIndexLabel', trans('langConfirmEnableIndexTitle'), trans('langConfirmEnableIndex'), 'confirmIndexCancel', 'confirmIndexOk') !!}
                     {!! modalConfirmation('confirmMobileAPIDialog', 'confirmMobileAPILabel', trans('langConfirmEnableMobileAPITitle'), trans('langConfirmEnableMobileAPI'), 'confirmMobileAPICancel', 'confirmMobileAPIOk') !!}
                 </div>
@@ -1253,7 +1247,7 @@
     }
 
     $(function() {
-        
+
         /* Check if we are in safari and fix Bootstrap Affix*/
         if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
             var stickywidget = $('#floatMenu');

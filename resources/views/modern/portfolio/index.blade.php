@@ -131,7 +131,7 @@
                                     <div class='panel-body rounded-0'>
                                         <div class="row mt-0">
                                             <div class="col-12 mb-1">
-                                                <p id="info" class="d-inline-flex align-items-top" >E-mail: <span class='text-primary fw-bold ps-2'>{{ $_SESSION['email'] }}</span></p>
+                                                <p id="info" class="d-inline-flex align-items-top" >E-mail: <span class='text-primary fw-bold ps-2'>{{ $userdata->email }}</span></p>
                                             </div>
                                             <div class="col-12 mb-1">
                                                 <p id="info" class="d-inline-flex align-items-top" >{{ trans('langStatus') }}:
@@ -208,7 +208,7 @@
 
                 <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-8 col-8 pt-2 d-inline-flex align-items-top">
                     <span class="text-uppercase fw-bold mb-0 Help-text-panel-heading">{{ trans('langMyCoursesSide') }}</span>
-                    <a href="{{$urlAppend}}main/my_courses.php" class='viewAllCourseBtn btn btn-default d-flex justify-content-center align-items-center ms-2' data-bs-toggle='tooltip' 
+                    <a href="{{$urlAppend}}main/my_courses.php" class='viewAllCourseBtn btn btn-default d-flex justify-content-center align-items-center ms-2' data-bs-toggle='tooltip'
                     data-bs-placement='bottom' title data-bs-original-title="{{ trans('langMyCoursesSide') }}">
                         <span class='fa fa-eye text-dark'></span>
                     </a>
@@ -263,13 +263,13 @@
                     <div class='row rowMedium'>
 
                         {!! $perso_tool_content['lessons_content'] !!}
-                        
-                        <div class='d-flex justify-content-center'> 
+
+                        <div class='d-flex justify-content-center'>
                             <a class="btn-slide" href="{{$urlServer}}modules/auth/courses.php" >
                                 <span class="circle d-flex justify-content-center align-items-center">
-                                    <i class="fa fa-pencil ms-2"></i>        
+                                    <i class="fa fa-pencil ms-2"></i>
                                 </span>
-                                
+
                                 <span class="title">{{ trans('langRegCourses') }}</span>
                                 <span class="title title-hover">{{ trans('langRegCourses') }}</span>
                             </a>
@@ -318,7 +318,7 @@
 
 
             @include('portfolio.portfolio-calendar')
-            
+
             <div class='panel panel-admin border-0 ps-md-3 pe-md-3 pt-md-2 mb-md-2 bg-white mt-4'>
                 <div class='panel-heading bg-body'>
                     <div class='col-12 Help-panel-heading'>
@@ -340,7 +340,7 @@
             </div>
 
 
-            
+
             <div class='panel panel-admin border-0 ps-md-3 pe-md-3 pt-md-2 mb-md-2 bg-white mt-4'>
                 <div class='panel-heading bg-body'>
                     <div class='col-12 Help-panel-heading'>

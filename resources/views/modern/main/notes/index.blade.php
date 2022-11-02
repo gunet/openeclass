@@ -1,7 +1,3 @@
-<?php 
-print_a($user_notes);
-?>
-
 @extends('layouts.default')
 
 @section('content')
@@ -14,7 +10,7 @@ print_a($user_notes);
             <div class="row">
                     <div class="col-xl-12 col-lg-8 col-md-12 col-sm-12 col-xs-12 justify-content-center courses-details">
 
-                        <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">      
+                        <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
                         @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                             <div class="row p-2"></div>
@@ -45,15 +41,15 @@ print_a($user_notes);
                                                         <a class="content-truncate-note" data-bs-toggle="modal" role="button" aria-expanded="false" data-bs-target="#ModalNote{{$i}}">
                                                             <?php $content_note = strip_tags($note->content); ?>
                                                             <span class="d-inline-block text-truncate" style="max-width: 180px;"><i class="fas fa-arrow-down"></i>{{$content_note}}</span>
-                    
+
                                                         </a>
-                                                        
-                                                        
+
+
                                                         <div class="modal fade modalNote" id="ModalNote{{$i}}" tabindex="-1" aria-labelledby="ModalNote{{$i}}" aria-hidden="true">
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                        <?php 
+                                                                        <?php
                                                                                 $courses_notes = Database::get()->querySingle("SELECT title FROM course WHERE id={$note->reference_obj_id}; ");
                                                                         ?>
                                                                         <h5 class="modal-title" id="ModalNote{{$i}}"><strong>Μάθημα</strong><small style="color:orange;"><{{$courses_notes->title}}></small><br><strong>{{trans('langHomePageIntroTitle')}}</strong><small style="color:orange;"><<{{$note->title}}>></small></h5>
@@ -65,10 +61,10 @@ print_a($user_notes);
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </td>
                                                     <td>{{$note->date_time}}</td>
-                                                    <?php 
+                                                    <?php
                                                         $course_note = Database::get()->querySingle("SELECT title,code FROM course WHERE id={$note->reference_obj_id}; ");
                                                     ?>
                                                     <td> <a class="" href="{{$urlServer}}courses/{{$course_note->code}}/index.php">{{$course_note->title}}</a></td>
@@ -79,7 +75,7 @@ print_a($user_notes);
                                                         <a class="edit_trash_notes" href="" data-bs-toggle="modal" data-bs-target="#DeleteNoteModal{{$note->id}}" >
                                                             <i class="fas fa-trash" style='color:#003F87'></i>
                                                         </a>
-                                            
+
                                                     </td>
                                                 </tr>
 
@@ -97,9 +93,9 @@ print_a($user_notes);
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <a class="btn btn-secondary" href="" data-bs-dismiss="modal">{{trans('langCancel')}}</a>
-                                                                
+
                                                                 <button class="btn btn-danger" type="submit" name="delete" value="{{$note->id}}">{{trans('langDelete')}}</button>
-                                                                
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -110,13 +106,13 @@ print_a($user_notes);
                                         </tbody>
                                     </table>
                                 </div>
-                            </form>  
+                            </form>
                         </div>
                     </div>
-                
+
             </div>
         </div>
     </div>
-    
+
 
 @endsection

@@ -75,7 +75,6 @@ function view($view_file, $view_data = array()) {
 
     // Setting $menuTypeID and Getting Side Menu
     $menuTypeID = isset($view_data['menuTypeID']) ? $view_data['menuTypeID'] : 2;
-
     $toolArr = $is_mobile ? array() : getSideMenu($menuTypeID);
 
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
@@ -181,7 +180,7 @@ function view($view_file, $view_data = array()) {
         }
 
         // Breadcrumb course home entry
-        if (isset($course_code)) {
+        if (isset($course_code) and $menuTypeID != 3) {
             $item['bread_text'] = ellipsize($currentCourseName, 48);
             if ($pageName) {
                 $item['bread_href'] = $urlAppend . 'courses/' . $course_code . '/';

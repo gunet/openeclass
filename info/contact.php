@@ -28,7 +28,9 @@ $data['postaddress'] = get_config('postaddress');
 $data['Institution'] = get_config('institution');
 $data['phone'] = get_config('phone');
 $data['fax'] = get_config('fax');
-$data['emailhelpdesk'] = str_replace('@', ' &lt;at&gt; ', get_config('emailhelpdesk'));
+if (get_config('emailhelpdesk')) {
+    $data['emailhelpdesk'] = str_replace('@', ' &lt;at&gt; ', get_config('emailhelpdesk'));
+}
 $data['action_bar'] = action_bar(
                                     [
                                         [

@@ -203,7 +203,7 @@ $data['departments'] = $user->getDepartmentIds($uid);
 $data['lastVisit'] = Database::get()->querySingle("SELECT * FROM loginout
                         WHERE id_user = ?d ORDER by idLog DESC LIMIT 1", $uid);
 
-$data['userdata'] = Database::get()->querySingle("SELECT am, phone, registered_at,
+$data['userdata'] = Database::get()->querySingle("SELECT email, am, phone, registered_at,
                                             has_icon, description, password,
                                             email_public, phone_public, am_public
                                         FROM user

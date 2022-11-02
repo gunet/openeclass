@@ -119,7 +119,6 @@ if (isset($_POST['submit'])) {
         'dropbox_allow_personal_messages' => true,
         'eportfolio_enable' => true,
         'personal_blog' => true,
-        'personal_blog_public' => true,
         'personal_blog_commenting' => true,
         'personal_blog_rating' => true,
         'personal_blog_sharing' => true,
@@ -250,14 +249,14 @@ if (isset($_POST['submit'])) {
                 <button type='submit' class='btn btn-default' name='updatePrivacyPolicy' value='true'>" .
                     trans('langPrivacyPolicyConsentRedisplay') . "
                 </button>
-            </form>"); 
+            </form>");
             Session::flash('alert-class', 'alert-info');
     }
 
     // Display result message
     Session::flash('scheduleIndexing', $scheduleIndexing);
     //Session::Messages($langFileUpdatedSuccess, 'alert-success');
-    Session::flash('message',$langFileUpdatedSuccess); 
+    Session::flash('message',$langFileUpdatedSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/eclassconf.php');
 
@@ -343,7 +342,6 @@ else {
     $data['cbox_dropbox_allow_student_to_student'] = get_config('dropbox_allow_student_to_student') ? 'checked' : '';
     $data['cbox_dropbox_allow_personal_messages'] = get_config('dropbox_allow_personal_messages') ? 'checked' : '';
     $data['cbox_personal_blog'] = get_config('personal_blog') ? 'checked' : '';
-    $data['cbox_personal_blog_public'] = get_config('personal_blog_public') ? 'checked' : '';
     $data['cbox_personal_blog_commenting'] = get_config('personal_blog_commenting') ? 'checked' : '';
     $data['cbox_personal_blog_rating'] = get_config('personal_blog_rating') ? 'checked' : '';
     $data['cbox_personal_blog_sharing'] = get_config('personal_blog_sharing') ? 'checked' : '';
