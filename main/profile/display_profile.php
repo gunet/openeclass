@@ -76,7 +76,7 @@ if ($userdata) {
                     'icon' => 'fa-key',
                     'show' => $allow_password_change,
                     'level' => 'primary-label'),
-                array('title' => $langEmailUnsubscribe,
+                array('title' => "$langNotifyActions $langsOfCourses",
                     'url' => "emailunsubscribe.php",
                     'icon' => 'fa-envelope',
                     'level' => 'primary-label',

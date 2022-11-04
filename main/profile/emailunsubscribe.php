@@ -25,7 +25,7 @@ include '../../include/baseTheme.php';
 load_js('tools.js');
 
 $toolName = $langMyProfile;
-$pageName = $langEmailUnsubscribe;
+$pageName = "$langNotifyActions $langsOfCourses";
 $navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
 
 check_uid();
