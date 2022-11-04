@@ -471,7 +471,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         }
 
         // Breadcrumb course home entry
-        if (isset($course_code)) {
+        if (isset($course_code) and $menuTypeID != 3) {
             $t->set_var('BREAD_TEXT', q(ellipsize($currentCourseName, 48)));
             if ($pageName) {
                 $t->set_var('BREAD_HREF', $urlAppend . 'courses/' . $course_code . '/');
