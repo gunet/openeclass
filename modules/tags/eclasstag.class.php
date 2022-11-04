@@ -89,9 +89,9 @@ class eClassTag {
                 });
             </script>";
         $input_field = "
-                <div class='form-group mt-3'>
-                    <label for='tags' class='col-sm-6 control-label-notes'>$langTags:</label>
-                    <div class='col-sm-12'>
+                <div class='row p-3 form-group'>
+                    <label for='tags' class='col-md-3 col-12 control-label-notes mb-1'>$langTags:</label>
+                    <div class='col-md-9 col-12'>
                         <select id='tags' class='form-select' name='tags[]' multiple>
                         </select>
                     </div>

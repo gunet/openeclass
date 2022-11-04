@@ -205,15 +205,15 @@
 <div class="container-fluid main-container details-section">
     <div class="row rowMedium">
         <div class="col-lg-12 user-details" >
-            <div class="row p-lg-5 ps-md-5 pe-md-5 pt-md-5 pb-md-2 ps-1 pe-2 pt-3 pb-5">
-                <nav>
+            <div class="row p-lg-5 ps-md-5 pe-md-5 pt-md-5 pb-md-2 ps-1 pe-1 pt-3 pb-5">
+                <nav class='p-md-0'>
                     <div class="nav nav-tabs portfolio-tabs-menu shadow-sm" id="nav-tab" role="tablist">
                         <button class="nav-link-portfolio nav-link active" id="nav-account-tab" data-bs-toggle="tab" data-bs-target="#nav-account" type="button" role="tab" aria-controls="nav-account" aria-selected="true"><span class='fa fa-user me-1'></span><span class='hidden-xs'>{{trans('langMyAccount')}}</span></button>
                         <button class="nav-link-portfolio nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false"><span class='fa fa-info-circle me-1'></span><span class='hidden-xs'>{{trans('langMyProfile')}}</span></button>
                         <button class="nav-link-portfolio nav-link" id="nav-options-tab" data-bs-toggle="tab" data-bs-target="#nav-options" type="button" role="tab" aria-controls="nav-options" aria-selected="false"><span class='fa fa-pencil me-1'></span><span class='hidden-xs'>{{trans('langOptions')}}</span></button>
                     </div>
                 </nav>
-                <div class="tab-content" id="nav-tabContent">
+                <div class="tab-content p-md-0" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-account" role="tabpanel" aria-labelledby="nav-account-tab">
                         <div class='row'>
                             <div class='col-md-3 col-12 mt-5'>
@@ -242,11 +242,17 @@
                                                     <div class='panel panel-admin border-0 bg-white min-hg-panel mt-md-0 mt-3'>
                                                             <div class='panel-heading bg-body'>
                                                                 <div class='col-12 Help-panel-heading'>
-                                                                    <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>Email</span>
+                                                                    <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{trans('langAm')}}</span>
                                                                 </div>
                                                         </div>
                                                         <div class='panel-body ps-4 pe-3 pt-0'>
-                                                            <span class='text-dark'> {{ $userdata->email }}</span>
+                                                            <span class='text-dark'> 
+                                                                @if(!empty($userdata->am))
+                                                                {{ $userdata->am }}
+                                                                @else
+                                                                {{trans('langNoInfoAvailable')}}
+                                                                @endif
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -278,11 +284,11 @@
                                                     <div class='panel panel-admin border-0 bg-white mt-md-0 mt-3 min-hg-panel'>
                                                         <div class='panel-heading bg-body'>
                                                             <div class='col-12 Help-panel-heading'>
-                                                                <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{trans('langName')}}</span>
+                                                                <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langProfileMemberSince') }}</span>
                                                             </div>
                                                         </div>
                                                         <div class='panel-body ps-4 pe-3 pt-0'>
-                                                            <span class='text-dark'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}</span>
+                                                            <span class='text-dark'> {{ $userdata->registered_at }}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -296,11 +302,11 @@
                                                         <div class='panel-body ps-4 pe-3 pt-0'>
                                                             <span class='text-dark'> 
                                                                 @if(($session->status == USER_TEACHER))
-                                                                    {{ trans('langMetaTeacher') }}
+                                                                    <span class='text-lowercase'>{{ trans('langMetaTeacher') }}</span>
                                                                 @elseif(($session->status == USER_STUDENT))
-                                                                    {{ trans('langCStudent') }}
+                                                                    <span class='text-lowercase'>{{ trans('langCStudent') }}</span>
                                                                 @else
-                                                                    {{ trans('langAdministrator')}}
+                                                                    <span class='text-lowercase'>{{ trans('langAdministrator')}}</span>
                                                                 @endif
                                                             </span>
                                                         </div>
@@ -339,16 +345,12 @@
                                             <div class='panel panel-admin border-0 bg-white min-hg-panel'>
                                                 <div class='panel-heading bg-body'>
                                                     <div class='col-12 Help-panel-heading'>
-                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{trans('langPhone')}}</span>
+                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{trans('langName')}}</span>
                                                     </div>
                                                 </div>
                                                 <div class='panel-body ps-4 pe-3 pt-0'>
                                                     <span class='text-dark'> 
-                                                        @if(!empty($userdata->phone))
-                                                        {{ $userdata->phone }}
-                                                        @else
-                                                        {{trans('langNoInfoAvailable')}}
-                                                        @endif
+                                                        {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -357,16 +359,15 @@
                                             <div class='panel panel-admin border-0 bg-white mt-md-0 mt-3 min-hg-panel'>
                                                 <div class='panel-heading bg-body'>
                                                     <div class='col-12 Help-panel-heading'>
-                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langAm') }}</span>
+                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>Email</span>
                                                     </div>
                                                 </div>
                                                 <div class='panel-body ps-4 pe-3 pt-0'>
                                                     <span class='text-dark'> 
-                                                        @if(!empty($userdata->am))
-                                                        {{ $userdata->am }}
-                                                        @else
-                                                        {{trans('langNoInfoAvailable')}}
-                                                        @endif</span>
+                                                        
+                                                        {{ $userdata->email }}
+                                                    </span>
+                                                        
                                                 </div>
                                             </div>
                                         </div>
@@ -374,11 +375,17 @@
                                             <div class='panel panel-admin border-0 bg-white mt-md-0 mt-3 min-hg-panel'>
                                                 <div class='panel-heading bg-body'>
                                                     <div class='col-12 Help-panel-heading'>
-                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langProfileMemberSince') }}</span>
+                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{trans('langPhone')}}</span>
                                                     </div>
                                                 </div>
                                                 <div class='panel-body ps-4 pe-3 pt-0'>
-                                                    <span class='text-dark'> {{ $userdata->registered_at }}</span>
+                                                    <span class='text-dark'>
+                                                         @if(!empty($userdata->phone))
+                                                            {{ $userdata->phone }}
+                                                         @else
+                                                            {{trans('langNoInfoAvailable')}}
+                                                         @endif
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -570,7 +577,7 @@
             <div class='panel panel-admin border-0 ps-md-3 pe-md-3 pt-md-2 mb-md-2 bg-white mt-4'>
                 <div class='panel-heading bg-body'>
                     <div class='col-12 Help-panel-heading'>
-                        <span class='panel-title text-capitalize Help-text-panel-heading'>{{ trans('langMyPersoAnnouncements') }}</span>
+                        <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoAnnouncements') }}</span>
                     </div>
                 </div>
                 <div class='panel-body pt-1 pb-1 ps-3 pe-3'>
@@ -592,7 +599,7 @@
             <div class='panel panel-admin border-0 ps-md-3 pe-md-3 pt-md-2 mb-md-2 bg-white mt-4'>
                 <div class='panel-heading bg-body'>
                     <div class='col-12 Help-panel-heading'>
-                     <span class='panel-title text-capitalize Help-text-panel-heading'>{{ trans('langMyPersoMessages') }}</span>
+                     <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoMessages') }}</span>
                     </div>
                 </div>
                 <div class='panel-body pt-1 pb-1 ps-3 pe-3'>

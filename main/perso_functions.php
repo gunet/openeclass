@@ -66,7 +66,7 @@ function getUserLessonInfo($uid) {
     $teacher_courses_count = 0;
     $student_courses_count = 0;
     if ($myCourses) {
-        $lesson_content .= "<table id='portfolio_lessons' class='table table-striped'>";
+        $lesson_content .= "<table id='portfolio_lessons' class='table table-striped portfolio-courses-table'>";
         $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
@@ -85,26 +85,24 @@ function getUserLessonInfo($uid) {
             }
             $lesson_content .= "<tr class='$visclass'>
 			  <td>
-			  <div class='row'>
-                <div class='col-md-6 col-12'>
+			  <div class='d-inline-flex'>
+                
                     <strong><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></strong>
-                </div>
-                <div class='col-md-6 col-12'>
-                    <div class='text-md-end text-start'><small>$langCode</small>: <span class='text-secondary'>(" . q($data->public_code) . ")</span></div>
-                </div>
+               
+                    <div class='text-md-end text-start'> <span class='text-secondary'>(" . q($data->public_code) . ")</span></div>
+                
               </div>
 			  <div><small>" . q($data->professor) . "</small></div></td>";
-            $lesson_content .= "<td class='text-center align-middle'><div class='col-12'><div class='row'><div class='col-12 col-md-6 text-md-end'>";
+            $lesson_content .= "<td class='text-center align-middle'><div class='col-12'><div class='d-inline-flex'>";
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
-            $lesson_content .= "</div><div class='col-12 col-md-6 mt-md-0 mt-3 text-md-start'>";
             if ($data->status == USER_STUDENT) {
-                $lesson_content .= icon('fa-minus-circle', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
+                $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
                 $student_courses_count++;
             } elseif ($data->status == USER_TEACHER) {
-                $lesson_content .= icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
+                $lesson_content .= icon('fa-wrench ms-3', $langAdm, "${urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
                 $teacher_courses_count++;
             }
-            $lesson_content .= "</div></div></div></td></tr>";
+            $lesson_content .= "</div></div></td></tr>";
         }
         $lesson_content .= "</tbody></table>";
     } else { // if we are not registered to courses

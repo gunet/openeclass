@@ -26,14 +26,14 @@
                 <ol class="breadcrumb mb-0">
                     @foreach ($breadcrumbs as $key => $item)
                     @if (isset($item['bread_href']))
-                            <li class="breadcrumb-item pb-2">
-                                <a class='btn btn-sm btn-outline-primary text-wrap text-uppercase' href='{{ $item['bread_href'] }}'>
+                            <li class="breadcrumb-item d-flex justify-content-center align-items-center">
+                                <a class='text-wrap text-capitalize' href='{{ $item['bread_href'] }}'>
                                     {!! $session->status != USER_GUEST && isset($uid) && $key == 0 ? '<span class="fa fa-home"></span> ' : "" !!}
                                     {!! $item['bread_text'] !!}
                                 </a>
                             </li>
                         @else
-                            <li class="breadcrumb-item active" aria-current="page"><a class='Borders pe-none btn btn-sm btn-info text-white text-lowercase'>{!! $item['bread_text'] !!}</a></li>
+                            <li class="breadcrumb-item active d-flex justify-content-center align-items-center" aria-current="page"><a class='pe-none text-secondary text-lowercase'>{!! $item['bread_text'] !!}</a></li>
                         @endif
                     @endforeach
                 </ol>

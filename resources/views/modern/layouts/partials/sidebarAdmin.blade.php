@@ -29,14 +29,14 @@
             
             <div class='row p-2'>
                 <div class='col-lg-4 col-12'>
-                    <a class='btn btn-sm btn-outline-primary w-auto m-auto d-block' href="search_user.php">
+                    <a class='btn btn-sm btn-light w-auto m-auto d-block' href="search_user.php">
                         <span class='fa fa-link mt-1 me-1 orangeText'></span>
                         <span class='toolAdminText'>{{ trans('langSearchUser') }}</span>
                     </a>
                 </div>
                 <div class='col-lg-4 col-12 mt-lg-0 mt-3'>
                     @if($is_admin or $is_departmentmanage_user or $is_power_user)
-                        <a  href="searchcours.php" class='btn btn-sm btn-outline-primary w-auto m-auto d-block'>
+                        <a  href="searchcours.php" class='btn btn-sm btn-light w-auto m-auto d-block'>
                             <div class='d-inline-flex'>
                                 <span class='fa fa-link mt-1 me-1 orangeText'></span>
                                 <span class='toolAdminText'>{{ trans('langSearchCourse') }}</span> 
@@ -53,7 +53,7 @@
                 </div>
                 <div class='col-lg-4 col-12 mt-lg-0 mt-3'>
                     @if($is_admin)
-                        <a href="hierarchy.php" class='btn btn-sm btn-outline-primary w-auto m-auto d-block'>
+                        <a href="hierarchy.php" class='btn btn-sm btn-light w-auto m-auto d-block'>
                             <div class='d-inline-flex'>
                                 <span class='fa fa-link mt-1 me-1 orangeText'></span>
                                 <span class='toolAdminText'>{{ trans('langHierarchy') }}</span>  
@@ -75,7 +75,7 @@
                 <div class='col-lg-4 col-12'>
                     
                     @if($is_admin)
-                        <a href="eclassconf.php" class='btn btn-sm btn-outline-primary w-auto m-auto d-block'>
+                        <a href="eclassconf.php" class='btn btn-sm btn-light w-auto m-auto d-block'>
                             <div class='d-inline-flex'>
                                 <span class='fa fa-link mt-1 me-1 orangeText'></span>
                                 <span class='toolAdminText'>{{ trans('langConfig') }}</span>   
@@ -94,7 +94,7 @@
                 <div class='col-lg-4 col-12 mt-lg-0 mt-3'>
                     
                         @if($is_admin)
-                        <a href="theme_options.php" class='btn btn-sm btn-outline-primary w-auto m-auto d-block'>
+                        <a href="theme_options.php" class='btn btn-sm btn-light w-auto m-auto d-block'>
                             <div class='d-inline-flex'>
                                 <span class='fa fa-link mt-1 me-1 orangeText'></span>
                                 <span class='toolAdminText'>{{ trans('langThemeSettings') }}</span>  
@@ -113,7 +113,7 @@
                 <div class='col-lg-4 col-12 mt-lg-0 mt-3'>
                     
                         @if($is_admin)
-                        <a href="extapp.php" class='btn btn-sm btn-outline-primary w-auto m-auto d-block'>
+                        <a href="extapp.php" class='btn btn-sm btn-light w-auto m-auto d-block'>
                             <div class='d-inline-flex'>
                                 <span class='fa fa-link mt-1 me-1 orangeText'></span>
                                 <span class='toolAdminText'>{{ trans('langExternalTools') }}</span>  

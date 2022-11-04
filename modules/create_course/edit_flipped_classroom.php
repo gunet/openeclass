@@ -46,7 +46,7 @@ $(document).ready(function() {
        
         if (i <= 20) {
               
-            $('#dynamic_goals').append('<div id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\" class="col-sm-12 control-label-notes">' + i + ':</label><div class="col-sm-12"><input type=\"text\" name=\"goals[]\" class=\"form-control\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle\"></span></a></div></div>')
+            $('#dynamic_goals').append('<div id=\"row_g_' + i + '\" class="col-12 d-inline-flex mt-3"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\" class="control-label-notes">' + i + ':</label><input type=\"text\" name=\"goals[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
             i++;
         }
         document.getElementById('goal_count').value = i-1;
@@ -55,7 +55,7 @@ $(document).ready(function() {
         
         if (j <= 20) {
            
-            $('#dynamic_units').append('<div id=\"row_u_' + j + '\"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="col-sm-12 control-label-notes">' + j + ':</label><div class="col-sm-12"><input type=\"text\" name=\"units[]\" class=\"form-control\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div></div>')
+            $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mt-3"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="control-label-notes">' + j + ':</label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
             j++;
         }
         document.getElementById('unit_count').value = j-1;
@@ -220,7 +220,7 @@ if(!isset($_POST['next'])){
         <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
             <fieldset>
                 <div class='form-group'>
-                    <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
+                    <label for='title' class='col-sm-12 control-label-notes mb-1'>$langTitle</label>
                     <div class='col-sm-12'>
                         <input name='title' id='title' type='text' class='form-control' value='" . q($q4->title) . "' placeholder='$langTitle' readonly>
                     </div>
@@ -228,95 +228,90 @@ if(!isset($_POST['next'])){
 
 
                 <div class='form-group mt-3'>
-                    <label for='stunum' class='col-sm-6 control-label-notes'>$langStuNum : </label>
+                    <label for='stunum' class='col-sm-12 control-label-notes mb-1'>$langStuNum</label>
                     <div class='col-sm-12'>
                         <input name='stunum' id='stunum' type='text' class='form-control' value='".q($q1->student_number)."' >
                     </div>
                 </div>
                 <div class='form-group mt-3'>
-                    <label for='lectnum' class='col-sm-6 control-label-notes'>$langLectNum : </label>
+                    <label for='lectnum' class='col-sm-12 control-label-notes mb-1'>$langLectNum</label>
                     <div class='col-sm-12'>
                         <input name='lectnum' id='lectnum' type='number' min='1' max='50' class='form-control' value='".q($q1->lessons_number)."' >
                     </div>
                 </div>
                 <div class='form-group mt-3'>
-                    <label for='lecthours' class='col-sm-6 control-label-notes'>$langLectHours <small>($langHoursSmall)</small> : </label>
+                    <label for='lecthours' class='col-sm-12 control-label-notes'>$langLectHours <small>($langHoursSmall)</small></label>
                     <div class='col-sm-12'>
                         <input name='lecthours' id='lecthours' type='number' min='1' max='150' class='form-control' value='".q($q1->lesson_hours)."' onchange='hoursSum()' >
                     </div>
                 </div>
                 <div class='form-group mt-3'>
-                    <label for='homehours' class='col-sm-6 control-label-notes'>$langHomeHours <small>($langHoursSmall)</small> : </label>
+                    <label for='homehours' class='col-sm-12 control-label-notes mb-1'>$langHomeHours <small>($langHoursSmall)</small></label>
                     <div class='col-sm-12'>
                         <input name='homehours' id='homehours' type='number' min='1' max='150' class='form-control' value='".q($q1->home_hours)."' onchange='hoursSum()' >
                     </div>
                 </div>        
                 <div class='form-group mt-3'>
-                    <label for='totalhours' class='col-sm-6 control-label-notes'>$langTotalHours : </label>
+                    <label for='totalhours' class='col-sm-12 control-label-notes mb-1'>$langTotalHours</label>
                     <div class='col-sm-12'>
                         <input name='totalhours' id='totalhours' type='number' min='1' max='650' class='form-control' value='".q($q1->total_hours)."' readonly>
                     </div>
                 </div>
             
                 <div class='form-group mt-3'>
-                    <label for='goals' class='col-sm-6 control-label-notes'>$langGoals:</label>
-                </div>
-                
-                <div class='form-group mt-3'>
-                    <div id='row_g_1'>
-                                ";
+                    <div class='col-12 d-inline-flex mb-2'>
+                        <label for='goals' class='control-label-notes me-2'>$langGoals:</label>
+                        <a href='#!' name='add_g' id='add_g'>
+                            <span class='fa fa-plus-circle add-unit-btn'>
+                            </span>
+                        </a>
+                    </div>";
+
                     $count_goals =1;
                     foreach($q2 as $goal){
 
-                        $tool_content .="<div id='row_g_".$count_goals."'>
-                                            <label for='goal_$count_goals' class='col-sm-12 control-label-notes' id='gtitle_$count_goals'>$count_goals: </label>
-                                            <div class='col-sm-12'><input name='goals[]' id='goal_$count_goals' type='text' class='form-control' value='".$goal->title."' placeholder='$langGoals'>
+                        $tool_content .="<div class='col-12 d-inline-flex mb-3' id='row_g_".$count_goals."'>
+                                            <label for='goal_$count_goals' class='control-label-notes' id='gtitle_$count_goals'>$count_goals: </label>
+                                            <input name='goals[]' id='goal_$count_goals' type='text' class='form-control w-100 ms-2' value='".$goal->title."' placeholder='$langGoals'>
                                         ";
-                                    if($count_goals ==1){
-
-                                        $tool_content.="<a href='#!' name='add_g' id='add_g'>
-                                                <span class='fa fa-plus-circle add-unit-btn'>
-                                                </span>
-                                            </a>
-                                        </div></div>";
-                                    }else{
+                                    if($count_goals > 1){
 
                                         $tool_content.="<a href='#!' class='btn_remove' name='remove_g' id='rm_g_".$count_goals."'>
                                                 <span class='fa fa-minus-circle text-danger'>
                                                 </span>
-                                            </a>
-                                        </div></div>";
+                                            </a>";
+                                       
                                     }
+                                    $tool_content .= "</div>";
                         $count_goals +=1;
                     }
 
                     $tool_content.="
                                
-                            </div>
-                            <div id='dynamic_goals'>
-                            </div>
+                            
+                        <div id='dynamic_goals'></div>
                             
                         <input id='goal_count' type='hidden' name='goal_count' value='1'>
                     </div>
                     
                 
                 <div class='form-group mt-3'>
-                    <label for='description' class='col-sm-6 control-label-notes'>$langCont <small>$langOptional</small>:</label>
+                    <label for='description' class='col-sm-12 control-label-notes mb-1'>$langCont <small>$langOptional</small>:</label>
                     <div class='col-sm-12'>
                           " .  rich_text_editor('description', 4, 20, purify($q4->description)) . "
                     </div>
                 </div>";
                 if($q4->lectures_model==2){
                     $tool_content .="<div class='form-group mt-3'>
-                        <label for='localize' class='col-sm-6 control-label-notes'>$langLectModel:</label>
-                        <div class='col-sm-12'>
-                            <div class='radio'>
+                        <label for='localize' class='col-sm-12 control-label-notes mb-1'>$langLectModel:</label>
+                        <div class='row'>
+                            <div class='col-md-6 col-12 radio'>
                                 <label>
                                     <input id='fromHome' type='radio' name='lectModel' value='2' checked>
                                         $langLectFromHome
                                 </label>
                             </div>
-                            <div class='radio'>
+                            <div class='col-md-6 col-12 radio'>
                                 <label>
                                     <input id='eLearn' type='radio' name='lectModel' value='1'>
                                         $langLectMixed
@@ -326,15 +321,15 @@ if(!isset($_POST['next'])){
                     </div>";
                 }else{
                     $tool_content .="<div class='form-group mt-3'>
-                        <label for='localize' class='col-sm-6 control-label-notes'>$langLectModel:</label>
-                        <div class='col-sm-12'>
-                            <div class='radio'>
+                        <label for='localize' class='col-sm-12 control-label-notes'>$langLectModel:</label>
+                        <div class='row'>
+                            <div class='col-md-6 col-12 radio'>
                                 <label>
                                     <input id='fromHome' type='radio' name='lectModel' value='2' >
                                         $langLectFromHome
                                 </label>
                             </div>
-                            <div class='radio'>
+                            <div class='col-md-6 col-12 radio'>
                                 <label>
                                     <input id='eLearn' type='radio' name='lectModel' value='1' checked>
                                         $langLectMixed
@@ -345,65 +340,48 @@ if(!isset($_POST['next'])){
 
                 }
                 $tool_content .="
+
                 <div class='form-group mt-3'>
-                    <label for='units' class='col-sm-6 control-label-notes'>$langUnits:</label>
-                </div>
-                <div class='form-group mt-3'>
-                    <div id='row_u_1'>
+                    <div class='col-12 d-inline-flex mb-2'>
+                        <label for='units' class='control-label-notes me-2'>$langUnits:</label>
+                        <a href='#!' name='add_u' id='add_u'>
+                            <span class='fa fa-plus-circle add-unit-btn'></span>
+                        </a>
+                    </div>";
+
+                    $count_units =1;
+                    foreach($q5_b as $unit){
+
+                        $tool_content .= "
+                            <div class='col-12 d-inline-flex mb-3' id='row_u_".$count_units."'>
+                                <label for='unit_$count_units' id='utitle_$count_units' class='control-label-notes'>$count_units: </label>
+                                <input name='units[]' id='unit_$count_units' type='text' class='form-control w-100 ms-2' value='".$unit->title."' placeholder='$langUnits'>
+                                <input name='ids[]' type='hidden' value='$unit->ID'>
                                 ";
-                        $count_units =1;
-                        foreach($q5_b as $unit){
 
-                            $tool_content .= "
-                                <label for='unit_$count_units' id='utitle_$count_units' class= 'col-sm-12 control-label'>$count_units: </label>
-                                <div class='col-sm-12'>
-                                    <input name='units[]' id='unit_$count_units' type='text' class='form-control' value='".$unit->title."' placeholder='$langUnits'>
-                                    <input name='ids[]' type='hidden' value='$unit->ID'>
-                                    ";
+                                if($count_units > 1){
 
-                                    if($count_units ==1){
-
-                                        $tool_content.="<a href='#!' name='add_u' id='add_u'>
-                                                <span class='fa fa-plus-circle add-unit-btn'>
-                                                </span>
-                                            </a>
-                                        ";
-                                    }else{
-
-                                        $tool_content.="<a href='#!' class='btn_remove btn disabled' name='remove_u' id='rm_u_".$count_units."' disabled>
-                                               
-                                            </a>
-                                        ";
-                                    }
-                                    $tool_content.="</div>";
-                                $count_units +=1;
-                        }
-                            $tool_content .="
-                            
-                            <div id='dynamic_units'>
-                            </div>
-                    
+                                    $tool_content.="<a href='#!' class='btn_remove' name='remove_u' id='rm_u_".$count_units."'>
+                                    <span class='fa fa-minus-circle text-danger'></a>";
+                                }
+                                $tool_content.="</div>";
+                            $count_units +=1;
+                    }
+                        $tool_content .="
                         
-                        <input id='unit_count' type='hidden' name='unit_count' value='1'>
+                    <div id='dynamic_units'></div>
+                
                     
-                    
-                </div>             
-            </div>
-
-            <div class='form-group mt-4'>
-                <div class='col-12 d-inline-flex'>
-                   
-                       
-                        <input class='btn btn-primary submitAdminBtn' type='submit' name='next' value='" . q($langNext) . "'>
-                       
-                       
-                        <a href='{$urlServer}courses/".$course_code."' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
-                      
-                    
-                    
-                    
+                    <input id='unit_count' type='hidden' name='unit_count' value='1'>
+                               
                 </div>
-            </div>     
+
+                <div class='form-group mt-4'>
+                    <div class='col-12 d-inline-flex'>
+                            <input class='col-6 btn btn-primary submitAdminBtn' type='submit' name='next' value='" . q($langNext) . "'>
+                            <a href='{$urlServer}courses/".$course_code."' class='col-6 btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                    </div>
+                </div>     
             </fieldset>" . generate_csrf_token_form_field() . "
         </form>
         </div>

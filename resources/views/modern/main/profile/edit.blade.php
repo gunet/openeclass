@@ -125,7 +125,7 @@
                                 </div>
 
                                 <div class='form-group mt-3'>
-                                    <label for='emailfromcourses' class='col-sm-12 control-label-notes'>{{ trans('langEmailFromCourses') }}</label>
+                                    <label for='emailfromcourses' class='col-sm-12 control-label-notes mb-2'>{{ trans('langEmailFromCourses') }}</label>
                                     <div class='col-sm-12 d-inline-flex'>
                                         <div class='radio'>
                                             <label>

@@ -21,10 +21,10 @@
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     <div class="col-12">
-                        <div class="panel panel-admin shadow-lg rounded-0">
-                            <div class='panel-heading rounded-0'>
-                                <div class='panel-title text-center p-0'>
-                                    {{trans('langAnalyticsEditElements')}}
+                        <div class="panel panel-admin border-0 bg-white rounded-0">
+                            <div class='panel-heading bg-body'>
+                                <div class='col-12 Help-panel-heading'>
+                                    <span class='text-uppercase fw-bold Help-text-panel-heading-Portfolio'>{{trans('langAnalyticsEditElements')}}</span>
                                 </div>
                             </div>
                             <div class="panel-body rounded-0">
