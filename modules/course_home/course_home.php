@@ -52,7 +52,7 @@ $tree = new Hierarchy();
 $course = new Course();
 $pageName = ''; // delete $pageName set in doc_init.php
 
-$main_content = $cunits_content = $course_info_extra = "";
+$main_content = $cunits_content = $course_info_extra = $email_notify_icon = "";
 
 add_units_navigation(TRUE);
 
@@ -208,6 +208,66 @@ if ($course_info->password !== '') {
               });
             });
         </script>";
+}
+
+/* email notifications pop up*/
+$head_content .= "
+    <script type='text/javascript'>
+        $(document).on('click', '#email_notification', function(e) {
+            e.preventDefault();
+            var info_message = '';
+            var action_message = '';
+            var url = $(this).attr('href');
+            var varUrl = url.split('?'); /* split url parameters */
+            for (i = 0; i < varUrl.length; i++) {
+                varUrlName = varUrl[i].split('=');
+            }
+            var valueMessage = varUrlName[2]; /* value of url parameter 'email_un' */            
+            if (valueMessage == 1) {
+                info_message = '". js_escape($langUserEmailNotification) . "' + '<br><br>' + '" . js_escape($langConfDisableMailNotification) . "';
+                action_message = '" .js_escape($langDeactivate) ."';
+            } else {
+                info_message = '".js_escape($langNoUserEmailNotification) . "' + '<br><br>' + '" . js_escape($langConfEnableMailNotification) . "';
+                action_message = '" .js_escape($langActivate) ."';
+            }            
+            bootbox.confirm({
+                title: '". js_escape($langEmailUnsubscribe) . "',
+                message: info_message,
+                buttons: {
+                    confirm: {
+                        label: action_message,
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: '". js_escape($langCancel) . "',                        
+                    }
+                },
+                callback: function(result) {
+                    if (result) {            
+                        window.location.href = url;
+                    }
+                }
+            });
+          });        
+    </script>";
+
+
+// course email notification
+if ($uid and $status != USER_GUEST) {
+    if (get_mail_ver_status($uid) == EMAIL_VERIFIED) {
+        if (isset($_GET['email_un'])) {
+            if ($_GET['email_un'] == 1) {
+                Database::get()->query("UPDATE course_user SET receive_mail = " . EMAIL_NOTIFICATIONS_DISABLED . " WHERE user_id = ?d AND course_id = ?d", $uid, $course_id);
+            } else if ($_GET['email_un'] == 0) {
+                Database::get()->query("UPDATE course_user SET receive_mail = " . EMAIL_NOTIFICATIONS_ENABLED . " WHERE user_id = ?d AND course_id = ?d", $uid, $course_id);
+            }
+        }
+        if (get_user_email_notification($uid, $course_id)) {
+            $email_notify_icon = "<a id='email_notification' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;email_un=1' style='color: #23527C;'><span class='fa fa-envelope fa-fw' data-toggle='tooltip' data-placement='bottom' title='" . q($langUserEmailNotification) . "'></span></a>";
+        } else {
+            $email_notify_icon = "<a id='email_notification' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;email_un=0' style='color: #23527C;'><span class='fa fa-envelope-o fa-fw' data-toggle='tooltip' data-placement='bottom' title='" . q($langNoUserEmailNotification) . "'></span></a>";
+        }
+    }
 }
 
 // For statistics: record login
@@ -644,6 +704,7 @@ $tool_content .= "<ul class='course-title-actions clearfix pull-right list-inlin
 
                         ($is_course_admin? "<li class='access pull-right'><a href='{$urlAppend}modules/course_info/?course=$course_code' style='color: #23527C;'><span class='fa fa-wrench fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInfo'></span></a></li>": '') . "
                         <li class='access pull-right'><a href='javascript:void(0);'>". course_access_icon($visible) . "</a></li>
+                        <li class='access pull-right'>" . $email_notify_icon . "</li>
                         <li class='access pull-right'><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='$langCitation'></span><span class='hidden'>.</span></a></li>";
                         if ($uid) {
                             $tool_content .= "<li class='access pull-right'>";

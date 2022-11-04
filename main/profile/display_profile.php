@@ -79,7 +79,7 @@ if ($userdata) {
                 array('title' => $langEmailUnsubscribe,
                     'url' => "emailunsubscribe.php",
                     'icon' => 'fa-envelope',
-                    'level' => 'primary',
+                    'level' => 'primary-label',
                     'show' => (get_mail_ver_status($uid) == EMAIL_VERIFIED) and (!empty($_SESSION['courses'])))
                 ));
     } else {

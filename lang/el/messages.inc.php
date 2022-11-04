@@ -1059,6 +1059,7 @@ $langRSSFeed = 'Ροή RSS';
 $langRefernce = "Αναφορά";
 $langCitation = "Βιβλιογραφική αναφορά $langsOfCourse";
 $langAccessed = "Ανακτήθηκε την ";
+$langUserEmailNotification = "Λαμβάνετε ειδοποιήσεις του $langsOfCourse μέσω email.";
 $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του $langsOfCourse μέσω email.";
 $langCourseInvalidDepartment = "Το $langsCourse βρίσκεται σε τμήμα όπου δεν
     επιτρέπεται πλέον η δημιουργία $langsOfCourses.";
@@ -1068,6 +1069,8 @@ $langReadMore = "Περισσότερα";
 $langReadLess = "Λιγότερα";
 $langNoInfoAvailable = "Δεν υπάρχουν διαθέσιμες πληροφορίες";
 $langDownloadCourse = "Κατέβασμα του μαθήματος";
+$langConfEnableMailNotification = "Θέλετε να ενεργοποιήσετε τη λήψη ειδοποιήσεων του $langsOfCourse μέσω email;";
+$langConfDisableMailNotification = "Θέλετε να απενεργοποιήσετε τη λήψη ειδοποιήσεων του $langsOfCourse μέσω email;";
 
 /* * *******************************************
  * course_info.php
