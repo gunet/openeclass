@@ -53,13 +53,13 @@ $tree = new Hierarchy();
 $course = new Course();
 $pageName = ''; // delete $pageName set in doc_init.php
 
-$main_content = $cunits_content = $course_info_extra = "";
+$main_content = $cunits_content = $course_info_extra = $email_notify_icon = "";
 
 add_units_navigation(TRUE);
 
 load_js('tools.js');
 
-$data['course_info'] = $course_info = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
+$data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license, finish_date,
                                                view_type, start_date, finish_date, description, home_layout, course_image, password
                                           FROM course WHERE id = ?d", $course_id);
 
@@ -219,6 +219,36 @@ calendar.view($this.data("calendar-view"));
 ."})
 </script>";
 $registerUrl = js_escape($urlAppend . 'modules/course_home/register.php?course=' . $course_code);
+
+// course email notification
+if (isset($uid) and isset($_SESSION['status']) and $_SESSION['status'] != USER_GUEST) {
+    if (get_mail_ver_status($uid) == EMAIL_VERIFIED) {
+        if (isset($_GET['email_un'])) {
+            if ($_GET['email_un'] == 1) {
+                Database::get()->query("UPDATE course_user SET receive_mail = " . EMAIL_NOTIFICATIONS_DISABLED . " WHERE user_id = ?d AND course_id = ?d", $uid, $course_id);
+                Log::record(0, 0, LOG_PROFILE, array(
+                    'uid' => $uid,
+                    'email_notifications' => 0,
+                    'course_title' => $course_info->title
+                ));
+            } else if ($_GET['email_un'] == 0) {
+                Database::get()->query("UPDATE course_user SET receive_mail = " . EMAIL_NOTIFICATIONS_ENABLED . " WHERE user_id = ?d AND course_id = ?d", $uid, $course_id);
+                Log::record(0, 0, LOG_PROFILE, array(
+                    'uid' => $uid,
+                    'email_notifications' => 1,
+                    'course_title' => $course_info->title
+                ));
+            }
+        }
+        if (get_user_email_notification($uid, $course_id)) {
+            $email_notify_icon = "<a id='email_notification' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;email_un=1' style='color: #23527C;' class='float-end'><span class='fa fa-envelope fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langUserEmailNotification) . "'></span></a>";
+        } else {
+            $email_notify_icon = "<a id='email_notification' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;email_un=0' style='color: #23527C;' class='float-end'><span class='fa fa-envelope-o fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langNoUserEmailNotification) . "'></span></a>";
+        }
+    }
+}
+$data['email_notify_icon'] = $email_notify_icon;
+
 
 // For statistics: record login
 Database::get()->query("INSERT INTO logins
@@ -510,7 +540,7 @@ if ($is_editor){
     }
 }
 $show_course = Database::get()->querySingle("SELECT view_units FROM course WHERE id =  ?d", $course_id);
-$carousel_or_row = $show_course->view_units; 
+$carousel_or_row = $show_course->view_units;
 /***************************************************************************/
 
 $total_cunits = count($all_units);
@@ -860,7 +890,7 @@ function course_announcements() {
         }else{
             $indexOfAnnounce = 3;
         }
-        
+
 
         if ($q) { // if announcements exist
             $ann_content = '';

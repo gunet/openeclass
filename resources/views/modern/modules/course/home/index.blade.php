@@ -1,31 +1,70 @@
 @extends('layouts.default')
 
 @push('head_scripts')
-<script src="{{ $urlServer }}/js/sortable/Sortable.min.js"></script>
-<script type='text/javascript'>
+    <script src="{{ $urlServer }}/js/sortable/Sortable.min.js"></script>
+    <script type='text/javascript'>
 
-$(document).ready(function(){
-    Sortable.create(boxlistSort, {
-            animation: 350,
-            handle: '.fa-arrows',
-            animation: 150,
-            onUpdate: function (evt) {
-                var itemEl = $(evt.item);
-                var idReorder = itemEl.attr('data-id');
-                var prevIdReorder = itemEl.prev().attr('data-id');
+    $(document).ready(function(){
+        Sortable.create(boxlistSort, {
+                animation: 350,
+                handle: '.fa-arrows',
+                animation: 150,
+                onUpdate: function (evt) {
+                    var itemEl = $(evt.item);
+                    var idReorder = itemEl.attr('data-id');
+                    var prevIdReorder = itemEl.prev().attr('data-id');
 
-                $.ajax({
-                  type: 'post',
-                  dataType: 'text',
-                  data: {
-                      toReorder: idReorder,
-                      prevReorder: prevIdReorder,
-                  }
-                });
+                    $.ajax({
+                      type: 'post',
+                      dataType: 'text',
+                      data: {
+                          toReorder: idReorder,
+                          prevReorder: prevIdReorder,
+                      }
+                    });
+                }
+            });
+    });
+    </script>
+
+    <script type='text/javascript'>
+        $(document).on('click', '#email_notification', function(e) {
+            e.preventDefault();
+            var info_message = '';
+            var action_message = '';
+            var url = $(this).attr('href');
+            var varUrl = url.split('?'); /* split url parameters */
+            for (i = 0; i < varUrl.length; i++) {
+                varUrlName = varUrl[i].split('=');
             }
+            var valueMessage = varUrlName[2]; /* value of url parameter 'email_un' */
+            if (valueMessage == 1) {
+                info_message = "{{ trans('langUserEmailNotification') }}" + "<br><br>" + "{{ trans('langConfDisableMailNotification') }}"
+                action_message = " {{ trans('langDeactivate') }} ";
+            } else {
+                info_message = "{{ trans('langNoUserEmailNotification') }}" + "<br><br>" + "{{ trans('langConfEnableMailNotification') }}";
+                action_message = " {{ trans('langActivate') }} ";
+            }
+            bootbox.confirm({
+                title: "{{ trans('langEmailUnsubscribe') }}",
+                message: info_message,
+                buttons: {
+                    confirm: {
+                        label: action_message,
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: "{{ trans('langCancel') }}",
+                    }
+                },
+                callback: function(result) {
+                    if (result) {
+                        window.location.href = url;
+                    }
+                }
+            });
         });
-});
-</script>
+    </script>
 @endpush
 
 @section('content')
@@ -79,11 +118,14 @@ $(document).ready(function(){
                         <div class='panel panel-admin border-0 p-md-3 bg-white'>
                             <div class='panel-heading bg-body'>
                                 <div class='col-12 d-inline-flex Help-panel-heading'>
-                                    
-                                    <div class='col-9'>
+
+                                    <div class='col-10'>
                                         <span class="panel-title text-uppercase Help-text-panel-heading">{{ trans('langCourseProgram') }}</span>
                                     </div>
-                                    <div class='col-3'>
+                                    <div class='col-1'>
+                                        {!! $email_notify_icon !!}
+                                    </div>
+                                    <div class='col-1'>
                                         <a href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation' class='float-end'>
                                             <span class='fa fa-paperclip fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langCitation') }}"></span>
                                         </a>
@@ -106,7 +148,7 @@ $(document).ready(function(){
                                             </a>
                                         @endif
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class='panel-body'>
