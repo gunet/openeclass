@@ -58,7 +58,7 @@ add_units_navigation(TRUE);
 
 load_js('tools.js');
 
-$course_info = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
+$course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license, finish_date,
                                                view_type, start_date, finish_date, description, home_layout, course_image, password
                                           FROM course WHERE id = ?d", $course_id);
 
@@ -251,15 +251,24 @@ $head_content .= "
           });        
     </script>";
 
-
 // course email notification
-if ($uid and $status != USER_GUEST) {
+if (isset($uid) and isset($_SESSION['status']) and $_SESSION['status'] != USER_GUEST) {
     if (get_mail_ver_status($uid) == EMAIL_VERIFIED) {
         if (isset($_GET['email_un'])) {
             if ($_GET['email_un'] == 1) {
                 Database::get()->query("UPDATE course_user SET receive_mail = " . EMAIL_NOTIFICATIONS_DISABLED . " WHERE user_id = ?d AND course_id = ?d", $uid, $course_id);
+                Log::record(0, 0, LOG_PROFILE, array(
+                    'uid' => $uid,
+                    'email_notifications' => 0,
+                    'course_title' => $course_info->title
+                ));
             } else if ($_GET['email_un'] == 0) {
                 Database::get()->query("UPDATE course_user SET receive_mail = " . EMAIL_NOTIFICATIONS_ENABLED . " WHERE user_id = ?d AND course_id = ?d", $uid, $course_id);
+                Log::record(0, 0, LOG_PROFILE, array(
+                    'uid' => $uid,
+                    'email_notifications' => 1,
+                    'course_title' => $course_info->title
+                ));
             }
         }
         if (get_user_email_notification($uid, $course_id)) {

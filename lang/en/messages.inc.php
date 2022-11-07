@@ -4960,6 +4960,7 @@ $langConfirmPurgeCert = "Caution: The progress record for this certificate will 
 $langDownloadCourse = "Download $langsCourse";
 $langConfEnableMailNotification = "Do you want to activate email notifications in $langsOfCourse?";
 $langConfDisableMailNotification = "Do you want to deactivate email notifications in $langsOfCourse?";
+$langOfNotifications = "notifications";
 $langTopics = "Topics";
 $langGoToHomePage = 'Go to home page';
 $langQuickLinks = "Quick Links";
