@@ -1074,6 +1074,8 @@ $langNoInfoAvailable = "Δεν υπάρχουν διαθέσιμες πληρο�
 $langDownloadCourse = "Κατέβασμα του μαθήματος";
 $langConfEnableMailNotification = "Θέλετε να ενεργοποιήσετε τη λήψη ειδοποιήσεων του $langsOfCourse μέσω email;";
 $langConfDisableMailNotification = "Θέλετε να απενεργοποιήσετε τη λήψη ειδοποιήσεων του $langsOfCourse μέσω email;";
+$langOfNotifications = "ειδοποιήσεων";
+
 
 /* * *******************************************
  * course_info.php

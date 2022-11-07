@@ -21,7 +21,9 @@
 
 $require_login = true;
 $require_valid_uid = true;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/log.class.php';
+
 load_js('tools.js');
 
 $toolName = $langMyProfile;
@@ -37,14 +39,24 @@ if (isset($_POST['submit'])) {
     }
     if (isset($_POST['cid'])) {  // change email subscription for one course
         $cid = getDirectReference($_POST['cid']);
+        $course_title = course_id_to_title($cid);
         if (isset($_POST['c_unsub'])) {
             Database::get()->query("UPDATE course_user SET receive_mail = ". EMAIL_NOTIFICATIONS_ENABLED . "
                                 WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
+            Log::record(0, 0, LOG_PROFILE, array(
+                        'uid' => intval($_SESSION['uid']),
+                        'email_notifications' => 1,
+                        'course_title' => $course_title
+                        ));
         } else {
-            Database::get()->query("UPDATE course_user SET receive_mail = " .EMAIL_NOTIFICATIONS_DISABLED . "
+            Database::get()->query("UPDATE course_user SET receive_mail = " . EMAIL_NOTIFICATIONS_DISABLED . "
                                 WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
+            Log::record(0, 0, LOG_PROFILE, array(
+                'uid' => intval($_SESSION['uid']),
+                'email_notifications' => 0,
+                'course_title' => $course_title
+            ));
         }
-        $course_title = course_id_to_title($cid);
         $message = q(sprintf($course_title, $langEmailUnsubSuccess));
         //Session::Messages($message, "alert-success");
         Session::flash('message',$message);
@@ -52,6 +64,7 @@ if (isset($_POST['submit'])) {
     } else { // change email subscription for all courses
         foreach ($_SESSION['courses'] as $course_code => $c_value) {
             $cid = course_code_to_id($course_code);
+            $course_title = course_id_to_title($cid);
             if (isset($_POST['c_unsub']) and array_key_exists($course_code, $_POST['c_unsub'])) {
                 $receive_mail = EMAIL_NOTIFICATIONS_ENABLED;
             } else {
@@ -59,6 +72,11 @@ if (isset($_POST['submit'])) {
             }
             Database::get()->query("UPDATE course_user SET receive_mail = ?d
                 WHERE user_id = ?d AND course_id = ?d", $receive_mail, $uid, $cid);
+            Log::record(0, 0, LOG_PROFILE, array(
+                'uid' => intval($_SESSION['uid']),
+                'email_notifications' => $receive_mail,
+                'course_title' => $course_title
+            ));
         }
         //Session::Messages($langWikiEditionSucceed, "alert-success");
         Session::flash('message',$langWikiEditionSucceed);

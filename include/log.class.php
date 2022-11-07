@@ -441,10 +441,16 @@ class Log {
         return $content;
     }
 
+    /**
+     * @brief display user profile actions details
+     * @param $details
+     * @return string
+     */
     private function profile_action_details($details) {
 
         global $lang_username, $langAm, $langChangePass, $langUpdateImage,
-        $langType, $langDelImage, $langPersoDetails;
+               $langType, $langDelImage, $langPersoDetails, $langActivate,
+               $langDeactivate, $langOfNotifications, $langsOfCourse;
 
         $details = unserialize(($details));
         $content = '';
@@ -465,9 +471,13 @@ class Log {
         if (!empty($details['deleteimage'])) {
             $content .= "$langDelImage";
         }
-        /* if (!empty($details['deleteuser'])) {
-          $content .= "$langUnregUser <br />&nbsp;&laquo;$langName".$details['name']."&raquo;&nbsp;$lang_username&nbsp;&laquo;".$details['username']."&raquo;";
-          } */
+        if (isset($details['email_notifications'])) {
+            if ($details['email_notifications'] == 1) {
+                $content .= "$langActivate $langOfNotifications  <br />&nbsp;&laquo;$langsOfCourse " . $details['course_title'] . "&raquo;";
+            } else {
+                $content .= "$langDeactivate $langOfNotifications  <br />&nbsp;&laquo;$langsOfCourse " . $details['course_title'] . "&raquo;";
+            }
+        }
 
         return $content;
     }
