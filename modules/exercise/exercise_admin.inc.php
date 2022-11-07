@@ -589,8 +589,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     eClassTag::tagInput($exerciseId) . "
                 </div>
                 <div class='row p-3 form-group'>
-                    <div class='col-md-3 col-12'></div>
-                    <div class='col-md-9 col-12 d-inline-flex'>
+                    <div class='col-md-9 offset-md-3 d-inline-flex'>
                       
                            
                              ".

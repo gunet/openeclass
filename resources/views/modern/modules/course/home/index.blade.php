@@ -34,10 +34,13 @@
             var action_message = '';
             var url = $(this).attr('href');
             var varUrl = url.split('?'); /* split url parameters */
+
             for (i = 0; i < varUrl.length; i++) {
                 varUrlName = varUrl[i].split('=');
             }
+
             var valueMessage = varUrlName[2]; /* value of url parameter 'email_un' */
+
             if (valueMessage == 1) {
                 info_message = "{{ trans('langUserEmailNotification') }}" + "<br><br>" + "{{ trans('langConfDisableMailNotification') }}"
                 action_message = " {{ trans('langDeactivate') }} ";
@@ -119,13 +122,11 @@
                             <div class='panel-heading bg-body'>
                                 <div class='col-12 d-inline-flex Help-panel-heading'>
 
-                                    <div class='col-10'>
+                                    <div class='col-md-9 col-8'>
                                         <span class="panel-title text-uppercase Help-text-panel-heading">{{ trans('langCourseProgram') }}</span>
                                     </div>
-                                    <div class='col-1'>
+                                    <div class='col-md-3 col-4'>
                                         {!! $email_notify_icon !!}
-                                    </div>
-                                    <div class='col-1'>
                                         <a href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation' class='float-end'>
                                             <span class='fa fa-paperclip fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langCitation') }}"></span>
                                         </a>

@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
         Database::get()->query("UPDATE user SET receive_mail = " . EMAIL_NOTIFICATIONS_ENABLED . " WHERE id = ?d", $uid);
     }
     if (isset($_POST['cid'])) {  // change email subscription for one course
-        $cid = getDirectReference($_POST['cid']);
+        $cid = $_POST['cid'];
         $course_title = course_id_to_title($cid);
         if (isset($_POST['c_unsub'])) {
             Database::get()->query("UPDATE course_user SET receive_mail = ". EMAIL_NOTIFICATIONS_ENABLED . "

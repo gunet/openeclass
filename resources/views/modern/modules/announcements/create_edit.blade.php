@@ -105,9 +105,9 @@
                                     <div class='form-wrapper form-edit p-3 rounded'>    
                                             <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">
                                                     
-                                                    <div class="form-group {{ $antitle_error }}">
-                                                        <label for="AnnTitle" class="col-sm-6 control-label-notes">{{ trans('langAnnTitle') }}:</label>
-                                                        <div class="col-sm-12 ">
+                                                    <div class="row p-3 form-group {{ $antitle_error }}">
+                                                        <label for="AnnTitle" class="col-md-3 col-12 control-label-notes">{{ trans('langAnnTitle') }}:</label>
+                                                        <div class="col-md-9 col-12 ">
                                                             <input class="form-control" placeholder="{{ trans('langAnnTitle') }}..." type="text" name="antitle" value="{{ $titleToModify }}"/>
                                                             <span class='help-block'>{{ Session::getError('antitle') }}</span>
                                                         </div>
@@ -115,9 +115,9 @@
 
                                         
 
-                                                    <div class='form-group mt-3'>
-                                                        <label for='AnnBody' class='col-sm-6 control-label-notes'>{{ trans('langAnnBody') }}:</label>
-                                                        <div class='col-sm-12'>{!! $contentToModify !!}</div>
+                                                    <div class='row p-3 form-groum'>
+                                                        <label for='AnnBody' class='col-md-3 col-12 control-label-notes'>{{ trans('langAnnBody') }}:</label>
+                                                        <div class='col-md-9 col-12'>{!! $contentToModify !!}</div>
                                                     </div>
 
                                                   
@@ -125,9 +125,9 @@
                                                     
                                                        
                                                            
-                                                    <div class='form-group mt-3 mb-3'>
-                                                            <label for='Email' class='col-sm-12 control-label-notes'>{{ trans('langEmailOption') }}:</label>
-                                                        <div class='col-sm-12'>
+                                                    <div class='row p-3 form-group'>
+                                                        <label for='Email' class='col-md-3 col-12 control-label-notes'>{{ trans('langEmailOption') }}:</label>
+                                                        <div class='col-md-9 col-12'>
                                                             <select class='form-select' name='recipients[]' multiple='multiple' id='select-recipients'>
                                                                 <option value='-1' selected>{{ trans('langAllUsers') }}</option>
                                                                 @foreach ($course_users as $cu)
@@ -144,42 +144,41 @@
                                                        
                                                     
                                                     
-
-                                                    <div class='row'>
-                                                        <div class='col-md-6 col-12'>
-                                                            <div class='form-group {{ $startdate_error }} mt-3'>
-                                                                <label for='startdate' class='col-sm-12 control-label-notes'>{{ trans('langStartDate') }} :</label>
-                                                                <div class='col-sm-12'>
-                                                                    <div class='input-group'> 
-                                                                        <span class='input-group-addon'>
-                                                                            <input type='checkbox' name='startdate_active' {{ $start_checkbox }}>
-                                                                        </span>
-                                                                        <input class='form-control' name='startdate' id='startdate' type='text' value = '{{ $showFrom }}'>
-                                                                    </div>
-                                                                    <span class='help-block'>{{ $startdate_error }}</span>
-                                                                </div>
+                                                   
+                                                       
+                                                    <div class='row p-3 form-group {{ $startdate_error }}'>
+                                                        <label for='startdate' class='col-md-3 col-12 control-label-notes'>{{ trans('langStartDate') }} :</label>
+                                                        <div class='col-md-9 col-12'>
+                                                            <div class='input-group'> 
+                                                                <span class='input-group-addon'>
+                                                                    <input type='checkbox' name='startdate_active' {{ $start_checkbox }}>
+                                                                </span>
+                                                                <input class='form-control' name='startdate' id='startdate' type='text' value = '{{ $showFrom }}'>
                                                             </div>
-                                                        </div>
-                                                        <div class='col-md-6 col-12'>
-                                                            <div class='form-group {{ $enddate_error }} mt-3'>
-                                                                <label for='enddate' class='col-sm-12 control-label-notes'>{{ trans('langEndDate') }} :</label>
-                                                                <div class='col-sm-12'>
-                                                                    <div class='input-group'>
-                                                                        <span class='input-group-addon'>
-                                                                            <input type='checkbox' name='enddate_active' {{ $end_checkbox}} {{ $end_disabled}}>
-                                                                        </span>
-                                                                        <input class='form-control' name='enddate' id='enddate' type='text' value = '{{ $showUntil }}'>
-                                                                    </div>
-                                                                    <span class='help-block'>{{ $enddate_error }}</span>
-                                                                </div>
-                                                            </div>
+                                                            <span class='help-block'>{{ $startdate_error }}</span>
                                                         </div>
                                                     </div>
+                                                
+                                                
+                                                    <div class='row p-3 form-group {{ $enddate_error }}'>
+                                                        <label for='enddate' class='col-md-3 col-12 control-label-notes'>{{ trans('langEndDate') }} :</label>
+                                                        <div class='col-md-9 col-12'>
+                                                            <div class='input-group'>
+                                                                <span class='input-group-addon'>
+                                                                    <input type='checkbox' name='enddate_active' {{ $end_checkbox}} {{ $end_disabled}}>
+                                                                </span>
+                                                                <input class='form-control' name='enddate' id='enddate' type='text' value = '{{ $showUntil }}'>
+                                                            </div>
+                                                            <span class='help-block'>{{ $enddate_error }}</span>
+                                                        </div>
+                                                    </div>
+                                                       
+                                                  
 
                                                   
 
-                                                    <div class='form-group mt-3'>
-                                                        <div class='col-sm-12 col-sm-offset-2'>
+                                                    <div class='row p-3 form-group'>
+                                                        <div class='col-md-9 offset-md-3'>
                                                             <div class='checkbox'>
                                                                 <label>
                                                                     <input type='checkbox' name='show_public' {{  $checked_public }}> {{ trans('langViewShow') }}
@@ -190,19 +189,15 @@
 
                                           
 
-                                                    <div class='form-group mt-4'>
+                                                    <div class='row p-3 form-group'>
                                                         <input type='hidden' name='id' value='{{ $announce_id }}'>
                                                         <input type='hidden' name='course' value='{{ $course_code }}'>
                                                         <input type='hidden' name='editorFromCreateEditAnnouncement' value='{{$is_editor}}'>
-                                                        <div class='col-12 d-inline-flex'>
-                                                           
-                                                              
-                                                                     <button type="submit" class="btn btn-primary submitAdminBtn" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
-                                                               
-                                                               
-                                                                    <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn btn-outline-secondary cancelAdminBtn ms-2">{{ trans('langCancel') }}</a>
-                                                               
-                                                           
+                                                        <div class='col-md-9 offset-md-3'>
+                                                            <div class='col-12 d-inline-flex'>
+                                                                <button type="submit" class="btn btn-primary submitAdminBtn" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
+                                                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn btn-outline-secondary cancelAdminBtn ms-2">{{ trans('langCancel') }}</a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     

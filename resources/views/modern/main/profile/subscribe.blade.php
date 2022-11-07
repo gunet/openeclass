@@ -15,7 +15,7 @@
 
         <div class="row rowMedium">
 
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 justify-content-center col_maincontent_active col_maincontent_active_ProfileUser">
+            <div class="col-12 justify-content-center col_maincontent_active_Homepage">
                     
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
@@ -47,8 +47,9 @@
                                     <div id='unsubscontrols'>
                                     @if(isset($_REQUEST['cid']))
                                     <div class='col-12 mb-3 label d-inline-flex align-items-top'>
-                                        <input type='checkbox' name='c_unsub' value='1' {{ $selected }}>&nbsp;{{ $course_title }}<br />
-                                        <input type='hidden' name='cid' value='{{ getIndirectReference($cid) }}'>
+                                        <input type='checkbox' name='c_unsub' value='1' {{ $selected }}>&nbsp;
+                                        @php $cid = $_GET['cid']; $course_title = course_id_to_title($cid) @endphp {{ $course_title }}<br />
+                                        <input type='hidden' name='cid' value='{{ $cid }}'>
                                     </div>
                                     @else
                                         @foreach($_SESSION['courses'] as $code => $status)

@@ -241,9 +241,9 @@ if (isset($uid) and isset($_SESSION['status']) and $_SESSION['status'] != USER_G
             }
         }
         if (get_user_email_notification($uid, $course_id)) {
-            $email_notify_icon = "<a id='email_notification' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;email_un=1' style='color: #23527C;' class='float-end'><span class='fa fa-envelope fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langUserEmailNotification) . "'></span></a>";
+            $email_notify_icon = "<a id='email_notification' href='/modules/course_home/course_home.php?course=$course_code&amp;email_un=1' class='float-end ps-2'><span class='fa fa-envelope fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langUserEmailNotification) . "'></span></a>";
         } else {
-            $email_notify_icon = "<a id='email_notification' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;email_un=0' style='color: #23527C;' class='float-end'><span class='fa fa-envelope-o fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langNoUserEmailNotification) . "'></span></a>";
+            $email_notify_icon = "<a id='email_notification' href='/modules/course_home/course_home.php?course=$course_code&amp;email_un=0' class='float-end ps-2'><span class='fa fa-envelope-o fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langNoUserEmailNotification) . "'></span></a>";
         }
     }
 }
