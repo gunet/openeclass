@@ -30,14 +30,16 @@
                                     </div>
                                 @else
                                     @foreach ($faqs as $key => $faq)
-                                        <div class='panel panel-default mt-3 rounded-0 overflow-auto'>
-                                            <div class='panel-heading rounded-0' role='tab' id='heading{{ $faq->id }}' style='border-bottom-right-radius:15px; border-bottom-left-radius:15px;'>
-                                                
-                                                <a class='control-label-notes' role='button' data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
-                                                    <span>{{ $key+1 }}.</span>{!! $faq->title !!}
-                                                </a>
-                                                <span class='fa fa-arrow-down orangeText ps-2 fs-6'></span>
-                                                
+                                        <div class='panel panel-admin border-0 p-md-3 bg-white rounded-0 overflow-auto'>
+                                            <div class='panel-heading bg-body'>
+                                                <div class='col-12'>
+                                                    <a role='button' data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
+                                                        <span>{{ $key+1 }}.</span>
+                                                        {!! $faq->title !!}
+                                                        <span class='fa fa-arrow-down'></span>
+                                                    </a>
+                                                    
+                                                </div>
                                             </div>
                                             <div id='faq-{{ $faq->id }}' class='panel-collapse accordion-collapse collapse' role='tabpanel' aria-labelledby='heading{{ $faq->id }}' data-bs-parent='#accordion'>
                                                 <div class='panel-body ps-3 rounded-0'>

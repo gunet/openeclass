@@ -17,62 +17,73 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                    <div class='col-12 mt-3'>
-                        <div class='text-start text-secondary'>{{trans('langEclass')}} - {{trans('langContact')}}</div>
-                        {!! $action_bar !!}
+                    <div class='col-12 mt-3 mb-3'>
+                        <div class='text-md-start text-center ms-md-2 text-secondary'>{{trans('langEclass')}} - {{trans('langContact')}}</div>
                     </div>
 
-                    
-                    <div class='col-12'>
-                        <div class='panel panel-default p-3 bg-body rounded'>
-                            <div class='panel-body'>
-                                <div class='p-1'>
-                                    <strong class='control-label-notes'>{!! trans('langPostMail') !!}</strong>&nbsp;{!! $Institution !!}
+                   
+                    <div class='col-lg-4 col-12 d-flex justify-content-center align-items-center mb-lg-0 mb-5'>
+                        <img class='contactImage' src="{{ $urlAppend }}template/modern/img/indexlogo.png">
+                    </div>
+                    <div class='col-lg-8 col-12'>
+                        
+                        <div class='row'>
+                            <div class='col-md-6 col-12'>
+                                <div class='col-12 d-flex justify-content-center mb-2'><div class='circle-img-contant'><i class='fa fa-address-card text-white'></i></div></div>
+                                <div class='col-12 d-flex justify-content-center mb-0'><strong>{!! trans('langPostMail') !!}</strong></div>
+                                <div class='col-12 d-flex justify-content-center'>{!! $Institution !!}</div>
+                            </div>
+                            <div class='col-md-6 col-12 mt-md-0 mt-5'>
+                                <div class='col-12 d-flex justify-content-center mb-2'><div class='circle-img-contant'><i class='fa fa-address-card text-white'></i></div></div>
+                                <div class='col-12 d-flex justify-content-center mb-0'><strong>{!! trans('langInstitutePostAddress') !!}:</strong></div>
+                                <div class='col-12 d-flex justify-content-center'>
+                                    @if(!empty($postaddress))
+                                        {!! $postaddress !!}
+                                    @else
+                                        - {{trans('langProfileNotAvailable')}} -
+                                    @endif
                                 </div>
-                                @if(!empty($postaddress))
-                                <div class='p-1'>
-                                    <strong class='control-label-notes'>{!! trans('langInstitutePostAddress') !!}: </strong>&nbsp;{!! $postaddress !!}
-                                </div>
-                                @endif
-
-                                @if (empty($phone))
-                                    <div class='p-1'>
-                                        <strong class='control-label-notes'>{!! trans('langPhone') !!}:</strong>
-                                        <span class='not_visible'> - {!! trans('langProfileNotAvailable') !!} - </span>
-                                    </div>
-                                @else
-                                <div class='p-1'>
-                                    <strong class='control-label-notes'>{!! trans('langPhone') !!}:&nbsp;</strong>
-                                    {{ $phone }}
-                                </div>
-                                @endif
-
-                                @if (empty($fax))
-                                <div class='p-1'>
-                                    <strong class='control-label-notes'>{!! trans('langFax') !!}</strong>
-                                    <span class='not_visible'> - {!! trans('langProfileNotAvailable') !!} - </span>
-                                </div>
-                                @else
-                                <div class='p-1'>
-                                    <strong class='control-label-notes'>{!! trans('langFax') !!}&nbsp;</strong>
-                                    {{ $fax }}
-                                </div>
-                                @endif
-
-                                @if (empty($emailhelpdesk))
-                                <div class='p-1'>
-                                    <strong class='control-label-notes'>{!! trans('langEmail') !!}:</strong>
-                                    <span class='not_visible'> - {!! trans('langProfileNotAvailable') !!} - </span>
-                                </div>
-                                @else
-                                <div class='p-1'>
-                                    <strong class='control-label-notes'>{!! trans('langEmail') !!}: </strong>
-                                    <a href='mailto:$emailhelpdesk'>{!! $emailhelpdesk !!}</a>
-                                </div>
-                                @endif
                             </div>
                         </div>
+
+                        <div class='row mt-5'>
+                            <div class='col-md-4 col-12'>
+                                <div class='col-12 d-flex justify-content-center mb-2'><div class='circle-img-contant'><i class='fa fa-phone text-white'></i></div></div>
+                                <div class='col-12 d-flex justify-content-center mb-0'><strong>{!! trans('langPhone') !!}:</strong></div>
+                                <div class='col-12 d-flex justify-content-center'>
+                                    @if(!empty($phone))
+                                        {{ $phone }}
+                                    @else
+                                        - {!! trans('langProfileNotAvailable') !!} -
+                                    @endif
+                                </div>
+                            </div>
+                            <div class='col-md-4 col-12 mt-md-0 mt-5'>
+                                <div class='col-12 d-flex justify-content-center mb-2'><div class='circle-img-contant'><i class='fa fa-fax text-white'></i></div></div>
+                                <div class='col-12 d-flex justify-content-center mb-0'><strong>{!! trans('langFax') !!}</strong></div>
+                                <div class='col-12 d-flex justify-content-center'>
+                                    @if(!empty($fax))
+                                        {{ $fax }}
+                                    @else
+                                            - {!! trans('langProfileNotAvailable') !!} -
+                                    @endif
+                                </div>
+                            </div>
+                            <div class='col-md-4 col-12 mt-md-0 mt-5'>
+                                <div class='col-12 d-flex justify-content-center mb-2'><div class='circle-img-contant'><i class='fa fa-envelope text-white'></i></div></div>
+                                <div class='col-12 d-flex justify-content-center mb-0'><strong>{!! trans('langEmail') !!}:</strong></div>
+                                <div class='col-12 d-flex justify-content-center'>
+                                    @if(!empty($emailhelpdesk))
+                                        {!! $emailhelpdesk !!}
+                                    @else
+                                        - {{trans('langProfileNotAvailable')}} -
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                            
                     </div>
+                    
                     
 
                 </div>

@@ -266,36 +266,34 @@ foreach ($result as $row) {
 
 $tool_content .= '<div class="col-12 mt-3"><div class="form-wrapper form-edit p-3 rounded">';
 $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
-$tool_content .= "<div class='input-append date form-group mt-3' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-6 control-label-notes'>$langStartDate:</label>
-            <div class='row'>
-                <div class='col-11 col-sm-11'>
+$tool_content .= "
+        <div class='row input-append date form-group p-3' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+                <label class='col-md-3 col-12 control-label-notes'>$langStartDate:</label>
+                <div class='col-md-8 col-10'>
                     <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
                 </div>
-                <div class='col-1 col-sm-1'>
+                <div class='col-md-1 col-2'>
                     <span class='add-on'><i class='fa fa-times'></i></span>
                     <span class='add-on'><i class='fa fa-calendar'></i></span>
                 </div>
-            </div>
         </div>";
-$tool_content .= "<div class='input-append date form-group mt-3' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-        <label class='col-sm-6 control-label-notes'>$langEndDate:</label>
-            <div class='row'>
-                <div class='col-11 col-sm-11'>
+$tool_content .= "<div class='row input-append date form-group p-3' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+                <label class='col-md-3 col-12 control-label-notes'>$langEndDate:</label>
+                <div class='col-md-8 col-10'>
                     <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
                 </div>
-                <div class='col-1 col-sm-1'>
+                <div class='col-md-1 col-2'>
                     <span class='add-on'><i class='fa fa-times'></i></span>
                     <span class='add-on'><i class='fa fa-calendar'></i></span>
                 </div>
-            </div>
+           
         </div>";
-$tool_content .= '<div class="form-group mt-3">
-        <label class="col-sm-6 control-label-notes">' . $langModule . ':</label>
-        <div class="col-sm-12"><select name="u_module_id" id="u_module_id" class="form-select">' . $mod_opts . '</select></div>
+$tool_content .= '<div class="row form-group p-3">
+        <label class="col-md-3 col-12 control-label-notes">' . $langModule . ':</label>
+        <div class="col-md-9 col-12"><select name="u_module_id" id="u_module_id" class="form-select">' . $mod_opts . '</select></div>
   </div>
-  <div class="form-group mt-3">
-    <div class="col-sm-offset-2 col-sm-10">
+  <div class="row form-group p-3">
+    <div class="col-md-9 offset-md-3">
       <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
       </div>
   </div>

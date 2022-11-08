@@ -98,6 +98,10 @@ textarea {width:100%;}
 
 .tool-sidebar { color: #f5f5f5}
 
+.contactImage { height:200px; }
+
+.circle-img-contant { height:35px; width: 35px; border-radius: 50%; background-color: #005ed7; display: flex; align-items: center; justify-content: center;}
+
 /* --------------------------------------------- BREADCRUMBS ----------------------------------------*/
 /* -------------------------------------------------------------------------------------------------*/
 /* -------------------------------------------------------------------------------------------------*/

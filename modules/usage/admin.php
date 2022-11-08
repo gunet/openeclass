@@ -54,28 +54,28 @@ $tool_content .= action_bar(array(
 $tool_content .= "
 
         <div class='col-12'>
-            <div class='panel-body'>
+
                 <div class='row'>
-                    <div class='col-sm-6'>
-                        <ul class='list-group'>
+                    <div class='col-md-6 col-12'>
+                        <ul class='list-group list-group-flush'>
                             <li class='list-group-item'><strong>$langUsageCoursesHeader</strong><span class='badge rounded bg-success text-white float-end'>".count_courses()."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langOpenCoursesShort<span class='badge rounded bg-success text-white float-end'>".count_courses(COURSE_OPEN)."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langOpenCourseWithRegistration<span class='badge rounded bg-success text-white float-end'>".count_courses(COURSE_REGISTRATION)."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langClosedCourses<span class='badge rounded bg-success text-white float-end'>".count_courses(COURSE_CLOSED)."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langCourseInactiveShort<span class='badge rounded bg-success text-white float-end'>".count_courses(COURSE_INACTIVE)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langOpenCoursesShort<span class='badge rounded bg-secondary text-white float-end'>".count_courses(COURSE_OPEN)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langOpenCourseWithRegistration<span class='badge rounded bg-secondary text-white float-end'>".count_courses(COURSE_REGISTRATION)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langClosedCourses<span class='badge rounded bg-secondary text-white float-end'>".count_courses(COURSE_CLOSED)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langCourseInactiveShort<span class='badge rounded bg-secondary text-white float-end'>".count_courses(COURSE_INACTIVE)."</span></li>
                         </ul>
                     </div>
-                    <div class='col-sm-6'>
-                        <ul class='list-group'>
+                    <div class='col-md-6 col-12 mt-md-0 mt-3'>
+                        <ul class='list-group list-group-flush'>
                             <li class='list-group-item'><strong>$langUsageUsers</strong><span class='badge rounded bg-success text-white float-end'>".count_users()."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge rounded bg-success text-white float-end'>".count_users(USER_TEACHER)."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge rounded bg-success text-white float-end'>".count_users(USER_STUDENT)."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langGuest<span class='badge rounded bg-success text-white float-end'>".count_users(USER_GUEST)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge rounded bg-secondary text-white float-end'>".count_users(USER_TEACHER)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge rounded bg-secondary text-white float-end'>".count_users(USER_STUDENT)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langGuest<span class='badge rounded bg-secondary text-white float-end'>".count_users(USER_GUEST)."</span></li>
                         </ul>
                     </div>
                 </div>
-                <div class='col-sm-12 mt-3'>
-                    <ul class='list-group'>
+                <div class='col-12 shadow-sm rounded-0 p-3 mt-3'>
+                    <ul class='list-group list-group-numbered list-group-flush'>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=failurelogin'>$langLoginFailures</a><small> ($langLast15Days)</small></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=musers'>$langMultipleUsers</a></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=memail'>$langMultipleAddr e-mail</a></li>
@@ -86,5 +86,5 @@ $tool_content .= "
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=unregusers'>$langUnregUsers</a><small> ($langLastMonth)</small></li>
                     </ul>
                 </div>
-            </div>
+            
         </div>";

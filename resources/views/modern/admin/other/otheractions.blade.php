@@ -42,10 +42,10 @@
                                 <table class='table-default'>
                                     <tr class='list-header'>
                                         <th>
-                                            <b class='text-white'>{{ trans('langMultipleUsers') }}</b>
+                                            {{ trans('langMultipleUsers') }}
                                         </th>
                                         <th class='text-end'>
-                                            <strong class='text-white'>{{ trans('langResult') }}</strong>
+                                            {{ trans('langResult') }}
                                         </th>
                                     </tr>
                                     @if (count($loginDouble) > 0)
@@ -70,9 +70,9 @@
                             <div class='table-responsive'>
                                 <table class='table-default'>
                                     <tr class='list-header'>
-                                        <th><b class='text-white'>{{ trans('langMultipleAddr') }} e-mail</b></th>
+                                        <th>{{ trans('langMultipleAddr') }} e-mail</th>
                                         <th class='right'>
-                                            <strong class='text-white'>{{ trans('langResult') }}</strong>
+                                            {{ trans('langResult') }}
                                         </th>
                                     </tr>
                                     @if (count($loginDouble) > 0)
@@ -98,10 +98,10 @@
                                 <table class='table-default'>
                                     <tr class='list-header'>
                                         <th>
-                                            <b class='text-white'>{{ trans('langMultiplePairs') }} LOGIN - PASS</b>
+                                            {{ trans('langMultiplePairs') }} LOGIN - PASS
                                         </th>
                                         <th class='text-end'>
-                                            <b class='text-white'>{{ trans('langResult') }}</b>
+                                            {{ trans('langResult') }}
                                         </th>
                                     </tr>
                                     @if (count($loginDouble) > 0)
@@ -123,12 +123,12 @@
                                 </table>
                             </div>
                         @elseif  ($_GET['stats'] == 'vmusers')
-                                <div class='col-sm-12 mt-5'>
+                                <div class='col-12'>
                                     <div class='shadow-sm p-3 rounded'>
                                         <div class='control-label-notes pb-3'>
                                             {{ trans('langUsers') }}
                                         </div>
-                                        <ul class='list-group'>
+                                        <ul class='list-group list-group-flush'>
                                             <li class='list-group-item'>
                                                 <label>
                                                     <a href='listusers.php?search=yes&verified_mail=1'>{{ trans('langMailVerificationYes') }}</a>
@@ -151,7 +151,7 @@
                                                 <label>
                                                     <a href='listusers.php?search=yes'>{{ trans('langTotal') }}</a>
                                                 </label>
-                                                <span class='badge btn btn-secondary btn-sm pe-none float-end'>{{ $totalUserCnt }}</span>
+                                                <span class='badge btn btn-success btn-sm pe-none float-end'>{{ $totalUserCnt }}</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -177,8 +177,8 @@
                             <div class='table-responsive'>
                                 <table class='table-default'>
                                     <tr class="list-header">
-                                        <th class='list-header'><strong>{{ trans('langPopularCourses') }}</strong></th>
-                                        <th class='list-header'><strong>{{ trans('langUsers') }}</strong></th>
+                                        <th class='list-header'>{{ trans('langPopularCourses') }}</th>
+                                        <th class='list-header text-center'>{{ trans('langUsers') }}</th>
                                     </tr>
                                     @foreach ($popularcourses as $data)
                                         <tr class = '{{ ($data->visible == COURSE_INACTIVE)? 'not_visible': ''  }}'>
