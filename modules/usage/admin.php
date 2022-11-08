@@ -79,6 +79,7 @@ $tool_content .= "
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=failurelogin'>$langLoginFailures</a><small> ($langLast15Days)</small></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=musers'>$langMultipleUsers</a></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=memail'>$langMultipleAddr e-mail</a></li>
+                        <li class='list-group-item'><a href='../admin/otheractions.php?stats=popularcourses'>$langPopularCourses</a><small> ($langLast30Entries)</small></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=cusers'>$langMultipleCourseUsers</a><small> ($langLast30Entries)</small></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=vmusers'>$langMailVerification</a></li>

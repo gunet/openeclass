@@ -125,6 +125,16 @@ if (isset($_GET['stats'])) {
                                     DESC 
                                     LIMIT 0,30");
             break;
+        case 'popularcourses':
+            $data['popularcourses'] = Database::get()->queryArray("SELECT code, public_code, title, prof_names, visible, COUNT(*) AS num_of_users 
+                                FROM course 
+                                    JOIN course_user 
+                                ON course_id = course.id 
+                                GROUP BY course_id 
+                                ORDER BY COUNT(*) 
+                                DESC 
+                                LIMIT 30");
+            break;
         default:
             break;
     }
