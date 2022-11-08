@@ -252,6 +252,7 @@ $langResult = " Αποτέλεσμα";
 $langMultiplePairs = "Πολλαπλά ζεύγη";
 $langMultipleAddr = "Πολλαπλές εμφανίσεις διευθύνσεων";
 $langMultipleUsers = "Πολλαπλές εγγραφές χρηστών";
+$langPopularCourses = "Δημοφιλή $langsCourses";
 $langMultipleCourseUsers = "Χρήστες που είναι γραμμένοι στα περισσότερα μαθήματα";
 $langLast30Entries = "30 πρώτες εγγραφές";
 $langAlert = "Σημεία Προσοχής";

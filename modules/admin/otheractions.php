@@ -185,20 +185,45 @@ if (isset($_GET['stats'])) {
                                     DESC 
                                     LIMIT 0,30");
             $tool_content .= "<div class='table-responsive'>
-                        <table class='table-default'>
-                        <tr>
-                            <th class='list-header'><strong>$langUsers</strong></th>
-                            <th class='text-center'><strong>$langResult</strong></th>
+                    <table class='table-default'>
+                    <tr>
+                        <th class='list-header'><strong>$langUsers</strong></th>
+                        <th class='text-center'><strong>$langResult</strong></th>
+                    </tr>";
+                    foreach ($q as $data) {
+                        $link = $urlServer . "modules/admin/edituser.php?u=" . $data->user_id;
+                        $tool_content .= "<tr>
+                        <td>" . $data->surname . " " . $data->givenname . " (<a href='$link'>" . $data->username . "</a>)</td>
+                        <td class='text-center'>" . $data->num_of_courses . "</td>
                         </tr>";
-                        foreach ($q as $data) {
-                            $link = $urlServer . "modules/admin/edituser.php?u=" . $data->user_id;
-                            $tool_content .= "<tr>
-                            <td>" . $data->surname . " " . $data->givenname . " (<a href='$link'>" . $data->username . "</a>)</td>
-                            <td class='text-center'>" . $data->num_of_courses . "</td>
-                            </tr>";
-                        }
-                        $tool_content .= "</table></div>";
-                break;
+                    }
+            $tool_content .= "</table></div>";
+            break;
+        case 'popularcourses':
+            $q = Database::get()->queryArray("SELECT code, public_code, title, prof_names, visible, COUNT(*) AS num_of_users 
+                                FROM course 
+                                    JOIN course_user 
+                                ON course_id = course.id 
+                                GROUP BY course_id 
+                                ORDER BY COUNT(*) 
+                                DESC 
+                                LIMIT 30");
+            $tool_content .= "<div class='table-responsive'>
+                <table class='table-default'>
+                <tr>
+                    <th class='list-header'><strong>$langPopularCourses</strong></th>
+                    <th class='list-header'><strong>$langUsers</strong></th>
+                </tr>";
+                foreach ($q as $data) {
+                    $class = ($data->visible == COURSE_INACTIVE)? "not_visible" : "";
+                    $link = $urlServer . "courses/" . $data->code . "/";
+                    $tool_content .= "<tr class = '$class'>                      
+                    <td><a href='$link'>" . $data->title . "</a> <small>(" . $data->public_code . ")</small> <br> <em>" . $data->prof_names . "</em></td>
+                    <td class='text-center'>" . $data->num_of_users . "</td>
+                    </tr>";
+                }
+            $tool_content .= "</table></div>";
+            break;
         default:
             break;
     }

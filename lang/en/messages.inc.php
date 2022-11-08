@@ -126,6 +126,7 @@ $langResult = "Result";
 $langMultiplePairs = "Multiple pairs";
 $langMultipleAddr = "Multiple address instances";
 $langMultipleUsers = "Multiple user registrations";
+$langPopularCourses = "Popular $langsCourses";
 $langAlert = "Points to be noticed";
 $langServerStatus = "MySQL server status : ";
 $langDataBase = "Database";
