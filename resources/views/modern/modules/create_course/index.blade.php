@@ -284,7 +284,7 @@
                                               <span class='ps-2'>{!! $icon_course_open !!}</span> 
                                               <span class='ps-2'>{{ trans('langOpenCourse') }}</span>
                                             </div><br>
-                                            <small class='orangeText'>{{ trans('langPublic') }}</small>
+                                            <small class='orangeText'>{{ trans('langPublic') }}</small><br>
                                          
 
                                         
@@ -293,7 +293,7 @@
                                               <span class='ps-2'>{!! $icon_course_registration !!}</span>
                                               <span class='ps-3'>{{ trans('langRegCourse') }}</span>
                                             </div><br>
-                                            <small class='orangeText'>{{ trans('langPrivOpen') }}</small>
+                                            <small class='orangeText'>{{ trans('langPrivOpen') }}</small><br>
                                       
 
                                         
@@ -302,16 +302,16 @@
                                               <span class='ps-2'>{!! $icon_course_closed !!}</span>
                                               <span class='ps-2'>{{ trans('langClosedCourse') }}</span>
                                             </div><br>
-                                            <small class='orangeText'>{{ trans('langClosedCourseShort') }}</small>
+                                            <small class='orangeText'>{{ trans('langClosedCourseShort') }}</small><br>
                                          
 
                                          
-                                              <div class='d-inline-flex align-items-center mt-2'>
-                                                  <input id='courseinactive' type='radio' name='formvisible' value='3'>
-                                                  <span class='ps-2'>{!! $icon_course_inactive !!}</span>
-                                                  <span class='ps-2'>{{ trans('langInactiveCourse') }}</span>
-                                              </div><br>
-                                              <small class='orangeText'>{{ trans('langCourseInactive') }}</small>
+                                            <div class='d-inline-flex align-items-center mt-2'>
+                                                <input id='courseinactive' type='radio' name='formvisible' value='3'>
+                                                <span class='ps-2'>{!! $icon_course_inactive !!}</span>
+                                                <span class='ps-2'>{{ trans('langInactiveCourse') }}</span>
+                                            </div><br>
+                                            <small class='orangeText'>{{ trans('langCourseInactive') }}</small>
                                                           
                                         
                                       </div>

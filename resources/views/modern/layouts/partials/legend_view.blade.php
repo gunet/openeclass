@@ -1,3 +1,11 @@
+@php
+    $check_module = Database::get()->queryArray("SELECT *FROM course_module 
+                        WHERE module_id = ?d AND course_id = ?d", $module_id, $course_id);
+    foreach($check_module as $m){
+        $visible_module = $m->visible;
+    }
+    $go_back_url = $_SERVER['REQUEST_URI'];
+@endphp
 
 <div class='d-none d-md-block mt-4'>
     <div class='col-12 shadow p-3 pb-3 bg-body rounded-0'>
@@ -12,8 +20,42 @@
                                     <span class='text-secondary'>({{course_id_to_public_code($course_id)}})</span><br>
                                     <span class='text-secondary'>{{course_id_to_prof($course_id)}}</span>
                                 </div>
-                                <div class='col-12'>
-                                    <span class='text-secondary fst-italic'>{{$toolName}}</span>
+                                <div class='col-12 d-inline-flex'>
+                                    <!-- toolName -->
+                                    <span class='text-secondary fst-italic me-2'>{{$toolName}}</span>
+                                    <!-- active - inactive module_id -->
+                                    <form id="form_id" action="{{$urlAppend}}main/module_toggle.php?course={{$course_code}}&module_id={{$module_id}}" method="post">
+                                        <input type="hidden" name="hide" value="{{$visible_module}}">
+                                        <input type="hidden" name="Active_Deactive_Btn">
+                                        <input type="hidden" name="prev_url" value="{{$go_back_url}}">
+                                        @if($visible_module == 0)
+                                            <a href="javascript:$('#form_id').submit();"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langActivate') }}">
+                                                <span class="fa tiny-icon fa-minus-square text-danger"></span>
+                                            </a>
+                                        @else
+                                            <a href="javascript:$('#form_id').submit();"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langDeactivate') }}">
+                                                <span class="fa tiny-icon fa-check-square text-success"></span>
+                                            </a>
+                                        @endif
+                                    </form>
+                                    <!-- rss for announcements - blog -->
+                                    @if($module_id == 7 or $module_id == 37)
+                                       @php $getToken = generate_csrf_token_link_parameter(); @endphp
+                                       @if($module_id == 7)
+                                            <a class="ms-2" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                                <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
+                                                data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}"></span>
+                                            </a>
+                                       @else
+                                            <a class="ms-2" href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                                <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
+                                                data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}"></span>
+                                            </a>
+                                       @endif
+                                    @endif
+                                  
                                 </div>
                             @else
                                 <div class='col-12'>
@@ -36,8 +78,23 @@
                                     <span class='text-secondary'>{{course_id_to_public_code($course_id)}}</span><br>
                                     <span class='text-secondary'>{{course_id_to_prof($course_id)}}</span>
                                 </div>
-                                <div class='col-12'>
+                                <div class='col-12 d-inline-flex'>
                                     <span class='text-secondary fst-italic'>{{$toolName}}</span>
+                                    <!-- rss for announcements - blog -->
+                                    @if($toolName == trans('langAnnouncements') or $toolName == trans('langBlog'))
+                                       @php $getToken = generate_csrf_token_link_parameter(); @endphp
+                                       @if($toolName == trans('langAnnouncements'))
+                                            <a class="ms-2" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                                <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
+                                                data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}"></span>
+                                            </a>
+                                       @else
+                                            <a class="ms-2" href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                                <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
+                                                data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}"></span>
+                                            </a>
+                                       @endif
+                                    @endif
                                 </div>
                             @else
                                 <div class='col-12'>
@@ -88,10 +145,42 @@
 
                                         @if($toolName)
                                             <tr class='border-0'>
-                                                <th class='border-0'>
-                                                    <span class='text-secondary fst-italic'>
+                                                <th class='border-0 d-inline-flex'>
+                                                    <span class='text-secondary fst-italic me-2'>
                                                         {{$toolName}}
                                                     </span>
+                                                     <!-- active - inactive module_id -->
+                                                    <form id="form_id" action="{{$urlAppend}}main/module_toggle.php?course={{$course_code}}&module_id={{$module_id}}" method="post">
+                                                        <input type="hidden" name="hide" value="{{$visible_module}}">
+                                                        <input type="hidden" name="Active_Deactive_Btn">
+                                                        <input type="hidden" name="prev_url" value="{{$go_back_url}}">
+                                                        @if($visible_module == 0)
+                                                            <a href="javascript:$('#form_id').submit();"
+                                                                data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langActivate') }}">
+                                                                <span class="fa tiny-icon fa-minus-square text-danger"></span>
+                                                            </a>
+                                                        @else
+                                                            <a href="javascript:$('#form_id').submit();"
+                                                                data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langDeactivate') }}">
+                                                                <span class="fa tiny-icon fa-check-square text-success"></span>
+                                                            </a>
+                                                        @endif
+                                                    </form>
+                                                    <!-- rss for announcements - blog -->
+                                                    @if($module_id == 7 or $module_id == 37)
+                                                        @php $getToken = generate_csrf_token_link_parameter(); @endphp
+                                                        @if($module_id == 7)
+                                                                <a class="ms-2" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                                                    <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
+                                                                    data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}"></span>
+                                                                </a>
+                                                        @else
+                                                                <a class="ms-2" href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                                                    <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
+                                                                    data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}"></span>
+                                                                </a>
+                                                        @endif
+                                                    @endif
                                                 </th>
                                             </tr>
                                         @endif
@@ -130,10 +219,25 @@
 
                                         @if($toolName)
                                             <tr class='border-0'>
-                                                <th class='border-0'>
+                                                <th class='border-0 d-inline-flex'>
                                                     <span class='text-secondary fst-italic'>
                                                         {{$toolName}}
                                                     </span>
+                                                    <!-- rss for announcements - blog -->
+                                                    @if($toolName == trans('langAnnouncements') or $toolName == trans('langBlog'))
+                                                        @php $getToken = generate_csrf_token_link_parameter(); @endphp
+                                                        @if($toolName == trans('langAnnouncements'))
+                                                                <a class="ms-2" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                                                    <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
+                                                                    data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}"></span>
+                                                                </a>
+                                                        @else
+                                                                <a class="ms-2" href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                                                    <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
+                                                                    data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}"></span>
+                                                                </a>
+                                                        @endif
+                                                    @endif
                                                 </th>
                                             </tr>
                                         @endif
