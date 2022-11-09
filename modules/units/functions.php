@@ -185,7 +185,7 @@ function show_resources($unit_id)
                 var count_1 = $('#unitResources_1').length;
                 var count_2 = $('#unitResources_2').length;
                 var count_3 = $('#unitResources_3').length;
-                
+
                 if(count_1>0){
                     Sortable.create(unitResources_1,{
                         handle: '.fa-arrows',
@@ -1064,7 +1064,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
             $polllink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='${urlServer}modules/units/view.php?course_code=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;unit_id=$id'>";
+        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;unit_id=$id'>";
         $polllink = $link . $title . '</a>';
         $imagelink = $link . "</a>" . icon('fa-question-circle') . "";
     }
@@ -1541,7 +1541,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
             $h5plink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version 
+        $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version
                                             FROM h5p_library WHERE id = ?s", $h5p->main_library_id);
         $h5p_content_type_title = $q->title;
         $typeFolder = $q->machine_name . "-" . $q->major_version . "." . $q->minor_version;
