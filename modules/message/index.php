@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.7
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2019  Greek Universities Network - GUnet
+ * Copyright 2003-2022  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -224,7 +224,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
         $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     }
     $tool_content .= "
-    
         <fieldset>
             <div class='form-group'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langSender:</label>
@@ -270,7 +269,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                           </script>";
 
         $tool_content .= "
-       
             <div class='form-group mt-3'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langCourse:</label>
                 <div class='col-sm-12'>
@@ -286,7 +284,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
 
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
         $tool_content .= "
-      
         <div class='form-group mt-3'>
             <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
             <div class='col-sm-12'>
@@ -308,7 +305,11 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                 $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
 
                 // find course groups (if any)
-                $sql_g = "SELECT id, name FROM `group` WHERE course_id = ?d ORDER BY name";
+                $sql_g = "SELECT `group`.id, name, COUNT(user_id) AS members_present
+                    FROM `group` LEFT JOIN group_members ON group_id = `group`.id
+                    WHERE course_id = ?d
+                    GROUP BY `group`.id
+                    ORDER BY name";
                 $result_g = Database::get()->queryArray($sql_g, $course_id);
                 foreach ($result_g as $res_g) {
                     if (isset($_GET['group_id']) and $_GET['group_id'] == $res_g->id) {
@@ -316,7 +317,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                     } else {
                         $selected_group = "";
                     }
-                    $tool_content .= "<option value = '_$res_g->id' $selected_group>".q($res_g->name)."</option>";
+                    $disabled_group = $res_g->members_present? '': 'disabled';
+                    $tool_content .= "<option value = '_$res_g->id' $disabled_group $selected_group>".q($res_g->name)."</option>";
                 }
             } else {
                 //if user is student and student-student messages not allowed for course messages show teachers
@@ -412,7 +414,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                 $u_name = $q->name;
             }
             $tool_content .= "<input type='hidden' name='recipients' value='$_GET[id]'>
-           
                             <div class='form-group mt-3'>
                                 <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
                                 <div class='col-sm-12'>
@@ -421,7 +422,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                             </div>";
         } else {
             $tool_content .= "
-           
                             <div class='form-group mt-3'>
                                 <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
                                 <div class='col-sm-12'>
@@ -432,7 +432,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     }
 
     $tool_content .= "
-  
         <div class='form-group mt-3'>
             <label for='title' class='col-sm-6 control-label-notes'>$langSubject:</label>
             <div class='col-sm-12'>
@@ -441,7 +440,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
         </div>";
 
     $tool_content .= "
- 
         <div class='form-group mt-3'>
             <label for='title' class='col-sm-6 control-label-notes'>$langMessage:</label>
             <div class='col-sm-12'>
@@ -451,7 +449,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
         enableCheckFileSize();
         $tool_content .= "
-        
         <div class='form-group mt-3'>
             <label for='title' class='col-sm-6 control-label-notes'>$langAttachedFile:</label>
             <div class='col-sm-12'>" .
@@ -462,7 +459,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     }
 
     $tool_content .= "
-    
         <div class='form-group mt-3'>
             <div class='col-xs-10 col-xs-offset-2'>
                 <div class='checkbox'>
@@ -473,7 +469,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                 </div>
             </div>
         </div>
-       
+
         <div class='form-group mt-4'>
             <div class='col-12 d-inline-flex'>
            
