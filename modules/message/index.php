@@ -169,8 +169,8 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'])
             }
             $tool_content .= "<div class='alert alert-success'>".sprintf($langDropboxFreeSpaceSuccess, format_file_size($space_released))."</div>";
         } else { //provide option to free some space
-            $tool_content .= "<div class='alert alert-danger text-center'>                                
-                                <a onclick=\"return confirm('".sprintf($langDropboxFreeSpaceConfirm, $space_to_free)."');\" href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE&amp;free=TRUE'>".sprintf($langDropboxFreeSpace, $space_to_free)."</a>                                
+            $tool_content .= "<div class='alert alert-danger text-center'>
+                                <a onclick=\"return confirm('".sprintf($langDropboxFreeSpaceConfirm, $space_to_free)."');\" href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE&amp;free=TRUE'>".sprintf($langDropboxFreeSpace, $space_to_free)."</a>
                               </div>";
         }
     }
@@ -286,7 +286,11 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                 $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
 
                 // find course groups (if any)
-                $sql_g = "SELECT id, name FROM `group` WHERE course_id = ?d ORDER BY name";
+                $sql_g = "SELECT `group`.id, name, COUNT(user_id) AS members_present
+                    FROM `group` LEFT JOIN group_members ON group_id = `group`.id
+                    WHERE course_id = ?d
+                    GROUP BY `group`.id
+                    ORDER BY name";
                 $result_g = Database::get()->queryArray($sql_g, $course_id);
                 foreach ($result_g as $res_g) {
                     if (isset($_GET['group_id']) and $_GET['group_id'] == $res_g->id) {
@@ -294,7 +298,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                     } else {
                         $selected_group = "";
                     }
-                    $tool_content .= "<option value = '_$res_g->id' $selected_group>".q($res_g->name)."</option>";
+                    $disabled_group = $res_g->members_present? '': 'disabled';
+                    $tool_content .= "<option value = '_$res_g->id' $disabled_group $selected_group>".q($res_g->name)."</option>";
                 }
             } else {
                 //if user is student and student-student messages not allowed for course messages show teachers

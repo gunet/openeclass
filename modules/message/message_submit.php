@@ -89,6 +89,7 @@ if (isset($_POST['submit'])) {
      * submit message
      */
     if (!$error) {
+        $recipients = [];
         if (!is_array($_POST['recipients'])) { // in personal msg form select2 returns a comma delimited string instead of array
             $_POST['recipients'] = explode(',', $_POST['recipients']);
         }
