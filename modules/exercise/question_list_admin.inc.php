@@ -147,36 +147,36 @@ if ($objExercise->hasQuestionListWithRandomCriteria()) {
 }
 
 $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d ORDER BY question_cat_name", $course_id);
-$cat_options = "<option value=\"-1\">-- $langQuestionAllCats --</option><option value=\"0\">-- $langQuestionWithoutCat --</option>";
+$cat_options = "<option value=\"-1\">-- " . js_escape($langQuestionAllCats) . " --</option><option value=\"0\">-- $langQuestionWithoutCat --</option>";
 $cat_options_2 = "<option value=\"0\"> ---- </option>";
 foreach ($q_cats as $qcat) {
-    $cat_options .= "<option value=\"$qcat->question_cat_id\">$qcat->question_cat_name</option>";
-    $cat_options_2 .= "<option value=\"$qcat->question_cat_id\">$qcat->question_cat_name</option>";
+    $cat_options .= "<option value=\"$qcat->question_cat_id\">" . js_escape($qcat->question_cat_name) . "</option>";
+    $cat_options_2 .= "<option value=\"$qcat->question_cat_id\">" . js_escape($qcat->question_cat_name) . "</option>";
 }
 
-$diff_options = "<option value=\"-1\">-- $langQuestionAllDiffs --</option>"
-    . "<option value=\"0\">-- $langQuestionNotDefined --</option>"
-    . "<option value=\"1\">$langQuestionVeryEasy</option>"
-    . "<option value=\"2\">$langQuestionEasy</option>"
-    . "<option value=\"3\">$langQuestionModerate</option>"
-    . "<option value=\"4\">$langQuestionDifficult</option>"
-    . "<option value=\"5\">$langQuestionVeryDifficult</option>";
+$diff_options = "<option value=\"-1\">-- " . js_escape($langQuestionAllDiffs) . " --</option>"
+    . "<option value=\"0\">-- " . js_escape($langQuestionNotDefined) . " --</option>"
+    . "<option value=\"1\">" . js_escape($langQuestionVeryEasy) . "</option>"
+    . "<option value=\"2\">" . js_escape($langQuestionEasy) . "</option>"
+    . "<option value=\"3\">" . js_escape($langQuestionModerate) . "</option>"
+    . "<option value=\"4\">" . js_escape($langQuestionDifficult) . "</option>"
+    . "<option value=\"5\">" . js_escape($langQuestionVeryDifficult) . "</option>";
 
 // for sorting
 $head_content .= "
     <script>
         $(document).ready(function(){
-            if (typeof(q_sort) !== 'undefined') {            
+            if (typeof(q_sort) !== 'undefined') {
                 Sortable.create(q_sort,{
                     handle: '.fa-arrows',
                     animation: 150,
                     onEnd: function (evt) {
-    
+
                     var itemEl = $(evt.item);
-    
+
                     var idReorder = itemEl.attr('data-id');
                     var prevIdReorder = itemEl.prev().attr('data-id');
-    
+
                     $.ajax({
                       type: 'post',
                       dataType: 'text',
@@ -186,7 +186,7 @@ $head_content .= "
                             }
                         });
                     }
-                });    
+                });
             }
         });
     </script>
@@ -203,29 +203,29 @@ $head_content .= "
   $(function() {
      RandomizationForm();
      $('#checkboxShuffleQuestions').click(function() {
-         if ($(this).is(':checked')) {            
+         if ($(this).is(':checked')) {
             $('#checkboxRandomQuestions').prop('disabled', true);
             $('#inputRandomQuestions').prop('disabled', true);
             $('#divcheckboxRandomQuestions').addClass('not_visible');
          } else {
              $('#inputRandomQuestions').prop('disabled', false);
              $('#checkboxRandomQuestions').prop('disabled', false);
-             $('#divcheckboxRandomQuestions').removeClass('not_visible');             
-         }         
+             $('#divcheckboxRandomQuestions').removeClass('not_visible');
+         }
      });
      $('#checkboxRandomQuestions').click(function() {
          if ($(this).is(':checked')) {
              $('#checkboxShuffleQuestions').prop('disabled', true);
-             $('#divcheckboxShuffleQuestions').addClass('not_visible');                          
+             $('#divcheckboxShuffleQuestions').addClass('not_visible');
          } else {
              $('#checkboxShuffleQuestions').prop('disabled', false);
-             $('#divcheckboxShuffleQuestions').removeClass('not_visible');             
+             $('#divcheckboxShuffleQuestions').removeClass('not_visible');
          }
      });
     $('.questionSelection').click( function(e){
         e.preventDefault();
         bootbox.dialog({
-            title: '$langSelection $langFrom2 $langQuestionPool ($langWithCriteria)',
+            title: '".js_escape($langWithCriteria)."',
             message: '<div class=\"row\">' +
                         '<div class=\"col-md-12\">' +
                             '<form class=\"form-horizontal\"> ' +
@@ -239,7 +239,7 @@ $head_content .= "
                                                 '<select name=\"difficulty\" class=\"form-select\" id=\"diff\">$diff_options</select>' +
                                             '</div>' +
                                             '<div class=\"col-sm-4\">' +
-                                                '<input class=\"form-control\" type=\"text\" id=\"q_num\" name=\"q_num\" value=\"\"> $langQuestions' +
+                                                '<input class=\"form-control\" type=\"text\" id=\"q_num\" name=\"q_num\" value=\"\">" .js_escape($langQuestions)."' +
                                             '</div>' +
                                         '</div>' +
                                     '</div>' +
@@ -248,7 +248,7 @@ $head_content .= "
                     '</div>',
                         buttons: {
                             success: {
-                                label: '$langSelection',
+                                label: '".js_escape($langSelection)."',
                                 className: 'btn-success',
                                 callback: function () {
                                     var catValue = $('select#cat').val();
@@ -277,40 +277,38 @@ $head_content .= "
                             }
                         }
                     }
-                ).find('div.modal-dialog').addClass('modal-lg');                
-    });    
-    $('.randomWithCriteria').click(function(e) {        
+                ).find('div.modal-dialog').addClass('modal-lg');
+    });
+    $('.randomWithCriteria').click(function(e) {
         e.preventDefault();
         bootbox.dialog({
-            title: '<span class=\"fa fa-random\" style=\"margin-right: 10px; color:grey\"></span>$langRandomQuestionsWithCriteria',
+            title: '<span class=\"fa fa-random\" style=\"margin-right: 10px; color:grey\"></span>".js_escape($langRandomQuestionsWithCriteria)."',
             message: '<div class=\"row\">' +
                         '<div class=\"col-md-12\">' +
-                            '<form class=\"form-horizontal\">' +                                
+                            '<form class=\"form-horizontal\">' +
                                 '<div class=\"row\" style=\"margin-bottom: 10px;\">' +
-                                '<span class=\"col-sm-4\">$langQuestionDiffGrade</span>' +
-                                '<span class=\"col-sm-4\">$langQuestionCats</span>' +
-                                '<span class=\"col-sm-4\">$langNumQuestions</span>' +
+                                '<span class=\"col-sm-5\">".js_escape($langQuestionDiffGrade)."</span>' +
+                                '<span class=\"col-sm-5\">".js_escape($langQuestionCats)."</span>' +
+                                '<span class=\"col-sm-2\">".js_escape($langNumQuestions)."</span>' +
                                 '</div>'+
                                 '<div class=\"form-group\">' +
-                                    '<div class=\"row\">'+
-                                        '<div class=\"col-sm-4\">' +
-                                            '<select id=\"difficultyId\" class=\"form-select\">' +
-                                                '<option value=\"0\">  ----  </option>' +
-                                                '<option value=\"1\">$langQuestionVeryEasy</option>' +
-                                                '<option value=\"2\">$langQuestionEasy</option>' +
-                                                '<option value=\"3\">$langQuestionModerate</option>' +
-                                                '<option value=\"4\">$langQuestionDifficult</option>' +
-                                                '<option value=\"5\">$langQuestionVeryDifficult</option>' +
-                                            '</select>' +
-                                        '</div>' +                                
-                                        '<div class=\"col-sm-4\">' +
-                                            '<select id=\"categoryId\" class=\"form-select\">$cat_options_2</select>' +
-                                        '</div>' +                                    
-                                        '<div class=\"col-sm-4\">' +
-                                            '<input class=\"form-control\" type=\"text\" id=\"questionRandomDrawn\" value=\"\">' +
-                                        '</div>' +
+                                    '<div class=\"col-sm-5\">' +
+                                        '<select id=\"difficultyId\" class=\"form-select\">' +
+                                            '<option value=\"0\">  ----  </option>' +
+                                            '<option value=\"1\">".js_escape($langQuestionVeryEasy)."</option>' +
+                                            '<option value=\"2\">".js_escape($langQuestionEasy)."</option>' +
+                                            '<option value=\"3\">".js_escape($langQuestionModerate)."</option>' +
+                                            '<option value=\"4\">".js_escape($langQuestionDifficult)."</option>' +
+                                            '<option value=\"5\">".js_escape($langQuestionVeryDifficult)."</option>' +
+                                        '</select>' +
                                     '</div>' +
-                                '</div>' +                                
+                                    '<div class=\"col-sm-5\">' +
+                                        '<select id=\"categoryId\" class=\"form-control\">$cat_options_2</select>' +
+                                    '</div>' +
+                                    '<div class=\"col-sm-2\">' +
+                                        '<input class=\"form-control\" type=\"text\" id=\"questionRandomDrawn\" value=\"\">' +
+                                    '</div>' +
+                                '</div>' +
                             '</form>' +
                         '</div>' +
                       '</div>',
@@ -319,7 +317,7 @@ $head_content .= "
                     label: '$langSubmit',
                     className: 'btn-success',
                     callback: function () {
-                        var difficultyIdValue = $('select#difficultyId').val();                        
+                        var difficultyIdValue = $('select#difficultyId').val();
                         var categoryIdValue = $('select#categoryId').val();
                         var questionRandomDrawnValue = $('input#questionRandomDrawn').val();
                         $.ajax({
@@ -328,9 +326,9 @@ $head_content .= "
                           datatype: 'json',
                           data: {
                              action: 'random_criteria',
-                             difficultyId: difficultyIdValue,                             
+                             difficultyId: difficultyIdValue,
                              categoryId: categoryIdValue,
-                             questionRandomDrawn: questionRandomDrawnValue                             
+                             questionRandomDrawn: questionRandomDrawnValue
                           },
                           success: function(data) {
                             window.location.href = '$_SERVER[REQUEST_URI]';
@@ -343,9 +341,9 @@ $head_content .= "
                         });
                     }
                 }
-            }        
+            }
         });
-    });    
+    });
     $('.menu-popover').on('shown.bs.popover', function () {
         $('.warnLink').on('click', function(e){
               var modifyAllLink = $(this).attr('href');
@@ -353,7 +351,42 @@ $head_content .= "
               $('a#modifyAll').attr('href', modifyAllLink);
               $('a#modifyOne').attr('href', modifyOneLink);
         });
-    });    
+    });
+    $(document).on('click', '.previewQuestion', function(e) {
+        e.preventDefault();
+        var qid = $(this).data('qid'),
+            nbr = $(this).data('nbr'),
+            editUrl = $(this).data('editurl'),
+            deleteUrl = $(this).data('deleteurl'),
+            url = '" . js_escape($urlAppend) . "' + 'modules/exercise/question_preview.php?question=' + qid;
+        $.ajax({
+            url: url,
+            success: function(data) {
+                bootbox.dialog({
+                    message: data,
+                    title: '$langQuestionPreview ' + qid,
+                    onEscape: true,
+                    backdrop: true,
+                    buttons: {
+                        edit: {
+                            label: '<span class=\"fa fa-edit\"></span> $langEditChange',
+                            callback: function () {
+                                if (nbr > 1) {
+                                    $('#modalWarning').modal('show');
+                                } else {
+                                    window.location.href = editUrl;
+                                }
+                            }
+                        },
+                        success: {
+                            label: '$langClose',
+                            className: 'btn-default',
+                        },
+                    }
+               });
+            }
+        });
+    });
   });
 </script>
 ";
@@ -395,12 +428,12 @@ $tool_content .= action_bar(array(
           'url' => "#",
           'icon' => 'fa-random',
           'level' => 'primary-label',
-          'button-class' => 'btn-secondary',
+          'button-class' => 'btn-default',
           'show' => !$randomQuestions),
-    array('title' => "$langImport $langFrom2 $langQuestionPool ($langWithoutCriteria)",
+    array('title' => $langWithoutCriteria,
           'url' => "question_pool.php?course=$course_code&amp;fromExercise=$exerciseId",
           'icon' => 'fa-bank'),
-    array('title' => "$langImport $langFrom2 $langQuestionPool ($langWithCriteria)",
+    array('title' => $langWithCriteria,
           'class' => 'questionSelection',
           'url' => "#",
           'icon' => 'fa-bank')),
@@ -420,7 +453,7 @@ if ($nbrQuestions) {
                             <label class='form-control-static'>
                                  <input id='checkboxShuffleQuestions' type='checkbox' name='enableShuffleQuestions' value='1' ".(($shuffleQuestions == 1)? 'checked' : '').">
                                  $langShuffleQuestions
-                             </label>                         
+                             </label>
                          </div>
                      </div>
                      <div class='col-sm-12'>
@@ -458,17 +491,17 @@ if ($nbrQuestions) {
         $objQuestionTmp = new Question();
         if (!is_array($id)) {
             $objQuestionTmp->read($id);
-            $q = Database::get()->querySingle("SELECT id FROM exercise_with_questions 
-                                        WHERE exercise_id = ?d 
+            $q = Database::get()->querySingle("SELECT id FROM exercise_with_questions
+                                        WHERE exercise_id = ?d
                                       AND question_id = ?d", $exerciseId, $id);
             $ewq_id = $q->id;
         } else {
             $next_limit = $limit+1;
-            $q = Database::get()->querySingle("SELECT id FROM exercise_with_questions 
-                                        WHERE exercise_id = ?d 
-                                      AND question_id IS NULL 
-                                          ORDER BY q_position 
-                                          ASC  
+            $q = Database::get()->querySingle("SELECT id FROM exercise_with_questions
+                                        WHERE exercise_id = ?d
+                                      AND question_id IS NULL
+                                          ORDER BY q_position
+                                          ASC
                                           LIMIT $limit,$next_limit", $exerciseId);
             $ewq_id = $q->id;
             $limit++;
@@ -476,11 +509,9 @@ if ($nbrQuestions) {
         $aType = $objQuestionTmp->selectType();
         $question_difficulty_legend = $objQuestionTmp->selectDifficultyIcon($objQuestionTmp->selectDifficulty());
         $question_category_legend = $objQuestionTmp->selectCategoryName($objQuestionTmp->selectCategory());
-        $addon = '';
-        if ($objQuestionTmp->selectType() == MATCHING) {
-            $sql = Database::get()->querySingle("SELECT * FROM exercise_answer WHERE question_id = ?d", $id);
-            if (!$sql) $addon = "&amp;htopic=4";
-        }
+        $addon = "&amp;htopic=" . $aType;
+        $editUrl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=$id$addon";
+        $deleteUrl = "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id";
 
         if (is_array($id)) {
             if ($id['criteria'] == 'difficulty') {
@@ -502,8 +533,11 @@ if ($nbrQuestions) {
                     <em>$number $langFromRandomDifficultyQuestions '" . $objQuestionTmp->selectDifficultyLegend($difficulty) ."' $langFrom2 '" . $objQuestionTmp->selectCategoryName($category) . "'</em>";
             }
         } else {
-            $legend = q_math($objQuestionTmp->selectTitle()) . "<br>
-            <small>" . $objQuestionTmp->selectTypeLegend($aType) . "&nbsp;$question_difficulty_legend $question_category_legend</small>";
+            $legend = "<a class='previewQuestion' data-qid='$id' data-nbr='" .
+                $objQuestionTmp->selectNbrExercises() . "' data-editurl='$editUrl' data-deleteurl='$deleteUrl' href='#'>" .
+                q_math($objQuestionTmp->selectTitle()) . "</a><br><small>" .
+                $objQuestionTmp->selectTypeLegend($aType) .
+                "&nbsp;$question_difficulty_legend $question_category_legend</small>";
         }
 
         $tool_content .= "<tr data-id='$ewq_id'>
@@ -516,18 +550,24 @@ if ($nbrQuestions) {
 
         $tool_content .= "<div class='text-center mt-2'>";
         if (!is_array($id)) {
+            if ($objQuestionTmp->hasAnswered($exerciseId)) {
+                $warning_message = $langWarnAboutAnsweredQuestion;
+            } else {
+                $warning_message = $langConfirmYourChoice;
+            }
+
             $tool_content .=
                 action_button(array(
                     array('title' => $langEditChange,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=$id$addon",
+                        'url' => $editUrl,
                         'icon-class' => 'warnLink',
                         'icon-extra' => $objQuestionTmp->selectNbrExercises() > 1 ? "data-bs-toggle='modal' data-bs-target='#modalWarning' data-bs-remote='false'" : "",
                         'icon' => 'fa-edit'),
                     array('title' => $langDelete,
-                        'url' => "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id",
+                        'url' => $deleteUrl,
                         'icon' => 'fa-times',
                         'class' => 'delete',
-                        'confirm' => $langConfirmYourChoice,
+                        'confirm' => $warning_message,
                         'show' => !isset($fromExercise))
                 ));
         } else {
