@@ -49,7 +49,7 @@ $tree = new Hierarchy();
 if(isset($_GET['course_code'])){
     $course_code = $_GET['course_code'];
     $course_id = course_code_to_id($course_code);
-} 
+}
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -159,9 +159,9 @@ if (isset($_POST['submit'])) {
                                 prof_names = ?s,
                                 lang = ?s,
                                 password = ?s,
-                                view_type = ?s                                
+                                view_type = ?s
                             WHERE id = ?d",
-                                $_POST['title'], mb_substr($_POST['fcode'], 0 ,20), $_POST['course_keywords'],
+                                $_POST['title'], mb_substr($_POST['fcode'], 0, 100), $_POST['course_keywords'],
                                 $_POST['formvisible'], $course_license, $_POST['teacher_name'],
                                 $session->language, $password, $view_type, $course_id);
             $course->refresh($course_id, $departments);
