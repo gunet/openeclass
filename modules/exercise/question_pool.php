@@ -75,6 +75,8 @@ $head_content .= "
             $(document).on('click', '.previewQuestion', function(e) {
                 e.preventDefault();
                 var qid = $(this).data('qid'),
+                    nbr = $(this).data('nbr'),
+                    editUrl = $(this).data('editurl'),
                     url = '" . js_escape($urlAppend) . "' + 'modules/exercise/question_preview.php?question=' + qid;
                 $.ajax({
                     url: url,
@@ -195,7 +197,7 @@ elseif (isset($_GET['recup']) and $fromExercise) {
     // current exercise
     if ($objQuestionTmp->read($recup) and $objExercise->addToList($recup)) {
         //Session::Messages($langQuestionReused, 'alert-success');
-        Session::flash('message',$langQuestionReused); 
+        Session::flash('message',$langQuestionReused);
         Session::flash('alert-class', 'alert-success');
         $objExercise->save();
     }
@@ -203,13 +205,13 @@ elseif (isset($_GET['recup']) and $fromExercise) {
 } elseif (isset($_REQUEST['clone_pool'])) {
     clone_question_pool($_POST['clone_pool_to_course_id']);
     //Session::Messages($langCopySuccess, 'alert-success');
-    Session::flash('message',$langCopySuccess); 
+    Session::flash('message',$langCopySuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/exercise/index.php?course=$course_code");
 } elseif (isset($_REQUEST['purge'])) {
     purge_question_pool($course_id);
     //Session::Messages($langQuestionPoolPurgeSuccess, 'alert-success');
-    Session::flash('message',$langQuestionPoolPurgeSuccess); 
+    Session::flash('message',$langQuestionPoolPurgeSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/exercise/index.php?course=$course_code");
 }
@@ -405,10 +407,12 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
         if ($fromExercise or !is_object(@$objExercise) or !$objExercise->isInList($row->id)) {
             $tool_content .= "<tr>";
             $class = count($exercise_ids) > 0 ? 'previewQuestion warnLink': 'previewQuestion';
+            $nbr = $question_temp->selectNbrExercises();
+            $editUrl = "{$urlAppend}modules/exercise/admin.php?course=$course_code&amp;modifyAnswers={$row->id}";
             $tool_content .= "
                 <td>
                   <div class='float-end small not_visible'>{$row->id}</div>
-                  <a class='$class' data-qid='{$row->id}' href='admin.php?course=$course_code&amp;modifyAnswers={$row->id}&amp;fromExercise=$fromExercise'>$question_title</a>
+                  <a class='$class' data-qid='{$row->id}' data-nbr='$nbr' data-editurl='$editUrl' href='admin.php?course=$course_code&amp;modifyAnswers={$row->id}&amp;fromExercise=$fromExercise'>$question_title</a>
                   <br>
                   <small>$question_type_legend $question_difficulty_legend $question_category_legend $exercises_used_in</small>
                 </td>";
