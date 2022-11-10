@@ -354,8 +354,8 @@ $head_content .= "
         e.preventDefault();
         var qid = $(this).data('qid'),
             nbr = $(this).data('nbr'),
-            editUrl = $(this).data('editUrl'),
-            deleteUrl = $(this).data('deleteUrl'),
+            editUrl = $(this).data('editurl'),
+            deleteUrl = $(this).data('deleteurl'),
             url = '" . js_escape($urlAppend) . "' + 'modules/exercise/question_preview.php?question=' + qid;
         $.ajax({
             url: url,
@@ -532,7 +532,7 @@ if ($nbrQuestions) {
             }
         } else {
             $legend = "<a class='previewQuestion' data-qid='$id' data-nbr='" .
-                $objQuestionTmp->selectNbrExercises() . " data-editUrl='$editUrl' data-deleteUrl='$deleteUrl' href='#'>" .
+                $objQuestionTmp->selectNbrExercises() . "' data-editurl='$editUrl' data-deleteurl='$deleteUrl' href='#'>" .
                 q_math($objQuestionTmp->selectTitle()) . "</a><br><small>" .
                 $objQuestionTmp->selectTypeLegend($aType) .
                 "&nbsp;$question_difficulty_legend $question_category_legend</small>";
