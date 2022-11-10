@@ -31,7 +31,12 @@ require_once 'modules/auth/auth.inc.php';
 require_once 'modules/h5p/classes/H5PHubUpdater.php';
 require_once 'upgrade/functions.php';
 
+die($is_admin.'');
+
 $command_line = (php_sapi_name() == 'cli' && !isset($_SERVER['REMOTE_ADDR']));
+if (!($command_line or $is_admin)) {
+    forbidden();
+}
 $ajax_call = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 
 if ($ajax_call and (!isset($_POST['token']) or !validate_csrf_token($_POST['token']))) csrf_token_error();

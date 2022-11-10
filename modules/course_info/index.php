@@ -211,9 +211,9 @@ if (isset($_POST['submit'])) {
                                 prof_names = ?s,
                                 lang = ?s,
                                 password = ?s,
-                                view_type = ?s                                
+                                view_type = ?s
                             WHERE id = ?d",
-                                $_POST['title'], mb_substr($_POST['fcode'], 0 ,20), $_POST['course_keywords'],
+                                $_POST['title'], mb_substr($_POST['fcode'], 0, 100), $_POST['course_keywords'],
                                 $_POST['formvisible'], $course_license, $_POST['teacher_name'],
                                 $session->language, $password, $view_type, $course_id);
             $course->refresh($course_id, $departments);
@@ -310,7 +310,7 @@ if (isset($_POST['submit'])) {
     <div id='operations_container'>" . action_bar($action_bar_array) . "</div>";
 
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
-                           course_license, password, id, view_type 
+                           course_license, password, id, view_type
                       FROM course WHERE code = ?s", $course_code);
     $title = $c->title;
     $visible = $c->visible;
@@ -598,11 +598,11 @@ if (isset($_POST['submit'])) {
         $tool_content .= "<div class='course-info-title clearfix'>
                             <a role='button' data-toggle='collapse' href='#MoreInfo' aria-expanded='false' aria-controls='MoreInfo'>
                                  <h5 class='panel-heading' style='margin-bottom: 0px;'>
-                                       <span class='fa fa-chevron-down fa-fw'></span> $langReadMore   
+                                       <span class='fa fa-chevron-down fa-fw'></span> $langReadMore
                                  </h5>
                             </a>
                           </div>";
-    
+
         $tool_content .= "<div class='collapse' id='MoreInfo'>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langCourseOfflineSettings:</label>
