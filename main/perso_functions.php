@@ -87,7 +87,7 @@ function getUserLessonInfo($uid) {
 			  <td>
 			  <div class='d-inline-flex'>
                 
-                    <strong><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></strong>
+                    <div class='TextMedium'><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></div>
                
                     <div class='text-md-end text-start'> <span class='text-secondary'>(" . q($data->public_code) . ")</span></div>
                 

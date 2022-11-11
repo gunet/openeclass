@@ -64,10 +64,10 @@ foreach ($q as $l) {
             <div class='form-group mt-3'>
               <div class='row'>
                 <div class='col-12 text-center'>
-                  <button class='btn btn-default text-dark fw-bold w-100 login-form-submit mt-2' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+                  <button class='btn btn-default text-dark TextBold w-100 login-form-submit mt-2' type='submit' name='submit' value='$langEnter'>$langEnter</button>
                 </div>
                 <div class='col-12 text-center mt-4'>
-                  <a class='text-primary fw-bold btnlostpass' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
+                  <a class='text-primary btnlostpass' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
                 </div>
               </div>
            </div>

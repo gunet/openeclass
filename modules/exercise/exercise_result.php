@@ -302,7 +302,7 @@ if (count($exercise_question_ids) > 0) {
     // for each question
     foreach ($exercise_question_ids as $row) {
         if (!$showResults) {
-            $tool_content .= "<div class='col-sm-12 mt-3'><div class='text-center alert alert-info'>$langExerciseCompleted</div></div>";
+            $tool_content .= "<div class='col-12 mt-3'><div class='text-center alert alert-info'>$langExerciseCompleted</div></div>";
             break;
         }
         // creates a temporary Question object

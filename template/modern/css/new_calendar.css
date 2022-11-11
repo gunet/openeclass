@@ -1,6 +1,6 @@
 
 /* header-calendar */
-.cal-row-fluid.cal-row-head{ color:blue;  background-color: white;  border-bottom: 1px solid blue; }
+.cal-row-fluid.cal-row-head{ color:#003e87;  background-color: white;  border-bottom: 1px solid #003e87; }
 
 #cal-header{ border-top-left-radius: 15px; border-top-right-radius:15px ;}
 
@@ -12,11 +12,11 @@
 
 #cal-header .fa-chevron-right{ color:white; }
 
-.number-day-cal{ font-size: 13.5px; color: #003F87;}
+.number-day-cal{ font-size: 13.5px; color: #001146;}
 
 .cal-day-outmonth > .number-day-cal {opacity: 0.2;}
 
-.cal-day-today > .number-day-cal{ color:white; padding:3px 7px 2px 7px; border-radius: 50%; background-color: #003F87; }
+.cal-day-today > .number-day-cal{ color:white; padding:3px 6px 2px 6px; border-radius: 50%; background-color: #005ad9;}
 
 
 /****************************************************************************************************/

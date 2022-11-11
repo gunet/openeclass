@@ -704,10 +704,10 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     $period = $periodLabel? "<div class='col-12 ps-3 pe-3 pt-3 pb-3'>$periodLabel <b>$periodInfo</b></div>": '';
 
     $tool_content .= "
-    <div class='col-sm-12 mb-2'>
+    <div class='col-12 mb-3'>
         <div class='panel panel-default rounded-0'>
             <div class='panel-heading rounded-0' data-bs-toggle='collapse' href='#exerciseInfoPanel' aria-expanded='false' aria-controls='#exerciseInfoPanel' style='cursor: pointer'>
-                <h5><span class='fa fa-chevron-right fa-fw control-label-notes' id='exerciseInfoPanelIndicator'></span> " . q($exerciseTitle) . "</h5>
+                <span class='fa fa-chevron-right fa-fw control-label-notes' id='exerciseInfoPanelIndicator'></span> " . q($exerciseTitle) . "
             </div>
             <div class='panel-body collapse rounded-0' id='exerciseInfoPanel'>
                 <div class='row p-2'>
@@ -731,11 +731,11 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     }
 
     $tool_content .= "
-                    <div class='col-sm-12 ps-3 pe-3 pt-3 pb-3' style='margin-top: 10px;'>$disp_results_message</div>
+                    <div class='col-sm-12 ps-3 pe-3 pt-3 pb-3'>$disp_results_message</div>
                     <div class='col-sm-12 ps-3 pe-3 pt-3 pb-3'>$disp_score_message</div>";
 
     if ($exerciseAssignToSpecific > 0) {
-        $tool_content .= "<div class='col-sm-12 ps-3 pe-3 pt-3 pb-3' style='margin-top: 10px;'>$m[WorkAssignTo]: <b>$assign_to_users_message</b></div>";
+        $tool_content .= "<div class='col-sm-12 ps-3 pe-3 pt-3 pb-3'>$m[WorkAssignTo]: <b>$assign_to_users_message</b></div>";
     }
 
     $tags_list = $moduleTag->showTags();

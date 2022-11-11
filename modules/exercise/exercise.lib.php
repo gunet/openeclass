@@ -349,7 +349,7 @@ function display_exercise($exercise_id) {
             $colspan = 1;
         }
 
-        $tool_content .= "<div class='col-sm-12 mt-3'><div class='table-responsive shadow-lg'><table class = 'table-default'>";
+        $tool_content .= "<div class='col-12 mt-3'><div class='table-responsive shadow'><table class = 'table-default'>";
         if (is_array($qid)) { // placeholder for random questions (if any)
             $hasRandomQuestions = true;
             $tool_content .= "<tr class='active'>

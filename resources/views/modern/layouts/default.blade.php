@@ -22,6 +22,8 @@
     <!-- Font Awesome - A font of icons -->
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/all.css">
     <link href="{{ $urlAppend }}template/modern/css/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+     <!-- Font Manrope -->
+    <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet">
 
     <!-- DataTables and Checkitor -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">

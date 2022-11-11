@@ -287,12 +287,12 @@ $head_content .= "
                         '<div class=\"col-md-12\">' +
                             '<form class=\"form-horizontal\">' +
                                 '<div class=\"row\" style=\"margin-bottom: 10px;\">' +
-                                '<span class=\"col-sm-5\">".js_escape($langQuestionDiffGrade)."</span>' +
-                                '<span class=\"col-sm-5\">".js_escape($langQuestionCats)."</span>' +
-                                '<span class=\"col-sm-2\">".js_escape($langNumQuestions)."</span>' +
+                                '<span class=\"col-5\">".js_escape($langQuestionDiffGrade)."</span>' +
+                                '<span class=\"col-5\">".js_escape($langQuestionCats)."</span>' +
+                                '<span class=\"col-2\">".js_escape($langNumQuestions)."</span>' +
                                 '</div>'+
-                                '<div class=\"form-group\">' +
-                                    '<div class=\"col-sm-5\">' +
+                                '<div class=\"row form-group\">' +
+                                    '<div class=\"col-5\">' +
                                         '<select id=\"difficultyId\" class=\"form-select\">' +
                                             '<option value=\"0\">  ----  </option>' +
                                             '<option value=\"1\">".js_escape($langQuestionVeryEasy)."</option>' +
@@ -302,10 +302,10 @@ $head_content .= "
                                             '<option value=\"5\">".js_escape($langQuestionVeryDifficult)."</option>' +
                                         '</select>' +
                                     '</div>' +
-                                    '<div class=\"col-sm-5\">' +
+                                    '<div class=\"col-5\">' +
                                         '<select id=\"categoryId\" class=\"form-control\">$cat_options_2</select>' +
                                     '</div>' +
-                                    '<div class=\"col-sm-2\">' +
+                                    '<div class=\"col-2\">' +
                                         '<input class=\"form-control\" type=\"text\" id=\"questionRandomDrawn\" value=\"\">' +
                                     '</div>' +
                                 '</div>' +
@@ -428,7 +428,7 @@ $tool_content .= action_bar(array(
           'url' => "#",
           'icon' => 'fa-random',
           'level' => 'primary-label',
-          'button-class' => 'btn-default',
+          'button-class' => 'btn-secondary',
           'show' => !$randomQuestions),
     array('title' => $langWithoutCriteria,
           'url' => "question_pool.php?course=$course_code&amp;fromExercise=$exerciseId",

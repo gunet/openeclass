@@ -24,6 +24,10 @@
                                     <!-- toolName -->
                                     <span class='text-secondary fst-italic me-2'>{{$toolName}}</span>
                                     <!-- active - inactive module_id -->
+                                    @if($module_id != MODULE_ID_COURSEINFO and $module_id != MODULE_ID_USERS
+                                        and $module_id != MODULE_ID_USAGE and $module_id != MODULE_ID_TOOLADMIN
+                                        and $module_id != MODULE_ID_ABUSE_REPORT and $module_id != MODULE_ID_COURSE_WIDGETS
+                                        and $module_id != MODULE_ID_UNITS and !empty($module_id))
                                     <form id="form_id" action="{{$urlAppend}}main/module_toggle.php?course={{$course_code}}&module_id={{$module_id}}" method="post">
                                         <input type="hidden" name="hide" value="{{$visible_module}}">
                                         <input type="hidden" name="Active_Deactive_Btn">
@@ -40,10 +44,11 @@
                                             </a>
                                         @endif
                                     </form>
+                                    @endif
                                     <!-- rss for announcements - blog -->
-                                    @if($module_id == 7 or $module_id == 37)
+                                    @if($module_id == MODULE_ID_ANNOUNCE or $module_id == MODULE_ID_BLOG)
                                        @php $getToken = generate_csrf_token_link_parameter(); @endphp
-                                       @if($module_id == 7)
+                                       @if($module_id == MODULE_ID_ANNOUNCE)
                                             <a class="ms-2" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
                                                 <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
                                                 data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}"></span>
@@ -150,6 +155,10 @@
                                                         {{$toolName}}
                                                     </span>
                                                      <!-- active - inactive module_id -->
+                                                     @if($module_id != MODULE_ID_COURSEINFO and $module_id != MODULE_ID_USERS
+                                                        and $module_id != MODULE_ID_USAGE and $module_id != MODULE_ID_TOOLADMIN
+                                                        and $module_id != MODULE_ID_ABUSE_REPORT and $module_id != MODULE_ID_COURSE_WIDGETS
+                                                        and $module_id != MODULE_ID_UNITS and !empty($module_id))
                                                     <form id="form_id" action="{{$urlAppend}}main/module_toggle.php?course={{$course_code}}&module_id={{$module_id}}" method="post">
                                                         <input type="hidden" name="hide" value="{{$visible_module}}">
                                                         <input type="hidden" name="Active_Deactive_Btn">
@@ -166,10 +175,11 @@
                                                             </a>
                                                         @endif
                                                     </form>
+                                                    @endif
                                                     <!-- rss for announcements - blog -->
-                                                    @if($module_id == 7 or $module_id == 37)
+                                                    @if($module_id == MODULE_ID_ANNOUNCE or $module_id == MODULE_ID_BLOG)
                                                         @php $getToken = generate_csrf_token_link_parameter(); @endphp
-                                                        @if($module_id == 7)
+                                                        @if($module_id == MODULE_ID_ANNOUNCE)
                                                                 <a class="ms-2" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
                                                                     <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
                                                                     data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}"></span>

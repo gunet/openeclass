@@ -230,7 +230,7 @@
                                                     <div class='panel panel-admin border-0 bg-white min-hg-panel'>
                                                         <div class='panel-heading bg-body'>
                                                                 <div class='col-12 Help-panel-heading'>
-                                                                    <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{trans('langUsername')}}</span>
+                                                                    <span class='text-capitalize Help-text-panel-heading-Portfolio'>{{trans('langUsername')}}</span>
                                                                 </div>
                                                         </div>
                                                         <div class='panel-body ps-4 pe-3 pt-0'>
@@ -242,7 +242,7 @@
                                                     <div class='panel panel-admin border-0 bg-white min-hg-panel mt-md-0 mt-3'>
                                                             <div class='panel-heading bg-body'>
                                                                 <div class='col-12 Help-panel-heading'>
-                                                                    <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{trans('langAm')}}</span>
+                                                                    <span class='text-capitalize Help-text-panel-heading-Portfolio'>{{trans('langAm')}}</span>
                                                                 </div>
                                                         </div>
                                                         <div class='panel-body ps-4 pe-3 pt-0'>
@@ -260,7 +260,7 @@
                                                     <div class='panel panel-admin border-0 bg-white min-hg-panel mt-xl-0 mt-3'>
                                                             <div class='panel-heading bg-body'>
                                                                 <div class='col-12 Help-panel-heading'>
-                                                                    <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langFaculty') }}</span>
+                                                                    <span class='text-capitalize Help-text-panel-heading-Portfolio'>{{ trans('langFaculty') }}</span>
                                                                 </div>
                                                         </div>
                                                         <div class='panel-body ps-4 pe-3 pt-0'>
@@ -284,7 +284,7 @@
                                                     <div class='panel panel-admin border-0 bg-white mt-md-0 mt-3 min-hg-panel'>
                                                         <div class='panel-heading bg-body'>
                                                             <div class='col-12 Help-panel-heading'>
-                                                                <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langProfileMemberSince') }}</span>
+                                                                <span class='text-capitalize Help-text-panel-heading-Portfolio'>{{ trans('langProfileMemberSince') }}</span>
                                                             </div>
                                                         </div>
                                                         <div class='panel-body ps-4 pe-3 pt-0'>
@@ -296,7 +296,7 @@
                                                     <div class='panel panel-admin border-0 bg-white min-hg-panel mt-md-0 mt-3'>
                                                         <div class='panel-heading bg-body'>
                                                             <div class='col-12 Help-panel-heading'>
-                                                                <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langStatus') }}</span>
+                                                                <span class='text-capitalize Help-text-panel-heading-Portfolio'>{{ trans('langStatus') }}</span>
                                                             </div>
                                                         </div>
                                                         <div class='panel-body ps-4 pe-3 pt-0'>
@@ -316,7 +316,7 @@
                                                     <div class='panel panel-admin border-0 bg-white min-hg-panel mt-xl-0 mt-3'>
                                                         <div class='panel-heading bg-body'>
                                                             <div class='col-12 Help-panel-heading'>
-                                                                <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langProfileLastVisit') }}</span>
+                                                                <span class='text-capitalize Help-text-panel-heading-Portfolio'>{{ trans('langProfileLastVisit') }}</span>
                                                             </div>
                                                         </div>
                                                         <div class='panel-body ps-4 pe-3 pt-0'>
@@ -345,7 +345,7 @@
                                             <div class='panel panel-admin border-0 bg-white min-hg-panel'>
                                                 <div class='panel-heading bg-body'>
                                                     <div class='col-12 Help-panel-heading'>
-                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{trans('langName')}}</span>
+                                                        <span class='text-capitalize Help-text-panel-heading-Portfolio'>{{trans('langName')}}</span>
                                                     </div>
                                                 </div>
                                                 <div class='panel-body ps-4 pe-3 pt-0'>
@@ -359,7 +359,7 @@
                                             <div class='panel panel-admin border-0 bg-white mt-md-0 mt-3 min-hg-panel'>
                                                 <div class='panel-heading bg-body'>
                                                     <div class='col-12 Help-panel-heading'>
-                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>Email</span>
+                                                        <span class='text-capitalize Help-text-panel-heading-Portfolio'>Email</span>
                                                     </div>
                                                 </div>
                                                 <div class='panel-body ps-4 pe-3 pt-0'>
@@ -375,7 +375,7 @@
                                             <div class='panel panel-admin border-0 bg-white mt-md-0 mt-3 min-hg-panel'>
                                                 <div class='panel-heading bg-body'>
                                                     <div class='col-12 Help-panel-heading'>
-                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{trans('langPhone')}}</span>
+                                                        <span class='text-capitalize Help-text-panel-heading-Portfolio'>{{trans('langPhone')}}</span>
                                                     </div>
                                                 </div>
                                                 <div class='panel-body ps-4 pe-3 pt-0'>
@@ -393,7 +393,7 @@
                                             <div class='panel panel-admin border-0 bg-white mt-3 min-hg-panel'>
                                                 <div class='panel-heading bg-body'>
                                                     <div class='col-12 Help-panel-heading'>
-                                                        <span class='text-capitalize fw-bold Help-text-panel-heading-Portfolio'>{{ trans('langAboutMe') }}</span>
+                                                        <span class='text-capitalize Help-text-panel-heading-Portfolio'>{{ trans('langAboutMe') }}</span>
                                                     </div>
                                                 </div>
                                                 <div class='panel-body ps-4 pe-3 pt-0'>
@@ -462,7 +462,7 @@
             <div class="row rowMedium">
 
                 <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-8 col-8 pt-2 d-inline-flex align-items-top">
-                    <span class="text-uppercase fw-bold mb-0 Help-text-panel-heading">{{ trans('langMyCoursesSide') }}</span>
+                    <span class="text-uppercase mb-0 Help-text-panel-heading" style=" font-family: 'Manrope-SemiBold';">{{ trans('langMyCoursesSide') }}</span>
                     <a href="{{$urlAppend}}main/my_courses.php" class='viewAllCourseBtn btn btn-default d-flex justify-content-center align-items-center ms-2' data-bs-toggle='tooltip'
                     data-bs-placement='bottom' title data-bs-original-title="{{ trans('langMyCoursesSide') }}">
                         <span class='fa fa-eye text-dark'></span>
@@ -550,7 +550,7 @@
                                     </picture>
                                 </figure>
                                 <h6 class="lesson-title">
-                                    <a href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
+                                    <a class='UserLessonsText' href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
                                     <span class="lesson-id text-secondary">({{ $cource->public_code }})</span>
                                 </h6>
                                 <div class="lesson-professor text-secondary mt-0">{{ $cource->professor }}</div>

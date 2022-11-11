@@ -1,11 +1,11 @@
 
-.tool-sidebar-text{color:white; font-size: 13px;}
+.tool-sidebar-text{color:white; font-size: 12px;}
 
 /* ------------------------ LEFT MENU HOVER ITEMS --------------------- */
 
 .leftMenuToolCourse{ background: transparent; }
 
-.toolSidebarTxt{ font-size: 13px; color: white; }
+.toolSidebarTxt{ font-size: 13px; color: white; font-family: 'Manrope-Medium', 'FontAwesome', sans-serif;}
 
 .posTool { margin-top:2px; }
 

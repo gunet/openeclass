@@ -32,10 +32,12 @@
 
                     <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 @if (isset($_SESSION['uid'])) mt-2 @else mt-1 @endif">
                         @if(!get_config('hide_login_link'))
-                            <a class="eclass-nav-link fs-6 text-white" href="{{ $urlServer }}"> <i class="fa fa-home"></i> {{ trans('langHome') }}</a>
+                            <a class="eclass-nav-link text-white text-uppercase" href="{{ $urlServer }}"> <i class="fa fa-home"></i> {{ trans('langHome') }}</a>
                         @endif
-                        <a class="eclass-nav-link fs-6 text-white @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib pen-nib-navhead"></i> {{ trans('langRegistration') }}</a>
-                        <a class="eclass-nav-link fs-6 text-white" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-university"></i> {{ trans('langCourses') }}</a>
+                        @if (!isset($_SESSION['uid']))
+                            <a class="eclass-nav-link text-uppercase text-white @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib pen-nib-navhead rotate_reg_icon"></i> {{ trans('langRegistration') }}</a>
+                        @endif
+                        <a class="eclass-nav-link text-uppercase text-white" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-book rotate_lessons_icon"></i> {{ trans('langCourses') }}</a>
                     </div>
 
 
@@ -65,10 +67,10 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/create_course/create_course.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-plus-circle orangeText pt-1"></span>
+                                                        <span class="fas fa-plus-circle pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fw-bold'>
+                                                        <span class='TextMedium'>
                                                             {{ trans('langCourseCreate') }}
                                                         </span>
                                                     </div>
@@ -80,10 +82,10 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/portfolio.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-home bg-transparent orangeText pt-1"></span>
+                                                        <span class="fas fa-home bg-transparent pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fw-bold'>
+                                                        <span class='TextMedium'>
                                                             {{ trans('langMyPortfolio') }}
                                                         </span>
                                                     </div>
@@ -95,10 +97,10 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/my_courses.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-graduation-cap orangeText pt-1"></span>
+                                                        <span class="fas fa-graduation-cap pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fw-bold'>
+                                                        <span class='TextMedium'>
                                                             {{ trans('langMyCoursesSide') }}
                                                         </span>
                                                     </div>
@@ -110,10 +112,10 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/announcements/myannouncements.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-bell orangeText pt-1"></span>
+                                                        <span class="fas fa-bell pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fw-bold'>
+                                                        <span class='TextMedium'>
                                                             {{ trans('langMyAnnouncements') }}
                                                         </span>
                                                     </div>
@@ -125,10 +127,10 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/notes/index.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-sticky-note orangeText pt-1"></span>
+                                                        <span class="fas fa-sticky-note pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fw-bold'>
+                                                        <span class='TextMedium'>
                                                             {{ trans('langNotes') }}
                                                         </span>
                                                     </div>
@@ -140,10 +142,10 @@
                                                 <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}">
                                                     <div class='row'>
                                                         <div class='col-1'>
-                                                            <span class="fas fa-briefcase orangeText pt-1"></span>
+                                                            <span class="fas fa-briefcase pt-1"></span>
                                                         </div>
                                                         <div class='col-10 ps-3 pe-3'>
-                                                            <span class='fw-bold'>
+                                                            <span class='TextMedium'>
                                                                 {{ trans('langMyePortfolio') }}
                                                             </span>
                                                         </div>
@@ -155,10 +157,10 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/usage/index.php?t=u">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-chart-bar orangeText pt-1"></span>
+                                                        <span class="fas fa-chart-bar pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fw-bold'>
+                                                        <span class='TextMedium'>
                                                             {{ trans('langMyStats') }}
                                                         </span>
                                                     </div>
@@ -170,10 +172,10 @@
                                                 <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}">
                                                     <div class='row'>
                                                         <div class='col-1'>
-                                                            <span class="fas fa-location-arrow orangeText pt-1"></span>
+                                                            <span class="fas fa-location-arrow pt-1"></span>
                                                         </div>
                                                         <div class='col-10 ps-3 pe-3'>
-                                                            <span class='fw-bold'>
+                                                            <span class='TextMedium'>
                                                                 {{ trans('langMyBlog') }}
                                                             </span>
                                                         </div>
@@ -185,10 +187,10 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}modules/message/index.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-envelope orangeText pt-1"></span>
+                                                        <span class="fas fa-envelope pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fw-bold'>
+                                                        <span class='TextMedium'>
                                                             {{ trans('langMyDropBox') }}
                                                         </span>
                                                     </div>
@@ -199,10 +201,10 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/personal_calendar/index.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-bell orangeText pt-1"></span>
+                                                        <span class="fas fa-bell pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fw-bold'>
+                                                        <span class='TextMedium'>
                                                             {{ trans('langMyAgenda') }}
                                                         </span>
                                                     </div>
@@ -213,10 +215,10 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/profile/display_profile.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fas fa-user orangeText pt-1"></span>
+                                                        <span class="fas fa-user pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fw-bold'>
+                                                        <span class='TextMedium'>
                                                             {{ trans('langMyProfile') }}
                                                         </span>
                                                     </div>
@@ -227,10 +229,10 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/my_widgets.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fa fa-magic fa-fw orangeText pt-1"></span>
+                                                        <span class="fa fa-magic fa-fw pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fw-bold'>
+                                                        <span class='TextMedium'>
                                                             {{ trans('langMyWidgets') }}
                                                         </span>
                                                     </div>
@@ -241,10 +243,10 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/gradebookUserTotal/index.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fa fa-sort-numeric-desc fa-fw orangeText pt-1"></span>
+                                                        <span class="fa fa-sort-numeric-desc fa-fw pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fw-bold'>
+                                                        <span class='TextMedium'>
                                                             {{ trans('langGradeTotal') }}
                                                         </span>
                                                     </div>
@@ -255,10 +257,10 @@
                                             <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/mycertificates.php">
                                                 <div class='row'>
                                                     <div class='col-1'>
-                                                        <span class="fa fa-trophy fa-fw orangeText pt-1"></span>
+                                                        <span class="fa fa-trophy fa-fw pt-1"></span>
                                                     </div>
                                                     <div class='col-10 ps-3 pe-3'>
-                                                        <span class='fw-bold'>
+                                                        <span class='TextMedium'>
                                                             {{ trans('langMyCertificates') }}
                                                         </span>
                                                     </div>
@@ -270,10 +272,10 @@
                                                 <a class="list-group-item border border-top-0 border-bottom-secondary" href="{{ $urlAppend }}main/mydocs/index.php">
                                                     <div class='row'>
                                                         <div class='col-1'>
-                                                            <span class="fas fa-folder orangeText pt-1"></span>
+                                                            <span class="fas fa-folder pt-1"></span>
                                                         </div>
                                                         <div class='col-10 ps-3 pe-3'>
-                                                            <span class='fw-bold'>
+                                                            <span class='TextMedium'>
                                                                 {{ trans('langMyDocs') }}
                                                             </span>
                                                         </div>
@@ -288,7 +290,7 @@
                                                 <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
                                                 <button class='w-100 list-group-item border border-top-0 border-bottom-0 bg-light text-end bg-light' type='submit' name='submit'>
                                                     <i class="fas fa-sign-out-alt fw-bold text-primary"></i>
-                                                    <span class='fw-bold text-dark'>{{ trans('langLogout') }}</span>
+                                                    <span class='TextMedium text-dark'>{{ trans('langLogout') }}</span>
                                                 </button>
                                             </form>
                                         </li>

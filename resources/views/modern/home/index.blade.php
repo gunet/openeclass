@@ -46,17 +46,17 @@
                                                         <div class="carousel-item active">
                                                             <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 Borders cardLogin'>
                                                                 <div class='card-header bg-transparent border-0'>
-                                                                    <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'> {{ trans('langUserLogin') }}</div>
+                                                                    <div class='fs-5 fw-bold text-center blackBlueText text-capitalize'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {{ trans('langUserLogin') }}</div>
                                                                 </div>
                                                                 <form action="{{ $urlAppend }}" method="post">
                                                                     <div class="login-form-spacing mt-2">
-                                                                        <input class="login-input border @if(count($q)>1) w-75 @else w-100 @endif" placeholder="{{ trans('langUsername') }} &#xf007;" type="text" id="uname" name="uname" >
-                                                                        <input class="login-input border @if(count($q)>1) w-75 @else w-100 @endif mt-4" placeholder="{{ trans('langPassword') }} &#xf023;" type="password" id="pass" name="pass">
-                                                                        <input class="btn text-white @if(count($q)>1) w-75 @else w-100 @endif login-form-submit mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
+                                                                        <input id='username_id' class="rounded-pill login-input @if(count($q)>1) w-75 @else w-100 @endif" placeholder="{{ trans('langUsername') }}" type="text" id="uname" name="uname" >
+                                                                        <input id='password_id' class="rounded-pill login-input @if(count($q)>1) w-75 @else w-100 @endif mt-4" placeholder="{{ trans('langPassword') }}" type="password" id="pass" name="pass">
+                                                                        <input class="rounded-pill btn @if(count($q)>1) w-75 @else w-100 @endif login-form-submit TextBold mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
                                                                     </div>
                                                                 </form>
                                                                 <div class='col-sm-12 d-flex justify-content-center'>
-                                                                    <a class="text-primary fw-bold btnlostpass mb-2 mt-md-4" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
+                                                                    <a class="orangeText btnlostpass mb-2 mt-md-4" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -68,11 +68,11 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'>{{ get_auth_info(2) }}</div>
+                                                                            <div class='fs-5 fw-bold text-center blackBlueText'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {{ get_auth_info(2) }}</div>
                                                                         </div>
                                                                     </div>
                                                                     <div class='col-12 text-center'>
-                                                                        <a class="btn btn-primary w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=2'>{{ trans('langUserLogin') }}</a>
+                                                                        <a class="rounded-pill btn login-form-submit TextBold w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=2'>{{ trans('langUserLogin') }}</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -86,11 +86,11 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'>{{ get_auth_info(4) }}</div>
+                                                                            <div class='fs-5 fw-bold text-center blackBlueText'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {{ get_auth_info(4) }}</div>
                                                                         </div>
                                                                     </div>
                                                                     <div class='col-12 text-center'>
-                                                                        <a class="btn btn-primary w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=4'>{{ trans('langUserLogin') }}</a>
+                                                                        <a class="rounded-pill btn login-form-submit TextBold w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=4'>{{ trans('langUserLogin') }}</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -103,11 +103,11 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'>{{ get_auth_info(3) }}</div>
+                                                                            <div class='fs-5 fw-bold text-center blackBlueText'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {{ get_auth_info(3) }}</div>
                                                                         </div>
                                                                     </div>
                                                                     <div class='col-12 text-center'>
-                                                                        <a class="btn btn-primary w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=3'>{{ trans('langUserLogin') }}</a>
+                                                                        <a class="rounded-pill btn login-form-submit TextBold w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=3'>{{ trans('langUserLogin') }}</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -119,11 +119,11 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'>{{ get_auth_info(5) }}</div>
+                                                                            <div class='fs-5 fw-bold text-center blackBlueText'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {{ get_auth_info(5) }}</div>
                                                                         </div>
                                                                     </div>
                                                                     <div class='col-12 text-center'>
-                                                                        <a class="btn btn-primary w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=5'>{{ trans('langUserLogin') }}</a>
+                                                                        <a class="rounded-pill btn login-form-submit TextBold w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=5'>{{ trans('langUserLogin') }}</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -135,11 +135,11 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'>{!! q(getSerializedMessage($l->auth_title)) !!}</div>
+                                                                            <div class='fs-5 fw-bold text-center blackBlueText'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {!! q(getSerializedMessage($l->auth_title)) !!}</div>
                                                                         </div>
                                                                     </div>
                                                                     <div class='col-12 text-center'>
-                                                                        <a class='btn btn-primary w-75' href='{{$urlAppend}}secure/'>{{ trans('langUserLogin') }}</a>
+                                                                        <a class='rounded-pill btn login-form-submit TextBold w-75' href='{{$urlAppend}}secure/'>{{ trans('langUserLogin') }}</a>
                                                                     </div>
                                                                 </div>   
                                                             </div>
@@ -151,11 +151,11 @@
                                                                  <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <div class='control-label-notes fs-5 text-center'><img src="template/modern/img/user2.png" class='user-icon'>{!! q(getSerializedMessage($l->auth_title)) !!}</div>
+                                                                            <div class='fs-5 fw-bold text-center blackBlueText'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {!! q(getSerializedMessage($l->auth_title)) !!}</div>
                                                                         </div>
                                                                     </div>
                                                                     <div class='col-12 text-center'>
-                                                                        <a class='btn btn-primary w-75' href='{{$urlAppend}}modules/auth/cas.php'>{{ trans('langUserLogin') }}</a>
+                                                                        <a class='rounded-pill btn login-form-submit TextBold w-75' href='{{$urlAppend}}modules/auth/cas.php'>{{ trans('langUserLogin') }}</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -166,10 +166,10 @@
                                             </div>
                                             @if(count($q)>1)
                                                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselLoginAuthControls" data-bs-slide="prev">
-                                                    <span class="carousel-control-prev-icon bg-primary Borders" aria-hidden="true"></span>
+                                                    <span class="fa fa-angle-left carouselPrevHome" aria-hidden="true"></span>
                                                 </button>
                                                 <button class="carousel-control-next" type="button" data-bs-target="#carouselLoginAuthControls" data-bs-slide="next">
-                                                    <span class="carousel-control-next-icon bg-primary Borders" aria-hidden="true"></span>
+                                                    <span class="fa fa-angle-right carouselNextHome" aria-hidden="true"></span>
                                                 </button>
                                             @endif
                                         </div>
@@ -204,7 +204,7 @@
                                             {!! get_config('homepage_title') !!}
                                         </div>
                                         @endif
-                                        <div class="panel-body bg-body @if(get_config('homepage_title')) NoBorderTop @else Borders @endif rounded-0">
+                                        <div class="panel-body blackBlueText bg-body @if(get_config('homepage_title')) NoBorderTop @else Borders @endif rounded-0 p-5">
                                             {!! get_config('homepage_intro') !!}
                                         </div>
                                     </div>
@@ -223,7 +223,7 @@
                                             {!! get_config('homepage_title') !!}
                                         </div>
                                         @endif
-                                        <div class='panel-body rounded-0'>
+                                        <div class='panel-body blackBlueText rounded-0'>
                                             {!! get_config('homepage_intro') !!}
                                         </div>
                                     </div>
@@ -365,7 +365,7 @@
                         @php $counterAn++; @endphp
                         @endforeach
                     </div>
-                    <div class="more-link"><a class="all_announcements mt-3 float-end" href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-arrow-right'></span></a></div>
+                    <div class="more-link"><a class="all_announcements mt-3 float-end" href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-angle-right'></span></a></div>
                 </div>
                 
             </div>
@@ -378,78 +378,86 @@
     <div class="container-fluid statistics @if($announcements) mt-lg-3 @else mt-lg-0 @endif mt-0">
         <div class='row rowMedium'>
             <div class="statistics-wrapper">
-                <h2 class="text-center pt-lg-0 pt-4">
+                <h2 class="TextExtraBold text-center pt-lg-0 pt-4">
                     {{trans('langViewStatics')}}
                 </h2>
                 <div class="row row_pad_courses">
                     <div class="col-sm-4 text-center">
                             <i class="fas fa-book"></i>
                             @php $course_inactive = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count; @endphp
-                            <div class="num">{{ $course_inactive }}</div>
+                            <div class="num TextBold">{{ $course_inactive }}</div>
                             <div class="num-text">{{trans('langsCourses')}}</div>
                     </div>
                     <div class="col-sm-4 text-center">
                             <i class="fas fa-mouse-pointer"></i>
-                            <div class="num">10K<sup>+</sup></div>
+                            <div class="num TextBold">10<span class='num-plus TextRegular'>K+</span></div>
                             <div class="num-text">{{trans('langUserLogins')}}/{{trans('langWeek')}}</div>
                     </div>
                     <div class="col-sm-4 text-center">
                             <i class="fas fa-user"></i>
-                            <div class="num">{{ getOnlineUsers() }}</div>
+                            <div class="num TextBold">{{ getOnlineUsers() }}</div>
                             <div class="num-text">{{trans('langOnlineUsers')}}</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-   
 
     <div class="d-flex justify-content-center mt-lg-3 mb-lg-3">
         <div class="container-fluid testimonials mt-lg-0 mb-lg-0 mt-0 mb-0 bg-light">
-            <div class="owl-carousel owl-theme p-3">
-                <div class="item testimonial">
-                    <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                    <div class="testimonial-person mt-3">- Λυδία Καλομοίρη -</div>
-                </div>
-                <div class="item testimonial">
-                    <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                    <div class="testimonial-person mt-3">- Γιάννης Ιωάννου -</div>
-                </div>
-                <div class="item testimonial">
-                    <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                    <div class="testimonial-person mt-3">- Νίκος Παπαδάκης -</div>
-                </div>
+            <div class="testimonial">
+                <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>
+                <div class="testimonial-person mt-3 fst-italic"><small>- Λυδία Καλομοίρη -</small></div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>
+                <div class="testimonial-person mt-3 fst-italic"><small>- Γιάννης Ιωάννου -</small></div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>
+                <div class="testimonial-person mt-3 fst-italic"><small>- Νίκος Παπαδάκης -</small></div>
             </div>
         </div>
     </div>
 
 <script>
-
-    $('.owl-carousel').owlCarousel({
-            center: true,
-            loop:true,
-            margin:0,
-            autoplay: true,
-            autoPlaySpeed: 5000,
-            autoPlayTimeout: 5000,
-            autoplayHoverPause: true,
-            nav:true,
-            items: 3,
-            smartSpeed: 750,
-            navText: ['<span class="fa fa-angle-left"></span>', '<span class="fa fa-angle-right"></span>'],
-            responsive : {
-            0 : {
-                items: 1
-            },
-            991 : {
-                items: 1
-            },
-            992 : {
-                items: 3
-            }
+   
+    document.body.addEventListener("click", function (e) {
+        clickerUsernamePassword = 0;
+        if (!e.target.classList.contains('login-input')) {
+            $('.carousel-control-prev').css('display','block');
+            $('.carousel-control-next').css('display','block'); 
         }
-
     });
+
+    $('.login-input').on('click',function(){
+        $('.owl-carousel').owlCarousel({
+            rewindNav : true,
+            rewindSpeed: 0
+        });
+        $('.carousel-control-prev').css('display','none');
+        $('.carousel-control-next').css('display','none');
+
+	});
+    
+    $('.testimonials').slick({
+		autoplay:true,
+		autoplaySpeed:5000,
+		centerMode: true,
+		slidesToShow: 1,
+		responsive: [
+            {
+                breakpoint: 768,
+                settings: { centerPadding: '0vw' }
+		    },
+            {
+                breakpoint: 2561,
+                settings: { centerPadding: '15vw' }
+		    }
+        ]
+	});
+
+    
 
 </script>
 

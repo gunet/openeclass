@@ -3520,7 +3520,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $i=0;
     $page_title = "";
     if (isset($pageName) and !empty($pageName) and $page_title_flag) {
-        $page_title = "<h6 class='text-dark fw-bold text-capitalize mb-0'><span class='fas fa-check text-success pe-2'></span>".q($pageName)."</h6>";
+        $page_title = "<h6 class='text-dark TextBold text-capitalize mb-0'><span class='fas fa-check text-success pe-2'></span>".q($pageName)."</h6>";
     }
     foreach (array_reverse($options) as $option) {
         // skip items with show=false
@@ -3603,7 +3603,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                 "</$primaryTag>$subMenu$form_end");
         } else {
             array_unshift($out_secondary,
-                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class list-group-item border border-top-0 border-bottom-secondary fw-bold'" . $href .
+                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class list-group-item border border-top-0 border-bottom-secondary TextMedium'" . $href .
                 " $link_attrs>" .
                 "<div class='d-inline-flex align-items-center'><span class='fa $option[icon] pe-2'></span> $title</div></a>$form_end</li>");
         }

@@ -33,7 +33,7 @@
                         <div class="panel-title h3">
                             <div class='d-inline-flex align-items-top'>
                                 <span class="fa fa-chevron-right tool-sidebar"></span>
-                                <span class='text-wrap tool-sidebar-text ps-2'>{{ $tool_group[0]['text'] }}</span>
+                                <span class='text-wrap tool-sidebar-text ps-2 text-uppercase'>{{ $tool_group[0]['text'] }}</span>
                             </div>
                         </div><hr class='text-white'>
                     </div>

@@ -319,18 +319,19 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['imageUpload'])) $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
         if (isset($theme_options_styles['imageUploadSmall'])) $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
     }else{
-        $styles_str .= "#background-cheat-leftnav,#bgr-cheat-header{background:#1d4e89;}
+        $styles_str .= "#background-cheat-leftnav,#bgr-cheat-header{background:#003e87;}
         #leftnav{background:transparent;}
-        #bgr-cheat-footer{background: #001146;} a{color:#0275d8;}
+        #bgr-cheat-footer{background: #001146;} a{color:#005ad9;}
         #leftnav .panel a.list-group-item:hover{background: #4682B4;}
         #leftnav .panel a.list-group-item.active:hover{background: #ccc;}
         .offcanvas{background:#1d4e89;}
         .statistics:before{background: #001146;}
-        .notes_thead, .list-header{background: #1d4e89;}
-        .menu-popover .list-group-item{background: #1d4e89; color:#DBE8F9;}
+        .notes_thead, .list-header{background: #003e87;}
+        .menu-popover .list-group-item{background: #003e87; color:#DBE8F9;}
         .menu-popover .list-group-item:hover{background: #4682B4;}
         .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{background: red;}
-        .openCoursesPanel{background:#1d4e89;}";
+        .openCoursesPanel{background:#003e87;}
+        #cal-header{background:#001146;}";
     }
 
     $sidebar_courses = Database::get()->queryArray("SELECT id, code, title, prof_names, public_code
@@ -537,9 +538,12 @@ function array2html($TheArray) {
  */
 
 function lang_selections() {
-    global $session, $native_language_names_init;
+    global $session, $native_language_names_init, $langDropdown;
     if (count($session->active_ui_languages) < 2) {
         return ('&nbsp;');
+    }
+    if (isset($_SESSION['uid'])){
+        $langDropdown = "user-language-menuOn";
     }
     $lang_select = "
       <a class='d-none d-sm-none d-md-none d-lg-block d-flex justify-content-center align-items-center btn btn-primary' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
@@ -548,13 +552,13 @@ function lang_selections() {
       <a class='d-block d-sm-block d-md-block d-lg-none btn btn-transparent text-white pt-2' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
           <span class='fa fa-globe'></span>
       </a>
-      <ul class='m-0 p-0 border-0 dropdown-menu dropdown-menu-end user-language-menu me-lg-0 me-md-5 me-0' role='menu' aria-labelledby='dropdownMenuLang'>";
+      <ul class='m-0 p-0 border-0 dropdown-menu dropdown-menu-end $langDropdown user-language-menu me-lg-0 me-md-5 me-0' role='menu' aria-labelledby='dropdownMenuLang'>";
     foreach ($session->active_ui_languages as $code) {
         $class = ($code == $session->language)? ' class="active"': '';
         $lang_select .=
             "<li role='presentation'$class>
                 <a class='list-group-item border border-top-0 border-bottom-secondary' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
-                    <div class='d-inline-flex align-items-center'><span class='fa fa-language orangeText' aria-hidden='true'></span><span class='fw-bold ps-1'>" .
+                    <div class='d-inline-flex align-items-center'><span class='fa fa-language' aria-hidden='true'></span><span class='TextMedium ps-1'>" .
                     q($native_language_names_init[$code]) . "</span></div></a></li>";
     }
     $lang_select .= "</ul>";
