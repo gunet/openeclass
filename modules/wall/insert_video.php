@@ -50,10 +50,10 @@ function list_videos($id = NULL) {
         }
 
         $video_found = TRUE;
-        $ret_string .= "<div class='table-responsive'><table class='announcements_table'>";
-        $ret_string .= "<tr class='notes_thead'>" .
-                         "<th width='200' class='text-white text-left'>&nbsp;$langTitle</th>" .
-                         "<th class='text-white text-left'>$langDescription</th>" .
+        $ret_string .= "<div class='table-responsive'><table class='table-default'>";
+        $ret_string .= "<tr class='list-header'>" .
+                         "<th width='200' class='text-white text-start'>&nbsp;$langTitle</th>" .
+                         "<th class='text-white text-start'>$langDescription</th>" .
                          "<th class='text-white pe-2' width='100'>$langDate</th>" .
                          "<th class='text-white pe-2' width='80'>$langChoice</th>" .
                          "</tr>";

@@ -726,13 +726,13 @@ if ($total_cunits > 0) {
             $cunits_content .= "<div id='unit_$cu_indirect' class='col-12 shadow-sm p-3 mb-3' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
                 <div class='item-content'>
                     <div class='item-header clearfix'>
-                        <div class='item-title h4 $class_vis text-primary TextSemiBold'>";
+                        <div class='item-title h4 $class_vis text-primary'>";
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<a class='$class_vis fs-6' href='${urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+                $cunits_content .= "<a style='line-height: 1.42857143; display:block;' class='$class_vis fs-6 TextSemiBold' href='${urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
             }
-            $cunits_content .= "<br><small><span class='help-block'>";
+            $cunits_content .= "<small><span class='help-block'>";
             if (!(is_null($cu->start_week))) {
                 $cunits_content .= "$langFrom2 " . format_locale_date(strtotime($cu->start_week), 'short', false);
             }

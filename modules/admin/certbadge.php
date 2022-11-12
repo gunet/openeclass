@@ -320,9 +320,9 @@ if (isset($_GET['action'])) {
 } else { // display available certificates / badges
     $sql1 = Database::get()->queryArray("SELECT * FROM certificate_template");
     $tool_content .= "<div class='table-responsive'>
-                        <table class='announcements_table'>
+                        <table class='table-default'>
                         <tr class='bg-light'><th class='text-center text-uppercase' colspan='5'>$langAvailableCertTemplates</th></tr>
-                        <tr class='notes_thead'>
+                        <tr class='list-header'>
                             <th class='text-white'>$langTitle</th>
                             <th class='text-white'>$langDescription</th>                            
                             <th class='text-white text-center'><i class='fa fa-cogs'></i></th>

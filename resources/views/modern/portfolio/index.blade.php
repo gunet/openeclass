@@ -421,7 +421,7 @@
                                 <div class="row mt-3">
                                     <div class='col-12'>
                                         <div class="py-1">
-                                            <span class='text-uppercase fw-bold fst-italic text-warning'>*{{trans('langNotice')}}</span>
+                                            <span class='text-uppercase TextBold fst-italic text-warning'>*{{trans('langNotice')}}</span>
                                             <br>{{ trans('langExplain') }}
                                         </div>
                                     </div>
@@ -550,7 +550,7 @@
                                     </picture>
                                 </figure>
                                 <h6 class="lesson-title">
-                                    <a class='UserLessonsText' href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
+                                    <a class='TextMedium' href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
                                     <span class="lesson-id text-secondary">({{ $cource->public_code }})</span>
                                 </h6>
                                 <div class="lesson-professor text-secondary mt-0">{{ $cource->professor }}</div>

@@ -150,8 +150,8 @@ function register_user_presences($attendance_id, $actID) {
         //table to display the users
         $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
         <form class='form-horizontal' id='user_attendances_form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($actID) . "'>
-        <table id='users_table{$course_id}' class='announcements_table custom_list_order'>
-            <thead class='notes_thead'>
+        <table id='users_table{$course_id}' class='table-default custom_list_order'>
+            <thead class='list-header'>
                 <tr>
                   <th class='text-white text-center' width='5%'>$langID</th>
                   <th class='text-white text-left'>$langName $langSurname</th>
@@ -829,8 +829,8 @@ function display_user_presences($attendance_id) {
         if ($actNumber > 0) {
             $tool_content .= "<h5>". display_user($userID) ."</h5>";
             $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
-                              <div class='table-responsive'><table class='announcements_table'>";
-            $tool_content .= "<tr class='notes_thead'><th class='text-white'>$langTitle</th><th class='text-white'>$langDate</th><th class='text-white'>$langType</th>";
+                              <div class='table-responsive'><table class='table-default'>";
+            $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th><th class='text-white'>$langDate</th><th class='text-white'>$langType</th>";
             $tool_content .= "<th width='10' class='text-white text-center'>$langAttendanceBooking</th>";
             $tool_content .= "</tr>";
         } else {
@@ -923,8 +923,8 @@ function display_all_users_presences($attendance_id) {
                                                 ORDER BY surname, name", $attendance_id, $course_id);
     if (count($resultUsers)) {
         //table to display the users
-        $tool_content .= "<table id='users_table{$course_id}' class='announcements_table custom_list_order'>
-            <thead class='notes_thead'>
+        $tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>
+            <thead class='list-header'>
                 <tr>
                   <th width='1' class='text-white'>$langID</th>
                   <th class='text-white'>$langName $langSurname</th>
@@ -1162,8 +1162,8 @@ function user_attendance_settings($attendance_id) {
                     <div class='form-group mt-3'>
                         <div class='col-sm-12 col-sm-offset-2'>
                             <div class='table-responsive'>
-                                <table id='participants_tbl' class='announcements_table hide'>
-                                    <tr class='title1 notes_thead'>
+                                <table id='participants_tbl' class='table-default hide'>
+                                    <tr class='title1 list-header'>
                                       <td id='users' class='text-white'>$langStudents</td>
                                       <td class='text-white text-center'>$langMove</td>
                                       <td class='text-white'>$langParticipate</td>

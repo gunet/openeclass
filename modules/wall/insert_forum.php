@@ -45,8 +45,8 @@ function list_forums($id = NULL) {
 
         $ret_string .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id' />" .
-                "<div class='table-responsive'><table class='announcements_table'>" .
-                "<tr class='notes_thead'>" .
+                "<div class='table-responsive'><table class='table-default'>" .
+                "<tr class='list-header'>" .
                 "<th class='text-white'>$langForums</th>" .
                 "<th class='text-white'>$langComments</th>" .
                 "<th style='width:20px;' class='text-center text-white'>$langChoice</th>" .

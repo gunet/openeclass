@@ -540,8 +540,8 @@ function show_rubric ($rubric_id) {
     }
         $tool_content .= "
         <div class='table-responsive'>
-        <table class='announcements_table'>
-            <thead class='notes_thead'>
+        <table class='table-default'>
+            <thead class='list-header'>
                 <th class='text-white' style='padding-left:15px;'>$langName</th> 
                 <th class='text-white'>$langDescription</th>
                 <th class='text-white'>$langRubricCriteria</th>

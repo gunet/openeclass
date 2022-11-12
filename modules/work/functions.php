@@ -417,8 +417,8 @@ function show_submission_details($id) {
                         . $sub->grade .
                         "</a>
                         <div class='table-responsive collapse' id='collapseGrade'>
-                            <table class='announcements_table'>
-                                <thead class='notes_thead'>
+                            <table class='table-default'>
+                                <thead class='list-header'>
                                         <th class='text-white'>$langCriteria</th>
                                 </thead>
                                 <tr>

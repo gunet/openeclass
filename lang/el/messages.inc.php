@@ -4805,7 +4805,7 @@ $langShowToAll = "όλους τους χρήστες";
 $langSureToDelEvent = "Θέλετε σίγουρα να διαγραφεί το γεγονός;";
 $langSureToDelEventAll = "Θέλετε σίγουρα να διαγραφούν όλα τα γεγονότα;";
 $langUntil = "μέχρι";
-$langWeek = "Eβδομάδα";
+$langWeek = "Εβδομάδα";
 $langsWeek = "εβδομάδα";
 $langWeeks = "εβδομάδες";
 

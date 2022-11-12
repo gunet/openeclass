@@ -961,7 +961,7 @@ class Calendar_Events {
         $calendar_content .= '<td width="250" class="right"><a href="#" onclick="show_month(1,'.$foreward['month'].','.$foreward['year'].'); return false;">&raquo;</a></td>';
         $calendar_content .= "</tr>";
         $calendar_content .= "</table><br />";
-        $calendar_content .= "<table class='announcements_table'><tr class='notes_thead'>";
+        $calendar_content .= "<table class='table-default'><tr class='list-header'>";
         for ($ii = 1; $ii < 8; $ii++) {
             $calendar_content .= "<th class='text-white center'>" . $langDay_of_weekNames['long'][$ii % 7] . "</th>";
         }

@@ -4,7 +4,7 @@
         <span data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{trans('langModifyInfo')}}"><i class="fas fa-tasks"></i></span>
     </button>
     <ul class="p-0 m-0 dropdown-menu manage-course-ul shadow-lg border border-secondary" aria-labelledby="dropdownManageCourse">
-        <li class='manage-course-li-active border-bottom border-secondary text-center p-2'>
+        <li class='manage-course-li-active border-bottom border-secondary text-center p-2 bgNormalBlueText'>
             <span class="d-inline fas fa-bank text-white"></span>
             <span class="d-inline text-white"> {{trans('langModifyInfo')}}</span>
         </li>

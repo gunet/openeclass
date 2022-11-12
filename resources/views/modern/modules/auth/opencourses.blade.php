@@ -73,7 +73,7 @@
                     @if (count($courses) > 0)
                             <div class='col-12'>
                                 <div class='table-responsive'>
-                                    <table class='table opencourses_table' id="myopencourses_table">
+                                    <table class='table-default' id="myopencourses_table">
                                         <thead>
                                             <tr class='list-header'>
                                                 <th class='text-start text-white'>{!! trans('langCourseCode') !!}</th>

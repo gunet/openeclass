@@ -577,9 +577,9 @@ if ($userdata) {
             $tool_content .= '<div id="mydocs" role="tabpanel" class="'.$mydocs_div_class.'" aria-labelledby="blogtab" style="padding-top:20px">';
             //usort($docs, "cmp");
             $tool_content .= "<div class='table-responsive'>
-                                <table class='announcements_table'>
+                                <table class='table-default'>
                                   <tbody>
-                                    <tr class='notes_thead'>
+                                    <tr class='list-header'>
                                       <th class='text-white text-left' width='60'>$langType</th>
                                       <th class='text-white text-left'>$langName</th>
                                       <th class='text-white text-left'>$langDate</th>

@@ -45,7 +45,7 @@ $courses = Database::get()->queryArray('SELECT course.id course_id, code, title
                       AND user.id = ?d', $uid, $uid);
 if (count($courses) > 0) {
     $grade_content .= "<div class ='table-responsive'>
-            <table class='announcements_table'><tr class='notes_thead'><th class='text-white'>$langCourse</th><th class='text-white'>$langGradebookGrade</th></tr>";
+            <table class='table-default'><tr class='list-header'><th class='text-white'>$langCourse</th><th class='text-white'>$langGradebookGrade</th></tr>";
     foreach ($courses as $course1) {
         $course_id = $course1->course_id;
         $code = $course1->code;

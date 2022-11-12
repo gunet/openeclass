@@ -541,9 +541,9 @@ if (isset($_GET['mid'])) {
 
     $out = "<div id='del_msg'></div><div id='inbox' class='table-responsive'>";
 
-    $out .= "<table id='inbox_table' class='table-default announcements_table'>
+    $out .= "<table id='inbox_table' class='table-default'>
                   <thead>
-                    <tr class='notes_thead'>
+                    <tr class='list-header'>
                       <th class='text-white'>$langSubject</th>";
     if ($course_id == 0) {
         $out .= "    <th class='text-white'>$langCourse</th>";

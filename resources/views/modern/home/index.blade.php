@@ -341,31 +341,31 @@
         <div class="row rowMedium">
             <div class="col-lg-12 border-15px p-md-5 ps-4 pe-4 pt-5 pb-5 Announcements-Homepage">
                 <div class="news">
-                    <h4 class="block-title">{{ trans('langAnnouncements') }}
+                    <h3 class="block-title TextExtraBold">{{ trans('langAnnouncements') }}
                         <a href='{{ $urlServer }}rss.php'>
                             <span class='fa fa-rss-square'></span>
                         </a>
-                    </h4>
+                    </h3>
                     <div class="row news-list m-auto">
                         @php $counterAn = 0; @endphp
                         @foreach ($announcements as $announcement)
                             @if($counterAn < 6)
                             <div class="col-sm-12 news-list-item">
                                 <div class="title">
-                                    <a class="d-inline-flex align-items-top fs-6" href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
-                                        <span class="fa fa-bullhorn fs-5 me-1 mt-1" aria-hidden="true"></span>
-                                        <span class='fs-6 mt-1'>{{$announcement->title}}</span>
+                                    <a class="d-inline-flex align-items-top" href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
+                                        <span class="fa fa-bullhorn me-1 mt-1 normalBlueText" aria-hidden="true"></span>
+                                        <span class='TextSemiBold normalBlueText fs-6'>{{$announcement->title}}</span>
                                     </a>
                                 </div>
-                                <div class="date ms-4">
-                                    {{ format_locale_date(strtotime($announcement->date)) }}
+                                <div class="date ms-3">
+                                    <small class='text-secondary TextSemiBold'>{{ format_locale_date(strtotime($announcement->date)) }}</small>
                                 </div>
                             </div>
                             @endif
                         @php $counterAn++; @endphp
                         @endforeach
                     </div>
-                    <div class="more-link"><a class="all_announcements mt-3 float-end" href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-angle-right'></span></a></div>
+                    <div class="more-link"><a class="all_announcements mt-3 float-end" href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span></a></div>
                 </div>
                 
             </div>
@@ -386,17 +386,17 @@
                             <i class="fas fa-book"></i>
                             @php $course_inactive = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count; @endphp
                             <div class="num TextBold">{{ $course_inactive }}</div>
-                            <div class="num-text">{{trans('langsCourses')}}</div>
+                            <div class="num-text text-lowercase TextLight">{{trans('langsCourses')}}</div>
                     </div>
                     <div class="col-sm-4 text-center">
                             <i class="fas fa-mouse-pointer"></i>
                             <div class="num TextBold">10<span class='num-plus TextRegular'>K+</span></div>
-                            <div class="num-text">{{trans('langUserLogins')}}/{{trans('langWeek')}}</div>
+                            <div class="num-text text-lowercase TextLight">{{trans('langUserLogins')}}/{{trans('langWeek')}}</div>
                     </div>
                     <div class="col-sm-4 text-center">
                             <i class="fas fa-user"></i>
                             <div class="num TextBold">{{ getOnlineUsers() }}</div>
-                            <div class="num-text">{{trans('langOnlineUsers')}}</div>
+                            <div class="num-text text-lowercase TextLight">{{trans('langOnlineUsers')}}</div>
                     </div>
                 </div>
             </div>
@@ -406,11 +406,11 @@
     <div class="d-flex justify-content-center mt-lg-3 mb-lg-3">
         <div class="container-fluid testimonials mt-lg-0 mb-lg-0 mt-0 mb-0 bg-light">
             <div class="testimonial">
-                <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>
+                <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</div>
                 <div class="testimonial-person mt-3 fst-italic"><small>- Λυδία Καλομοίρη -</small></div>
             </div>
             <div class="testimonial">
-                <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>
+                <div class="testimonial-body">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</div>
                 <div class="testimonial-person mt-3 fst-italic"><small>- Γιάννης Ιωάννου -</small></div>
             </div>
             <div class="testimonial">
@@ -442,7 +442,7 @@
     
     $('.testimonials').slick({
 		autoplay:true,
-		autoplaySpeed:5000,
+		autoplaySpeed:4000,
 		centerMode: true,
 		slidesToShow: 1,
 		responsive: [

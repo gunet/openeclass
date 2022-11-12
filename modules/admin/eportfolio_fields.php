@@ -457,7 +457,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                                     cursor: move;
                                 }
                               </style>";
-            $tool_content .= "<div id='cat_".getIndirectReference($res->id)."' class='table-responsive tile' style='margin-bottom:30px;'><table class='announcements_table'>";
+            $tool_content .= "<div id='cat_".getIndirectReference($res->id)."' class='table-responsive tile' style='margin-bottom:30px;'><table class='table-default'>";
             $tool_content .= "<caption class='tile__name'><strong>$langCategory :</strong> $res->name<div class='float-end'>";
             
             $dyntools = array(

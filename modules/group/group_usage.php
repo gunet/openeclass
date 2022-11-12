@@ -157,9 +157,9 @@ if ($type == 'duration') {
     $label = '?';
 }
 
-$tool_content .= "<div class='table-responsive'><table class='announcements_table'>
-	<tr class='notes_thead'>
-	<th class='text-white text-left'>$langSurname $langName</th>
+$tool_content .= "<div class='table-responsive'><table class='table-default'>
+	<tr class='list-header'>
+	<th class='text-white text-start'>$langSurname $langName</th>
 	<th class='text-white'>$langAm</th>
 	<th class='text-white'>$langGroup</th>
 	<th class='text-white'>$label</th>

@@ -75,8 +75,8 @@ $tool_content .= "
     </div>
     <form name='courseCategories' action='" . $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "' method='post' enctype='multipart/form-data'>
         <div class='table-responsive mt-0'>
-            <table class='announcements_table'>
-                <tr class='notes_thead'>
+            <table class='table-default'>
+                <tr class='list-header'>
                     <th width='45%' class='text-white text-center'>" . $langInactiveCourseCategories . "</th>
                     <th width='10%' class='text-white text-center'>" . $langMove . "</th>
                     <th width='45%' class='text-white text-center'>" . $langActiveCourseCategories . "</th>

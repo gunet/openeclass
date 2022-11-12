@@ -112,8 +112,8 @@
 
                     <div class='col-12 mt-3'>
                         <div class='table-responsive'>
-                            <table class='announcements_table'>
-                                <tr class='notes_thead'>
+                            <table class='table-default'>
+                                <tr class='list-header'>
                                     <th class='text-white center'>ID</th>
                                     <th class='text-white'>{{ trans('langSurnameName') }}</th>
                                     <th class='text-white'>{{ trans('langUsername') }}</th>

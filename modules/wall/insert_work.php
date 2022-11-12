@@ -36,9 +36,9 @@ function list_assignments($id = NULL) {
             }
         }
 
-        $ret_string .= "<div class='table-responsive'><table class='announcements_table'>" .
-                "<tr class='notes_thead'>" .
-                "<th class='text-white text-left'>&nbsp;$langTitle</th>" .
+        $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
+                "<tr class='list-header'>" .
+                "<th class='text-white text-start'>&nbsp;$langTitle</th>" .
                 "<th class='text-white' width='120'>$langGroupWorkDeadline_of_Submission</th>" .
                 "<th style='width:20px;' class='text-white text-center'>$langChoice</th>" .
                 "</tr>";

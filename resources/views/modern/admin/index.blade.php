@@ -205,7 +205,7 @@
                                     <div class='col-12 mt-5'>
 
                                         <div class='panel panel-admin'>
-                                            <div class='panel-heading ps-3 pt-2 pb-2 colorPalette text-center Borders'>
+                                            <div class='panel-heading ps-3 pt-2 pb-2 text-center Borders'>
                                             {{ trans('langOnlineUsers') }} : <b>{{ getOnlineUsers() }}</b>
                                             </div>
                                         </div>

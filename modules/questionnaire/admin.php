@@ -464,8 +464,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group mt-3'>
                 <div class='col-sm-12 col-sm-offset-2'>
                     <div class='table-responsive'>
-                        <table id='assignees_tbl' class='announcements_table".(isset($poll) && in_array($poll->assign_to_specific, [1, 2]) ? '' : ' hide')."'>
-                            <tr class='title1 notes_thead'>
+                        <table id='assignees_tbl' class='table-default".(isset($poll) && in_array($poll->assign_to_specific, [1, 2]) ? '' : ' hide')."'>
+                            <tr class='title1 list-header'>
                               <td class='text-white' id='assignees'>$langStudents</td>
                               <td class='text-white text-center'>$langMove</td>
                               <td class='text-white'>$m[WorkAssignTo]</td>

@@ -124,10 +124,10 @@
                     @if ($content)
                         <div class='col-12 mt-4'>
                             <div class='table-responsive'>
-                                <table class="announcements_table">
+                                <table class="table-default">
                                     <thead>
-                                        <tr class="notes_thead">
-                                            <th class="text-left text-white">{{ trans('langH5pInteractiveContent') }}</th>
+                                        <tr class="list-header">
+                                            <th class="text-start text-white">{{ trans('langH5pInteractiveContent') }}</th>
                                             <th class='text-center text-white'>{{ trans('langAttendanceType') }} HP5</th>
                                             <th class="text-center text-white" style="width:109px;">
                                                 <span class="fa fa-gears"></span>

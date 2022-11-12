@@ -38,10 +38,10 @@ function list_links($id = NULL) {
             }
         }
 
-        $ret_string .= "<div class='table-responsive'><table class='announcements_table'>" .
-            "<tr class='notes_thead'>" .
-            "<th class='text-white text-left' style='width:'>&nbsp;$langLinks</th>" .
-            "<th class='text-white text-left'>$langDescription</th>" .
+        $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
+            "<tr class='list-header'>" .
+            "<th class='text-white text-start' style='width:'>&nbsp;$langLinks</th>" .
+            "<th class='text-white text-start'>$langDescription</th>" .
             "<th class='text-white' width='10'>$langChoice</th>" .
             "</tr>";
         $sql = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d", $course_id);

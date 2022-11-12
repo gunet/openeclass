@@ -182,8 +182,8 @@ if (isset($_GET['add'])) {
                                                 user u LEFT JOIN lala c ON u.id = c.user_id WHERE
                                                 c.user_id IS NULL AND u.expires_at >= CURRENT_DATE() AND $query", $values);
         if ($result) {
-            $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='announcements_table'>
-                                <tr class='notes_thead'>
+            $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
+                                <tr class='list-header'>
                                   <th class='text-white'>$langID</th>
                                   <th class='text-white'>$langName</th>
                                   <th class='text-white'>$langSurname</th>

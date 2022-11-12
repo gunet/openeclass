@@ -122,9 +122,9 @@ if ($is_editor) {
 }
 
 if ($content) {
-   $tool_content .= "<div class='col-12 mt-4'><div class='table-responsive'><table class='announcements_table'>
+   $tool_content .= "<div class='col-12 mt-4'><div class='table-responsive'><table class='table-default'>
         <thead>
-            <tr class='notes_thead'>
+            <tr class='list-header'>
                 <th class='text-white text-left col-sm-8'>$langH5pInteractiveContent</th>
                 <th class='text-white text-center col-sm-3'>$langTypeH5P</th>";
                 if ($is_editor) {
