@@ -642,19 +642,18 @@ if (count($exercise_question_ids) > 0) {
         if ($answerType == MULTIPLE_ANSWER and $questionScore < 0) {
             $questionScore = 0;
         }
-        $rounded_weight = round($question_weight, 2);
+        $rounded_weight = is_null($question_weight)? 0: round($question_weight, 2);
 
         if ($rounded_weight < 0 and $answerType == MULTIPLE_ANSWER) {
             $rounded_weight = 0;
         }
-        $rounded_score = round($questionScore, 2);
+        $rounded_score = is_null($question_weight)? 0: round($questionScore, 2);
         if ($showScore and $rounded_weight != $rounded_score) {
             $tool_content .= "<tr class='warning'>
                                 <th colspan='2' class='text-right'>
                                     $langQuestionStoredScore: $rounded_weight / $questionWeighting
                                 </th>
                               </tr>";
-
         }
 
         $tool_content .= "</table>";
