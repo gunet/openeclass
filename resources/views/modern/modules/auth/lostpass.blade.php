@@ -185,14 +185,14 @@
                                                 <input class='form-control' type='text' name='email' id='email' autocomplete='off' placeholder='{!! trans('lang_email') !!}'>
                                             </div>
                                         </div>
-                                        <div class='form-group mt-5'>
+                                        <div class='form-group mt-4'>
                                             <div class='col-12'>
                                                 <div class='row'>
                                                     <div class='col-6'>
-                                                        <button class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='send_link' value='{{ trans('langSend') }}'>{!! trans('langSend') !!}</button>
+                                                        <button class='btn btn-outline-primary rounded-pill submitAdminBtn w-100 TextBold text-uppercase' type='submit' name='send_link' value='{{ trans('langSend') }}'>{!! trans('langSend') !!}</button>
                                                     </div>
                                                     <div class='col-6'>
-                                                        <button class='btn btn-sm btn-outline-secondary cancelAdminBtn w-100' href='{{ $urlServer }}'>{!! trans('langCancel') !!}</button>
+                                                        <button class='btn btn-outline-secondary rounded-pill cancelAdminBtn w-100 TextBold text-uppercase' href='{{ $urlServer }}'>{!! trans('langCancel') !!}</button>
                                                     </div>
                                                 </div>
                                                 

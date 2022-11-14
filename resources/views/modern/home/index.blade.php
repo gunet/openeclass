@@ -45,8 +45,9 @@
                                                     @if($l->auth_name == 'eclass' and $l->auth_default == 1)
                                                         <div class="carousel-item active">
                                                             <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 Borders cardLogin'>
-                                                                <div class='card-header bg-transparent border-0'>
-                                                                    <div class='fs-5 fw-bold text-center blackBlueText text-capitalize'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {{ trans('langUserLogin') }}</div>
+                                                                <div class='card-header d-flex justify-content-center bg-transparent border-0'>
+                                                                    <img class="UserLoginIcon me-1" src="{{ $themeimg }}/user_login.svg"> 
+                                                                    <span class="fs-5 TextBold blackBlueText text-capitalize">{{ trans('langUserLogin') }}</span>
                                                                 </div>
                                                                 <form action="{{ $urlAppend }}" method="post">
                                                                     <div class="login-form-spacing mt-2">
@@ -68,7 +69,8 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <div class='fs-5 fw-bold text-center blackBlueText'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {{ get_auth_info(2) }}</div>
+                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $themeimg }}/user_login.svg">
+                                                                            <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ get_auth_info(2) }}</p>
                                                                         </div>
                                                                     </div>
                                                                     <div class='col-12 text-center'>
@@ -86,7 +88,8 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <div class='fs-5 fw-bold text-center blackBlueText'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {{ get_auth_info(4) }}</div>
+                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $themeimg }}/user_login.svg">
+                                                                            <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ get_auth_info(4) }}</p>
                                                                         </div>
                                                                     </div>
                                                                     <div class='col-12 text-center'>
@@ -103,7 +106,8 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <div class='fs-5 fw-bold text-center blackBlueText'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {{ get_auth_info(3) }}</div>
+                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $themeimg }}/user_login.svg">
+                                                                            <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ get_auth_info(3) }}</p>
                                                                         </div>
                                                                     </div>
                                                                     <div class='col-12 text-center'>
@@ -119,7 +123,8 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <div class='fs-5 fw-bold text-center blackBlueText'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {{ get_auth_info(5) }}</div>
+                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $themeimg }}/user_login.svg">
+                                                                            <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ get_auth_info(5) }}</p>
                                                                         </div>
                                                                     </div>
                                                                     <div class='col-12 text-center'>
@@ -135,7 +140,8 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <div class='fs-5 fw-bold text-center blackBlueText'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {!! q(getSerializedMessage($l->auth_title)) !!}</div>
+                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $themeimg }}/user_login.svg">
+                                                                            <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{!! q(getSerializedMessage($l->auth_title)) !!}</p>
                                                                         </div>
                                                                     </div>
                                                                     <div class='col-12 text-center'>
@@ -151,7 +157,8 @@
                                                                  <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <div class='fs-5 fw-bold text-center blackBlueText'><span class='fa fa-user me-1 text-primary UserLoginIcon'></span> {!! q(getSerializedMessage($l->auth_title)) !!}</div>
+                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $themeimg }}/user_login.svg">
+                                                                            <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{!! q(getSerializedMessage($l->auth_title)) !!}</p>
                                                                         </div>
                                                                     </div>
                                                                     <div class='col-12 text-center'>
@@ -166,10 +173,10 @@
                                             </div>
                                             @if(count($q)>1)
                                                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselLoginAuthControls" data-bs-slide="prev">
-                                                    <span class="fa fa-angle-left carouselPrevHome" aria-hidden="true"></span>
+                                                    <span class="fa fa-chevron-left carouselPrevHome" aria-hidden="true"></span>
                                                 </button>
                                                 <button class="carousel-control-next" type="button" data-bs-target="#carouselLoginAuthControls" data-bs-slide="next">
-                                                    <span class="fa fa-angle-right carouselNextHome" aria-hidden="true"></span>
+                                                    <span class="fa fa-chevron-right carouselNextHome" aria-hidden="true"></span>
                                                 </button>
                                             @endif
                                         </div>
@@ -383,18 +390,19 @@
                 </h2>
                 <div class="row row_pad_courses">
                     <div class="col-sm-4 text-center">
-                            <i class="fas fa-book"></i>
+                            <img class="statistics-icon m-auto d-block" src="{{ $themeimg }}/statistics_1.svg">
                             @php $course_inactive = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count; @endphp
                             <div class="num TextBold">{{ $course_inactive }}</div>
                             <div class="num-text text-lowercase TextLight">{{trans('langsCourses')}}</div>
                     </div>
                     <div class="col-sm-4 text-center">
-                            <i class="fas fa-mouse-pointer"></i>
+                            
+                            <img class="statistics-icon m-auto d-block" src="{{ $themeimg }}/statistics_2.svg">
                             <div class="num TextBold">10<span class='num-plus TextRegular'>K+</span></div>
                             <div class="num-text text-lowercase TextLight">{{trans('langUserLogins')}}/{{trans('langWeek')}}</div>
                     </div>
                     <div class="col-sm-4 text-center">
-                            <i class="fas fa-user"></i>
+                            <img class="statistics-icon m-auto d-block" src="{{ $themeimg }}/statistics_3.svg">
                             <div class="num TextBold">{{ getOnlineUsers() }}</div>
                             <div class="num-text text-lowercase TextLight">{{trans('langOnlineUsers')}}</div>
                     </div>
@@ -453,6 +461,22 @@
             {
                 breakpoint: 2561,
                 settings: { centerPadding: '15vw' }
+		    },
+            {
+                breakpoint: 3561,
+                settings: { centerPadding: '10vw' }
+		    },
+            {
+                breakpoint: 4561,
+                settings: { centerPadding: '7vw' }
+		    },
+            {
+                breakpoint: 5561,
+                settings: { centerPadding: '5vw' }
+		    },
+            {
+                breakpoint: 10000,
+                settings: { centerPadding: '3vw' }
 		    }
         ]
 	});

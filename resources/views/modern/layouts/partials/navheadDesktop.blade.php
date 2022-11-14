@@ -32,12 +32,19 @@
 
                     <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 @if (isset($_SESSION['uid'])) mt-2 @else mt-1 @endif">
                         @if(!get_config('hide_login_link'))
-                            <a class="eclass-nav-link text-white text-uppercase" href="{{ $urlServer }}"> <i class="fa fa-home"></i> {{ trans('langHome') }}</a>
+                            <a id="link-home" class="eclass-nav-link text-white text-uppercase" href="{{ $urlServer }}" onmouseover="hoverHome(this);" onmouseout="unhoverHome(this);"> 
+                               <img class='HeaderIcon me-2' src="{{ $themeimg }}/home_1.svg"> {{ trans('langHome') }}
+                            </a>
                         @endif
                         @if (!isset($_SESSION['uid']))
-                            <a class="eclass-nav-link text-uppercase text-white @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib pen-nib-navhead rotate_reg_icon"></i> {{ trans('langRegistration') }}</a>
+                            <a id="link-register" class="eclass-nav-link text-uppercase text-white @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" onmouseover="hoverRegister(this);" onmouseout="unhoverRegister(this);">
+                                <img class='HeaderIcon me-2' src="{{ $themeimg }}/register_1.svg"> {{ trans('langRegistration') }} 
+                                
+                            </a>
                         @endif
-                        <a class="eclass-nav-link text-uppercase text-white" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-book rotate_lessons_icon"></i> {{ trans('langCourses') }}</a>
+                        <a id="link-lessons" class="eclass-nav-link text-uppercase text-white" href="{{ $urlServer }}modules/auth/listfaculte.php" onmouseover="hoverLessons(this);" onmouseout="unhoverLessons(this);">
+                            <img class='HeaderIcon me-2' src="{{ $themeimg }}/lessons_1.svg"> {{ trans('langCourses') }}
+                        </a>
                     </div>
 
 
@@ -305,3 +312,26 @@
             </div>
     </div>
 </nav>
+
+<script>
+    function hoverHome(obj) {
+        $('#'+obj.id+'>'+'img').attr("src","/template/modern/img/home_2.svg");
+    }
+    function unhoverHome(obj) {
+        $('#'+obj.id+'>'+'img').attr("src","/template/modern/img/home_1.svg");
+    }
+
+    function hoverRegister(obj) {
+        $('#'+obj.id+'>'+'img').attr("src","/template/modern/img/register_2.svg");
+    }
+    function unhoverRegister(obj) {
+        $('#'+obj.id+'>'+'img').attr("src","/template/modern/img/register_1.svg");
+    }
+
+    function hoverLessons(obj) {
+        $('#'+obj.id+'>'+'img').attr("src","/template/modern/img/lessons_2.svg");
+    }
+    function unhoverLessons(obj) {
+        $('#'+obj.id+'>'+'img').attr("src","/template/modern/img/lessons_1.svg");
+    }
+</script>

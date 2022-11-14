@@ -43,8 +43,8 @@ if ($numOfAnnouncements > 0) {
     $tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default rounded-0'><div class='panel-body rounded-0'>";
     for ($i = 0; $i < $numOfAnnouncements; $i++) {
         $tool_content .= "<div class='single_announcement'><div class='announcement-title control-label-notes'>" . q($announceArr[$i]->title) . "</div><hr>
-		<div class='announcement-main mt-3'>" . standard_text_escape($announceArr[$i]->body) . "</div><hr>
-        <div class='announcement-date info-date text-center'>- " . format_locale_date(strtotime($announceArr[$i]->date)) . " -</div>
+		<div class='announcement-main mt-3'>" . standard_text_escape($announceArr[$i]->body) . "</div>
+        <div class='announcement-date info-date text-end'>- " . format_locale_date(strtotime($announceArr[$i]->date)) . " -</div>
 		</div>";
     }
     $tool_content .= "</div></div></div>";

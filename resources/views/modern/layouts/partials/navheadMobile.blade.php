@@ -10,7 +10,7 @@
                 @if (!isset($_SESSION['uid']))
                     <a type="button" class="btn btn-transparent text-white pt-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib pen-nib-navhead"></i></a>
                 @endif
-                <a type='button' class="btn btn-transparent text-white pt-2" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-university"></i></a>
+                <a type='button' class="btn btn-transparent text-white pt-2" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-book"></i></a>
                 @if(get_config('enable_search'))
                 <a type="button" class='btn btn-transparent text-white pt-2' href="{{ $urlAppend }}modules/search/{{ $search_action }}"><i class="fa fa-search"></i></button>
                 @endif

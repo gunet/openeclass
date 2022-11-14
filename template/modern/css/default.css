@@ -21,7 +21,7 @@
 html{ height:100%; }
 
 body{ 
-  font-family: 'Manrope-Regular',sans-serif; 
+  font-family: 'Manrope-Regular','Fontawesome', sans-serif; 
   font-size: 15px; line-height: 1.42857143; color: #001146;
   background: linear-gradient(170deg, rgba(49, 57, 73, 0.8) 20%, rgba(49, 57, 73, 0.5) 20%, rgba(49, 57, 73, 0.5) 35%, rgba(41, 48, 61, 0.6) 35%, rgba(41, 48, 61, 0.8) 45%, rgba(31, 36, 46, 0.5) 45%, rgba(31, 36, 46, 0.8) 75%, rgba(49, 57, 73, 0.5) 75%), linear-gradient(45deg, rgba(20, 24, 31, 0.8) 0%, rgba(41, 48, 61, 0.8) 50%, rgba(82, 95, 122, 0.8) 50%, rgba(133, 146, 173, 0.8) 100%) #313949;
 }
@@ -282,10 +282,10 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   position: relative;
   height:auto;
   border-radius:15px;
-  min-height: 300px;
+  height: 300px;
 }
 @media(max-width:991px){
-  .testimonials {border-radius: 0px; display:flex; justify-content: center; align-items: center;}
+  .testimonials {border-radius: 0px; display:flex; justify-content: center; align-items: center; height:304px;}
 }
 @media(max-width:767px){
   .testimonials .slick-list.draggable {padding: 5vh 0px !important;}
@@ -439,7 +439,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .inputSearch:hover{ background-color: #005ed7; border:0; }
 
-  .inputSearch::placeholder {  color: white; text-align: center; font-size:15px; }
+  .inputSearch::placeholder {  color: white; text-align: center; font-size:15px;}
   
   /* --------------------------------------------- ManageCourse-Partials --------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -749,6 +749,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .login-form-Homepage{ border-top-right-radius: 15px; border-bottom-right-radius: 15px; background:#F5F5F5; }
 
   .cardLogin{min-height:340px; -webkit-box-shadow: 0 0 30px black; box-shadow: 0 0 30px black; background-color: rgba(255, 255, 255, 0.776); }
+  @media(max-width:767px){ .cardLogin{min-height: 350px;} }
 
   .Announcements-Homepage{ background-color: #f8f9fa; }
 
@@ -758,13 +759,24 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .rotate_reg_icon {transform: rotate(270deg);}
   .rotate_lessons_icon{transform: rotate(360deg);}
 
-  .carousel-control-prev, .carousel-control-next{opacity: 1;}
-  .carouselPrevHome{ height:45px; width:45px; color: #005ad9; font-size: 40px; border-radius:50%; background-color: #ffffff;}
-  .carouselPrevHome::before {margin-right:4px;}
+  .HeaderIcon{width:30px; height:28px; border-radius: 50%;}
+
+  #carouselLoginAuthControls > .carousel-control-prev { width:40px; margin-left:25px; }
+  @media(max-width:767px){ #carouselLoginAuthControls > .carousel-control-prev { margin-left:0px; } }
+
+  #carouselLoginAuthControls > .carousel-control-next { width:40px; margin-right:25px; }
+  @media(max-width:767px){ #carouselLoginAuthControls > .carousel-control-next { margin-right:0px; } }
+
+  #carouselLoginAuthControls > .carousel-control-prev, #carouselLoginAuthControls > .carousel-control-next{opacity: 1;}
+  #carouselLoginAuthControls > .carousel-control-prev:hover, #carouselLoginAuthControls > .carousel-control-next:hover{opacity: 1;}
+
+  .carouselPrevHome{ display:flex; justify-content: center; align-items: center; height:40px; width:40px; color: #005ad9; border-radius:50%; background-color: #ffffff;}
   .carouselPrevHome:hover{ color: #ffffff; background-color: #005ad9;}
-  .carouselNextHome{ height:45px; width:45px; color: #005ad9; font-size: 40px; border-radius:50%; background-color: #ffffff;}
-  .carouselNextHome::before {margin-left:4px;}
+  .carouselPrevHome::before { font-size: 15px; margin-right:3px;}
+  
+  .carouselNextHome{ display:flex; justify-content: center; align-items: center; height:40px; width:40px; color: #005ad9; border-radius:50%; background-color: #ffffff;}
   .carouselNextHome:hover{ color: #ffffff; background-color: #005ad9;}
+  .carouselNextHome::before { font-size: 15px; margin-left:3px;}
 
   .opencourse_triangle{
     float:left;
@@ -801,7 +813,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .user-icon2 { width: 30px; height: 30px; border-radius: 50%; }
 
-  .UserLoginIcon{ border: solid 1px #005ed7; border-radius: 50%; padding:7px 10px 7px 10px;}
+  .UserLoginIcon{ width: 30px; height: 30px; }
 
   .news-list{ margin-left: 5px; }
   
@@ -886,15 +898,20 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   }
   @media(max-width:991px){ .statistics:before{border-radius:0px;} }
   
-  .statistics i {
+  /* .statistics i {
     font-size: 20px;
     background: #005ed7;
     border-radius: 50%;
     width: 60px;
     line-height: 60px;
     text-align: center;
+  } */
+
+  .statistics-icon{
+    width: 60px;
+    height: 60px;
   }
-  
+
   .statistics .num { font-size: 60px;}
   
   .statistics .num-text { font-size: 20px; }
@@ -983,6 +1000,33 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   /* first choice of inputs forms */
   .submitAdminBtn, .cancelAdminBtn{ min-width:105px; } 
+
+  /* .submitAdminBtn {
+    border: solid thin;
+    border-color: #005ad9;
+    color: #005ad9;
+    font-size: 18px;
+    text-transform: uppercase;
+    background-color: #ffffff;
+  }
+  .submitAdminBtn:hover {
+    background-color: #005ad9;
+    color: #ffffff;
+  }
+
+  .cancelAdminBtn {
+    border: solid thin;
+    border-color: #edf3fb;
+    color: #001146;
+    font-size: 18px;
+    text-transform: uppercase;
+    background-color: #ffffff;
+  }
+  .cancelAdminBtn:hover {
+    background-color: #AAAAAA;
+    color: #001146;
+  } */
+
 
   
 /* -------------------------------------------- Forum ---------------------------------------------------------------------------------------*/
