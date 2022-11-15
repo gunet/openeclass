@@ -38,7 +38,7 @@
 
 
 
-                    {!! isset($action_bar) ?  $action_bar : '' !!}
+                    <div class='mt-3'>{!! isset($action_bar) ?  $action_bar : '' !!}</div>
 
                     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
                         <div class='col-12 h-100 left-form'></div>

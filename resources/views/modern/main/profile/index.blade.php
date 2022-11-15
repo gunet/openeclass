@@ -53,7 +53,7 @@
                                                 <div id='profile-avatar'>{!! $profile_img !!}</div>
                                             </div>
                                             <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 text-md-start text-center">
-                                                <div class="profile-name">{{ $userdata->givenname }} {{ $userdata->surname }}</div>
+                                                <div class="profile-name TextBold">{{ $userdata->givenname }} {{ $userdata->surname }}</div>
                                                 <div class='not_visible'><strong>{{ $userdata->username }}</strong></div>
                                             </div>
 
@@ -260,12 +260,12 @@
                                     </div>
                                     <div class="panel-body rounded-0">
                                         <div class="row">
-                                            <div class="col-sm-9">
+                                            <div class="col-md-9 col-12">
                                                 <div class="profile-content-panel-text">
                                                     {{ trans('langExplain') }}
                                                 </div>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-md-3 col-12 mt-md-0 mt-3">
                                                 {!! $action_bar_unreg !!}
                                             </div>
                                         </div>

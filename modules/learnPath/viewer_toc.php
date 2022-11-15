@@ -206,7 +206,7 @@ echo "<!DOCTYPE HTML>
     <script src='{$urlAppend}js/jquery.slimscroll.min.js'></script>
 
     <!-- DataTables and Checkitor js-->
-    <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
+    <script src='{$urlAppend}js/jquery.dataTables.min.js'></script>
 
     <!-- Latest compiled and minified CSS -->
     <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?v=".ECLASS_VERSION."'>

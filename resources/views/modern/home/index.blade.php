@@ -46,7 +46,7 @@
                                                         <div class="carousel-item active">
                                                             <div class='card-body mt-md-5 mb-md-5 me-md-5 ms-md-5 mt-5 mb-5 ms-3 me-3 Borders cardLogin'>
                                                                 <div class='card-header d-flex justify-content-center bg-transparent border-0'>
-                                                                    <img class="UserLoginIcon me-1" src="{{ $themeimg }}/user_login.svg"> 
+                                                                    <img class="UserLoginIcon me-1" src="{{ $urlAppend }}template/modern/img/user_login.svg"> 
                                                                     <span class="fs-5 TextBold blackBlueText text-capitalize">{{ trans('langUserLogin') }}</span>
                                                                 </div>
                                                                 <form action="{{ $urlAppend }}" method="post">
@@ -69,7 +69,7 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $themeimg }}/user_login.svg">
+                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $urlAppend }}template/modern/img/user_login.svg">
                                                                             <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ get_auth_info(2) }}</p>
                                                                         </div>
                                                                     </div>
@@ -88,7 +88,7 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $themeimg }}/user_login.svg">
+                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $urlAppend }}template/modern/img/user_login.svg">
                                                                             <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ get_auth_info(4) }}</p>
                                                                         </div>
                                                                     </div>
@@ -106,7 +106,7 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $themeimg }}/user_login.svg">
+                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $urlAppend }}template/modern/img/user_login.svg">
                                                                             <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ get_auth_info(3) }}</p>
                                                                         </div>
                                                                     </div>
@@ -123,7 +123,7 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $themeimg }}/user_login.svg">
+                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $urlAppend }}template/modern/img/user_login.svg">
                                                                             <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ get_auth_info(5) }}</p>
                                                                         </div>
                                                                     </div>
@@ -140,7 +140,7 @@
                                                                 <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $themeimg }}/user_login.svg">
+                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $urlAppend }}template/modern/img/user_login.svg">
                                                                             <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{!! q(getSerializedMessage($l->auth_title)) !!}</p>
                                                                         </div>
                                                                     </div>
@@ -157,7 +157,7 @@
                                                                  <div class='row'>
                                                                     <div class='col-12 mb-3'>
                                                                         <div class='card-header bg-transparent border-0'>
-                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $themeimg }}/user_login.svg">
+                                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $urlAppend }}template/modern/img/user_login.svg">
                                                                             <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{!! q(getSerializedMessage($l->auth_title)) !!}</p>
                                                                         </div>
                                                                     </div>
@@ -390,19 +390,19 @@
                 </h2>
                 <div class="row row_pad_courses">
                     <div class="col-sm-4 text-center">
-                            <img class="statistics-icon m-auto d-block" src="{{ $themeimg }}/statistics_1.svg">
+                            <img class="statistics-icon m-auto d-block" src="{{ $urlAppend }}template/modern/img/statistics_1.svg">
                             @php $course_inactive = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count; @endphp
                             <div class="num TextBold">{{ $course_inactive }}</div>
                             <div class="num-text text-lowercase TextLight">{{trans('langsCourses')}}</div>
                     </div>
                     <div class="col-sm-4 text-center">
                             
-                            <img class="statistics-icon m-auto d-block" src="{{ $themeimg }}/statistics_2.svg">
+                            <img class="statistics-icon m-auto d-block" src="{{ $urlAppend }}template/modern/img/statistics_2.svg">
                             <div class="num TextBold">10<span class='num-plus TextRegular'>K+</span></div>
                             <div class="num-text text-lowercase TextLight">{{trans('langUserLogins')}}/{{trans('langWeek')}}</div>
                     </div>
                     <div class="col-sm-4 text-center">
-                            <img class="statistics-icon m-auto d-block" src="{{ $themeimg }}/statistics_3.svg">
+                            <img class="statistics-icon m-auto d-block" src="{{ $urlAppend }}template/modern/img/statistics_3.svg">
                             <div class="num TextBold">{{ getOnlineUsers() }}</div>
                             <div class="num-text text-lowercase TextLight">{{trans('langOnlineUsers')}}</div>
                     </div>

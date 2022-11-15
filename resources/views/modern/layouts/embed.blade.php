@@ -24,9 +24,9 @@
     <link href="{{ $urlAppend }}template/modern/css/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
 
     <!-- DataTables and Checkitor -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css">
+    <script src="{{ $urlAppend }}js/jquery.dataTables.min.js"></script>
+    <script src="{{ $urlAppend }}js/classic-ckeditor.js"></script>
 
      <!-- BootBox -->
     <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js"></script>

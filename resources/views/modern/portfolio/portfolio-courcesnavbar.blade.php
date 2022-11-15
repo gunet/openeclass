@@ -1,5 +1,5 @@
-<div class="row justify-content-center">
-    <div class="col-6 d-flex justify-content-center">
+<div class="row justify-content-start mt-3">
+    <div class="col-md-6 col-12 d-flex justify-content-md-start justify-content-center">
         @if($cources)
         <div class="cources-{{$paging_type}}-num-group d-flex" >
             <div type="button" onclick="cources_paging_left('{{$paging_type}}')"> 
@@ -40,7 +40,13 @@
         @endif
     </div>
 
-    <div class='d-flex justify-content-center'> 
+    <div class='col-md-6 col-12 text-end text-uppercase TextMedium mt-md-0 mt-4'>
+        <a class='' href='{{$urlAppend}}main/my_courses.php'>{{ trans('langMyCoursesSide') }} 
+            <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span>
+        </a>
+    </div>
+
+    {{--<div class='d-flex justify-content-center'> 
         <a class="btn-slide" href="{{$urlServer}}modules/auth/courses.php" >
             <span class="circle d-flex justify-content-center align-items-center">
                 <i class="fa fa-pencil ms-2"></i>        
@@ -49,7 +55,7 @@
             <span class="title">{{ trans('langRegCourses') }}</span>
             <span class="title title-hover">{{ trans('langRegCourses') }}</span>
         </a>
-    </div>
+    </div>--}}
 </div>
 
 <script>

@@ -25,8 +25,8 @@
      <!-- Font Manrope -->
     <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet">
 
-    <!-- DataTables and Checkitor -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <!-- DataTables 1.10.19 version -->
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css">
 
     <!-- Owl-carousel -->
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-carousel.css">
@@ -54,14 +54,14 @@
 
 
     <!-- jQuery -->
-    <script type="text/javascript" src="{{$urlAppend}}js/jquery3-6-0.min.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/jquery3-6-0.min.js"></script>
 
     <!-- Bootstrap v5 js -->
-    <script type="text/javascript" src="{{$urlAppend}}js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap.bundle.min.js"></script>
 
-    <!-- DataTables and Checkitor js-->
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+    <!-- DataTables v1.10.19 and Checkitor v11.0.1 js-->
+    <script src="{{ $urlAppend }}js/jquery.dataTables.min.js"></script>
+    <script src="{{ $urlAppend }}js/classic-ckeditor.js"></script>
 
     <!-- Bootbox -->
     <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js"></script>
