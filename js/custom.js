@@ -34,7 +34,7 @@ $(document).ready(function(){
         e.preventDefault();
         javascript:window.history.back();
     });
-	
+
     
     /////////////////////////////////////////////////// initial datatable /////////////////////////////////////////////////
 
@@ -47,7 +47,6 @@ $(document).ready(function(){
     popover_init();
     truncate_toggle('.more_less_btn', '#truncated', '#not_truncated', '#descr_content');
     validator_rubric();
-
 });
 
 
@@ -220,7 +219,5 @@ function validator_rubric(){
         }, false)
       })
 }
-
-
 
 

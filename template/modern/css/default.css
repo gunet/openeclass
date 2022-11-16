@@ -596,19 +596,9 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .cources-section{ background-color: #f9f8fa; border-radius: 15px;}
 
-  .user-courses {
-    background-color: #f8f9fa;
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
-    height:auto;
-  }
-  .user-details{
-    background-color: #f8f9fa;
+  /* .user-details{
     border-radius: 15px;
-    padding-right: 15px;
-    padding-left: 15px;
-    height:auto;
-  }
+  } */
   
   .user-detals-photo { min-width: 120px; height: 120px; border-radius: 50%; }
   
@@ -1655,6 +1645,12 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     }
 
     select,.dataTables_wrapper{ overflow-y: auto !important; }
+
+    .ColumnCalendarAnnounceMessagePortfolio{background-color: #f8f9fa;}
+
+    .details-section{ background-color: #f8f9fa;}
+
+    .user-details{ border-radius: 15px; background-color: white;}
   }
 
   /*******************************************************************/

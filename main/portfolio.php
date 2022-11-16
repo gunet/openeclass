@@ -101,7 +101,7 @@ jQuery(document).ready(function() {
   $modalShow
   jQuery('#portfolio_lessons').DataTable({
     'bLengthChange': false,
-    'iDisplayLength': 10,
+    'iDisplayLength': 8,
     'bSort' : false,
     'fnDrawCallback': function( oSettings ) {
       $('#portfolio_lessons_filter label input').attr({

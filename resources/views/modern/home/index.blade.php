@@ -51,8 +51,8 @@
                                                                 </div>
                                                                 <form action="{{ $urlAppend }}" method="post">
                                                                     <div class="login-form-spacing mt-2">
-                                                                        <input id='username_id' class="rounded-pill login-input @if(count($q)>1) w-75 @else w-100 @endif" placeholder="{{ trans('langUsername') }}" type="text" id="uname" name="uname" >
-                                                                        <input id='password_id' class="rounded-pill login-input @if(count($q)>1) w-75 @else w-100 @endif mt-4" placeholder="{{ trans('langPassword') }}" type="password" id="pass" name="pass">
+                                                                        <input id='username_id' class="rounded-pill login-input @if(count($q)>1) w-75 @else w-100 @endif" placeholder="{{ trans('langUsername') }}" type="text" id="uname" name="uname" autocomplete="on">
+                                                                        <input id='password_id' class="rounded-pill login-input @if(count($q)>1) w-75 @else w-100 @endif mt-4" placeholder="{{ trans('langPassword') }}" type="password" id="pass" name="pass" autocomplete="on">
                                                                         <input class="rounded-pill btn @if(count($q)>1) w-75 @else w-100 @endif login-form-submit TextBold mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
                                                                     </div>
                                                                 </form>

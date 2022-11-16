@@ -66,7 +66,7 @@ function getUserLessonInfo($uid) {
     $teacher_courses_count = 0;
     $student_courses_count = 0;
     if ($myCourses) {
-        $lesson_content .= "<table id='portfolio_lessons' class='table table-striped portfolio-courses-table'>";
+        $lesson_content .= "<table id='portfolio_lessons' class='table table-default portfolio-courses-table'>";
         $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
@@ -84,7 +84,7 @@ function getUserLessonInfo($uid) {
                 $fav_message = $langFavorite;
             }
             $lesson_content .= "<tr class='$visclass'>
-			  <td>
+			  <td class='border-top-0 border-start-0 border-end-0'>
 			  <div class='d-inline-flex'>
                 
                     <div class='TextMedium'><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></div>
@@ -93,7 +93,7 @@ function getUserLessonInfo($uid) {
                 
               </div>
 			  <div><small>" . q($data->professor) . "</small></div></td>";
-            $lesson_content .= "<td class='text-center align-middle'><div class='col-12'><div class='d-inline-flex'>";
+            $lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-center align-middle'><div class='col-12'><div class='d-inline-flex'>";
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
             if ($data->status == USER_STUDENT) {
                 $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
