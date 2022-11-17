@@ -435,11 +435,15 @@
         if (!e.target.classList.contains('login-input')) {
             $('.carousel-control-prev').css('display','block');
             $('.carousel-control-next').css('display','block'); 
+            $('.owl-carousel').owlCarousel({
+                autoplay:true
+            });
         }
     });
 
     $('.login-input').on('click',function(){
         $('.owl-carousel').owlCarousel({
+            autoplay:false,
             rewindNav : true,
             rewindSpeed: 0
         });

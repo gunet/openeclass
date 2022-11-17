@@ -7,9 +7,9 @@
 <div class="container-fluid main-container details-section">
 
     <div class="row rowMedium">
-        <div class="col-lg-12 user-details bg-white Borders p-lg-0 p-4" >
+        <div class="col-lg-12 user-details Borders p-lg-0 ps-3 pe-3 pt-4 pb-1" >
 
-                <div class='panel panel-admin border-0 bg-white py-md-4 px-md-5 py-4 px-4'>
+                <div class='panel panel-admin border-0 bg-white py-md-4 px-md-5 py-3 px-3'>
                     <div class='panel-heading bg-body p-0'>
                         <div class='col-12 Help-panel-heading'>
                             <div class="row">
@@ -199,11 +199,11 @@
 
 
 
-<div class="container-fluid main-container">
+<div class="container-fluid main-container details-section">
     <div class='row rowMedium'>
-        <div class='col-lg-8 col-12 cources-section bg-white Borders p-lg-0 p-4 mt-3'>
+        <div class='col-lg-8 col-12 user-cources-details Borders mt-lg-3 p-lg-0 ps-3 pe-3 pt-4 pb-1'>
         
-            <div class='panel panel-admin shadow-none border-0 bg-white py-md-4 px-md-5 py-4 px-4'>
+            <div class='panel panel-admin panel-courses-portfolio shadow-none border-0 bg-white py-md-4 px-md-5 py-3 px-3'>
                 <div class='panel-heading bg-body p-0'>
                     <div class='col-12 Help-panel-heading'>
                         <div class="row">
@@ -236,153 +236,70 @@
                     </div>
                 </div>
                 <div class='panel-body'>
-                    @if(Session::has('message'))
-                        <div class='col-12 mt-3'>
-                            <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                                @if(is_array(Session::get('message')))
-                                    @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
-                                    @foreach($messageArray as $message)
-                                        {!! $message !!}
-                                    @endforeach
-                                @else
-                                    {!! Session::get('message') !!}
-                                @endif
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </p>
-                        </div>
-                    @endif
-
-                    <div id="cources-bars" class="col-12 ps-0 pe-0">
-                        {!! $perso_tool_content['lessons_content'] !!}
-                    </div>
-
-                    <div id="cources-pics" class="col-12 cources-paging ps-0 pe-0" style="display:none">
-                        <div class="row cources-pics-page" id="cources-pics-page-1">
-                            @php $i=0; @endphp
-                            @foreach($cources as $cource)
-                            <div class="col-md-6 col-12">
-                                <div class="lesson">
-                                    <figure class="lesson-image">
-                                        <a href="{{$urlServer}}courses/{{$cource->code}}/index.php">
-                                        <picture>
-                                            @if($cource->course_image == NULL)
-                                                <img class="imageCourse mb-md-2 mb-0" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $cource->course_image }}" /></a>
-                                            @else
-                                                <img class="imageCourse mb-md-2 mb-0" src="{{$urlAppend}}courses/{{$cource->code}}/image/{{$cource->course_image}}" alt="{{ $cource->course_image }}" /></a>
-                                            @endif
-                                        </picture>
-                                    </figure>
-                                    <h6 class="lesson-title">
-                                        <a class='TextMedium' href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
-                                        <span class="lesson-id text-secondary">({{ $cource->public_code }})</span>
-                                    </h6>
-                                    <div class="lesson-professor text-secondary mt-0">{{ $cource->professor }}</div>
+                    <div class='container-fluid p-0'>
+                        <div class='row'>
+                            @if(Session::has('message'))
+                                <div class='col-12 mt-3'>
+                                    <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                                        @if(is_array(Session::get('message')))
+                                            @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                                            @foreach($messageArray as $message)
+                                                {!! $message !!}
+                                            @endforeach
+                                        @else
+                                            {!! Session::get('message') !!}
+                                        @endif
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </p>
                                 </div>
-                                <hr>
+                            @endif
+
+                            <div id="cources-bars" class="col-12 ps-0 pe-0">
+                                {!! $perso_tool_content['lessons_content'] !!}
                             </div>
-                                @if( $i>0 && ($i+1)%$items_per_page==0 )
+
+                            <div id="cources-pics" class="col-12" style="display:none">
+                                <div class="row cources-pics-page" id="cources-pics-page-1">
+                                    @php $i=0; @endphp
+                                    @foreach($cources as $cource)
+                                    <div class="col-md-6 col-12">
+                                        <div class="lesson">
+                                            <figure class="lesson-image">
+                                                <a href="{{$urlServer}}courses/{{$cource->code}}/index.php">
+                                                <picture>
+                                                    @if($cource->course_image == NULL)
+                                                        <img class="imageCourse mb-md-2 mb-0" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $cource->course_image }}" /></a>
+                                                    @else
+                                                        <img class="imageCourse mb-md-2 mb-0" src="{{$urlAppend}}courses/{{$cource->code}}/image/{{$cource->course_image}}" alt="{{ $cource->course_image }}" /></a>
+                                                    @endif
+                                                </picture>
+                                            </figure>
+                                            <h6 class="lesson-title">
+                                                <a class='TextMedium' href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
+                                                <span class="lesson-id text-secondary">({{ $cource->public_code }})</span>
+                                            </h6>
+                                            <div class="lesson-professor text-secondary mt-0">{{ $cource->professor }}</div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                        @if( $i>0 && ($i+1)%$items_per_page==0 )
+                                </div>
+                                <div class="row cources-pics-page" style="display:none" id="cources-pics-page-{{ceil($i/$items_per_page)+1}}" >
+                                        @endif
+                                        @php $i++; @endphp
+                                    @endforeach
+                                </div>
+                                @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'pics', 'cource_pages' => $cource_pages ,'cources' => $cources])
+                            </div>
                         </div>
-                        <div class="row cources-pics-page" style="display:none" id="cources-pics-page-{{ceil($i/$items_per_page)+1}}" >
-                                @endif
-                                @php $i++; @endphp
-                            @endforeach
-                        </div>
-                        @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'pics', 'cource_pages' => $cource_pages ,'cources' => $cources])
                     </div>
                 </div>
             </div>
-
-
-            {{--<div class='container-fluid'>
-                <div class='row rowMedium'>
-                    <div class="col-8 d-inline-flex align-items-top block-title-2 ps-0">
-                        <span class="text-uppercase TextSemiBold mb-0 Help-text-panel-heading">{{ trans('langMyCoursesSide') }}</span>
-                        <a href="{{$urlAppend}}modules/auth/courses.php" class='viewAllCourseBtn btn btn-outline-success d-flex justify-content-center align-items-center ms-2' data-bs-toggle='tooltip'
-                        data-bs-placement='bottom' title data-bs-original-title="{{ trans('langRegCourses') }}">
-                            <span class='fa fa-check'></span>
-                        </a>
-                    </div>
-                    <div class="col-4  block-title-2 pe-0">
-                        <div id="bars-active" type='button' class='float-end mt-0' style="display:flex;">
-                            <div id="cources-bars-button" class="collapse-cources-button text-primary">
-                                <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars custom-font" style='font-size:15px;'></i></span>
-                            </div>
-                            <div id="cources-pics-button" class="collapse-cources-button text-secondary collapse-cources-button-deactivated" onclick="switch_cources_toggle()">
-                                <span class="grid-style"><i class="fas fa-custom-size fa-th-large custom-font" style='font-size:15px;'></i></span>
-                            </div>
-                        </div>
-                        <div id="pics-active" type='button' class='float-end mt-0' style="display:none">
-                            <div id="cources-bars-button" class="collapse-cources-button text-secondary collapse-cources-button-deactivated" onclick="switch_cources_toggle()">
-                                <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars custom-font" style='font-size:15px;'></i></span>
-                            </div>
-                            <div id="cources-pics-button" class="collapse-cources-button text-primary">
-                                <span class="grid-style"><i class="fas fa-custom-size fa-th-large custom-font" style='font-size:15px;'></i></span>
-                            </div>
-                        </div>
-                    </div>
-
-                     @if(Session::has('message'))
-                    <div class='col-12 mt-3'>
-                        <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @if(is_array(Session::get('message')))
-                                @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
-                                @foreach($messageArray as $message)
-                                    {!! $message !!}
-                                @endforeach
-                            @else
-                                {!! Session::get('message') !!}
-                            @endif
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </p>
-                    </div>
-                    @endif
-
-                    <div id="cources-bars" class="col-12 ps-0 pe-0">
-                        {!! $perso_tool_content['lessons_content'] !!}
-                    </div>
-
-                    <div id="cources-pics" class="col-12 cources-paging ps-0 pe-0" style="display:none">
-                        <div class="row cources-pics-page" id="cources-pics-page-1">
-                            @php $i=0; @endphp
-                            @foreach($cources as $cource)
-                            <div class="col-md-6 col-12">
-                                <div class="lesson">
-                                    <figure class="lesson-image">
-                                        <a href="{{$urlServer}}courses/{{$cource->code}}/index.php">
-                                        <picture>
-                                            @if($cource->course_image == NULL)
-                                                <img class="imageCourse mb-md-2 mb-0" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $cource->course_image }}" /></a>
-                                            @else
-                                                <img class="imageCourse mb-md-2 mb-0" src="{{$urlAppend}}courses/{{$cource->code}}/image/{{$cource->course_image}}" alt="{{ $cource->course_image }}" /></a>
-                                            @endif
-                                        </picture>
-                                    </figure>
-                                    <h6 class="lesson-title">
-                                        <a class='TextMedium' href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
-                                        <span class="lesson-id text-secondary">({{ $cource->public_code }})</span>
-                                    </h6>
-                                    <div class="lesson-professor text-secondary mt-0">{{ $cource->professor }}</div>
-                                </div>
-                                <hr>
-                            </div>
-                                @if( $i>0 && ($i+1)%$items_per_page==0 )
-                        </div>
-                        <div class="row cources-pics-page" style="display:none" id="cources-pics-page-{{ceil($i/$items_per_page)+1}}" >
-                                @endif
-                                @php $i++; @endphp
-                            @endforeach
-                        </div>
-                        @include('portfolio.portfolio-courcesnavbar', ['paging_type' => 'pics', 'cource_pages' => $cource_pages ,'cources' => $cources])
-                    </div>
-
-                </div>
-            </div>--}}
-
         </div>
 
-        <div class='col-lg-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-0 ps-lg-3 pe-lg-0 pt-lg-0 pb-lg-0 ps-md-4 pe-md-4 ps-3 pe-3 pt-3 pb-4'>
+        <div class='col-lg-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-0 ps-lg-3 pe-lg-0 pt-lg-0 pb-lg-0 ps-md-3 pe-md-3 ps-3 pe-3 pt-3 pb-4'>
             @include('portfolio.portfolio-calendar')
-            <div class='panel panel-admin border-0 bg-white mt-3 py-md-4 px-md-4 py-3 px-3'>
+            <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-4 py-md-4 px-md-4 py-3 px-3'>
                 <div class='panel-heading bg-body p-0'>
                     <div class='col-12 Help-panel-heading'>
                         <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoAnnouncements') }}</span>
@@ -404,7 +321,7 @@
 
 
 
-            <div class='panel panel-admin border-0 bg-white mt-3 py-md-4 px-md-4 py-3 px-3'>
+            <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-4 py-md-4 px-md-4 py-3 px-3'>
                 <div class='panel-heading bg-body p-0'>
                     <div class='col-12 Help-panel-heading'>
                     <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoMessages') }}</span>

@@ -596,9 +596,9 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   .cources-section{ background-color: #f9f8fa; border-radius: 15px;}
 
-  /* .user-details{
-    border-radius: 15px;
-  } */
+  .user-details{ background-color: white; }
+
+  .user-cources-details{background-color: white;}
   
   .user-detals-photo { min-width: 120px; height: 120px; border-radius: 50%; }
   
@@ -1622,7 +1622,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     /* full-width-container to mobile and tablet */
     .container {max-width:100%; padding: 0;}
 
-    .rowMedium, .cources-pics-page{ margin: auto; }
+    .rowMedium{ margin: auto; }
 
     .jumbotron{ border: 1px solid #001146; }
 
@@ -1646,11 +1646,12 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
     select,.dataTables_wrapper{ overflow-y: auto !important; }
 
-    .ColumnCalendarAnnounceMessagePortfolio{background-color: #f8f9fa;}
+    .ColumnCalendarAnnounceMessagePortfolio, .user-cources-details, .user-details{background-color: #f8f9fa;}
 
-    .details-section{ background-color: #f8f9fa;}
+    .details-section, .cources-section{ background-color: #f8f9fa;}
 
-    .user-details{ border-radius: 15px; background-color: white;}
+    .panel-courses-portfolio{box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1) !important;}
+ 
   }
 
   /*******************************************************************/

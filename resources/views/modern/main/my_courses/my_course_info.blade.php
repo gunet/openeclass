@@ -13,7 +13,7 @@
 
         <div class="row">
 
-                <div id="background-cheat-leftnav" class="col-xxl-2 col-xl-2 col-lg-4 col-md-0 col-sm-12 col-xs-12 col_sidebar_active" >
+                <div id="background-cheat-leftnav" class="col-xxl-2 col-xl-2 col-lg-4 col-md-0 col-sm-12 col-12 col_sidebar_active" >
 
                     @include('layouts.partials.sidebar')
 
