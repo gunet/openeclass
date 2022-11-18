@@ -1,54 +1,53 @@
-<nav id="bgr-cheat-header" class="navbar navbar-eclass">
+<nav id="bgr-cheat-header" class="navbar navbar-eclass BordersBottom">
 
     <div class="container-fluid">
 
-            <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-0 col-sm-0 col-0 pb-2">
-                <a class="navbar-brand" href="{{ $urlAppend }}"><img class="eclass-nav-icon" src="{{ $logo_img }}"/></a>
+        <div class='row w-100'>
+
+            <div class="col-lg-2 d-flex justify-content-center align-items-center ps-0">
+                <a href="{{ $urlAppend }}">
+                    <img class="eclass-nav-icon" src="{{ $logo_img }}"/>
+                </a>
             </div>
 
-            <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-0 col-sm-0 col-0">
+            <div class="col-lg-10">
 
-                <div class='row pt-0 ps-2 pe-2 pb-0'>
-                    <div class='d-flex justify-content-end'>
-                        <div class="col-lg-4 col-xl-3 d-flex justify-content-end">
-                            <form action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
-                                <div class="input-group mb-3">
-                                    @if(get_config('enable_search'))
-                                        <input id="search_terms" type="text" class="border-0 form-control outline-0 text-white inputSearch " name="search_terms" placeholder="{{ trans('langSearch') }}..." aria-describedby="basic-inputSearch">
-                                        <button id="btn-search" class="d-flex justify-content-center align-items-center btn btn-primary" type="submit" name="quickSearch"><i class="fa fa-search text-white"></i></button>
-                                    @endif
-                                    @if (!isset($_SESSION['uid']))
-                                        <a class='d-flex justify-content-center align-items-center btn btn-primary' href="{{$urlAppend}}main/login_form.php"><span class="fa fa-lock"></span></a>
-                                    @endif
-                                    {!! lang_selections() !!}
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                <div class='row mt-0'>
+                    <form class='d-flex justify-content-end d-inline-flex' action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
+                        @if(get_config('enable_search'))
+                            <button id="btn-search" class="rounded-0 inputSearch d-flex justify-content-center align-items-center btn btn-transparent" type="submit" name="quickSearch">
+                                 <img class='search-icon' src="{{$urlAppend}}template/modern/img/search.svg">
+                            </button>
+                            <input id="search_terms" type="text" class="inputSearch inputSearchbtn me-4" name="search_terms" aria-describedby="basic-inputSearch">
+                        @endif
+                        {!! lang_selections_Desktop() !!}
+                    </form>
                 </div>
 
 
-                <div class='row ps-2 pt-2 pe-2 pb-1 mt-3'>
+                <div class="row mt-5">
 
-                    <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 @if (isset($_SESSION['uid'])) mt-2 @else mt-1 @endif">
+                    <div class="col-xl-8 col-lg-9 col-md-12 col-sm-12 col-12 mt-2 @if (isset($_SESSION['uid'])) ps-5 @else ps-0 @endif">
                         @if(!get_config('hide_login_link'))
-                            <a id="link-home" class="eclass-nav-link text-white text-uppercase" href="{{ $urlServer }}" onmouseover="hoverHome(this);" onmouseout="unhoverHome(this);"> 
-                               <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/home_1.svg"> {{ trans('langHome') }}
+                            <a id="link-home" class="eclass-nav-link" href="{{ $urlServer }}" onmouseover="hoverHome(this);" onmouseout="unhoverHome(this);"> 
+                               <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/home_1.svg">
+                               <span class='small-text text-white text-uppercase'>{{ trans('langHome') }}</span>
                             </a>
                         @endif
                         @if (!isset($_SESSION['uid']))
-                            <a id="link-register" class="eclass-nav-link text-uppercase text-white @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" onmouseover="hoverRegister(this);" onmouseout="unhoverRegister(this);">
-                                <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/register_1.svg"> {{ trans('langRegistration') }} 
-                                
+                            <a id="link-register" class="eclass-nav-link @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" onmouseover="hoverRegister(this);" onmouseout="unhoverRegister(this);">
+                                <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/register_1.svg">
+                                <span class='small-text text-white text-uppercase'>{{ trans('langRegistration') }}</span>
                             </a>
                         @endif
-                        <a id="link-lessons" class="eclass-nav-link text-uppercase text-white" href="{{ $urlServer }}modules/auth/listfaculte.php" onmouseover="hoverLessons(this);" onmouseout="unhoverLessons(this);">
-                            <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/lessons_1.svg"> {{ trans('langCourses') }}
+                        <a id="link-lessons" class="eclass-nav-link" href="{{ $urlServer }}modules/auth/listfaculte.php" onmouseover="hoverLessons(this);" onmouseout="unhoverLessons(this);">
+                            <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/lessons_1.svg">
+                            <span class='small-text text-white text-uppercase'>{{ trans('langCourses') }}</span>
                         </a>
                     </div>
 
 
-                    <div class='col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
+                    <div class='col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
                         @if (isset($_SESSION['uid']))
                             <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                                 @if ((isset($is_admin) and $is_admin) or
@@ -310,6 +309,7 @@
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 </nav>
 

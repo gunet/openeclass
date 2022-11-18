@@ -65,15 +65,26 @@
 
 .nav-item:active{  border:0; }
 
-.col_maincontent_active{ transition: 0.4s;  min-height: calc(100vh - 147px - 188.56px - 32px); background-color: #f8f9fa;  border-bottom-right-radius: 15px; border-top-right-radius: 15px; }
+.col_maincontent_active{ transition: 0.4s;  min-height: calc(100vh - 147px - 188.56px - 32px); background-color: white; 
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); border-bottom-right-radius: 15px; border-top-right-radius: 15px; }
 
-.col_maincontent_active_Homepage{ transition: 0.4s;  min-height: calc(100vh - 147px - 188.56px - 32px); background-color: #f8f9fa;  border-radius:15px; }
+.col_maincontent_active_Homepage{ transition: 0.4s;  min-height: calc(100vh - 147px - 188.56px - 32px);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);  background-color: white;  border-radius:15px; }
 
-.col_maincontent_active_HomepageStart{ transition: 0.4s;  background-color: #f8f9fa;  border-radius:15px; }
+.col_maincontent_active_HomepageStart{ transition: 0.4s;  background-color: white;  border-radius:15px; 
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);}
+@media(min-width:992px){
+  .col_maincontent_active_HomepageStart{
+    min-height: calc(100vh - 147px - 390px - 300px - 188.55px);
+    border-radius:0px;
+  }
+}
 
-.col_maincontent_active_unit{ transition: 0.4s;  height:auto; background-color: #f8f9fa;  border-radius:15px; -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc; box-shadow: 0 0 3px #ccc; }
+.col_maincontent_active_unit{ transition: 0.4s;  height:auto; background-color: white;  
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); border-radius:15px; -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc; box-shadow: 0 0 3px #ccc; }
 
-.col_maincontent_coursePage{ height:auto; background-color: #f8f9fa;  border-radius:15px; -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc; box-shadow: 0 0 3px #ccc ;}
+.col_maincontent_coursePage{ height:auto; background-color: white;  
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); border-radius:15px; -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc; box-shadow: 0 0 3px #ccc ;}
 
 .col_sidebar_active{ transition: 0.4s;  border-top-left-radius: 15px;  border-bottom-left-radius: 15px;  background-color: #1d4e89 ;}
 
@@ -127,9 +138,9 @@
 
   .active-nav2{ margin-left:-218px; }
 
-  .active-cont{ width: 100%; align-items: end; margin: 0px 0px 0px auto; background-color: #f8f9fa; border-radius:15px; }
+  .active-cont{ width: 100%; align-items: end; margin: 0px 0px 0px auto;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); background-color: white; border-radius:15px; }
 
-  .active-cont-completeCourse{ width: 100%; align-items: end; margin: 0px 0px 0px auto; background-color: #f8f9fa; border-radius:15px; }
 }
 
 @media(min-width:1024px) and (max-width:1199px){
@@ -138,9 +149,8 @@
 
   .active-nav2{ margin-left:-218px; }
 
-  .active-cont{ width: 100%; align-items: end; margin: 0px 0px 0px auto; background-color: #f8f9fa; border-radius:15px;  }
-
-  .active-cont-completeCourse{ width: 100%; align-items: end; margin: 0px 0px 0px auto; background-color: #f8f9fa; border-radius:15px; }
+  .active-cont{ width: 100%; align-items: end; 
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); margin: 0px 0px 0px auto; background-color: white; border-radius:15px;  }
 
 }
 
@@ -151,9 +161,8 @@
 
   .active-nav2{ margin-left:-218px; }
 
-  .active-cont{  width: 100%;  align-items: end;  margin: 0px 0px 0px auto;  background-color: #f8f9fa;  border-radius:15px; }
-
-  .active-cont-completeCourse{ width: 100% ;  align-items: end;  margin: 0px 0px 0px auto; background-color: #f8f9fa;  border-radius:15px; }
+  .active-cont{  width: 100%;  align-items: end; 
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); margin: 0px 0px 0px auto;  background-color: white;  border-radius:15px; }
 }
 
 
@@ -163,11 +172,8 @@
 
   .active-nav{ margin-left:-100vw; }
 
-  .active-cont{ width: 100%;  align-items: end;  margin: 0px 0px 0px auto;  background-color: #f8f9fa;  border-radius:15px; }
-
-  .active-cont-unit{  width: 100%;  align-items: end;  margin: 0px 0px 0px auto;  background-color: #f8f9fa;  border-radius:15px; }
-
-  .active-cont-completeCourse{  width: 100% ;  align-items: end; margin: 0px 0px 0px auto;  background-color: #f8f9fa; border-radius:15px; }
+  .active-cont{ width: 100%;  align-items: end; 
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); margin: 0px 0px 0px auto;  background-color: white;  border-radius:15px; }
 
 }
 

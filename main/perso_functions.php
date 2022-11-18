@@ -84,16 +84,16 @@ function getUserLessonInfo($uid) {
                 $fav_message = $langFavorite;
             }
             $lesson_content .= "<tr class='$visclass'>
-			  <td class='border-top-0 border-start-0 border-end-0'>
+			  <td class='border-top-0 border-start-0 border-end-0 ps-0'>
 			  <div class='d-inline-flex'>
                 
-                    <div class='TextMedium'><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></div>
+                    <div class='TextSemiBold'><a class='fs-6' href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></div>
                
-                    <div class='text-md-end text-start'> <span class='text-secondary'>(" . q($data->public_code) . ")</span></div>
+                    <div class='TextSemiBold text-md-end text-start'> <span class='blackBlueText'>(" . q($data->public_code) . ")</span></div>
                 
               </div>
 			  <div><small>" . q($data->professor) . "</small></div></td>";
-            $lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-center align-middle'><div class='col-12'><div class='d-inline-flex'>";
+            $lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-end align-top pe-0'><div class='col-12'><div class='d-inline-flex'>";
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
             if ($data->status == USER_STUDENT) {
                 $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");

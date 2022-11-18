@@ -1,7 +1,7 @@
-<footer id="bgr-cheat-footer" class="site-footer mt-auto">
+<footer id="bgr-cheat-footer" class="site-footer @if(isset($_SESSION['uid'])) BordersTop @else NoBorders @endif mt-auto">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-3 col-xl-3 col-xxl-2">
+            <div class="col-lg-4 col-xl-3 col-xxl-2">
                 <ul class="ul_tools_site_footer">
                     <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/about.php">{{ trans('langPlatformIdentity') }}</a></li>
                     <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/contact.php">{{ trans('langContact') }}</a></li>
@@ -17,7 +17,7 @@
                     @endif
                 </ul>
             </div>
-            <div class="col-lg-5 col-xl-5 col-xxl-6">
+            <div class="col-lg-4 col-xl-5 col-xxl-6">
                 @if(get_config('enable_social_sharing_links'))
                 <ul class="social_meadia_ul">
                     <li>

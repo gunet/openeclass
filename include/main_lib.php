@@ -3789,29 +3789,35 @@ function make_dir($dir) {
 
 function setOpenCoursesExtraHTML() {
     global $urlAppend, $openCoursesExtraHTML, $langListOpenCourses,
-        $langOpenCoursesShort, $langListOpenCoursesShort,
+        $langOpenCoursesShort, $langListOpenCoursesShort,$langCourses,$langCourse,$langNationalOpenCourses,
         $langNumOpenCourseBanner, $langNumOpenCoursesBanner, $themeimg;
     $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
     if ($openCoursesNum > 0) {
         $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
         $openCoursesExtraHTML = "
-            <div class='inner_opencourses'>
+            <div class='row w-100'>
                 
-                <div class='col-sm-12 d-flex justify-content-center'>
-                    <img class='img-responsive center-block' src='$themeimg/banner_open_courses.png' alt='".q($langListOpenCourses)."'>
+                <div class='col-lg-5 offset-lg-0 col-8 offset-2 d-flex justify-content-center align-items-center'>
+                    <img style='height:120px; width:100%;' src='$themeimg/banner_open_courses.png' alt='".q($langListOpenCourses)."'>
                 </div>
                 
-                <div class='clearfix'>
-                    <div class='row num_sub_wrapper center-block clearfix'>
-                        <div class='col-6 col-md-5 opencourse_num'><div class='float-end'><span class='fs-2 fw-bold'>$openCoursesNum</span></div></div>
-                        <div class='col-6 col-md-7 opencourse_num_text'>
+                <div class='col-lg-7 col-12'>
+                    <div class='row'>
+                        <div class='col-12 ps-0' style='background-color:#ffffff; border-bottom:solid 1px #003e87;'>
+                            <span class='text-uppercase TextBold normalBlueText'>$langOpenCoursesShort</span>
+                        </div>
+                        <div class='col-12 ps-0 mt-3'>
                             <a target='_blank' href='$openFacultiesUrl'>
-                            <div class='float-start'>
-                                <span class='opencourse_sub'>" .
-                                    (($openCoursesNum == 1)? $langNumOpenCourseBanner: $langNumOpenCoursesBanner) . "
+                                <span class='text-uppercase TextBold lightBlueText fs-5'>$openCoursesNum</span>
+                                <span class='text-uppercase TextBold lightBlueText fs-5'>" .
+                                  (($openCoursesNum == 1)? $langCourses: $langCourse) . "
                                 </span>
-                                <span class='opencourse_triangle'></span>
-                            </div>
+                            </a>
+                        </div>
+                        <div class='col-12 ps-0 pe-0 mt-3'>
+                            <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
+                                $langNationalOpenCourses
+                                <span class='fa fa-chevron-right ms-2'></span>
                             </a>
                         </div>
                     </div>

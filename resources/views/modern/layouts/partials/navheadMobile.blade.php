@@ -18,7 +18,7 @@
                     <a class='btn btn-transparent text-white pt-2' href="{{$urlAppend}}main/login_form.php"><span class="fa fa-lock"></span></a>
                 @endif
 
-                {!! lang_selections() !!}
+                {!! lang_selections_Mobile() !!}
 
 
                 @if(isset($_SESSION['uid']))

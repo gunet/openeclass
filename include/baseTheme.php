@@ -275,7 +275,7 @@ function view($view_file, $view_data = array()) {
         }
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
-        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; border:solid 1px #000000;}";
+        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str;}";
         if (isset($theme_options_styles['loginImgPlacement']) && $theme_options_styles['loginImgPlacement']=='full-width') {
             // $styles_str .= ".jumbotron.jumbotron-login {background-size: cover, cover; background-position: 0% 0%;}";
             $styles_str .= ".jumbotron.jumbotron-login {background-repeat: no-repeat; background-size: cover;}";
@@ -319,7 +319,7 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['imageUpload'])) $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
         if (isset($theme_options_styles['imageUploadSmall'])) $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
     }else{
-        $styles_str .= "#background-cheat-leftnav,#bgr-cheat-header{background:#003e87;}
+        $styles_str .= "#background-cheat-leftnav,#bgr-cheat-header{background:rgba(0, 62, 135, 0.9) ;}
         #leftnav{background:transparent;}
         #bgr-cheat-footer{background: #001146;} a{color:#005ad9;}
         #leftnav .panel a.list-group-item:hover{background: #4682B4;}
@@ -537,7 +537,7 @@ function array2html($TheArray) {
  *
  */
 
-function lang_selections() {
+function lang_selections_Mobile() {
     global $session, $native_language_names_init, $langDropdown;
     if (count($session->active_ui_languages) < 2) {
         return ('&nbsp;');
@@ -546,9 +546,6 @@ function lang_selections() {
         $langDropdown = "user-language-menuOn";
     }
     $lang_select = "
-      <a class='d-none d-sm-none d-md-none d-lg-block d-flex justify-content-center align-items-center btn btn-primary' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
-          <span class='fa fa-globe'></span>
-      </a>
       <a class='d-block d-sm-block d-md-block d-lg-none btn btn-transparent text-white pt-2' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
           <span class='fa fa-globe'></span>
       </a>
@@ -562,6 +559,21 @@ function lang_selections() {
                     q($native_language_names_init[$code]) . "</span></div></a></li>";
     }
     $lang_select .= "</ul>";
+    return $lang_select;
+}
+
+function lang_selections_Desktop() {
+    global $session, $native_language_names_init, $langDropdown;
+    if (count($session->active_ui_languages) < 2) {
+        return ('&nbsp;');
+    }
+
+    foreach ($session->active_ui_languages as $code) {
+        $class = ($code == $session->language)? 'btn btn-primary': '';
+        $lang_select .=
+            "<a class='$class btnLang rounded-circle ms-2 d-flex justify-content-center align-items-center' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
+                 <span class='TextMedium text-white text-capitalize'>" . q($code) . "</span></a>";
+    }
     return $lang_select;
 }
 
