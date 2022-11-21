@@ -115,7 +115,7 @@ function printPollForm() {
     $pageName, $lang_rate1, $lang_rate5, $pid;
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
-    $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
+    $refresh_time = 300000; // Refresh PHP session every 5 min. (in ms)
     $head_content .= "
     <style>.slider-tick-label { font-size: 12px; white-space: normal; }</style>
     <script>

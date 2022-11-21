@@ -817,7 +817,7 @@ if (!$attempt && !$is_editor) {
 }
 
 if ($questionList) {
-    $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
+    $refresh_time = 300000; // Refresh PHP session every 5 min. (in ms)
     // Enable check for unanswered questions when displaying more than one question
     if ($exerciseType == ONE_WAY_TYPE) {
         $checkSinglePage = 'true';
