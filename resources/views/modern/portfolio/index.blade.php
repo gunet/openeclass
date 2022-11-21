@@ -206,8 +206,8 @@
 
 <div class="container-fluid details-section">
     <div class="row rowMedium px-lg-0 px-3 py-lg-0 py-3">
-        <div class='col-lg-8 col-12 pe-lg-3 mt-lg-3 px-0'>
-            <div class='panel panel-admin border-0 bg-white px-lg-4 py-lg-3'>
+        <div class='col-lg-8 col-12 Courses-Content pe-lg-0 mt-lg-3 px-0'>
+            <div class='panel panel-admin border-0 shadow-none bg-white px-lg-4 py-lg-3'>
                 <div class='panel-heading bg-white'>
                     <div class='col-12 Help-panel-heading'>
                         <div class='row'>
@@ -266,7 +266,7 @@
                                     @php $i=0; @endphp
                                     @foreach($cources as $cource)
                                     <div class="col-md-6 col-12 @if($i==0 or $i==2) ps-lg-1 ps-md-0 pe-md-2 @else pe-lg-1 ps-md-2 pe-md-0 @endif ps-0 pe-0">
-                                        <div class="lesson">
+                                        <div class="lesson border-bottom pb-1 pt-3">
                                             <figure class="lesson-image">
                                                 <a href="{{$urlServer}}courses/{{$cource->code}}/index.php">
                                                 <picture>
@@ -283,11 +283,11 @@
                                             </div>
                                             <div class="small-text text-secondary lesson-professor mt-0">{{ $cource->professor }}</div>
                                         </div>
-                                        <hr>
+                                       
                                     </div>
                                         @if( $i>0 && ($i+1)%$items_per_page==0 )
                                 </div>
-                                <div class="row cources-pics-page" style="display:none" id="cources-pics-page-{{ceil($i/$items_per_page)+1}}" >
+                                <div class="row cources-pics-page ps-lg-1 pe-lg-2 ps-3 pe-3" style="display:none" id="cources-pics-page-{{ceil($i/$items_per_page)+1}}" >
                                         @endif
                                         @php $i++; @endphp
                                     @endforeach
@@ -300,7 +300,7 @@
                 </div>
             </div>
         </div>
-        <div class='col-lg-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-4 px-lg-0 px-0'>
+        <div class='col-lg-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-4 ps-lg-3 px-lg-0 px-0'>
             @include('portfolio.portfolio-calendar')
             <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-4 py-md-4 px-md-4 py-3 px-3'>
                 <div class='panel-heading bg-body p-0'>
@@ -310,12 +310,12 @@
                 </div>
                 <div class='panel-body p-0'>
                     @if(empty($user_announcements))
-                        <div class='text-center p-2'><span class='text-title not_visible'> - {{ trans('langNoRecentAnnounce') }} - </span></div>
+                        <div class='text-start mt-3 mb-2'><span class='text-title not_visible'>{{ trans('langNoRecentAnnounce') }}</span></div>
                     @else
                         {!! $user_announcements !!}
                     @endif
                 </div>
-                <div class='panel-footer d-flex justify-content-end p-0'>
+                <div class='panel-footer d-flex justify-content-start p-0'>
                     <a href="{{$urlAppend}}modules/announcements/myannouncements.php" class='mt-1'>
                         {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
                     </a>
@@ -333,8 +333,8 @@
                 <div class='panel-body p-0'>
                     {!! $user_messages !!}
                 </div>
-                <div class='panel-footer d-flex justify-content-end p-0'>
-                    <a href="{{$urlAppend}}modules/message/index.php" class='mt-1'>
+                <div class='panel-footer d-flex justify-content-start p-0'>
+                    <a href="{{$urlAppend}}modules/message/index.php">
                         {{ trans('langAllMessages') }} <span class='fa fa-chevron-right'></span>
                     </a>
                 </div>

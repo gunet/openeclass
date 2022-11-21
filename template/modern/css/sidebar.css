@@ -74,8 +74,9 @@
 .col_maincontent_active_HomepageStart{ transition: 0.4s;  background-color: white;  border-radius:15px; 
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);}
 @media(min-width:992px){
+  /* +147px is the padding 147px of jumbotron */
   .col_maincontent_active_HomepageStart{
-    min-height: calc(100vh - 147px - 390px - 300px - 188.55px);
+    min-height: calc(100vh - 147px + 147px - 390px - 300px - 188.55px);
     border-radius:0px;
   }
 }

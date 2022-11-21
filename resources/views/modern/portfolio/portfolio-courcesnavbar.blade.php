@@ -40,11 +40,13 @@
         @endif
     </div>
 
+    @if($cources)
     <div class='col-md-6 col-12 text-end text-uppercase TextMedium mt-md-0 mt-4'>
         <a class='' href='{{$urlAppend}}main/my_courses.php'>{{ trans('langMyCoursesSide') }} 
             <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span>
         </a>
     </div>
+    @endif
 
     {{--<div class='d-flex justify-content-center'> 
         <a class="btn-slide" href="{{$urlServer}}modules/auth/courses.php" >

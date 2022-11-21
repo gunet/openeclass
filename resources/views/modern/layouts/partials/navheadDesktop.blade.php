@@ -29,7 +29,7 @@
 
                     <div class="col-xl-8 col-lg-9 col-md-12 col-sm-12 col-12 mt-2 @if (isset($_SESSION['uid'])) ps-5 @else ps-0 @endif">
                         @if(!get_config('hide_login_link'))
-                            <a id="link-home" class="eclass-nav-link" href="{{ $urlServer }}" onmouseover="hoverHome(this);" onmouseout="unhoverHome(this);"> 
+                            <a id="link-home" class="eclass-nav-link" href="{{ $urlServer }}" onclick="clickHome(this)" onmouseover="hoverHome(this);" onmouseout="unhoverHome(this);"> 
                                <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/home_1.svg">
                                <span class='small-text text-white text-uppercase'>{{ trans('langHome') }}</span>
                             </a>
@@ -314,24 +314,55 @@
 </nav>
 
 <script>
+    let current_url = document.URL; console.log(current_url);
+
+    if(current_url.includes('/modules/auth/registration.php')
+       || current_url.includes('/modules/auth/formuser.php')
+       || current_url.includes('/modules/auth/altnewuser.php')){
+        $('#link-register'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/register_2.svg");
+    }else{
+        $('#link-register'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/register_1.svg");
+    }
+    if(current_url.includes('/modules/auth/opencourses.php')){
+        $('#link-lessons'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/lessons_2.svg");
+    }else{
+        $('#link-lesson'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/lessons_1.svg");
+    }
+    if(current_url.includes('/main/portfolio.php')){
+        $('#link-home'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_2.svg");
+    }
+
+
+    function clickHome(obj){
+        $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_2.svg");
+    }
+
     function hoverHome(obj) {
         $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_2.svg");
     }
     function unhoverHome(obj) {
-        $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_1.svg");
+        if(!current_url.includes('/main/portfolio.php')){
+            $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_1.svg");
+        }
     }
 
     function hoverRegister(obj) {
         $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/register_2.svg");
     }
     function unhoverRegister(obj) {
-        $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/register_1.svg");
+        if(!current_url.includes('/modules/auth/registration.php')
+        && !current_url.includes('/modules/auth/formuser.php')
+        && !current_url.includes('/modules/auth/altnewuser.php')){
+            $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/register_1.svg");
+        }
     }
 
     function hoverLessons(obj) {
         $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/lessons_2.svg");
     }
     function unhoverLessons(obj) {
-        $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/lessons_1.svg");
+        if(!current_url.includes('/modules/auth/opencourses.php')){
+            $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/lessons_1.svg");
+        }
     }
 </script>

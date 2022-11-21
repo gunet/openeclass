@@ -33,13 +33,9 @@
 
 .inputSearchbtn{width:160px;}
 
-.inputSearch:active{ outline:0; background-color: transparent; border:0; border-bottom: solid 1px white;}
-
-.inputSearch:focus{ outline:0; background-color: transparent; border:0; border-bottom: solid 1px white; }
-
-.inputSearch:hover{ outline:0; background-color: transparent; border:0; border-bottom: solid 1px white; }
-
-.inputSearch::placeholder { text-align: center; font-size:15px; }
+.inputSearch:active,
+.inputSearch:focus,
+.inputSearch:hover { outline:0; background-color: transparent; border:0; border-bottom: solid 1px white;}
 
 .search-icon {width:14px; height:16px;}
 
@@ -661,13 +657,27 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .nav-link-portfolio.nav-link:hover{ border-top: solid 1px #f8f9fa ; border-left:solid 1px #f8f9fa ; border-right: solid 1px #f8f9fa;}
 
   .Help-text-panel-heading-Portfolio {color: #4682B4; font-size:13.5px;}
-  
+
+  @media(min-width:426px) and (max-width:768px){
+    .lesson {min-height: 314px;}
+  }
+  @media(min-width:992px) and (max-width:1199px){
+    .lesson {min-height: 267px;}
+  }
+  @media(min-width:1200px) and (max-width:1399px){
+    .lesson {min-height: 230px;}
+  }
+  @media(min-width:1400px){
+    .lesson {min-height: 290px;}
+  }
+
   @media(max-width:991px){
     .lesson-image img{ width:100%; height:208px; }
   }
   @media(min-width:992px){
-    .lesson-image img{ width:100%; height:190px; }
+    .lesson-image img{ width:100%; height:140px; }
   }
+  
   .lesson-image:hover{ opacity:0.5; }
 
   .user-details-collapse-more{ cursor: pointer; }
@@ -689,6 +699,9 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .cources-paging-arrow.arrow-left{ color:blue; margin-left:8px; margin-top:6px; }
 
   .cources-paging-arrow.arrow-right{ padding-left:10px; color:blue; margin-top:6px; }
+
+  .Courses-Content { border-radius: 15px; background-color: white; 
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);}
 
   .event-important, .event-info, .event-success, .event-special{ float:left; }
 
@@ -818,7 +831,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   
   .jumbotron.jumbotron-login{ background-repeat: no-repeat; background-size: cover; background-image: url(../images/books.jpeg);}
   @media(min-width:992px){
-    .jumbotron.jumbotron-login { height:750px; padding-top: 107px; }
+    .jumbotron.jumbotron-login { height:650px; padding-top: 107px; }
   }
 
   .login-form-Homepage{ border-top-right-radius: 15px; border-bottom-right-radius: 15px; background:#F5F5F5; }
@@ -859,6 +872,16 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     .panel-banner > .panel-body img, .panel-social-media > .panel-body img {height:60px; width:100%;}
     .panel-open-courses { height: auto; display: flex; justify-content: center; align-items: center; background-color: #ffffff;}
     .panel-open-courses> .panel-body {height:auto;}
+  }
+
+  @media(min-width:992px){
+    .homepageIntroPanel{min-height: 118px;}
+    .only-announcements{min-height: 215px; margin-top: -100px;}
+    .panel-announcements-homepage{min-height: 215px;}
+    .homepage_intro-margin{margin-top:-70px; min-height: 118px;}
+    .only-banner-margin, .only-banner-mobileapi-margin, .only-banner-openecourses-margin, .only-mobileapi-margin {margin-top:-50px;}
+    .only-opencourses-margin {margin-top: -90px;}
+    .only-banner-mobileapi-openecourses-margin, .only-mobileapi-openecourses-margin{margin-top:-107px;}
   }
 
   .opencourse_triangle{
@@ -1716,6 +1739,8 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
       border-radius:0px;
     }
     .col_maincontent_active_HomepageStart{ border-radius:0px; }
+
+    .HomepageStartMobile{padding-bottom: 0px;}
 
     .navbar-eclass{ border-radius: 0px; min-height: 56px; }
 

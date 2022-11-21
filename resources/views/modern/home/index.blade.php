@@ -9,11 +9,11 @@
 
         <div class="row rowMedium">
 
-            <div class="col-12 col_maincontent_active_HomepageStart">
+            <div class="col-12 col_maincontent_active_HomepageStart HomepageStartMobile">
 
                 <div class="row">
                     <div class='jumbotron jumbotron-login'>
-                        <div class='col-xl-4 offset-xl-8 col-lg-5 offset-lg-7 col-md-8 offset-md-2 col-12 bg-transparent px-4 py-lg-0 py-4' style='z-index:2;'>
+                        <div class='col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 bg-transparent px-4 py-lg-0 py-4' style='z-index:2;'>
                             @if($warning)
                                 {!! $warning !!}
                             @endif
@@ -59,8 +59,8 @@
                                                                     <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ get_auth_info(2) }}</p>
                                                                 </div>
                                                             </div>
-                                                            <div class='col-12 text-center'>
-                                                                <a class="rounded-pill btn login-form-submit TextBold w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=2'>{{ trans('langUserLogin') }}</a>
+                                                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                                                                <a class="rounded-pill btn login-form-submit TextBold w-75 d-flex justify-content-center align-items-center"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=2'>{{ trans('langUserLogin') }}</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -78,8 +78,8 @@
                                                                     <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ get_auth_info(4) }}</p>
                                                                 </div>
                                                             </div>
-                                                            <div class='col-12 text-center'>
-                                                                <a class="rounded-pill btn login-form-submit TextBold w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=4'>{{ trans('langUserLogin') }}</a>
+                                                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                                                                <a class="rounded-pill btn login-form-submit TextBold w-75 d-flex justify-content-center align-items-center"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=4'>{{ trans('langUserLogin') }}</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -96,8 +96,8 @@
                                                                     <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ get_auth_info(3) }}</p>
                                                                 </div>
                                                             </div>
-                                                            <div class='col-12 text-center'>
-                                                                <a class="rounded-pill btn login-form-submit TextBold w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=3'>{{ trans('langUserLogin') }}</a>
+                                                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                                                                <a class="rounded-pill btn login-form-submit TextBold w-75 d-flex justify-content-center align-items-center"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=3'>{{ trans('langUserLogin') }}</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -113,8 +113,8 @@
                                                                     <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ get_auth_info(5) }}</p>
                                                                 </div>
                                                             </div>
-                                                            <div class='col-12 text-center'>
-                                                                <a class="rounded-pill btn login-form-submit TextBold w-75"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=5'>{{ trans('langUserLogin') }}</a>
+                                                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                                                                <a class="rounded-pill btn login-form-submit TextBold w-75 d-flex justify-content-center align-items-center"  href='{{$urlAppend}}modules/auth/altnewuser.php?auth=5'>{{ trans('langUserLogin') }}</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -130,8 +130,8 @@
                                                                     <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{!! q(getSerializedMessage($l->auth_title)) !!}</p>
                                                                 </div>
                                                             </div>
-                                                            <div class='col-12 text-center'>
-                                                                <a class='rounded-pill btn login-form-submit TextBold w-75' href='{{$urlAppend}}secure/'>{{ trans('langUserLogin') }}</a>
+                                                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                                                                <a class='rounded-pill btn login-form-submit TextBold w-75 d-flex justify-content-center align-items-center' href='{{$urlAppend}}secure/'>{{ trans('langUserLogin') }}</a>
                                                             </div>
                                                         </div>   
                                                     </div>
@@ -147,8 +147,8 @@
                                                                     <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{!! q(getSerializedMessage($l->auth_title)) !!}</p>
                                                                 </div>
                                                             </div>
-                                                            <div class='col-12 text-center'>
-                                                                <a class='rounded-pill btn login-form-submit TextBold w-75' href='{{$urlAppend}}modules/auth/cas.php'>{{ trans('langUserLogin') }}</a>
+                                                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                                                                <a class='rounded-pill btn login-form-submit TextBold w-75 d-flex justify-content-center align-items-center' href='{{$urlAppend}}modules/auth/cas.php'>{{ trans('langUserLogin') }}</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -170,11 +170,11 @@
                         </div>
                     </div>
                     
-
-                    <div class='d-none d-lg-block pb-3' style='background-color:#fafafa;'>
+                    @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements)
+                    <div class='d-none d-lg-block' style='background-color:#fafafa;'>
 
                         @if(get_config('homepage_title') or get_config('homepage_intro'))
-                            <div class='col-12' style='margin-top:-150px;'>
+                            <div class='col-12 homepage_intro-margin mb-3'>
                                 <div class='row'>
                                     <div class='col-lg-10 offset-lg-1'>
                                         <div class="panel panel-default homepageIntroPanel w-100 border-0">
@@ -194,11 +194,11 @@
 
                         <!-- only eclass-banner -->
                         @if (!get_config('enable_mobileapi') and !get_config('opencourses_enable') and $eclass_banner_value == 1)
-                            <div class='col-12 mt-3'>
+                            <div class='col-12 @if(!get_config("homepage_title") and !get_config("homepage_intro")) only-banner-margin @endif mb-3'>
                                 <div class='row'>
                                     <div class='col-lg-10 offset-lg-1'>
                                         <div class='panel panel-admin panel-banner border-0'>
-                                            <div class='panel-body'>
+                                            <div class='panel-body d-flex justify-content-center align-items-center'>
                                                 <a href="http://www.openeclass.org/" target="_blank">
                                                     <img class="img-responsive center-block m-auto d-block" src="{{ $themeimg }}/open_eclass_banner.png" alt="Open eClass Banner">
                                                 </a>
@@ -209,13 +209,13 @@
                             </div>
                         <!-- only eclass-banner and mobileapi -->
                         @elseif (get_config('enable_mobileapi') and !get_config('opencourses_enable') and $eclass_banner_value == 1)
-                            <div class='col-12 mt-3'>
+                            <div class='col-12 @if(!get_config("homepage_title") and !get_config("homepage_intro")) only-banner-mobileapi-margin @endif mb-3'>
                                 <div class='row'>
                                     <div class='col-lg-10 offset-lg-1'>
                                         <div class='row'>
                                             <div class='col-lg-6 pe-1'>
                                                 <div class='panel panel-admin panel-banner border-0'>
-                                                    <div class='panel-body'>
+                                                    <div class='panel-body d-flex justify-content-center align-items-center'>
                                                         <a href="http://www.openeclass.org/" target="_blank">
                                                             <img class="img-responsive center-block m-auto d-block" src="{{ $themeimg }}/open_eclass_banner.png" alt="Open eClass Banner">
                                                         </a>
@@ -224,7 +224,7 @@
                                             </div>
                                             <div class='col-lg-6'>
                                                 <div class='panel panel-admin panel-social-media border-0'>
-                                                    <div class='panel-body'>
+                                                    <div class='panel-body d-flex justify-content-center align-items-center'>
                                                         <div class='col-12'>
                                                             <div class='row'>
                                                                 <div class='col-6'>
@@ -248,7 +248,7 @@
                             </div>
                          <!-- only eclass-banner and openecourses -->
                          @elseif (!get_config('enable_mobileapi') and $eclass_banner_value == 1)
-                            <div class='col-12 mt-3'>
+                            <div class='col-12 @if(!get_config("homepage_title") and !get_config("homepage_intro")) only-banner-openecourses-margin @endif mb-3'>
                                 <div class='row'>
                                     <div class='col-lg-10 offset-lg-1'>
                                         <div class='row'>
@@ -296,7 +296,7 @@
                             </div>
                         <!-- only eclass-banner , mobileapi , openecourses -->
                         @elseif (get_config('enable_mobileapi') and get_config('opencourses_enable') and $eclass_banner_value == 1)
-                            <div class='col-12 mt-3'>
+                            <div class='col-12 @if(!get_config("homepage_title") and !get_config("homepage_intro")) only-banner-mobileapi-openecourses-margin @endif mb-3'>
                                 <div class='row'>
                                     <div class='col-lg-10 offset-lg-1'>
                                         <div class='row'>
@@ -368,7 +368,7 @@
                             </div>
                         <!-- only mobileapi , openecourses -->
                         @elseif (get_config('enable_mobileapi') and get_config('opencourses_enable') and $eclass_banner_value == 0)
-                            <div class='col-12 mt-3'>
+                            <div class='col-12 @if(!get_config("homepage_title") and !get_config("homepage_intro")) only-mobileapi-openecourses-margin @endif mb-3'>
                                 <div class='row'>
                                     <div class='col-lg-10 offset-lg-1'>
                                         <div class='row'>
@@ -431,7 +431,7 @@
                             </div>
                         <!-- only mobileapi -->
                         @elseif (get_config('enable_mobileapi') and !get_config('opencourses_enable') and $eclass_banner_value == 0)
-                            <div class='col-12 mt-3'>
+                            <div class='col-12 @if(!get_config("homepage_title") and !get_config("homepage_intro")) only-mobileapi-margin @endif mb-3'>
                                 <div class='row'>
                                     <div class='col-lg-10 offset-lg-1'>
                                         <div class='row'>
@@ -461,9 +461,9 @@
                                     </div>
                                 </div>
                             </div>
-                         <!-- only openecourses -->
-                         @elseif (!get_config('enable_mobileapi') and get_config('opencourses_enable') and $eclass_banner_value == 0)
-                            <div class='col-12 mt-3'>
+                        <!-- only openecourses -->
+                        @elseif (!get_config('enable_mobileapi') and get_config('opencourses_enable') and $eclass_banner_value == 0)
+                            <div class='col-12 @if(!get_config("homepage_title") and !get_config("homepage_intro")) only-opencourses-margin @endif mb-3'>
                                 <div class='row'>
                                     <div class='col-lg-10 offset-lg-1'>
                                         <div class='row'>
@@ -499,11 +499,11 @@
                         @endif
 
                         @if ($announcements)
-                            <div class='col-12 mt-3'>
+                            <div class="col-12 @if(!get_config('homepage_title') and !get_config('homepage_intro') and !get_config('enable_mobileapi') and !get_config('opencourses_enable') and ($eclass_banner_value == 0)) only-announcements @endif mb-3">
                                 <div class='row'>
                                     <div class='col-lg-10 offset-lg-1'>
-                                        <div class='panel panel-admin border-0'>
-                                            <div class='panel-body px-5 py-4'>
+                                        <div class='panel panel-admin panel-announcements-homepage border-0'>
+                                            <div class='panel-body panel-announcements-homepage px-5 py-4'>
                                                 <div class="news">
                                                     <div class='row'>
                                                         <div class='col-lg-1 pe-0'>
@@ -544,12 +544,12 @@
                             </div>
                         @endif
                     </div>
+                    @endif
 
-
-
-                    <div class='d-block d-lg-none pb-3 pt-3 ps-3 pe-3' style='background-color:#fafafa;'>
+                    @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements)
+                    <div class='d-block d-lg-none pb-3 pt-0 ps-3 pe-3' style='background-color:#fafafa;'>
                         @if(get_config('homepage_title') or get_config('homepage_intro'))
-                            <div class='col-12'>
+                            <div class='col-12 mt-3'>
                                 <div class="panel panel-default homepageIntroPanel w-100 border-0">
                                     <div class="panel-body blackBlueText bg-body @if(get_config('homepage_title')) NoBorderTop @else Borders @endif">
                                         {!! get_config('homepage_intro') !!}
@@ -823,16 +823,15 @@
 
                         @if ($announcements)
                             <div class='col-12 mt-3'>
-                                <div class='row'>
-                                    <div class='col-lg-10 offset-lg-1'>
+                                
                                         <div class='panel panel-admin border-0'>
-                                            <div class='panel-body px-5 py-4'>
+                                            <div class='panel-body'>
                                                 <div class="news">
                                                     <div class='row'>
-                                                        <div class='col-lg-1 pe-0'>
+                                                        <div class='col-2 pe-0'>
                                                             <img class='announcement-image' src="{{$urlAppend}}template/modern/img/announcement.svg">
                                                         </div>
-                                                        <div class='col-lg-11'>
+                                                        <div class='col-10'>
                                                             <h4 class="block-title TextExtraBold text-uppercase pb-0 mt-2">{{ trans('langAnnouncements') }}
                                                                 <a href='{{ $urlServer }}rss.php'>
                                                                     <span class='fa fa-rss-square'></span>
@@ -862,11 +861,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                   
                             </div>
                         @endif
                     </div>
+                    @endif
 
 
                 </div>
@@ -877,98 +876,61 @@
 </div>
 
 
-<!-- collapse menu -->
-
-
-{{--
-    @if ($announcements)
-    <div class="container-fluid main-section mt-lg-3">
-        <div class="row rowMedium">
-            <div class="col-lg-12 border-15px p-md-5 ps-4 pe-4 pt-5 pb-5 Announcements-Homepage">
-                <div class="news">
-                    <h3 class="block-title TextExtraBold">{{ trans('langAnnouncements') }}
-                        <a href='{{ $urlServer }}rss.php'>
-                            <span class='fa fa-rss-square'></span>
-                        </a>
-                    </h3>
-                    <div class="row news-list m-auto">
-                        @php $counterAn = 0; @endphp
-                        @foreach ($announcements as $announcement)
-                            @if($counterAn < 6)
-                            <div class="col-sm-12 news-list-item">
-                                <div class="title">
-                                    <a class="d-inline-flex align-items-top" href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
-                                        <span class="fa fa-bullhorn me-1 mt-1 normalBlueText" aria-hidden="true"></span>
-                                        <span class='TextSemiBold normalBlueText fs-6'>{{$announcement->title}}</span>
-                                    </a>
-                                </div>
-                                <div class="date ms-3">
-                                    <small class='text-secondary TextSemiBold'>{{ format_locale_date(strtotime($announcement->date)) }}</small>
-                                </div>
-                            </div>
-                            @endif
-                        @php $counterAn++; @endphp
-                        @endforeach
-                    </div>
-                    <div class="more-link"><a class="all_announcements mt-3 float-end" href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span></a></div>
+<div class="container-fluid statistics mt-0">
+    <div class='row rowMedium'>
+        <div class="statistics-wrapper">
+            <h2 class="TextExtraBold text-center pt-lg-0 pt-4">
+                {{trans('langViewStatics')}}
+            </h2>
+            <div class="row row_pad_courses">
+                <div class="col-sm-4 text-center">
+                        <img class="statistics-icon m-auto d-block" src="{{ $urlAppend }}template/modern/img/statistics_1.svg">
+                        @php $course_inactive = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count; @endphp
+                        <div class="num TextBold">{{ $course_inactive }}</div>
+                        <div class="num-text text-lowercase TextLight">{{trans('langsCourses')}}</div>
                 </div>
-                
-            </div>
-        </div>
-    </div>
-    @endif
-
-    --}}
-
-
-    
-    <div class="container-fluid statistics mt-0">
-        <div class='row rowMedium'>
-            <div class="statistics-wrapper">
-                <h2 class="TextExtraBold text-center pt-lg-0 pt-4">
-                    {{trans('langViewStatics')}}
-                </h2>
-                <div class="row row_pad_courses">
-                    <div class="col-sm-4 text-center">
-                            <img class="statistics-icon m-auto d-block" src="{{ $urlAppend }}template/modern/img/statistics_1.svg">
-                            @php $course_inactive = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count; @endphp
-                            <div class="num TextBold">{{ $course_inactive }}</div>
-                            <div class="num-text text-lowercase TextLight">{{trans('langsCourses')}}</div>
-                    </div>
-                    <div class="col-sm-4 text-center">
-                            
-                            <img class="statistics-icon m-auto d-block" src="{{ $urlAppend }}template/modern/img/statistics_2.svg">
-                            <div class="num TextBold">10<span class='num-plus TextRegular'>K+</span></div>
-                            <div class="num-text text-lowercase TextLight">{{trans('langUserLogins')}}/{{trans('langWeek')}}</div>
-                    </div>
-                    <div class="col-sm-4 text-center">
-                            <img class="statistics-icon m-auto d-block" src="{{ $urlAppend }}template/modern/img/statistics_3.svg">
-                            <div class="num TextBold">{{ getOnlineUsers() }}</div>
-                            <div class="num-text text-lowercase TextLight">{{trans('langOnlineUsers')}}</div>
-                    </div>
+                <div class="col-sm-4 text-center">
+                        
+                        <img class="statistics-icon m-auto d-block" src="{{ $urlAppend }}template/modern/img/statistics_2.svg">
+                        <div class="num TextBold">10<span class='num-plus TextRegular'>K+</span></div>
+                        <div class="num-text text-lowercase TextLight">{{trans('langUserLogins')}}/{{trans('langWeek')}}</div>
+                </div>
+                <div class="col-sm-4 text-center">
+                        <img class="statistics-icon m-auto d-block" src="{{ $urlAppend }}template/modern/img/statistics_3.svg">
+                        <div class="num TextBold">{{ getOnlineUsers() }}</div>
+                        <div class="num-text text-lowercase TextLight">{{trans('langOnlineUsers')}}</div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="d-flex justify-content-center">
-        <div class="container-fluid testimonials mt-lg-0 mb-lg-0 mt-0 mb-0">
-            <div class="testimonial">
-                <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</div>
-                <div class="testimonial-person mt-3 fst-italic"><small>- Λυδία Καλομοίρη -</small></div>
-            </div>
-            <div class="testimonial">
-                <div class="testimonial-body">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</div>
-                <div class="testimonial-person mt-3 fst-italic"><small>- Γιάννης Ιωάννου -</small></div>
-            </div>
-            <div class="testimonial">
-                <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>
-                <div class="testimonial-person mt-3 fst-italic"><small>- Νίκος Παπαδάκης -</small></div>
-            </div>
+<div class="d-flex justify-content-center">
+    <div class="container-fluid testimonials mt-lg-0 mb-lg-0 mt-0 mb-0">
+        <div class="testimonial">
+            <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</div>
+            <div class="testimonial-person mt-3 fst-italic"><small>- Λυδία Καλομοίρη -</small></div>
+        </div>
+        <div class="testimonial">
+            <div class="testimonial-body">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</div>
+            <div class="testimonial-person mt-3 fst-italic"><small>- Γιάννης Ιωάννου -</small></div>
+        </div>
+        <div class="testimonial">
+            <div class="testimonial-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</div>
+            <div class="testimonial-person mt-3 fst-italic"><small>- Νίκος Παπαδάκης -</small></div>
         </div>
     </div>
+</div>
 
 <script>
+
+    
+    $('#link-home'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_2.svg");
+    function unhoverHome(obj) {
+        if(!current_url.includes('/main/portfolio.php')){
+            $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_2.svg");
+        }
+    }
    
     document.body.addEventListener("click", function (e) {
         clickerUsernamePassword = 0;

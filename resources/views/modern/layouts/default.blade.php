@@ -106,7 +106,7 @@
 
 </head>
 
-<body class="@if(!isset($_SESSION['uid'])) bg-white @endif">
+<body>
 
     <div class="d-flex flex-column min-vh-100 {{ $container }}">
 
