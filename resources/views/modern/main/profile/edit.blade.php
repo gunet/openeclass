@@ -90,7 +90,7 @@
 
                                 <div class='form-group mt-3'>
                                     <label for='email_form' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
-                                    <div class='row'>   
+                                    <div class='row'>
                                         <div class='col-sm-6'>
                                             <input class='form-control' type='text' name='email_form' id='email_form' value='{{ $email_form }}'>
                                         </div>
@@ -102,7 +102,7 @@
 
                                 <div class='form-group mt-3'>
                                     <label for='am_form' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
-                                    <div class='row'>   
+                                    <div class='row'>
                                         <div class='col-sm-6'>
                                             <input type='text' class='form-control' name='am_form' id='am_form' value='{{ $am_form }}'>
                                         </div>
@@ -114,7 +114,7 @@
 
                                 <div class='form-group mt-3'>
                                     <label for='phone_form' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}</label>
-                                    <div class='row'>   
+                                    <div class='row'>
                                         <div class='col-sm-6'>
                                             <input type='text' class='form-control' name='phone_form' id='phone_form' value='{{$phone_form }}'>
                                         </div>
@@ -176,8 +176,6 @@
                                 </div>
                             </div>
 
-
-
                             <div class='form-group mt-3'>
                                 <label for='desription' class='col-sm-12 control-label-notes'>{{ trans('langProfileAboutMe') }}</label>
                                 <div class='col-sm-12'>{!! $info_text_area !!}</div>
@@ -189,15 +187,14 @@
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langProviderConnectWith') }}</label>
                                     <div class='col-sm-12'>
                                         <div class='row'>
-                                        @foreach ($allProviders as $provider => $settings)
-                                            @php $lcProvider = strtolower($provider); @endphp
+                                        @foreach ($allProviders as $provider)
                                             <div class='col-2 text-center'>
                                                 <img src='$themeimg/{{ strtolower($provider) }}.png' alt="{{ trans('langLoginVia') }}"><br>{{ $provider }}<br>
                                         @if ($userProviders[strtolower($provider)])
                                             <img src='{{ $themeimg }}/tick.png' alt='{{ trans('langProviderConnectWith') }} {{ $provider }}'>
-                                            <a href='{{ $data[sec] }}?action=delete&provider={{ $provider }}'>{{ trans('langProviderDeleteConnection') }}</a>
+                                            <a href='{{ $sec }}?action=delete&provider={{ $provider }}'>{{ trans('langProviderDeleteConnection') }}</a>
                                         @else
-                                            <a href='{{ $data[sec] }}?action=connect&provider={{ $provider }}'>{{ trans('langProviderConnect') }}</a>
+                                            <a href='{{ $sec }}?action=connect&provider={{ $provider }}'>{{ trans('langProviderConnect') }}</a>
                                         @endif
                                             </div>
                                         @endforeach
@@ -219,8 +216,7 @@
                                         </div>
 
                                     </div>
-                                    
-                                    
+
                                 </div>
                         </fieldset>
                             {!! generate_csrf_token_form_field() !!}

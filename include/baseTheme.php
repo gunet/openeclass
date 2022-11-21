@@ -298,9 +298,9 @@ function view($view_file, $view_data = array()) {
             $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
             $styles_str .= ".offcanvas-header,.offcanvas-body,#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer, #collapseTools, .panel-admin>.panel-heading, .descCoursePanel, #cal-header,
             .admin-list-group .list-group-item:hover{background:$theme_options_styles[leftNavBgColor];}
-            .tool-sidebar{color:#ffffff;} 
+            .tool-sidebar{color:#ffffff;}
             .statistics:before{background: $theme_options_styles[leftNavBgColor];}
-            .notes_thead, .list-header{background: $theme_options_styles[leftNavBgColor];} 
+            .notes_thead, .list-header{background: $theme_options_styles[leftNavBgColor];}
             .menu-popover .list-group-item{background: $theme_options_styles[leftNavBgColor];}
             .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{background: red;}
             .openCoursesPanel, .BtnMoreInfoAdmin{background:$theme_options_styles[leftNavBgColor];}
@@ -568,6 +568,7 @@ function lang_selections_Desktop() {
         return ('&nbsp;');
     }
 
+    $lang_select = '';
     foreach ($session->active_ui_languages as $code) {
         $class = ($code == $session->language)? 'btn btn-primary': '';
         $lang_select .=
