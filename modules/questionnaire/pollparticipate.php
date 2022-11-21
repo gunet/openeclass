@@ -76,7 +76,7 @@ if (!$p) { // check poll access
 $pq = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d", $_REQUEST['pid']);
 if(!$pq) {
     //Session::messages($langPollNoQuestions);
-    Session::flash('message',$langPollNoQuestions); 
+    Session::flash('message',$langPollNoQuestions);
     Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
@@ -120,7 +120,7 @@ function printPollForm() {
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
     $pageName, $lang_rate1, $lang_rate5;
 
-    $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
+    $refresh_time = 300000; // Refresh PHP session every 5 min. (in ms)
     $head_content .= "
     <style>.slider-tick-label { font-size: 12px; white-space: normal; }</style>
     <script>
@@ -144,7 +144,7 @@ function printPollForm() {
     $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->count;
     if ($uid && $has_participated > 0 && !$is_editor){
        // Session::Messages($langPollAlreadyParticipated);
-        Session::flash('message',$langPollAlreadyParticipated); 
+        Session::flash('message',$langPollAlreadyParticipated);
         Session::flash('alert-class', 'alert-warning');
         if (isset($_REQUEST['unit_id'])) {
             redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit_id']);
@@ -196,7 +196,7 @@ function printPollForm() {
             $form_link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
         }
         $tool_content .= "
-        
+
             <form class='form-horizontal' role='form' action='$form_link' id='poll' method='post'>
             <input type='hidden' value='2' name='UseCase'>
             <input type='hidden' value='$pid' name='pid'>";
@@ -317,7 +317,7 @@ function printPollForm() {
         $tool_content .= "</div></form>";
     } else {
         //Session::Messages($langPollInactive);
-        Session::flash('message',$langPollInactive); 
+        Session::flash('message',$langPollInactive);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
