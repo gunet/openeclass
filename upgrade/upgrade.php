@@ -31,12 +31,20 @@ require_once 'modules/auth/auth.inc.php';
 require_once 'modules/h5p/classes/H5PHubUpdater.php';
 require_once 'upgrade/functions.php';
 
-die($is_admin.'');
-
 $command_line = (php_sapi_name() == 'cli' && !isset($_SERVER['REMOTE_ADDR']));
-if (!($command_line or $is_admin)) {
-    forbidden();
+
+if (!$command_line) {
+    if (isset($_POST['login']) and isset($_POST['password'])) {
+        if (!is_admin($_POST['login'], $_POST['password'])) {
+            Session::Messages($langUpgAdminError, 'alert-warning');
+            redirect_to_home_page('upgrade/');
+        }
+    }
+    if (!$is_admin) {
+        redirect_to_home_page('upgrade/');
+    }
 }
+
 $ajax_call = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 
 if ($ajax_call and (!isset($_POST['token']) or !validate_csrf_token($_POST['token']))) csrf_token_error();
@@ -152,7 +160,7 @@ if ($command_line or $ajax_call) {
 
     $logfile_begin = !file_exists($upgrade_logfile_path);
     if (!($logfile_handle = @fopen($upgrade_logfile_path, 'a'))) {
-        $error_message = q(error_get_last());
+        $error_message = q(error_get_last()['message']);
         fatal_error($langLogFileWriteError);
     }
 
@@ -319,17 +327,6 @@ $pageName = $langUpgrade;
 
 // Coming from the admin tool or stand-alone upgrade?
 $fromadmin = !isset($_POST['submit_upgrade']);
-
-if (isset($_POST['login']) and isset($_POST['password'])) {
-    if (!is_admin($_POST['login'], $_POST['password'])) {
-        Session::Messages($langUpgAdminError, 'alert-warning');
-        redirect_to_home_page('upgrade/');
-    }
-}
-
-if (!($command_line or $is_admin)) {
-    redirect_to_home_page('upgrade/');
-}
 
 // upgrade from versions < 3.0 is not possible
 if (!defined('ECLASS_VERSION') or !DBHelper::tableExists('config') or version_compare(ECLASS_VERSION, '3.0', '<')) {
