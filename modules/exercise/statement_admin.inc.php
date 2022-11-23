@@ -193,20 +193,20 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     enableCheckFileSize();
     $tool_content .= "
 
-    <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    <div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>
                   
             
-            <div class='form-group ".(Session::getError('questionName') ? "has-error" : "")."'>
-                <label for='questionName' class='col-sm-6 control-label-notes'>$langQuestion:</label>
-                <div class='col-sm-12'>
+            <div class='row form-group ".(Session::getError('questionName') ? "has-error" : "")."'>
+                <label for='questionName' class='col-md-3 col-12 control-label-notes mb-1'>$langQuestion:</label>
+                <div class='col-md-9 col-12'>
                   <input name='questionName' type='text' class='form-control' id='questionName' placeholder='$langQuestion' value='" . q($questionName) . "'>
                   <span class='help-block'>".Session::getError('questionName')."</span>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-                <label for='imageUpload' class='col-sm-6 control-label-notes'>".(($okPicture) ? $langReplacePicture : $langAddPicture).":</label>
-                <div class='col-sm-12'>" .
+            <div class='row form-group mt-4'>
+                <label for='imageUpload' class='col-md-3 col-12 control-label-notes mb-1'>".(($okPicture) ? $langReplacePicture : $langAddPicture).":</label>
+                <div class='col-md-9 col-12'>" .
                 (($okPicture) ? "<img src='../../$picturePath/quiz-$questionId'><br><br>" : "") .
                 fileSizeHidenInput() . "
                   <input type='file' name='imageUpload' id='imageUpload'>
@@ -214,9 +214,9 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             </div>";
             if ($okPicture) {
                 $tool_content .= "
-                    <div class='form-group mt-3'>
-                        <label class='col-sm-6 control-label-notes'>$langDeletePicture:</label>
-                        <div class='col-sm-12'>
+                    <div class='row form-group mt-4'>
+                        <label class='col-md-3 col-12 control-label-notes mb-1'>$langDeletePicture</label>
+                        <div class='col-md-9 col-12'>
                             <div class='checkbox'>
                               <label>
                                 <input type='checkbox' name='deletePicture' value='1' ".(isset($_POST['deletePicture'])? "checked":"").">
@@ -226,35 +226,36 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     </div>";
             }
             $tool_content .= "
-                <div class='form-group mt-3'>
-                    <label for='questionDescription' class='col-sm-6 control-label-notes'>$langQuestionDescription:</label>
-                    <div class='col-sm-12'>
+                <div class='row form-group mt-4'>
+                    <label for='questionDescription' class='col-md-3 col-12 control-label-notes mb-1'>$langQuestionDescription:</label>
+                    <div class='col-md-9 col-12'>
                       ". rich_text_editor('questionDescription', 4, 50, $questionDescription) ."
                     </div>
                 </div>
-                <div class='form-group mt-3'>
-                    <label for='questionCat' class='col-sm-6 control-label-notes'>$langQuestionCat:</label>
-                    <div class='col-sm-12'>
+                <div class='row form-group mt-4'>
+                    <label for='questionCat' class='col-md-3 col-12 control-label-notes mb-1'>$langQuestionCat:</label>
+                    <div class='col-md-9 col-12'>
                         <select name='category' id='questionCat' class='form-select'>
                             $options
                         </select>
                     </div>
                 </div>
-                <div class='form-group mt-3'>
-                    <label for='questionDifficulty' class='col-sm-6 control-label-notes'>$langQuestionDiffGrade:</label>
-                    
+                <div class='row form-group mt-4'>
+                    <label for='questionDifficulty' class='col-md-3 col-12 control-label-notes mb-1'>$langQuestionDiffGrade:</label>
+                    <div class='col-md-9 col-12'>
                         <div class='col-sm-2'>
                             <input id='questionDifficulty' name='difficulty' data-slider-id='ex1Slider' type='text' data-slider-min='0' data-slider-max='5' data-slider-step='1' data-slider-value='$difficulty'/>
                         </div>
                         <div class='col-sm-10'>
                             <span id='questionDifficultyValue' class='label label-default'></span>
                         </div>
+                    </div>
                     
                 </div>
             ";
-        $tool_content .= "<div class='form-group mt-3'>
-                <label class='col-sm-6 control-label-notes'>$langAnswerType:</label>
-                <div class='col-sm-12'>
+        $tool_content .= "<div class='row form-group mt-4'>
+                <label class='col-md-3 col-12 control-label-notes mb-1'>$langAnswerType:</label>
+                <div class='col-md-9 col-12'>
                     <div class='radio'>
                       <label>
                         <input type='radio' name='answerType' value='1' ". (($answerType == UNIQUE_ANSWER) ? "checked" : "") .">
@@ -274,27 +275,27 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                       </label>
                     </div>
                     <div class='row'>
-                        <div class='col-11 col-xs-offset-1 d-flex justify-content-center'>
+                        <div class='col-10 offset-2 d-flex justify-content-center'>
                             <div class='form-group ".(($answerType != FILL_IN_BLANKS && $answerType != FILL_IN_BLANKS_TOLERANT && $answerType != FILL_IN_FROM_PREDEFINED_ANSWERS) ? "hide": "")."' id='fillInBlanksOptions'>
                                 <div class='col-12'>
-                                    <div class='radio'>
-                                        <div class='d-inline-flex aligm-items-center'>
+                                    <div class='radio mb-2'>
+                                        <label>
                                             <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS."' ". (($answerType != FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
-                                            <span class='ps-3'>$langFillBlanksStrict $langFillBlanksStrictExample</span>
-                                        </div>
+                                            <span class='ps-2'>$langFillBlanksStrict $langFillBlanksStrictExample</span>
+                                        </label>
                                     </div>
-                                    <div class='radio mt-3'>
-                                        <div class='d-inline-flex aligm-items-center'>
+                                    <div class='radio mb-2'>
+                                        <label>
                                             <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS_TOLERANT."' ". (($answerType == FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
-                                            <span class='ps-3'>$langFillBlanksTolerant $langFillBlanksTolerantExample</span>
+                                            <span class='ps-2'>$langFillBlanksTolerant $langFillBlanksTolerantExample</span>
 
-                                        </div>
+                                        </label>
                                     </div>
-                                    <div class='radio mt-3'>
-                                        <div class='d-inline-flex aligm-items-center'>
+                                    <div class='radio'>
+                                        <label>
                                             <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_FROM_PREDEFINED_ANSWERS."' ". (($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) ? "checked" : "") .">
-                                            <span class='ps-3'>$langFillFromSelectedWords</span>
-                                        </div>
+                                            <span class='ps-2'>$langFillFromSelectedWords</span>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -320,22 +321,21 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     </div>
                 </div>
             </div>
-            <div class='form-group ".(($answerType != FREE_TEXT) ? "hide": "")." mt-3'>
-                <label for='questionGrade' class='col-sm-2 col-sm-offset-1 control-label-notes'>$langGradebookGrade:</label>
-                <div class='col-sm-12'>
+            <div class='row form-group ".(($answerType != FREE_TEXT) ? "hide": "")." mt-4'>
+                <label for='questionGrade' class='col-md-3 col-12 control-label-notes mb-1'>$langGradebookGrade:</label>
+                <div class='col-md-9 col-12'>
                   <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$langGradebookGrade' value='$questionWeight'".(($answerType != 6) ? " disabled": "").">
                 </div>
             </div>
             <div class='row'>
-                <div class='col-12 mt-4'>
-                    <div class='row'>
-                       <div class='col-6'>
-                        <input type='submit' class='btn btn-primary submitAdminBtn w-100' name='submitQuestion' value='$langCreate'>
-                       </div>
-                       <div class='col-6'>
-                        <a href='$link_back' class='btn btn-outline-secondary cancelAdminBtn w-100'>$langCancel</a>
-                       </div>
-                    </div>
+                <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
+                    
+                      
+                        <input type='submit' class='btn submitAdminBtn' name='submitQuestion' value='$langCreate'>
+                     
+                        <a href='$link_back' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                       
+                    
                     
                     
                 </div>

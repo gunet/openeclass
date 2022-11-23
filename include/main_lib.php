@@ -3546,9 +3546,10 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $href = " href='$url'";
         }
         if (!isset($option['button-class'])) {
-            $button_class = 'btn-secondary';
+            $button_class = 'action_bar_btn rounded-pill d-flex justify-content-center align-items-center me-2';
         } else {
-            $button_class = $option['button-class'];
+            // $button_class = $option['button-class'];
+            $button_class = 'action_bar_btn rounded-pill d-flex justify-content-center align-items-center me-2';
         }
         if (isset($option['link-attrs'])) {
             $link_attrs = " ".$option['link-attrs'];
@@ -3583,9 +3584,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         $iconTag = '';
         if ($level == 'primary-label') {
             if (isset($option['icon'])) {
-                $iconTag = "<span class='fa $option[icon] space-after-icon'></span>";
+                $iconTag = "<span class='fa $option[icon] space-after-icon TextButton'></span>";
                 $link_attrs .= " title='$title'";
-                $title = "<span class='hidden-xs text-white'>$title</span>";
+                $title = "<span class='hidden-xs TextBold TextButton'>$title</span>";
             }
             array_unshift($out_primary,
                 "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
@@ -3618,25 +3619,25 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-cogs";
     if (count($out_secondary)) {
-        $action_button .= "<button data-bs-display='static' type='button' id='toolDropdown' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span><span class='hidden-xs text-dark'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
-        $action_button .= "<ul class='dropdown-menu dropdown-menu-end p-0 m-0 mydropdowns shadow-lg' role='menu' aria-labelledby='toolDropdown'>
+        $action_button .= "<button data-bs-display='static' type='button' id='toolDropdown' class='btn action_bar_btn rounded-pill dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span><span class='hidden-xs text-dark'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
+        $action_button .= "<ul class='dropdown-menu dropdown-menu-md-end p-0 m-0 mydropdowns shadow-lg' role='menu' aria-labelledby='toolDropdown'>
                      ".implode('', $out_secondary)."
                   </ul>";
     }
     $pageTitleActive = "";
-    if(!empty($page_title) and $pageName != $langVideo){
-        $pageTitleActive = "<div class='col-12 mt-3'>
-                               <div class='panel panel-default rounded-0'>
-                                  <div class='panel-body rounded-0 text-center'>
-                                        $page_title
-                                  </div>
-                               </div>
+    // if(!empty($page_title) and $pageName != $langVideo){
+    //     $pageTitleActive = "<div class='col-12 mt-3'>
+    //                            <div class='panel panel-default rounded-0'>
+    //                               <div class='panel-body rounded-0 text-center'>
+    //                                     $page_title
+    //                               </div>
+    //                            </div>
                                
-                            </div>";
-    }
+    //                         </div>";
+    // }
     if ($out && $i!=0) {
-        return "<div class='col-12 mb-3'>
-                    <div class='col-12 action_bar d-flex justify-content-end rounded'>  
+        return "<div class='col-12 mb-4'>
+                    <div class='col-12 action_bar d-flex justify-content-start'>  
                         <div class='margin-top-thin margin-bottom-fat hidden-print'>
                             <div class='btn-group btn-group-sm' style='flex-wrap: wrap;'>
                             $out

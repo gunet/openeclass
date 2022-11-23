@@ -132,7 +132,7 @@
                           </div>
 
                           <div class='col-12'>
-                            <div class='form-wrapper form-edit p-3 rounded'>
+                            <div class='form-wrapper form-edit py-3 rounded'>
                               
                               <form class='form-horizontal' role='form' method='post' action="{{ $form_url }}" onsubmit='return validateNodePickerForm();'>
                                 <fieldset>
@@ -146,8 +146,8 @@
                                             </div>
                                         </div>
                                         <div class='col-md-6 col-12'>
-                                            <div class='form-group'>
-                                                <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langCourseTitle') }}:</label>
+                                            <div class='form-group mt-md-0 mt-4'>
+                                                <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langCourseTitle') }}</label>
                                                 <div class='col-sm-12'>
                                                     <input type='text' class='form-control' name='title' id='title' value='{{ q($title) }}'>
                                                 </div>
@@ -159,8 +159,8 @@
 
                                     <div class='row'>
                                         <div class='col-md-6 col-12'>
-                                            <div class='form-group mt-3'>
-                                                <label for='teacher_name' class='col-sm-12 control-label-notes'>{{ trans('langTeachers') }}:</label>
+                                            <div class='form-group mt-4'>
+                                                <label for='teacher_name' class='col-sm-12 control-label-notes'>{{ trans('langTeachers') }}</label>
                                                 <div class='col-sm-12'>
                                                     <input type='text' class='form-control' name='teacher_name' id='teacher_name' value='{{ $teacher_name }} '>
                                                 </div>
@@ -168,8 +168,8 @@
                                         </div>
 
                                         <div class='col-md-6 col-12'>
-                                            <div class='form-group mt-3'>
-                                                <label for='Faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</label>
+                                            <div class='form-group mt-4'>
+                                                <label for='Faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                                 <div class='col-sm-12'>
                                                     {!! $buildusernode !!}
                                                 </div>
@@ -178,175 +178,186 @@
                                     </div>
 
 
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group mt-4'>
                                         <label for='course_keywords' class='col-sm-12 control-label-notes'>{{ trans('langCourseKeywords') }}</label>
                                         <div class='col-sm-12'>
                                             <input type='text' class='form-control' name='course_keywords' id='course_keywords' value='{{ $course_keywords }}'>
                                         </div>
                                     </div>
 
+                                    <div class='row'>
+                                        <div class='col-md-6 col-12'>
+                                            <div class='form-group mt-4'>
+                                                <label class='col-sm-12 control-label-notes mb-2'> {{ trans('langCourseFormat') }}</label>
+                                                <div class='col-sm-12'>
+                                                    <div class='radio mb-2'>
+                                                    <label>
+                                                        <input type='radio' name='view_type' value='simple' id='simple' {{ $course_type_simple }}>
+                                                        {{ trans('langCourseSimpleFormat') }}
+                                                    </label>
+                                                    </div>
+                                                    <div class='radio mb-2'>
+                                                    <label>
+                                                        <input type='radio' name='view_type' value='units' id='units' {{ $course_type_units }}>
+                                                        {{ trans('langWithCourseUnits') }}
+                                                    </label>
+                                                    </div>
+                                                    <div class='radio mb-2'>
+                                                    <label>
+                                                        <input type='radio' name='view_type' value='activity' id='activity' {{ $course_type_activity }}>
+                                                        {{ trans('langCourseActivityFormat') }}
+                                                    </label>
+                                                    </div>
+                                                    <div class='radio'>
+                                                    <label>
+                                                        <input type='radio' name='view_type' value='wall' id='wall' {{ $course_type_wall }}>
+                                                        {{ trans('langCourseWallFormat') }}
+                                                    </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                    <div class='form-group mt-3'>
-                                        <label class='col-sm-12 control-label-notes'> {{ trans('langCourseFormat') }}:</label>
-                                        <div class='col-sm-12'>
-                                            <div class='radio'>
-                                              <label>
-                                                <input type='radio' name='view_type' value='simple' id='simple' {{ $course_type_simple }}>
-                                                {{ trans('langCourseSimpleFormat') }}
-                                              </label>
-                                            </div>
-                                            <div class='radio'>
-                                              <label>
-                                                <input type='radio' name='view_type' value='units' id='units' {{ $course_type_units }}>
-                                                {{ trans('langWithCourseUnits') }}
-                                              </label>
-                                            </div>
-                                            <div class='radio'>
-                                              <label>
-                                                <input type='radio' name='view_type' value='activity' id='activity' {{ $course_type_activity }}>
-                                                {{ trans('langCourseActivityFormat') }}
-                                              </label>
-                                            </div>
-                                            <div class='radio'>
-                                              <label>
-                                                <input type='radio' name='view_type' value='wall' id='wall' {{ $course_type_wall }}>
-                                                {{ trans('langCourseWallFormat') }}
-                                              </label>
+                                        @if (isset($isOpenCourseCertified)) {
+                                            <input type='hidden' name='course_license' value='{{ getIndirectReference($course_license) }}'>
+                                        @endif
+
+                                        <div class='col-md-6 col-12'>
+                                            <div class='form-group mt-4'>
+                                                <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCoursesLicense') }}</label>
+                                                <div class='col-sm-12'>
+                                                    <div class='radio mb-2'>
+                                                    <label>
+                                                        <input type='radio' name='l_radio' value='0' {{ $license_checked0 }} $disabledVisibility>
+                                                        {{ trans('langLicenseUnset') }}
+                                                    </label>
+                                                    </div>
+                                                    <div class='radio mb-2'>
+                                                    <label>
+                                                        <input type='radio' name='l_radio' value='10' {{ $license_checked10 }} $disabledVisibility>
+                                                        {{ trans('langCopyrightedNotFree') }}
+                                                    </label>
+                                                    </div>
+                                                    <div class='radio'>
+                                                    <label>
+                                                        <input id='cc_license' type='radio' name='l_radio' value='cc' {{ $cc_checked}} $disabledVisibility>
+                                                        {{ trans("langCMeta['course_license']") }}
+                                                    </label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    @if (isset($isOpenCourseCertified)) {
-                                        <input type='hidden' name='course_license' value='{{ getIndirectReference($course_license) }}'>
-                                    @endif
 
-                                    
-                                    <div class='form-group mt-3'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langOpenCoursesLicense') }}:</label>
-                                        <div class='col-sm-12'>
-                                            <div class='radio'>
-                                              <label>
-                                                <input type='radio' name='l_radio' value='0' {{ $license_checked0 }} $disabledVisibility>
-                                                {{ trans('langLicenseUnset') }}
-                                              </label>
-                                            </div>
-                                            <div class='radio'>
-                                              <label>
-                                                <input type='radio' name='l_radio' value='10' {{ $license_checked10 }} $disabledVisibility>
-                                                {{ trans('langCopyrightedNotFree') }}
-                                              </label>
-                                            </div>
-                                            <div class='radio'>
-                                              <label>
-                                                <input id='cc_license' type='radio' name='l_radio' value='cc' {{ $cc_checked}} $disabledVisibility>
-                                                {{ trans("langCMeta['course_license']") }}
-                                              </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group mt-4'>
                                         <div class='col-sm-12 col-sm-offset-2' id='cc'>
                                             {!! $license_selection !!}
                                         </div>
                                     </div>
 
  
-                                    <div class='form-group mt-3'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langConfidentiality') }}:</label>
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langConfidentiality') }}</label>
                                         <div class='col-sm-12'>
 
-                                            <div class='radio'>
-                                                <div class='d-inline-flex align-items-top'>
-                                                    <input class='mt-1 pe-2' id='courseopen' type='radio' name='formvisible' value='2' {{ $course_open }}>
-                                                    <span class='ps-2 pe-2 mt-1'>{!! course_access_icon(COURSE_OPEN) !!}</span>
-                                                    <span class='ps-2 pe-2 mt-1'>{{ trans('langOpenCourse') }}</span>
-                                                </div>
+                                            <div class='radio mb-2'>
+                                                <label>
+                                                    <input id='courseopen' type='radio' name='formvisible' value='2' {{ $course_open }}>
+                                                    <span class='ps-1'>{!! course_access_icon(COURSE_OPEN) !!}</span>
+                                                    {{ trans('langOpenCourse') }}
+                                                </label>
+                                                <div class='help-block ps-5'>{{ trans('langPublic') }}</div>
                                             </div>
-                                            <small class='help-block'>{{ trans('langPublic') }}</small>
+                                         
 
-                                            <div class='radio'>
-                                                <div class='d-inline-flex align-items-top mt-3'>
-                                                    <input class='mt-1 pe-2' id='coursewithregistration' type='radio' name='formvisible' value='1' {{ $course_registration }}>
-                                                    <span class='ps-2 pe-2 mt-1'>{!! course_access_icon(COURSE_REGISTRATION) !!}</span>
-                                                    <span class='ps-2 pe-2 mt-1'>{{ trans('langTypeRegistration') }}</span>
-                                                    
-                                                </div>
+                                            <div class='radio mb-2'>
+                                                <label>
+                                                    <input id='coursewithregistration' type='radio' name='formvisible' value='1' {{ $course_registration }}>
+                                                    <span class='ps-1 pe-1'>{!! course_access_icon(COURSE_REGISTRATION) !!}</span>
+                                                    {{ trans('langTypeRegistration') }}
+                                                </label>
+                                                <div class='help-block ps-5'>{{ trans('langPrivOpen') }}</div>
                                             </div>
-                                            <small class='ps-2 help-block'>{{ trans('langPrivOpen') }}</small>
+                                            
 
-                                            <div class='radio'>
-                                                <div class='d-inline-flex align-items-top mt-3'>
-                                                    <input class='mt-1 pe-2' id='courseclose' type='radio' name='formvisible' value='0' {{ $course_closed }} {{ $disable_visibility }}>
-                                                    <span class='ps-2 pe-2 mt-1'>{!! course_access_icon(COURSE_CLOSED) !!}</span>
-                                                    <span class='ps-2 pe-2 mt-1'>{{ trans('langClosedCourse') }}</span>
-                                                </div>
+                                            <div class='radio mb-2'>
+                                                <label>
+                                                    <input id='courseclose' type='radio' name='formvisible' value='0' {{ $course_closed }} {{ $disable_visibility }}>
+                                                    <span class='ps-1'>{!! course_access_icon(COURSE_CLOSED) !!}</span>
+                                                    {{ trans('langClosedCourse') }}
+                                                </label>
+                                                <div class='help-block ps-5'>{{ trans('langClosedCourseShort') }}</div>
                                             </div>
-                                            <small class='help-block'>{{ trans('langClosedCourseShort') }}</small>
+                                            
 
-                                            <div class='radio'>
-                                                <div class='d-inline-flex align-items-top mt-3'>                                        
-                                                    <input class='mt-1 pe-2' id='courseinactive' type='radio' name='formvisible' value='3' {{ $course_inactive }} {{ $disable_visibility }}>
-                                                    <span class='ps-2 pe-2 mt-1'>{!! course_access_icon(COURSE_INACTIVE) !!}</span>
-                                                    <span class='ps-2 pe-2 mt-1'>{!! trans('langInactiveCourse') !!}</span>
-                                                </div>
+                                            <div class='radio'> 
+                                                <label>                                     
+                                                    <input id='courseinactive' type='radio' name='formvisible' value='3' {{ $course_inactive }} {{ $disable_visibility }}>
+                                                    <span class='ps-1 pe-2'>{!! course_access_icon(COURSE_INACTIVE) !!}</span>
+                                                    {!! trans('langInactiveCourse') !!}
+                                                </label>
+                                                <div class='help-block ps-5'>{{ trans('langCourseInactive') }}</div>
                                             </div>
-                                            <small class='help-block'>{{ trans('langCourseInactive') }}</small>
+                                            
                                         </div>
                                     </div>
 
 
-                                    <div class='form-group mt-3'>
-                                        <label for='coursepassword' class='col-sm-12 control-label-notes'>{{ trans('langOptPassword') }}:</label>
-                                        <div class='col-sm-10'>
+                                    <div class='form-group mt-4'>
+                                        <label for='coursepassword' class='col-sm-12 control-label-notes'>{{ trans('langOptPassword') }}</label>
+                                        <div class='col-sm-12'>
                                               <input class='form-control' id='coursepassword' type='text' name='password' value='{{ q($password) }}' autocomplete='off'>
                                         </div>
-                                        <div class='col-sm-2 text-center padding-thin'>
-                                            <span id='result'></span>
+                                        <div class='col-sm-12 text-center padding-thin'>
+                                            <span id='result' class='text-dark'></span>
                                         </div>
                                     </div>
 
 
-                                    <div class='form-group mt-3'>
-                                        <label for='Options' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}:</label>
+                                    <div class='form-group mt-4'>
+                                        <label for='Options' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
                                         <div class='col-sm-12'>
                                             {!! $lang_select_options !!}
                                         </div>
                                     </div>
 
 
-                                    <div class='form-group mt-3'>
-                                        <label for='courseoffline' class='col-sm-12 control-label-notes'>{{ trans('langCourseOfflineSettings') }}:</label>
+                                    <div class='form-group mt-4'>
+                                        <label for='courseoffline' class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseOfflineSettings') }}</label>
                                         <div class="col-sm-12">
-                                            <div class="radio">
+                                            <div class="radio mb-2">
                                                 <label>
-                                                    <input type='radio' value='1' name='enable_offline_course' {{ $log_offline_course_enable }} {{ $log_offline_course_inactive }}> {{ trans('langActivate') }}
-                                                    <span class='help-block ps-2 pe-2'><small>{{ trans('langCourseOfflineLegend') }}</small></span>
+                                                    <input type='radio' value='1' name='enable_offline_course' {{ $log_offline_course_enable }} {{ $log_offline_course_inactive }}> 
+                                                    <span class='ps-2'>{{ trans('langActivate') }}</span>
                                                 </label>
+                                                <div class='help-block ps-5'>{{ trans('langCourseOfflineLegend') }}</div>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type='radio' value='0' name='enable_offline_course' {{ $log_offline_course_disable }} {{ $log_offline_course_inactive }}> {{ trans('langDeactivate') }}
+                                                    <input type='radio' value='0' name='enable_offline_course' {{ $log_offline_course_disable }} {{ $log_offline_course_inactive }}> 
+                                                    <span class='ps-2'>{{ trans('langDeactivate') }}</span>
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
 
 
-                                    <div class='form-group mt-3'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langCourseUserRequests') }}:</label>
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseUserRequests') }}</label>
                                         <div class='col-sm-12'>
-                                            <div class='radio'>
-                                            <div class='radio'>
-                                              <label>
-                                                    <input type='radio' value='0' name='disable_log_course_user_requests' {{ $log_course_user_requests_enable }} {{ $log_course_user_requests_inactive }}> {{ trans('langActivate') }}
-                                                    <span class='help-block ps-2 pe-2'><small>{{ $log_course_user_requests_disable }}</small></span>
-                                              </label>
+                                            <div class='radio mb-2'>
+                                                <label>
+                                                        <input type='radio' value='0' name='disable_log_course_user_requests' {{ $log_course_user_requests_enable }} {{ $log_course_user_requests_inactive }}> 
+                                                        <span class='ps-2'>{{ trans('langActivate') }}</span>
+                                                </label>
+                                                <div class='help-block ps-5'>{{ $log_course_user_requests_disable }}</div>
                                             </div>
-                                              <label>
-                                                    <input type='radio' value='1' name='disable_log_course_user_requests' {{ $log_course_user_requests_disable }} {{ $log_course_user_requests_inactive }}> {{ trans('langDeactivate') }}
-                                              </label>
+                                            <div class='radio'>
+                                                <label>
+                                                        <input type='radio' value='1' name='disable_log_course_user_requests' {{ $log_course_user_requests_disable }} {{ $log_course_user_requests_inactive }}> 
+                                                        <span class='ps-2'>{{ trans('langDeactivate') }}</span>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -354,19 +365,21 @@
 
 
 
-                                    <div class='form-group mt-3'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langCourseSharing') }}:</label>
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseSharing') }}</label>
                                         <div class='col-sm-12'>
-                                            <div class='radio'>
+                                            <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='s_radio' {{ $checkSharingEn }} {{ $sharing_radio_dis }}> {{ trans('langSharingEn') }}
+                                                    <input type='radio' value='1' name='s_radio' {{ $checkSharingEn }} {{ $sharing_radio_dis }}> 
+                                                    <span class='ps-2'>{{ trans('langSharingEn') }}</span>
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='s_radio' {{ $checkSharingDis }} {{ $sharing_radio_dis }}> {{ trans('langSharingDis') }}
-                                                    <span class='help-block ps-2 pe-2'><small>{{ $sharing_dis_label }}</small></span>
-                                              </label>
+                                                    <input type='radio' value='0' name='s_radio' {{ $checkSharingDis }} {{ $sharing_radio_dis }}> 
+                                                    <span class='ps-2'>{{ trans('langSharingDis') }}</span>
+                                                    
+                                              </label><div class='help-block ps-5'>{{ $sharing_dis_label }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -374,17 +387,19 @@
                        
 
 
-                                    <div class='form-group mt-3'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langForum') }}:</label>
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langForum') }}</label>
                                         <div class='col-sm-12'>
-                                            <div class='radio'>
+                                            <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='f_radio' {{ $checkForumEn }}> {{ trans('langDisableForumNotifications') }}
+                                                    <input type='radio' value='1' name='f_radio' {{ $checkForumEn }}> 
+                                                    <span class='ps-2'>{{ trans('langDisableForumNotifications') }}</span>
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='f_radio' {{ $checkForumDis }}> {{ trans('langActivateForumNotifications') }}
+                                                    <input type='radio' value='0' name='f_radio' {{ $checkForumDis }}> 
+                                                    <span class='ps-2'>{{ trans('langActivateForumNotifications') }}</span>
                                               </label>
                                             </div>
                                         </div>
@@ -393,19 +408,21 @@
                
 
 
-                                    <div class='form-group mt-3'>
-                                        <label class='col-sm-12 control-label-notes'>
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes mb-2'>
                                             {{ trans('langCourseRating') }}:
                                         </label>
                                         <div class='col-sm-12'>
-                                                <div class='radio'>
+                                                <div class='radio mb-2'>
                                                   <label>
-                                                        <input type='radio' value='1' name='r_radio' {{ $checkRatingEn }}> {{ trans('langRatingEn') }}
+                                                        <input type='radio' value='1' name='r_radio' {{ $checkRatingEn }}> 
+                                                        <span class='ps-2'>{{ trans('langRatingEn') }}</span>
                                                   </label>
                                                 </div>
                                                 <div class='radio'>
                                                   <label>
-                                                        <input type='radio' value='0' name='r_radio' {{ $checkRatingDis }}> {{ trans('langRatingDis') }}
+                                                        <input type='radio' value='0' name='r_radio' {{ $checkRatingDis }}> 
+                                                        <span class='ps-2'>{{ trans('langRatingDis') }}</span>
                                                   </label>
                                                 </div>
                                             </div>
@@ -413,19 +430,21 @@
 
                      
 
-                                    <div class='form-group mt-3'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langCourseAnonymousRating') }}:</label>
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseAnonymousRating') }}</label>
                                         <div class='col-sm-12'>
-                                            <div class='radio'>
+                                            <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='ran_radio' {{ $checkAnonRatingEn }} {{ $anon_rating_radio_dis }}> {{ trans('langRatingAnonEn') }}
+                                                    <input type='radio' value='1' name='ran_radio' {{ $checkAnonRatingEn }} {{ $anon_rating_radio_dis }}> 
+                                                    <span class='ps-2'>{{ trans('langRatingAnonEn') }}</span>
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='ran_radio' {{ $checkAnonRatingDis }} {{ $anon_rating_radio_dis }}> {{ trans('langRatingAnonDis') }}
-                                                    <span class='help-block ps-2 pe-2'><small>{{ $anon_rating_dis_label }}</small></span>
-                                              </label>
+                                                    <input type='radio' value='0' name='ran_radio' {{ $checkAnonRatingDis }} {{ $anon_rating_radio_dis }}> 
+                                                    <span class='ps-2'>{{ trans('langRatingAnonDis') }}</span>
+                                                    
+                                              </label><div class='help-block ps-5'>{{ $anon_rating_dis_label }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -433,17 +452,19 @@
                              
 
 
-                                    <div class='form-group mt-3'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langCourseCommenting') }}:</label>
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseCommenting') }}</label>
                                         <div class='col-sm-12'>
-                                            <div class='radio'>
+                                            <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='c_radio' {{ $checkCommentEn }}> {{ trans('langCommentsEn') }}
+                                                    <input type='radio' value='1' name='c_radio' {{ $checkCommentEn }}> 
+                                                    <span class='ps-2'>{{ trans('langCommentsEn') }}</span>
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='c_radio' {{ $checkCommentDis }}> {{ trans('langCommentsDis') }}
+                                                    <input type='radio' value='0' name='c_radio' {{ $checkCommentDis }}> 
+                                                    <span class='ps-2'>{{ trans('langCommentsDis') }}</span>
                                               </label>
                                             </div>
                                         </div>
@@ -452,17 +473,19 @@
                          
 
 
-                                    <div class='form-group mt-3'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langAbuseReport') }}:</label>
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langAbuseReport') }}</label>
                                         <div class='col-sm-12'>
-                                            <div class='radio'>
+                                            <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='ar_radio' {{ $checkAbuseReportEn }}> {{ trans('langAbuseReportEn') }}
+                                                    <input type='radio' value='1' name='ar_radio' {{ $checkAbuseReportEn }}> 
+                                                    <span class='ps-2'>{{ trans('langAbuseReportEn') }}</span>
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='ar_radio' {{ $checkAbuseReportDis }}> {{ trans('langAbuseReportDis') }}
+                                                    <input type='radio' value='0' name='ar_radio' {{ $checkAbuseReportDis }}> 
+                                                    <span class='ps-2'>{{ trans('langAbuseReportDis') }}</span>
                                               </label>
                                             </div>
                                         </div>
@@ -471,10 +494,8 @@
 
                                  
                                     
-                                    <div class='form-group mt-5'>
-                                        <div class='col-12'>
-                                            <input class='btn btn-primary btn-sm submitAdminBtn w-50 m-auto d-block' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
-                                        </div>
+                                    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                                        <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                                     </div>
                                 </fieldset>
                                 {!! generate_csrf_token_form_field() !!}

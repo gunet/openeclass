@@ -108,7 +108,7 @@
 
 <body>
 
-    <div class="d-flex flex-column min-vh-100 {{ $container }}">
+    <div class="ContentEclass d-flex flex-column min-vh-100 {{ $container }}">
 
     
 

@@ -141,17 +141,17 @@ $tool_content .= $ret_str['panels'];
 
 $tool_content .= "
 
-<div class='form-group mt-4'>
-                      <div class='col-12 d-inline-flex'>
+<div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+
                        
 
-                            <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
+                            <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
                           
                          
                             <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
                           
                        
-                      </div>
+
                   </div>
       ". generate_csrf_token_form_field() ."  
       </div></form>

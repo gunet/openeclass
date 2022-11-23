@@ -100,15 +100,14 @@ $tool_content .= "
             </div>
         </div>
         <div class='row'>
-            <div class='col-12 mt-4'>
-                <div class='row'>
-                   <div class='col-6'>
-                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                   </div>
-                   <div class='col-6'>
-                        <a href='" . q($courseHome) . "' class='btn btn-outline-secondary cancelAdminBtn w-100'>" . q($langCancel) . "</a>
-                   </div>
-                </div>
+            <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
+               
+                   
+                        <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                 
+                        <a href='" . q($courseHome) . "' class='btn btn-outline-secondary cancelAdminBtn ms-1'>" . q($langCancel) . "</a>
+                  
+                
                
                 
             </div>

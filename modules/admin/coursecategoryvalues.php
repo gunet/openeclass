@@ -209,7 +209,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
             <div class='col-12 h-100 left-form'></div>
         </div>
     
-    <div class='col-lg-6 col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    <div class='col-lg-6 col-12'><div class='form-wrapper form-edit rounded'>
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?category=" . $catId . "&amp;action=" . $action . "'>
         <fieldset>";
 
@@ -234,7 +234,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
         }
 
         $langSuffix = " (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
-        $html .= "<div class='form-group mb-3'><label class='col-sm-12 control-label-notes'>" . $GLOBALS['langName'] . $langSuffix . "</label>";
+        $html .= "<div class='form-group mb-4'><label class='col-sm-12 control-label-notes'>" . $GLOBALS['langName'] . $langSuffix . "</label>";
         $tdpre = ($i >= 0) ? "<div class='col-sm-12'>" : '';
         $placeholder = $GLOBALS['langCourseCategoryValue2'] . $langSuffix;
         $html .= $tdpre . "<input class='form-control' type='text' name='name-" . q($langcode) . "' " . $nameValue . " placeholder='$placeholder'></div></div>";
@@ -244,7 +244,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
     // ordering input
     $orderingValue = ($id != null) ? "value='" . $ordering . "'" : '';
     $html .= "
-    <div class='form-group mt-3'>
+    <div class='form-group mt-4'>
         <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langCourseCategoryValueOrdering'] . ":</label>
         <div class='col-sm-12'>
             <input class='form-control' type='text' name='ordering' " . $orderingValue . " placeholder='". $GLOBALS['langCourseCategoryValueOrdering2'] . "'>
@@ -259,7 +259,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
     }
 
     $html .= "
-    <div class='form-group mt-3'>
+    <div class='form-group mt-4'>
         <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langChatActive'] . "</label>
         <div class='col-sm-12'>
             <input class='form-check-input' type='checkbox' name='active' value='1' " . $check_active . ">
@@ -272,13 +272,12 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
     }
 
     $html .= "
-    <div class='form-group mt-4'>
-        <div class='col-12 d-inline-flex'>
-
+    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+       
               "
                     . form_buttons(array(
                         array(
-                            'class' => 'btn-primary submitAdminBtn',
+                            'class' => 'submitAdminBtn',
                             'text' => $GLOBALS['langSave'],
                             'name' => $action,
                             'value'=> $actionValue
@@ -291,7 +290,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
               "
            
 
-        </div>
+        
     </div>
     </fieldset>
     ". generate_csrf_token_form_field() ."

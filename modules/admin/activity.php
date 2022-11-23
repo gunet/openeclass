@@ -90,7 +90,7 @@ if (isset($_POST['toReorder'])) {
                 <div class='col-12 h-100 left-form'></div>
             </div>
        <div class='col-lg-6 col-12'>
-        <div class='form-wrapper form-edit p-3 rounded'>
+        <div class='form-wrapper form-edit rounded'>
         <form role='form' class='form-horizontal' method='post' action='activity.php'>
           $idInput
           <fieldset>";
@@ -102,7 +102,7 @@ if (isset($_POST['toReorder'])) {
             $value = '';
         }
         $tool_content .= "
-            <div class='form-group mb-3'>
+            <div class='form-group mb-4'>
               <label class='col-sm-12 control-label-notes' for='heading-$langcode'>$langTitle (" . $langNameOfLang[langcode_to_name($langcode)] . ")</label>
               <div class='col-sm-12'>
                 <input class='form-control' type='text' name='heading[$langcode]' id='heading-$langcode' value='$value' placeholder='$langTitle...'>
@@ -112,7 +112,7 @@ if (isset($_POST['toReorder'])) {
 
     $tool_content .= "
   
-            <div class='form-group mt-3'>
+            <div class='form-group mt-4'>
               <div class='col-sm-9 col-sm-offset-3 checkbox'>
                 <label>
                   <input type='checkbox' name='required' id='required' value='1'$checked>
@@ -123,19 +123,19 @@ if (isset($_POST['toReorder'])) {
 
             
 
-            <div class='form-group mt-4'>
-               <div class='col-12 d-inline-flex'>
+            <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+              
                
                  
-                   <input class='col-6 btn btn-primary submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                   <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
                  
                  
-                   <a href='activity.php' class='col-6 btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                   <a href='activity.php' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
                 
              
                
                
-              </div>
+             
             </div>
           </fieldset>
           ". generate_csrf_token_form_field() ."

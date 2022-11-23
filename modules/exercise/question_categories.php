@@ -81,7 +81,7 @@ if (isset($_POST['submitCat'])) {
     ));
     $tool_content .= "
     <div class='col-12'>
-        <div class='form-wrapper form-edit p-3 rounded'>
+        <div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' action='$form_action_url' method='post'>
                 <div class='form-group ".(Session::getError('questionCatName') ? "has-error" : "")."'>
                     <label for='questionCatName' class='col-sm-6 control-label-notes'>$langTitle:</label>
@@ -90,11 +90,11 @@ if (isset($_POST['submitCat'])) {
                       <span class='help-block'>".Session::getError('questionCatName')."</span>
                     </div>
                 </div>
-                <div class='form-group mt-4'>
-                    <div class='col-12 d-inline-flex'>
+                <div class='form-group mt-5'>
+                    <div class='col-12 d-flex justify-content-center align-items-center'>
                       
                           
-                            <input class='btn btn-primary submitAdminBtn' name='submitCat' type='submit' value='$langSubmit'>
+                            <input class='btn submitAdminBtn' name='submitCat' type='submit' value='$langSubmit'>
                          
                           
                             <a href='question_categories.php?course=$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>

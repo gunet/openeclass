@@ -738,7 +738,7 @@ function new_attendance() {
     $limit_error  = Session::getError('limit');
     $limit = Session::has('limit') ? Session::get('limit') : '';
 
-    $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>
+    $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                     <div class='form-group'>
                     <label class='col-12 control-label-notes'>$langNewAttendance2</label></div>
@@ -750,7 +750,7 @@ function new_attendance() {
                     </div>
                     <div class='row'>
                         <div class='col-md-6 col-12'>
-                            <div class='form-group mt-3".($start_date_error ? " has-error" : "")."'>
+                            <div class='form-group mt-4".($start_date_error ? " has-error" : "")."'>
                                 <div class='col-12'>
                                     <label class='control-label-notes'>$langStart</label>
                                 </div>
@@ -761,7 +761,7 @@ function new_attendance() {
                             </div>
                         </div>
                         <div class='col-md-6 col-12'>
-                            <div class='form-group mt-3".($end_date_error ? " has-error" : "")."'>
+                            <div class='form-group mt-4".($end_date_error ? " has-error" : "")."'>
                                 <div class='col-12'>
                                     <label class='control-label-notes'>$langEnd</label>
                                 </div>
@@ -772,19 +772,19 @@ function new_attendance() {
                             </div>
                         </div>
                     </div>
-                    <div class='form-group mt-3".($limit_error ? " has-error" : "")."'>
+                    <div class='form-group mt-4".($limit_error ? " has-error" : "")."'>
                         <label class='col-12 control-label-notes'>$langAttendanceLimitNumber</label>
                         <div class='col-sm-12'>
                             <input class='form-control' placeholder='$langAttendanceLimitNumber...' type='text' name='limit' value='$attendance_limit'>
                             <span class='help-block'>$limit_error</span>
                         </div>
                     </div>
-                    <div class='form-group mt-4'>
-                        <div class='col-12 d-inline-flex'>"
+                    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                        "
                                 
                                     .form_buttons(array(
                                         array(
-                                                'class'=> 'btn-primary submitAdminBtn',
+                                                'class'=> 'submitAdminBtn',
                                                 'text' => $langSave,
                                                 'name' => 'newAttendance',
                                                 'value'=> $langInsert
@@ -797,7 +797,7 @@ function new_attendance() {
                                
                                     
 
-                        "</div>
+                        "
                     </div>
             </form>
         </div></div>";
@@ -1009,7 +1009,7 @@ function attendance_settings($attendance_id) {
     $tool_content .= "
 
     <div class='col-sm-12'>
-            <div class='form-wrapper form-edit p-3 rounded'>
+            <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id'>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
                         <label class='col-12 control-label-notes'>$langTitle</label>
@@ -1020,7 +1020,7 @@ function attendance_settings($attendance_id) {
                     </div>
                     <div class='row'>
                         <div class='col-md-6 col-12'>
-                            <div class='form-group".($start_date_error ? " has-error" : "")." mt-3'>
+                            <div class='form-group".($start_date_error ? " has-error" : "")." mt-4'>
                                 <div class='col-12'>
                                     <label class='control-label-notes'>$langStart</label>
                                 </div>
@@ -1031,7 +1031,7 @@ function attendance_settings($attendance_id) {
                             </div>
                         </div>
                         <div class='col-md-6 col-12'>
-                            <div class='form-group".($end_date_error ? " has-error" : "")." mt-3'>
+                            <div class='form-group".($end_date_error ? " has-error" : "")." mt-4'>
                                 <div class='col-12'>
                                     <label class='control-label-notes'>$langEnd</label>
                                 </div>
@@ -1042,20 +1042,20 @@ function attendance_settings($attendance_id) {
                             </div>
                         </div>
                     </div>
-                    <div class='form-group".($limit_error ? " has-error" : "")." mt-3'>
+                    <div class='form-group".($limit_error ? " has-error" : "")." mt-4'>
                         <label class='col-12 control-label-notes'>$langAttendanceLimitNumber:</label>
                         <div class='col-sm-12'>
                             <input class='form-control' type='text' name='limit' value='$limit'/>
                             <span class='help-block'>$limit_error</span>
                         </div>
                     </div>
-                    <div class='form-group mt-4'>
-                        <div class='col-12 d-inline-flex'>
+                    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                       
                           
                              
                                  ".form_buttons(array(
                                     array(
-                                        'class' => 'btn-primary submitAdminBtn',
+                                        'class' => 'submitAdminBtn',
                                         'text' => $langSave,
                                         'name' => 'submitAttendanceBookSettings',
                                         'value'=> $langAttendanceUpdate
@@ -1068,7 +1068,7 @@ function attendance_settings($attendance_id) {
                              
                               
                           
-                        </div>
+                        
                     </div>
                     </fieldset>
                 </form>

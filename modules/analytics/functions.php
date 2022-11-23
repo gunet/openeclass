@@ -834,7 +834,7 @@ function edit_analytics_settings ($analytics_id = 0)
     
     $tool_content .= "
     <div class='col-12'>
-    <div class='form-wrapper form-edit p-3 rounded'>
+    <div class='form-wrapper form-edit rounded'>
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <div class='form-group'>
             <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
@@ -842,25 +842,25 @@ function edit_analytics_settings ($analytics_id = 0)
                 <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <label for='description' class='col-sm-6 control-label-notes'>$langDescription</label>
             <div class='col-sm-12'>
                 <textarea class='form-control' placeholder='$langDescription' name='description' rows='6'>$description</textarea>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <label for='title' class='col-sm-6 control-label-notes'>$langActivate</label>
                 <div class='col-sm-12'>";
                     $tool_content .= selection(get_activation_status(), 'active', $active);
                 $tool_content .= "</div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
         <label for='title' class='col-sm-6 control-label-notes'>$langAnalyticsCalculation</label>
             <div class='col-sm-12'>";
                 $tool_content .= selection(get_period_types_array () , 'periodType', $periodType);
             $tool_content .= "</div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <label class='col-sm-6 control-label-notes'>$langStart</label>
             <div class='col-sm-12'>
                 <div class='input'>
@@ -869,7 +869,7 @@ function edit_analytics_settings ($analytics_id = 0)
                 <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsStartDescription</span>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <label class='col-sm-6 control-label-notes'>$langFinish</label>
             <div class='col-sm-12'>
                 <div class='input'>
@@ -878,13 +878,13 @@ function edit_analytics_settings ($analytics_id = 0)
                 <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsEndDescription</span>
             </div>
         </div> $id_input
-        <div class='form-group mt-4'>
-            <div class='col-12 d-inline-flex'>
+        <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+            
              
                
                   ".form_buttons(array(
                     array(
-                            'class' => 'btn-primary submitAdminBtn',
+                            'class' => 'submitAdminBtn',
                             'text' => $langSave,
                             'name' => $action,
                             'value'=> $langAdd
@@ -898,7 +898,7 @@ function edit_analytics_settings ($analytics_id = 0)
               
                 
               
-            </div>
+            
         </div>
     </form>
 </div></div>";
@@ -947,7 +947,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
 
     $tool_content .="
     <div class='col-12'>
-    <div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+    <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <h4 class='fs-4 control-label-notes text-center'>$elementTypeTitle</h4>
         <input type='hidden' name='analytics_id' value='$analytics_id'>
         <input type='hidden' name='analytics_element_id' value='$analytics_element_id'>
@@ -968,7 +968,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
                 </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='row'>
                 <label for='title' class='col-sm-12 control-label-notes mb-2'>$langAnalyticsAdvancedLevel</label>
                 <div class='col-md-6 col-12'>
@@ -985,7 +985,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
                 </div>
             </div>
         </div>
-        <div class='form-group mt-3'>   
+        <div class='form-group mt-4'>   
             <label for='title' class='col-sm-12 control-label-notes'>$langAnalyticsWeight</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='number' placeholder='' name='weight' value='$weight'>
@@ -994,13 +994,13 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
 
         $tool_content .= get_available_resources($type, $analytics_element_id);
         $tool_content .= "
-        <div class='form-group mt-4'>
-            <div class='col-12 d-inline-flex'>
+        <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+            
              
                 
                  ".form_buttons(array(
                     array(
-                            'class' => 'btn-primary submitAdminBtn',
+                            'class' => 'submitAdminBtn',
                             'text' => $langSave,
                             'name' => $action,
                             'value'=> $langAdd
@@ -1013,7 +1013,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
                 
                 
              
-            </div>
+            
         </div>
     </form></div></div>";
 }

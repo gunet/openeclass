@@ -305,7 +305,7 @@ if (isset($_POST['submit'])) {
             <div class='col-12 h-100 left-form'></div>
         </div>
         <div class='col-lg-6 col-12'>
-        <div class='form-wrapper form-edit p-3 rounded'>
+        <div class='form-wrapper form-edit rounded'>
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
             <fieldset>
                 $monthsField
@@ -317,13 +317,13 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
                 
-                <div class='form-group mt-4'>
-                    <div class='col-12 d-inline-flex'>
+                <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                   
 
-                            <input class='col-6 btn btn-primary submitAdminBtn' type='submit' name='submit' value='" . $langSubmit . "'$confirm>
-                            <a href='index.php' class='col-6 btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                            <input class='btn submitAdminBtn' type='submit' name='submit' value='" . $langSubmit . "'$confirm>
+                            <a href='index.php' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
                        
-                    </div>
+                   
                 </div>
             </fieldset>
             ". generate_csrf_token_form_field() ."

@@ -129,7 +129,7 @@ if ($can_upload) {
     }
     
             
-    $tool_content .= "<div class='form-wrapper form-edit p-3 rounded'>
+    $tool_content .= "<div class='form-wrapper form-edit rounded'>
 
         <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>
           <input type='hidden' name='uploadPath' value='$uploadPath' />
@@ -138,7 +138,7 @@ if ($can_upload) {
 
           <div class='row'>
             <div class='col-md-6 col-12'>
-              <div class='form-group mt-3'>
+              <div class='form-group mt-4'>
                 <label for='inputFileTitle' class='col-sm-12 control-label-notes'>$langTitle</label>
                 <div class='col-sm-12'>
                   <input type='text' class='form-control' placeholder='$langTitle...' id='inputFileTitle' name='file_title'>
@@ -147,7 +147,7 @@ if ($can_upload) {
             </div>
 
             <div class='col-md-6 col-12'>
-              <div class='form-group mt-3'>
+              <div class='form-group mt-4'>
                 <label for='inputFileComment' class='col-sm-12 control-label-notes'>$langComment</label>
                 <div class='col-sm-12'>
                   <input type='text' class='form-control' placeholder='$langComment...' id='inputFileComment' name='file_comment'>
@@ -158,7 +158,7 @@ if ($can_upload) {
 
           <div class='row'>
             <div class='col-md-6 col-12'>
-              <div class='form-group mt-3'>
+              <div class='form-group mt-4'>
                 <label for='inputFileCategory' class='col-sm-12 control-label-notes'>$langCategory</label>
                 <div class='col-sm-12'>
                   <select class='form-select' name='file_category'>
@@ -176,7 +176,7 @@ if ($can_upload) {
             </div>
 
             <div class='col-md-6 col-12'>
-              <div class='form-group mt-3'>
+              <div class='form-group mt-4'>
                 <label for='inputFileSubject' class='col-sm-12 control-label-notes'>$langSubject</label>
                 <div class='col-sm-12'>
                   <input type='text' class='form-control' placeholder='$langSubject...' id='inputFileSubject' name='file_subject'>
@@ -187,7 +187,7 @@ if ($can_upload) {
 
           <div class='row'>
             <div class='col-md-6 col-12'>
-              <div class='form-group mt-3'>
+              <div class='form-group mt-4'>
                 <label for='inputFileDescription' class='col-sm-12 control-label-notes'>$langDescription</label>
                 <div class='col-sm-12'>
                   <input type='text' class='form-control' placeholder='$langDescription...' id='inputFileDescription' name='file_description'>
@@ -196,7 +196,7 @@ if ($can_upload) {
             </div>
 
             <div class='col-md-6 col-12'>
-              <div class='form-group mt-3'>
+              <div class='form-group mt-4'>
                 <label for='inputFileAuthor' class='col-sm-12 control-label-notes'>$langAuthor</label>
                 <div class='col-sm-12'>
                   <input type='text' class='form-control' placeholder='$langAuthor...' id='inputFileAuthor' name='file_author'>
@@ -207,7 +207,7 @@ if ($can_upload) {
 
           <div class='row'>
             <div class='col-md-6 col-12'>
-              <div class='form-group mt-3'>
+              <div class='form-group mt-4'>
                 <input type='hidden' name='file_date' value='' size='40' />
                 <input type='hidden' name='file_format' value='' size='40' />
                 <label for='inputFileLanguage' class='col-sm-12 control-label-notes'>$langLanguage:</label>
@@ -218,7 +218,7 @@ if ($can_upload) {
             </div>
 
             <div class='col-md-6 col-12'>
-              <div class='form-group mt-3'>
+              <div class='form-group mt-4'>
                 <label for='inputFileCopyright' class='col-sm-12 control-label-notes'>$langCopyrighted:</label>
                 <div class='col-sm-12'>
                   " .
@@ -238,7 +238,7 @@ if ($can_upload) {
 
     if (!isset($_GET['ext'])) {
         $tool_content .= "
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-sm-offset-2 col-sm-10'>
                 <div class='checkbox'>
                     <label>
@@ -252,7 +252,7 @@ if ($can_upload) {
 
     if ($can_upload_replacement) {
         $tool_content .= "
-      <div class='form-group mt-3'>
+      <div class='form-group mt-4'>
         <div class='col-sm-offset-2 col-sm-10'>
             <div class='checkbox'>
                 <label>
@@ -265,20 +265,20 @@ if ($can_upload) {
     }
 
     $tool_content .= "
-    <div class='row mt-3'>
+    <div class='row mt-4'>
         <div class='infotext col-12 margin-bottom-fat text-secondary fw-bold'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
     </div>";
 
 
       $tool_content .= "
-      <div class='form-group mt-4'>
-        <div class='col-12 d-inline-flex'>
+      <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+        
           
              "
                 .
                 form_buttons(array(
                     array(
-                        'class' => 'btn-primary submitAdminBtn',
+                        'class' => 'submitAdminBtn',
                         'text' => $langUpload
                     ),
                     array(
@@ -290,7 +290,7 @@ if ($can_upload) {
              "
              
          
-        </div>
+        
       </div>
     </form>
     </div></div>";

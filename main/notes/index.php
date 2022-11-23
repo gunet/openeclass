@@ -163,7 +163,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             <div class='col-12 h-100 left-form'></div>
         </div>
     <div class='col-lg-6 col-12'>
-        <div class='form-wrapper form-edit p-3 rounded'>
+        <div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <fieldset>
                 <div class='form-group".(Session::getError('newTitle') ? " has-error" : "")."'>
@@ -173,31 +173,21 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                         <span class='help-block'>".Session::getError('newTitle')."</span>
                     </div>
                 </div>
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                   <label for='newContent' class='col-sm-12 control-label-notes'>$langNoteBody</label>
                   <div class='col-sm-12'>
                     " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
                   </div>
                 </div>
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                   <label for='refobjgentype' class='col-sm-12 control-label-notes'>$langReferencedObject</label>
                   <div class='col-sm-12'>
                     ".References::build_object_referennce_fields($gen_type_selected, $course_selected, $type_selected, $object_selected). "
                   </div>
                 </div>
-                <div class='form-group mt-4'>
-                  <div class='col-12 d-inline-flex'>
-
-
-                     <input class='col-6 btn btn-primary submitAdminBtn' type='submit' name='submitNote' value='$langAdd'> 
-
-
-                     <a class='col-6 btn btn-outline-secondary cancelAdminBtn ms-1' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
-                    
-                  
-
-                   
-                    
+                <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                     <input class='btn submitAdminBtn' type='submit' name='submitNote' value='$langAdd'> 
+                     <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
                   </div>
                 </div>";
                 if($noteToModify!=""){

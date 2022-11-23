@@ -8,17 +8,17 @@
 @endphp
 
 <div class='d-none d-md-block mt-4'>
-    <div class='col-12 shadow p-3 pb-3 bg-body rounded-0'>
+    <div class='col-12 ps-3 pb-3 ps-0 pe-0 legendViewContent'>
         
             @if($course_code)
                 @if($is_editor)
                     <div class='row'>
-                        <div class='col-10'>
+                        <div class='col-10 ps-0 pe-0'>
                             @if($toolName)
                                 <div class='col-12 mb-2'>
-                                    <span class='control-label-notes fs-5 me-1'>{{$currentCourseName}}</span>
-                                    <span class='text-secondary'>({{course_id_to_public_code($course_id)}})</span><br>
-                                    <span class='text-secondary'>{{course_id_to_prof($course_id)}}</span>
+                                    <span class='courseInfoText TextExtraBold blackBlueText me-1'>{{$currentCourseName}}</span>
+                                    <span class='courseInfoText TextExtraBold normalBlueText'>({{course_id_to_public_code($course_id)}})</span><br>
+                                    <span class='small-text TextRegular blackBlueText'>{{course_id_to_prof($course_id)}}</span>
                                 </div>
                                 <div class='col-12 d-inline-flex'>
                                     <!-- toolName -->
@@ -64,13 +64,13 @@
                                 </div>
                             @else
                                 <div class='col-12'>
-                                    <span class='control-label-notes fs-5 me-1'>{{$currentCourseName}}</span>
-                                    <span class='text-secondary'>({{course_id_to_public_code($course_id)}})</span><br>
-                                    <span class='text-secondary'>{{course_id_to_prof($course_id)}}</span> 
+                                    <span class='courseInfoText TextExtraBold blackBlueText me-1'>{{$currentCourseName}}</span>
+                                    <span class='courseInfoText TextExtraBold normalBlueText'>({{course_id_to_public_code($course_id)}})</span><br>
+                                    <span class='small-text TextRegular blackBlueText'>{{course_id_to_prof($course_id)}}</span> 
                                 </div>
                             @endif
                         </div>
-                        <div class='col-2 d-flex justify-content-end align-items-center'>
+                        <div class='col-2 d-flex justify-content-end align-items-top'>
                             @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code])
                         </div>
                     </div>
@@ -79,9 +79,9 @@
                         <div class='col-12'>
                             @if($toolName)
                                 <div class='col-12 mb-2'>
-                                    <span class='control-label-notes fs-5 me-1'>{{$currentCourseName}}</span> 
-                                    <span class='text-secondary'>{{course_id_to_public_code($course_id)}}</span><br>
-                                    <span class='text-secondary'>{{course_id_to_prof($course_id)}}</span>
+                                    <span class='courseInfoText TextExtraBold blackBlueText me-1'>{{$currentCourseName}}</span> 
+                                    <span class='courseInfoText TextExtraBold normalBlueText'>{{course_id_to_public_code($course_id)}}</span><br>
+                                    <span class='small-text TextRegular blackBlueText'>{{course_id_to_prof($course_id)}}</span>
                                 </div>
                                 <div class='col-12 d-inline-flex'>
                                     <span class='text-secondary fst-italic'>{{$toolName}}</span>
@@ -103,20 +103,17 @@
                                 </div>
                             @else
                                 <div class='col-12'>
-                                    <span class='control-label-notes fs-5 me-1'>{{$currentCourseName}}</span>
-                                    <span class='text-secondary'>{{course_id_to_public_code($course_id)}}</span><br> 
-                                    <span class='text-secondary'>{{course_id_to_prof($course_id)}}</span>
+                                    <span class='courseInfoText TextExtraBold blackBlueText me-1'>{{$currentCourseName}}</span>
+                                    <span class='courseInfoText TextExtraBold normalBlueText'>{{course_id_to_public_code($course_id)}}</span><br> 
+                                    <span class='small-text TextRegular blackBlueText'>{{course_id_to_prof($course_id)}}</span>
                                 </div>
                             @endif
                         </div>
                     </div>
                 @endif
             @else
-                <div class='d-flex justify-content-center ps-1 pt-1 pb-2'>
-                    <div class="d-inline-flex align-items-top">
-                        <i class="fas fa-tools orangeText text-center me-2 mt-1" aria-hidden="true"></i> 
-                        <span class="control-label-notes">{{$toolName}}</spa>
-                    </div>
+                <div class='d-flex justify-content-center align-items-center'>
+                    <span class="courseInfoText TextExtraBold blackBlueText">{{$toolName}}</spa>
                 </div>
             @endif
         

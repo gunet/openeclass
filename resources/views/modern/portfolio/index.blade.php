@@ -7,7 +7,7 @@
 <div class="container-fluid details-section">
     <div class="row rowMedium px-lg-0 px-3 py-lg-0 py-3">
         <div class="col-12 px-0">
-            <div class='panel panel-admin border-0 bg-white px-lg-4 py-lg-3'>
+            <div class='panel panel-admin border-0 bg-white px-lg-4 py-lg-3 shadow-none'>
                 <div class='panel-heading bg-white'>
                     <div class='col-12 Help-panel-heading'>
                         <div class="row">
@@ -97,7 +97,7 @@
 
                             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 pe-md-0">
             
-                                <div class='panel panel-admin border-0 shadow-none mt-md-2 mt-3 bg-white rounded-0 px-0'>
+                                <div class='panel panel-admin border-0 shadow-none mt-md-2 mt-3 bg-white rounded-0 px-0 shadow-none'>
                                     <div class='panel-heading rounded-0 bg-white ps-md-3 pe-md-1 px-0'>
                                         <div class='panel-heading bg-white ps-md-3 pe-md-0'>
                                             <div class='col-12 Help-panel-heading border-0'>
@@ -108,7 +108,7 @@
                                     </div>
                                 </div>
 
-                                <div class='panel panel-admin border-0 shadow-none mt-md-2 mt-3 bg-white rounded-0 '>
+                                <div class='panel panel-admin border-0 shadow-none mt-md-2 mt-3 bg-white rounded-0 shadow-none'>
                                     <div class='panel-heading rounded-0 bg-white ps-md-3 pe-md-1 px-0'>
                                         <div class='panel-heading bg-white ps-md-3 pe-md-0'>
                                             <div class='col-12 Help-panel-heading'>
@@ -170,7 +170,7 @@
                                     </div>
                                 </div>
 
-                                <div class='panel panel-admin border-0 shadow-none bg-white rounded-0 px-0'>
+                                <div class='panel panel-admin border-0 shadow-none bg-white rounded-0 px-0 shadow-none'>
                                     <div class='panel-heading rounded-0 bg-white ps-md-3 pe-md-1 px-0'>
                                         <div class='panel-heading bg-body ps-md-3 pe-md-0'>
                                             <div class='col-12 Help-panel-heading'>
@@ -302,7 +302,7 @@
         </div>
         <div class='col-lg-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-4 ps-lg-3 px-lg-0 px-0'>
             @include('portfolio.portfolio-calendar')
-            <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-4 py-md-4 px-md-4 py-3 px-3'>
+            <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-4 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                 <div class='panel-heading bg-body p-0'>
                     <div class='col-12 Help-panel-heading'>
                         <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoAnnouncements') }}</span>
@@ -324,7 +324,7 @@
 
 
 
-            <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-4 py-md-4 px-md-4 py-3 px-3'>
+            <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-4 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                 <div class='panel-heading bg-body p-0'>
                     <div class='col-12 Help-panel-heading'>
                     <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoMessages') }}</span>

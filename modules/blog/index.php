@@ -211,10 +211,10 @@ if ($blog_type == 'course_blog' && $is_editor) {
         $tool_content .= "
             
                 <div class='col-12'>
-                    <div class='form-wrapper form-edit p-3 rounded'>
+                    <div class='form-wrapper form-edit rounded'>
                         <form class='form-horizontal' action='' role='form' method='post'>
                             <fieldset>                               
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>$langBlogPerm</label>
                                     <div class='col-sm-12'> 
                                         <div class='radio'>
@@ -231,7 +231,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                 </div>
                             </fieldset>
                             <fieldset>
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>$langBlogCommenting</label>
                                     <div class='col-sm-12'>
                                         <div class='radio'>
@@ -246,7 +246,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>$langBlogRating:</label>
                                     <div class='col-sm-12'>
                                         <div class='radio'>
@@ -261,7 +261,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>$langBlogSharing:</label>
                                     <div class='col-sm-12'>
                                         <div class='radio'>
@@ -277,14 +277,14 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                     </div>
                                 </div>
                             </fieldset>
-                            <div class='form-group mt-4'>
-                                <div class='col-12 d-inline-flex'>
+                            <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                                
                                  
                                       
                                          ".
                                          form_buttons(array(
                                              array(
-                                                 'class' => 'btn-primary submitAdminBtn',
+                                                 'class' => 'submitAdminBtn',
                                                  'text'  =>  $langSave,
                                                  'name'  =>  'submitSettings',
                                                  'value' =>  $langSubmit
@@ -298,7 +298,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                       
                                       
                                    
-                                </div>
+                                
                             </div>
                         </form>
                     </div>
@@ -366,18 +366,22 @@ if ($action == "createPost") {
     if ($allow_to_create) {
         $commenting_setting = '';
         if ($comments_enabled) {
-            $commenting_setting = "<div class='form-group mt-3'>
+            $commenting_setting = "<div class='form-group mt-4'>
                                        <label class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting:</label>
-                                       <div class='col-12'>
-                                           <div class='radio d-inline-flex align-items-top'>
-                                                <input type='radio' value='1' name='commenting' checked>
-                                                $langCommentsEn
+                                       
+                                           <div class='radio mb-2'>
+                                                <label>
+                                                    <input type='radio' value='1' name='commenting' checked>
+                                                    $langCommentsEn
+                                                </label>
                                            </div>
-                                           <div class='radio d-inline-flex align-items-top ms-xl-3 ms-lg-2 ms-md-3 ms-0'>
-                                                <input type='radio' value='0' name='commenting'>
-                                                $langCommentsDis
+                                           <div class='radio'>
+                                                <label>
+                                                    <input type='radio' value='0' name='commenting'>
+                                                    $langCommentsDis
+                                                </label>
                                            </div>
-                                       </div>
+                                       
                                    </div>";
         }
         if(!$course_code){
@@ -394,7 +398,7 @@ if ($action == "createPost") {
             ";
         }
         $tool_content .= "
-        <div class='form-wrapper form-edit p-3 rounded'>
+        <div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
             <fieldset>
                 
@@ -408,7 +412,7 @@ if ($action == "createPost") {
 
              
 
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
                     <div class='col-sm-12'>
                         ".rich_text_editor('newContent', 4, 20, '')."
@@ -416,14 +420,14 @@ if ($action == "createPost") {
                 </div>
                 $commenting_setting
                 
-                <div class='form-group mt-4'>
-                    <div class='col-12 d-inline-flex'>
+                <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                   
                       
                          
                             ".
                             form_buttons(array(
                                 array(
-                                    'class' => 'btn-primary submitAdminBtn',
+                                    'class' => 'submitAdminBtn',
                                     'text'  =>  $langSave,
                                     'name'  =>  'submitBlogPost',
                                     'value' =>  $langAdd
@@ -437,7 +441,7 @@ if ($action == "createPost") {
                           
                           
                       
-                    </div>
+                   
                 </div>
                 <input type='hidden' name='action' value='savePost' />
             </fieldset>
@@ -479,18 +483,22 @@ if ($action == "editPost") {
                 }
                 $commenting_setting = "
                 
-                                        <div class='form-group mt-3'>
-                                           <label class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting:</label>
-                                           <div class='col-sm-12'>
-                                               <div class='d-inline-flex align-items-top'>
-                                                   <input type='radio' value='1' name='commenting' $checkCommentEn>
-                                                   $langCommentsEn
+                                        <div class='form-group mt-4'>
+                                              <label class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting:</label>
+                                           
+                                               <div class='radio mb-2'>
+                                                    <label>
+                                                        <input type='radio' value='1' name='commenting' $checkCommentEn>
+                                                        $langCommentsEn
+                                                    </label>
                                                </div>
-                                               <div class='d-inline-flex align-items-top ms-lg-0 ms-md-3'>
-                                                   <input type='radio' value='0' name='commenting' $checkCommentDis>
-                                                   $langCommentsDis
+                                               <div class='radio'>
+                                                    <label>
+                                                        <input type='radio' value='0' name='commenting' $checkCommentDis>
+                                                        $langCommentsDis
+                                                    </label>
                                                </div>
-                                           </div>
+                                          
                                        </div>";
             }
             if(!$course_code){
@@ -508,7 +516,7 @@ if ($action == "editPost") {
             }
             $tool_content .= "
 
-            <div class='form-wrapper form-edit p-3 rounded'>
+            <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
                 <fieldset>
 
@@ -523,7 +531,7 @@ if ($action == "editPost") {
 
                
 
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
                     <div class='col-sm-12'>
                         ".rich_text_editor('newContent', 4, 20, $post->getContent())."
@@ -533,14 +541,14 @@ if ($action == "editPost") {
 
                 
 
-                <div class='form-group mt-4'>
-                    <div class='col-12 d-inline-flex'>
+                <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                   
                        
                        
                            ".
                            form_buttons(array(
                                array(
-                                   'class' => 'btn-primary submitAdminBtn',
+                                   'class' => 'submitAdminBtn',
                                    'text'  =>  $langSave,
                                    'name'  =>  'submitBlogPost',
                                    'value' =>  $langModifBlogPost
@@ -554,7 +562,7 @@ if ($action == "editPost") {
                          
                         
                       
-                    </div>
+                    
                 </div>
                 <input type='hidden' name='action' value='savePost'>
                 <input type='hidden' name='pId' value='".$post->getId()."'>

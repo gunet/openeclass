@@ -114,7 +114,7 @@ $tool_content = action_bar(array(
         )
     ),false)."
         <div class='col-12'>
-            <div class='form-wrapper form-edit p-3 rounded'>
+            <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='editdesc.php?course=$course_code' enctype='multipart/form-data'>
                     <fieldset>
                     <div class='row form-group'>
@@ -135,12 +135,12 @@ $tool_content = action_bar(array(
                             " . rich_text_editor('description', 8, 20, $description) . "
                         </div>
                     </div>
-                    <div class='row form-group mt-4'>
+                    <div class='row form-group mt-5'>
                         <div class='col-md-3 col-12'></div>
-                        <div class='col-md-9 col-12'>
+                        <div class='col-md-9 col-12 d-flex justify-content-center align-items-center'>
                            
                               
-                                <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
+                                <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
                             
                               
                                 <a href='{$urlAppend}courses/$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>

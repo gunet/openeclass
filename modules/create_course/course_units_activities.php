@@ -306,11 +306,11 @@ if(!isset($_POST['final_submit'])){
                         </div>
                         
 
-                        <div class='form-group mt-4'>
-                            <div class='col-12 d-inline-flex'>
+                        <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                           
                                 
                                  
-                                    <input id='final_sub' class='btn btn-primary submitAdminBtn' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
+                                    <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
                                  
                                  
                                         <a href='{$urlServer}main/portfolio.php' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
@@ -318,7 +318,7 @@ if(!isset($_POST['final_submit'])){
                                
                                 
 
-                            </div>
+                            
                         </div>
                         <input type='hidden' name='next'>
                         <input name='checked_in_class' type='hidden' value='1'></input>
@@ -503,11 +503,11 @@ if(!isset($_POST['final_submit'])){
                 $tool_content .= "</tr>
                         </table>
                     </div>
-                    <div class='form-group mt-4'>
-                        <div class='col-12 d-inline-flex'>    
+                    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                        
                             
                                
-                                    <input id='final_sub' class='btn btn-primary submitAdminBtn' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
+                                    <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
                                
                               
                                     <a href='{$urlServer}modules/units/index.php?course=".$course_code."&id=".$unit_id."' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
@@ -515,7 +515,7 @@ if(!isset($_POST['final_submit'])){
                                                  
                             
                            
-                        </div>
+                       
                     </div>
                     <input type='hidden' name='next'>
                     <input name='checked_in_class' type='hidden' value='1'></input>

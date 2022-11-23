@@ -220,7 +220,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
         <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
             <div class='col-12 h-100 left-form'></div>
         </div>
-    <div class='col-lg-6 col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    <div class='col-lg-6 col-12'><div class='form-wrapper form-edit rounded'>
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?action=" . $action . "'>
         <fieldset>";
 
@@ -245,7 +245,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
         }
 
         $langSuffix = " (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
-        $html .= "<div class='form-group mb-3'><label class='col-sm-12 control-label-notes'>" . $GLOBALS['langName'] . $langSuffix . "</label>";
+        $html .= "<div class='form-group mb-4'><label class='col-sm-12 control-label-notes'>" . $GLOBALS['langName'] . $langSuffix . "</label>";
         $tdpre = ($i >= 0) ? "<div class='col-sm-12'>" : '';
         $placeholder = $GLOBALS['langCourseCategory2'] . $langSuffix;
         $html .= $tdpre . "<input class='form-control' type='text' name='name-" . q($langcode) . "' " . $nameValue . " placeholder='$placeholder'></div></div>";
@@ -255,7 +255,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     // ordering input
     $orderingValue = ($id != null) ? "value='" . $ordering . "'" : '';
     $html .= "
-    <div class='form-group mt-3'>
+    <div class='form-group mt-4'>
         <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langReorder'] . "</label>
         <div class='col-sm-12'>
             <input class='form-control' type='text' name='ordering' " . $orderingValue . " placeholder='". $GLOBALS['langCourseCategoryOrdering2'] . "'>
@@ -272,21 +272,21 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     }
 
     $html .= "
-    <div class='form-group mt-3'>
+    <div class='form-group mt-4'>
         <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langCourseCategoryMultiple'] . "</label>
         <div class='col-sm-12'>
             <input type='checkbox' name='multiple' value='1' " . $check_multiple . ">
             <span class='help-block'><small>" . $GLOBALS['langCourseCategoryMultiple2'] . "</small></span>
         </div>
     </div>
-    <div class='form-group mt-3'>
+    <div class='form-group mt-4'>
         <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langCourseCategorySearchable'] . "</label>
         <div class='col-sm-12'>
             <input type='checkbox' name='searchable' value='1' " . $check_searchable . ">
             <span class='help-block'><small>" . $GLOBALS['langCourseCategorySearchable2'] . "</small></span>
         </div>
     </div>
-    <div class='form-group mt-3'>
+    <div class='form-group mt-4'>
         <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langChatActive'] . "</label>
         <div class='col-sm-12'>
             <input type='checkbox' name='active' value='1' " . $check_active . ">
@@ -299,12 +299,12 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     }
 
     $html .= "
-    <div class='form-group mt-4'>
-        <div class='col-12 d-inline-flex'>
+    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+       
            "
                 . form_buttons(array(
                     array(
-                        'class' => 'btn-primary submitAdminBtn',
+                        'class' => 'submitAdminBtn',
                         'text' => $GLOBALS['langSave'],
                         'name' => $action,
                         'value'=> $actionValue
@@ -315,7 +315,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
                     )
                 )) .
            "
-        </div>
+        
     </div>
     </fieldset>
     ". generate_csrf_token_form_field() ."

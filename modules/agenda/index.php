@@ -260,7 +260,7 @@ if ($is_editor) {
             $startdate = date('d-m-Y H:i', strtotime('now'));
             $enddate = '';
         } 
-        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>";
+        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<form id='agendaform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <input type='hidden' id = 'id' name='id' value='$id'>"
                 . "<input type='hidden' name='rep' id='rep' value='$applytogroup'>";
@@ -278,7 +278,7 @@ if ($is_editor) {
                 <label for='startdate' class='col-md-3 col-12 control-label-notes text-capitalize'>$langDate</label>
                 <div class='col-md-9 col-12'>
                     <div class='input-group'>
-                        <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
+                        <input class='form-control rounded-pill' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
                         <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                     </div>
                 </div>
@@ -290,7 +290,7 @@ if ($is_editor) {
                 <label for='durationcal' class='col-md-3 col-12 control-label-notes text-capitalize'>$langDuration <small>$langInHour</small></label>
                 <div class='col-md-9 col-12'>
                     <div class='input-group add-on'>
-                        <input class='form-control' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
+                        <input class='form-control rounded-pill' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
                         <div class='input-group-addon add-on'><span class='fa fa-clock-o fa-fw'></span></div>
                     </div>
                 </div>
@@ -317,7 +317,7 @@ if ($is_editor) {
             if($is_recursive_event){
                 $selected[$repeatperiod] = ' selected';
             }
-            $tool_content .= "<div class='col-md-6 col-12 mt-md-0 mt-3'>
+            $tool_content .= "<div class='col-md-6 col-12 mt-md-0 mt-4'>
                         <select class='form-select' name='frequencyperiod' id='frequencyperiod'>
                             <option value=\"\">$langSelectFromMenu...</option>
                             <option value=\"D\"{$selected['D']}>$langDays</option>
@@ -330,7 +330,7 @@ if ($is_editor) {
                 <label for='Enddate' class='col-md-3 col-12 control-label-notes text-capitalize'>$langUntil</label>
                     <div class='col-md-9 col-12'>
                         <div class='input-group ms-md-2'>
-                            <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
+                            <input class='form-control rounded-pill' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
                             <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                         </div>
                     </div>
@@ -344,15 +344,15 @@ if ($is_editor) {
                       
                       
 
-                      <div class='row form-group mt-4'>
+                      <div class='row form-group mt-5'>
                         <div class='col-md-3 col-12'></div>
-                        <div class='col-md-9 col-12 d-inline-flex'>
+                        <div class='col-md-9 col-12 d-flex justify-content-center align-items-center'>
                             
                               
                                   ".
                                   form_buttons(array(
                                       array(
-                                          'class' => 'btn-primary submitAdminBtn',
+                                          'class' => 'submitAdminBtn',
                                           'text'  => $langSave,
                                           'name'  => 'submitbtn',
                                           'value' => $langAddModify,

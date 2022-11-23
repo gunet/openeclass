@@ -48,14 +48,14 @@ if (isset($_GET['add_cat'])) { //add a new category form
                         <div class='col-12 h-100 left-form'></div>
                     </div>
     <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper form-edit p-3 rounded'>";
+                      <div class='form-wrapper form-edit rounded'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName</label>
                       <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' placeholder='$langName...'></div>";
     $tool_content .= "</div><div class='row p-2'>";
-    $tool_content .= "<div class='col-12 mt-5'>".showSecondFactorChallenge()."<input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit_cat' value='$langAdd'></div>";
+    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[
@@ -98,15 +98,15 @@ if (isset($_GET['add_cat'])) { //add a new category form
                         <div class='col-12 h-100 left-form'></div>
                     </div>
     <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper form-edit p-3 rounded'>";
+                      <div class='form-wrapper form-edit rounded'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<input type='hidden' name='cat_id' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<fieldset>";
-    $tool_content .= "<div class='form-group mt-3'>";
+    $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName</label>
                       <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' value='$cat_name'></div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='col-12 mt-5'>".showSecondFactorChallenge()."<input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit_cat' value='$langAdd'></div>";
+    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
@@ -132,15 +132,15 @@ if (isset($_GET['add_cat'])) { //add a new category form
                         <div class='col-12 h-100 left-form'></div>
                     </div>
     <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper form-edit p-3 rounded'>";
+                      <div class='form-wrapper form-edit rounded'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
     $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
-    $tool_content .= "<div class='form-group mt-3'>";
+    $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='datatype' class='col-sm-12 control-label-notes'>$langCPFFieldDatatype</label>
                       <div class='col-sm-12'>".selection($field_types, 'datatype', 1, 'class="form-control"')."</div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='col-12 mt-5'><input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='add_field_proceed_step2' value='$langNext'></div>";
+    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'><input class='btn submitAdminBtn' type='submit' name='add_field_proceed_step2' value='$langNext'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div></div>";
     
 } elseif (isset($_POST['add_field_proceed_step2'])) { //add new field form 2nd step
@@ -167,33 +167,33 @@ if (isset($_GET['add_cat'])) { //add a new category form
                         <div class='col-12 h-100 left-form'></div>
                     </div>
     <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper form-edit p-3 rounded'>";
+                      <div class='form-wrapper form-edit rounded'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
     $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<input type='hidden' name='datatype' value='$datatype'>";
-    $tool_content .= "<div class='form-group mt-3'>";
+    $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='name' class='col-sm-12 control-label-notes'>$langName</label>
                       <div class='col-sm-12'><input id='name' class='form-control' type='text' name='field_name'></div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group mt-3'>";
+    $tool_content .= "<div class='form-group mt-4'>";
     $tool_content .= "<label for='shortname' class='col-sm-12 control-label-notes'>$langCPFShortName <small>($langEPFUniqueShortname)</small></label>
                       <div class='col-sm-12'><input id='shortname' class='form-contro' type='text' name='field_shortname'></div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group mt-3'><label for='fielddescr' class='col-sm-12 control-label-notes'>$langCPFFieldDescr</label>
+    $tool_content .= "<div class='form-group mt-4'><label for='fielddescr' class='col-sm-12 control-label-notes'>$langCPFFieldDescr</label>
                       <div class='col-sm-12'>".rich_text_editor('fielddescr', 8, 20, '')."</div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group mt-3'>";
+    $tool_content .= "<div class='form-group mt-4'>";
     $tool_content .= "<label for='required' class='col-sm-12 control-label-notes'>$langCPFFieldRequired</label>
                       <div class='col-sm-12'>".selection($yes_no, 'required', 0, 'class="form-control"')."</div>";
     $tool_content .= "</div>";
     if ($datatype == EPF_MENU) {
-        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<div class='form-group mt-4'>";
         $tool_content .= "<label for='options' class='col-sm-12 control-label-notes'>$langCPFMenuOptions <small>($langCPFMenuOptionsExplan)</small></label>
                           <div class='col-sm-12'><textarea name='options' rows='8' class='w-100'></textarea></div>";
         $tool_content .= "</div>";
     }
-    $tool_content .= "<div class='col-12 mt-5'>".showSecondFactorChallenge()."<input class='btn btn-sm btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit_field' value='$langAdd'></div>";
+    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_field' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div></div>";
     
     $tool_content .='<script language="javaScript" type="text/javascript">
@@ -337,37 +337,37 @@ if (isset($_GET['add_cat'])) { //add a new category form
                         <div class='col-12 h-100 left-form'></div>
                     </div>
         <div class='col-lg-6 col-12'>
-                          <div class='form-wrapper form-edit p-3 rounded'>";
+                          <div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
         $tool_content .= "<fieldset>";
         $tool_content .= "<input type='hidden' name='field_id' value='" . getIndirectReference($fieldid) . "'>";
         $tool_content .= "<input type='hidden' name='datatype' value='$datatype'>";
-        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='name' class='col-sm-12 control-label-notes'>$langName</label>
                           <div class='col-sm-12'><input id='name' class='form-control' type='text' name='field_name' value='$name'></div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<div class='form-group mt-4'>";
         $tool_content .= "<label for='shortname' class='col-sm-12 control-label-notes'>$langCPFShortName <small>($langEPFUniqueShortname)</small></label>
                           <div class='col-sm-12'><input id='shortname' class='form-control' type='text' name='field_shortname' value='$shortname'></div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group mt-3'><label for='fielddescr' class='col-sm-12 control-label-notes'>$langCPFFieldDescr</label>
+        $tool_content .= "<div class='form-group mt-4'><label for='fielddescr' class='col-sm-12 control-label-notes'>$langCPFFieldDescr</label>
                           <div class='col-sm-12'>".rich_text_editor('fielddescr', 8, 20, $description)."</div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<div class='form-group mt-4'>";
         $tool_content .= "<label for='datatype' class='col-sm-12 control-label-notes'>$langCPFFieldDatatype</label>
                           <div class='col-sm-12'>".selection($field_types, 'datatype_disabled', $datatype, 'class="form-control" disabled')."</div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group mt-3'>";
+        $tool_content .= "<div class='form-group mt-4'>";
         $tool_content .= "<label for='required' class='col-sm-12 control-label-notes'>$langCPFFieldRequired</label>
                           <div class='col-sm-12'>".selection($yes_no, 'required', $required, 'class="form-control"')."</div>";
         $tool_content .= "</div>";
         if ($datatype == EPF_MENU) {
-            $tool_content .= "<div class='form-group mt-3'>";
+            $tool_content .= "<div class='form-group mt-4'>";
             $tool_content .= "<label for='options' class='col-sm-12 control-label-notes'>$langCPFMenuOptions <small>($langCPFMenuOptionsExplan - $langCPFMenuOptionsChangeExplan)</small></label>
                               <div class='col-sm-12'><textarea name='options' rows='8' class='w-100'>$textarea_val</textarea></div>";
             $tool_content .= "</div>";
         }
-        $tool_content .= "<div class='col-12 mt-5'><input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' name='submit_field' value='$langSave'></div>";
+        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit_field' value='$langSave'></div>";
         $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div></div>";
         
         $tool_content .='<script language="javaScript" type="text/javascript">

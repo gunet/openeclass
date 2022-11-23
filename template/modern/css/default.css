@@ -19,13 +19,10 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
   
-.navbar-eclass { overflow: visible; background:rgba(0, 62, 135, 0.9) ; border: 0 none; height:147px; }
+.navbar-eclass { overflow: visible; background:rgba(0, 62, 135, 0.9) ; border: 0 none; height:147px; border-bottom-left-radius: 15px; border-bottom-right-radius:15px ;}
 
-.eclass-nav-icon{ width:120px; height:110px; }
+.eclass-nav-icon{ width:100px; height:90px; }
 
-@media(min-width:992px) and (max-width:1199px){
-  .eclass-nav-icon { width:100px; height:90px; }
-}
 
 .eclass-nav-link { padding-left: 10px; padding-right: 10px; }
 
@@ -120,7 +117,7 @@ body{
   font-family: 'Manrope-Regular','Fontawesome', sans-serif; 
   font-size: 15px; line-height: 1.42857143; color: #001146;
   /* background: linear-gradient(170deg, rgba(49, 57, 73, 0.8) 20%, rgba(49, 57, 73, 0.5) 20%, rgba(49, 57, 73, 0.5) 35%, rgba(41, 48, 61, 0.6) 35%, rgba(41, 48, 61, 0.8) 45%, rgba(31, 36, 46, 0.5) 45%, rgba(31, 36, 46, 0.8) 75%, rgba(49, 57, 73, 0.5) 75%), linear-gradient(45deg, rgba(20, 24, 31, 0.8) 0%, rgba(41, 48, 61, 0.8) 50%, rgba(82, 95, 122, 0.8) 50%, rgba(133, 146, 173, 0.8) 100%) #313949; */
-  background-color: #f5f5f5;
+  background-color: #e8e8e8;
 }
 
 span, p {font-size: 15px;}
@@ -149,6 +146,8 @@ a{ text-decoration: none; font-size: 15px;}
 
 .TextSemiBold { font-family: 'Manrope-SemiBold', sans-serif;}
 
+.TextButton { font-size: 12px; }
+
 /* margin tag <p> for tables and panels */
 table p, .panel p, .margin-bottom-fat.form-wrapper.form-edit.p-2.mb-3.rounded p {margin-bottom: 0px;}
 .panel .table-responsive p {margin-bottom: 10px;}
@@ -156,6 +155,8 @@ table p, .panel p, .margin-bottom-fat.form-wrapper.form-edit.p-2.mb-3.rounded p 
 @media (max-width:1023px){ body{ font-size:15px; } select{ overflow-y:auto !important; } }
 
 .h-400px{ height:400px; }
+
+.h-30px{ height:30px; }
 
 .lh-25px{ line-height: 25px; }
 
@@ -179,9 +180,11 @@ table p, .panel p, .margin-bottom-fat.form-wrapper.form-edit.p-2.mb-3.rounded p 
 
 .panel-phpinfo{ overflow-y: auto; }
 
-.lightColor{ background: #f5f5f5; }
+.bgEclass { background-color: #e8e8e8;}
 
-.greyColor { background: #D3D3D3;}
+.lightColor{ background-color: #f5f5f5; }
+
+.greyColor { background-color: #D3D3D3;}
 
 .textgreyColor { color: #bdbdbd;}
 
@@ -201,7 +204,7 @@ img { max-width: 100%; height: auto; }
 
 @media (max-width:1023px){ .textFileUpload{ font-size: 16px; } }
 
-.help-block{ color:#44b6c8; font-size: 13px;  }
+.help-block{ color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold',sans-serif; }
 
 .pen-hierarchy{margin-left:-5px;}
 
@@ -216,6 +219,10 @@ textarea {width:100%;}
 .circle-img-contant { height:35px; width: 35px; border-radius: 50%; background-color: #005ed7; display: flex; align-items: center; justify-content: center;}
 
 .Shadow-cols { box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); }
+
+.legendViewContent{border-bottom:solid 1px #e8e8e8;}
+
+.courseInfoText{font-size: 22px;}
 
 /* --------------------------------------------- BREADCRUMBS --------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -239,33 +246,49 @@ textarea {width:100%;}
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
 /* this is d-inline-flex between inputs-radio and texts */
-.radio label{ display:inline-flex; align-items: top; } 
-
+.radio label{ display:inline-flex; justify-content: center; align-items:center ; color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold',sans-serif;} 
 .radio label p{ margin-top:0px; } 
-
+.radio .help-block{margin-top: -10px;}
+.radio:has(input[type='radio']:checked) .help-block{
+  font-size: 14px;
+  font-family: 'Manrope-SemiBold',sans-serif;
+  color:#001146;
+}
+.radio:has(input[type='radio']:disabled) .help-block{
+  opacity:0.4;
+}
 /* this is space between input-radio and texts */
 input[type="radio"]{
-  margin: 0 5px 0 0px;
-  accent-color: #003F87;
-  border-radius: 50%;
-  width:19px;
-  height:19px;
-  min-width: 19px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  margin: 0 10px 0 0px;
   appearance: none;
-  transition: 0.2s all linear;
-  position: relative;
-  top: 1px;
-  background: #e6e6e6;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+  outline: none;
+  box-shadow: inset 0 0 0 2px #e8e8e8;
+  border: 6px solid #e8e8e8;
+  background-color: #e8e8e8;
 }
-input[type="radio"]:checked { border: 6px solid #003e87; outline: unset; }
+input[type="radio"]:checked { 
+  background-color: #005ad9;
+}
+label:has(input[type="radio"]:disabled){
+  opacity:0.4;
+}
+/* panels and form-wrapper where contains checkbox checked then change checked label color*/
+.form-wrapper.form-edit label:has(input[type="radio"]:checked){
+  font-size: 14px;
+  font-family: 'Manrope-SemiBold',sans-serif;
+  color:#001146;
+}
 
-input[type="radio"]:disabled { opacity: 0.1; background: #dc3545;}
+
+
 
 /* this is d-inline-flex between inputs-checkbox and texts */
-.checkbox label{ display:inline-flex; align-items: top; } 
+.checkbox label{ display:inline-flex; align-items:top ; color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold',sans-serif;} 
 
 .checkbox label p{ margin-top:0px; } 
 
@@ -273,15 +296,19 @@ input[type="radio"]:disabled { opacity: 0.1; background: #dc3545;}
 input[type="checkbox"]{
   margin: 0 5px 0 0px;
   accent-color: #003e87;
-  width:17px;
-  height:17px;
-  min-width: 17px;
+  width:20px;
+  height:20px;
   vertical-align: middle;
   position: relative;
-  top: 2px;
+  top: 0px;
+}
+.form-wrapper.form-edit label:has(input[type="checkbox"]:checked), .panel .panel-body label:has(input[type="checkbox"]:checked){
+  font-size: 14px;
+  font-family: 'Manrope-SemiBold',sans-serif;
+  color:#001146;
 }
 
-input::placeholder , .form-select, .form-control{ font-size: 12px; background: transparent; color:#6c757d; }
+input::placeholder , .form-select, .form-control{ font-size: 14px; background: transparent; color:#001146; }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -295,17 +322,24 @@ input:-webkit-autofill:active {
 /* dates checkboxes inside form-wrapper */
 .form-wrapper.form-edit .input-group-addon input[type=checkbox]{ margin-top:10px; }
 
-.form-wrapper.form-edit { border:0px; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); background-color: white;}
-@media(max-width:767px){ .form-wrapper.form-edit{overflow-y: auto;} }
+.form-wrapper.form-edit { border:0px; 
+  padding-left: 0px;
+  padding-right: 0px;
+  background-color: white;
+}
+
+/* @media(max-width:767px){ .form-wrapper.form-edit{overflow-y: auto;} } */
 
 .form-wrapper input[type=text], .form-wrapper input[type=password], .form-wrapper input[type=number], .form-wrapper .form-select,
 .forms-panels-admin input[type=text], .forms-panels-admin input[type=password], .forms-panels-admin input[type=number], .forms-panels-admin .form-select{
-  height:46px;
-  border-radius: 0px;
+  height:30px;
+  border-radius: 35px;
   margin-top: 5px;
   border: 0px;
-  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.13);
-  background-color: white;
+  background-color: #e8e8e8;
+  color: #001146;
+  font-size: 14px;
+  font-family: 'Manrope-SemiBold', sans-serif;
 }
 .form-wrapper textarea, .forms-panels-admin textarea{
    min-height:106px;
@@ -334,16 +368,21 @@ input:-webkit-autofill:active {
   border-color: white;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(12, 103, 222, 0.6);
   outline: 0 none;
-  background: white;
+  background-color: #e8e8e8;
 }
 select.form-select { -webkit-appearance: menulist; appearance: menulist;}
+
 .form-wrapper .form-control:disabled{
-  opacity: 0.5;
+  opacity: 0.4;
   border-bottom: solid 2px #f9f8fa;
   border-image: none;
   border-image-slice: 0;
   background-color: #DCDCDC;
 }
+label:has(input[type="checkbox"]:disabled){
+  opacity: 0.4;
+}
+
 
 
 /* ------------------------------------- alerts --------------------------------------------------------------------------------------------- */
@@ -372,7 +411,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 .slick-track{ display: flex; justify-content: center; align-items: center; }
 
 .testimonials {
-  background-color: #fafafa;
+  background-color: #e8e8e8;
   padding: 40px 0;
   position: relative;
   height: 300px;
@@ -403,7 +442,6 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
 }
 .testimonials .testimonial::-webkit-scrollbar{ display: none; }
 .testimonials .testimonial>div { position: relative; z-index: 2; }
@@ -599,6 +637,19 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   body .form-action-button-mydropdowns{ display: none; }
 
   .mydropdowns .form-action-button-mydropdowns{ display: block; }
+
+  .action_bar_btn {
+    border: solid thin;
+    border-color: #005ad9;
+    color: #005ad9;
+    text-transform: uppercase;
+    height:30px;
+  }
+
+  .action_bar_btn:hover, .opencourses_btn:hover {
+    background-color: #005ad9;
+    color: #ffffff;
+  }
 
 /* --------------------------------------------- Datepicker-datetimepicker ------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -839,6 +890,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .cardLogin{min-height:340px; background-color: rgba(255, 255, 255, 1); }
   @media(max-width:767px){ .cardLogin{min-height: 350px;} }
   @media(max-width:991px) { .cardLogin{background-color: rgba(255, 255, 255, 0.8);}}
+  @media(min-width:1400px){ .cardLogin{ width: max(425px); } }
 
   .Announcements-Homepage{ background-color: #f8f9fa; box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);}
 
@@ -876,12 +928,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
   @media(min-width:992px){
     .homepageIntroPanel{min-height: 118px;}
-    .only-announcements{min-height: 215px; margin-top: -100px;}
-    .panel-announcements-homepage{min-height: 215px;}
     .homepage_intro-margin{margin-top:-70px; min-height: 118px;}
-    .only-banner-margin, .only-banner-mobileapi-margin, .only-banner-openecourses-margin, .only-mobileapi-margin {margin-top:-50px;}
-    .only-opencourses-margin {margin-top: -90px;}
-    .only-banner-mobileapi-openecourses-margin, .only-mobileapi-openecourses-margin{margin-top:-107px;}
   }
 
   .opencourse_triangle{
@@ -1085,12 +1132,38 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .control-label-notes{ font-size:15px; color:#001146; font-family:'Manrope-SemiBold', sans-serif; }
 
   /* first choice of inputs forms */
-  .form-wrapper.form-edit .control-label-notes{ font-family:'Manrope-SemiBold', sans-serif; font-size: 15px; color:#001146; text-transform:capitalize;} 
+  .form-wrapper.form-edit .control-label-notes{ font-family:'Manrope-ExtraBold', sans-serif; font-size: 16px; color:#001146; text-transform:capitalize;} 
   
   @media (max-width:1023px){ .control-label-notes{ font-size: 16px; } }
 
+  .submitAdminBtn {
+    border: solid thin;
+    border-color: #005ad9;
+    color: #005ad9;
+    font-size: 12px;
+    text-transform: uppercase;
+    height:30px;
+    font-family: 'Manrope-SemiBold',sans-serif;
+    border-radius: 35px;
+    
+  }
+
+  .submitAdminBtn:hover {
+    background-color: #005ad9;
+    color: #ffffff;
+  }
+
+  .cancelAdminBtn {
+    font-size: 12px;
+    text-transform: uppercase;
+    height:30px;
+    font-family: 'Manrope-SemiBold',sans-serif;
+    border-radius: 35px;
+  }
+
+
   /* first choice of inputs forms */
-  .submitAdminBtn, .cancelAdminBtn{ min-width:105px; } 
+  /* .submitAdminBtn, .cancelAdminBtn{ min-width:105px; }  */
 
   /* .submitAdminBtn {
     border: solid thin;
@@ -1239,7 +1312,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
  
-
+.rounded-Home{border-radius:15px;}
   .panel-admin{
     border-radius:15px;
     border:0px;
@@ -1625,8 +1698,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   .float-end.label.label-success{ width:125px; }
 
   .label.label-danger{ 
-    background-color: red;
-    color:white;
+    color: red;
     width:188px;
     padding-left: 15px;
     padding-right: 15px;
@@ -1635,8 +1707,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
   }
 
   .label.label-warning{  
-    background-color: orange;
-    color:white;
+    color: orange;
     width:188px;
     padding-left: 15px;
     padding-right: 15px;
@@ -1737,6 +1808,7 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
     .col_maincontent_active, .col_maincontent_active_Homepage{
       min-height: calc(100vh - 56px - 54px);
       border-radius:0px;
+      /* background-color: #e8e8e8; */
     }
     .col_maincontent_active_HomepageStart{ border-radius:0px; }
 
@@ -1773,9 +1845,9 @@ select.form-select { -webkit-appearance: menulist; appearance: menulist;}
 
     select,.dataTables_wrapper{ overflow-y: auto !important; }
 
-    .ColumnCalendarAnnounceMessagePortfolio, .user-cources-details{background-color: #f8f9fa;}
+    .ColumnCalendarAnnounceMessagePortfolio, .user-cources-details{background-color: #e8e8e8;}
 
-    .details-section, .cources-section{ background-color: #f8f9fa;}
+    .details-section, .cources-section{ background-color: #e8e8e8;}
 
     .panel-courses-portfolio{box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1) !important;}
  

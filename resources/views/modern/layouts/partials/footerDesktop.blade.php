@@ -1,4 +1,4 @@
-<footer id="bgr-cheat-footer" class="site-footer @if(isset($_SESSION['uid'])) BordersTop @else NoBorders @endif mt-auto">
+<footer id="bgr-cheat-footer" class="site-footer mt-auto">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-4 col-xl-3 col-xxl-2">

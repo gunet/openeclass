@@ -178,7 +178,7 @@ if(!isset($_POST['next'])){
             <div class='col-12 h-100 left-form'></div>
         </div>
         <div class='col-lg-6 col-12'>
-        <div class='form-wrapper form-edit p-3 rounded'>
+        <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
             <fieldset>
                 <div class='form-group'>
@@ -189,38 +189,38 @@ if(!isset($_POST['next'])){
                 </div>
 
                 
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <label for='stunum' class='col-sm-12 control-label-notes'>$langStuNum</label>
                     <div class='col-sm-12'>  
                             <input name='stunum' id='stunum' type='text' class='form-control' value='".q($stuNum)."' >
                     </div>
                 </div>
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     
                     <label for='lectnum' class='col-sm-12 control-label-notes'>$langLectNum</label>
                     <div class='col-sm-12'>
                         <input name='lectnum' id='lectnum' type='number' min='1' max='50' class='form-control' value='".q($lectNum)."' >
                     </div>
                 </div>
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <label for='lecthours' class='col-sm-12 control-label-notes'>$langLectHours <small>($langHoursSmall)</small></label>
                     <div class='col-sm-12'>
                         <input name='lecthours' id='lecthours' type='number' min='1' max='150' class='form-control' value='".q($lectHours)."' onchange='hoursSum()' >
                     </div>
                 </div>
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <label for='homehours' class='col-sm-12 control-label-notes'>$langHomeHours <small>($langHoursSmall)</small></label>
                     <div class='col-sm-12'>
                         <input name='homehours' id='homehours' type='number' min='1' max='150' class='form-control' value='".q($homeHours)."' onchange='hoursSum()' >
                     </div>
                 </div>
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <label for='totalhours' class='col-sm-12 control-label-notes'>$langTotalHours</label>
                     <div class='col-sm-12'>
                         <input name='totalhours' id='totalhours' type='number' min='1' max='650' class='form-control' value='".q($lectTotalHours)."' readonly><input type='hidden' id= 'total_hours_hid' name='total_hours_hid' value=''>
                     </div>
                 </div>
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <div class='col-12 d-inline-flex mb-2'>
                         <label for='goals' class='control-label-notes me-2'>$langGoals</label>
                         <a href='#!' name='add_g' id='add_g'>
@@ -240,14 +240,14 @@ if(!isset($_POST['next'])){
                 </div>
                     
                 
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <label for='description' class='col-sm-12 control-label-notes'>$langCont <small>$langOptional</small></label>
                     <div class='col-sm-12'>
                           " .  rich_text_editor('description', 4, 20, purify($_SESSION['description'])) . "
                     </div>
                 </div>
 
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <label for='localize' class='col-sm-12 control-label-notes mb-1'>$langLectModel</label>
                     <div class='row'>
                         <div class='col-md-6 col-12 radio'>
@@ -265,7 +265,7 @@ if(!isset($_POST['next'])){
                     </div>
                 </div>
 
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <div class='col-12 d-inline-flex mb-2'>
                         <label for='units' class='control-label-notes me-2'>$langUnits</label>
                         <a href='#!' name='add_u' id='add_u'>
@@ -284,17 +284,17 @@ if(!isset($_POST['next'])){
                     <input id='unit_count' type='hidden' name='unit_count' value='1'>     
                 </div>
 
-                <div class='form-group mt-4'>
-                   <div class='col-12 d-inline-flex'>           
+                <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                              
                         
                                        
-                               <a href='{$urlServer}main/portfolio.php' class='col-6 btn btn-outline-secondary cancelAdminBtn me-1'>$langCancel</a>
+                               <a href='{$urlServer}main/portfolio.php' class='btn btn-outline-secondary cancelAdminBtn me-1'>$langCancel</a>
                            
                            
-                                <input class='col-6 btn btn-primary submitAdminBtn' type='submit' name='next' value='" . q($langNext) . "&nbsp;&nbsp;&raquo;'>
+                                <input class='btn submitAdminBtn' type='submit' name='next' value='" . q($langNext) . "&nbsp;&nbsp;&raquo;'>
                           
                        
-                    </div>
+                   
                 </div>     
             </fieldset>" . generate_csrf_token_form_field() . "
         </form>

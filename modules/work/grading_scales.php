@@ -146,14 +146,14 @@ if (isset($_GET['scale_id'])) {
     $tool_content .= "
         
             <div class='col-12 mt-3'>
-                <div class='form-wrapper form-edit p-3 rounded'>
+                <div class='form-wrapper form-edit rounded'>
                     <form class='form-horizontal' role='form' data-bs-toggle='validator' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='scales_form'>
                     <fieldset>
                         $hidden_input
                         
-                        <div class='form-group".(Session::getError('title') ? " has-error" : "")."'>
-                            <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
-                            <div class='col-sm-12'>
+                        <div class='row form-group".(Session::getError('title') ? " has-error" : "")."'>
+                            <label for='title' class='col-md-3 col-12 control-label-notes mb-1'>$langTitle:</label>
+                            <div class='col-md-9 col-12'>
                               <input name='title' type='text' class='form-control' id='title' value='$title'".($scale_used ? " disabled" : "").">
                               ".(Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "")."
                             </div>
@@ -161,9 +161,9 @@ if (isset($_GET['scale_id'])) {
 
                        
 
-                        <div class='form-group mt-3'>
-                            <label class='col-sm-6 control-label-notes'>$langScales:</label>
-                            <div class='col-sm-12'>
+                        <div class='row form-group mt-4'>
+                            <label class='col-md-3 col-12 control-label-notes mb-1'>$langScales:</label>
+                            <div class='col-md-9 col-12'>
                                 <div class='table-responsive mt-0'>
                                     <table class='table-default' id='scale_table'>
                                         <thead>
@@ -180,27 +180,27 @@ if (isset($_GET['scale_id'])) {
                                 </div>
                             </div>";
     if (!$scale_used) {
-        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center'>
-                             <a class='btn btn-sm btn-success w-50 submitAdminBtn margin-top-thin' id='addScale'>$langAdd</a>
+        $tool_content .= "<div class='col-md-9 col-12 offset-md-3 mt-5 d-flex justify-content-center'>
+                             <a class='btn submitAdminBtn' id='addScale'>$langAdd</a>
                          </div>";
     }
     $tool_content .= "</div>";
     if (!$scale_used) {
         $tool_content .= " 
      
-                        <div class='form-group mt-4'>
-                            <div class='col-12 d-inline-flex'>
+                        <div class='form-group mt-5'>
+                            <div class='col-md-9 col-12 offset-md-3 d-flex justify-content-center'>
                             
                                
                                   ".
                                   form_buttons(array(
                                       array(
-                                          'class' => 'btn-primary submitAdminBtn',
+                                          'class' => 'submitAdminBtn',
                                           'text' => $langSave,
                                           'name' => 'submitScale'
                                       ),
                                       array(
-                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-2',
+                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                                     )
                                   ))

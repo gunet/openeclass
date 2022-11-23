@@ -1,10 +1,10 @@
-<nav id="bgr-cheat-header" class="navbar navbar-eclass BordersBottom">
+<nav id="bgr-cheat-header" class="navbar navbar-eclass">
 
     <div class="container-fluid">
 
         <div class='row w-100'>
 
-            <div class="col-lg-2 d-flex justify-content-center align-items-center ps-0">
+            <div class="col-lg-2 d-flex justify-content-lg-center align-items-lg-center">
                 <a href="{{ $urlAppend }}">
                     <img class="eclass-nav-icon" src="{{ $logo_img }}"/>
                 </a>
@@ -27,7 +27,7 @@
 
                 <div class="row mt-5">
 
-                    <div class="col-xl-8 col-lg-9 col-md-12 col-sm-12 col-12 mt-2 @if (isset($_SESSION['uid'])) ps-5 @else ps-0 @endif">
+                    <div class="col-xl-8 col-lg-9 col-md-12 col-sm-12 col-12 mt-2 @if (isset($_SESSION['uid'])) ps-3 @else ps-0 @endif">
                         @if(!get_config('hide_login_link'))
                             <a id="link-home" class="eclass-nav-link" href="{{ $urlServer }}" onclick="clickHome(this)" onmouseover="hoverHome(this);" onmouseout="unhoverHome(this);"> 
                                <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/home_1.svg">
@@ -314,7 +314,7 @@
 </nav>
 
 <script>
-    let current_url = document.URL; console.log(current_url);
+    let current_url = document.URL;
 
     if(current_url.includes('/modules/auth/registration.php')
        || current_url.includes('/modules/auth/formuser.php')

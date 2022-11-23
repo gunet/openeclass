@@ -83,21 +83,21 @@ if ($is_editor) {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 
-        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>";
+        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>";
+        $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>";
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />";
         $tool_content .= "</div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group mt-3'>";
-        $tool_content .= "<label for='description' class='col-sm-6 control-label-notes'>$langDescription:</label>";
+        $tool_content .= "<div class='form-group mt-4'>";
+        $tool_content .= "<label for='description' class='col-sm-6 control-label-notes'>$langDescription</label>";
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "$textarea";
         $tool_content .= "</div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group mt-3'>
+        $tool_content .= "<div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <div class='checkbox'>
                     <label>
@@ -107,7 +107,7 @@ if ($is_editor) {
             </div>
         </div>";
         if ($colmoocapp->isEnabled()) {
-            $tool_content .= "<div class='form-group mt-3'>
+            $tool_content .= "<div class='form-group mt-4'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <div class='checkbox'>
                         <label>
@@ -118,7 +118,7 @@ if ($is_editor) {
             </div>";
         }
 
-        $tool_content .= "<div class='form-group mt-3'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel control-labe-notes'>$langChatToSpecUsers:</label></div>
+        $tool_content .= "<div class='form-group mt-4'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel control-labe-notes'>$langChatToSpecUsers</label></div>
             <div class='form-group mt-3'>
                 <div class='col-sm-12'>
                     <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
@@ -137,7 +137,7 @@ if ($is_editor) {
                 </div>
             </div>";
 
-        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center'><input class='btn btn-primary btn-sm submitAdminBtn w-50' type='submit' name='submit' value='$langAddModify'></div>";
+        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langAddModify'></div>";
         $tool_content .= "</form></div></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
             //<![CDATA[
@@ -250,25 +250,25 @@ if ($is_editor) {
         $conf = Database::get()->querySingle("SELECT * FROM conference WHERE conf_id = ?d", $conf_id);
         $textarea = rich_text_editor('description', 4, 20, $conf->conf_description);
 
-        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>";
+        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
         $tool_content .= "<fieldset>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>";
+        $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>";
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<input class='form-control' type='text' name='title' id='title' value='$conf->conf_title' size='50' />";
         $tool_content .= "</div>";
         $tool_content .= "</div>";
 
-        $tool_content .= "<div class='form-group mt-3'>";
-        $tool_content .= "<label for='desc' class='col-sm-6 control-label-notes'>$langDescription:</label>";
+        $tool_content .= "<div class='form-group mt-4'>";
+        $tool_content .= "<label for='desc' class='col-sm-6 control-label-notes'>$langDescription</label>";
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "$textarea";
         $tool_content .= "</div>";
         $tool_content .= "</div>";
 
-        $tool_content .= "<div class='form-group mt-3'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel control-label-notes'>$langChatToSpecUsers:</label></div>
-        <div class='form-group mt-3'>
+        $tool_content .= "<div class='form-group mt-4'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel control-label-notes'>$langChatToSpecUsers</label></div>
+        <div class='form-group mt-4'>
             <div class='col-sm-12'>
                 <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
 
@@ -308,7 +308,7 @@ if ($is_editor) {
         </div>";
 
         $checked_status = ($conf->status == "active") ? 'checked' : '';
-        $tool_content .= "<div class='form-group mt-3'>
+        $tool_content .= "<div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <div class='checkbox'>
                     <label>
@@ -320,7 +320,7 @@ if ($is_editor) {
 
         if ($colmoocapp->isEnabled()) {
             $activity_status = ($conf->chat_activity == true) ? 'checked' : '';
-            $tool_content .= "<div class='form-group mt-3'>
+            $tool_content .= "<div class='form-group mt-4'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <div class='checkbox'>
                         <label>
@@ -332,7 +332,7 @@ if ($is_editor) {
         }
 
         $tool_content .= "<input type = 'hidden' name = 'conference_id' value='$conf_id'>";
-        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center'><input class='btn btn-primary btn-sm submitAdminBtn w-50' type='submit' name='submit' value='$langSubmit'></div>";
+        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'></div>";
         $tool_content .= "</fieldset></form></div></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
                 //<![CDATA[
