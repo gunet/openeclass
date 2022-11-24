@@ -81,7 +81,7 @@ $head_content .= "
                 $.ajax({
                     url: url,
                     success: function(data) {
-                        bootbox.dialog({
+                        var dialog = bootbox.dialog({
                             message: data,
                             title: '". js_escape($langQuestionPreview) . "',
                             onEscape: true,
@@ -102,6 +102,9 @@ $head_content .= "
                                     className: 'btn-default',
                                 },
                             }
+                        });
+                        dialog.init(function() {
+                            typeof MathJax !== 'undefined' && MathJax.typeset();
                         });
                     }
                 });
