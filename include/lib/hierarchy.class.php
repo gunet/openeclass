@@ -281,11 +281,11 @@ class Hierarchy {
             Database::get()->query("UPDATE hierarchy SET lft = (lft - ?d) + ?d WHERE lft > ?d", $maxrgt, $nodelft, $maxrgt);
         }
     }
-    
+
     /**
      * Recursive function for getting all neighbour nodes (on the same depth level) according to a starting LEFT value.
      * i.e. useful for finding all roots (depth level 0)
-     * 
+     *
      * @param type $lft      - the starting point lft value, this has to be well known, i.e. lft = 1 certainly belongs to a root node
      * @param type $callback - optional callback function to call for each found node
      */
@@ -299,7 +299,7 @@ class Hierarchy {
             $nextRootLft = intval($row->rgt) + 1;
             $hasMore = Database::get()->querySingle("SELECT COUNT(id) AS count FROM hierarchy WHERE lft = ?d", $nextRootLft)->count;
         }, $lft);
-        
+
         if ($hasMore > 0) {
             return $this->getNeighbourNodesByLft($nextRootLft, $callback);
         } else {
@@ -320,21 +320,21 @@ class Hierarchy {
         $this->getNeighbourNodesByLft(1, $cb);
         return $roots;
     }
-    
+
     /**
      * Locate immediate subordinates of parent node with given lft and their subtrees.
-     * 
+     *
      * @param  integer $searchLft - the lft of the parent node upon which the searching will apply
      * @return array
      */
     private function locateSubordinatesAndSubTrees($searchLft) {
         $subords = array();
         $subtrees = array();
-        
+
         $currentSubIdx = 0;
         $searchSubLft = 0;
         $searchSubRgt = 0;
-        
+
         $this->loopTree(function($node) use (&$searchLft, &$currentSubIdx, &$searchSubLft, &$searchSubRgt, &$subords, &$subtrees) {
             $nlft = intval($node->lft);
             // locate immediate subordinates of parent node by searching for specific lft values
@@ -349,13 +349,13 @@ class Hierarchy {
                 $subtrees[$currentSubIdx][] = $node->id;
             }
         });
-        
+
         return array($subords, $subtrees);
     }
-    
+
     /**
      * Loop the whole tree ordered by lft and call callback for each node.
-     * 
+     *
      * @param  function $callback
      * @param  array    $nodesoverride - in case we can avoid the query
      * @return array    $nodes
@@ -370,16 +370,16 @@ class Hierarchy {
                 $nodes[] = $row;
             });
         }
-        
+
         foreach($nodes as $node) {
             if (is_callable($callback)) {
                 $callback($node);
             }
         }
-        
+
         return $nodes;
     }
-    
+
     /**
      * Compile an array with the root nodes (nodes of 0 depth) and their subtrees.
      *
@@ -388,7 +388,7 @@ class Hierarchy {
     public function buildRootsWithSubTreesArray() {
         return $this->locateSubordinatesAndSubTrees(1);
     }
-    
+
     /**
      * Compile an array with the root node ids (nodes of 0 depth).
      *
@@ -740,14 +740,14 @@ jContent;
 
         return array($js, $html);
     }
-    
+
     public function buildNodePickerIndirect($options) {
         $js = $this->buildJSNodePicker($options);
         $html = $this->buildHtmlNodePickerIndirect($options);
 
         return array($js, $html);
     }
-    
+
 
     /**
      * Build a Tree Node Picker (UI) for attaching courses under tree nodes. The method's output provides all necessary JS and HTML code.
@@ -948,7 +948,7 @@ jContent;
             }
         }
     }
-    
+
     /**
      * Builds an array containing all the subtree nodes of the (parent) nodes given
      *
@@ -961,11 +961,11 @@ jContent;
         $nodelfts = array();
         $ids = '';
 
-   
+
         if (count($nodes) <= 0) {
             return $subs;
         }
-   
+
         foreach ($nodes as $key => $id) {
             $ids .= $id . ',';
         }
@@ -975,13 +975,13 @@ jContent;
         Database::get()->queryFunc("SELECT node.id, node.lft FROM hierarchy AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
             $nodelfts[] = $row->lft;
         });
-        
+
         if (count($nodelfts) > 0) {
             $currentIdx = 0;
             $searchLft = intval($nodelfts[$currentIdx]);
             $searchSubLft = 0;
             $searchSubRgt = 0;
-            
+
             $this->loopTree(function($node) use(&$subs, &$nodelfts, &$searchLft, &$currentIdx, &$searchSubLft, &$searchSubRgt) {
                 $nlft = intval($node->lft);
                 if ($nlft === $searchLft) {
@@ -998,7 +998,7 @@ jContent;
 
         return $subs;
     }
-    
+
     /**
      * Builds an array containing all the subtree nodes of the (parent) nodes given
      *
@@ -1010,7 +1010,7 @@ jContent;
         $subs = array();
         $nodelfts = array();
         $ids = '';
-        
+
         if (count($nodes) <= 0) {
             return $subs;
         }
@@ -1020,17 +1020,17 @@ jContent;
         }
         // remove last ',' from $ids
         $q = substr($ids, 0, -1);
-        
+
         Database::get()->queryFunc("SELECT node.id, node.lft FROM hierarchy AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
             $nodelfts[] = $row->lft;
         });
-        
+
         if (count($nodelfts) > 0) {
             $currentIdx = 0;
             $searchLft = intval($nodelfts[$currentIdx]);
             $searchSubLft = 0;
             $searchSubRgt = 0;
-            
+
             $this->loopTree(function($node) use(&$subs, &$nodelfts, &$searchLft, &$currentIdx, &$searchSubLft, &$searchSubRgt) {
                 $nlft = intval($node->lft);
                 if ($nlft === $searchLft) {
@@ -1084,7 +1084,7 @@ jContent;
                 $priorityB = intval($b->order_priority);
                 $nameA = Hierarchy::unserializeLangField($a->name);
                 $nameB = Hierarchy::unserializeLangField($b->name);
-                
+
                 if ($priorityA == $priorityB) {
                     if ($nameA == $nameB) {
                         return 0;
@@ -1095,17 +1095,17 @@ jContent;
                     return ($priorityA < $priorityB) ? 1 : -1;
                 }
             });
-            
+
             // course department counting
-            //SELECT COUNT(course_department.id) AS count,department FROM course_department 
-            //              JOIN course ON course_department.course=course.id 
+            //SELECT COUNT(course_department.id) AS count,department FROM course_department
+            //              JOIN course ON course_department.course=course.id
             //              WHERE course.visible != 3 GROUP BY department;
             /*Database::get()->queryFunc("select department, count(id) as count from course_department group by department", function($row) use (&$coursedeps) {
                 $coursedeps[intval($row->department)] = $row->count;
             });*/
-            
-            Database::get()->queryFunc("SELECT COUNT(course_department.id) AS count,department FROM course_department 
-                                            JOIN course ON course_department.course = course.id 
+
+            Database::get()->queryFunc("SELECT COUNT(course_department.id) AS count,department FROM course_department
+                                            JOIN course ON course_department.course = course.id
                                         WHERE course.visible != " . COURSE_INACTIVE . " GROUP BY department", function($row) use (&$coursedeps) {
                 $coursedeps[intval($row->department)] = $row->count;
             });
@@ -1115,7 +1115,7 @@ jContent;
                 $name = self::unserializeLangField($node->name);
                 $description = self::unserializeLangField($node->description);
                 $count = 0;
-                
+
                 if (isset($subtrees[$id])) {
                     foreach ($subtrees[$id] as $subkey => $subnode) {
                         // TODO: callback mechanism might need further optimization to avoid repeating extra sql query foreach subnode
@@ -1127,7 +1127,7 @@ jContent;
                         }
                     }
                 }
-                
+
                 if ($options['showEmpty'] || $count > 0) {
                     if (!$this->checkVisibilityRestrictions($id, $node->visible, $options)) {
                         continue;
@@ -1136,7 +1136,7 @@ jContent;
                     $ret .= "<li class='list-group-item'><div class='table_td_header'><a href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
                     $ret .= (!empty($code)) ? "&nbsp;(" . q($code) . ")" : '';
                     $ret .= "<small>&nbsp;&nbsp;-&nbsp;&nbsp;" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</small></div>";
-                    $ret .= (!empty($description)) ? "<div class='table_td_body' style='font-size:small; padding-right:10px; padding-left:10px;'>" . q($description)  . "</div>" : '';
+                    $ret .= (!empty($description)) ? "<div class='table_td_body' style='font-size:small; padding-right:10px; padding-left:10px;'>$description</div>" : '';
                     $ret .= "</li>";
                 }
             }
@@ -1160,10 +1160,10 @@ jContent;
             return " ";
         }
         $searchLft = intval($parent->lft) + 1;
-        
+
         list($children, $subtrees) = $this->locateSubordinatesAndSubTrees($searchLft);
         $chCnt = count($children);
-        
+
         if ($chCnt > 0) {
             return array($chCnt, $this->buildNodesNavigationHtml($children, $url, $countCallback, $options, $subtrees));
         } else {
@@ -1180,7 +1180,7 @@ jContent;
      */
     public function buildRootsSelection($currentNode, $params = '', $options = array('respectVisibility' => true)) {
         global $uid;
-        
+
         // select root nodes
         $res = Database::get()->queryArray("SELECT node.id, node.name, node.visible
                           FROM hierarchy AS node
