@@ -224,21 +224,21 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
               'level' => 'primary-label',)
     ));
 
-    $form .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    $form .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='POST' id='wikiProperties' action='$script'>
                     <fieldset>
                         <input type='hidden' name='wikiId' value='$wikiId'>
                         <!-- groupId = 0 if course wiki, != 0 if group_wiki  -->
                         <input type='hidden' name='gid' value='$groupId'>
                         <div class='form-group".(Session::getError('title') ? " has-error" : "")."'>
-                            <label for='title' class='col-sm-6 control-label-notes'>$langWikiTitle:</label>
+                            <label for='title' class='col-sm-6 control-label-notes'>$langWikiTitle</label>
                             <div class='col-sm-12'>
                                 <input name='title' type='text' class='form-control' id='wikiTitle' value='".q($title) ."' placeholder='$langWikiTitle'>
                                 <span class='help-block'>".Session::getError('title')."</span>
                             </div>
                         </div>
-                        <div class='form-group mt-3'>
-                            <label for='wikiDesc' class='col-sm-6 control-label-notes'>".$langWikiDescription.":</label>
+                        <div class='form-group mt-4'>
+                            <label for='wikiDesc' class='col-sm-6 control-label-notes'>".$langWikiDescription."</label>
                             <div class='col-sm-12'>
                                 <textarea class='form-control' id='wikiDesc' name='desc'>" . q($desc) . "</textarea>";
 
@@ -269,14 +269,14 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
 
     $form .= "                  </div>
                             </div>
-                            <div class='form-group mt-4'>
-                                <div class='col-12 d-inline-flex'>
+                            <div class='form-group mt-5'>
+                                <div class='col-12 d-flex justify-content-center align-items-center'>
                                     
                                       
-                                            <input class='btn btn-primary submitAdminBtn' type='submit' name='action[exEdit]' value='$langSave'>
+                                            <input class='btn submitAdminBtn' type='submit' name='action[exEdit]' value='$langSave'>
                                        
                                         
-                                            <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langCancel</a>
+                                            <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langCancel</a>
                                        
                                     
                                 </div>

@@ -175,33 +175,33 @@ if (isset($_POST['submit'])) {
         $action .= "&amp;res_type=forum_new_topic";
     }
     $tool_content .= "
-    <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    <div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$action' method='post' enctype='multipart/form-data'>
         <fieldset>
             <div class='form-group'>
-              <label for='subject' class='col-sm-6 control-label-notes'>$langSubject:</label>
+              <label for='subject' class='col-sm-6 control-label-notes'>$langSubject</label>
               <div class='col-sm-12'>
                 <input type='text' name='subject' id='subject' class='form-control' maxlength='100'>
               </div>
             </div>
-            <div class='form-group mt-3'>
-              <label for='message' class='col-sm-6 control-label-notes'>$langBodyMessage:</label>
+            <div class='form-group mt-4'>
+              <label for='message' class='col-sm-6 control-label-notes'>$langBodyMessage</label>
               <div class='col-sm-12'>
                 " . rich_text_editor('message', 14, 50, '') . "
               </div>
             </div>
-            <div class='form-group mt-3'>
-                <label for='topic_file' class='col-sm-6 control-label-notes'>$langAttachedFile:</label>
+            <div class='form-group mt-4'>
+                <label for='topic_file' class='col-sm-6 control-label-notes'>$langAttachedFile</label>
                 <div class='col-sm-12'>
                     <input type='file' name='topic_file' id='topic_file' size='35'>
                     " . fileSizeHidenInput() . "
                 </div>
             </div>
-            <div class='form-group mt-4'>
-              <div class='col-12 d-inline-flex'>
+            <div class='form-group mt-5'>
+              <div class='col-12 d-flex justify-content-center align-items-center'>
                
                     
-                        <input class='btn btn-primarysubmitAdminBtn' type='submit' name='submit' value='$langSubmit'>
+                        <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
                     
                   
                         <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='viewforum.php?course=$course_code&forum=$forum_id'>$langCancel</a>

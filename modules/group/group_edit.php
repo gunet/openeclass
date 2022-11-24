@@ -270,41 +270,46 @@ $tool_content .= action_bar(array(
             'icon' => 'fa-reply',
             'url' => $back_url)));
 
-$tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+$tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id'>
         <fieldset>
         <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
-            <label class='col-sm-6 control-label-notes'>$langGroupName:</label>
+            <label class='col-sm-6 control-label-notes'>$langGroupName</label>
             <div class='col-sm-12'>
                 <input class='form-control' type=text name='name' size='40' value='$tool_content_group_name'>
                 <span class='help-block'>".Session::getError('name')."</span>
             </div>
         </div>
-        <div class='form-group mt-3'>
-          <label class='col-sm-6 control-label-notes'>$langDescription $langOptional:</label>
+        <div class='form-group mt-4'>
+          <label class='col-sm-6 control-label-notes'>$langDescription $langOptional</label>
           <div class='col-sm-12'><textarea class='form-control' name='description' rows='2' cols='60'>$tool_content_group_description</textarea></div>
         </div>
-        <div class='form-group".(Session::getError('maxStudent') ? " has-error" : "")." mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langMax $langGroupPlacesThis:</label>
-            <div class='col-sm-12'>
-                <input class='form-control' type=text name='maxStudent' size=2 value='$max_members'>
-                <span class='help-block'>".Session::getError('maxStudent')."</span>
+        <div class='row'>
+            <div class='col-md-6 col-12'>
+                <div class='form-group".(Session::getError('maxStudent') ? " has-error" : "")." mt-4'>
+                    <label class='col-sm-12 control-label-notes'>$langMax $langGroupPlacesThis</label>
+                    <div class='col-sm-12'>
+                        <input class='form-control' type=text name='maxStudent' size=2 value='$max_members'>
+                        <span class='help-block'>".Session::getError('maxStudent')."</span>
+                    </div>
+                </div>
             </div>
-
+            <div class='col-md-6 col-12'>
+                <div class='form-group mt-4'>
+                    <label class='col-sm-12 control-label-notes'>$langGroupTutor</label>
+                    <div class='col-sm-12'>
+                        $tool_content_tutor
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class='form-group mt-3'>
-          <label class='col-sm-6 control-label-notes'>$langGroupTutor:</label>
-          <div class='col-sm-12'>
-             $tool_content_tutor
-          </div>
-        </div>
-        <div class='form-group mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langGroupMembers:</label>
+        <div class='form-group mt-4'>
+            <label class='col-sm-6 control-label-notes'>$langGroupMembers</label>
         <div class='col-sm-12'>
             <div class='table-responsive'>
                 <table class='table-default'>
                     <thead>
-                        <tr class='title1 notes_thead'>
+                        <tr class='title1 list-header'>
                           <th class='text-white'>$langNoGroupStudents</th>
                           <th width='100' class='text-white text-center'>$langMove</th>
                           <th class='right text-white'>$langGroupMembers</th>
@@ -313,20 +318,20 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rou
                     <tbody>
                         <tr>
                           <td>
-                            <select class='form-select' id='users_box' name='nogroup[]' size='15' multiple>
+                            <select class='form-select h-100' id='users_box' name='nogroup[]' size='15' multiple>
                               $tool_content_not_Member
                             </select>
                           </td>
                           <td class='text-center'>
                               <div class='form-group'>
-                                  <input class='btn btn-secondary btn-sm' type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' />
+                                  <input class='btn btn-outline-primary btn-sm rounded-pill h-30px' type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' />
                               </div>
                               <div class='form-group'>
-                                  <input class='btn btn-secondary btn-sm mt-2' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
+                                  <input class='btn btn-outline-primary btn-sm rounded-pill h-30px mt-2' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
                               </div>
                           </td>
                           <td class='text-end'>
-                            <select class='form-select' id='members_box' name='ingroup[]' size='15' multiple>
+                            <select class='form-select h-100' id='members_box' name='ingroup[]' size='15' multiple>
                               $tool_content_group_members
                             </select>
                           </td>
@@ -336,8 +341,8 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rou
             </div>
       </div>
     </div>
-    <div class='form-group mt-3'>
-            <label for='selectcategory' class='col-sm-6 control-label-notes'>$langCategory:</label>
+    <div class='form-group mt-4'>
+            <label for='selectcategory' class='col-sm-6 control-label-notes'>$langCategory</label>
             <div class='col-sm-12'>
                 <select class='form-select' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
@@ -356,8 +361,8 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rou
     </div>";
 
     $tool_content .= "
-            <div class='form-group mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langGroupStudentRegistrationType:</label>
+            <div class='form-group mt-4'>
+            <label class='col-sm-12 control-label-notes mb-2'>$langGroupStudentRegistrationType</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
                     <label>
@@ -367,8 +372,8 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rou
                         </div>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langGroupAllowUnregister:</label>
+            <div class='form-group mt-4'>
+            <label class='col-sm-12 control-label-notes mb-2'>$langGroupAllowUnregister</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
                     <label>
@@ -378,10 +383,10 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rou
                         </div>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-                <label class='col-sm-6 control-label-notes'>$langPrivate_1:</label>
+            <div class='form-group mt-4'>
+                <label class='col-sm-12 control-label-notes mb-2'>$langPrivate_1</label>
                 <div class='col-sm-12'>
-                    <div class='radio'>
+                    <div class='radio mb-2'>
                       <label>
                         <input type='radio' name='private_forum' value='1' checked=''  $checked[private_forum_yes]>
                         $langPrivate_2
@@ -395,7 +400,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rou
                     </div>
                 </div>
             </div>
-            <div class='form-group mt-3 d-inline-flex'>
+            <div class='form-group mt-4 d-inline-flex'>
                 <label class='col-auto control-label-notes'>$langGroupForum:</label>
                 <div class='col-auto ms-2'>
                     <div class='checkbox'>
@@ -405,7 +410,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rou
                     </div>
                 </div>
             </div>
-            <div class='form-group mt-3 d-inline-flex'>
+            <div class='form-group mt-4 d-inline-flex'>
                 <label class='col-auto control-label-notes'>$langDoc:</label>
                 <div class='col-auto ms-2'>
                     <div class='checkbox'>
@@ -415,7 +420,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rou
                     </div>
                 </div>
             </div>
-            <div class='form-group mt-3 d-inline-flex'>
+            <div class='form-group mt-4 d-inline-flex'>
             <label class='col-auto control-label-notes'>$langWiki:</label>
                 <div class='col-auto ms-2'>
                     <div class='checkbox'>
@@ -426,14 +431,14 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rou
                 </div>
             </div>
             <input type='hidden' name='group_id' value=$group_id></input>
-        <div class='form-group mt-4'>
-            <div class='col-12 d-inline-flex'>
+        <div class='form-group mt-5'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
                
                  
                       ".
                       form_buttons(array(
                           array(
-                              'class' => 'btn-primary submitAdminBtn',
+                              'class' => 'submitAdminBtn',
                               'text'  =>  $langSave,
                               'name'  =>  'modify',
                               'value' =>  $langModify,

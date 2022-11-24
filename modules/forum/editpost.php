@@ -131,8 +131,8 @@ if (isset($_POST['submit'])) {
     $subject_field = $attached_file_content = '';
     if ($first_post) {
         $subject_field .= "
-            <div class='form-group mt-3'>
-                <label for='title' class='col-sm-6 control-label-notes'>$langSubject:</label>
+            <div class='form-group'>
+                <label for='title' class='col-sm-6 control-label-notes'>$langSubject</label>
                 <div class='col-sm-12'>
                     <input type='text' name='subject' size='53' maxlength='100' value='" . q($myrow->title) . "'  class='form-control'>
                 </div>
@@ -142,8 +142,8 @@ if (isset($_POST['submit'])) {
     if (!empty($myrow->topic_filename)) {
         $actual_filename = $webDir . "/courses/" . $course_code . "/forum/" . $myrow->topic_filepath;
         $attached_file_content =
-            "<div class='form-group mt-3'>
-                <label class='col-sm-6 control-label-notes'>$langAttachedFile:</label>
+            "<div class='form-group mt-4'>
+                <label class='col-sm-6 control-label-notes'>$langAttachedFile</label>
                 <div class='col-sm-12'>
                     " .q($myrow->topic_filename) ." (" . format_file_size(filesize($actual_filename)) . ") <a id='filedelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id&amp;delete=$myrow->id'>
                         <span class='fa fa-fw fa-times text-danger' data-original-title='$langDeleteAttachment' title='' data-toggle='tooltip'></span>
@@ -154,31 +154,24 @@ if (isset($_POST['submit'])) {
 
 
     $tool_content .= "
-        <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+        <div class='col-12'><div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                 <input type='hidden' name='post_id' value='$post_id'>
                 <input type='hidden' name='topic' value='$topic_id'>
                 <input type='hidden' name='forum' value='$forum_id'>            
                 $subject_field
                 $attached_file_content
-                <div class='form-group mt-3'>
-                    <label for='title' class='col-sm-6 control-label-notes'>$langBodyMessage:</label>
+                <div class='form-group mt-4'>
+                    <label for='title' class='col-sm-6 control-label-notes'>$langBodyMessage</label>
                     <div class='col-sm-12'>
                         " . rich_text_editor('message', 10, 50, $message) . "
                     </div>
                 </div>
-                <div class='form-group mt-4'>
-                    <div class='col-12 d-inline-flex'>
-                        
-                           
-                              <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
-                           
-                          
-                           <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id'>$langCancel</a>
+                <div class='form-group mt-5'>
+                    <div class='col-12 d-flex justify-content-center align-items center'>
+                         <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
+                          <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id'>$langCancel</a>
                          
-                      
-                        
-                        
                     </div>
                 </div>
             </form>

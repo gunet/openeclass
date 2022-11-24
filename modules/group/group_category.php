@@ -49,7 +49,7 @@ $tool_content .= action_bar(array(
             $categoryname = $_POST['categoryname'];
         }
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langGroups);
-        $tool_content .= "<div class='col-12'><div class = 'form-wrapper form-edit p-3 rounded'>";
+        $tool_content .= "<div class='col-12'><div class = 'form-wrapper form-edit rounded'>";
         $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;addcategory=1'>";
 
         $form_name = $form_description = '';
@@ -57,23 +57,23 @@ $tool_content .= action_bar(array(
 
         $tool_content .= "<fieldset>
                         <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")."'>
-                            <label for='CatName' class='col-sm-6 control-label-notes'>$langCategoryName:</label>
+                            <label for='CatName' class='col-sm-6 control-label-notes'>$langCategoryName</label>
                             <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='categoryname' size='53' placeholder='$langCategoryName'>
                                 <span class='help-block'>".Session::getError('categoryname')."</span>
                             </div>
                         </div>
-                        <div class='form-group mt-3'>
-                            <label for='CatDesc' class='col-sm-6 control-label-notes'>$langDescription:</label>
+                        <div class='form-group mt-4'>
+                            <label for='CatDesc' class='col-sm-6 control-label-notes'>$langDescription</label>
                             <div class='col-sm-12'>
                                 <textarea class='form-control' rows='5' name='description'></textarea>
                             </div>
                         </div>
-                        <div class='form-group mt-4'>
-                            <div class='col-12 d-inline-flex'>
+                        <div class='form-group mt-5'>
+                            <div class='col-12 d-flex justify-content-center align-items-center'>
                              
                                     
-                                        <input type='submit' class='btn btn-primary submitAdminBtn' name='submitCategory' value='$form_legend' />
+                                        <input type='submit' class='btn submitAdminBtn' name='submitCategory' value='$form_legend' />
                                   
                                   
                                         <a href='index.php?course=$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-2'>$langCancel</a>
@@ -90,31 +90,31 @@ $tool_content .= action_bar(array(
         category_form_defaults($id);
         $myrow = Database::get()->querySingle("SELECT name,description  FROM group_category WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $form_legend = $langCategoryMod;	
-        $tool_content .= "<div class='col-12'><div class = 'form-wrapper form-edit p-3 rounded'>";
+        $tool_content .= "<div class='col-12'><div class = 'form-wrapper form-edit rounded'>";
         $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;editcategory=1'>";
         $tool_content .= "<fieldset>
             <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")."'>
-                <label for='CatName' class='col-sm-6 control-label-notes'>$langCategoryName:</label>
+                <label for='CatName' class='col-sm-6 control-label-notes'>$langCategoryName</label>
                 <div class='col-sm-12'>
                     <input class='form-control' type='text' name='categoryname' size='53' placeholder='$langCategoryName' $form_name>
                                                     <span class='help-block'>".Session::getError('categoryname')."</span>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-                <label for='CatDesc' class='col-sm-6 control-label-notes'>$langDescription:</label>
+            <div class='form-group mt-4'>
+                <label for='CatDesc' class='col-sm-6 control-label-notes'>$langDescription</label>
                 <div class='col-sm-12'>
                     <textarea class='form-control' rows='5' name='description'>$form_description</textarea>
                 </div>
             </div>
             <input type='hidden' name='id' value='" . getIndirectReference($id) . "' />
             <div class='form-group mt-4'>
-                <div class='col-12 d-inline-flex'>
+                <div class='col-12 d-flex justify-content-center align-items-center'>
                    
                        
-                            <input type='submit' class='btn btn-primary submitAdminBtn' name='submitCategory' value='$form_legend' />
+                            <input type='submit' class='btn submitAdminBtn' name='submitCategory' value='$form_legend' />
                        
                         
-                          <a href='index.php?course=$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-2'>$langCancel</a>
+                          <a href='index.php?course=$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
                        
                    
                 </div>

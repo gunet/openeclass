@@ -184,7 +184,7 @@ if (!isset($_GET['from_other'])) {
     }
 }
 
-$tool_content .= '<div class="col-12"><div class="form-wrapper form-edit p-3 rounded">';
+$tool_content .= '<div class="col-12"><div class="form-wrapper form-edit rounded">';
 if (isset($_GET['from_other'])) {
     $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?from_other=TRUE">';
 } else {
@@ -193,7 +193,7 @@ if (isset($_GET['from_other'])) {
 
 // if we haven't choose 'system actions'
 if (!isset($_GET['from_other'])) {
-    $tool_content .= '<div class="row p-3 form-group">
+    $tool_content .= '<div class="row form-group mt-4">
             <label class="col-md-3 col-12 control-label-notes">' . $langLogModules . ':</label>
             <div class="col-md-9 col-12"><select name="u_module_id" class="form-select">';
     $tool_content .= "<option value='-1'>$langAllModules</option>";
@@ -220,7 +220,7 @@ if (!isset($_GET['from_other'])) {
     $tool_content .= "</select></div></div>";
 }
 
-$tool_content .= '<div class="row p-3 form-group">
+$tool_content .= '<div class="row form-group mt-4">
         <label class="col-md-3 col-12 control-label-notes">' . $langLogTypes . ':</label>        
          <div class="col-md-9 col-12">';
 
@@ -234,53 +234,53 @@ if (isset($_GET['from_other'])) {   // system actions
                     LOG_DELETE => $langDelete);
 }
 
-$tool_content .= selection($log_types, 'logtype', $logtype, "class='row p-3 form-control'");
+$tool_content .= selection($log_types, 'logtype', $logtype, "class='row form-control mt-4'");
 $tool_content .= "</div></div>";
-$tool_content .= "<div class='row input-append date form-group p-3' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-    <div class='row'>
+$tool_content .= "<div class='row input-append date form-group mt-4' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+    
         <label class='col-md-3 col-12 control-label-notes' for='user_date_start'>$langStartDate:</label>
-        <div class='col-md-8 col-10'>               
-            <input class='form-control ms-2' id='user_date_start' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+        <div class='col-md-9 col-12'> 
+            <div class='input-group'>              
+                <input class='form-control mt-0' id='user_date_start' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+                <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-times'></i></span>
+                <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+            </div>
         </div>
-        <div class='col-md-1 col-2'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>
-    </div>
+    
 </div>";
-$tool_content .= "<div class='row input-append date form-group p-3' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-    <div class='row'>
+$tool_content .= "<div class='row input-append date form-group mt-4' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+    
         <label class='col-md-3 col-12 control-label-notes' for='user_date_end'>$langEndDate:</label>
-        <div class='col-md-8 col-10'>
-            <input class='form-control ms-2' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+        <div class='col-md-9 col-12'>
+            <div class='input-group'>   
+                <input class='form-control mt-0' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+                <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-times'></i></span>
+                <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+            </div>
         </div>
-        <div class='col-md-1 col-2'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>
-    </div>
+    
 </div>";
 
 
 // if we haven't choose 'system actions'
 if (!isset($_GET['from_other'])) {
     $tool_content .= 
-      '<div class="row form-group p-3">  
+      '<div class="row form-group mt-4">  
         <label class="col-md-3 col-12 control-label-notes">' . $langFirstLetterUser . ':</label>
         <div class="col-md-9 col-12">' . $letterlinks . '</div>
       </div>
-      <div class="row form-group p-3">  
+      <div class="row form-group mt-4">  
         <label class="col-md-3 col-12 control-label-notes">' . $langUser . ':</label>
         <div class="col-md-9 col-12"><select name="u_user_id" class="form-select">' . $user_opts . '</select></div>
       </div>';
 }
 
-$tool_content .= "<div class='row p-3 form-group'><div class='col-md-9 offset-md-3'>
+$tool_content .= "<div class='row form-group mt-5'><div class='col-md-9 offset-md-3 col-12 d-flex justify-content-center align-items-center'>
 
 
     ".form_buttons(array(
         array(
-            'class' => 'btn-primary submitAdminBtn',
+            'class' => 'submitAdminBtn',
             'text' => $langSubmit,
             'name' => 'submit',
             'value'=> $langSubmit

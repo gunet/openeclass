@@ -2158,7 +2158,7 @@ function certificate_settings($element, $element_id = 0) {
         $check_certdeadline = '';
         $statuscertdeadline = '';
     }
-    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <div class='form-group'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
@@ -2166,13 +2166,13 @@ function certificate_settings($element, $element_id = 0) {
                         <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
                     </div>
                 </div>
-                <div class='form-group mt-3'>
-                    <label for='description' class='col-sm-6 control-label-notes'>$langDescription: </label>
+                <div class='form-group mt-4'>
+                    <label for='description' class='col-sm-6 control-label-notes'>$langDescription</label>
                     <div class='col-sm-12'>
                         <textarea class='form-control' name='description' rows='6'>$description</textarea>
                     </div>
                 </div>
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <label for='title' class='col-sm-6 control-label-notes'>";
                     $tool_content .= ($element == 'certificate') ? $langTemplate : $langIcon;
                     $tool_content .= "</label>
@@ -2180,19 +2180,19 @@ function certificate_settings($element, $element_id = 0) {
                             $tool_content .= ($element == 'certificate') ? selection(get_certificate_templates(), 'template', $template) : selection(get_badge_icons(), 'template', $template);
                         $tool_content .= "</div>
                 </div>
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <label for='message' class='col-sm-6 control-label-notes'>$langMessage</label>
                     <div class='col-sm-12'>
                         <textarea class='form-control' name='message' rows='3' maxlength='200'>$message</textarea>
                     </div>
                 </div>
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langpublisher</label>
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='issuer' value='$issuer'>
                     </div>
                 </div>
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <label class='col-sm-6 control-label-notes'>$langCertificateDeadline:</label>
                     <div class='col-sm-12'>
                        <div class='input-group'>
@@ -2206,12 +2206,12 @@ function certificate_settings($element, $element_id = 0) {
                 </div>
                 $cert_id";
                 $tool_content .= "<div class='form-group mt-5'>
-                    <div class='col-12'>
+                    <div class='col-12 d-flex justify-content-center align-items-center'>
                      
                         
                            ".form_buttons(array(
                             array(
-                                    'class' => 'btn-primary submitAdminBtn',
+                                    'class' => 'submitAdminBtn',
                                     'text' => $langSave,
                                     'name' => $name,
                                     'value'=> $langInsert

@@ -65,24 +65,24 @@ $group_quantity_value = Session::has('group_quantity') ? Session::get('group_qua
 
 if (isset($_GET['all'])) {
     $tool_content .= "
-    <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    <div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
         <div class='form-group".(Session::getError('group_quantity') ? " has-error":"")."'>
-            <label for='group_quantity' class='col-sm-6 control-label-notes'>$langNewGroups:</label>
+            <label for='group_quantity' class='col-sm-6 control-label-notes'>$langNewGroups</label>
             <div class='col-sm-12'>
                 <input name='group_quantity' type='text' class='form-control' id='group_quantity' value='$group_quantity_value' placeholder='$langNewGroups'>
                 <span class='help-block'>".Session::getError('group_quantity')."</span>
             </div>
         </div>
-        <div class='form-group".(Session::getError('group_max') ? " has-error":"")." mt-3'>
-            <label for='group_max' class='col-sm-6 control-label-notes'>$langNewGroupMembers:</label>
+        <div class='form-group".(Session::getError('group_max') ? " has-error":"")." mt-4'>
+            <label for='group_max' class='col-sm-6 control-label-notes'>$langNewGroupMembers</label>
             <div class='col-sm-12'>
                 <input name='group_max' type='text' class='form-control' id='group_max' value='$group_max_value' placeholder='$langNewGroupMembers'>
                 <span class='help-block'>".(Session::getError('group_max') ?: "$langGroupInfiniteUsers")."</span>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <label for='selectcategory' class='col-sm-6 control-label-notes'>$langCategory:</label>
             <div class='col-12'>
                 <select class='form-select' name='selectcategory' id='selectcategory'>
@@ -107,14 +107,14 @@ if (isset($_GET['all'])) {
             </div>
         </div>";
         $tool_content .= "<input type='hidden' name='all' value='$_GET[all]'>";
-        $tool_content .= "<div class='form-group mt-4'>
-        <div class='col-12 d-inline-flex'>
+        $tool_content .= "<div class='form-group mt-5'>
+        <div class='col-12 d-flex justify-content-center align-items-center'>
             
                 
-                   <input class='btn btn-primary submitAdminBtn' type='submit' value='$langCreate' name='creation'>
+                   <input class='btn submitAdminBtn' type='submit' value='$langCreate' name='creation'>
               
                
-                   <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='index.php?course=$course_code'>$langCancel</a>
+                   <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
               
            
         </div>
@@ -124,7 +124,7 @@ if (isset($_GET['all'])) {
     </div></div>";
 } else {
     if ($is_editor) {
-            $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-select'>";
+            $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-select h-100'>";
             $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname
                                                 FROM course_user, user
                                                 WHERE course_user.user_id = user.id AND
@@ -139,24 +139,24 @@ if (isset($_GET['all'])) {
     } else {
             $tool_content_tutor = display_user($tutors);
     }
-    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
         <div class='form-group".(Session::getError('group_name') ? " has-error" : "")."'>
-            <label class='col-sm-6 control-label-notes'>$langGroupName:</label>
+            <label class='col-sm-6 control-label-notes'>$langGroupName</label>
             <div class='col-sm-12'>
                 <input class='form-control' type=text name='group_name' size='40'>
                 <span class='help-block'>".Session::getError('group_name')."</span>
             </div>
         </div>
-        <div class='form-group mt-3'>
-          <label class='col-sm-6 control-label-notes'>$langDescription $langOptional:</label>
+        <div class='form-group mt-4'>
+          <label class='col-sm-6 control-label-notes'>$langDescription $langOptional</label>
           <div class='col-sm-12'><textarea class='form-control' name='description' rows='2' cols='60'></textarea></div>
         </div>
         <div class='row'>
             <div class='col-md-6 col-12'>
-                <div class='form-group".(Session::getError('group_max') ? " has-error" : "")." mt-3'>
-                    <label class='col-sm-6 control-label-notes'>$langNewGroupMembers:</label>
+                <div class='form-group".(Session::getError('group_max') ? " has-error" : "")." mt-4'>
+                    <label class='col-sm-12 control-label-notes'>$langNewGroupMembers</label>
                     <div class='col-sm-12'>
                         <input class='form-control' type=text name='group_max' value='$group_max_value' size=2>
                         <span class='help-block'>".(Session::getError('group_max') ?: "$langGroupInfiniteUsers")."</span>
@@ -164,13 +164,14 @@ if (isset($_GET['all'])) {
                 </div>
             </div>
             <div class='col-md-6 col-12'>
-            <div class='form-group mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langGroupTutor:</label>
-            <div class='col-sm-12'>
-                $tool_content_tutor
+                <div class='form-group mt-4'>
+                    <label class='col-sm-12 control-label-notes'>$langGroupTutor</label>
+                    <div class='col-sm-12'>
+                        $tool_content_tutor
+                    </div>
+                </div>
             </div>
-        </div>
-        </div></div>";
+        </div>";
 
     $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 
@@ -202,13 +203,13 @@ if (isset($_GET['all'])) {
                 q("$myNotMember->surname $myNotMember->givenname") . (!empty($myNotMember->am) ? q(" ($myNotMember->am)") : "") . "</option>";
     }
 
-    $tool_content .= "<div class='form-group mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langGroupMembers:</label>
+    $tool_content .= "<div class='form-group mt-4'>
+            <label class='col-sm-6 control-label-notes'>$langGroupMembers</label>
         <div class='col-sm-12'>
             <div class='table-responsive'>
                 <table class='table-default'>
                     <thead>
-                        <tr class='title1 notes_thead'>
+                        <tr class='title1 list-header'>
                           <th class='text-white'>$langNoGroupStudents</th>
                           <th width='100' class='text-white text-center'>$langMove</th>
                           <th class='right text-white'>$langGroupMembers</th>
@@ -217,20 +218,20 @@ if (isset($_GET['all'])) {
                     <tbody>
                         <tr>
                           <td>
-                            <select class='form-select' id='users_box' name='nogroup[]' size='15' multiple>
+                            <select class='form-select h-100' id='users_box' name='nogroup[]' size='15' multiple>
                               $tool_content_not_Member
                             </select>
                           </td>
                           <td class='text-center'>
                               <div class='form-group'>
-                                  <input class='btn btn-sm btn-secondary' type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' />
+                                  <input class='btn btn-sm btn-outline-primary rounded-pill h-30px' type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' />
                               </div>
                               <div class='form-group mt-2'>
-                                  <input class='btn btn-sm btn-secondary' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
+                                  <input class='btn btn-sm btn-outline-primary rounded-pill h-30px' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
                               </div>
                           </td>
                           <td class='text-end'>
-                            <select class='form-select' id='members_box' name='ingroup[]' size='15' multiple>
+                            <select class='form-select h-100' id='members_box' name='ingroup[]' size='15' multiple>
                               $tool_content_group_members
                             </select>
                           </td>
@@ -240,8 +241,8 @@ if (isset($_GET['all'])) {
             </div>
       </div>
     </div>
-    <div class='form-group mt-3'>
-            <label for='selectcategory' class='col-sm-6 control-label-notes'>$langCategory:</label>
+    <div class='form-group mt-4'>
+            <label for='selectcategory' class='col-sm-6 control-label-notes'>$langCategory</label>
             <div class='col-sm-12'>
                 <select class='form-select' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
@@ -264,8 +265,8 @@ if (isset($_GET['all'])) {
             </select>
             </div>
         </div>
-            <div class='form-group mt-3'>
-             <label class='col-sm-6 control-label-notes'>$langGroupStudentRegistrationType:</label>
+            <div class='form-group mt-4'>
+             <label class='col-sm-6 control-label-notes mb-2'>$langGroupStudentRegistrationType</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
                     <label>
@@ -274,8 +275,8 @@ if (isset($_GET['all'])) {
                  </div>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-             <label class='col-sm-6 control-label-notes'>$langGroupAllowUnregister:</label>
+            <div class='form-group mt-4'>
+             <label class='col-sm-6 control-label-notes mb-2'>$langGroupAllowUnregister</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
                     <label>
@@ -284,8 +285,8 @@ if (isset($_GET['all'])) {
                  </div>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-                 <label class='col-sm-12 control-label-notes'>$langPrivate_1:</label>
+            <div class='form-group mt-4'>
+                 <label class='col-sm-12 control-label-notes mb-2'>$langPrivate_1</label>
                 <div class='col-sm-12'>
                     <div class='radio'>
                       <label>
@@ -293,7 +294,7 @@ if (isset($_GET['all'])) {
                         $langPrivate_2
                       </label>
                     </div>
-                    <div class='radio'>
+                    <div class='radio mt-2'>
                       <label>
                         <input type='radio' name='private_forum' value='0'>
                         $langPrivate_3
@@ -301,7 +302,7 @@ if (isset($_GET['all'])) {
                     </div>
                 </div>
             </div>
-            <div class='form-group mt-3'>
+            <div class='form-group mt-4'>
                 <div class='row'>
                     <label class='col-auto control-label-notes'>$langGroupForum:</label>
                     <div class='col-auto pt-1'>
@@ -313,7 +314,7 @@ if (isset($_GET['all'])) {
                     </div>
                 </div>
             </div>
-            <div class='form-group mt-3'>
+            <div class='form-group mt-4'>
                <div class='row'>
                     <label class='col-auto control-label-notes'>$langDoc:</label>
                     <div class='col-auto pt-1'>
@@ -325,7 +326,7 @@ if (isset($_GET['all'])) {
                     </div>
                 </div>
             </div>
-            <div class='form-group mt-3'>
+            <div class='form-group mt-4'>
                 <div class='row'>
                     <label class='col-auto control-label-notes'>$langWiki:</label>
                     <div class='col-auto pt-1'>
@@ -338,14 +339,14 @@ if (isset($_GET['all'])) {
                 </div>
             </div>";
         $tool_content .= "<input type='hidden' name='group_quantity' value='1'>";
-        $tool_content .= "<div class='form-group mt-4'>
-            <div class='col-12 d-inline-flex'>
+        $tool_content .= "<div class='form-group mt-5'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
               
                     
-                    <input class='btn btn-primary submitAdminBtn' type='submit' value='$langCreate' name='creation' onClick=\"selectAll('members_box', true)\" >
+                    <input class='btn submitAdminBtn' type='submit' value='$langCreate' name='creation' onClick=\"selectAll('members_box', true)\" >
                    
                  
-                     <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='index.php?course=$course_code'>$langCancel</a>
+                     <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
                    
                
                 

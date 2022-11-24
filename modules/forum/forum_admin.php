@@ -138,27 +138,27 @@ elseif (isset($_GET['forumgoedit'])) {
     $forum_desc = $result->desc;
     $cat_id_1 = $result->cat_id;
     $tool_content .= "
-                <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+                <div class='col-12'><div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgosave=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
                 <input type='hidden' name='forum_id' value='$forum_id'>
                 <fieldset>
                 <div class='form-group'>
-                    <label for='forum_name' class='col-sm-6 control-label-notes'>$langForName:</label>
+                    <label for='forum_name' class='col-sm-6 control-label-notes'>$langForName</label>
                     <div class='col-sm-12'>
                         <input name='forum_name' type='text' class='form-control' id='forum_name' value='" . q($forum_name) . "'>
                     </div>
                 </div>
-                <div class='form-group mt-3'>
-                    <label for='forum_desc' class='col-sm-6 control-label-notes'>$langDescription:</label>
+                <div class='form-group mt-4'>
+                    <label for='forum_desc' class='col-sm-6 control-label-notes'>$langDescription</label>
                     <div class='col-sm-12'>
                         <textarea name='forum_desc' id='forum_desc' class='form-control' cols='47' rows='3'>" . q($forum_desc) . "</textarea>
                     </div>
                 </div>
-                <div class='form-group mt-3'>";
+                <div class='form-group mt-4'>";
     $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM `group` WHERE `forum_id` = ?d", $forum_id);
     if ($result->c == 0) {//group forums cannot change category
         $tool_content .= "
-                    <label for='cat_id' class='col-sm-6 control-label-notes'>$langChangeCat:</label>
+                    <label for='cat_id' class='col-sm-6 control-label-notes'>$langChangeCat</label>
                     <div class='col-sm-12'>
                     <select name='cat_id' id='cat_id' class='form-select'>";
         $result = Database::get()->queryArray("SELECT `id`, `cat_title` FROM `forum_category` WHERE `course_id` = ?d AND `cat_order` <> ?d", $course_id, -1);
@@ -176,11 +176,11 @@ elseif (isset($_GET['forumgoedit'])) {
     }
     $tool_content .= "
        </div>
-        <div class='form-group mt-4'>
-            <div class='col-12 d-inline-flex'>
+        <div class='form-group mt-5'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
                 
                    
-                        <input class='btn btn-primary submitAdminBtn' type='submit' value='$langModify'>
+                        <input class='btn submitAdminBtn' type='submit' value='$langModify'>
                 
                    
                          <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
@@ -200,21 +200,21 @@ elseif (isset($_GET['forumcatedit'])) {
     $cat_id = $result->id;
     $cat_title = $result->cat_title;
     $tool_content .= "
-        <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+        <div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatsave=yes' method='post' onsubmit=\"return checkrequired(this,'cat_title');\">
         <input type='hidden' name='cat_id' value='$cat_id'>
         <fieldset>
         <div class='form-group'>
-            <label for='cat_title' class='col-sm-6 control-label-notes'>$langCategory:</label>
+            <label for='cat_title' class='col-sm-6 control-label-notes'>$langCategory</label>
             <div class='col-sm-12'>
                 <input name='cat_title' type='text' class='form-control' id='cat_title' placeholder='$langCategory' value='$cat_title'>
             </div>
         </div>
-        <div class='form-group mt-4'>
-            <div class='col-12 d-inline-flex'>
+        <div class='form-group mt-5'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
               
                     
-                        <input class='btn btn-primary submitAdminBtn' type='submit' value='$langModify'>
+                        <input class='btn submitAdminBtn' type='submit' value='$langModify'>
                     
                   
                         <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
@@ -564,20 +564,20 @@ elseif (isset($_GET['forumgodel'])) {
         </div></div>";
 } else {
     $tool_content .= "
-        <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+        <div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">
         <fieldset>
         <div class='form-group'>
-            <label for='categories' class='col-sm-6 control-label-notes'>$langCategory:</label>
+            <label for='categories' class='col-sm-6 control-label-notes'>$langCategory</label>
             <div class='col-sm-12'>
               <input name='categories' type='text' class='form-control' id='categories' placeholder='$langCategory'>
             </div>
         </div>
-        <div class='form-group mt-4'>
-            <div class='col-12 d-inline-flex'>
+        <div class='form-group mt-5'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
                
                    
-                        <input class='btn btn-primary submitAdminBtn' type='submit' value='$langAdd'>
+                        <input class='btn submitAdminBtn' type='submit' value='$langAdd'>
                   
                    
                         <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>

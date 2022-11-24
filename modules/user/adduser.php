@@ -109,7 +109,7 @@ if (isset($_GET['add'])) {
     $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langAskUser</div></div>
 
     <div class='col-12'>
-                <div class='form-wrapper form-edit p-3 rounded'>
+                <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <fieldset>
 
@@ -123,7 +123,7 @@ if (isset($_GET['add'])) {
 
 
 
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                 <label for='name' class='col-sm-6 control-label-notes'>$langName</label>
                 <div class='col-sm-12'>
                     <input class='form-control' id='name' type='text' name='search_givenname' value='" . q($search_givenname) . "' placeholder='$langName'></div>
@@ -131,7 +131,7 @@ if (isset($_GET['add'])) {
 
 
 
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                 <label for='username' class='col-sm-6 control-label-notes'>$langUsername</label>
                 <div class='col-sm-12'>
                     <input class='form-control' id='username' type='text' name='search_username' value='" . q($search_username) . "' placeholder='$langUsername'></div>
@@ -139,7 +139,7 @@ if (isset($_GET['add'])) {
 
 
 
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                 <label for='am' class='col-sm-6 control-label-notes'>$langAm</label>
                 <div class='col-sm-12'>
                     <input class='form-control' id='am' type='text' name='search_am' value='" . q($search_am) . "' placeholder='$langAm'></div>
@@ -147,14 +147,14 @@ if (isset($_GET['add'])) {
 
 
 
-                <div class='form-group mt-4'>
-                <div class='col-12 d-inline-flex'>
+                <div class='form-group mt-5'>
+                <div class='col-12 d-flex justify-content-center align-items-center'>
                    
                        
-                      <input class='btn btn-primary submitAdminBtn' type='submit' name='search' value='$langSearch'>
+                      <input class='btn submitAdminBtn' type='submit' name='search' value='$langSearch'>
                       
                       
-                       <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='index.php?course=$course_code'>$langCancel</a>
+                       <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
                       
                    
                    

@@ -89,22 +89,22 @@ if (isset($_POST['submit'])) {
 $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langAskManyUsers</div></div>
         
 <div class='col-12'>
-<div class='form-wrapper form-edit p-3 rounded'>
+<div class='form-wrapper form-edit rounded'>
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <fieldset>     
                   
             <div class='form-group'>
-               <div class='col-sm-12 radio'><label class='control-label'><input type='radio' name='type' value='uname' checked>$langUsername</label></div>
+               <div class='col-sm-12 radio mb-2'><label class='control-label'><input type='radio' name='type' value='uname' checked>$langUsername</label></div>
                 <div class='col-sm-12 radio'><label class='control-label'><input type='radio' name='type' value='am'>$langAm</label></div>
             </div>
                  
-            <div class='form-group mt-3'>
+            <div class='form-group mt-4'>
                 <textarea class='auth_input w-100' name='user_info' rows='10'></textarea>
             </div>
             ".showSecondFactorChallenge()." 
                
-            <div class='col-12 mt-5'>
-                <input class='btn btn-primary btn-sm submitAdminBtn m-auto d-block w-50' type='submit' name='submit' value='$langAdd'>
+            <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
+                <input class='btn submitAdminBtn' type='submit' name='submit' value='$langAdd'>
             </div>                       
         </fieldset>
         ". generate_csrf_token_form_field() ."  

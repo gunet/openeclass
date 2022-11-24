@@ -264,34 +264,39 @@ if ($is_editor) {
                     
                     <div class='col-12'>
 
-                    <div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
-                        <div class='form-group'>
-                            <label for='newPathName' class='col-sm-6 control-label-notes'>$langName</label>
-                            <div class='col-sm-12'>
-                              <input name='newPathName' placeholder='$langName...' type='text' class='form-control' id='newPathName'>
+                    <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
+                        <div class='row'>
+                            <div class='col-md-6 col-12'>
+                                <div class='form-group mt-4'>
+                                    <label for='newPathName' class='col-sm-6 control-label-notes'>$langName</label>
+                                    <div class='col-sm-12'>
+                                    <input name='newPathName' placeholder='$langName' type='text' class='form-control' id='newPathName'>
+                                    </div>
+                                </div>
+                            </div>
+
+                        
+                            <div class='col-md-6 col-12'>
+                                <div class='form-group mt-4'>
+                                    <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription</label>
+                                    <div class='col-sm-12'>
+                                    <input name='newComment' placeholder='$langDescription' type='text' class='form-control' id='newComment'>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                        
 
-                        <div class='form-group mt-3'>
-                            <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription:</label>
-                            <div class='col-sm-12'>
-                              <input name='newComment' placeholder='$langDescription...' type='text' class='form-control' id='newComment'>
-                            </div>
-                        </div>
-
-                       
-
-                        <div class='form-group mt-4'>
-                            <div class='col-12 d-inline-flex'>
+                        <div class='form-group mt-5'>
+                            <div class='col-12 d-flex justify-content-center align-items-center'>
                               <input type='hidden' name='cmd' value='create'>
                               
                                 "
                                     .
                                         form_buttons(array(
                                             array(
-                                                'class' => 'btn-primary submitAdminBtn',
+                                                'class' => 'submitAdminBtn',
                                                 'text' => $langSave,
                                                 'value' => $langCreate
                                             ),

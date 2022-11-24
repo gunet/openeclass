@@ -204,7 +204,7 @@ img { max-width: 100%; height: auto; }
 
 @media (max-width:1023px){ .textFileUpload{ font-size: 16px; } }
 
-.help-block{ color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold',sans-serif; }
+.help-block{ color:#9d9d9c; font-size: 12px; font-family: 'Manrope-SemiBold',sans-serif; }
 
 .pen-hierarchy{margin-left:-5px;}
 
@@ -246,11 +246,11 @@ textarea {width:100%;}
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
 /* this is d-inline-flex between inputs-radio and texts */
-.radio label{ display:inline-flex; justify-content: center; align-items:center ; color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold',sans-serif;} 
+.radio label{ display:inline-flex; justify-content: center; align-items:center ; color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold',sans-serif; } 
 .radio label p{ margin-top:0px; } 
 .radio .help-block{margin-top: -10px;}
 .radio:has(input[type='radio']:checked) .help-block{
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Manrope-SemiBold',sans-serif;
   color:#001146;
 }
@@ -346,7 +346,7 @@ input:-webkit-autofill:active {
    border-radius: 0px;
    margin-top: 5px;
    border: 0px;
-   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.13);
+   box-shadow: 0px 0px 10px 0px rgba(232, 232, 232, 1);
    background-color: white;
 }
 .form-wrapper textarea:focus, .forms-panels-admin textarea:focus,
@@ -1633,21 +1633,30 @@ label:has(input[type="checkbox"]:disabled){
   
   .Borders{ border-radius:15px; }
 
+  .BordersInput{ border-radius:35px; }
+
   .BordersTop{ border-top-left-radius:15px; border-top-right-radius:15px; }
+
+  .BordersTopInput{ border-top-left-radius:35px; border-top-right-radius:35px; }
 
   .BordersBottom{ border-bottom-left-radius:15px; border-bottom-right-radius:15px; }
 
+  .BordersBottomInput{ border-bottom-left-radius:35px; border-bottom-right-radius:35px; }
+
   .BordersBottom2{ border-bottom-left-radius:13px; border-bottom-right-radius:13px; }
 
-  .NoBorders{ border-radius:0px; }
+  .NoBorders , .NoBordersInput{ border-radius:0px; }
 
-  .NoBorderTop{ border-top-left-radius:0px; border-top-right-radius:0px; }
+  .NoBorderTop , .NoBorderTopInput { border-top-left-radius:0px; border-top-right-radius:0px; }
 
-  .NoBorderBottom{ border-bottom-left-radius:0px; border-bottom-right-radius:0px; }
+  .NoBorderBottom, .NoBorderBottomInput{ border-bottom-left-radius:0px; border-bottom-right-radius:0px; }
 
   .BordersLeft { border-bottom-left-radius: 75px !important; }
   
-  
+  .BordersLeftInput { border-bottom-left-radius: 35px; border-top-left-radius: 35px;}
+
+  .BordersRightInput { border-bottom-right-radius: 35px; border-top-right-radius: 35px;}
+
 /* -------------------------------------------- Links ---------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/

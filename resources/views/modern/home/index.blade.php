@@ -930,8 +930,15 @@
     $('.ContentEclass').addClass('container-fluid');
     $('.ContentEclass.container-fluid').css('padding-left','0px');
     $('.ContentEclass.container-fluid').css('padding-right','0px');
-    $('.navbar-eclass').css('border-bottom-left-radius','70px');
+    var x = window.matchMedia("(max-width: 991px)")
+    if (x.matches){ 
+        $('.navbar-eclass').css('border-bottom-left-radius','0px');
+    }else{
+        $('.navbar-eclass').css('border-bottom-left-radius','70px');
+    }
     $('.navbar-eclass').css('border-bottom-right-radius','0px');
+
+    
     
     $('#link-home'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_2.svg");
     function unhoverHome(obj) {

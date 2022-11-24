@@ -3548,8 +3548,31 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         if (!isset($option['button-class'])) {
             $button_class = 'action_bar_btn rounded-pill d-flex justify-content-center align-items-center me-2';
         } else {
-            // $button_class = $option['button-class'];
-            $button_class = 'action_bar_btn rounded-pill d-flex justify-content-center align-items-center me-2';
+            $oldButton = '';
+
+            if(strpos($option['button-class'],'btn-success') !== false){
+                $oldButton = 'btn-success';
+            }else if(strpos($option['button-class'], 'btn-secondary') !== false){
+                $oldButton = 'btn-secondary';
+            }else if(strpos($option['button-class'], 'btn-default') !== false){
+                $oldButton = 'btn-default';
+            }else if(strpos($option['button-class'], 'btn-primary') !== false){
+                $oldButton = 'btn-primary';
+            }else if(strpos($option['button-class'], 'btn-danger') !== false){
+                $oldButton = 'btn-danger';
+            }else if(strpos($option['button-class'], 'btn-warnig') !== false){
+                $oldButton = 'btn-warnig';
+            }else if(strpos($option['button-class'], 'btn-info') !== false){
+                $oldButton = 'btn-info';
+            }else if(strpos($option['button-class'], 'btn-light') !== false){
+                $oldButton = 'btn-light';
+            }else if(strpos($option['button-class'], 'btn-dark') !== false){
+                $oldButton = 'btn-dark';
+            }
+            //replace button-class with myclass;
+            $button_class = $option['button-class'];
+            $new_button = str_replace($oldButton,'action_bar_btn rounded-pill d-flex justify-content-center align-items-center me-2',$button_class);
+            $button_class = $new_button;
         }
         if (isset($option['link-attrs'])) {
             $link_attrs = " ".$option['link-attrs'];

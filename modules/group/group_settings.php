@@ -75,16 +75,16 @@ if (isset($_POST['submit'])) {
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/group/group_settings.php?course=$course_code");
 } else {
-    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                     <div class='form-group'>
                         <div class='col-sm-12'>
-                            <div class='radio'>
+                            <div class='radio mb-2'>
                                   <label>
                                     <input type='radio' name='group_reg' value='0'$checked_single_reg>$langGroupAllowRegistration
                                   </label>
                             </div>
-                            <div class='radio'>
+                            <div class='radio mb-2'>
                                   <label>
                                     <input type='radio' name='group_reg' value='2'$checked_category_reg>$langGroupAllowCategoryRegistration
                                   </label>
@@ -96,7 +96,7 @@ if (isset($_POST['submit'])) {
                              </div>
                          </div>
                      </div>
-                    <div class='form-group mt-3'>
+                    <div class='form-group mt-4'>
                          <div class='col-sm-12'>
                             <div class='checkbox'>
                                   <label>
@@ -105,13 +105,13 @@ if (isset($_POST['submit'])) {
                              </div>
                          </div>
                      </div>                    
-                    <div class='form-group mt-4'>
-                        <div class='col-12 d-inline-flex'>
+                    <div class='form-group mt-5'>
+                        <div class='col-12 d-flex justify-content-center align-items-center'>
                            
                              
                                 ".form_buttons(array(
                                     array(
-                                        'class' => 'btn-primary submitAdminBtn',
+                                        'class' => 'submitAdminBtn',
                                         'text' => $langSave,
                                         'name' => 'submit',
                                         'value'=> $langSubmit

@@ -146,25 +146,24 @@ if (!$field) {
     $checked_am = ($field == 'am')? 'checked': '';
 }
 $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langGroupManyUsers</div></div>
-    <div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>
+    <div class='col-sm-12'><div class='form-wrapper form-edit rounded'>
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id'>
         <fieldset>
             <div class='form-group'>
-               <div class='col-sm-12 radio'><label><input type='radio' name='type' value='uname' $checked_uname> $langUsername</label></div>
+               <div class='col-sm-12 radio mb-2'><label><input type='radio' name='type' value='uname' $checked_uname> $langUsername</label></div>
                <div class='col-sm-12 radio'><label><input type='radio' name='type' value='am' $checked_am> $langAm</label></div>
             </div>
-            <div class='form-group mt-3'>
+            <div class='form-group mt-4'>
                 <textarea class='form-control' name='user_info' rows='10'>" . q(Session::get('user_info')) . "</textarea>
             </div>
-            <div class='form-group mt-4'>
-                <div class='row'>
-                   <div class='col-6'>
-                       <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='$langAdd'>
-                   </div>
-                   <div class='col-6'>
-                     <a href='group_space.php?course=$course_code&amp;group_id=$group_id' class='btn btn-outline-secondary cancelAdminBtn w-100'>$langCancel</a>
-                   </div>
-                </div>
+            <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+               
+                   
+                    <input class='btn submitAdminBtn' type='submit' name='submit' value='$langAdd'>
+
+                     <a href='group_space.php?course=$course_code&amp;group_id=$group_id' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                 
+               
                 
               
             </div>

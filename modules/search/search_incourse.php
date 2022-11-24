@@ -76,18 +76,18 @@ if (empty($search_terms)) {
     $langSearchCriteria;
     $tool_content .= "
     <div class='col-12'>
-    <div class='form-wrapper form-edit p-3 rounded'>
+    <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
-        <div class='form-group'>
-            <label for='search_terms' class='col-sm-6 control-label-notes'>$langOR:</label>
-            <div class='col-sm-12'>
+        <div class='row form-group'>
+            <label for='search_terms' class='col-md-3 col-12 control-label-notes'>$langOR:</label>
+            <div class='col-md-9 col-12'>
                 <input name='search_terms' type='text' class='form-control'>
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='search_terms' class='col-sm-6 control-label-notes'>$langSearchIn:</label>
-            <div class='col-sm-10'>
+        <div class='form-group mt-4'>
+            <label for='search_terms' class='col-sm-6 control-label-notes mb-2'>$langSearchIn</label>
+            <div class='col-12'>
                 <div class='row'>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
@@ -157,8 +157,8 @@ if (empty($search_terms)) {
             </div>
         </div>
         <div class='form-group mt-5'>
-            <div class='col-12'>
-                <input class='btn btn-primary btn-sm m-auto d-block submitAdminBtn w-50' type='submit' name='submit' value='$langDoSearch'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
+                <input class='btn submitAdminBtn' type='submit' name='submit' value='$langDoSearch'>
             </div>
         </div>
        </fieldset>

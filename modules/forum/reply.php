@@ -200,27 +200,27 @@ if (isset($_POST['submit'])) {
     }
 
     $reply = '';
-    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$form_url' method='post' enctype='multipart/form-data'>
             <input type='hidden' name='parent_post' value='$parent_post'>
             <div class='form-group'>
-              <label for='message' class='col-sm-6 control-label-notes'>$langBodyMessage:</label>
+              <label for='message' class='col-sm-6 control-label-notes'>$langBodyMessage</label>
               <div class='col-sm-12'>
                 " . rich_text_editor('message', 15, 70, $reply) . "
               </div>
             </div>
-            <div class='form-group mt-3'>
-                <label for='topic_file' class='col-sm-6 control-label-notes'>$langAttachedFile:</label>
+            <div class='form-group mt-4'>
+                <label for='topic_file' class='col-sm-6 control-label-notes'>$langAttachedFile</label>
                 <div class='col-sm-12'>
                     <input type='file' name='topic_file' id='topic_file' size='35'>
                     " . fileSizeHidenInput() . "
                 </div>
             </div>
-            <div class='form-group mt-4'>
-                <div class='col-12 d-inline-flex'>
+            <div class='form-group mt-5'>
+                <div class='col-12 d-flex justify-content-center align-items-center'>
                    
                        
-                            <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
+                            <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
                        
                        
                             <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='$cancel_url'>$langCancel</a>

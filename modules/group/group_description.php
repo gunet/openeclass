@@ -63,26 +63,26 @@ if (isset($_GET['delete'])) {
             'level' => 'primary-label'
         )
     ))."
-    <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    <div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <input type='hidden' name='group_id' value='$group_id'>
             <div class='form-group'>
                 <div class='col-sm-12'>$langGroupDescInfo</div>
             </div>
-            <div class='form-group mt-3'>
-              <label for='group_desc' class='col-sm-6 control-label-notes'>$langDescription:</label>
+            <div class='form-group mt-4'>
+              <label for='group_desc' class='col-sm-6 control-label-notes'>$langDescription</label>
               <div class='col-sm-12'>
                 <textarea class='form-control' name='group_desc' id='group_desc' rows='10'>" . @$description . "</textarea>
               </div>
             </div>
-            <div class='form-group mt-4'>
-                <div class='col-12 d-inline-flex'>
+            <div class='form-group mt-5'>
+                <div class='col-12 d-flex justify-content-center align-items-center'>
                   
                        
-                         <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='" . q($langAddModify) . "'>
+                         <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langAddModify) . "'>
                         
                        
-                          <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='index.php?course=$course_code'>$langCancel</a>
+                          <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
                        
                    
                    

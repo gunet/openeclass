@@ -113,12 +113,12 @@
     
 
         <!-- Desktop navbar -->
-        <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
+        <div class="d-none d-lg-block">
             @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
         </div>
 
         <!-- Mobile navbar -->
-        <div class="d-lg-none">
+        <div class="d-block d-lg-none">
             @include('layouts.partials.navheadMobile',['logo_img_small' => $logo_img_small])
         </div>
 
@@ -127,12 +127,12 @@
 
 
         <!-- Desktop navbar -->
-        <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
+        <div class="d-none d-lg-block">
             @include('layouts.partials.footerDesktop')
         </div>
 
         <!-- Mobile navbar -->
-        <div class="d-lg-none">
+        <div class="d-block d-lg-none">
             @include('layouts.partials.footerMobile')
         </div>
     </div>

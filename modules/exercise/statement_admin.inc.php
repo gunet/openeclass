@@ -328,7 +328,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 </div>
             </div>
             <div class='row'>
-                <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
+                <div class='col-md-9 col-12 offset-md-3 mt-5 d-flex justify-content-center align-items-center'>
                     
                       
                         <input type='submit' class='btn submitAdminBtn' name='submitQuestion' value='$langCreate'>

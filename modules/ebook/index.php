@@ -121,33 +121,35 @@ if ($is_editor) {
         <div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>" .
                 fileSizeHidenInput() . "
-                <div class='form-group'>
-                    <label for='ebook_title' class='col-sm-6 control-label-notes'>$langTitle</label>
-                    <div class='col-sm-12'>
+                <div class='row form-group'>
+                    <label for='ebook_title' class='col-md-3 col-12 control-label-notes mb-1'>$langTitle:</label>
+                    <div class='col-md-9 col-12'>
                         <input type='text' class='form-control' id='ebook_title' name='title' placeholder='$langTitle'>
                     </div>
                 </div>
 
             
 
-                <div class='form-group mt-4'>
-                    <label for='fileUpload' class='col-sm-6 control-label-notes'>$langZipFile</label>
-                    <div class='col-sm-12'>
-                      <input type='file' name='file' id='fileUpload'><small class='help-block'>$langOptional</small>
+                <div class='row form-group mt-4'>
+                    <label for='fileUpload' class='col-md-3 col-12 control-label-notes mb-1'>$langZipFile:</label>
+                    <div class='col-md-9 col-12'>
+                      <input type='file' name='file' id='fileUpload'></br>
+                      <small class='help-block'>$langOptional</small>
                     </div>
                 </div>
 
                
 
                 <div class='row mt-4'>
-                      <div class='infotext col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+                      
+                      <div class='col-md-9 col-12 offset-md-3 infotext'>$langMaxFileSize" . ini_get('upload_max_filesize') . "</div>
                 </div>
 
                
 
-                <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                <div class='form-group mt-5'>
                     
-                       
+                       <div class='col-md-9 col-12 offset-md-3 d-flex justify-content-center align-items-center'>
                           
                               ".
                               form_buttons(array(
@@ -164,7 +166,7 @@ if ($is_editor) {
                               ))
                               ."
                            
-                           
+                        </div>
                        
                     
                 </div>

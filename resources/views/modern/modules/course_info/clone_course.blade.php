@@ -151,15 +151,19 @@
                                     </div>
                                 </div>
                                 <div class='form-group mt-3'>
-                                    <label class='col-sm-6 control-label-notes'>{{ trans('langUsersWillAdd') }}:</label>
-                                    <div class='col-sm-12'>
-                                        <input type='radio' name='add_users' value='all' id='add_users_all' checked='checked'>
-                                        {{ trans('langAll') }}<br>
+                                    <label class='col-sm-12 control-label-notes'>{{ trans('langUsersWillAdd') }}:</label>
+                                    
+                                    <div class='radio mb-2'>
+                                        <label>
+                                            <input type='radio' name='add_users' value='all' id='add_users_all' checked='checked'>
+                                            {{ trans('langAll') }}
+                                        </label>
+                                    </div>
                                         <input type='radio' name='add_users' value='prof' id='add_users_prof'>
                                         {{ trans('langsTeachers') }}<br>
                                         <input type='radio' name='add_users' value='none' id='add_users_none'>
                                         {{ trans('langNone') }}
-                                    </div>
+                                    
                                 </div>
                                 <div class='form-group mt-3'>
                                     <label class='col-sm-6 control-label-notes'>{{ trans('langMultiRegType') }}:</label>

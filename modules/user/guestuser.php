@@ -98,41 +98,41 @@ if (isset($_POST['submit'])) {
         $guest_info->username = $default_guest_username;
         $submit_label = $langAdd;
     }
-    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
         <div class='form-group'>
-            <label class='col-sm-6 control-label-notes'>$langName:</label>
+            <label class='col-sm-6 control-label-notes'>$langName</label>
             <div class='col-sm-12'>
-                <input class='form-control' value='".q($guest_info->givenname)."' disabled>
+                <input class='form-control rounded-pill' value='".q($guest_info->givenname)."' disabled>
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langSurname:</label>
+        <div class='form-group mt-4'>
+            <label class='col-sm-6 control-label-notes'>$langSurname</label>
             <div class='col-sm-12'>
-                <input class='form-control' value='".q($guest_info->surname)."' disabled>
+                <input class='form-control rounded-pill' value='".q($guest_info->surname)."' disabled>
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label class='col-sm-6 control-label-notes'>$langUsername:</label>
+        <div class='form-group mt-4'>
+            <label class='col-sm-6 control-label-notes'>$langUsername</label>
             <div class='col-sm-12'>
-                <input class='form-control' value='".q($guest_info->username)."' disabled>
+                <input class='form-control rounded-pill' value='".q($guest_info->username)."' disabled>
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='password' class='col-sm-6 control-label-notes'>$langPass:</label>
+        <div class='form-group mt-4'>
+            <label for='password' class='col-sm-6 control-label-notes'>$langPass</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='guestpassword' value='' id='password' autocomplete='off' placeholder='$langAskGuest'>
                 <span id='result'></span>
             </div>
         </div>
-        <div class='col-12 mt-4 d-inline-flex'>
+        <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
          
              
-             <input class='btn btn-primary submitAdminBtn' type='submit' name='submit' value='$submit_label'>
+             <input class='btn submitAdminBtn' type='submit' name='submit' value='$submit_label'>
            
             
-              <a href='index.php?course=$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-2'>$langCancel</a>
+              <a href='index.php?course=$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
             
          
           

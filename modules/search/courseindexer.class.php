@@ -189,38 +189,38 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
                 <div class='col-12 h-100 left-form'></div>
             </div>
             <div class='col-lg-6 col-12'>
-                <div class='form-wrapper form-edit p-3 rounded'>
+                <div class='form-wrapper form-edit rounded'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
                         <fieldset>
                             <div class='form-group'>
-                                <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
+                                <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
                                 <div class='col-sm-12'><input id='title' class='form-control' name='search_terms_title' type='text' placeholder='$langTitle_Descr'></div>
                             </div>
-                            <div class='form-group mt-3'>
-                                <label for='description' class='col-sm-6 control-label-notes'>$langDescription:</label>
+                            <div class='form-group mt-4'>
+                                <label for='description' class='col-sm-6 control-label-notes'>$langDescription</label>
                                 <div class='col-sm-12'><input id='description' class='form-control' name='search_terms_description' type='text' placeholder='$langDescription_Descr'></div>
                             </div>
-                            <div class='form-group mt-3'>
-                                <label for='keywords' class='col-sm-6 control-label-notes'>$langKeywords:</label>
+                            <div class='form-group mt-4'>
+                                <label for='keywords' class='col-sm-6 control-label-notes'>$langKeywords</label>
                                 <div class='col-sm-12'><input id='keywords' class='form-control' name='search_terms_keywords' type='text' placeholder='$langKeywords_Descr'></div>
                             </div>
-                            <div class='form-group mt-3'>
-                                <label for='teacher' class='col-sm-6 control-label-notes'>$langTeacher:</label>
+                            <div class='form-group mt-4'>
+                                <label for='teacher' class='col-sm-6 control-label-notes'>$langTeacher</label>
                                 <div class='col-sm-12'><input id='teacher' class='form-control' name='search_terms_instructor' type='text' placeholder='$langInstructor_Descr'></div>
                             </div>
-                            <div class='form-group mt-3'>
-                                <label for='code' class='col-sm-6 control-label-notes'>$langCourseCode:</label>
+                            <div class='form-group mt-4'>
+                                <label for='code' class='col-sm-6 control-label-notes'>$langCourseCode</label>
                                 <div class='col-sm-12'><input id='code' class='form-control' name='search_terms_coursecode' type='text' placeholder='$langCourseCode_Descr'></div>
                             </div>
-                            <div class='col-sm-12 mt-5'>
-                            <div class='row'>
-                                <div class='col-md-6 col-12'>
-                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='$langDoSearch'>
-                                </div>
-                                <div class='col-md-6 col-12 mt-md-0 mt-3'>
-                                    <input class='btn btn-outline-secondary cancelAdminBtn w-100' type='reset' name='reset' value='$langNewSearch'>
-                                </div>
-                                </div>
+                            <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
+                            
+                                
+                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='$langDoSearch'>
+                               
+                              
+                                    <input class='btn btn-outline-secondary cancelAdminBtn ms-1' type='reset' name='reset' value='$langNewSearch'>
+                               
+                               
                             </div>
                         </fieldset>
                     </form>

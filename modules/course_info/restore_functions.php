@@ -405,15 +405,27 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label class='col-sm-6 control-label-notes'>$langUsersWillAdd</label>
+                        <label class='col-sm-6 control-label-notes mb-2'>$langUsersWillAdd</label>
 
-                        <div class='col-sm-9'>
-                            <input type='radio' name='add_users' value='all' id='add_users_all' checked='checked'>
-                           $langAll<br>
-                           <input type='radio' name='add_users' value='prof' id='add_users_prof'>
-                           $langsTeachers<br>
-                           <input type='radio' name='add_users' value='none' id='add_users_none'>
-                           $langNone
+                        <div class='col-sm-12'>
+                           <div class='radio mb-2'>
+                                <label>
+                                    <input type='radio' name='add_users' value='all' id='add_users_all' checked='checked'>
+                                    $langAll
+                                </label>
+                            </div>
+                            <div class='radio mb-2'>
+                                <label>
+                                    <input type='radio' name='add_users' value='prof' id='add_users_prof'>
+                                    $langsTeachers
+                                </label>
+                            </div>
+                            <div class='radio mb-2'>
+                                <label>
+                                    <input type='radio' name='add_users' value='none' id='add_users_none'>
+                                    $langNone
+                                </label>
+                            </div>
                         </div>
                     </div>" .
                     // Hide "Create accounts" option if in course (i.e. clone mode)

@@ -353,10 +353,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     <div class='col-12'>
 
-    <div class='form-wrapper form-edit p-3 rounded'>
+    <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>            
             <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")."'>
-              <label for='PollName' class='col-sm-6 control-label-notes'>$langTitle:</label>
+              <label for='PollName' class='col-sm-6 control-label-notes'>$langTitle</label>
               <div class='col-sm-12'>
                 <input type='text' class='form-control' id='PollName' name='PollName' placeholder='$langTitle' value='$PollName'>
                 <span class='help-block'>".Session::getError('PollName')."</span>
@@ -364,41 +364,41 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
 
             
-
-            <div class='input-append date form-group".(Session::getError('PollStart') ? " has-error" : "")." mt-3' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
-                <label for='PollStart' class='col-sm-6 control-label-notes'>$langPollStart:</label>
-                <div class='row'>
-                    <div class='col-10 col-sm-9'>
-                        <input class='form-control' name='PollStart' id='PollStart' type='text' value='$PollStart'>
-                        <span class='help-block'>".Session::getError('PollStart')."</span>
+            <div class='row'>
+                <div class='col-md-6 col-12'>
+                    <div class='input-append date form-group".(Session::getError('PollStart') ? " has-error" : "")." mt-4' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
+                        <label for='PollStart' class='col-sm-12 control-label-notes mb-1'>$langPollStart</label>
+                        
+                        <div class='input-group'>
+                                <input class='form-control mt-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
+                                <span class='help-block'>".Session::getError('PollStart')."</span>
+                                <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+                        </div>
+                            
+                        
                     </div>
-                    <div class='col-2 col-sm-1'>
-                        <span class='add-on'><i class='fa fa-calendar'></i></span>
+                </div>
+
+            
+                <div class='col-md-6 col-12'>
+                    <div class='input-append date form-group".(Session::getError('PollEnd') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
+                        <label for='PollEnd' class='col-sm-6 control-label-notes mb-1'>$langPollEnd</label>
+                        
+                        <div class='input-group'>
+                            <input class='form-control mt-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
+                            <span class='help-block'>".Session::getError('PollEnd')."</span>
+                            <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+                        </div>
                     </div>
                 </div>
             </div>
 
            
 
-            <div class='input-append date form-group".(Session::getError('PollEnd') ? " has-error" : "")." mt-3' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
-                <label for='PollEnd' class='col-sm-6 control-label-notes'>$langPollEnd:</label>
-                <div class='row'>
-                    <div class='col-10 col-sm-9'>
-                        <input class='form-control' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
-                        <span class='help-block'>".Session::getError('PollEnd')."</span>
-                    </div>
-                    <div class='col-2 col-sm-1'>
-                        <span class='add-on'><i class='fa fa-calendar'></i></span>
-                    </div>
-                </div>
-            </div>
-
-           
-
-            <div class='form-group mt-3'>
-                <label class='col-sm-6 control-label-notes'>$langResults:</label>
+            <div class='form-group mt-4'>
+                <label class='col-sm-6 control-label-notes mb-2'>$langResults</label>
                 <div class='col-sm-12'>
-                    <div class='checkbox'>
+                    <div class='checkbox mb-2'>
                         <label>
                             <input type='checkbox' name='PollAnonymized' id='PollAnonymized' value='1' ".((isset($poll->anonymized) && $poll->anonymized) ? 'checked' : '').">
                             $langPollAnonymize
@@ -416,8 +416,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
        
 
 
-            <div class='form-group mt-3'>
-              <label for='PollDescription' class='col-sm-6 control-label-notes'>$langDescription:</label>
+            <div class='form-group mt-4'>
+              <label for='PollDescription' class='col-sm-6 control-label-notes'>$langDescription</label>
               <div class='col-sm-12'>
                 ".rich_text_editor('PollDescription', 4, 52, $PollDescription)."
               </div>
@@ -425,8 +425,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
             
             
-            <div class='form-group mt-3'>
-              <label for='PollEndMessage' class='col-sm-6 control-label-notes'>$langPollEndMessage:</label>
+            <div class='form-group mt-4'>
+              <label for='PollEndMessage' class='col-sm-6 control-label-notes'>$langPollEndMessage</label>
               <div class='col-sm-12'>
                 ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."
               </div>
@@ -435,16 +435,16 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             
 
 
-            <div class='form-group mt-3'>
-                <label class='col-sm-6 control-label-notes'>$m[WorkAssignTo]:</label>
+            <div class='form-group mt-4'>
+                <label class='col-sm-6 control-label-notes mb-2'>$m[WorkAssignTo]</label>
                 <div class='col-sm-12'>
-                    <div class='radio'>
+                    <div class='radio mb-2'>
                       <label>
                         <input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".($PollAssignToSpecific == 0 ? " checked" : "").">
                         <span>$m[WorkToAllUsers]</span>
                       </label>
                     </div>
-                    <div class='radio'>
+                    <div class='radio mb-2'>
                       <label>
                         <input type='radio' id='assign_button_user' name='assign_to_specific' value='1'".($PollAssignToSpecific == 1 ? " checked" : "").">
                         <span>$m[WorkToUser]</span>
@@ -461,7 +461,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
            
 
-            <div class='form-group mt-3'>
+            <div class='form-group mt-4'>
                 <div class='col-sm-12 col-sm-offset-2'>
                     <div class='table-responsive'>
                         <table id='assignees_tbl' class='table-default".(isset($poll) && in_array($poll->assign_to_specific, [1, 2]) ? '' : ' hide')."'>
@@ -472,15 +472,15 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             </tr>
                             <tr>
                               <td>
-                                <select class='form-select' id='assign_box' size='10' multiple>
+                                <select class='form-select h-100' id='assign_box' size='10' multiple>
                                 ".((isset($unassigned_options)) ? $unassigned_options : '')."
                                 </select>
                               </td>
                               <td class='text-center'>
-                                <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                                <input class='btn-outline-primary h-30px rounded-pill' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn-outline-primary h-30px rounded-pill mt-3' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                               </td>
                               <td width='40%'>
-                                <select class='form-select' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                <select class='form-select h-100' id='assignee_box' name='ingroup[]' size='10' multiple>
                                 ".((isset($assignee_options)) ? $assignee_options : '')."
                                 </select>
                               </td>
@@ -493,16 +493,16 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             
 
 
-            <div class='form-group mt-3'>
-                <label class='col-sm-6 control-label-notes'>$langType:</label>
+            <div class='form-group mt-4'>
+                <label class='col-sm-6 control-label-notes mb-2'>$langType</label>
                 <div class='col-sm-12'>
-                    <div class='radio'>
+                    <div class='radio mb-2'>
                       <label>
                         <input type='radio' id='general_type' name='survey_type' value='0'".($PollSurveyType == POLL_NORMAL ? " checked" : "").">
                         <span>$langGeneralSurvey </span>
                       </label>
                     </div>
-                    <div class='radio'>
+                    <div class='radio mb-2'>
                       <label>
                         <input type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == POLL_COLLES ? " checked" : "").">
                         <span>$langCollesSurvey</span>&nbsp;&nbsp;<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$colles_desc'></span>
@@ -520,15 +520,15 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
            
 
 
-            <div class='form-group mt-4'>
-              <div class='col-12 d-inline-flex'>
+            <div class='form-group mt-5'>
+              <div class='col-12 d-flex justify-content-center align-items-center'>
                 
                   
                      "
                      .
                                  form_buttons(array(
                                      array(
-                                         'class' => 'btn-primary submitAdminBtn',
+                                         'class' => 'submitAdminBtn',
                                          'text'  => $langSave,
                                          'name'  => 'submitPoll',
                                          'value' => (isset($_GET['newPoll']) ? $langCreate : $langModify),
@@ -593,9 +593,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     $tool_content .= "
     <div class='col-12'>
-    <div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' action='$action_url' method='post'>    
+    <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$action_url' method='post'>    
             <div class='form-group $questionNameErrorClass'>
-                <label for='questionName' class='col-sm-6 control-label-notes'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion).":</label>
+                <label for='questionName' class='col-sm-6 control-label-notes'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion)."</label>
                 <div class='col-sm-12'>
                   ".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, $questionName) :"<input type='text' class='form-control' id='questionName' name='questionName' value='".q($questionName)."'>")."
                   <span class='help-block'>$questionNameError</span>
@@ -619,22 +619,22 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         </script>";
         $tool_content .= "
         
-            <div class='form-group mt-3'>
-                <label for='answerType' class='col-sm-6 control-label-notes'>$langType:</label>
+            <div class='form-group mt-4'>
+                <label for='answerType' class='col-sm-6 control-label-notes mb-2'>$langType</label>
                 <div class='col-sm-12'>
-                    <div class='radio'>
+                    <div class='radio mb-2'>
                       <label>
                         <input type='radio' name='answerType' class='answerType' value='1' value='".QTYPE_SINGLE."' ".($answerType == QTYPE_SINGLE || !isset($question) ? 'checked' : '').">
                         ". $aType[QTYPE_SINGLE - 1] . "
                       </label>
                     </div>
-                    <div class='radio'>
+                    <div class='radio mb-2'>
                       <label>
                         <input type='radio' name='answerType' class='answerType' value='".QTYPE_MULTIPLE."' ".($answerType == QTYPE_MULTIPLE ? 'checked' : '').">
                         ". $aType[QTYPE_MULTIPLE - 1] . "
                       </label>
                     </div>
-                    <div class='radio'>
+                    <div class='radio mb-2'>
                       <label>
                         <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILL."' ".($answerType == QTYPE_FILL ? 'checked' : '').">
                         ". $aType[QTYPE_FILL - 1] . "
@@ -652,9 +652,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             
 
 
-            <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-3'>
+            <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
                 <label for='questionScale' class='col-sm-6 control-label-notes'>$langMax $langScale (1-..):</label>
-                <div class='col-sm-12 col-md-3'>
+                <div class='col-12'>
                     <input type='text' class='form-control' name='questionScale' id='questionScale' value='".q($questionScale)."'>
                     <span class='help-block'>$questionScaleError</span>
                 </div>
@@ -664,14 +664,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
    
 
-            <div class='form-group mt-4'>
-                <div class='col-12 d-inline-flex'>
+            <div class='form-group mt-5'>
+                <div class='col-12 d-flex justify-content-center align-items-center'>
                   
                      
                          ".
                          form_buttons(array(
                              array(
-                                 'class' => 'btn-primary submitAdminBtn',
+                                 'class' => 'submitAdminBtn',
                                  'text'  => $langSave,
                                  'name'  => 'submitQuestion',
                                  'value' => (isset($_GET['newQuestion']) ? $langCreate : $langModify)
@@ -739,7 +739,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                        
                             
                             <div class='col-9 control-label-notes'>
-                               <span>$langPollAddAnswer: </span><input class='btn btn-sm btn-primary' type='submit' name='MoreAnswers' value='+'>
+                               <span>$langPollAddAnswer: </span><input class='btn submitAdminBtn' type='submit' name='MoreAnswers' value='+'>
                             </div>
                        
                     </div><hr><br>";
@@ -783,10 +783,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $tool_content .= "
        
                     <div class='form-group mt-4'>
-                        <div class='col-12 d-inline-flex'>
+                        <div class='col-12 d-flex justify-content-center align-items-center'>
                             
                                
-                                 <input class='btn btn-primary submitAdminBtn' type='submit' name='submitAnswers' value='$langCreate'>
+                                 <input class='btn submitAdminBtn' type='submit' name='submitAnswers' value='$langCreate'>
                               
                               
                                  <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='admin.php?course=$course_code&amp;pid=$pid'>$langCancel</a>

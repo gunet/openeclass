@@ -121,18 +121,18 @@
 </div>
 
 <div class='d-block d-md-none mt-3'>
-    <div class='col-12 shadow p-3 bg-body rounded'>
+    <div class='col-12 legendViewContent ps-0 pe-0 pt-0 pb-3'>
         
             @if($course_code)
                 @if($is_editor)
                     <div class='row'>
                         <div class='col-10'>
                            
-                                <table class='table'>
+                                <table class='table mb-0 ps-0 pe-0'>
                                     <thead>
                                         
-                                        <tr class='border-0'>
-                                            <th class='border-0'>
+                                        <tr class='border-0 ps-0'>
+                                            <th class='border-0 ps-0'>
                                                 <span class='control-label-notes fs-5'>
                                                     {{$currentCourseName}}
                                                 </span>
@@ -146,8 +146,8 @@
                                         </tr>
 
                                         @if($toolName)
-                                            <tr class='border-0'>
-                                                <th class='border-0 d-inline-flex'>
+                                            <tr class='border-0 ps-0'>
+                                                <th class='border-0 d-inline-flex ps-0'>
                                                     <span class='text-secondary fst-italic me-2'>
                                                         {{$toolName}}
                                                     </span>
@@ -198,7 +198,7 @@
                                 </table>
                             
                         </div>
-                        <div class='col-2 d-flex justify-content-end align-items-end'>
+                        <div class='col-2 d-flex justify-content-end align-items-top pt-3'>
                             @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code])
                         </div>
                     </div>
@@ -206,12 +206,12 @@
                     <div class='row'>
                         <div class='col-12'>
                             
-                                <table class='table'>
+                                <table class='table mb-0 ps-0 pe-0'>
                                     <thead>
                                        
                                        
-                                        <tr class='border-0'>
-                                            <th class='border-0'>
+                                        <tr class='border-0 ps-0'>
+                                            <th class='border-0 ps-0'>
                                                 <span class='control-label-notes fs-5'>
                                                     {{$currentCourseName}}
                                                 </span>

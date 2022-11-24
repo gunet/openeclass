@@ -141,7 +141,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     $tool_content .= "
     <div class='col-12'><div class='alert alert-info'><label>$langFirstMethod</label> $langRequest1</div></div>
     <div class='col-12'>
-    <div class='form-wrapper form-edit p-3 rounded'>
+    <div class='form-wrapper form-edit rounded'>
             <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>            
             <div class='form-group mt-3'>
                 <div class='col-sm-4'>" .
@@ -149,7 +149,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                     <input type='file' name='archiveZipped' />
                 </div>
                 <div class='col-sm-6'>
-                    <input class='btn btn-primary mt-3' type='submit' name='send_archive' value='" . $langSend . "'>
+                    <input class='btn mt-3 submitAdminBtn' type='submit' name='send_archive' value='" . $langSend . "'>
                     <span class='help-block'><small>$langMaxFileSize " .ini_get('upload_max_filesize') . "</small></span>
                 </div>
             </div>
@@ -160,13 +160,13 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         <div class='col-12 mt-3'><div class='alert alert-info'>
         <label>$langSecondMethod</label> $langRequest2</div></div>      
         <div class='col-12'>
-        <div class='form-wrapper form-edit p-3 rounded'>
+        <div class='form-wrapper form-edit rounded'>
           <form role='form' class='form-inline' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>
             <div class='form-group mt-3'>
                 <input type='text' class='form-control' name='pathToArchive'>
             </div>
             <div class='form-group mt-3'>
-                <input class='btn btn-primary mt-3' type='submit' name='send_path' value='" . $langSend . "'>
+                <input class='btn submitAdminBtn' type='submit' name='send_path' value='" . $langSend . "'>
             </div>
           ". generate_csrf_token_form_field() ."
           </form>

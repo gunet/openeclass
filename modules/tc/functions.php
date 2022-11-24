@@ -150,29 +150,29 @@ function bbb_session_form($session_id = 0) {
                                                 AND enabled = 'true' ORDER BY FIELD(enable_recordings, 'true', 'false'), weight ASC LIMIT 1")->id;
 
     $tool_content .= "
-        <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+        <div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
         <fieldset>
         <div class='form-group'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
+            <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='title' id='title' value='$value_title' placeholder='$langTitle' size='50'>
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='desc' class='col-sm-6 control-label-notes'>$langUnitDescr:</label>
+        <div class='form-group mt-4'>
+            <label for='desc' class='col-sm-6 control-label-notes'>$langUnitDescr</label>
             <div class='col-sm-12'>
                 $textarea
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='start_session' class='col-sm-6 control-label-notes'>$langStart:</label>
+        <div class='form-group mt-4'>
+            <label for='start_session' class='col-sm-6 control-label-notes'>$langStart</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='start_session' id='start_session' value='$start_session'>
             </div>
         </div>";
-        $tool_content .= "<div class='input-append date form-group".(Session::getError('BBBEndDate') ? " has-error" : "")." mt-3' id='enddatepicker' data-date='$BBBEndDate' data-date-format='dd-mm-yyyy'>
-            <label for='BBBEndDate' class='col-sm-6 control-label-notes'>$langEnd:</label>
+        $tool_content .= "<div class='input-append date form-group".(Session::getError('BBBEndDate') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$BBBEndDate' data-date-format='dd-mm-yyyy'>
+            <label for='BBBEndDate' class='col-sm-6 control-label-notes'>$langEnd</label>
             <div class='col-sm-12'>
                 <div class='input-group'>
                     <span class='input-group-addon'>
@@ -185,16 +185,16 @@ function bbb_session_form($session_id = 0) {
         </div>";
         $en_recordings = has_enable_recordings($server_id);
         if ($en_recordings == 'true') {
-            $tool_content .= "<div class='form-group mt-3'>
-                <label for='group_button' class='col-sm-6 control-label-notes'>$langBBBRecord:</label>
+            $tool_content .= "<div class='form-group mt-4'>
+                <label for='group_button' class='col-sm-6 control-label-notes mb-2'>$langBBBRecord</label>
                 <div class='col-sm-12'>
-                    <div class='radio'>
+                    <div class='radio mb-2'>
                       <label>
                         <input type='radio' id='user_button' name='record' value='true' " . (($record == true) ? 'checked' : '') . ">
                         $langBBBRecordTrue
                       </label>
                     </div>
-                    <div class='radio'>
+                    <div class='radio mb-2'>
                       <label>
                         <input type='radio' id='group_button' name='record' value='false' " . (($record == false) ? 'checked' : '') . ">
                        $langBBBRecordFalse
@@ -203,10 +203,10 @@ function bbb_session_form($session_id = 0) {
                 </div>
             </div>";
         }
-        $tool_content .= "<div class='form-group mt-3'>
-            <label for='active_button' class='col-sm-6 control-label-notes'>$langNewBBBSessionStatus:</label>
+        $tool_content .= "<div class='form-group mt-4'>
+            <label for='active_button' class='col-sm-6 control-label-notes mb-2'>$langNewBBBSessionStatus:</label>
             <div class='col-sm-12'>
-                    <div class='radio'>
+                    <div class='radio mb-2'>
                       <label>
                         <input type='radio' id='active_button' name='status' value='1' " . (($status==1) ? "checked" : "") . ">
                         $langVisible
@@ -218,8 +218,8 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
-        <label for='active_button' class='col-sm-6 control-label-notes'>$langAnnouncements:</label>
+        <div class='form-group mt-4'>
+        <label for='active_button' class='col-sm-6 control-label-notes mb-2'>$langAnnouncements</label>
             <div class='col-sm-12'>
                      <div class='checkbox'>
                       <label>
@@ -228,14 +228,14 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='minutes_before' class='col-sm-6 control-label-notes'>$langBBBSessionAvailable:</label>
+        <div class='form-group mt-4'>
+            <label for='minutes_before' class='col-sm-6 control-label-notes'>$langBBBSessionAvailable</label>
             <div class='col-sm-12'>" . selection(array(10 => '10', 15 => '15', 30 => '30'), 'minutes_before', $unlock_interval, "id='minutes_before'") . "
                 $langBBBMinutesBefore
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='sessionUsers' class='col-sm-6 control-label-notes'>$langBBBSessionMaxUsers:</label>
+        <div class='form-group mt-4'>
+            <label for='sessionUsers' class='col-sm-6 control-label-notes'>$langBBBSessionMaxUsers</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='number' min='1' pattern='\d+' name='sessionUsers' id='sessionUsers' value='$value_session_users'>";
         if (isset($bbb_max_part_per_room_limit)) {
@@ -246,8 +246,8 @@ function bbb_session_form($session_id = 0) {
         $tool_content .= "
             </div>
         </div>";
-        $tool_content .= "<div class='form-group mt-3'>
-                <label for='select-groups' class='col-sm-6 control-label-notes'>$langParticipants:</label>
+        $tool_content .= "<div class='form-group mt-4'>
+                <label for='select-groups' class='col-sm-6 control-label-notes'>$langParticipants</label>
                 <div class='col-sm-12'>
                 <select name='groups[]' multiple='multiple' class='form-select' id='select-groups'>";
 
@@ -297,7 +297,7 @@ function bbb_session_form($session_id = 0) {
             </div>";
 
 
-        $tool_content .= "<div class='form-group mt-3'>
+        $tool_content .= "<div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -308,14 +308,14 @@ function bbb_session_form($session_id = 0) {
         </div>";
 
         $tool_content .= "
-        <div class='form-group mt-3'>
-            <label for='tags_1' class='col-sm-6 control-label-notes'>$langBBBExternalUsers:</label>
+        <div class='form-group mt-4'>
+            <label for='tags_1' class='col-sm-6 control-label-notes'>$langBBBExternalUsers</label>
             <div class='col-sm-12'>
                 <select id='tags_1' class='form-select' name='external_users[]' multiple></select>
                 <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBNotifyExternalUsersHelpBlock</span>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -324,7 +324,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>";
-        $tool_content .= "<div class='clearfix'>
+        $tool_content .= "<div class='clearfix mt-4'>
                             <a role='button' data-bs-toggle='collapse' href='#MoreInfo' aria-expanded='false' aria-controls='MoreInfo'>
                                  <h5 class='panel-heading' style='margin-bottom: 0px;'>
                                        <span class='fa fa-chevron-down fa-fw'></span> $langReadMore   
@@ -332,7 +332,7 @@ function bbb_session_form($session_id = 0) {
                             </a>
                           </div>";
         $tool_content .= "<div class='collapse $options_show' id='MoreInfo'>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -341,7 +341,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -350,7 +350,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -359,7 +359,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -368,7 +368,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -377,7 +377,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -386,7 +386,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -395,7 +395,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -404,7 +404,7 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
                       <label>
@@ -417,8 +417,8 @@ function bbb_session_form($session_id = 0) {
         $tool_content .= "</div>
         $submit_id
         <div class='form-group mt-5'>
-            <div class='col-12'>
-                <input class='btn btn-sm btn-primary submitAdminBtn w-50 m-auto d-block' type='submit' name='$submit_name' value='$value_message'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
+                <input class='btn submitAdminBtn' type='submit' name='$submit_name' value='$value_message'>
             </div>
         </div>
         </fieldset>

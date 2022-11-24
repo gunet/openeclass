@@ -209,7 +209,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                 <div class='col-12 h-100 left-form'></div>
             </div>
             <div class='col-lg-6 col-12'>
-                <div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' id='newmsg' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+                <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' id='newmsg' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } elseif ($course_id == 0 && $type == 'cm') {
         $tool_content .= "
         <div class='row'>
@@ -218,15 +218,15 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
             </div>
             <div class='col-lg-6 col-12'>
         ";
-        $tool_content .= "<div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } else {
         $type = 'cm'; //only course messages are allowed in the context of a course
-        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     }
     $tool_content .= "
         <fieldset>
             <div class='form-group'>
-                <label for='title' class='col-sm-6 control-label-notes'>$langSender:</label>
+                <label for='title' class='col-sm-6 control-label-notes'>$langSender</label>
                 <div class='col-sm-12'>
                   <input type='text' class='form-control' value='" . q(uid_to_name($uid)) . "' disabled>
                 </div>
@@ -269,8 +269,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                           </script>";
 
         $tool_content .= "
-            <div class='form-group mt-3'>
-                <label for='title' class='col-sm-6 control-label-notes'>$langCourse:</label>
+            <div class='form-group mt-4'>
+                <label for='title' class='col-sm-6 control-label-notes'>$langCourse</label>
                 <div class='col-sm-12'>
                     <select id='courseselect' class='form-select' name='course'>
                         <option value='-1'>&nbsp;</option>";
@@ -284,8 +284,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
 
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
         $tool_content .= "
-        <div class='form-group mt-3'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
+        <div class='form-group mt-4'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langSendTo</label>
             <div class='col-sm-12'>
                 <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
 
@@ -414,16 +414,16 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                 $u_name = $q->name;
             }
             $tool_content .= "<input type='hidden' name='recipients' value='$_GET[id]'>
-                            <div class='form-group mt-3'>
-                                <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
+                            <div class='form-group mt-4'>
+                                <label for='title' class='col-sm-6 control-label-notes'>$langSendTo</label>
                                 <div class='col-sm-12'>
                                     <label>$u_name</label>
                                 </div>
                             </div>";
         } else {
             $tool_content .= "
-                            <div class='form-group mt-3'>
-                                <label for='title' class='col-sm-6 control-label-notes'>$langSendTo:</label>
+                            <div class='form-group mt-4'>
+                                <label for='title' class='col-sm-6 control-label-notes'>$langSendTo</label>
                                 <div class='col-sm-12'>
                                     <select name='recipients' class='form-select' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
                                 </div>
@@ -432,16 +432,16 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     }
 
     $tool_content .= "
-        <div class='form-group mt-3'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langSubject:</label>
+        <div class='form-group mt-4'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langSubject</label>
             <div class='col-sm-12'>
                 <input type='text' class='form-control' name='message_title'>
             </div>
         </div>";
 
     $tool_content .= "
-        <div class='form-group mt-3'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langMessage:</label>
+        <div class='form-group mt-4'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langMessage</label>
             <div class='col-sm-12'>
                 ".rich_text_editor('body', 4, 20, '')."
             </div>
@@ -449,17 +449,18 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
         enableCheckFileSize();
         $tool_content .= "
-        <div class='form-group mt-3'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langAttachedFile:</label>
+        <div class='form-group mt-4'>
+            <label for='title' class='col-sm-6 control-label-notes mb-2'>$langAttachedFile</label>
             <div class='col-sm-12'>" .
                 fileSizeHidenInput() . "
-                <input type='file' name='file'><span class='help-block' style='margin-bottom: 0px;'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></span>
+                <input type='file' name='file'>
+                <div class='help-block' style='margin-bottom: 0px;'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></div>
             </div>
         </div>";
     }
 
     $tool_content .= "
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-xs-10 col-xs-offset-2'>
                 <div class='checkbox'>
                   <label>
@@ -470,14 +471,14 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
             </div>
         </div>
 
-        <div class='form-group mt-4'>
-            <div class='col-12 d-inline-flex'>
+        <div class='form-group mt-5'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
            
                  
                     ".
                     form_buttons(array(
                             array(
-                                'class' => 'btn-primary submitAdminBtn',
+                                'class' => 'submitAdminBtn',
                                 'text'  => $langSend,
                                 'name'  => 'submit',
                                 'value' => $langSend
