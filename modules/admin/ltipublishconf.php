@@ -153,7 +153,7 @@ foreach ($app->getParams() as $param) {
             $selected = "selected";
         }
         $tool_content .= "<div class='form-group' id='courses-list'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-3 control-label'>$langUseOfApp&nbsp;&nbsp;";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>$langUseOfApp&nbsp;&nbsp;";
         $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfAppInfo'></span></label>";
         $tool_content .= "<div class='col-sm-9'><select id='select-courses' class='form-control' name='lti_courses[]' multiple>";
         $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";

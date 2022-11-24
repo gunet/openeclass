@@ -66,7 +66,7 @@ if (isset($_POST['submit'])) {
 }
 
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
-$pageName = $langModify . ' ' . $app->getDisplayName();
+$toolName = $langConfig . ' ' . $app->getDisplayName();
 $tool_content .= action_bar(array(
     array('title' => $langBack,
         'url' => 'extapp.php',
