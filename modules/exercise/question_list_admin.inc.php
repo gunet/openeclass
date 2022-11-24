@@ -360,7 +360,7 @@ $head_content .= "
         $.ajax({
             url: url,
             success: function(data) {
-                bootbox.dialog({
+                var dialog = bootbox.dialog({
                     message: data,
                     title: '$langQuestionPreview ' + qid,
                     onEscape: true,
@@ -381,6 +381,9 @@ $head_content .= "
                             className: 'btn-default',
                         },
                     }
+               });
+               dialog.init(function() {
+                 typeof MathJax !== 'undefined' && MathJax.typeset();
                });
             }
         });
