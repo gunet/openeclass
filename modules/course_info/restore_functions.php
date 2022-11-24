@@ -322,7 +322,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     global $langInfo1, $langInfo2, $langCourseCode, $langLanguage, $langTitle,
     $langCourseDescription, $langFaculty, $langCourseVis,
     $langTeacher, $langUsersWillAdd,
-    $langOk, $langAll, $langsTeachers, $langMultiRegType,
+    $langRestore, $langAll, $langsTeachers, $langMultiRegType,
     $langNone, $langOldValue, $treeObj, $langBack, $course_code;
 
     list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
@@ -426,7 +426,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                     </div>") . "
                     <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
                         
-                        <input class='btn submitAdminBtn' type='submit' name='create_restored_course' value='$langOk' />
+                        <input class='btn submitAdminBtn' type='submit' name='create_restored_course' value='$langRestore' />
                       <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' />
                           
                     </div>
