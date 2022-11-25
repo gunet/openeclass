@@ -212,12 +212,12 @@ if ($is_editor) {
                         $dialogBox .= "
                         
                          <div class=col-12>
-                        <div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
+                        <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                         
                        
 
                         <div class='form-group'>
-                            <label for='newPathName' class='col-sm-6 control-label-notes'>$langName:</label>
+                            <label for='newPathName' class='col-sm-6 control-label-notes'>$langName</label>
                             <div class='col-sm-12'>
                               <input name='newPathName' type='text' class='form-control' id='newPathName'>
                             </div>
@@ -225,8 +225,8 @@ if ($is_editor) {
 
       
 
-                        <div class='form-group mt-3'>
-                            <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription:</label>
+                        <div class='form-group mt-4'>
+                            <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription</label>
                             <div class='col-sm-12'>
                               <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
@@ -234,15 +234,17 @@ if ($is_editor) {
 
            
 
-                        <div class='form-group mt-3'>
-                            <div class='col-sm-10 col-sm-offset-2'>
+                        <div class='form-group mt-5'>
+                            <div class='col-12 d-flex justify-content-center align-items-center'>
                               <input type='hidden' name='cmd' value='create'>".
                                     form_buttons(array(
                                         array(
+                                            'class' => 'submitAdminBtn',
                                             'text' => $langSave,
                                             'value' => $langCreate
                                         ),
                                         array(
+                                            'class' => 'btn btn-outline-secondary cancelAdminBtn ms-1',
                                             'href' => "index.php?course=$course_code",
                                         )
                                     ))

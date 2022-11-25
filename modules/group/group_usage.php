@@ -120,33 +120,32 @@ if ($type == 'duration') {
         $u_date_end = $date_end->format('Y-m-d');
         $user_date_end = $date_end->format('d-m-Y');        
     }    
-    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
 
 
 
             <form class='form-horizontal' role='form' method='post' action='$base&amp;type=$type'>
-            <div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-            <label class='col-sm-6 control-label-notes'>$langStartDate:</label>
-                <div class='col-xs-10 col-sm-9'>               
-                    <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
-                </div>
-                <div class='col-xs-2 col-sm-1'>
-                    <span class='add-on'><i class='fa fa-times'></i></span>
-                    <span class='add-on'><i class='fa fa-calendar'></i></span>
-                </div>
+                <div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+                    <label class='col-sm-6 control-label-notes'>$langStartDate</label>
+                    <div class='input-group'> 
+                        <input class='form-control mt-0' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+                        <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-times'></i></span>
+                        <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+                    </div>
+               
                 </div>";        
-    $tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-        <label class='col-sm-6 control-label-notes'>$langEndDate:</label>
-            <div class='col-xs-10 col-sm-9'>
-                <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+    $tool_content .= "
+        <div class='input-append date form-group mt-4' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+            <label class='col-sm-6 control-label-notes'>$langEndDate</label>
+            <div class='input-group'> 
+                <input class='form-control mt-0' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+                <span class='add-on nput-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-times'></i></span>
+                <span class='add-on nput-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
             </div>
-        <div class='col-xs-2 col-sm-1'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>
+      
         </div>";
-    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
-            <input class='btn btn-primary' type='submit' name='btnUsage' value='$langSubmit'>
+    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
+            <input class='btn submitAdminBtn' type='submit' name='btnUsage' value='$langSubmit'>
             </div>";
     $tool_content .= "</form></div></div>";
 } elseif ($type == 'lp') {

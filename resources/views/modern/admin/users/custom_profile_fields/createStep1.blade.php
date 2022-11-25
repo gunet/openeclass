@@ -37,7 +37,7 @@
                     </div>
 
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                             
                             <form class='form-horizontal' role='form' name='fieldForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                                 <fieldset>
@@ -49,8 +49,8 @@
                                     </div>
                                 </div>
                              
-                                <div class='col-12 mt-5'>
-                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='add_field_proceed_step2' value='{{ trans('langNext') }}'>
+                                <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
+                                    <input class='btn submitAdminBtn' type='submit' name='add_field_proceed_step2' value='{{ trans('langNext') }}'>
                                 </div>
                                 </fieldset>
                                 {!! generate_csrf_token_form_field() !!}

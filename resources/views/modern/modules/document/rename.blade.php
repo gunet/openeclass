@@ -1,6 +1,6 @@
 
     <div class='col-12'>
-        <div class='form-wrapper form-edit p-3 mt-2 rounded'>
+        <div class='form-wrapper form-edit mt-2 rounded'>
 			<form class='form-horizontal' role='form' method='post' action='{{ $base_url }}'>
 				<fieldset>
 					<input type='hidden' name='sourceFile' value='{{ $renamePath }}'>
@@ -14,20 +14,20 @@
 
 					<div class='form-group mt-4'>
 					    @if($menuTypeID == 3 or $menuTypeID == 1)
-                        <div class='col-12 d-inline-flex'>
+                        <div class='col-12 d-flex justify-content-start align-items-center'>
                             
                                
-                                    <button class='btn btn-primary submitAdminBtn' type='submit'>{{ trans('langRename') }}</button>
+                                    <button class='btn submitAdminBtn' type='submit'>{{ trans('langRename') }}</button>
                                
                                 
-                                    <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                    <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                               
                            
                         </div>
                         @else
-						<div class='col-offset-2 col-10'>
-                            <button class='btn btn-primary btn-sm' type='submit'>{{ trans('langRename') }}</button>
-                            <a class='btn btn-outline-secondary btn-sm' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+						<div class='col-offset-2 col-10 d-flex justify-content-start align-items-center'>
+                            <button class='btn submitAdminBtn' type='submit'>{{ trans('langRename') }}</button>
+                            <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
 						</div>
 						@endif
 					</div>

@@ -54,7 +54,7 @@
 
 
                     <div class='col-sm-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                             <form class='form-horizontal' action='{{ $targetUrl }}' method='post'>
                                 <div class='form-group'>
                                     <label for='requestTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
@@ -65,7 +65,7 @@
 
                         
 
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label for='requestDescription' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
                                     <div class='col-sm-12'>
                                         {!! $descriptionEditor !!}
@@ -73,7 +73,7 @@
                                 </div>
 
                                 @if ($request->type_id)
-                                <div class='mt-3'></div>
+                                <div class='mt-4'></div>
                                     @include('modules.request.extra_fields',
                                         ['type_name' => $type->name,
                                         'type_id' => $type->id,
@@ -82,7 +82,7 @@
 
                             
 
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <div class='col-sm-10 col-sm-offset-2'>
                                         <div class='checkbox'>
                                             <label>
@@ -94,14 +94,14 @@
 
                         
 
-                                <div class='form-group mt-4'>
-                                    <div class='col-12 d-inline-flex'>
+                                <div class='form-group mt-5'>
+                                    <div class='col-12 d-flex justify-content-center align-items-center'>
                                         
                                            
-                                                 <button class='btn btn-primary submitAdminBtn' type='submit'>{{ trans('langSubmit') }}</button>
+                                                 <button class='btn submitAdminBtn' type='submit'>{{ trans('langSubmit') }}</button>
                                            
                                            
-                                                 <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                                 <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                                            
                                        
                                     </div>

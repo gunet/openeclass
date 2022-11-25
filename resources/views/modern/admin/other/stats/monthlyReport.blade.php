@@ -40,14 +40,14 @@
                     </div>
 
                     <div class='col-lg-6 col-12'>
-                        <div class="form-wrapper form-edit p-3 rounded">
+                        <div class="form-wrapper form-edit rounded">
                             
                             <form class="form-horizontal" role="form" method="post">
                                 <div class="form-group">
                                     <div class="col-sm-12">
                                         <select name="selectedMonth" class="form-select">{!! $months !!}</select>
                                     </div>
-                                    <input class="btn btn-primary mt-5 submitAdminBtn w-100" type="submit" name="btnUsage" value="{{ trans('langSubmit') }}">
+                                    <input class="btn mt-5 m-auto d-block submitAdminBtn" type="submit" name="btnUsage" value="{{ trans('langSubmit') }}">
                                 </div>
                             </form>
                         </div>

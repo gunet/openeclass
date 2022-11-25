@@ -102,10 +102,10 @@
                                 @endif
                         
                                 <div class='col-12'>
-                                    <div class='form-wrapper form-edit p-3 rounded'>    
+                                    <div class='form-wrapper form-edit rounded'>    
                                             <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">
                                                     
-                                                    <div class="row p-3 form-group {{ $antitle_error }}">
+                                                    <div class="row mt-4 form-group {{ $antitle_error }}">
                                                         <label for="AnnTitle" class="col-md-3 col-12 control-label-notes">{{ trans('langAnnTitle') }}:</label>
                                                         <div class="col-md-9 col-12 ">
                                                             <input class="form-control" placeholder="{{ trans('langAnnTitle') }}..." type="text" name="antitle" value="{{ $titleToModify }}"/>
@@ -115,7 +115,7 @@
 
                                         
 
-                                                    <div class='row p-3 form-groum'>
+                                                    <div class='row mt-4 form-groum'>
                                                         <label for='AnnBody' class='col-md-3 col-12 control-label-notes'>{{ trans('langAnnBody') }}:</label>
                                                         <div class='col-md-9 col-12'>{!! $contentToModify !!}</div>
                                                     </div>
@@ -125,7 +125,7 @@
                                                     
                                                        
                                                            
-                                                    <div class='row p-3 form-group'>
+                                                    <div class='row mt-4 form-group'>
                                                         <label for='Email' class='col-md-3 col-12 control-label-notes'>{{ trans('langEmailOption') }}:</label>
                                                         <div class='col-md-9 col-12'>
                                                             <select class='form-select' name='recipients[]' multiple='multiple' id='select-recipients'>
@@ -146,7 +146,7 @@
                                                     
                                                    
                                                        
-                                                    <div class='row p-3 form-group {{ $startdate_error }}'>
+                                                    <div class='row mt-4 form-group {{ $startdate_error }}'>
                                                         <label for='startdate' class='col-md-3 col-12 control-label-notes'>{{ trans('langStartDate') }} :</label>
                                                         <div class='col-md-9 col-12'>
                                                             <div class='input-group'> 
@@ -160,7 +160,7 @@
                                                     </div>
                                                 
                                                 
-                                                    <div class='row p-3 form-group {{ $enddate_error }}'>
+                                                    <div class='row mt-4 form-group {{ $enddate_error }}'>
                                                         <label for='enddate' class='col-md-3 col-12 control-label-notes'>{{ trans('langEndDate') }} :</label>
                                                         <div class='col-md-9 col-12'>
                                                             <div class='input-group'>
@@ -177,7 +177,7 @@
 
                                                   
 
-                                                    <div class='row p-3 form-group'>
+                                                    <div class='row mt-4 form-group'>
                                                         <div class='col-md-9 offset-md-3'>
                                                             <div class='checkbox'>
                                                                 <label>
@@ -189,14 +189,14 @@
 
                                           
 
-                                                    <div class='row p-3 form-group'>
+                                                    <div class='row mt-4 form-group'>
                                                         <input type='hidden' name='id' value='{{ $announce_id }}'>
                                                         <input type='hidden' name='course' value='{{ $course_code }}'>
                                                         <input type='hidden' name='editorFromCreateEditAnnouncement' value='{{$is_editor}}'>
                                                         <div class='col-md-9 offset-md-3'>
-                                                            <div class='col-12 d-inline-flex'>
-                                                                <button type="submit" class="btn btn-primary submitAdminBtn" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
-                                                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn btn-outline-secondary cancelAdminBtn ms-2">{{ trans('langCancel') }}</a>
+                                                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                                                                <button type="submit" class="btn submitAdminBtn" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
+                                                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn btn-outline-secondary cancelAdminBtn ms-1">{{ trans('langCancel') }}</a>
                                                             </div>
                                                         </div>
                                                     </div>

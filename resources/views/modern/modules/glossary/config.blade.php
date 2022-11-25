@@ -50,7 +50,7 @@
 
 
                         <div class='col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                           <form class='form-horizontal' role='form' action='{{ $base_url }}' method='post'>
                               <div class='form-group'>
                                   <div class='col-sm-12'>            
@@ -62,7 +62,7 @@
                                   </div>
                               </div>
 
-                              <div class='form-group mt-3'>
+                              <div class='form-group mt-4'>
                                   <div class='col-sm-12'>            
                                       <div class='checkbox'>
                                         <label>
@@ -72,8 +72,8 @@
                                   </div>
                               </div>
 
-                              <div class='form-group mt-3'>
-                                  <div class='col-sm-12'>{!! $form_buttons !!}</div>
+                              <div class='form-group mt-4'>
+                                  <div class='col-12 d-flex justify-content-start'>{!! $form_buttons !!}</div>
                               </div>   
                               {!! generate_csrf_token_form_field() !!}                
                           </form>

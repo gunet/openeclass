@@ -557,27 +557,27 @@ function user_info_form() {
         $amInput = '<input type="text" class="form-control" id="am_id" name="am" maxlength="20"' .
             set('am') . ' placeholder="' . q($amMessage) . '">';
     }
-    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='post'>
         <fieldset>
         <div class='form-group'>
-            <label for='givenname_id' class='col-sm-6 control-label-notes'>$langName:</label>
+            <label for='givenname_id' class='col-sm-6 control-label-notes'>$langName</label>
             <div class='col-sm-12$givennameClass'>$givennameInput</div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='surname_id' class='col-sm-6 control-label-notes'>$langSurname:</label>
+        <div class='form-group mt-4'>
+            <label for='surname_id' class='col-sm-6 control-label-notes'>$langSurname</label>
             <div class='col-sm-12$surnameClass'>$surnameInput</div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='email_id' class='col-sm-6 control-label-notes'>$langEmail:</label>
+        <div class='form-group mt-4'>
+            <label for='email_id' class='col-sm-6 control-label-notes'>$langEmail</label>
             <div class='col-sm-12'>
                 <input type='text' name='email' id='email_id' class='form-control' maxlength='100'" . set('email') . "'>" .
                     ($email_required ? '' : "<span class='help-block'><small>$mail_message</small></span>") . "
             </div>
         </div>";
     if (!$prof) {
-        $tool_content .= "<div class='form-group mt-3'>
-                <label for='am_id' class='col-sm-6 control-label-notes'>$langAm:</label>
+        $tool_content .= "<div class='form-group mt-4'>
+                <label for='am_id' class='col-sm-6 control-label-notes'>$langAm</label>
                 <div class='col-sm-12$amClass'>$amInput
                 </div>
             </div>";
@@ -587,33 +587,33 @@ function user_info_form() {
     } else {
         $phone_message = $langOptional;
     }
-    $tool_content .= "<div class='form-group mt-3'>
-                <label for='UserPhone' class='col-sm-6 control-label-notes'>$langPhone:</label>
+    $tool_content .= "<div class='form-group mt-4'>
+                <label for='UserPhone' class='col-sm-6 control-label-notes'>$langPhone</label>
                 <div class='col-sm-12'>
                     <input class='form-control' type='text' name='userphone' size='20' maxlength='20'" . set('userphone') . "' placeholder = '$phone_message'>
                 </div>
             </div>";
     if ($comment_required) {
-        $tool_content .= "<div class='form-group mt-3'>
-          <label for='UserComment' class='col-sm-6 control-label-notes'>$langComments:</label>
+        $tool_content .= "<div class='form-group mt-4'>
+          <label for='UserComment' class='col-sm-6 control-label-notes'>$langComments</label>
             <div class='col-sm-12'>
              <textarea class='form-control' name='usercomment' cols='30' rows='4' placeholder='$profreason'>" . q($usercomment) . "</textarea></div>
           </div>";
     }
-    $tool_content .= "<div class='form-group mt-3'>
-              <label for='UserFac' class='col-sm-6 control-label-notes'>$langFaculty:</label>
+    $tool_content .= "<div class='form-group mt-4'>
+              <label for='UserFac' class='col-sm-6 control-label-notes'>$langFaculty</label>
                 <div class='col-sm-12'>";
     list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'where' => 'AND node.allow_user = true', 'multiple' => false));
     $head_content .= $js;
     $tool_content .= $html . "</div>
         </div>
-        <div class='form-group mt-3'>
-          <label for='UserLang' class='col-sm-6 control-label-notes'>$langLanguage:</label>
+        <div class='form-group mt-4'>
+          <label for='UserLang' class='col-sm-6 control-label-notes'>$langLanguage</label>
           <div class='col-sm-12'>" . lang_select_options('localize', "class='form-control'") . "</div>
         </div>
-        <div class='form-group mt-3'>
-            <div class='col-sm-offset-2 col-sm-10'>
-              <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "'>
+        <div class='form-group mt-5'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
+              <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langRegistration) . "'>
             </div>
         </div>
         <input type='hidden' name='p' value='$prof'>";

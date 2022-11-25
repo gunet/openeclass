@@ -261,43 +261,43 @@
                                         <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langConfidentiality') }}</label>
                                         <div class='col-sm-12'>
 
-                                            <div class='radio mb-2'>
+                                            <div class='radio mb-3'>
                                                 <label>
-                                                    <input id='courseopen' type='radio' name='formvisible' value='2' {{ $course_open }}>
-                                                    <span class='ps-1'>{!! course_access_icon(COURSE_OPEN) !!}</span>
+                                                    <input class='input-StatusCourse' id='courseopen' type='radio' name='formvisible' value='2' {{ $course_open }}>
+                                                    <label for="courseopen">{!! course_access_icon(COURSE_OPEN) !!}</label>
                                                     {{ trans('langOpenCourse') }}
                                                 </label>
-                                                <div class='help-block ps-5'>{{ trans('langPublic') }}</div>
+                                                <div class='help-block ps-4 ms-3'>{{ trans('langPublic') }}</div>
                                             </div>
                                          
 
-                                            <div class='radio mb-2'>
+                                            <div class='radio mb-3'>
                                                 <label>
-                                                    <input id='coursewithregistration' type='radio' name='formvisible' value='1' {{ $course_registration }}>
-                                                    <span class='ps-1 pe-1'>{!! course_access_icon(COURSE_REGISTRATION) !!}</span>
+                                                    <input class='input-StatusCourse' id='coursewithregistration' type='radio' name='formvisible' value='1' {{ $course_registration }}>
+                                                    <label for="coursewithregistration">{!! course_access_icon(COURSE_REGISTRATION) !!}</label>
                                                     {{ trans('langTypeRegistration') }}
                                                 </label>
-                                                <div class='help-block ps-5'>{{ trans('langPrivOpen') }}</div>
+                                                <div class='help-block ps-4 ms-3'>{{ trans('langPrivOpen') }}</div>
                                             </div>
                                             
 
-                                            <div class='radio mb-2'>
+                                            <div class='radio mb-3'>
                                                 <label>
-                                                    <input id='courseclose' type='radio' name='formvisible' value='0' {{ $course_closed }} {{ $disable_visibility }}>
-                                                    <span class='ps-1'>{!! course_access_icon(COURSE_CLOSED) !!}</span>
+                                                    <input class='input-StatusCourse' id='courseclose' type='radio' name='formvisible' value='0' {{ $course_closed }} {{ $disable_visibility }}>
+                                                    <label for="courseclose">{!! course_access_icon(COURSE_CLOSED) !!}</label>
                                                     {{ trans('langClosedCourse') }}
                                                 </label>
-                                                <div class='help-block ps-5'>{{ trans('langClosedCourseShort') }}</div>
+                                                <div class='help-block ps-4 ms-3'>{{ trans('langClosedCourseShort') }}</div>
                                             </div>
                                             
 
                                             <div class='radio'> 
                                                 <label>                                     
-                                                    <input id='courseinactive' type='radio' name='formvisible' value='3' {{ $course_inactive }} {{ $disable_visibility }}>
-                                                    <span class='ps-1 pe-2'>{!! course_access_icon(COURSE_INACTIVE) !!}</span>
+                                                    <input class='input-StatusCourse' id='courseinactive' type='radio' name='formvisible' value='3' {{ $course_inactive }} {{ $disable_visibility }}>
+                                                    <label for="courseinactive">{!! course_access_icon(COURSE_INACTIVE) !!}</label>
                                                     {!! trans('langInactiveCourse') !!}
                                                 </label>
-                                                <div class='help-block ps-5'>{{ trans('langCourseInactive') }}</div>
+                                                <div class='help-block ps-4 ms-3'>{{ trans('langCourseInactive') }}</div>
                                             </div>
                                             
                                         </div>

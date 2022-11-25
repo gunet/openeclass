@@ -63,12 +63,12 @@ if (isset($_GET['delete'])) {
         // Form #1 - edit title
         $tool_content .= "
         
-        <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+        <div class='col-12'><div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='id' value='$ebook_id' />
                 <div class='form-group'>
-                    <label class='col-sm-6 control-label-notes'>$langTitle:</label>
-                    <div class='col-sm-9 input-group'>
+                    <label class='col-sm-6 control-label-notes'>$langTitle</label>
+                    <div class='col-sm-12 input-group'>
                         <input class='form-control' type='text' name='ebook_title' value='" . q($info->title) . "' />
                         <span class='input-group-btn'>
                             <button class='btn btn-sm btn-primary' name='title_submit' type='submit' value='$langModify'>$langModify</button>

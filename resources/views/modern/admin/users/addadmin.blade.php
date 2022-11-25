@@ -44,7 +44,7 @@
 
                     <div class='col-lg-6 col-12'>
 
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                         
                             <form class='form-horizontal' role='form' method='post' name='makeadmin' action='{{ $_SERVER['SCRIPT_NAME']  }}'>
                                 <fieldset>
@@ -55,37 +55,43 @@
                                         </div>
                                     </div>
 
-                                    <div class='form-group mt-3'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langAddRole') }}</label>
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langAddRole') }}</label>
                                             <div class='col-sm-12'>
-                                                <div class='radio d-inline-flex align-items-top'>
-                                                    <input type='radio' name='adminrights' value='admin' {{$checked['admin']}}> {{ trans('langAdministrator') }}
+                                                <div class='radio mb-4'>
+                                                    <label>
+                                                        <input type='radio' name='adminrights' value='admin' {{$checked['admin']}}> 
+                                                        {{ trans('langAdministrator') }}
+                                                    </label>
+                                                     <div class='help-block ps-4 ms-3'>{{ trans('langHelpAdministrator') }}</div>
                                                 </div>
-                                                <div class='col-12'>
-                                                    <small class='help-block orangeText'>{{ trans('langHelpAdministrator') }}</small>
+
+                                                <div class='radio mb-4'>
+                                                    <label>
+                                                        <input type='radio' name='adminrights' value='poweruser' {{$checked['poweruser']}}> 
+                                                        {{ trans('langPowerUser') }} 
+                                                    </label>  
+                                                    <div class='help-block ps-4 ms-3'>{{ trans('langHelpPowerUser') }}</div>
                                                 </div>
-                                                
-                                                <div class='radio mt-3 d-inline-flex align-items-top'>
-                                                    <input type='radio' name='adminrights' value='poweruser' {{$checked['poweruser']}}> {{ trans('langPowerUser') }}   
-                                                </div>
-                                                <div class='col-12'>
-                                                    <small class='help-block orangeText'>{{ trans('langHelpPowerUser') }}</small>
+
+                                               
+                                                <div class='radio mb-4'>
+                                                    <label>
+                                                        <input type='radio' name='adminrights' value='manageuser' {{$checked['manageuser']}}> 
+                                                        {{ trans('langManageUser') }}    
+                                                    </label>     
+                                                    <div class='help-block ps-4 ms-3'>{{ trans('langHelpManageUser') }}</div>
                                                 </div>
                                                
-                                                <div class='radio mt-3 d-inline-flex align-items-top'>
-                                                    <input type='radio' name='adminrights' value='manageuser' {{$checked['manageuser']}}> {{ trans('langManageUser') }}                                                  
-                                                </div>
-                                                <div class='col-12'>
-                                                    <small class='help-block orangeText'>{{ trans('langHelpManageUser') }}</small>
-                                                </div>
                                               
-                                                <div class='radio mt-3 d-inline-flex align-items-top'>
-                                                    <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio' {{$checked['managedepartment']}}> {{ trans('langManageDepartment') }}
-                                                    
+                                                <div class='radio'>
+                                                    <label>
+                                                        <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio' {{$checked['managedepartment']}}> 
+                                                        {{ trans('langManageDepartment') }}
+                                                    </label>
+                                                    <div class='help-block ps-4 ms-3'>{{ trans('langHelpManageDepartment') }}</div>
                                                 </div>
-                                                <div class='col-12'>
-                                                    <small class='help-block orangeText'>{{ trans('langHelpManageDepartment') }}</small>
-                                                </div>
+                                               
                                             </div>
                                         </label>
                                     </div>

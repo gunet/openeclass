@@ -319,7 +319,7 @@ if ($topic_locked == 1) {
 
     $tool_content .= "
         <div class='col-sm-12 mb-3'>
-            <div class='form-wrapper form-edit p-3 rounded'>
+            <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' name='viewselect' action='$selection_url' method='get'>
                     <div class='form-group'>
                         <label class='col-sm-12 control-label-notes'>$langQuestionView</label>

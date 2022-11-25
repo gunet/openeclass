@@ -448,7 +448,7 @@ if ($nbrQuestions) {
         $info_random_text = "<small><span class='help-block'>$langShow $randomQuestions $langFromRandomQuestions</span></small>";
     }
 
-    $tool_content .= "<div class='col-12'><div id='RandomizationForm' class='form-wrapper form-edit p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div id='RandomizationForm' class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId'>
                 <div class='form-group'>
                     <div class='col-sm-12'>
@@ -468,9 +468,9 @@ if ($nbrQuestions) {
                          </div>
                     </div>
                 </div>
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                     <div class='col-sm-12'>
-                        <input class='btn btn-primary' type='submit' value='$langSubmit' name='shuffleQuestions'>
+                        <input class='btn submitAdminBtn' type='submit' value='$langSubmit' name='shuffleQuestions'>
                     </div>
                 </div>
             </form>

@@ -41,18 +41,18 @@ $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langImpo
 
 $tool_content .= "
     <div class='col-sm-12'>
-        <div class='form-wrapper form-edit p-3 rounded'>
+        <div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' action='save.php' method='post' enctype='multipart/form-data'>
                 <div class='form-group'>
-                    <label for='userFile' class='col-sm-6 control-label-notes'>$langPathUploadFile:</label>
+                    <label for='userFile' class='col-sm-6 control-label-notes'>$langPathUploadFile</label>
                     <div class='col-sm-12'>
                         <input type='file' id='userFile' name='userFile'>
                         <span class='help-block' style='margin-bottom: 0px;'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></span>
                     </div>
                 </div>
-                <div class='form-group mt-3'>
-                    <div class='col-sm-offset-2 col-sm-10'>
-                        <button class='btn btn-sm btn-primary' type='submit'>$langUpload</button>
+                <div class='form-group mt-5'>
+                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                        <button class='btn submitAdminBtn' type='submit'>$langUpload</button>
                     </div>
                 </div>
             </form>

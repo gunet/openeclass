@@ -40,7 +40,7 @@
                     </div>
 
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                         
                         <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             
@@ -52,9 +52,9 @@
                             </div>
                          
                             <div class='form-group mt-5'>
-                                <div class='col-12'>
+                                <div class='col-12 d-flex justify-content-center align-items-center'>
                                     {!! showSecondFactorChallenge() !!}
-                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' value='{{ trans('langSubmit') }}'>
+                                    <input class='btn submitAdminBtn' type='submit' value='{{ trans('langSubmit') }}'>
                                 </div>
                             </div>
                             {!! generate_csrf_token_form_field() !!}            

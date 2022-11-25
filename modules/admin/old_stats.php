@@ -217,33 +217,29 @@ if (isset($_POST['user_date_start']) && isset($_POST['user_date_end'])) {
 
 //    $tool_content .= "<div class='alert alert-warning'>$langNoStatistics</div>";
 
-$tool_content .= '<div class="col-sm-12 mt-3"><div class="form-wrapper form-edit p-3 rounded"><form class="form-horizontal" role="form" method="post">';
+$tool_content .= '<div class="col-sm-12 mt-3"><div class="form-wrapper form-edit rounded"><form class="form-horizontal" role="form" method="post">';
 $tool_content .= "<div class='input-append date form-group' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-6 control-label-notes' for='user_date_start'>$langStartDate:</label>
-    <div class='row'>
-        <div class='col-10'>               
-            <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+       <label class='col-sm-6 control-label-notes' for='user_date_start'>$langStartDate:</label>
+   
+        <div class='input-group'>               
+            <input class='form-control mt-0' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+            <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-times'></i></span>
+            <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
         </div>
-        <div class='col-2'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>
-    </div>
+        
+   
         </div>";
-$tool_content .= "<div class='input-append date form-group mt-3' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+$tool_content .= "<div class='input-append date form-group mt-4' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
         <label class='col-sm-6 control-label-notes' for='user_date_end'>$langEndDate:</label>
-        <div class='row'>
-            <div class='col-10'>
-                <input class='form-control' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
-            </div>
-        <div class='col-2'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
+        <div class='input-group'> 
+            <input class='form-control mt-0' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+            <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-times'></i></span>
+            <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
         </div>
-        </div>
+       
         </div>";
-$tool_content .= '<div class="col-sm-offset-2 col-sm-10 mt-3">    
-    <input class="btn btn-sm btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
+$tool_content .= '<div class="col-12 mt-5 d-flex justify-content-center align-items-center">    
+    <input class="btn submitAdminBtn" type="submit" name="btnUsage" value="' . $langSubmit . '">
     </div>  
 </form></div></div>';
 

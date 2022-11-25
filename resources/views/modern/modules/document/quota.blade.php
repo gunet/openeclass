@@ -60,27 +60,26 @@
                         {!! $backButton !!}
 
                         <div class='col-12'>
-                            <div class='form-wrapper form-edit p-3 mt-2 bg-body rounded'>
+                            <div class='form-wrapper form-edit mt-2 bg-body rounded'>
                                 <form class='form-horizontal' role='form'>
                                     <div class='form-group'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langQuotaUsed') }}:</label>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langQuotaUsed') }}</label>
                                         <div class='col-sm-8'>
                                             <p class='form-control-static'>{!! $used !!}</p>
                                         </div>
                                     </div>
-                                    <div class="row p-2"></div>
-                                    <div class='form-group'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langQuotaPercentage') }}:</label>
+
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langQuotaPercentage') }}</label>
                                         <div class='col-sm-9'>
                                             <div class="progress">
                                                 <div class="progress-bar" role="progressbar" style="min-width: 2em; width: {{$diskUsedPercentage}}%;" aria-valuenow="{{$diskUsedPercentage}}" aria-valuemin="0" aria-valuemax="100">{{$diskUsedPercentage}}%</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row p-2"></div>
-                                    <div class="row p-2"></div>
-                                    <div class='form-group'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langQuotaTotal') }}:</label>
+
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes'>{{ trans('langQuotaTotal') }}</label>
                                         <div class='col-sm-8'>
                                             <p class='form-control-static'>{!! $quota !!}</p>
                                         </div>

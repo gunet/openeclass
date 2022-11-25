@@ -73,7 +73,7 @@
                                     <div class='col-12 h-100 left-form'></div>
                                 </div>
                                 <div class='col-lg-6 col-12'>
-                                    <div class='form-wrapper form-edit p-3 rounded'>
+                                    <div class='form-wrapper form-edit rounded'>
 
                                         <form class="form-horizontal" role="form" method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                             <input type='hidden' name='u' value='{{ $userUID }}'>
@@ -81,18 +81,18 @@
                                             <div class="form-group">
                                                 <label  class='col-sm-12 control-label-notes'>{!! trans('langNewPass1') !!}</label>
                                                 <div class="col-sm-12">
-                                                    <input type='password' placeholder="{!! trans('langNewPass1') !!}..." class='form-control' size='40' name='newpass' value='' id='password' autocomplete='off'>&nbsp;<span id='result'></span>
+                                                    <input type='password' placeholder="{!! trans('langNewPass1') !!}" class='form-control' size='40' name='newpass' value='' id='password' autocomplete='off'>&nbsp;<span id='result'></span>
                                                 </div>
                                             </div>
-                                            <div class="form-group mt-3">
+                                            <div class="form-group mt-4">
                                                 <label class="col-sm-12 control-label-notes">{!! trans('langNewPass2') !!}</label>
                                                 <div class="col-sm-12">
-                                                    <input type='password' placeholder="{!! trans('langNewPass2') !!}..." class='form-control' size='40' name='newpass1' value='' autocomplete='off'>
+                                                    <input type='password' placeholder="{!! trans('langNewPass2') !!}" class='form-control' size='40' name='newpass1' value='' autocomplete='off'>
                                                 </div>
                                             </div>
                                             <div class='form-group mt-5'>
-                                                <div class='col-12'>
-                                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value="{!! trans('langModify') !!}">
+                                                <div class='col-12 d-flex justify-content-center align-items-center'>
+                                                    <input class='btn  submitAdminBtn' type='submit' name='submit' value="{!! trans('langModify') !!}">
                                                 </div>
                                             </div>
                                         </form>
@@ -172,7 +172,7 @@
                                 <div class='col-12 h-100 left-form'></div>
                             </div>
                             <div class='col-lg-6 col-12'>
-                                <div class='form-wrapper form-edit p-3 rounded'>
+                                <div class='form-wrapper form-edit rounded'>
                                     <form class='form-horizontal' role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
                                         <div class='row'><div class='col-sm-8'><h4 class='control-label-notes ps-1 mt-1'>{!! trans('langUserData') !!}</h4></div></div>
                                         <div class='form-group'>
@@ -180,21 +180,20 @@
                                                 <input class='form-control' type='text' name='userName' id='userName' autocomplete='off' placeholder='{!! trans('lang_username') !!}'>
                                             </div>
                                         </div>
-                                        <div class='form-group mt-3'>
+                                        <div class='form-group mt-4'>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' name='email' id='email' autocomplete='off' placeholder='{!! trans('lang_email') !!}'>
                                             </div>
                                         </div>
-                                        <div class='form-group mt-4'>
-                                            <div class='col-12'>
-                                                <div class='row'>
-                                                    <div class='col-6'>
-                                                        <button class='btn btn-outline-primary rounded-pill submitAdminBtn w-100 TextBold text-uppercase' type='submit' name='send_link' value='{{ trans('langSend') }}'>{!! trans('langSend') !!}</button>
-                                                    </div>
-                                                    <div class='col-6'>
-                                                        <button class='btn btn-outline-secondary rounded-pill cancelAdminBtn w-100 TextBold text-uppercase' href='{{ $urlServer }}'>{!! trans('langCancel') !!}</button>
-                                                    </div>
-                                                </div>
+                                        <div class='form-group mt-5'>
+                                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                                               
+                                                    
+                                                        <button class='btn submitAdminBtn' type='submit' name='send_link' value='{{ trans('langSend') }}'>{!! trans('langSend') !!}</button>
+                                                    
+                                                        <button class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $urlServer }}'>{!! trans('langCancel') !!}</button>
+                                                    
+                                               
                                                 
                                                 
                                             </div>

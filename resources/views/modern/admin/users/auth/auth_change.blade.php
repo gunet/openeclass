@@ -40,7 +40,7 @@
                         <div class='col-12 h-100 left-form'></div>
                     </div>
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                             <form class='form-horizontal' role='form' name='authchange' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>   
                             <fieldset>
                                 <div class='form-group'>
@@ -50,8 +50,8 @@
                                     </div>
                                 </div>
                                 <input type='hidden' name='auth' value='{{ getIndirectReference(intval($auth)) }}'>  
-                                <div class='col-12 mt-5'>
-                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
+                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                 </div>
                             </fieldset>
                             {!! generate_csrf_token_form_field() !!}    

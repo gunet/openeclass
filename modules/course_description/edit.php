@@ -72,13 +72,13 @@ $data['text_area_comments'] = rich_text_editor('editComments', 4, 20, $comments)
 
 $data['form_buttons'] = form_buttons(array(
             array(
-                'class' => 'btn-primary btn-sm',
+                'class' => 'submitAdminBtn',
                 'text'  =>  $langSave,
                 'name'  =>  'saveCourseDescription',
                 'value' =>  $langAdd
             ),
             array(
-                'class' => 'btn-secondary btn-sm',
+                'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                 'href'  =>  "index.php?course=$course_code"
             )
         ));

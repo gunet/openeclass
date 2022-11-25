@@ -39,14 +39,14 @@
                     </div>
 
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                         
                     <form class='form-horizontal' name='authmenu' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                         <input type='hidden' name='auth' value='{{ $auth }}'>
                         <fieldset>  
                             <div class='alert alert-info'>{{ trans('langTestAccount') }} ({{ $auth_ids[$auth] }})</div>
                             
-                            <div class='form-group mt-3'>
+                            <div class='form-group mt-4'>
                                 <label for='test_username' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}:</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' type='text' name='test_username' id='test_username' value='{{ canonicalize_whitespace($test_username) }}' autocomplete='off'>
@@ -55,7 +55,7 @@
 
                           
 
-                            <div class='form-group mt-3'>
+                            <div class='form-group mt-4'>
                                 <label for='test_password' class='col-sm-12 control-label-notes'>{{ trans('langPass') }}:</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' type='password' name='test_password' id='test_password' value='{{ $test_password }}' autocomplete='off'>
@@ -65,15 +65,15 @@
                             
 
                             <div class='form-group mt-5'>
-                                <div class='col-12'>
-                                    <div class='row'>
-                                        <div class='col-6'>
-                                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langConnTest') }}'>
-                                        </div>
-                                        <div class='col-6'>
-                                            <a class='btn btn-outline-secondary cancelAdminBtn w-100' href='auth.php'>{{ trans('langCancel') }}</a>
-                                        </div>
-                                    </div>
+                                <div class='col-12 d-flex justify-content-center align-items-center'>
+                                 
+                                      
+                                            <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langConnTest') }}'>
+                                      
+                                      
+                                            <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='auth.php'>{{ trans('langCancel') }}</a>
+                                       
+                                
                                     
                                     
                                 </div>

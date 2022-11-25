@@ -53,37 +53,37 @@ function new_publish_ltiapp() {
     $key = random_secret(8);
     $secret = random_secret();
     $tool_content .= "<div class='col-sm-12'>
-        <div class='form-wrapper form-edit p-3 rounded'>
+        <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
         <fieldset>
         <div class='form-group'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
+            <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='desc' class='col-sm-6 control-label-notes'>$langDescription:</label>
+        <div class='form-group mt-4'>
+            <label for='desc' class='col-sm-6 control-label-notes'>$langDescription</label>
             <div class='col-sm-12'>
                 $textarea
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderKey:</label>
+        <div class='form-group mt-4'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderKey</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='lti_key' id='lti_key' placeholder='$langLTIProviderKey' value='$key' size='32' />
             </div>
         </div>        
-        <div class='form-group mt-3'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderSecret:</label>
+        <div class='form-group mt-4'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderSecret</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='lti_secret' id='lti_secret' placeholder='$langLTIProviderSecret' value='$secret' size='32' />
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='active_button' class='col-sm-6 control-label-notes'>$langNewLTIAppStatus:</label>
+        <div class='form-group mt-4'>
+            <label for='active_button' class='col-sm-6 control-label-notes mb-2'>$langNewLTIAppStatus</label>
             <div class='col-sm-12'>
-                <div class='radio'>
+                <div class='radio mb-2'>
                   <label>
                     <input type='radio' id='active_button' name='status' value='1' checked>
                     $langNewLTIAppActive
@@ -97,9 +97,9 @@ function new_publish_ltiapp() {
                 </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                <input class='btn btn-primary' type='submit' name='new_publish_ltiapp' value='$langAdd'>
+        <div class='form-group mt-5'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
+                <input class='btn submitAdminBtn' type='submit' name='new_publish_ltiapp' value='$langAdd'>
             </div>
         </div>
         </fieldset>
@@ -132,37 +132,37 @@ function edit_publish_ltiapp($id) {
     $secret = $row->lti_provider_secret;
 
     $tool_content .= "<div class='col-sm-12'>
-        <div class='form-wrapper form-edit p-3 rounded'>
+        <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
         <fieldset>
         <div class='form-group'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langTitle:</label>
+            <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' value='".q($row->title)."'/>
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='desc' class='col-sm-6 control-label-notes'>$langDescription:</label>
+        <div class='form-group mt-4'>
+            <label for='desc' class='col-sm-6 control-label-notes'>$langDescription</label>
             <div class='col-sm-12'>
                 $textarea
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderKey:</label>
+        <div class='form-group mt-4'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderKey</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='lti_key' id='lti_key' placeholder='$langLTIProviderKey' value='$key' size='32' />
             </div>
         </div>        
-        <div class='form-group mt-3'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderSecret:</label>
+        <div class='form-group mt-4'>
+            <label for='title' class='col-sm-6 control-label-notes'>$langLTIProviderSecret</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='lti_secret' id='lti_secret' placeholder='$langLTIProviderSecret' value='$secret' size='32' />
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <label for='active_button' class='col-sm-6 control-label-notes'>$langNewLTIAppStatus:</label>
+        <div class='form-group mt-4'>
+            <label for='active_button' class='col-sm-6 control-label-notes mb-2'>$langNewLTIAppStatus</label>
             <div class='col-sm-12'>
-                <div class='radio'>
+                <div class='radio mb-2'>
                   <label>
                     <input type='radio' id='active_button' name='status' value='1' ".(($status==1) ? "checked" : "").">
                     $langNewLTIAppActive
@@ -176,9 +176,9 @@ function edit_publish_ltiapp($id) {
                 </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                <input class='btn btn-primary' type='submit' name='update_publish_ltiapp' value='$langModify'>
+        <div class='form-group mt-5'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
+                <input class='btn submitAdminBtn' type='submit' name='update_publish_ltiapp' value='$langModify'>
                 <input type='hidden' name='id' value='" . getIndirectReference($id) . "'>
             </div>
         </div>
@@ -210,26 +210,26 @@ function show_publish_ltiapp($id) {
     $secret = $row->lti_provider_secret;
     $cartridgeurl = $urlServer . "modules/lti/cartridge.php?id=" . $id . "&token=" . LtiEnrolHelper::generate_cartridge_token($id);
 
-    $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'><form class='form-horizontal'><fieldset>
+    $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'><form class='form-horizontal'><fieldset>
             <div class='form-group'>
                 <label class='col-sm-6 control-label-notes'>$langLTIProviderUrl</label>
                 <div class='col-sm-12'>
                     <input type='text' class='form-control' value='$launchurl' readonly>
                 </div>
             </div>
-            <div class='form-group mt-3'>
+            <div class='form-group mt-4'>
                 <label class='col-sm-6 control-label-notes'>$langLTIProviderKey</label>
                 <div class='col-sm-12'>
                     <input type='text' class='form-control' value='$key' readonly>
                 </div>
             </div>
-            <div class='form-group mt-3'>
+            <div class='form-group mt-4'>
                 <label class='col-sm-6 control-label-notes'>$langLTIProviderSecret</label>
                 <div class='col-sm-12'>
                     <input type='text' class='form-control' value='$secret' readonly>
                 </div>
             </div>
-            <div class='form-group mt-3'>
+            <div class='form-group mt-4'>
                 <label class='col-sm-6 control-label-notes'>$langLTIProviderCartridgeUrl</label>
                 <div class='col-sm-12'>
                     <input type='text' class='form-control' value='$cartridgeurl' readonly>

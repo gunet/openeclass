@@ -41,7 +41,7 @@
                             <div class='col-12 h-100 left-form'></div>
                         </div>
                         <div class='col-lg-6 col-12'>
-                            <div class='form-wrapper form-edit p-3 rounded'>
+                            <div class='form-wrapper form-edit rounded'>
                                 
                                 <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                 <input type='hidden' name='id' value='{{ $id }}'>
@@ -51,26 +51,22 @@
                                             <input class='form-control' placeholder="{{ trans('langFaqQuestion') }}..." type='text' name='question' value="{{ $faq_mod->title }}" />
                                         </div>
                                     </div>
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group mt-4'>
                                         <label for='answer' class='col-sm-12 control-label-notes'>{{ trans('langFaqAnswer') }} <sup><small>(<span class='text-danger'>*</span>)</small></sup>:</label>
                                         <div class='col-sm-12'>{!! $editor !!}</div>
                                     </div>
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group mt-4'>
                                         <div class='col-sm-offset-2 col-sm-10'>
                                             <sup><small>(<span class='text-danger'>*</span>)</small></sup> <small class='text-muted'>{{ trans('langCPFFieldRequired') }}</small>
                                         </div>
                                     </div>
                                     <div class='form-group mt-5'>
-                                        <div class='col-12'>
-                                            <div class='row'>
-                                                <div class='col-6'>
-                                                    <button type="submit" class="btn btn-primary submitAdminBtn w-100" name="{{ $new? "submitFaq" : "modifyFaq" }}" value="{{ trans('submitBtnValue') }}">{{ trans('langSave') }}</button>
-                                                </div>
-                                                <div class='col-6'>
-                                                     <a href="{{ $_SERVER['SCRIPT_NAME'] }}" class="btn btn-outline-secondary cancelAdminBtn w-100">{{ trans('langCancel') }}</a>
-                                                </div>
-                                            </div>
-                                            
+                                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                                           
+                                                
+                                                <button type="submit" class="btn submitAdminBtn" name="{{ $new? "submitFaq" : "modifyFaq" }}" value="{{ trans('submitBtnValue') }}">{{ trans('langSave') }}</button>
+                                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}" class="btn btn-outline-secondary cancelAdminBtn ms-1">{{ trans('langCancel') }}</a>
+                                               
                                            
                                         </div>
                                     </div>

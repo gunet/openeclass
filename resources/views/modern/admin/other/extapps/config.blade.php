@@ -44,7 +44,7 @@
                                 <div class='col-12 h-100 left-form'></div>
                             </div>
                             <div class='col-lg-6 col-12'>
-                                <div class='form-wrapper form-edit p-3 rounded'>
+                                <div class='form-wrapper form-edit rounded'>
                                     
                                     <form class='form-horizontal' role='form' action='extapp.php?edit={{ $appName }}' method='post'>
                                         <fieldset>
@@ -54,7 +54,7 @@
                                                 <?php $boolean_fields[] = $param; ?>
                                             @elseif ($param->getType() == ExtParam::TYPE_MULTILINE)
                                                 
-                                                <div class='form-group mt-3'>
+                                                <div class='form-group mt-4'>
                                                     <label for='{{ $param->name() }}' class='col-sm-12 control-label-notes'>{{ $param->display() }}</label>
                                                     <div class='col-sm-12'>
                                                         <textarea class='form-control' rows='3' cols='40' name='{{ $param->name() }}'>
@@ -63,7 +63,7 @@
                                                     </div>
                                                 </div>
                                             @else
-                                                <div class='form-group mt-3'>
+                                                <div class='form-group mt-4'>
                                                     <label for='{{ $param->name() }}' class='col-sm-12 control-label-notes'>{{ $param->display() }}</label>
                                                     <div class='col-sm-12'>
                                                         <input class='form-control' type='text' name='{{ $param->name() }}' value='{{ $param->value() }}'>
@@ -72,7 +72,7 @@
                                             @endif
                                         @endforeach
                                         @foreach ($boolean_fields as $param)
-                                                <div class='form-group mt-3'>
+                                                <div class='form-group mt-4'>
                                                     <div class='col-sm-offset-2 col-sm-10'>
                                                         <div class='checkbox'>
                                                             <label>
@@ -84,19 +84,19 @@
                                                 </div>
                                         @endforeach
                                             <div class='form-group mt-5'>
-                                                <div class='col-12'>
-                                                    <div class='row'>
-                                                        <div class='col-md-6 col-4'>
-                                                             <button class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                                <div class='col-12 d-flex justify-content-center align-items-center'>
+                                                
+                                                       
+                                                             <button class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                                                 {{ trans('langModify') }}
                                                             </button> 
-                                                        </div>
-                                                        <div class='col-md-6 col-8'>
-                                                            <button class='btn btn-outline-danger cancelAdminBtn w-100' type='submit' name='submit' value='clear'>
+                                                     
+                                                      
+                                                            <button class='btn btn-outline-danger cancelAdminBtn ms-1' type='submit' name='submit' value='clear'>
                                                                 {{ trans('langClearSettings') }}
                                                             </button>
-                                                        </div>
-                                                    </div>
+                                                     
+                                                   
                                                    
                                                     
                                                 </div>

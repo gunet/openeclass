@@ -35,7 +35,7 @@
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
                     <div class='col-12'>
-                        <form class='form-wrapper form-edit p-3 rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                        <form class='form-wrapper form-edit rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             <fieldset>
                                 <legend class='text-center'>{{ trans('langBasicCfgSetting') }}</legend>
                                 <table class='table table-bordered' width='100%'>
@@ -81,7 +81,7 @@
                                     @endforeach           
                                 </table>
                             </fieldset>
-                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                            <input class='btn  submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
                             {!! generate_csrf_token_form_field() !!}
                         </form>
                     </div>

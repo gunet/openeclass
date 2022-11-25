@@ -1142,7 +1142,7 @@ function register_user_grades($gradebook_id, $actID) {
                                                             ORDER BY surname,name", $gradebook_id, $course_id);
 
     if ($resultUsers) {
-        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>
+        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' id='user_grades_form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($actID) . "'>
         <div class='col-12'>
         <div class='table-responsive'>

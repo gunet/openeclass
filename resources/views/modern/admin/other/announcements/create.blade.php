@@ -39,7 +39,7 @@
                     </div>
 
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'> 
+                        <div class='form-wrapper form-edit rounded'> 
                             
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                 @if (isset($announcement))
@@ -48,15 +48,15 @@
                                 <div class='form-group{{ Session::hasError('title') ? " has-error" : "" }}'>
                                     <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                     <div class='col-sm-12'>
-                                        <input class='form-control' placeholder="{{ trans('langTitle') }}..." type='text' name='title' value='{{ isset($announcement) ? $announcement->title : "" }}'>
+                                        <input class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='title' value='{{ isset($announcement) ? $announcement->title : "" }}'>
                                         {!! Session::getError('title', "<span class='help-block'>:message</span>") !!}
                                     </div>
                                 </div>
-                                <div class='mt-3 form-group'>
+                                <div class='mt-4 form-group'>
                                     <label for='newContent' class='col-sm-12 control-label-notes'>{{ trans('langAnnouncement') }}</label>
                                     <div class='col-sm-12'>{!! $newContentTextarea !!}</div>
                                 </div>
-                                <div class='mt-3 form-group'>
+                                <div class='mt-4 form-group'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>    
                                     <div class='col-sm-12'>
                                         {!! lang_select_options('lang_admin_ann', "class='form-control'", isset($announcement) ? $announcement->lang : false) !!}
@@ -65,7 +65,7 @@
                                         <span class='help-block'>{{ trans('langTipLangAdminAnn') }}</span>
                                     </small>
                                 </div>
-                                <div class='mt-3 form-group'>
+                                <div class='mt-4 form-group'>
                                     <label for='startdate' class='col-sm-12 control-label-notes'>{{ trans('langStartDate') }}</label>
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
@@ -76,7 +76,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class='mt-3 form-group'>
+                                <div class='mt-4 form-group'>
                                     <label for='enddate' class='col-sm-12 control-label-notes'>{{ trans('langEndDate') }}</label>
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
@@ -87,7 +87,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class='mt-3 form-group'>
+                                <div class='mt-4 form-group'>
                                     <div class='col-sm-10 col-sm-offset-2'>
                                         <div class='checkbox'>
                                             <label>
@@ -97,8 +97,8 @@
                                     </div>
                                 </div>
                                 <div class='mt-5 form-group'>
-                                    <div class='col-12'>
-                                        <input id='submitAnnouncement' class='btn btn-primary submitAdminBtn w-100' type='submit' name='submitAnnouncement' value='{{ trans('langSubmit') }}'>
+                                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                                        <input id='submitAnnouncement' class='btn submitAdminBtn' type='submit' name='submitAnnouncement' value='{{ trans('langSubmit') }}'>
                                     </div>
                                 </div>
                                 {!! generate_csrf_token_form_field() !!}

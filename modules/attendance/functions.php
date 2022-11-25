@@ -485,7 +485,7 @@ function add_attendance_other_activity($attendance_id) {
     $date_error = Session::getError('date');
     $tool_content .= "
     <div class='col-sm-12'>
-            <div class='form-wrapper form-edit p-3 rounded'>
+            <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id'>
                     <fieldset>";
                     if (isset($_GET['modify'])) { // modify an existing attendance activity
@@ -513,27 +513,27 @@ function add_attendance_other_activity($attendance_id) {
                     if (!isset($contentToModify)) $contentToModify = "";
                     @$tool_content .= "
                         <div class='form-group'>
-                            <label for='actTitle' class='col-sm-6 control-label-notes'>$langTitle:</label>
+                            <label for='actTitle' class='col-sm-6 control-label-notes'>$langTitle</label>
                             <div class='col-sm-12'>
                                 <input type='text' class='form-control' name='actTitle' value='$titleToModify'/>
                             </div>
                         </div>
-                        <div class='form-group".($date_error ? " has-error" : "")." mt-3'>
-                            <label for='date' class='col-sm-6 control-label-notes'>$langAttendanceActivityDate:</label>
+                        <div class='form-group".($date_error ? " has-error" : "")." mt-4'>
+                            <label for='date' class='col-sm-6 control-label-notes'>$langAttendanceActivityDate</label>
                             <div class='col-sm-12'>
                                 <input type='text' class='form-control' name='date' id='startdatepicker' value='" . datetime_remove_seconds($date) . "'/>
                                 <span class='help-block'>$date_error</span>
                             </div>
                         </div>
-                        <div class='form-group mt-3'>
-                            <label for='actDesc' class='col-sm-6 control-label-notes'>$langDescription:</label>
+                        <div class='form-group mt-4'>
+                            <label for='actDesc' class='col-sm-6 control-label-notes'>$langDescription</label>
                             <div class='col-sm-12'>
                                 " . rich_text_editor('actDesc', 4, 20, $contentToModify) . "
                             </div>
                         </div>";
                     if (isset($module_auto_id) && $module_auto_id != 0) { //accept the auto attendance mechanism
-                        $tool_content .= "<div class='form-group mt-3'>
-                            <label for='weight' class='col-sm-6 control-label-notes'>$langAttendanceInsAut:</label>
+                        $tool_content .= "<div class='form-group mt-4'>
+                            <label for='weight' class='col-sm-6 control-label-notes'>$langAttendanceInsAut</label>
                                 <div class='col-sm-12'><input type='checkbox' value='1' name='auto' ";
                         if ($auto) {
                             $tool_content .= " checked";
@@ -543,14 +543,16 @@ function add_attendance_other_activity($attendance_id) {
                     $tool_content .= "
                    
 
-                    <div class='form-group mt-3'>
-                    <div class='col-sm-10 col-sm-offset-2'>".form_buttons(array(
+                    <div class='form-group mt-5'>
+                    <div class='col-12 d-flex justify-content-center align-items-center'>".form_buttons(array(
                         array(
+                            'class' => 'submitAdminBtn',
                             'text' => $langSave,
                             'name' => 'submitAttendanceActivity',
                             'value'=> $langAdd
                         ),
                         array(
+                            'class' => 'btn btn-outline-secondary cancelAdminBtn ms-1',
                             'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                         )
                     ))."</div></div>";
@@ -1106,21 +1108,21 @@ function user_attendance_settings($attendance_id) {
     $tool_content .= "
     
     <div class='col-sm-12'>
-            <div class='form-wrapper form-edit p-3 rounded'>
+            <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id&editUsers=1'>
-                    <div class='form-group mt-3'>
+                    <div class='form-group'>
                         <label class='col-12 text-secondary'><span class='help-block'>$langAttendanceInfoForUsers</span></label>
                     </div>
-                    <div class='form-group mt-3'>
-                    <label class='col-sm-6 control-label-notes'>$langUserDuration:</label>
+                    <div class='form-group mt-4'>
+                    <label class='col-sm-6 control-label-notes mb-2'>$langUserDuration</label>
                         <div class='col-sm-12'>
-                            <div class='radio'>
+                            <div class='radio mb-2'>
                               <label>
                                 <input type='radio' id='button_some_users' name='specific_attendance_users' value='1'>
                                 <span id='button_some_users_text'>$langSpecificUsers</span>
                               </label>
                             </div>
-                            <div class='radio'>
+                            <div class='radio mb-2'>
                               <label>
                                 <input type='radio' id='button_groups' name='specific_attendance_users' value='2'>
                                 <span id='button_groups_text'>$langGroups</span>
@@ -1137,29 +1139,29 @@ function user_attendance_settings($attendance_id) {
                     <div class='form-group mt-3' id='all_users'>
                         <div class='input-append date form-group' id='startdatepicker'>
                             <label for='UsersStart' class='col-sm-6 control-label-notes'>$langRegistrationDate $langFrom2:</label>
-                            <div class='row'>
-                                <div class='col-10 col-sm-9'>
-                                    <input class='form-control' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
+                            
+                                <div class='input-group'>
+                                    <input class='form-control mt-0' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
+                            
+                                    <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
                                 </div>
-                                <div class='col-2 col-sm-1'>
-                                    <span class='add-on'><i class='fa fa-calendar'></i></span>
-                                </div>
-                            </div>
+                               
+                            
                         </div>
                        
-                        <div class='input-append date form-group mt-3' id='enddatepicker'>
-                            <label for='UsersEnd' class='col-sm-6 control-label-notes'>$langTill:</label>
-                            <div class='row'>
-                                <div class='col-10 col-sm-9'>
-                                    <input class='form-control' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
+                        <div class='input-append date form-group mt-4' id='enddatepicker'>
+                            <label for='UsersEnd' class='col-sm-6 control-label-notes'>$langTill</label>
+                          
+                                <div class='input-group'>
+                                    <input class='form-control mt-0' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
+                              
+                                    <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
                                 </div>
-                                <div class='col-2 col-sm-1'>
-                                    <span class='add-on'><i class='fa fa-calendar'></i></span>
-                                </div>
-                            </div>
+                              
+                           
                         </div>
                     </div>
-                    <div class='form-group mt-3'>
+                    <div class='form-group mt-4'>
                         <div class='col-sm-12 col-sm-offset-2'>
                             <div class='table-responsive'>
                                 <table id='participants_tbl' class='table-default hide'>
@@ -1170,29 +1172,31 @@ function user_attendance_settings($attendance_id) {
                                     </tr>
                                     <tr>
                                       <td>
-                                        <select class='form-select' id='users_box' size='10' multiple></select>
+                                        <select class='form-select h-100' id='users_box' size='10' multiple></select>
                                       </td>
                                       <td class='text-center'>
-                                        <input type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' /><br />
-                                        <input type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
+                                        <input class='btn-outline-primary rounded-pill h-30px' type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' /><br />
+                                        <input class='btn-outline-primary rounded-pill h-30px mt-2' type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
                                       </td>
                                       <td width='40%'>
-                                        <select class='form-select' id='participants_box' name='specific[]' size='10' multiple></select>
+                                        <select class='form-select h-100' id='participants_box' name='specific[]' size='10' multiple></select>
                                       </td>
                                     </tr>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    <div class='form-group mt-3'>
-                        <div class='col-10 col-offset-2'>".form_buttons(array(
+                    <div class='form-group mt-5'>
+                        <div class='col-12 d-flex justify-content-center align-items-center'>".form_buttons(array(
                         array(
+                            'class' => 'submitAdminBtn',
                             'text' => $langRefreshList,
                             'name' => 'resetAttendanceUsers',
                             'value'=> $langAttendanceUpdate,
                             'javascript' => "selectAll('participants_box',true)"
                         ),
                         array(
+                            'class' => 'btn btn-outline-secondary cancelAdminBtn ms-1',
                             'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1"
                         )
                     ))."</div>

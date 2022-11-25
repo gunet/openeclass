@@ -110,7 +110,7 @@ hContent;
         </div>
     
         <div class='col-12'>
-            <div class='form-wrapper form-edit p-3 rounded'>
+            <div class='form-wrapper form-edit rounded'>
                 <form role='form' class='form-horizontal' method='post' action='index.php?course=" . $course_code . "'>
                 <input type='hidden' name='addcommit' value='1'>
                 <fieldset>
@@ -121,9 +121,9 @@ hContent;
                     </div>
                     </div>
                     <div class='form-group mt-3'>
-                    <div class='col-sm-10 col-sm-offset-2'>
-                        <input class='btn btn-sm btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                        <a href='index.php?course=" . $course_code . "'' class='btn btn-sm btn-secondary'>$langCancel</a>
+                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                        <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                        <a href='index.php?course=" . $course_code . "'' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
                     </div>
                     </div>
                 </fieldset>

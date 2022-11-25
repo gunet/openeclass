@@ -43,7 +43,7 @@
                                 <div class='col-12 h-100 left-form'></div>
                             </div>
                             <div class='col-lg-6 col-12'>
-                                <div class='form-wrapper form-edit p-3 rounded'>
+                                <div class='form-wrapper form-edit rounded'>
                                     <div id='unsubscontrols'>
                                     @if(isset($_REQUEST['cid']))
                                     <div class='col-12 mb-3 label d-inline-flex align-items-top'>
@@ -62,13 +62,13 @@
                                     @endif
                                     </div>
                                     <br>
-                                    <div class='row'>
-                                        <div class='col-6'>
-                                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
-                                        </div>
-                                        <div class='col-6'>
-                                             <a class='btn btn-outline-secondary cancelAdminBtn w-100' href='display_profile.php'>{{ trans('langCancel') }}</a>
-                                        </div>
+                                    <div class='col-12 d-flex justify-content-center align-items-center mt-5'>
+                                      
+                                            <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                     
+                                   
+                                             <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='display_profile.php'>{{ trans('langCancel') }}</a>
+                                      
                                     </div>
                                     
                                    

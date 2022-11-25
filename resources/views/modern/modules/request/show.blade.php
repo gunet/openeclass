@@ -165,12 +165,12 @@
 
                     @if ($can_comment)
                         <div class='col-sm-12'>
-                            <div class='form-wrapper form-edit p-3 rounded'>
+                            <div class='form-wrapper form-edit rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='{{ $targetUrl }}' enctype='multipart/form-data'>
                                     <fieldset>
                                         @if ($can_modify)
                                             <div class='form-group'>
-                                                <label for='newState' class='col-sm-6 control-label-notes'>{{ trans('langChangeState') }}:</label>
+                                                <label for='newState' class='col-sm-6 control-label-notes'>{{ trans('langChangeState') }}</label>
                                                 <div class='col-sm-12'>
                                                     <select class='form-select' name='newState' id='newState'>
                                                         @foreach ($states as $stateId => $stateName)
@@ -183,8 +183,8 @@
 
 
 
-                                        <div class='form-group  @if($can_modify) mt-3 @endif'>
-                                            <label for='requestComment' class='col-sm-6 control-label-notes'>{{ trans('langComment') }}:</label>
+                                        <div class='form-group  @if($can_modify) mt-4 @endif'>
+                                            <label for='requestComment' class='col-sm-6 control-label-notes'>{{ trans('langComment') }}</label>
                                             <div class='col-sm-12'>
                                                 {!! $commentEditor !!}
                                             </div>
@@ -192,8 +192,8 @@
 
 
 
-                                        <div class='form-group mt-3'>
-                                            <label for='requestFile' class='col-sm-6 control-label-notes'>{{ trans('langAttachedFile') }}:</label>
+                                        <div class='form-group mt-4'>
+                                            <label for='requestFile' class='col-sm-6 control-label-notes'>{{ trans('langAttachedFile') }}</label>
                                             <div class='col-sm-12'>
                                                 <input type='hidden' name='MAX_FILE_SIZE' value='{{ fileUploadMaxSize() }}'>
                                                 <input type='file' name='requestFile'>
@@ -202,14 +202,14 @@
 
 
 
-                                        <div class='form-group mt-4'>
-                                            <div class='col-12 d-inline-flex'>
+                                        <div class='form-group mt-5'>
+                                            <div class='col-12 d-flex justify-content-center align-items-center'>
                                                 
                                                    
-                                                        <button class='btn btn-primary submitAdminBtn' type='submit'>{{ trans('langSubmit') }}</button>
+                                                        <button class='btn submitAdminBtn' type='submit'>{{ trans('langSubmit') }}</button>
                                                    
                                                   
-                                                        <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a> 
+                                                        <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a> 
                                                    
                                                 
                                                 

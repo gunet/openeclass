@@ -1409,7 +1409,7 @@ function course_access_icon($visibility) {
         }
         case COURSE_REGISTRATION: {
             $access_icon = "<div class='d-inline-flex align-items-center'><span class='fa fa-lock fa-fw access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration'></span>
-                            <span class='fa fa-pencil text-danger fa-custom-lock mt-0' style='margin-left:-9px;'></span></div>";
+            <span class='fa fa-pencil text-danger fa-custom-lock mt-0' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration' style='margin-left:-5px;'></span></div>";
             break;
         }
         case COURSE_CLOSED: {
@@ -1417,11 +1417,12 @@ function course_access_icon($visibility) {
             break;
         }
         case COURSE_INACTIVE: {
-            $access_icon = "<span class='fa fa-ban fa-lg text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeInactive'></span>";
+            $access_icon = "<span class='fa fa-ban fa-lg pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeInactive'></span>";
             break;
         }
     }
-    return "<div class='course_status_container'>$access_icon</div>";
+    // return "<div class='course_status_container'>$access_icon</div>";
+    return $access_icon;
 }
 
 // Convert language code to language name in English lowercase (for message files etc.)

@@ -57,7 +57,7 @@
                         <div class='col-12 h-100 left-form'></div>
                     </div>
                     <div class='col-lg-6 col-12'>
-                    <div class='form-wrapper form-edit p-3 rounded'>
+                    <div class='form-wrapper form-edit rounded'>
                         <form class='form-horizontal' role='form' method='post' action='{{ $passUrl }}'>
                             <fieldset>
 
@@ -70,10 +70,10 @@
                                 </div>
 
 
-                                <div class='form-group{{ $password_form_error ? " has-error" : "" }} mt-3'>
+                                <div class='form-group{{ $password_form_error ? " has-error" : "" }} mt-4'>
                                     <label for='password_form' class='col-sm-12 control-label-notes'>{{ trans('langNewPass1') }} </label>
                                     <div class='col-sm-12'>
-                                        <input type='password' class='form-control' placeholder="{{ trans('langNewPass1') }}..." id='password_form' name='password_form' value='{{ $password_form }}' autocomplete='off'>
+                                        <input type='password' class='form-control' placeholder="{{ trans('langNewPass1') }}" id='password_form' name='password_form' value='{{ $password_form }}' autocomplete='off'>
                                         <span class='help-block'>{{ $password_form_error }}</span>
                                     </div>
                                     <div class='col-sm-12 text-center padding-thin'>
@@ -81,10 +81,10 @@
                                     </div>
                                 </div>
 
-                                <div class='form-group{{ $password_form1_error ? " has-error" : "" }} mt-3'>
+                                <div class='form-group{{ $password_form1_error ? " has-error" : "" }} mt-4'>
                                     <label for='password_form1' class='col-sm-12 control-label-notes'>{{ trans('langNewPass2') }} </label>
                                     <div class='col-sm-12'>
-                                        <input type='password' class='form-control' placeholder="{{ trans('langNewPass2') }}..." id='password_form1' name='password_form1' value='{{ $password_form1 }}' autocomplete='off'>
+                                        <input type='password' class='form-control' placeholder="{{ trans('langNewPass2') }}" id='password_form1' name='password_form1' value='{{ $password_form1 }}' autocomplete='off'>
                                         <span class='help-block'>{{ $password_form1_error }}</span>
                                     </div>
                                 </div>
@@ -94,17 +94,15 @@
                                 {!! showSecondFactorChallenge() !!}
 
                                 <div class='form-group mt-5'>
-                                    <div class='col-12'>
-                                        <div class='row'>
-                                            <div class='col-6'>
-                                               <input type='submit' class='btn btn-primary submitAdminBtn w-100' name='submit' value='{{ trans('langModify') }}'>
-                                            </div>
-                                            <div class='col-6'>
-                                                <a href='display_profile.php' class='btn btn-outline-secondary cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>
-                                            </div>
-                                        </div>
+                                    <div class='col-12 d-flex justify-content-center align-items-center'>
                                        
-                                        
+                                           
+                                               <input type='submit' class='btn submitAdminBtn' name='submit' value='{{ trans('langModify') }}'>
+                                           
+                                          
+                                                <a href='display_profile.php' class='btn btn-outline-secondary cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
+                                            
+                                     
                                     </div>
                                 </div>
                             </fieldset>

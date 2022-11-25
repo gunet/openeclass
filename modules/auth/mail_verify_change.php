@@ -129,22 +129,22 @@ if (!empty($_POST['submit'])) {
 }
 
 if (empty($_POST['email']) or !valid_email($_POST['email'])) {
-    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
             <div class='form-group'>
-                <label class='col-sm-6 control-label-notes'>$lang_email:</label>
+                <label class='col-sm-6 control-label-notes'>$lang_email</label>
                 <div class='col-sm-12'>
                     <input class='form-control' type='text' name='email' size='30' maxlength='40' value='" . q($_SESSION['email']) . "' placeholder='$langMailVerificationAddrChange'>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-                <div class='col-sm-offset-2 col-sm-10'>
-                    <input class='btn btn-primary' type='submit' name='submit' value='$langMailVerificationNewCode'>" .
+            <div class='form-group mt-5'>
+                <div class='col-12 d-flex justify-content-center align-items-center'>
+                    <input class='btn submitAdminBtn' type='submit' name='submit' value='$langMailVerificationNewCode'>" .
                     (isset($_GET['from_profile']) || get_config('email_required')? '':
-                        " <input class='btn btn-primary' type='submit' name='enter' value='$langCancelAndEnter'>") .
+                        " <input class='btn submitAdminBtn ms-1' type='submit' name='enter' value='$langCancelAndEnter'>") .
                     (isset($_GET['from_profile']) && !get_config('mail_verification_required')?
-                        " <a href='{$urlAppend}main/profile/display_profile.php' class='btn btn-default' type='button'>$langCancel</a>": '') . "
+                        " <a href='{$urlAppend}main/profile/display_profile.php' class='btn btn-outline-secondary cancelAdminBtn ms-1' type='button'>$langCancel</a>": '') . "
                 </div>
             </div>
         </fieldset>

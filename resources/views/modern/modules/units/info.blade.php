@@ -88,7 +88,7 @@
                                 !!}
 
                         <div class='col-12'>
-                            <div class='form-wrapper form-edit p-3 rounded'>
+                            <div class='form-wrapper form-edit rounded'>
                                 
                                 <form class='form-horizontal' action='{{ $postUrl }}' method='post' onsubmit="return checkrequired(this, 'unittitle')">
                                     @if ($unitId)
@@ -102,47 +102,47 @@
                                         </div>
                                     </div>
 
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group mt-4'>
                                         <label for='unitdescr' class='col-sm-6 control-label-notes'>{{ trans('langUnitDescr') }}</label>
                                         <div class='col-sm-12'>
                                             {!! $descriptionEditor !!}
                                         </div>
                                     </div>
                                     
-                                    <div class='form-group mt-3'>
-                                        <label for='unitduration' class='col-sm-6 control-label-notes'>{{ trans('langDuration') }}
+                                    <div class='form-group mt-4'>
+                                        <label for='unitduration' class='col-sm-6 control-label-notes mb-1'>{{ trans('langDuration') }}
                                             <span class='help-block'>{{ trans('langOptional') }}</span>
                                         </label>
                                         <div class="row">
 
                                             <div class="col-lg-6 col-12">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon1">{{ trans('langFrom2') }}</span>
+                                                <div class="input-group mb-4">
+                                                    <span class="input-group-text h-30px border-0 BordersLeftInput bgEclass" id="basic-addon1">{{ trans('langFrom2') }}</span>
                                                     <input type="text" class="form-control mt-0" id='unitdurationfrom' name='unitdurationfrom' value='{{ $start_week }}' aria-label="{{ $start_week }}" aria-describedby="basic-addon1">
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6 col-12 mt-lg-0 mt-3">
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text" id="basic-addon2">{{ trans('langUntil') }}</span>
+                                            <div class="col-lg-6 col-12 mt-lg-0 mt-4">
+                                                <div class="input-group mb-4">
+                                                    <span class="input-group-text h-30px border-0 BordersLeftInput bgEclass" id="basic-addon2">{{ trans('langUntil') }}</span>
                                                     <input type="text" class="form-control mt-0" id='unitdurationto' name='unitdurationto' value='{{ $finish_week }}' aria-label="{{ $finish_week }}" aria-describedby="basic-addon2">
                                                 </div>
                                             </div>
                                         </div>                     
                                     </div>
 
-                                    <div class="mt-3"></div>
+                                    <div class="mt-4"></div>
                                     
                                     {!! $tagInput !!}
 
                                     
-                                    <div class='form-group mt-4'>
-                                        <div class='col-12 d-inline-flex'>
+                                    <div class='form-group mt-5'>
+                                        <div class='col-12 d-flex justify-content-center align-items-center'>
                                            
                                                 
-                                                 <button class='btn btn-primary submitAdminBtn' type='submit' name='edit_submit'>{{ trans('langSubmit') }}</button>
+                                                 <button class='btn submitAdminBtn' type='submit' name='edit_submit'>{{ trans('langSubmit') }}</button>
                                            
                                             
-                                                <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='{{ $postUrl }}'>{{ trans('langCancel') }}</a>
+                                                <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $postUrl }}'>{{ trans('langCancel') }}</a>
                                               
                                            
                                             

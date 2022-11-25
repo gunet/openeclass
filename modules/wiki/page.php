@@ -934,19 +934,19 @@ switch ($action) {
     {
         $tool_content .= "
         <div class='col-12'>
-            <div class='form-wrapper form-edit p-3 rounded'>
+            <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='". htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>
                     <input type='hidden' name='action' value='exSearch'>
-                    <div class='form-group mt-3'>
-                        <label for='searchPattern' class='col-sm-6 control-label-notes'>$langSearch:</label>
+                    <div class='form-group'>
+                        <label for='searchPattern' class='col-sm-6 control-label-notes'>$langSearch</label>
                         <div class='col-sm-12'>
                             <input class='form-control' type='text' id='searchPattern' name='searchPattern' placeholder='$langGiveText'>
                         </div>
                     </div>
-                    <div class='form-group mt-3'>
-                        <div class='col-sm-offset-2 col-sm-10'>
-                            <input class='btn btn-primary' type='submit' value='". $langSubmit ."'>
-                            <a class='btn btn-default' href='".htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>$langCancel</a>
+                    <div class='form-group mt-4'>
+                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                            <input class='btn submitAdminBtn' type='submit' value='". $langSubmit ."'>
+                            <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='".htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>$langCancel</a>
                         </div>
                     </div>
                 </form>

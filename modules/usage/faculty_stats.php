@@ -223,10 +223,10 @@ if (isset($_GET['stats_submit'])) {
     load_js('jstree3');
     $tool_content .= "
     <div class='col-12'>
-        <div class='form-wrapper form-edit p-3 rounded'>
+        <div class='form-wrapper form-edit rounded'>
                         <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='get'>
                     <fieldset>";
-    $tool_content .= "<div class='row form-group p-3'><label class='col-md-3 col-12 control-label-notes'>$langFaculty:</label>";
+    $tool_content .= "<div class='row form-group mt-4'><label class='col-md-3 col-12 control-label-notes'>$langFaculty:</label>";
     $tool_content .= "<div class='col-md-9 col-12'>";
     if (isDepartmentAdmin()) {
         list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
@@ -238,30 +238,30 @@ if (isset($_GET['stats_submit'])) {
     $tool_content .= $html;
     $tool_content .= "</div></div>";
 
-    $tool_content .= "<div class='row input-append date form-group p-3' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+    $tool_content .= "<div class='row input-append date form-group mt-4' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
         <label class='col-md-3 col-12 control-label-notes' for='user_date_start'>$langStartDate:</label>
-        <div class='col-md-8 col-10'>
-            <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
-        </div>
-        <div class='col-md-1 col-2'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>
-        </div>";
-    $tool_content .= "<div class='row input-append date form-group p-3' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-            <label class='col-md-3 col-12 control-label-notes' for='user_date_end'>$langEndDate:</label>
-            <div class='col-md-8 col-10'>
-                <input class='form-control' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+        <div class='col-md-9 col-12'>
+            <div class='input-group'> 
+                <input class='form-control mt-0' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+                <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-times'></i></span>
+                <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
             </div>
-        <div class='col-md-1 col-2'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
         </div>
         </div>";
-    $tool_content .= "<div class='row form-group p-3'>
-                        <div class='col-md-9 offset-md-3'>
-                            <input class='btn btn-primary' type='submit' name='stats_submit' value='$langSubmit'>
-                            <a href='index.php' class='btn btn-outline-secondary ms-2'>$langCancel</a>
+    $tool_content .= "<div class='row input-append date form-group mt-4' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+            <label class='col-md-3 col-12 control-label-notes' for='user_date_end'>$langEndDate:</label>
+            <div class='col-md-9 col-10'>
+                <div class='input-group'> 
+                    <input class='form-control mt-0' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+                    <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-times'></i></span>
+                    <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+                </div>
+            </div>
+        </div>";
+    $tool_content .= "<div class='row form-group mt-5'>
+                        <div class='col-md-9 offset-md-3 d-flex justify-content-center align-items-center'>
+                            <input class='btn submitAdminBtn' type='submit' name='stats_submit' value='$langSubmit'>
+                            <a href='index.php' class='btn btn-outline-secondary cancelAdminBtn ms-2'>$langCancel</a>
                         </div>
           </div>";
     $tool_content .= "</fieldset></form></div></div>";

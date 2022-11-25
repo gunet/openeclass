@@ -54,7 +54,7 @@
                
 
                     <div class='col-sm-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                             <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code}}&action=true'>
                                 <div class='form-group'>
                                     <label for='link' class='col-sm-6 control-label-notes'>{{ trans('langLink') }}:</label>
@@ -66,7 +66,7 @@
                           
 
 
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label for='name_link' class='col-sm-6 control-label-notes'>{{ trans('langLinkName') }}:</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' type='text' name='name_link' size='50'>
@@ -77,8 +77,8 @@
 
 
                                 <div class='form-group mt-5'>
-                                    <div class='col-12'>
-                                    <input class='btn btn-primary btn-sm m-auto d-block submitAdminBtn w-50' type='submit' name='submit' value='{{ trans('langAdd') }}'>
+                                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langAdd') }}'>
                                     </div>
                                 </div>
                                 {!! $csrf !!}

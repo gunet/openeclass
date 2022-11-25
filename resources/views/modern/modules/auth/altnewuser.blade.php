@@ -46,7 +46,7 @@
                             <div class='col-12 h-100 left-form'></div>
                         </div>
                         <div class='col-lg-6 col-12'>
-                            <div class='form-wrapper form-edit p-3 rounded'>
+                            <div class='form-wrapper form-edit rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='altsearch.php'>
                                     <fieldset> {{ $auth_instructions }}
                                             <div class='form-group'>
@@ -55,7 +55,7 @@
                                                     <input class='form-control' type='text' size='30' maxlength='30' placeholder="{{ trans('langUserNotice') }}" name='uname' autocomplete='off' {{ $set_uname }}>
                                                 </div>
                                             </div>
-                                            <div class='form-group mt-3'>
+                                            <div class='form-group mt-4'>
                                                 <label for='Pass' class='col-sm-12 control-label-notes'>{{ trans('langPass') }}</label>
                                                 <div class='col-sm-12'>
                                                     <input class='form-control' type='password' size='30' maxlength='30' name='passwd' autocomplete='off' placeholder='{{ trans('langPass') }}'>
@@ -63,7 +63,7 @@
                                             </div>                    
                                         <input type='hidden' name='auth' value='{{ $auth }}'>
                                         <div class='form-group mt-5'>
-                                            <div class='col-12 d-flex justify-content-center'>
+                                            <div class='col-12 d-flex justify-content-center align-items-center'>
                                                 {!! $form_buttons !!}
                                                 @if (isset($_SESSION['prof']) and $_SESSION['prof']) 
                                                     <input type='hidden' name='p' value='1'>

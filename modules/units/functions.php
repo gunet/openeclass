@@ -1712,7 +1712,7 @@ function edit_res($resource_id) {
     $rescomments = $ru->comments;
     $resource_id = $ru->id;
     $resource_type = $ru->type;
-    $content = "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>";
+    $content = "<div class='col-12'><div class='form-wrapper form-edit rounded'>";
     $content .= "<form class='form-horizontal' role='form' method='post' action='${urlServer}modules/units/index.php?course=$course_code'>" .
             "<input type='hidden' name='id' value='$id'>" .
             "<input type='hidden' name='resource_id' value='$resource_id'>";

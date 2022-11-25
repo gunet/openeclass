@@ -77,7 +77,7 @@ $(function() {
                     
                      {!! $action_bar !!}
                     <div class='col-12'>
-                    <div class='form-wrapper form-edit p-3 rounded'>
+                    <div class='form-wrapper form-edit rounded'>
                        
                         @if (!isset($_GET['from_user']))
                             <div class='alert alert-info'>
@@ -97,12 +97,12 @@ $(function() {
                                             <p class='form-control-static'>{{trans('langUserDelCourse')}}</p>
                                         </div>
                                     </div>
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group mt-4'>
                                         <div class='col-sm-12 checkbox'>
                                             <label><input type='checkbox' name='delusersinactive'>{{trans('langInactiveUsers')}}</label>
                                         </div>
                                     </div>
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group mt-4'>
                                         <div class='col-sm-12 checkbox'>
                                             <label><input type='checkbox' name='delusersdate'>{{trans('langWithRegistrationDate')}}:</label>
                                         </div>
@@ -111,12 +111,16 @@ $(function() {
                                                 {!! selection(array('before' => trans('langBefore'), 'after' => trans('langAfter')), 'reg_flag', $reg_flag) !!}
                                             </div>
                                             <div class='col-sm-6 mt-md-0 mt-2'>
-                                                <input class='w-75' type='text' name='reg_date' id='reg_date' value='{!! date("d-m-Y", time()) !!}'>
-                                                <span class="fa fa-calendar" aria-hidden="true"></span>
+                                                <div class='input-group'>
+                                                    <input class='form-control mt-0' type='text' name='reg_date' id='reg_date' value='{!! date("d-m-Y", time()) !!}'>
+                                                    <div class='input-group-text h-30px border-0 BordersRightInput bgEclass'>
+                                                        <span class="fa fa-calendar" aria-hidden="true"></span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class='form-group mt-3'>
+                                    <div class='form-group mt-4'>
                                         <div class='col-sm-12 checkbox'>
                                             <label><input type='checkbox' name='delusersdept'>{{trans('langWho')}}</label>
                                         </div>
@@ -129,7 +133,7 @@ $(function() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div class='form-group MT-3'>
+                                    <div class='form-group mt-4'>
                                         <div class='col-sm-12 checkbox'>
                                             <label><input type='checkbox' name='delusersid'>{{trans('langWith')}}</label>
                                         </div>
@@ -147,64 +151,77 @@ $(function() {
 
                                     @if (!isset($_GET['from_user']))
 
-                                        <div class='form-group mt-3'>
-                                            <label for='delannounces' class='col-sm-6 control-label-notes'>{{ trans('langAnnouncements') }}</label>
-                                            <div class='col-sm-12 checkbox'>
-                                                <label><input type='checkbox' name='delannounces'> {{ trans('langAnnouncesDel') }}</label>
+                                        <div class='row'>
+                                            <div class='col-md-6 col-12'>
+                                                <div class='form-group mt-4'>
+                                                    <label for='delannounces' class='col-sm-6 control-label-notes mb-1'>{{ trans('langAnnouncements') }}</label>
+                                                    <div class='col-sm-12 checkbox'>
+                                                        <label><input type='checkbox' name='delannounces'> {{ trans('langAnnouncesDel') }}</label>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
 
-                            
-
-                                        <div class='form-group mt-3'>
-                                            <label for='delagenda' class='col-sm-6 control-label-notes'>{{ trans('langAgenda') }}</label>
-                                            <div class='col-sm-12 checkbox'>
-                                                <label><input type='checkbox' name='delagenda'> {{ trans('langAgendaDel') }}</label>
-                                            </div>
-                                        </div>
-
-                                        
-
-                                        <div class='form-group mt-3'>
-                                            <label for='hideworks' class='col-sm-6 control-label-notes'>{{ trans('langWorks') }}</label>
-                                            <div class='col-sm-12 checkbox'>
-                                                <label><input type='checkbox' name='hideworks'> {{ trans('langHideWork') }}</label>
-                                            </div>
-                                            <div class='col-sm-offset-2 col-sm-10 checkbox'>
-                                                <label><input type='checkbox' name='delworkssubs'> {{ trans('langDelAllWorkSubs') }}</label>
-                                            </div>
-                                        </div>
-
-                            
-
-                                        <div class='form-group mt-3'>
-                                            <label for='purgeexercises' class='col-sm-6 control-label-notes'>{{ trans('langExercises') }}</label>
-                                            <div class='col-sm-12 checkbox'>
-                                                <label><input type='checkbox' name='purgeexercises'> {{ trans('langPurgeExercisesResults') }}</label>
+                                
+                                            <div class='col-md-6 col-12'>
+                                                <div class='form-group mt-4'>
+                                                    <label for='delagenda' class='col-sm-6 control-label-notes mb-1'>{{ trans('langAgenda') }}</label>
+                                                    <div class='col-sm-12 checkbox'>
+                                                        <label><input type='checkbox' name='delagenda'> {{ trans('langAgendaDel') }}</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
                                         
+                                        <div class='row'>
+                                            <div class='col-md-6 col-12'>
+                                                <div class='form-group mt-4'>
+                                                    <label for='hideworks' class='col-sm-6 control-label-notes mb-1'>{{ trans('langWorks') }}</label>
+                                                    <div class='col-sm-12 checkbox'>
+                                                        <label><input type='checkbox' name='hideworks'> {{ trans('langHideWork') }}</label>
+                                                    </div>
+                                                    <div class='col-sm-offset-2 col-sm-10 checkbox'>
+                                                        <label><input type='checkbox' name='delworkssubs'> {{ trans('langDelAllWorkSubs') }}</label>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                        <div class='form-group mt-3'>
-                                            <label for='clearstats' class='col-sm-6 control-label-notes'>{{ trans('langUsage') }}</label>
-                                            <div class='col-sm-12 checkbox'>
-                                                <label><input type='checkbox' name='clearstats'> {{ trans('langClearStats') }}</label>
+                                
+                                            <div class='col-md-6 col-12'>
+                                                <div class='form-group mt-4'>
+                                                    <label for='purgeexercises' class='col-sm-6 control-label-notes mb-1'>{{ trans('langExercises') }}</label>
+                                                    <div class='col-sm-12 checkbox'>
+                                                        <label><input type='checkbox' name='purgeexercises'> {{ trans('langPurgeExercisesResults') }}</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
+
+                                        
+                                        <div class='row'>
+                                            <div class='col-md-6 col-12'>
+                                                <div class='form-group mt-4'>
+                                                    <label for='clearstats' class='col-sm-6 control-label-notes mb-1'>{{ trans('langUsage') }}</label>
+                                                    <div class='col-sm-12 checkbox'>
+                                                        <label><input type='checkbox' name='clearstats'> {{ trans('langClearStats') }}</label>
+                                                    </div>
+                                                </div>
+                                            </div>
 
                         
-
-                                        <div class='form-group mt-3'>
-                                            <label for='delblogposts' class='col-sm-6 control-label-notes'>{{ trans('langBlog') }}</label>
-                                            <div class='col-sm-12 checkbox'>
-                                                <label><input type='checkbox' name='delblogposts'> {{ trans('langDelBlogPosts') }}</label>
+                                            <div class='col-md-6 col-12'>
+                                                <div class='form-group mt-4'>
+                                                    <label for='delblogposts' class='col-sm-6 control-label-notes mb-1'>{{ trans('langBlog') }}</label>
+                                                    <div class='col-sm-12 checkbox'>
+                                                        <label><input type='checkbox' name='delblogposts'> {{ trans('langDelBlogPosts') }}</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
                                     
 
-                                        <div class='form-group mt-3'>
+                                        <div class='form-group mt-4'>
                                             <label for='delwallposts' class='col-sm-6 control-label-notes'>{{ trans('langWall') }}</label>
                                             <div class='col-sm-12 checkbox'>
                                                 <label><input type='checkbox' name='delwallposts'> {{ trans('langDelWallPosts') }}</label>
@@ -212,13 +229,13 @@ $(function() {
                                         </div>
                                     @endif
 
-                                    <div class='mt-3'></div>
+                                    <div class='mt-4'></div>
 
                                     {{ showSecondFactorChallenge() }}
 
                                
-                                    <div class='col-12 mt-5'>
-                                        <input class='btn btn-primary btn-sm m-auto d-block submitAdminBtn w-50' type='submit' value='{{ trans('langSubmitActions') }}' name='submit'>
+                                    <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
+                                        <input class='btn submitAdminBtn' type='submit' value='{{ trans('langSubmitActions') }}' name='submit'>
                                     </div>
 
                                 </fieldset>

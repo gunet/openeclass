@@ -78,7 +78,7 @@
                         )
                         !!}
                         <div class='col-12'>
-                            <div class='form-wrapper form-edit p-3 rounded'> 
+                            <div class='form-wrapper form-edit rounded'> 
                                 
                                 <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code }}'>
                                     @if (isset($_GET['id']))
@@ -96,21 +96,21 @@
 
                                   
 
-                                        <div class='form-group mt-3'>
+                                        <div class='form-group mt-4'>
                                             <label for='CatDesc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
                                             <div class='col-sm-12'><textarea class='form-control' rows='5' name='description'>{{ $form_description }}</textarea></div>
                                         </div>
 
                                         
                                         
-                                        <div class='form-group mt-4'>
-                                            <div class='col-12 d-inline-flex'>
+                                        <div class='form-group mt-5'>
+                                            <div class='col-12 d-flex justify-content-center align-items-center'>
                                               
                                                  
                                                   {!!
                                                     form_buttons(array(
                                                         array(
-                                                            'class' => 'btn-primary submitAdminBtn',
+                                                            'class' => ' submitAdminBtn',
                                                             'text'  =>  $GLOBALS['langSave'],
                                                             'name'  =>  'submitCategory',
                                                             'value' =>  $form_legend
@@ -122,7 +122,7 @@
                                                   {!!
                                                 form_buttons(array(
                                                     array(
-                                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-2',
+                                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                                                         'href'  =>  $backPath
                                                     )
                                                 ))

@@ -69,7 +69,7 @@
                                 <div class='col-12'>
                             @endif
                             
-                                <div class='form-wrapper form-edit p-3 mt-2 rounded'>
+                                <div class='form-wrapper form-edit mt-2 rounded'>
                                 
                                     <form class='form-horizontal' role='form' action='{{ $upload_target_url }}' method='post'>
                                         <input type='hidden' name='{{ $pathName }}' value='{{ $pathValue }}'>
@@ -78,7 +78,7 @@
                                             <input type='hidden' name='back' value='{{ $back }}'>
                                         @endif
                                         @if ($sections)
-                                            <div class='form-group mb-3'>
+                                            <div class='form-group mb-4'>
                                                 <label for='section' class='col-sm-12 control-label-notes'>{{ trans('langSection') }}</label>
                                                 <div class='col-sm-12'>
                                                     {!! selection($sections, 'section_id', $section_id) !!}
@@ -89,7 +89,7 @@
                                         
 
                                         @if ($filename)
-                                            <div class='form-group mb-3'>
+                                            <div class='form-group mb-4'>
                                                 <label for='file_name' class='col-sm-12 control-label-notes'>{{ trans('langFileName') }}</label>
                                                 <div class='col-sm-12'>
                                                     <p class='form-control-static'>{{ $filename }}</p>
@@ -109,7 +109,7 @@
 
                                         
 
-                                        <div class='form-group mt-3'>
+                                        <div class='form-group mt-4'>
                                             <label for='file_title' class='col-sm-12 control-label-notes'>{{ trans('langContent') }}</label>
                                             <div class='col-sm-12'>
                                                 {!! $rich_text_editor !!}
@@ -118,16 +118,16 @@
 
                                        
 
-                                        <div class='form-group mt-4'>
+                                        <div class='form-group mt-5'>
                                             @if($menuTypeID == 3 or $menuTypeID == 1)
-                                            <div class='col-12 d-inline-flex'>
-                                                <button class='btn btn-primary submitAdminBtn ' type='submit'>{{ trans('langSave') }}</button>
-                                                <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                                                <button class='btn submitAdminBtn ' type='submit'>{{ trans('langSave') }}</button>
+                                                <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                                             </div>
                                             @else
-                                            <div class='col-12 d-inline-flex'>
-                                                <button class='btn btn-primary submitAdminBtn' type='submit'>{{ trans('langSave') }}</button>
-                                                <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                                                <button class='btn submitAdminBtn' type='submit'>{{ trans('langSave') }}</button>
+                                                <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                                                 {!! generate_csrf_token_form_field() !!}
                                             </div>
                                             @endif

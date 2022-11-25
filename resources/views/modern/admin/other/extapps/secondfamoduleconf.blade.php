@@ -39,7 +39,7 @@
                     </div>
 
                     <div class='col-lg-6 col-12'>
-                        <form class='form-wrapper form-edit p-3 rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                        <form class='form-wrapper form-edit rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             <fieldset>
                                 <table class='table table-bordered'>
                                     <tr>
@@ -69,7 +69,7 @@
                                 <li><a href='http://apps.microsoft.com/windows/en-us/app/google-authenticator/7ea6de74-dddb-47df-92cb-40afac4d38bb%22'>Google Authenticator (port) on Windows app store</a></li>
                             </ul>
                             <br>
-                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                            <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
                             {!! generate_csrf_token_form_field() !!}
                         </form>
                     </div>

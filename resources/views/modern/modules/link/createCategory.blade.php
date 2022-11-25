@@ -54,7 +54,7 @@
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
                     <div class='col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                             
                             <form class = 'form-horizontal' role='form' method='post' action='index.php?course={{ $course_code }}&urlview={{ $urlview }}'>
                                 @if ($action == 'editcategory')
@@ -63,7 +63,7 @@
                                 <fieldset>
 
                                     <div class="form-group{{ $categoryNameError ? ' has-error' : ''}}">
-                                    <label for='CatName' class='col-sm-6 control-label-notes'>{{ trans('langCategoryName') }}:</label>
+                                    <label for='CatName' class='col-sm-6 control-label-notes'>{{ trans('langCategoryName') }}</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' type='text' name='categoryname' size='53' placeholder='{{ trans('langCategoryName') }}' value='{{ isset($category) ? $category->name : "" }}'>
                                         {!! Session::getError('categoryname', "<span class='help-block'>:message</span>") !!}
@@ -72,8 +72,8 @@
 
                                   
 
-                                    <div class='form-group mt-3'>
-                                        <label for='CatDesc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
+                                    <div class='form-group mt-4'>
+                                        <label for='CatDesc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}</label>
                                         <div class='col-sm-12'>
                                             <textarea class='form-control' rows='5' name='description'>{{ isset($category) ? $category->description : "" }}</textarea>
                                         </div>
@@ -81,13 +81,13 @@
 
                                   
                                     
-                                    <div class='form-group mt-4'>
-                                        <div class='col-12 d-inline-flex'>
+                                    <div class='form-group mt-5'>
+                                        <div class='col-12 d-flex justify-content-center align-items-center'>
                                            
                                                 
-                                                    <input type='submit' class='btn btn-primary submitAdminBtn' name='submitCategory' value="{{ $form_legend }}">
+                                                    <input type='submit' class='btn submitAdminBtn' name='submitCategory' value="{{ $form_legend }}">
                                                
-                                                    <a href='index.php?course={{ $course_code }}' class='btn btn-outline-secondary cancelAdminBtn ms-2'>{{ trans('langCancel') }}</a>
+                                                    <a href='index.php?course={{ $course_code }}' class='btn btn-outline-secondary cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
                                                
                                            
                                         </div>

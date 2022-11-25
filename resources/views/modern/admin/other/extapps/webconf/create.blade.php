@@ -39,7 +39,7 @@
                     </div>
 
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                             
                             <form class='form-horizontal' role='form' name='serverForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             <fieldset>
@@ -49,7 +49,7 @@
                                         <input class='form-control' placeholder="{{ trans('langWebConfServer') }}..." id='host' type='text' name='hostname_form' value="{{ isset($server) ? $server->hostname : ''}}">
                                     </div>
                                 </div>            
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langActivate') }}</label>
                                     <div class='col-sm-12 d-inline-flex'>
                                         <div class='radio'>
@@ -58,7 +58,7 @@
                                                 {{ trans('langYes') }}
                                             </label>                    
                                         </div>                     
-                                        <div class='radio ms-2'>
+                                        <div class='radio ms-4'>
                                             <label>
                                                 <input  type='radio' id='enabled_false' name='enabled' value='false'{{ $enabled ? '' : ' checked' }}>
                                                 {{ trans('langNo') }}
@@ -66,7 +66,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langUseOfTc') }}</label>                
                                     <div class="col-sm-12">
                                         <select class='form-select' name='tc_courses[]' multiple class='form-control' id='select-courses'>
@@ -79,8 +79,8 @@
                                     <input class='form-control' type = 'hidden' name = 'id_form' value='{{ $wc_server }}'>
                                 @endif
                                 <div class='form-group mt-5'>
-                                    <div class='col-12'>
-                                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langAddModify') }}'>
+                                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                                        <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langAddModify') }}'>
                                     </div>
                                 </div>
                             </fieldset>

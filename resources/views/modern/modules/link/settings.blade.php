@@ -56,14 +56,14 @@
                         @endif
 
                         <div class='col-sm-12'>
-                            <div class='form-wrapper form-edit p-3 rounded'>
+                            <div class='form-wrapper form-edit rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='index.php?course={{ $course_code }}'>
                                 <fieldset>                 
                                              
                                     <div class='form-group'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langSocialBookmarksFunct') }}</label>
-                                        <div class='col-sm-9'> 
-                                            <div class='radio'>
+                                        <label class='col-sm-6 control-label-notes mb-2'>{{ trans('langSocialBookmarksFunct') }}</label>
+                                        <div class='col-sm-12'> 
+                                            <div class='radio mb-2'>
                                                 <label>
                                                     <input type='radio' value='1' name='settings_radio'{{ $social_enabled ? " checked" : "" }}> {{ trans('langActivate') }}
                                                 </label>
@@ -78,14 +78,14 @@
 
                             
                                     
-                                    <div class='form-group mt-4'>
-                                        <div class='col-12 d-inline-flex'>
+                                    <div class='form-group mt-5'>
+                                        <div class='col-12 d-flex justify-content-start align-items-center'>
                                            
                                                 
-                                                    <input type='submit' class='btn btn-primary submitAdminBtn' name='submitSettings' value='{{ trans('langSubmit') }}' />
+                                                    <input type='submit' class='btn submitAdminBtn' name='submitSettings' value='{{ trans('langSubmit') }}' />
                                                
                                               
-                                                    <a href='index.php?course={{ $course_code }}' class='btn btn-outline-secondary btn-sm cancelAdminBtn ms-2'>{{ trans('langCancel') }}</a>
+                                                    <a href='index.php?course={{ $course_code }}' class='btn btn-outline-secondary cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
                                                
                                             
                                             

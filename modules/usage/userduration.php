@@ -363,7 +363,7 @@ function selection_course_modules() {
 
     $content = "
         <div class='col-12'>
-            <div class='form-wrapper form-edit p-3 rounded'>
+            <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' name='module_select' action='$_SERVER[SCRIPT_NAME]' method='get'>
                 <input type='hidden' name='course' value='$course_code'>
                     <div class='form-group'>

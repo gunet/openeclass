@@ -45,7 +45,7 @@
                     </div>
 
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                         
                         <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                             <fieldset>
@@ -59,15 +59,15 @@
                                 <div class='col-sm-12'>{!! text_area('user_info', 10, 30, '') !!}</div>
                             </div>
                             </fieldset>
-                            <div class='mt-3'></div>
+                            <div class='mt-4'></div>
                             <fieldset>
                             <h4 class='control-label-notes'>{{ trans('langCourseCodes') }}</h4>
                             <div class='form-group'>
                                     <div class='col-sm-12'>{!! text_area('courses_codes', 10, 30, '') !!}</div>
                                 </div>
                                 {!! showSecondFactorChallenge() !!}
-                                <div class='col-12 mt-5'>
-                                    <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
+                                <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
+                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
                                 </div>
                             </fieldset>
                             {!! generate_csrf_token_form_field() !!}

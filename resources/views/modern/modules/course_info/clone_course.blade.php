@@ -104,7 +104,7 @@
 
                        
                         <div class='col-sm-12'>
-                            <div class='form-wrapper form-edit p-3 rounded' >
+                            <div class='form-wrapper form-edit rounded' >
                                 <form class='form-horizontal' role='form' action='{{ $formAction }}' method='post' onsubmit='return validateNodePickerForm();' >
 
                                 <div class='form-group'>
@@ -113,44 +113,44 @@
                                         <input type='text' class='form-control' id='course_code' name='course_code' value='{{ $code }}'>
                                     </div>
                                 </div>
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label for='course_code' class='col-sm-6 control-label-notes'>{{ trans('langLanguage') }}:</label>
                                     <div class='col-sm-12'>
                                         {!! $lang_selection !!}
                                     </div>
                                 </div>
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label for='course_title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' type='text' id='course_title' name='course_title' value='{{ $title }}'>
                                     </div>
                                 </div>
 
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label class='col-sm-6 control-label-notes'>{{ trans('langCourseDescription') }}:</label>
                                     <div class='col-sm-12'>
                                         {!! $rich_text_editor !!}
                                     </div>
                                 </div>
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label class='col-sm-6 control-label-notes'>{{ trans('langFaculty') }}:</label>
                                     <div class='col-sm-12'>
                                         {!! $course_node_picker !!} <br>{{ trans('langOldValue') }}: <i>{{ $old_faculty }}</i>
                                     </div>
                                 </div>
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label class='col-sm-6 control-label-notes'>{{ trans('langCourseVis') }}:</label>
                                     <div class='col-sm-12'>
                                         {!! $visibility_select !!}
                                     </div>
                                 </div>
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label for='course_prof' class='col-sm-6 control-label-notes'>{{ trans('langTeacher') }}:</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' type='text' id='course_prof' name='course_prof' value='{{ $prof }}' size='50' />
                                     </div>
                                 </div>
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langUsersWillAdd') }}:</label>
                                     
                                     <div class='radio mb-2'>
@@ -165,16 +165,16 @@
                                         {{ trans('langNone') }}
                                     
                                 </div>
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label class='col-sm-6 control-label-notes'>{{ trans('langMultiRegType') }}:</label>
                                     <div class='col-sm-12'>
                                         <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
                                     </div>
                                 </div>
                                 <div class='form-group mt-5'>
-                                    <div class='col-12'>
+                                    <div class='col-12 d-flex justify-content-center align-items-center'>
                                         
-                                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='create_restored_course' value='{{ trans('langOk') }}'>
+                                        <input class='btn submitAdminBtn' type='submit' name='create_restored_course' value='{{ trans('langOk') }}'>
                                         <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' />
                                     </div>
                                 </div>

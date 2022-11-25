@@ -41,7 +41,7 @@
                     </div>
                     
                     <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper form-edit p-3 rounded'>
+                      <div class='form-wrapper form-edit rounded'>
                         
                           <form class='form-horizontal' role='form' method='post' action='{{ $urlServer }}modules/admin/password.php'>
                             <fieldset>      
@@ -49,27 +49,26 @@
                               <div class='form-group'>
                               <label class='col-sm-12 control-label-notes'>{{ trans('langNewPass1') }}</label>
                                 <div class='col-sm-12'>
-                                    <input class='form-control' placeholder="{{ trans('langNewPass1') }}..." type='password' size='40' name='password_form' value='' id='password' autocomplete='off'>
+                                    <input class='form-control' placeholder="{{ trans('langNewPass1') }}" type='password' size='40' name='password_form' value='' id='password' autocomplete='off'>
                                     &nbsp;
                                     <span id='result'></span>
                                 </div>
                               </div>
-                              <div class='form-group mt-3'>
+                              <div class='form-group mt-4'>
                                 <label class='col-sm-12 control-label-notes'>{{ trans('langNewPass2') }}</label>
                                 <div class='col-sm-12'>
-                                    <input class='form-control' placeholder="{{ trans('langNewPass2') }}..." type='password' size='40' name='password_form1' value='' autocomplete='off'>
+                                    <input class='form-control' placeholder="{{ trans('langNewPass2') }}" type='password' size='40' name='password_form1' value='' autocomplete='off'>
                                 </div>
                               </div>
-                              <div class='col-12 mt-5'>
+                              <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
                                 {!! showSecondFactorChallenge() !!}
-                                <div class='row'>
-                                    <div class='col-6'>
-                                        <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='changePass' value='{{ trans('langModify') }}'>
-                                    </div>
-                                    <div class='col-6'>
-                                         <a class='btn btn-outline-secondary cancelAdminBtn w-100' href='{{ $urlServer }}modules/admin/edituser.php?u={{ urlencode(getDirectReference($_REQUEST['userid'])) }}'>{{ trans('langCancel') }}</a>
-                                    </div>
-                                </div>
+                               
+                                   
+                                        <input class='btn submitAdminBtn' type='submit' name='changePass' value='{{ trans('langModify') }}'>
+                                   
+                                         <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $urlServer }}modules/admin/edituser.php?u={{ urlencode(getDirectReference($_REQUEST['userid'])) }}'>{{ trans('langCancel') }}</a>
+                                    
+                                
                                 
                                
                               </div>      

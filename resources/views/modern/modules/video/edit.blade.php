@@ -70,7 +70,7 @@
                         !!}
                         
                         <div class='col-12'>
-                            <div class='form-wrapper form-edit p-3 rounded'>
+                            <div class='form-wrapper form-edit rounded'>
                                 
                                 <form class='form-horizontal'
                                     role='form'
@@ -113,13 +113,13 @@
 
                                         
 
-                                        <div class='form-group mt-3'>
+                                        <div class='form-group mt-4'>
                                             <label for='Title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
                                             <div class='col-sm-12'>
                                                 @if (isset($edititem))
-                                                    <input class='form-control' placeholder="{{ trans('langTitle') }}..." type='text' name='title' value='{{ $edititem->title }}'>
+                                                    <input class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='title' value='{{ $edititem->title }}'>
                                                 @else
-                                                    <input class='form-control' placeholder="{{ trans('langTitle') }}..." type='text' name='title' size='55'>
+                                                    <input class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='title' size='55'>
                                                 @endif
                                             </div>
                                         </div>
@@ -127,8 +127,8 @@
                                       
 
 
-                                        <div class='form-group mt-3'>
-                                            <label for='Desc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
+                                        <div class='form-group mt-4'>
+                                            <label for='Desc' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}</label>
                                             <div class='col-sm-12'>
                                                 <textarea class='form-control' placeholder="{{ trans('langGiveText') }}..." rows='3' name='description'>@if (isset($_GET['id']) && isset($_GET['table_edit'])){{ $edititem->description }}@endif</textarea>
                                             </div>
@@ -138,8 +138,8 @@
 
                                         <div class='row'>
                                             <div class='col-md-6 col-12'>
-                                                <div class='form-group mt-3'>
-                                                    <label for='Creator' class='col-sm-12 control-label-notes'>{{ trans('langCreator') }}:</label>
+                                                <div class='form-group mt-4'>
+                                                    <label for='Creator' class='col-sm-12 control-label-notes'>{{ trans('langCreator') }}</label>
                                                     <div class='col-sm-12'>
                                                         @if (isset($form_input))
                                                             <input class='form-control' type='text' name='creator' value='{{ $nick }}'>
@@ -151,8 +151,8 @@
                                             </div>
 
                                             <div class='col-md-6 col-12'>
-                                                <div class='form-group mt-3'>
-                                                    <label for='Publisher' class='col-sm-12 control-label-notes'>{{ trans('langpublisher') }}:</label>
+                                                <div class='form-group mt-4'>
+                                                    <label for='Publisher' class='col-sm-12 control-label-notes'>{{ trans('langpublisher') }}</label>
                                                     <div class='col-sm-12'>
                                                         @if (isset($form_input))
                                                             <input class='form-control' type='text' name='publisher' value='{{ $nick }}'>
@@ -168,15 +168,15 @@
                                         <div class='row'>
                                             @if (isset($form_input))
                                             <div class='col-md-6 col-12'>
-                                                <div class='form-group mt-3'>
-                                                    <label for='Date' class='col-sm-6 control-label-notes'>{{ trans('langDate') }}:</label>
+                                                <div class='form-group mt-4'>
+                                                    <label for='Date' class='col-sm-6 control-label-notes'>{{ trans('langDate') }}</label>
                                                     <div class='col-sm-12'><input class='form-control' type='text' name='date' value='{{ date('Y-m-d G:i') }}'></div>
                                                 </div>
                                             </div>
                                             @endif
                                             <div class='col-md-6 col-12'>
-                                                <div class='form-group mt-3'>
-                                                    <label for='Category' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}:</label>
+                                                <div class='form-group mt-4'>
+                                                    <label for='Category' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}</label>
                                                     <div class='col-sm-12'>
                                                         <select class='form-select' name='selectcategory'>
                                                             <option value='0'>--</option>
@@ -202,15 +202,15 @@
                                      
 
 
-                                        <div class='form-group mt-4'>
-                                            <div class='col-12 d-inline-flex'>
+                                        <div class='form-group mt-5'>
+                                            <div class='col-12 d-flex justify-content-center align-items-center'>
                                                 
                                                     @if ($form_input === 'file')
                                                        
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-primary submitAdminBtn',
+                                                                    'class' => 'submitAdminBtn',
                                                                     'text'  =>  $GLOBALS['langUpload'],
                                                                     'name'  =>  'add_submit',
                                                                     'value' =>  $GLOBALS['langUpload']
@@ -220,7 +220,7 @@
                                                        
                                                         {!! form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-2',
+                                                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                                                                     'href'  =>  $backPath
                                                                 )
                                                             ))
@@ -231,7 +231,7 @@
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-primary submitAdminBtn',
+                                                                    'class' => 'submitAdminBtn',
                                                                     'text'  =>  $GLOBALS['langSave'],
                                                                     'name'  =>  'add_submit',
                                                                     'value' =>  $GLOBALS['langAdd']
@@ -242,7 +242,7 @@
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-2',
+                                                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                                                                     'href'  =>  $backPath
                                                                 )
                                                             ))
@@ -253,7 +253,7 @@
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-primary submitAdminBtn',
+                                                                    'class' => 'submitAdminBtn',
                                                                     'text'  =>  $GLOBALS['langSave'],
                                                                     'name'  =>  'edit_submit',
                                                                     'value' =>  $GLOBALS['langEditChange']
@@ -264,7 +264,7 @@
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
-                                                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-2',
+                                                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
                                                                     'href'  =>  $backPath
                                                                 )
                                                             ))

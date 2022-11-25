@@ -74,7 +74,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
     $checkMap['meta_level'] = metaBuildCheckMap($metaLevels, "meta_level");
 
     $output = "
-    <div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>
+    <div class='col-sm-12'><div class='form-wrapper form-edit rounded'>
 	<form method='post' action='index.php?course=$course_code'>
 	<fieldset>
 	  <input type='hidden' name='metadataPath' value='" . q($metadata) . "' />

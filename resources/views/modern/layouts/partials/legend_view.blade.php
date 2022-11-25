@@ -225,8 +225,8 @@
                                         </tr>
 
                                         @if($toolName)
-                                            <tr class='border-0'>
-                                                <th class='border-0 d-inline-flex'>
+                                            <tr class='border-0 ps-0'>
+                                                <th class='border-0 d-inline-flex ps-0'>
                                                     <span class='text-secondary fst-italic'>
                                                         {{$toolName}}
                                                     </span>
@@ -261,8 +261,7 @@
             @else
                 <div class='d-flex justify-content-center ps-1 pt-1 pb-2'>
                     <div class="d-inline-flex align-items-top">
-                        <i class="fas fa-tools orangeText text-center me-2 mt-1" aria-hidden="true"></i> 
-                        <span class="control-label-notes">{{$toolName}}</span>
+                        <span class="courseInfoText TextExtraBold blackBlueText">{{$toolName}}</span>
                     </div>
                 </div>
             @endif

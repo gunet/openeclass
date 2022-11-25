@@ -47,7 +47,7 @@ if (!isset($_POST['doit'])) {
         if (!$q) {
             $tool_content .= "
             <div class='col-12'>
-            <div class='form-wrapper form-edit p-3 rounded'>
+            <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
 
                   <div class='form-group'>
@@ -56,14 +56,14 @@ if (!isset($_POST['doit'])) {
                     </div>
                   </div>
 
-                  <div class='form-group mt-3'>
+                  <div class='form-group mt-4'>
                     <div class='d-inline-flex align-items-center'>
                       <label class='pe-2'>$langYes:</label>
                       <button class='btn btn-sm btn-danger' name='doit'><i class='fa fa-trash-o'></i> $langUnregUser</button>
                     </div>
                   </div>
 
-                  <div class='form-group mt-3'>
+                  <div class='form-group mt-4'>
                     <div class='d-inline-flex align-items-center'>
                       <label class='pe-2'>$langNo:</label>
                       <a href='{$urlAppend}main/profile/display_profile.php' class='btn btn-sm btn-outline-secondary'><i class='fa fa-reply'></i> $langCancel</a>

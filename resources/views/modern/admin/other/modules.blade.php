@@ -45,7 +45,7 @@
                   </div>
 
                   <div class='col-lg-6 col-12'>
-                    <div class='form-wrapper form-edit p-3 rounded'>
+                    <div class='form-wrapper form-edit rounded'>
                       
                       <form class='form-horizontal' role='form' action='modules.php' method='post'>
                         <div class='row'>
@@ -70,8 +70,8 @@
                         
                         {!! showSecondFactorChallenge() !!}
                         <div class='form-group mt-5'>
-                          <div class='col-12'>
-                            <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmitChanges') }}'>
+                          <div class='col-12 d-flex justify-content-center align-items-center'>
+                            <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmitChanges') }}'>
                           </div>
                         </div>
                         {!! generate_csrf_token_form_field() !!}

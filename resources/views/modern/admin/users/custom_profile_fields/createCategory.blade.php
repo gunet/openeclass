@@ -36,7 +36,7 @@
                         <div class='col-12 h-100 left-form'></div>
                     </div>
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                         
                         <form class='form-horizontal' role='form' name='catForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                         <fieldset>
@@ -46,13 +46,13 @@
                             <div class='form-group'>
                                 <label for='catname' class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
                                 <div class='col-sm-12'>
-                                    <input id='catname' placeholder="{{ trans('langName') }}..." class="form-control" type='text' name='cat_name' value="{{ $cat_name ?: '' }}">
+                                    <input id='catname' placeholder="{{ trans('langName') }}" class="form-control" type='text' name='cat_name' value="{{ $cat_name ?: '' }}">
                                 </div>
                             </div>
                      
-                            <div class='col-12 mt-5'>
+                            <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
                                 {!! showSecondFactorChallenge() !!}
-                                <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit_cat' value='{{ trans('langAdd') }}'>
+                                <input class='btn submitAdminBtn' type='submit' name='submit_cat' value='{{ trans('langAdd') }}'>
                             </div>
                         </fieldset>
                         {!! generate_csrf_token_form_field() !!}

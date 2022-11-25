@@ -37,7 +37,7 @@
                         <div class='col-12 h-100 left-form'></div>
                     </div>
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                             
                         <form role='form' class='form-horizontal' method='post' action='autoenroll.php'>
                             <input type='hidden' name='add' value='{{ $type }}'>
@@ -52,14 +52,14 @@
                                     </div>
                                 </div>
                              
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}:</label>   
                                     <div class='col-sm-12 form-control-static'>
                                         {!! $htmlTree !!}
                                     </div>
                                 </div>
                     
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langAutoEnrollCourse') }}:</label>   
                                     <div class='col-sm-12'>
                                         {{--<input class='form-control' type='hidden' id='courses' name='courses' value=''>--}}
@@ -67,7 +67,7 @@
                                     </div>
                                 </div>
                           
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langAutoEnrollDepartment') }}:</label>   
                                     <div class='col-sm-12 form-control-static'>                  
                                         <div id='nodCnt2'>
@@ -112,26 +112,26 @@
                                     </div>
                                 </div>
                           
-                                <div class='form-group mt-3'>
-                                    <div class='col-sm-12 checkbox'>
+                                <div class='form-group mt-4'>
+                                    <div class='col-sm-12 checkbox mb-1'>
                                         <label>
                                             <input type='checkbox' name='apply' id='apply' value='1' checked='1'>
                                             {{ trans('langApplyRule') }}
                                         </label>
                                     </div>
                                 </div>
-                                <div class='mt-3'></div>
+                                <div class='mt-4'></div>
                                 {!! showSecondFactorChallenge() !!}
                                 <div class='form-group mt-5'>
-                                    <div class='col-12'>
-                                        <div class='row'>
-                                            <div class='col-6'>
-                                                <input class='btn btn-primary submitAdminBtn w-100' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
-                                            </div>
-                                            <div class='col-6'>
-                                                <a href='autoenroll.php' class='btn btn-outline-secondary cancelAdminBtn w-100'>{{ trans('langCancel') }}</a>    
-                                            </div>
-                                        </div>
+                                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                                       
+                                           
+                                                <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                          
+                                        
+                                                <a href='autoenroll.php' class='btn btn-outline-secondary cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>    
+                                          
+                                       
                                         
                                         
                                     </div>

@@ -45,7 +45,7 @@
                     </div>
 
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                             
                             <form class='form-horizontal' role='form' method='get' action='{{ $_SERVER['SCRIPT_NAME'] }}'>  
                                 <input type="hidden" name="u" value="{{ $u }}">
@@ -55,36 +55,36 @@
                                         <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '{{ $user_date_start }}'>
                                     </div>
                                 </div>
-                                <div class='form-group mt-3' data-date= '{{ $user_date_end }}' data-date-format='dd-mm-yyyy'>
+                                <div class='form-group mt-4' data-date= '{{ $user_date_end }}' data-date-format='dd-mm-yyyy'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langEndDate') }}</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' name='user_date_end' id='user_date_start' type='text' value= '{{ $user_date_end }}'>
                                     </div>
                                 </div>
-                                <div class='form-group mt-3'>  
+                                <div class='form-group mt-4'>  
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langLogTypes') }}</label>
                                     <div class='col-sm-12'>{!! selection($log_types, 'logtype', $logtype, "class='form-control'") !!}</div>
                                 </div>
-                                <div class="form-group mt-3">
+                                <div class="form-group mt-4">
                                     <label class="col-sm-12 control-label-notes">{{ trans('langCourse') }}</label>
                                     <div class="col-sm-12">{!! selection($cours_opts, 'u_course_id', $u_course_id, "class='form-control'") !!}</div>
                                 </div>
-                                <div class="form-group mt-3">
+                                <div class="form-group mt-4">
                                     <label class="col-sm-12 control-label-notes">{{ trans('langLogModules') }}</label>
                                     <div class="col-sm-12">{!! selection($module_names, 'u_module_id', '', "class='form-select'") !!}</div>
                                 </div>
                                 <div class="form-group mt-5">
-                                    <div class="col-12">
-                                        <div class='row'>
-                                            <div class='col-6'>
-                                                <input class="btn btn-primary submitAdminBtn w-100" type="submit" name="submit" value="{{ trans('langSubmit') }}">
-                                            </div>
-                                            <div class='col-6'>
-                                                <a class="btn btn-outline-secondary cancelAdminBtn w-100" href="listusers.php" data-placement="bottom" data-toggle="tooltip" title="" data-original-title="{{ trans('langBack') }}" >
-                                                    <span class="fa fa-reply space-after-icon"></span><span class="hidden-xs">{{ trans('langBack') }}</span>
+                                    <div class="col-12 d-flex justify-content-center align-items-center">
+                                      
+                                            
+                                                <input class="btn submitAdminBtn" type="submit" name="submit" value="{{ trans('langSubmit') }}">
+                                         
+                                         
+                                                <a class="btn btn-outline-secondary cancelAdminBtn ms-1" href="listusers.php" data-placement="bottom" data-toggle="tooltip" title="" data-original-title="{{ trans('langBack') }}" >
+                                                    <span class="fa fa-reply space-after-icon"></span>{{ trans('langBack') }}
                                                 </a>
-                                            </div>
-                                        </div>
+                                            
+                                      
                                     </div>
                                 </div>
                             </form>

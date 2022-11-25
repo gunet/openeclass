@@ -36,7 +36,7 @@
 
                     {!! $action_bar !!}
                     <div class='col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                             
                             <form class='form-horizontal' role='form' action='{{$urlServer}}modules/course_description/index.php?course={{ $course_code }}' method='post'>
                                 <input type='hidden' name='course' value='{{ $course_code }}'>
@@ -47,7 +47,7 @@
                             
 
                                 <div class='form-group'>
-                                    <label for='editType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}: </label>
+                                    <label for='editType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}</label>
                                     <div class='col-sm-12'>
                                         {!! selection($types, 'editType', $defaultType, 'class="form-control" id="typSel"') !!}
                                     </div>
@@ -56,8 +56,8 @@
                                 
 
 
-                                <div class='form-group{{ $titleError ? " form-error" : ""}} mt-3'>
-                                    <label for='titleSel' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
+                                <div class='form-group{{ $titleError ? " form-error" : ""}} mt-4'>
+                                    <label for='titleSel' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
                                     <div class='col-sm-12'>
                                         <input type='text' name='editTitle' class='form-control' value='{{ $cdtitle }}' size='40' id='titleSel'>
                                         {!! Session::getError('editTitle', "<span class='help-block'>:message</span>") !!}                                    
@@ -67,8 +67,8 @@
                             
 
 
-                                <div class='form-group mt-3'>
-                                    <label for='editComments' class='col-sm-6 control-label-notes'>{{ trans('langContent') }}:</label>
+                                <div class='form-group mt-4'>
+                                    <label for='editComments' class='col-sm-6 control-label-notes'>{{ trans('langContent') }}</label>
                                     <div class='col-sm-12'>
                                     {!! $text_area_comments !!}
                                     </div>
@@ -76,8 +76,8 @@
 
                                 
 
-                                <div class='form-group mt-3'>    
-                                    <div class='col-sm-10 col-sm-offset-2'>
+                                <div class='form-group mt-5'>    
+                                    <div class='col-12 d-flex justify-content-center align-items-center'>
                                         {!! $form_buttons !!}
                                     </div>
                                 </div>

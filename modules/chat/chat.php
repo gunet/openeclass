@@ -154,17 +154,17 @@ if (!$conference_activity) {
         $iframe_file = "messageList.php?course=$course_code&amp;conference_id=$conference_id";
     }
     $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langTypeMessage</div></div>
-       <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+       <div class='col-12'><div class='form-wrapper form-edit rounded'>
        <form name='chatForm' action='$action_form' method='POST' target='messageList' onSubmit='return prepare_message();'>
        <input type='hidden' name='course' value='$course_code'>
        <input type='hidden' name='conference_id' value='$conference_id'>
        <fieldset>
         <div class='col-12'>
             <div class='input-group'>
-              <input type='text' placeholder='$typeyourmessage...' name='msg' size='80' class='form-control'>
+              <input class='form-control mt-0' type='text' placeholder='$typeyourmessage...' name='msg' size='80' class='form-control'>
               <input type='hidden' name='chatLine'>
-              <span class='input-group-btn mt-2'>
-                <input class='btn btn-success' type='submit' value='&raquo;'>
+              <span class='input-group-text h-30px border-0 BordersRightInput bgEclass'>
+                <input class='btn btn-outline-success btn-sm rounded-pill' type='submit' value='&raquo;'>
               </span>
             </div>
             <div class='embed-responsive embed-responsive-4by3 margin-top-fat mt-3'>

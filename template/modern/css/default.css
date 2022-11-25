@@ -246,25 +246,44 @@ textarea {width:100%;}
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
 /* this is d-inline-flex between inputs-radio and texts */
-.radio label{ display:inline-flex; justify-content: center; align-items:center ; color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold',sans-serif; } 
+.radio label{ 
+  display:inline-flex; justify-content: center; align-items:center ; 
+  color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold',sans-serif;
+  position: relative;
+  transition: 0.5s;
+} 
+
+/* this is inputs-radio for course status */
+.radio label .fa {
+  font-size: 17px;
+  position: absolute;
+  top: 59%;
+  left: 5%;
+  transform: translate(-160%, -50%); 
+}
+
 .radio label p{ margin-top:0px; } 
+
 .radio .help-block{margin-top: -10px;}
+
 .radio:has(input[type='radio']:checked) .help-block{
   font-size: 12px;
   font-family: 'Manrope-SemiBold',sans-serif;
   color:#001146;
 }
+
 .radio:has(input[type='radio']:disabled) .help-block{
   opacity:0.4;
 }
+
 /* this is space between input-radio and texts */
 input[type="radio"]{
   margin: 0 10px 0 0px;
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
-  width: 30px;
-  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
   border-radius: 50px;
   outline: none;
   box-shadow: inset 0 0 0 2px #e8e8e8;
@@ -274,6 +293,15 @@ input[type="radio"]{
 input[type="radio"]:checked { 
   background-color: #005ad9;
 }
+.input-StatusCourse:checked{
+  box-shadow: inset 0 0 0 0px #e8e8e8;
+  border: 0px solid #e8e8e8;
+  background-color: #005ad9;
+}
+.radio:has(.input-StatusCourse:checked) .fa{
+  color: #ffffff;
+}
+
 label:has(input[type="radio"]:disabled){
   opacity:0.4;
 }
@@ -285,10 +313,14 @@ label:has(input[type="radio"]:disabled){
 }
 
 
-
+/*****************************************************************************************************************/
+/*****************************************************************************************************************/
 
 /* this is d-inline-flex between inputs-checkbox and texts */
-.checkbox label{ display:inline-flex; align-items:top ; color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold',sans-serif;} 
+.checkbox label{ 
+  display:inline-flex; justify-content: top; align-items:top; 
+  color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold',sans-serif;
+} 
 
 .checkbox label p{ margin-top:0px; } 
 
@@ -296,11 +328,9 @@ label:has(input[type="radio"]:disabled){
 input[type="checkbox"]{
   margin: 0 5px 0 0px;
   accent-color: #003e87;
-  width:20px;
+  min-width:20px;
   height:20px;
-  vertical-align: middle;
-  position: relative;
-  top: 0px;
+
 }
 .form-wrapper.form-edit label:has(input[type="checkbox"]:checked), .panel .panel-body label:has(input[type="checkbox"]:checked){
   font-size: 14px;

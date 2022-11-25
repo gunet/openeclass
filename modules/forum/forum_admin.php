@@ -97,31 +97,31 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langF
 if (isset($_GET['forumgo'])) {
     $ctg = category_name($cat_id);
     $tool_content .= "
-        <div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+        <div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
         <fieldset>
             <div class='form-group'>
-                <label for='cat_title' class='col-sm-6 control-label-notes'>$langCategory:</label>
+                <label for='cat_title' class='col-sm-6 control-label-notes'>$langCategory</label>
                 <div class='col-sm-12'>
                     <input type='text' class='form-control' id='cat_title' value='$ctg' disabled>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-                <label for='forum_name' class='col-sm-6 control-label-notes'>$langForName:</label>
+            <div class='form-group mt-4'>
+                <label for='forum_name' class='col-sm-6 control-label-notes'>$langForName</label>
                 <div class='col-sm-12'>
                     <input type='text' class='form-control' name='forum_name' id='forum_name'>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-                <label for='forum_desc' class='col-sm-6 control-label-notes'>$langDescription:</label>
+            <div class='form-group mt-4'>
+                <label for='forum_desc' class='col-sm-6 control-label-notes'>$langDescription</label>
                 <div class='col-sm-12'>
                     <textarea class='form-control' name='forum_desc' id='forum_desc' rows='3'></textarea>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-                <div class='col-sm-10 col-sm-offset-2'>
-                    <input class='btn btn-primary' type='submit' value='$langAdd'>
-                    <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>
+            <div class='form-group mt-5'>
+                <div class='col-12 d-flex justify-content-center align-items-center'>
+                    <input class='btn submitAdminBtn' type='submit' value='$langAdd'>
+                    <a href='index.php?course=$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
                 </div>
             </div>
         </fieldset>
@@ -459,7 +459,7 @@ elseif (isset($_GET['forumgodel'])) {
    if ($result) {
        $current_forum_id = $result->forum_id;
 
-       $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+       $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumtopicsave=yes&amp;topic_id=$topic_id' method='post'>
        <fieldset>
        <div class='form-group'>
@@ -478,9 +478,9 @@ elseif (isset($_GET['forumgodel'])) {
        }
        $tool_content .= "</select></div>
        </div>
-       <div class='form-group mt-3'>
-            <div class='col-sm-8 col-sm-offset-4'>
-                <input class='btn btn-primary' type='submit' value='$langModify'>
+       <div class='form-group mt-4'>
+            <div class='col-12 d-flex justify-content-center align-items-center>
+                <input class='btn submitAdminBtn' type='submit' value='$langModify'>
             </div>
         </div>
        </fieldset>
@@ -540,13 +540,13 @@ elseif (isset($_GET['forumgodel'])) {
         $checkEn = "";
     }
 
-    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;settings=yes' method='post'>
         <fieldset>
         <div class='form-group'>
-            <label class='col-sm-12 control-label-notes'>$langForumPostRating:</label>
+            <label class='col-sm-12 control-label-notes mb-2'>$langForumPostRating</label>
             <div class='col-sm-9'>
-                <div class='radio'>
+                <div class='radio mb-2'>
                     <label><input type='radio' value='1' name='r_radio' $checkEn/>$langRatingEn</label>
                 </div>
                 <div class='radio'>
@@ -554,9 +554,9 @@ elseif (isset($_GET['forumgodel'])) {
                 </div>
             </div>
         </div>
-        <div class='form-group mt-3'>
-            <div class='col-sm-9 col-sm-offset-3'>
-                <input class='btn btn-primary' type='submit' name='submitSettings' value='$langSubmit'>
+        <div class='form-group mt-5'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
+                <input class='btn submitAdminBtn' type='submit' name='submitSettings' value='$langSubmit'>
             </div>
         </div>
         </fieldset>

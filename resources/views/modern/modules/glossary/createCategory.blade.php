@@ -38,7 +38,7 @@
                                         {!! $action_bar !!}
 
                                         <div class='col-12'>
-                                            <div class='form-wrapper form-edit p-3 rounded'>
+                                            <div class='form-wrapper form-edit rounded'>
 
                                                 <form class='form-horizontal' role='form' action='{{ $cat_url }}' method='post'>
 
@@ -56,7 +56,7 @@
 
                                                     
 
-                                                    <div class='form-group mt-3'>
+                                                    <div class='form-group mt-4'>
                                                         <label for='description' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}</label>
                                                         <div class='col-sm-12'>
                                                             {!! $description_rich !!}
@@ -65,14 +65,14 @@
 
                                                     
 
-                                                    <div class='form-group mt-4'>    
-                                                        <div class='col-12 d-inline-flex'>
+                                                    <div class='form-group mt-5'>    
+                                                        <div class='col-12 d-flex justify-content-center align-items-center'>
                                                            
                                                                
                                                                   {!! $form_buttons !!}
                                                               
                                                                
-                                                                    <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href="{{$cat_url}}">{{trans('langCancel')}}</a>
+                                                                    <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href="{{$cat_url}}">{{trans('langCancel')}}</a>
                                                                
                                                             
                                                         </div>

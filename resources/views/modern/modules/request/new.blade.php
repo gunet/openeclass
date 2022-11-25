@@ -55,7 +55,7 @@
 
                      {!! $action_bar !!}
                     <div class='col-12'>
-                        <div class='form-wrapper form-edit p-3 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                            
                             <form class='form-horizontal' action='{{ $targetUrl }}' method='post'>
                                 <div class='form-group'>
@@ -72,7 +72,7 @@
                                 <div class='row'>
                                     <div class='col-md-6 col-12'>
                                         @if ($request_types)
-                                            <div class='form-group mt-3'>
+                                            <div class='form-group mt-4'>
                                                 <label for='requestType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}</label>
                                                 <div class='col-sm-12'>
                                                     <select class='form-select' name='requestType' id='requestType'>
@@ -86,7 +86,7 @@
                                         @endif
                                     </div>
                                     <div class='col-md-6 col-12'>
-                                        <div class='form-group mt-3'>
+                                        <div class='form-group mt-4'>
                                             <label for='requestTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
                                             <div class='col-sm-12'>
                                                 <input type='text' class='form-control' placeholder="{{ trans('langTitle') }}..." id='requestTitle' name='requestTitle' required>
@@ -97,8 +97,8 @@
 
                                 
 
-                                <div class='form-group mt-3'>
-                                    <label for='requestDescription' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
+                                <div class='form-group mt-4'>
+                                    <label for='requestDescription' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}</label>
                                     <div class='col-sm-12'>
                                         {!! $descriptionEditor !!}
                                     </div>
@@ -108,7 +108,7 @@
 
                                 <div class='row'>
                                     <div class='col-md-6 col-12'>
-                                        <div class='form-group mt-3'>
+                                        <div class='form-group mt-4'>
                                             <label for='assignTo' class='col-sm-6 control-label-notes'>{{ trans("m['WorkAssignTo']") }}:</label>
                                             <div class='col-sm-12'>
                                                 <select class='form-select' name='assignTo[]' multiple id='assignTo'>
@@ -120,7 +120,7 @@
                                         </div>
                                     </div>
                                     <div class='col-md-6 col-12'>
-                                        <div class='form-group mt-3'>
+                                        <div class='form-group mt-4'>
                                             <label for='requestWatchers' class='col-sm-6 control-label-notes'>{{ trans('langWatchers') }}:</label>
                                             <div class='col-sm-12'>
                                                 <select class='form-select' name='requestWatchers[]' multiple id='requestWatchers'>
@@ -136,7 +136,7 @@
                                 </div>
 
                                 @if ($request_types)
-                                    <div class="mt-3"></div>
+                                    <div class="mt-4"></div>
                                     @foreach ($request_types as $type)
                                         @include('modules.request.extra_fields',
                                             ['type_name' => $type->name,
@@ -147,7 +147,7 @@
 
                                 
 
-                                <div class='form-group mt-3'>
+                                <div class='form-group mt-4'>
                                     <div class='col-sm-10 col-sm-offset-2'>
                                         <div class='checkbox'>
                                             <label>
@@ -159,14 +159,14 @@
 
                                 
 
-                                <div class='form-group mt-4'>
-                                    <div class='col-12 d-inline-flex'>
+                                <div class='form-group mt-5'>
+                                    <div class='col-12 d-flex justify-content-center align-items-center'>
                                        
                                             
-                                                 <button class='btn btn-primary submitAdminBtn' type='submit'>{{ trans('langSubmit') }}</button>
+                                                 <button class='btn submitAdminBtn' type='submit'>{{ trans('langSubmit') }}</button>
                                           
                                           
-                                                 <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                                 <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                                           
                                        
                                        
