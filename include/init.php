@@ -179,21 +179,6 @@ if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = generate_csrf_token();
 }
 
-if (($upgrade_begin = get_config('upgrade_begin'))) {
-    if (!defined('UPGRADE')) {
-        Session::Messages(sprintf($langUpgradeInProgress, format_time_duration(time() - $upgrade_begin)), 'alert-warning');
-        if (!isset($guest_allowed) or !$guest_allowed) {
-            redirect_to_home_page();
-        }
-    }
-}
-
-// ----------------- sso transition ------------------
-if (isset($_SESSION['SSO_USER_TRANSITION']) and !isset($transition_script)) {
-    header("Location: {$urlServer}modules/auth/transition/auth_transition.php");
-}
-// ----------------------------------------------------
-
 // check if we are admin or power user or manageuser_user
 if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     $is_admin = true;
@@ -221,6 +206,21 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     $is_usermanage_user = false;
     $is_departmentmanage_user = false;
 }
+
+if (($upgrade_begin = get_config('upgrade_begin'))) {
+    if (!defined('UPGRADE')) {
+        Session::Messages(sprintf($langUpgradeInProgress, format_time_duration(time() - $upgrade_begin)), 'alert-warning');
+        if (!$is_admin and (!isset($guest_allowed) or !$guest_allowed)) {
+            redirect_to_home_page();
+        }
+    }
+}
+
+// ----------------- sso transition ------------------
+if (isset($_SESSION['SSO_USER_TRANSITION']) and !isset($transition_script)) {
+    header("Location: {$urlServer}modules/auth/transition/auth_transition.php");
+}
+// ----------------------------------------------------
 
 $theme = $_SESSION['theme'] = 'default';
 $themeimg = $urlAppend . 'template/' . $theme . '/img';

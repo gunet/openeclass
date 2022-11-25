@@ -50,13 +50,17 @@ if ($release_info and version_compare($release_info->release, ECLASS_VERSION) > 
 }
 
 // Construct a table with platform identification info
-$tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "${urlServer}main/portfolio.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')),false);
-$tool_content .= "
-    $release_alert
+$tool_content .= action_bar([
+        [ 'title' => $langBack,
+          'url' => "${urlAppend}main/portfolio.php",
+          'icon' => 'fa-reply',
+          'level' => 'primary-label' ],
+        [ 'title' => $langUnlockPlatform,
+          'url' => 'unlock_platform.php',
+          'icon' => 'fa-unlock',
+          'button-class' => 'btn-success',
+          'level' => 'primary-label' ],
+    ], false) . $release_alert . "
     <div class='row'>
         <div class='col-md-12'>
             <div class='panel'>

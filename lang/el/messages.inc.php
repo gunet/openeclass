@@ -203,6 +203,7 @@ $langNewEclassVersion = 'Νέα έκδοση πλατφόρμας Open eClass';
 $langNewEclassVersionInfo = 'Μια νέα έκδοση της πλατφόρμας Open eClass, %s,
 είναι διαθέσιμη. Παρακαλούμε επισκεφθείτε την ιστοσελίδα %s για πληροφορίες
 αναβάθμισης.';
+$langUnlockPlatform = 'Ξεκλείδωμα πλατφόρμας';
 
 // FAQ
 $langAdminCreateFaq = "Δημιουργία FAQ";
