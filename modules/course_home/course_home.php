@@ -825,17 +825,9 @@ foreach ($course_home_page_sidebar->getCourseAndAdminWidgets($course_id) as $key
     $data['course_home_sidebar_widgets'] .= $widget->run($key);
 }
 
-$data['edit_link'] = $data['action_bar'] = '';
+$data['action_bar'] = '';
 $data['registered'] = false;
-if ($is_editor) {
-    warnCourseInvalidDepartment(true);
-    $data['edit_link'] =
-    "<div class='access access-edit pull-left'><a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code'>
-        <span class='fa fa-pencil' style='line-height:30px;' data-bs-toggle='tooltip' data-bs-placement='top' title='Επεξεργασία Πληροφοριών'></span>
-        <span class='hidden'>.</span></a>
-    </div>";
-}
-else if ($uid) {
+if ($uid) {
     $myCourses = [];
     Database::get()->queryFunc("SELECT course.code  course_code, course.public_code public_code,
                                         course.id course_id, status
@@ -855,7 +847,6 @@ else if ($uid) {
     } else {
         $data['registered'] = true;
     }
-    $data['edit_link'] = '';
 }
 
 view('modules.course.home.index', $data);

@@ -124,6 +124,14 @@
 
                                     <div class='col-md-9 col-8'>
                                         <span class="panel-title text-uppercase Help-text-panel-heading">{{ trans('langCourseProgram') }}</span>
+                                        @if ($is_editor)
+                                            @php
+                                                warnCourseInvalidDepartment(true);
+                                            @endphp;
+                                            <a href='{{ $urlAppend }}modules/course_home/editdesc.php?course={{ $course_code }}'>
+                                                <span class='fa fa-pencil' style='line-height:30px;' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEditMeta') }}'></span>
+                                            </a>
+                                        @endif
                                     </div>
                                     <div class='col-md-3 col-4'>
                                         {!! $email_notify_icon !!}
