@@ -38,8 +38,53 @@ $action->record(MODULE_ID_QUESTIONNAIRE);
 
 $toolName = $langQuestionnaire;
 
-
 load_js('tools.js');
+load_js('datatables');
+
+if ($is_editor) {
+    // disable ordering for action button column
+    $columns = 'null, null, null, { orderable: false }';
+} else {
+    $columns = 'null, null, null';
+}
+
+$head_content .= "<script type='text/javascript'>
+        $(document).ready(function() {
+            $('#polls').DataTable ({
+                'columns': [ null, null, null, { orderable: false } ],
+                'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
+                'aLengthMenu': [
+                   [10, 20, 30 , -1],
+                   [10, 20, 30, '$langAllOfThem'] // change per page values here
+                ],
+                'sPaginationType': 'full_numbers',
+                'bAutoWidth': true,
+                'searchDelay': 1000,
+                'order' : [[1, 'desc']],
+                'oLanguage': {
+                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                   'sZeroRecords':  '" . $langNoResult . "',
+                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoFiltered': '',
+                   'sInfoPostFix':  '',
+                   'sSearch':       '',
+                   'sUrl':          '',
+                   'oPaginate': {
+                       'sFirst':    '&laquo;',
+                       'sPrevious': '&lsaquo;',
+                       'sNext':     '&rsaquo;',
+                       'sLast':     '&raquo;'
+                   }
+               }
+            });
+            $('.dataTables_filter input').attr({
+                          class : 'form-control input-sm',
+                          placeholder : '$langSearch...'
+                        });
+        });
+        </script>";
+
 if (isset($_GET['verification_code'])) {
     $afftected_rows = Database::get()->query("UPDATE poll_user_record SET email_verification = 1, verification_code = NULL WHERE verification_code = ?s", $_GET['verification_code'])->affectedRows;
     if ($afftected_rows > 0) {
@@ -271,7 +316,8 @@ function printPolls() {
         // Print active polls
         $tool_content .= "<div class='col-sm-12'>
                     <div class='table-responsive'>
-              <table class='table-default'>
+              <table id='polls' class='table-default'>
+              <thead>
                 <tr class='list-header'>
                     <th class='text-white ps-2' style='min-width: 55%;'><div align='left'>&nbsp;$langTitle</div></th>
                     <th class='text-white text-center'>$langDate</th>";
@@ -280,8 +326,9 @@ function printPolls() {
         } else {
             $tool_content .= "<th class='text-white text-center'>$langParticipate</th>";
         }
+
         $tool_content .= "<th class='text-white text-center'>".icon('fa-cogs')."</th>";
-        $tool_content .= "</tr>";
+        $tool_content .= "</tr></thead><tbody>";
         $k = 0;
         foreach ($result as $thepoll) {
             if (!$is_editor && !resource_access($thepoll->active, $thepoll->public)) {
@@ -300,12 +347,9 @@ function printPolls() {
                 $k++;
                 $tool_content .= "<tr $visibility_css>";
 
-                $temp_CurrentDate = date("Y-m-d H:i");
-                $temp_StartDate = $thepoll->start_date;
-                $temp_EndDate = $thepoll->end_date;
-                $temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
-                $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
-                $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
+                $temp_CurrentDate = new DateTime('NOW');
+                $temp_StartDate = new DateTime($thepoll->start_date);
+                $temp_EndDate = new DateTime($thepoll->end_date);
                 $pid = $thepoll->pid;
                 $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d AND (email_verification = 1 OR email_verification IS NULL)", $pid)->total;
                 // check if user has participated
@@ -343,8 +387,13 @@ function printPolls() {
                 $tool_content .= "</div>
                                     <div class='table_td_body'>" . standard_text_escape($thepoll->description) . "</div>
                                     </div></td>";
+                if (isset($thepoll->start_date)) {
+                    $sort_date = date("Y-m-d H:i", strtotime($thepoll->start_date));
+                } else {
+                    $sort_date = '';
+                }
                 $tool_content .= "
-                        <td class='text-center'>
+                        <td data-sort='$sort_date' class='text-center'>
                             <div style='padding-top: 7px;'><span class='text-success'>$langFrom</span>: &nbsp;" . format_locale_date(strtotime($thepoll->start_date)) . "</div>
                             <div style='padding-top: 7px;'><span class='text-danger'>$langTill</span>: &nbsp;" . format_locale_date(strtotime($thepoll->end_date)) . "</div>
                         </td>";
@@ -413,7 +462,8 @@ function printPolls() {
                 }
             }
         }
-        $tool_content .= "</table></div></div>
+
+        $tool_content .= "</tbody></table></div></div>
 
             <div class='modal fade' tabindex='-1' role='dialog' id='cloneModal'>
               <div class='modal-dialog' role='document'>
