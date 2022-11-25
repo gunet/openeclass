@@ -41,7 +41,7 @@ if (isset($_GET['delete_image'])) {
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     Database::get()->query("UPDATE course SET course_image = NULL WHERE id = ?d", $course_id);
     unlink("$webDir/courses/$course_code/image/$course->course_image");
-    redirect_to_home_page('modules/course_home/editdesc.php?course=$course_code');
+    header("Location: {$urlServer}courses/$course_code");
 } elseif (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $db_vars = array(purify($_POST['description']), $_POST['layout']);
@@ -96,7 +96,7 @@ $layout = $course->home_layout;
 
 if (isset($course->course_image)) {
     $course_image = "
-        <img src='{$urlAppend}courses/$course_code/image/".urlencode($course->course_image)."' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>
+        <img src='{$urlAppend}courses/$course_code/image/".urlencode($course->course_image)."' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?course=$course_code&delete_image=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>
         <input type='hidden' name='course_image' value='".q($course->course_image)."'>
     ";
 } else {
