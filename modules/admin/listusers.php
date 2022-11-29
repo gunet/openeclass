@@ -367,16 +367,16 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     'url' => $profileUrl
                 ),
                 array(
-                    'title' => $langActions,
-                    'icon' => 'fa-list-alt',
-                    'url' => "userlogs.php?u=$myrow->id"
-                ),
-                array(
                     'title' => $changetip,
                     'icon' => 'fa-key',
                     'url' => 'change_user.php?username=' . urlencode($myrow->username),
                     'class' => 'change-user-link',
                     'hide' => isDepartmentAdmin()
+                ),
+                array(
+                    'title' => $langActions,
+                    'icon' => 'fa-list-alt',
+                    'url' => "userlogs.php?u=$myrow->id"
                 ),
                 array(
                     'title' => $langUsage,

@@ -126,7 +126,12 @@ if (isDepartmentAdmin()) {
 $log = new Log();
 
 // display logs
-$log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
+if ($logtype == -2) { // all platform actions
+    $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
+} else { // course actions
+    $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
+}
+
 
 $terms = array();
 $qry = "SELECT id, title FROM course";
@@ -150,16 +155,16 @@ $module_names[MODULE_ID_TOOLADMIN] = $langExternalLinks;
 $module_names[MODULE_ID_ABUSE_REPORT] = $langAbuseReport;
 
 $i = html_entity_decode('&nbsp;&nbsp;&nbsp;', ENT_QUOTES, 'UTF-8');
-$log_types = array(0 => $langAllActions,
-    -1 => $i . $langCourseActions,
-    LOG_INSERT => $i . $i . $langInsert,
-    LOG_MODIFY => $i . $i . $langModify,
-    LOG_DELETE => $i . $i . $langDelete,
-    -2 => $i . $langSystemActions,
-    LOG_PROFILE => $i . $i . $langModProfile,
-    LOG_CREATE_COURSE => $i . $i . $langFinalize,
-    LOG_DELETE_COURSE => $i . $i . $langCourseDel,
-    LOG_MODIFY_COURSE => $i . $i . $langCourseInfoEdit);
+$log_types = array(
+                -1 => $i . $langCourseActions,
+                LOG_INSERT => $i . $i . $langInsert,
+                LOG_MODIFY => $i . $i . $langModify,
+                LOG_DELETE => $i . $i . $langDelete,
+                -2 => $i . $langSystemActions,
+                LOG_PROFILE => $i . $i . $langModProfile,
+                LOG_CREATE_COURSE => $i . $i . $langFinalize,
+                LOG_DELETE_COURSE => $i . $i . $langCourseDel,
+                LOG_MODIFY_COURSE => $i . $i . $langCourseInfoEdit);
 $tool_content .= "<div class='form-wrapper'>";
 $tool_content .= "<form class='form-horizontal' role='form' method='get' action='$_SERVER[SCRIPT_NAME]'>
         <div class='input-append date form-group' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
