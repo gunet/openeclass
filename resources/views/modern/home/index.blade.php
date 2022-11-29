@@ -16,8 +16,8 @@
                 <div class="row">
                     <div class='jumbotron jumbotron-login'>
                         <div class='col-xxl-2 offset-xxl-10 col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 d-lg-flex justify-content-lg-end align-items-lg-end bg-transparent px-4 py-lg-0 py-4' style='z-index:2;'>
-                            
-                            @php 
+
+                            @php
                                 $q = Database::get()->queryArray("SELECT auth_id, auth_name, auth_default, auth_title
                                         FROM auth WHERE auth_default <> 0
                                         ORDER BY auth_default DESC, auth_id");
@@ -34,7 +34,7 @@
                                                             @if($warning)
                                                                 {!! $warning !!}
                                                             @endif
-                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $urlAppend }}template/modern/img/user_login.svg"> 
+                                                            <img class="UserLoginIcon m-auto d-block" src="{{ $urlAppend }}template/modern/img/user_login.svg">
                                                             <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ trans('langUserLogin') }}</p>
                                                         </div>
                                                         <form class='mt-0' action="{{ $urlAppend }}" method="post">
@@ -51,7 +51,7 @@
                                                 </div>
                                             @endif
                                             @if($l->auth_name == 'pop3' and $l->auth_default == 1)
-                                                
+
                                                 <div class="carousel-item">
                                                     <div class='card-body Borders cardLogin d-flex justify-content-center align-items-center'>
                                                         <div class='row'>
@@ -67,10 +67,10 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                             @endif
                                             @if($l->auth_name == 'ldap' and $l->auth_default == 1)
-                                                
+
                                                 <div class="carousel-item">
                                                     <div class='card-body Borders cardLogin d-flex justify-content-center align-items-center'>
                                                         <div class='row'>
@@ -86,7 +86,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                             @endif
                                             @if($l->auth_name == 'imap' and $l->auth_default == 1)
                                                 <div class="carousel-item">
@@ -135,7 +135,7 @@
                                                             <div class='col-12 d-flex justify-content-center align-items-center'>
                                                                 <a class='rounded-pill btn login-form-submit TextBold w-75 d-flex justify-content-center align-items-center' href='{{$urlAppend}}secure/'>{{ trans('langUserLogin') }}</a>
                                                             </div>
-                                                        </div>   
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @endif
@@ -171,7 +171,7 @@
                             @endif
                         </div>
                     </div>
-                    
+
                     @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements)
                     <div class='d-none d-lg-block bgEclass @if(!get_config("homepage_title") and !get_config("homepage_intro")) pt-3 @endif'>
 
@@ -277,7 +277,7 @@
                                                                         {!! $openCoursesExtraHTML !!}
                                                                     @else
                                                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
-                                                                            <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{!! q($langListOpenCourses) !!}">
+                                                                            <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{{ trans('langListOpenCourses') }}">
                                                                         </div>
                                                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                                             <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
@@ -349,7 +349,7 @@
                                                                         {!! $openCoursesExtraHTML !!}
                                                                     @else
                                                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
-                                                                            <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{!! q($langListOpenCourses) !!}">
+                                                                            <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{{ trans('langListOpenCourses') }}">
                                                                         </div>
                                                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                                             <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
@@ -410,7 +410,7 @@
                                                                                 {!! $openCoursesExtraHTML !!}
                                                                             @else
                                                                                 <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
-                                                                                    <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{!! q($langListOpenCourses) !!}">
+                                                                                    <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{{ trans('langListOpenCourses') }}">
                                                                                 </div>
                                                                                 <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                                                     <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
@@ -481,7 +481,7 @@
                                                                 {!! $openCoursesExtraHTML !!}
                                                             @else
                                                                 <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
-                                                                    <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{!! q($langListOpenCourses) !!}">
+                                                                    <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{{ trans('langListOpenCourses') }}">
                                                                 </div>
                                                                 <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                                     <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
@@ -638,7 +638,7 @@
                                                                 {!! $openCoursesExtraHTML !!}
                                                             @else
                                                                 <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
-                                                                    <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{!! q($langListOpenCourses) !!}">
+                                                                    <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{{ trans('langListOpenCourses') }}">
                                                                 </div>
                                                                 <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                                     <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
@@ -701,7 +701,7 @@
                                                         {!! $openCoursesExtraHTML !!}
                                                     @else
                                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
-                                                            <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{!! q($langListOpenCourses) !!}">
+                                                            <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{{ trans('langListOpenCourses') }}">
                                                         </div>
                                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                             <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
@@ -714,13 +714,13 @@
                                             </div>
                                         </div>
                                     @endif
-                                            
+
                                 </div>
                             </div>
                         <!-- only mobileapi , openecourses -->
                         @elseif (get_config('enable_mobileapi') and get_config('opencourses_enable') and $eclass_banner_value == 0)
                             <div class='col-12 mt-3'>
-                                <div class='row'>          
+                                <div class='row'>
                                     <div class='col-md-6 col-12 pe-md-1'>
                                         <div class='panel panel-admin panel-social-media border-0'>
                                             <div class='panel-body d-flex justify-content-center align-items-center'>
@@ -751,7 +751,7 @@
                                                         {!! $openCoursesExtraHTML !!}
                                                     @else
                                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
-                                                            <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{!! q($langListOpenCourses) !!}">
+                                                            <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{{ trans('langListOpenCourses') }}">
                                                         </div>
                                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                             <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
@@ -763,7 +763,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endif      
+                                    @endif
                                 </div>
                             </div>
                         <!-- only mobileapi -->
@@ -806,7 +806,7 @@
                                                         {!! $openCoursesExtraHTML !!}
                                                     @else
                                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
-                                                            <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{!! q($langListOpenCourses) !!}">
+                                                            <img class='w-50' style='height:100px;' src='{{$urlAppend}}template/modern/img/banner_open_courses.png' alt="{{ trans('langListOpenCourses') }}">
                                                         </div>
                                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                             <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
@@ -825,7 +825,7 @@
 
                         @if ($announcements)
                             <div class='col-12 mt-3'>
-                                
+
                                         <div class='panel panel-admin border-0'>
                                             <div class='panel-body'>
                                                 <div class="news">
@@ -863,7 +863,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                   
+
                             </div>
                         @endif
                     </div>
@@ -892,7 +892,7 @@
                         <div class="num-text text-lowercase TextLight">{{trans('langsCourses')}}</div>
                 </div>
                 <div class="col-sm-4 text-center">
-                        
+
                         <img class="statistics-icon m-auto d-block" src="{{ $urlAppend }}template/modern/img/statistics_2.svg">
                         <div class="num TextBold">10<span class='num-plus TextRegular'>K+</span></div>
                         <div class="num-text text-lowercase TextLight">{{trans('langUserLogins')}}/{{trans('langWeek')}}</div>
@@ -931,28 +931,28 @@
     $('.ContentEclass.container-fluid').css('padding-left','0px');
     $('.ContentEclass.container-fluid').css('padding-right','0px');
     var x = window.matchMedia("(max-width: 991px)")
-    if (x.matches){ 
+    if (x.matches){
         $('.navbar-eclass').css('border-bottom-left-radius','0px');
     }else{
         $('.navbar-eclass').css('border-bottom-left-radius','70px');
     }
     $('.navbar-eclass').css('border-bottom-right-radius','0px');
 
-    
-    
+
+
     $('#link-home'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_2.svg");
     function unhoverHome(obj) {
         if(!current_url.includes('/main/portfolio.php')){
             $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_2.svg");
         }
     }
-   
+
     document.body.addEventListener("click", function (e) {
         clickerUsernamePassword = 0;
         if (!e.target.classList.contains('login-input')) {
             $('.carousel-control-prev').css('display','block');
             $('.carousel-control-prev').css('padding-left','5px');
-            $('.carousel-control-next').css('display','block'); 
+            $('.carousel-control-next').css('display','block');
             $('.carousel-control-next').css('padding-left','5px');
             $('.owl-carousel').owlCarousel({
                 autoplay:true
@@ -970,7 +970,7 @@
         $('.carousel-control-next').css('display','none');
 
 	});
-    
+
     $('.testimonials').slick({
 		autoplay:true,
 		autoplaySpeed:4000,
@@ -1004,7 +1004,7 @@
         ]
 	});
 
-    
+
 
 </script>
 
