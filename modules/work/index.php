@@ -4045,6 +4045,11 @@ function show_assignment_review($id, $display_graph_results = false) {
     $review_per_assignment = Database::get()->querySingle("SELECT reviews_per_assignment FROM assignment WHERE id = ?d", $id)->reviews_per_assignment;
     if (!$display_graph_results) {
 
+        $head_content .= "
+          <style>
+            .table-responsive { width: 100%; }
+            .table-responsive td { word-break: break-word; }
+          </style>";
         $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
             <input type='hidden' name='grades_id' value='$id'>
@@ -4896,6 +4901,11 @@ function show_assignment($id, $display_graph_results = false) {
                                                    WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
                                                    ORDER BY $order $rev, assign.id", $id);
 
+            $head_content .= "
+              <style>
+                .table-responsive { width: 100%; }
+                .table-responsive td { word-break: break-word; }
+              </style>";
             $tool_content .= "<form action='{$urlServer}modules/work/index.php?course=$course_code' method='post' class='form-inline'>
                 <input type='hidden' name='grades_id' value='$id' />
                 <br>
@@ -5342,7 +5352,7 @@ function show_non_submitted($id) {
  * @brief display all assignments - student view only
  */
 function show_student_assignments() {
-    global $tool_content, $m, $uid, $course_id, $urlAppend, $langGroupWorkDeadline_of_Submission,
+    global $tool_content, $head_content, $m, $uid, $course_id, $urlAppend, $langGroupWorkDeadline_of_Submission,
         $langHasExpiredS, $langDaysLeft, $langNoAssign, $course_code, $langNoDeadline,
         $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio,
         $langGradebookGrade, $langPassCode, $langIPUnlock, $langWillStartAt;
@@ -5370,10 +5380,10 @@ function show_student_assignments() {
                             SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
                         )
                     ORDER BY time
-                    DESC 
+                    DESC
                     LIMIT 1000
             )
-            UNION 
+            UNION
             (
                 SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
                     FROM assignment WHERE course_id = ?d
@@ -5385,8 +5395,8 @@ function show_student_assignments() {
                             SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
                         )
                     ORDER BY title
-                    DESC 
-                    LIMIT 1000            
+                    DESC
+                    LIMIT 1000
             )
             UNION
             (
@@ -5400,9 +5410,9 @@ function show_student_assignments() {
                             SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
                         )
                     ORDER BY time
-                    DESC 
+                    DESC
                     LIMIT 1000
-            )                 
+            )
             ", $course_id, $uid, $course_id, $uid, $course_id, $uid);
 
     if (count($result) > 0) {
@@ -5412,6 +5422,11 @@ function show_student_assignments() {
             $add_eportfolio_res_th = "";
         }
 
+        $head_content .= "
+          <style>
+            #assignment_table { width: 100%; }
+            .table-responsive td { word-break: break-word; }
+          </style>";
         $tool_content .= "
             <div class='col-sm-12'>
             <div class='table-responsive'>
@@ -5533,7 +5548,7 @@ function show_student_assignments() {
  * @brief display all assignments
  */
 function show_assignments() {
-    global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign,
+    global $tool_content, $head_content, $m, $langEditChange, $langDelete, $langNoAssign,
         $langNewAssign, $course_code, $course_id, $langWorksDelConfirm,
         $langDaysLeft, $langHasExpiredS, $langWarnForSubmissions, $langNoDeadline,
         $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics, $langWillStartAt,
@@ -5546,31 +5561,31 @@ function show_assignments() {
     $result = Database::get()->queryArray("
             (
                 SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
-                    FROM assignment 
+                    FROM assignment
                 WHERE course_id = ?d
                     AND UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) > 0
                 ORDER BY time
-                DESC 
+                DESC
                 LIMIT 10000
             )
             UNION
             (
                 SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
-                    FROM assignment 
+                    FROM assignment
                 WHERE course_id = ?d
-                    AND deadline IS NULL 
-                ORDER BY title 
-                ASC 
+                    AND deadline IS NULL
+                ORDER BY title
+                ASC
                 LIMIT 10000
             )
             UNION
             (
                 SELECT *, UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS time
-                    FROM assignment 
+                    FROM assignment
                 WHERE course_id = ?d
-                    AND UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) < 0 
+                    AND UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) < 0
                 ORDER BY time
-                DESC 
+                DESC
                 LIMIT 10000
             )", $course_id, $course_id, $course_id);
 
@@ -5589,6 +5604,11 @@ function show_assignments() {
                   'level' => 'primary-label'),
             ),false);
     if (count($result) > 0) {
+        $head_content .= "
+          <style>
+            #assignment_table { width: 100%; }
+            .table-responsive td { word-break: break-word; }
+          </style>";
         $tool_content .= "
             <div class='col-sm-12'>
                     <div class='table-responsive'>
