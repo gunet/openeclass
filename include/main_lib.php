@@ -1260,6 +1260,9 @@ function safe_filename($extension = '') {
 }
 
 function get_file_extension($filename) {
+    if (!$filename) {
+        return '';
+    }
     $matches = array();
     if (preg_match('/\.(tar\.(z|gz|bz|bz2))$/i', $filename, $matches)) {
         return strtolower($matches[1]);
