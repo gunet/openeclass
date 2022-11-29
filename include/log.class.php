@@ -450,17 +450,30 @@ class Log {
 
         global $lang_username, $langAm, $langChangePass, $langUpdateImage,
                $langType, $langDelImage, $langPersoDetails, $langActivate,
-               $langDeactivate, $langOfNotifications, $langsOfCourse;
+               $langDeactivate, $langOfNotifications, $langsOfCourse,
+               $langFrom2, $langIn;
 
         $details = unserialize(($details));
         $content = '';
 
         if (!empty($details['modifyprofile'])) {
-            $content .= "$langPersoDetails<br />$lang_username&nbsp;&laquo;" . q($details['username']) . "&raquo;&nbsp;email&nbsp;&laquo;" . q($details['email']) . "&raquo;&nbsp;";
-            if (!empty($details['am'])) {
-                $content .= "&nbsp;($langAm: " . q($details['am']);
+            $content .= "$langPersoDetails<br />$lang_username: ";
+            if (!empty($details['old_username'])) {
+                $content .= "$langFrom2 " . q($details['old_username']). " $langIn ";
             }
-            $content .= ")";
+            $content .= q($details['username']);
+            $content .= " Email: ";
+            if (!empty($details['old_email'])) {
+                $content .= "$langFrom2 " . q($details['old_email']) . " $langIn ";
+            }
+            $content .= q($details['email']);
+            $content .= " $langAm: ";
+            if (!empty($details['old_am'])) {
+                $content .= " $langFrom2 " . q($details['old_am']) . " $langIn ";
+            }
+            if (!empty($details['am'])) {
+                $content .= q($details['am']);
+            }
         }
         if (!empty($details['pass_change'])) {
             $content .= "$langChangePass";

@@ -55,6 +55,7 @@ $myrow = Database::get()->querySingle("SELECT surname, givenname, username, emai
                                             email_public, phone_public, am_public, password
                                         FROM user WHERE id = ?d", $uid);
 
+
 $password = $myrow->password;
 $auth = array_search($password, $auth_ids);
 if (!$auth) {
@@ -237,12 +238,19 @@ if (isset($_POST['submit'])) {
     process_profile_fields_data(array('uid' => $uid, 'origin' => 'edit_profile'));
 
     if ($q->affectedRows > 0 or isset($departments)) {
+        $old_username = q($myrow->username);
+        $old_email = q($myrow->email);
+        $old_am = q($myrow->am);
+
         $userObj->refresh($uid, $departments);
         Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
                                              'modifyprofile' => 1,
-                                             'username' => $username_form,
-                                             'email' => $email_form,
-                                             'am' => $am_form));
+                                             'old_username' => "$old_username",
+                                             'username' => "$username_form",
+                                             'old_email' => "$old_email",
+                                             'email' => "$email_form",
+                                             'old_am' => "$old_am",
+                                             'am' => "$am_form"));
         $_SESSION['uname'] = $username_form;
         $_SESSION['surname'] = $surname_form;
         $_SESSION['givenname'] = $givenname_form;

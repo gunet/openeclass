@@ -112,6 +112,7 @@ if (isset($_POST['user_date_end'])) {
 
 $data['logtype'] = $logtype = isset($_GET['logtype']) ? intval($_GET['logtype']) : '0';
 $data['u_course_id'] = $u_course_id = isset($_GET['u_course_id']) ? intval($_GET['u_course_id']) : '-1';
+$data['users_login_data'] = '';
 $u_module_id = isset($_GET['u_module_id']) ? intval($_GET['u_module_id']) : '-1';
 
 if (isDepartmentAdmin()) {
@@ -123,11 +124,14 @@ $data['action_bar'] = action_bar(array(
         'icon' => 'fa-reply',
         'level' => 'primary-label')),false);
 $log = new Log();
+
 // display logs
 if (isset($_GET['submit'])) {  // display course modules logging
-    $data['users_login_data'] = $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
-} else {
-    $data['users_login_data'] = $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
+    if ($logtype == -2) { // all platform actions
+        $data['users_login_data'] = $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
+    } else {
+        $data['users_login_data'] = $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
+    }
 }
 
 $terms = array();
@@ -151,8 +155,8 @@ $data['module_names'][MODULE_ID_TOOLADMIN] = $langExternalLinks;
 $data['module_names'][MODULE_ID_ABUSE_REPORT] = $langAbuseReport;
 
 $i = html_entity_decode('&nbsp;&nbsp;&nbsp;', ENT_QUOTES, 'UTF-8');
+
 $data['log_types'] = [
-        0 => $langAllActions,
         -1 => $i . $langCourseActions,
         LOG_INSERT => $i . $i . $langInsert,
         LOG_MODIFY => $i . $i . $langModify,
