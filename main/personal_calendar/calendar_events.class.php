@@ -206,6 +206,7 @@ class Calendar_Events {
         if (!is_null($enddate)) {
            $q_args_templ[] = $enddate;
         }
+
         if (isset($uid)) {
             Calendar_Events::get_calendar_settings();
             if (Calendar_Events::$calsettings->show_personal == 1) {
@@ -233,8 +234,14 @@ class Calendar_Events {
                 }
                 $dc = str_replace('start', 'ag.start', $datecond);
                 $q .= "SELECT ag.id, CONCAT(c.title,': ',ag.title), ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(addtime(ag.start, time(ag.duration)), '%Y-%m-%d %H:%i') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
-                        . "FROM agenda ag JOIN course_user cu ON ag.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
-                        . "WHERE cu.user_id = ?d AND (ag.visible = 1 OR cu.status = 1) AND ag.visible = 1 "
+                        . "FROM agenda ag JOIN course_user cu ON ag.course_id=cu.course_id "
+                        . "JOIN course c ON cu.course_id=c.id "
+                        . "JOIN course_module cm ON c.id=cm.course_id "
+                        . "WHERE cu.user_id = ?d "
+                        . "AND ag.visible = 1 "
+                        . "AND cm.module_id = " . MODULE_ID_AGENDA . " "
+                        . "AND cm.visible = 1 "
+                        . "AND c.visible != " . COURSE_INACTIVE . " "
                         . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
 
@@ -244,8 +251,9 @@ class Calendar_Events {
                 }
                 $dc = str_replace('start', 'tc.start_date', $datecond);
                 $q .= "SELECT tc.id, CONCAT(c.title,': ',tc.title), tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(tc.start_date, '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
-                        . "FROM tc_session tc JOIN course_user cu ON tc.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
-                        . "WHERE cu.user_id = ?d AND tc.active = '1' "
+                        . "FROM tc_session tc JOIN course_user cu ON tc.course_id=cu.course_id "
+                        . "JOIN course c ON cu.course_id=c.id "
+                        . "WHERE cu.user_id = ?d AND tc.active = '1' AND c.visible != " . COURSE_INACTIVE . " "
                         . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
             }
@@ -257,7 +265,8 @@ class Calendar_Events {
 
                 $dc = str_replace('start', 'ass.deadline', $datecond);
                 $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline, '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
-                        . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
+                        . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id "
+                        . "JOIN course c ON cu.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
                         . "WHERE cu.user_id = ?d " . $dc
                         . "AND (assign_to_specific = 0 OR
                             ass.id IN
@@ -266,7 +275,7 @@ class Calendar_Events {
                             SELECT assignment_id FROM assignment_to_specific
                                WHERE group_id != 0 $group_sql_template2)
                                 OR cu.status = 1) "
-                        . "AND ass.active = 1";
+                        . "AND ass.active = 1 AND c.visible != " . COURSE_INACTIVE . " ";
                 $q_args = array_merge($q_args, $q_args_templ, array($user_id), $student_groups);
 
                 // exercises
@@ -275,9 +284,10 @@ class Calendar_Events {
                 }
                 $dc = str_replace('start', 'ex.end_date', $datecond);
                 $q .= "SELECT ex.id, CONCAT(c.title,': ',ex.title), ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(addtime(ex.end_date, time('00:00')), '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
-                        . "FROM exercise ex JOIN course_user cu ON ex.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id LEFT JOIN exercise_to_specific ex_sp ON ex.id = ex_sp.exercise_id "
+                        . "FROM exercise ex JOIN course_user cu ON ex.course_id=cu.course_id "
+                        . "JOIN course c ON cu.course_id=c.id LEFT JOIN exercise_to_specific ex_sp ON ex.id = ex_sp.exercise_id "
                         . "WHERE cu.user_id = ?d " . $dc
-                        . "AND (ex.public = 1 OR cu.status = 1) AND ex.active = 1 AND (assign_to_specific = 0 OR ex_sp.user_id = ?d $group_sql_template) ";
+                        . "AND ex.public = 1 AND ex.active = 1 AND (assign_to_specific = 0 OR ex_sp.user_id = ?d $group_sql_template) AND c.visible != " . COURSE_INACTIVE . " ";
                 $q_args = array_merge($q_args, $q_args_templ, array($user_id), $student_groups);
             }
         }
@@ -285,31 +295,7 @@ class Calendar_Events {
             return null;
         }
         $q .= " ORDER BY start, event_type";
-
         return Database::get()->queryArray($q, $q_args);
-
-        /*if ($eventtypes == "all") {
-            if (!is_null($startdate) && !is_null($enddate)) {
-                return Database::get()->queryArray($q, $user_id, $startdate, $enddate, $user_id, $startdate, $enddate);
-            }
-            elseif (!is_null($startdate)) {
-                return Database::get()->queryArray($q, $user_id, $startdate, $user_id, $startdate);
-            }
-            else{
-                return Database::get()->queryArray($q, $user_id, $user_id);
-            }
-        }
-        else{
-            if (!is_null($startdate) && !is_null($enddate)) {
-                return Database::get()->queryArray($q, $user_id, $startdate, $enddate);
-            }
-            elseif (!is_null($startdate)) {
-                return Database::get()->queryArray($q, $user_id, $startdate);
-            }
-            else{
-                return Database::get()->queryArray($q, $user_id);
-            }
-        }*/
     }
 
 
