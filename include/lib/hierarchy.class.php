@@ -581,7 +581,7 @@ jContent;
      * @return string  $html - The returned HTML code
      */
     private function buildHtmlNodePicker($options) {
-        global $themeimg, $langNodeAdd, $langNodeDel, $langCancel, $langSelect;
+        global $langNodeAdd, $langNodeDel, $langCancel, $langSelect;
 
         $params = (array_key_exists('params', $options)) ? $options['params'] : '';
         $defaults = (array_key_exists('defaults', $options)) ? $options['defaults'] : '';
@@ -660,7 +660,7 @@ jContent;
 
 
     private function buildHtmlNodePickerIndirect($options) {
-        global $themeimg, $langNodeAdd, $langNodeDel, $langCancel, $langSelect;
+        global $langNodeAdd, $langNodeDel, $langCancel, $langSelect;
 
         $params = (array_key_exists('params', $options)) ? $options['params'] : '';
         $defaults = (array_key_exists('defaults', $options)) ? $options['defaults'] : '';
@@ -1164,7 +1164,7 @@ jContent;
                     $ret .= "<li class='list-group-item'><div class='table_td_header'><a href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
                     $ret .= (!empty($code)) ? "&nbsp;(" . q($code) . ")" : '';
                     $ret .= "<small>&nbsp;&nbsp;-&nbsp;&nbsp;" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</small></div>";
-                    $ret .= (!empty($description)) ? "<div class='table_td_body' style='font-size:small; padding-right:10px; padding-left:10px;'>" . q($description)  . "</div>" : '';
+                    $ret .= (!empty($description)) ? "<div class='table_td_body' style='font-size:small; padding-right:10px; padding-left:10px;'>" . $description  . "</div>" : '';
                     $ret .= "</li>";
                 }
             }
