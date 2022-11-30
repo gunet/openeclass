@@ -141,7 +141,7 @@ if ($can_upload) {
               <div class='form-group mt-4'>
                 <label for='inputFileTitle' class='col-sm-12 control-label-notes'>$langTitle</label>
                 <div class='col-sm-12'>
-                  <input type='text' class='form-control' placeholder='$langTitle...' id='inputFileTitle' name='file_title'>
+                  <input type='text' class='form-control' placeholder='$langTitle' id='inputFileTitle' name='file_title'>
                 </div>
               </div>
             </div>
@@ -150,7 +150,7 @@ if ($can_upload) {
               <div class='form-group mt-4'>
                 <label for='inputFileComment' class='col-sm-12 control-label-notes'>$langComment</label>
                 <div class='col-sm-12'>
-                  <input type='text' class='form-control' placeholder='$langComment...' id='inputFileComment' name='file_comment'>
+                  <input type='text' class='form-control' placeholder='$langComment' id='inputFileComment' name='file_comment'>
                 </div>
               </div>
             </div>
@@ -179,7 +179,7 @@ if ($can_upload) {
               <div class='form-group mt-4'>
                 <label for='inputFileSubject' class='col-sm-12 control-label-notes'>$langSubject</label>
                 <div class='col-sm-12'>
-                  <input type='text' class='form-control' placeholder='$langSubject...' id='inputFileSubject' name='file_subject'>
+                  <input type='text' class='form-control' placeholder='$langSubject' id='inputFileSubject' name='file_subject'>
                 </div>
               </div>
             </div>
@@ -190,7 +190,7 @@ if ($can_upload) {
               <div class='form-group mt-4'>
                 <label for='inputFileDescription' class='col-sm-12 control-label-notes'>$langDescription</label>
                 <div class='col-sm-12'>
-                  <input type='text' class='form-control' placeholder='$langDescription...' id='inputFileDescription' name='file_description'>
+                  <input type='text' class='form-control' placeholder='$langDescription' id='inputFileDescription' name='file_description'>
                 </div>
               </div>
             </div>
@@ -199,7 +199,7 @@ if ($can_upload) {
               <div class='form-group mt-4'>
                 <label for='inputFileAuthor' class='col-sm-12 control-label-notes'>$langAuthor</label>
                 <div class='col-sm-12'>
-                  <input type='text' class='form-control' placeholder='$langAuthor...' id='inputFileAuthor' name='file_author'>
+                  <input type='text' class='form-control' placeholder='$langAuthor' id='inputFileAuthor' name='file_author'>
                 </div>
               </div>
             </div>

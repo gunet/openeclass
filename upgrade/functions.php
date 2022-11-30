@@ -2558,6 +2558,20 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER table course ADD `view_units` INT(11) NOT NULL DEFAULT 0");
     }
 
+    $checkTestimonials = array('dont_display_testimonials', 0);
+    $q = Database::get()->queryArray("SELECT `key` FROM config");
+    $SettingsTestimonials = 0;
+    foreach($q as $q2 => $key){
+        if(strcmp($key->key,'dont_display_testimonials') == 0){
+           $SettingsTestimonials = 1;
+        }
+    }
+    if($SettingsTestimonials != 1){
+        Database::get()->query("INSERT INTO `config` (`key`, `value`) VALUES " .
+                  implode(', ', array_fill(0, count($checkTestimonials) / 2, '(?s, ?s)')), $checkTestimonials);
+    }
+
+
     $current_theme = get_config('theme');
     if (!$current_theme or $current_theme == 'default') {
         set_config('theme', 'modern');

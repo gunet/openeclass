@@ -210,12 +210,12 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_date = format_locale_date(strtotime($ann->an_date));
                     $ann_content .= "
                         <li class='list-group-item pt-3 pb-3 ps-0 pe-0'>
-                            <div class='item-wholeline'>
+                            <div class='item-wholeline text-center'>
                                     <div class='text-title'>
                                         <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
-                                    </div>
-                                <div class='text-secondary'>$course_title</div>
-                                <div class='orangeText'>$ann_date</div>
+                                    </div><br><br>
+                                <div class='blackBlueText TextBold'>$course_title</div>
+                                <div class='blackBlueText TextRegular'>$ann_date</div>
                             </div>
                         </li>";
                 } else {
@@ -223,14 +223,14 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_date = format_locale_date(strtotime($ann->an_date));
                     $ann_content .= "
                     <li class='list-group-item pt-3 pb-3 ps-0 pe-0'>
-                        <div class='item-wholeline'>
+                        <div class='item-wholeline text-center'>
                                 <div class='text-title'>
                                     <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
-                                </div>
+                                </div><br><br>
 
-                            <div class='text-secondary'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></div>
+                            <div class='blackBlueText TextBold'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></div>
 
-                            <div class='orangeText'>$ann_date</div>
+                            <div class='blackBlueText TextRegular'>$ann_date</div>
                         </div>
                     </li>";
                 }
@@ -267,12 +267,12 @@ function getUserMessages() {
             }
             $message_date = format_locale_date($message->timestamp);
             $message_content .= "<li class='list-group-item pt-3 pb-3 ps-0 pe-0'>
-                                    <div class='item-wholeline'>
-                                        <div class='text-title'>$langFrom: ".display_user($message->author_id, false, false)."<br>
+                                    <div class='item-wholeline text-center'>
+                                        <div class='text-title'>$langFrom: ".display_user($message->author_id, false, false)."<br><br>
                                             <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
                                         </div>
-                                        <div class='text-secondary'>$course_title</div>
-                                        <div class='orangeText'>$message_date</div>
+                                        <div class='blackBlueText TextBold'>$course_title</div><br>
+                                        <div class='blackBlueText TextRegular'>$message_date</div>
                                     </div>
                                 </li>";
         }
@@ -280,8 +280,8 @@ function getUserMessages() {
     }
     if(!$msgs){
         $message_content .= "<li class='list-group-item pt-3 pb-3 ps-0 pb-0'>
-            <div class='item-wholeline'>
-                <div class='text-title text-start'>
+            <div class='item-wholeline text-center'>
+                <div class='text-title'>
                     $langDropboxNoMessage
                 </div>
             </div>

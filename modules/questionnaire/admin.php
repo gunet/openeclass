@@ -504,14 +504,20 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     </div>
                     <div class='radio mb-2'>
                       <label>
-                        <input type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == POLL_COLLES ? " checked" : "").">
-                        <span>$langCollesSurvey</span>&nbsp;&nbsp;<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$colles_desc'></span>
+                        <input class='input-Questionnaire' type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == POLL_COLLES ? " checked" : "").">
+                        <label for='colles_type'>   
+                            <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$colles_desc'></span>
+                            <span>$langCollesSurvey</span>
+                        </label>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == POLL_ATTLS ? " checked" : "").">
-                        <span>$langATTLSSurvey</span>&nbsp;&nbsp;<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$rate_scale'></span>
+                         <input class='input-Questionnaire' type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == POLL_ATTLS ? " checked" : "").">
+                         <label for='attls_type'>   
+                            <span>$langATTLSSurvey</span>
+                            <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$rate_scale'></span>
+                        </label>
                       </label>
                     </div>
                 </div>

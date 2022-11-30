@@ -5,17 +5,14 @@
             <div class="btn-group w-100" role="group" aria-label="Basic example">
 
                 @if(!get_config('hide_login_link'))
-                <a class='d-flex justify-content-center align-items-center' type="button" href="{{ $urlServer }}"><img class="eclass-nav-icon ps-1 pe-2" src="{{$logo_img_small}}"></a>
+                <a class='d-flex justify-content-center align-items-center' type="button" href="{{ $urlServer }}"><img class="eclass-nav-icon ps-2 pe-1" src="{{$logo_img_small}}"></a>
                 @endif
                 @if (!isset($_SESSION['uid']))
-                    <a type="button" class="btn btn-transparent text-white pt-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib pen-nib-navhead"></i></a>
+                    <a type="button" class="btn btn-transparent text-white @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib pen-nib-navhead"></i></a>
                 @endif
-                <a type='button' class="btn btn-transparent text-white pt-2" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-book"></i></a>
+                <a type='button' class="btn btn-transparent text-white" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-book"></i></a>
                 @if(get_config('enable_search'))
-                <a type="button" class='btn btn-transparent text-white pt-2' href="{{ $urlAppend }}modules/search/{{ $search_action }}"><i class="fa fa-search"></i></button>
-                @endif
-                @if (!isset($_SESSION['uid']))
-                    <a class='btn btn-transparent text-white pt-2' href="{{$urlAppend}}main/login_form.php"><span class="fa fa-lock"></span></a>
+                <a type="button" class='btn btn-transparent text-white' href="{{ $urlAppend }}modules/search/{{ $search_action }}"><i class="fa fa-search"></i></button>
                 @endif
 
                 {!! lang_selections_Mobile() !!}
@@ -23,7 +20,7 @@
 
                 @if(isset($_SESSION['uid']))
 
-                        <button class="btn btn-transparent dropdown-toogle text-warning pt-2" type="button"
+                        <button class="btn btn-transparent dropdown-toogle text-warning" type="button"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-user"></i>
                         </button>

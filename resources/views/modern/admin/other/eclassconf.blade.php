@@ -488,6 +488,17 @@
                                                                     </div>
                                                             </div>
                                                         </div>
+                                                        <div class='form-group mt-4'>
+                                                            <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{trans('lang_testimonials')}}: </label>
+                                                            <div class='col-sm-12'>
+                                                                <div class='checkbox'>
+                                                                    <label>
+                                                                        <input type='checkbox' name='dont_display_testimonials' value='1' {{ $cbox_dont_display_testimonials }}>
+                                                                        {{trans('lang_dont_display_login_testimonials')}}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
 

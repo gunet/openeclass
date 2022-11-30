@@ -2535,7 +2535,9 @@ $langEmailSendmail = 'Εντολή sendmail';
 $lang_dropbox_allow_student_to_student = "Να επιτρέπεται η ανταλλαγή μηνυμάτων $langsOfCourse μεταξύ $langsOfStudents στο υποσύστημα 'Ανταλλαγή Μηνυμάτων'";
 $lang_dropbox_allow_personal_messages = "Να επιτρέπεται η ανταλλαγή προσωπικών μηνυμάτων στο υποσύστημα 'Ανταλλαγή Μηνυμάτων'";
 $lang_login_form = "Οθόνη Σύνδεσης";
+$lang_testimonials = "Αναφορές/testimonials";
 $lang_dont_display_login_form = "Να μην εμφανίζεται στην αρχική σελίδα η οθόνη σύνδεσης";
+$lang_dont_display_login_testimonials = "Να μην εμφανίζεται στην αρχική σελίδα";
 $lang_hide_login_link = "Να μην εμφανίζεται σύνδεσμος προς την οθόνη σύνδεσης";
 $lang_block_username_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το 'όνομα χρήστη'";
 $lang_block_duration_account = "Απενεργοποίηση λήξης λογαριασμών";
@@ -5596,8 +5598,8 @@ $langLoginConfiguration = "Ρυθμίσεις Οθόνης Σύνδεσης";
 $langLoginBgGradient = "Gradient φόντου οθόνης σύνδεσης";
 $langLoginImg = "Εικόνα οθόνης σύνδεσης";
 $langLoginBanner = "Banner Open eClass Οθόνης Σύνδεσης";
-$langLoginImgPlacementSmall = "Μικρή (κεντρική στοίχιση)";
-$langLoginImgPlacementFull = "Πλήρους Πλάτους (πλάτος: 1091px, ύψος: 315px)";
+$langFormLoginPlacementCenter = "Κεντρική Στοίχιση";
+$langFormLoginPlacementRight = "Στοίχιση στα δεξιά";
 $langThemeOptionsName = "Όνομα Ρυθμίσεων Θέματος";
 
 /* * ***********************************************************

@@ -595,14 +595,14 @@ $tool_content .= "
                 <div class='form-inline col-sm-9 col-sm-offset-3'>
                       <div class='radio'>
                         <label>
-                          <input type='radio' name='loginImgPlacement' value='small-right' ".(($theme_options_styles['loginImgPlacement'] == 'small-right')? 'checked' : '').">
-                          $langLoginImgPlacementSmall &nbsp;
+                          <input type='radio' name='FormLoginPlacement' value='center-position' ".(($theme_options_styles['FormLoginPlacement'] == 'center-position')? 'checked' : '').">
+                          $langFormLoginPlacementCenter &nbsp;
                         </label>
                       </div>
                       <div class='radio'>
                         <label>
-                          <input type='radio' name='loginImgPlacement' value='full-width' ".(($theme_options_styles['loginImgPlacement'] == 'full-width')? 'checked' : '').">
-                          $langLoginImgPlacementFull &nbsp;
+                          <input type='radio' name='FormLoginPlacement' value='right-position' ".(($theme_options_styles['FormLoginPlacement'] == 'right-position')? 'checked' : '').">
+                          $langFormLoginPlacementRight &nbsp;
                         </label>
                       </div>
                 </div>

@@ -315,7 +315,7 @@
                         {!! $user_announcements !!}
                     @endif
                 </div>
-                <div class='panel-footer d-flex justify-content-start p-0'>
+                <div class='panel-footer d-flex justify-content-end p-0'>
                     <a href="{{$urlAppend}}modules/announcements/myannouncements.php" class='mt-1'>
                         {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
                     </a>
@@ -333,7 +333,7 @@
                 <div class='panel-body p-0'>
                     {!! $user_messages !!}
                 </div>
-                <div class='panel-footer d-flex justify-content-start p-0'>
+                <div class='panel-footer d-flex justify-content-end p-0'>
                     <a href="{{$urlAppend}}modules/message/index.php">
                         {{ trans('langAllMessages') }} <span class='fa fa-chevron-right'></span>
                     </a>

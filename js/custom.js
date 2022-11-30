@@ -5,6 +5,7 @@ $(document).ready(function(){
         localStorage.clear();
     })
 
+
     //////////////////////////////////////////////////////////////////////////////
 
     // var action_bar = $('.action_bar').length;

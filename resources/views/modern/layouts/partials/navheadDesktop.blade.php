@@ -4,13 +4,43 @@
 
         <div class='row w-100'>
 
-            <div class="col-lg-2 d-flex justify-content-lg-center align-items-lg-center">
-                <a href="{{ $urlAppend }}">
-                    <img class="eclass-nav-icon" src="{{ $logo_img }}"/>
-                </a>
+            <div class="col-lg-9 d-flex justify-content-start">
+                <div class='d-flex justify-content-center align-items-center'>
+                    <a href="{{ $urlAppend }}">
+                        <img class="eclass-nav-icon me-5 ms-4" src="{{ $logo_img }}"/>
+                    </a>
+                </div>
+                @if(!get_config('hide_login_link'))
+                    <div class='d-flex justify-content-center align-items-end'>
+                        <a id="link-home" class="eclass-nav-link" href="{{ $urlServer }}" onclick="clickHome(this)" onmouseover="hoverHome(this);" onmouseout="unhoverHome(this);"> 
+                            <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/home_1.svg">
+                            <span class='small-text text-white text-uppercase'>{{ trans('langHome') }}</span>
+                        </a>
+                    </div>
+                @endif
+                @if (!isset($_SESSION['uid']))
+                    <div class='d-flex justify-content-center align-items-end'>
+                        <a id="link-register" class="eclass-nav-link @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" onmouseover="hoverRegister(this);" onmouseout="unhoverRegister(this);">
+                            <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/register_1.svg">
+                            <span class='small-text text-white text-uppercase'>{{ trans('langRegistration') }}</span>
+                        </a>
+                    </div>
+                @endif
+                <div class='d-flex justify-content-center align-items-end'>
+                    <a id="link-lessons" class="eclass-nav-link" href="{{ $urlServer }}modules/auth/listfaculte.php" onmouseover="hoverLessons(this);" onmouseout="unhoverLessons(this);">
+                        <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/lessons_1.svg">
+                        <span class='small-text text-white text-uppercase'>{{ trans('langCourses') }}</span>
+                    </a>
+                </div>
+               {{-- <div class='d-flex justify-content-center align-items-end'>
+                    <a class="eclass-nav-link mt-2" href="{{$urlAppend}}info/faq.php">
+                        <span class='HeaderIcon fa fa-question-circle fa-fw me-2'></span>
+                        <span class='small-text text-white text-uppercase'>{{ trans('langFaq') }}</span>
+                    </a>
+                </div> --}}
             </div>
 
-            <div class="col-lg-10">
+            <div class="col-lg-3">
 
                 <div class='row mt-0'>
                     <form class='d-flex justify-content-end d-inline-flex' action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
@@ -18,37 +48,15 @@
                             <button id="btn-search" class="rounded-0 inputSearch d-flex justify-content-center align-items-center btn btn-transparent" type="submit" name="quickSearch">
                                  <img class='search-icon' src="{{$urlAppend}}template/modern/img/search.svg">
                             </button>
-                            <input id="search_terms" type="text" class="inputSearch inputSearchbtn me-4" name="search_terms" aria-describedby="basic-inputSearch">
+                            <input id="search_terms" type="text" class="inputSearch inputSearchbtn me-3" name="search_terms" aria-describedby="basic-inputSearch">
                         @endif
                         {!! lang_selections_Desktop() !!}
                     </form>
                 </div>
 
-
-                <div class="row mt-5">
-
-                    <div class="col-xl-8 col-lg-9 col-md-12 col-sm-12 col-12 mt-2 @if (isset($_SESSION['uid'])) ps-3 @else ps-0 @endif">
-                        @if(!get_config('hide_login_link'))
-                            <a id="link-home" class="eclass-nav-link" href="{{ $urlServer }}" onclick="clickHome(this)" onmouseover="hoverHome(this);" onmouseout="unhoverHome(this);"> 
-                               <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/home_1.svg">
-                               <span class='small-text text-white text-uppercase'>{{ trans('langHome') }}</span>
-                            </a>
-                        @endif
-                        @if (!isset($_SESSION['uid']))
-                            <a id="link-register" class="eclass-nav-link @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" onmouseover="hoverRegister(this);" onmouseout="unhoverRegister(this);">
-                                <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/register_1.svg">
-                                <span class='small-text text-white text-uppercase'>{{ trans('langRegistration') }}</span>
-                            </a>
-                        @endif
-                        <a id="link-lessons" class="eclass-nav-link" href="{{ $urlServer }}modules/auth/listfaculte.php" onmouseover="hoverLessons(this);" onmouseout="unhoverLessons(this);">
-                            <img class='HeaderIcon me-2' src="{{ $urlAppend }}template/modern/img/lessons_1.svg">
-                            <span class='small-text text-white text-uppercase'>{{ trans('langCourses') }}</span>
-                        </a>
-                    </div>
-
-
-                    <div class='col-xl-4 col-lg-3 col-md-12 col-sm-12 col-12 d-flex justify-content-end'>
-                        @if (isset($_SESSION['uid']))
+                @if (isset($_SESSION['uid']))
+                    <div class="row mt-5">
+                        <div class='col-12 d-flex justify-content-end'>
                             <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                                 @if ((isset($is_admin) and $is_admin) or
                                     (isset($is_power_user) and $is_power_user) or
@@ -305,9 +313,9 @@
                                     </ul>
                                 </div>
                             </div>
-                        @endif
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>

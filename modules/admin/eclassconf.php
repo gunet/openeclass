@@ -114,6 +114,7 @@ if (isset($_POST['submit'])) {
         'email_verification_required' => true,
         'am_required' => true,
         'dont_display_login_form' => true,
+        'dont_display_testimonials' => true,
         'hide_login_link' => true,
         'dropbox_allow_student_to_student' => true,
         'dropbox_allow_personal_messages' => true,
@@ -306,6 +307,7 @@ else {
     $data['sel'] = [];
     $data['selectable_langs'] = [];
     $data['cbox_dont_display_login_form'] = get_config('dont_display_login_form') ? 'checked' : '';
+    $data['cbox_dont_display_testimonials'] = get_config('dont_display_testimonials') ? 'checked' : '';
     $data['cbox_hide_login_link'] = get_config('hide_login_link') ? 'checked' : '';
     foreach ($language_codes as $langcode => $langname) {
         if (in_array($langcode, $langdirs)) {

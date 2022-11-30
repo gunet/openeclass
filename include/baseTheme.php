@@ -255,6 +255,7 @@ function view($view_file, $view_data = array()) {
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
     $styles_str = '';
     $leftsideImg = '';
+    $PositionFormLogin = 0;
     $eclass_banner_value = 1;
     if ($theme_id and $theme_id!=0) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
@@ -275,15 +276,19 @@ function view($view_file, $view_data = array()) {
         }
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
-        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str;}";
-        if (isset($theme_options_styles['loginImgPlacement']) && $theme_options_styles['loginImgPlacement']=='full-width') {
-            // $styles_str .= ".jumbotron.jumbotron-login {background-size: cover, cover; background-position: 0% 0%;}";
-            $styles_str .= ".jumbotron.jumbotron-login {background-repeat: no-repeat; background-size: cover;}";
+        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; border:0px; }";
+        // if (isset($theme_options_styles['loginImgPlacement']) && $theme_options_styles['loginImgPlacement']=='full-width') {
+        //     $styles_str .= ".jumbotron.jumbotron-login {background-repeat: no-repeat; background-size: cover;}";
+        // }else{
+        //     $leftsideImg = "1";
+        //     $styles_str .= ".jumbotron.jumbotron-login{border-top-right-radius:0px;}";
+        // }
+        if (isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement']=='center-position') {
+            $PositionFormLogin = 1;
         }else{
-            $leftsideImg = "1";
-            $styles_str .= ".jumbotron.jumbotron-login{border-top-right-radius:0px;}";
+            $PositionFormLogin = 0;
         }
-        //$styles_str .= ".jumbotron.jumbotron-login {  background-size: 353px, cover; background-position: 10% 60%;}";
+
         if (isset($theme_options_styles['fluidContainerWidth'])){
             $container = 'container-fluid';
             $styles_str .= ".container-fluid {max-width:$theme_options_styles[fluidContainerWidth]px}";
@@ -294,9 +299,11 @@ function view($view_file, $view_data = array()) {
         }
         if (!empty($theme_options_styles['leftNavBgColor'])) {
             $rgba_no_alpha = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
-            $rgba_no_alpha[3] = '1';
+            $rgba_no_alpha[3] = '0.85';
             $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
-            $styles_str .= ".offcanvas-header,.offcanvas-body,#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer, #collapseTools, .panel-admin>.panel-heading, .descCoursePanel, #cal-header,
+
+            $styles_str .= "
+            .offcanvas-header,.offcanvas-body,#background-cheat-leftnav, #bgr-cheat-footer, #collapseTools, .panel-admin>.panel-heading, .descCoursePanel, #cal-header,
             .admin-list-group .list-group-item:hover{background:$theme_options_styles[leftNavBgColor];}
             .tool-sidebar{color:#ffffff;}
             .statistics:before{background: $theme_options_styles[leftNavBgColor];}
@@ -305,6 +312,7 @@ function view($view_file, $view_data = array()) {
             .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{background: red;}
             .openCoursesPanel, .BtnMoreInfoAdmin{background:$theme_options_styles[leftNavBgColor];}
             .BtnMoreInfoAdmin{color:#f2f2f2;}
+            #bgr-cheat-header{background:$rgba_no_alpha};
             @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
         }
         if (!empty($theme_options_styles['linkColor'])) $styles_str .= "a {color: $theme_options_styles[linkColor];}";
@@ -378,7 +386,7 @@ function view($view_file, $view_data = array()) {
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
-            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce');
+            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();
@@ -567,14 +575,26 @@ function lang_selections_Desktop() {
     if (count($session->active_ui_languages) < 2) {
         return ('&nbsp;');
     }
-
-    $lang_select = '';
+    $Selected_Language = '';
     foreach ($session->active_ui_languages as $code) {
-        $class = ($code == $session->language)? 'btn btn-primary': '';
-        $lang_select .=
-            "<a class='$class btnLang rounded-circle ms-2 d-flex justify-content-center align-items-center' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
-                 <span class='TextMedium text-white text-capitalize'>" . q($code) . "</span></a>";
+        if($code == $session->language){
+           $Selected_Language = q($native_language_names_init[$code]); 
+        }
     }
+    $lang_select = '<div class="dropdown d-flex justify-content-center align-items-end">
+    <a class="dropdown-toggle text-white TextSemiBold text-capitalize" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+       '. $Selected_Language .' 
+   </a>
+    <ul class="m-0 p-0 border-0 dropdown-menu dropdown-menu-end $langDropdown user-language-menu me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="dropdownMenuLang">';
+    foreach ($session->active_ui_languages as $code) {
+        $class = ($code == $session->language)? ' class="active"': '';
+        $lang_select .=
+            "<li role='presentation'$class>
+                <a class='list-group-item border border-top-0 border-bottom-secondary' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
+                    <div class='d-inline-flex align-items-center'><span class='fa fa-globe' aria-hidden='true'></span><span class='TextMedium ps-1'>" .
+                    q($native_language_names_init[$code]) . "</span></div></a></li>";
+    }
+    $lang_select .= "</ul>";
     return $lang_select;
 }
 

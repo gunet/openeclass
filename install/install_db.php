@@ -1471,6 +1471,7 @@ $default_config = array(
     'base_url', $urlForm,
     'default_language', $lang,
     'dont_display_login_form', 0,
+    'dont_display_testimonials', 0,
     'email_required', 0,
     'email_from', 1,
     'email_verification_required', 0,

@@ -48,7 +48,7 @@ $tool_content .= "
   </div>
 
 
-
+  
   <div class='panel panel-default login-page rounded-0'>
       <div class='panel-heading rounded-0'>
         <span>$langUpgDetails</span>
@@ -59,19 +59,19 @@ $tool_content .= "
 
           <div class='form-group mt-3'>
             <div class='col-12'>
-              <input class='form-control' name='login' placeholder='$langUsername'>
+              <input class='form-control rounded-pill' name='login' placeholder='$langUsername'>
             </div>
           </div>
 
           <div class='form-group mt-3'>
             <div class='col-12'>
-              <input class='form-control' name='password' placeholder='$langPass' type='password'>
+              <input class='form-control rounded-pill' name='password' placeholder='$langPass' type='password'>
             </div>
           </div>
 
           <div class='form-group mt-5'>
             <div class='col-12 d-flex justify-content-center'>
-              <button class='btn btn-sm btn-primary submitAdminBtn w-50 margin-bottom-fat' type='submit' name='submit_upgrade2' value='$langUpgrade'>$langUpgrade</button>
+              <button class='btn submitAdminBtn margin-bottom-fat' type='submit' name='submit_upgrade2' value='$langUpgrade'>$langUpgrade</button>
             </div>
           </div>
 
