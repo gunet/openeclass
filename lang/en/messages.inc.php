@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2022-10-12 13:09:36
+// Generated 2022-11-30 15:18:47
 
 $langYes = "Yes";
 $langNo = "No";
@@ -126,7 +126,6 @@ $langResult = "Result";
 $langMultiplePairs = "Multiple pairs";
 $langMultipleAddr = "Multiple address instances";
 $langMultipleUsers = "Multiple user registrations";
-$langPopularCourses = "$langCourses with most $langUsersS";
 $langAlert = "Points to be noticed";
 $langServerStatus = "MySQL server status : ";
 $langDataBase = "Database";
@@ -2011,7 +2010,7 @@ $langAdministrator = "Administrator";
 $langContinue = " Continue";
 $langDelImage = "Remove picture";
 $langGroups = "Groups";
-$langGroup = "Group";
+$langGroup = "group";
 $langIs = "is";
 $langLastname = "Last name";
 $langLegendRequiredFields = "<span class=\"required\">*</span> denotes required field";
@@ -3980,7 +3979,7 @@ $langPasswordModalTitle = "Enter the exercise password";
 $langIPHasNoAccess = "Your IP address has no access to the specific exercise.";
 $langIPInvalid = "contains an invalid IP or IP CIDR";
 $langAdminMessage = "Message by Administrator of $siteName";
-$langWarn2AboutPHP = "Warning: PHP >= 7.4 is required for proper operation of the platform. Please upgrade PHP as soon as possible; otherwise, some modules may not function correctly.";
+$langWarn2AboutPHP = "Warning: PHP >= 8.0 is required for proper operation of the platform. Please upgrade PHP as soon as possible; otherwise, some modules may not function correctly.";
 $langLinkSettings = "Link module settings";
 $langLinkSettingsSucc = "Settings were succesfully saved";
 $langSocialBookmarksFunct = "Social bookmarking functionality";
@@ -4959,9 +4958,6 @@ $langConfirmPurgeCourseCompletion = "Caution: The completion record for all user
 $langConfirmPurgeBadge = "Caution: The progress record for this badge will be deleted for all course users.";
 $langConfirmPurgeCert = "Caution: The progress record for this certificate will be deleted for all course users.";
 $langDownloadCourse = "Download $langsCourse";
-$langConfEnableMailNotification = "Do you want to activate email notifications in $langsOfCourse?";
-$langConfDisableMailNotification = "Do you want to deactivate email notifications in $langsOfCourse?";
-$langOfNotifications = "notifications";
 $langTopics = "Topics";
 $langGoToHomePage = 'Go to home page';
 $langQuickLinks = "Quick Links";
@@ -5521,3 +5517,8 @@ $langLTIAPPlertKey = "Please type the LTI Provider Key";
 $langLTIAPPlertSecret = "Please type the LTI Provider Secret";
 $langPUBLTIAppAddSuccessful = "Published LTI tool was added successfully.";
 $langUnlockPlatform = 'Unlock Platform';
+$langPopularCourses = "$langCourses with most $langUsersS";
+$langUserEmailNotification = "You are receiving $langsOfCourse notifications via email.";
+$langConfEnableMailNotification = "Do you want to activate email notifications in $langsOfCourse?";
+$langConfDisableMailNotification = "Do you want to deactivate email notifications in $langsOfCourse?";
+$langOfNotifications = "notifications";

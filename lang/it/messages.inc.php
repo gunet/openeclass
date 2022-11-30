@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2022-10-12 13:09:40
+// Generated 2022-11-30 15:18:51
 
 $langYes = "Sì";
 $langNo = "No";
@@ -3210,7 +3210,7 @@ $langBBBScheduleSessionInfo2 = "was scheduled for ";
 $langBBBScheduleSessionInfoJoin = "Connect to the $langsCourse environment to watch by clicking here ";
 $langPollResultsDeleted = "Questionnaire results deleted successfully.";
 $langPollResultsAccess = "You are not allowed to acccess questionnaire results";
-$langPollAlreadyParticipated = "You have already participated in questionnaire";
+$langPollAlreadyParticipated = "You have already participated in this questionnaire";
 $langPollAnonymize = "Anonymize";
 $langTemporarySaveNotice = "You have temporarily saved the following attempts of exercise";
 $langTemporarySaveNotice2 = "There is a temporarily saved attempt that needs to be finished and that will be loaded if you continue. Do you want to continuew?";
@@ -3942,7 +3942,7 @@ $langPasswordModalTitle = "Enter the exercise password";
 $langIPHasNoAccess = "Your IP address has no access to the specific exercise.";
 $langIPInvalid = "contains an invalid IP or IP CIDR";
 $langAdminMessage = "Message by Administrator of $siteName";
-$langWarn2AboutPHP = "Warning: PHP >= 7.4 is required for proper operation of the platform. Please upgrade PHP as soon as possible; otherwise, some modules may not function correctly.";
+$langWarn2AboutPHP = "Warning: PHP >= 8.0 is required for proper operation of the platform. Please upgrade PHP as soon as possible; otherwise, some modules may not function correctly.";
 $langLinkSettings = "Link module settings";
 $langLinkSettingsSucc = "Settings were succesfully saved";
 $langSocialBookmarksFunct = "Social bookmarking functionality";
@@ -5479,3 +5479,9 @@ $langNoPUBLTIApps = "No Published LTI tools are configured.";
 $langLTIAPPlertKey = "Please type the LTI Provider Key";
 $langLTIAPPlertSecret = "Please type the LTI Provider Secret";
 $langPUBLTIAppAddSuccessful = "Published LTI tool was added successfully.";
+$langUnlockPlatform = 'Unlock Platform';
+$langPopularCourses = "$langCourses with most $langUsersS";
+$langUserEmailNotification = "You are receiving $langsOfCourse notifications via email.";
+$langConfEnableMailNotification = "Do you want to activate email notifications in $langsOfCourse?";
+$langConfDisableMailNotification = "Do you want to deactivate email notifications in $langsOfCourse?";
+$langOfNotifications = "notifications";
