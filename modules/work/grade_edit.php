@@ -33,6 +33,7 @@ require_once 'include/lib/multimediahelper.class.php';
 $toolName = $langScore;
 
 load_js('tools.js');
+load_js('screenfull/screenfull.min.js');
 
 // delete confirmation student review
 $head_content .= "
@@ -403,6 +404,14 @@ function show_edit_form($id, $sid, $assign) {
 							  . "</div>";
 
 			}
+            if ($sub->grade_comments_filepath) {
+                $comments_url = "$GLOBALS[urlAppend]modules/work/?course=$course_code&amp;getcomment=$sub->id";
+                $comments_file = "<p class='form-control-static'>" .
+                    MultimediaHelper::chooseMediaAhrefRaw($comments_url, $comments_url, $sub->grade_comments_filename, $sub->grade_comments_filename) .
+                    "</p>";
+            } else {
+                $comments_file = '';
+            }
 			$tool_content .= action_bar(array(
 					array(
 						'title' => $langBack,
@@ -442,7 +451,8 @@ function show_edit_form($id, $sid, $assign) {
 					</div>
 					<div class='form-group'>
 						<label for='comments_file' class='col-sm-3 control-label'>$langCommentsFile:</label>
-						<div class='col-sm-9'>
+                        <div class='col-sm-9'>
+                            $comments_file
 							<input type='file' name='comments_file' id='comments_file' size='35'>
 							" . fileSizeHidenInput() . "
 						</div>

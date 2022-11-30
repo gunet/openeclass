@@ -5723,17 +5723,24 @@ function submit_grade_comments($args) {
         }
 
         $grade = is_numeric($grade) ? $grade : null;
-        if(isset($args['auto_judge_scenarios_output'])){
+        if (isset($args['auto_judge_scenarios_output'])){
             Database::get()->query("UPDATE assignment_submit SET auto_judge_scenarios_output = ?s
                                     WHERE id = ?d",serialize($args['auto_judge_scenarios_output']), $sid);
         }
+        if ($comments_filepath) {
+            Database::get()->query("UPDATE assignment_submit
+                                    SET grade_comments_filepath = ?s,
+                                        grade_comments_filename = ?s
+                                    WHERE id = ?d",
+                $comments_filepath, $comments_real_filename, $sid);
+        }
+
         if (Database::get()->query("UPDATE assignment_submit
                                     SET grade = ?f, grade_rubric = ?s, grade_comments = ?s,
-                                    grade_comments_filepath = ?s,
-                                    grade_comments_filename = ?s,
                                     grade_submission_date = NOW(), grade_submission_ip = ?s
-                                    WHERE id = ?d", $grade, $grade_rubric, $comment, $comments_filepath,
-                                            $comments_real_filename, Log::get_client_ip(), $sid)->affectedRows>0) {
+                                    WHERE id = ?d",
+                                    $grade, $grade_rubric, $comment,
+                                    Log::get_client_ip(), $sid)->affectedRows > 0) {
             $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
             triggerGame($course_id, $quserid, $id);
             triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
