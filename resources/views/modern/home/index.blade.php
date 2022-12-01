@@ -2,7 +2,7 @@
 
 @section('content')
 
-<link href="{{ $urlAppend }}template/modern/homepage.css" rel="stylesheet" type="text/css">
+<link href="{{ $urlAppend }}template/modern/css/homepage.css" rel="stylesheet" type="text/css">
 
 <div class="container-login">
 
@@ -35,8 +35,11 @@
                                             <input class="rounded-pill btn w-75 login-form-submit TextBold mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
                                         </div>
                                     </form>
-                                    <div class='col-sm-12 d-flex justify-content-center'>
-                                        <a class="orangeText btnlostpass mb-2 mt-md-4" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
+                                    <div class='col-12 text-center mt-3'>
+                                        <a class="orangeText btnlostpass" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
+                                    </div>
+                                    <div class='col-12 text-center mt-2 mb-1'>
+                                        <a class="vsmall-text TextSemiBold text-uppercase lightBlueText" href="{{$urlAppend}}main/login_form.php">{{ trans('langMoreLogin') }}</a>
                                     </div>
                                 </div>
                             </div>

@@ -30,7 +30,7 @@ foreach ($q as $l) {
         }
         $authLink[] = array(false, "
             <div class='col-12 d-flex justify-content-center align-items-center'>
-                <a class='btn btn-sm btn-primary btn-block w-50' href='$authUrl'>$langEnter</a>
+                <a class='btn login-form-submit rounded-pill btn-block w-50' href='$authUrl'>$langEnter</a>
             </div>", $authTitle);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/modern/css/bootstrap-social.css'>";
@@ -55,19 +55,19 @@ foreach ($q as $l) {
             $next
             <div class='row'>
               <div class='col-12 login-form-spacing m-auto d-block'>
-                <input class='login-input bg-body w-100' name='uname' aria-describedby='usernameIcon' placeholder='$langUsername &#xf007;'$userValue>
+                <input class='login-input w-75 rounded-pill' name='uname' aria-describedby='usernameIcon' placeholder='$langUsername &#xf007;'$userValue>
               </div>
               <div class='col-12 login-form-spacing m-auto d-block'>
-                  <input class='login-input bg-body w-100 mt-2' name='pass' type='password' aria-describedby='passwordIcon' placeholder='$langPass &#xf023;'>
+                  <input class='login-input  w-75 rounded-pill mt-2' name='pass' type='password' aria-describedby='passwordIcon' placeholder='$langPass &#xf023;'>
               </div>
             </div>
             <div class='form-group mt-3'>
               <div class='row'>
                 <div class='col-12 text-center'>
-                  <button class='btn btn-default text-dark TextBold w-100 login-form-submit mt-2' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+                  <button class='btn login-form-submit w-75 rounded-pill mt-2' type='submit' name='submit' value='$langEnter'>$langEnter</button>
                 </div>
                 <div class='col-12 text-center mt-4'>
-                  <a class='text-primary btnlostpass' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
+                  <a class='orangeText btnlostpass' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
                 </div>
               </div>
            </div>
@@ -95,10 +95,10 @@ foreach ($authLink as $authInfo) {
     $tool_content .= "
    
       <div class='col-lg-$columns col-12'>
-        <div class='panel panel-default rounded-0 mt-lg-0 mb-lg-0 mb-3' style='min-height:328px;'>
+        <div class='panel panel-default rounded-0 mt-lg-0 mb-lg-0 mb-3' style='min-height:280px;'>
           <div class='panel-heading rounded-0'><div class='panel-title p-0 text-dark text-center'>
           <img src='/template/modern/img/user2.png' class='user-icon2 me-2'>" . q($authInfo[2]) . "</div></div>
-            <div class='panel-body login-page-option rounded-0 bg-light'>" .
+            <div class='panel-body login-page-option rounded-0 bg-light d-flex justify-content-center align-items-center'>" .
               $authInfo[1];
     if (Session::has('login_error') and $authInfo[0]) {
         $tool_content .= "<div class='alert alert-warning' role='alert'>".Session::get('login_error')."</div>";

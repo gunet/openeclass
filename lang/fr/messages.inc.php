@@ -1010,6 +1010,7 @@ $langInvalidAuth = "Mode d'authentification invalide"
 ;
 $langContact = 'Nous contacter';
 $lang_forgot_pass = "Avez-vous oublié votre mot de passe ?";
+$langMoreLogin = 'Plus doptions de connexion';
 $langNewAnnounce = "Nouveau !";
 $langUnregUser = "Supprimer le compte";
 $langListCourses = "Liste des Cours"

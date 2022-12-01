@@ -3,8 +3,12 @@
 
 @media(min-width:992px){
     #bgr-cheat-header {border-bottom-left-radius:85px; border-bottom-right-radius:0px;}
+    
     .eclass-nav-icon{margin-left:30px; margin-right:30px;}
+    
     .fa-question::before{width:30px; height:28px;}
+    
+    /* .eclass-nav-icon{} */
 }
 
 @media(max-width:991px){

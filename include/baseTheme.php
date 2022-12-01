@@ -579,7 +579,7 @@ function lang_selections_Desktop() {
         }
     }
     $lang_select = '<div class="dropdown d-flex justify-content-center align-items-end">
-    <a class="dropdown-toggle text-white TextSemiBold text-capitalize" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="dropdown-toggle text-white TextSemiBold text-capitalize small-text" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
        '. $Selected_Language .' 
    </a>
     <ul class="m-0 p-0 border-0 dropdown-menu dropdown-menu-end $langDropdown user-language-menu me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="dropdownMenuLang">';

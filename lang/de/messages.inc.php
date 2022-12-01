@@ -917,6 +917,7 @@ $langSupportForum = "Hilfe (Support) Forum";
 $langInvalidAuth = "Ungültige Authentifizierungsmethode";
 $langContact = 'Kontakt';
 $lang_forgot_pass = 'Haben Sie ihr Passwort vergessen?';
+$langMoreLogin = 'Mehr Anschlussmöglichkeiten';
 $langNewAnnounce = "Neu!";
 $langUnregUser = "Löschen des Benutzerkontos";
 $langListCourses = "Liste aller Kurse";

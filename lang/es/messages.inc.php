@@ -943,6 +943,7 @@ $langSupportForum = "Soporte del foro";
 $langInvalidAuth = "Método de autentificación inválido";
 $langContact = "Contactar";
 $lang_forgot_pass = '¿Has olvidado tu contraseña?';
+$langMoreLogin = 'Más opciones de conexión';
 $langNewAnnounce = "¡Nuevo !";
 $langUnregUser = "Usuario no registrado";
 $langListCourses = "Cursos";
