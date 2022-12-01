@@ -398,12 +398,9 @@ function view($view_file, $view_data = array()) {
  * @return mixed
  */
 function widget_view($view_file, $view_data = array()) {
-    global $webDir, $is_editor, $course_code, $course_id, $language, $siteName,
-    $urlAppend, $theme, $pageName, $currentCourseName, $uid, $session, $toolName,
-    $require_help, $professor, $helpTopic, $head_content, $toolName, $themeimg, $navigation,
-    $require_current_course, $saved_is_editor, $require_course_admin, $require_editor;
+    global $webDir;
 
-    $views = $webDir . "/$view_data[widget_folder]/views/" . get_config('theme');
+    $views = $webDir . "/$view_data[widget_folder]/views/";
     $cache = $webDir . '/storage/views/' . get_config('theme');
     $blade = new Blade($views, $cache);
 
@@ -578,7 +575,7 @@ function lang_selections_Desktop() {
     $Selected_Language = '';
     foreach ($session->active_ui_languages as $code) {
         if($code == $session->language){
-           $Selected_Language = q($native_language_names_init[$code]); 
+           $Selected_Language = q($native_language_names_init[$code]);
         }
     }
     $lang_select = '<div class="dropdown d-flex justify-content-center align-items-end">
