@@ -59,7 +59,8 @@ $tool_content .= action_bar([
           'url' => 'unlock_platform.php',
           'icon' => 'fa-unlock',
           'button-class' => 'btn-success',
-          'level' => 'primary-label' ],
+          'level' => 'primary-label',
+          'show' => get_config('upgrade_begin') ],
     ], false) . $release_alert . "
     <div class='row'>
         <div class='col-md-12'>
