@@ -24,14 +24,17 @@
 .eclass-nav-icon{ width:100px; height:90px; }
 @media(min-width:992px){.eclass-nav-icon{ margin-left:25px; margin-right:30px;}}
 
-.eclass-nav-link { padding-left: 10px; padding-right: 10px; }
+/* .eclass-nav-link { padding-left: 10px; padding-right: 10px; } */
+@media(min-width:992px){
+  .eclass-nav-link{ min-height:38px;}
+}
 
 .inputSearch{ outline:0; background-color: transparent; border:0; border-bottom: solid 1px white;}
 
-@media(min-width:992px) and (max-width:1023px){
-  .inputSearchbtn{width:85px;}
-}
-@media(min-width:1024px) and (max-width:1199px){
+/* @media(min-width:992px) and (max-width:1023px){ */
+  .inputSearchbtn{width:115px;}
+/* } */
+/* @media(min-width:1024px) and (max-width:1199px){
   .inputSearchbtn{width:90px;}
 }
 @media(min-width:1200px) and (max-width:1399px){
@@ -39,7 +42,7 @@
 }
 @media(min-width:1400px){
   .inputSearchbtn{width:100px;}
-}
+} */
 
 .inputSearch:active,
 .inputSearch:focus,
@@ -59,8 +62,14 @@
 
 .user-language-menu .list-group-item:hover{ background-color: #1d4e89; color:white; }
 
-.linkFaq{width:27px; height:27px; border-radius:50%; border:solid 1px white;}
-#link-faq:hover .linkFaq{ background-color: #005ad9; border:0px;}
+/* .linkFaq{width:30px; height:28px; border-radius:50%; border:solid 1px white;}
+.linkFaq .fa{font-size: 13px;}
+#link-faq:hover .linkFaq{ background-color: #005ad9; border:0px;} */
+
+@media(min-width:1200px){
+  .rowHeader{width:100%;}
+}
+
 
 /********************************************* FOOTER ****************************************************************************************/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -939,6 +948,8 @@ label:has(input[type="checkbox"]:disabled){
   .cardLogin{min-height:340px; background-color: rgba(255, 255, 255, 1); }
   @media(max-width:767px){ .cardLogin{min-height: 350px;} }
   @media(min-width:992px) and (max-width:1023px){ .cardLogin{max-width: 250px;} }
+  @media(min-width:1024px) and (max-width:1199px){ .cardLogin{max-width: 275px;} }
+  @media(min-width:1200px) and (max-width:1399px){ .cardLogin{max-width: 300px;} }
   @media(min-width:1400px){ .cardLogin{ max-width: 425px; } }
 
   .Announcements-Homepage{ background-color: #f8f9fa; box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);}
@@ -999,9 +1010,12 @@ label:has(input[type="checkbox"]:disabled){
   
   .row_pad_courses{ padding-top: 40px; }
 
+  .popular_course_img{width:150px; height:150px; border-radius: 50%;}
+  .popular_course_img:hover{opacity: 0.7;}
+
   .announcement-image{ width:50px; height:50px;}
   
-  .all_announcements{
+  .all_announcements, .all_courses{
       font-size: 14px;
       font-weight: 600;
       display: inline-block;

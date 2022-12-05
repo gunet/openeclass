@@ -348,6 +348,49 @@
                                 </div>
                             @endif
 
+                            @if($popular_courses)
+                                <div class="col-12 mb-3">
+                                    <div class='panel panel-admin border-0 shadow-none'>
+                                        <div class='panel-body rounded-Home px-5 py-4'>
+                                            <div class="news">
+                                                <div class='row'>
+                                                    <div class='col-lg-12'>
+                                                        <h4 class="block-title TextExtraBold text-uppercase pb-0 mt-2">{{trans('langPopularCourse')}}</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="row news-list m-auto">
+                                                    
+                                                    @foreach ($popular_courses as $pop_course)
+                                                       
+                                                        <div class="col-lg-3 news-list-item">
+                                                            <div class="col-12 d-flex justify-content-center align-items-center">
+                                                                <a href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
+                                                                    @if($pop_course->course_image)
+                                                                        <img class='popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt='Course Banner'/>
+                                                                    @else
+                                                                        <img class='popular_course_img' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
+                                                                    @endif
+                                                                </a>
+                                                            </div>
+                                                            <div class="col-12 text-center mt-2">
+                                                                <a class='lightBlueText TextSemiBold text-capitalize' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
+                                                                    {{$pop_course->title}} ({{$pop_course->public_code}})<br>
+                                                                    <p class='textgreyColor small-text text-capitalize TextMedium'>{{$pop_course->prof_names}}</p>
+                                                                </a>
+                                                            </div>
+                                                           
+                                                        </div>
+                                                    
+                                                
+                                                    @endforeach
+                                                </div>
+                                                <div class="more-link"><a class="all_courses mt-3 float-end text-uppercase" href="{{ $urlAppend }}modules/auth/opencourses.php?fc=1">{{ trans('langAllCourses') }} <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span></a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
                             @if ($announcements)
                                 <div class="col-12 mb-3">
                                     <div class='panel panel-admin panel-announcements border-0 shadow-none'>
@@ -383,7 +426,7 @@
                                                     @php $counterAn++; @endphp
                                                     @endforeach
                                                 </div>
-                                                <div class="more-link"><a class="all_announcements mt-3 float-end" href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span></a></div>
+                                                <div class="more-link"><a class="all_announcements mt-3 float-end" href="{{ $urlAppend }}main/system_announcements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span></a></div>
                                             </div>
                                         </div>
                                     </div>
@@ -667,6 +710,49 @@
                                 </div>
                             </div>
                         @endif
+
+                        @if($popular_courses)
+                                <div class="col-12 mt-3">
+                                    <div class='panel panel-admin'>
+                                        <div class='panel-body'>
+                                            <div class="news">
+                                                <div class='row'>
+                                                    <div class='col-lg-12'>
+                                                        <h4 class="block-title TextExtraBold text-uppercase pb-0 mt-2">{{trans('langPopularCourse')}}</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="row news-list m-auto">
+                                                   
+                                                    @foreach ($popular_courses as $pop_course)
+                                                        
+                                                        <div class="col-md-6 col-12 news-list-item">
+                                                            <div class="col-12 d-flex justify-content-center align-items-center">
+                                                                <a href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
+                                                                    @if($pop_course->course_image)
+                                                                        <img class='popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt='Course Banner'/>
+                                                                    @else
+                                                                        <img class='popular_course_img' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
+                                                                    @endif
+                                                                </a>
+                                                            </div>
+                                                            <div class="col-12 text-center mt-2">
+                                                                <a class='lightBlueText TextSemiBold text-capitalize' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
+                                                                    {{$pop_course->title}} ({{$pop_course->public_code}})<br>
+                                                                    <p class='textgreyColor small-text text-capitalize TextMedium'>{{$pop_course->prof_names}}</p>
+                                                                </a>
+                                                            </div>
+                                                           
+                                                        </div>
+                                                        
+                                                    
+                                                    @endforeach
+                                                </div>
+                                                <div class="more-link"><a class="all_courses mt-3 float-end text-uppercase" href="{{ $urlAppend }}modules/auth/opencourses.php?fc=1">{{ trans('langAllCourses') }} <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span></a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
 
                         @if ($announcements)
                             <div class='col-12 mt-3'>

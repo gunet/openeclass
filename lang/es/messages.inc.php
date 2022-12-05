@@ -4609,6 +4609,7 @@ $langcas_altauth_use = "Use alternative authentication method";
 $langcas_altauth_use_all = "For all access methods (via web or mobile apps)";
 $langcas_altauth_use_mobile = "Only for access via mobile apps";
 $langActivityCourse = 'Activity Course Type';
+$langPopularCourse = 'cursos populares';
 $langNoActivityHeadings = 'There are no activity category headings';
 $langActivityCourseAdd = 'Add Activity Category Heading';
 $langActivityEdit = "Editar actividad";

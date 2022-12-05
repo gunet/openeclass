@@ -17,7 +17,7 @@
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     <div class='col-12 mt-3'>
-                        <div class='text-start text-secondary'>{{trans('langEclass')}} - {{trans('langFaq')}}</div>
+                        <div class='text-start text-secondary mb-3'>{{trans('langEclass')}} - {{trans('langFaq')}}</div>
                         @if (count($faqs) != 0){!! $action_bar !!} @endif
                     </div>
 

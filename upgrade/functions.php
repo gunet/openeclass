@@ -2558,6 +2558,10 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER table course ADD `view_units` INT(11) NOT NULL DEFAULT 0");
     }
 
+    if (!DBHelper::fieldExists('course','popular_course')) {
+        Database::get()->query("ALTER table course ADD `popular_course` INT(11) NOT NULL DEFAULT 0");
+    }
+
     $checkKeyTestimonials = get_config('dont_display_testimonials');
     if (is_null($checkKeyTestimonials)) {
         set_config('dont_display_testimonials', 0);

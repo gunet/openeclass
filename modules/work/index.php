@@ -3687,14 +3687,14 @@ function show_edit_assignment($id) {
                 </div>" .
                 eClassTag::tagInput($id);
         $tool_content .= "
-            <div class='form-group mt-4'>
-                <div class='col-12 d-inline-flex'>
+            <div class='form-group mt-5'>
+                <div class='col-12 d-inline-flex justify-content-center align-items-center'>
                   
                      
                         ".
                         form_buttons(array(
                             array(
-                                'class'         => 'btn-primary submitAdminBtn',
+                                'class'         => 'submitAdminBtn',
                                 'name'          => 'do_edit',
                                 'value'         => $langModify,
                                 'javascript'    => "selectAll('assignee_box',true)"

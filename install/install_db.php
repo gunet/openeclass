@@ -198,6 +198,7 @@ $db->query("CREATE TABLE `course` (
   `flipped_flag` int(11) NOT NULL DEFAULT 0,
   `lectures_model` int(11) NOT NULL DEFAULT 0,
   `view_units` INT(11) NOT NULL DEFAULT 0,
+  `popular_course` INT(11) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE `course_user` (

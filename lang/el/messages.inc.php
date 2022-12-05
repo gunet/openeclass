@@ -196,6 +196,7 @@ $langApplyRule = 'Εφαρμογή του κανόνα στους υπάρχον
 $langRuleApplied = 'Ο κανόνας εφαρμόστηκε σε όλους τους υπάρχοντες χρήστες';
 $langSureToDelRule = "Θέλετε σίγουρα να διαγραφεί ο κανόνας;";
 $langActivityCourse = 'Μαθήματα-Δραστηριότητες';
+$langPopularCourse = 'Δημοφιλή Μαθήματα';
 $langNoActivityHeadings = 'Δεν υπάρχουν τίτλοι κατηγοριών δραστηριοτήτων';
 $langActivityCourseAdd = 'Προσθήκη τίτλου κατηγορίας δραστηριότητας';
 $langQuickLinks = "Γρήγοροι σύνδεσμοι";
