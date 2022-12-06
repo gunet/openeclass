@@ -101,10 +101,12 @@ $sco['session_time'] = "0000:00:00.00";
 
 ?>
 <script type="text/javascript">
+
     var init_total_time = "<?php echo $sco['total_time']; ?>";
     var item_objectives = new Array();
     var updatetable_to_list = new Array();
     var interactions = new Array();
+
     // ====================================================
     // API Class Constructor
     var debug_ = false;
@@ -160,19 +162,19 @@ $sco['session_time'] = "0000:00:00.00";
     function LMSInitialize(arg) {
         if (debug_) {
             alert("initialize");
-		}
+        }
         if (arg != "") {
             this.APIError("201");
             return "false";
         }
         if (APIInitialized == true) {
-			if(isSCORM2004) {
-				this.APIError("103");
-				return "false";
-			} else {
+            if(isSCORM2004) {
+                this.APIError("103");
+                return "false";
+            } else {
             this.APIError("101");
             return "false";
-			}
+            }
         }
 
         this.APIError("0");
@@ -180,11 +182,12 @@ $sco['session_time'] = "0000:00:00.00";
 
         return "true";
     }
-	function LMSInitialize2004(arg) {
-		isSCORM2004 = true;
 
-		return LMSInitialize(arg);
-	}
+    function LMSInitialize2004(arg) {
+        isSCORM2004 = true;
+        return LMSInitialize(arg);
+    }
+
     // Finish
     // According to SCORM 1.2 reference
     //    - arg must be "" (empty string)
@@ -216,121 +219,127 @@ $sco['session_time'] = "0000:00:00.00";
     function LMSGetValue(ele) {
         if (debug_)
             alert("LMSGetValue : \n" + ele);
-        if (APIInitialized) {
+            if (APIInitialized) {
 
-			//SCORM2004
-			if(ele=="" && isSCORM2004) {
-				APIError("301"); // read only
+            // SCORM2004
+            if (ele=="" && isSCORM2004) {
+                APIError("301"); // read only
                 return "false";
-			}
+            }
 
             var i = array_indexOf(elements, ele);
             if (i != -1) { // ele is implemented -> handle it
                 switch (ele) {
-					case 'cmi._version':
-						APIError("0");
-						return "1.0";
-						break;
-                    case 'cmi.core._children' :
-					case 'cmi.learner_id':
-                    case 'cmi.core.student_id' :
-					case 'cmi.learner_name':
-                    case 'cmi.core.student_name' :
-					case 'cmi.location' :
-                    case 'cmi.core.lesson_location' :
-                    case 'cmi.core.credit' :
-                    case 'cmi.core.lesson_status' :
-                    case 'cmi.core.entry' :
-                    case 'cmi.core.score._children' :
-                    case 'cmi.core.score.raw' :
-                    case 'cmi.score.raw' :
-                    case 'cmi.core.score.min' :
-                    case 'cmi.score.min' :
-                    case 'cmi.core.score.max' :
-                    case 'cmi.score.max' :
-                    case 'cmi.core.total_time' :
-                    case 'cmi.suspend_data' :
-                    case 'cmi.launch_data' :
-                    case 'cmi.core.lesson_mode' :
-                    case 'cmi.objectives._children' :
-                    case 'cmi.student_data._children' :
-                    case 'cmi.interactions._children' :
+                    case 'cmi._version':
+                        APIError("0");
+                        return "1.0";
+                        break;
+                    case 'cmi.core._children':
+                    case 'cmi.learner_id':
+                    case 'cmi.core.student_id':
+                    case 'cmi.learner_name':
+                    case 'cmi.core.student_name':
+                    case 'cmi.location':
+                    case 'cmi.core.lesson_location':
+                    case 'cmi.core.credit':
+                    case 'cmi.core.lesson_status':
+                    case 'cmi.core.entry':
+                    case 'cmi.core.score._children':
+                    case 'cmi.core.score.raw':
+                    case 'cmi.score.raw':
+                    case 'cmi.core.score.min':
+                    case 'cmi.score.min':
+                    case 'cmi.core.score.max':
+                    case 'cmi.score.max':
+                    case 'cmi.core.total_time':
+                    case 'cmi.suspend_data':
+                    case 'cmi.launch_data':
+                    case 'cmi.core.lesson_mode':
+                    case 'cmi.objectives._children':
+                    case 'cmi.student_data._children':
+                    case 'cmi.interactions._children':
                         APIError("0");
                         return values[i];
                         break;
-                        //-----------------------------------
-                        //deal with SCORM 2004 new elements :
-                        //-----------------------------------
-                    case 'cmi.completion_status' :
-                    case 'cmi.success_status' :
+                    //-----------------------------------
+                    //deal with SCORM 2004 new elements :
+                    //-----------------------------------
+                    case 'cmi.completion_status':
+                    case 'cmi.success_status':
                         APIError("0");
                         ele = 'cmi.core.lesson_status';
                         return values[i];
                         break;
-                        //-----------------------------------
-                    case 'cmi.core.exit' :
-                    case 'cmi.core.session_time' :
-                    case 'cmi.session_time' :
+                    //-----------------------------------
+                    case 'cmi.core.exit':
+                    case 'cmi.core.session_time':
+                    case 'cmi.session_time':
                         APIError("404"); // write only
                         return "";
                         break;
-                    case 'cmi.objectives._count' :
+                    case 'cmi.objectives._count':
                         APIError("0");
                         values[i] = item_objectives.length;
                         return item_objectives.length;
                         break;
-
-                    case 'cmi.interactions._count' :
+                    case 'cmi.interactions._count':
                         APIError("0");
                         values[i] = interactions.length;
                         return interactions.length;
                         break;
-					//SCORM2004
-					case 'cmi.learner_preference._children':
-						APIError("0"); // not implemented
-						return "language,delivery_speed,audio_captioning,audio_level";
-						break;
-                case 'cmi.student_preference._children':
-                                    APIError("401"); // not implemented
-                                    return "";
-                    break;
-					case 'cmi.learner_preference.audio_level':
-				case 'cmi.student_preference.audio':
-                                    APIError("0");
-                    return values[i];
-					case 'cmi.learner_preference.language':
-				case 'cmi.student_preference.language':
-                                    APIError("0");
-                    return values[i];
-					case 'cmi.learner_preference.delivery_speed':
-				case 'cmi.student_preference.speed':
-                                    APIError("0");
-                    return values[i];
-					case 'cmi.learner_preference.audio_captioning':
-				case 'cmi.student_preference.text':
-                                    APIError("0");
-                    return values[i];
-				case 'cmi.comments':
-                                APIError("0");
-                    return values[i];
-				case 'cmi.comments_from_lms':
-                                APIError("0");
-                    return values[i];
-                            }
+
+                    // SCORM2004
+                    case 'cmi.learner_preference._children':
+                        APIError("0"); // not implemented
+                        return "language,delivery_speed,audio_captioning,audio_level";
+                        break;
+                    case 'cmi.student_preference._children':
+                        APIError("401"); // not implemented
+                        return "";
+                        break;
+                    case 'cmi.learner_preference.audio_level':
+                    case 'cmi.student_preference.audio':
+                        APIError("0");
+                        return values[i];
+                        break;
+                    case 'cmi.learner_preference.language':
+                    case 'cmi.student_preference.language':
+                        APIError("0");
+                        return values[i];
+                        break;
+                    case 'cmi.learner_preference.delivery_speed':
+                    case 'cmi.student_preference.speed':
+                        APIError("0");
+                        return values[i];
+                        break;
+                    case 'cmi.learner_preference.audio_captioning':
+                    case 'cmi.student_preference.text':
+                        APIError("0");
+                        return values[i];
+                        break;
+                    case 'cmi.comments':
+                        APIError("0");
+                        return values[i];
+                        break;
+                    case 'cmi.comments_from_lms':
+                        APIError("0");
+                        return values[i];
+                        break;
+                }
             } else {
 
                 var pos = ele.indexOf("cmi.interactions");
                 if (pos >= 0) {
-					return handleGetInteractions(ele, interactions);
-                            }
+                    return handleGetInteractions(ele, interactions);
+                }
                 // cmi.objectives
                 if (ele.substring(0, 15) == 'cmi.objectives.') {
-					return handleGetObjectives(ele, item_objectives);
-                                }
+                    return handleGetObjectives(ele, item_objectives);
+                }
 
                 // ignore _children if not explicitly defined
 
-				/*
+                /*
                 var pos = ele.indexOf("_children");
                 if (pos >= 0) {
                     APIError("202");
@@ -342,7 +351,7 @@ $sco['session_time'] = "0000:00:00.00";
                     APIError("203");
                     return "";
                 }
-				*/
+                */
                 // ignore cmi.core.none
                 var pos = ele.indexOf("cmi.core.none");
                 if (pos >= 0) {
@@ -351,18 +360,18 @@ $sco['session_time'] = "0000:00:00.00";
                 }
 
                 // not implemented error
-            	if (isSCORM2004) {
-					this.APIError("401");
-					return "";
+                if (isSCORM2004) {
+                    this.APIError("401");
+                    return "";
                 } else {
                     APIError("401");
                     return "";
                 }
             }
         } else { // not initialized error
-			if (isSCORM2004) {
-				this.APIError("122");
-				return "";
+            if (isSCORM2004) {
+                this.APIError("122");
+                return "";
             } else {
                 this.APIError("301");
                 return "";
@@ -377,46 +386,46 @@ $sco['session_time'] = "0000:00:00.00";
 
         if (APIInitialized) {
 
-			//SCORM2004
-			if(ele=="" && isSCORM2004) {
-				APIError("351"); // read only
+            // SCORM2004
+            if (ele == "" && isSCORM2004) {
+                APIError("351"); // read only
                 return "false";
-			}
+            }
 
             var i = array_indexOf(elements, ele);
             if (i != -1) { // ele is implemented -> handle it
 
                 switch (ele) {
-					case 'cmi._version':
-						APIError("404");
-						return "1.0";
-						break;
-                    case 'cmi.core._children' :
-                    case 'cmi.core.student_id' :
-                    case 'cmi.core.student_name' :
-                    case 'cmi.core.credit' :
-                    case 'cmi.core.entry' :
-                    case 'cmi.core.score._children' :
-                    case 'cmi.core.total_time' :
-                    case 'cmi.launch_data' :
-                    case 'cmi.objectives._children' :
-                    case 'cmi.objectives._count' :
+                    case 'cmi._version':
+                        APIError("404");
+                        return "1.0";
+                        break;
+                    case 'cmi.core._children':
+                    case 'cmi.core.student_id':
+                    case 'cmi.core.student_name':
+                    case 'cmi.core.credit':
+                    case 'cmi.core.entry':
+                    case 'cmi.core.score._children':
+                    case 'cmi.core.total_time':
+                    case 'cmi.launch_data':
+                    case 'cmi.objectives._children':
+                    case 'cmi.objectives._count':
                     case 'cmi.interactions._children':
                     case 'cmi.interactions._count':
-                    case 'cmi.student_data._children' :
-					//SCORM2004
-					case 'cmi.learner_preference._children' :
+                    case 'cmi.student_data._children':
+                    // SCORM2004
+                    case 'cmi.learner_preference._children':
                         APIError("404"); // read only
                         return "false";
                         break;
-                    case 'cmi.student_preference._children' :
+                    case 'cmi.student_preference._children':
                         APIError("403"); // read only
                         return "false";
                         break;
-					//SCORM2004
-					case 'cmi.location':
-                    case 'cmi.core.lesson_location' :
-						if(!checkDataType(val, 'CMIIdentifier') && !isSCORM2004) {
+                    // SCORM2004
+                    case 'cmi.location':
+                    case 'cmi.core.lesson_location':
+                        if(!checkDataType(val, 'CMIIdentifier') && !isSCORM2004) {
                             APIError("405");
                             return "false";
                         }
@@ -424,7 +433,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-                    case 'cmi.core.lesson_status' :
+                    case 'cmi.core.lesson_status':
                         if (val == 'not attempted' || !checkDataType(val, 'CMIVocabulary', 'Status')) {
                             APIError("405");
                             return "false";
@@ -433,22 +442,22 @@ $sco['session_time'] = "0000:00:00.00";
                         var upperCaseVal = val.toUpperCase();
                         if (upperCaseVal != "PASSED" && upperCaseVal != "FAILED"
                                 && upperCaseVal != "COMPLETED" && upperCaseVal != "INCOMPLETE"
-					   && upperCaseVal != "BROWSED" /*&& upperCaseVal != "NOT ATTEMPTED" )
+                       && upperCaseVal != "BROWSED" /*&& upperCaseVal != "NOT ATTEMPTED" )
                         {
                             APIError("405");
                             return "false";
-					}*/
+                    }*/
 
                         values[i] = val;
                         APIError("0");
                         return "true";
                         break;
-                        //-------------------------------
-                        // Deal with SCORM 2004 element :
-                        // completion_status and success_status are new element,
-                        // we use them together with the old element lesson_status in the claro DB
-                        //-------------------------------
-                    case 'cmi.completion_status' :
+                    //-------------------------------
+                    // Deal with SCORM 2004 element :
+                    // completion_status and success_status are new element,
+                    // we use them together with the old element lesson_status in the claro DB
+                    //-------------------------------
+                    case 'cmi.completion_status':
                         var upperCaseVal = val.toUpperCase();
                         if (upperCaseVal != "PASSED" && upperCaseVal != "FAILED" && upperCaseVal != "COMPLETED" && upperCaseVal != "INCOMPLETE" && upperCaseVal != "BROWSED" && upperCaseVal != "NOT ATTEMPTED" && upperCaseVal != "UNKNOWN") {
                             APIError("405");
@@ -460,7 +469,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-                    case 'cmi.success_status' :
+                    case 'cmi.success_status':
                         var upperCaseVal = val.toUpperCase();
                         if (upperCaseVal != "PASSED" && upperCaseVal != "FAILED" && upperCaseVal != "COMPLETED" && upperCaseVal != "INCOMPLETE" && upperCaseVal != "BROWSED" && upperCaseVal != "NOT ATTEMPTED" && upperCaseVal != "UNKNOWN") {
                             APIError("405");
@@ -473,7 +482,7 @@ $sco['session_time'] = "0000:00:00.00";
                         return "true";
                         break;
                         //-------------------------------
-                    case 'cmi.core.score.raw' :
+                    case 'cmi.core.score.raw':
                         if (isNaN(parseInt(val)) || (val < 0) || (val > 100)) {
                             APIError("405");
                             return "false";
@@ -482,7 +491,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-                    case 'cmi.score.raw' :
+                    case 'cmi.score.raw':
                         if (isNaN(parseInt(val)) || (val < 0) || (val > 100)) {
                             APIError("405");
                             return "false";
@@ -492,7 +501,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-                    case 'cmi.core.score.min' :
+                    case 'cmi.core.score.min':
                         if (isNaN(parseInt(val)) || (val < 0) || (val > 100)) {
                             APIError("405");
                             return "false";
@@ -501,7 +510,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-                    case 'cmi.score.min' :
+                    case 'cmi.score.min':
                         if (isNaN(parseInt(val)) || (val < 0) || (val > 100)) {
                             APIError("405");
                             return "false";
@@ -511,7 +520,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-                    case 'cmi.core.score.max' :
+                    case 'cmi.core.score.max':
                         if (isNaN(parseInt(val)) || (val < 0) || (val > 100)) {
                             APIError("405");
                             return "false";
@@ -520,7 +529,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-                    case 'cmi.score.max' :
+                    case 'cmi.score.max':
                         if (isNaN(parseInt(val)) || (val < 0) || (val > 100)) {
                             APIError("405");
                             return "false";
@@ -530,27 +539,27 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-                    case 'cmi.core.exit' :
+                    case 'cmi.core.exit':
 
-					/*
+                    /*
                         var upperCaseVal = val.toUpperCase();
                         if (upperCaseVal != "TIME-OUT" && upperCaseVal != "SUSPEND"
                                 && upperCaseVal != "LOGOUT" && upperCaseVal != "")
                         {
                             APIError("405");
                             return "false";
-					   }*/
+                       }*/
 
-					if (!checkDataType(val, 'CMIVocabulary', 'Exit')) {
-						APIError("405");
-						return "false";
+                        if (!checkDataType(val, 'CMIVocabulary', 'Exit')) {
+                            APIError("405");
+                            return "false";
                         }
 
                         values[i] = val;
                         APIError("0");
                         return "true";
                         break;
-                    case 'cmi.core.session_time' :
+                    case 'cmi.core.session_time':
                         // regexp to check format
                         // hhhh:mm:ss.ss or PThHmMsS
                         /*
@@ -580,7 +589,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-                    case 'cmi.session_time' :
+                    case 'cmi.session_time':
                         // regexp to check format
                         // hhhh:mm:ss.ss or PThHmMsS
                         /*
@@ -610,7 +619,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-                    case 'cmi.suspend_data' :
+                    case 'cmi.suspend_data':
                         if (val.length > 4096) {
                             APIError("405");
                             return "false";
@@ -619,25 +628,25 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-                    case 'cmi.core.lesson_mode' :
+                    case 'cmi.core.lesson_mode':
                         values[i] = val;
                         APIError("403");
                         return "false";
                         break;
-					//SCORM2004
-					case 'cmi.learner_preference.audio_level':
-						if (!checkDataType(val, 'CMIDecimal')) {
-							APIError("406");
-							return "false";
-						} else if(val < 0) {
-							APIError("407");
-							return "false";
-						}
+                    // SCORM2004
+                    case 'cmi.learner_preference.audio_level':
+                        if (!checkDataType(val, 'CMIDecimal')) {
+                            APIError("406");
+                            return "false";
+                        } else if(val < 0) {
+                            APIError("407");
+                            return "false";
+                        }
 
-						values[i] = val;
-						APIError("0");
-						return "true";
-						break;
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                        break;
                     case 'cmi.student_preference.audio':
                         if (!checkDataType(val, 'CMISInteger') || val < -1 || val > 100) {
                             APIError("405");
@@ -647,7 +656,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-					//SCORM2004
+                    // SCORM2004
                     case 'cmi.learner_preference.language':
                     case 'cmi.student_preference.language':
                         if (!checkDataType(val, 'CMIString255')) {
@@ -658,19 +667,19 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-                    //SCORM2004
-					case 'cmi.learner_preference.delivery_speed':
-						if (!checkDataType(val, 'CMIDecimal')) {
-							APIError("406");
-							return "false";
-						} else if(val < 0) {
-							APIError("407");
-							return "false";
-						}
-						values[i] = val;
-						APIError("0");
-						return "true";
-						break;
+                    // SCORM2004
+                    case 'cmi.learner_preference.delivery_speed':
+                        if (!checkDataType(val, 'CMIDecimal')) {
+                            APIError("406");
+                            return "false";
+                        } else if(val < 0) {
+                            APIError("407");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                        break;
                     case 'cmi.student_preference.speed':
                         if (!checkDataType(val, 'CMISInteger') || val < -100 || val > 100) {
                             APIError("405");
@@ -680,7 +689,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                         break;
-					//SCORM2004
+                    // SCORM2004
                     case 'cmi.learner_preference.audio_captioning':
                         if (!checkDataType(val, 'CMISInteger') || val < -1 || val > 1) {
                             APIError("406");
@@ -714,8 +723,8 @@ $sco['session_time'] = "0000:00:00.00";
                         break;
                 }
             } else {
-				if (ele.substring(0, 17) == 'cmi.interactions.') {
-					return handleSetInteractions(ele, val, interactions);
+                if (ele.substring(0, 17) == 'cmi.interactions.') {
+                    return handleSetInteractions(ele, val, interactions);
                 } // end of interactions
 
                 // cmi.objectives
@@ -742,7 +751,7 @@ $sco['session_time'] = "0000:00:00.00";
                 }
             }
         } else {
-            if(isSCORM2004) {
+            if (isSCORM2004) {
                 this.APIError("132");
                 return "false";
             } else {
@@ -763,13 +772,11 @@ $sco['session_time'] = "0000:00:00.00";
                 return "false";
             } else {
                 this.APIError("0");
-
                 do_commit();
-
                 return "true";
             }
         } else {
-            if(isSCORM2004) {
+            if (isSCORM2004) {
                 this.APIError("142");
                 return "false";
             } else {
@@ -894,7 +901,6 @@ $sco['session_time'] = "0000:00:00.00";
     errDiagn["405"] = "Incorrect Data Type";
     errDiagn["407"] = "Data Model Element Value Out Of Range";
 
-
     // ====================================================
     // CMI Elements and Values
     //
@@ -928,24 +934,24 @@ $sco['session_time'] = "0000:00:00.00";
     elements[26] = "cmi.student_preference._children";
     elements[27] = "cmi.interactions._children";
     elements[28] = "cmi.interactions._count";
-	elements[29] = "cmi.student_preference.audio";
-	elements[30] = "cmi.student_preference.language";
-	elements[31] = "cmi.student_preference.speed";
-	elements[32] = "cmi.student_preference.text";
-	elements[33] = "cmi.comments";
-	elements[34] = "cmi.comments";
+    elements[29] = "cmi.student_preference.audio";
+    elements[30] = "cmi.student_preference.language";
+    elements[31] = "cmi.student_preference.speed";
+    elements[32] = "cmi.student_preference.text";
+    elements[33] = "cmi.comments";
+    elements[34] = "cmi.comments";
 
-	elements[35] = "cmi.comments_from_lms";
-	elements[36] = "cmi._version";
-	elements[37] = "cmi.location";
-	elements[38] = "cmi.learner_id";
-	elements[39] = "cmi.learner_name";
+    elements[35] = "cmi.comments_from_lms";
+    elements[36] = "cmi._version";
+    elements[37] = "cmi.location";
+    elements[38] = "cmi.learner_id";
+    elements[39] = "cmi.learner_name";
 
-	elements[40] = "cmi.learner_preference._children";
-	elements[41] = "cmi.learner_preference.audio_level";
-	elements[42] = "cmi.learner_preference.language";
-	elements[43] = "cmi.learner_preference.delivery_speed";
-	elements[44] = "cmi.learner_preference.audio_captioning";
+    elements[40] = "cmi.learner_preference._children";
+    elements[41] = "cmi.learner_preference.audio_level";
+    elements[42] = "cmi.learner_preference.language";
+    elements[43] = "cmi.learner_preference.delivery_speed";
+    elements[44] = "cmi.learner_preference.audio_captioning";
 
 
     var values = new Array();
@@ -980,13 +986,13 @@ $sco['session_time'] = "0000:00:00.00";
     values[28] = interactions.length;
 
 
-	//SCORM2004
-	values[37] = "<?php echo js_escape($sco['lesson_location']); ?>";
-	values[38] = "<?php echo js_escape($sco['student_id']); ?>";
+    // SCORM2004
+    values[37] = "<?php echo js_escape($sco['lesson_location']); ?>";
+    values[38] = "<?php echo js_escape($sco['student_id']); ?>";
     values[39] = "<?php echo js_escape($sco['student_name']); ?>";
-	values[41] = 1;
-	values[43] = 1;
-	values[44] = 0;
+    values[41] = 1;
+    values[43] = 1;
+    values[44] = 0;
 
 
 
@@ -1000,11 +1006,11 @@ $sco['session_time'] = "0000:00:00.00";
         cmiform.ump_id.value = "<?php echo $userProgressionDetails->user_module_progress_id ?>";
         // values to set in DB
 
-		if (isSCORM2004) {
-			cmiform.lesson_location.value = values[37];
-		} else {
-			cmiform.lesson_location.value = values[3];
-		}
+        if (isSCORM2004) {
+            cmiform.lesson_location.value = values[37];
+        } else {
+            cmiform.lesson_location.value = values[3];
+        }
         cmiform.lesson_location.value = values[3];
         cmiform.lesson_status.value = values[4];
         cmiform.credit.value = values[5];
@@ -1050,8 +1056,8 @@ $sco['session_time'] = "0000:00:00.00";
 	isSCORM2004 = false;
 
     var CMIDataModel = {
-		'CMITime' : '^([0-2]{1}[0-9]{1}):([0-5]{1}[0-9]{1}):([0-5]{1}[0-9]{1})(\.[0-9]{1,2})?$',
-		'CMIFeedback' : '',
+        'CMITime': '^([0-2]{1}[0-9]{1}):([0-5]{1}[0-9]{1}):([0-5]{1}[0-9]{1})(\.[0-9]{1,2})?$',
+        'CMIFeedback': '',
         'CMITimespan': '^([0-9]{2,4}):([0-9]{2}):([0-9]{2})(\.[0-9]{1,2})?$',
         'CMIInteger': '^\\d+$',
         'CMISInteger': '^-?([0-9]+)$',
@@ -1070,8 +1076,8 @@ $sco['session_time'] = "0000:00:00.00";
             'Result': '^(correct|wrong|unanticipated|neutral|-?([0-9]+)(\\.[0-9]+))$',
             'TimeLimitAction': '^(exit,message|exit,no message|continue,message|continue,no message)$'
         },
-		'CMIString255' : '^.{0,255}$',
-		'CMIString4096' : '^.{0,4096}$'
+        'CMIString255': '^.{0,255}$',
+        'CMIString4096': '^.{0,4096}$'
     };
 
     function checkDataType(value, data_type, sub_type) {
@@ -1236,160 +1242,159 @@ $sco['session_time'] = "0000:00:00.00";
             }
         }
 
-		myres = ele.match(/objectives.(_count)/);
+        myres = ele.match(/objectives.(_count)/);
 
-		if (myres != null) {
-			if(item_objectives == null) {
-				APIError("0");
-				return 0;
-			} else {
-				APIError("0");
-				return item_objectives.length;
-			}
-		}
-	}
+        if (myres != null) {
+            if (item_objectives == null) {
+                APIError("0");
+                return 0;
+            } else {
+                APIError("0");
+                return item_objectives.length;
+            }
+        }
+    }
 
-	function handleSetCorrectResponses(ele, val, correct_responses) {
+    function handleSetCorrectResponses(ele, val, correct_responses) {
 
-		var myres = new Array();
-		if (myres = ele.match(/correct_responses.(\d+).(pattern)(.*)/)) {
+        var myres = new Array();
+        if (myres = ele.match(/correct_responses.(\d+).(pattern)(.*)/)) {
 
-			updatetable_to_list['correct_responses'] = 'true';
-			elem_id = myres[1];
-			elem_attrib = myres[2];
+            updatetable_to_list['correct_responses'] = 'true';
+            elem_id = myres[1];
+            elem_attrib = myres[2];
 
-			if (elem_id > correct_responses.length) { //objectives setting should start at 0
-				APIError("201"); // invalid argument
-				return "false";
-			} else {
+            if (elem_id > correct_responses.length) { //objectives setting should start at 0
+                APIError("201"); // invalid argument
+                return "false";
+            } else {
+                if (correct_responses[elem_id] == null) {
+                    correct_responses[elem_id] = [];
+                }
+                switch (elem_attrib) {
+                    case "pattern":
+                        if (!checkDataType(val, 'CMIString255')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        correct_responses[elem_id][0] = val;
+                        APIError("0");
+                        return "true";
+                        break;
+                    default:
+                        APIError("401"); // not implemented
+                        return "false";
+                        break;
+                }
+            }
+        } else {
+            APIError("402");
+            return "false";
+        }
+    }
 
-				if (correct_responses[elem_id] == null) {
-					correct_responses[elem_id] = [];
-				}
-				switch (elem_attrib) {
-					case "pattern":
-						if (!checkDataType(val, 'CMIString255')) {
-							APIError("405");
-							return "false";
-						}
-						correct_responses[elem_id][0] = val;
-						APIError("0");
-						return "true";
-						break;
-					default:
-						APIError("401"); // not implemented
-						return "false";
-				}
-			}
-		} else {
-			APIError("402");
-			return "false";
-		}
-	}
+    function handleSetInteractions(ele, val, interactions) {
 
-	function handleSetInteractions(ele, val, interactions) {
+        var myres = new Array();
 
-		var myres = new Array();
+        if (myres = ele.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency|objectives)(.*)/)) {
 
-		if (myres = ele.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency|objectives)(.*)/)) {
+            updatetable_to_list['interactions'] = 'true';
+            elem_id = myres[1];
+            elem_attrib = myres[2];
 
-			updatetable_to_list['interactions'] = 'true';
-			elem_id = myres[1];
-			elem_attrib = myres[2];
+            if (elem_id > interactions.length) { //objectives setting should start at 0
+                APIError("201"); // invalid argument
+                return "false";
+            } else {
+                if (interactions[elem_id] == null) {
+                    interactions[elem_id] = ['', '', '', [], '', '', '', '', []];
+                }
+                switch (elem_attrib) {
+                    case "id":
+                        if (!checkDataType(val, 'CMIIdentifier')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][0] = val;
+                        APIError("0");
+                        return "true";
+                        break;
+                    case "time":
+                        if (!checkDataType(val, 'CMITime')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][2] = val;
+                        APIError("0");
+                        return "true";
+                        break;
+                    case "type":
+                        if (!checkDataType(val, 'CMIVocabulary', 'Interaction')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][1] = val;
+                        APIError("0");
+                        return "true";
+                        break;
+                    case "correct_responses":
+                        //do nothing yet
+                        //not supported to push
+                        //interactions[elem_id][4].push(val);
 
-			if (elem_id > interactions.length) { //objectives setting should start at 0
-				APIError("201"); // invalid argument
-				return "false";
-			} else {
-				if (interactions[elem_id] == null) {
-					interactions[elem_id] = ['', '', '', [], '', '', '', '', []];
-				}
-				switch (elem_attrib) {
-					case "id":
+                        return handleSetCorrectResponses(ele, val, interactions[elem_id][3]);
 
-						if (!checkDataType(val, 'CMIIdentifier')) {
-							APIError("405");
-							return "false";
-						}
-						interactions[elem_id][0] = val;
-						APIError("0");
-						return "true";
-						break;
-					case "time":
-						if (!checkDataType(val, 'CMITime')) {
-							APIError("405");
-							return "false";
-						}
-						interactions[elem_id][2] = val;
-						APIError("0");
-						return "true";
-						break;
-					case "type":
-						if (!checkDataType(val, 'CMIVocabulary', 'Interaction')) {
-							APIError("405");
-							return "false";
-						}
-						interactions[elem_id][1] = val;
-						APIError("0");
-						return "true";
-						break;
-					case "correct_responses":
-						//do nothing yet
-						//not supported to push
-						//interactions[elem_id][4].push(val);
-
-						return handleSetCorrectResponses(ele, val, interactions[elem_id][3]);
-
-						//APIError("0");
-						//return "true";
-						//break;
-					case "weighting":
-						if (!checkDataType(val, 'CMIDecimal')) {
-							APIError("405");
-							return "false";
-						}
-						interactions[elem_id][3] = val;
-						APIError("0");
-						return "true";
-						break;
-					case "student_response":
-						interactions[elem_id][5] = '' + val;
-						APIError("0");
-						return "true";
-						break;
-					case "result":
-						if (!checkDataType(val, 'CMIVocabulary', 'Result')) {
-							APIError("405");
-							return "false";
-						}
-						interactions[elem_id][6] = val;
-						APIError("0");
-						return "true";
-						break;
-					case "latency":
-						if (!checkDataType(val, 'CMITimespan')) {
-							APIError("405");
-							return "false";
-						}
-						interactions[elem_id][7] = val;
-						APIError("0");
-						return "true";
-						break;
-					case "objectives":
-						//var myres = '';
-						//var item_objectives = new Array();
-						//interactions[elem_id][8] = new Array();
-						return handleSetObjectives(ele, val, interactions[elem_id][8]);
-						//APIError("401");
-						//return "false";
-						break;
-					default:
-						APIError("401"); // not implemented
-						return "false";
-				}
-			}
-		}
-	}
+                        //APIError("0");
+                        //return "true";
+                        //break;
+                    case "weighting":
+                        if (!checkDataType(val, 'CMIDecimal')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][3] = val;
+                        APIError("0");
+                        return "true";
+                        break;
+                    case "student_response":
+                        interactions[elem_id][5] = '' + val;
+                        APIError("0");
+                        return "true";
+                        break;
+                    case "result":
+                        if (!checkDataType(val, 'CMIVocabulary', 'Result')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][6] = val;
+                        APIError("0");
+                        return "true";
+                        break;
+                    case "latency":
+                        if (!checkDataType(val, 'CMITimespan')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        interactions[elem_id][7] = val;
+                        APIError("0");
+                        return "true";
+                        break;
+                    case "objectives":
+                        //var myres = '';
+                        //var item_objectives = new Array();
+                        //interactions[elem_id][8] = new Array();
+                        return handleSetObjectives(ele, val, interactions[elem_id][8]);
+                        //APIError("401");
+                        //return "false";
+                        break;
+                    default:
+                        APIError("401"); // not implemented
+                        return "false";
+                }
+            }
+        }
+    }
 
     function handleSetObjectives(ele, val, item_objectives) {
         if (myres = ele.match(/objectives.(\d+).(id|score|status)(.*)/)) {
@@ -1397,13 +1402,13 @@ $sco['session_time'] = "0000:00:00.00";
 
             if (obj_id > item_objectives.length) { //objectives setting should start at 0
                 APIError("201"); // invalid argument
-				alert(ele);
+                alert(ele);
                 return "false";
             } else {
 
-			   if (item_objectives[obj_id] == null) {
-					item_objectives[obj_id] = ['', '', '', '', ''];
-				}
+                if (item_objectives[obj_id] == null) {
+                    item_objectives[obj_id] = ['', '', '', '', ''];
+                }
                 req_type = myres[2];
                 if (obj_id == null || obj_id == '') { // do nothing
                     APIError("0");
@@ -1424,10 +1429,10 @@ $sco['session_time'] = "0000:00:00.00";
                             return "false";
                         } else if (myres[3] == '.raw') {
                             /*
-							if(val<0) {
-								APIError("405"); // invalid set value
-								return "false";
-							}*/
+                            if(val<0) {
+                                APIError("405"); // invalid set value
+                                return "false";
+                            }*/
                             if ((!checkDataType(val, 'CMIDecimal') || val < 0 || val > 100) && !checkDataType(val, 'CMIBlank')) {
                                 APIError("405");
                                 return "false";
@@ -1454,7 +1459,7 @@ $sco['session_time'] = "0000:00:00.00";
                                 return "false";
                             }
 
-							item_objectives[obj_id][4] = val;
+                            item_objectives[obj_id][4] = val;
 
                             APIError("0");
                             return "true";
@@ -1464,7 +1469,7 @@ $sco['session_time'] = "0000:00:00.00";
                         }
                     } else if (req_type == "status") {
 
-					     if (!checkDataType(val, 'CMIVocabulary', 'Status')) {
+                        if (!checkDataType(val, 'CMIVocabulary', 'Status')) {
                             APIError("405");
                             return "false";
                         }
@@ -1479,8 +1484,8 @@ $sco['session_time'] = "0000:00:00.00";
                 }
             }
         } else  {
-			APIError("403"); // read only
-			return "false";
-		}
+            APIError("403"); // read only
+            return "false";
+        }
     }
 </script>
