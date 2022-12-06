@@ -103,9 +103,9 @@ $sco['session_time'] = "0000:00:00.00";
 <script type="text/javascript">
 
     var init_total_time = "<?php echo $sco['total_time']; ?>";
-    var item_objectives = new Array();
-    var updatetable_to_list = new Array();
-    var interactions = new Array();
+    var item_objectives = [];
+    var updatetable_to_list = [];
+    var interactions = [];
 
     // ====================================================
     // API Class Constructor
@@ -802,7 +802,7 @@ $sco['session_time'] = "0000:00:00.00";
     // ====================================================
     // Error codes and Error diagnostics
     //
-    var errCodes = new Array();
+    var errCodes = [];
     errCodes["0"] = "No Error";
     errCodes["101"] = "General Exception";
     errCodes["102"] = "General Initialization Failure";
@@ -831,7 +831,7 @@ $sco['session_time'] = "0000:00:00.00";
     errCodes["405"] = "Incorrect Data Type";
     errCodes["407"] = "Data Model Element Value Out Of Range";
 
-    var errDiagn = new Array();
+    var errDiagn = [];
     errDiagn["0"] = "No Error";
     errDiagn["101"] = "General Exception";
     errDiagn["102"] = "General Initialization Failure";
@@ -863,7 +863,7 @@ $sco['session_time'] = "0000:00:00.00";
     // ====================================================
     // CMI Elements and Values
     //
-    var elements = new Array();
+    var elements = [];
     elements[0] = "cmi.core._children";
     elements[1] = "cmi.core.student_id";
     elements[2] = "cmi.core.student_name";
@@ -913,7 +913,7 @@ $sco['session_time'] = "0000:00:00.00";
     elements[44] = "cmi.learner_preference.audio_captioning";
 
 
-    var values = new Array();
+    var values = [];
     values[0] = "<?php echo js_escape($sco['_children']); ?>";
     values[1] = "<?php echo js_escape($sco['student_id']); ?>";
     values[2] = "<?php echo js_escape($sco['student_name']); ?>";
@@ -1216,7 +1216,7 @@ $sco['session_time'] = "0000:00:00.00";
 
     function handleSetCorrectResponses(ele, val, correct_responses) {
 
-        var myres = new Array();
+        var myres;
         if (myres = ele.match(/correct_responses.(\d+).(pattern)(.*)/)) {
 
             updatetable_to_list['correct_responses'] = 'true';
@@ -1252,7 +1252,7 @@ $sco['session_time'] = "0000:00:00.00";
 
     function handleSetInteractions(ele, val, interactions) {
 
-        var myres = new Array();
+        var myres;
 
         if (myres = ele.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency|objectives)(.*)/)) {
 
