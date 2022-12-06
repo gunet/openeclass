@@ -102,14 +102,14 @@ $sco['session_time'] = "0000:00:00.00";
 ?>
 <script type="text/javascript">
 
-    var init_total_time = "<?php echo $sco['total_time']; ?>";
-    var item_objectives = [];
-    var updatetable_to_list = [];
-    var interactions = [];
+    let init_total_time = "<?php echo $sco['total_time']; ?>";
+    let item_objectives = [];
+    let updatetable_to_list = [];
+    let interactions = [];
 
     // ====================================================
     // API Class Constructor
-    var debug_ = false;
+    let debug_ = false;
 
     function APIClass() {
 
@@ -227,7 +227,7 @@ $sco['session_time'] = "0000:00:00.00";
                 return "false";
             }
 
-            var i = array_indexOf(elements, ele);
+            let i = array_indexOf(elements, ele);
             if (i !== -1) { // ele is implemented -> handle it
                 switch (ele) {
                     case 'cmi._version':
@@ -325,14 +325,12 @@ $sco['session_time'] = "0000:00:00.00";
                 // ignore _children if not explicitly defined
 
                 /*
-                var pos = ele.indexOf("_children");
-                if (pos >= 0) {
+                if (ele.indexOf("_children") >= 0) {
                     APIError("202");
                     return "";
                 }
                 // ignore _count if not explicitly defined
-                var pos = ele.indexOf("_count");
-                if (pos >= 0) {
+                if (ele.indexOf("_count") >= 0) {
                     APIError("203");
                     return "";
                 }
@@ -376,9 +374,9 @@ $sco['session_time'] = "0000:00:00.00";
                 return "false";
             }
 
-            var i = array_indexOf(elements, ele);
+            let i = array_indexOf(elements, ele);
             if (i !== -1) { // ele is implemented -> handle it
-
+                let upperCaseVal;
                 switch (ele) {
                     case 'cmi._version':
                         APIError("404");
@@ -419,7 +417,7 @@ $sco['session_time'] = "0000:00:00.00";
                             return "false";
                         }
                     /*
-                        var upperCaseVal = val.toUpperCase();
+                        upperCaseVal = val.toUpperCase();
                         if (upperCaseVal != "PASSED" && upperCaseVal != "FAILED"
                                 && upperCaseVal != "COMPLETED" && upperCaseVal != "INCOMPLETE"
                        && upperCaseVal != "BROWSED" /*&& upperCaseVal != "NOT ATTEMPTED" )
@@ -437,7 +435,7 @@ $sco['session_time'] = "0000:00:00.00";
                     // we use them together with the old element lesson_status in the claro DB
                     //-------------------------------
                     case 'cmi.completion_status':
-                        var upperCaseVal = val.toUpperCase();
+                        upperCaseVal = val.toUpperCase();
                         if (upperCaseVal !== "PASSED" && upperCaseVal !== "FAILED" && upperCaseVal !== "COMPLETED" && upperCaseVal !== "INCOMPLETE" && upperCaseVal !== "BROWSED" && upperCaseVal !== "NOT ATTEMPTED" && upperCaseVal !== "UNKNOWN") {
                             APIError("405");
                             return "false";
@@ -448,7 +446,7 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                     case 'cmi.success_status':
-                        var upperCaseVal = val.toUpperCase();
+                        upperCaseVal = val.toUpperCase();
                         if (upperCaseVal !== "PASSED" && upperCaseVal !== "FAILED" && upperCaseVal !== "COMPLETED" && upperCaseVal !== "INCOMPLETE" && upperCaseVal !== "BROWSED" && upperCaseVal !== "NOT ATTEMPTED" && upperCaseVal !== "UNKNOWN") {
                             APIError("405");
                             return "false";
@@ -513,7 +511,7 @@ $sco['session_time'] = "0000:00:00.00";
                     case 'cmi.core.exit':
 
                     /*
-                        var upperCaseVal = val.toUpperCase();
+                        upperCaseVal = val.toUpperCase();
                         if (upperCaseVal != "TIME-OUT" && upperCaseVal != "SUSPEND"
                                 && upperCaseVal != "LOGOUT" && upperCaseVal != "")
                         {
@@ -798,7 +796,7 @@ $sco['session_time'] = "0000:00:00.00";
     // ====================================================
     // Error codes and Error diagnostics
     //
-    var errCodes = [];
+    let errCodes = [];
     errCodes["0"] = "No Error";
     errCodes["101"] = "General Exception";
     errCodes["102"] = "General Initialization Failure";
@@ -827,7 +825,7 @@ $sco['session_time'] = "0000:00:00.00";
     errCodes["405"] = "Incorrect Data Type";
     errCodes["407"] = "Data Model Element Value Out Of Range";
 
-    var errDiagn = [];
+    let errDiagn = [];
     errDiagn["0"] = "No Error";
     errDiagn["101"] = "General Exception";
     errDiagn["102"] = "General Initialization Failure";
@@ -859,7 +857,7 @@ $sco['session_time'] = "0000:00:00.00";
     // ====================================================
     // CMI Elements and Values
     //
-    var elements = [];
+    let elements = [];
     elements[0] = "cmi.core._children";
     elements[1] = "cmi.core.student_id";
     elements[2] = "cmi.core.student_name";
@@ -908,8 +906,7 @@ $sco['session_time'] = "0000:00:00.00";
     elements[43] = "cmi.learner_preference.delivery_speed";
     elements[44] = "cmi.learner_preference.audio_captioning";
 
-
-    var values = [];
+    let values = [];
     values[0] = "<?php echo js_escape($sco['_children']); ?>";
     values[1] = "<?php echo js_escape($sco['student_id']); ?>";
     values[2] = "<?php echo js_escape($sco['student_name']); ?>";
@@ -979,8 +976,8 @@ $sco['session_time'] = "0000:00:00.00";
         cmiform.submit();
     }
 
-    function array_indexOf(arr, val) {
-        for (var i = 0; i < arr.length; i++) {
+    function array_indexOf (arr, val) {
+        for (let i = 0; i < arr.length; i++) {
             if (arr[i] === val) {
                 return i;
             }
@@ -1010,7 +1007,7 @@ $sco['session_time'] = "0000:00:00.00";
 
     isSCORM2004 = false;
 
-    var CMIDataModel = {
+    let CMIDataModel = {
         'CMITime': '^([0-2]{1}[0-9]{1}):([0-5]{1}[0-9]{1}):([0-5]{1}[0-9]{1})(\.[0-9]{1,2})?$',
         'CMIFeedback': '',
         'CMITimespan': '^([0-9]{2,4}):([0-9]{2}):([0-9]{2})(\.[0-9]{1,2})?$',
@@ -1036,6 +1033,7 @@ $sco['session_time'] = "0000:00:00.00";
     };
 
     function checkDataType(value, data_type, sub_type) {
+        let expression;
 
         if (typeof sub_type === 'undefined') {
             expression = new RegExp(CMIDataModel[data_type]);
@@ -1044,18 +1042,15 @@ $sco['session_time'] = "0000:00:00.00";
         }
 
         value = value + '';
-        result = expression.test(value);
-
-        return result;
+        return expression.test(value);
     }
 
     function handleGetInteractions(ele, interactions) {
+        let myres, elem_id, req_type;
 
-        var myres;
         if ((myres = ele.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency|objectives)(.*)/))) {
-
-            var elem_id = myres[1];
-            var req_type = myres[2];
+            elem_id = myres[1];
+            req_type = myres[2];
 
             if (interactions[elem_id] == null) {
 
@@ -1105,10 +1100,11 @@ $sco['session_time'] = "0000:00:00.00";
     }
 
     function handleGetObjectives(ele, item_objectives) {
-        var myres;
+        let myres, obj_id, req_type;
+
         if ((myres = ele.match(/objectives.(\d+).(id|score|status|_children|_count)(.*)/))) {
-            var obj_id = myres[1];
-            var req_type = myres[2];
+            obj_id = myres[1];
+            req_type = myres[2];
 
             if (item_objectives[obj_id] == null) {
                 if (req_type === 'id') {
@@ -1211,8 +1207,8 @@ $sco['session_time'] = "0000:00:00.00";
     }
 
     function handleSetCorrectResponses(ele, val, correct_responses) {
+        let myres, elem_id, elem_attrib;
 
-        var myres;
         if ((myres = ele.match(/correct_responses.(\d+).(pattern)(.*)/))) {
 
             updatetable_to_list['correct_responses'] = 'true';
@@ -1247,8 +1243,8 @@ $sco['session_time'] = "0000:00:00.00";
     }
 
     function handleSetInteractions(ele, val, interactions) {
+        let myres, elem_id, elem_attrib;
 
-        var myres;
         if ((myres = ele.match(/cmi.interactions.(\d+).(id|time|type|correct_responses|weighting|student_response|result|latency|objectives)(.*)/))) {
 
             updatetable_to_list['interactions'] = 'true';
@@ -1341,6 +1337,8 @@ $sco['session_time'] = "0000:00:00.00";
     }
 
     function handleSetObjectives(ele, val, item_objectives) {
+        let myres, obj_id, req_type;
+
         if ((myres = ele.match(/objectives.(\d+).(id|score|status)(.*)/))) {
             obj_id = myres[1];
 
@@ -1427,7 +1425,7 @@ $sco['session_time'] = "0000:00:00.00";
                     }
                 }
             }
-        } else  {
+        } else {
             APIError("403"); // read only
             return "false";
         }
