@@ -137,7 +137,7 @@ if (isset($_POST['submit'])) {
 
         if ($numofcourses > 0) {
             $tool_content .= expanded_faculte($fc, $uid);
-            $tool_content .= "<br /><div align='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>&nbsp;&nbsp;</div>";
+            $tool_content .= "<br /><div align='right'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langRegistration'>&nbsp;&nbsp;</div>";
         } else if ($childCount <= 0) {
             $tool_content .= "<div class='col-12'><div class='alert alert-warning text-center'>- $langNoCourses -</div></div>\n";
         }

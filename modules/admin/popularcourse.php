@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 /**
- * @file searchcours.php
+ * @file popularcours.php
  * @brief search on courses by title, code, type and faculty
  */
 

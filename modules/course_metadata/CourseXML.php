@@ -98,7 +98,7 @@ class CourseXMLElement extends SimpleXMLElement {
         }
         $out .= $this->populateForm();
         $out .= "</div>
-                 <p class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></p>
+                 <p class='right'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'></p>
                  </div>
                  </form>
                  <div class='right smaller'>$langRequiredFields</div>";

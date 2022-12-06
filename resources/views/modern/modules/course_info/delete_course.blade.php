@@ -63,7 +63,7 @@
                                 {{ showSecondFactorChallenge() }}
                                 <div class='form-group'>
                                     <div class='col-sm-10 col-sm-offset-5'>
-                                        <input class='btn btn-primary' type='submit' name='delete' value='{{ trans('langDelete') }}'>
+                                        <input class='btn submitAdminBtn' type='submit' name='delete' value='{{ trans('langDelete') }}'>
                                     </div>
                                 </div>
                                 <div class='pt-3 help-block'>

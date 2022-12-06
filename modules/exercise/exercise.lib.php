@@ -216,7 +216,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langNoAnswer</div></div>";
     }
     if (in_array($answerType, [TRUE_FALSE, UNIQUE_ANSWER])) {
-        $tool_content .= "<button class='float-end clearSelect btn btn-secondary btn-sm' style='margin-top:-30px;'><span class='fa fa-times'></span> $langClear</button>";
+        $tool_content .= "<button class='float-end clearSelect btn btn-outline-secondary cancelAdminBtn' style='margin-top:-30px;'><span class='fa fa-times'></span> $langClear</button>";
     }
     $tool_content .= "
                 </div>
@@ -281,8 +281,8 @@ function display_exercise($exercise_id) {
                 $langUsedInSeveralExercises
               </div>
               <div class='modal-footer'>
-                <a href='#' id='modifyAll' class='btn btn-primary'>$langModifyInAllExercises</a>
-                <a href='#' id='modifyOne' class='btn btn-success'>$langModifyInThisExercise</a>
+                <a href='#' id='modifyAll' class='btn submitAdminBtn'>$langModifyInAllExercises</a>
+                <a href='#' id='modifyOne' class='btn submitAdminBtn'>$langModifyInThisExercise</a>
               </div>
             </div>
           </div>

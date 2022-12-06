@@ -113,7 +113,7 @@ function unpack_zip_show_files($zipfile) {
             $checked = '';
         }
 
-        $retString .= "</ol><br /><input class='btn btn-primary' type='submit' name='do_restore' value='$langRestore' />
+        $retString .= "</ol><br /><input class='btn submitAdminBtn' type='submit' name='do_restore' value='$langRestore' />
                       ".generate_csrf_token_form_field()."
                       </form>";
     }

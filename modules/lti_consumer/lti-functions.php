@@ -590,7 +590,7 @@ function create_launch_button($resource_link_id) {
     global $urlServer, $course_code, $langLogIn;
 
     $button = '<form id="ltiLaunchForm" name="ltiLaunchForm" method="POST" action="' . $urlServer . "modules/lti_consumer/launch.php?course=" . $course_code . "&amp;id=" . getIndirectReference($resource_link_id) . '">';
-    $button .= '<button class="btn btn-primary btn-sm" type="submit">' . $langLogIn . '</button>';
+    $button .= '<button class="btn submitAdminBtn" type="submit">' . $langLogIn . '</button>';
     $button .= '</form>';
 
     return $button;
@@ -634,7 +634,7 @@ function create_join_button($launch_url, $oauth_consumer_key, $secret, $resource
         $button .='<input type="hidden" name="' . $k .'" value="' . $v . '">';
     }
     $button .='<input type="hidden" name="oauth_signature" value="' . $signature . '">';
-    $button .= $extrabutton . '<button class="btn btn-primary" type="submit">' . $langLogIn . '</button>';
+    $button .= $extrabutton . '<button class="btn submitAdminBtn" type="submit">' . $langLogIn . '</button>';
     $button .='</form>';
 
     return $button;

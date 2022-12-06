@@ -148,7 +148,7 @@ function register_user_presences($attendance_id, $actID) {
 
     if ($resultUsers) {
         //table to display the users
-        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>
+        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' id='user_attendances_form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($actID) . "'>
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead class='list-header'>
@@ -198,7 +198,7 @@ function register_user_presences($attendance_id, $actID) {
                                 'name' => 'bookUsersToAct',
                                 'value'=> $langAttendanceBooking
                                 ))).
-                "<a href='index.php?course=$course_code&amp;attendance_id=" . $attendance_id . "' class='btn btn-secondary'>$langCancel</a>";
+                "<a href='index.php?course=$course_code&amp;attendance_id=" . $attendance_id . "' class='btn btn-outline-secondary cancelAdminBtn'>$langCancel</a>";
         $tool_content .= "</div></div>";
         $tool_content .= generate_csrf_token_form_field() ."</form></div></div>";
         $tool_content .= "</tbody></table>";
@@ -897,7 +897,7 @@ function display_user_presences($attendance_id) {
             } // end of while
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='float-end mt-3'><input class='btn btn-primary' type='submit' name='bookUser' value='$langAttendanceBooking'></div>";
+        $tool_content .= "<div class='float-end mt-3'><input class='btn submitAdminBtn' type='submit' name='bookUser' value='$langAttendanceBooking'></div>";
 }
 
 

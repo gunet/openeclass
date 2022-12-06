@@ -178,7 +178,7 @@ foreach ($categories as $category) {
 $tool_content .= "
                 <tr>
                     <td colspan='3' class='text-center'>
-                        <input type='submit' class='btn btn-primary' value='$langSubmit' name='submit' onClick=\"" . $submitOnClick . "\" />
+                        <input type='submit' class='btn submitAdminBtn' value='$langSubmit' name='submit' onClick=\"" . $submitOnClick . "\" />
                     </td>
                 </tr>
             </table>

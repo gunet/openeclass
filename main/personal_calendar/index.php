@@ -390,10 +390,10 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             <div class='col-md-6 col-12'>
                 <div class='input-append date form-group mt-4' name='startdatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                     <label for='startdate' class='col-sm-12 control-label-notes'>$langDate</label>
-                    <div class='col-sm-12'>
+                    <div class='col-12'>
                         <div class='input-group'>
-                            <input class='form-control rounded-pill' type='text' name='startdate' id='startdate' value='$datetimeToModify'>
-                            <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
+                            <input class='form-control mt-0' type='text' name='startdate' id='startdate' value='$datetimeToModify'>
+                            <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                         </div>
                     </div>
                 </div>
@@ -403,10 +403,10 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             <div class='col-md-6 col-12 mt-md-0 mt-4'>
                 <div class='input-append bootstrap-timepicker form-group mt-4'>
                     <label for='durationcal' class='col-sm-12 control-label-notes'>$langDuration <small>$langInHour</small></label>
-                    <div class='col-sm-12'>
+                    <div class='col-12'>
                         <div class='input-group add-on'>
-                            <input class='form-control rounded-pill' name='duration' id='duration' type='text' class='input-small' value='" . $durationToModify . "'>
-                            <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
+                            <input class='form-control mt-0' name='duration' id='duration' type='text' class='input-small' value='" . $durationToModify . "'>
+                            <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='fa fa-clock-o fa-fw'></span></div>
                         </div>
                     </div>
                 </div>
@@ -561,15 +561,15 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                         <div id="calendar-header">
                             <div class="float-end form-inline">
                                 <div class="btn-group">
-                                        <button class="btn btn-secondary btn-sm" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
-                                        <button class="btn btn-secondary btn-sm" data-calendar-nav="today">' . $langToday . '</button>
-                                        <button class="btn btn-secondary btn-sm" data-calendar-nav="next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
+                                        <button class="btn btn-outline-secondary cancelAdminBtn" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
+                                        <button class="btn btn-outline-secondary cancelAdminBtn" data-calendar-nav="today">' . $langToday . '</button>
+                                        <button class="btn btn-outline-secondary cancelAdminBtn" data-calendar-nav="next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
                                 </div>
                                 <div class="btn-group">
-                                        <button class="btn btn-secondary btn-sm" data-calendar-view="year">' . $langYear . '</button>
-                                        <button class="btn btn-secondary btn-sm active" data-calendar-view="month">' . $langMonth . '</button>
-                                        <button class="btn btn-secondary btn-sm" data-calendar-view="week">' . $langWeek . '</button>
-                                        <button class="btn btn-secondary btn-sm" data-calendar-view="day">' . $langDay . '</button>
+                                        <button class="btn btn-outline-secondary cancelAdminBtn" data-calendar-view="year">' . $langYear . '</button>
+                                        <button class="btn btn-outline-secondary cancelAdminBtn active" data-calendar-view="month">' . $langMonth . '</button>
+                                        <button class="btn btn-outline-secondary cancelAdminBtn" data-calendar-view="week">' . $langWeek . '</button>
+                                        <button class="btn btn-outline-secondary cancelAdminBtn" data-calendar-view="day">' . $langDay . '</button>
                                 </div>
                             </div>
                             <h6></h6>
@@ -633,7 +633,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                 <input type='text' class='form-control' value='$iCalFeedLink' readonly>
                             </div>
                             <div class='form-group text-end'>
-                                <button class='btn btn-secondary' data-bs-dismiss='modal'>$langClose</button>
+                                <button class='btn btn-outline-secondary cancelAdminBtn' data-bs-dismiss='modal'>$langClose</button>
                             </div>
                         </form>
                     </div>

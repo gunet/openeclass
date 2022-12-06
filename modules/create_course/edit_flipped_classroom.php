@@ -657,7 +657,7 @@ if(!isset($_POST['next'])){
                                     <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "'>
                                
                               
-                                    <a href='{$urlServer}courses/".$course_code."' class='btn btn-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                                    <a href='{$urlServer}courses/".$course_code."' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
                               
                            
                        

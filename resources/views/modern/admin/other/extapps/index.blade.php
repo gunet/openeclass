@@ -76,11 +76,11 @@
                                                             {!! $app->isEnabled() ? '<i class="fa fa-toggle-on"></i>' : '<i class="fa fa-toggle-off"></i>' !!} 
                                                         </button>  
                                                     @else
-                                                        <button type="button" class="btn btn-secondary" data-app="{{ getIndirectReference($app->getName()) }}"  data-bs-toggle='modal' data-bs-target='#noSettings'> 
+                                                        <button type="button" class="btn btn-outline-secondary cancelAdminBtn" data-app="{{ getIndirectReference($app->getName()) }}"  data-bs-toggle='modal' data-bs-target='#noSettings'> 
                                                             <i class="fa fa-warning"></i> 
                                                         </button>
                                                     @endif
-                                                    <a href="{{ $urlAppend . $app->getConfigUrl() }}" class="btn btn-primary"> 
+                                                    <a href="{{ $urlAppend . $app->getConfigUrl() }}" class="btn submitAdminBtn"> 
                                                         <i class="fa fa-sliders fw"></i> 
                                                     </a>
                                                 </div>

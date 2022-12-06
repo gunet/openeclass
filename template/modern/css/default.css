@@ -24,25 +24,13 @@
 .eclass-nav-icon{ width:100px; height:90px; }
 @media(min-width:992px){.eclass-nav-icon{ margin-left:25px; margin-right:30px;}}
 
-/* .eclass-nav-link { padding-left: 10px; padding-right: 10px; } */
 @media(min-width:992px){
   .eclass-nav-link{ min-height:38px;}
 }
 
 .inputSearch{ outline:0; background-color: transparent; border:0; border-bottom: solid 1px white;}
 
-/* @media(min-width:992px) and (max-width:1023px){ */
-  .inputSearchbtn{width:115px;}
-/* } */
-/* @media(min-width:1024px) and (max-width:1199px){
-  .inputSearchbtn{width:90px;}
-}
-@media(min-width:1200px) and (max-width:1399px){
-  .inputSearchbtn{width:95px;}
-}
-@media(min-width:1400px){
-  .inputSearchbtn{width:100px;}
-} */
+.inputSearchbtn{width:120px;}
 
 .inputSearch:active,
 .inputSearch:focus,
@@ -61,14 +49,6 @@
 @media(min-width:768px) and (max-width:991px){.user-language-menuOn{ margin-right: 200px !important;}}
 
 .user-language-menu .list-group-item:hover{ background-color: #1d4e89; color:white; }
-
-/* .linkFaq{width:30px; height:28px; border-radius:50%; border:solid 1px white;}
-.linkFaq .fa{font-size: 13px;}
-#link-faq:hover .linkFaq{ background-color: #005ad9; border:0px;} */
-
-@media(min-width:1200px){
-  .rowHeader{width:100%;}
-}
 
 
 /********************************************* FOOTER ****************************************************************************************/
@@ -253,7 +233,6 @@ textarea {width:100%;}
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
-/* .breadcrumb-item::before{ display: flex; align-items: center; justify-content: center; font-size: 19px; } */
 .breadcrumb-item::before{margin-top:-3px;}
 
 @media(max-width:767px){ .breadcrumbs-container {margin-top: -25px;} .breadcrumb-item > a {font-size: 11px;} .breadcrumb-content {margin-top:3px;} 
@@ -1033,14 +1012,14 @@ label:has(input[type="checkbox"]:disabled){
   .login-form-spacing2 { padding-top: 17px; margin-top:-12px; text-align: center; }
   
   .login-input { 
-    text-align: center; background-color: #e9ecef; border: none; 
+    text-align: center; background-color: #e8e8e8; border: none; 
     height:40px;}
 
   .login-input:focus {
     border-color: white;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(12, 103, 222, 0.6);
     outline: 0 none;
-    background: #fafafa;
+    background: #e8e8e8;
   }
 
 
@@ -1366,7 +1345,7 @@ label:has(input[type="checkbox"]:disabled){
   .panel-admin{
     border-radius:15px;
     border:0px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
   }
   .panel-admin>.panel-heading{
     background: #003e87;

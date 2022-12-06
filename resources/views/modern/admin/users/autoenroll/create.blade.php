@@ -103,8 +103,8 @@
                                                         <div id='js-tree-course'></div>
                                                     </div>
                                                     <div class='modal-footer'>
-                                                        <button type='button' class='btn btn-secondary treeCourseModalClose'>{{ trans('langCancel') }}</button>
-                                                        <button type='button' class='btn btn-primary' id='treeCourseModalSelect'>{{ trans('langSelect') }}</button>
+                                                        <button type='button' class='btn btn-outline-secondary cancelAdminBtn treeCourseModalClose'>{{ trans('langCancel') }}</button>
+                                                        <button type='button' class='btn submitAdminBtn ms-1' id='treeCourseModalSelect'>{{ trans('langSelect') }}</button>
                                                     </div>
                                                 </div>
                                             </div>

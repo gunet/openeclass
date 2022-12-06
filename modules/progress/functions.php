@@ -852,7 +852,7 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
         }
         $operators = get_operators();
 
-        $tool_content .= "<form action=$action method='post'><div class='form-wrapper form-edit p-3 rounded'>";
+        $tool_content .= "<form action=$action method='post'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
         $tool_content .= "<div class='form-group mt-3'>";
@@ -861,7 +861,7 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
         $tool_content .= "<span class='col-sm-2'><input class='form-control' type='text' name='cert_threshold' value='$data->threshold'></span>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='col-sm-5 col-sm-offset-5 mt-3'>";
-        $tool_content .= "<input class='btn btn-primary' type='submit' name='mod_cert_activity' value='$langModify'>";
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='mod_cert_activity' value='$langModify'>";
         $tool_content .= "</div>";
         $tool_content .= "</div></form>";
     }
@@ -922,7 +922,7 @@ function display_available_assignments($element, $element_id, $unit_id = 0) {
                     "</tr>";
         }
         $tool_content .= "</table></div>" .
-                "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='add_assignment' value='$langAddModulesButton'></div></th></form>";
+                "<div class='text-end mt-3'><input class='btn submitAdminBtn' type='submit' name='add_assignment' value='$langAddModulesButton'></div></th></form>";
     }
 }
 
@@ -982,7 +982,7 @@ function display_available_exercises($element, $element_id, $unit_id = 0) {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div><div class='text-end mt-3'>";
-        $tool_content .= "<input class='btn btn-primary' type='submit' name='add_exercise' value='$langAddModulesButton'></div>
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='add_exercise' value='$langAddModulesButton'></div>
         </form>";
     }
 }
@@ -1137,7 +1137,7 @@ function display_available_documents($element, $element_id, $unit_id = 0) {
         }
         $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>";
-        $tool_content .= "<input class='btn btn-primary' type='submit' name='add_document' value='$langAddModulesButton' /></div>$dir_html</form>";
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='add_document' value='$langAddModulesButton' /></div>$dir_html</form>";
     }
 }
 
@@ -1197,7 +1197,7 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
                     "</tr>";
 
         $tool_content .= "</table></div>" .
-                "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='add_blog' value='$langAddModulesButton'></div></th></form>";
+                "<div class='text-end mt-3'><input class='btn submitAdminBtn' type='submit' name='add_blog' value='$langAddModulesButton'></div></th></form>";
     }
 }
 
@@ -1263,7 +1263,7 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
                     "</tr>";
         }
         $tool_content .= "</table></div>" .
-                "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='add_blogcomment' value='$langAddModulesButton'></div></th></form>";
+                "<div class='text-end mt-3'><input class='btn submitAdminBtn' type='submit' name='add_blogcomment' value='$langAddModulesButton'></div></th></form>";
     }
 }
 
@@ -1324,7 +1324,7 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
                     "</tr>";
 
         $tool_content .= "</table></div>" .
-                "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='add_forum' value='$langAddModulesButton'></div></th></form>";
+                "<div class='text-end mt-3'><input class='btn submitAdminBtn' type='submit' name='add_forum' value='$langAddModulesButton'></div></th></form>";
     }
 
 }
@@ -1389,7 +1389,7 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0) {
         }
         $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>
-                            <input class='btn btn-primary' type='submit' name='add_forumtopic' value='$langAddModulesButton'>
+                            <input class='btn submitAdminBtn' type='submit' name='add_forumtopic' value='$langAddModulesButton'>
                         </div></form>";
     }
 }
@@ -1459,7 +1459,7 @@ function display_available_lps($element, $element_id, int $unit_id = 0) {
         }
         $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>";
-        $tool_content .= "<input class='btn btn-primary' type='submit' name='add_lp' value='$langAddModulesButton'></div></form>";
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='add_lp' value='$langAddModulesButton'></div></form>";
 
     }
 }
@@ -1564,7 +1564,7 @@ function display_available_multimedia($element, $element_id, $unit_id = 0) {
         }
         $tool_content .= "</table></div>"
                 . "<div class='text-end mt-3'>"
-                . "<input class='btn btn-primary' type='submit' name='add_multimedia' value='".q($langAddModulesButton)."'>&nbsp;&nbsp;"
+                . "<input class='btn submitAdminBtn' type='submit' name='add_multimedia' value='".q($langAddModulesButton)."'>&nbsp;&nbsp;"
                 . "</div>"
                 . "</form>";
     }
@@ -1666,7 +1666,7 @@ function display_available_ebooks($element, $element_id, $unit_id = 0) {
         $tool_content .=
                 "</table></div>
                 <div class='text-end mt-3'>
-                <input class='btn btn-primary' type='submit' name='add_ebook' value='$langAddModulesButton' /></div></form>";
+                <input class='btn submitAdminBtn' type='submit' name='add_ebook' value='$langAddModulesButton' /></div></form>";
     }
 }
 
@@ -1724,7 +1724,7 @@ function display_available_polls($element, $element_id, $unit_id = 0) {
         }
         $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>";
-        $tool_content .= "<input class='btn btn-primary' type='submit' name='add_poll' value='$langAddModulesButton'></div></form>";
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='add_poll' value='$langAddModulesButton'></div></form>";
     }
 }
 
@@ -1785,7 +1785,7 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
         $tool_content .= "
                     </table></div>
                 <div class='text-end mt-3'>
-                    <input class='btn btn-primary' type='submit' name='add_wiki' value='$langAddModulesButton'>
+                    <input class='btn submitAdminBtn' type='submit' name='add_wiki' value='$langAddModulesButton'>
                 </div></form>";
     }
 }
@@ -1837,7 +1837,7 @@ function display_available_participation($element, $element_id, $unit_id = 0) {
         $tool_content .= "
                     </table></div>
                 <div class='text-end mt-3'>
-                    <input class='btn btn-primary' type='submit' name='add_participation' value='$langAddModulesButton'>
+                    <input class='btn submitAdminBtn' type='submit' name='add_participation' value='$langAddModulesButton'>
                 </div></form>";
     }
 }
@@ -1901,7 +1901,7 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
         }
 
         $tool_content .= "</table></div>" .
-            "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='add_gradebook' value='$langAddModulesButton'></div></th></form>";
+            "<div class='text-end mt-3'><input class='btn submitAdminBtn' type='submit' name='add_gradebook' value='$langAddModulesButton'></div></th></form>";
     }
 }
 
@@ -1950,7 +1950,7 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
             "</tr>";
 
         $tool_content .= "</table></div>" .
-            "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='add_coursecompletiongrade' value='$langAddModulesButton'></div></th></form>";
+            "<div class='text-end mt-3'><input class='btn submitAdminBtn' type='submit' name='add_coursecompletiongrade' value='$langAddModulesButton'></div></th></form>";
     }
 }
 
@@ -2007,7 +2007,7 @@ function display_settings($element, $element_id, $unit_id = 0) {
                                     $langProgressBasicInfo
                                 </div>
                                 <div class='col-5 text-end'>
-                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'>"
+                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn'>"
                                             . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
                                     </a>
                                 </div>

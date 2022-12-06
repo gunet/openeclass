@@ -546,7 +546,7 @@ if (!class_exists('IMSCPExport')) {
             // No more questions, add the button.
             $pageEnd = '</td></tr>
                 <tr>
-                    <td align="center"><br><input class="btn btn-primary" type="button" value="' . $langOk . '" onClick="calcScore()"></td>
+                    <td align="center"><br><input class="btn submitAdminBtn" type="button" value="' . $langOk . '" onClick="calcScore()"></td>
                 </tr>
                 </table>
                 </form>

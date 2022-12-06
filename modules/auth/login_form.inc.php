@@ -148,7 +148,7 @@ function login_form($format='main') {
                             <label class='hidden' for='pass'>$langPass</label>
                             <input name='pass' type='password' class='form-control' id='pass' placeholder='$langPass'>
                         </div>
-                        <button type='submit' name='submit' class='btn btn-primary btn-block'>$langEnter</button>
+                        <button type='submit' name='submit' class='btn submitAdminBtn btn-block'>$langEnter</button>
                         <div class='text-end small lost-pass-link'>
                             <a href='$urlAppend/modules/auth/lostpass.php'>$lang_forgot_pass</a>
                         </div>

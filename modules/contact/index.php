@@ -103,7 +103,7 @@ function form($user) {
     }
         
     $ret = "<div class='col-sm-12'><div class='alert alert-info'>$langInfoAboutRegistration</div></div>";
-    $ret .= "<div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>";
+    $ret .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'>";
     $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	<fieldset>
         <div class='col-sm-12'><label class='control-label-notes'>$langRequest $langOfCourse:</label>&nbsp;&nbsp;<small>" . course_id_to_title($course_id) . "</small></div>
@@ -118,7 +118,7 @@ function form($user) {
 	</div>
         <div class='form-group mt-3'>
             <div class='col-sm-offset-1 col-sm-11'>
-                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
+                <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
             </div>
         </div>		
         ". generate_csrf_token_form_field() ."

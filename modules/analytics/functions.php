@@ -345,7 +345,7 @@ function display_analytics_information($analytics_id) {
                             $title<span class='$active_vis'>($active_msg)</span>
                         </div>
                         <div class='col-xl-5 col-lg-5 col-md-5 col-sm-3 col-3 text-end'>
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn btn-primary btn-sm'>"
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn submitAdminBtn'>"
                                     . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langModify</span>
                             </a>
                         </div>

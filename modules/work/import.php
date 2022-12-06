@@ -122,7 +122,7 @@ enableCheckFileSize();
 $tool_content .= "
 
         <div class='col-12 mt-3'>
-            <div class='form-wrapper form-edit p-3 rounded'>
+            <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' enctype='multipart/form-data' method='post' action='import.php?course=$course_code&amp;id=$id'>
                     <fieldset>
                         <div class='form-group'>

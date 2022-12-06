@@ -205,7 +205,7 @@
 
 
 <div class="container-fluid details-section">
-    <div class="row rowMedium px-lg-0 px-3 py-lg-0 py-3">
+    <div class="row rowMedium px-lg-0 px-3 py-lg-0 py-0">
         <div class='col-lg-8 col-12 Courses-Content pe-lg-0 mt-lg-3 px-0'>
             <div class='panel panel-admin border-0 shadow-none bg-white px-lg-4 py-lg-3'>
                 <div class='panel-heading bg-white'>
@@ -300,9 +300,9 @@
                 </div>
             </div>
         </div>
-        <div class='col-lg-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-4 ps-lg-3 px-lg-0 px-0'>
+        <div class='col-lg-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-2 ps-lg-3 px-lg-0 px-0 pb-lg-0 pb-3'>
             @include('portfolio.portfolio-calendar')
-            <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-4 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+            <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                 <div class='panel-heading bg-body p-0'>
                     <div class='col-12 Help-panel-heading'>
                         <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoAnnouncements') }}</span>
@@ -324,7 +324,7 @@
 
 
 
-            <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-4 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+            <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                 <div class='panel-heading bg-body p-0'>
                     <div class='col-12 Help-panel-heading'>
                     <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoMessages') }}</span>

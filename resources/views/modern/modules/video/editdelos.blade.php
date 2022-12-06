@@ -165,7 +165,7 @@
                                             </th>
                                             <th colspan="2">
                                                 <div class="float-end">
-                                                    <input class="btn btn-primary" name="add_submit_delos" value="{{ trans('langAddModulesButton') }}" type="submit">
+                                                    <input class="btn submitAdminBtn" name="add_submit_delos" value="{{ trans('langAddModulesButton') }}" type="submit">
                                                 </div>
                                             </th>
                                         </tr>

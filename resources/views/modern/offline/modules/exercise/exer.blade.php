@@ -310,7 +310,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="center"><br><input class="btn btn-primary" type="button" value="{{ trans('langOk') }}" onClick="calcScore()"></td>
+                                    <td align="center"><br><input class="btn submitAdminBtn" type="button" value="{{ trans('langOk') }}" onClick="calcScore()"></td>
                                 </tr>
                             </table>
                         </form>

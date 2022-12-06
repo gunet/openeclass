@@ -95,7 +95,6 @@ $tool_content .=
         
 $tool_content .= 
     "<div class='col-12'>
-    <div class='shadow-sm p-3 rounded'>
                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='' onsubmit='return validateNodePickerForm();'>
                     <fieldset>";
 enableCheckFileSize();
@@ -120,8 +119,8 @@ $tool_content .=
 
     <div class='form-group mt-3'>
         <div class='col-sm-10 col-sm-offset-2'>
-            <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-            <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn btn-outline-secondary'>$langCancel</a>
+            <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
+            <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
         </div>
     </div>";
 
@@ -129,7 +128,7 @@ $tool_content .=
                 "</fieldset>
                 ". generate_csrf_token_form_field() ."  
             </form>
-        </div></div>
+        </div>
     ";
             
 draw($tool_content, 1, null, $head_content);

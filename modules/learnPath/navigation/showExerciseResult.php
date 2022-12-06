@@ -383,7 +383,7 @@ if ($displayScore == 1) {
         </table>";
 }
 echo "<br>
-  <div class='text-center'><input class='btn btn-primary' type='submit' value='$langNext'></div>
+  <div class='text-center'><input class='btn submitAdminBtn' type='submit' value='$langNext'></div>
   <br>
   </form><br>";
 

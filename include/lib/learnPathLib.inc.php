@@ -137,7 +137,7 @@ function commentBox($type, $mode) {
             $output .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <textarea class='form-control' name='insertCommentBox' rows='3'>$oldComment</textarea><br>
                 <input type='hidden' name='cmd' value='update$col_name' />
-                <input class='btn btn-primary' type='submit' value=$langSubmit /></form>";
+                <input class='btn submitAdminBtn' type='submit' value=$langSubmit /></form>";
         }
     }
 
@@ -251,7 +251,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
                 $output .= '<div class="col-xs-10"><div class="input-group">'
                         . '<input class="form-control" type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '">' . "\n"
                         . '<span class="input-group-btn">'
-                        . '<button class="btn btn-primary" type="submit" value="'.$langModify.'">'.$langModify.'</button>'
+                        . '<button class="btn submitAdminBtn" type="submit" value="'.$langModify.'">'.$langModify.'</button>'
                         . '</span>'
                         . '</div></div>'
                         . '<input type="hidden" name="cmd" value="updateName" />' . ""
@@ -577,7 +577,7 @@ function display_my_exercises($dialogBox, $style) {
                         . '</td></tr>';
             }
         $output .= "</table></div>";
-        $output .= "<div class='text-end mt-3'><input class='btn btn-primary' type='submit' name='insertExercise' value='$langAddModulesButton'></div>";
+        $output .= "<div class='text-end mt-3'><input class='btn submitAdminBtn' type='submit' name='insertExercise' value='$langAddModulesButton'></div>";
         $output .= "</form>";
     } else {
         $output .= "<div class='alert alert-warning text-center'>$langNoExercises</div>";
@@ -676,7 +676,7 @@ function display_my_documents($dialogBox, $style)
     }
     $content .= "</table>";
     $content .= "<div class='text-end mt-3'>";
-    $content .= "<input class='btn btn-primary' type='submit' name='submitInsertedDocument' value='$langAddModulesButton'>";
+    $content .= "<input class='btn submitAdminBtn' type='submit' name='submitInsertedDocument' value='$langAddModulesButton'>";
     $content .= "</div>";
 
     return $content;

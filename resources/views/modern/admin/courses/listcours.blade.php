@@ -55,7 +55,7 @@
                                     <input type='hidden' name='{!! q($key) !!}' value='{!! q($value) !!}'>
                                 @endforeach
 
-                                <input class='btn btn-primary' type='submit' name='move_submit' value='{{ trans('langChangeDepartment') }}'>
+                                <input class='btn submitAdminBtn' type='submit' name='move_submit' value='{{ trans('langChangeDepartment') }}'>
                                 {!! generate_csrf_token_form_field() !!}
                             </form>
                         </div>

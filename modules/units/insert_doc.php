@@ -163,7 +163,7 @@ function list_docs() {
         }
         $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>";
-        $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_doc' value='$langAddModulesButton' /></div>$dir_html</form>";
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_doc' value='$langAddModulesButton' /></div>$dir_html</form>";
 
     }
 }

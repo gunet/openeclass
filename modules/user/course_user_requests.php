@@ -102,7 +102,7 @@ if (isset($_GET['rid'])) {
             $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langCourseUserRegError</div></div>";
         }
     } else {
-        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit p-3 rounded'>";
+        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
         <div class='col-sm-12'><label class='control-label-notes'>$langReasonReject</label></div>
@@ -115,7 +115,7 @@ if (isset($_GET['rid'])) {
     </div>
         <div class='form-group mt-3'>
             <div class='col-sm-offset-1 col-sm-11'>
-                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRejectRequest) . "'>
+                <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langRejectRequest) . "'>
             </div>
         </div>
         ". generate_csrf_token_form_field() ."

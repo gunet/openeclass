@@ -288,13 +288,13 @@ foreach ($questionList as $questionId) {
 if (!$questionList) {
     echo "<div class='alert alert-alert'>$langNoQuestion</div>";
 } else {
-    echo "<div class='panel'><div class='panel-body'><input class='btn btn-primary' type='submit' value=\"";
+    echo "<div class='panel'><div class='panel-body'><input class='btn submitAdminBtn' type='submit' value=\"";
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
         echo "$langContinue\" />&nbsp;";
     } else {
         echo $langNext . " &gt;&nbsp;" . "\" />&nbsp;";
     }
-    echo "<input class='btn btn-primary' type='submit' name='buttonCancel' value='$langCancel' /></div></div>";
+    echo "<input class='btn submitAdminBtn' type='submit' name='buttonCancel' value='$langCancel' /></div></div>";
 }
 echo "</form>";
 echo "</div></body>" . "\n";

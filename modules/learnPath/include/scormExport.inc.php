@@ -508,7 +508,7 @@ if (!class_exists('ScormExport')) {
             // No more questions, add the button.
             $pageEnd = '</td></tr>
             <tr>
-                <td align="center"><br><input class="btn btn-primary" type="button" value="' . $langSubmit . '" onClick="calcScore()"></td>
+                <td align="center"><br><input class="btn submitAdminBtn" type="button" value="' . $langSubmit . '" onClick="calcScore()"></td>
             </tr>
             </table>
             </form>

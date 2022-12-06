@@ -189,7 +189,7 @@ function addActionButtons(): string {
                         <div class='form-group fitem'>
                             <span data-fieldtype='submit'>
                                 <input type='submit'
-                                       class='btn btn-primary'
+                                       class='btn submitAdminBtn'
                                        name='submitbutton'
                                        id='id_submitbutton'
                                        value='$langSave' >

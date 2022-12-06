@@ -25,7 +25,7 @@
                  </div>
             </div>
             <div class='panel-body'>
-                <div class="form-wrapper form-edit p-3 rounded">
+                <div class="form-wrapper form-edit rounded">
                     <form id="wall_form" method="post" action="{{$urlServer}}modules/wall/index.php?course={{$course_code}}&fromCoursePage" enctype="multipart/form-data">
                         <fieldset> 
                             <div class="form-group">

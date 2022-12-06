@@ -233,8 +233,8 @@ if (count($exercise_question_ids) > 0) {
 //creating buttons at the end of page
 $tool_content .= "<br><div align='center'>";
 //submit button will only appear when the exercise can be graded
-$tool_content .= "<input type='submit' value='$langSubmit' form='grade_form' class='btn btn-primary' id='submitButton'>"
-     ."<a class='btn btn-secondary' href='results_by_question.php?course=$course_code&exerciseId=$exerciseIdIndirect'>
+$tool_content .= "<input type='submit' value='$langSubmit' form='grade_form' class='btn submitAdminBtn' id='submitButton'>"
+     ."<a class='btn btn-outline-secondary cancelAdminBtn' href='results_by_question.php?course=$course_code&exerciseId=$exerciseIdIndirect'>
            $langReturn
        </a>";
 $tool_content .= "</div>";

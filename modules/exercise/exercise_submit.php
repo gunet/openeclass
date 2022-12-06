@@ -452,8 +452,8 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
                 ' ' . $langExerciseAttemptContinue . "</div>
             <div class='text-center'>
                 <form action='$form_next_link' method='post'>
-                    <input class='btn btn-primary' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
-                    <a href='$form_cancel_link' class='btn btn-secondary'>$langCancel</a>
+                    <input class='btn submitAdminBtn' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
+                    <a href='$form_cancel_link' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
                 </form>
             </div>";
             unset_exercise_var($exerciseId);
@@ -752,13 +752,13 @@ if ($questionList) {
     } else {
         $backlink = "index.php?course=$course_code";
     }
-    $tool_content .= "<div class='float-end'><a href='$backlink' class='btn btn-secondary'>$langBack</a></div>";
+    $tool_content .= "<div class='float-end'><a href='$backlink' class='btn btn-outline-secondary cancelAdminBtn'>$langBack</a></div>";
 }
 
 // "Temporary save" button
 if ($uid and $exerciseTempSave) {
     $tempSaveButton = "<div class='exercise-action-buttons'>
-        <input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>
+        <input class='btn submitAdminBtn blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>
         </div>";
 } else {
     $tempSaveButton = '';
@@ -786,10 +786,10 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
     $prevLabel = '&lt; ' . $langPrevious;
     $nextLabel = $langNext . ' &gt';
     if ($exerciseType == MULTIPLE_PAGE_TYPE and $questionId != $questionList[1]) { // `prev` button
-        $tool_content .= "<input class='btn btn-primary blockUI navbutton' style='margin-right: 10px;' type='submit' name='prev' value='$prevLabel'>";
+        $tool_content .= "<input class='btn submitAdminBtn blockUI navbutton' style='margin-right: 10px;' type='submit' name='prev' value='$prevLabel'>";
     }
     if ($questionId != end($questionList)) { // `next` button
-        $tool_content .= "<input class='btn btn-primary blockUI navbutton' type='submit' value='$nextLabel'>";
+        $tool_content .= "<input class='btn submitAdminBtn blockUI navbutton' type='submit' value='$nextLabel'>";
     } else {
         $isFinalQuestion = 'true';
     }

@@ -240,7 +240,7 @@ $tool_content .= <<<EOF
                                     <span class='float-end'><input type="checkbox" id="check_APlus" name="course_confirmAPlusLevel" value="true" $checkedAPlusLevel $disabledAPlusLevel/></span>
                                 </li>
                                 <li class='list-group-item' style='border-top:none;'>
-                                    <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
                                 </li>
                             </ul>
                         </form>

@@ -93,7 +93,7 @@
                                             <div class="row p-2"></div>
                                             <div class='form-group'>
                                                 <div class='col-sm-12 col-sm-offset-2'>
-                                                    <input class='btn btn-primary' type='submit' name='submit' value='{{$langSubmit}}'>
+                                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='{{$langSubmit}}'>
                                                     <a href='{{$urlServer}}courses/{{$course_code}}/index.php' class='btn btn-secondary'>Ακύρωση</a>
                                                 </div>
                                             </div>

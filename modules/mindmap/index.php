@@ -93,18 +93,18 @@ $head_content .= '
     </style>';
 
 $tool_content .= "
-<div id='layout' class='mt-5'>
+<div id='layout' class='mt-3'>
 	<div id='jsmiin-nav-horizontal'>
 		<div class='btn-group btn-group-justified' role='group' style=''>
 			<div class='btn-group' role='group'>
-				<button type='button' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='hidden-xs'>$langOpenMind</span> <span class='caret'></span> </button>
+				<button type='button' class='btn submitAdminBtn dropdown-toggle me-2 rounded-pill' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='hidden-xs'>$langOpenMind</span> <span class='caret'></span> </button>
 				<ul class='dropdown-menu m-0 p-0 dropdown_menu_user shadow-lg bg-body border-0'>
 					<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button' onclick='open_json();'>$langOpenEx</a></li>
 					<li><input id='file_input' type='file' onchange='open_file();'/></li>
 				</ul>
 			</div>
 			<div class='btn-group' role='group'>
-				<button type='button' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='hidden-xs'>$langEditMind</span> <span class='caret'></span> </button>
+				<button type='button' class='btn submitAdminBtn dropdown-toggle me-2 rounded-pill' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='hidden-xs'>$langEditMind</span> <span class='caret'></span> </button>
 				<ul class='dropdown-menu m-0 p-0 dropdown_menu_user shadow-lg bg-body border-0'>
 					<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button' onclick='toggle_editable(this);'>$langEditDis</a></li>
             		<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button' onclick='add_node();'>$langAddNode</a></li>
@@ -113,7 +113,7 @@ $tool_content .= "
 				</ul>
 			</div>
 			<div class='btn-group' role='group'>
-				<button type='button' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='hidden-xs'>$langThemes</span> <span class='caret'></span> </button>
+				<button type='button' class='btn submitAdminBtn dropdown-toggle me-2 rounded-pill' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='hidden-xs'>$langThemes</span> <span class='caret'></span> </button>
 				<ul class='dropdown-menu m-0 p-0 dropdown_menu_user max-dropdown-height shadow-lg bg-body border-0'>
 					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-secondary' href='javascript:void(0)' data-theme='' role='button' onclick='set_theme(this);'>Default</a></li>
 					<li><a class='list-group-item border border-top-0 border-bottom-secondary text-primary' href='javascript:void(0)' data-theme='primary' role='button' onclick='set_theme(this);'>Primary</a></li>
@@ -134,7 +134,7 @@ $tool_content .= "
 				</ul>
 			</div>
 			<div class='btn-group' role='group'>
-				<button type='button' class='btn btn-secondary dropdown-toggle' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='hidden-xs'>$langSave</span> <span class='caret'></span> </button>
+				<button type='button' class='btn submitAdminBtn dropdown-toggle rounded-pill' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='hidden-xs'>$langSave</span> <span class='caret'></span> </button>
 				<ul class='dropdown-menu m-0 p-0 dropdown_menu_user shadow-lg bg-body border-0'>
 					<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button'  onclick='screen_shot();'>$langScreenshot</a></li>
             		<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button'  onclick='save_file();'>$langSaveFile</a></li>";

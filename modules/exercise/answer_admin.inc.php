@@ -713,13 +713,13 @@ if (isset($_GET['modifyAnswers'])) {
 
      $cancel_link = isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code";
      $submit_text = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && !isset($setWeighting) ? "$langNext &gt;" : $langCreate;
-     $back_button = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && isset($setWeighting) ? "<input class='btn btn-primary' type='submit' name='buttonBack' value='&lt; $langBack'' />" : "";
+     $back_button = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && isset($setWeighting) ? "<input class='btn submitAdminBtn' type='submit' name='buttonBack' value='&lt; $langBack'' />" : "";
      $tool_content .= "
                      <div class='row'>
                          <div class='col-sm-10 col-sm-offset-2 ps-3'>
                              $back_button
-                             <input class='btn btn-primary' type='submit' name='submitAnswers' value='$submit_text'>
-                             <a class='btn btn-secondary' href='$cancel_link'>$langCancel</a>
+                             <input class='btn submitAdminBtn' type='submit' name='submitAnswers' value='$submit_text'>
+                             <a class='btn btn-outline-secondary cancelAdminBtn' href='$cancel_link'>$langCancel</a>
                          </div>
                      </div>
                 </fieldset>

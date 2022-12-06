@@ -44,7 +44,7 @@
                                 <em>{{ course_id_to_title($c) }}</em>
                             </div>
                             <div class='col-sm-offset-5'>
-                                <a class='btn btn-primary' href='{{ $_SERVER['SCRIPT_NAME'] }}?u={{ $u }}&amp;c={{ $c }}&amp;doit=yes'>{{ trans('langDelete') }}</a>
+                                <a class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?u={{ $u }}&amp;c={{ $c }}&amp;doit=yes'>{{ trans('langDelete') }}</a>
                             </div>
                         </div>
                     </div>

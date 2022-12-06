@@ -81,10 +81,10 @@
                 <div class='row mt-0'>
                     <form class='d-flex justify-content-end d-inline-flex ps-0' action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
                         @if(get_config('enable_search'))
-                            <button id="btn-search" class="rounded-0 inputSearch d-flex justify-content-center align-items-center btn btn-transparent" type="submit" name="quickSearch">
+                            <button id="btn-search" class="rounded-0 inputSearch d-flex justify-content-center align-items-center btn btn-transparent p-0" type="submit" name="quickSearch">
                                  <img class='search-icon' src="{{$urlAppend}}template/modern/img/search.svg">
                             </button>
-                            <input id="search_terms" type="text" class="inputSearch inputSearchbtn me-3" name="search_terms" aria-describedby="basic-inputSearch">
+                            <input id="search_terms" type="text" class="inputSearch inputSearchbtn text-white me-3" name="search_terms" aria-describedby="basic-inputSearch">
                         @endif
                         {!! lang_selections_Desktop() !!}
                     </form>

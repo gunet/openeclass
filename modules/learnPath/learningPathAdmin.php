@@ -312,7 +312,7 @@ switch ($cmd) {
                     <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
                     <input type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
                     <input type='hidden' name='cmd' value='createLabel' />
-                    <button class='btn btn-primary btn-sm' type='submit' value='" . $langCreate . "'>$langCreate</button>
+                    <button class='btn submitAdminBtn' type='submit' value='" . $langCreate . "'>$langCreate</button>
                   </form>
                 </td>
               </tr>";
@@ -425,7 +425,7 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
                         $dialogBox .= "
                         <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
                         <input type=\"hidden\" name=\"cmdid\" value=\"" . q($_REQUEST['cmdid']) . "\" />
-                        <button type=\"submit\" class=\"btn btn-primary\" value=\"" . $langSave . "\" >$langSave</button>
+                        <button type=\"submit\" class=\"btn submitAdminBtn\" value=\"" . $langSave . "\" >$langSave</button>
                         <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\" class=\"btn btn-default\" value=\"" . $langCancel . "\" >$langCancel</a>
                     </form>
                 </div>

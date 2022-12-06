@@ -205,7 +205,7 @@ function showlinks() {
             <th colspan='2'>
                 <div class='float-end'>
                 <input type='hidden' name='maxLinkForm' value ='" . ($i - 1) . "' />
-                <input class='btn btn-primary' type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
+                <input class='btn submitAdminBtn' type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
                 </div>
             </th>
         </tr>

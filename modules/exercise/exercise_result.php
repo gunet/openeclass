@@ -280,8 +280,8 @@ $tool_content .= "<div class='row margin-bottom-fat'>
 if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
     $tool_content .= "
             <div class='btn-group btn-group-sm' style='float:right;'>
-                <a class='btn btn-primary' id='all'>$langAllExercises</a>
-                <a class='btn btn-secondary' id='ungraded'>$langAttemptPending</a>
+                <a class='btn submitAdminBtn' id='all'>$langAllExercises</a>
+                <a class='btn btn-outline-secondary cancelAdminBtn ms-1' id='ungraded'>$langAttemptPending</a>
             </div>";
 }
 $tool_content .= "
@@ -729,7 +729,7 @@ if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting
 
              Session::flash('message',$langScoreDiffers .
              "<form action='exercise_result.php?course=$course_code&amp;eurId=$eurid' method='post'>
-                 <button class='btn btn-secondary' type='submit' name='regrade' value='true'>$langRegrade</button>
+                 <button class='btn submitAdminBtn' type='submit' name='regrade' value='true'>$langRegrade</button>
               </form>"); 
             Session::flash('alert-class', 'alert-warning');
     }
@@ -741,7 +741,7 @@ if ($checking) {
 }
 
 if ($is_editor) {
-    $tool_content .= "<div class='text-center'><a class='btn btn-primary' href='index.php' id='submitButton'><span id='text_submit'>$langSubmit</span></a></div>";
+    $tool_content .= "<div class='text-center'><a class='btn submitAdminBtn' href='index.php' id='submitButton'><span id='text_submit'>$langSubmit</span></a></div>";
 }
 
 draw($tool_content, 2, null, $head_content);

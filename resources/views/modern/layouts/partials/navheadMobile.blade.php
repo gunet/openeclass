@@ -5,14 +5,17 @@
             <div class="btn-group w-100" role="group" aria-label="Basic example">
 
                 @if(!get_config('hide_login_link'))
-                <a class='d-flex justify-content-center align-items-center' type="button" href="{{ $urlServer }}"><img class="eclass-nav-icon ps-2 pe-1" src="{{$logo_img_small}}"></a>
+                    <a class='d-flex justify-content-center align-items-center' type="button" href="{{ $urlServer }}"><img class="eclass-nav-icon ps-2 pe-1" src="{{$logo_img_small}}"></a>
                 @endif
                 @if (!isset($_SESSION['uid']))
-                    <a type="button" class="btn btn-transparent text-white @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php"><i class="fas fa-pen-nib pen-nib-navhead"></i></a>
+                    <a type="button" class="btn btn-transparent text-white @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlAppend }}modules/auth/registration.php"><i class="fas fa-pen-nib pen-nib-navhead"></i></a>
                 @endif
-                <a type='button' class="btn btn-transparent text-white" href="{{ $urlServer }}modules/auth/listfaculte.php"><i class="fas fa-book"></i></a>
+                <a type='button' class="btn btn-transparent text-white" href="{{ $urlAppend }}modules/auth/listfaculte.php"><i class="fas fa-book"></i></a>
+                @if (!isset($_SESSION['uid']))
+                    <a type='button' class="btn btn-transparent text-white" href="{{ $urlAppend }}info/faq.php"><i class="fa fa-question-circle fa-fw text-white"></i></a>
+                @endif
                 @if(get_config('enable_search'))
-                <a type="button" class='btn btn-transparent text-white' href="{{ $urlAppend }}modules/search/{{ $search_action }}"><i class="fa fa-search"></i></button>
+                    <a type="button" class='btn btn-transparent text-white' href="{{ $urlAppend }}modules/search/{{ $search_action }}"><i class="fa fa-search"></i></button>
                 @endif
 
                 {!! lang_selections_Mobile() !!}

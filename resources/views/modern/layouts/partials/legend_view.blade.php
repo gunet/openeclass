@@ -8,7 +8,7 @@
 @endphp
 
 <div class='d-none d-md-block mt-4'>
-    <div class='col-12 ps-3 pb-3 ps-0 pe-0 legendViewContent'>
+    <div class='col-12 pb-3 ps-3 pe-0 legendViewContent'>
         
             @if($course_code)
                 @if($is_editor)

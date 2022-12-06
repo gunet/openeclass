@@ -305,13 +305,13 @@ function printPollForm() {
         }
         $tool_content .= "<div class='text-center mt-3'>";
         if ($is_editor) {
-            $tool_content .= "<a class='btn btn-secondary' href='index.php?course=$course_code'>" . q($langBack). "</a>";
+            $tool_content .= "<a class='btn btn-outline-secondary cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack). "</a>";
         } else {
-            $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='".q($langSubmit)."'>";
+            $tool_content .= "<input class='btn submitAdminBtn blockUI' name='submit' type='submit' value='".q($langSubmit)."'>";
             if (isset($_REQUEST['unit_id'])) {
-                $tool_content .= "<a class='btn btn-secondary ms-3' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
+                $tool_content .= "<a class='btn btn-ouline-secondary cancelAdminBtn ms-3' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
             } else {
-                $tool_content .= "<a class='btn btn-secondary ms-3' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
+                $tool_content .= "<a class='btn btn-outline-secondary cancelAdminBtn ms-3' href='index.php?course=$course_code'>" . q($langCancel) . "</a>";
             }
         }
         $tool_content .= "</div></form>";
@@ -420,15 +420,15 @@ function submitPoll() {
         }
         $tool_content .= "<br><div class='text-center'>";
         if (isset($_REQUEST['unit_id'])) {
-            $tool_content .= "<a class='btn btn-secondary' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>$langBack</a>";
+            $tool_content .= "<a class='btn btn-outline-secondary cancelAdminBtn' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>$langBack</a>";
         } else {
-            $tool_content .= "<a class='btn btn-secondary' href='index.php?course=$course_code'>$langBack</a>";
+            $tool_content .= "<a class='btn btn-outline-secondary cancelAdminBtn' href='index.php?course=$course_code'>$langBack</a>";
         }
         if ($poll->show_results) {
             if (isset($_REQUEST['unit_id'])) {
-                $tool_content .= "<a class='btn btn-primary ms-3' href='../units/view.php?course=$course_code&amp;res_type=questionnaire_results&amp;unit_id=$_REQUEST[unit_id]&amp;pid=$pid'>$langUsage</a>";
+                $tool_content .= "<a class='btn submitAdminBtn ms-3' href='../units/view.php?course=$course_code&amp;res_type=questionnaire_results&amp;unit_id=$_REQUEST[unit_id]&amp;pid=$pid'>$langUsage</a>";
             } else {
-                $tool_content .= "<a class='btn btn-primary ms-3' href='pollresults.php?course=$course_code&amp;pid=$pid'>$langUsage</a>";
+                $tool_content .= "<a class='btn submitAdminBtn ms-3' href='pollresults.php?course=$course_code&amp;pid=$pid'>$langUsage</a>";
             }
         }
         $tool_content .= "</div>";

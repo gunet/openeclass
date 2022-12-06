@@ -393,7 +393,7 @@ if (isset($_GET['delete'])) {
                    $tool_content .= "
                     <tr>
                       <td colspan='3'>&nbsp;</td>
-                      <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></td>
+                      <td><input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'></td>
                     </table></div>
                 </fieldset>
              </form>";

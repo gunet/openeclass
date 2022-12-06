@@ -632,7 +632,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         } else {
             $reply_url = "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id";
         }
-        $reply_button = "<a class='btn btn-success btn-sm reply-post-btn' style='margin-right: 15px;' href='$reply_url'>$langReply</a>";
+        $reply_button = "<a class='btn submitAdminBtn reply-post-btn' style='margin-right: 15px;' href='$reply_url'>$langReply</a>";
     } else {
         $reply_button = '';
     }

@@ -69,10 +69,10 @@
                             <input type='hidden' name='{{ $key }}' value='{{ $value }}'>
                         @endforeach
                         @if (isset($_GET['department']) && $_GET['department'] && is_numeric($_GET['department'])) {
-                            <input class='btn btn-primary' type='submit' name='move_submit' value='{{ trans('langChangeDepartment') }}'>
+                            <input class='btn submitAdminBtn' type='submit' name='move_submit' value='{{ trans('langChangeDepartment') }}'>
                         @endif
-                        <input class='btn btn-primary' type='submit' name='dellall_submit' value='{{ trans('langDelList') }}'>
-                        <input class='btn btn-primary mt-md-0 mt-3' type='submit' name='activate_submit' value='{{ trans('langAddSixMonths') }}'>
+                        <input class='btn submitAdminBtn' type='submit' name='dellall_submit' value='{{ trans('langDelList') }}'>
+                        <input class='btn submitAdminBtn mt-md-0 mt-3 ms-1' type='submit' name='activate_submit' value='{{ trans('langAddSixMonths') }}'>
                         {!! generate_csrf_token_form_field() !!}
                         </form>
                     </div>   

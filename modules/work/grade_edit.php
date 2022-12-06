@@ -211,7 +211,7 @@ function show_edit_form($id, $sid, $assign) {
                         }
 
                         $tool_content .= "
-						    <div class='col-12 mt-3'><div class='form-wrapper form-edit p-3 rounded'>
+						    <div class='col-12 mt-3'><div class='form-wrapper form-edit rounded'>
                                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data'>
                                     <input type='hidden' name='assignment' value='$id' />
                                     <input type='hidden' name='submission' value='$row->id' />
@@ -267,8 +267,8 @@ function show_edit_form($id, $sid, $assign) {
                                 </div>
                                 <div class='form-group'>
                                     <div class='col-sm-9 col-sm-offset-3'>
-                                        <input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'>
-                                        <a class='btn btn-secondary' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
+                                        <input class='btn submitAdminBtn' type='submit' name='grade_comments' value='$langGradeOk'>
+                                        <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
                                     </div>
                                 </div>
                             </form>";
@@ -403,7 +403,7 @@ function show_edit_form($id, $sid, $assign) {
 					)
 				))."
             <div class='col-12'>
-			<div class='form-wrapper form-edit p-3 rounded'>
+			<div class='form-wrapper form-edit rounded'>
 				<form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data' style='border:2px solid #003F87; background-color:#FFFAF0'>
 				<input type='hidden' name='assignment' value='$id'>
 				<input type='hidden' name='submission' value='$sid'>
@@ -476,8 +476,8 @@ function show_edit_form($id, $sid, $assign) {
 
 					<div class='form-group mt-3 mb-3'>
 						<div class='col-sm-9 col-sm-offset-3'>
-							<input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'>
-							<a class='btn btn-default' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
+							<input class='btn submitAdminBtn' type='submit' name='grade_comments' value='$langGradeOk'>
+							<a class='btn btn-default cancelAdminBtn ms-1' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
 						</div>
 					</div>
 

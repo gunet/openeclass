@@ -151,12 +151,12 @@
                                 <p>
                                 {!! generate_csrf_token_form_field() !!}
                                 @if ($can_assign_to_self)
-                                    <button class='btn btn-secondary btn-sm' type='submit' name='assignToSelf'>{{ trans('langTakeRequest') }}</button>
+                                    <button class='btn submitAdminBtn' type='submit' name='assignToSelf'>{{ trans('langTakeRequest') }}</button>
                                 @endif
                                 @if ($can_modify)
-                                    <button class='btn btn-secondary btn-sm' type='button' data-bs-toggle='modal' data-bs-target='#assigneesModal'>{{ trans("m['WorkAssignTo']") }}...</button>
-                                    <button class='btn btn-secondary btn-sm' type='button' data-bs-toggle='modal' data-bs-target='#watchersModal'>{{ trans("langWatchers") }}...</button>
-                                    <a class='btn btn-secondary btn-sm' href='{{ $editUrl }}'>{{ trans("langElaboration") }}...</a>
+                                    <button class='btn submitAdminBtn' type='button' data-bs-toggle='modal' data-bs-target='#assigneesModal'>{{ trans("m['WorkAssignTo']") }}...</button>
+                                    <button class='btn submitAdminBtn' type='button' data-bs-toggle='modal' data-bs-target='#watchersModal'>{{ trans("langWatchers") }}...</button>
+                                    <a class='btn submitAdminBtn' href='{{ $editUrl }}'>{{ trans("langElaboration") }}...</a>
                                 @endif
                                 </p>
                             </form>

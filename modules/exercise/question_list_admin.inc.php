@@ -609,8 +609,8 @@ $tool_content .= "
         $langUsedInSeveralExercises
       </div>
       <div class='modal-footer'>
-        <a href='#' id='modifyAll' class='btn btn-primary'>$langModifyInAllExercises</a>
-        <a href='#' id='modifyOne' class='btn btn-success'>$langModifyInThisExercise</a>
+        <a href='#' id='modifyAll' class='btn submitAdminBtn'>$langModifyInAllExercises</a>
+        <a href='#' id='modifyOne' class='btn submitAdminBtn'>$langModifyInThisExercise</a>
       </div>
     </div>
   </div>

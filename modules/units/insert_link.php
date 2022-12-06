@@ -117,6 +117,6 @@ function list_links() {
         }
         $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>" .
-                "<input class='btn btn-primary' type='submit' name='submit_link' value='$langAddModulesButton'></div></form>";
+                "<input class='btn submitAdminBtn' type='submit' name='submit_link' value='$langAddModulesButton'></div></form>";
     }
 }

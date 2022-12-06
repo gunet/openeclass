@@ -66,7 +66,7 @@ echo '<input type="password" class="form-control text-center" id="password" name
 echo '</div>';
 
 echo '<div class="form-group">';
-echo '<input type="submit" class="btn btn-primary btn-block" value="Submit">';
+echo '<input type="submit" class="btn submitAdminBtn btn-block" value="Submit">';
 echo '</div>';
 
 echo '</form>';

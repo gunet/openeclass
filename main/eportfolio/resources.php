@@ -524,7 +524,7 @@ if ($userdata) {
                 $submission_header_content = "<h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3>";
                 $submission->course_title = $langCourse.': '.$submission->course_title;
                 $submission_content = "<div class='well'>";
-                $submission_content .= "<div><button type='button' class='btn btn-primary btn-sm' data-bs-toggle='collapse' data-bs-target='#header_more_$submission->id'>$langMore</button></div>
+                $submission_content .= "<div><button type='button' class='btn submitAdminBtn' data-bs-toggle='collapse' data-bs-target='#header_more_$submission->id'>$langMore</button></div>
                                        <div id='header_more_$submission->id' class='collapse panel-body'>";
                 if (!empty($data['descr'])) {
                     $submission_content .= "<div><b class='control-label-notes pt-3 pb-3'>".$langDescription."</b>:</div><div>".$data['descr']."</div>";

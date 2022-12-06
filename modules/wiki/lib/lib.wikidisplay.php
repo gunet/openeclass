@@ -55,7 +55,7 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
     $out = "
             <h4>$localtitle</h4>
             <br>
-            <div class='col-sm-12'><div class='form-wrapper form-edit p-3 rounded'>
+            <div class='col-sm-12'><div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='POST' action='$script' name='editform' id='editform'>";
 
     if ($showWikiToolBar === true) {
@@ -89,12 +89,12 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
             . '" />' . "\n"
     ;
 
-    $out .= '<input class="btn btn-primary" type="submit" name="action[preview]" value="'
+    $out .= '<input class="btn submitAdminBtn" type="submit" name="action[preview]" value="'
             . $langPreview . '" />' . "\n"
     ;
 
     if (!$forcePreview) {
-        $out .= '<input class="btn btn-primary" type="submit" name="action[save]" value="'
+        $out .= '<input class="btn submitAdminBtn" type="submit" name="action[save]" value="'
                 . $langSave . '" />' . "\n"
         ;
     }
@@ -163,8 +163,8 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog =
              <input type='hidden' name='changelog' value='". q($changelog) . "'>
              <input type='hidden' name='title' value='". q($title) ."'>
              <input type='hidden' name='wikiId' value='$wikiId'>
-             <input class='btn btn-primary' type='submit' name='action[save]' value='$langSave'>
-             <input class='btn btn-primary' type='submit' name='action[edit]' value='$langEdit'>
+             <input class='btn submitAdminBtn' type='submit' name='action[save]' value='$langSave'>
+             <input class='btn submitAdminBtn' type='submit' name='action[edit]' value='$langEdit'>
             ";
 
     $location = add_request_variable_to_url($script, "wikiId", $wikiId);

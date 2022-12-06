@@ -84,6 +84,6 @@ $tool_content .= '<div class="form-group mt-4">
      <div class="col-sm-12"><select name="u_interval" class="form-select">' . $statsIntervalOptions . '</select></div>
   </div>
   <div class="col-sm-offset-2 col-sm-10">    
-    <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
+    <input class="btn submitAdminBtn" type="submit" name="btnUsage" value="' . $langSubmit . '">
     </div>  
 </form></div></div>';

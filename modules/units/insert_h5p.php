@@ -42,7 +42,7 @@ function list_h5p() {
         }
         $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>";
-        $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_h5p' value='$langAddModulesButton'>";
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_h5p' value='$langAddModulesButton'>";
         $tool_content .= "</div>";
         $tool_content .= "</form>";
     }

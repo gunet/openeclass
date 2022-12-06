@@ -83,8 +83,8 @@
                                                     </select>
                                                 </td>
                                                 <td class="text-center" style="vertical-align: middle;">
-                                                    <button type="button" class="btn btn-sm btn-secondary" onClick="move('inactive_box','active_box')"><span class="fa fa-arrow-right"></span></button><br><br>
-                                                    <button type="button" class="btn btn-sm btn-secondary" onClick="move('active_box','inactive_box')"><span class="fa fa-arrow-left"></span></button>
+                                                    <button type="button" class="btn submitAdminBtn" onClick="move('inactive_box','active_box')"><span class="fa fa-arrow-right"></span></button><br><br>
+                                                    <button type="button" class="btn submitAdminBtn" onClick="move('active_box','inactive_box')"><span class="fa fa-arrow-left"></span></button>
                                                 </td>
                                                 <td class="text-center">
                                                     <select class="form-select" name="toolStatActive[]" id='active_box' size='17' multiple>
@@ -96,7 +96,7 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="3" class="text-center">
-                                                    <input type="submit" class="btn btn-primary" value="{{ trans('langSubmit') }}" name="toolStatus" onClick="selectAll('active_box',true)" />
+                                                    <input type="submit" class="btn submitAdminBtn" value="{{ trans('langSubmit') }}" name="toolStatus" onClick="selectAll('active_box',true)" />
                                                 </td>
                                             </tr>
                                         </table>

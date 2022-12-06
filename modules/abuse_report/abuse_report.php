@@ -108,8 +108,8 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
 		                     </form>
                          </div>
                          <div class="modal-footer">
-                             <button type="button" class="btn btn-default" onClick="$(\'#abuse_modal_'.$rtype.'_'.$rid.'\').modal(\'hide\');">'.$langClose.'</button>
-                             <button type="button" class="btn btn-primary" id="abuse_submit_'.$rtype.'_'.$rid.'">'.$langSend.'</button>
+                             <button type="button" class="btn btn-default cancelAdminBtn" onClick="$(\'#abuse_modal_'.$rtype.'_'.$rid.'\').modal(\'hide\');">'.$langClose.'</button>
+                             <button type="button" class="btn submitAdminBtn ms-1" id="abuse_submit_'.$rtype.'_'.$rid.'">'.$langSend.'</button>
                          </div>
                      </div>
                  </div>
@@ -165,8 +165,8 @@ function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
 		                     </form>
                          </div>
                          <div class="modal-footer">
-                             <button type="button" class="btn btn-default" data-bs-dismiss="modal">'.$langClose.'</button>
-                             <button type="button" class="btn btn-primary" id="abuse_submit_'.$rtype.'_'.$rid.'">'.$langSend.'</button>
+                             <button type="button" class="btn btn-default cancelAdminBtn" data-bs-dismiss="modal">'.$langClose.'</button>
+                             <button type="button" class="btn submitAdminBtn ms-1" id="abuse_submit_'.$rtype.'_'.$rid.'">'.$langSend.'</button>
                          </div>
                      </div>
                  </div>

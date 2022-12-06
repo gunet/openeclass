@@ -673,7 +673,7 @@ $tool_content .= "<div class='modal fade' id='restrictlp' tabindex='-1' role='di
         $langRestrictedLPath
       ."</div>
       <div class='modal-footer'>
-        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
+        <button type='button' class='btn btn-outline-secondary cancelAdminBtn' data-bs-dismiss='modal'>Close</button>
       </div>
     </div>
   </div>

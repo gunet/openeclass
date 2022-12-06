@@ -5,33 +5,11 @@
 
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
-            <div class='d-none d-md-block'>
-                <div class="col-12 mt-3">
-                    <div class='shadow-lg p-3 bg-body rounded' style='height:65px;'>
-                        <span class='float-md-start pt-1'><i class="fas fa-graduation-cap orangeText"></i> <span class='control-label-notes'>{{ trans('langMyCourses') }}</span></span>
-                        <span class='float-md-end'>
-                            <a class='btn btn-sm btn-success rounded-5' href="{{ $urlAppend }}modules/auth/courses.php">
-                                <span class='fa fa-check pe-2'></span>{{ trans('langRegCourses') }}
-                            </a>
-                        </span>
-                    </div> 
+            <div class="col-12 mt-3">
+                <div class='pb-3 ps-3 pe-0 legendViewContent text-center'>
+                    <span class='courseInfoText TextExtraBold blackBlueText'>{{ trans('langMyCourses') }}</span>
                 </div>
             </div>
-
-            <div class='d-md-none d-block'>
-                <div class="mt-3">
-                    <div class='shadow-lg p-3 bg-body rounded bg-primary' style='height:65px;'>
-                        <span class='float-start pt-1'><i class="fas fa-graduation-cap orangeText"></i> <span class='control-label-notes'>{{ trans('langMyCourses') }}</span></span>
-                        <span class='float-end'>
-                            <a class='btn btn-sm btn-success rounded-5' href="{{ $urlAppend }}modules/auth/courses.php">
-                                <span class='fa fa-check'></span>
-                            </a>
-                        </span>
-                        
-                    </div>
-                </div>
-            </div>
-
            
             @if(Session::has('message'))
             <div class='col-12 all-alerts'>
@@ -49,8 +27,13 @@
             </div>
             @endif
 
+            <div class='col-12 mt-4'>
+                <a class='btn submitAdminBtn' href="{{ $urlAppend }}modules/auth/courses.php">
+                    <span class='fa fa-check'></span>{{ trans('langRegCourses') }}
+                </a>
+            </div>
 
-            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-3">
+            <div class="col-12 mt-3">
                 <div class="table-responsive">
                     <table id="courses_table_pag" class="table_my_courses">
                         <thead class="list-header text-light">

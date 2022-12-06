@@ -75,7 +75,7 @@
                                     <tr>
                                         <th class='text-start'>&nbsp;</th>
                                         <td>
-                                            <input class='btn btn-primary' type='submit' name='submit' value="{{trans('langRejectRequest')}}">&nbsp;&nbsp;<small>{{ trans('langRequestDisplayMessage') }}</small>
+                                            <input class='btn submitAdminBtn' type='submit' name='submit' value="{{trans('langRejectRequest')}}">&nbsp;&nbsp;<small>{{ trans('langRequestDisplayMessage') }}</small>
                                         </td>
                                     </tr>
                                 </table>

@@ -45,7 +45,7 @@ $tool_content .= "
         </div>
         <div class='form-group mt-3'>
           <div class='col-12 d-flex justify-content-md-start justify-content-center'>
-            <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit' value='submit'>$langAdminLoginPage</button>
+            <button class='btn submitAdminBtn margin-bottom-fat' type='submit' name='submit' value='submit'>$langAdminLoginPage</button>
           </div>
         </div>
       </form>

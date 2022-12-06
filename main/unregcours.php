@@ -53,7 +53,7 @@ if (!isset($_POST['doit'])) {
           <div class='form-group mt-4'>
             <div class='d-inline-flex align-items-center'>
               <label class='control-label-notes'>$langNo:</label>
-              <a href='{$urlAppend}main/portfolio.php' class='btn btn-sm btn-secondary ms-2'> $langCancel</a>
+              <a href='{$urlAppend}main/portfolio.php' class='btn btn-outline-secondary cancelAdminBtn ms-2'> $langCancel</a>
             </div>
           </div>
         </form>

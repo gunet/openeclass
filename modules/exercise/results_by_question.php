@@ -139,8 +139,8 @@ $tool_content .= "<form id='grade_form' method='POST' action='$action_url'>$ques
 //creating buttons at the end of page
 $tool_content .= "<br><div align='center'>";
 //submit button
-$tool_content .= "<input type='submit' value='$langSubmit' form='grade_form' class='btn btn-primary' id='submitButton'>"
-        . "<a class='btn btn-secondary' href='index.php?course=$course_code'>
+$tool_content .= "<input type='submit' value='$langSubmit' form='grade_form' class='btn submitAdminBtn' id='submitButton'>"
+        . "<a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>
            $langReturn
        </a></div>";
 

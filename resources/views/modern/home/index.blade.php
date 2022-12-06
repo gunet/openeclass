@@ -384,7 +384,7 @@
                                                 
                                                     @endforeach
                                                 </div>
-                                                <div class="more-link"><a class="all_courses mt-3 float-end text-uppercase" href="{{ $urlAppend }}modules/auth/opencourses.php?fc=1">{{ trans('langAllCourses') }} <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span></a></div>
+                                                <div class="more-link"><a class="all_courses mt-3 float-end text-uppercase" href="{{ $urlAppend }}modules/auth/listfaculte.php">{{ trans('langAllCourses') }} <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span></a></div>
                                             </div>
                                         </div>
                                     </div>
@@ -747,7 +747,7 @@
                                                     
                                                     @endforeach
                                                 </div>
-                                                <div class="more-link"><a class="all_courses mt-3 float-end text-uppercase" href="{{ $urlAppend }}modules/auth/opencourses.php?fc=1">{{ trans('langAllCourses') }} <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span></a></div>
+                                                <div class="more-link"><a class="all_courses mt-3 float-end text-uppercase" href="{{ $urlAppend }}modules/auth/listfaculte.php">{{ trans('langAllCourses') }} <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span></a></div>
                                             </div>
                                         </div>
                                     </div>
