@@ -2259,13 +2259,12 @@ tinymce.init({
 </script>";
     }
 
-    /* $text = str_replace(array('<m>', '</m>', '<M>', '</M>'),
-      array('[m]', '[/m]', '[m]', '[/m]'),
-      $text); */
-
-    return "<textarea class='mceEditor' name='$name' rows='$rows' cols='$cols'>" .
-            q(str_replace('{', '&#123;', $text)) .
-            "</textarea>\n";
+    if (!is_null($text)) {
+        $textarea_text = q(str_replace('{', '&#123;', $text));
+    } else {
+        $textarea_text = '';
+    }
+    return "<textarea class='mceEditor' name='$name' rows='$rows' cols='$cols'>" . $textarea_text . "</textarea>\n";
 }
 
 // Display a simple textarea with name $name
