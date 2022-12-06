@@ -1991,6 +1991,7 @@ $langAddPicture = "Προσθήκη εικόνας";
 $langReplacePicture = "Αντικατάσταση της εικόνας";
 $langDeletePicture = "Διαγραφή της εικόνας";
 $langQuestionDescription = "Προαιρετικό σχόλιο";
+$langQuestionFeedback = "Σχόλιο ανατροφοδότησης";
 $langGiveQuestion = "Δώστε την ερώτηση";
 $langInvalidPicture = "Μη υποστηριζόμενος τύπος εικόνας";
 $langQuestionDiffGrade = "Βαθμός δυσκολίας";
@@ -3695,6 +3696,13 @@ $langMailVerificationChangedNo = "Δεν επιλέξατε κάποια αλλ�
 $langMailVerificationChangedNoAdmin = "Μηδενικός αριθμός χρηστών ή δεν επιτρέπεται η αλλαγή του χρήστη admin";
 $langCourseUserRegDone = "Η εγγραφή χρήστη πραγματοποιήθηκε με επιτυχία.";
 $langCourseUserRegError = "Παρουσιάστηκε σφάλμα κατά την εγγραφή χρήστη.";
+
+/* ****************************************
+ * api token.php
+ ***************************************** */
+
+$langNoApiToken = "Δεν έχουν δημιουργηθεί api tokens";
+$langApiTokenDeleted = "Το token διαγράφηκε με επιτυχία";
 
 /* * **********************************************************
  * restore_course.php
@@ -5600,6 +5608,9 @@ $langClearSettings = "Καθαρισμός Ρυθμίσεων";
 $langNotConfigured = 'Δεν έχει ρυθμιστεί';
 $langEnableAfterConfig = 'Για να ενεργοποιήσετε αυτό το εργαλείο θα πρέπει πρώτα να εισάγετε τις απαιτούμενες ρυθμίσεις.';
 $langUnknownSetting = 'Άγνωστη ρύθμιση';
+$langAPITokenExists = "Έχει δημιουργηθεί ήδη ένα token. Αν θέλετε να δημιουργήσετε νέο, κάντε κλικ στο 'Δημιουργία νέου token'";
+$langAPITokenShortDesc = "Δημιουργία token για χρήση του eClass API";
+$langCreateAPIToken = 'Δημιουργία νέου Token';
 
 /* * ***********************************************************
  * Auto Judge
