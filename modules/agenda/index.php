@@ -278,8 +278,8 @@ if ($is_editor) {
                 <label for='startdate' class='col-md-3 col-12 control-label-notes text-capitalize'>$langDate</label>
                 <div class='col-md-9 col-12'>
                     <div class='input-group'>
-                        <input class='form-control rounded-pill' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
-                        <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
+                        <input class='form-control mt-0' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
+                        <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                     </div>
                 </div>
             </div>
@@ -290,8 +290,8 @@ if ($is_editor) {
                 <label for='durationcal' class='col-md-3 col-12 control-label-notes text-capitalize'>$langDuration <small>$langInHour</small></label>
                 <div class='col-md-9 col-12'>
                     <div class='input-group add-on'>
-                        <input class='form-control rounded-pill' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
-                        <div class='input-group-addon add-on'><span class='fa fa-clock-o fa-fw'></span></div>
+                        <input class='form-control mt-0' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
+                        <div class='input-group-addon add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='fa fa-clock-o fa-fw'></span></div>
                     </div>
                 </div>
             </div>";
@@ -330,8 +330,8 @@ if ($is_editor) {
                 <label for='Enddate' class='col-md-3 col-12 control-label-notes text-capitalize'>$langUntil</label>
                     <div class='col-md-9 col-12'>
                         <div class='input-group ms-md-2'>
-                            <input class='form-control rounded-pill' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
-                            <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
+                            <input class='form-control mt-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
+                            <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                         </div>
                     </div>
                 </div>

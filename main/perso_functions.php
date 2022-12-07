@@ -211,9 +211,9 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_content .= "
                         <li class='list-group-item pt-3 pb-3 ps-0 pe-0'>
                             <div class='item-wholeline text-center'>
-                                    <div class='text-title'>
+                                    <div class='text-title TextSemiBold fs-6'>
                                         <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
-                                    </div><br><br>
+                                    </div><br>
                                 <div class='blackBlueText TextBold'>$course_title</div>
                                 <div class='blackBlueText TextRegular'>$ann_date</div>
                             </div>
@@ -268,7 +268,7 @@ function getUserMessages() {
             $message_date = format_locale_date($message->timestamp);
             $message_content .= "<li class='list-group-item pt-3 pb-3 ps-0 pe-0'>
                                     <div class='item-wholeline text-center'>
-                                        <div class='text-title'>$langFrom: ".display_user($message->author_id, false, false)."<br><br>
+                                        <div class='text-title TextSemiBold'><span>$langFrom: ".display_user($message->author_id, false, false)."<br><br>
                                             <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
                                         </div>
                                         <div class='blackBlueText TextBold'>$course_title</div><br>

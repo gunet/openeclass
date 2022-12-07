@@ -58,7 +58,7 @@
                         @endif
                     </div>
                     
-                    @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements)
+                    @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements or $popular_courses)
                     <div class='d-none d-lg-block'>
                         <div class='SectionMenu ms-auto me-auto bg-transparent @if(!get_config("homepage_title") and !get_config("homepage_intro")) pt-3 @endif'>
                             @if(get_config('homepage_title') or get_config('homepage_intro'))
@@ -436,11 +436,11 @@
                     </div>
                     @endif
 
-                    @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements)
+                    @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements or $popular_courses)
                     <div class='d-block d-lg-none bgEclass pb-3 pt-0 ps-3 pe-3'>
                         @if(get_config('homepage_title') or get_config('homepage_intro'))
                             <div class='col-12 mt-3'>
-                                <div class="panel panel-default homepageIntroPanel w-100 border-0">
+                                <div class="panel panel-default homepageIntroPanel w-100 border-0 shadow-none">
                                     <div class="panel-body blackBlueText bg-body @if(get_config('homepage_title')) NoBorderTop @else Borders @endif">
                                         {!! get_config('homepage_intro') !!}
                                     </div>
@@ -456,7 +456,7 @@
                         <!-- only eclass-banner -->
                         @if (!get_config('enable_mobileapi') and !get_config('opencourses_enable') and $eclass_banner_value == 1)
                             <div class='col-12 mt-3'>
-                                <div class='panel panel-admin panel-banner border-0'>
+                                <div class='panel panel-admin panel-banner border-0 shadow-none'>
                                     <div class='panel-body'>
                                         <a href="http://www.openeclass.org/" target="_blank">
                                             <img class="img-responsive center-block m-auto d-block" src="{{ $themeimg }}/open_eclass_banner.png" alt="Open eClass Banner">
@@ -469,7 +469,7 @@
                             <div class='col-12 mt-3'>
                                 <div class='row'>
                                     <div class='col-6 pe-1'>
-                                        <div class='panel panel-admin panel-banner border-0'>
+                                        <div class='panel panel-admin panel-banner border-0 shadow-none'>
                                             <div class='panel-body'>
                                                 <a href="http://www.openeclass.org/" target="_blank">
                                                     <img class="img-responsive center-block m-auto d-block" src="{{ $themeimg }}/open_eclass_banner.png" alt="Open eClass Banner">
@@ -478,7 +478,7 @@
                                         </div>
                                     </div>
                                     <div class='col-6'>
-                                        <div class='panel panel-admin panel-social-media border-0'>
+                                        <div class='panel panel-admin panel-social-media border-0 shadow-none'>
                                             <div class='panel-body'>
                                                 <div class='col-12'>
                                                     <div class='row'>
@@ -504,7 +504,7 @@
                             <div class='col-12 mt-3'>
                                 <div class='row'>
                                     <div class='col-12 mb-3'>
-                                        <div class='panel panel-admin panel-banner border-0'>
+                                        <div class='panel panel-admin panel-banner border-0 shadow-none'>
                                             <div class='panel-body'>
                                                 <a href="http://www.openeclass.org/" target="_blank">
                                                     <img class="img-responsive center-block m-auto d-block" src="{{ $themeimg }}/open_eclass_banner.png" alt="Open eClass Banner">
@@ -520,7 +520,7 @@
                                         @if (get_config('opencourses_enable'))
                                             <div class='row'>
                                                 <div class='col-12'>
-                                                    <div class='panel panel-admin panel-open-courses border-0'>
+                                                    <div class='panel panel-admin panel-open-courses border-0 shadow-none'>
                                                         <div class='panel-body w-100 @if($openCoursesExtraHTML) d-flex justify-content-center align-items-center @endif'>
                                                             @if ($openCoursesExtraHTML)
                                                                 {!! $openCoursesExtraHTML !!}
@@ -549,7 +549,7 @@
                             <div class='col-12 mt-3'>
                                 <div class='row'>
                                     <div class='col-12'>
-                                        <div class='panel panel-admin panel-banner border-0'>
+                                        <div class='panel panel-admin panel-banner border-0 shadow-none'>
                                             <div class='panel-body d-flex justify-content-center align-items-center'>
                                                 <a class='d-flex justify-content-center align-items-center' href="http://www.openeclass.org/" target="_blank">
                                                     <img src="{{ $themeimg }}/open_eclass_banner.png" alt="Open eClass Banner">
@@ -558,7 +558,7 @@
                                         </div>
                                     </div>
                                     <div class='col-12 mt-3'>
-                                        <div class='panel panel-admin panel-social-media border-0'>
+                                        <div class='panel panel-admin panel-social-media border-0 shadow-none'>
                                             <div class='panel-body d-flex justify-content-center align-items-center'>
                                                 <div class='col-12'>
                                                     <div class='row'>
@@ -583,7 +583,7 @@
                                     @endif
                                     @if (get_config('opencourses_enable'))
                                         <div class='col-12 mt-3'>
-                                            <div class='panel panel-admin panel-open-courses border-0'>
+                                            <div class='panel panel-admin panel-open-courses border-0 shadow-none'>
                                                 <div class='panel-body w-100 @if($openCoursesExtraHTML) d-flex justify-content-center align-items-center @endif'>
                                                     @if ($openCoursesExtraHTML)
                                                         {!! $openCoursesExtraHTML !!}
@@ -610,7 +610,7 @@
                             <div class='col-12 mt-3'>
                                 <div class='row'>          
                                     <div class='col-md-6 col-12 pe-md-1'>
-                                        <div class='panel panel-admin panel-social-media border-0'>
+                                        <div class='panel panel-admin panel-social-media border-0 shadow-none'>
                                             <div class='panel-body d-flex justify-content-center align-items-center'>
                                                 <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank>
                                                     <img src='template/modern/images/appstore.png' class='img-responsive center-block m-auto d-block' alt='Available on the App Store'>
@@ -619,7 +619,7 @@
                                         </div>
                                     </div>
                                     <div class='col-md-6 col-12 mt-md-0 mt-3'>
-                                        <div class='panel panel-admin panel-social-media border-0'>
+                                        <div class='panel panel-admin panel-social-media border-0 shadow-none'>
                                             <div class='panel-body d-flex justify-content-center align-items-center'>
                                                 <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank>
                                                     <img src='template/modern/images/playstore.png' class='img-responsive center-block m-auto d-block' alt='Available on the Play Store'>
@@ -633,7 +633,7 @@
                                     @endif
                                     @if (get_config('opencourses_enable'))
                                         <div class='col-12 mt-3'>
-                                            <div class='panel panel-admin panel-open-courses border-0'>
+                                            <div class='panel panel-admin panel-open-courses border-0 shadow-none'>
                                                 <div class='panel-body w-100 @if($openCoursesExtraHTML) d-flex justify-content-center align-items-center @endif'>
                                                     @if ($openCoursesExtraHTML)
                                                         {!! $openCoursesExtraHTML !!}
@@ -659,7 +659,7 @@
                             <div class='col-12 mt-3'>
                                 <div class='row'>
                                     <div class='col-6 pe-1'>
-                                        <div class='panel panel-admin panel-social-media border-0'>
+                                        <div class='panel panel-admin panel-social-media border-0 shadow-none'>
                                             <div class='panel-body d-flex justify-content-center align-items-center'>
                                                 <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank>
                                                     <img src='template/modern/images/appstore.png' class='img-responsive center-block m-auto d-block' alt='Available on the App Store'>
@@ -668,7 +668,7 @@
                                         </div>
                                     </div>
                                     <div class='col-6'>
-                                        <div class='panel panel-admin panel-social-media border-0'>
+                                        <div class='panel panel-admin panel-social-media border-0 shadow-none'>
                                             <div class='panel-body d-flex justify-content-center align-items-center'>
                                                 <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank>
                                                     <img src='template/modern/images/playstore.png' class='img-responsive center-block m-auto d-block' alt='Available on the Play Store'>
@@ -688,7 +688,7 @@
                                     @endif
                                     @if (get_config('opencourses_enable'))
                                         <div class='col-12'>
-                                            <div class='panel panel-admin panel-open-courses border-0'>
+                                            <div class='panel panel-admin panel-open-courses border-0 shadow-none'>
                                                 <div class='panel-body w-100 @if($openCoursesExtraHTML) d-flex justify-content-center align-items-center @endif'>
                                                     @if ($openCoursesExtraHTML)
                                                         {!! $openCoursesExtraHTML !!}
@@ -713,7 +713,7 @@
 
                         @if($popular_courses)
                                 <div class="col-12 mt-3">
-                                    <div class='panel panel-admin'>
+                                    <div class='panel panel-admin shadow-none'>
                                         <div class='panel-body'>
                                             <div class="news">
                                                 <div class='row'>
@@ -757,7 +757,7 @@
                         @if ($announcements)
                             <div class='col-12 mt-3'>
                                 
-                                        <div class='panel panel-admin border-0'>
+                                        <div class='panel panel-admin border-0 shadow-none'>
                                             <div class='panel-body'>
                                                 <div class="news">
                                                     <div class='row'>

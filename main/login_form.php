@@ -51,6 +51,7 @@ foreach ($q as $l) {
     } elseif (!$loginFormEnabled) {
         $loginFormEnabled = true;
         $authLink[] = array(true, "
+        <div class='col-12'>
           <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
             $next
             <div class='row'>
@@ -71,7 +72,7 @@ foreach ($q as $l) {
                 </div>
               </div>
            </div>
-            </form>", $authTitle);
+            </form></div>", $authTitle);
     }
 }
 
@@ -97,11 +98,11 @@ foreach ($authLink as $authInfo) {
       <div class='col-lg-$columns col-12'>
         <div class='panel panel-default rounded-0 mt-lg-0 mb-lg-0 mb-3' style='min-height:280px;'>
           <div class='panel-heading rounded-0'><div class='panel-title p-0 text-dark text-center'>
-          <img src='/template/modern/img/user2.png' class='user-icon2 me-2'>" . q($authInfo[2]) . "</div></div>
-            <div class='panel-body login-page-option rounded-0 bg-light d-flex justify-content-center align-items-center'>" .
+          <img src='/template/modern/img/user_login.svg' class='user-icon2 me-2'>" . q($authInfo[2]) . "</div></div>
+            <div class='panel-body login-page-option rounded-0 bg-white'>" .
               $authInfo[1];
     if (Session::has('login_error') and $authInfo[0]) {
-        $tool_content .= "<div class='alert alert-warning' role='alert'>".Session::get('login_error')."</div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning' role='alert'>".Session::get('login_error')."</div></div>";
     }
     $tool_content .= "
                                 </div>

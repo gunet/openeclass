@@ -9,7 +9,7 @@
                     <i class="fas fa-align-left"></i>
                     <span></span>
                 </button>
-                <a class="btn btn-sm btn-primary d-lg-none" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools">
+                <a class="btn btn-sm btn-outline-primary d-lg-none" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools">
                     <i class="fa fa-bars"></i>
                 </a>
             </nav>
@@ -27,13 +27,13 @@
                     @foreach ($breadcrumbs as $key => $item)
                     @if (isset($item['bread_href']))
                             <li class="breadcrumb-item d-flex justify-content-center align-items-center">
-                                <a class='text-wrap text-capitalize' href='{{ $item['bread_href'] }}'>
+                                <a class='text-wrap text-capitalize TextMedium' href='{{ $item['bread_href'] }}'>
                                     {!! $session->status != USER_GUEST && isset($uid) && $key == 0 ? '<span class="fa fa-home"></span> ' : "" !!}
                                     {!! $item['bread_text'] !!}
                                 </a>
                             </li>
                         @else
-                            <li class="breadcrumb-item active d-flex justify-content-center align-items-center" aria-current="page"><a class='pe-none text-secondary text-lowercase'>{!! $item['bread_text'] !!}</a></li>
+                            <li class="breadcrumb-item active d-flex justify-content-center align-items-center TextMedium" aria-current="page"><a class='pe-none text-secondary text-lowercase'>{!! $item['bread_text'] !!}</a></li>
                         @endif
                     @endforeach
                 </ol>

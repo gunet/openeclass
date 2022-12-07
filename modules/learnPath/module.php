@@ -332,7 +332,7 @@ if ($module->contentType != CTLABEL_) { //
         <div class='col-sm-8'>";
     if ($module->startAsset_id != "" && $asset->asset_id == $module->startAsset_id) {
         $tool_content .= "<form action='./viewer.php?course=$course_code' method='post'> 
-                            <input class='btn btn-sm btn-primary' type='submit' value='$langStartModule'>
+                            <input class='btn submitAdminBtn' type='submit' value='$langStartModule'>
                         </form>";
     } else {
         $tool_content .= "<p style='align:center;'>$langNoStartAsset</p>";

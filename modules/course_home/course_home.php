@@ -686,6 +686,7 @@ if ($total_cunits > 0) {
         $cunits_content .= "</div>";
     }else{
         $counter_hr = 0;
+        $countUnits = count($all_units);
         foreach ($all_units as $cu) {
             $counter_hr++;
             $not_shown = false;
@@ -723,7 +724,11 @@ if ($total_cunits > 0) {
             $vis = $cu->visible;
             $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
             $cu_indirect = getIndirectReference($cu->id);
-            $cunits_content .= "<div id='unit_$cu_indirect' class='col-12 legendViewContent ps-0 pe-0 pt-0 pb-3 mb-3' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
+            $legendViewContent = '';
+            if($counter_hr < $countUnits){
+                $legendViewContent = 'legendViewContent';
+            }
+            $cunits_content .= "<div id='unit_$cu_indirect' class='col-12 $legendViewContent ps-0 pe-0 pt-0 pb-3 mb-3' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
                 <div class='item-content'>
                     <div class='item-header clearfix'>
                         <div class='item-title h4 $class_vis text-primary'>";
@@ -778,9 +783,6 @@ if ($total_cunits > 0) {
             }
 
             $cunits_content .= "</div></div></div></div>";
-            // if($counter_hr <= count($all_units)-1){
-            //     $cunits_content .= "<hr>";
-            // }
         }
     }
 

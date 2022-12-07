@@ -72,7 +72,7 @@
                                                         <small>{{ trans('langDelete') }}</small>
                                                     </a>
                                                     <div class="float-end">
-                                                        <a href="#" class="btn btn-sm btn-primary submitOptions">
+                                                        <a href="#" class="btn submitAdminBtn submitOptions">
                                                             {{ trans('langSubmit') }}
                                                         </a>                                
                                                     </div>                    
