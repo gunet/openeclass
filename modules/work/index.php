@@ -4042,8 +4042,8 @@ function submission_count($sub_id) {
  * @param type $display_graph_results
  */
 function show_assignment_review($id, $display_graph_results = false) {
-    global $tool_content, $course_id, $works_url, $course_code, $uid,
-        $langWorkOnlineText, $m, $langGradebookGrade, $urlServer,
+    global $tool_content, $head_content, $course_id, $works_url, $course_code, $uid,
+        $langWorkOnlineText, $m, $langGradebookGrade,
         $langQuestionView, $langSGradebookBook, $langEdit, $langPeerSubmissions;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
@@ -4057,6 +4057,7 @@ function show_assignment_review($id, $display_graph_results = false) {
             .table-responsive { width: 100%; }
             .table-responsive td { word-break: break-word; }
           </style>";
+
         $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
             <input type='hidden' name='grades_id' value='$id'>
@@ -4067,7 +4068,7 @@ function show_assignment_review($id, $display_graph_results = false) {
               <table class='table-default'>
                 <tbody>
                   <tr class='list-header'>
-                    <th width='3'>&nbsp;</th>";
+                    <th width='3%'>&nbsp;</th>";
         //auta einai ta onomata panw sto pedio tou pinaka bathmos hmeromhnia...
         $assign->submission_type ? $tool_content .= "<th>$langWorkOnlineText</th>" : sort_link($m['filename'], 'filename');
         sort_link($langGradebookGrade, 'grade');
