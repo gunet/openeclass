@@ -53,10 +53,11 @@ if (isset($_POST['ump_id'])) {
     $lesson_status_value = strtoupper($_POST['lesson_status']);
     $credit_value = strtoupper($_POST['credit']);
 
-    //set values for the scores
+    // set values for the scores
     $raw_value = (int) $_POST['raw'];
     $scoreMin_value = (int) $_POST['scoreMin'];
     $scoreMax_value = (int) $_POST['scoreMax'];
+    // $scaled_value = (float) $_POST['scoreScaled'];
 
     // next visit of the sco will not be the first so entry must be setted to RESUME
     $entry_value = "RESUME";
@@ -143,6 +144,7 @@ if (isset($_POST['ump_id'])) {
             <input type="hidden" name="suspend_data" />
             <input type="hidden" name="scoreMin" />
             <input type="hidden" name="scoreMax" />
+            <input type="hidden" name="scoreScaled" />
         </form>
     </body>
 </html>
