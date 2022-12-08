@@ -30,7 +30,7 @@
                                     </div>
                                 @else
                                     @foreach ($faqs as $key => $faq)
-                                        <div class='panel panel-admin border-0 p-md-3 bg-white rounded-0 overflow-auto'>
+                                        <div class='panel panel-admin p-md-3 bg-white rounded-0 overflow-auto'>
                                             <div class='panel-heading bg-body'>
                                                 <div class='col-12'>
                                                     <a role='button' data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>

@@ -187,7 +187,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 </div>
                 <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
                      <input class='btn submitAdminBtn' type='submit' name='submitNote' value='$langAdd'> 
-                     <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
+                     <a class='btn cancelAdminBtn ms-1' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
                   
                 </div>";
                 if($noteToModify!=""){

@@ -62,7 +62,7 @@ function display_certificates() {
                                     $langCertificates
                                 </div>
                                 <div class='col-md-5 col-6 text-md-end text-end'>
-                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> <span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate</span></a>
+                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span> <span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate</span></a>
                                 </div>
                             </div>
                         </div>
@@ -169,7 +169,7 @@ function display_badges() {
                                     $langBadges
                                 </div>
                                 <div class='col-md-5 col-6 text-end'>
-                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
+                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
                                 </div>
                             </div>
                         </div>
@@ -501,7 +501,7 @@ function display_activities($element, $id, $unit_id = 0) {
         array(
             'secondary_title' => $langAdd,
             'secondary_icon' => 'fa-plus',
-            'secondary_btn_class' => 'btn-success btn-sm'
+            'secondary_btn_class' => 'submitAdminBtn'
         ));
 
     //get available activities
@@ -677,7 +677,7 @@ function display_activities($element, $id, $unit_id = 0) {
             array(
                 'secondary_title' => $langNewUnitPrerequisite,
                 'secondary_icon' => 'fa-plus',
-                'secondary_btn_class' => 'btn-success btn-sm',
+                'secondary_btn_class' => 'submitAdminBtn',
             ));
         $tool_content .= "  
                
@@ -2217,7 +2217,7 @@ function certificate_settings($element, $element_id = 0) {
                                     'value'=> $langInsert
                             ),
                             array(
-                                'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                'class' => 'cancelAdminBtn ms-1',
                                 'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                 )
                             ))."

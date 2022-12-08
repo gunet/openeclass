@@ -283,7 +283,7 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
                             'value'=> $actionValue
                         ),
                         array(
-                            'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                            'class' => 'cancelAdminBtn ms-1',
                             'href' =>  $_SERVER['SCRIPT_NAME'] . "?category=" . $catId
                         )
                     )) .

@@ -118,7 +118,7 @@
 
 
                     <div class='col-sm-12'>
-                        <div class='panel panel-admin border-0 p-md-3 bg-white'>
+                        <div class='panel panel-admin p-md-3 bg-white'>
                             <div class='panel-heading bg-body'>
                                 <div class='col-12 d-inline-flex Help-panel-heading'>
 
@@ -307,7 +307,7 @@
 
                         @if($course_info->view_type == 'units')
                             @if($total_cunits > 0)
-                                <div class='panel panel-admin border-0 p-md-3 bg-white'>
+                                <div class='panel panel-admin p-md-3 bg-white'>
                                     <div class='panel-heading bg-body'>
                                         <div class='col-12 d-inline-flex Help-panel-heading'>
                                             <div class='col-6'>
@@ -349,7 +349,7 @@
                                     </div>
                                 </div>
                             @else
-                                <div class='panel panel-admin border-0 p-md-3 bg-white'>
+                                <div class='panel panel-admin p-md-3 bg-white'>
                                     <div class='panel-heading bg-body'>
                                         <div class='col-12 d-inline-flex Help-panel-heading'>
                                             <div class='col-6 panel-title text-uppercase Help-text-panel-heading'>
@@ -399,7 +399,7 @@
 
                                 @foreach ($items as $item)
                                     @if (trim($item->content))
-                                        <div class='panel panel-admin border-0 p-md-3 bg-white mb-3'>
+                                        <div class='panel panel-admin p-md-3 bg-white mb-3'>
                                             <div class='panel-heading bg-body'>
                                                 <div class='col-12 Help-panel-heading'>
                                                     <span class='panel-title text-uppercase Help-text-panel-heading'>
@@ -440,7 +440,7 @@
                         @endif
 
                         @if($course_info->view_type == 'simple')
-                            <div class="panel panel-admin border-0 p-md-3 bg-white @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif">
+                            <div class="panel panel-admin p-md-3 bg-white @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif">
                                 <div class='panel-heading bg-body'>
                                     <div class='col-12 d-inline-flex Help-panel-heading'>
                                         <div class='col-6'>
@@ -473,7 +473,7 @@
 
                     <div class="col-xxl-4 col-xl-5 col-lg-12 col-md-12 mt-lg-4 mt-4 float-end ">
 
-                        <div class="panel panel-admin border-0 p-0 bg-white">
+                        <div class="panel panel-admin p-0 bg-white">
                             {!! $user_personal_calendar !!}
                             <div class='panel-footer'>
                                 <div class='col-12'>
@@ -510,7 +510,7 @@
                         </div>
 
                         @if($course_info->view_type != 'simple')
-                            <div class="panel panel-admin border-0 p-md-3 bg-white mt-4">
+                            <div class="panel panel-admin p-md-3 bg-white mt-4">
                                 <div class='panel-heading bg-body'>
                                     <div class='col-12 d-inline-flex Help-panel-heading'>
                                         <div class='col-6'>
@@ -534,7 +534,7 @@
                         @endif
 
                         @if(isset($course_completion_id) and $course_completion_id > 0)
-                            <div class="panel panel-admin border-0 p-md-3 bg-white mt-4">
+                            <div class="panel panel-admin p-md-3 bg-white mt-4">
                                 <div class='panel-heading bg-body'>
                                     <div class='col-12 Help-panel-heading'>
                                         <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langCourseCompletion') }}</span>
@@ -561,7 +561,7 @@
                         @endif
 
                         @if (isset($level) && !empty($level))
-                            <div class='panel panel-admin border-0 p-md-3 bg-white mt-4'>
+                            <div class='panel panel-admin p-md-3 bg-white mt-4'>
                                 <div class='panel-heading bg-body rounded-0'>
                                     <div class='col-12 Help-panel-heading rounded-0'>
                                         <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langOpenCourseShort') }}</span>

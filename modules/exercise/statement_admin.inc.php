@@ -333,7 +333,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                       
                         <input type='submit' class='btn submitAdminBtn' name='submitQuestion' value='$langCreate'>
                      
-                        <a href='$link_back' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                        <a href='$link_back' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                        
                     
                     

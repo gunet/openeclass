@@ -190,7 +190,7 @@ $tool_content .= "
                     <button class='btn submitAdminBtn' type='submit' name='submit'>$langSubmit</button>
               
                 
-                    <button class='btn btn-outline-danger rounded-pill ms-1 h-30px d-flex justify-content-center align-items-center' type='submit' name='submit' value='clear'>$langClearSettings</button>
+                    <button class='btn deleteAdminBtn ms-1' type='submit' name='submit' value='clear'>$langClearSettings</button>
                 
                
              

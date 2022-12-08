@@ -241,7 +241,7 @@ if (isset($_GET['action'])) {
                                            <button class='btn submitAdminBtn' type ='submit' name='submit_cert_template'>$langUpload</button>
                                       
                                     
-                                           <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
+                                           <a class='btn cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
                                        
                                         
                                         
@@ -308,7 +308,7 @@ if (isset($_GET['action'])) {
                                     <button class='btn submitAdminBtn' type ='submit' name='submit_badge_icon'>$langUpload</button>
                                 
                                 
-                                    <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
+                                    <a class='btn cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
                               
                                     
                                     

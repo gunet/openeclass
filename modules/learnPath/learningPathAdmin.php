@@ -481,7 +481,7 @@ $lp_action_button = action_button(array(
     array(
         'secondary_title' => $langAdd,
         'secondary_icon' => 'fa-plus',
-        'secondary_btn_class' => 'btn-success btn-sm'
+        'secondary_btn_class' => 'submitAdminBtn'
     )
 );
 $tool_content .= "<div class='col-sm-12 mt-3'>

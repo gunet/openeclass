@@ -237,7 +237,7 @@
                                         </table>
                                     </div>
                                     <div class="row p-2"></div>
-                                    <input class="btn btn-success" type="submit" name="submit_register_course" value="{{trans('langSubmitChanges')}}">
+                                    <input class="btn submitAdminBtn" type="submit" name="submit_register_course" value="{{trans('langSubmitChanges')}}">
 
                                     
                                 </form>

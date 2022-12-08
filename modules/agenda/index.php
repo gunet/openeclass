@@ -109,10 +109,10 @@ var dialogDeleteOptions = {
         cancel:{label: '$langCancel'},
         yes:{
             label: '$langYes',
-            className: 'btn-danger'},
+            className: 'deleteAdminBtn'},
         no:{
             label: '$langNoJustThisOne',
-            className: 'btn-warning'}}};
+            className: 'cancelAdminBtn'}}};
 
 $(document).ready(function(){
     $('#enddatecal').hide();
@@ -359,7 +359,7 @@ if ($is_editor) {
                                           'id' => 'submitbtn'
                                       ),
                                       array(
-                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                        'class' => 'cancelAdminBtn ms-1',
                                         'href' => "index.php?course=$course_code",
                                     )
                                   ))
@@ -418,15 +418,15 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                                     <div id="calendar-header">
                                         <div class="float-end form-inline">
                                             <div class="btn-group">
-                                                    <button class="btn btn-outline-secondary cancelAdminBtn" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
-                                                    <button class="btn btn-outline-secondary cancelAdminBtn" data-calendar-nav="today">' . $langToday . '</button>
-                                                    <button class="btn btn-outline-secondary cancelAdminBtn" data-calendar-nav="next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
+                                                    <button class="btn submitAdminBtn" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
+                                                    <button class="btn submitAdminBtn" data-calendar-nav="today">' . $langToday . '</button>
+                                                    <button class="btn submitAdminBtn" data-calendar-nav="next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
                                             </div>
                                             <div class="btn-group">
-                                                    <button class="btn btn-outline-secondary cancelAdminBtn" data-calendar-view="year">' . $langYear . '</button>
-                                                    <button class="btn btn-outline-secondary cancelAdminBtn active" data-calendar-view="month">' . $langMonth . '</button>
-                                                    <button class="btn btn-outline-secondary cancelAdminBtn" data-calendar-view="week">' . $langWeek . '</button>
-                                                    <button class="btn btn-outline-secondary cancelAdminBtn" data-calendar-view="day">' . $langDay . '</button>
+                                                    <button class="btn submitAdminBtn" data-calendar-view="year">' . $langYear . '</button>
+                                                    <button class="btn submitAdminBtn active" data-calendar-view="month">' . $langMonth . '</button>
+                                                    <button class="btn submitAdminBtn" data-calendar-view="week">' . $langWeek . '</button>
+                                                    <button class="btn submitAdminBtn" data-calendar-view="day">' . $langDay . '</button>
                                             </div>
                                         </div>
                                         <h6></h6>

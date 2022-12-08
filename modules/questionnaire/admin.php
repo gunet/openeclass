@@ -541,7 +541,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                          'javascript' => "selectAll('assignee_box',true)"
                                      ),
                                      array(
-                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                        'class' => 'cancelAdminBtn ms-1',
                                         'href' => "index.php?course=$course_code",
                                     )
                                  ))
@@ -683,7 +683,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                  'value' => (isset($_GET['newQuestion']) ? $langCreate : $langModify)
                              ),
                              array(
-                                'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                'class' => 'cancelAdminBtn ms-1',
                                 'href' => "admin.php?course=$course_code&pid=$pid".(isset($_GET['modifyQuestion']) ? "&modifyAnswers=".$_GET['modifyQuestion'] : "")
                              )
                          ))
@@ -795,7 +795,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                  <input class='btn submitAdminBtn' type='submit' name='submitAnswers' value='$langCreate'>
                               
                               
-                                 <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='admin.php?course=$course_code&amp;pid=$pid'>$langCancel</a>
+                                 <a class='btn cancelAdminBtn ms-1' href='admin.php?course=$course_code&amp;pid=$pid'>$langCancel</a>
                               
                           
                             

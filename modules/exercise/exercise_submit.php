@@ -453,7 +453,7 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
             <div class='text-center'>
                 <form action='$form_next_link' method='post'>
                     <input class='btn submitAdminBtn' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
-                    <a href='$form_cancel_link' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                    <a href='$form_cancel_link' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                 </form>
             </div>";
             unset_exercise_var($exerciseId);
@@ -723,10 +723,10 @@ if ($questionList) {
             foreach ($questionList as $k => $q_id) {
                 $answered = in_array($q_id, $answeredIds);
                 if ($answered) {
-                    $class = 'btn-info';
+                    $class = 'btn-primary rounded-pill text-white';
                     $title = q($langHasAnswered);
                 } else {
-                    $class = 'btn-default';
+                    $class = 'btn-default rounded-pill';
                     $title = q($langPendingAnswered);
                 }
                 if ($questionNumber == $k) { // we are in the current question
@@ -752,7 +752,7 @@ if ($questionList) {
     } else {
         $backlink = "index.php?course=$course_code";
     }
-    $tool_content .= "<div class='float-end'><a href='$backlink' class='btn btn-outline-secondary cancelAdminBtn'>$langBack</a></div>";
+    $tool_content .= "<div class='float-end'><a href='$backlink' class='btn cancelAdminBtn'>$langBack</a></div>";
 }
 
 // "Temporary save" button
@@ -809,10 +809,10 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
 $tool_content .= "<div class='exercise-action-buttons'>";
 
 // "Cancel" button
-$tool_content .= "<input class='btn btn-danger' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
+$tool_content .= "<input class='btn cancelAdminBtn' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
 
 // "Submit" button
-$tool_content .= "<input class='btn btn-success blockUI' type='submit' name='buttonFinish' value='$langExerciseFinalSubmit'>";
+$tool_content .= "<input class='btn submitAdminBtn blockUI' type='submit' name='buttonFinish' value='$langExerciseFinalSubmit'>";
 if ($exerciseType != SINGLE_PAGE_TYPE) {
     $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
 }

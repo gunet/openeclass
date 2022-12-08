@@ -209,7 +209,7 @@
                                                         <button class='btn submitAdminBtn' type='submit'>{{ trans('langSubmit') }}</button>
                                                    
                                                   
-                                                        <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a> 
+                                                        <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a> 
                                                    
                                                 
                                                 

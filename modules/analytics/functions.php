@@ -71,7 +71,7 @@ function display_learning_analytics() {
                                 $langLearningAnalytics
                             </div>
                             <div class='col-xl-5 col-lg-5 col-md-5 col-sm-3 col-3 text-end'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span><span class='hidden-xs'>$langAdd</span></a>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>$langAdd</span></a>
                             </div>
                         </div>
                     </div>
@@ -890,7 +890,7 @@ function edit_analytics_settings ($analytics_id = 0)
                             'value'=> $langAdd
                     ),
                     array(
-                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                        'class' => 'cancelAdminBtn ms-1',
                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                         )
                     
@@ -1006,7 +1006,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
                             'value'=> $langAdd
                     ),
                     array(
-                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                        'class' => 'cancelAdminBtn ms-1',
                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showElements"
                         )
                     ))."

@@ -204,7 +204,7 @@ if (isset($_POST['submit'])) {
                         <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
                     
                   
-                        <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='viewforum.php?course=$course_code&forum=$forum_id'>$langCancel</a>
+                        <a class='btn cancelAdminBtn ms-1' href='viewforum.php?course=$course_code&forum=$forum_id'>$langCancel</a>
                     
                 
               </div>

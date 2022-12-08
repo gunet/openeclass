@@ -59,7 +59,7 @@ if (!isset($_POST['doit'])) {
                   <div class='form-group mt-4'>
                     <div class='d-inline-flex align-items-center'>
                       <label class='pe-2'>$langYes:</label>
-                      <button class='btn btn-sm btn-danger' name='doit'><i class='fa fa-trash-o'></i> $langUnregUser</button>
+                      <button class='btn deleteAdminBtn' name='doit'><i class='fa fa-trash-o'></i> $langUnregUser</button>
                     </div>
                   </div>
 

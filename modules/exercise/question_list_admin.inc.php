@@ -249,7 +249,7 @@ $head_content .= "
                         buttons: {
                             success: {
                                 label: '".js_escape($langSelection)."',
-                                className: 'btn-success',
+                                className: 'submitAdminBtn',
                                 callback: function () {
                                     var catValue = $('select#cat').val();
                                     var diffValue = $('select#diff').val();

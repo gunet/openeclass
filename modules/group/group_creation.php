@@ -114,7 +114,7 @@ if (isset($_GET['all'])) {
                    <input class='btn submitAdminBtn' type='submit' value='$langCreate' name='creation'>
               
                
-                   <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
+                   <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
               
            
         </div>
@@ -346,7 +346,7 @@ if (isset($_GET['all'])) {
                     <input class='btn submitAdminBtn' type='submit' value='$langCreate' name='creation' onClick=\"selectAll('members_box', true)\" >
                    
                  
-                     <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
+                     <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
                    
                
                 

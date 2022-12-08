@@ -89,8 +89,8 @@
                                             </span><span class="sr-only">{{trans('langAdm')}}</span>
                                         </a>
                                         @else
-                                        <button class='btn btn-sm btn-danger' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
-                                            <i class="fa fa-times text-white"></i>
+                                        <button class='btn deleteAdminBtn' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
+                                            <i class="fa fa-times"></i>
                                         </button>
                                         @endif
 
@@ -113,7 +113,7 @@
                                                 <div class="modal-footer">
                                                     <a class="btn btn-secondary" href="" data-bs-dismiss="modal">{{trans('langCancel')}}</a>
 
-                                                    <button type='submit' class="btn btn-danger" name="doit">{{trans('langDelete')}}</a>
+                                                    <button type='submit' class="btn deleteAdminBtn" name="doit">{{trans('langDelete')}}</a>
 
                                                 </div>
                                             </div>

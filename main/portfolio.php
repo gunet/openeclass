@@ -80,9 +80,9 @@ if (get_config('activate_privacy_policy_text')) {
                         </div>
                         <div class='modal-footer'>
                             <form method='post' action='$_SERVER[SCRIPT_NAME]'>
-                                <button type='submit' class='btn btn-success' role='button' name='accept_policy' value='yes'>$langAccept</button>
-                                <button type='submit' class='btn btn-danger' role='button' name='accept_policy' value='no'>$langRejectRequest</button>
-                                <button type='submit' class='btn btn-default' role='button' name='accept_policy' value='later'>$langLater</button>
+                                <button type='submit' class='btn submitAdminBtn' role='button' name='accept_policy' value='yes'>$langAccept</button>
+                                <button type='submit' class='btn deleteAdminBtn' role='button' name='accept_policy' value='no'>$langRejectRequest</button>
+                                <button type='submit' class='btn cancelAdminBtn' role='button' name='accept_policy' value='later'>$langLater</button>
                             </form>
                         </div>
                     </div>
@@ -128,7 +128,7 @@ jQuery(document).ready(function() {
            }
        }
   });
- // $('div.all_courses').html('<a class=\"btn btn-outline-secondary cancelAdminBtn\" href=\"{$urlServer}main/my_courses.php\">$langAllCourses <span class=\"fa fa-arrow-right\"></span></a>');
+ // $('div.all_courses').html('<a class=\"btn cancelAdminBtn\" href=\"{$urlServer}main/my_courses.php\">$langAllCourses <span class=\"fa fa-arrow-right\"></span></a>');
   jQuery('.panel_title').click(function()
   {
     var mypanel = $(this).next();

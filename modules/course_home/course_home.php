@@ -339,10 +339,10 @@ if (count($res) > 0) {
                                     ."</div>
                                     <div class='modal-footer'>";
                                         if ($previous_id) {
-                                            $course_descriptions_modals .= "<a id='prev_btn' class='btn btn-outline-secondary cancelAdminBtn' data-bs-dismiss='modal' data-bs-toggle='modal' href='#$previous_id'><span class='fa fa-arrow-left'></span></a>";
+                                            $course_descriptions_modals .= "<a id='prev_btn' class='btn cancelAdminBtn' data-bs-dismiss='modal' data-bs-toggle='modal' href='#$previous_id'><span class='fa fa-arrow-left'></span></a>";
                                         }
                                         if ($next_id) {
-                                            $course_descriptions_modals .= "<a id='next_btn' class='btn btn-outline-secondary cancelAdminBtn' data-bs-dismiss='modal' data-bs-toggle='modal' href='#$next_id'><span class='fa fa-arrow-right'></span></a>";
+                                            $course_descriptions_modals .= "<a id='next_btn' class='btn cancelAdminBtn' data-bs-dismiss='modal' data-bs-toggle='modal' href='#$next_id'><span class='fa fa-arrow-right'></span></a>";
                                         }
         $course_descriptions_modals .=    "
                                     </div>

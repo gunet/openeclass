@@ -31,7 +31,7 @@ function modalConfirmation($id, $labelId, $title, $body, $cancelId, $okId) {
             </div>
             <div class='modal-body'><p>$body</p></div>
             <div class='modal-footer'>
-                <button id='$cancelId' type='button' class='btn btn-default cancelAdminBtn'>$langCancel</button>
+                <button id='$cancelId' type='button' class='btn cancelAdminBtn'>$langCancel</button>
                 <button id='$okId' type='button' class='btn submitAdminBtn ms-1'>$langOk</button>
             </div>
         </div>

@@ -20,7 +20,7 @@
                     </select>
                 </div>
                 <div class='modal-footer'>
-                    <button type='button' class='btn btn-outline-secondary cancelAdminBtn' class='close' data-bs-dismiss='modal'>{{ trans('langCancel') }}</button>
+                    <button type='button' class='btn cancelAdminBtn' class='close' data-bs-dismiss='modal'>{{ trans('langCancel') }}</button>
                     <button class='btn submitAdminBtn ms-1' type='submit' name='assignmentSubmit'>{{ trans('langSubmit') }}</button>
                 </div>
             </form>
@@ -52,7 +52,7 @@
                     </select>
                 </div>
                 <div class='modal-footer'>
-                    <button type='button' class='btn btn-outline-secondary cancelAdminBtn' class='close' data-bs-dismiss='modal'>{{ trans('langCancel') }}</button>
+                    <button type='button' class='btn cancelAdminBtn' class='close' data-bs-dismiss='modal'>{{ trans('langCancel') }}</button>
                     <button class='btn submitAdminBtn ms-1' type='submit' name='watchersSubmit'>{{ trans('langSubmit') }}</button>
                 </div>
             </form>

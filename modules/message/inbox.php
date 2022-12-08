@@ -263,7 +263,7 @@ if (isset($_GET['mid'])) {
                                     'value' => $langAddModify
                                 ),
                                 array(
-                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                    'class' => 'cancelAdminBtn ms-1',
                                     'href' => "javascript:void(0)",
                                     'id'   => "cancelReply"
                                 )
@@ -354,7 +354,7 @@ if (isset($_GET['mid'])) {
                             </p>
                         </div>
                         <div class='col-sm-2'>
-                            <button class='float-end btn btn-outline-secondary cancelAdminBtn attachment-delete-button'><span class='fa fa-times space-after-icon'></span>$langLessElements</button>
+                            <button class='float-end btn cancelAdminBtn attachment-delete-button'><span class='fa fa-times space-after-icon'></span>$langLessElements</button>
                         </div>
                     </div>";
             } elseif ($course_id != 0) {
@@ -394,7 +394,7 @@ if (isset($_GET['mid'])) {
                                          'value' => $langAddModify
                                      ),
                                      array(
-                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                        'class' => 'cancelAdminBtn ms-1',
                                         'href' => "javascript:void(0)",
                                         'id'   => "cancelReply"
                                     )

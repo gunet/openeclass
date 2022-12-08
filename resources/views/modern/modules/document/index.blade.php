@@ -102,7 +102,7 @@
                                         </div>
                                         <div class='col-3 text-end'>
                                             @if ($curDirName)
-                                                <a href='{{$parentLink}}' type='button' class='btn btn-success btn-sm'>
+                                                <a href='{{$parentLink}}' type='button' class='btn submitAdminBtn'>
                                                     <span class='fa fa-level-up'></span>&nbsp;{{ trans('langUp') }}
                                                 </a>
                                             @endif
@@ -296,14 +296,14 @@
         var bts = {
             download: {
                 label: '<span class="fa fa-download"></span> {{ trans('langDownload') }}',
-                className: 'btn-success',
+                className: 'submitAdminBtn',
                 callback: function (d) {
                     window.location = downloadURL;
                 }
             },
             print: {
                 label: '<span class="fa fa-print"></span> {{ trans('langPrint') }}',
-                className: 'btn-primary',
+                className: 'submitAdminBtn',
                 callback: function (d) {
                     var iframe = document.getElementById('fileFrame');
                     iframe.contentWindow.print();
@@ -313,7 +313,7 @@
         if (screenfull.enabled) {
             bts.fullscreen = {
                 label: '<span class="fa fa-arrows-alt"></span> {{ trans('langFullScreen') }}',
-                className: 'btn-primary',
+                className: 'submitAdminBtn',
                 callback: function() {
                     screenfull.request(document.getElementById('fileFrame'));
                     return false;
@@ -322,7 +322,7 @@
         }
         bts.newtab = {
             label: '<span class="fa fa-plus"></span> {{ trans('langNewTab') }}',
-            className: 'btn-primary',
+            className: 'submitAdminBtn',
             callback: function() {
                 window.open(fileURL);
                 return false;
@@ -330,7 +330,7 @@
         };
         bts.cancel = {
             label: '{{ trans('langCancel') }}',
-            className: 'btn-secondary'
+            className: 'cancelAdminBtn'
         };
 
         bootbox.dialog({

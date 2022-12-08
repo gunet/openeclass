@@ -78,7 +78,7 @@ $data['form_buttons'] = form_buttons(array(
                 'value' =>  $langAdd
             ),
             array(
-                'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                'class' => 'cancelAdminBtn ms-1',
                 'href'  =>  "index.php?course=$course_code"
             )
         ));

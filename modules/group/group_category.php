@@ -76,7 +76,7 @@ $tool_content .= action_bar(array(
                                         <input type='submit' class='btn submitAdminBtn' name='submitCategory' value='$form_legend' />
                                   
                                   
-                                        <a href='index.php?course=$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-2'>$langCancel</a>
+                                        <a href='index.php?course=$course_code' class='btn cancelAdminBtn ms-2'>$langCancel</a>
                                  
                                
                             </div>
@@ -114,7 +114,7 @@ $tool_content .= action_bar(array(
                             <input type='submit' class='btn submitAdminBtn' name='submitCategory' value='$form_legend' />
                        
                         
-                          <a href='index.php?course=$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                          <a href='index.php?course=$course_code' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                        
                    
                 </div>

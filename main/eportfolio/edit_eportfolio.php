@@ -148,7 +148,7 @@ $tool_content .= "
                             <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
                           
                          
-                            <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                            <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                           
                        
 

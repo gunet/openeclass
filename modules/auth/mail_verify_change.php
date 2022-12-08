@@ -144,7 +144,7 @@ if (empty($_POST['email']) or !valid_email($_POST['email'])) {
                     (isset($_GET['from_profile']) || get_config('email_required')? '':
                         " <input class='btn submitAdminBtn ms-1' type='submit' name='enter' value='$langCancelAndEnter'>") .
                     (isset($_GET['from_profile']) && !get_config('mail_verification_required')?
-                        " <a href='{$urlAppend}main/profile/display_profile.php' class='btn btn-outline-secondary cancelAdminBtn ms-1' type='button'>$langCancel</a>": '') . "
+                        " <a href='{$urlAppend}main/profile/display_profile.php' class='btn cancelAdminBtn ms-1' type='button'>$langCancel</a>": '') . "
                 </div>
             </div>
         </fieldset>

@@ -21,7 +21,7 @@
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     <div class="col-12">
-                        <div class="panel panel-admin border-0 bg-white">
+                        <div class="panel panel-admin bg-white">
                             <div class='panel-heading bg-body'>
                                 <div class='col-12 Help-panel-heading'>
                                     <span class='text-uppercase fw-bold Help-text-panel-heading-Portfolio'>{{trans('langAnalyticsEditElements')}}</span>

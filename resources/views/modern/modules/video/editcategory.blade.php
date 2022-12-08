@@ -122,7 +122,7 @@
                                                   {!!
                                                 form_buttons(array(
                                                     array(
-                                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                                        'class' => 'cancelAdminBtn ms-1',
                                                         'href'  =>  $backPath
                                                     )
                                                 ))

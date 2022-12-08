@@ -198,7 +198,7 @@ function register_user_presences($attendance_id, $actID) {
                                 'name' => 'bookUsersToAct',
                                 'value'=> $langAttendanceBooking
                                 ))).
-                "<a href='index.php?course=$course_code&amp;attendance_id=" . $attendance_id . "' class='btn btn-outline-secondary cancelAdminBtn'>$langCancel</a>";
+                "<a href='index.php?course=$course_code&amp;attendance_id=" . $attendance_id . "' class='btn cancelAdminBtn'>$langCancel</a>";
         $tool_content .= "</div></div>";
         $tool_content .= generate_csrf_token_form_field() ."</form></div></div>";
         $tool_content .= "</tbody></table>";
@@ -552,7 +552,7 @@ function add_attendance_other_activity($attendance_id) {
                             'value'=> $langAdd
                         ),
                         array(
-                            'class' => 'btn btn-outline-secondary cancelAdminBtn ms-1',
+                            'class' => 'cancelAdminBtn ms-1',
                             'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                         )
                     ))."</div></div>";
@@ -746,7 +746,7 @@ function new_attendance() {
                     <label class='col-12 control-label-notes'>$langNewAttendance2</label></div>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
                         <div class='col-12'>
-                            <input class='form-control' type='text' placeholder='$langTitle...' name='title'>
+                            <input class='form-control' type='text' placeholder='$langTitle' name='title'>
                             <span class='help-block'>$title_error</span>
                         </div>
                     </div>
@@ -757,7 +757,7 @@ function new_attendance() {
                                     <label class='control-label-notes'>$langStart</label>
                                 </div>
                                 <div class='col-12'>
-                                    <input class='form-control' placeholder='$langStart...' type='text' name='start_date' id='start_date' value='$start_date'>
+                                    <input class='form-control' placeholder='$langStart' type='text' name='start_date' id='start_date' value='$start_date'>
                                     <span class='help-block'>$start_date_error</span>
                                 </div>
                             </div>
@@ -768,7 +768,7 @@ function new_attendance() {
                                     <label class='control-label-notes'>$langEnd</label>
                                 </div>
                                 <div class='col-12'>
-                                    <input class='form-control' placeholder='$langEnd...' type='text' name='end_date' id='end_date' value='$end_date'>
+                                    <input class='form-control' placeholder='$langEnd' type='text' name='end_date' id='end_date' value='$end_date'>
                                     <span class='help-block'>$end_date_error</span>
                                 </div>
                             </div>
@@ -777,7 +777,7 @@ function new_attendance() {
                     <div class='form-group mt-4".($limit_error ? " has-error" : "")."'>
                         <label class='col-12 control-label-notes'>$langAttendanceLimitNumber</label>
                         <div class='col-sm-12'>
-                            <input class='form-control' placeholder='$langAttendanceLimitNumber...' type='text' name='limit' value='$attendance_limit'>
+                            <input class='form-control' placeholder='$langAttendanceLimitNumber' type='text' name='limit' value='$attendance_limit'>
                             <span class='help-block'>$limit_error</span>
                         </div>
                     </div>
@@ -792,7 +792,7 @@ function new_attendance() {
                                                 'value'=> $langInsert
                                         ),
                                             array(
-                                                'class'=> 'btn-outline-secondary cancelAdminBtn ms-1',
+                                                'class'=> 'cancelAdminBtn ms-1',
                                                 'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                                 )
                                         )).
@@ -1063,7 +1063,7 @@ function attendance_settings($attendance_id) {
                                         'value'=> $langAttendanceUpdate
                                     ),
                                     array(
-                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                        'class' => 'cancelAdminBtn ms-1',
                                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id"
                                     )
                                 ))."
@@ -1196,7 +1196,7 @@ function user_attendance_settings($attendance_id) {
                             'javascript' => "selectAll('participants_box',true)"
                         ),
                         array(
-                            'class' => 'btn btn-outline-secondary cancelAdminBtn ms-1',
+                            'class' => 'cancelAdminBtn ms-1',
                             'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1"
                         )
                     ))."</div>

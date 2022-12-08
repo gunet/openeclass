@@ -603,7 +603,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                                   [ 'href' => $exerciseId ?
                                     "admin.php?course=$course_code&exerciseId=$exerciseId" :
                                     "index.php?course=$course_code",
-                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                    'class' => 'cancelAdminBtn ms-1',
                                   ]
                              ]) . "
                            

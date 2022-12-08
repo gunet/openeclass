@@ -119,7 +119,7 @@
                                                                     <div class="modal-dialog modal-xl">
                                                                         <div class="modal-content">
                                                                             <div class="modal-header">
-                                                                                <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                <button type="button" class="btn-close deleteAdminBtn" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                             </div>
                                                                             <div class="modal-body">
                                                                                 <a href='{{ $glossary_term->url }}' target='_blank'>

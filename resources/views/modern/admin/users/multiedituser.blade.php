@@ -60,7 +60,7 @@
                                     <div class='form-group mt-5'>
                                         <div class='col-12 d-flex justify-content-center align-items-center'>
                                             <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'{!! $confirm !!}>
-                                            <a href='index.php' class='btn btn-outline-secondary cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
+                                            <a href='index.php' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
             
                                         </div>
                                     </div>

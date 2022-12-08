@@ -107,7 +107,7 @@
                                                 </div>
                                             </div>--}}
                                             <div class='col-sm-12'>
-                                                <div class='panel panel-admin border-0 p-md-3 bg-white'>
+                                                <div class='panel panel-admin p-md-3 bg-white'>
                                                     <div class='panel-heading bg-body'>
                                                         <div class='col-12 Help-panel-heading'>
                                                             <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langPlatformIdentity') }}</span>
@@ -150,7 +150,7 @@
                                                 </div>
                                             </div>
                                             <div class='col-sm-12 mt-3'>
-                                                <div class='panel panel-admin border-0 p-md-3 bg-white'>
+                                                <div class='panel panel-admin p-md-3 bg-white'>
                                                     <div class='panel-heading bg-body'>
                                                         <div class='col-12 Help-panel-heading'>
                                                             <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langIndexInfo') }}</span>

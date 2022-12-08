@@ -2587,7 +2587,7 @@ function new_assignment() {
                     ),
                     array(
                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1'
+                        'class' => 'cancelAdminBtn ms-1'
                     )
                 ))
                 .
@@ -3707,7 +3707,7 @@ function show_edit_assignment($id) {
                                 'javascript'    => "selectAll('assignee_box',true)"
                             ),
                             array(
-                                'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                'class' => 'cancelAdminBtn ms-1',
                                 'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                             )
                         ))
@@ -4395,7 +4395,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                             'value'         => $langSubmit
                         ),
                         array(
-                            'class' => 'btn-outline-secondary cancelAdminBtn',
+                            'class' => 'cancelAdminBtn',
                             'href' => $back_link
                         )
                     ))
@@ -4618,7 +4618,7 @@ function assignment_details($id, $row, $x =false) {
                 'title' => $langDelAssign,
                 'icon' => 'fa-times',
                 'url' => "{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=do_delete",
-                'button-class' => "btn-danger",
+                'button-class' => "deleteAdminBtn",
                 'confirm' => "$langWorksDelConfirm"
             )
         ));
@@ -4634,7 +4634,7 @@ function assignment_details($id, $row, $x =false) {
     $tool_content .= "
     <div class='col-sm-12'>
     <div class='panel panel-action-btn-primary rounded-0'>
-        <div class='panel-heading'>
+        <div class='panel-heading rounded-0'>
             <h4 class='panel-title'>
                 $m[WorkInfo] &nbsp;
                 ". (($is_editor) ?
@@ -5021,7 +5021,7 @@ function show_assignment($id, $display_graph_results = false) {
                 $name = empty($row->group_id) ? display_user($row->uid) : display_group($row->group_id);
                 $stud_am = uid_to_am($row->uid);
                 if ($assign->submission_type == 1) {
-                    $filelink = "<button class='onlineText btn btn-outline-secondary cancelAdminBtn' data-id='$row->id'>$langQuestionView</button>";
+                    $filelink = "<button class='onlineText btn submitAdminBtn' data-id='$row->id'>$langQuestionView</button>";
                 } else {
                     if (empty($row->file_name)) {
                         $filelink = '&nbsp;';

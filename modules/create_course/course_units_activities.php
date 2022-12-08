@@ -313,7 +313,7 @@ if(!isset($_POST['final_submit'])){
                                     <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
                                  
                                  
-                                        <a href='{$urlServer}main/portfolio.php' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                                        <a href='{$urlServer}main/portfolio.php' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                                  
                                
                                 
@@ -510,7 +510,7 @@ if(!isset($_POST['final_submit'])){
                                     <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
                                
                               
-                                    <a href='{$urlServer}modules/units/index.php?course=".$course_code."&id=".$unit_id."' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                                    <a href='{$urlServer}modules/units/index.php?course=".$course_code."&id=".$unit_id."' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                               
                                                  
                             

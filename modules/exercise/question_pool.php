@@ -136,11 +136,11 @@ $head_content .= "<script>
                         buttons: {
                             cancel: {
                                 label: '" . js_escape($langCancel) . "',
-                                className: 'btn-default'
+                                className: 'cancelAdminBtn'
                             },
                             success: {
                                 label: '" . js_escape($langCreateDuplicate) . "',
-                                className: 'btn-success',
+                                className: 'submitAdminBtn',
                                 callback: function (d) {
                                     $('#clone_pool_form').attr('action', '$_SERVER[SCRIPT_NAME]?course=$course_code&clone_pool=1');
                                     $('#clone_pool_form').submit();

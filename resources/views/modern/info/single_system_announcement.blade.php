@@ -21,8 +21,8 @@
 
                     
                     <div class="col-12">
-                        <div class="panel panel-default rounded-0 border-0">
-                            <div class='panel-heading rounded-0 border-0'>
+                        <div class="panel panel-default rounded-0">
+                            <div class='panel-heading rounded-0'>
                                 <div class='panel-title text-dark fw-bold'>{!! $title !!}</div>
                             </div>
                         

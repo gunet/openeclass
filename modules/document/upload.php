@@ -210,7 +210,7 @@ if ($can_upload) {
               <div class='form-group mt-4'>
                 <input type='hidden' name='file_date' value='' size='40' />
                 <input type='hidden' name='file_format' value='' size='40' />
-                <label for='inputFileLanguage' class='col-sm-12 control-label-notes'>$langLanguage:</label>
+                <label for='inputFileLanguage' class='col-sm-12 control-label-notes'>$langLanguage</label>
                 <div class='col-sm-12'>          
                     " . lang_select_options('file_language', "class='form_control'") . "
                 </div>
@@ -219,7 +219,7 @@ if ($can_upload) {
 
             <div class='col-md-6 col-12'>
               <div class='form-group mt-4'>
-                <label for='inputFileCopyright' class='col-sm-12 control-label-notes'>$langCopyrighted:</label>
+                <label for='inputFileCopyright' class='col-sm-12 control-label-notes'>$langCopyrighted</label>
                 <div class='col-sm-12'>
                   " .
                     selection(array('0' => $langCopyrightedUnknown,
@@ -282,7 +282,7 @@ if ($can_upload) {
                         'text' => $langUpload
                     ),
                     array(
-                      'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                      'class' => 'cancelAdminBtn ms-1',
                       'href' => "index.php?course=$course_code",
                   )
                 ))

@@ -97,7 +97,7 @@ if (isset($_POST['submitCat'])) {
                             <input class='btn submitAdminBtn' name='submitCat' type='submit' value='$langSubmit'>
                          
                           
-                            <a href='question_categories.php?course=$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                            <a href='question_categories.php?course=$course_code' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                            
                        
                         

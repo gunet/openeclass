@@ -83,7 +83,7 @@ $tool_content .= action_bar(array(
           'url' => "$urlServer",
           'icon' => 'fa-reply',
           'level' => 'primary-label',
-          'button-class' => 'btn-secondary')), false);
+          'button-class' => 'btn-primary')), false);
 $tool_content .= "<div class='login-page'> <div class='row'>";
 if($columns == 12){
 

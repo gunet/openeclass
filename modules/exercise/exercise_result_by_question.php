@@ -234,7 +234,7 @@ if (count($exercise_question_ids) > 0) {
 $tool_content .= "<br><div align='center'>";
 //submit button will only appear when the exercise can be graded
 $tool_content .= "<input type='submit' value='$langSubmit' form='grade_form' class='btn submitAdminBtn' id='submitButton'>"
-     ."<a class='btn btn-outline-secondary cancelAdminBtn' href='results_by_question.php?course=$course_code&exerciseId=$exerciseIdIndirect'>
+     ."<a class='btn cancelAdminBtn' href='results_by_question.php?course=$course_code&exerciseId=$exerciseIdIndirect'>
            $langReturn
        </a>";
 $tool_content .= "</div>";

@@ -29,7 +29,7 @@ if (isset($_GET['update']) and $_GET['update']) {
         <div class='col-sm-12'>
         <div class='alert alert-info'>$langH5pInfoUpdate</div>
             <div class='text-center'>            
-                <a class='btn btn-success' href='$_SERVER[SCRIPT_NAME]?update=true' data-placement='bottom' data-toggle='tooltip' title='$langMaj'>
+                <a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?update=true' data-bs-placement='bottom' data-bs-toggle='tooltip' title='$langMaj'>
                     <span class='fa fa-refresh space-after-icon'></span>
                     <span class='hidden-xs'>$langMaj</span>                    
                 </a>";

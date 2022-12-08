@@ -288,7 +288,7 @@ if(!isset($_POST['next'])){
                               
                         
                                        
-                               <a href='{$urlServer}main/portfolio.php' class='btn btn-outline-secondary cancelAdminBtn me-1'>$langCancel</a>
+                               <a href='{$urlServer}main/portfolio.php' class='btn cancelAdminBtn me-1'>$langCancel</a>
                            
                            
                                 <input class='btn submitAdminBtn' type='submit' name='next' value='" . q($langNext) . "&nbsp;&nbsp;&raquo;'>

@@ -160,7 +160,7 @@ if ($is_editor) {
                                       'value' => (isset($_GET['newPoll']) ? $langCreate : $langModify)
                                   ),
                                   array(
-                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                    'class' => 'cancelAdminBtn ms-1',
                                     'href' => "index.php?course=$course_code",
                                 )
                               ))

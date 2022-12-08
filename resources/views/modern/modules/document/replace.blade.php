@@ -19,14 +19,14 @@
                                     <button class='btn submitAdminBtn' type='submit'>{{ trans('langReplace') }}</button>
                             
                               
-                                    <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                    <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                             
                            
                         </div>
                         @else
 						<div class='col-offset-2 col-10 d-flex justify-content-start align-items-center'>
                             <button class='btn submitAdminBtn' type='submit'>{{ trans('langReplace') }}</button>
-                            <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                            <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
 						</div>
                         @endif
 					</div>

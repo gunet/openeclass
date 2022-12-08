@@ -53,8 +53,8 @@ if ($auth_transition->get_sso_exception_status() == SSO_TRANSITION_EXCEPTION_BLO
                     <div class='col-sm-12'>
                         <div class='alert alert-info'>" . INTRO_SSO_MESSAGE . "</div>
                         <div class='text-justify'>
-                            <a href='$_SERVER[SCRIPT_NAME]?t=true' class='btn btn-success' role='button'>Μετάβαση</a>
-                            <a href='$_SERVER[SCRIPT_NAME]?t=false' class='btn btn-warning' role='button'>Αίτημα εξαίρεσης</a>
+                            <a href='$_SERVER[SCRIPT_NAME]?t=true' class='btn submitAdminBtn' role='button'>Μετάβαση</a>
+                            <a href='$_SERVER[SCRIPT_NAME]?t=false' class='btn deleteAdminBtn' role='button'>Αίτημα εξαίρεσης</a>
                         </div>
                     </div>
                 </div>";
@@ -97,7 +97,7 @@ function display_sso_exception_form($uid) {
                             'value' => $langSend,
                         ),
                         array(
-                            'class' => 'btn btn-outline-secondary cancelAdminBtn ms-1',
+                            'class' => 'cancelAdminBtn ms-1',
                             'href' => $urlAppend
                         )
                     ))

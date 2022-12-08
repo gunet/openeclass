@@ -94,7 +94,7 @@
                                                             <div class="modal-footer">
                                                                 <a class="btn btn-secondary" href="" data-bs-dismiss="modal">{{trans('langCancel')}}</a>
 
-                                                                <button class="btn btn-danger" type="submit" name="delete" value="{{$note->id}}">{{trans('langDelete')}}</button>
+                                                                <button class="btn deleteAdminBtn" type="submit" name="delete" value="{{$note->id}}">{{trans('langDelete')}}</button>
 
                                                             </div>
                                                         </div>

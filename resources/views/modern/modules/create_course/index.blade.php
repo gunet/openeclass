@@ -338,7 +338,7 @@
                                       <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
                                             
                                                   <input class='btn submitAdminBtn' type='submit' name='create_course' value='{{ trans('langCourseCreate') }}'>                          
-                                                  <a href='{{ $cancel_link }}' class='btn btn-outline-secondary cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
+                                                  <a href='{{ $cancel_link }}' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
                                            
                                       </div>     
                                         

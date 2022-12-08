@@ -357,18 +357,18 @@ if (isset($_POST['optionsSave'])) {
     }
     initialize_settings();
     $activate_class = isset($preview_theme) ? '' : ' hidden';
-    $activate_btn = "<a href='#' class='theme_enable btn btn-outline-success btn-sm$activate_class' id='theme_enable'>$langActivate</a>";
+    $activate_btn = "<a href='#' class='theme_enable btn submitAdminBtn $activate_class' id='theme_enable'>$langActivate</a>";
     $preview_class = ' hidden';
-    $preview_btn = "<a href='#' class='btn btn-outline-primary btn-sm$preview_class' id='theme_preview'>$langSee</a>";
+    $preview_btn = "<a href='#' class='btn submitAdminBtn $preview_class' id='theme_preview'>$langSee</a>";
     $del_class = ($theme_id != 0) ? "" : " hidden";
     $delete_btn = "
                     <form class='form-inline' style='display:inline;' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=$theme_id'>
-                        <a class='confirmAction mt-md-0 mt-1 btn btn-outline-danger btn-sm$del_class' id='theme_delete' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
+                        <a class='confirmAction mt-md-0 mt-1 btn deleteAdminBtn $del_class' id='theme_delete' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='deleteAdminBtn'>$langDelete</a>
                     </form>";
     $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
     if (isset($theme_options_styles['imageUpload'])) {
         $logo_field = "
-            <img src='$urlThemeData/$theme_options_styles[imageUpload]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-sm btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUpload'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[imageUpload]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUpload'>$langDelete</a>
             <input type='hidden' name='imageUpload' value='$theme_options_styles[imageUpload]'>
         ";
     } else {
@@ -376,7 +376,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['imageUploadSmall'])) {
         $small_logo_field = "
-            <img src='$urlThemeData/$theme_options_styles[imageUploadSmall]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-sm btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadSmall'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[imageUploadSmall]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadSmall'>$langDelete</a>
             <input type='hidden' name='imageUploadSmall' value='$theme_options_styles[imageUploadSmall]'>
         ";
     } else {
@@ -384,7 +384,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['bgImage'])) {
         $bg_field = "
-            <img src='$urlThemeData/$theme_options_styles[bgImage]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-sm btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=bgImage'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[bgImage]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=bgImage'>$langDelete</a>
             <input type='hidden' name='bgImage' value='$theme_options_styles[bgImage]'>
         ";
     } else {
@@ -392,7 +392,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['loginImg'])) {
         $login_image_field = "
-            <img src='$urlThemeData/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-sm btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>
             <input type='hidden' name='loginImg' value='$theme_options_styles[loginImg]'>
         ";
     } else {
@@ -419,7 +419,7 @@ if (isset($_POST['optionsSave'])) {
                             $langPreviewState &nbsp;".$themes_arr[$preview_theme].".
                         </div>
                         <div class='col-sm-3'>
-                            <a href='#' class='theme_enable btn btn-success btn-sm'>$langActivate</a> &nbsp; <a href='theme_options.php?reset_theme_options=true' class='btn btn-default btn-sm'>$langLogout</a>
+                            <a href='#' class='theme_enable btn submitAdminBtn'>$langActivate</a> &nbsp; <a href='theme_options.php?reset_theme_options=true' class='btn btn-default btn-sm'>$langLogout</a>
                         </div>
                     </div>
                 </div>
@@ -687,9 +687,9 @@ $tool_content .= "
   </div>
     <div class='form-group mt-3'>
         <div class='col-sm-9 col-sm-offset-3'>
-            ".($theme_id ? "<input class='btn btn-primary' name='optionsSave' type='submit' value='$langSave'>" : "")."
-            <input class='btn btn-success mb-md-0 mb-2' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
-            ".($theme_id ? "<a class='btn btn-info' href='theme_options.php?export=true'>$langExport</a>" : "")."
+            ".($theme_id ? "<input class='btn submitAdminBtn' name='optionsSave' type='submit' value='$langSave'>" : "")."
+            <input class='btn submitAdminBtn mb-md-0 mb-2' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
+            ".($theme_id ? "<a class='btn submitAdminBtn' href='theme_options.php?export=true'>$langExport</a>" : "")."
         </div>
     </div>
     ". generate_csrf_token_form_field() ."

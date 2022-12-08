@@ -200,7 +200,7 @@ if (isset($_GET['scale_id'])) {
                                           'name' => 'submitScale'
                                       ),
                                       array(
-                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                        'class' => 'cancelAdminBtn ms-1',
                                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                                     )
                                   ))

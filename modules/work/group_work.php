@@ -153,7 +153,7 @@ function show_assignments() {
                                     <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
                               
                                 
-                                    <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='$urlServer/modules/group/document.php?course=$course_code&group_id=$group_id'>$langCancel</a>
+                                    <a class='btn cancelAdminBtn ms-1' href='$urlServer/modules/group/document.php?course=$course_code&group_id=$group_id'>$langCancel</a>
                                
                           
                                

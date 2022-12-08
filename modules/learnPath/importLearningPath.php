@@ -1109,7 +1109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                                             'value'=> $langImport
                                         ),
                                         array(
-                                            'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                            'class' => 'cancelAdminBtn ms-1',
                                             'href' => "index.php?course=$course_code",
                                         )
                                     ))."

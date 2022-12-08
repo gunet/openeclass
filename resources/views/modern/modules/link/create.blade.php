@@ -121,7 +121,7 @@
                                                         <input type='submit' class='btn submitAdminBtn' name='submitLink' value='{{ $submit_label }}' />
                                                  
                                                   
-                                                        <a href='index.php?course={{ $course_code }}' class='btn btn-outline-secondary cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
+                                                        <a href='index.php?course={{ $course_code }}' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
                                                    
                                              
                                             </div>

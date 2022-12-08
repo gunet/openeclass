@@ -105,7 +105,7 @@ $tool_content .= "
                    
                         <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
                  
-                        <a href='" . q($courseHome) . "' class='btn btn-outline-secondary cancelAdminBtn ms-1'>" . q($langCancel) . "</a>
+                        <a href='" . q($courseHome) . "' class='btn cancelAdminBtn ms-1'>" . q($langCancel) . "</a>
                   
                 
                

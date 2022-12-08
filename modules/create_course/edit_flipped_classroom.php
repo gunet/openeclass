@@ -379,7 +379,7 @@ if(!isset($_POST['next'])){
                 <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
                     
                             <input class='btn submitAdminBtn' type='submit' name='next' value='" . q($langNext) . "'>
-                            <a href='{$urlServer}courses/".$course_code."' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                            <a href='{$urlServer}courses/".$course_code."' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                    
                 </div>     
             </fieldset>" . generate_csrf_token_form_field() . "
@@ -657,7 +657,7 @@ if(!isset($_POST['next'])){
                                     <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "'>
                                
                               
-                                    <a href='{$urlServer}courses/".$course_code."' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                                    <a href='{$urlServer}courses/".$course_code."' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                               
                            
                        

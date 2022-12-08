@@ -627,7 +627,7 @@ jContent;
                     <div id="js-tree"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary cancelAdminBtn treeModalClose">' . $langCancel . '</button>
+                    <button type="button" class="btn cancelAdminBtn treeModalClose">' . $langCancel . '</button>
                     <button type="button" class="btn submitAdminBtn ms-1" id="treeModalSelect">' . $langSelect . '</button>
                 </div>
             </div>
@@ -706,7 +706,7 @@ jContent;
                     <div id="js-tree"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary cancelAdminBtn treeModalClose">' . $langCancel . '</button>
+                    <button type="button" class="btn cancelAdminBtn treeModalClose">' . $langCancel . '</button>
                     <button type="button" class="btn submitAdminBtn ms-1" id="treeModalSelect">' . $langSelect . '</button>
                 </div>
             </div>

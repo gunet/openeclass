@@ -168,7 +168,7 @@ if (isset($_GET['stats_submit'])) {
                                             AND hierarchy.id = course_department.department")->total;
         }
         $all = Database::get()->querySingle("SELECT COUNT(*) AS num_of_courses FROM course")->num_of_courses;
-        $tool_content .= "<div class='panel panel-admin'><div class='panel-body'><p class='text-center text-secondary mb-0'>$s $langCourses ($langFrom2 $all $langSumFrom $siteName)</p></div></div>";
+        $tool_content .= "<div class='panel panel-admin rounded-0 shadow-none'><div class='panel-body rounded-0 p-2'><p class='text-center text-secondary mb-0'>$s $langCourses ($langFrom2 $all $langSumFrom $siteName)</p></div></div>";
 
         // division info
         /*$tool_content .= "<table class='table table-striped table-bordered table-condensed'>";
@@ -261,7 +261,7 @@ if (isset($_GET['stats_submit'])) {
     $tool_content .= "<div class='row form-group mt-5'>
                         <div class='col-md-9 offset-md-3 d-flex justify-content-center align-items-center'>
                             <input class='btn submitAdminBtn' type='submit' name='stats_submit' value='$langSubmit'>
-                            <a href='index.php' class='btn btn-outline-secondary cancelAdminBtn ms-2'>$langCancel</a>
+                            <a href='index.php' class='btn cancelAdminBtn ms-2'>$langCancel</a>
                         </div>
           </div>";
     $tool_content .= "</fieldset></form></div></div>";

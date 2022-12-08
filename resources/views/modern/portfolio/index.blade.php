@@ -7,7 +7,7 @@
 <div class="container-fluid details-section">
     <div class="row rowMedium px-lg-0 px-3 py-lg-0 py-3">
         <div class="col-12 px-0">
-            <div class='panel panel-admin border-0 bg-white px-lg-4 py-lg-3 shadow-none'>
+            <div class='panel panel-admin border-0 BorderSolid bg-white px-lg-4 py-lg-3'>
                 <div class='panel-heading bg-white'>
                     <div class='col-12 Help-panel-heading'>
                         <div class="row">
@@ -170,7 +170,7 @@
                                     </div>
                                 </div>
 
-                                <div class='panel panel-admin border-0 shadow-none bg-white rounded-0 px-0 shadow-none'>
+                                <div class='panel panel-admin border-0 bg-white rounded-0 px-0'>
                                     <div class='panel-heading rounded-0 bg-white ps-md-3 pe-md-1 px-0'>
                                         <div class='panel-heading bg-body ps-md-3 pe-md-0'>
                                             <div class='col-12 Help-panel-heading'>
@@ -207,13 +207,13 @@
 <div class="container-fluid details-section">
     <div class="row rowMedium px-lg-0 px-3 py-lg-0 py-0">
         <div class='col-lg-8 col-12 Courses-Content pe-lg-0 mt-lg-3 px-0'>
-            <div class='panel panel-admin border-0 shadow-none bg-white px-lg-4 py-lg-3'>
+            <div class='panel panel-admin border-0 BorderSolid shadow-none bg-white px-lg-4 py-lg-3'>
                 <div class='panel-heading bg-white'>
                     <div class='col-12 Help-panel-heading'>
                         <div class='row'>
                             <div class='col-8 d-inline-flex align-items-top'>
                                 <span class="text-uppercase TextSemiBold mb-0 Help-text-panel-heading">{{ trans('langMyCoursesSide') }}</span>
-                                <a href="{{$urlAppend}}modules/auth/courses.php" class='viewAllCourseBtn btn btn-outline-success d-flex justify-content-center align-items-center ms-2' data-bs-toggle='tooltip'
+                                <a href="{{$urlAppend}}modules/auth/courses.php" class='viewAllCourseBtn btn btn-outline-primary d-flex justify-content-center align-items-center ms-2' data-bs-toggle='tooltip'
                                     data-bs-placement='bottom' title data-bs-original-title="{{ trans('langRegCourses') }}">
                                     <span class='fa fa-check'></span>
                                 </a>
@@ -302,7 +302,7 @@
         </div>
         <div class='col-lg-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-2 ps-lg-3 px-lg-0 px-0 pb-lg-0 pb-3'>
             @include('portfolio.portfolio-calendar')
-            <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+            <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                 <div class='panel-heading bg-body p-0'>
                     <div class='col-12 Help-panel-heading'>
                         <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoAnnouncements') }}</span>
@@ -324,7 +324,7 @@
 
 
 
-            <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+            <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                 <div class='panel-heading bg-body p-0'>
                     <div class='col-12 Help-panel-heading'>
                     <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoMessages') }}</span>

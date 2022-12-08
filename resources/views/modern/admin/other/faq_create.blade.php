@@ -65,7 +65,7 @@
                                            
                                                 
                                                 <button type="submit" class="btn submitAdminBtn" name="{{ $new? "submitFaq" : "modifyFaq" }}" value="{{ trans('submitBtnValue') }}">{{ trans('langSave') }}</button>
-                                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}" class="btn btn-outline-secondary cancelAdminBtn ms-1">{{ trans('langCancel') }}</a>
+                                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}" class="btn cancelAdminBtn ms-1">{{ trans('langCancel') }}</a>
                                                
                                            
                                         </div>

@@ -52,7 +52,7 @@
                         <div class='col-12'>
                             <form method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}?u={{ $user }}'>
                                 {!! showSecondFactorChallenge() !!}
-                                <input class='btn btn-danger' type='submit' name='doit' value='{{ trans('langDelete') }}'>
+                                <input class='btn deleteAdminBtn' type='submit' name='doit' value='{{ trans('langDelete') }}'>
                                 {!! generate_csrf_token_form_field() !!}
                             </form>
                         </div>

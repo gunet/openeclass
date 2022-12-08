@@ -63,20 +63,20 @@
                                                 <div class="btn-group btn-group-sm">
                                                     @if ($app->isConfigured())
                                                         @if (showSecondFactorChallenge() != "")
-                                                            <button onclick="var totp=prompt('Type 2FA:','');this.setAttribute('data-app', this.getAttribute('data-app')+','+escape(totp));"  type="button" class="btn{!! $app->isEnabled() ? ' btn-success' : ' btn-danger' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
+                                                            <button onclick="var totp=prompt('Type 2FA:','');this.setAttribute('data-app', this.getAttribute('data-app')+','+escape(totp));"  type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
                                                         @elseif ($app->getName() == 'bigbluebutton')
-                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' btn-success' : ' btn-danger' !!} bbb-status" data-app="{{ getIndirectReference($app->getName()) }}">     
+                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} bbb-status" data-app="{{ getIndirectReference($app->getName()) }}">     
                                                         @elseif ($app->getName() == 'openmeetings')
-                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' btn-success' : ' btn-danger' !!} om-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
+                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} om-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
                                                         @elseif ($app->getName() == 'webconf')
-                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' btn-success' : ' btn-danger' !!} webconf-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
+                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} webconf-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
                                                         @else
-                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' btn-success' : ' btn-danger' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
+                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
                                                         @endif
                                                             {!! $app->isEnabled() ? '<i class="fa fa-toggle-on"></i>' : '<i class="fa fa-toggle-off"></i>' !!} 
                                                         </button>  
                                                     @else
-                                                        <button type="button" class="btn btn-outline-secondary cancelAdminBtn" data-app="{{ getIndirectReference($app->getName()) }}"  data-bs-toggle='modal' data-bs-target='#noSettings'> 
+                                                        <button type="button" class="btn cancelAdminBtn" data-app="{{ getIndirectReference($app->getName()) }}"  data-bs-toggle='modal' data-bs-target='#noSettings'> 
                                                             <i class="fa fa-warning"></i> 
                                                         </button>
                                                     @endif
@@ -129,8 +129,8 @@
                 function (data) {           
                     var newState = (data === "0")? "fa-toggle-off":"fa-toggle-on";
                     button.removeClass('fa-spinner fa-spin').addClass(newState);
-                    btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
-                    newBtnColorState = button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                    btnColorState = button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';
+                    newBtnColorState = button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';
                     button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);
                 });
     });
@@ -159,21 +159,21 @@
                         if (om_state === 'fa-toggle-on') {
                            om_newState = "fa-toggle-off";
                            om_button.removeClass('fa-spinner fa-spin').addClass(om_newState);
-                           om_btnColorState = om_button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
-                           om_newBtnColorState = om_button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                           om_btnColorState = om_button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';
+                           om_newBtnColorState = om_button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';
                            om_button.parent('button').removeClass(om_btnColorState).addClass(om_newBtnColorState);
                         }
                         if (webconf_state === 'fa-toggle-on') {
                            webconf_newState = "fa-toggle-off";
                            webconf_button.removeClass('fa-spinner fa-spin').addClass(webconf_newState);
-                           webconf_btnColorState = webconf_button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
-                           webconf_newBtnColorState = webconf_button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                           webconf_btnColorState = webconf_button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';
+                           webconf_newBtnColorState = webconf_button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';
                            webconf_button.parent('button').removeClass(webconf_btnColorState).addClass(webconf_newBtnColorState);
                         }
                     }
                     button.removeClass('fa-spinner fa-spin').addClass(newState);                    
-                    btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';                    
-                    newBtnColorState = button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';                    
+                    btnColorState = button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';                    
+                    newBtnColorState = button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';                    
                     button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);                    
                 });
     });
@@ -202,21 +202,21 @@
                         if (bbb_state === 'fa-toggle-on') {
                            bbb_newState = "fa-toggle-off";
                            bbb_button.removeClass('fa-spinner fa-spin').addClass(bbb_newState);
-                           bbb_btnColorState = bbb_button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
-                           bbb_newBtnColorState = bbb_button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                           bbb_btnColorState = bbb_button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';
+                           bbb_newBtnColorState = bbb_button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';
                            bbb_button.parent('button').removeClass(bbb_btnColorState).addClass(bbb_newBtnColorState);
                         }
                         if (webconf_state === 'fa-toggle-on') {
                            webconf_newState = "fa-toggle-off";
                            webconf_button.removeClass('fa-spinner fa-spin').addClass(webconf_newState);
-                           webconf_btnColorState = webconf_button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
-                           webconf_newBtnColorState = webconf_button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                           webconf_btnColorState = webconf_button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';
+                           webconf_newBtnColorState = webconf_button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';
                            webconf_button.parent('button').removeClass(webconf_btnColorState).addClass(webconf_newBtnColorState);
                         }
                     }                    
                     button.removeClass('fa-spinner fa-spin').addClass(newState);                    
-                    btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';                    
-                    newBtnColorState = button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';                    
+                    btnColorState = button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';                    
+                    newBtnColorState = button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';                    
                     button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);                    
                 });
     });
@@ -245,21 +245,21 @@
                         if (bbb_state === 'fa-toggle-on') {
                            bbb_newState = "fa-toggle-off";
                            bbb_button.removeClass('fa-spinner fa-spin').addClass(bbb_newState);
-                           bbb_btnColorState = bbb_button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
-                           bbb_newBtnColorState = bbb_button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                           bbb_btnColorState = bbb_button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';
+                           bbb_newBtnColorState = bbb_button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';
                            bbb_button.parent('button').removeClass(bbb_btnColorState).addClass(bbb_newBtnColorState);
                         }
                         if (om_state === 'fa-toggle-on') {
                            om_newState = "fa-toggle-off";
                            om_button.removeClass('fa-spinner fa-spin').addClass(om_newState);
-                           om_btnColorState = om_button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
-                           om_newBtnColorState = om_button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                           om_btnColorState = om_button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';
+                           om_newBtnColorState = om_button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';
                            om_button.parent('button').removeClass(om_btnColorState).addClass(om_newBtnColorState);
                         }
                     }
                     button.removeClass('fa-spinner fa-spin').addClass(newState);
-                    btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
-                    newBtnColorState = button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                    btnColorState = button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';
+                    newBtnColorState = button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';
                     button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);
                 });
     });

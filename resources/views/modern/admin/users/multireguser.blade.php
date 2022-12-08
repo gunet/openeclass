@@ -141,7 +141,7 @@
                                    
                                         <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                                  
-                                        <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php'>{{ trans('langCancel') }}</a>
+                                        <a class='btn cancelAdminBtn ms-1' href='index.php'>{{ trans('langCancel') }}</a>
                                   
                                
                                 

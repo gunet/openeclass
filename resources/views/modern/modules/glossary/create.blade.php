@@ -85,7 +85,7 @@
                                                                 {!! $form_buttons !!}
                                                            
                                                            
-                                                                <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href="{{$base_url}}">
+                                                                <a class='btn cancelAdminBtn ms-1' href="{{$base_url}}">
                                                                     {{trans('langCancel')}}
                                                                 </a>
                                                          

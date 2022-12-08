@@ -639,7 +639,7 @@ if ($is_editor) {
                                 },
                             second: {
                                     label : '" . js_escape($langCancelDistribute) . "',
-                                    className : 'btn btn-danger',
+                                    className : 'btn deleteAdminBtn',
                                     callback: function(d) {
                                             $('#correction_form').attr('action', 'index.php?course=$course_code&choice=cancelDistribution&exerciseId=' + exerciseid[1]);
                                             $('#correction_form').submit();

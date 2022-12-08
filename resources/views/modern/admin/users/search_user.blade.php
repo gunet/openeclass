@@ -152,7 +152,7 @@
                        
                             <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
                                 <input class='btn submitAdminBtn' type='submit' value='{{ trans('langSearch') }}'>
-                                <a class='btn btn-outline-secondary cancelAdminBtn ms-2' href='index.php'>{{ trans('langCancel') }}</a>  
+                                <a class='btn cancelAdminBtn ms-2' href='index.php'>{{ trans('langCancel') }}</a>  
                             </div>
                         </fieldset>
                         </form>

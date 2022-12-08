@@ -286,7 +286,7 @@ $tool_content .= "<div class='row form-group mt-5'><div class='col-md-9 offset-m
             'value'=> $langSubmit
         ),
         array(
-            'class' => 'btn-outline-secondary cancelAdminBtn',
+            'class' => 'cancelAdminBtn',
             'href' => "index.php?course=$course_code",
         )
     ))."

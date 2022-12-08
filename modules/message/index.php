@@ -484,7 +484,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
                                 'value' => $langSend
                             ),
                             array(
-                                'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                'class' => 'cancelAdminBtn ms-1',
                                 'href'  => "$_SERVER[SCRIPT_NAME]".(($course_id != 0)? "?course=$course_code" : "")
                             )
                     ))

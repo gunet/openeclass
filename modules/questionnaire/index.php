@@ -481,8 +481,8 @@ function printPolls() {
                         </div>
                     </div>
                     <div class='modal-footer'>
-                      <button type='button' class='btn btn-default' data-bs-dismiss='modal'>$langCancel</button>
-                      <button type='submit' class='btn btn-success'>$langCreateDuplicate</button>
+                      <button type='button' class='btn cancelAdminBtn' data-bs-dismiss='modal'>$langCancel</button>
+                      <button type='submit' class='btn submitAdminBtn ms-1'>$langCreateDuplicate</button>
                     </div>
                   </form>
                 </div>

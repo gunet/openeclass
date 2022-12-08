@@ -218,7 +218,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
                                     <input class='btn submitAdminBtn' type='submit' name='submit' value='$langDoSearch'>
                                
                               
-                                    <input class='btn btn-outline-secondary cancelAdminBtn ms-1' type='reset' name='reset' value='$langNewSearch'>
+                                    <input class='btn submitAdminBtn ms-1' type='reset' name='reset' value='$langNewSearch'>
                                
                                
                             </div>

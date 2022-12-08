@@ -130,7 +130,7 @@ if (isset($_POST['toReorder'])) {
                    <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
                  
                  
-                   <a href='activity.php' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                   <a href='activity.php' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                 
              
                
@@ -155,11 +155,11 @@ $(function() {
             buttons: {
                 cancel_btn: {
                     label: '" . js_escape($langCancel) . "',
-                    className: 'btn-default'
+                    className: 'cancelAdminBtn'
                 },
                 action_btn: {
                     label: '" . js_escape($langDelete) . "',
-                    className: 'btn-danger',
+                    className: 'deleteAdminBtn',
                     callback: function () {
                         $('<form method=post action=' + href + '><input type=hidden name=action value=delete></form>').appendTo('body').submit();
                     }

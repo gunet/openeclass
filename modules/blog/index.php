@@ -290,7 +290,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                                  'value' =>  $langSubmit
                                              ),
                                              array(
-                                                'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                                'class' => 'cancelAdminBtn ms-1',
                                                  'href'  =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog"
                                              )
                                          ))
@@ -433,7 +433,7 @@ if ($action == "createPost") {
                                     'value' =>  $langAdd
                                 ),
                                 array(
-                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                    'class' => 'cancelAdminBtn ms-1',
                                     'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
                                 )
                             ))
@@ -554,7 +554,7 @@ if ($action == "editPost") {
                                    'value' =>  $langModifBlogPost
                                ),
                                array(
-                                'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                'class' => 'cancelAdminBtn ms-1',
                                 'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
                             )
                            ))

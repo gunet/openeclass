@@ -445,7 +445,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
                               'javascript' => "selectAll('members_box',true)"
                           ),
                           array(
-                            'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                            'class' => 'cancelAdminBtn ms-1',
                              'href'  =>  "index.php?course=$course_code"
                          )
                       ))

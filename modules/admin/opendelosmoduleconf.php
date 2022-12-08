@@ -117,7 +117,7 @@ $tool_content .= "<div class='form-group mt-5 d-flex justify-content-center alig
 
 $tool_content .= "
 <button class='btn submitAdminBtn' type='submit' name='submit' value='$langModify'>$langModify</button>
-<button class='btn btn-outline-danger h-30px rounded-pill ms-1 d-flex justify-content-center align-items-center' type='submit' name='submit' value='clear'>$langClearSettings</button>";
+<button class='btn deleteAdminBtn ms-1' type='submit' name='submit' value='clear'>$langClearSettings</button>";
 
 $tool_content .= "</div>";
 $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."";

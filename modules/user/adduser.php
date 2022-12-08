@@ -154,7 +154,7 @@ if (isset($_GET['add'])) {
                       <input class='btn submitAdminBtn' type='submit' name='search' value='$langSearch'>
                       
                       
-                       <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
+                       <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
                       
                    
                    

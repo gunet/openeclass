@@ -6,7 +6,7 @@
 ?>
 
 
-<div class='panel panel-admin panel-Calendar-portfolio border-0 mt-lg-0 mt-2 shadow-none'>
+<div class='panel panel-admin panel-Calendar-portfolio border-0 BorderSolid mt-lg-0 mt-2 shadow-none'>
     <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js?v=4.0-dev"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/js/language/el-GR.js?v=4.0-dev"></script>
     <link href="{{ $urlAppend }}js/bootstrap-calendar-master/css/calendar_small.css?v=4.0-dev" rel="stylesheet" type="text/css">

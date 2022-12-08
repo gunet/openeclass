@@ -82,7 +82,7 @@ if (isset($_GET['delete'])) {
                          <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langAddModify) . "'>
                         
                        
-                          <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
+                          <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
                        
                    
                    

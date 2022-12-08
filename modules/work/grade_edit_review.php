@@ -194,7 +194,7 @@ function show_form($id, $sid, $assign) {
                         <div class='form-group mt-5'>
                             <div class='col-12 d-flex justify-content-center align-items-center'>
                                 <input class='btn submitAdminBtn' type='submit' name='grade_comments_review' value='$langGradeOk'>
-                                <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='$cancel_link'>$langCancel</a>
+                                <a class='btn cancelAdminBtn ms-1' href='$cancel_link'>$langCancel</a>
                             </div>
                         </div>";
                     } else {

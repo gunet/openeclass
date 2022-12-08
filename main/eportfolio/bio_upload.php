@@ -101,7 +101,7 @@ enableCheckFileSize();
 if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
     $label = $langReplace;
     $bio = "<a href='{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$uid&amp;token=$token'>$langBio</a>&nbsp;&nbsp;
-        <a class='btn btn-danger btn-sm' onclick='return confirmDel(this.href)' href='$_SERVER[SCRIPT_NAME]?delete_bio=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>";
+        <a class='btn deleteAdminBtn' onclick='return confirmDel(this.href)' href='$_SERVER[SCRIPT_NAME]?delete_bio=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>";
 } else {
     $label = $langPathUploadFile;
     $bio = '';
@@ -120,7 +120,7 @@ $tool_content .=
     <div class='form-group mt-3'>
         <div class='col-sm-10 col-sm-offset-2'>
             <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
-            <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+            <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn ms-1'>$langCancel</a>
         </div>
     </div>";
 

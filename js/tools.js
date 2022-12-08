@@ -445,7 +445,7 @@ function exercise_init_countdown(params) {
                 buttons: {
                     goBack: {
                         label: params.goBack,
-                        className: 'btn-success',
+                        className: 'submitAdminBtn',
                         callback: function () {
                             finishClicked = false;
                             var moveTo = $('#qPanel' + firstUnanswered);
@@ -482,11 +482,11 @@ function exercise_init_countdown(params) {
         buttons: {
           confirm: {
             label: params.cancelAttempt,
-            className: 'btn-danger'
+            className: 'deleteAdminBtn'
           },
           cancel: {
             label: params.goBack,
-            className: 'btn-default'
+            className: 'cancelAdminBtn'
           }
         },
         callback: function(result) {
@@ -662,14 +662,14 @@ function initialize_filemodal(lang) {
     var buttons = {};
     buttons.download = {
       label: '<i class="fa fa-download"></i> ' + lang.download,
-      className: 'btn-success',
+      className: 'submitAdminBtn',
       callback: function (d) {
         window.location = downloadURL;
       }
     };
     buttons.print = {
       label: '<i class="fa fa-print"></i> ' + lang.print,
-      className: 'btn-primary',
+      className: 'submitAdminBtn',
       callback: function (d) {
         var iframe = document.getElementById('fileFrame');
         iframe.contentWindow.print();
@@ -678,7 +678,7 @@ function initialize_filemodal(lang) {
     if (screenfull.enabled) {
       buttons.fullscreen = {
         label: '<i class="fa fa-arrows-alt"></i> ' + lang.fullScreen,
-        className: 'btn-primary',
+        className: 'submitAdminBtn',
         callback: function() {
           screenfull.request(document.getElementById('fileFrame'));
           return false;
@@ -687,7 +687,7 @@ function initialize_filemodal(lang) {
     }
     buttons.newtab = {
       label: '<i class="fa fa-plus"></i> ' + lang.newTab,
-      className: 'btn-primary',
+      className: 'submitAdminBtn',
       callback: function() {
         window.open(fileURL);
         return false;
@@ -695,7 +695,7 @@ function initialize_filemodal(lang) {
     };
     buttons.cancel = {
       label: lang.cancel,
-      className: 'btn-secondary'
+      className: 'cancelAdminBtn'
     };
     bootbox.dialog({
       size: 'large',
@@ -770,11 +770,11 @@ function unit_password_bootbox(e) {
     buttons: {
       cancel: {
         label: lang.cancel,
-        className: 'btn-default'
+        className: 'cancelAdminBtn'
       },
       success: {
         label: lang.submit,
-        className: 'btn-success',
+        className: 'submitAdminBtn',
         callback: passwordCallback,
       }
     }

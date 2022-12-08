@@ -276,7 +276,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
                                             <input class='btn submitAdminBtn' type='submit' name='action[exEdit]' value='$langSave'>
                                        
                                         
-                                            <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langCancel</a>
+                                            <a class='btn cancelAdminBtn ms-1' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langCancel</a>
                                        
                                     
                                 </div>

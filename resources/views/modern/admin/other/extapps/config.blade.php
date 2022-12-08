@@ -92,7 +92,7 @@
                                                             </button> 
                                                      
                                                       
-                                                            <button class='btn btn-outline-danger cancelAdminBtn ms-1' type='submit' name='submit' value='clear'>
+                                                            <button class='btn deleteAdminBtn ms-1' type='submit' name='submit' value='clear'>
                                                                 {{ trans('langClearSettings') }}
                                                             </button>
                                                      

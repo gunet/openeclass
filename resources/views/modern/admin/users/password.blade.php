@@ -66,7 +66,7 @@
                                    
                                         <input class='btn submitAdminBtn' type='submit' name='changePass' value='{{ trans('langModify') }}'>
                                    
-                                         <a class='btn btn-outline-secondary cancelAdminBtn ms-1' href='{{ $urlServer }}modules/admin/edituser.php?u={{ urlencode(getDirectReference($_REQUEST['userid'])) }}'>{{ trans('langCancel') }}</a>
+                                         <a class='btn cancelAdminBtn ms-1' href='{{ $urlServer }}modules/admin/edituser.php?u={{ urlencode(getDirectReference($_REQUEST['userid'])) }}'>{{ trans('langCancel') }}</a>
                                     
                                 
                                 

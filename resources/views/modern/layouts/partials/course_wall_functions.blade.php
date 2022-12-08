@@ -18,7 +18,7 @@
     @endphp
 
     <div class="col-12 mb-4">
-        <div class='panel panel-admin border-0 p-md-3 bg-white'>
+        <div class='panel panel-admin p-md-3 bg-white'>
             <div class='panel-heading bg-body'>
                 <div class='col-12 Help-panel-heading'>
                     <span class='panel-title text-uppercase Help-text-panel-heading'>{{trans('langWall')}}</span>
@@ -185,7 +185,7 @@
                 if (downloadURL) {
                     buttons.download = {
                             label: '<i class=\"fa fa-download\"></i> {{ trans("langDownload") }}',
-                            className: 'btn-success',
+                            className: 'submitAdminBtn',
                             callback: function (d) {
                                 window.location = downloadURL;
                             }
@@ -193,7 +193,7 @@
                 }
                 buttons.print = {
                             label: '<i class=\"fa fa-print\"></i> {{ trans("langPrint") }}',
-                            className: 'btn-primary',
+                            className: 'submitAdminBtn',
                             callback: function (d) {
                                 var iframe = document.getElementById('fileFrame');
                                 iframe.contentWindow.print();
@@ -202,7 +202,7 @@
                 if (screenfull.enabled) {
                     buttons.fullscreen = {
                         label: '<i class=\"fa fa-arrows-alt\"></i> {{ trans("langFullScreen") }}',
-                        className: 'btn-primary',
+                        className: 'submitAdminBtn',
                         callback: function() {
                             screenfull.request(document.getElementById('fileFrame'));
                             return false;
@@ -211,7 +211,7 @@
                 }
                 buttons.newtab = {
                     label: '<i class=\"fa fa-plus\"></i> {{ trans("langNewTab") }}',
-                    className: 'btn-primary',
+                    className: 'submitAdminBtn',
                     callback: function() {
                         window.open(fileURL);
                         return false;
@@ -219,7 +219,7 @@
                 };
                 buttons.cancel = {
                             label: '{{ trans("langCancel") }}',
-                            className: 'btn-secondary'
+                            className: 'cancelAdminBtn'
                         };
                 bootbox.dialog({
                     size: 'large',

@@ -44,7 +44,7 @@
                 <a href='#' class='theme_enable btn btn-success btn-xs{{ isset($preview_theme) ? '' : ' hidden' }}' id='theme_enable'>{{ trans('langActivate') }}</a>
                 <a href='#' class='btn btn-primary btn-xs hidden' id='theme_preview'>{{ trans('langSee') }}</a>  
                 <form class='form-inline' style='display:inline;' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}?delThemeId={{ getIndirectReference($theme_id) }}'>
-                    <a class='confirmAction btn btn-danger btn-xs{{ $theme_id != 0 ? "" : " hidden" }}' id='theme_delete' data-title='{{ trans('langConfirmDelete') }}' data-message='{{ trans('langThemeSettingsDelete') }}' data-cancel-txt='{{ trans('langCancel') }}' data-action-txt='{{ trans('langDelete') }}' data-action-class='btn-danger'>{{ trans('langDelete') }}</a>
+                    <a class='confirmAction btn deleteAdminBtn {{ $theme_id != 0 ? "" : " hidden" }}' id='theme_delete' data-title='{{ trans('langConfirmDelete') }}' data-message='{{ trans('langThemeSettingsDelete') }}' data-cancel-txt='{{ trans('langCancel') }}' data-action-txt='{{ trans('langDelete') }}' data-action-class='deleteAdminBtn'>{{ trans('langDelete') }}</a>
                 </form>
             </div>
         </div>

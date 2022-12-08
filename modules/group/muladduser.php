@@ -161,7 +161,7 @@ $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langGrou
                    
                     <input class='btn submitAdminBtn' type='submit' name='submit' value='$langAdd'>
 
-                     <a href='group_space.php?course=$course_code&amp;group_id=$group_id' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                     <a href='group_space.php?course=$course_code&amp;group_id=$group_id' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                  
                
                 

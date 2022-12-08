@@ -217,7 +217,7 @@ function new_gradebook() {
                                             'value'=> $langInsert
                                     ),
                                     array(
-                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                        'class' => 'cancelAdminBtn ms-1',
                                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                         )
                                     )). 
@@ -393,7 +393,7 @@ function gradebook_settings($gradebook_id) {
                                             'value'=> $langGradebookUpdate
                                         ),
                                         array(
-                                            'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                            'class' => 'cancelAdminBtn ms-1',
                                             'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . ""
                                         )
                                     ))."
@@ -524,7 +524,7 @@ function user_gradebook_settings() {
                                         'javascript' => "selectAll('participants_box',true)"
                                     ),
                                     array(
-                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                        'class' => 'cancelAdminBtn ms-1',
                                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . "&amp;gradebookBook=1"
                                     )
                                 ))."
@@ -1563,7 +1563,7 @@ function add_gradebook_other_activity($gradebook_id) {
                                                 'value'=> $langAdd
                                             ),
                                             array(
-                                                'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                                'class' => 'cancelAdminBtn ms-1',
                                                 'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                             )
                                         ))."

@@ -21,8 +21,8 @@
                     @if($announcementsID)
                        
                         <div class='col-sm-12'>
-                            <div class="panel panel-default rounded-0 border-0">
-                                <div class="panel-heading border-0 rounded-0">                   
+                            <div class="panel panel-default rounded-0">
+                                <div class="panel-heading rounded-0">                   
                                     <div class='panel-title text-dark fw-bold'>{{$announcementsID->title}}</div>
                                 </div>
                                 <div class="panel-body rounded-0">

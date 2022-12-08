@@ -96,7 +96,7 @@ $layout = $course->home_layout;
 
 if (isset($course->course_image)) {
     $course_image = "
-        <img src='{$urlAppend}courses/$course_code/image/".urlencode($course->course_image)."' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-sm btn-danger' href='$_SERVER[SCRIPT_NAME]?course=$course_code&delete_image=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>
+        <img src='{$urlAppend}courses/$course_code/image/".urlencode($course->course_image)."' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&delete_image=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>
         <input type='hidden' name='course_image' value='".q($course->course_image)."'>
     ";
 } else {
@@ -143,7 +143,7 @@ $tool_content = action_bar(array(
                                 <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
                             
                               
-                                <a href='{$urlAppend}courses/$course_code' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                                <a href='{$urlAppend}courses/$course_code' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                              
                            
                             

@@ -123,7 +123,7 @@ hContent;
                     <div class='form-group mt-3'>
                     <div class='col-12 d-flex justify-content-center align-items-center'>
                         <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                        <a href='index.php?course=" . $course_code . "'' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                        <a href='index.php?course=" . $course_code . "'' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                     </div>
                     </div>
                 </fieldset>

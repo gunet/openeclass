@@ -196,7 +196,7 @@
                                                         <div class='col-md-9 offset-md-3'>
                                                             <div class='col-12 d-flex justify-content-center align-items-center'>
                                                                 <button type="submit" class="btn submitAdminBtn" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
-                                                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn btn-outline-secondary cancelAdminBtn ms-1">{{ trans('langCancel') }}</a>
+                                                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn cancelAdminBtn ms-1">{{ trans('langCancel') }}</a>
                                                             </div>
                                                         </div>
                                                     </div>

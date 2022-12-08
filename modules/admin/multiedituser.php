@@ -267,7 +267,7 @@ if (isset($_POST['submit'])) {
         $monthsField = "
         
                 <div class='form-group mt-3'>
-                    <label class='col-sm-6 control-label-notes' for='months-id'>$langActivateMonths:</label>
+                    <label class='col-sm-12 control-label-notes' for='months-id'>$langActivateMonths:</label>
                     <div class='col-sm-12'>
                         <input name='months' id='months-id' class='form-control' type='number' min='1' step='1' value='6'>
                     </div>
@@ -310,7 +310,7 @@ if (isset($_POST['submit'])) {
             <fieldset>
                 $monthsField
                 
-                <div class='form-group'>
+                <div class='form-group mt-4'>
                     <label class='col-sm-12 control-label-notes'>$langMultiDelUserData:</label>
                     <div class='col-sm-12'>
                         <textarea class='auth_input form-control' name='user_names' rows='30'>$usernames</textarea>
@@ -321,7 +321,7 @@ if (isset($_POST['submit'])) {
                    
 
                             <input class='btn submitAdminBtn' type='submit' name='submit' value='" . $langSubmit . "'$confirm>
-                            <a href='index.php' class='btn btn-outline-secondary cancelAdminBtn ms-1'>$langCancel</a>
+                            <a href='index.php' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                        
                    
                 </div>

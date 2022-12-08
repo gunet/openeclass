@@ -117,7 +117,7 @@ if (isset($_POST['submit'])) {
                                         'value'=> $langSubmit
                                     ),
                                     array(
-                                        'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                        'class' => 'cancelAdminBtn ms-1',
                                         'href' => "index.php?course=$course_code"
                                     )
                                 ))

@@ -14,7 +14,7 @@
                     <div class='panel-body'>
                         @if ($curDirName)
                             <div class='pull-right'>
-                                <a href='{{ $parentLink }}' type='button' class='btn btn-success'>
+                                <a href='{{ $parentLink }}' type='button' class='btn submitAdminBtn'>
                                     <span class='fa fa-level-up'></span>&nbsp;{{ trans('langUp') }}
                                 </a>
                             </div>

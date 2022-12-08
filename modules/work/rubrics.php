@@ -267,7 +267,7 @@ if (isset($_GET['rubric_id'])) {
                             </div>
                         </div>
                         <div class='col-xs-offset-2 col-sm-10'>
-                            <a class='btn btn-sm btn-success margin-top-thin' id='addScale$crit'>$langAdd</a>
+                            <a class='btn submitAdminBtn margin-top-thin' id='addScale$crit'>$langAdd</a>
                         </div>
                 </div>	
             </div>";
@@ -420,7 +420,7 @@ if (isset($_GET['rubric_id'])) {
                                       'value' => 1
                                   ),
                                   array(
-                                    'class' => 'btn-outline-secondary cancelAdminBtn ms-1',
+                                    'class' => 'cancelAdminBtn ms-1',
                                     'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                                 )
                               ))

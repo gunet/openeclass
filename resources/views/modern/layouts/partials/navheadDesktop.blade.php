@@ -14,23 +14,23 @@
                     <div class="col-xxl-10 col-lg-9 d-flex justify-content-start align-items-end ps-lg-3 ps-xl-5">
                         <div class='d-none d-xl-block w-100'>
                             @if(!get_config('hide_login_link'))
-                                <a id="link-home" class="eclass-nav-link m-auto d-block mb-2 me-3 d-inline-flex justify-content-center align-items-top" href="{{ $urlServer }}" onclick="clickHome(this)" onmouseover="hoverHome(this);" onmouseout="unhoverHome(this);"> 
+                                <a id="link-home" class="eclass-nav-link m-auto d-block me-3 d-inline-flex justify-content-center align-items-top" href="{{ $urlServer }}" onclick="clickHome(this)" onmouseover="hoverHome(this);" onmouseout="unhoverHome(this);"> 
                                     <img class='HeaderIcon me-1' src="{{ $urlAppend }}template/modern/img/home_1.svg">
                                     <p class='small-text text-white text-uppercase mb-0 mt-xl-1 mt-lg-1'>{{ trans('langHome') }}</p>
                                 </a>
                             @endif
                             @if (!isset($_SESSION['uid']))
-                                <a id="link-register" class="eclass-nav-link m-auto d-block mb-2 me-3 d-inline-flex justify-content-center align-items-top @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" onmouseover="hoverRegister(this);" onmouseout="unhoverRegister(this);">
+                                <a id="link-register" class="eclass-nav-link m-auto d-block me-3 d-inline-flex justify-content-center align-items-top @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" onmouseover="hoverRegister(this);" onmouseout="unhoverRegister(this);">
                                     <img class='HeaderIcon me-1' src="{{ $urlAppend }}template/modern/img/register_1.svg">
                                     <p class='small-text text-white text-uppercase mb-0 mt-xl-1 mt-lg-1'>{{ trans('langRegistration') }}</p>
                                 </a>
                             @endif
-                            <a id="link-lessons" class="eclass-nav-link m-auto d-block mb-2 me-3 d-inline-flex justify-content-center align-items-top" href="{{ $urlServer }}modules/auth/listfaculte.php" onmouseover="hoverLessons(this);" onmouseout="unhoverLessons(this);">
+                            <a id="link-lessons" class="eclass-nav-link m-auto d-block me-3 d-inline-flex justify-content-center align-items-top" href="{{ $urlServer }}modules/auth/listfaculte.php" onmouseover="hoverLessons(this);" onmouseout="unhoverLessons(this);">
                                 <img class='HeaderIcon me-1' src="{{ $urlAppend }}template/modern/img/lessons_1.svg">
                                 <p class='small-text text-white text-uppercase mb-0 mt-xl-1 mt-lg-1'>{{ trans('langCourses') }}</p>
                             </a>
                             @if (!isset($_SESSION['uid']))
-                                <a id="link-faq" class="eclass-nav-link m-auto d-block mb-2 me-3 d-inline-flex justify-content-center align-items-top" href="{{$urlAppend}}info/faq.php" onmouseover="hoverQuestions(this);" onmouseout="unhoverQuestions(this);">
+                                <a id="link-faq" class="eclass-nav-link m-auto d-block me-3 d-inline-flex justify-content-center align-items-top" href="{{$urlAppend}}info/faq.php" onmouseover="hoverQuestions(this);" onmouseout="unhoverQuestions(this);">
                                     <img class='HeaderIcon me-1' src="{{ $urlAppend }}template/modern/img/faq_1.svg">
                                     <p class='small-text text-white text-uppercase mt-xl-1 mt-lg-1 mb-0'>{{ trans('langFaq') }}</p>
                                 </a>
