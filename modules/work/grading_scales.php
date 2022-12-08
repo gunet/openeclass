@@ -39,10 +39,10 @@ if (isset($_GET['delete'])) { // delete scale
 
 if (isset($_POST['submitScale'])) {
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', array('title'));
+    $v->rule('required', array('title','scale_item_name'));
     $v->labels(array(
         'title' => "$langTheField $langTitle",
-        'max_grade' => "$langTheField $m[max_grade]"
+        'scale_item_name' => "$langNoGradeScales"
     ));
     $scale_id = isset($_POST['grading_scale_id']) ? $_POST['grading_scale_id'] : 0;
     if($v->validate()) {
