@@ -43,6 +43,10 @@
   ==============================================================================
  */
 
+/**
+ * @var integer $uid
+ * @var integer $course_id
+ */
 if ($uid) {
     // Get user first and last name
     $userDetails = Database::get()->querySingle("SELECT surname, givenname
@@ -72,10 +76,10 @@ if (!$uid || !$userProgressionDetails) {
     $sco['raw'] = "";
     $sco['scoreMin'] = "";
     $sco['scoreMax'] = "";
+    $sco['scoreScaled'] = "";
     $sco['total_time'] = "0000:00:00.00";
     $sco['suspend_data'] = "";
     $sco['launch_data'] = "";
-    $sco['lesson_mode'] = "normal";
 } else { // authenticated user and no error in query
     // set vars
     $sco['student_id'] = $uid;
@@ -87,13 +91,17 @@ if (!$uid || !$userProgressionDetails) {
     $sco['raw'] = ($userProgressionDetails->raw == -1) ? "" : "" . $userProgressionDetails->raw;
     $sco['scoreMin'] = ($userProgressionDetails->scoreMin == -1) ? "" : "" . $userProgressionDetails->scoreMin;
     $sco['scoreMax'] = ($userProgressionDetails->scoreMax == -1) ? "" : "" . $userProgressionDetails->scoreMax;
+    $sco['scoreScaled'] = "";
+    if ($userProgressionDetails->raw > 0 && $userProgressionDetails->scoreMax > 0) {
+        $sco['scoreScaled'] = $userProgressionDetails->raw / $userProgressionDetails->scoreMax;
+    }
     $sco['total_time'] = $userProgressionDetails->total_time;
     $sco['suspend_data'] = $userProgressionDetails->suspend_data;
     $sco['launch_data'] = stripslashes($userProgressionDetails->launch_data);
-    $sco['lesson_mode'] = "normal";
 }
 
 //common vars
+$sco['lesson_mode'] = "normal";
 $sco['_children'] = "student_id,student_name,lesson_location,credit,lesson_status,entry,score,total_time,exit,session_time";
 $sco['score_children'] = "raw,min,max";
 $sco['exit'] = "";
@@ -250,6 +258,7 @@ $sco['session_time'] = "0000:00:00.00";
                     case 'cmi.score.min':
                     case 'cmi.core.score.max':
                     case 'cmi.score.max':
+                    case 'cmi.score.scaled':
                     case 'cmi.core.total_time':
                     case 'cmi.suspend_data':
                     case 'cmi.launch_data':
@@ -505,6 +514,14 @@ $sco['session_time'] = "0000:00:00.00";
                             return "false";
                         }
                         values[15] = val;
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.score.scaled':
+                        if (isNaN(parseFloat(val)) || (val < 0.0) || (val > 1.0)) {
+                            APIError("405");
+                            return "false";
+                        }
                         values[i] = val;
                         APIError("0");
                         return "true";
@@ -906,6 +923,8 @@ $sco['session_time'] = "0000:00:00.00";
     elements[43] = "cmi.learner_preference.delivery_speed";
     elements[44] = "cmi.learner_preference.audio_captioning";
 
+    elements[45] = 'cmi.score.scaled';
+
     let values = [];
     values[0] = "<?php echo js_escape($sco['_children']); ?>";
     values[1] = "<?php echo js_escape($sco['student_id']); ?>";
@@ -946,6 +965,8 @@ $sco['session_time'] = "0000:00:00.00";
     values[43] = 1;
     values[44] = 0;
 
+    values[45] = "<?php echo js_escape($sco['scoreScaled']); ?>";
+
 
 
     // ====================================================
@@ -953,11 +974,11 @@ $sco['session_time'] = "0000:00:00.00";
     //
     function do_commit() {
         // target form is in a hidden frame
-        cmiform = upFrame.document.forms[0];
+        let cmiform = upFrame.document.forms[0];
         // user module progress id
         cmiform.ump_id.value = "<?php echo $userProgressionDetails->user_module_progress_id ?>";
-        // values to set in DB
 
+        // values to set in DB
         if (isSCORM2004) {
             cmiform.lesson_location.value = values[37];
         } else {
@@ -973,6 +994,8 @@ $sco['session_time'] = "0000:00:00.00";
         cmiform.suspend_data.value = values[12];
         cmiform.scoreMin.value = values[14];
         cmiform.scoreMax.value = values[15];
+        cmiform.scoreScaled.value = values[45];
+
         cmiform.submit();
     }
 
