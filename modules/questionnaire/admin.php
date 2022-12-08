@@ -820,11 +820,19 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $poll_type = $langATTLSSurvey." $langSurvey";
     }
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
+
     $tool_content .= action_bar(array(
+        array('title' => $langSee,
+            'level' => 'primary-label',
+            'button-class' => 'btn-danger',
+            'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&amp;pid=$pid",
+            'icon' => 'fa-play-circle'),
         array('title' => $langBack,
               'level' => 'primary-label',
               'url' => "index.php?course=$course_code",
-              'icon' => 'fa-reply')));
+              'icon' => 'fa-reply')
+        ));
+
     $tool_content .= "
 
     <div class='col-12 mb-3'>
