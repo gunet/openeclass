@@ -383,7 +383,7 @@
                         @if($course_info->view_type == 'activity')
                             @if($is_editor)
                                 <div class='col-12 d-flex justify-content-center mb-3'>
-                                    <a class='btn btn-sm btn-default w-100 mt-0 mb-0 text-dark fw-bold' href="{{$urlAppend}}modules/course_info/activity_edit.php?course{{$course_code}}"><span class='fa fa-edit me-2'></span>{{trans('langActivityEdit')}}</a>
+                                    <a class='btn submitAdminBtn w-100 mt-0 mb-0' href="{{$urlAppend}}modules/course_info/activity_edit.php?course{{$course_code}}"><span class='fa fa-edit me-2'></span>{{trans('langActivityEdit')}}</a>
                                 </div>
                             @endif
                             <div class='col-12'>

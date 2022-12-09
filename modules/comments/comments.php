@@ -64,17 +64,20 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                 $response[1] = "<div class='alert alert-success'>".$langCommentsSaveSuccess."</div>";
                 $response[2] = $comment->getId();
                 $response[3] = "
-                <div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
+                <div class='row mb-4 comment' id='comment-".$comment->getId()."'>
                     <div class='col-12'>
-                        <div class='media panel-default p-1 rounded-0'>
-                            <a class='media-left' href='#'>
-                                ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
-                            </a>
-                            <div class='media-body bubble panel-body rounded-0 overflow-auto'>
+                        <div class='panel panel-default'>
+                            <div class='panel-heading'>
+                                <a class='media-left' href='#'>
+                                    ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
+                                </a>
+                                ".$post_actions."
+                            </div>
+                            <div class='media-body bubble panel-body overflow-auto'>
                                 <button class='w-100 btn btn-light mt-2 media-heading'>".format_locale_date(strtotime($comment->getTime())).'</buton>'.
-                                    "<br><small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
-                                    $post_actions
-                                    ."<div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
+                                    "<br><small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>
+                                    
+                                    <div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
                             </div>
                         </div>
                     </div>

@@ -124,7 +124,7 @@ span, p {font-size: 15px;}
 
 b, strong {font-family: 'Manrope-Bold', sans-serif;}
 
-a{ text-decoration: none; font-size: 15px;}
+a{ text-decoration: none; font-size: 15px; color:#005ad9; font-family: 'Manrope-Medium',sans-serif;}
 
 @media(max-width:1023px){ a{ font-size: 15px; } }
 
@@ -227,6 +227,7 @@ textarea {width:100%;}
 .legendViewContent{border-bottom:solid 1px #e8e8e8;}
 
 .courseInfoText{font-size: 22px;}
+
 
 
 /* --------------------------------------------- BREADCRUMBS --------------------------------------------------------------------------------*/
@@ -386,8 +387,8 @@ input:-webkit-autofill:active {
    min-height:106px;
    border-radius: 0px;
    margin-top: 5px;
-   border: 0px;
-   box-shadow: 0px 0px 3px 1px rgb(0 0 0 / 15%);
+   border: solid 1px #e8e8e8;
+   /* box-shadow: 0px 0px 3px 1px rgb(0 0 0 / 15%); */
    background-color: white;
 }
 
@@ -431,7 +432,7 @@ input:-webkit-autofill:active {
 
 
 
-/* arrows */
+/* select in form-wrapper */
 
 select.form-select {
   background-color: #e8e8e8;
@@ -1318,7 +1319,7 @@ label:has(input[type="checkbox"]:disabled){
 
   .modal-header .close{ background-color: transparent; border-radius: 50%; color:#003F87; }
 
-  .modal .close{ background-color: #dc3545; border: 0; border-radius: 0px; color:white; width:35px; height:30px; }
+  .modal .close{ background-color: #dc3545; border: 0; border-radius: 50%; color:white; width:35px; height:30px; }
 
   .modal-title{ font-size: 15px; }
 
@@ -1701,9 +1702,10 @@ label:has(input[type="checkbox"]:disabled){
 
   .media{
     border-radius: 15px;
-    -moz-box-shadow: 0 0 2px rgb(101, 102, 133);
+    border: solid 1px #e8e8e8;
+    /* -moz-box-shadow: 0 0 2px rgb(101, 102, 133);
     -webkit-box-shadow: 0 0 2px rgb(118, 119, 146);
-    box-shadow: 0 0 2px rgb(92, 93, 121);
+    box-shadow: 0 0 2px rgb(92, 93, 121); */
   }
   .panel-heading,.media-left{ padding:10px 15px; }
 

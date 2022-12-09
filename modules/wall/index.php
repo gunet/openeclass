@@ -427,6 +427,7 @@ if (isset($_GET['showPost'])) { //show comments case
                             <div class="form-group mt-3">'.
                             form_buttons(array(
                                 array(
+                                    'class' => 'submitAdminBtn',
                                     'text'  =>  $langSubmit,
                                     'name'  =>  'edit_submit',
                                     'value' =>  $langSubmit

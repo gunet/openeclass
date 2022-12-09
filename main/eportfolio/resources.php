@@ -373,8 +373,8 @@ if ($userdata) {
             } else {
                 $post->course_title = $langUserBlog;
             }
-            $tool_content .= "<div class='panel panel-action-btn-default mt-3 rounded-0'>
-                                    <div class='panel-heading rounded-0'>
+            $tool_content .= "<div class='panel panel-action-btn-default mb-3'>
+                                    <div class='panel-heading'>
                                         <div class='float-end'>
                                             ". action_button(array(
                                                                 array(
@@ -388,10 +388,10 @@ if ($userdata) {
                                          </div>
                                             <h3 class='panel-title'>".q($data['title'])."</h3>
                                     </div>
-                                    <div class='panel-body rounded-0'>
-                                        <button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($data['timestamp'])) . "</button><br><br>".standard_text_escape($data['content'])."
+                                    <div class='panel-body'>
+                                        <p class='blackBlueText TextSemiBold'>" . format_locale_date(strtotime($data['timestamp'])) . "</p><br><br>".standard_text_escape($data['content'])."
                                     </div>
-                                    <div class='panel-footer rounded-0'>
+                                    <div class='panel-footer'>
                                         <div class='row'>
                                             <div class='col-sm-6'>$post->course_title</div>
                                         </div>

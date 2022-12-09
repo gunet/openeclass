@@ -694,8 +694,8 @@ if ($action == "showPost") {
         }
         $tool_content .= "
         <div class='col-sm-12'>
-                        <div class='panel panel-action-btn-default rounded-0'>
-                            <div class='panel-heading rounded-0'>
+                        <div class='panel panel-action-btn-default'>
+                            <div class='panel-heading'>
                                 <div class='float-end'>
                                     ". action_button(array(
                                         array(
@@ -724,8 +724,8 @@ if ($action == "showPost") {
                                     ".q($post->getTitle())."
                                 </h3>
                             </div>
-                            <div class='panel-body ps-3 panel-body-blog'><button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($post->getTime())). "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
-                            <div class='panel-footer ps-3 panel-footer-blog rounded-0 pb-4'>
+                            <div class='panel-body ps-3 panel-body-blog'><p class='blackBlueText TextSemiBold mb-2'>" . format_locale_date(strtotime($post->getTime())). "</p><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
+                            <div class='panel-footer ps-3 panel-footer-blog pb-4'>
 
                                 <div class='row'>
                                     <div class='col-sm-6'>$rating_content</div>
@@ -819,8 +819,8 @@ if ($action == "showBlog") {
             } else {
                 $comment_content = "<div class=\"blog_post_empty_space\"></div>";
             }
-            $tool_content .= "<div class='panel panel-action-btn-default rounded-0'>
-                                <div class='panel-heading rounded-0'>
+            $tool_content .= "<div class='panel panel-action-btn-default mb-3'>
+                                <div class='panel-heading'>
                                     <div class='float-end'>
                                         ". action_button(array(
                                             array(
@@ -849,11 +849,11 @@ if ($action == "showBlog") {
                                         <a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
                                     </h3>
                                 </div>
-                                <div class='panel-body ps-3 panel-body-blog rounded-0 overflow-auto'>
-                                    <button class='btn btn-success btn-sm pe-none mt-2'>" . format_locale_date(strtotime($post->getTime())) . "</button><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+                                <div class='panel-body ps-3 panel-body-blog overflow-auto'>
+                                    <p class='blackBlueText TextSemiBold mb-2'>" . format_locale_date(strtotime($post->getTime())) . "</p><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     $comment_content
                                 </div>
-                                <div class='panel-footer panel-footer-blog rounded-0 pb-4'>
+                                <div class='panel-footer panel-footer-blog pb-4'>
                                     <div class='row'>
                                         <div class='col-sm-6'>$rating_content</div>
                                         <div class='col-sm-6 text-end'>$sharing_content</div>

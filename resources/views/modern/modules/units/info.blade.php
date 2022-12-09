@@ -95,39 +95,41 @@
                                         <input type='hidden' name='unit_id' value='{{ $unitId }}'>
                                     @endif
 
-                                    <div class='form-group'>
-                                        <label for='unitTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
-                                        <div class='col-sm-12'>
+                                    <div class='row form-group'>
+                                        <label for='unitTitle' class='col-md-3 col-12 control-label-notes'>{{ trans('langTitle') }}:</label>
+                                        <div class='col-md-9 col-12'>
                                             <input type='text' class='form-control' id='unitTitle' name='unittitle' value='{{ $unitTitle }}'>
                                         </div>
                                     </div>
 
-                                    <div class='form-group mt-4'>
-                                        <label for='unitdescr' class='col-sm-6 control-label-notes'>{{ trans('langUnitDescr') }}</label>
-                                        <div class='col-sm-12'>
+                                    <div class='row form-group mt-4'>
+                                        <label for='unitdescr' class='col-md-3 col-12 control-label-notes'>{{ trans('langUnitDescr') }}:</label>
+                                        <div class='col-md-9 col-12'>
                                             {!! $descriptionEditor !!}
                                         </div>
                                     </div>
                                     
-                                    <div class='form-group mt-4'>
-                                        <label for='unitduration' class='col-sm-6 control-label-notes mb-1'>{{ trans('langDuration') }}
-                                            <span class='help-block'>{{ trans('langOptional') }}</span>
+                                    <div class='row form-group mt-4'>
+                                        <label for='unitduration' class='col-md-3 col-12 control-label-notes mb-1'>{{ trans('langDuration') }}
+                                            <span class='help-block'>{{ trans('langOptional') }}:</span>
                                         </label>
-                                        <div class="row">
+                                        <div class='col-md-9 col-12'>
+                                            <div class="row">
 
-                                            <div class="col-lg-6 col-12">
-                                                <div class="input-group mb-4">
-                                                    <span class="input-group-text h-30px border-0 BordersLeftInput bgEclass" id="basic-addon1">{{ trans('langFrom2') }}</span>
-                                                    <input type="text" class="form-control mt-0" id='unitdurationfrom' name='unitdurationfrom' value='{{ $start_week }}' aria-label="{{ $start_week }}" aria-describedby="basic-addon1">
+                                                <div class="col-lg-6 col-12">
+                                                    <div class="input-group mb-4">
+                                                        <span class="input-group-text h-30px border-0 BordersLeftInput bgEclass" id="basic-addon1">{{ trans('langFrom2') }}</span>
+                                                        <input type="text" class="form-control mt-0" id='unitdurationfrom' name='unitdurationfrom' value='{{ $start_week }}' aria-label="{{ $start_week }}" aria-describedby="basic-addon1">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-lg-6 col-12 mt-lg-0 mt-4">
-                                                <div class="input-group mb-4">
-                                                    <span class="input-group-text h-30px border-0 BordersLeftInput bgEclass" id="basic-addon2">{{ trans('langUntil') }}</span>
-                                                    <input type="text" class="form-control mt-0" id='unitdurationto' name='unitdurationto' value='{{ $finish_week }}' aria-label="{{ $finish_week }}" aria-describedby="basic-addon2">
+                                                <div class="col-lg-6 col-12 mt-lg-0 mt-4">
+                                                    <div class="input-group mb-4">
+                                                        <span class="input-group-text h-30px border-0 BordersLeftInput bgEclass" id="basic-addon2">{{ trans('langUntil') }}</span>
+                                                        <input type="text" class="form-control mt-0" id='unitdurationto' name='unitdurationto' value='{{ $finish_week }}' aria-label="{{ $finish_week }}" aria-describedby="basic-addon2">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>                     
+                                            </div>    
+                                        </div>                 
                                     </div>
 
                                     <div class="mt-4"></div>
@@ -136,7 +138,7 @@
 
                                     
                                     <div class='form-group mt-5'>
-                                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                                        <div class='col-md-9 col-12 offset-md-3 d-flex justify-content-center align-items-center'>
                                            
                                                 
                                                  <button class='btn submitAdminBtn' type='submit' name='edit_submit'>{{ trans('langSubmit') }}</button>

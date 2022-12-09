@@ -176,7 +176,7 @@ function generate_single_post_html($post) {
                               });
                           });
                       </script>';
-        $post_actions = '<div class="action-btns float-end">';
+        $post_actions = '<div class="action-btns float-end mt-2">';
         $post_actions .= '<a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
                           <span class="fa fa-fw fa-times text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
         if ($is_editor) { //add link for pin post
@@ -201,7 +201,7 @@ function generate_single_post_html($post) {
         }
         $post_actions .= '</div>';
     } else {
-        $post_actions = '<div class="action-btns float-end">';
+        $post_actions = '<div class="action-btns float-end mt-2">';
         if ($pinned == 1) {
             $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
         }
@@ -214,23 +214,25 @@ function generate_single_post_html($post) {
     $ret = '
     <div class="col-12">
         <div class="row p-0 margin-right-thin margin-left-thin margin-top-thin m-auto">                              
-                                  <div class="media rounded-0 p-0">
-                                      <div class="row p-2"></div>
-                                      <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
-                                        '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
-                                      </a>
-                                      <div class="media-body bubble overflow-auto">
-                                          <button class="btn btn-success btn-sm pe-none mt-2 media-heading text-white mt-1 ps-3 pe-2">'.$datetime.'</button>
-                                          <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
-                                          '.$post_actions.'
-                                          <div class="margin-top-thin" style="padding:20px">
-                                              '.$extvideo_block.'
-                                              <div class="userContent control-label-notes">'.nl2br(standard_text_escape($content)).'</div>
-                                          </div>
-                                          '.show_resources($id).'
-                                          '.$rating_content.'
-                                          '.$comm_content.'
-                                      </div>
+                                  <div class="panel panel-default p-0">
+                                        <div class="panel-heading p-1">
+                                            <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
+                                                '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
+                                            </a>
+                                            '.$post_actions.'
+                                        </div>
+                                        <div class="panel-body bubble overflow-auto Borders">
+                                            <p class="blackBlueText TextSemiBold">'.$datetime.'</p>
+                                            <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
+
+                                            <div class="margin-top-thin" style="padding:20px">
+                                                '.$extvideo_block.'
+                                                <div class="userContent control-label-notes">'.nl2br(standard_text_escape($content)).'</div>
+                                            </div>
+                                            '.show_resources($id).'
+                                            '.$rating_content.'
+                                            '.$comm_content.'
+                                        </div>
                                   </div>                              
                           </div></div>';
     return $ret;
@@ -254,7 +256,7 @@ function generate_infinite_container_html($posts, $next_page) {
                           });
                       </script>';
     $ret = '
-    <div class="form-wrapper form-edit rounded mt-3">
+    <div class="form-wrapper form-edit rounded">
     <div class="col-12">
     <div class="infinite-container">';
 
@@ -291,7 +293,7 @@ function generate_infinite_container_html($posts, $next_page) {
 
 
         if (allow_to_edit($id, $uid, $is_editor)) {
-            $post_actions = '<div class="action-btns float-end">';
+            $post_actions = '<div class="action-btns float-end mt-2">';
             $post_actions .= '<a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
                               <span class="fa fa-fw fa-times text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
             if ($is_editor) { //add link for pin post
@@ -317,7 +319,7 @@ function generate_infinite_container_html($posts, $next_page) {
             }
             $post_actions .= '</div>';
         } else {
-            $post_actions = '<div class="action-btns float-end">';
+            $post_actions = '<div class="action-btns float-end mt-2">';
             if ($pinned == 1) {
                 $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
             }
@@ -331,38 +333,40 @@ function generate_infinite_container_html($posts, $next_page) {
         }
 
         $ret .= '<div class="infinite-item">';
-        $ret .= '<div class="row p-2 margin-right-thin margin-left-thin margin-top-thin">
+        $ret .= '<div class="row margin-right-thin margin-left-thin margin-top-thin">
 
-                              <div class="col-sm-12">
-                                  <div class="media rounded-0 p-0">
-                                        <div class="row pt-2 pb-2">
-                                            <div class="col-12">
-                                                <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
+                              <div class="col-12 mt-4">
+                                  <div class="panel panel-default">
+                                        <div class="panel-heading p-1">
+                                           
+                                                <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
                                                     '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
                                                 </a>
-                                            </div>
+                                                '.$post_actions.'
                                             
-                                            <div class="col-12">
-                                                <div class="media-body bubble overflow-auto">
-                                                    <button class="btn btn-success btn-sm pe-none mt-2 media-heading mt-1 text-white ps-3 pe-2">'.$datetime.'</button>
-                                                    <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
-                                                    '.$post_actions.'
-                                                    <div class="margin-top-thin" style="padding:20px">
-                                                        '.$extvideo_block.'
-                                                        <div class="userContent control-label-notes">'.nl2br(standard_text_escape($content)).'</div>
-                                                    </div>
-                                                    '.show_resources($id).'
-                                                    <div class="row">
-                                                        <div class="col-md-9 col-12">
-                                                            '.$rating_content.'
-                                                        </div>
-                                                        <div class="col-md-3 col-12 mt-md-0 mt-3">
-                                                            '.$comm_content.'
-                                                        </div>
-                                                    </div>
+                                        </div>
+                                            
+                                       
+                                        <div class="panel-body bubble overflow-auto Borders">
+                                            <p class="blackBlueText TextSemiBold">'.$datetime.'</p>
+                                            <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
+                                            
+                                            <div class="margin-top-thin" style="padding:20px">
+                                                '.$extvideo_block.'
+                                                <div class="userContent control-label-notes">'.nl2br(standard_text_escape($content)).'</div>
+                                            </div>
+                                            '.show_resources($id).'
+                                            <div class="row">
+                                                <div class="col-md-9 col-12">
+                                                    '.$rating_content.'
+                                                </div>
+                                                <div class="col-md-3 col-12 mt-md-0 mt-3">
+                                                    '.$comm_content.'
                                                 </div>
                                             </div>
                                         </div>
+                                       
+                                        
                                   </div>
                               </div>
                           </div>';

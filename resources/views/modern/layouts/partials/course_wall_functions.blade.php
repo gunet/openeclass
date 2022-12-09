@@ -17,7 +17,7 @@
         $extvideo = Session::has('extvideo')? Session::get('extvideo'): '';
     @endphp
 
-    <div class="col-12 mb-4">
+    <div class="col-12">
         <div class='panel panel-admin p-md-3 bg-white'>
             <div class='panel-heading bg-body'>
                 <div class='col-12 Help-panel-heading'>
@@ -135,7 +135,7 @@
                                 {!!
                                     form_buttons(array(
                                         array(
-                                            'class' => 'btn-primary btn-sm',
+                                            'class' => 'submitAdminBtn',
                                             'text'  =>  trans('langSubmit'),
                                             'name'  =>  'submit',
                                             'value' =>  trans('langSubmit')
