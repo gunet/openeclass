@@ -50,7 +50,7 @@ if (isset($_GET['fc'])) {
     $data['fc'] = intval($_GET['fc']);
 }
 
-// parse the faculte id in a session
+// parse the faculty id in a session
 // This is needed in case the user decides to switch language.
 if (isset($data['fc'])) {
     $_SESSION['fc_memo'] = $data['fc'];
@@ -69,14 +69,6 @@ if (!$fac) {
 if (!$data['tree']->checkVisibilityRestrictions($fac->id, $fac->visible, array('respectVisibility' => true))) {
     redirect_to_home_page();
 }
-
-
-// use the following array for the legend icons
-$data['icons'] = array(
-    2 => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' width='16' height='16' />",
-    1 => "<img src='$themeimg/lock_registration.png' alt='" . $langRegCourse . "' title='" . $langRegCourse . "' width='16' height='16' />",
-    0 => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' width='16' height='16' />"
-);
 
 $data['action_bar'] = action_bar(array(
                                 array('title' => $langBack,
@@ -170,4 +162,3 @@ if (count($data['courses']) > 0) {
 
 $data['menuTypeID'] = isset($uid) && $uid ? 1 : 0 ;
 view('modules.auth.opencourses', $data);
-

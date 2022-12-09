@@ -35,7 +35,7 @@
         <div class="row rowMedium">
 
             <div class="col-12 justify-content-center col_maincontent_active_Homepage">
-                    
+
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -62,80 +62,74 @@
                         {!! $buildRoots !!}
                     @endif
 
-                    
+
                     <div class='col-12 mt-4'>
                         <ul class='list-group'>
                             <li class='list-group-item bg-light'>{!! trans('langFaculty') !!}: <strong class='orangeText'>{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</strong>
                             {!! $childHTML !!}
                         </ul>
                     </div>
-                    
+
                     @if (count($courses) > 0)
-                            <div class='col-12'>
-                                <div class='table-responsive'>
-                                    <table class='table-default' id="myopencourses_table">
-                                        <thead>
-                                            <tr class='list-header'>
-                                                <th class='text-start text-white'>{!! trans('langCourseCode') !!}</th>
-                                            @if (isset($isInOpenCoursesMode))
-                                                <th class='text-start text-white' width='220'>{!! trans('langTeacher') !!}</th>
-                                                <th class='text-start text-white'width='30'>{!! trans('langOpenCoursesLevel') !!}</th>
-                                            @else
-                                                <th class='text-start text-white' width='220'>{!! trans('langTeacher') !!}</th>
-                                                <th width='30'>{!! trans('langType') !!}</th>
-                                            @endif
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($courses as $mycourse)
-                                                <tr>
-                                                    <td>
-                                                    @if ($mycourse->visible == COURSE_OPEN)
-                                                        <a href="../../courses/{!! urlencode($mycourse->k) !!}/">{!! $mycourse->i !!}</a>&nbsp;<small>({!! $mycourse->c !!})</small>
-                                                    @else
-                                                        {!! $mycourse->i !!}&nbsp;<small>({!! $mycourse->c !!})</small>
-                                                    @endif
-                                                    @if ($displayGuestLoginLinks)
-                                                        @if ($course_data[$mycourse->id]['userguest'])
-                                                            <div class='float-end'>
-                                                            @if ($course_data[$mycourse->id]['userguest']->password === '')
-                                                                    <form method='post' action='{{ $urlAppend }}'>
-                                                                        <input type='hidden' name='uname' value='{{ $course_data[$mycourse->id]['userguest']->username }}'>
-                                                                        <input type='hidden' name='pass' value=''>
-                                                                        <input type='hidden' name='next' value='/courses/{{ $mycourse->k }}/'>
-                                                                        <button class='btn btn-default' type='submit' title='{!! trans('langGuestLogin') !!}' name='submit' data-toggle='tooltip'><span class='fa fa-plane'></span></button>
-                                                                    </form>
-                                                            @else
-                                                                    <a class='btn btn-default' role='button' href='{{ $urlAppend }}main/login_form.php?user={!! urlencode($course_data[$mycourse->id]['userguest']->username) !!}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F' title='{!! trans('langGuestLogin') !!}' data-toggle='tooltip'>
-                                                                    <span class='fa fa-plane'></span></a>
-                                                            @endif
-                                                            </div>
+                        <div class='col-12'>
+                            <div class='table-responsive'>
+                                <table class='table-default' id="myopencourses_table">
+                                    <thead>
+                                        <tr class='list-header'>
+                                            <th class='text-start text-white'>{!! trans('langCourseCode') !!}</th>
+                                        @if (isset($isInOpenCoursesMode))
+                                            <th class='text-start text-white' width='220'>{!! trans('langTeacher') !!}</th>
+                                            <th class='text-start text-white'width='30'>{!! trans('langOpenCoursesLevel') !!}</th>
+                                        @else
+                                            <th class='text-start text-white' width='220'>{!! trans('langTeacher') !!}</th>
+                                            <th width='30'>{!! trans('langType') !!}</th>
+                                        @endif
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($courses as $mycourse)
+                                            <tr>
+                                                <td>
+                                                @if ($mycourse->visible == COURSE_OPEN)
+                                                    <a href="../../courses/{!! urlencode($mycourse->k) !!}/">{!! $mycourse->i !!}</a>&nbsp;<small>({!! $mycourse->c !!})</small>
+                                                @else
+                                                    {!! $mycourse->i !!}&nbsp;<small>({!! $mycourse->c !!})</small>
+                                                @endif
+                                                @if ($displayGuestLoginLinks)
+                                                    @if ($course_data[$mycourse->id]['userguest'])
+                                                        <div class='float-end'>
+                                                        @if ($course_data[$mycourse->id]['userguest']->password === '')
+                                                                <form method='post' action='{{ $urlAppend }}'>
+                                                                    <input type='hidden' name='uname' value='{{ $course_data[$mycourse->id]['userguest']->username }}'>
+                                                                    <input type='hidden' name='pass' value=''>
+                                                                    <input type='hidden' name='next' value='/courses/{{ $mycourse->k }}/'>
+                                                                    <button class='btn btn-default' type='submit' title='{!! trans('langGuestLogin') !!}' name='submit' data-toggle='tooltip'><span class='fa fa-plane'></span></button>
+                                                                </form>
+                                                        @else
+                                                                <a class='btn btn-default' role='button' href='{{ $urlAppend }}main/login_form.php?user={!! urlencode($course_data[$mycourse->id]['userguest']->username) !!}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F' title='{!! trans('langGuestLogin') !!}' data-toggle='tooltip'>
+                                                                <span class='fa fa-plane'></span></a>
                                                         @endif
+                                                        </div>
                                                     @endif
-                                                    </td>
-                                                    <td>
-                                                        {!! $mycourse->t !!}
-                                                    </td>
-                                                    <td class='text-center'>
-                                                    @if ($isInOpenCoursesMode)
-                                                        {!! CourseXMLElement::getLevel($mycourse->level) !!}&nbsp;
-                                                        <a href='javascript:showMetadata("{!! $mycourse->k !!}");'><img src='{{ $themeimg }}/lom.png'/></a>
-                                                    @else
-                                                        @foreach( $icons as $visible=>$image)
-                                                            @if($visible == $mycourse->visible)
-                                                                {!! $image !!}
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                @endif
+                                                </td>
+                                                <td>
+                                                    {!! $mycourse->t !!}
+                                                </td>
+                                                <td class='text-center'>
+                                                @if ($isInOpenCoursesMode)
+                                                    {!! CourseXMLElement::getLevel($mycourse->level) !!}&nbsp;
+                                                    <a href='javascript:showMetadata("{!! $mycourse->k !!}");'><img src='{{ $themeimg }}/lom.png'/></a>
+                                                @else
+                                                    {!! course_access_icon($mycourse->visible) !!}
+                                                @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
-                        
-                
+                        </div>
                     @endif
                 </div>
             </div>
@@ -143,8 +137,8 @@
     </div>
 </div>
 
-                                
+
 
 @endsection
-    
-    
+
+
