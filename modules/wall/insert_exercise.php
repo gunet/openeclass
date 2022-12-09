@@ -49,7 +49,7 @@ function list_exercises($id = NULL) {
                 "<th width='50%' class='text-left text-white'>$langExercices</th>" .
                 "<th class='text-left text-white'>$langDescription</th>" .
                 "<th style='width:20px;' class='text-center text-white'>$langChoice</th>" .
-                "</tr>";        
+                "</tr>";
         foreach ($quizinfo as $entry) {
             if ($entry['visibility'] == '0') {
                 $vis = 'not_visible';
@@ -61,7 +61,7 @@ function list_exercises($id = NULL) {
                 $checked = 'checked';
             }
             $ret_string .= "<tr class='$vis'>";
-            $ret_string .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a></td>";
+            $ret_string .= "<td class='text-left'><a href='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a></td>";
             $ret_string .= "<td class='text-left'>" . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
             $ret_string .= "<td class='text-center'><input type='checkbox' $checked name='exercise[]' value='$entry[id]'></td>";
             $ret_string .= "</tr>";

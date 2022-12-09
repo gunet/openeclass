@@ -459,7 +459,7 @@ function user_icon($uid, $size = null) {
                 $size = IMAGESIZE_SMALL;
             }
             if ($user->has_icon) {
-                return "${urlAppend}courses/userimg/${uid}_$size.jpg";
+                return "{$urlAppend}courses/userimg/{$uid}_$size.jpg";
             } else {
                 return "$themeimg/default_$size.png";
             }
@@ -2728,8 +2728,8 @@ function profile_image($uid, $size, $class=null) {
     $name = ($uid > 0) ? q(trim(uid_to_name($uid))) : '';
     $size_width = ($size != IMAGESIZE_SMALL || $size != IMAGESIZE_LARGE)? "style='width:$size'":'';
     $size = ($size != IMAGESIZE_SMALL && $size != IMAGESIZE_LARGE)? IMAGESIZE_LARGE:$size;
-    if ($uid > 0 and file_exists("courses/userimg/${uid}_$size.jpg")) {
-        return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' $class_attr title='$name' alt='$name' $size_width>";
+    if ($uid > 0 and file_exists("courses/userimg/{$uid}_$size.jpg")) {
+        return "<img src='{$urlServer}courses/userimg/{$uid}_$size.jpg' $class_attr title='$name' alt='$name' $size_width>";
     } else {
         return "<img src='$themeimg/default_$size.png' $class_attr title='$name' alt='$name' $size_width>";
     }
@@ -3580,7 +3580,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             }else{
                 $new_button = str_replace($oldButton,'submitAdminBtn rounded-pill d-flex justify-content-center align-items-center me-2',$button_class);
             }
-            
+
             $button_class = $new_button;
         }
         if (isset($option['link-attrs'])) {
@@ -3664,12 +3664,12 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     //                                     $page_title
     //                               </div>
     //                            </div>
-                               
+
     //                         </div>";
     // }
     if ($out && $i!=0) {
         return "<div class='col-12 mb-4'>
-                    <div class='col-12 action_bar d-flex justify-content-start'>  
+                    <div class='col-12 action_bar d-flex justify-content-start'>
                         <div class='margin-top-thin margin-bottom-fat hidden-print'>
                             <div class='btn-group btn-group-sm' style='flex-wrap: wrap;'>
                             $out
@@ -3829,11 +3829,11 @@ function setOpenCoursesExtraHTML() {
         $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
         $openCoursesExtraHTML = "
             <div class='row w-100'>
-                
+
                 <div class='col-lg-5 offset-lg-0 col-8 offset-2 d-flex justify-content-center align-items-center'>
                     <img style='height:120px; width:100%;' src='$themeimg/banner_open_courses.png' alt='".q($langListOpenCourses)."'>
                 </div>
-                
+
                 <div class='col-lg-7 col-12'>
                     <div class='row'>
                         <div class='col-12 ps-0' style='background-color:#ffffff; border-bottom:solid 1px #003e87;'>

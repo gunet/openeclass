@@ -169,7 +169,7 @@ if (isset($_POST['submit'])) {
                 $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
             } else {
                 //Session::Messages($errormsg, 'alert-danger');
-                Session::flash('message',$errormsg); 
+                Session::flash('message',$errormsg);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page('modules/message/' . ($course_id? "?course=$course_code": ''));
             }
@@ -189,7 +189,7 @@ if (isset($_POST['submit'])) {
                     }
                 }
                 array_push($list_of_recipients, $_SESSION['email']); // add sender email address
-                $linkhere = "<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a>.";
+                $linkhere = "<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a>.";
                 $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $c);
                 $datetime = date('l jS \of F Y h:i:s A');
                 $course_code = course_id_to_code($cid);
@@ -216,7 +216,7 @@ if (isset($_POST['submit'])) {
                             " . $_POST['body']. "
                         </div><br/>";
                 if ($filesize > 0) {
-                    $main_dropbox_message .= "<div><a href='${urlServer}modules/message/message_download.php?course=".course_id_to_code($cid)."&amp;id=$msg->id'>[$langAttachedFile]</a></div><br/>";
+                    $main_dropbox_message .= "<div><a href='{$urlServer}modules/message/message_download.php?course=".course_id_to_code($cid)."&amp;id=$msg->id'>[$langAttachedFile]</a></div><br/>";
                 }
                 $main_dropbox_message .= "
                     </div>";
@@ -228,7 +228,7 @@ if (isset($_POST['submit'])) {
                         <div id='alert'><small><b class='notice'>$langNote:</b> $langDoNotReply <a href='$msgURL'>$langHere</a>.</small></div>
                                         <br>
                         <div>
-                            <small>" . sprintf($langLinkUnsubscribe, $c) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a></small>
+                            <small>" . sprintf($langLinkUnsubscribe, $c) ." <a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a></small>
                         </div>
                     </div>";
 
@@ -299,16 +299,16 @@ if (isset($_POST['submit'])) {
         }
         if (!$errormail) {
             //Session::Messages($langdocAdd, 'alert-success');
-            Session::flash('message',$langdocAdd); 
+            Session::flash('message',$langdocAdd);
             Session::flash('alert-class', 'alert-success');
         } else {
             //Session::Messages($langUsersEmailWrong, 'alert-warning');
-            Session::flash('message',$langUsersEmailWrong); 
+            Session::flash('message',$langUsersEmailWrong);
             Session::flash('alert-class', 'alert-warning');
         }
     } else { //end if(!$error)
         //Session::Messages($errormsg, 'alert-danger');
-        Session::flash('message',$errormsg); 
+        Session::flash('message',$errormsg);
         Session::flash('alert-class', 'alert-danger');
     }
     redirect_to_home_page('modules/message/index.php' . ($course_id? "?course=$course_code": ''));

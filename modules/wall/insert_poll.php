@@ -56,7 +56,7 @@ function list_polls($id = NULL) {
             }
 
             $ret_string .= "<tr>";
-            $ret_string .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='${urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a></td>";
+            $ret_string .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a></td>";
             $ret_string .= "<td class='text-center'><input type='checkbox' $checked name='poll[]' value='$entry[id]'></td>";
             $ret_string .= "</tr>";
         }

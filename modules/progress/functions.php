@@ -49,11 +49,11 @@ function display_certificates() {
            $langDeactivate, $langSee, $langConfirmPurgeCert;
 
     // Fetch the certificate list
-    $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template 
+    $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template
                                                     FROM certificate WHERE course_id = ?d", $course_id);
 
         $tool_content .= "
-            
+
                 <div class='col-12 mt-3'>
                     <div class='panel panel-default rounded-0'>
                         <div class='panel-heading rounded-0'>
@@ -391,7 +391,7 @@ function display_activities($element, $id, $unit_id = 0) {
     if ($unit_id) {
         // check if unit completion is enabled
         $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge
-                                                            WHERE course_id = ?d AND unit_id = ?d 
+                                                            WHERE course_id = ?d AND unit_id = ?d
                                                             AND bundle = -1", $course_id, $unit_id)->active;
 
         // check if current element is unit completion badge
@@ -404,8 +404,8 @@ function display_activities($element, $id, $unit_id = 0) {
         }
     } else {
         // check if course completion is enabled
-        $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge 
-                                                            WHERE course_id = ?d AND bundle = -1 
+        $cc_enable = Database::get()->querySingle("SELECT count(id) as active FROM badge
+                                                            WHERE course_id = ?d AND bundle = -1
                                                             AND unit_id = ?d", $course_id, $unit_id)->active;
 
         // check if current element is course completion badge
@@ -505,7 +505,7 @@ function display_activities($element, $id, $unit_id = 0) {
         ));
 
     //get available activities
-    $result = Database::get()->queryArray("SELECT * FROM ${element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);
+    $result = Database::get()->queryArray("SELECT * FROM {$element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);
 
     if (!$unit_id) {
         $tool_content .= "
@@ -537,7 +537,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                     <th class='text-center'>
                                         <i class='fa fa-cogs'></i>
                                     </th>
-                                    
+
                                 </tr>";
         if (count($result) == 0) {
             $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
@@ -583,7 +583,7 @@ function display_activities($element, $id, $unit_id = 0) {
     } else {
             $tool_content .= "<div class='main-content'>
                                 <div class='col-sm-12'>
-                                    
+
                                         <div class='panel panel-default rounded-0'>
                                             <div class='panel-heading rounded-0'>
                                                 <div class='row'>
@@ -651,12 +651,12 @@ function display_activities($element, $id, $unit_id = 0) {
         $tool_content .= "</table></div></div></div></div>";
 
         //************* UNIT PREREQUISITES *************//
-        $course_units = Database::get()->queryArray("SELECT * FROM course_units 
+        $course_units = Database::get()->queryArray("SELECT * FROM course_units
                                                             WHERE course_id = ?d", $course_id);
 
-        $unit_prerequisite_id = Database::get()->querySingle("SELECT up.prerequisite_unit 
+        $unit_prerequisite_id = Database::get()->querySingle("SELECT up.prerequisite_unit
                                                                     FROM unit_prerequisite up
-                                                                    JOIN course_units cu ON (cu.id = up.unit_id) 
+                                                                    JOIN course_units cu ON (cu.id = up.unit_id)
                                                                     WHERE cu.id = ".$unit_id);
 
         $action_button_content = [];
@@ -679,8 +679,8 @@ function display_activities($element, $id, $unit_id = 0) {
                 'secondary_icon' => 'fa-plus',
                 'secondary_btn_class' => 'submitAdminBtn',
             ));
-        $tool_content .= "  
-               
+        $tool_content .= "
+
                     <div class='panel panel-default mt-3 rounded-0'>
                         <div class='panel-heading rounded-0'>
                             <div class='row'>
@@ -704,15 +704,15 @@ function display_activities($element, $id, $unit_id = 0) {
                 'confirm' => $langConfirmDelete)));
 
         if ( $unit_prerequisite_id ) {
-            $prereq_unit_title = Database::get()->querySingle("SELECT title FROM course_units 
+            $prereq_unit_title = Database::get()->querySingle("SELECT title FROM course_units
                                                                         WHERE id = ?d", $unit_prerequisite_id->prerequisite_unit)->title;
 
-            $tool_content .= "  
+            $tool_content .= "
             <div class='table-responsive'>
                 <table class='table-default'>
                 <tr>
                     <td><p class='text-start'>$prereq_unit_title</p></td>
-                
+
                     <td>$delPrereqBtn</td>
                 </tr>
                </table>
@@ -735,7 +735,7 @@ function display_activities($element, $id, $unit_id = 0) {
  * @return bool
  */
 function is_unit_prereq_enabled($unit_id) {
-    $prereq_id = Database::get()->queryArray("SELECT prerequisite_unit FROM unit_prerequisite 
+    $prereq_id = Database::get()->queryArray("SELECT prerequisite_unit FROM unit_prerequisite
                                                         WHERE unit_id = ?d", $unit_id);
     if (count($prereq_id) > 0) {
         return true;
@@ -838,11 +838,11 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
         if ($unit_id) {
             redirect(localhostUrl().$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
         } else {
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;${element}_id=$element_id");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;{$element}_id=$element_id");
         }
 
     } else { // otherwise editing is not allowed
-        $data = Database::get()->querySingle("SELECT threshold, operator FROM ${element}_criterion
+        $data = Database::get()->querySingle("SELECT threshold, operator FROM {$element}_criterion
                                             WHERE id = ?d AND $element = ?d", $activity_id, $element_id);
 
         if ($unit_id) {
@@ -885,7 +885,7 @@ function display_available_assignments($element, $element_id, $unit_id = 0) {
                                     AND active = 1
                                     AND (deadline IS NULL OR deadline >= ". DBHelper::timeAfter() . ")
                                     AND id NOT IN
-                                    (SELECT resource FROM ${element}_criterion WHERE $element = ?d
+                                    (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                         AND resource != ''
                                         AND activity_type = '" . AssignmentEvent::ACTIVITY . "'
                                         AND module = " . MODULE_ID_ASSIGN . ")
@@ -944,7 +944,7 @@ function display_available_exercises($element, $element_id, $unit_id = 0) {
                                     AND exercise.active = 1
                                     AND (exercise.end_date IS NULL OR exercise.end_date >= ". DBHelper::timeAfter() . ")
                                     AND exercise.id NOT IN
-                                    (SELECT resource FROM ${element}_criterion WHERE $element = ?d
+                                    (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                             AND resource != ''
                                             AND activity_type = '" . ExerciseEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_EXERCISE . ") ORDER BY title", $course_id, $element_id);
@@ -975,7 +975,7 @@ function display_available_exercises($element, $element_id, $unit_id = 0) {
             $exercise_id = $entry['id'];
             $comments = empty($entry['comment']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['comment']. "</div>";
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-start ps-2'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
+            $tool_content .= "<td class='text-start ps-2'><a href='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
             $tool_content .= "<td>". selection(get_operators(), "operator[$exercise_id]") . "</td>";
             $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$exercise_id]' value=''></td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$exercise_id'></td>";
@@ -1021,7 +1021,7 @@ function display_available_documents($element, $element_id, $unit_id = 0) {
                                      WHERE $group_sql AND visible = 1 AND
                                           path LIKE ?s AND
                                           path NOT LIKE ?s AND id NOT IN
-                                        (SELECT resource FROM ${element}_criterion WHERE $element = ?d
+                                        (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                             AND resource!='' AND activity_type = '" . ViewingEvent::DOCUMENT_ACTIVITY . "' AND module = " . MODULE_ID_DOCS . ")
                                 ORDER BY sort_key COLLATE utf8mb4_general_ci",
         "$path/%", "$path/%/%", $element_id);
@@ -1165,7 +1165,7 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $res = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d
+    $res = Database::get()->queryArray("SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                             AND resource IS NULL
                                             AND activity_type = '" . BlogEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_BLOG, $element_id);
@@ -1227,7 +1227,7 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
     $result = Database::get()->queryArray("SELECT * FROM blog_post WHERE course_id = ?d AND id NOT IN
-                                (SELECT resource FROM ${element}_criterion WHERE $element = ?d
+                                (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                     AND resource != ''
                                     AND activity_type = '" . CommentEvent::BLOG_ACTIVITY . "'
                                     AND module = " . MODULE_ID_COMMENTS . ")
@@ -1255,7 +1255,7 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
         foreach ($result as $row) {
             $blog_id = $row->id;
             $tool_content .= "<tr>" .
-                    "<td><a href='${urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id#comments-title'>" . q($row->title) . "</a></td>" .
+                    "<td><a href='{$urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id#comments-title'>" . q($row->title) . "</a></td>" .
                     "<td class='text-center'>" . format_locale_date(strtotime($row->time), 'short') . "</td>
                     <td>". selection(get_operators(), "operator[$blog_id]") . "</td>".
                     "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$blog_id]' value=''></td>" .
@@ -1291,7 +1291,7 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $res = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d
+    $res = Database::get()->queryArray("SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                             AND resource IS NULL
                                             AND activity_type = '" . ForumEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_FORUM . "", $element_id);
@@ -1344,7 +1344,7 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0) {
 
     $result = Database::get()->queryArray("SELECT ft.* FROM forum_topic ft JOIN forum f ON (f.id = ft.forum_id) WHERE f.course_id = ?d
                                         AND ft.id NOT IN
-                                        (SELECT resource FROM ${element}_criterion WHERE $element = ?d
+                                        (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                             AND resource != ''
                                             AND activity_type = '" . ForumTopicEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_FORUM . ")", $course_id, $element_id);
@@ -1381,7 +1381,7 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0) {
             $topic_id = $topicentry['topic_id'];
             $forum_id = $topicentry['forum_id'];
             $tool_content .= "<tr>";
-            $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='${urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id'>" . q($topicentry['topic_title']) . "</a></td>";
+            $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='{$urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id'>" . q($topicentry['topic_title']) . "</a></td>";
             $tool_content .= "<td>". selection(get_operators(), "operator[$topic_id]") . "</td>";
             $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$topic_id]' value=''></td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='forumtopic[]' value='$topic_id'></td>";
@@ -1411,7 +1411,7 @@ function display_available_lps($element, $element_id, int $unit_id = 0) {
     $result = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE lp_learnPath.course_id = ?d
                                             AND lp_learnPath.visible = 1
                                             AND lp_learnPath.learnPath_id NOT IN
-                                        (SELECT resource FROM ${element}_criterion WHERE $element = ?d
+                                        (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                                     AND resource!=''
                                                     AND activity_type = '" . LearningPathEvent::ACTIVITY . "'
                                                     AND module = " . MODULE_ID_LP . ")", $course_id, $element_id);
@@ -1450,7 +1450,7 @@ function display_available_lps($element, $element_id, int $unit_id = 0) {
                 $lp_id = $entry['id'];
                 $comments = empty($entry['comment']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['comment']. "</div>";
                 $tool_content .= "<tr>";
-                $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
+                $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
                 $tool_content .= "<td>". selection(get_operators(), "operator[$lp_id]") . "</td>";
                 $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$lp_id]' value=''></td>";
                 $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$lp_id'></td>";
@@ -1514,7 +1514,7 @@ function display_available_multimedia($element, $element_id, $unit_id = 0) {
                                                         AND course_id = ?d
                                                         AND visible = 1
                                                         AND id NOT IN
-                                                (SELECT resource FROM ${element}_criterion WHERE $element = ?d
+                                                (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                                     AND resource!=''
                                                     AND activity_type IN ('" . ViewingEvent::VIDEO_ACTIVITY . "', '" . ViewingEvent::VIDEOLINK_ACTIVITY . "') AND module = ". MODULE_ID_VIDEO . ")", $course_id, $element_id);
             foreach ($result as $row) {
@@ -1547,7 +1547,7 @@ function display_available_multimedia($element, $element_id, $unit_id = 0) {
                     $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d
                                                         AND visible = 1
                                                         AND id NOT IN
-                                                    (SELECT resource FROM ${element}_criterion WHERE $element = ?d
+                                                    (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                                         AND resource!=''
                                                         AND activity_type IN ('" . ViewingEvent::VIDEO_ACTIVITY . "', '" . ViewingEvent::VIDEOLINK_ACTIVITY . "') AND module = " . MODULE_ID_VIDEO . ")", $videocat->id, $element_id);
                     foreach ($sql2 as $linkvideocat) {
@@ -1591,7 +1591,7 @@ function display_available_ebooks($element, $element_id, $unit_id = 0) {
     $result = Database::get()->queryArray("SELECT * FROM ebook WHERE ebook.course_id = ?d
                                                 AND ebook.visible = 1
                                                 AND ebook.id NOT IN
-                                        (SELECT resource FROM ${element}_criterion WHERE $element = ?d
+                                        (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                         AND resource!='' AND activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "' AND module = " . MODULE_ID_EBOOK . ")", $course_id, $element_id);
 
     if (count($result) == 0) {
@@ -1688,7 +1688,7 @@ function display_available_polls($element, $element_id, $unit_id = 0) {
                                     AND poll.active = 1
                                     AND poll.end_date >= ". DBHelper::timeAfter() . "
                                     AND poll.pid NOT IN
-                                (SELECT resource FROM ${element}_criterion WHERE $element = ?d
+                                (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                     AND resource != '' AND activity_type = '" . ViewingEvent::QUESTIONNAIRE_ACTIVITY . "' AND module = " . MODULE_ID_QUESTIONNAIRE . ")",
         $course_id, $element_id);
 
@@ -1718,7 +1718,7 @@ function display_available_polls($element, $element_id, $unit_id = 0) {
         foreach ($pollinfo as $entry) {
             $description = empty($entry['description']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['description']. "</div>";
             $tool_content .= "<tr>";
-            $tool_content .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='${urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>" . $description ."</td>";
+            $tool_content .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>" . $description ."</td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='poll[]' value='$entry[id]'></td>";
             $tool_content .= "</tr>";
         }
@@ -1751,7 +1751,7 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $result = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d
+    $result = Database::get()->queryArray("SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                             AND resource IS NULL
                                             AND activity_type = '" . WikiEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_WIKI . "", $element_id);
@@ -1804,7 +1804,7 @@ function display_available_participation($element, $element_id, $unit_id = 0) {
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $result = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d
+    $result = Database::get()->queryArray("SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                             AND resource IS NULL
                                             AND activity_type = '" . CourseParticipationEvent::ACTIVITY . "'", $element_id);
 
@@ -1859,7 +1859,7 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
                                     AND active = 1
                                     AND end_date > " . DBHelper::timeAfter() . "
                                     AND id NOT IN
-                                    (SELECT resource FROM ${element}_criterion WHERE $element = ?d
+                                    (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                         AND resource != ''
                                         AND activity_type = '" . GradebookEvent::ACTIVITY . "'
                                         AND module = " . MODULE_ID_GRADEBOOK . ")
@@ -1919,7 +1919,7 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $res = Database::get()->queryArray("SELECT id FROM ${element}_criterion WHERE $element = ?d
+    $res = Database::get()->queryArray("SELECT id FROM {$element}_criterion WHERE $element = ?d
                                             AND resource IS NULL
                                             AND activity_type = '" . CourseCompletionEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_PROGRESS, $element_id);
@@ -2007,7 +2007,7 @@ function display_settings($element, $element_id, $unit_id = 0) {
                                     $langProgressBasicInfo
                                 </div>
                                 <div class='col-5 text-end'>
-                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn'>"
+                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn'>"
                                             . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
                                     </a>
                                 </div>
@@ -2067,7 +2067,7 @@ function display_settings($element, $element_id, $unit_id = 0) {
                     <div class='panel-body rounded-0 bg-light'>
 
                         <h6 class='mb-0 text-center'><strong>$langCourseCompletion</strong></h6>
-                            
+
                     </div>
                 </div>
             </div>";
@@ -2207,8 +2207,8 @@ function certificate_settings($element, $element_id = 0) {
                 $cert_id";
                 $tool_content .= "<div class='form-group mt-5'>
                     <div class='col-12 d-flex justify-content-center align-items-center'>
-                     
-                        
+
+
                            ".form_buttons(array(
                             array(
                                     'class' => 'submitAdminBtn',
@@ -2221,9 +2221,9 @@ function certificate_settings($element, $element_id = 0) {
                                 'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                 )
                             ))."
-                        
-                        
-                    
+
+
+
                     </div>
                 </div>
             </form>
@@ -2570,10 +2570,10 @@ function display_user_progress_details($element, $element_id, $user_id) {
             <div class='col-12'>
                 <div class='panel panel-default rounded-0'>
                     <div class='panel-heading rounded-0'>
-                        $element_title     
+                        $element_title
                     </div>
                     <div class='panel-body rounded-0'>
-                        
+
                         <div class='row'>
                             <div class='col-sm-12'>
                                 <div class='row p-2'>

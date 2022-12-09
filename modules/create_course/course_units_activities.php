@@ -48,7 +48,7 @@ function checkedBoxes() {
             checked_in_class.push(checkboxes[i].attr('id'));
         }
     }
-    
+
     for(let j=1; j<parseInt(checkboxes_in_home.length); j++) {
         if(checkboxes_in_home[j].checked){
             checked_in_home.push(checkboxes[j].attr('id'));
@@ -60,12 +60,12 @@ function checkedBoxes() {
             checked_after_class.push(checkboxes[k].attr('id'));
         }
     }
-    
+
     document.getElementsByName('checked_in_class').value=checked_in_class;
     document.getElementsByName('checked_in_home').value=checked_in_home;
     document.getElementsByName('checked_after_class').value=checked_after_class;
 
-   
+
 }
 
 
@@ -98,14 +98,14 @@ if(!isset($_POST['final_submit'])){
 
                 if (empty($_SESSION['goals']) or $_SESSION['goals'][0] == "") {
                     //Session::Messages($langEmptyGoal);
-                    Session::flash('message', $langEmptyGoal); 
+                    Session::flash('message', $langEmptyGoal);
                     Session::flash('alert-class', 'alert-warning');
                     $validationFailed = true;
                 }
 
                 if (empty($_SESSION['units']) or $_SESSION['goals'][0] == "") {
                     //Session::Messages($langEmptyUnit);
-                    Session::flash('message', $langEmptyUnit); 
+                    Session::flash('message', $langEmptyUnit);
                     Session::flash('alert-class', 'alert-warning');
                     $validationFailed = true;
                 }
@@ -113,7 +113,7 @@ if(!isset($_POST['final_submit'])){
 
                 if (empty($_SESSION['stunum'])||empty($_SESSION['lectnum'])||empty($_SESSION['lecthours'])||empty($_SESSION['homehours'])) {
                     //Session::Messages($langFieldsMissing);
-                    Session::flash('message', $langFieldsMissing); 
+                    Session::flash('message', $langFieldsMissing);
                     Session::flash('alert-class', 'alert-warning');
                     $validationFailed = true;
 
@@ -123,13 +123,13 @@ if(!isset($_POST['final_submit'])){
                 if ($validationFailed) {
                     redirect_to_home_page('modules/create_course/flipped_classroom.php');
                 }
-                
+
                 $mtitles_in_home = $mtitles_in_class = $mtitles_after_class = $mids_in_home = $mids_in_class = $mids_after_class = array();
 
                 $maxUnitId = Database::get()->querySingle("SELECT MAX(id) as muid FROM course_units");
 
                 $act_list_in_home = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_IN_HOME."'");
-                
+
                 $act_list_after_class = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_AFTER_CLASS."'");
 
                 $act_list_in_class = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_IN_CLASS."'");
@@ -180,20 +180,20 @@ if(!isset($_POST['final_submit'])){
                 ), false);
 
 
-                $tool_content .= " 
-                
+                $tool_content .= "
+
                     <div class='form-wrapper '>
                         <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
                         <div class='panel panel-default rounded-0'>
                             <div class='panel-heading rounded-0'>
                                 <div class='panel-title text-center text-uppercase'>
                                     $langActSelect
-                    
+
                                 </div>
                             </div>
                         </div>
-                       
-                        
+
+
                         <fieldset>
                             <div class='table-responsive'>
                                 <table class='table table-bordered table-striped'>
@@ -304,28 +304,28 @@ if(!isset($_POST['final_submit'])){
                     $tool_content .= "</tr>
                             </table>
                         </div>
-                        
+
 
                         <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
-                           
-                                
-                                 
-                                    <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
-                                 
-                                 
-                                        <a href='{$urlServer}main/portfolio.php' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-                                 
-                               
-                                
 
-                            
+
+
+                                    <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
+
+
+                                        <a href='{$urlServer}main/portfolio.php' class='btn cancelAdminBtn ms-1'>$langCancel</a>
+
+
+
+
+
                         </div>
                         <input type='hidden' name='next'>
                         <input name='checked_in_class' type='hidden' value='1'></input>
                         <input name='checked_in_home' type='hidden' value='2'></input>
                         <input name='checked_after_class' type='hidden' value='3'></input>
-            
-                    </fieldset>". generate_csrf_token_form_field() ." 
+
+                    </fieldset>". generate_csrf_token_form_field() ."
                 </form>
             </div>
             ";
@@ -334,7 +334,7 @@ if(!isset($_POST['final_submit'])){
         $toolName = $langCourseEdit;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "${urlServer}modules/units/index.php?course=$course_code&id=$unit_id",
+                'url' => "{$urlServer}modules/units/index.php?course=$course_code&id=$unit_id",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')),false);
 
@@ -396,7 +396,7 @@ if(!isset($_POST['final_submit'])){
                             </div>
                         </div>
                     </div>
-    
+
                     <fieldset>
                         <div class='table-responsive'>
                         <table class='table table-bordered table-striped '>
@@ -504,24 +504,24 @@ if(!isset($_POST['final_submit'])){
                         </table>
                     </div>
                     <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
-                        
-                            
-                               
+
+
+
                                     <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
-                               
-                              
+
+
                                     <a href='{$urlServer}modules/units/index.php?course=".$course_code."&id=".$unit_id."' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-                              
-                                                 
-                            
-                           
-                       
+
+
+
+
+
                     </div>
                     <input type='hidden' name='next'>
                     <input name='checked_in_class' type='hidden' value='1'></input>
                     <input name='checked_in_home' type='hidden' value='2'></input>
                     <input name='checked_after_class' type='hidden' value='3'></input>
-            
+
                     </form></fieldset>". generate_csrf_token_form_field() ."
                 </div>
                 ";
@@ -566,14 +566,14 @@ if(!isset($_POST['final_submit'])){
 
             if (count($_SESSION['code']) < 1 || empty($_SESSION['code'][0])) {
                 //Session::Messages($langEmptyAddNode);
-                Session::flash('message', $langEmptyAddNode); 
+                Session::flash('message', $langEmptyAddNode);
                 Session::flash('alert-class', 'alert-warning');
                 $validationFailed = true;
             }
 
             if (empty($_SESSION['title'])) {
                 //Session::Messages($langFieldsMissing);
-                Session::flash('message', $langFieldsMissing); 
+                Session::flash('message', $langFieldsMissing);
                 Session::flash('alert-class', 'alert-warning');
                 $validationFailed = true;
             }
@@ -602,7 +602,7 @@ if(!isset($_POST['final_submit'])){
             // create course directories
             if (!create_course_dirs($code)) {
                 //Session::Messages($langGeneralError, 'alert-danger');
-                Session::flash('message', $langGeneralError); 
+                Session::flash('message', $langGeneralError);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page('modules/create_course/create_course.php');
             }
@@ -696,7 +696,7 @@ if(!isset($_POST['final_submit'])){
             $new_course_id = $result->lastInsertID;
             if (!$new_course_id) {
             //Session::Messages($langGeneralError);
-            Session::flash('message', $langGeneralError); 
+            Session::flash('message', $langGeneralError);
             Session::flash('alert-class', 'alert-warning');
             redirect_to_home_page('modules/create_course/create_course.php');
             }
@@ -772,7 +772,7 @@ if(!isset($_POST['final_submit'])){
                                     <li>$langLectHours: $lecthours </li>
                                     <li>$langHomeHours: $homehours </li>
                                     <li>$langTotalHours: $totalhours</li>
-                                </ul>   
+                                </ul>
             ";
 
 
@@ -839,7 +839,7 @@ if(!isset($_POST['final_submit'])){
                                                     course_code = ?s,
                                                     activity_id = ?s,
                                                     unit_id = ?d,
-                                                    tool_ids = ?s, 
+                                                    tool_ids = ?s,
                                                     activity_type=?d,
                                                     `visible` =?d",
                         $code,
@@ -874,7 +874,7 @@ if(!isset($_POST['final_submit'])){
                                                     course_code = ?s,
                                                     activity_id = ?s,
                                                     unit_id = ?d,
-                                                    tool_ids = ?s, 
+                                                    tool_ids = ?s,
                                                     activity_type=?d,
                                                     `visible` =?d",
                         $code,
@@ -906,7 +906,7 @@ if(!isset($_POST['final_submit'])){
                                                     course_code = ?s,
                                                     activity_id = ?s,
                                                     unit_id = ?d,
-                                                    tool_ids = ?s, 
+                                                    tool_ids = ?s,
                                                     activity_type=?d,
                                                     `visible` =?d",
                         $code,
@@ -996,7 +996,7 @@ if(!isset($_POST['final_submit'])){
                                                 course_code = ?s,
                                                 activity_id = ?s,
                                                 unit_id = ?d,
-                                                tool_ids = ?s, 
+                                                tool_ids = ?s,
                                                 activity_type=?d,
                                                 `visible` =?d",
                     $course_code,
@@ -1031,7 +1031,7 @@ if(!isset($_POST['final_submit'])){
                                                 course_code = ?s,
                                                 activity_id = ?s,
                                                 unit_id = ?d,
-                                                tool_ids = ?s, 
+                                                tool_ids = ?s,
                                                 activity_type=?d,
                                                 `visible` =?d",
                     $course_code,
@@ -1064,7 +1064,7 @@ if(!isset($_POST['final_submit'])){
                                                 course_code = ?s,
                                                 activity_id = ?s,
                                                 unit_id = ?d,
-                                                tool_ids = ?s, 
+                                                tool_ids = ?s,
                                                 activity_type=?d,
                                                 `visible` =?d",
                     $course_code,

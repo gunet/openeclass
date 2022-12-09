@@ -55,7 +55,7 @@ function list_assignments() {
                     "<div class='margin-top: 10px;'>" . mathfilter($row->description, 12 , "../../courses/mathimg/"). "</div>";
             $tool_content .= "<tr class='$vis'>" .
                     "<td class='text-center'><input name='work[]' value='$row->id' type='checkbox' /></td>" .
-                    "<td><a href='${urlServer}modules/work/index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$exclamation_icon $description</td>" .
+                    "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$exclamation_icon $description</td>" .
                     "<td class='text-center'>".format_locale_date(strtotime($row->submission_date), 'short')."</td>" .
                     "</tr>";
         }

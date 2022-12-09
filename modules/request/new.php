@@ -171,7 +171,7 @@ if (isset($_POST['requestTitle'])) {
                       <div id='mail-footer'>
                           <br>
                           <div>
-                              <small>" . sprintf($langLinkUnsubscribe, q($currentCourseName)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+                              <small>" . sprintf($langLinkUnsubscribe, q($currentCourseName)) ." <a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
                           </div>
                       </div>";
                 $emailBody = html2text($emailContent);

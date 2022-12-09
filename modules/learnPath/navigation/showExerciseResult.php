@@ -124,10 +124,10 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
     echo "<br>
         <table class='table-default graded'>
         <tr class='odd list-header'>
-            <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
+            <td colspan='$colspan'><b><u>$langQuestion</u>: $iplus</b></td>
         </tr>
         <tr>
-            <td colspan='${colspan}'>
+            <td colspan='$colspan'>
                 <strong>" . q_math($questionName) . "</strong>
                 <br>" . standard_text_escape($questionDescription) . "<br/><br/>
             </td>
@@ -346,7 +346,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                 } else {
                     echo "<tr>
                           <td>" . standard_text_escape($answer) . "</td>
-                          <td>${choice[$answerId]} / <span class='text-success'><strong>${matching[$answerCorrect]}</strong></span></td>
+                          <td>{$choice[$answerId]} / <span class='text-success'><strong>{$matching[$answerCorrect]}</strong></span></td>
                         </tr>";
                 }
             }

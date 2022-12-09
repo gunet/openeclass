@@ -360,7 +360,7 @@ function attendance_display_available_exercises($attendance_id) {
         foreach ($checkForExer as $newExerToGradebook) {
             $content = ellipsize_html($newExerToGradebook->description, 50);
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-start'><a href='${urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
+            $tool_content .= "<td class='text-start'><a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
             $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2");
             $tool_content .= "</td></tr>";
@@ -409,7 +409,7 @@ function attendance_display_available_assignments($attendance_id) {
                 }
             }
             $tool_content .= "<tr>";
-            $tool_content .= "<td><a href='${urlServer}modules/work/index.php?course=$course_code&amp;id=$newAssToGradebook->id'>" . q($newAssToGradebook->title) . "</a></td>";
+            $tool_content .= "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$newAssToGradebook->id'>" . q($newAssToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
             $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1");
             $tool_content .= "</td></tr>";
@@ -541,7 +541,7 @@ function add_attendance_other_activity($attendance_id) {
                         $tool_content .= "/></div>";
                     }
                     $tool_content .= "
-                   
+
 
                     <div class='form-group mt-5'>
                     <div class='col-12 d-flex justify-content-center align-items-center'>".form_buttons(array(
@@ -783,7 +783,7 @@ function new_attendance() {
                     </div>
                     <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
                         "
-                                
+
                                     .form_buttons(array(
                                         array(
                                                 'class'=> 'submitAdminBtn',
@@ -796,8 +796,8 @@ function new_attendance() {
                                                 'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                                 )
                                         )).
-                               
-                                    
+
+
 
                         "
                     </div>
@@ -1052,9 +1052,9 @@ function attendance_settings($attendance_id) {
                         </div>
                     </div>
                     <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
-                       
-                          
-                             
+
+
+
                                  ".form_buttons(array(
                                     array(
                                         'class' => 'submitAdminBtn',
@@ -1067,10 +1067,10 @@ function attendance_settings($attendance_id) {
                                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id"
                                     )
                                 ))."
-                             
-                              
-                          
-                        
+
+
+
+
                     </div>
                     </fieldset>
                 </form>
@@ -1106,7 +1106,7 @@ function user_attendance_settings($attendance_id) {
     $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $attendance->start_date)->format('d-m-Y H:i');
     $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $attendance->end_date)->format('d-m-Y H:i');
     $tool_content .= "
-    
+
     <div class='col-sm-12'>
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id&editUsers=1'>
@@ -1139,26 +1139,26 @@ function user_attendance_settings($attendance_id) {
                     <div class='form-group mt-3' id='all_users'>
                         <div class='input-append date form-group' id='startdatepicker'>
                             <label for='UsersStart' class='col-sm-6 control-label-notes'>$langRegistrationDate $langFrom2:</label>
-                            
+
                                 <div class='input-group'>
                                     <input class='form-control mt-0' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
-                            
+
                                     <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
                                 </div>
-                               
-                            
+
+
                         </div>
-                       
+
                         <div class='input-append date form-group mt-4' id='enddatepicker'>
                             <label for='UsersEnd' class='col-sm-6 control-label-notes'>$langTill</label>
-                          
+
                                 <div class='input-group'>
                                     <input class='form-control mt-0' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
-                              
+
                                     <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
                                 </div>
-                              
-                           
+
+
                         </div>
                     </div>
                     <div class='form-group mt-4'>

@@ -363,7 +363,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
             echo "
                   <div class='radio'>
                       <label>
-                        <input type='radio' name='choice[${questionId}]' value='${answerId}'>
+                        <input type='radio' name='choice[$questionId]' value='$answerId'>
                         " . $answer . "
                       </label>
                     </div>";
@@ -372,7 +372,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
             echo "
                   <div class='checkbox'>
                       <label>
-                        <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1'>
+                        <input type='checkbox' name='choice[$questionId][$answerId]' value='1'>
                         " . $answer . "
                       </label>
                     </div>";
@@ -401,14 +401,14 @@ function showQuestion($questionId, $onlyAnswers = false) {
                 $select[$answerId]['Reponse'] = $answer;
             } else {
                 echo "<tr class='even'>
-                    <td width='200'><b>${cpt2}.</b> " . $answer . "</td>
+                    <td width='200'><b>$cpt2.</b> $answer</td>
                     <td width='130'><div align='center'>
-                     <select name='choice[${questionId}][${answerId}]'>
+                     <select name='choice[$questionId][$answerId]'>
                        <option value='0'>--</option>";
 
                 // fills the list-box
                 foreach ($select as $key => $val) {
-                    echo "<option value=\"${key}\">${val['Lettre']}</option>";
+                    echo "<option value=\"$key\">$val[Lettre]</option>";
                 }
                 echo "</select></td>
                                     <td width='200'>";
@@ -437,7 +437,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
         } elseif ($answerType == TRUE_FALSE) {
             echo "<div class='radio'>
                           <label>
-                            <input type='radio' name='choice[${questionId}]' value='${answerId}'>
+                            <input type='radio' name='choice[$questionId]' value='$answerId'>
                             " . $answer . "
                           </label>
                         </div>";

@@ -131,7 +131,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $blanksDefined = true;
         }
         if (isset($buttonBack) or isset($blanksDefined)) {
-            Session::flash('message',$langQuestionUpdated); 
+            Session::flash('message',$langQuestionUpdated);
             Session::flash('alert-class', 'alert-success');
 
             if (isset($exerciseId)) {
@@ -165,7 +165,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
         }
         if (isset($_POST['match'])) { // check for blank matches
             if ($_POST['match'] != array_filter($_POST['match'],'check_empty')) {
-                Session::flash('message',$langGiveAnswers); 
+                Session::flash('message',$langGiveAnswers);
                 Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
             }
@@ -173,7 +173,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
 
         if (isset($_POST['option'])) { // check for blank options
             if ($_POST['option'] != array_filter($_POST['option'], 'check_empty')) {
-                Session::flash('message',$langGiveAnswers); 
+                Session::flash('message',$langGiveAnswers);
                 Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
             }
@@ -248,7 +248,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
     }
     if (empty($msgErr) and !isset($_POST['setWeighting'])) {
         if (isset($exerciseId)) {
-            Session::flash('message',$langQuestionReused); 
+            Session::flash('message',$langQuestionReused);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
         } else {

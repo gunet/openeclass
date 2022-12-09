@@ -281,7 +281,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
     <div id='mail-footer'>
         <br>
         <div>
-            <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+            <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
         </div>
     </div>";
 
@@ -297,7 +297,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
        "--------------------------------------------\n$plain_message\n" .
        "--------------------------------------------\n" .
        "$langNote: " . canonicalize_whitespace(str_replace('<br />', "\n", sprintf($langLinkUnsubscribe, q($title)))) .
-       " $langHere:\n${urlServer}main/profile/emailunsubscribe.php?cid=$course_id\n";
+       " $langHere:\n{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id\n";
 
        if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)) { // first lookup for course setting
            $users = Database::get()->queryArray("SELECT cu.user_id FROM course_user cu

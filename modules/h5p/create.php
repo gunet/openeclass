@@ -59,7 +59,7 @@ if (isset($_POST['h5paction']) && $_POST['h5paction'] === 'create') {
     $id = saveContent((object)$_POST);
 
     //Session::Messages($langH5pSaveSuccess, 'alert-success');
-    Session::flash('message',$langH5pSaveSuccess); 
+    Session::flash('message',$langH5pSaveSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect($backUrl);
 }
@@ -111,33 +111,33 @@ if (isset($_GET['id'])) {
 // h5p editor form
 $tool_content .= "
         <div class='col-12'>
-            <form id='coolh5peditor' autocomplete='off' action='${urlAppend}modules/h5p/create.php?course=$course_code' method='post' accept-charset='utf-8' class='mform'>
+            <form id='coolh5peditor' autocomplete='off' action='{$urlAppend}modules/h5p/create.php?course=$course_code' method='post' accept-charset='utf-8' class='mform'>
                 <div style='display: none;'>
-                    <input name='library' type='hidden' value='" . $library . "' />
-                    <input name='h5plibrary' type='hidden' value='" . $library . "' />
+                    <input name='library' type='hidden' value='$library' />
+                    <input name='h5plibrary' type='hidden' value='$library' />
                     <input name='h5pparams' type='hidden' value='" . q(json_encode($maincontentdata, true)) . "' />
                     <input name='h5paction' type='hidden' value='' />
-                    <input name='id' type='hidden' value='" . $id . "' />
-                    <input name='h5pcorecommonpath' type='hidden' value='" . $coreCommonPath . "' />
+                    <input name='id' type='hidden' value='$id' />
+                    <input name='h5pcorecommonpath' type='hidden' value='$coreCommonPath' />
                 </div>
-                
+
                 <div class='h5p-editor-wrapper' id='h5p-editor-region'>
                     <div class='h5p-editor'>
                         <span class='loading-icon icon-no-margin'><i class='icon fa fa-circle-o-notch fa-spin fa-fw' title='$langLoading' aria-label='$langLoading'></i></span>
                     </div>
                 </div>
-    
+
                 <div class='h5p-editor-upload'></div>
-                
+
                 " . addActionButtons() . "
-                
+
             </form>
         </div>\n";
 
 $head_content .= "
     <script type='text/javascript'>
         var H5PIntegration = " . json_encode(getH5pIntegrationObject(), JSON_PRETTY_PRINT) . ";
-    
+
         $(document).ready(function() {
             const editorwrapper = $('#h5p-editor-region');
             const editor = $('.h5p-editor');
@@ -147,14 +147,14 @@ $head_content .= "
             const h5pparams = $('input[name=\"h5pparams\"]');
             const inputname = $('input[name=\"name\"]');
             const h5paction = $('input[name=\"h5paction\"]');
-            
+
             // Cancel validation and submission of form if clicking cancel button.
             const cancelSubmitCallback = function(button) {
                 return button.is('[name=\"cancel\"]');
             };
-            
+
             h5paction.val('create');
-        
+
             H5PEditor.init(
                 mform,
                 h5paction,
@@ -181,7 +181,7 @@ function addActionButtons(): string {
             <div class='col-md-3 col-form-label d-flex pb-0 pr-md-0'>
                 <div class='form-label-addon d-flex align-items-center align-self-start'></div>
             </div>
-            
+
             <div class='col-md-9 form-inline align-items-start felement' data-fieldtype='group'>
                 <fieldset class='w-100 m-0 p-0 border-0'>
                     <legend class='sr-only'></legend>
@@ -196,7 +196,7 @@ function addActionButtons(): string {
                             </span>
                             <div class='form-control-feedback invalid-feedback' id='id_error_submitbutton'></div>
                         </div>
-    
+
                         <div class='form-group fitem btn-cancel' >
                             <span data-fieldtype='submit'>
                                 <input type='submit'

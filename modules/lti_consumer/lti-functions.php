@@ -38,7 +38,7 @@ const RESOURCE_LINK_TYPE_POLL = "poll";
  * @param $course_code
  * @param string $lti_url_default
  */
-function new_lti_app($is_template = false, $course_code, $lti_url_default = '') {
+function new_lti_app($is_template, $course_code, $lti_url_default = '') {
     global $tool_content, $langAdd, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderSecret,
            $langLTIProviderKey, $langNewLTIAppActive, $langNewLTIAppInActive, $langNewLTIAppStatus, $langTitle,
            $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer, $langUseOfApp,
@@ -63,8 +63,8 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
             <div class='col-sm-12'>
                 $textarea
             </div>
-        </div>      
-        <div class='row'>  
+        </div>
+        <div class='row'>
             <div class='col-md-6 col-12'>
                 <div class='form-group mt-4'>
                     <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderUrl</label>
@@ -82,7 +82,7 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
                 </div>
             </div>
         </div>
-        <div class='row'>  
+        <div class='row'>
             <div class='col-md-6 col-12'>
                 <div class='form-group mt-4'>
                     <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderSecret</label>
@@ -119,8 +119,8 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
             if (!isset($course_code)) {
                 $tool_content .= "<div class='form-group mt-4' id='courses-list'>
                     <label class='col-sm-6 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
-                    <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></label>                    
-                    <div class='col-sm-12'>                                
+                    <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></label>
+                    <div class='col-sm-12'>
                         <select id='select-courses' class='form-select' name='lti_courses[]' multiple>";
                     $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                             WHERE id NOT IN (SELECT course_id FROM course_lti_app)
@@ -172,7 +172,7 @@ function new_lti_app($is_template = false, $course_code, $lti_url_default = '') 
  * @brief add / update lti app settings
  */
 function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $lti_courses, $course_id = null,
-                            $is_template = false, $update = false, $session_id = null, $type)  {
+                            $is_template = false, $update = false, $session_id = null, $type = null)  {
     if (in_array(0, $lti_courses)) {
         $all_courses = 1; // lti app is assigned to all courses
     } else {
@@ -266,7 +266,7 @@ function edit_lti_app($session_id) {
                 </div>
             </div>";
 
-    $tool_content .= 
+    $tool_content .=
 "           <div class='col-md-6 col-12'>
                 <div class='form-group mt-4'>
                     <label for='lti_launchcontainer' class='col-sm-6 control-label-notes'>$langLTILaunchContainer</label>
@@ -274,7 +274,7 @@ function edit_lti_app($session_id) {
                 </div>
             </div>
         </div>
-        
+
         <div class='form-group mt-4'>
             <label for='active_button' class='col-sm-6 control-label-notes mb-2'>$langNewLTIAppStatus:</label>
             <div class='col-sm-12'>
@@ -296,8 +296,8 @@ function edit_lti_app($session_id) {
                     if (!isset($course_id)) {
                         $tool_content .= "<div class='form-group mt-4' id='courses-list'>
                             <label class='col-sm-6 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
-                            <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></label>                    
-                            <div class='col-sm-12'>                                
+                            <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></label>
+                            <div class='col-sm-12'>
                                 <select class='form-select' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
                                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                     WHERE id NOT IN (SELECT course_id FROM course_lti_app)
@@ -306,7 +306,7 @@ function edit_lti_app($session_id) {
                                 if ($row->all_courses == 1) {
                                     $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
                                 } else {
-                                    $lti_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
+                                    $lti_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id
                                                                                 IN (SELECT course_id FROM course_lti_app WHERE lti_app = ?d) ORDER BY title", $session_id);
                                     if (count($lti_courses_list) > 0) {
                                         foreach($lti_courses_list as $c) {

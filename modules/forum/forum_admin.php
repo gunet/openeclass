@@ -178,14 +178,14 @@ elseif (isset($_GET['forumgoedit'])) {
        </div>
         <div class='form-group mt-5'>
             <div class='col-12 d-flex justify-content-center align-items-center'>
-                
-                   
+
+
                         <input class='btn submitAdminBtn' type='submit' value='$langModify'>
-                
-                   
+
+
                          <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
-                   
-                
+
+
             </div>
         </div>
         </fieldset>
@@ -212,14 +212,14 @@ elseif (isset($_GET['forumcatedit'])) {
         </div>
         <div class='form-group mt-5'>
             <div class='col-12 d-flex justify-content-center align-items-center'>
-              
-                    
+
+
                         <input class='btn submitAdminBtn' type='submit' value='$langModify'>
-                    
-                  
+
+
                         <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
-                   
-               
+
+
             </div>
         </div>
         </fieldset>
@@ -232,7 +232,7 @@ elseif (isset($_GET['forumcatsave'])) {
     Database::get()->query("UPDATE forum_category SET cat_title = ?s
                                         WHERE id = ?d AND course_id = ?d", $_POST['cat_title'], $cat_id, $course_id);
     //Session::Messages($langNameCatMod, 'alert-success');
-    Session::flash('message',$langNameCatMod); 
+    Session::flash('message',$langNameCatMod);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/index.php?course=$course_code");
 }
@@ -254,7 +254,7 @@ elseif (isset($_GET['forumcatadd'])) {
                         SET cat_title = ?s,
                         course_id = ?d", $_POST['categories'], $course_id);
     //Session::Messages($langCatAdded, 'alert-success');
-    Session::flash('message',$langCatAdded); 
+    Session::flash('message',$langCatAdded);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/index.php?course=$course_code");
 }
@@ -290,7 +290,7 @@ elseif (isset($_GET['forumgoadd'])) {
     foreach ($sql as $r) {
         $emailaddr = uid_to_email($r->user_id);
         if (valid_email($emailaddr) and get_user_email_notification($r->user_id, $course_id)) {
-            $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
+            $linkhere = "&nbsp;<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
             $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
             $body_topic_notify .= $unsubscribe . $linkhere;
 
@@ -316,7 +316,7 @@ elseif (isset($_GET['forumgoadd'])) {
             <div id='mail-footer'>
                 <br>
                 <div>
-                    <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+                    <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
                 </div>
             </div>";
 
@@ -329,7 +329,7 @@ elseif (isset($_GET['forumgoadd'])) {
     }
     // end of notification
     //Session::Messages($langForumCategoryAdded, 'alert-success');
-    Session::flash('message',$langForumCategoryAdded); 
+    Session::flash('message',$langForumCategoryAdded);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/index.php?course=$course_code");
 }
@@ -388,7 +388,7 @@ elseif (isset($_GET['forumcatdel'])) {
     Database::get()->query("DELETE FROM forum_notify WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id);
     Database::get()->query("DELETE FROM forum_category WHERE id = ?d AND course_id = ?d", $cat_id, $course_id);
     //Session::Messages($langCatForumDelete, 'alert-success');
-    Session::flash('message',$langCatForumDelete); 
+    Session::flash('message',$langCatForumDelete);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/index.php?course=$course_code");
 }
@@ -448,7 +448,7 @@ elseif (isset($_GET['forumgodel'])) {
                     WHERE forum_id = ?d
                     AND course_id = ?d", $forum_id, $course_id);
     //Session::Messages($langForumDelete, 'alert-success');
-    Session::flash('message',$langForumDelete); 
+    Session::flash('message',$langForumDelete);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/index.php?course=$course_code");
 } elseif (isset($_GET['forumtopicedit'])) {
@@ -575,14 +575,14 @@ elseif (isset($_GET['forumgodel'])) {
         </div>
         <div class='form-group mt-5'>
             <div class='col-12 d-flex justify-content-center align-items-center'>
-               
-                   
+
+
                         <input class='btn submitAdminBtn' type='submit' value='$langAdd'>
-                  
-                   
+
+
                         <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
-                   
-               
+
+
             </div>
         </div>
         </fieldset>

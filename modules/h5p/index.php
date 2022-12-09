@@ -139,7 +139,7 @@ if ($content) {
         <tbody>";
 
     foreach ($content as $item) {
-        $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version 
+        $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version
                                             FROM h5p_library WHERE id = ?s", $item->main_library_id);
         $h5p_content_type_title = $q->title;
         $typeFolder = $q->machine_name . "-" . $q->major_version . "." . $q->minor_version;
@@ -188,8 +188,8 @@ if ($content) {
 // utilize bootstrap-select for Add/Create dropdown button
 // override default bootstrap-select style because we want trully white color (alpha of 1 instead of default 0.5)
 $head_content .= "
-    <link rel='stylesheet' href='${urlAppend}js/bootstrap-select/bootstrap-select.min.css'>
-    <script type='text/javascript' src='${urlAppend}js/bootstrap-select/bootstrap5-select.min.js'></script>
+    <link rel='stylesheet' href='{$urlAppend}js/bootstrap-select/bootstrap-select.min.css'>
+    <script type='text/javascript' src='{$urlAppend}js/bootstrap-select/bootstrap5-select.min.js'></script>
     <style>
         .bootstrap-select > .dropdown-toggle.bs-placeholder.btn-primary,
         .bootstrap-select > .dropdown-toggle.bs-placeholder.btn-secondary,
@@ -224,7 +224,7 @@ $head_content .= "
     <script type='text/javascript'>
         $(document).ready(function() {
             $('#createpicker').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-                window.location.href = '${urlAppend}modules/h5p/create.php?course=${course_code}&library=' + $('#createpicker').val();
+                window.location.href = '{$urlAppend}modules/h5p/create.php?course=$course_code&library=' + $('#createpicker').val();
             });
         });
     </script>";

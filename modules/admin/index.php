@@ -37,7 +37,7 @@ $data['release_info'] = get_eclass_release();
 // Construct a table with platform identification info
 $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
-        'url' => "${urlServer}main/portfolio.php",
+        'url' => "{$urlServer}main/portfolio.php",
         'icon' => 'fa-reply',
         'level' => 'primary-label')),false);
 

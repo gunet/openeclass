@@ -2575,7 +2575,7 @@ function new_assignment() {
     $tool_content .= "
         <div class='form-group mt-5'>
             <div class='col-md-9 col-12 offset-md-3 d-flex justify-content-center align-items-center'>
-                
+
                     "
                     .
                 form_buttons(array(
@@ -2592,7 +2592,7 @@ function new_assignment() {
                 ))
                 .
                     "
-                   
+
                 </div>
             </div>
         </fieldset>
@@ -3412,9 +3412,9 @@ function show_edit_assignment($id) {
                         </div>
                     </div>
                 </div>
-                
-               
-                    
+
+
+
                         <div class='row input-append date form-group".(Session::getError('WorkStart') ? " has-error" : "")." mt-4' id='startdatepicker' data-date='$WorkStart' data-date-format='dd-mm-yyyy'>
                             <label for='WorkStart' class='col-md-3 col-12 control-label-notes'>$langStartDate:</label>
                             <div class='col-md-9 col-12'>
@@ -3427,7 +3427,7 @@ function show_edit_assignment($id) {
                             <span class='help-block'>".(Session::hasError('WorkStart') ? Session::getError('WorkStart') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentStartHelpBlock")."</span>
                             </div>
                         </div>
-                    
+
                         <div class='row input-append date form-group".(Session::getError('WorkEnd') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$WorkEnd' data-date-format='dd-mm-yyyy'>
                             <label for='WorkEnd' class='col-md-3 col-12 control-label-notes'>$langGroupWorkDeadline_of_Submission:</label>
                             <div class='col-md-9 col-12'>
@@ -3440,7 +3440,7 @@ function show_edit_assignment($id) {
                             <span class='help-block'>".(Session::hasError('WorkEnd') ? Session::getError('WorkEnd') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
                             </div>
                         </div>
-                    
+
                 ";
     if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id)) {
         $tool_content .= "
@@ -3696,8 +3696,8 @@ function show_edit_assignment($id) {
         $tool_content .= "
             <div class='form-group mt-5'>
                 <div class='col-12 d-inline-flex justify-content-center align-items-center'>
-                  
-                     
+
+
                         ".
                         form_buttons(array(
                             array(
@@ -3712,9 +3712,9 @@ function show_edit_assignment($id) {
                             )
                         ))
                         ."
-                    
-                     
-                  
+
+
+
                 </div>
             </div>
     </fieldset>
@@ -3751,7 +3751,7 @@ function delete_assignment($id) {
             if ($row->assign_to_specific) {
                 Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
             }
-            move_dir("$workPath/$secret", "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
+            move_dir("$workPath/$secret", "$webDir/courses/garbage/{$course_code}_work_{$id}_$secret");
 
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
                                                                         'title' => $row->title));
@@ -3787,7 +3787,7 @@ function purge_assignment_subs($id) {
             Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
         }
         move_dir("$workPath/$secret",
-        "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
+        "$webDir/courses/garbage/{$course_code}_work_{$id}_$secret");
         return true;
     }
     return false;
@@ -4378,7 +4378,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input $course_unit_hidden_input
                         <fieldset>
                         $group_select_form
-                        $submission_form                        
+                        $submission_form
                         <div class='form-group mt-3'>
                             <label for='stud_comments' class='col-sm-6 control-label-notes'>$m[comments]:</label>
                             <div class='col-sm-12'>

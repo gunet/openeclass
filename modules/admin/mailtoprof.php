@@ -147,7 +147,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         <div id='mail-footer'>
             <br>
             <div>
-                <small>" . sprintf($langLinkUnsubscribeFromPlatform, $siteName) ." <a href='${urlServer}main/profile/emailunsubscribe.php'>$langHere</a></small>
+                <small>" . sprintf($langLinkUnsubscribeFromPlatform, $siteName) ." <a href='{$urlServer}main/profile/emailunsubscribe.php'>$langHere</a></small>
             </div>
         </div>
         ";
@@ -164,7 +164,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent);
     }
     //Session::Messages($emailsuccess, 'alert-success');
-    Session::flash('message',$emailsuccess); 
+    Session::flash('message',$emailsuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/mailtoprof.php');
 }

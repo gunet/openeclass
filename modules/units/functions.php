@@ -485,8 +485,8 @@ function show_resources($unit_id)
             $html .= "</tbody></table>";
             $html .= "</div>";
         }
-       
-    } 
+
+    }
 
     return $html;
 }
@@ -690,7 +690,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
     } else {
         $status = $lp->visible;
         $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
-        $link = "<a href='${urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title";
+        $link = "<a href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title";
         $imagelink = icon('fa-ellipsis-h');
     }
 
@@ -1732,7 +1732,7 @@ function edit_res($resource_id) {
                 </div>
                 <div class='col-12 mt-5 d-flex justify-content-center'>
                     <input class='btn submitAdminBtn' type='submit' name='edit_res_submit' value='$langModify'>
-                </div>                
+                </div>
             </form></div>
         </div>";
     return $content;

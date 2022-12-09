@@ -49,9 +49,9 @@ function getUserLessonInfo($uid) {
                              course_user.status status,
                              course_user.favorite favorite
                         FROM course JOIN course_user
-                            ON course.id = course_user.course_id 
-                            AND course_user.user_id = ?d 
-                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ") 
+                            ON course.id = course_user.course_id
+                            AND course_user.user_id = ?d
+                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
                         ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
 
     $courses = [];
@@ -86,20 +86,17 @@ function getUserLessonInfo($uid) {
             $lesson_content .= "<tr class='$visclass'>
 			  <td class='border-top-0 border-start-0 border-end-0 ps-0'>
 			  <div class='d-inline-flex'>
-                
-                    <div class='TextSemiBold'><a class='fs-6' href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></div>
-               
+                    <div class='TextSemiBold'><a class='fs-6' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></div>
                     <div class='TextSemiBold text-md-end text-start'> <span class='blackBlueText'>(" . q($data->public_code) . ")</span></div>
-                
               </div>
 			  <div><small>" . q($data->professor) . "</small></div></td>";
             $lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-end align-top pe-0'><div class='col-12'><div class='d-inline-flex'>";
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
             if ($data->status == USER_STUDENT) {
-                $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
+                $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
                 $student_courses_count++;
             } elseif ($data->status == USER_TEACHER) {
-                $lesson_content .= icon('fa-wrench ms-3', $langAdm, "${urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
+                $lesson_content .= icon('fa-wrench ms-3', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
                 $teacher_courses_count++;
             }
             $lesson_content .= "</div></div></td></tr>";

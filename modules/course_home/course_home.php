@@ -486,7 +486,7 @@ if (isset($level) && !empty($level)) {
                 <img class='img-responsive center-block' src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
             </div>
             <div class='col-12 mt-3'>
-                <div style='border-bottom:1px solid #ccc; margin-bottom: 5px;'>${langOpenCoursesLevel}: $level</div>
+                <div style='border-bottom:1px solid #ccc; margin-bottom: 5px;'>$langOpenCoursesLevel: $level</div>
                 <p class='not_visible'>
                 <small>$langVisitsShort : &nbsp;$visitsopencourses</small>
                 <br />
@@ -617,7 +617,7 @@ if ($total_cunits > 0) {
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<a class='$class_vis' href='${urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+                $cunits_content .= "<a class='$class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
             }
             $cunits_content .= "<br><small><span class='help-block'>";
             if (!(is_null($cu->start_week))) {
@@ -670,7 +670,7 @@ if ($total_cunits > 0) {
             $cunits_content .=  "<button class='carousel-next-btn float-end' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='next'>
                                     <span class='d-flex justify-content-center align-items-center fa fa-arrow-right text-primary'></span>
                             </button>
-                    
+
                         </div>";
 
             $cunits_content .= "</div></div></div></div></div>";
@@ -735,7 +735,7 @@ if ($total_cunits > 0) {
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<a style='line-height: 1.42857143; display:block;' class='$class_vis fs-6 TextSemiBold' href='${urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+                $cunits_content .= "<a style='line-height: 1.42857143; display:block;' class='$class_vis fs-6 TextSemiBold' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
             }
             $cunits_content .= "<small><span class='help-block'>";
             if (!(is_null($cu->start_week))) {

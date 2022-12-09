@@ -48,7 +48,7 @@ function list_forums() {
             }
             $tool_content .= "<tr>
                 <td class='text-center'><input type='checkbox' name='forum[]' value='{$entry->id}'></td>
-                <td><a href='${urlServer}/modules/forum/viewforum.php?course=$course_code&amp;forum={$entry->id}'>" . $entry->name . "</a>$description_text</td>
+                <td><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum={$entry->id}'>" . $entry->name . "</a>$description_text</td>
               </tr>";
 
             $r = Database::get()->queryArray("SELECT * FROM forum_topic WHERE forum_id = ?d", $entry->id);
@@ -63,7 +63,7 @@ function list_forums() {
                 foreach ($topicinfo as $topicentry) {
                     $tool_content .= "<tr>";
                     $tool_content .= "<td class='text-center'><input type='checkbox' name='forum[]'  value='{$entry->id}:$topicentry[topic_id]'></td>";
-                    $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='${urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum={$entry->id}'>" . q($topicentry['topic_title']) . "</a></td>";
+                    $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='{$urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum={$entry->id}'>" . q($topicentry['topic_title']) . "</a></td>";
                     $tool_content .= "</tr>";
                 }
             }

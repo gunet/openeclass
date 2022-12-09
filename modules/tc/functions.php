@@ -327,7 +327,7 @@ function bbb_session_form($session_id = 0) {
         $tool_content .= "<div class='clearfix mt-4'>
                             <a role='button' data-bs-toggle='collapse' href='#MoreInfo' aria-expanded='false' aria-controls='MoreInfo'>
                                  <h5 class='panel-heading' style='margin-bottom: 0px;'>
-                                       <span class='fa fa-chevron-down fa-fw'></span> $langReadMore   
+                                       <span class='fa fa-chevron-down fa-fw'></span> $langReadMore
                                  </h5>
                             </a>
                           </div>";
@@ -606,7 +606,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
                 // Notify course users for new bbb session
-                send_mail_multipart("{$_SESSION['givenname']} ${_SESSION['surname']}", $_SESSION['email'], '', $recipients, $emailsubject, $emailbody, $emailcontent);
+                send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $recipients, $emailsubject, $emailbody, $emailcontent);
             }
         }
     }
@@ -637,7 +637,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                 ";
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
-                send_mail_multipart("{$_SESSION['givenname']} ${_SESSION['surname']}", $_SESSION['email'], '', $row, $emailsubject, $emailbody, $emailcontent);
+                send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $row, $emailsubject, $emailbody, $emailcontent);
             }
         }
     }
@@ -1667,7 +1667,9 @@ function get_bbb_servers_load()
 
             // unless cameras are locked to be shown only to moderators/professors
             // first check if meeting is local to us
-            $res = Database::get()->querySingle("SELECT tc_session.options FROM tc_session WHERE meeting_id='${meeting['meetingId']}' AND running_at=$server_id");
+            $res = Database::get()->querySingle("SELECT tc_session.options FROM tc_session
+                WHERE meeting_id = ?s AND running_at = ?d",
+                $meeting['meetingId'], $server_id);
             if (!empty($res->options)) {
                 $options = unserialize($res->options);
                 if (isset($options['lockSettingsDisableCam'])) {

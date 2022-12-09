@@ -207,8 +207,8 @@ function new_gradebook() {
                 </div>
                 <div class='form-group mt-5'>
                     <div class='col-12 d-flex justify-content-center align-items-center'>
-                       
-                           " 
+
+                           "
                                 .form_buttons(array(
                                     array(
                                             'class' => 'submitAdminBtn',
@@ -220,10 +220,10 @@ function new_gradebook() {
                                         'class' => 'cancelAdminBtn ms-1',
                                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                         )
-                                    )). 
+                                    )).
                             "
-                            
-                        
+
+
                     </div>
                 </div>
             ". generate_csrf_token_form_field() ."
@@ -383,8 +383,8 @@ function gradebook_settings($gradebook_id) {
                         </div>
                         <div class='form-group mt-5'>
                             <div class='col-12 d-flex justify-content-center align-items-center'>
-                               
-                                 
+
+
                                       ".form_buttons(array(
                                         array(
                                             'class' => 'submitAdminBtn',
@@ -397,9 +397,9 @@ function gradebook_settings($gradebook_id) {
                                             'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . ""
                                         )
                                     ))."
-                                  
-                                  
-                               
+
+
+
                             </div>
                         </div>
                     </fieldset>
@@ -469,8 +469,8 @@ function user_gradebook_settings() {
                     <div class='row form-group mt-4' id='all_users'>
                         <div class='col-md-6 col-12'>
                             <div class='input-append date form-group' id='startdatepicker'>
-                                <label for='UsersStart' class='col-sm-12 control-label-notes mb-2'>$langRegistrationDate $langFrom2</label> 
-                                <div class='input-group'> 
+                                <label for='UsersStart' class='col-sm-12 control-label-notes mb-2'>$langRegistrationDate $langFrom2</label>
+                                <div class='input-group'>
                                     <input class='form-control mt-0' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
                                     <span class='add-on input-group-text BordersRightInput bgEclass h-30px border-0' id='basic-addon1'><i class='fa fa-calendar'></i></span>
                                 </div>
@@ -513,8 +513,8 @@ function user_gradebook_settings() {
                     </div>
                     <div class='form-group mt-5'>
                         <div class='col-12 d-flex justify-content-center align-items-center'>
-                      
-                            
+
+
                                  ".form_buttons(array(
                                     array(
                                         'class' => 'submitAdminBtn',
@@ -528,9 +528,9 @@ function user_gradebook_settings() {
                                         'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . "&amp;gradebookBook=1"
                                     )
                                 ))."
-                             
-                             
-                          
+
+
+
                         </div>
                     </div>
                 ". generate_csrf_token_form_field() ."
@@ -581,7 +581,7 @@ function display_all_users_grades($gradebook_id) {
                 <tr class='$classvis'>
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
-                <td>" . $resultUser->am . "</td>                
+                <td>" . $resultUser->am . "</td>
                 <td class='text-center'>";
                 if (!empty($resultUser->reg_date)) {
                     $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
@@ -635,7 +635,7 @@ function student_view_gradebook($gradebook_id, $uid) {
     $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) AS count
                                             FROM gradebook_book, gradebook_activities
                                         WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id
-                                            $extra 
+                                            $extra
                                             AND uid = ?d
                                             AND gradebook_activities.gradebook_id = ?d", $uid, $gradebook_id)->count;
 
@@ -889,11 +889,11 @@ function display_gradebook($gradebook) {
             $tool_content .= "</td>";
             $tool_content .= "<td width='120' class='text-center'>" . userGradebookTotalActivityStats($details, $gradebook) . "</td>";
             if ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
-                $preview_link = "${urlServer}modules/exercise/results.php?course=$course_code&amp;exerciseId=$details->module_auto_id";
+                $preview_link = "{$urlServer}modules/exercise/results.php?course=$course_code&amp;exerciseId=$details->module_auto_id";
             } elseif ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
-                $preview_link = "${urlServer}modules/work/index.php?course=$course_code&amp;id=$details->module_auto_id";
+                $preview_link = "{$urlServer}modules/work/index.php?course=$course_code&amp;id=$details->module_auto_id";
             } elseif ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_LP) {
-                $preview_link = "${urlServer}modules/learnPath/detailsAll.php?course=$course_code";
+                $preview_link = "{$urlServer}modules/learnPath/detailsAll.php?course=$course_code";
             } else {
                 $preview_link = '';
             }
@@ -945,7 +945,7 @@ function display_gradebooks() {
     if (count($result) == 0) { // no gradebooks
         $tool_content .= "<div class='alert alert-warning'>$langNoGradeBooks</div>";
     } else {
-        
+
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
@@ -1023,7 +1023,7 @@ function display_available_exercises($gradebook_id) {
         foreach ($checkForExer as $newExerToGradebook) {
             $content = ellipsize_html($newExerToGradebook->description, 50);
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
+            $tool_content .= "<td class='text-left'><a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
             $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->id) . "&amp;type=2");
             $tool_content .= "</td></tr>";
@@ -1044,8 +1044,8 @@ function display_available_assignments($gradebook_id) {
            $m, $langDescription, $langAttendanceNoActMessageAss4,
            $langAdd, $langTitle;
 
-    $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d 
-                    AND assignment.active = 1 
+    $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d
+                    AND assignment.active = 1
                     AND assignment.id NOT IN
                         (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = " . GRADEBOOK_ACTIVITY_ASSIGNMENT . " AND gradebook_id = ?d)", $course_id, $gradebook_id);
 
@@ -1068,7 +1068,7 @@ function display_available_assignments($gradebook_id) {
                 }
             }
             $tool_content .= "<tr>";
-            $tool_content .= "<td><a href='${urlServer}modules/work/index.php?course=$course_code&amp;id=$newAssToGradebook->id'>" . q($newAssToGradebook->title) . "</a></td>";
+            $tool_content .= "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$newAssToGradebook->id'>" . q($newAssToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
             $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newAssToGradebook->id) . "&amp;type=1");
             $tool_content .= "</td></tr>";
@@ -1103,7 +1103,7 @@ function display_available_lps($gradebook_id) {
         $tool_content .= "</tr>";
         foreach ($checkForLp as $newExerToGradebook) {
             $tool_content .= "<tr>";
-            $tool_content .= "<td>&nbsp;<a href='${urlServer}modules/learnPath/learningPathAdmin.php?course=$course_code&amp;path_id=$newExerToGradebook->learnPath_id'>" . q($newExerToGradebook->name) . "</a></td>";
+            $tool_content .= "<td>&nbsp;<a href='{$urlServer}modules/learnPath/learningPathAdmin.php?course=$course_code&amp;path_id=$newExerToGradebook->learnPath_id'>" . q($newExerToGradebook->name) . "</a></td>";
             $tool_content .= "<td>" .q($newExerToGradebook->comment). "</td>";
             $tool_content .= "<td class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->learnPath_id) . "&amp;type=3")."</td>";
             $tool_content .= "</tr>";
@@ -1553,8 +1553,8 @@ function add_gradebook_other_activity($gradebook_id) {
                         }
                         $tool_content .= "<div class='form-group mt-5'>
                                 <div class='col-12 d-flex justify-content-center align-items-center'>
-                                  
-                                    
+
+
                                         ".form_buttons(array(
                                             array(
                                                 'class' => 'submitAdminBtn',
@@ -1567,9 +1567,9 @@ function add_gradebook_other_activity($gradebook_id) {
                                                 'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                             )
                                         ))."
-                                    
-                                     
-                                   
+
+
+
                                 </div></div>";
                         if (isset($_GET['modify'])) {
                             $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($gradebookActivityToModify) . "'>";

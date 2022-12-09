@@ -1194,20 +1194,20 @@ class CourseXMLElement extends SimpleXMLElement {
         $arr[$clang] = $GLOBALS['langCMeta'][$key];
         $revert = false;
         if ($clang != 'en') {
-            require("${webDir}/lang/en/common.inc.php");
-            require("${webDir}/lang/en/messages.inc.php");
+            require("$webDir/lang/en/common.inc.php");
+            require("$webDir/lang/en/messages.inc.php");
             $arr['en'] = $langCMeta[$key]; // do not use GLOBALS here as it will not work
             $revert = true;
         }
         if ($clang != 'el') {
-            require("${webDir}/lang/el/common.inc.php");
-            require("${webDir}/lang/el/messages.inc.php");
+            require("$webDir/lang/el/common.inc.php");
+            require("$webDir/lang/el/messages.inc.php");
             $arr['el'] = $langCMeta[$key]; // do not use GLOBALS here as it will not work
             $revert = true;
         }
         if ($revert) { // revert messages back to current language
-            require("${webDir}/lang/" . $clang . "/common.inc.php");
-            require("${webDir}/lang/" . $clang . "/messages.inc.php");
+            require("$webDir/lang/$clang/common.inc.php");
+            require("$webDir/lang/$clang/messages.inc.php");
         }
         return base64_encode(serialize($arr));
     }
@@ -1247,12 +1247,12 @@ class CourseXMLElement extends SimpleXMLElement {
         // en
         $data['course_language_en'] = ucfirst(langcode_to_name($clang));
         // el
-        include("${webDir}/lang/el/common.inc.php");
-        include("${webDir}/lang/el/messages.inc.php");
+        include("$webDir/lang/el/common.inc.php");
+        include("$webDir/lang/el/messages.inc.php");
         $data['course_language_el'] = $langNameOfLang[langcode_to_name($clang)]; // do not use GLOBALS here as it will not work
         // revert messages back to current language
-        include("${webDir}/lang/" . $plang . "/common.inc.php");
-        include("${webDir}/lang/" . $plang . "/messages.inc.php");
+        include("$webDir/lang/$plang/common.inc.php");
+        include("$webDir/lang/$plang/messages.inc.php");
 
         $data['course_url'] = $urlServer . 'courses/' . $course->code;
         $data['course_title_' . $clang] = $course->title;
@@ -1262,19 +1262,19 @@ class CourseXMLElement extends SimpleXMLElement {
         if (!empty($course->course_license)) {
             $data['course_license_' . $clang] = $license[$course->course_license]['title'];
             // en
-            include("${webDir}/lang/en/common.inc.php");
-            include("${webDir}/lang/en/messages.inc.php");
-            include("${webDir}/include/license_info.php");
+            include("$webDir/lang/en/common.inc.php");
+            include("$webDir/lang/en/messages.inc.php");
+            include("$webDir/include/license_info.php");
             $data['course_license_en'] = $license[$course->course_license]['title'];
             //el
-            include("${webDir}/lang/el/common.inc.php");
-            include("${webDir}/lang/el/messages.inc.php");
-            include("${webDir}/include/license_info.php");
+            include("$webDir/lang/el/common.inc.php");
+            include("$webDir/lang/el/messages.inc.php");
+            include("$webDir/include/license_info.php");
             $data['course_license_el'] = $license[$course->course_license]['title'];
             // revert messages back to current language
-            include("${webDir}/lang/" . $clang . "/common.inc.php");
-            include("${webDir}/lang/" . $clang . "/messages.inc.php");
-            include("${webDir}/include/license_info.php");
+            include("$webDir/lang/$clang/common.inc.php");
+            include("$webDir/lang/$clang/messages.inc.php");
+            include("$webDir/include/license_info.php");
         } else {
             $data['course_license_' . $clang] = '';
             if ($clang != 'en') {
@@ -1340,7 +1340,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
         // turn visible units to associative array
         $unitsCount = 0;
-        DataBase::get()->queryFunc("SELECT title, comments 
+        DataBase::get()->queryFunc("SELECT title, comments
                                       FROM course_units
                                      WHERE visible > 0 AND course_id = ?d", function($unit) use (&$data, &$unitsCount) {
             $data['course_unit_title'][$unitsCount] = $unit->title;

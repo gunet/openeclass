@@ -56,7 +56,7 @@ if (isset($_GET['add'])) {
                                                                'right' => '+5'));
     if ($result) {
       //  Session::Messages($langTheU . ' ' . $langAdded, "alert alert-success");
-        Session::flash('message',$langTheU . ' ' . $langAdded); 
+        Session::flash('message',$langTheU . ' ' . $langAdded);
         Session::flash('alert-class', 'alert-success');
         // notify user via email
         $email = uid_to_email($uid_to_add);
@@ -85,11 +85,11 @@ if (isset($_GET['add'])) {
 
             $plainemailbody = html2text($emailbody);
 
-            send_mail_multipart("{$_SESSION['givenname']} ${_SESSION['surname']}",  $_SESSION['email'], '', $email, $emailsubject, $plainemailbody, $emailbody);
+            send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]",  $_SESSION['email'], '', $email, $emailsubject, $plainemailbody, $emailbody);
         }
     } else {
       //  Session::Messages($langAddError, "alert alert-warning");
-        Session::flash('message',$langAddError); 
+        Session::flash('message',$langAddError);
         Session::flash('alert-class', 'alert-warning');
     }
     redirect_to_home_page("modules/user/index.php?course=$course_code");
@@ -149,16 +149,16 @@ if (isset($_GET['add'])) {
 
                 <div class='form-group mt-5'>
                 <div class='col-12 d-flex justify-content-center align-items-center'>
-                   
-                       
+
+
                       <input class='btn submitAdminBtn' type='submit' name='search' value='$langSearch'>
-                      
-                      
+
+
                        <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
-                      
-                   
-                   
-                    
+
+
+
+
                 </div>
                 </div>
                 </fieldset>

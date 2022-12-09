@@ -356,7 +356,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                 <div class='col-12'>
                     <div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>
                 </div>
-                
+
                 <div class='col-12'>
                 <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
@@ -437,16 +437,16 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                         </div>
                     </div>") . "
                     <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
-                        
+
                         <input class='btn submitAdminBtn' type='submit' name='create_restored_course' value='$langRestore' />
                       <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' />
-                          
+
                     </div>
                 " . generate_csrf_token_form_field() . "
                 </form>
                 </div>
                 </div>
-               
+
     ";
 }
 
@@ -570,8 +570,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $userid_map[1] = 1;
         }
 
-        $courseDir = "${webDir}/courses/$new_course_code";
-        $videoDir = "${webDir}/video/$new_course_code";
+        $courseDir = "$webDir/courses/$new_course_code";
+        $videoDir = "$webDir/video/$new_course_code";
         $oldCourseDir = $restoreThis . '/html';
         move_dir($oldCourseDir, $courseDir);
 

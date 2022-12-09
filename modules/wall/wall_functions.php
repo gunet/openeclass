@@ -213,7 +213,7 @@ function generate_single_post_html($post) {
     }
     $ret = '
     <div class="col-12">
-        <div class="row p-0 margin-right-thin margin-left-thin margin-top-thin m-auto">                              
+        <div class="row p-0 margin-right-thin margin-left-thin margin-top-thin m-auto">
                                   <div class="panel panel-default p-0">
                                         <div class="panel-heading p-1">
                                             <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
@@ -233,7 +233,7 @@ function generate_single_post_html($post) {
                                             '.$rating_content.'
                                             '.$comm_content.'
                                         </div>
-                                  </div>                              
+                                  </div>
                           </div></div>';
     return $ret;
 }
@@ -256,9 +256,9 @@ function generate_infinite_container_html($posts, $next_page) {
                           });
                       </script>';
     $ret = '
-    <div class="form-wrapper form-edit rounded">
-    <div class="col-12">
-    <div class="infinite-container">';
+        <div class="form-wrapper form-edit rounded">
+          <div class="col-12">
+            <div class="infinite-container">';
 
     foreach ($posts as $post) {
         $user_id = $post->user_id;
@@ -332,46 +332,39 @@ function generate_infinite_container_html($posts, $next_page) {
             $post_actions .= '</div>';
         }
 
-        $ret .= '<div class="infinite-item">';
-        $ret .= '<div class="row margin-right-thin margin-left-thin margin-top-thin">
+        $ret .= '
+              <div class="infinite-item">
+                <div class="row margin-right-thin margin-left-thin margin-top-thin">
+                  <div class="col-12 mt-4">
+                    <div class="panel panel-default">
+                      <div class="panel-heading p-1">
+                        <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">' .
+                          profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') . '
+                        </a>' .
+                        $post_actions . '
+                      </div>
 
-                              <div class="col-12 mt-4">
-                                  <div class="panel panel-default">
-                                        <div class="panel-heading p-1">
-                                           
-                                                <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
-                                                    '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
-                                                </a>
-                                                '.$post_actions.'
-                                            
-                                        </div>
-                                            
-                                       
-                                        <div class="panel-body bubble overflow-auto Borders">
-                                            <p class="blackBlueText TextSemiBold">'.$datetime.'</p>
-                                            <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
-                                            
-                                            <div class="margin-top-thin" style="padding:20px">
-                                                '.$extvideo_block.'
-                                                <div class="userContent control-label-notes">'.nl2br(standard_text_escape($content)).'</div>
-                                            </div>
-                                            '.show_resources($id).'
-                                            <div class="row">
-                                                <div class="col-md-9 col-12">
-                                                    '.$rating_content.'
-                                                </div>
-                                                <div class="col-md-3 col-12 mt-md-0 mt-3">
-                                                    '.$comm_content.'
-                                                </div>
-                                            </div>
-                                        </div>
-                                       
-                                        
-                                  </div>
-                              </div>
-                          </div>';
-
-        $ret .= '</div>';
+                      <div class="panel-body bubble overflow-auto Borders">
+                        <p class="blackBlueText TextSemiBold">'.$datetime.'</p>
+                        <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
+                        <div class="margin-top-thin" style="padding:20px">' .
+                          $extvideo_block . '
+                        <div class="userContent control-label-notes">'.nl2br(standard_text_escape($content)).'</div>
+                      </div>' .
+                      show_resources($id) . '
+                      <div class="row">
+                        <div class="col-md-9 col-12">' .
+                          $rating_content . '
+                        </div>
+                        <div class="col-md-3 col-12 mt-md-0 mt-3">' .
+                          $comm_content.'
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>';
     }
     $ret .= '</div></div></div>';
     if (count($posts) == $posts_per_page) {
@@ -589,12 +582,12 @@ function show_video($table, $title, $resource_id, $video_id) {
         }
         $row->title = $title;
         if ($table == 'video') {
-            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=video&amp;id=$video_id";
+            $videoplayurl = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=video&amp;id=$video_id";
             $vObj = MediaResourceFactory::initFromVideo($row);
             $vObj->setPlayURL($videoplayurl);
             $videolink = MultimediaHelper::chooseMediaAhref($vObj);
         } else {
-            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=videolink&amp;id=$video_id";
+            $videoplayurl = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=videolink&amp;id=$video_id";
             $vObj = MediaResourceFactory::initFromVideoLink($row);
             $vObj->setPlayURL($videoplayurl);
             $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
@@ -649,9 +642,9 @@ function show_exercise($title, $resource_id, $exercise_id) {
             . "WHERE eid = ?d AND uid = ?d "
             . "AND attempt_status = ?d", $exercise_id, $uid, ATTEMPT_PAUSED);
         if ($paused_exercises) {
-            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$paused_exercises->eurid'>";
+            $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$paused_exercises->eurid'>";
         } else {
-            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id'>";
+            $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id'>";
         }
         $exlink = $link.q($title)."</a>";
         $imagelink = 'fa-pencil-square-o';
@@ -672,7 +665,7 @@ function show_assignment($title, $resource_id, $assignment_id) {
     $row = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $assignment_id);
     if ($row) {
         $visibility = 1;
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$assignment_id'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$assignment_id'>";
         $exlink = $link.q($title)."</a>";
         $imagelink = 'fa-flask';
     } else {
@@ -692,7 +685,7 @@ function show_chat($title, $resource_id, $chat_id) {
     $row = Database::get()->querySingle("SELECT * FROM conference WHERE course_id = ?d AND conf_id = ?d", $course_id, $chat_id);
     if ($row) {
         $visibility = 1;
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id'>";
         $chatlink = $link.q($title)."</a>";
         $imagelink = 'fa-exchange';
     } else {
@@ -712,7 +705,7 @@ function show_poll($title, $resource_id, $poll_id) {
     $row = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $poll_id);
     if ($row) {
         $visibility = 1;
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1'>";
         $polllink = $link.q($title)."</a>";
         $imagelink = 'fa-question-circle';
     } else {
@@ -732,7 +725,7 @@ function show_forum($type, $title, $resource_id, $ft_id) {
     $title = q($title);
     if ($type == 'forum') {
         $visibility = 1;
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$ft_id'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$ft_id'>";
         $forumlink = $link.q($title)."</a>";
         $imagelink = 'fa-comments';
     } else {
@@ -740,7 +733,7 @@ function show_forum($type, $title, $resource_id, $ft_id) {
         if ($row) {
             $visibility = 1;
             $forum_id = $row->forum_id;
-            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id'>";
+            $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id'>";
             $forumlink = $link.q($title)."</a>";
             $imagelink = 'fa-comments';
         } else {
