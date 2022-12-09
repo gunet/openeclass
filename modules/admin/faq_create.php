@@ -42,8 +42,7 @@ if (isset($_POST['submitFaq'])) {
 
     Database::get()->query("INSERT INTO faq (title, body, `order`) VALUES (?s, ?s, ?d)", $question, $answer, $top + 1);
 
-    //Session::Messages("$langFaqAddSuccess", 'alert-success');
-    Session::flash('message',"$langFaqAddSuccess"); 
+    Session::flash('message',"$langFaqAddSuccess");
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/faq_create.php");
 }
@@ -55,8 +54,7 @@ if (isset($_POST['modifyFaq'])) {
 
     Database::get()->query("UPDATE faq SET `title`=?s, `body`=?s WHERE `id`=?d", $question, $answer, $record);
 
-    //Session::Messages("$langFaqEditSuccess", 'alert-success');
-    Session::flash('message',"$langFaqEditSuccess"); 
+    Session::flash('message',"$langFaqEditSuccess");
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/faq_create.php");
 }
@@ -66,110 +64,14 @@ if (isset($_GET['faq']) && $_GET['faq'] == 'delete') {
 
     Database::get()->query("DELETE FROM faq WHERE `id`=?d", $record);
 
-    //Session::Messages("$langFaqDeleteSuccess", 'alert-success');
-    Session::flash('message',"$langFaqDeleteSuccess"); 
+    Session::flash('message',"$langFaqDeleteSuccess");
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/faq_create.php");
 }
 
-load_js('sortable/Sortable.min.js');
-
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $toolName = $langAdminCreateFaq;
 $pageName = $langAdminCreateFaq;
-
-$head_content .= "
-    <script type='text/javascript'>
-    $(document).ready(function() {
-
-      $(document).on('click', '.expand:not(.revert)', function(e) {
-        e.preventDefault();
-        $('.faq-section .panel-collapse').addClass('show');
-        $(this).toggleClass('revert');
-        $(this).children().eq(0).toggleClass('fa-plus-circle').toggleClass('fa-minus-circle');
-        $(this).children().eq(1).html('$langFaqCloseAll');
-      });
-
-      $(document).on('click', '.expand.revert', function(e) {
-        e.preventDefault();
-        $('.faq-section .panel-collapse').removeClass('show');
-        $('.faq-section .panel-collapse').addClass('hide');
-        $(this).toggleClass('revert');
-        $(this).children().eq(0).toggleClass('fa-minus-circle').toggleClass('fa-plus-circle');
-        $(this).children().eq(1).html('$langFaqExpandAll');
-      });
-
-      $(document).on('click', '.forDelete', function(e) {
-        e.preventDefault();
-        idDelete = $(this).data('id');
-        idOrder = $(this).data('order');
-        elem_rem = $(this).parents('.list-group-item');
-        var ids = [];
-        $('.faq-section .list-group-item').each(function () {
-          ids.push($(this).data('id'));
-        });
-        bootbox.confirm('".js_escape($langSureToDelAnnounce)."', function(result) {
-          if (result) {
-
-            $.ajax({
-              type: 'post',
-              data: { 
-                      toDelete: idDelete,
-                      oldOrder: idOrder
-                    },
-              success: function() {
-
-                elem_rem.remove();
-                
-                $('.indexing').each(function (i){
-                  $(this).html(i+1);
-                });
-
-                $('.tooltip').remove();
-
-                moreDeletes = $('.alert-success').length;
-
-                if (moreDeletes > 0){
-                  $('.alert-success').html('$langFaqDeleteSuccess');
-                } else {
-                  $('.row.action_bar').before('<div class=\'alert alert-success\'>$langFaqDeleteSuccess</div>');
-                }
-
-              }
-            });
-          }
-        });
-      });
-
-      Sortable.create(accordion, {
-          handle: '.fa-arrows',
-          animation: 150,
-          onEnd: function (evt) {
-
-            var itemEl = $(evt.item);
-                
-            var idReorder = itemEl.attr('data-id');
-            var prevIdReorder = itemEl.prev().attr('data-id');
-
-            $.ajax({
-              type: 'post',
-              dataType: 'text',
-              data: { 
-                      toReorder: idReorder,
-                      prevReorder: prevIdReorder,
-                    },
-              success: function(data) {
-                $('.indexing').each(function (i){
-                  $(this).html(i+1);
-                });
-              }
-            })
-          }
-          
-        });
-    });
-  </script>
-";
 
 
 $data['action_bar'] = action_bar(
@@ -186,7 +88,8 @@ $data['action_bar'] = action_bar(
             'url' => "#",
             'class' => 'expand',
             'icon' => 'fa-plus-circle',
-            'level' => 'primary-label'
+            'level' => 'primary-label',
+            'show' => !isset($_GET['faq'])
         ],
         [
             'title' => $langBack,
@@ -209,6 +112,7 @@ if ($data['modify']) {
 }
 
 if ($data['new']) {
+    $data['id'] = '';
     $data['editor'] = rich_text_editor('answer', 5, 40, '' );
 }
 
