@@ -207,6 +207,7 @@ $langNewEclassVersionInfo = 'Μια νέα έκδοση της πλατφόρμ�
 
 // FAQ
 $langAdminCreateFaq = "Δημιουργία FAQ";
+$langAdminCreateHomeTexts = "Δημιουργία κειμένων στην αρχική σελίδα";
 $langFaq = "Συχνές ερωτήσεις";
 $langFaqQuestion = "Ερώτηση";
 $langFaqAdd = "Προσθήκη ερώτησης";

@@ -236,6 +236,9 @@ if (!$upgrade_begin and $uid) {
                                                         AND (`begin` <= NOW() or `begin` IS null)
                                                         AND (NOW() <= `end` or `end` IS null)
                                                 ORDER BY `order` DESC", $language);
+
+    $data['texts'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s ORDER BY `order` ASC",$language);
+
     $data['dateFormatLong'] = $dateFormatLong;
 
     $data['home_main_area_widgets'] = '';

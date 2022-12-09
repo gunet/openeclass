@@ -58,7 +58,7 @@
                         @endif
                     </div>
                     
-                    @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements or $popular_courses)
+                    @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements or $popular_courses or $texts)
                     <div class='d-none d-lg-block'>
                         <div class='SectionMenu ms-auto me-auto bg-transparent @if(!get_config("homepage_title") and !get_config("homepage_intro")) pt-3 @endif'>
                             @if(get_config('homepage_title') or get_config('homepage_intro'))
@@ -432,11 +432,33 @@
                                     </div>
                                 </div>
                             @endif
+
+                            @if($texts)
+                                @foreach($texts as $text)
+                                    <div class="col-12 mb-3">
+                                        <div class='panel panel-admin border-0 shadow-none'>
+                                            <div class='panel-body rounded-Home px-5 py-4'>
+                                                <div class="news">
+                                                    <div class='row'>
+                                                        <div class='col-lg-12'>
+                                                            <h4 class="block-title TextExtraBold text-uppercase pb-0 mt-2">{!! $text->title !!}</h4>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    {!! $text->body !!}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
+
                         </div>
                     </div>
                     @endif
 
-                    @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements or $popular_courses)
+                    @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements or $popular_courses or $texts)
                     <div class='d-block d-lg-none bgEclass pb-3 pt-0 ps-3 pe-3'>
                         @if(get_config('homepage_title') or get_config('homepage_intro'))
                             <div class='col-12 mt-3'>
@@ -797,6 +819,28 @@
                                    
                             </div>
                         @endif
+
+                        @if($texts)
+                            @foreach($texts as $text)
+                                <div class="col-12 mt-3">
+                                    <div class='panel panel-admin shadow-none'>
+                                        <div class='panel-body'>
+                                            <div class="news">
+                                                <div class='row'>
+                                                    <div class='col-lg-12'>
+                                                        <h4 class="block-title TextExtraBold text-uppercase pb-0 mt-2">{!! $text->title !!}</h4>
+                                                    </div>
+                                                </div>
+                                                
+                                                {!! $text->body !!}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+
                     </div>
                     @endif
 

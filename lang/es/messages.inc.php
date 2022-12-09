@@ -4369,6 +4369,7 @@ $dateFormatMiddle = "%d %b %Y";
 $langAmShort = "Student ID";
 $langMonthlyCourseRegistration = "Registration to $langsCourse";
 $langAdminCreateFaq = "Create FAQ";
+$langAdminCreateHomeTexts = "Create texts on the homepage";
 $langFaq = "Frequently Asked Questions";
 $langFaqQuestion = "Question";
 $langFaqAnswer = "Answer";

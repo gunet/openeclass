@@ -58,6 +58,8 @@
                                     $('.row.action_bar').before('<div class=\'alert alert-success\'>{{ trans('langFaqDeleteSuccess') }}</div>');
                                 }
 
+                                location.reload();
+
                             }
                         });
                     }
@@ -146,7 +148,7 @@
                             <div class='form-wrapper form-edit rounded'>
 
                                 <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
-                                <input type='hidden' name='id' value='{{ $id }}'>
+                                    <input type='hidden' name='id' value='{{ $id }}'>
                                     <div class='form-group'>
                                         <label for='question' class='col-sm-12 control-label-notes'>{{ trans('langFaqQuestion') }} <sup><small>(<span class='text-danger'>*</span>)</small></sup>:</label>
                                         <div class='col-sm-12'>

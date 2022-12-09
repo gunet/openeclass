@@ -2554,6 +2554,16 @@ function upgrade_to_4_0($tbl_options): void {
             FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
     }
 
+    //texts in homepage
+    if (!DBHelper::tableExists('homepageTexts')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `homepageTexts` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
+            `title` text NULL,
+            `body` text NULL,
+            `order` int(11) NOT NULL) $tbl_options");
+    }
+
     if (!DBHelper::fieldExists('course','view_units')) {
         Database::get()->query("ALTER table course ADD `view_units` INT(11) NOT NULL DEFAULT 0");
     }

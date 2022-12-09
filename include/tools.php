@@ -646,6 +646,10 @@ function adminMenu() {
         array_push($sideMenuLink, "../admin/faq_create.php");
         array_push($sideMenuImg, "fa-caret-right");
 
+        array_push($sideMenuText, $GLOBALS['langAdminCreateHomeTexts']);
+        array_push($sideMenuLink, "../admin/homepageTexts_create.php");
+        array_push($sideMenuImg, "fa-caret-right");
+
         if (get_config('enable_common_docs')) {
             array_push($sideMenuText, $GLOBALS['langCommonDocs']);
             array_push($sideMenuLink, "../admin/commondocs.php");

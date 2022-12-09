@@ -851,6 +851,14 @@ $db->query("CREATE TABLE IF NOT EXISTS `faq` (
                             `order` int(11) NOT NULL,
                             PRIMARY KEY (`id`)) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `homepageTexts` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
+    `title` text NULL,
+    `body` text NULL,
+    `order` int(11) NOT NULL,
+    PRIMARY KEY (`id`)) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields` (
         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         `shortname` VARCHAR(255) NOT NULL,
