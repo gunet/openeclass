@@ -687,6 +687,7 @@ if ($total_cunits > 0) {
     }else{
         $counter_hr = 0;
         $countUnits = count($all_units);
+        $data['countUnits'] = $countUnits;
         foreach ($all_units as $cu) {
             $counter_hr++;
             $not_shown = false;

@@ -3,6 +3,7 @@
 
 @push('head_styles')
     <link href="{{ $urlAppend }}js/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" type='text/css' rel='stylesheet'>
+    <link href="{{ $urlAppend }}template/modern/css/new_calendar.css" type='text/css' rel='stylesheet'>
 @endpush
 
 @push('head_scripts')
@@ -15,7 +16,7 @@
                 $('#unitdurationfrom, #unitdurationto').datepicker({
                     format: 'dd-mm-yyyy',
                     pickerPosition: 'bottom-right',
-                    language: '".$language."',
+                    language: '{{ $language }}',
                     autoclose: true    
                 });
             });
