@@ -1548,7 +1548,7 @@ function display_available_multimedia($element, $element_id, $unit_id = 0) {
                     foreach ($sql2 as $linkvideocat) {
                         $linkvideocat_description = empty($linkvideocat->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". standard_text_escape($linkvideocat->description). "</div>";
                         $tool_content .= "<tr>";
-                        $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
+                        $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-film') ."&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
                                 q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>" . $linkvideocat_description . "</td>";
                         $tool_content .= "<td class='text-center'>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
                         $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id'></td>";
@@ -1850,7 +1850,7 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d 
+    $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d
                                     AND active = 1
                                     AND end_date > " . DBHelper::timeAfter() . "
                                     AND id NOT IN

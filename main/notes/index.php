@@ -249,8 +249,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     $iterator = 1;
     $bottomNote = $noteNumber = count($notelist);
 
-    $tool_content .= "
-            <script type='text/javascript' src='../../modules/auth/sorttable.js'></script>
+    $tool_content .= "            
             <div class='table-responsive'>
                 <table class='table-default'>";
     if ($noteNumber > 0) {

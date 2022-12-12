@@ -82,7 +82,8 @@ $tool_content = action_bar(array(
                                   'url' => "#",
                                   'class' => 'expand',
                                   'icon' => 'fa-plus-circle',
-                                  'level' => 'primary-label'),
+                                  'level' => 'primary-label',
+                                  'show' => !isset($_GET['faq'])),
                             array('title' => $langBack,
                                   'url' => $_SERVER['SCRIPT_NAME'],
                                   'icon' => 'fa-reply',
@@ -229,7 +230,7 @@ $tool_content .= "
         $('.faq-section .list-group-item').each(function () {
           ids.push($(this).data('id'));
         });
-        bootbox.confirm('".js_escape($langSureToDelAnnounce)."', function(result) {
+        bootbox.confirm('".js_escape($langConfirmDelete)."', function(result) {
           if (result) {
 
             $.ajax({
