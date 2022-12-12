@@ -102,7 +102,7 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
     $location = add_request_variable_to_url($script, "wikiId", $wikiId);
     $location = add_request_variable_to_url($location, "action", "show");
 
-    $out .= "   <a class='btn btn-default' href='$location'>$langCancel</a>
+    $out .= "   <a class='btn cancelAdminBtn' href='$location'>$langCancel</a>
             </div>
         </form>
     </div></div>";
@@ -171,7 +171,7 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog =
     $location = add_request_variable_to_url($location, "title", $title);
     $location = add_request_variable_to_url($location, "action", "show");
 
-    $out .= "<a class='btn btn-default' href='$location'>$langCancel</a>";
+    $out .= "<a class='btn cancelAdminBtn' href='$location'>$langCancel</a>";
 
     $out .= "</form></div>";
 

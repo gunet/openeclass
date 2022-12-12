@@ -442,7 +442,8 @@ select.form-select {
   height:30px;
   border:0px;
   color:#001146;
-  height:100%;
+  padding-top: 4px;
+ 
 
   background-image:
     linear-gradient(45deg, transparent 50%, #005ad9 50%),
@@ -451,12 +452,17 @@ select.form-select {
   background-position:
     calc(100% - 20px) calc(1em + 2px),
     calc(100% - 15px) calc(1em + 2px),
-    100% 0;
+    100% 50%;
   background-size:
     5px 5px,
     5px 5px,
     2.5em 2.5em;
   background-repeat: no-repeat;
+
+
+
+
+
 }
 select.form-select:focus {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(12, 103, 222, 0.6);
@@ -723,15 +729,17 @@ label:has(input[type="checkbox"]:disabled){
 
   .mydropdowns{ background-color: #fafafa; width:315px; font-size:14px; }  
   
-  .fa-times, .fa-trash{ color:tomato; }
+  /* .fa-times, .fa-trash{ color:tomato; } */
 
   .mydropdowns .list-group-item:hover{ background-color: #1d4e89; color:white; }
 
-  .mydropdowns .confirmAction .fa-times{ color: tomato; }
+  .mydropdowns .confirmAction .fa-times{ color: #ffa023; }
 
-  .mydropdowns .confirmAction:hover{ background-color: tomato; cursor: pointer; color:white; }
+  .mydropdowns .confirmAction:hover{ background-color: #ffa023; cursor: pointer; color:white; }
 
-  .mydropdowns .delete_all_in .list-group-item:hover{ background-color: tomato; color:white; }
+  .mydropdowns .confirmAction:hover .fa-times, .mydropdowns .confirmAction:hover .fa-trash{ color:#ffffff;}
+
+  .mydropdowns .delete_all_in .list-group-item:hover{ background-color: #ffa023; color:white; }
 
   .mydropdowns .delete_all_in .list-group-item span:hover{ color:white; }
 
@@ -1297,29 +1305,107 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
   
   .bootbox-close-button{ display: flex; align-items: center; justify-content: center; }
+  .bootbox-confirm .modal-footer .btn-primary{
+    background: white !important;
+    border: solid thin;
+    border-color: #ffa023;
+    color: #ffa023;
+    font-size: 12px;
+    text-transform: uppercase;
+    height:30px;
+    font-family: 'Manrope-SemiBold',sans-serif;
+    border-radius: 35px;
+    margin-bottom: 10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .bootbox-confirm .modal-footer .btn-primary:hover{
+    background: #ffa023 !important;
+    color: #ffffff;
+  }
+  .bootbox-confirm .modal-footer .btn-default{
+    background: white !important;
+    border: solid thin;
+    border-color: #001146;
+    color: #001146;
+    font-size: 12px;
+    text-transform: uppercase;
+    height:30px;
+    font-family: 'Manrope-SemiBold',sans-serif;
+    border-radius: 35px;
+    margin-bottom: 10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .bootbox-confirm .modal-footer .btn-default:hover{
+    background: #001146 !important;
+    color: #ffffff;
+  }
 
-  .menu-popover{ background: #DCDCDC; border-radius: 5px; }
 
-  .menu-popover .list-group-item{ background: #1d4e89; color:#DBE8F9; }
+  .menu-popover{ background: #FFFFFF; border-radius: 5px; text-align: center;}
+
+  .menu-popover .hidden-xs{padding: 0px;}
+
+  .menu-popover .list-group-item{ 
+    border: solid thin;
+    border-color: #005ad9;
+    color: #005ad9;
+    font-size: 12px;
+    text-transform: uppercase;
+    min-height:30px;
+    font-family: 'Manrope-SemiBold',sans-serif;
+    border-radius: 35px;
+    display: inline-block;
+    margin: 0 auto;
+    width:100%;
+    margin-bottom: 10px;
+  }
+
+  .menu-popover .list-group-item.disabled{ opacity: 0.4;}
   
-  .menu-popover .list-group-item:hover{ background: blue; }
+  .menu-popover .list-group-item:hover{ 
+    background-color: #005ad9;
+    color: #ffffff;
+   }
 
-  .menu-popover .delete.confirmAction:hover{ background: red; }
+  .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{
+    background:#ffffff;
+    border: solid thin;
+    border-color: #ffa023;
+    color: #ffa023;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-family: 'Manrope-SemiBold',sans-serif;
+    border-radius: 35px;
+    min-height:30px;
+    display: inline-block;
+    margin: 0 auto;
+    width:100%;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .menu-popover .delete.confirmAction .fa-times, .menu-popover .delete.delete_btn .fa-times,
+  .menu-popover .delete.confirmAction .fa-trash, .menu-popover .delete.delete_btn .fa-trash{ color: #ffa023; }
 
-  .menu-popover .delete.delete_btn:hover{ background: red; }
+  .menu-popover .delete.confirmAction:hover , .menu-popover .delete.delete_btn:hover{ background: #ffa023; color:#ffffff;}
 
-  .menu-popover .fa-times{ color:white; }
+  .menu-popover .delete.confirmAction:hover .fa-times, .menu-popover .delete.confirmAction:hover .fa-trash{ color:#ffffff;}
 
-  .menu-popover .fa-trash{ color:white; }
+  .menu-popover .delete.delete_btn:hover .fa-times, .menu-popover .delete.delete_btn:hover .fa-trash{ color:#ffffff;}
+
 
   /* after close modal , display none from body and block inside popover for form-action-button */
   body .form-action-button-popover{ display: none; }
 
   .menu-popover .form-action-button-popover{ display: block; }
 
-  .modal-header .close{ background-color: transparent; border-radius: 50%; color:#003F87; }
+  .modal-header .close{ background-color: transparent; color:#003F87; }
 
-  .modal .close{ background-color: #dc3545; border: 0; border-radius: 50%; color:white; width:35px; height:30px; }
+  .modal .close{ background-color: #dc3545; border: 0; color:white; width:35px; height:30px; }
 
   .modal-title{ font-size: 15px; }
 

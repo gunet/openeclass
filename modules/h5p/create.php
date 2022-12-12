@@ -182,7 +182,7 @@ function addActionButtons(): string {
                 <div class='form-label-addon d-flex align-items-center align-self-start'></div>
             </div>
 
-            <div class='col-md-9 form-inline align-items-start felement' data-fieldtype='group'>
+            <div class='col-md-9 form-inline felement mt-5' data-fieldtype='group'>
                 <fieldset class='w-100 m-0 p-0 border-0'>
                     <legend class='sr-only'></legend>
                     <div class='d-flex flex-wrap align-items-center'>
@@ -200,7 +200,7 @@ function addActionButtons(): string {
                         <div class='form-group fitem btn-cancel' >
                             <span data-fieldtype='submit'>
                                 <input type='submit'
-                                       class='btn btn-secondary'
+                                       class='btn cancelAdminBtn ms-2'
                                        name='cancel'
                                        id='id_cancel'
                                        value='$langCancel'

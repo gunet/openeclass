@@ -422,7 +422,7 @@ function show_resources($unit_id)
                     if (downloadURL) {
                         buttons.download = {
                                 label: '<i class=\"fa fa-download\"></i> $langDownload',
-                                className: 'btn-success',
+                                className: 'submitAdminBtn',
                                 callback: function (d) {
                                     window.location = downloadURL;
                                 }
@@ -430,7 +430,7 @@ function show_resources($unit_id)
                     }
                     buttons.print = {
                                 label: '<i class=\"fa fa-print\"></i> $langPrint',
-                                className: 'btn-primary',
+                                className: 'submitAdminBtn',
                                 callback: function (d) {
                                     var iframe = document.getElementById('fileFrame');
                                     iframe.contentWindow.print();
@@ -439,7 +439,7 @@ function show_resources($unit_id)
                     if (screenfull.enabled) {
                         buttons.fullscreen = {
                             label: '<i class=\"fa fa-arrows-alt\"></i> $langFullScreen',
-                            className: 'btn-primary',
+                            className: 'submitAdminBtn',
                             callback: function() {
                                 screenfull.request(document.getElementById('fileFrame'));
                                 return false;
@@ -448,7 +448,7 @@ function show_resources($unit_id)
                     }
                     buttons.newtab = {
                         label: '<i class=\"fa fa-plus\"></i> $langNewTab',
-                        className: 'btn-primary',
+                        className: 'submitAdminBtn',
                         callback: function() {
                             window.open(fileURL);
                             return false;
@@ -456,7 +456,7 @@ function show_resources($unit_id)
                     };
                     buttons.cancel = {
                                 label: '$langCancel',
-                                className: 'btn-default'
+                                className: 'cancelAdminBtn'
                             };
                     bootbox.dialog({
                         size: 'large',

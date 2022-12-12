@@ -28,43 +28,30 @@
         <div class='panel-body'>
             
             <div class='row p-2'>
-                <div class='col-lg-4 col-12'>
-                    <a class='btn btn-sm btn-light w-auto m-auto d-block' href="search_user.php">
-                        <span class='fa fa-link mt-1 me-1 orangeText'></span>
-                        <span class='toolAdminText'>{{ trans('langSearchUser') }}</span>
+                <div class='col-lg-4 col-12 d-flex justify-content-center'>
+                    <a class='btn submitAdminBtn w-100' href="search_user.php">
+                        {{ trans('langSearchUser') }}
                     </a>
                 </div>
-                <div class='col-lg-4 col-12 mt-lg-0 mt-3'>
+                <div class='col-lg-4 col-12 mt-lg-0 mt-3 d-flex justify-content-center'>
                     @if($is_admin or $is_departmentmanage_user or $is_power_user)
-                        <a  href="searchcours.php" class='btn btn-sm btn-light w-auto m-auto d-block'>
-                            <div class='d-inline-flex'>
-                                <span class='fa fa-link mt-1 me-1 orangeText'></span>
-                                <span class='toolAdminText'>{{ trans('langSearchCourse') }}</span> 
-                            </div>     
+                        <a  href="searchcours.php" class='btn submitAdminBtn w-100'>
+                            {{ trans('langSearchCourse') }} 
                         </a>
                     @else
-                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-sm btn-default w-auto opacity-help m-auto d-block'>
-                            <div class='d-inline-flex'>
-                                <span class='fa fa-link mt-1 me-1 orangeText'></span>
-                                <span class='toolAdminText'>{{ trans('langSearchCourse') }}</span> 
-                            </div>     
+                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn submitAdminBtn w-100 opacity-help'>
+                          {{ trans('langSearchCourse') }}
                         </a>
                     @endif
                 </div>
-                <div class='col-lg-4 col-12 mt-lg-0 mt-3'>
+                <div class='col-lg-4 col-12 mt-lg-0 mt-3 d-flex justify-content-center'>
                     @if($is_admin)
-                        <a href="hierarchy.php" class='btn btn-sm btn-light w-auto m-auto d-block'>
-                            <div class='d-inline-flex'>
-                                <span class='fa fa-link mt-1 me-1 orangeText'></span>
-                                <span class='toolAdminText'>{{ trans('langHierarchy') }}</span>  
-                            </div>    
+                        <a href="hierarchy.php" class='btn submitAdminBtn w-100'>
+                           {{ trans('langHierarchy') }}
                         </a>
                     @else
-                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-sm btn-default w-auto opacity-help m-auto d-block'>
-                            <div class='d-inline-flex'>
-                                <span class='fa fa-link mt-1 me-1 orangeText'></span>
-                                <span class='toolAdminText'>{{ trans('langHierarchy') }}</span>  
-                            </div>    
+                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn submitAdminBtn w-100 opacity-help'>
+                           {{ trans('langHierarchy') }}  
                         </a>
                     @endif
                 </div>
@@ -72,59 +59,41 @@
 
             <div class='row p-2'>
                 
-                <div class='col-lg-4 col-12'>
+                <div class='col-lg-4 col-12 d-flex justify-content-center'>
                     
                     @if($is_admin)
-                        <a href="eclassconf.php" class='btn btn-sm btn-light w-auto m-auto d-block'>
-                            <div class='d-inline-flex'>
-                                <span class='fa fa-link mt-1 me-1 orangeText'></span>
-                                <span class='toolAdminText'>{{ trans('langConfig') }}</span>   
-                            </div>   
+                        <a href="eclassconf.php" class='btn submitAdminBtn w-100'>
+                            {{ trans('langConfig') }}
                         </a>
                     @else
-                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-sm btn-default w-auto opacity-help m-auto d-block'>
-                        <div class='d-inline-flex'>
-                            <span class='fa fa-link mt-1 me-1 orangeText'></span>
-                            <span class='toolAdminText'>{{ trans('langConfig') }}</span>   
-                        </div>   
+                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn submitAdminBtn w-100 opacity-help'>
+                        {{ trans('langConfig') }}
                     </a>
                     @endif
                     
                 </div>
-                <div class='col-lg-4 col-12 mt-lg-0 mt-3'>
+                <div class='col-lg-4 col-12 mt-lg-0 mt-3 d-flex justify-content-center'>
                     
                         @if($is_admin)
-                        <a href="theme_options.php" class='btn btn-sm btn-light w-auto m-auto d-block'>
-                            <div class='d-inline-flex'>
-                                <span class='fa fa-link mt-1 me-1 orangeText'></span>
-                                <span class='toolAdminText'>{{ trans('langThemeSettings') }}</span>  
-                            </div>    
+                        <a href="theme_options.php" class='btn submitAdminBtn w-100'>
+                           {{ trans('langThemeSettings') }}   
                         </a>
                         @else
-                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-sm btn-default w-auto opacity-help m-auto d-block'>
-                            <div class='d-inline-flex'>
-                                <span class='fa fa-link mt-1 me-1 orangeText'></span>
-                                <span class='toolAdminText'>{{ trans('langThemeSettings') }}</span>  
-                            </div>    
+                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn submitAdminBtn w-100 opacity-help'>
+                            {{ trans('langThemeSettings') }} 
                         </a>
                         @endif
                    
                 </div>
-                <div class='col-lg-4 col-12 mt-lg-0 mt-3'>
+                <div class='col-lg-4 col-12 mt-lg-0 mt-3 d-flex justify-content-center'>
                     
                         @if($is_admin)
-                        <a href="extapp.php" class='btn btn-sm btn-light w-auto m-auto d-block'>
-                            <div class='d-inline-flex'>
-                                <span class='fa fa-link mt-1 me-1 orangeText'></span>
-                                <span class='toolAdminText'>{{ trans('langExternalTools') }}</span>  
-                            </div>    
+                        <a href="extapp.php" class='btn submitAdminBtn w-100'>
+                          {{ trans('langExternalTools') }}  
                         </a>
                         @else
-                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-sm btn-default w-auto opacity-help m-auto d-block'>
-                            <div class='d-inline-flex'>
-                                <span class='fa fa-link mt-1 me-1 fw-bold orangeText'></span>
-                                <span class='toolAdminText fw-bold'>{{ trans('langExternalTools') }}</span>  
-                            </div>    
+                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn submitAdminBtn w-100 opacity-help'>
+                           {{ trans('langExternalTools') }} 
                         </a>
                         @endif
                     

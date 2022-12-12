@@ -28,7 +28,7 @@
                 buttons: {
                     confirm: {
                         label: action_message,
-                        className: 'btn-success'
+                        className: 'submitAdminBtn'
                     },
                     cancel: {
                         label: "{{ trans('langCancel') }}",
@@ -640,11 +640,11 @@
                         buttons: {
                             cancel: {
                                 label: '{{ js_escape(trans('langCancel')) }}',
-                                className: 'btn-secondary'
+                                className: 'cancelAdminBtn'
                             },
                             success: {
                                 label: '{{ js_escape(trans('langSubmit')) }}',
-                                className: 'btn-success',
+                                className: 'submitAmdinBtn',
                                 callback: function (d) {
                                     var password = $('#password').val();
                                     if(password != '') {

@@ -391,7 +391,7 @@ $head_content .= "<script>
             if (screenfull.enabled) {
                 bts.fullscreen = {
                     label: '<i class=\"fa fa - arrows - alt\"></i> $langFullScreen',
-                    className: 'btn-primary',
+                    className: 'submitAdminBtn',
                     callback: function() {
                         screenfull.request(document.getElementById('fileFrame'));
                         return false;
@@ -400,7 +400,7 @@ $head_content .= "<script>
             }
             bts.cancel = {
                 label: '$langCancel',
-                className: 'btn-default'
+                className: 'cancelAdminBtn'
             };
             
             bootbox.dialog({

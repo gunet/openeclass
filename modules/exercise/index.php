@@ -379,7 +379,7 @@ if (!$nbrExercises) {
                     "$countNumOfResults $langExercisesSubmissions");
                 $tool_content .= "<td class='text-center'>"
                         . "<div><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></div>
-                           <span class='btn btn-success btn-sm pe-none mt-2'>
+                           <span class='btn rounded-pill bg-info ps-2 pe-2 pt-0 pb-0 text-white mt-2'>
                                 <small>$submissionCount</small>
                            </span>"
                         . "</td>";
@@ -607,7 +607,7 @@ if ($is_editor) {
                         buttons: {
                             first: {
                                 label : '" . js_escape($langDistribute) . "',
-                                className : 'btn btn-success',
+                                className : 'btn submitAdminBtn',
                                 callback: function(d) {
                                     var row = $('#my-grade-table tbody').find('tr');
                                     var output = [];
@@ -647,7 +647,7 @@ if ($is_editor) {
                                     },
                             third: {
                                 label : '" . js_escape($langCancel) . "',
-                                className : 'btn-default'
+                                className : 'cancelAdminBtn'
                             }
                         }
                     });
@@ -669,11 +669,11 @@ if ($is_editor) {
                         buttons: {
                             cancel: {
                                 label: '" . js_escape($langCancel) . "',
-                                className: 'btn-default'
+                                className: 'cancelAdminBtn'
                             },
                             success: {
                                 label: '" . js_escape($langGradeCorrect) . "',
-                                className: 'btn-success',
+                                className: 'submitAdminBtn',
                                 callback: function (a) {
                                     window.location.href = 'results_by_question.php?course=$course_code&exerciseId='+ exerciseid[0];
                                 }
@@ -704,11 +704,11 @@ if ($is_editor) {
                     buttons: {
                         cancel: {
                             label: '" . js_escape($langCancel) . "',
-                            className: 'btn-default'
+                            className: 'cancelAdminBtn'
                         },
                         success: {
                             label: '" . js_escape($langCreateDuplicate) . "',
-                            className: 'btn-success',
+                            className: 'submitAdminBtn',
                             callback: function (d) {
                                 $('#clone_form').attr('action', 'index.php?course=$course_code&choice=clone&exerciseId=' + exerciseid);
                                 $('#clone_form').submit();

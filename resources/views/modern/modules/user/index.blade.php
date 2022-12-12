@@ -21,7 +21,7 @@
                 buttons: {
                     cancel_btn: {
                         label: cancel_text,
-                        className: "btn-secondary"
+                        className: "cancelAdminBtn"
                     },
                     action_btn: {
                         label: action_text,

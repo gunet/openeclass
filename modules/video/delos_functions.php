@@ -120,7 +120,7 @@ $(document).ready(function() {
             buttons: {
                 ok: {
                     label: '$langOk',
-                    className: 'btn-default',
+                    className: 'submitAdminBtn',
                     callback: function (d) {
                         window.location.reload(true);
                     }

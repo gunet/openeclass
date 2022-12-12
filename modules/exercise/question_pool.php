@@ -99,7 +99,7 @@ $head_content .= "
                                 },
                                 success: {
                                     label: '" . js_escape($langClose) . "',
-                                    className: 'btn-default',
+                                    className: 'cancelAdminBtn',
                                 },
                             }
                         });

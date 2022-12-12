@@ -97,7 +97,7 @@ $tool_content .= "
 	<div id='jsmiin-nav-horizontal'>
 		<div class='btn-group btn-group-justified' role='group' style=''>
 			<div class='btn-group' role='group'>
-				<button type='button' class='btn submitAdminBtn dropdown-toggle me-2 rounded-pill' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='hidden-xs'>$langOpenMind</span> <span class='caret'></span> </button>
+				<button type='button' class='btn submitAdminBtn dropdown-toggle me-2 rounded-pill' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='hidden-xs p-0'>$langOpenMind</span> <span class='caret'></span> </button>
 				<ul class='dropdown-menu m-0 p-0 dropdown_menu_user shadow-lg bg-body border-0'>
 					<li><a class='list-group-item border border-top-0 border-bottom-secondary' href='javascript:void(0)' role='button' onclick='open_json();'>$langOpenEx</a></li>
 					<li><input id='file_input' type='file' onchange='open_file();'/></li>

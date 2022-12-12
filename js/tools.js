@@ -573,7 +573,7 @@ function poll_init() {
     $('input[type=submit][value="+"]').on('click', function (e) {
         e.preventDefault();
         var last_form_group = $(this).closest('div.form-group').siblings('.form-group:last');
-        last_form_group.before("<div class='form-group answer-group'><div class='col-xs-11'><input class='form-control' type='text' name='answers[]' value=''></div><div class='col-xs-1 form-control-static'><a href='#' style='cursor: pointer;' class='del_btn'><i class='fa fa-times'></i></a></div></div>").next().find('input').removeAttr('value');
+        last_form_group.before("<div class='form-group answer-group input-group-text mt-3 border-0 bg-transparent p-0'><input style='background-color:#e8e8e8;' class='form-control border-0 mt-0 h-30px BordersLeftInput' type='text' name='answers[]' value=''><div class='form-control-static input-group-text h-30px border-0 BordersRightInput bgEclass'><a href='#' style='cursor: pointer;' class='del_btn'><i class='fa fa-times'></i></a></div></div>").next().find('input').removeAttr('value');
         delete_init();
     });
 }
@@ -619,10 +619,10 @@ function initialize_multifile_submission(max) {
             }
         });
         if (emptyInputs == 0) {
-            $('.moreFiles.btn-info').click();
+            $('.moreFiles.submitAdminBtn').click();
         }
     });
-    $('body').on('click', '.moreFiles.btn-info', function (e) {
+    $('body').on('click', '.moreFiles.submitAdminBtn', function (e) {
         e.preventDefault();
         fileInputs = fileInputCount();
         if (fileInputs < max) {
@@ -632,11 +632,11 @@ function initialize_multifile_submission(max) {
                 $(newInput).find('button').prop('disabled', true);
             }
             formGroup.append(newInput);
-            $(this).removeClass('btn-info').addClass('btn-danger')
+            $(this).removeClass('submitAdminBtn').addClass('deleteAdminBtn')
                 .find('.fa-plus').removeClass('fa-plus').addClass('fa-times');
         }
     });
-    $('body').on('click', '.moreFiles.btn-danger', function (e) {
+    $('body').on('click', '.moreFiles.deleteAdminBtn', function (e) {
         e.preventDefault();
         fileInputs = fileInputCount();
         if (fileInputs == max) {

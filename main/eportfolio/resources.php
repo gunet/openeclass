@@ -491,7 +491,7 @@ if ($userdata) {
                                             <h3 class='panel-title'>".q($data['title'])."</h3>
                                     </div>
                                     <div class='panel-body rounded-0'>
-                                        <button class='btn btn-success btn-sm pe-none'>" . format_locale_date(strtotime($data['timestamp'])) . "</button><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+                                        <button class='rounded-pill bg-info ps-2 pe-2 text-white border-0'>" . format_locale_date(strtotime($data['timestamp'])) . "</button><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     </div>
                                     <div class='panel-footer rounded-0'>
                                         <div class='row'>

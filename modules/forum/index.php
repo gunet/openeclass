@@ -122,7 +122,7 @@ if ($total_categories > 0) {
         $tool_content .= "<div class='col-sm-12 mt-3'><caption>";
         $tool_content .= "<div class='col-sm-12 shadow-lg p-3 rounded'>
                           <div class='row'>
-                          <div class='col-sm-6 text-md-start text-center'><strong>$langCategory :</strong> $cat_title</div>";
+                          <div class='col-sm-6 text-md-start text-center mt-1'><strong>$langCategory :</strong> $cat_title</div>";
         $tool_content .= "<div class='col-sm-6 text-md-end text-center mt-md-0 mt-3'>";
         $tool_content .= action_button(
                 array(
@@ -132,7 +132,7 @@ if ($total_categories > 0) {
                         'icon' => 'fa-edit',
                         'level' => 'primary',
                         'show' => $is_editor,
-                        'btn_class' => 'btn-secondary'
+                        'btn_class' => 'submitAdminBtn'
                     ),
                     array(
                         'title' => $langNewForum,
@@ -140,21 +140,21 @@ if ($total_categories > 0) {
                         'icon' => 'fa-plus-circle',
                         'level' => 'primary',
                         'show' => $is_editor,
-                        'btn_class' => 'btn-secondary'
+                        'btn_class' => 'submitAdminBtn'
                     ),
                     array(
                         'title' => $action_notify ? $langStopNotify : $langNotify,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
                         'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope',
                         'level' => 'primary',
-                        'btn_class' => $action_notify ? 'btn-primary' : 'btn-secondary',
+                        'btn_class' => $action_notify ? 'submitAdminBtn' : 'submitAdminBtn',
                         'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)),
                     ),
                     array('title' => $langDelete,
                         'url' => "forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum",
-                        'icon' => 'fa-times text-danger',
+                        'icon' => 'fa-times',
                         'class' => 'delete',
-                        'btn_class' => 'btn-warning',
+                        'btn_class' => 'deleteAdminBtn',
                         'level' => 'primary',
                         'show' => $is_editor
                         // 'confirm' => $langConfirmDelete

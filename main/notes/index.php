@@ -232,7 +232,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <h3 class='panel-title'>".q($note->title)."</h3>
             </div>
             <div class='panel-body rounded-0'>
-                <div class='btn btn-success btn-sm pe-none'>". format_locale_date(strtotime($note->date_time)). "</div><br><br>
+                <div class='btn btn-info btn-sm rounded-pill text-white pe-none'>". format_locale_date(strtotime($note->date_time)). "</div><br><br>
                 $note->content
             </div>
         </div></div>";

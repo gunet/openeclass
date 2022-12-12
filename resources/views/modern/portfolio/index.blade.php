@@ -84,10 +84,10 @@
                                 </div>
                                 <div class="row justify-content-md-start justify-content-center text-center mt-3">
                                     <div class="py-1" >
-                                        <a href="{{ $urlAppend }}main/profile/profile.php" class="rounded-pill btn btn-outline-primary text-uppercase TextBold"><i class="fas fa-pen me-1"></i>{{ trans('langModProfile') }}</a>
+                                        <a href="{{ $urlAppend }}main/profile/profile.php" class="btn submitAdminBtn"><i class="fas fa-pen me-1"></i>{{ trans('langModProfile') }}</a>
                                     </div>
                                     <div class="py-1">
-                                        <a href="{{$urlAppend}}main/unreguser.php" class="rounded-pill btn btn-outline-warning text-uppercase TextBold"><i class="fa fa-trash-o me-1"></i>{{ trans('langUnregUser') }} </a>
+                                        <a href="{{$urlAppend}}main/unreguser.php" class="btn deleteAdminBtn"><i class="fa fa-trash-o me-1"></i>{{ trans('langUnregUser') }} </a>
                                     </div>
                                     <div class="py-1">
                                         {{ trans('langExplain') }}
@@ -206,7 +206,7 @@
 
 <div class="container-fluid details-section">
     <div class="row rowMedium px-lg-0 px-3 py-lg-0 py-0">
-        <div class='col-lg-8 col-12 Courses-Content pe-lg-0 mt-lg-3 px-0'>
+        <div class='col-xl-8 col-12 Courses-Content pe-lg-0 mt-lg-3 px-0'>
             <div class='panel panel-admin border-0 BorderSolid shadow-none bg-white px-lg-4 py-lg-3'>
                 <div class='panel-heading bg-white'>
                     <div class='col-12 Help-panel-heading'>
@@ -300,7 +300,7 @@
                 </div>
             </div>
         </div>
-        <div class='col-lg-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-2 ps-lg-3 px-lg-0 px-0 pb-lg-0 pb-3'>
+        <div class='col-xl-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-2 ps-xl-3 px-lg-0 px-0 pb-lg-0 pb-3'>
             @include('portfolio.portfolio-calendar')
             <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                 <div class='panel-heading bg-body p-0'>

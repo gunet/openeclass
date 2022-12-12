@@ -315,7 +315,7 @@ $head_content .= "
             buttons: {
                 success: {
                     label: '$langSubmit',
-                    className: 'btn-success',
+                    className: 'submitAdminBtn',
                     callback: function () {
                         var difficultyIdValue = $('select#difficultyId').val();
                         var categoryIdValue = $('select#categoryId').val();

@@ -3540,7 +3540,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $title_conf = isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete;
             $accept_conf = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
             $confirm_extra = " data-title='$title_conf' data-message='" .
-                q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept_conf' data-action-class='btn-danger'";
+                q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept_conf' data-action-class='deleteAdminBtn'";
             $confirm_modal_class = ' confirmAction';
             $form_begin = "<form class='form-action-button-mydropdowns mb-0' method=post action='$url' class='mb-0'>";
             $form_end = '</form>';
@@ -3711,7 +3711,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         if (isset($option['btn_class'])) {
             $btn_class = ' ' . $option['btn_class'];
         } else {
-            $btn_class = ' btn-secondary';
+            $btn_class = ' submitAdminBtn';
         }
         if (isset($option['link-attrs'])) {
             $link_attrs = ' ' . $option['link-attrs'];
@@ -3733,10 +3733,10 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
                 $primary_form_end = $form_end;
                 $form_begin = $form_end = '';
                 $primary_icon_class = " confirmAction' data-title='$title' data-message='" .
-                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='deleteAdminBtn'";
             } else {
                 $icon_class .= " confirmAction' data-title='$title' data-message='" .
-                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='deleteAdminBtn'";
                 $primary_icon_class = '';
             }
             $url = '#';
@@ -3769,7 +3769,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     }else{
         $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
     }
-    $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "btn-default";
+    $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "submitAdminBtn";
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
         $action_button = "

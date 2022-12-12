@@ -722,7 +722,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         <div class='panel panel-primary rounded-0'>
             <div class='panel-heading rounded-0'>
                 <h4 class='panel-title'>$langQuestion&nbsp;"
-                    . icon('fa-edit', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid") .
+                    . icon('fa-edit text-white', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid") .
                 "</h4>
             </div>
             <div class='panel-body rounded-0'>
@@ -754,11 +754,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               $tool_content .="
              
 
-                  <div class='form-group mt-3'>
-                        <div class='col-xs-11'>
-                            <input type='text' class='form-control' name='answers[]' value='$answer->answer_text'>
-                        </div>
-                        <div class='col-xs-1 form-control-static'>
+                  <div class='form-group input-group mt-3'>
+                        
+                        <input style='background-color:#e8e8e8;' type='text' class='form-control border-0 mt-0 h-30px BordersLeftInput' name='answers[]' value='$answer->answer_text'>
+                        
+                        <div class='form-control-static input-group-text h-30px border-0 BordersRightInput bgEclass'>
                             " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>";
@@ -766,22 +766,22 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         } else {
             $tool_content .="
                     
-                    <div class='form-group mt-3'>
-                        <div class='col-xs-11'>
-                            <input class='form-control' type='text' name='answers[]' value=''>
-                        </div>
-                        <div class='col-xs-1 form-control-static'>
-                            " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
-                        </div>
+                    <div class='form-group input-group mt-3'>
+                       
+                            <input style='background-color:#e8e8e8;' class='form-control border-0 mt-0 h-30px BordersLeftInput' type='text' name='answers[]' value=''>
+                     
+                            <div class='form-control-static input-group-text h-30px border-0 BordersRightInput bgEclass'>
+                                " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
+                            </div>
                     </div>
 
                    
               
-                  <div class='form-group mt-3'>
-                        <div class='col-11'>
-                            <input class='form-control' type='text' name='answers[]' value=''>
-                        </div>
-                        <div class='col-1 form-control-static'>
+                  <div class='form-group input-group mt-3'>
+                       
+                        <input style='background-color:#e8e8e8;' class='form-control border-0 mt-0 h-30px BordersLeftInput' type='text' name='answers[]' value=''>
+                      
+                        <div class='form-control-static input-group-text h-30px border-0 BordersRightInput bgEclass'>
                             " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>";

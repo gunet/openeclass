@@ -138,11 +138,11 @@ $tool_content .= "
                         </div>
                         <div class='form-group mt-3'>
                             <div class='col-sm-offset-2 col-sm-10'>" .
-                                form_buttons([[ 'class' => 'btn-primary',
+                                form_buttons([[ 'class' => 'submitAdminBtn',
                                                 'name' => 'new_assign',
                                                 'value' => $langUpload,
                                                 'javascript' => '' ],
-                                              [ 'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code" ]]) . "
+                                              [ 'class' => 'cancelAdminBtn', 'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code" ]]) . "
                             </div>
                         </div>
                     </fieldset>

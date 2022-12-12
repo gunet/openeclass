@@ -39,7 +39,7 @@ if ($is_editor) {
 
     // custom action bar
     $tool_content .= "<div class='col-12 clearfix'>
-        <div class='action_bar shadow-sm p-3 mt-2 rounded'>
+        <div class='action_bar mt-2 rounded'>
             <div class='col-sm-12 clearfix'>
                 <div class='margin-top-thin margin-bottom-fat float-end'>
                     <div class='btn-group'>";
@@ -47,7 +47,7 @@ if ($is_editor) {
     // Dropdown select for Creating H5P Content
     if (!empty($h5pcontenttypes)) {
         $tool_content .= "
-            <select id='createpicker' class='selectpicker' title='$langCreate' data-style='btn-success btn-sm' data-width='fit'>
+            <select id='createpicker' class='selectpicker' title='$langCreate' data-style='submitAdminBtn' data-width='fit'>
                 <optgroup label='$langH5pInteractiveContent'>";
         $counter = 0;
         foreach ($h5pcontenttypes as $h5pcontenttype) {
@@ -78,7 +78,7 @@ if ($is_editor) {
 
     // Import
     $tool_content .= "
-        <a class='btn btn-secondary btn-sm ms-1' href='upload.php?course=$course_code' data-bs-placement='bottom' data-bs-toggle='tooltip'  title='$langImport'>
+        <a class='btn submitAdminBtn ms-2' href='upload.php?course=$course_code' data-bs-placement='bottom' data-bs-toggle='tooltip'  title='$langImport'>
             <span class='fa fa-upload space-after-icon'></span>
             <span class='hidden-xs'>$langImport</span>
         </a>";

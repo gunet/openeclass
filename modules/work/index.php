@@ -4334,8 +4334,8 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 $maxFiles = $assignment->max_submissions;
                 $inputName = 'userfile[]';
                 $moreButton = "<div class='float-end'>
-                                 <button class='btn btn-info btn-sm moreFiles'>
-                                   <span class='fa fa-plus text-white'></span>
+                                 <button class='btn submitAdminBtn moreFiles'>
+                                   <span class='fa fa-plus'></span>
                                  </button>
                                </div>";
                 $GLOBALS['head_content'] .=

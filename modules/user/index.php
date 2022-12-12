@@ -156,7 +156,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
               'level' => 'primary',
               'url' => '#',
               'icon' => 'fa-times',
-              'btn_class' => 'delete_btn btn-default'
+              'btn_class' => 'delete_btn deleteAdminBtn'
             ),
             array(
                 'title' => $langGiveRightTutor,

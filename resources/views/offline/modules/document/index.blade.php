@@ -133,14 +133,14 @@
                 buttons: {
                     download: {
                         label: '<span class="fa fa-download"></span> {{ trans('langDownload') }}',
-                        className: 'btn-success',
+                        className: 'submitAdminBtn',
                         callback: function (d) {
                             window.location = downloadURL;
                         }
                     },
                     print: {
                         label: '<span class="fa fa-print"></span> {{ trans('langPrint') }}',
-                        className: 'btn-primary',
+                        className: 'submitAdminBtn',
                         callback: function (d) {
                             var iframe = document.getElementById('fileFrame');
                             iframe.contentWindow.print();
@@ -148,7 +148,7 @@
                     },
                     cancel: {
                         label: '{{ trans('langCancel') }}',
-                        className: 'btn-default'
+                        className: 'cancelAdminBtn'
                     }
                 }
             });

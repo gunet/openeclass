@@ -303,13 +303,54 @@ function view($view_file, $view_data = array()) {
             $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
 
             $styles_str .= "
+
+            .submitAdminBtn {
+                border: solid thin;
+                border-color: $theme_options_styles[leftNavBgColor];
+                color: $theme_options_styles[leftNavBgColor];
+                font-size: 12px;
+                text-transform: uppercase;
+                height:30px;
+                font-family: 'Manrope-SemiBold',sans-serif;
+                border-radius: 35px;
+              }
+            
+              .submitAdminBtn:hover {
+                background-color: $theme_options_styles[leftNavBgColor];
+                color: #ffffff;
+              }
+
             .offcanvas-header,.offcanvas-body,#background-cheat-leftnav, #bgr-cheat-footer, #collapseTools, .panel-admin>.panel-heading, .descCoursePanel, #cal-header,
             .admin-list-group .list-group-item:hover{background:$theme_options_styles[leftNavBgColor];}
             .tool-sidebar{color:#ffffff;}
             .statistics:before{background: $theme_options_styles[leftNavBgColor];}
             .notes_thead, .list-header{background: $theme_options_styles[leftNavBgColor];}
-            .menu-popover .list-group-item{background: $theme_options_styles[leftNavBgColor];}
-            .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{background: red;}
+
+            .menu-popover .list-group-item{
+                border: solid thin;
+                border-color: $theme_options_styles[leftNavBgColor];
+                color: $theme_options_styles[leftNavBgColor];
+                font-size: 12px;
+                text-transform: uppercase;
+                height:30px;
+                font-family: 'Manrope-SemiBold',sans-serif;
+                border-radius: 35px;
+                margin-bottom: 10px;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+            }
+            
+            .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{
+                background:#ffffff;
+                border: solid thin;
+                border-color: #ffa023;
+                color: #ffa023;
+            }
+            .menu-popover .delete.confirmAction .fa-times, .menu-popover .delete.delete_btn .fa-times{
+                color: #ffa023;
+            }
+
             .openCoursesPanel, .BtnMoreInfoAdmin{background:$theme_options_styles[leftNavBgColor];}
             .BtnMoreInfoAdmin{color:#f2f2f2;}
             #bgr-cheat-header{background:$rgba_no_alpha};
@@ -327,19 +368,57 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['imageUpload'])) $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
         if (isset($theme_options_styles['imageUploadSmall'])) $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
     }else{
-        $styles_str .= "#background-cheat-leftnav,#bgr-cheat-header{background:rgba(0, 62, 135, 0.9) ;}
-        #leftnav{background:transparent;}
-        #bgr-cheat-footer{background: #001146;} a{color:#005ad9;}
-        #leftnav .panel a.list-group-item:hover{background: #4682B4;}
-        #leftnav .panel a.list-group-item.active:hover{background: #ccc;}
-        .offcanvas{background:#1d4e89;}
-        .statistics:before{background: #001146;}
-        .notes_thead, .list-header{background: #003e87;}
-        .menu-popover .list-group-item{background: #003e87; color:#DBE8F9;}
-        .menu-popover .list-group-item:hover{background: #4682B4;}
-        .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{background: red;}
-        .openCoursesPanel{background:#003e87;}
-        #cal-header{background:#001146;}";
+        // $styles_str .= "#background-cheat-leftnav,#bgr-cheat-header{background:rgba(0, 62, 135, 0.9) ;}
+        // #leftnav{background:transparent;}
+        // #bgr-cheat-footer{background: #001146;} a{color:#005ad9;}
+        // #leftnav .panel a.list-group-item:hover{background: #4682B4;}
+        // #leftnav .panel a.list-group-item.active:hover{background: #ccc;}
+        // .offcanvas{background:#1d4e89;}
+        // .statistics:before{background: #001146;}
+        // .notes_thead, .list-header{background: #003e87;}
+        // .menu-popover .list-group-item{
+        //     border: solid thin;
+        //     border-color: #005ad9;
+        //     color: #005ad9;
+        //     font-size: 12px;
+        //     text-transform: uppercase;
+        //     height:30px;
+        //     font-family: 'Manrope-SemiBold',sans-serif;
+        //     border-radius: 35px;
+        //     margin-bottom: 10px;
+        //     display:flex;
+        //     justify-content:center;
+        //     align-items:center;
+        // }
+        // .menu-popover .list-group-item:hover{
+        //     background-color: #005ad9;
+        //     color: #ffffff;
+        // }
+        // .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{
+        //     background:#ffffff;
+        //     border: solid thin;
+        //     border-color: #ffa023;
+        //     color: #ffa023;
+        // }
+        // .menu-popover .delete.confirmAction .fa-times, .menu-popover .delete.delete_btn .fa-times{
+        //     color: #ffa023;
+        // }
+        // .openCoursesPanel{background:#003e87;}
+        // #cal-header{background:#001146;}";
+
+        $head_content .= "
+            <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/slick.css'/>
+            <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/slick-theme.css'/>
+            <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/sidebar.css'/>
+            <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/new_calendar.css'/>
+            <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default.css'/>
+        
+            <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?donotcache'>
+            <link rel='stylesheet' href='{$urlAppend}template/modern/css/sidebar.css?donotcache'>
+            <link rel='stylesheet' href='{$urlAppend}template/modern/css/new_calendar.css?donotcache'>
+            <link rel='stylesheet' href='{$urlAppend}template/modern/css/default.css?donotcache'>
+        ";
+
     }
 
     $sidebar_courses = Database::get()->queryArray("SELECT id, code, title, prof_names, public_code

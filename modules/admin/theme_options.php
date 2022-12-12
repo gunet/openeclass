@@ -230,7 +230,7 @@ if (isset($_POST['optionsSave'])) {
                     buttons: {
                         success: {
                             label: '$langUpload',
-                            className: 'btn-success',
+                            className: 'submitAdminBtn',
                             callback: function (d) {
                                 var themeFile = $('#themeFile').val();
                                 if(themeFile != '') {
@@ -244,7 +244,7 @@ if (isset($_POST['optionsSave'])) {
                         },
                         cancel: {
                             label: '$langCancel',
-                            className: 'btn-default'
+                            className: 'cancelAdminBtn'
                         }
                     }
                 });
@@ -281,12 +281,12 @@ if (isset($_POST['optionsSave'])) {
                     buttons: {
                         success: {
                             label: '$langSave',
-                            className: 'btn-success',
+                            className: 'submitAdminBtn',
                             callback: optionsSaveCallback,
                         },
                         cancel: {
                             label: '$langCancel',
-                            className: 'btn-default'
+                            className: 'cancelAdminBtn'
                         }
                     }
                 });
