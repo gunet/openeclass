@@ -53,7 +53,7 @@ $tree = new Hierarchy();
 $course = new Course();
 $pageName = ''; // delete $pageName set in doc_init.php
 
-$main_content = $cunits_content = $course_info_extra = $email_notify_icon = "";
+$main_content = $cunits_content = $course_info_extra = $email_notify_icon = $data['countUnits'] = "";
 
 add_units_navigation(TRUE);
 
@@ -549,6 +549,8 @@ if ($total_cunits > 0) {
     $cunits_content .= "";
     $count_index = 0;
     $counterUnits = 0;
+    $countUnits = count($all_units);
+    $data['countUnits'] = $countUnits;
 
     if($carousel_or_row == 0){
         $cunits_content .= "<div id='carouselUnitsControls' class='carousel slide' data-bs-ride='carousel'>";
@@ -684,10 +686,8 @@ if ($total_cunits > 0) {
 
         //end courseUnitsControls
         $cunits_content .= "</div>";
-    }else{
+    } else {
         $counter_hr = 0;
-        $countUnits = count($all_units);
-        $data['countUnits'] = $countUnits;
         foreach ($all_units as $cu) {
             $counter_hr++;
             $not_shown = false;
