@@ -3,7 +3,7 @@
 *   E-learning and Course Management System
 * ========================================================================
 *  Copyright(c) 2003-2020  Greek Universities Network - GUnet
-*  A full copyright notice can be read in "/info/copyright.txt".				
+*  A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Open eClass is an open platform distributed in the hope that it will
 *  be useful (without any warranty), under the terms of the GNU (General
@@ -82,17 +82,14 @@ Licensed under the MIT license.
 Wiki module: Frederic Minne <zefredz@gmail.com>
 class wiki2xhtml based on DotClear version 3.1d licensed under GPL
 Copyright (c) 2004 Olivier Meunier and contributors.
-  DotClear contributors: Stephanie Booth, Mathieu Pillard, Christophe Bonijol, 
-  Jean-Charles Bagneris, Nicolas Chachereau, Jereme Lipowicz	
+  DotClear contributors: Stephanie Booth, Mathieu Pillard, Christophe Bonijol,
+  Jean-Charles Bagneris, Nicolas Chachereau, Jereme Lipowicz
 
 Learnpath module: Piraux Sebastien <pir@cerdecam.be>
         Lederer Guillaume <led@cerdecam.be>
 
-PHP MathPublisher : Copyright (c) 2005 by Pascal Brachet <pbrachet@xm1math.net> 
+PHP MathPublisher : Copyright (c) 2005 by Pascal Brachet <pbrachet@xm1math.net>
   http://www.xm1math.net/phpmathpublisher/
-
-Javascript SortTable (sorttable.js): Stuart Langridge (licenced as X11)
- http://www.kryogenix.org/code/browser/sorttable/
 
 jQuery JavaScript Library - Copyright 2010, John Resig
   Dual licensed under the MIT or GPL Version 2 licenses.
