@@ -10,7 +10,7 @@
     font-family: 'Manrope-SemiBold', sans-serif;
 }
 
-.select2-selection--multiple:before { content: ""; position: absolute; right: 15px; top: 55%; border-top: 5px solid #005ad9;
+.select2-selection--multiple:before { content: ""; position: absolute; right: 15px; top: 53%; border-top: 5px solid #005ad9;
     border-left: 5px solid transparent; border-right: 5px solid transparent; background: transparent;
 }
 

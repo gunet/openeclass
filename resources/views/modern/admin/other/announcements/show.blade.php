@@ -21,16 +21,16 @@
                     @if($announcementsID)
                        
                         <div class='col-sm-12'>
-                            <div class="panel panel-default rounded-0">
-                                <div class="panel-heading rounded-0">                   
+                            <div class="panel panel-default">
+                                <div class="panel-heading">                   
                                     <div class='panel-title text-dark fw-bold'>{{$announcementsID->title}}</div>
                                 </div>
-                                <div class="panel-body rounded-0">
+                                <div class="panel-body">
                                     <span class="text-secondary">
                                         {!! $announcementsID->body !!}
                                     </span>
                                 </div>
-                                <div class='panel-footer rounded-0'>
+                                <div class='panel-footer'>
                                     <div class='text-dark fw-bold text-end'>{{trans('langDate')}}: <span class='info-date fw-normal'>{{ $announcementsID->date }}</span></div>
                                 </div>
                             </div>

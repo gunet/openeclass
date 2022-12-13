@@ -719,7 +719,7 @@ if ($questionList) {
 
         if ($exerciseType == MULTIPLE_PAGE_TYPE) {
             // display question numbering buttons
-            $tool_content .= "<div class='d-flex justify-content-center lightColor p-2'>";
+            $tool_content .= "<div class='d-flex justify-content-center p-2'>";
             foreach ($questionList as $k => $q_id) {
                 $answered = in_array($q_id, $answeredIds);
                 if ($answered) {

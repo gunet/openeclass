@@ -14,7 +14,7 @@
         </form>--}}
 
          <!-- THIS IS SECOND CHOICE OF VIEW-STUDENT-TEACHER TOOGLE-BUTTON -->
-        <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center'> 
+        <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center mb-5'> 
             <label class="switch-sidebar">
                 <input class="form-check-input slider-btn-on btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}" type="checkbox" id="flexSwitchCheckChecked" {{ !$is_editor ? "checked" : "" }}>
                 <div class="slider-round">
@@ -25,7 +25,7 @@
         </form>
     @endif
 
-    <div class="panel-group accordion mt-5" id="sidebar-accordion">
+    <div class="panel-group accordion mt-4" id="sidebar-accordion">
         <div class="panel">
             @foreach ($toolArr as $key => $tool_group)
                 <a id="Tool{{$key}}" class="collapsed parent-menu mt-5" data-bs-toggle="collapse" href="#collapse{{ $key }}">
@@ -38,9 +38,9 @@
                         </div><hr class='text-white'>
                     </div>
                 </a>
-                <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse {{ $tool_group[0]['class'] }}{{ $key == $default_open_group? ' show': '' }}" aria-labelledby="Tool{{$key}}" data-bs-parent="#sidebar-accordion">
+                <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse {{ $tool_group[0]['class'] }}{{ $key == $default_open_group? ' show': '' }} Borders" aria-labelledby="Tool{{$key}}" data-bs-parent="#sidebar-accordion">
                     @foreach ($tool_group[1] as $key2 => $tool)
-                        <a href="{!! $tool_group[2][$key2] !!}" class='leftMenuToolCourse list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
+                        <a href="{!! $tool_group[2][$key2] !!}" class='leftMenuToolCourse list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}} Borders border-0' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                             <div class='d-inline-flex align-items-top'>
                                 <span class="fa {{ $tool_group[3][$key2] }} fa-fw posTool tool-sidebar toolSidebarTxt pe-2"></span>
                                 <span class='toolSidebarTxt'>{!! $tool !!}</span>

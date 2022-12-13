@@ -91,11 +91,13 @@
                         <div class='col-xl-9 col-lg-8 col-md-12 col-sm-12 col-12 forms-panels-admin'>
                             <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                                 <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">
-                                    <div class='panel panel-admin Borders' id='one'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{ trans('langBasicCfgSetting') }}</h2>
+                                    <div class='panel panel-admin px-lg-4 py-lg-3 bg-white' id='one'>
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langBasicCfgSetting') }}</span>
+                                            </div>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 Borders'>
+                                        <div class='panel-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <label for='formurlServer' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langSiteUrl') }}:</label>
@@ -210,11 +212,13 @@
 
 
 
-                                    <div class='panel panel-admin mt-3 Borders' id='two'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{ trans('langUpgReg') }}</h2>
+                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='two'>
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langUpgReg') }}</span>
+                                            </div>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 Borders'>
+                                        <div class='panel-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <label for='user_registration' class='col-sm-12 control-label-notes'>{{ trans('langUserRegistration') }}:</label>
@@ -401,9 +405,11 @@
 
 
 
-                                    <div class='panel panel-admin mt-3 Borders' id='three'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{ trans('langEclassThemes') }}</h2>
+                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='three'>
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langEclassThemes') }}</span>
+                                            </div>
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 Borders'>
                                             <fieldset>
@@ -435,11 +441,14 @@
 
 
 
-                                    <div class='panel panel-admin mt-3 Borders' id='four'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{trans('langHomePageSettings')}}</h2>
+                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='four'>
+                                       
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{trans('langHomePageSettings')}}</span>
+                                            </div>
                                         </div>
-                                        <div class='panel-body Borders'>
+                                        <div class='panel-body'>
                                             <div class='margin-bottom-fat margin-top-fat fs-5 mb-3'><strong>{{trans('langSelectHomePage')}} :</strong></div>
                                             <fieldset>
                                                 <div class='landing-default'>
@@ -568,11 +577,13 @@
 
 
                                     @if(!$install)
-                                    <div class='panel panel-admin mt-3 Borders' id='five'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{ trans('langEmailSettings') }}</h2>
+                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='five'>
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langEmailSettings') }}</span>
+                                            </div>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 Borders'>
+                                        <div class='panel-body'>
                                             <fieldset>
                                     @endif
                                                 <div class='form-group'>
@@ -668,11 +679,13 @@
                                     </div>
                                     @endif
 
-                                    <div class='panel panel-admin mt-3 Borders' id='six'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{ trans('langCourseSettings') }}</h2>
+                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='six'>
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langCourseSettings') }}</span>
+                                            </div>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 Borders'>
+                                        <div class='panel-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -719,11 +732,14 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3 Borders' id='seven'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{ trans('langMetaCommentary') }}</h2>
+                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='seven'>
+
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMetaCommentary') }}</span>
+                                            </div>
                                         </div>
-                                        <div class='panel-body panel-body-admin pt-3 ps-3 pb-3 pe-3 Borders'>
+                                        <div class='panel-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -753,11 +769,13 @@
 
 
 
-                                    <div class='panel panel-admin mt-3 Borders' id='eight'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{ trans('langOtherOptions') }}</h2>
+                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='eight'>
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langOtherOptions') }}</span>
+                                            </div>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 Borders'>
+                                        <div class='panel-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -894,11 +912,14 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-admin mt-3 Borders' id='nine'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{ trans('langDocumentSettings') }}</h2>
+                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='nine'>
+
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langDocumentSettings') }}</span>
+                                            </div>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 Borders'>
+                                        <div class='panel-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                 <label class='col-sm-12 control-label-notes'>{{ trans('langEnableMyDocs') }}:</label>
@@ -958,11 +979,13 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-admin mt-3 Borders' id='ten'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{ trans('langDefaultQuota') }}</h2>
+                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='ten'>
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langDefaultQuota') }}</span>
+                                            </div>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pb-3 pt-3 pe-3 Borders'>
+                                        <div class='panel-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <label for='doc_quota' class='col-sm-12 control-label-notes'>{{ trans('langDocQuota') }} (MB):</label>
@@ -993,11 +1016,14 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3 Borders' id='eleven'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{ trans('langUploadWhitelist') }}</h2>
+                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='eleven'>
+
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langUploadWhitelist') }}</span>
+                                            </div>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pb-3 pt-3 pe-3 Borders'>
+                                        <div class='panel-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <label for='student_upload_whitelist' class='col-sm-12 control-label-notes'>{{ trans('langStudentUploadWhitelist') }}:</label>
@@ -1019,11 +1045,14 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3 Borders' id='twelve'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{ trans('langLogActions') }}</h2>
+                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='twelve'>
+
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langLogActions') }}</span>
+                                            </div>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 Borders'>
+                                        <div class='panel-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -1069,11 +1098,14 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3 Borders' id='thirteen'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{ trans('langLoginFailCheck') }}</h2>
+                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='thirteen'>
+
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langLoginFailCheck') }}</span>
+                                            </div>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pe-3 pb-3 pt-3 Borders'>
+                                        <div class='panel-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -1117,11 +1149,13 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3 Borders' id='fourteen'>
-                                        <div class='panel-heading'>
-                                            <h2 class='panel-title'>{{ trans('langPrivacyPolicy') }}</h2>
+                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='fourteen'>
+                                        <div class='panel-heading bg-body'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langPrivacyPolicy') }}</span>
+                                            </div>
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 Borders'>
+                                        <div class='panel-body'>
                                             <div class='margin-bottom-fat margin-top-fat pb-3'><strong>{{ trans('langPrivacyPolicyLegend') }}</strong></div>
                                             <fieldset>
                                                 <div class='landing-default'>

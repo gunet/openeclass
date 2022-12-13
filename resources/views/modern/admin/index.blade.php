@@ -47,67 +47,9 @@
                                 @if ($is_admin)
                                     <div class='col-lg-6 col-12 mt-3'>
                                         <div class='row'>
-                                            {{--<div class='col-sm-12'>
-                                                <div class='panel panel-admin shadow'>
-                                                    <div class='panel-heading text-center'>
-                                                        <span class='colorPalette'>{{ trans('langQuickLinks') }}</span>
-                                                    </div>
-                                                    <div class='panel-body'>
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item border-0 admin-list-group">
-                                                                <a href="search_user.php" class='list-group-item'>
-                                                                    <div class='d-inline-flex'>
-                                                                        <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                                                        <span class='toolAdminText'>{{ trans('langSearchUser') }}</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li class="list-group-item border-0 admin-list-group">
-                                                                <a href="searchcours.php" class='list-group-item'>
-                                                                    <div class='d-inline-flex'>
-                                                                        <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                                                        <span class='toolAdminText'>{{ trans('langSearchCourse') }}</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li class="list-group-item border-0 admin-list-group">
-                                                                <a href="hierarchy.php" class='list-group-item'>
-                                                                    <div class='d-inline-flex'>
-                                                                        <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                                                        <span class='toolAdminText'>{{ trans('langHierarchy') }}</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li class="list-group-item border-0 admin-list-group">
-                                                                <a href="eclassconf.php" class='list-group-item'>
-                                                                    <div class='d-inline-flex'>
-                                                                        <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                                                        <span class='toolAdminText'>{{ trans('langConfig') }}</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li class="list-group-item border-0 admin-list-group">
-                                                                <a href="theme_options.php" class='list-group-item'>
-                                                                    <div class='d-inline-flex'>
-                                                                        <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                                                        <span class='toolAdminText'>{{ trans('langThemeSettings') }}</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li class="list-group-item border-0 admin-list-group">
-                                                                <a href="extapp.php" class='list-group-item'>
-                                                                    <div class='d-inline-flex'>
-                                                                        <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                                                        <span class='toolAdminText'>{{ trans('langExternalTools') }}</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>--}}
-                                            <div class='col-sm-12'>
-                                                <div class='panel panel-admin p-md-3 bg-white'>
+                                            
+                                            <div class='col-12'>
+                                                <div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
                                                     <div class='panel-heading bg-body'>
                                                         <div class='col-12 Help-panel-heading'>
                                                             <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langPlatformIdentity') }}</span>
@@ -115,42 +57,42 @@
                                                     </div>
                                                     <div class='panel-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-sm-6'>
+                                                            <div class='col-6'>
                                                                 <strong class='control-label-notes'>{{ trans('langWebServerVersion') }}</strong>
                                                             </div>
-                                                            <div class='col-sm-6'>
+                                                            <div class='col-6'>
                                                                 <em>{{ $_SERVER['SERVER_SOFTWARE'] }}</em>
                                                             </div>
                                                         </div>
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-sm-6'>
+                                                            <div class='col-6'>
                                                                 <strong class='control-label-notes'>{{ trans('langPHPVersion') }}</strong>
                                                             </div>
-                                                            <div class='col-sm-6'>
+                                                            <div class='col-6'>
                                                                 <em>{{ PHP_VERSION }}</em>
                                                             </div>
                                                         </div>
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-sm-6'>
+                                                            <div class='col-6'>
                                                                 <strong class='control-label-notes'>{{ trans('langMySqlVersion') }}</strong>
                                                             </div>
-                                                            <div class='col-sm-6'>
+                                                            <div class='col-6'>
                                                                 <em>{{ $serverVersion }}</em>
                                                             </div>
                                                         </div>
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-sm-6'>
+                                                            <div class='col-6'>
                                                                 <strong class='control-label-notes'>{{ trans('langVersion') }}:</strong>
                                                             </div>
-                                                            <div class='col-sm-6'>
+                                                            <div class='col-6'>
                                                                 <em>{{ $siteName }} {{ ECLASS_VERSION }}</em>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class='col-sm-12 mt-3'>
-                                                <div class='panel panel-admin p-md-3 bg-white'>
+                                            <div class='col-12 mt-3'>
+                                                <div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
                                                     <div class='panel-heading bg-body'>
                                                         <div class='col-12 Help-panel-heading'>
                                                             <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langIndexInfo') }}</span>
@@ -158,30 +100,30 @@
                                                     </div>
                                                     <div class='panel-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-sm-6'>
+                                                            <div class='col-6'>
                                                             <strong class='control-label-notes'>{{ trans('langIndexNumDocs') }}:</strong>
                                                             </div>
-                                                            <div class='col-sm-6'>
+                                                            <div class='col-6'>
                                                                 {{ $numDocs }}
                                                             </div>
                                                         </div>
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-sm-6'>
+                                                            <div class='col-6'>
                                                             <strong class='control-label-notes'>{{ trans('langIndexIsOptimized') }}</strong>
                                                             </div>
-                                                            <div class='col-sm-6'>
+                                                            <div class='col-6'>
                                                                 {{ $isOpt }}
                                                             </div>
                                                         </div>
                                                         @if ($idxHasDeletions)
                                                             <div class='row p-2 margin-bottom-thin'>
-                                                                <div class='col-sm-9 col-sm-offset-3'>
+                                                                <div class='col-9 col-offset-3'>
                                                                     <a href='../search/optpopup.php' onclick="return optpopup('../search/optpopup.php', 600, 500)">{{ trans('langOptimize') }}</a>
                                                                 </div>
                                                             </div>
                                                         @endif
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-sm-9 col-sm-offset-3'>
+                                                            <div class='col-9 col-offset-3'>
                                                                 <a id='reindex_link' href='../search/idxpopup.php?reindex'>{{ trans('langReindex') }}</a>
                                                             </div>
                                                         </div>
@@ -195,31 +137,34 @@
 
                                 @endif
 
-                                <div class='col-sm-12 d-flex justify-content-center mt-5'>
-                                    <a class="d-flex justify-content-center align-items-center BtnMoreInfoAdmin" data-bs-toggle="collapse" href="#collapseMoreInfoAdmin" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                        <span class='text-uppercase'>{{trans('langMore')}} <span class='fa fa-arrow-down'></span>
-                                    </a>
+                                <div class='col-12'>
+                                    <div class='col-12 d-flex justify-content-start border-primary border-bottom mt-5'>
+                                        <a class="d-flex justify-content-center align-items-center" data-bs-toggle="collapse" href="#collapseMoreInfoAdmin" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            <span class='text-uppercase'>{{trans('langMore')}}</span> 
+                                            <span class='fa fa-arrow-down'></span>
+                                        </a>
+                                    </div>
                                 </div>
 
                                 <div class="collapse" id="collapseMoreInfoAdmin">
                                     <div class='col-12 mt-5'>
 
-                                        <div class='panel panel-admin'>
-                                            <div class='panel-heading ps-3 pt-2 pb-2 text-center Borders'>
-                                            {{ trans('langOnlineUsers') }} : <b>{{ getOnlineUsers() }}</b>
-                                            </div>
-                                        </div>
+                                        
+                                        <p class='text-center text-uppercase TextBold fs-5'>{{ trans('langOnlineUsers') }} :{{ getOnlineUsers() }}</p>
+                                           
 
-                                        <div class='panel panel-info mt-3'>
-                                            <div class='panel-heading'>
-                                                <div class='panel-title text-center'>{{ trans('langInfoAdmin') }}</div>
+                                        <div class='panel panel-admin px-lg-4 py-lg-3 mt-3'>
+                                            <div class='panel-heading bg-body'>
+                                                <div class='col-12 Help-panel-heading'>
+                                                    <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langInfoAdmin') }}</span>
+                                                </div>
                                             </div>
-                                            <div class='panel-body panel-body-admin'>
+                                            <div class='panel-body'>
                                                 <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-sm-5'>
+                                                    <div class='col-md-5 col-12'>
                                                         <strong class='control-label-notes'>{{ trans('langOpenRequests') }}:</strong>
                                                     </div>
-                                                    <div class='col-sm-7'>
+                                                    <div class='col-md-7 col-12'>
                                                         @if ($count_prof_requests)
                                                             {{ trans('langThereAre') }} {{ $count_prof_requests }} {{ trans('langOpenRequests') }}
                                                         @else
@@ -228,10 +173,10 @@
                                                     </div>
                                                 </div>
                                                 <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-sm-5'>
+                                                    <div class='col-md-5 col-12'>
                                                         <strong class='control-label-notes'>{{ trans('langLastLesson') }}</strong>
                                                     </div>
-                                                    <div class='col-sm-7'>
+                                                    <div class='col-md-7 col-12'>
                                                         @if ($lastCreatedCourse)
                                                             <b>{{ $lastCreatedCourse->title }}</b>
                                                             ({{ $lastCreatedCourse->code }}, {{ $lastCreatedCourse->prof_names }})
@@ -241,19 +186,19 @@
                                                     </div>
                                                 </div>
                                                 <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-sm-5'>
+                                                    <div class='col-md-5 col-12'>
                                                         <strong class='control-label-notes'>{{ trans('langLastProf') }}</strong>
                                                     </div>
-                                                    <div class='col-sm-7'>
+                                                    <div class='col-md-7 col-12'>
                                                         <b>{{ $lastProfReg->givenname . " " . $lastProfReg->surname }}</b>
                                                         ({{ $lastProfReg->username }}, {{ date("j/n/Y H:i", strtotime($lastProfReg->registered_at)) }})
                                                     </div>
                                                 </div>
                                                 <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-sm-5'>
+                                                    <div class='col-md-5 col-12'>
                                                         <strong class='control-label-notes'>{{ trans('langLastStud') }}</strong>
                                                     </div>
-                                                    <div class='col-sm-7'>
+                                                    <div class='col-md-7 col-12'>
                                                         @if ($lastStudReg)
                                                             <b>{{ $lastStudReg->givenname . " " . $lastStudReg->surname }}</b>
                                                             ({{ $lastStudReg->username . ", " . date("j/n/Y H:i", strtotime($lastStudReg->registered_at)) }})
@@ -263,10 +208,10 @@
                                                     </div>
                                                 </div>
                                                 <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-sm-5'>
+                                                    <div class='col-md-5 col-12'>
                                                         <strong class='control-label-notes'>{{ trans('langAfterLastLoginInfo') }}</strong>
                                                     </div>
-                                                    <div class='col-sm-7'>
+                                                    <div class='col-md-7 col-12'>
                                                     {{ trans('langAfterLastLogin') }}
                                                         <ul class='custom_list'>
                                                         <li>
@@ -284,16 +229,19 @@
                                         </div>
 
                                         @if (count($cronParams) > 0)
-                                        <div class='panel panel-info mt-3'>
-                                            <div class='panel-heading'>
-                                                <div class='panel-title text-center'>{{ trans('langCronInfo') }}</div>
+                                        <div class='panel panel-admin px-lg-4 py-lg-3 mt-3'>
+                                           
+                                            <div class='panel-heading bg-body'>
+                                                <div class='col-12 Help-panel-heading'>
+                                                    <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langCronInfo') }}</span>
+                                                </div>
                                             </div>
                                             <div class='panel-body panel-body-admin'>
                                                 <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-sm-5'>
+                                                    <div class='col-md-5 col-12'>
                                                     <strong class='control-label-notes'>{{ trans('langCronName') }}</strong>
                                                     </div>
-                                                    <div class='col-sm-7'>
+                                                    <div class='col-md-7 col-12'>
                                                         {{ trans('langCronLastRun') }}
                                                         <div class='row p-2'>
                                                             @foreach ($cronParams as $cronParam)

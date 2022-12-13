@@ -351,8 +351,8 @@ function view($view_file, $view_data = array()) {
                 color: #ffa023;
             }
 
-            .openCoursesPanel, .BtnMoreInfoAdmin{background:$theme_options_styles[leftNavBgColor];}
-            .BtnMoreInfoAdmin{color:#f2f2f2;}
+            .openCoursesPanel{background:$theme_options_styles[leftNavBgColor];}
+
             #bgr-cheat-header{background:$rgba_no_alpha};
             @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
         }

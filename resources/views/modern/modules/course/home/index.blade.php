@@ -121,45 +121,46 @@
                     @endif
 
 
-                    <div class='col-sm-12'>
-                        <div class='panel panel-admin p-md-3 bg-white'>
+                    <div class='col-12'>
+                        <div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
                             <div class='panel-heading bg-body'>
-                                <div class='col-12 d-inline-flex Help-panel-heading'>
-
-                                    <div class='col-md-9 col-8'>
-                                        <span class="panel-title text-uppercase Help-text-panel-heading">{{ trans('langCourseProgram') }}</span>
-                                        @if ($is_editor)
-                                            @php
-                                                warnCourseInvalidDepartment(true);
-                                            @endphp;
-                                            <a href='{{ $urlAppend }}modules/course_home/editdesc.php?course={{ $course_code }}'>
-                                                <span class='fa fa-pencil' style='line-height:30px;' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEditMeta') }}'></span>
-                                            </a>
-                                        @endif
-                                    </div>
-                                    <div class='col-md-3 col-4'>
-                                        {!! $email_notify_icon !!}
-                                        <a href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation' class='float-end'>
-                                            <span class='fa fa-paperclip fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langCitation') }}"></span>
-                                        </a>
-                                        @if($uid)
-                                            @if ($is_course_admin)
-                                                <a href="{{ $urlAppend }}modules/user/index.php?course={{$course_code}}" class='float-end me-2'>
-                                                    <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
+                                <div class='col-12 Help-panel-heading'>
+                                    <div class='row'>
+                                        <div class='col-md-9 col-auto d-flex align-items-end'>
+                                            <span class="panel-title text-uppercase Help-text-panel-heading">{{ trans('langCourseProgram') }}</span>
+                                            @if ($is_editor)
+                                                @php
+                                                    warnCourseInvalidDepartment(true);
+                                                @endphp;
+                                                <a class='mt-2' href='{{ $urlAppend }}modules/course_home/editdesc.php?course={{ $course_code }}'>
+                                                    <span class='fa fa-pencil' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEditMeta') }}'></span>
                                                 </a>
-                                            @else
-                                                @if ($visible == COURSE_CLOSED)
-                                                    <a href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}" class='float-end me-2'>
+                                            @endif
+                                        </div>
+                                        <div class='col-md-3 col'>
+                                            {!! $email_notify_icon !!}
+                                            <a href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation' class='float-end mt-2'>
+                                                <span class='fa fa-paperclip fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langCitation') }}"></span>
+                                            </a>
+                                            @if($uid)
+                                                @if ($is_course_admin)
+                                                    <a href="{{ $urlAppend }}modules/user/index.php?course={{$course_code}}" class='float-end me-2 mt-2'>
                                                         <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
                                                     </a>
+                                                @else
+                                                    @if ($visible == COURSE_CLOSED)
+                                                        <a href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}" class='float-end me-2 mt-2'>
+                                                            <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
+                                                        </a>
+                                                    @endif
                                                 @endif
                                             @endif
-                                        @endif
-                                        @if ($offline_course)
-                                            <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}" class='float-end me-2'>
-                                                <span class="fa fa-download fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langDownloadCourse') }}"></span>
-                                            </a>
-                                        @endif
+                                            @if ($offline_course)
+                                                <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}" class='float-end me-2 mt-2'>
+                                                    <span class="fa fa-download fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langDownloadCourse') }}"></span>
+                                                </a>
+                                            @endif
+                                        </div>
                                     </div>
 
                                 </div>
@@ -225,8 +226,8 @@
                                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mt-md-0 mt-2 d-flex justify-content-end">{!! copyright_info($course_id) !!}</div>
                                             @endif
                                             <div class='col-12'>
-                                                <div class='collapse shadow-sm p-3 bg-body rounded' id='collapseDescription'>
-                                                    <div class='col-12'>
+                                                <div class='collapse p-0' id='collapseDescription'>
+                                                    <div class='col-12 p-0 bg-white'>
                                                         @foreach ($course_descriptions as $row)
                                                             <div class='row mb-3'>
                                                                 <div class='col-xl-6 col-12'>
@@ -311,7 +312,7 @@
 
                         @if($course_info->view_type == 'units')
                             @if($total_cunits > 0)
-                                <div class='panel panel-admin p-md-3 bg-white'>
+                                <div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
                                     <div class='panel-heading bg-body'>
                                         <div class='col-12 d-inline-flex Help-panel-heading'>
                                             <div class='col-6'>
@@ -353,7 +354,7 @@
                                     </div>
                                 </div>
                             @else
-                                <div class='panel panel-admin p-md-3 bg-white'>
+                                <div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
                                     <div class='panel-heading bg-body'>
                                         <div class='col-12 d-inline-flex Help-panel-heading'>
                                             <div class='col-6 panel-title text-uppercase Help-text-panel-heading'>
@@ -403,7 +404,7 @@
 
                                 @foreach ($items as $item)
                                     @if (trim($item->content))
-                                        <div class='panel panel-admin p-md-3 bg-white mb-3'>
+                                        <div class='panel panel-admin px-lg-4 py-lg-3 bg-white mb-3'>
                                             <div class='panel-heading bg-body'>
                                                 <div class='col-12 Help-panel-heading'>
                                                     <span class='panel-title text-uppercase Help-text-panel-heading'>
@@ -444,7 +445,7 @@
                         @endif
 
                         @if($course_info->view_type == 'simple')
-                            <div class="panel panel-admin p-md-3 bg-white @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif">
+                            <div class="panel panel-admin px-lg-4 py-lg-3 bg-white @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif">
                                 <div class='panel-heading bg-body'>
                                     <div class='col-12 d-inline-flex Help-panel-heading'>
                                         <div class='col-6'>
@@ -514,7 +515,7 @@
                         </div>
 
                         @if($course_info->view_type != 'simple')
-                            <div class="panel panel-admin p-md-3 bg-white mt-4">
+                            <div class="panel panel-admin px-lg-4 py-lg-3 bg-white mt-4">
                                 <div class='panel-heading bg-body'>
                                     <div class='col-12 d-inline-flex Help-panel-heading'>
                                         <div class='col-6'>
@@ -538,7 +539,7 @@
                         @endif
 
                         @if(isset($course_completion_id) and $course_completion_id > 0)
-                            <div class="panel panel-admin p-md-3 bg-white mt-4">
+                            <div class="panel panel-admin px-lg-4 py-lg-3 bg-white mt-4">
                                 <div class='panel-heading bg-body'>
                                     <div class='col-12 Help-panel-heading'>
                                         <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langCourseCompletion') }}</span>
@@ -565,9 +566,9 @@
                         @endif
 
                         @if (isset($level) && !empty($level))
-                            <div class='panel panel-admin p-md-3 bg-white mt-4'>
-                                <div class='panel-heading bg-body rounded-0'>
-                                    <div class='col-12 Help-panel-heading rounded-0'>
+                            <div class='panel panel-admin px-lg-4 py-lg-3 bg-white mt-4'>
+                                <div class='panel-heading bg-body'>
+                                    <div class='col-12 Help-panel-heading'>
                                         <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langOpenCourseShort') }}</span>
                                     </div>
                                 </div>

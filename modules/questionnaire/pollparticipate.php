@@ -241,11 +241,11 @@ function printPollForm() {
             } else {
                 $tool_content .= "
                 <div class='col-sm-12 mt-3'>
-                    <div class='panel panel-success rounded-0'>
-                        <div class='panel-heading text-white rounded-0'>
+                    <div class='panel panel-success'>
+                        <div class='panel-heading'>
                             $langQuestion $i
                         </div>
-                        <div class='panel-body panel-body-questionaire p-3 rounded-0'>
+                        <div class='panel-body panel-body-questionaire'>
                             <h6>".q_math($theQuestion->question_text)."</h6>
                             <input type='hidden' name='question[$pqid]' value='$qtype'>";
                 if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {

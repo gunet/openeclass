@@ -21,7 +21,7 @@
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
                     <div class="col-12">
-                        <div class="panel panel-admin bg-white">
+                        <div class="panel panel-admin px-lg-4 py-lg-3 bg-white">
                             <div class='panel-heading bg-body'>
                                 <div class='col-12 Help-panel-heading'>
                                     <span class='text-uppercase fw-bold Help-text-panel-heading-Portfolio'>{{trans('langAnalyticsEditElements')}}</span>
@@ -159,7 +159,7 @@
                         <div class='col-sm-6 mt-3'>
                             <div class="panel panel-success">
                                 <div class='panel-heading'>
-                                    <div class='panel-title text-center text-white p-0'>
+                                    <div class='panel-title text-center p-0'>
                                          {{ trans('langMyCertificates') }}
                                     </div>
                                 </div>
@@ -210,7 +210,7 @@
                         <div class='col-sm-6 mt-3'>
                             <div class="panel panel-success">
                                 <div class='panel-heading'>
-                                    <div class='panel-title text-center text-white p-0'>
+                                    <div class='panel-title text-center p-0'>
                                         {{ trans('langBadges') }}
                                     </div>
                                 </div>
@@ -252,20 +252,20 @@
                     @if ($uid == $id)
 
                             <div class="col-12 mt-3">
-                                <div class="panel panel-danger">
-                                    <div class='panel-heading'>
-                                        <div class='panel-title text-center p-0'>
-                                            {{trans('langUnregUser')}}
+                                <div class="panel panel-admin px-lg-4 py-lg-3 bg-white">
+                                    <div class='panel-heading bg-body'>
+                                        <div class='col-12 Help-panel-heading'>
+                                            <span class='text-uppercase fw-bold Help-text-panel-heading-Portfolio'>{{trans('langUnregUser')}}</span>
                                         </div>
                                     </div>
                                     <div class="panel-body">
                                         <div class="row">
-                                            <div class="col-md-9 col-12">
+                                            <div class="col-md-8 col-12">
                                                 <div class="profile-content-panel-text">
                                                     {{ trans('langExplain') }}
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 col-12 mt-md-0 mt-3">
+                                            <div class="col-md-4 col-12 mt-md-0 mt-3">
                                                 {!! $action_bar_unreg !!}
                                             </div>
                                         </div>

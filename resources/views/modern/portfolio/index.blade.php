@@ -95,7 +95,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 pe-md-0">
+                            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 ps-md-3 pe-md-0 ps-0 pe-0">
             
                                 <div class='panel panel-admin border-0 shadow-none mt-md-2 mt-3 bg-white rounded-0 px-0 shadow-none'>
                                     <div class='panel-heading rounded-0 bg-white ps-md-3 pe-md-1 px-0'>

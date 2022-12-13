@@ -3773,8 +3773,10 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
         $action_button = "
-                <a tabindex='1' role='button' class='menu-popover btn $secondary_btn_class' data-bs-toogle='popover' data-bs-container='body' data-bs-placement='left' data-bs-html='true' data-bs-trigger='manual' data-bs-content='$action_list'>
-                    <span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
+                <a tabindex='1' role='button' class='menu-popover btn $secondary_btn_class d-flex justify-content-center align-items-center' data-bs-toogle='popover' data-bs-container='body' data-bs-placement='left' data-bs-html='true' data-bs-trigger='manual' data-bs-content='$action_list'>
+                    <span class='fa $secondary_icon'></span>
+                    <span class='hidden-xs'>$secondary_title</span>
+                    <span class='caret'></span>
                 </a>";
     }
 
