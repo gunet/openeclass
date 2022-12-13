@@ -545,59 +545,18 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                     case 'cmi.core.session_time':
-                        // regexp to check format
-                        // hhhh:mm:ss.ss or PThHmMsS
-                        /*
-                        var re = /^[0-9]{2,4}:[0-9]{2}:[0-9]{2}(.)?[0-9]?[0-9]?$/;
-                        var re2 = /^PT[0-9]{1,2}H[0-9]{1,2}M[0-9]{2}(.)?[0-9]?[0-9]?S$/;
-
-                        if (!re.test(val) && !re2.test(val)) {
-                            APIError("405");
-                            return "false";
-                        }
-
-                        // check that minuts and second are 0 <= x < 60
-                        if (re.test(val)) // only for SCORM 1.2 {
-                            var splitted_val = val.split(':');
-                            if (splitted_val[1] < 0 || splitted_val[1] >= 60 || splitted_val[2] < 0 || splitted_val[2] >= 60) {
-                                APIError("405");
-                                return "false";
-                            }
-                        } */
-
                         if (!checkDataType(val, 'CMITimespan')) {
                             APIError("405");
                             return "false";
                         }
-
                         values[i] = val;
                         APIError("0");
                         return "true";
                     case 'cmi.session_time':
-                        // regexp to check format
-                        // hhhh:mm:ss.ss or PThHmMsS
-                        /*
-                        var re = /^[0-9]{2,4}:[0-9]{2}:[0-9]{2}(.)?[0-9]?[0-9]?$/;
-                        var re2 = /^PT[0-9]{1,2}H[0-9]{1,2}M[0-9]{2}(.)?[0-9]?[0-9]?S$/;
-
-                        if (!re.test(val) && !re2.test(val)) {
-                            APIError("405");
-                            return "false";
-                        }*/
                         if (!checkDataType(val, 'CMITimespan')) {
                             APIError("405");
                             return "false";
                         }
-                        // check that minuts and second are 0 <= x < 60
-
-                        /* if (re.test(val)) { // only for SCORM 1.2
-                            var splitted_val = val.split(':');
-                            if (splitted_val[1] < 0 || splitted_val[1] >= 60 || splitted_val[2] < 0 || splitted_val[2] >= 60)
-                            {
-                                APIError("405");
-                                return "false";
-                            }
-                        }*/
                         values[11] = val; // SCORM 2004, use together with the old element
                         values[i] = val;
                         APIError("0");
@@ -1033,7 +992,7 @@ $sco['session_time'] = "0000:00:00.00";
     let CMIDataModel = {
         'CMITime': '^([0-2]{1}[0-9]{1}):([0-5]{1}[0-9]{1}):([0-5]{1}[0-9]{1})(\.[0-9]{1,2})?$',
         'CMIFeedback': '',
-        'CMITimespan': '^([0-9]{2,4}):([0-9]{2}):([0-9]{2})(\.[0-9]{1,2})?$',
+        'CMITimespan': '^(([0-9]{2,4}):([0-9]{2}):([0-9]{2})(\.[0-9]{1,2})?)|(PT([0-9]{1,2}H)?([0-9]{1,2}M)?([0-9]{1,2}(.)?[0-9]?[0-9]?S)?)$',
         'CMIInteger': '^\\d+$',
         'CMISInteger': '^-?([0-9]+)$',
         'CMIDecimal': '^-?([0-9]+)(\\.[0-9]+)?$',
