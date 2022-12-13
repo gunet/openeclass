@@ -65,6 +65,9 @@ define('MODULE_', 2);
 define('LEARNINGPATH_', 3);
 define('LEARNINGPATHMODULE_', 4);
 
+const SCORM_TIME_MASK = "/^([0-9]{2,4}):([0-9]{2}):([0-9]{2}).?([0-9]?[0-9]?)$/";
+const SCORM_2004_TIME_MASK = "/^PT(([0-9]{1,2})H)?(([0-9]{1,2})M)?(([0-9]{1,2}).?([0-9]?[0-9]?)S)?$/";
+
 /*
  * This function is used to display comments of module or learning path with admin links if needed.
  * Admin links are 'edit' and 'delete' links.
@@ -896,238 +899,136 @@ function seconds_to_scorm_time($time) {
  * This function allows to see if a time string is the SCORM 2004 requested format:
  * timeinterval(second,10,2): PThHmMsS
  *
- * @param $time a suspected SCORM 2004 time value, returned by the javascript API
- *
- * @author Thanos Kyritsis <atkyritsis@upnet.gr>
+ * @param string $time a suspected SCORM 2004 time value, returned by the javascript API
  */
-function isScorm2004Time($time) {
-    $mask = "/^PT[0-9]{1,2}H[0-9]{1,2}M[0-9]{2}.?[0-9]?[0-9]?S$/";
-    if (preg_match($mask, $time)) {
-        return TRUE;
-    }
-    return FALSE;
+function isScorm2004Time(string $time): bool {
+    return preg_match(SCORM_2004_TIME_MASK, $time);
 }
 
 /**
  * This function allow to see if a time string is the SCORM requested format : hhhh:mm:ss.cc
  *
- * @param $time a suspected SCORM time value, returned by the javascript API
- *
- * @author Lederer Guillaume <led@cerdecam.be>
+ * @param string $time a suspected SCORM time value, returned by the javascript API
  */
-function isScormTime($time) {
-    $mask = "/^[0-9]{2,4}:[0-9]{2}:[0-9]{2}.?[0-9]?[0-9]?$/";
-    if (preg_match($mask, $time)) {
-        return TRUE;
+function isScormTime(string $time): bool {
+    return preg_match(SCORM_TIME_MASK, $time);
+}
+
+function extractScormTime(string $time): array {
+    preg_match(SCORM_TIME_MASK, $time, $matches);
+    $hours = intval($matches[1] ?? 0);
+    $minutes = intval($matches[2] ?? 0);
+    $seconds = intval($matches[3] ?? 0);
+    $primes = intval($matches[4] ?? 0);
+    return array($hours, $minutes, $seconds, $primes);
+}
+
+function extractScorm2004Time(string $time): array {
+    preg_match(SCORM_2004_TIME_MASK, $time, $matches);
+    $hours = intval($matches[2] ?? 0);
+    $minutes = intval($matches[4] ?? 0);
+    $seconds = intval($matches[6] ?? 0);
+    $primes = intval($matches[7] ?? 0);
+    return array($hours, $minutes, $seconds, $primes);
+}
+
+function calculateScormTime(int $hours1, int $minutes1, int $seconds1, int $primes1, int $hours2, int $minutes2, int $seconds2, int $primes2): string {
+    // calculate the resulting added hours, seconds, ... for result
+    $primesReport = FALSE;
+    $secondsReport = FALSE;
+    $minutesReport = FALSE;
+    // $hoursReport = FALSE;
+
+    // calculate primes
+    if ($primes1 < 10) {
+        $primes1 = $primes1 * 10;
     }
-    return FALSE;
+    if ($primes2 < 10) {
+        $primes2 = $primes2 * 10;
+    }
+    $total_primes = $primes1 + $primes2;
+    if ($total_primes >= 100) {
+        $total_primes -= 100;
+        $primesReport = TRUE;
+    }
+
+    // calculate seconds
+    $total_seconds = $seconds1 + $seconds2;
+    if ($primesReport) {
+        $total_seconds++;
+    }
+    if ($total_seconds >= 60) {
+        $total_seconds -= 60;
+        $secondsReport = TRUE;
+    }
+
+    // calculate minutes
+    $total_minutes = $minutes1 + $minutes2;
+    if ($secondsReport) {
+        $total_minutes ++;
+    }
+    if ($total_minutes >= 60) {
+        $total_minutes -= 60;
+        $minutesReport = TRUE;
+    }
+
+    // calculate hours
+    $total_hours = $hours1 + $hours2;
+    if ($minutesReport) {
+        $total_hours++;
+    }
+    if ($total_hours >= 10000) {
+        $total_hours -= 10000;
+        // $hoursReport = TRUE;
+    }
+
+    // construct and return result string
+    if ($total_hours < 10) {
+        $total_hours = "0" . $total_hours;
+    }
+    if ($total_minutes < 10) {
+        $total_minutes = "0" . $total_minutes;
+    }
+    if ($total_seconds < 10) {
+        $total_seconds = "0" . $total_seconds;
+    }
+
+    $total_time = $total_hours . ":" . $total_minutes . ":" . $total_seconds;
+    // add primes only if != 0
+    if ($total_primes != 0) {
+        $total_time .= "." . $total_primes;
+    }
+    return $total_time;
 }
 
 /**
  * This function allow to add times saved in the SCORM 2004 requested format:
  * timeinterval(second,10,2): PThHmMsS
  *
- * @param $time1 a suspected SCORM 1.2 time value, total_time,  in the API
- * @param $time2 a suspected SCORM 2004 time value, session_time to add, in the API
- *
- * @author Thanos Kyritsis <atkyritsis@upnet.gr>
- *
+ * @param string $time1 a suspected SCORM 1.2 time value, total_time,  in the API
+ * @param string $time2 a suspected SCORM 2004 time value, session_time to add, in the API
  */
-function addScorm2004Time($time1, $time2) {
+function addScorm2004Time(string $time1, string $time2): string {
     if (isScorm2004Time($time2)) {
-        //extract hours, minutes, secondes, ... from time1 and time2
-
-        $mask = "/^([0-9]{2,4}):([0-9]{2}):([0-9]{2}).?([0-9]?[0-9]?)$/";
-        $mask2004 = "/^PT([0-9]{1,2})H([0-9]{1,2})M([0-9]{2}).?([0-9]?[0-9]?)S$/";
-
-        preg_match($mask, $time1, $matches);
-        $hours1 = $matches[1];
-        $minutes1 = $matches[2];
-        $secondes1 = $matches[3];
-        $primes1 = $matches[4];
-
-        preg_match($mask2004, $time2, $matches);
-        $hours2 = $matches[1];
-        $minutes2 = $matches[2];
-        $secondes2 = $matches[3];
-        $primes2 = $matches[4];
-
-        // calculate the resulting added hours, secondes, ... for result
-
-        $primesReport = FALSE;
-        $secondesReport = FALSE;
-        $minutesReport = FALSE;
-        $hoursReport = FALSE;
-
-        //calculate primes
-
-        if ($primes1 < 10) {
-            $primes1 = $primes1 * 10;
-        }
-        if ($primes2 < 10) {
-            $primes2 = $primes2 * 10;
-        }
-        $total_primes = $primes1 + $primes2;
-        if ($total_primes >= 100) {
-            $total_primes -= 100;
-            $primesReport = TRUE;
-        }
-
-        //calculate secondes
-
-        $total_secondes = $secondes1 + $secondes2;
-        if ($primesReport) {
-            $total_secondes ++;
-        }
-        if ($total_secondes >= 60) {
-            $total_secondes -= 60;
-            $secondesReport = TRUE;
-        }
-
-        //calculate minutes
-
-        $total_minutes = $minutes1 + $minutes2;
-        if ($secondesReport) {
-            $total_minutes ++;
-        }
-        if ($total_minutes >= 60) {
-            $total_minutes -= 60;
-            $minutesReport = TRUE;
-        }
-
-        //calculate hours
-
-        $total_hours = $hours1 + $hours2;
-        if ($minutesReport) {
-            $total_hours ++;
-        }
-        if ($total_hours >= 10000) {
-            $total_hours -= 10000;
-            $hoursReport = TRUE;
-        }
-
-        // construct and return result string
-
-        if ($total_hours < 10) {
-            $total_hours = "0" . $total_hours;
-        }
-        if ($total_minutes < 10) {
-            $total_minutes = "0" . $total_minutes;
-        }
-        if ($total_secondes < 10) {
-            $total_secondes = "0" . $total_secondes;
-        }
-
-        $total_time = $total_hours . ":" . $total_minutes . ":" . $total_secondes;
-        // add primes only if != 0
-        if ($total_primes != 0) {
-            $total_time .= "." . $total_primes;
-        }
-        return $total_time;
+        list($hours1, $minutes1, $seconds1, $primes1) = extractScormTime($time1);
+        list($hours2, $minutes2, $seconds2, $primes2) = extractScorm2004Time($time2);
+        return calculateScormTime($hours1, $minutes1, $seconds1, $primes1, $hours2, $minutes2, $seconds2, $primes2);
     } else {
         return $time1;
     }
 }
 
 /**
- * This function allow to add times saved in the SCORM requested format : hhhh:mm:ss.cc
+ * This function allow to add times saved in the SCORM requested format: hhhh:mm:ss.cc
  *
- * @param $time1 a suspected SCORM time value, total_time,  in the API
- * @param $time2 a suspected SCORM time value, session_time to add, in the API
- *
- * @author Lederer Guillaume <led@cerdecam.be>
- *
+ * @param string $time1 a suspected SCORM time value, total_time,  in the API
+ * @param string $time2 a suspected SCORM time value, session_time to add, in the API
  */
-function addScormTime($time1, $time2) {
+function addScormTime(string $time1, string $time2): string {
     if (isScormTime($time2)) {
-        //extract hours, minutes, secondes, ... from time1 and time2
-
-        $mask = "/^([0-9]{2,4}):([0-9]{2}):([0-9]{2}).?([0-9]?[0-9]?)$/";
-
-        preg_match($mask, $time1, $matches);
-        $hours1 = intval($matches[1]);
-        $minutes1 = intval($matches[2]);
-        $secondes1 = intval($matches[3]);
-        $primes1 = intval($matches[4]);
-
-        preg_match($mask, $time2, $matches);
-        $hours2 = intval($matches[1]);
-        $minutes2 = intval($matches[2]);
-        $secondes2 = intval($matches[3]);
-        $primes2 = intval($matches[4]);
-
-        // calculate the resulting added hours, secondes, ... for result
-
-        $primesReport = FALSE;
-        $secondesReport = FALSE;
-        $minutesReport = FALSE;
-        $hoursReport = FALSE;
-
-        //calculate primes
-
-        if ($primes1 < 10) {
-            $primes1 = $primes1 * 10;
-        }
-        if ($primes2 < 10) {
-            $primes2 = $primes2 * 10;
-        }
-        $total_primes = $primes1 + $primes2;
-        if ($total_primes >= 100) {
-            $total_primes -= 100;
-            $primesReport = TRUE;
-        }
-
-        //calculate secondes
-
-        $total_secondes = $secondes1 + $secondes2;
-        if ($primesReport) {
-            $total_secondes ++;
-        }
-        if ($total_secondes >= 60) {
-            $total_secondes -= 60;
-            $secondesReport = TRUE;
-        }
-
-        //calculate minutes
-
-        $total_minutes = $minutes1 + $minutes2;
-        if ($secondesReport) {
-            $total_minutes ++;
-        }
-        if ($total_minutes >= 60) {
-            $total_minutes -= 60;
-            $minutesReport = TRUE;
-        }
-
-        //calculate hours
-
-        $total_hours = $hours1 + $hours2;
-        if ($minutesReport) {
-            $total_hours ++;
-        }
-        if ($total_hours >= 10000) {
-            $total_hours -= 10000;
-            $hoursReport = TRUE;
-        }
-
-        // construct and return result string
-
-        if ($total_hours < 10) {
-            $total_hours = "0" . $total_hours;
-        }
-        if ($total_minutes < 10) {
-            $total_minutes = "0" . $total_minutes;
-        }
-        if ($total_secondes < 10) {
-            $total_secondes = "0" . $total_secondes;
-        }
-
-        $total_time = $total_hours . ":" . $total_minutes . ":" . $total_secondes;
-        // add primes only if != 0
-        if ($total_primes != 0) {
-            $total_time .= "." . $total_primes;
-        }
-        return $total_time;
+        list($hours1, $minutes1, $seconds1, $primes1) = extractScormTime($time1);
+        list($hours2, $minutes2, $seconds2, $primes2) = extractScormTime($time2);
+        return calculateScormTime($hours1, $minutes1, $seconds1, $primes1, $hours2, $minutes2, $seconds2, $primes2);
     } else {
         return $time1;
     }
