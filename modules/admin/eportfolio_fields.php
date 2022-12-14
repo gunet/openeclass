@@ -458,7 +458,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                                 }
                               </style>";
             $tool_content .= "<div id='cat_".getIndirectReference($res->id)."' class='table-responsive tile' style='margin-bottom:30px;'><table class='table-default'>";
-            $tool_content .= "<caption class='tile__name'><strong>$langCategory :</strong> $res->name<div class='float-end'>";
+            $tool_content .= "<caption class='tile__name ps-1 pe-1'><strong>$langCategory :</strong> $res->name<div class='float-end'>";
             
             $dyntools = array(
                 array(
@@ -483,12 +483,12 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $tool_content .= action_button($dyntools)."</div></caption>";
             
             $tool_content .= "<thead><tr class='notes_thead'>
-                <td class='TextBold fs-6'>$langName</td>
-                <td class='TextBold fs-6'>$langCPFShortName</td>
-                <td class='TextBold fs-6'>$langDescription</td>
-                <td class='TextBold fs-6'>$langCPFFieldDatatype</td>
-                <td class='TextBold fs-6'>$langCPFFieldRequired</td>
-                <td class='TextBold fs-6'>" . icon('fa-gears') . "</td>
+                <td class='TextBold text-white'>$langName</td>
+                <td class='TextBold text-white'>$langCPFShortName</td>
+                <td class='TextBold text-white'>$langDescription</td>
+                <td class='TextBold text-white'>$langCPFFieldDatatype</td>
+                <td class='TextBold text-white'>$langCPFFieldRequired</td>
+                <td class='TextBold text-white'>" . icon('fa-gears') . "</td>
 		        </tr></thead>";
             
             $q = Database::get()->queryArray("SELECT * FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $res->id);

@@ -31,6 +31,8 @@ require_once 'perso_functions.php';
 
 $toolName = $langMyCourses;
 
+load_js('datatables');
+
 //  Get user's course list
 $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                      course.code code,

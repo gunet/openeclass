@@ -894,31 +894,7 @@ label:has(input[type="checkbox"]:disabled){
     .BorderSolidDes{border: solid 1px #e8e8e8; }
   }
 
-      
-/* -------------------------------------------- AllTables -----------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
   
-  /* afora to input search των πινακων */
-  #courses_table_pag_filter, #ann_table_my_ann_filter, #search_results_table_filter, #requests_table_filter, #course_results_table_filter,#log_results_table_filter{
-    margin-bottom:10px !important;
-  }
-
-  .announcements_table{ width:100%; background: #FFFFFF; }
-
-  .announcements_table .list-header th, .announcements_table .notes_thead th{ color:#ffffff; font-size: 15px; font-family: 'Manrope-SemiBold',sans-serif;}
-
-  .table-default{ width:100%; background: #FFFFFF; }
-
-  .table-default .list-header th{ color:#ffffff; font-size: 15px;  font-family: 'Manrope-SemiBold',sans-serif;}
-
-  .list-header{ background:#003e87; }
-
-  tr.active{ background: #fafafa; }
-
-  tr.active th span,strong{ padding-right: 10px; }
 
 /* -------------------------------------------- Announcements -------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1193,7 +1169,7 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
-  .notes_thead{ background:#1d4e89; }
+  .notes_thead{ background:rgba(0, 62, 135, 0.9) ;  }
 
   .control-label-notes{ font-size:15px; color:#001146; font-family:'Manrope-SemiBold', sans-serif; }
 
@@ -1828,32 +1804,65 @@ label:has(input[type="checkbox"]:disabled){
   
   .category-link a{  padding-left:15px ; }
   
-/* ------------------------------------- All Tables And Panels For ToolContent --------------------------------------------------------------*/
+   
+/* -------------------------------------------- AllTables -----------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
-  /* for all tables */
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+  
+  /* afora to input search των πινακων */
+  #courses_table_pag_filter, #ann_table_my_ann_filter, #search_results_table_filter, #requests_table_filter, #course_results_table_filter,#log_results_table_filter{
+    margin-bottom:10px !important;
+  }
+  
+  .table-responsive{ margin-top:15px; padding: 1px;}
 
-  .table-responsive{ margin-top:14px; }
+  th, td { 
+    padding:10px; 
+    border-bottom: solid 1px #e8e8e8;
+  }
 
-  th, td { padding:10px; }
+  .table-default, .announcements_table{ 
+    width:100%;
+    background: #f5f5f5; 
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 1em;
+    border: solid 1px #e8e8e8;
+  }
 
-  tbody,tr,th,td{ border:1px solid rgba(65, 66, 66, 0.1) ; }
+  .list-header{ background:rgba(0, 62, 135, 0.9) ; }
 
-  .announcements_table tr{ border:1px solid rgba(65, 66, 66, 0.1) ; }
+  .table-default .list-header th,
+  .announcements_table .list-header th, 
+  .announcements_table .notes_thead th{ 
+    color:#ffffff; font-size: 15px; font-family: 'Manrope-SemiBold',sans-serif;
+  }
 
-  .announcements_table td{ border:1px solid rgba(65, 66, 66, 0.1) ;  }
 
-  .res-table-row{ border:1px solid rgba(65, 66, 66, 0.1) ; }
+  
+
+  tr.active{ background: #fafafa; }
+
+
+  tr.active th span,strong{ padding-right: 10px; }
 
   .shadow-sm .res-table-row{ border:none ; }
   
   .padTableContents{ padding-left:15px; }
 
-  .dataTable{ width:100% !important; overflow:auto !important; }
+  #adetails1_wrapper{ overflow:auto; }
 
-  #adetails1_wrapper{ overflow:auto !important; }
+
+ 
+
+  
+/* -------------------------------------------- LABELS -----------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
   .label.label-success{
      background-color: green;

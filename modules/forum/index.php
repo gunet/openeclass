@@ -164,7 +164,7 @@ if ($total_categories > 0) {
         $tool_content .= "</div></div></div></caption>";
 
         $tool_content .= "<div class='mt-0 table-responsive'><table class='table-default'>";
-        $tool_content .= "<thead class='list-header text-light'>";
+        $tool_content .= "<thead class='list-header'>";
         $tool_content .= "<tr>
             <th class='text-start'>$toolName</th>
             <th class='text-start'>$langTopics</th>

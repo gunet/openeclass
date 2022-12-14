@@ -88,8 +88,8 @@
                     @if (count($fileInfo) or $curDirName)
 
                         <div class='col-12  @if($dialogBox or $metaDataBox) mt-3 @endif'>
-                            <div class='panel'>
-                                <div class='panel-body docPanel'>
+                            <div class='panel Borders'>
+                                <div class='panel-body docPanel Borders'>
                                     <div class='row'>
                                         <div class='col-9 d-flex justidy-content-center align-items-center'>
                                             {!! make_clickable_path($curDirPath) !!}

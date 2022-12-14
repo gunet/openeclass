@@ -312,21 +312,22 @@
                         </div>
                     @endif
 
-                    
-                    <div class="table-responsive">
-                        <table id='ann_table{{ $course_id }}' class='table-default announcements_table'>
-                            <thead>
-                                <tr class='notes_thead'>
-                                    <th>{{ trans('langAnnouncement') }}</th>
-                                    <th>{{ trans('langDate') }}</th>
-                                    @if ($is_editor)
-                                        <th>{{ trans('langNewBBBSessionStatus') }}</th>
-                                        <th class='text-center'><i class='fa fa-cogs'></i></th>
-                                    @endif
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                    <div class='col-12'>
+                        <div class="table-responsive">
+                            <table id='ann_table{{ $course_id }}' class='table-default announcements_table'>
+                                <thead>
+                                    <tr class='notes_thead'>
+                                        <th>{{ trans('langAnnouncement') }}</th>
+                                        <th>{{ trans('langDate') }}</th>
+                                        @if ($is_editor)
+                                            <th>{{ trans('langNewBBBSessionStatus') }}</th>
+                                            <th class='text-center'><i class='fa fa-cogs'></i></th>
+                                        @endif
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                         
                 </div>

@@ -32,16 +32,18 @@
                         </div>
                         @endif
                     
-                        <div class='table-responsive'>
-                            <table id='ann_table_my_ann' class='announcements_table'>
-                                <thead>
-                                <tr class='notes_thead'>
-                                    <th>{{ trans('langAnnouncement') }}</th>
-                                    <th>{{ trans('langDate') }}</th>
-                                </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                        <div class='col-12'>
+                            <div class='table-responsive'>
+                                <table id='ann_table_my_ann' class='announcements_table'>
+                                    <thead>
+                                    <tr class='notes_thead'>
+                                        <th>{{ trans('langAnnouncement') }}</th>
+                                        <th>{{ trans('langDate') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

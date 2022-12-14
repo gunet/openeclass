@@ -35,8 +35,8 @@
 
             <div class="col-12 mt-3">
                 <div class="table-responsive">
-                    <table id="courses_table_pag" class="table_my_courses">
-                        <thead class="list-header text-light">
+                    <table id="courses_table_pag" class="table-default">
+                        <thead class="list-header">
                             <tr>
                                 <th>{{ trans('langTitle') }}</th>
                                 <th>{{ trans('langCode') }}</th>

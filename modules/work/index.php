@@ -5432,11 +5432,7 @@ function show_student_assignments() {
             $add_eportfolio_res_th = "";
         }
 
-        $head_content .= "
-          <style>
-            #assignment_table { width: 100%; }
-            .table-responsive td { word-break: break-word; }
-          </style>";
+       
         $tool_content .= "
             <div class='col-sm-12'>
             <div class='table-responsive'>
@@ -5493,7 +5489,7 @@ function show_student_assignments() {
                 $link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'$class>$title_temp</a>$exclamation_icon";
             }
 
-            $tool_content .= "<tr class='$class_not_started'>
+            $tool_content .= "<tr style='background:red;' class='$class_not_started'>
                                 <td>$link</td>
                                 <td class='text-center' data-sort='$sort_id'>" . $deadline ;
 
@@ -5614,11 +5610,7 @@ function show_assignments() {
                   'level' => 'primary-label'),
             ),false);
     if (count($result) > 0) {
-        $head_content .= "
-          <style>
-            #assignment_table { width: 100%; }
-            .table-responsive td { word-break: break-word; }
-          </style>";
+        
         $tool_content .= "
             <div class='col-sm-12'>
                     <div class='table-responsive'>

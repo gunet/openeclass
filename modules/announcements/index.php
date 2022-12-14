@@ -39,6 +39,8 @@ $toolName = $langAnnouncements;
 
 define_rss_link();
 
+load_js('datatables');
+
 if ($is_editor) {
     // Pin sticky announcement
     if (isset($_POST['pin_announce'])) {

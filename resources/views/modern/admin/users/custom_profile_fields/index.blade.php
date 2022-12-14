@@ -36,12 +36,12 @@
 
                     @if ($result)
                         <!--container for sorting-->
-                        <div id='multi'>
+                        <div class='col-12' id='multi'>
                         
                         @foreach ($result as $res)
-                            <div id='cat_{{ getIndirectReference($res->id) }}' class='overflow-auto tile' style='margin-bottom:30px;'>
+                            <div id='cat_{{ getIndirectReference($res->id) }}' class='table-responsive'>
                                 <table class='table-default'>
-                                <caption class='tile__name'>
+                                <caption class='tile__name ps-1 pe-1'>
                                     <strong>{{ trans('langCategory') }} :</strong> {{ $res->name }}
                                     <div class='float-end'>
                                         {!! action_button(array(
@@ -68,15 +68,15 @@
                                 </caption>            
                                 <thead>
                                     <tr class='list-header'>
-                                        <td>{{ trans('langName') }}</td>
-                                        <td>{{ trans('langCPFShortName') }}</td>
-                                        <td>{{ trans('langDescription') }}</td>
-                                        <td>{{ trans('langCPFFieldDatatype') }}</td>
-                                        <td>{{ trans('langCPFFieldRequired') }}</td>
-                                        <td>{{ trans('langCPFFieldRegistration') }}</td>
-                                        <td>{{ trans('langCPFFieldUserType') }}</td>
-                                        <td>{{ trans('langCPFFieldVisibility') }}</td>
-                                        <td>{!! icon('fa-gears') !!}</td>
+                                        <td class='text-white TextSemiBold'>{{ trans('langName') }}</td>
+                                        <td class='text-white TextSemiBold'>{{ trans('langCPFShortName') }}</td>
+                                        <td class='text-white TextSemiBold'>{{ trans('langDescription') }}</td>
+                                        <td class='text-white TextSemiBold'>{{ trans('langCPFFieldDatatype') }}</td>
+                                        <td class='text-white TextSemiBold'>{{ trans('langCPFFieldRequired') }}</td>
+                                        <td class='text-white TextSemiBold'>{{ trans('langCPFFieldRegistration') }}</td>
+                                        <td class='text-white TextSemiBold'>{{ trans('langCPFFieldUserType') }}</td>
+                                        <td class='text-white TextSemiBold'>{{ trans('langCPFFieldVisibility') }}</td>
+                                        <td class='text-white TextSemiBold'>{!! icon('fa-gears') !!}</td>
                                     </tr>
                                 </thead>
                             

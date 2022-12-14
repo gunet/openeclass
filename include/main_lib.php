@@ -142,6 +142,7 @@ function load_js($file, $init='') {
             $file = 'slick-master/slick/slick.min.js';
         } elseif ($file == 'datatables') {
             $head_content .= css_link('datatables/media/css/jquery.dataTables.css');
+            $head_content .= css_link('datatables/media/css/override_jquery.dataTables.css');
             $file = 'datatables/media/js/jquery.dataTables.min.js';
         } elseif ($file == 'datatables_bootstrap') {
             $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');

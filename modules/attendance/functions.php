@@ -276,7 +276,7 @@ function display_attendance_activities($attendance_id) {
     if (count($result) > 0) {
         $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
-                        <tr class='bg-light'><th class='control-label-notes text-center' colspan='5'>$langAttendanceActList</th></tr>
+                        <tr style='background:#f5f5f5;'><th class='control-label-notes text-center' colspan='5'>$langAttendanceActList</th></tr>
                         <tr class='list-header'>
                             <th>$langTitle</th>
                             <th>$langDate</th>
