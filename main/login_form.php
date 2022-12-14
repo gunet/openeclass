@@ -98,7 +98,7 @@ foreach ($authLink as $authInfo) {
       <div class='col-lg-$columns col-12'>
         <div class='panel panel-default rounded-0 mt-lg-0 mb-lg-0 mb-3' style='min-height:280px;'>
           <div class='panel-heading rounded-0'><div class='panel-title p-0 text-dark text-center'>
-          <img src='/template/modern/img/user_login.svg' class='user-icon2 me-2'>" . q($authInfo[2]) . "</div></div>
+          <img src='{$urlServer}template/modern/img/user_login.svg' class='user-icon2 me-2'>" . q($authInfo[2]) . "</div></div>
             <div class='panel-body login-page-option rounded-0 bg-white'>" .
               $authInfo[1];
     if (Session::has('login_error') and $authInfo[0]) {
