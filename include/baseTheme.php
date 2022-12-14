@@ -646,8 +646,17 @@ function lang_selections_Mobile() {
     return $lang_select;
 }
 
+/**
+ * @brief displays lang selection box
+ * @return string|void
+ */
 function lang_selections_Desktop() {
-    global $session, $native_language_names_init, $langDropdown;
+
+    global $session, $native_language_names_init;
+
+    if (isset($_SESSION['uid'])) { //ignore language selection for logged-in users
+        return;
+    }
     if (count($session->active_ui_languages) < 2) {
         return ('&nbsp;');
     }
