@@ -35,7 +35,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $widget_id = $_POST['widget_id'];
         $position = $_POST['position'];
         Database::get()->query("UPDATE `widget_widget_area` SET `position` = `position` + 1 WHERE `position` >= ?d AND `widget_area_id` = ?d", $position, $widget_area_id);
-        $widget_widget_area_id = Database::get()->query("INSERT INTO `widget_widget_area` (`widget_id`, `widget_area_id`, `position`, `course_id`) VALUES (?d, ?d, ?d, ?d)", $widget_id, $widget_area_id, $position, $course_id)->lastInsertID;
+        $widget_widget_area_id = Database::get()->query("INSERT INTO `widget_widget_area` (`widget_id`, `widget_area_id`, `options`, `position`, `course_id`) VALUES (?d, ?d, '', ?d, ?d)", $widget_id, $widget_area_id, $position, $course_id)->lastInsertID;
         $data['widget_widget_area_id'] = $widget_widget_area_id;
     } elseif ($_POST['action'] == 'move') {
         $widget_widget_area_id = $_POST['widget_widget_area_id'];
@@ -96,6 +96,7 @@ if (isset($_POST['widgetAction'])) {
     }
     redirect_to_home_page('modules/admin/widgets.php');
 }
+
 $head_content .=
         "
         <script type='text/javascript'>
