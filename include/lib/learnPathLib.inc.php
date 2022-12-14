@@ -1234,7 +1234,7 @@ function disp_progress_bar($progress, $factor) {
  */
 
 function build_nested_select_menu($name, $elementList) {
-    return '<select name="' . $name . '">' . "\n"
+    return '<select class="form-select" name="' . $name . '">' . "\n"
             . implode("\n", prepare_option_tags($elementList))
             . '</select>' . "\n";
 }

@@ -40,10 +40,10 @@
                         <div class='table-responsive'>
                             <table class='announcements_table'>
                                 <tr class='notes_thead'>
-                                    <th class='text-white' style='width: 70%;'>{{ trans('langAnnouncement') }}</th>
-                                    <th class='text-white'>{{ trans('langDate') }}</th>
-                                    <th class='text-white'>{{ trans('langNewBBBSessionStatus') }}</th>
-                                    <th class="text-white text-center">{!! icon('fa-gears') !!}</th>
+                                    <th style='width: 70%;'>{{ trans('langAnnouncement') }}</th>
+                                    <th>{{ trans('langDate') }}</th>
+                                    <th>{{ trans('langNewBBBSessionStatus') }}</th>
+                                    <th class="text-center">{!! icon('fa-gears') !!}</th>
                                 </tr>
                                 @foreach ($announcements as $announcement)
                                     <tr{!! !$announcement->visible

@@ -46,9 +46,9 @@ function list_chats($id = NULL) {
 
         $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
             "<tr class='list-header'>" .
-            "<th class='text-white'><div align='left'>&nbsp;$langChat</div></th>" .
-            "<th class='text-white'><div align='left'>$langDescription</div></th>" .
-            "<th class='text-white' width='80'>$langChoice</th>" .
+            "<th><div align='left'>&nbsp;$langChat</div></th>" .
+            "<th><div align='left'>$langDescription</div></th>" .
+            "<th width='80'>$langChoice</th>" .
             "</tr>";
         foreach ($chatinfo as $entry) {
             $checked = '';

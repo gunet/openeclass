@@ -45,13 +45,13 @@ if (!isset($_GET['id'])) {
 /****   Datatables   ****/
 $tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
 $tschema = "<thead><tr class='list-header'>"
-    . "<th class='text-white'>$langDate</th>"
-    . "<th class='text-white'>$langModule</th>"
-    . "<th class='text-white'>$langUser</th>"
-    . "<th class='text-white'>$langHits</th>"
-    . "<th class='text-white'>$langDuration</th>"
-    . "<th class='text-white'>$langUsername</th>"
-    . "<th class='text-white'>$langEmail</th>"
+    . "<th>$langDate</th>"
+    . "<th>$langModule</th>"
+    . "<th>$langUser</th>"
+    . "<th>$langHits</th>"
+    . "<th>$langDuration</th>"
+    . "<th>$langUsername</th>"
+    . "<th>$langEmail</th>"
     . "</tr></thead>"
     . "<tbody></tbody>"
     . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th></tr></tfoot>";
@@ -61,11 +61,11 @@ $tool_content .= "</div></div>";
 if (!isset($_GET['id'])) {
     $tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
     $tschema = "<thead><tr class='list-header'>"
-        . "<th class='text-white'>$langDate</th>"
-        . "<th class='text-white'>$langUser</th>"
-        . "<th class='text-white'>$langAction</th>"
-        . "<th class='text-white'>$langUsername</th>"
-        . "<th class='text-white'>$langEmail</th>"
+        . "<th>$langDate</th>"
+        . "<th>$langUser</th>"
+        . "<th>$langAction</th>"
+        . "<th>$langUsername</th>"
+        . "<th>$langEmail</th>"
         . "</tr></thead>"
         . "<tbody></tbody>";
     $tool_content .= table_placeholder("cdetails2", "table table-striped table-bordered", $tschema, $langMonthlyCourseRegistrations);

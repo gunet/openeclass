@@ -160,8 +160,8 @@
                             <div class='table-responsive'>
                                 <table class='table-default'>
                                     <tr class='list-header'>
-                                        <th class='text-white'>{{ trans('langUsers') }}</th>
-                                        <th class='text-center text-white'>{{ trans('langResult') }}</th>
+                                        <th>{{ trans('langUsers') }}</th>
+                                        <th class='text-center'>{{ trans('langResult') }}</th>
                                     </tr>
                                     @foreach ($q as $data)
                                        <tr>

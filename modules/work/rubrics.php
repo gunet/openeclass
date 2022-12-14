@@ -157,8 +157,8 @@ if (isset($_GET['rubric_id'])) {
             '            <table class=\'table-default\' id=\'scale_table'+ j +'\'>'+
             '                <thead class=\'list-header\'>'+
             '                    <tr>'+
-            '                        <th class=\'text-white\' style=\'width:47%\'>" . js_escape($langWording). "</th>'+
-            '                        <th class=\'text-white\' style=\'width:47%\'>" . js_escape($langValue). "</th>'+
+            '                        <th style=\'width:47%\'>" . js_escape($langWording). "</th>'+
+            '                        <th style=\'width:47%\'>" . js_escape($langValue). "</th>'+
             '                        <th class=\'text-center option-btn-cell\' style=\'width:5%\'><span class=\'fa fa-gears\'></span></th>'+
             '                    </tr>'+
             '                </thead>'+
@@ -237,8 +237,8 @@ if (isset($_GET['rubric_id'])) {
                         <table class='table-default' id='scale_table$crit'>
                                 <thead>
                                     <tr class='list-header'>
-                                        <th class='text-white' style='width:47% padding-left:15px;'>$langWording</th>
-                                        <th class='text-white' style='width:47%'>$langValue</th>
+                                        <th style='width:47% padding-left:15px;'>$langWording</th>
+                                        <th style='width:47%'>$langValue</th>
                                         <th class='text-center option-btn-cell' style='width:5%'><span class='fas fa-cogs'></span></th>
                                     </tr>
                                 </thead>
@@ -335,9 +335,9 @@ if (isset($_GET['rubric_id'])) {
                         <table class='table-default' id='scale_table0'>
                             <thead class='list-header'>
                                 <tr>
-                                    <th class='text-white' style='width:47%'>$langWording</th>
-                                    <th class='text-white' style='width:47%'>$langValue</th>
-                                    ".(!$rubric_used ? "<th class='text-center text-white option-btn-cell'  style='width:5%'>".icon('fa-cogs')."</th>" : "")."
+                                    <th style='width:47%'>$langWording</th>
+                                    <th style='width:47%'>$langValue</th>
+                                    ".(!$rubric_used ? "<th class='text-center option-btn-cell'  style='width:5%'>".icon('fa-cogs')."</th>" : "")."
                                 </tr>
                             </thead>
                             <tbody>
@@ -493,9 +493,9 @@ if (isset($_GET['rubric_id'])) {
                 <table class='table-default'>
                     <thead>
                         <tr class='list-header'>
-                            <th class='text-white' style='padding-left:15px;'>$langName</th>
-                            <th class='text-white'>$langDescription</th>
-                            <th class='text-end text-white' style='padding-right:15px;'>" . icon('fa-cogs') . "</th>
+                            <th style='padding-left:15px;'>$langName</th>
+                            <th>$langDescription</th>
+                            <th class='text-end' style='padding-right:15px;'>" . icon('fa-cogs') . "</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -549,10 +549,10 @@ function show_rubric ($rubric_id) {
         <div class='table-responsive'>
         <table class='table-default'>
             <thead class='list-header'>
-                <th class='text-white' style='padding-left:15px;'>$langName</th> 
-                <th class='text-white'>$langDescription</th>
-                <th class='text-white'>$langRubricCriteria</th>
-                <th style='padding-right:15px;' class='text-end text-white' rowspan='2'>" . icon('fa-cogs') . "</th>
+                <th style='padding-left:15px;'>$langName</th> 
+                <th>$langDescription</th>
+                <th>$langRubricCriteria</th>
+                <th style='padding-right:15px;' class='text-end' rowspan='2'>" . icon('fa-cogs') . "</th>
             </thead>
             <tr>
                 <td style='padding-left:15px;'>$rubric->name</td>

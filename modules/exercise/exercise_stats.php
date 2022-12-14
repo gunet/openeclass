@@ -75,7 +75,7 @@ $tool_content .= "
         <table class='table-default'>
             <thead>
                 <tr class='list-header'>
-                    <th colspan='4' class=' text-white text-center'>$langAttempts</th>
+                    <th colspan='4' class='text-center'>$langAttempts</th>
                 </tr>
             </thead>
             <tbody>
@@ -104,7 +104,7 @@ $tool_content .= "
         <table class='table-default'>
             <thead>
                 <tr class='list-header'>
-                    <th colspan='2' class='text-center text-white'>$langScore</th>
+                    <th colspan='2' class='text-center'>$langScore</th>
                 </tr>
             </thead>
             <tbody>
@@ -127,7 +127,7 @@ $tool_content .= "
         <table class='table-default'>
             <thead>
                 <tr class='list-header'>
-                    <th colspan='2' class='text-center text-white'>$langStudents</th>
+                    <th colspan='2' class='text-center'>$langStudents</th>
                 </tr>
             </thead>
             <tbody>
@@ -154,8 +154,8 @@ $tool_content .= "
         <table class='table-default'>
             <thead>
                 <tr class='list-header'>
-                    <th class='text-white ps-2'>$langTitle</th>
-                    <th class='text-white ps-2'>$langSuccessPercentage</th>
+                    <th class='ps-2'>$langTitle</th>
+                    <th class='ps-2'>$langSuccessPercentage</th>
                 </tr>
             </thead>
             <tbody>";

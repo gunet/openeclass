@@ -391,8 +391,8 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
     $result = Database::get()->queryArray($result_query, $result_query_vars);
     $tool_content .= "<thead>
     <tr class='list-header'>
-      <th class='text-white'>$langQuesList</th>
-      <th class='text-white text-center'>".icon('fa-gears')."</th>
+      <th>$langQuesList</th>
+      <th class='text-center'>".icon('fa-gears')."</th>
     </tr></thead><tbody>";
     foreach ($result as $row) {
         $question_temp = new Question();

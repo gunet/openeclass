@@ -47,11 +47,11 @@ function display_attendances() {
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='list-header'>
-                            <th class='text-white'>$langAvailableAttendances</th>
-                            <th class='text-white'>$langStart</th>
-                            <th class='text-white'>$langEnd</th>";
+                            <th>$langAvailableAttendances</th>
+                            <th>$langStart</th>
+                            <th>$langEnd</th>";
         if( $is_editor) {
-            $tool_content .= "<th class='text-white text-center'>" . icon('fa-gears') . "</th>";
+            $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr>";
         foreach ($result as $a) {
@@ -153,11 +153,11 @@ function register_user_presences($attendance_id, $actID) {
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead class='list-header'>
                 <tr>
-                  <th class='text-white text-center' width='5%'>$langID</th>
-                  <th class='text-white text-left'>$langName $langSurname</th>
-                  <th class='text-white text-center'>$langAmShort</th>
-                  <th class='text-white text-center'>$langRegistrationDateShort</th>
-                  <th class='text-white text-center'>$langAttendanceAbsences</th>
+                  <th class='text-center' width='5%'>$langID</th>
+                  <th class='text-center'>$langName $langSurname</th>
+                  <th class='text-center'>$langAmShort</th>
+                  <th class='text-center'>$langRegistrationDateShort</th>
+                  <th class='text-center'>$langAttendanceAbsences</th>
 
                 </tr>
             </thead>
@@ -278,11 +278,11 @@ function display_attendance_activities($attendance_id) {
                         <table class='table-default'>
                         <tr class='bg-light'><th class='control-label-notes text-center' colspan='5'>$langAttendanceActList</th></tr>
                         <tr class='list-header'>
-                            <th class='text-white'>$langTitle</th>
-                            <th class='text-white'>$langDate</th>
-                            <th class='text-white'>$langType</th>
-                            <th class='text-white'>$langStudents</th>
-                            <th class='text-white text-center'><i class='fa fa-cogs'></i></th>
+                            <th>$langTitle</th>
+                            <th>$langDate</th>
+                            <th>$langType</th>
+                            <th>$langStudents</th>
+                            <th class='text-center'><i class='fa fa-cogs'></i></th>
 
                         </tr>";
         foreach ($result as $details) {
@@ -353,8 +353,8 @@ function attendance_display_available_exercises($attendance_id) {
     if ($checkForExerNumber > 0) {
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th><th class='text-white'>$langDescription</th>";
-        $tool_content .= "<th class='text-white text-center'><i class='fa fa-cogs'></i></th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
+        $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
 
         foreach ($checkForExer as $newExerToGradebook) {
@@ -394,8 +394,8 @@ function attendance_display_available_assignments($attendance_id) {
     if ($checkForAssNumber > 0) {
         $tool_content .= "<div class='table-responsive'>
                             <table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th><th class='text-white'>$langDescription</th>";
-        $tool_content .= "<th class='text-white text-center'><i class='fa fa-cogs'></i></th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
+        $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
         foreach ($checkForAss as $newAssToGradebook) {
             $content = ellipsize_html($newAssToGradebook->description, 50);
@@ -443,8 +443,8 @@ function attendance_display_available_tc($attendance_id) {
     if ($checkForTcNumber > 0) {
         $tool_content .= "<div class='table-responsive'>
                             <table class='table-default'";
-        $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th><th class='text-white'>$langGradebookActivityDate</th>";
-        $tool_content .= "<th class='text-white text-center'><i class='fa fa-cogs'></i></th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate</th>";
+        $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
         foreach ($checkForTc as $data) {
             $tool_content .= "<tr><td><b>" . q($data->title) . "</b></td>";
@@ -832,8 +832,8 @@ function display_user_presences($attendance_id) {
             $tool_content .= "<h5>". display_user($userID) ."</h5>";
             $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
                               <div class='table-responsive'><table class='table-default'>";
-            $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th><th class='text-white'>$langDate</th><th class='text-white'>$langType</th>";
-            $tool_content .= "<th width='10' class='text-white text-center'>$langAttendanceBooking</th>";
+            $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDate</th><th>$langType</th>";
+            $tool_content .= "<th width='10' class='text-center'>$langAttendanceBooking</th>";
             $tool_content .= "</tr>";
         } else {
             $tool_content .= "
@@ -928,12 +928,12 @@ function display_all_users_presences($attendance_id) {
         $tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead class='list-header'>
                 <tr>
-                  <th width='1' class='text-white'>$langID</th>
-                  <th class='text-white'>$langName $langSurname</th>
-                  <th class='text-white text-center'>$langAmShort</th>
-                  <th class='text-white text-center'>$langRegistrationDateShort</th>
-                  <th class='text-white text-center'>$langAttendanceAbsences</th>
-                  <th class='text-white text-center'><i class='fa fa-cogs'></i></th>
+                  <th width='1'>$langID</th>
+                  <th>$langName $langSurname</th>
+                  <th class='text-center'>$langAmShort</th>
+                  <th class='text-center'>$langRegistrationDateShort</th>
+                  <th class='text-center'>$langAttendanceAbsences</th>
+                  <th class='text-center'><i class='fa fa-cogs'></i></th>
                 </tr>
             </thead>
             <tbody>";
@@ -1166,9 +1166,9 @@ function user_attendance_settings($attendance_id) {
                             <div class='table-responsive'>
                                 <table id='participants_tbl' class='table-default hide'>
                                     <tr class='title1 list-header'>
-                                      <td id='users' class='text-white'>$langStudents</td>
-                                      <td class='text-white text-center'>$langMove</td>
-                                      <td class='text-white'>$langParticipate</td>
+                                      <td id='users'>$langStudents</td>
+                                      <td class='text-center'>$langMove</td>
+                                      <td>$langParticipate</td>
                                     </tr>
                                     <tr>
                                       <td>
@@ -1247,10 +1247,10 @@ function student_view_attendance($attendance_id) {
 
         $tool_content .= " <div class='col-12'>
         <div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th>
-                              <th class='text-white'>$langDate</th>
-                              <th class='text-white'>$langDescription</th>
-                              <th class='text-white'>$langAttendanceAbsencesYes</th>
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th>
+                              <th>$langDate</th>
+                              <th>$langDescription</th>
+                              <th>$langAttendanceAbsencesYes</th>
                           </tr>";
     }
     if ($result) {

@@ -39,12 +39,12 @@
                             <table class='table-default'>
                                 <thead>
                                 <tr class='list-header'>
-                                    <th class = 'text-white text-center'>API URL</th>
-                                    <th class = 'text-white text-center'>{{ trans('langBBBEnabled') }}</th>
-                                    <th class = 'text-white text-center'>{{ trans('langOnlineUsers') }}</th>
-                                    <th class = 'text-white text-center'>{{ trans('langMaxRooms') }}</th>
-                                    <th class = 'text-white text-center'>{{ trans('langBBBServerOrderP') }}</th>
-                                    <th class = 'text-white text-center'>{!! icon('fa-gears') !!}</th>
+                                    <th class = 'text-center'>API URL</th>
+                                    <th class = 'text-center'>{{ trans('langBBBEnabled') }}</th>
+                                    <th class = 'text-center'>{{ trans('langOnlineUsers') }}</th>
+                                    <th class = 'text-center'>{{ trans('langMaxRooms') }}</th>
+                                    <th class = 'text-center'>{{ trans('langBBBServerOrderP') }}</th>
+                                    <th class = 'text-center'>{!! icon('fa-gears') !!}</th>
                                 </tr>
                                 </thead>
                         @foreach ($bbb_servers as $bbb_server)

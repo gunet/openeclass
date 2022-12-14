@@ -37,10 +37,10 @@
                         <table id='course_results_table' class='table-default'>
                             <thead>
                                 <tr class='list-header'>
-                                <th class='text-white'>{{ trans('langCourseCode') }}</th>
-                                <th class='text-white'>{{ trans('langGroupAccess') }}</th>
-                                <th class='text-white'>{{ trans('langFaculty') }}</th>
-                                <th class='text-white text-center'>{!! icon('fa-cogs') !!}</th>
+                                <th>{{ trans('langCourseCode') }}</th>
+                                <th>{{ trans('langGroupAccess') }}</th>
+                                <th>{{ trans('langFaculty') }}</th>
+                                <th class='text-center'>{!! icon('fa-cogs') !!}</th>
                                 </tr>
                             </thead>
                             <tbody>

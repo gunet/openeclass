@@ -93,8 +93,8 @@ if (isset($_GET['u'])) { //  stats per user
         <div class='table-responsive'>
             <table class='table-default'>
             <tr class='list-header'>
-              <th class='text-white'>$langModule</th>          
-              <th class='text-white'>$langDuration</th>          
+              <th>$langModule</th>          
+              <th>$langDuration</th>          
             </tr>";
         foreach ($user_actions as $ua) {
             $tool_content .= "<tr>";
@@ -116,7 +116,7 @@ if (isset($_GET['u'])) { //  stats per user
         if (count($user_logins) > 0) {
             $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
             <tr class='list-header'>
-                <th class='text-white'>$langLastUserVisits</th>
+                <th>$langLastUserVisits</th>
             </tr>";
             foreach ($user_logins as $ul) {
                 $tool_content .= "<tr>";
@@ -177,10 +177,10 @@ if (isset($_GET['u'])) { //  stats per user
         <div class='table-responsive'>
             <table class='table-default'>
             <tr class='list-header'>
-                <th class='text-white ps-3'>$langUser</th>
-                <th  class='text-white'>$langAm</th>
-                <th  class='text-white'>$langGroup</th>
-                <th  class='text-white'>$langDuration</th>            
+                <th class='ps-3'>$langUser</th>
+                <th>$langAm</th>
+                <th>$langGroup</th>
+                <th>$langDuration</th>            
             </tr>";
         foreach ($user_actions as $um) {
             $grp_name = user_groups($course_id, $um->user_id);
@@ -229,11 +229,11 @@ if (isset($_GET['u'])) { //  stats per user
         <div class='table-responsive'>
         <table class='table-default'>
         <tr class='list-header'>
-          <th class='text-white ps-3'>$langSurnameName</th>
-          <th class='text-white'>$langAm</th>
-          <th class='text-white'>$langGroup</th>
-          <th class='text-white'>$langDuration</th>
-          <th class='text-white text-center'>" . icon('fa-gears') . "</th>
+          <th class='ps-3'>$langSurnameName</th>
+          <th>$langAm</th>
+          <th>$langGroup</th>
+          <th>$langDuration</th>
+          <th class='text-center'>" . icon('fa-gears') . "</th>
         </tr>";
     }
 

@@ -87,9 +87,9 @@ if (isset($_GET['delete'])) {
         <div class='table-responsive mt-0'>
           <table class='table-default'>
           <tr class='list-header'>
-            <th class='text-white text-left'>$langID</th>
-            <th class='text-white'>$langTitle</th>
-            <th width='75' class='text-white text-center'>$langActions</th>
+            <th class='text-start'>$langID</th>
+            <th>$langTitle</th>
+            <th width='75' class='text-center'>$langActions</th>
           </tr>";
         $q = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
                            WHERE ebook_id = ?d
@@ -349,10 +349,10 @@ if (isset($_GET['delete'])) {
                 <div class='table-responsive mt-0'>
                     <table class='table-default'>
                     <tr class='list-header'>
-                      <th class='text-white'>$langFileName</th>
-                      <th class='text-white'>$langTitle</th>
-                      <th class='text-white'>$langSection</th>
-                      <th class='text-white'>$langSubsection</th>
+                      <th>$langFileName</th>
+                      <th>$langTitle</th>
+                      <th>$langSection</th>
+                      <th>$langSubsection</th>
                     </tr>";
                    foreach ($q as $r) {
                        $file_id = $r->file_id;

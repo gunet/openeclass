@@ -60,15 +60,15 @@
                             <table class='table-default nocategory-links'>
                             @if (count($general_category->links) > 0)
                                 <tr class='list-header'>
-                                    <th class='text-white text-start'>{{ trans('langNoCategory') }}</th>
+                                    <th class='text-start'>{{ trans('langNoCategory') }}</th>
                                     @if ($display_tools)
-                                    <th class='text-white text-center'>{!! icon('fa-cogs') !!}</th>
+                                    <th class='text-center'>{!! icon('fa-cogs') !!}</th>
                                     @endif
                                 <tr>
                                 @include('modules.link.common.linkList', ['category' => $general_category])
                             @else
                                 <tr class='list-header'>
-                                    <th class='text-white text-start'>{{ trans('langNoCategory') }}</th>
+                                    <th class='text-start'>{{ trans('langNoCategory') }}</th>
                                 </tr>
                                 <tr>
                                     <td class='text-dark text-start not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
@@ -84,7 +84,7 @@
                                 <table class='table-default nocategory-links'>
                                 @if (count($social_category->links) > 0)
                                     <tr class='list-header'>
-                                        <th class='text-white text-start'>
+                                        <th class='text-start'>
                                             {{ trans('langSocialCategory')."   " }}
                                             @if (!$socialview)
                                                 <a href='index.php?course={{ $course_code }}&amp;urlview={{ $urlview }}&amp;socialview'>{!! icon('fa-folder', trans('langViewShow')) !!}</a>
@@ -93,7 +93,7 @@
                                             @endif
                                         </th>
                                         @if (isset($_SESSION['uid']) && !$is_in_tinymce)
-                                            <th class='text-white text-center'>{!! icon('fa-gears') !!}</th>
+                                            <th class='text-center'>{!! icon('fa-gears') !!}</th>
                                         @endif
                                     </tr>
                                     @if ($socialview)
@@ -101,7 +101,7 @@
                                     @endif
                                 @else
                                     <tr class='list-header'>
-                                        <th class='text-white text-left'>
+                                        <th class='text-start'>
                                             {{ trans('langSocialCategory') }}
                                         </th>
                                     </tr>
@@ -119,7 +119,7 @@
                         <div class='table-responsive'>
                             <table class='table-default category-links'>
                             <tr class='list-header'>
-                                    <th class='text-white'>{{ trans('langCategorisedLinks').'   ' }}
+                                    <th>{{ trans('langCategorisedLinks').'   ' }}
                                     @if ($categories)    
                                         @if (isset($urlview) && abs($urlview) == 0)
                                             <a href='index.php?course={{ $course_code }}&amp;urlview={{ str_repeat('1', count($categories)) . $tinymce_params . $socialview_param }}'>
@@ -133,7 +133,7 @@
                                     @endif
                                     </th>
                                     @if ($categories && $display_tools)
-                                        <th class='text-white text-center' style='width:109px;'>{!! icon('fa-cogs') !!}</th>
+                                        <th class='text-center' style='width:109px;'>{!! icon('fa-cogs') !!}</th>
                                     @endif
                                 </tr>                        
                             @if ($categories)

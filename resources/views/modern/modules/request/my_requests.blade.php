@@ -38,14 +38,14 @@
                     
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table id='request_table_{{ $course_id }}' class='table'>
+                            <table id='request_table_{{ $course_id }}' class='table table-default'>
                                 <thead>
                                     <tr class='list-header'>
-                                        <th class='text-white'>{{ trans('langRequest') }}</th>
-                                        <th class='text-white'>{{ trans('langNewBBBSessionStatus') }}</th>
-                                        <th class='text-white'>{{ trans('langOpenedOn') }}</th>
-                                        <th class='text-white'>{{ trans('langUpdatedOn') }}</th>
-                                        <th class='text-center text-white'><span class='fa fa-cogs'></span></th>
+                                        <th>{{ trans('langRequest') }}</th>
+                                        <th>{{ trans('langNewBBBSessionStatus') }}</th>
+                                        <th>{{ trans('langOpenedOn') }}</th>
+                                        <th>{{ trans('langUpdatedOn') }}</th>
+                                        <th class='text-center'><span class='fa fa-cogs'></span></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>

@@ -949,7 +949,7 @@ class Calendar_Events {
         $calendar_content .= "</table><br />";
         $calendar_content .= "<table class='table-default'><tr class='list-header'>";
         for ($ii = 1; $ii < 8; $ii++) {
-            $calendar_content .= "<th class='text-white center'>" . $langDay_of_weekNames['long'][$ii % 7] . "</th>";
+            $calendar_content .= "<th class='text-center'>" . $langDay_of_weekNames['long'][$ii % 7] . "</th>";
         }
         $calendar_content .= "</tr>";
         $curday = -1;

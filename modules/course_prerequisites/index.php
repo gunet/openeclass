@@ -225,8 +225,8 @@ function show_prereqs() {
             <div class='row'><div class='col-sm-12'>
             <div class='table-responsive'><table class='table-default'>
                                   <tr class='list-header'>
-                                      <th class='text-white ps-3'>$langTitle</th>
-                                      <th class='text-white text-center'>".icon('fa-gears')."</th>
+                                      <th class='ps-3'>$langTitle</th>
+                                      <th class='text-center'>".icon('fa-gears')."</th>
                                   </tr>";
         foreach ($result as $row) {
 

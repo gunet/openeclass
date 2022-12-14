@@ -39,12 +39,12 @@
                             <table class='table-default'>
                                 <thead>
                                     <tr class='list-header'>
-                                        <th class='text-white text-center'>{{ trans('langOpenMeetingsServer') }}</th>
-                                        <th class='text-white text-center'>{{ trans('langOpenMeetingsPort') }}</th>
-                                        <th class='text-white text-center'>{{ trans('langOpenMeetingsAdminUser') }}</th>
-                                        <th class='text-white text-center'>{{ trans('langOpenMeetingsWebApp') }}</th>
-                                        <th class='text-white text-center'>{{ trans('langBBBEnabled') }}</th>
-                                        <th class='text-white text-center'>{!! icon('fa-gears') !!}</th>
+                                        <th class='text-center'>{{ trans('langOpenMeetingsServer') }}</th>
+                                        <th class='text-center'>{{ trans('langOpenMeetingsPort') }}</th>
+                                        <th class='text-center'>{{ trans('langOpenMeetingsAdminUser') }}</th>
+                                        <th class='text-center'>{{ trans('langOpenMeetingsWebApp') }}</th>
+                                        <th class='text-center'>{{ trans('langBBBEnabled') }}</th>
+                                        <th class='text-center'>{!! icon('fa-gears') !!}</th>
                                     </tr>
                                 </thead>
                         @foreach ($om_servers as $om_server)

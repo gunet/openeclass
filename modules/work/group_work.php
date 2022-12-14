@@ -130,10 +130,10 @@ function show_assignments() {
                             <div class='table-responsive'>
                                 <table class='table-default'>
                                     <tr class='list-header'>
-                                        <th class='text-white ps-3' colspan='2'>$langTitle</th>
-                                        <th class='text-white' align='center' width='30%'>$langGroupWorkDeadline_of_Submission</th>
-                                        <th class='text-white' align='center' width='10%'>$m[submitted]</th>
-                                        <th class='text-white' align='center' width='10%'>$langSelect</th>
+                                        <th class='ps-3' colspan='2'>$langTitle</th>
+                                        <th align='center' width='30%'>$langGroupWorkDeadline_of_Submission</th>
+                                        <th align='center' width='10%'>$m[submitted]</th>
+                                        <th align='center' width='10%'>$langSelect</th>
                                     </tr>
                                     $table_content
                                 </table>

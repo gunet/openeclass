@@ -44,13 +44,13 @@
                         <div class='table-responsive'>
                             <table class='table-default'>
                                 <tr class='list-header'>
-                                    <th class='text-white'>{{ trans('langSurname') }}</th>
-                                    <th class='text-white'>{{ trans('langName') }}</th>
-                                    <th class='text-white'>e-mail</th>
-                                    <th class='text-white'>{{ trans('langPhone') }}</th>
-                                    <th class='text-white'>{{ trans('langAm') }}</th>
-                                    <th class='text-white'>username</th>
-                                    <th class='text-white'>password</th>
+                                    <th>{{ trans('langSurname') }}</th>
+                                    <th>{{ trans('langName') }}</th>
+                                    <th>e-mail</th>
+                                    <th>{{ trans('langPhone') }}</th>
+                                    <th>{{ trans('langAm') }}</th>
+                                    <th>username</th>
+                                    <th>password</th>
                                 </tr>
                                 @foreach ($new_users_info as $n)
                                     <tr>

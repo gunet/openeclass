@@ -544,13 +544,13 @@ if (isset($_GET['mid'])) {
     $out .= "<table id='inbox_table' class='table-default'>
                   <thead>
                     <tr class='list-header'>
-                      <th class='text-white'>$langSubject</th>";
+                      <th>$langSubject</th>";
     if ($course_id == 0) {
-        $out .= "    <th class='text-white'>$langCourse</th>";
+        $out .= "    <th>$langCourse</th>";
     }
-    $out .= "         <th class='text-white'>$langSender</th>
-                      <th class='text-white'>$langDate</th>
-                      <th class='text-white text-center option-btn-cell'><i class='fa fa-cogs'></i></th>
+    $out .= "         <th>$langSender</th>
+                      <th>$langDate</th>
+                      <th class='text-center option-btn-cell'><i class='fa fa-cogs'></i></th>
                     </tr>
                 </thead>
                 <tbody>

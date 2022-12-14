@@ -184,12 +184,12 @@ if (isset($_GET['add'])) {
         if ($result) {
             $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
                                 <tr class='list-header'>
-                                  <th class='text-white'>$langID</th>
-                                  <th class='text-white'>$langName</th>
-                                  <th class='text-white'>$langSurname</th>
-                                  <th class='text-white'>$langUsername</th>
-                                  <th class='text-white'>$langFaculty</th>
-                                  <th class='text-white'>$langActions</th>
+                                  <th>$langID</th>
+                                  <th>$langName</th>
+                                  <th>$langSurname</th>
+                                  <th>$langUsername</th>
+                                  <th>$langFaculty</th>
+                                  <th>$langActions</th>
                                 </tr>";
             $i = 1;
             foreach ($result as $myrow) {

@@ -210,10 +210,10 @@ foreach ($result as $row) {
         $tool_content .= "</td>
                 </tr>
                 <tr class='list-header'>
-                  <th class='text-white text-center'>" . $langStart . "</th>
-                  <th class='text-white text-center'>" . $langExerciseDuration . "</th>
-                  <th class='text-white text-center'>" . $langTotalScore . "</th>
-                  <th class='text-white text-center'>" . $langCurrentStatus. "</th>
+                  <th class='text-center'>" . $langStart . "</th>
+                  <th class='text-center'>" . $langExerciseDuration . "</th>
+                  <th class='text-center'>" . $langTotalScore . "</th>
+                  <th class='text-center'>" . $langCurrentStatus. "</th>
                   ". ($is_editor ? "<th class='text-center'>" . icon('fa-gears'). "</th>" : "") ."
                 </tr>";
 

@@ -38,7 +38,7 @@
                         <div class='table-responsive'>
                             <table class='table-default'>
                                 <tr class='list-header'>
-                                    <td colspan='{{ $maxdepth + 4 }}' class='right text-white'>
+                                    <td colspan='{{ $maxdepth + 4 }}' class='right'>
                                             {{ trans('langThereAre') }}: <b>{{ $nodesCount }}</b> {{ trans('langFaculties') }}
                                     </td>
                                 </tr>

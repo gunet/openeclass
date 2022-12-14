@@ -226,8 +226,8 @@
                                                     <td>{{ $file->size }}</td>
                                                     <td class='center'>{{ $file->date }}</td>
                                                 @else
-                                                    <td><span class="opacity-50 text-white-50">{{ $file->size }}</span></td>
-                                                    <td class='center'><span class="opacity-50 text-white-50">{{ $file->date }}</span></td>
+                                                    <td><span class="opacity-50">{{ $file->size }}</span></td>
+                                                    <td class='center'><span class="opacity-50">{{ $file->date }}</span></td>
                                                 @endif
 
                                             @else
@@ -235,8 +235,8 @@
                                                     <td>{{ $file->size }}</td>
                                                     <td title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'>{{ format_locale_date(strtotime($file->date), 'short') }}</td>
                                                 @else
-                                                    <td><span style="opacity-50 text-white-50">{{ $file->size }}</span></td>
-                                                    <td title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'><span class="opacity-50 text-white-50">{{ format_locale_date(strtotime($file->date), 'short') }}</span></td>
+                                                    <td><span style="opacity-50">{{ $file->size }}</span></td>
+                                                    <td title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short') }}</span></td>
                                                 @endif
 
 

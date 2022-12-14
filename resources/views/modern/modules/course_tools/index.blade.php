@@ -70,9 +70,9 @@
                                     <div class="table-responsive mt-0">
                                         <table class="table-default">
                                             <tr class='list-header'>
-                                            <th width="45%" class="text-white text-center">{{ trans('langInactiveTools') }}</th>
-                                            <th width="10%" class="text-white text-center">{{ trans('langMove') }}</th>
-                                            <th width="45%" class="text-white text-center">{{ trans('langActiveTools') }}</th>
+                                            <th width="45%" class="text-center">{{ trans('langInactiveTools') }}</th>
+                                            <th width="10%" class="text-center">{{ trans('langMove') }}</th>
+                                            <th width="45%" class="text-center">{{ trans('langActiveTools') }}</th>
                                             </tr>
                                             <tr>
                                                 <td class="text-center">

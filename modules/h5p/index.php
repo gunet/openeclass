@@ -125,11 +125,11 @@ if ($content) {
    $tool_content .= "<div class='col-12 mt-4'><div class='table-responsive'><table class='table-default'>
         <thead>
             <tr class='list-header'>
-                <th class='text-white text-left col-sm-8'>$langH5pInteractiveContent</th>
-                <th class='text-white text-center col-sm-3'>$langTypeH5P</th>";
+                <th class='text-start col-sm-8'>$langH5pInteractiveContent</th>
+                <th class='text-center col-sm-3'>$langTypeH5P</th>";
                 if ($is_editor) {
                     $tool_content .= "
-                        <th class='text-white text-center'>
+                        <th class='text-center'>
                         <span class='fa fa-gears'></span>
                     </th>";
                 }

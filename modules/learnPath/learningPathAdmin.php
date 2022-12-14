@@ -415,19 +415,21 @@ $tool_content .= "</td></tr></table></div></div>";
 if (isset($displayChangePosForm) && $displayChangePosForm) {
     $dialogBox = "
 
-        <div class='col-sm-12'>
+        <div class='col-12 mt-3'>
             <div class='panel panel-body'>
-                <div class='col-md-2' style='line-height: 32px;'><strong>$langMove:</strong></div>
-                <div class='col-md-10'>
-                    <form action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code\" method=\"post\">\"<b>" . $moduleInfos->name . "</b>\" &nbsp;" . $langTo . ":&nbsp;&nbsp;";
-                        // build select input - $elementList has been declared in the previous big cmd case
-                        $dialogBox .= build_nested_select_menu("newPos", $elementList);
-                        $dialogBox .= "
-                        <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
-                        <input type=\"hidden\" name=\"cmdid\" value=\"" . q($_REQUEST['cmdid']) . "\" />
-                        <button type=\"submit\" class=\"btn submitAdminBtn\" value=\"" . $langSave . "\" >$langSave</button>
-                        <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\" class=\"btn btn-default\" value=\"" . $langCancel . "\" >$langCancel</a>
-                    </form>
+                <div class='row'>
+                    <div class='col-md-2'><strong>$langMove:</strong></div>
+                    <div class='col-md-10'>
+                        <form action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code\" method=\"post\">\"<b>" . $moduleInfos->name . "</b>\" &nbsp;" . $langTo . ":&nbsp;&nbsp;";
+                            // build select input - $elementList has been declared in the previous big cmd case
+                            $dialogBox .= build_nested_select_menu("newPos", $elementList);
+                            $dialogBox .= "<div class='mb-2'></div>
+                            <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
+                            <input type=\"hidden\" name=\"cmdid\" value=\"" . q($_REQUEST['cmdid']) . "\" />
+                            <button type=\"submit\" class=\"btn submitAdminBtn\" value=\"" . $langSave . "\" >$langSave</button>
+                            <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\" class=\"btn cancelAdminBtn\" value=\"" . $langCancel . "\" >$langCancel</a>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>";

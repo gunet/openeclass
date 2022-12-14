@@ -127,9 +127,9 @@
                                 <table class="table-default">
                                     <thead>
                                         <tr class="list-header">
-                                            <th class="text-start text-white">{{ trans('langH5pInteractiveContent') }}</th>
-                                            <th class='text-center text-white'>{{ trans('langAttendanceType') }} HP5</th>
-                                            <th class="text-center text-white" style="width:109px;">
+                                            <th class="text-start">{{ trans('langH5pInteractiveContent') }}</th>
+                                            <th class='text-center'>{{ trans('langAttendanceType') }} HP5</th>
+                                            <th class="text-center" style="width:109px;">
                                                 <span class="fa fa-gears"></span>
                                             </th>
                                         </tr>

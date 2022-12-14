@@ -38,12 +38,12 @@
                         <table id='search_results_table' class='table-default display'>
                             <thead class='list-header'>
                                 <tr>
-                                <th class='text-white' width='150'>{{ trans('langSurname') }}</th>
-                                <th class='text-white' width='100'>{{ trans('langName') }}</th>
-                                <th class='text-white' width='170'>{{ trans('langUsername') }}</th>
-                                <th class='text-white'>{{ trans('langEmail') }}</th>
-                                <th class='text-white'>{{ trans('langProperty') }}</th>
-                                <th width='130' class='text-white centertext-center'>{!! icon('fa-gears') !!}</th>
+                                <th width='150'>{{ trans('langSurname') }}</th>
+                                <th width='100'>{{ trans('langName') }}</th>
+                                <th width='170'>{{ trans('langUsername') }}</th>
+                                <th>{{ trans('langEmail') }}</th>
+                                <th>{{ trans('langProperty') }}</th>
+                                <th width='130' class='text-center'>{!! icon('fa-gears') !!}</th>
                                 </tr>
                             </thead>
                             <!-- DO NOT DELETE THESE EMPTY COLUMNS -->

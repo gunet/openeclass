@@ -131,10 +131,10 @@ if (isset($_GET['group_as'])) {
                 <div class='table-responsive'>
                 <table class='table-default'>
                 <tr class='list-header'>
-                  <th class='text-white' style='width:45%;'>$langTitle</th>
-                  <th class='text-white text-center'>$m[subm]</th>
-                  <th class='text-white text-center'>$m[nogr]</th>
-                  <th class='text-white text-center'>$langGroupWorkDeadline_of_Submission</th>
+                  <th style='width:45%;'>$langTitle</th>
+                  <th class='text-center'>$m[subm]</th>
+                  <th class='text-center'>$m[nogr]</th>
+                  <th class='text-center'>$langGroupWorkDeadline_of_Submission</th>
                 </tr>";
         foreach ($result as $row) {
             // Check if assignment contains submissions

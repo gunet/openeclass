@@ -4714,8 +4714,8 @@ function assignment_details($id, $row, $x =false) {
                 <div class='table-responsive collapse' id='collapseRubric'>
                     <table class='table-default'>
                         <thead class='list-header'>
-                            <th class='text-white'>$langDetail</th>
-                            <th class='text-white'>$langCriteria</th>
+                            <th>$langDetail</th>
+                            <th>$langCriteria</th>
                         </thead>
                         <tr>
                             <td><h5>$rubric_name</h5><h6>$rubric_desc</h6></td>
@@ -4935,16 +4935,16 @@ function show_assignment($id, $display_graph_results = false) {
                 <th class='count-col'>&nbsp;</th>";
                 sort_link($langSurnameName, 'username', 'class="user-col"');
                 if ($assign->submission_type)  {
-                    $tool_content .= "<th class='text-white text-center'>$langWorkOnlineText</th>";
+                    $tool_content .= "<th class='text-center'>$langWorkOnlineText</th>";
                 } else {
-                    $tool_content .= "<th class='text-white text-center'>$langFileName</th>";
+                    $tool_content .= "<th class='text-center'>$langFileName</th>";
                 }
                 sort_link($m['sub_date'], 'date', 'class="date-col"');
                 if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) { //neo pedio vathmos aksiologhshs mono gia peer review
                     sort_link($langPeerReviewGrade, '');
                 }
                 sort_link($langGradebookGrade, 'grade', 'class="grade-col"');
-                $tool_content .= "<th class='text-white text-center tools-col'><i class='fa fa-cogs'></i></th></tr>";
+                $tool_content .= "<th class='text-center tools-col'><i class='fa fa-cogs'></i></th></tr>";
                 $i = 1;
                 $plagiarismlink = '';
                 $seen = [];
@@ -5427,7 +5427,7 @@ function show_student_assignments() {
 
     if (count($result) > 0) {
         if (get_config('eportfolio_enable')) {
-            $add_eportfolio_res_th = "<th class='text-center text-white'>".icon('fa-gears')."</th>";
+            $add_eportfolio_res_th = "<th class='text-center'>".icon('fa-gears')."</th>";
         } else {
             $add_eportfolio_res_th = "";
         }
@@ -5443,10 +5443,10 @@ function show_student_assignments() {
                 <table id='assignment_table' class='table-default'>
                   <thead>
                       <tr class='list-header'>
-                          <th class='text-white' style='width:45%'>$langTitle</th>
-                          <th class='text-white text-center' style='width:25%'>$langGroupWorkDeadline_of_Submission</th>
-                          <th class='text-white text-center'>$m[submitted]</th>
-                          <th class='text-white text-center'>$langGradebookGrade</th>
+                          <th style='width:45%'>$langTitle</th>
+                          <th class='text-center' style='width:25%'>$langGroupWorkDeadline_of_Submission</th>
+                          <th class='text-center'>$m[submitted]</th>
+                          <th class='text-center'>$langGradebookGrade</th>
                           $add_eportfolio_res_th
                       </tr>
                   </thead>
@@ -5625,11 +5625,11 @@ function show_assignments() {
                     <table id='assignment_table' class='table-default'>
                     <thead>
                     <tr class='list-header'>
-                      <th class='text-white' style='width:45%;'>$langTitle</th>
-                      <th class='text-white text-center'>$m[subm]</th>
-                      <th class='text-white text-center'>$m[nogr]</th>
-                      <th class='text-white text-center'>$langGroupWorkDeadline_of_Submission</th>
-                      <th class='text-white text-center'>".icon('fa-gears')."</th>
+                      <th style='width:45%;'>$langTitle</th>
+                      <th class='text-center'>$m[subm]</th>
+                      <th class='text-center'>$m[nogr]</th>
+                      <th class='text-center'>$langGroupWorkDeadline_of_Submission</th>
+                      <th class='text-center'>".icon('fa-gears')."</th>
                     </tr>
                     </thead>
                     <tbody>";

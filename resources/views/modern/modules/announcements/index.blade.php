@@ -317,11 +317,11 @@
                         <table id='ann_table{{ $course_id }}' class='table-default announcements_table'>
                             <thead>
                                 <tr class='notes_thead'>
-                                    <th class='text-white'>{{ trans('langAnnouncement') }}</th>
-                                    <th class='text-white'>{{ trans('langDate') }}</th>
+                                    <th>{{ trans('langAnnouncement') }}</th>
+                                    <th>{{ trans('langDate') }}</th>
                                     @if ($is_editor)
-                                        <th class='text-white'>{{ trans('langNewBBBSessionStatus') }}</th>
-                                        <th class='text-white text-center'><i class='fa fa-cogs'></i></th>
+                                        <th>{{ trans('langNewBBBSessionStatus') }}</th>
+                                        <th class='text-center'><i class='fa fa-cogs'></i></th>
                                     @endif
                                 </tr>
                             </thead>

@@ -22,8 +22,8 @@
                     <table id='ann_table_admin_logout' class='announcements_table'>
                         <thead>
                         <tr class='notes_thead'>
-                            <th class='text-white'>{{ trans('langAnnouncement') }}</th>
-                            <th class='text-white'>{{ trans('langDate') }}</th>
+                            <th>{{ trans('langAnnouncement') }}</th>
+                            <th>{{ trans('langDate') }}</th>
                         </tr>
                         </thead>
                         <tbody></tbody>

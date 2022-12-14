@@ -39,10 +39,10 @@
                     <table class='table-default'>
                     <thead>
                         <tr class='list-header'>
-                            <th class = 'text-white text-center'>{{ trans('langWebConfServer') }}</th>
-                            <th class = 'text-white text-center'>{{ trans('langWebConfScreenshareServer') }}</th>
-                            <th class = 'text-white text-center'>{{ trans('langBBBEnabled') }}</th>
-                            <th class = 'text-white text-center'>{!! icon('fa-gears') !!}</th>
+                            <th class = 'text-center'>{{ trans('langWebConfServer') }}</th>
+                            <th class = 'text-center'>{{ trans('langWebConfScreenshareServer') }}</th>
+                            <th class = 'text-center'>{{ trans('langBBBEnabled') }}</th>
+                            <th class = 'text-center'>{!! icon('fa-gears') !!}</th>
                         </tr>
                     </thead>
                     @foreach ($wc_servers as $wc_server)

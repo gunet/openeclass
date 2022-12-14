@@ -228,10 +228,10 @@ function expanded_faculte($facid, $uid) {
 
     $retString .= "<div class='table-responsive'><table class='table-default'>";
     $retString .= "<tr class='list-header'>";
-    $retString .= "<th class='text-white' width='50' align='center'>$langRegistration</th>";
-    $retString .= "<th class='text-white'>$langCourseCode</th>";
-    $retString .= "<th class='text-white' width='220'>$langTeacher</th>";
-    $retString .= "<th class='text-white' width='30' align='center'>$langType</th>";
+    $retString .= "<th width='50' align='center'>$langRegistration</th>";
+    $retString .= "<th>$langCourseCode</th>";
+    $retString .= "<th width='220'>$langTeacher</th>";
+    $retString .= "<th width='30' align='center'>$langType</th>";
     $retString .= "</tr>";
 
     Database::get()->queryFunc("SELECT

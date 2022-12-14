@@ -482,8 +482,8 @@ if ($nbrQuestions) {
         <table class='table-default'>
         <thead class='list-header'>        
             <tr>
-                 <th colspan='2' class='text-start text-white'>$langQuestionList $info_random_text</th>
-                 <th class='text-center text-white'>".icon('fa-cogs', $langActions)."</th>
+                 <th colspan='2' class='text-start'>$langQuestionList $info_random_text</th>
+                 <th class='text-center'>".icon('fa-cogs', $langActions)."</th>
             </tr>
         </thead>
         <tbody id='q_sort'>";

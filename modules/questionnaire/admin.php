@@ -466,9 +466,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='table-responsive'>
                         <table id='assignees_tbl' class='table-default".(isset($poll) && in_array($poll->assign_to_specific, [1, 2]) ? '' : ' hide')."'>
                             <tr class='title1 list-header'>
-                              <td class='text-white' id='assignees'>$langStudents</td>
-                              <td class='text-white text-center'>$langMove</td>
-                              <td class='text-white'>$m[WorkAssignTo]</td>
+                              <td id='assignees'>$langStudents</td>
+                              <td class='text-center'>$langMove</td>
+                              <td>$m[WorkAssignTo]</td>
                             </tr>
                             <tr>
                               <td>
@@ -954,8 +954,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <table class='table-default'>
                         <tbody id='pollAnswers'>
                             <tr class='list-header'>
-                              <th class='text-white' colspan='2'>$langQuesList</th>
-                              <th class='text-white text-center'>".icon('fa-gears', $langCommands)."</th>
+                              <th colspan='2'>$langQuesList</th>
+                              <th class='text-center'>".icon('fa-gears', $langCommands)."</th>
                             </tr>";
             $i=1;
             $nbrQuestions = count($questions);

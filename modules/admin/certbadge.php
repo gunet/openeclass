@@ -324,9 +324,9 @@ if (isset($_GET['action'])) {
                         <table class='table-default'>
                         <tr class='bg-light'><th class='text-center text-uppercase' colspan='5'>$langAvailableCertTemplates</th></tr>
                         <tr class='list-header'>
-                            <th class='text-white'>$langTitle</th>
-                            <th class='text-white'>$langDescription</th>                            
-                            <th class='text-white text-center'><i class='fa fa-cogs'></i></th>
+                            <th>$langTitle</th>
+                            <th>$langDescription</th>                            
+                            <th class='text-center'><i class='fa fa-cogs'></i></th>
                         </tr>";
                 foreach ($sql1 as $cert_data) {
                     //$template_link = $urlServer . CERT_TEMPLATE_PATH ."$cert_data->filename";
@@ -355,10 +355,10 @@ if (isset($_GET['action'])) {
                         <table class='table-default'>
                         <tr class='bg-light'><th class='text-center text-uppercase' colspan='5'>$langAvailableBadges</th></tr>
                         <tr class='list-header'>
-                            <th class='text-white'>$langTitle</th>
-                            <th class='text-white'>$langDescription</th>
-                            <th width='70' class='text-white text-center'>$langIcon</th>
-                            <th class='text-white text-center'><i class='fa fa-cogs'></i></th>
+                            <th>$langTitle</th>
+                            <th>$langDescription</th>
+                            <th width='70' class='text-center'>$langIcon</th>
+                            <th class='text-center'><i class='fa fa-cogs'></i></th>
                         </tr>";
                 foreach ($sql2 as $badge_data) {
                     $icon_link = $urlServer . BADGE_TEMPLATE_PATH ."$badge_data->filename";

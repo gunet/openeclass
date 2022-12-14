@@ -68,15 +68,15 @@
                                 </caption>            
                                 <thead>
                                     <tr class='list-header'>
-                                        <td class='text-white'>{{ trans('langName') }}</td>
-                                        <td class='text-white'>{{ trans('langCPFShortName') }}</td>
-                                        <td class='text-white'>{{ trans('langDescription') }}</td>
-                                        <td class='text-white'>{{ trans('langCPFFieldDatatype') }}</td>
-                                        <td class='text-white'>{{ trans('langCPFFieldRequired') }}</td>
-                                        <td class='text-white'>{{ trans('langCPFFieldRegistration') }}</td>
-                                        <td class='text-white'>{{ trans('langCPFFieldUserType') }}</td>
-                                        <td class='text-white'>{{ trans('langCPFFieldVisibility') }}</td>
-                                        <td class='text-white'>{!! icon('fa-gears') !!}</td>
+                                        <td>{{ trans('langName') }}</td>
+                                        <td>{{ trans('langCPFShortName') }}</td>
+                                        <td>{{ trans('langDescription') }}</td>
+                                        <td>{{ trans('langCPFFieldDatatype') }}</td>
+                                        <td>{{ trans('langCPFFieldRequired') }}</td>
+                                        <td>{{ trans('langCPFFieldRegistration') }}</td>
+                                        <td>{{ trans('langCPFFieldUserType') }}</td>
+                                        <td>{{ trans('langCPFFieldVisibility') }}</td>
+                                        <td>{!! icon('fa-gears') !!}</td>
                                     </tr>
                                 </thead>
                             

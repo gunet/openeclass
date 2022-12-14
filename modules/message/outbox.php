@@ -209,13 +209,13 @@ if (isset($_GET['mid'])) {
     $out .= "<table id='outbox_table' class='table-default'>
                <thead>
                  <tr class='list-header'>
-                    <th class='text-white'>$langSubject</th>";
+                    <th>$langSubject</th>";
     if ($course_id == 0) {
-        $out .= "<th class='text-white'>$langCourse</th>";
+        $out .= "<th>$langCourse</th>";
     }
-    $out .= "      <th class='text-white'>$langRecipients</th>
-                   <th class='text-white'>$langDate</th>
-                   <th class='text-white option-btn-cell text-center'><i class='fa fa-cogs'></i></th>
+    $out .= "      <th>$langRecipients</th>
+                   <th>$langDate</th>
+                   <th class='option-btn-cell text-center'><i class='fa fa-cogs'></i></th>
                  </tr>
                </thead>
                <tbody>

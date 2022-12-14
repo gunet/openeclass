@@ -47,9 +47,9 @@ function list_forums($id = NULL) {
                 "<input type='hidden' name='id' value='$id' />" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-white'>$langForums</th>" .
-                "<th class='text-white'>$langComments</th>" .
-                "<th style='width:20px;' class='text-center text-white'>$langChoice</th>" .
+                "<th>$langForums</th>" .
+                "<th>$langComments</th>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
 
         foreach ($foruminfo as $entry) {

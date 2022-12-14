@@ -310,9 +310,9 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
                 <table class='table-default'>
                     <thead>
                         <tr class='title1 list-header'>
-                          <th class='text-white'>$langNoGroupStudents</th>
-                          <th width='100' class='text-white text-center'>$langMove</th>
-                          <th class='right text-white'>$langGroupMembers</th>
+                          <th>$langNoGroupStudents</th>
+                          <th width='100' class='text-center'>$langMove</th>
+                          <th class='right'>$langGroupMembers</th>
                         </tr>
                     </thead>
                     <tbody>

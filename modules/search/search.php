@@ -126,10 +126,10 @@ $tool_content .= "<br><small>" . count($courses) . " $langResults2</small></div>
 if ($uid > 0) {
     $tool_content .= "<th width='50' align='center'>$langRegistration</th>";
 }
-$tool_content .= "<th class='text-start text-white ps-1'>" . $langCourse . " ($langCode)</th>
-      <th class='text-start text-white'>$langTeacher</th>
-      <th class='text-start text-white'>$langKeywords</th>
-      <th class='text-start text-white'>$langType</th>
+$tool_content .= "<th class='text-start ps-1'>" . $langCourse . " ($langCode)</th>
+      <th class='text-start'>$langTeacher</th>
+      <th class='text-start'>$langKeywords</th>
+      <th class='text-start'>$langType</th>
     </tr>";
 
 foreach ($courses as $course) {

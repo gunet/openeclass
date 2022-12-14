@@ -51,8 +51,8 @@ function display_user_grades($gradebook_id) {
             $tool_content .= "<h5>" . display_user($userID) . " ($langGradebookGrade: " . userGradeTotal($gradebook_id, $userID) . ")</h5>";
             $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
                               <div class='table-responsive'><table class='table-default'>";
-            $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th><th class='text-white'>$langGradebookActivityDate2</th><th class='text-white'>$langType</th><th class='text-white'>$langGradebookWeight</th>";
-            $tool_content .= "<th width='10' class='text-center text-white'>$langGradebookBooking</th>";
+            $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langType</th><th>$langGradebookWeight</th>";
+            $tool_content .= "<th width='10' class='text-center'>$langGradebookBooking</th>";
             $tool_content .= "</tr>";
         } else {
             $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
@@ -561,12 +561,12 @@ function display_all_users_grades($gradebook_id) {
         $tool_content .= "<div class='table-responsive'><table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
                 <tr class='list-header'>
-                  <th class='text-white' style='width:1%'>$langID</th>
-                  <th class='text-white'>$langName $langSurname</th>
-                  <th class='text-white'>$langAm</th>
-                  <th class='text-white'>$langRegistrationDateShort</th>
-                  <th class='text-white'>$langGradebookGrade</th>
-                  <th class='text-center text-white'>".icon('fa-cogs')."</th>
+                  <th style='width:1%'>$langID</th>
+                  <th>$langName $langSurname</th>
+                  <th>$langAm</th>
+                  <th>$langRegistrationDateShort</th>
+                  <th>$langGradebookGrade</th>
+                  <th class='text-center'>".icon('fa-cogs')."</th>
                 </tr>
             </thead>
             <tbody>";
@@ -664,12 +664,12 @@ function student_view_gradebook($gradebook_id, $uid) {
         }
         $tool_content .= "<div style='padding: 15px;'>" . display_user($uid, false, false) . "</div>";
         $tool_content .= "<div class='table-responsive'><table class='table-default' >";
-        $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th>
-                              <th class='text-white'>$langGradebookActivityDate2</th>
-                              <th class='text-white'>$langType</th>
-                              <th class='text-white'>$langGradebookActivityWeight</th>
-                              <th class='text-white'>$langGradebookGrade</th>
-                              <th class='text-white'>$langGradebookTotalGrade</th>
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th>
+                              <th>$langGradebookActivityDate2</th>
+                              <th>$langType</th>
+                              <th>$langGradebookActivityWeight</th>
+                              <th>$langGradebookGrade</th>
+                              <th>$langGradebookTotalGrade</th>
                           </tr>";
     }
     if ($result) {
@@ -823,12 +823,12 @@ function display_gradebook($gradebook) {
                                             <th colspan='7' class='text-center text-secondary'>$langGradebookActList</th>
                                         </tr>
                                         <tr class='list-header'>
-                                            <th class='text-white'>$langTitle</th>
-                                            <th class='text-white'>$langGradebookActivityDate2</th>
-                                            <th class='text-white'>$langType</th><th>$langGradebookWeight</th>
-                                            <th class='text-center text-white'>$langViewShow</th>
-                                            <th class='text-center text-white'>$langScore</th>
-                                            <th class='text-center text-white'>".icon('fa-cogs')."</i></th>
+                                            <th>$langTitle</th>
+                                            <th>$langGradebookActivityDate2</th>
+                                            <th>$langType</th><th>$langGradebookWeight</th>
+                                            <th class='text-center'>$langViewShow</th>
+                                            <th class='text-center'>$langScore</th>
+                                            <th class='text-center'>".icon('fa-cogs')."</i></th>
                                         </tr>";
 
         foreach ($result as $details) {
@@ -950,11 +950,11 @@ function display_gradebooks() {
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='list-header'>
-                            <th class='text-white'>$langAvailableGradebooks</th>
-                            <th class='text-white' style='width: 150px;'>$langStart</th>
-                            <th class='text-white' style='width: 150px;'>$langFinish</th>";
+                            <th>$langAvailableGradebooks</th>
+                            <th style='width: 150px;'>$langStart</th>
+                            <th style='width: 150px;'>$langFinish</th>";
         if( $is_editor) {
-            $tool_content .= "<th class='text-center text-white'>" . icon('fa-gears') . "</th>";
+            $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr>";
         foreach ($result as $g) {
@@ -1016,8 +1016,8 @@ function display_available_exercises($gradebook_id) {
     if ($checkForExerNumber > 0) {
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th><th class='text-white'>$langDescription</th>";
-        $tool_content .= "<th class='text-center text-white'><i class='fa fa-cogs'></i></th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
+        $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
 
         foreach ($checkForExer as $newExerToGradebook) {
@@ -1055,8 +1055,8 @@ function display_available_assignments($gradebook_id) {
         $tool_content .= "
             <div class='row'><div class='col-sm-12'><div class='table-responsive'>
                           <table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th><th class='text-white'>$langDescription</th>";
-        $tool_content .= "<th class='text-center text-white'><i class='fa fa-cogs'></i></th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
+        $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
         foreach ($checkForAss as $newAssToGradebook) {
             $content = ellipsize_html($newAssToGradebook->description, 50);
@@ -1098,8 +1098,8 @@ function display_available_lps($gradebook_id) {
     if ($checkForLpNumber > 0) {
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th class='text-white'>$langTitle</th><th class='text-white'>$langDescription</th>";
-        $tool_content .= "<th class='text-center text-white'>$langActions</th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
+        $tool_content .= "<th class='text-center'>$langActions</th>";
         $tool_content .= "</tr>";
         foreach ($checkForLp as $newExerToGradebook) {
             $tool_content .= "<tr>";
@@ -1149,12 +1149,12 @@ function register_user_grades($gradebook_id, $actID) {
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
                 <tr class='list-header'>
-                    <th class='text-white' width='2'>$langID</th>
-                    <th class='text-white'>$langName $langSurname</th>
-                    <th class='text-center text-white'>$langAm</th>
-                    <th class='text-center text-white' width='120'>$langRegistrationDateShort</th>
-                    <th width='50' class='text-center text-white'>$langGradebookGrade</th>
-                    <th class='text-white' width='50'>$langGradebookTotalGrade</th>
+                    <th width='2'>$langID</th>
+                    <th>$langName $langSurname</th>
+                    <th class='text-center'>$langAm</th>
+                    <th class='text-center' width='120'>$langRegistrationDateShort</th>
+                    <th width='50' class='text-center'>$langGradebookGrade</th>
+                    <th width='50'>$langGradebookTotalGrade</th>
                 </tr>
             </thead>
             <tbody>";

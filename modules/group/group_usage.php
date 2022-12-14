@@ -158,10 +158,10 @@ if ($type == 'duration') {
 
 $tool_content .= "<div class='table-responsive'><table class='table-default'>
 	<tr class='list-header'>
-	<th class='text-white text-start'>$langSurname $langName</th>
-	<th class='text-white'>$langAm</th>
-	<th class='text-white'>$langGroup</th>
-	<th class='text-white'>$label</th>
+	<th class='text-start'>$langSurname $langName</th>
+	<th>$langAm</th>
+	<th>$langGroup</th>
+	<th>$label</th>
 	</tr>";
 
 if ($type == 'duration') {    

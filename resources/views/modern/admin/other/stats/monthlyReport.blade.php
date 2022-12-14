@@ -59,7 +59,7 @@
                                     <table class="table-default">
                                         <tbody>		
                                             <tr class='list-header'>
-                                                <th colspan="2" class="text-center text-white">{{ trans('langReport') }}: {{ $msg_of_month }} {{ $y }}</th>
+                                                <th colspan="2" class="text-center">{{ trans('langReport') }}: {{ $msg_of_month }} {{ $y }}</th>
                                             </tr>
                                             <tr>
                                                 <th class="left">{{ trans('langNbProf') }}: </th>

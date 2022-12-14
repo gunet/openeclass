@@ -204,9 +204,9 @@ if (!$q && !isset($_GET['create'])) {
     $tool_content .= "<div class='table-responsive'>";
     $tool_content .= "<table class='table-default'><thead>
      <tr class='list-header'>
-       <th class = 'text-white text-left'>$langEBooks</th>" .
+       <th class = 'text-start'>$langEBooks</th>" .
             ($is_editor ?
-                    "<th class='text-white text-center option-btn-cell'>".icon('fa-cogs')."</th>" :
+                    "<th class='text-center option-btn-cell'>".icon('fa-cogs')."</th>" :
                     '') . "
      </tr></thead><tbody id='tosort'>";
     foreach ($q as $r) {

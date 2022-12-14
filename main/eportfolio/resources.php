@@ -580,12 +580,12 @@ if ($userdata) {
                                 <table class='table-default'>
                                   <tbody>
                                     <tr class='list-header'>
-                                      <th class='text-white text-left' width='60'>$langType</th>
-                                      <th class='text-white text-left'>$langName</th>
-                                      <th class='text-white text-left'>$langDate</th>
-                                      <th class='text-white text-left'>$langSize</th>";
+                                      <th class='text-start' width='60'>$langType</th>
+                                      <th class='text-start'>$langName</th>
+                                      <th class='text-start'>$langDate</th>
+                                      <th class='text-start'>$langSize</th>";
             if ($id == $uid) {
-                $tool_content .= "<th class='text-white text-center'>".icon('fa-gears', $langCommands)."</th>";
+                $tool_content .= "<th class='text-center'>".icon('fa-gears', $langCommands)."</th>";
             }
 
             $tool_content .= "</tr>";

@@ -249,8 +249,8 @@ if ($PollType == POLL_NORMAL) {
                 $answers_table = "
                     <table class='table-default'>
                         <tr class='list-header'>
-                            <th class='text-white'>$langAnswer</th>
-                            <th class='text-white'>$langSurveyTotalAnswers</th>".(($thePoll->anonymized) ? '' : '<th class="text-white">' . $langStudents . '</th>')."</tr>";
+                            <th>$langAnswer</th>
+                            <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized) ? '' : '<th>' . $langStudents . '</th>')."</tr>";
                 foreach ($answers as $answer) {
                     $percentage = round(100 * ($answer->count / $answer_total),2);
                     if (isset($answer->answer_text)) {
@@ -328,8 +328,8 @@ if ($PollType == POLL_NORMAL) {
                 $answers_table = "
                     <table class='table-default'>
                         <tr class='list-header'>
-                            <th class='text-white'>$langAnswer</th>
-                            <th class='text-white'>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";
+                            <th>$langAnswer</th>
+                            <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";
                 foreach ($answers as $answer) {
                     $percentage = round(100 * ($answer->count / $answer_total),2);
                     $this_chart_data['percentage'][array_search($answer->answer_text,$this_chart_data['answer'])] = $percentage;
@@ -402,8 +402,8 @@ if ($PollType == POLL_NORMAL) {
                 $tool_content .= "<table class='table-default'>
                         <tbody>
                         <tr class='list-header'>
-                                <th class='text-white'>$langAnswer</th>
-                                <th class='text-white'>$langSurveyTotalAnswers</th>
+                                <th>$langAnswer</th>
+                                <th>$langSurveyTotalAnswers</th>
                                 ".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."
                         </tr>";
                 $k=1;

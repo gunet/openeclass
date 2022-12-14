@@ -111,7 +111,7 @@ if (isset($_GET['stats_submit'])) {
 
         // user registrations per month
         $tool_content .= "<div class='table-responsive mt-5'><table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th class='col-8 text-white'>$langMonth</th><th class='col-4 text-white'>$langMonthlyCourseRegistrations</th></tr>";
+        $tool_content .= "<tr class='list-header'><th class='col-8'>$langMonth</th><th class='col-4'>$langMonthlyCourseRegistrations</th></tr>";
         $q2 = Database::get()->queryArray("SELECT COUNT(*) AS registrations, MONTH(reg_date) AS month, YEAR(reg_date) AS year FROM course_user
                             WHERE course_id = ?d AND (reg_date BETWEEN '$u_date_start' AND '$u_date_end')
                                 AND status = " . USER_STUDENT . " GROUP BY month, year ORDER BY year, month ASC", $_GET['c']);
@@ -122,7 +122,7 @@ if (isset($_GET['stats_submit'])) {
 
         // visits per month
         $tool_content .= "<div class='table-responsive mt-5'><table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th class='col-6 text-white'>$langMonth</th><th class='col-2 text-white'>$langVisits</th><th class='col-2 text-white'>$langUsers</th></tr>";
+        $tool_content .= "<tr class='list-header'><th class='col-6'>$langMonth</th><th class='col-2'>$langVisits</th><th class='col-2'>$langUsers</th></tr>";
         $q1 = Database::get()->queryArray("SELECT MONTH(day) AS month, YEAR(day) AS year, COUNT(*) AS visits, COUNT(DISTINCT user_id) AS users FROM actions_daily
                         WHERE (day BETWEEN '$u_date_start' AND '$u_date_end') AND course_id = ?d GROUP BY month,year ORDER BY year, month ASC", $_GET['c']);
         $total_visits = $total_users = 0;
@@ -136,7 +136,7 @@ if (isset($_GET['stats_submit'])) {
 
         // visits per module per month
         $tool_content .= "<div class='table-responsive mt-5'><table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th class='col-6 text-white'>$langModule</th><th class='col-2 text-white'>$langVisits</th><th class='col-2 text-white'>$langUsers</th></tr>";
+        $tool_content .= "<tr class='list-header'><th class='col-6'>$langModule</th><th class='col-2'>$langVisits</th><th class='col-2'>$langUsers</th></tr>";
         $q3 = Database::get()->queryArray("SELECT COUNT(*) AS cnt, module_id, COUNT(DISTINCT user_id) AS users FROM actions_daily
                         WHERE (day BETWEEN '$u_date_start' AND '$u_date_end') AND course_id = ?d
                         GROUP BY module_id", $_GET['c']);

@@ -67,8 +67,8 @@
                     <div class='table-responsive'>
                         <table class='table-default'>
                             <thead class='list-header'>
-                                <th class='text-white'>{{ trans('langAllAuthTypes') }}</th>
-                                <th class='text-white text-center'>{!! icon('fa-gears', trans('langActions')) !!}</th>
+                                <th>{{ trans('langAllAuthTypes') }}</th>
+                                <th class='text-center'>{!! icon('fa-gears', trans('langActions')) !!}</th>
                             </thead>
                             <tbody>
                             @foreach ($authMethods as $authMethod)

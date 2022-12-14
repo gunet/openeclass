@@ -266,8 +266,8 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <table class='table-default'>";
     if ($noteNumber > 0) {
         $tool_content .= "<tr class='list-header'>";
-        $tool_content .= "<th class='text-white text-left ps-2'>$langCategoryNotes</th>";
-        $tool_content .= "<th class='text-white text-center'>".icon('fa-gears')."</th>";
+        $tool_content .= "<th class='text-start ps-2'>$langCategoryNotes</th>";
+        $tool_content .= "<th class='text-center'>".icon('fa-gears')."</th>";
         $tool_content .= "</tr>";
     }
 

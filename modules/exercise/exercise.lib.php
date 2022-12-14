@@ -317,15 +317,15 @@ function display_exercise($exercise_id) {
 
 
     $tool_content .= "
-    <div class='col-sm-12'><div class='panel panel-primary rounded-0'>
-            <div class='panel-heading rounded-0'>
+    <div class='col-12'><div class='panel panel-primary'>
+            <div class='panel-heading'>
               <h3 class='panel-title'>" . q_math($exercise->selectTitle()) . "
                 <a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes'>
                   <span class='fa fa-edit text-white' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
                 </a>
               </h3>
             </div>
-            <div class='panel-body rounded-0'>" . standard_text_escape($exercise->selectDescription()) . "</div>
+            <div class='panel-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>
         </div>
     </div>";
 

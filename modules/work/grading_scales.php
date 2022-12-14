@@ -276,9 +276,9 @@ if (isset($_GET['scale_id'])) {
                 <table class='table-default'>
                     <thead>
                         <tr class='list-header'>
-                            <th style='padding-left:15px;'class='text-white'>$langTitle</th>
-                            <th  class='text-white'>$langGradebookMEANS</th>
-                            <th class='text-white text-end' style='padding-right:15px;'>" . icon('fa-cogs') . "</th>
+                            <th style='padding-left:15px;>$langTitle</th>
+                            <th>$langGradebookMEANS</th>
+                            <th class='text-end' style='padding-right:15px;'>" . icon('fa-cogs') . "</th>
                         </tr>
                     </thead>
                     <tbody>

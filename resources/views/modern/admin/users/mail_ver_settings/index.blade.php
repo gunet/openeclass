@@ -39,7 +39,7 @@
                         <div class='table-responsive'>
                     <table class='table-default'>
                         <tr class='list-header'>
-                                    <td class='text-white text-left' colspan='3'>
+                                    <td class='text-start' colspan='3'>
                                         <b>{{ trans('langMailVerificationSettings') }}</b>
                                     </td>
                                 </tr>

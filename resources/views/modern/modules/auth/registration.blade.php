@@ -47,7 +47,7 @@
                                         <table class="table-default">
                                             
                                             <tr class='list-header'>
-                                                <th class='text-white'># {{ trans('langOfStudent') }}</th>
+                                                <th># {{ trans('langOfStudent') }}</th>
                                             </tr>
                             
                                             <tbody>
@@ -105,7 +105,7 @@
                                         <table class="table-default">
                                             
                                             <tr class='list-header'>
-                                                <th class='text-white'># {{ trans('langOfTeacher') }}</th>
+                                                <th># {{ trans('langOfTeacher') }}</th>
                                             </tr>
                                             
                                             <tbody>

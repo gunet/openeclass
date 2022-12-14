@@ -185,11 +185,11 @@
                                     <div class='table-responsive'>
                                         <table class='table-default'>
                                             <tr class='list-header'>
-                                                <th class='text-left text-white'>{{ trans('langCode') }}</th>
-                                                <th class='text-left text-white'>{{ trans('langLessonName') }}</th>
-                                                <th class='text-white'>{{ trans('langCourseRegistrationDate') }}</th>
-                                                <th class='text-white'>{{ trans('langProperty') }}</th>
-                                                <th class='text-white'>{{ trans('langActions') }}</th>
+                                                <th>{{ trans('langCode') }}</th>
+                                                <th>{{ trans('langLessonName') }}</th>
+                                                <th>{{ trans('langCourseRegistrationDate') }}</th>
+                                                <th>{{ trans('langProperty') }}</th>
+                                                <th>{{ trans('langActions') }}</th>
                                             </tr>
                                             @foreach ($sql as $logs)
                                                 @if ($logs->visible == COURSE_INACTIVE)

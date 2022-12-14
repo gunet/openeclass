@@ -120,11 +120,11 @@
                         <div class='table-responsive'>
                             <table class='table-default'>
                                 <tr class='list-header'>
-                                    <th class='text-white center'>ID</th>
-                                    <th class='text-white'>{{ trans('langSurnameName') }}</th>
-                                    <th class='text-white'>{{ trans('langUsername') }}</th>
-                                    <th class='text-white text-center'>{{ trans('langRole') }}</th>
-                                    <th class='text-white text-center'>{!! icon('fa-gears') !!}</th>
+                                    <th class='center'>ID</th>
+                                    <th>{{ trans('langSurnameName') }}</th>
+                                    <th>{{ trans('langUsername') }}</th>
+                                    <th>{{ trans('langRole') }}</th>
+                                    <th class='text-center'>{!! icon('fa-gears') !!}</th>
                                 </tr>
                             
                                 @foreach ($admins as $admin)

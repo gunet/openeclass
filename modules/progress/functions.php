@@ -2469,9 +2469,9 @@ function display_users_progress($element, $element_id) {
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default custom_list_order'>";
             $tool_content .= "<thead>
                         <tr class='list-header'>
-                          <th class='text-white ps-2' style='width:5%'>$langID</th>
-                          <th class='text-white ps-2'>$langSurnameName</th>
-                          <th class='text-white ps-2' style='width: 20%;'>$langProgress</th>
+                          <th class='ps-2' style='width:5%'>$langID</th>
+                          <th class='ps-2'>$langSurnameName</th>
+                          <th class='ps-2' style='width: 20%;'>$langProgress</th>
                         </tr>
                     </thead>
                     <tbody>";

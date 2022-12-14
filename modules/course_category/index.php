@@ -77,9 +77,9 @@ $tool_content .= "
         <div class='table-responsive mt-0'>
             <table class='table-default'>
                 <tr class='list-header'>
-                    <th width='45%' class='text-white text-center'>" . $langInactiveCourseCategories . "</th>
-                    <th width='10%' class='text-white text-center'>" . $langMove . "</th>
-                    <th width='45%' class='text-white text-center'>" . $langActiveCourseCategories . "</th>
+                    <th width='45%' class='text-center'>" . $langInactiveCourseCategories . "</th>
+                    <th width='10%' class='text-center'>" . $langMove . "</th>
+                    <th width='45%' class='text-center'>" . $langActiveCourseCategories . "</th>
                 </tr>";
 
 $submitOnClick = '';
