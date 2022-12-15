@@ -5547,12 +5547,12 @@ $langWidgetUninstall = "Απεγκατάσταση";
 $langWidgetAdmin = "Διαχείρισης";
 $langWidgetPersonal = "Προσωπικό";
 $langWidgetCourse = "$langOfCourse";
-$langHomePageMainContent = "Κυρίως περιεχόμενο Αρχικής Σελίδας";
-$langHomePageSidebarContent = "Στήλη κυρίως περιεχομένου Αρχικής Σελίδας";
-$langPortfolioMainContent = "Κυρίως περιεχόμενο Χαρτοφυλακίου";
-$langPortfolioSidebarContent = "Στήλη κυρίως περιεχομένου Χαρτοφυλακίου";
-$langCourseHomeMainContent = "Κυρίως περιεχόμενο Αρχικής Σελίδας $langOfCourse";
-$langCourseHomeSidebarContent = "Στήλη κυρίως περιεχομένου Αρχικής Σελίδας $langOfCourse";
+$langHomePageMainContent = "Κύριο περιεχόμενο Αρχικής Σελίδας";
+$langHomePageSidebarContent = "Στήλη κυρίου περιεχομένου Αρχικής Σελίδας";
+$langPortfolioMainContent = "Κύριο περιεχόμενο Χαρτοφυλακίου";
+$langPortfolioSidebarContent = "Στήλη κυρίου περιεχομένου Χαρτοφυλακίου";
+$langCourseHomeMainContent = "Κύριο περιεχόμενο Αρχικής Σελίδας $langOfCourse";
+$langCourseHomeSidebarContent = "Στήλη κυρίου περιεχομένου Αρχικής Σελίδας $langOfCourse";
 /* * ******************************************
   Theme Options
  * ***************************************** */

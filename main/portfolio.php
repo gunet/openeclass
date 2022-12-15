@@ -24,6 +24,8 @@
  * @brief This component creates the content of the start page when the user is logged in
  */
 
+use Widgets\WidgetArea;
+
 $require_login = true;
 define('HIDE_TOOL_TITLE', true);
 
@@ -189,15 +191,19 @@ $data['perso_tool_content'] = $perso_tool_content;
 $data['user_announcements'] = $user_announcements;
 
 $data['portfolio_page_main_widgets'] = '';
-$portfolio_page_main = new \Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
+$portfolio_page_main = new WidgetArea(PORTFOLIO_PAGE_MAIN);
+
 foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {
     $data['portfolio_page_main_widgets'] .= $widget->run($key);
 }
+
 $data['portfolio_page_sidebar_widgets'] = "";
-$portfolio_page_sidebar = new \Widgets\WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
-foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {
+$portfolio_page_sidebar = new WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
+
+foreach ($portfolio_page_sidebar->getUserAndAdminWidgets($uid) as $key => $widget) {
     $data['portfolio_page_sidebar_widgets'] .= $widget->run($key);
 }
+
 $data['departments'] = $user->getDepartmentIds($uid);
 
 $data['lastVisit'] = Database::get()->querySingle("SELECT * FROM loginout
@@ -211,7 +217,6 @@ $data['userdata'] = Database::get()->querySingle("SELECT email, am, phone, regis
 
 $data['teacher_courses_count'] = $teacher_courses_count;
 $data['student_courses_count'] = $student_courses_count;
-
 
 $data['user_messages'] = $user_messages;
 

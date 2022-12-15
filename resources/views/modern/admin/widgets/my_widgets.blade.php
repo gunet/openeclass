@@ -41,11 +41,11 @@
                             <div id="widgets">
                                 @foreach ($installed_widgets as $key => $installed_widget)
                                         <div class="panel panel-success widget mt-3" data-widget-id="{{ $installed_widget->id }}">
-                                            <div class="panel-heading Borders">                   
-                                                <a data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
+                                            <div class="panel-heading Borders">
+                                                <a data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}"
                                                 href="#widget_desc_{{ $key }}" class="ps-2">
                                                     {{ $installed_widget->getName() }} <span class='fa fa-arrow-down fs-6 ps-2'></span>
-                                                </a>                     
+                                                </a>
                                             </div>
                                             <div id="widget_desc_{{ $key }}" class="panel-collapse collapse">
                                                 <div class="panel-body text-muted">
@@ -59,9 +59,9 @@
                                                         </form>
                                                         <a href="#" onclick="$('#uninstallForm{{ $key }}').submit();">
                                                             <small>{{ trans('langWidgetUninstall') }}</small>
-                                                        </a>                               
-                                                    </div>                      
-                                                </div>                        
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="panel-collapse collapse in hidden">
                                                 <div class="panel-body">
@@ -74,32 +74,32 @@
                                                     <div class="float-end">
                                                         <a href="#" class="btn submitAdminBtn submitOptions">
                                                             {{ trans('langSubmit') }}
-                                                        </a>                                
-                                                    </div>                    
-                                                </div>                        
-                                            </div>                    
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                             @endforeach
-                            </div>   
+                            </div>
                             @else
                             <div class='orangeText margin-bottom-fat'>
                                 {{ trans('langNoInstalledWidgets') }}
-                            </div>       
-                            @endif   
-                        </div>    
+                            </div>
+                            @endif
+                        </div>
                         <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
-                            
+
                                 @include('admin.widgets.common.portfolioMain')
-                                @include('admin.widgets.common.portfolioSide') 
+                                @include('admin.widgets.common.portfolioSide')
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>    
+</div>
 
-                            
+
 
 @endsection
 

@@ -54,7 +54,7 @@
                             <div class='col-12 d-flex justify-content-md-end justify-content-center pe-0 mt-lg-0 mt-5'>
                                 <button class='bg-transparent border-0 text-end'data-bs-toggle="collapse" data-bs-target=".user-details-collapse" aria-expanded="false" onclick="switch_user_details_toggle()" >
                                     <span class="user-details-collapse-more">
-                                        <span class='text-primary text-uppercase mt-2 small-text'>{{ trans('langMoreInfo') }}</span> 
+                                        <span class='text-primary text-uppercase mt-2 small-text'>{{ trans('langMoreInfo') }}</span>
                                         <i class="fas fa-chevron-down text-primary"></i>
                                     </span>
                                 </button>
@@ -96,7 +96,7 @@
                             </div>
 
                             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 ps-md-3 pe-md-0 ps-0 pe-0">
-            
+
                                 <div class='panel panel-admin border-0 shadow-none mt-md-2 mt-3 bg-white rounded-0 px-0 shadow-none'>
                                     <div class='panel-heading rounded-0 bg-white ps-md-3 pe-md-1 px-0'>
                                         <div class='panel-heading bg-white ps-md-3 pe-md-0'>
@@ -115,7 +115,7 @@
                                                 <span class='text-uppercase Help-text-panel-heading-Portfolio'>{{ trans('langPersInfo') }}</span>
                                             </div>
                                         </div>
-                                
+
                                         <div class='panel-body rounded-0'>
                                             <div class="row mt-0">
                                                 <div class="col-xl-4 col-lg-6 col-12 mb-2">
@@ -144,7 +144,7 @@
 
 
                                                 <div class="col-xl-4 col-lg-6 col-12 mt-xl-0 mt-lg-3 mb-lg-3 mb-2">
-                                                    <p class='text-secondary TextMedium small-text'>{{ trans('langAm') }}:</p> 
+                                                    <p class='text-secondary TextMedium small-text'>{{ trans('langAm') }}:</p>
                                                     <p class='blackBlueText'>{{ $userdata->am }}</p>
                                                 </div>
 
@@ -283,7 +283,7 @@
                                             </div>
                                             <div class="small-text text-secondary lesson-professor mt-0">{{ $cource->professor }}</div>
                                         </div>
-                                       
+
                                     </div>
                                         @if( $i>0 && ($i+1)%$items_per_page==0 )
                                 </div>
@@ -298,6 +298,11 @@
                         </div>
                     </div>
                 </div>
+
+                <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                    {!! $portfolio_page_main_widgets !!}
+                </div>
+
             </div>
         </div>
         <div class='col-xl-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-2 ps-xl-3 px-lg-0 px-0 pb-lg-0 pb-3'>
@@ -322,8 +327,6 @@
                 </div>
             </div>
 
-
-
             <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                 <div class='panel-heading bg-body p-0'>
                     <div class='col-12 Help-panel-heading'>
@@ -339,6 +342,11 @@
                     </a>
                 </div>
             </div>
+
+            <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                {!! $portfolio_page_sidebar_widgets !!}
+            </div>
+
         </div>
     </div>
 </div>
