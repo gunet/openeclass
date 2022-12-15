@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 /**
@@ -34,7 +34,7 @@
 function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $moderator) {
 
     global $webDir, $urlServer;
-    
+
     $res = Database::get()->querySingle("SELECT running_at FROM tc_session WHERE meeting_id = ?s",$meeting_id);
     if ($res) {
         $running_server = $res->running_at;
@@ -54,7 +54,7 @@ function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $mo
     $rs = $soapUsers->getSession();
 
     $session_id = $rs->return->session_id;
-    
+
     $params = array(
             'SID' => $session_id,
             'username' => $res->username,
@@ -65,12 +65,12 @@ function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $mo
     $l = $soapUsers->loginUser($params);
 
     // check for user profile image if exists
-    $profileimageurl = "courses/userimg/${uid}_256";
-    if (file_exists("${webDir}/$profileimageurl.jpg")) {
-        $userimage = "${urlServer}/$profileimageurl.jpg";    
-    } elseif (file_exists("${webDir}/$profileimageurl.png")) { 
-        $userimage = "${urlServer}/$profileimageurl.png";
-    } else {       
+    $profileimageurl = "courses/userimg/{$uid}_256";
+    if (file_exists("$webDir/$profileimageurl.jpg")) {
+        $userimage = "$urlServer$profileimageurl.jpg";
+    } elseif (file_exists("$webDir/$profileimageurl.png")) {
+        $userimage = "$urlServer$profileimageurl.png";
+    } else {
         $userimage = '';
     }
 
@@ -90,7 +90,7 @@ function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $mo
 
     $rs = array();
     $rs = $soapUsers->setUserObjectAndGenerateRoomHash($params);
-    
+
     return $url.'/'.$res->webapp.'/?secureHash='.$rs->return;
 }
 
@@ -102,7 +102,7 @@ function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $mo
 function om_session_running($meeting_id)
 {
     global $langOMNotSupported, $course_code;
-    
+
     $res = Database::get()->querySingle("SELECT running_at FROM tc_session WHERE meeting_id = ?s",$meeting_id);
 
     if (!isset($res->running_at)) {
@@ -110,31 +110,31 @@ function om_session_running($meeting_id)
     } else {
         $running_server = $res->running_at;
     }
-    
+
     $res = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $running_server);
     $enabled = $res->enabled;
     if ($enabled == 'false') {
         return false;
-    }    
-    
+    }
+
     $url = $res->hostname;
     if (!empty($res->port)) {
         $url = $res->hostname.':'.$res->port;
     }
     $soapUsers = new SoapClient($url.'/'.$res->webapp.'/services/UserService?wsdl');
     $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
-    
-    if (!in_array('getSession', $soapUsers->__getFunctions())) {        
+
+    if (!in_array('getSession', $soapUsers->__getFunctions())) {
         Session::Messages($langOMNotSupported, 'alert-danger');
         redirect_to_home_page("modules/tc/index.php?course=$course_code");
     }
-       
+
     $rs = array();
     $rs = $soapUsers->getSession();
-    
-    
-    
-    $session_id = $rs->return->session_id;    
+
+
+
+    $session_id = $rs->return->session_id;
     $params = array(
 	'SID' => $session_id,
 	'username' => $res->username,
@@ -143,7 +143,7 @@ function om_session_running($meeting_id)
 
     $l = array();
     $l = $soapUsers->loginUser($params);
-    
+
     $params = array(
 	'SID' => $session_id,
 	'start' => 0,
@@ -151,15 +151,15 @@ function om_session_running($meeting_id)
 	'orderby' => 'name',
 	'asc' => true
     );
-    
+
     $rs = $roomService->getRooms($params);
-    
+
     foreach ($rs->return->result as $rr)
     {
         if($rr->name == $meeting_id)
             return true;
     }
-    
+
     return false;
 }
 
@@ -175,12 +175,12 @@ function om_session_running($meeting_id)
 function create_om_meeting($title, $meeting_id, $record)
 {
     global $course_id, $langBBBCreationRoomError, $langBBBConnectionErrorOverload, $course_code;
-        
+
     $run_to = Database::get()->querySingle("SELECT running_at FROM tc_session WHERE meeting_id = ?s", $meeting_id)->running_at;
-        
-    if (isset($run_to)) {        
+
+    if (isset($run_to)) {
         if (!is_om_server_available($run_to)) { // if existing on server is busy try to find next one
-            $r = Database::get()->queryArray("SELECT id FROM tc_servers 
+            $r = Database::get()->queryArray("SELECT id FROM tc_servers
                             WHERE `type`= 'om' AND enabled='true' AND id <> ?d ORDER BY weight ASC", $run_to);
             if (($r) and count($r) > 0) {
                 foreach ($r as $server) {
@@ -197,14 +197,14 @@ function create_om_meeting($title, $meeting_id, $record)
             }
         }
     }
-        
+
     if ($run_to == -1) {
         Session::Messages($langBBBConnectionErrorOverload, 'alert-danger');
         redirect_to_home_page("modules/tc/index.php?course=$course_code");
     } else {
         // we find the om server that will serve the session
         $res = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d AND `type` = 'om'", $run_to);
-        
+
         $url = $res->hostname;
         if (!empty($res->port)) {
             $url = $res->hostname.':'.$res->port;
@@ -240,7 +240,7 @@ function create_om_meeting($title, $meeting_id, $record)
             'isModeratedRoom' => true
         );
 
-        $l = $roomService->addRoomWithModeration($params);       
+        $l = $roomService->addRoomWithModeration($params);
     }
 }
 
@@ -254,7 +254,7 @@ function get_om_active_rooms($om_server)
 {
     $active_rooms = 0;
     $res = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $om_server);
-    
+
     $url = $res->hostname;
     if (!empty($res->port)) {
         $url = $res->hostname.':'.$res->port;
@@ -267,7 +267,7 @@ function get_om_active_rooms($om_server)
     $rs = $soapUsers->getSession();
 
     $session_id = $rs->return->session_id;
-    
+
     $params = array(
 	'SID' => $session_id,
 	'username' => $res->username,
@@ -276,7 +276,7 @@ function get_om_active_rooms($om_server)
 
     $l = array();
     $l = $soapUsers->loginUser($params);
-    
+
     $params = array(
 	'SID' => $session_id,
 	'start' => 0,
@@ -284,14 +284,14 @@ function get_om_active_rooms($om_server)
 	'orderby' => 'name',
 	'asc' => true
     );
-    
+
     $rs = $roomService->getRooms($params);
-    
+
     foreach ($rs->return->result as $rr)
     {
         $active_rooms += 1;
     }
-    
+
     return $active_rooms;
 }
 
@@ -304,19 +304,19 @@ function get_om_connected_users($om_server)
 {
     $connected_users = 0;
     $res = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $om_server);
-        
+
     $url = $res->hostname;
     if (!empty($res->port)) {
         $url = $res->hostname.':'.$res->port;
     }
     $soapUsers = new SoapClient($url.'/'.$res->webapp.'/services/UserService?wsdl');
-    $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');    
-    
+    $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
+
     $rs = array();
     $rs = $soapUsers->getSession();
 
     $session_id = $rs->return->session_id;
-    
+
     $params = array(
 	'SID' => $session_id,
 	'username' => $res->username,
@@ -325,7 +325,7 @@ function get_om_connected_users($om_server)
 
     $l = array();
     $l = $soapUsers->loginUser($params);
-    
+
     $params = array(
 	'SID' => $session_id,
 	'start' => 0,
@@ -333,9 +333,9 @@ function get_om_connected_users($om_server)
 	'orderby' => 'name',
 	'asc' => true
     );
-    
+
     $rs = $roomService->getRooms($params);
-    
+
     foreach ($rs->return->result as $rr)
     {
         $params = array(
@@ -343,10 +343,10 @@ function get_om_connected_users($om_server)
             'roomId' => $rr->id
         );
 
-        $cu = $roomService->getRoomCounters($params);        
+        $cu = $roomService->getRoomCounters($params);
         $connected_users++;
     }
-    
+
     return $connected_users;
 }
 
@@ -358,14 +358,14 @@ function get_om_connected_users($om_server)
  * @return boolean
  */
 function is_om_server_available($server_id) {
-    
+
     global $course_id;
-    
+
     //Get all course participants
     $users_to_join = Database::get()->querySingle("SELECT COUNT(*) AS count FROM course_user, user
                                 WHERE course_user.course_id = ?d AND course_user.user_id = user.id", $course_id)->count;
-    
-    $row = Database::get()->querySingle("SELECT id, max_rooms, max_users 
+
+    $row = Database::get()->querySingle("SELECT id, max_rooms, max_users
                                     FROM tc_servers WHERE id = ?d AND enabled = 'true'", $server_id);
     if ($row) {
         $max_rooms = $row->max_rooms;
@@ -379,18 +379,16 @@ function is_om_server_available($server_id) {
         // active_rooms < max_rooms && active_users < max_users
         // active_rooms < max_rooms && max_users = 0 (UNLIMITED)
         // active_users < max_users && max_rooms = 0 (UNLIMITED)
-        if (($max_rooms == 0 && $max_users == 0) 
-            or (($max_users >= ($users_to_join + $connected_users)) and $active_rooms <= $max_rooms) 
-            or ($active_rooms <= $max_rooms and $max_users == 0) 
+        if (($max_rooms == 0 && $max_users == 0)
+            or (($max_users >= ($users_to_join + $connected_users)) and $active_rooms <= $max_rooms)
+            or ($active_rooms <= $max_rooms and $max_users == 0)
             or (($max_users >= ($users_to_join + $connected_users)) && $max_rooms == 0)) // YOU FOUND THE SERVER
         {
             return true;
-        } else {     
+        } else {
             return false;
         }
-    } else {        
+    } else {
         return false;
     }
 }
-
-

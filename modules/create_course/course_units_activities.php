@@ -48,7 +48,7 @@ function checkedBoxes() {
             checked_in_class.push(checkboxes[i].attr('id'));
         }
     }
-    
+
     for(let j=1; j<parseInt(checkboxes_in_home.length); j++) {
         if(checkboxes_in_home[j].checked){
             checked_in_home.push(checkboxes[j].attr('id'));
@@ -60,12 +60,12 @@ function checkedBoxes() {
             checked_after_class.push(checkboxes[k].attr('id'));
         }
     }
-    
+
     document.getElementsByName('checked_in_class').value=checked_in_class;
     document.getElementsByName('checked_in_home').value=checked_in_home;
     document.getElementsByName('checked_after_class').value=checked_after_class;
 
-   
+
 }
 
 
@@ -117,7 +117,7 @@ if(!isset($_POST['final_submit'])){
                 if ($validationFailed) {
                     redirect_to_home_page('modules/create_course/flipped_classroom.php');
                 }
-                
+
                 $mtitles_in_home = $mtitles_in_class = $mtitles_after_class = $mids_in_home = $mids_in_class = $mids_after_class = array();
 
                 $maxUnitId = Database::get()->querySingle("SELECT MAX(id) as muid FROM course_units");
@@ -173,20 +173,20 @@ if(!isset($_POST['final_submit'])){
                 ), false);
 
 
-                $tool_content .= " 
-                
+                $tool_content .= "
+
                     <div class='form-wrapper '>
                         <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
                         <div class='panel panel-default'>
                             <div class='panel-heading'>
                                 <div class='paenel-title h4'>
                                     $langActSelect
-                    
+
                                 </div>
                             </div>
                         </div>
-                       
-                        
+
+
                         <fieldset>
                             <div class='table-responsive'>
                                 <table class='table table-bordered table-striped'>
@@ -297,7 +297,7 @@ if(!isset($_POST['final_submit'])){
                     $tool_content .= "</tr>
                             </table>
                         </div>
-                        
+
 
                         <div class='form-group'>
                             <div class='col-sm-10 col-sm-offset-2'>
@@ -309,8 +309,8 @@ if(!isset($_POST['final_submit'])){
                         <input name='checked_in_class' type='hidden' value='1'></input>
                         <input name='checked_in_home' type='hidden' value='2'></input>
                         <input name='checked_after_class' type='hidden' value='3'></input>
-            
-                    </fieldset>". generate_csrf_token_form_field() ." 
+
+                    </fieldset>". generate_csrf_token_form_field() ."
                 </form>
             </div>
             ";
@@ -319,7 +319,7 @@ if(!isset($_POST['final_submit'])){
         $toolName = $langCourseEdit;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "${urlServer}modules/units/?course=$course_code&id=$unit_id",
+                'url' => "{$urlServer}modules/units/?course=$course_code&id=$unit_id",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')),false);
 
@@ -381,7 +381,7 @@ if(!isset($_POST['final_submit'])){
                             </div>
                         </div>
                     </div>
-    
+
                     <fieldset>
                         <div class='table-responsive'>
                         <table class='table table-bordered table-striped '>
@@ -489,7 +489,7 @@ if(!isset($_POST['final_submit'])){
                         </table>
                     </div>
                     <div class='form-group'>
-                        <div class='col-sm-10 col-sm-offset-2'>                            
+                        <div class='col-sm-10 col-sm-offset-2'>
                             <a href='{$urlServer}modules/units/?course=".$course_code."&id=".$unit_id."' class='btn btn-default'>$langCancel</a>
                             <input id='final_sub' class='btn btn-primary' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
                         </div>
@@ -498,7 +498,7 @@ if(!isset($_POST['final_submit'])){
                     <input name='checked_in_class' type='hidden' value='1'></input>
                     <input name='checked_in_home' type='hidden' value='2'></input>
                     <input name='checked_after_class' type='hidden' value='3'></input>
-            
+
                     </form></fieldset>". generate_csrf_token_form_field() ."
                 </div>
                 ";
@@ -741,7 +741,7 @@ if(!isset($_POST['final_submit'])){
                                     <li>$langLectHours: $lecthours </li>
                                     <li>$langHomeHours: $homehours </li>
                                     <li>$langTotalHours: $totalhours</li>
-                                </ul>   
+                                </ul>
             ";
 
 
@@ -808,7 +808,7 @@ if(!isset($_POST['final_submit'])){
                                                     course_code = ?s,
                                                     activity_id = ?s,
                                                     unit_id = ?d,
-                                                    tool_ids = ?s, 
+                                                    tool_ids = ?s,
                                                     activity_type=?d,
                                                     `visible` =?d",
                         $code,
@@ -843,7 +843,7 @@ if(!isset($_POST['final_submit'])){
                                                     course_code = ?s,
                                                     activity_id = ?s,
                                                     unit_id = ?d,
-                                                    tool_ids = ?s, 
+                                                    tool_ids = ?s,
                                                     activity_type=?d,
                                                     `visible` =?d",
                         $code,
@@ -875,7 +875,7 @@ if(!isset($_POST['final_submit'])){
                                                     course_code = ?s,
                                                     activity_id = ?s,
                                                     unit_id = ?d,
-                                                    tool_ids = ?s, 
+                                                    tool_ids = ?s,
                                                     activity_type=?d,
                                                     `visible` =?d",
                         $code,
@@ -965,7 +965,7 @@ if(!isset($_POST['final_submit'])){
                                                 course_code = ?s,
                                                 activity_id = ?s,
                                                 unit_id = ?d,
-                                                tool_ids = ?s, 
+                                                tool_ids = ?s,
                                                 activity_type=?d,
                                                 `visible` =?d",
                     $course_code,
@@ -1000,7 +1000,7 @@ if(!isset($_POST['final_submit'])){
                                                 course_code = ?s,
                                                 activity_id = ?s,
                                                 unit_id = ?d,
-                                                tool_ids = ?s, 
+                                                tool_ids = ?s,
                                                 activity_type=?d,
                                                 `visible` =?d",
                     $course_code,
@@ -1033,7 +1033,7 @@ if(!isset($_POST['final_submit'])){
                                                 course_code = ?s,
                                                 activity_id = ?s,
                                                 unit_id = ?d,
-                                                tool_ids = ?s, 
+                                                tool_ids = ?s,
                                                 activity_type=?d,
                                                 `visible` =?d",
                     $course_code,

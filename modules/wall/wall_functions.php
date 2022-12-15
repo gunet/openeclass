@@ -570,12 +570,12 @@ function show_video($table, $title, $resource_id, $video_id) {
         }
         $row->title = $title;
         if ($table == 'video') {
-            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=video&amp;id=$video_id";
+            $videoplayurl = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=video&amp;id=$video_id";
             $vObj = MediaResourceFactory::initFromVideo($row);
             $vObj->setPlayURL($videoplayurl);
             $videolink = MultimediaHelper::chooseMediaAhref($vObj);
         } else {
-            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=videolink&amp;id=$video_id";
+            $videoplayurl = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=videolink&amp;id=$video_id";
             $vObj = MediaResourceFactory::initFromVideoLink($row);
             $vObj->setPlayURL($videoplayurl);
             $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
@@ -630,9 +630,9 @@ function show_exercise($title, $resource_id, $exercise_id) {
             . "WHERE eid = ?d AND uid = ?d "
             . "AND attempt_status = ?d", $exercise_id, $uid, ATTEMPT_PAUSED);
         if ($paused_exercises) {
-            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$paused_exercises->eurid'>";
+            $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$paused_exercises->eurid'>";
         } else {
-            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id'>";
+            $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id'>";
         }
         $exlink = $link.q($title)."</a>";
         $imagelink = 'fa-pencil-square-o';
@@ -653,7 +653,7 @@ function show_assignment($title, $resource_id, $assignment_id) {
     $row = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $assignment_id);
     if ($row) {
         $visibility = 1;
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$assignment_id'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$assignment_id'>";
         $exlink = $link.q($title)."</a>";
         $imagelink = 'fa-flask';
     } else {
@@ -673,7 +673,7 @@ function show_chat($title, $resource_id, $chat_id) {
     $row = Database::get()->querySingle("SELECT * FROM conference WHERE course_id = ?d AND conf_id = ?d", $course_id, $chat_id);
     if ($row) {
         $visibility = 1;
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id'>";
         $chatlink = $link.q($title)."</a>";
         $imagelink = 'fa-exchange';
     } else {
@@ -693,7 +693,7 @@ function show_poll($title, $resource_id, $poll_id) {
     $row = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $poll_id);
     if ($row) {
         $visibility = 1;
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1'>";
         $polllink = $link.q($title)."</a>";
         $imagelink = 'fa-question-circle';
     } else {
@@ -713,7 +713,7 @@ function show_forum($type, $title, $resource_id, $ft_id) {
     $title = q($title);
     if ($type == 'forum') {
         $visibility = 1;
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$ft_id'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$ft_id'>";
         $forumlink = $link.q($title)."</a>";
         $imagelink = 'fa-comments';
     } else {
@@ -721,7 +721,7 @@ function show_forum($type, $title, $resource_id, $ft_id) {
         if ($row) {
             $visibility = 1;
             $forum_id = $row->forum_id;
-            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id'>";
+            $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id'>";
             $forumlink = $link.q($title)."</a>";
             $imagelink = 'fa-comments';
         } else {

@@ -154,7 +154,7 @@ if ($runQuery) {
 }
 
 if (count($courses) > 0) {
-    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='table-responsive'><table class='table-default'>        
+    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='table-responsive'><table class='table-default'>
                 <tr class='list-header'><th class='text-left'>" . q($langCourseCode) . "</th>";
 
     if ($isInOpenCoursesMode) {
@@ -167,7 +167,7 @@ if (count($courses) > 0) {
 
     $tool_content .= "</tr>";
 
-    $displayGuestLoginLinks = $uid == 0 && get_config('course_guest') == 'link';    
+    $displayGuestLoginLinks = $uid == 0 && get_config('course_guest') == 'link';
     foreach ($courses as $mycours) {
         if ($mycours->visible == COURSE_OPEN) {
             $codelink = "<a href='../../courses/" . urlencode($mycours->k) . "/'>" . q($mycours->i) . "</a>&nbsp;<small>(" . q($mycours->c) . ")</small>";
@@ -199,19 +199,19 @@ if (count($courses) > 0) {
                 $codelink .= "</div>";
             }
         }
-                
+
         $tool_content .= "<td>" . $codelink . "</td>";
         $tool_content .= "<td>" . q($mycours->t) . "</td>";
         $tool_content .= "<td class='text-center'>";
 
         if ($isInOpenCoursesMode) {
             $tool_content .= CourseXMLElement::getLevel($mycours->level) . "&nbsp;";
-            $tool_content .= "<a href='javascript:showMetadata(\"" . $mycours->k . "\");'><img src='${themeimg}/lom.png'/></a>";
+            $tool_content .= "<a href='javascript:showMetadata(\"" . $mycours->k . "\");'><img src='$themeimg/lom.png'/></a>";
         } else {
             $tool_content .= course_access_icon($mycours->visible);
         }
         $tool_content .= "</td>";
-        $tool_content .= "</tr>";        
+        $tool_content .= "</tr>";
     }
     $tool_content .= "</table></div></div></div>";
 } else if ($childCount <= 0) {
@@ -226,7 +226,7 @@ if ($isInOpenCoursesMode) {
 /* <![CDATA[ */
 
     var dialog;
-    
+
     var showMetadata = function(course) {
         $('.modal-body', dialog).load('anoninfo.php', {course: course}, function(response, status, xhr) {
             if (status === "error") {
@@ -236,7 +236,7 @@ if ($isInOpenCoursesMode) {
         });
         dialog.modal('show');
     };
-        
+
     $(document).ready(function() {
         dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{$langCancel}</span></button><h4 class="modal-title" id="modal-label">{$langCourseMetadata}</h4></div><div class="modal-body">body</div></div></div></div>');
     });

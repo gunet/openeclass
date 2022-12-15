@@ -43,7 +43,7 @@ $head_content .= "
                     format: 'dd-mm-yyyy',
                     pickerPosition: 'bottom-right',
                     language: '".$language."',
-                    autoclose: true    
+                    autoclose: true
                 });
             });
     </script>";
@@ -76,7 +76,7 @@ $actionAppend = isset($unit_id) ? "&amp;id=$unit_id" : "";
 
 $tool_content .= action_bar(array(
         array('title' => $langBack,
-            'url' => "${urlServer}courses/$course_code",
+            'url' => "{$urlServer}courses/$course_code",
             'icon' => 'fa-reply',
             'level' => 'primary-label')),false);
 $tool_content .= "<div class='form-wrapper'>
@@ -108,16 +108,15 @@ $tool_content .= "<div class='form-group'>
                 <label for='unitduration' class='col-sm-1 control-label'>$langUntil</label>
                 <div class='col-sm-4'>
                     <input type='text' class='form-control' id='unitdurationto' name='unitdurationto' value='$finish_week'>
-                </div>                        
+                </div>
             </div>
             " . $tagsInput . "
             <div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <input class='btn btn-primary' type='submit' name='edit_submit' value='" . q($langSubmit) . "'>
                 </div>
-            </div>            
+            </div>
         </form>
     </div>";
 
 draw($tool_content, 2, null, $head_content);
-

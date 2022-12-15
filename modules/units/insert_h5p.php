@@ -27,7 +27,7 @@ function list_h5p() {
             "<th><div class='text-left'>&nbsp;$langH5p</div></th>" .
             "</tr>";
         foreach ($h5pinfo as $entry) {
-            $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version 
+            $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version
                                             FROM h5p_library WHERE id = ?s", $entry['main_library_id']);
             $h5p_content_type_title = $q->title;
             $typeFolder = $q->machine_name . "-" . $q->major_version . "." . $q->minor_version;
@@ -37,7 +37,7 @@ function list_h5p() {
                 : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
             $tool_content .= "<tr>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='h5p[]' value='$entry[id]'></td>";
-            $tool_content .= "<td>&nbsp;<img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>&nbsp;&nbsp;<a href='${urlServer}modules/h5p/view.php?id=$entry[id]&amp;course=$course_code'>" . q($entry['title']) . "</a></td>";
+            $tool_content .= "<td>&nbsp;<img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>&nbsp;&nbsp;<a href='{$urlServer}modules/h5p/view.php?id=$entry[id]&amp;course=$course_code'>" . q($entry['title']) . "</a></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";

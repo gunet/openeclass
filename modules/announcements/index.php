@@ -535,7 +535,7 @@ if ($is_editor) {
                     <div id='mail-footer'>
                         <br>
                         <div>
-                            <small>" . sprintf($langLinkUnsubscribe, q($title)) . " <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+                            <small>" . sprintf($langLinkUnsubscribe, q($title)) . " <a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
                         </div>
                     </div>";
 

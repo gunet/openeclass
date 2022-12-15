@@ -45,11 +45,11 @@ if ($row) {
     $videoData->module = MODULE_ID_VIDEO;
     $videoData->resource = intval($_GET['id']);
     ViewingEvent::trigger(ViewingEvent::NEWVIEW, $videoData);
-    
+
     $vObj = MediaResourceFactory::initFromVideo($row);
     $token = token_generate($row->path, true);                         // generate new token
     $vObj->setAccessURL($vObj->getAccessURL() . '&amp;token=' . $token); // append token to accessurl
     echo MultimediaHelper::mediaHtmlObject($vObj);
 } else {
-    header("Location: ${urlServer}modules/video/index.php?course=$course_code");
+    header("Location: {$urlServer}modules/video/index.php?course=$course_code");
 }

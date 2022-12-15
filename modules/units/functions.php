@@ -673,7 +673,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
     } else {
         $status = $lp->visible;
         $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
-        $link = "<a href='${urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title";
+        $link = "<a href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title";
         $imagelink = icon('fa-ellipsis-h');
     }
 
@@ -712,12 +712,12 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         $row->title = $title;
         $status = $row->public;
         if ($table == 'video') {
-            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=video&amp;id=$video_id&amp;unit=$id";
+            $videoplayurl = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=video&amp;id=$video_id&amp;unit=$id";
             $vObj = MediaResourceFactory::initFromVideo($row);
             $vObj->setPlayURL($videoplayurl);
             $videolink = MultimediaHelper::chooseMediaAhref($vObj);
         } else {
-            $videoplayurl = "${urlServer}modules/units/view.php?course=$course_code&amp;res_type=videolink&amp;id=$video_id&amp;unit=$id";
+            $videoplayurl = "{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=videolink&amp;id=$video_id&amp;unit=$id";
             $vObj = MediaResourceFactory::initFromVideoLink($row);
             $vObj->setPlayURL($videoplayurl);
             $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
@@ -853,7 +853,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
             $class = $exclamation_icon = '';
         }
 
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id' $class>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;unit=$id' $class>";
         $exlink = $link . "$title</a> $exclamation_icon";
         $imagelink = $link . "</a>".icon('fa-flask')."";
     }
@@ -942,9 +942,9 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         }
         if ($pending_class) {
             enable_password_bootbox();
-            $link = "<a class='ex_settings $pending_class $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
+            $link = "<a class='ex_settings $pending_class $link_class' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
         } else {
-            $link = "<a class='ex_settings $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+            $link = "<a class='ex_settings $link_class' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         }
         $exlink = $link . "$title</a> $exclamation_icon $pending_label";
         $imagelink = $link . "</a>" . icon('fa-pencil-square-o'). "";
@@ -987,7 +987,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $title = q($title);
     if ($type == 'forum') {
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$ft_id&amp;unit=$id'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$ft_id&amp;unit=$id'>";
         $forumlink = $link . "$title</a>";
         $imagelink = icon('fa-comments');
     } else {
@@ -1001,7 +1001,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
             }
         } else {
             $forum_id = $r->forum_id;
-            $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
+            $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
             $forumlink = $link . "$title</a>";
             $imagelink = icon('fa-comments'). "";
         }
@@ -1047,7 +1047,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
             $polllink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;unit_id=$id'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;unit_id=$id'>";
         $polllink = $link . $title . '</a>';
         $imagelink = $link . "</a>" . icon('fa-question-circle') . "";
     }
@@ -1106,7 +1106,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_
             $wikilink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='${urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$wiki_id&amp;action=show&amp;unit=$id'>";
+        $link = "<a href='{$urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$wiki_id&amp;action=show&amp;unit=$id'>";
         $wikilink = $link . "$title</a>";
         if (!$module_visible) {
             $wikilink .= " <i>($langInactiveModule)</i>";
@@ -1270,7 +1270,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='${urlServer}modules/ebook/show.php/$course_code/$ebook_id/unit=$id'>";
+        $link = "<a href='{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/unit=$id'>";
         $exlink = $link . "$title</a>";
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
@@ -1393,7 +1393,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='${urlServer}modules/ebook/show.php/$course_code/$ebook_id/$display_id/unit=$id'>";
+        $link = "<a href='{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/$display_id/unit=$id'>";
         $exlink = $link . q($title) . '</a>';
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
@@ -1441,7 +1441,7 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility, $act_
         if (!$is_editor and $chat->status == 'inactive') {
             return '';
         }
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
         $chatlink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-exchange') . "";
     }
@@ -1483,8 +1483,8 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility, $act_
             $bloglink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        //$link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
-        $link = "<a href='${urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id'>";
+        //$link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
+        $link = "<a href='{$urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id'>";
         $bloglink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-columns') . "";
     }
@@ -1532,7 +1532,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
         $typeIcon = (file_exists($typeIconPath))
             ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
             : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
-        $link = "<a href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=h5p&amp;id=$h5p_id&amp;unit=$id'>";
         $h5plink = $link . "$title</a>";
         $imagelink = $link . "</a><img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>";
     }
@@ -1695,7 +1695,7 @@ function edit_res($resource_id) {
     $resource_id = $ru->id;
     $resource_type = $ru->type;
     $content = "<div class='form-wrapper'>";
-    $content .= "<form class='form-horizontal' role='form' method='post' action='${urlServer}modules/units/?course=$course_code'>" .
+    $content .= "<form class='form-horizontal' role='form' method='post' action='{$urlServer}modules/units/?course=$course_code'>" .
             "<input type='hidden' name='id' value='$id'>" .
             "<input type='hidden' name='resource_id' value='$resource_id'>";
     if ($resource_type != 'text') {

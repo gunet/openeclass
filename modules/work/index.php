@@ -3675,7 +3675,7 @@ function delete_assignment($id) {
             if ($row->assign_to_specific) {
                 Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
             }
-            move_dir("$workPath/$secret", "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
+            move_dir("$workPath/$secret", "$webDir/courses/garbage/{$course_code}_work_{$id}_$secret");
 
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
                                                                         'title' => $row->title));
@@ -3711,7 +3711,7 @@ function purge_assignment_subs($id) {
             Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
         }
         move_dir("$workPath/$secret",
-        "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
+        "$webDir/courses/garbage/{$course_code}_work_{$id}_$secret");
         return true;
     }
     return false;

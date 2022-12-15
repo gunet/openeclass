@@ -44,7 +44,7 @@ function list_forums($id = NULL) {
         }
 
         $ret_string .= "<form action='insert.php?course=$course_code' method='post'>" .
-                "<input type='hidden' name='id' value='$id' />" .
+                "<input type='hidden' name='id' value='$id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th>$langForums</th>" .
@@ -59,7 +59,7 @@ function list_forums($id = NULL) {
             }
 
             $ret_string .= "<tr>
-                <td><a href='${urlServer}/modules/forum/viewforum.php?course=$course_code&amp;forum={$entry->id}'><b>" . q($entry->name) . "</b></a></td>
+                <td><a href='{$urlServer}/modules/forum/viewforum.php?course=$course_code&amp;forum={$entry->id}'><b>" . q($entry->name) . "</b></a></td>
                 <td>" . ($entry->desc? q($entry->desc): '&nbsp;') . "</td>
                 <td class='text-center'><input type='checkbox' $fchecked name='forum[]' value='{$entry->id}'></td>
               </tr>";
@@ -80,7 +80,7 @@ function list_forums($id = NULL) {
                     }
 
                     $ret_string .= "<tr>";
-                    $ret_string .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='${urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum={$entry->id}'>" . q($topicentry['topic_title']) . "</a></td>";
+                    $ret_string .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='{$urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum={$entry->id}'>" . q($topicentry['topic_title']) . "</a></td>";
                     $ret_string .= "<td>&nbsp;</td>";
                     $ret_string .= "<td class='text-center'><input type='checkbox' $tchecked name='forum[]' value='{$entry->id}:$topicentry[topic_id]'></td>";
                     $ret_string .= "</tr>";

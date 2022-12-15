@@ -545,7 +545,7 @@ function display_all_users_grades($gradebook_id) {
                 <tr class='$classvis'>
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
-                <td>" . $resultUser->am . "</td>                
+                <td>" . $resultUser->am . "</td>
                 <td class='text-center'>";
                 if (!empty($resultUser->reg_date)) {
                     $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
@@ -599,7 +599,7 @@ function student_view_gradebook($gradebook_id, $uid) {
     $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) AS count
                                             FROM gradebook_book, gradebook_activities
                                         WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id
-                                            $extra 
+                                            $extra
                                             AND uid = ?d
                                             AND gradebook_activities.gradebook_id = ?d", $uid, $gradebook_id)->count;
 
@@ -853,11 +853,11 @@ function display_gradebook($gradebook) {
             $tool_content .= "</td>";
             $tool_content .= "<td width='120' class='text-center'>" . userGradebookTotalActivityStats($details, $gradebook) . "</td>";
             if ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
-                $preview_link = "${urlServer}modules/exercise/results.php?course=$course_code&amp;exerciseId=$details->module_auto_id";
+                $preview_link = "{$urlServer}modules/exercise/results.php?course=$course_code&amp;exerciseId=$details->module_auto_id";
             } elseif ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
-                $preview_link = "${urlServer}modules/work/index.php?course=$course_code&amp;id=$details->module_auto_id";
+                $preview_link = "{$urlServer}modules/work/index.php?course=$course_code&amp;id=$details->module_auto_id";
             } elseif ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_LP) {
-                $preview_link = "${urlServer}modules/learnPath/detailsAll.php?course=$course_code";
+                $preview_link = "{$urlServer}modules/learnPath/detailsAll.php?course=$course_code";
             } else {
                 $preview_link = '';
             }
@@ -987,7 +987,7 @@ function display_available_exercises($gradebook_id) {
         foreach ($checkForExer as $newExerToGradebook) {
             $content = ellipsize_html($newExerToGradebook->description, 50);
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
+            $tool_content .= "<td class='text-left'><a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
             $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->id) . "&amp;type=2");
             $tool_content .= "</td></tr>";
@@ -1008,8 +1008,8 @@ function display_available_assignments($gradebook_id) {
            $m, $langDescription, $langAttendanceNoActMessageAss4,
            $langAdd, $langTitle;
 
-    $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d 
-                    AND assignment.active = 1 
+    $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d
+                    AND assignment.active = 1
                     AND assignment.id NOT IN
                         (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = " . GRADEBOOK_ACTIVITY_ASSIGNMENT . " AND gradebook_id = ?d)", $course_id, $gradebook_id);
 
@@ -1032,7 +1032,7 @@ function display_available_assignments($gradebook_id) {
                 }
             }
             $tool_content .= "<tr>";
-            $tool_content .= "<td><a href='${urlServer}modules/work/index.php?course=$course_code&amp;id=$newAssToGradebook->id'>" . q($newAssToGradebook->title) . "</a></td>";
+            $tool_content .= "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$newAssToGradebook->id'>" . q($newAssToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
             $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newAssToGradebook->id) . "&amp;type=1");
             $tool_content .= "</td></tr>";
@@ -1067,7 +1067,7 @@ function display_available_lps($gradebook_id) {
         $tool_content .= "</tr>";
         foreach ($checkForLp as $newExerToGradebook) {
             $tool_content .= "<tr>";
-            $tool_content .= "<td>&nbsp;<a href='${urlServer}modules/learnPath/learningPathAdmin.php?course=$course_code&amp;path_id=$newExerToGradebook->learnPath_id'>" . q($newExerToGradebook->name) . "</a></td>";
+            $tool_content .= "<td>&nbsp;<a href='{$urlServer}modules/learnPath/learningPathAdmin.php?course=$course_code&amp;path_id=$newExerToGradebook->learnPath_id'>" . q($newExerToGradebook->name) . "</a></td>";
             $tool_content .= "<td>" .q($newExerToGradebook->comment). "</td>";
             $tool_content .= "<td class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->learnPath_id) . "&amp;type=3")."</td>";
             $tool_content .= "</tr>";

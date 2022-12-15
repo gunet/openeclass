@@ -598,7 +598,7 @@ if (isset($level) && !empty($level)) {
             <img class='img-responsive center-block' src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
         </div>
         <div class='col-xs-8'>
-            <div style='border-bottom:1px solid #ccc; margin-bottom: 5px;'>${langOpenCoursesLevel}: $level</div>
+            <div style='border-bottom:1px solid #ccc; margin-bottom: 5px;'>$langOpenCoursesLevel: $level</div>
             <p class='not_visible'>
             <small>$langVisitsShort : &nbsp;$visitsopencourses</small>
             <br />
@@ -864,7 +864,7 @@ if ($total_cunits > 0) {
         if ($not_shown) {
             $cunits_content .= q($cu->title) ;
         } else {
-            $cunits_content .= "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+            $cunits_content .= "<a class='$class_vis' href='{$urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
         }
         $cunits_content .= "<small><span class='help-block'>";
         if (!(is_null($cu->start_week))) {

@@ -396,7 +396,7 @@ function del_work_subs()  {
             if (is_dir("$workPath/$secret->secret_directory")) { // if exists secret directory
                 if (count(scandir("$workPath/$secret->secret_directory")) > 2) { // and is not empty
                     move_dir("$workPath/$secret->secret_directory",
-                       "$webDir/courses/garbage/${course_code}_work_".$row->id."_$secret->secret_directory");
+                       "$webDir/courses/garbage/{$course_code}_work_".$row->id."_$secret->secret_directory");
                 }
             }
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $row->id);

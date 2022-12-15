@@ -274,7 +274,7 @@ elseif (isset($_GET['forumgoadd'])) {
     foreach ($sql as $r) {
         $emailaddr = uid_to_email($r->user_id);
         if (valid_email($emailaddr) and get_user_email_notification($r->user_id, $course_id)) {
-            $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
+            $linkhere = "&nbsp;<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
             $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
             $body_topic_notify .= $unsubscribe . $linkhere;
 
@@ -300,7 +300,7 @@ elseif (isset($_GET['forumgoadd'])) {
             <div id='mail-footer'>
                 <br>
                 <div>
-                    <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+                    <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
                 </div>
             </div>";
 

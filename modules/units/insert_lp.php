@@ -66,7 +66,7 @@ function list_lps() {
                 }
                 $tool_content .= "<tr class='$vis'>";
                 $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$entry[id]' $disabled></td>";
-                $tool_content .= "<td>&nbsp;<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$entry[id]&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>"
+                $tool_content .= "<td>&nbsp;<a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$entry[id]&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>"
                  . $comment_text . "</td>";
                 $tool_content .= "</tr>";
             }

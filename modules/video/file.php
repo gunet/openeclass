@@ -25,12 +25,12 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'modules/progress/ViewingEvent.php';
 
 if (!isset($_GET['course']) || !isset($_GET['id'])) {
-    header("Location: ${urlServer}");
+    header("Location: $urlServer");
     exit();
 }
 
 if (strpos($_GET['course'], '..') !== false) {
-    header("Location: ${urlServer}");
+    header("Location: $urlServer");
     exit();
 }
 
@@ -48,7 +48,7 @@ if ($res1) {
 }
 
 if ($course_id == null) {
-    header("Location: ${urlServer}");
+    header("Location: $urlServer");
     exit();
 }
 
@@ -65,13 +65,13 @@ $res2 = Database::get()->querySingle("SELECT * FROM video
                   WHERE course_id = ?d AND id = ?d", $course_id, $_GET['id']);
 
 if (!$res2) {
-    header("Location: ${urlServer}");
+    header("Location: $urlServer");
     exit();
 }
 
 $valid = $uid || course_status($course_id) == COURSE_OPEN || (isset($_GET['token']) && token_validate($file_info->path, $_GET['token'], 30));
 if (!$valid) {
-    header("Location: ${urlServer}");
+    header("Location: $urlServer");
     exit();
 }
 

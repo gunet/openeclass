@@ -550,8 +550,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $userid_map[1] = 1;
         }
 
-        $courseDir = "${webDir}/courses/$new_course_code";
-        $videoDir = "${webDir}/video/$new_course_code";
+        $courseDir = "$webDir/courses/$new_course_code";
+        $videoDir = "$webDir/video/$new_course_code";
         $oldCourseDir = $restoreThis . '/html';
         move_dir($oldCourseDir, $courseDir);
 

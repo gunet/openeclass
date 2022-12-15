@@ -39,7 +39,7 @@ header("Content-Type: application/xml;");
 echo "<?xml version='1.0' encoding='utf-8'?>";
 echo "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>";
 echo "<channel>";
-echo "<atom:link href='${urlServer}rss.php' rel='self' type='application/rss+xml' />";
+echo "<atom:link href='{$urlServer}rss.php' rel='self' type='application/rss+xml' />";
 echo "<title>$langAnnouncements $siteName</title>";
 echo "<link>" . $urlServer . "rss.php?lang=$language</link>";
 echo "<description>$langAnnouncements</description>";

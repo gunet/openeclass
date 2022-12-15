@@ -187,7 +187,7 @@ if (isset($_POST['submit'])) {
                     }
                 }
                 array_push($list_of_recipients, $_SESSION['email']); // add sender email address
-                $linkhere = "<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a>.";
+                $linkhere = "<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a>.";
                 $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $c);
                 $datetime = date('l jS \of F Y h:i:s A');
                 $course_code = course_id_to_code($cid);
@@ -214,7 +214,7 @@ if (isset($_POST['submit'])) {
                             " . $_POST['body']. "
                         </div><br/>";
                 if ($filesize > 0) {
-                    $main_dropbox_message .= "<div><a href='${urlServer}modules/message/message_download.php?course=".course_id_to_code($cid)."&amp;id=$msg->id'>[$langAttachedFile]</a></div><br/>";
+                    $main_dropbox_message .= "<div><a href='{$urlServer}modules/message/message_download.php?course=".course_id_to_code($cid)."&amp;id=$msg->id'>[$langAttachedFile]</a></div><br/>";
                 }
                 $main_dropbox_message .= "
                     </div>";
@@ -226,7 +226,7 @@ if (isset($_POST['submit'])) {
                         <div id='alert'><small><b class='notice'>$langNote:</b> $langDoNotReply <a href='$msgURL'>$langHere</a>.</small></div>
                                         <br>
                         <div>
-                            <small>" . sprintf($langLinkUnsubscribe, $c) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a></small>
+                            <small>" . sprintf($langLinkUnsubscribe, $c) ." <a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a></small>
                         </div>
                     </div>";
 

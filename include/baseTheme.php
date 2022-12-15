@@ -349,7 +349,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         if (!$pageName) {
             $t->set_var('SECTION_TITLE', q($currentCourseName));
         } else {
-            $t->set_var('SECTION_TITLE', "<a href='${urlServer}courses/$course_code/'>" . q($currentCourseName) . '</a>');
+            $t->set_var('SECTION_TITLE', "<a href='{$urlServer}courses/$course_code/'>" . q($currentCourseName) . '</a>');
         }
         if (!empty($public_code) and ($public_code !== $course_code)) {
             $t->set_var('COURSE_PUBLIC_CODE', "($public_code)");
