@@ -147,7 +147,7 @@
                     @if ($previousLink or $nextLink)
 
                         <div class='col-12 mt-3'>
-                            <div class='form-wrapper course_units_pager docPanel p-3 clearfix'>
+                            <div class='form-wrapper course_units_pager clearfix'>
                                 @if ($previousLink)
                                     <a class='pull-left' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
                                         <span class='fa fa-arrow-left space-after-icon'></span>
@@ -167,8 +167,8 @@
 
 
                     <div class='col-12 mt-3'>
-                        <div class='panel panel-default rounded-0'>
-                            <div class='panel-heading rounded-0'>
+                        <div class='panel panel-default'>
+                            <div class='panel-heading'>
                                 <div class='panel-title'>{{ $pageName }}
                                     @if($course_start_week or $course_finish_week)
                                     <span class='orangeText'>
@@ -178,7 +178,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class='panel-body rounded-0'>
+                            <div class='panel-body'>
                                 <div>
                                     {!! $comments !!}
                                 </div>
@@ -198,8 +198,8 @@
 
                     @if ($is_editor and $q->flipped_flag == 2)
                         <div class='col-12 mt-3'>
-                            <div class='panel panel-default rounded-0'>
-                                <div class='panel-heading rounded-0'>
+                            <div class='panel panel-default'>
+                                <div class='panel-heading'>
                                     <div class='d-inline-flex align-items-top'>
                                         {{ trans('langActivities')}} 
                                         <a href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}">
@@ -683,9 +683,9 @@
 
 
                     <div class='col-12 mt-3'>
-                        <div class='panel panel-default rounded-0'>
-                            <div class='panel-heading rounded-0'>{{ trans('langCourseUnits') }}</div>
-                            <div class='panel-body rounded-0'>
+                        <div class='panel panel-default'>
+                            <div class='panel-heading'>{{ trans('langCourseUnits') }}</div>
+                            <div class='panel-body'>
                                 <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
                                     <input type='hidden' name='course' value='{{ $course_code }}'>
                                     <div class='form-group'>

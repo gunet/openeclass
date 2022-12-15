@@ -61,11 +61,11 @@
                     @endif
 
                     <div class='col-12'>
-                        <div class="panel panel-default rounded-0">
-                            <div class='panel-heading rounded-0' style='background:white;'>
+                        <div class="panel panel-default">
+                            <div class='panel-heading bg-white'>
                                 <h3 class='panel-title text-center'>{{ trans('langActivateCourseTools') }}</h3>
                             </div>
-                            <div class='panel-body rounded-0'>
+                            <div class='panel-body'>
                                 <form name="courseTools" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method="post" enctype="multipart/form-data">
                                     <div class="table-responsive mt-0">
                                         <table class="table-default">
@@ -108,8 +108,8 @@
                     </div>
 
                     <div class='col-12 mt-5'>
-                        <div class='panel panel-default rounded-0'>
-                            <div class='panel-heading rounded-0'>
+                        <div class='panel panel-default'>
+                            <div class='panel-heading'>
                                 <div class='row'>
                                     <div class='col-md-6 col-10 text-start pt-md-1 pt-0'>
                                         <span class='panel-title'> {{ trans('langOperations') }}</span>
@@ -119,7 +119,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class='panel-body rounded-0'>
+                            <div class='panel-body'>
                                 <table class='table-default mb-2 bg-light'>
                                 @foreach($q as $externalLinks)
                                     <tr class='bg-body'>
@@ -143,8 +143,8 @@
                     </div>
 
                     <div class='col-12 mt-5'>
-                        <div class='panel panel-default rounded-0'>
-                            <div class='panel-heading rounded-0'>
+                        <div class='panel panel-default'>
+                            <div class='panel-heading'>
                                 <div class='row'>
                                     <div class='col-md-6 col-10 text-start pt-md-1 pt-0'>
                                         <span class='panel-title'>{{ trans('langLtiConsumer') }}</span>
@@ -156,7 +156,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class='panel-body rounded-0'>
+                            <div class='panel-body'>
                                 @php 
                                     load_js('trunk8');
                                     $activeClause = ($is_editor) ? '' : "AND enabled = 1";

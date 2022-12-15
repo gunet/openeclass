@@ -184,8 +184,8 @@ if(!isset($_POST['final_submit'])){
 
                     <div class='form-wrapper '>
                         <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
-                        <div class='panel panel-default rounded-0'>
-                            <div class='panel-heading rounded-0'>
+                        <div class='panel panel-default'>
+                            <div class='panel-heading'>
                                 <div class='panel-title text-center text-uppercase'>
                                     $langActSelect
 

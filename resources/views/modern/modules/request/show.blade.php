@@ -56,8 +56,8 @@
 
 
                     <div class='col-sm-12'>
-                        <div class='panel panel-default rounded-0'>
-                            <div class='panel-heading rounded-0'>
+                        <div class='panel panel-default'>
+                            <div class='panel-heading'>
                                 <div class='panel-title text-start'>
                                     <span>
                                     {{ $request->title }}
@@ -68,7 +68,7 @@
                                 </div>
                             </div>
 
-                            <div class='panel-body rounded-0'>
+                            <div class='panel-body'>
 
                                 <div class='row'>
                                     <div class='d-inline-flex align-items-center'>
@@ -225,8 +225,8 @@
                     @if ($comments)
                         @foreach ($comments as $comment)
                             <div class='col-sm-12 mt-3'>
-                                <div class='panel panel-default rounded-0'>
-                                    <div class='panel-body rounded-0'>
+                                <div class='panel panel-default'>
+                                    <div class='panel-body'>
                                         
                                         <div class='d-inline-flex align-items-center'>
                                             <b class='control-label-notes pe-2'>{{ trans('langFrom') }}:</b>

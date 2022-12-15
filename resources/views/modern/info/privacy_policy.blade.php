@@ -21,7 +21,7 @@
 
                     
                     <div class='col-12'>
-                        <div class='panel panel-default shadow-sm rounded-0'>
+                        <div class='panel panel-default shadow-sm'>
                             <div class='panel-body'>
                                 {!! $policy !!}
                             </div>

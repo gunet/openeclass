@@ -59,11 +59,11 @@ function render_eportfolio_fields_content($uid) {
     
             $cat_return_string['panels'] .= '
             <div class="col-sm-12 mt-3">
-            <div class="panel panel-default rounded-0" id="IndexPortfolio'.$c->id.'">
-                                                <div class="panel-heading rounded-0">
+            <div class="panel panel-default" id="IndexPortfolio'.$c->id.'">
+                                                <div class="panel-heading">
                                                         <span class="panel-title">'.$c->name.'</span>
                                                     </div>
-                                                 <div class="panel-body rounded-0">
+                                                 <div class="panel-body">
                                                      
                                                      <fieldset class="row p-2 fieldset-eportfolio">';
             if ($j == 0) {
@@ -169,11 +169,11 @@ function render_eportfolio_fields_form() {
             
             $return_string['panels'] .= '
             <div class="row p-2"></div>
-            <div class="panel panel-default rounded-0" id="EditPortfolio'.$c->id.'">
-                                       <div class="panel-heading rounded-0">
+            <div class="panel panel-default" id="EditPortfolio'.$c->id.'">
+                                       <div class="panel-heading">
                                            <h2 class="panel-title">'.$c->name.'</h2>
                                        </div>
-                                       <div class="panel-body ps-3 pe-3 pb-3 pt-2 panel-body-eportfolio-edit rounded-0">
+                                       <div class="panel-body ps-3 pe-3 pb-3 pt-2 panel-body-eportfolio-edit">
                                            <fieldset>';
             if ($j == 0) {
                 $active = " class='active'";

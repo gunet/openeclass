@@ -189,11 +189,11 @@ $tool_content .=
                 'url' => $pathBack . "?course=$course_code",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')),false) . "
-    <div class='panel panel-default rounded-0'>
-        <div class='panel-heading rounded-0'>
+    <div class='panel panel-default'>
+        <div class='panel-heading'>
             <h3 class='panel-title'>$langLearningObjectData</h3>
         </div>
-        <div class='panel-body rounded-0'>
+        <div class='panel-body'>
             <div class='row margin-bottom-fat p-2'>
                 <div class='col-sm-4'>
                     <strong class='control-label-notes'>$langTitle:</strong>

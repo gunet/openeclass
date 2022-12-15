@@ -73,9 +73,9 @@ $tool_content .= "
             <div class='col-md-12'>";
 foreach ($items as $item) {
     $tool_content .= "
-                <div class='panel panel-default clearfix mb-3 rounded-0'>
-                    <div class='panel-heading rounded-0'>" . q(getSerializedMessage($item->heading)) . "</div>
-                    <div class='panel-body rounded-0'>" .
+                <div class='panel panel-default clearfix mb-3'>
+                    <div class='panel-heading'>" . q(getSerializedMessage($item->heading)) . "</div>
+                    <div class='panel-body'>" .
                         rich_text_editor("content[{$item->heading_id}]", 5, 40, $item->content, true) . "</div>";
     $resources = Database::get()->queryArray("SELECT * FROM unit_resources
             WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $item->id);

@@ -249,11 +249,11 @@ if (isset($_GET['group_as'])) {
 
     $tool_content .= "
     <div class='col-sm-12'>
-        <div class='panel panel-action-btn-primary rounded-0'>
-            <div class='panel-heading rounded-0'>
+        <div class='panel panel-action-btn-primary'>
+            <div class='panel-heading'>
                 <h3 class='panel-title'>$langGroupInfo</h3>
             </div>
-            <div class='panel-body rounded-0'>
+            <div class='panel-body'>
                 <div class='row'>
                     <div class='col-sm-3'><strong>$langGroupTutor:</strong></div>
                     <div class='col-sm-9'>$tool_content_tutor</div>

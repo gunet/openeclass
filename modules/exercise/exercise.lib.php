@@ -54,14 +54,14 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
         $qNumber = "$question_number / $nbrQuestions";
     }
     $tool_content .= "
-            <div class='panel panel-default qPanel mt-3 rounded-0' id='qPanel$questionId'>
-              <div class='panel-heading rounded-0'>
+            <div class='panel panel-default qPanel mt-3' id='qPanel$questionId'>
+              <div class='panel-heading'>
                 <h6 class='panel-title'>$langQuestion $qNumber
                     <small>($questionTypeWord &mdash; $questionWeight $message)</small>&nbsp;
                     <span title='$langHasAnswered' id='qCheck$question_number'></span>
                 </h6>
             </div>
-            <div class='panel-body rounded-0'>
+            <div class='panel-body'>
                 <h6 class='mb-2'>" . q_math($questionName) . "</h6>
                 <div class='mb-2'>$questionDescription</div>
                 <div class='text-center'>" .
@@ -349,7 +349,7 @@ function display_exercise($exercise_id) {
             $colspan = 1;
         }
 
-        $tool_content .= "<div class='col-12 mt-3'><div class='table-responsive Shadow-cols'><table class = 'table-default'>";
+        $tool_content .= "<div class='col-12 mt-3'><div class='table-responsive Shadow-cols Borders'><table class = 'table-default'>";
         if (is_array($qid)) { // placeholder for random questions (if any)
             $hasRandomQuestions = true;
             $tool_content .= "<tr class='active'>

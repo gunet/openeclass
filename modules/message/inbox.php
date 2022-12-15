@@ -82,9 +82,9 @@ if (isset($_GET['mid'])) {
         $out .= "
         <div id='del_msg'></div>
                 <div id='msg_area'>
-                    <div class='panel panel-primary rounded-0'>
-                        <div class='panel-heading rounded-0'>$langMessage</div>
-                        <div class='panel-body rounded-0'>
+                    <div class='panel panel-primary'>
+                        <div class='panel-heading'>$langMessage</div>
+                        <div class='panel-body'>
                             <div class='row p-2 margin-bottom-thin'>
                                 <div class='col-sm-2'>
                                     <strong class='control-label-notes'>$langSubject:</strong>
@@ -133,9 +133,9 @@ if (isset($_GET['mid'])) {
                         </div>
                     </div>
                     <div class='col-sm-12 mt-3 mb-3'>
-                    <div class='panel panel-default rounded-0'>
-                        <div class='panel-heading rounded-0'>$langMessage</div>
-                        <div class='panel-body rounded-0'>
+                    <div class='panel panel-default'>
+                        <div class='panel-heading'>$langMessage</div>
+                        <div class='panel-body'>
                             <div class='row p-2 margin-bottom-thin'>
                                 <div class='col-12'>
                                     ".standard_text_escape($msg->body)."

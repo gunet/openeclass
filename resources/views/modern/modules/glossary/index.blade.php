@@ -59,7 +59,7 @@
                                     @if ($glossary_index && count($prefixes) > 1)
                                         <div class="col-12">
                                             <nav aria-label="...">
-                                                <ul class="pagination bg-light p-0 pagination-glossary" id="myPag">
+                                                <ul class="pagination p-0 pagination-glossary" id="myPag">
                                                    
                                                     <li class="page-item disabled">
                                                         <span class="page-link">{{trans('langGlossaryIndex')}}:</span>

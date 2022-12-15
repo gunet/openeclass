@@ -162,11 +162,11 @@ $tool_content .= action_bar(array(
             )
         ))."
 $export_box
-<div class='panel panel-primary rounded-0'>
-    <div class='panel-heading rounded-0'>
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
         <h3 class='panel-title'>$langInfoPoll</h3>
     </div>
-    <div class='panel-body rounded-0'>
+    <div class='panel-body'>
         <div class='row  margin-bottom-fat p-2'>
             <div class='col-sm-4'>
                 <strong>$langTitle:</strong>
@@ -276,11 +276,11 @@ $this_chart_data = array();
 
 $tool_content .= "
 <div class='col-sm-12 mt-3'>
-    <div class='panel panel-success rounded-0'>
-    <div class='panel-heading rounded-0'>
+    <div class='panel panel-success'>
+    <div class='panel-heading'>
         <h3 class='panel-title'>$lcolles1</h3>
     </div>
-    <div class='panel-body rounded-0'>";
+    <div class='panel-body'>";
 
     $this_chart_data['question'][] = "$scolles1";
     $this_chart_data['question'][] = "$scolles2";
@@ -306,11 +306,11 @@ $tool_content .= "
 
 $tool_content .= "
 <div class='col-sm-12 mt-3'>
-    <div class='panel panel-success rounded-0'>
-    <div class='panel-heading rounded-0'>
+    <div class='panel panel-success'>
+    <div class='panel-heading'>
         <h3 class='panel-title'>$lcolles2</h3>
     </div>
-    <div class='panel-body rounded-0'>";
+    <div class='panel-body'>";
 
     $this_chart_data['question'][] = "$scolles5";
     $this_chart_data['question'][] = "$scolles6";
@@ -336,11 +336,11 @@ $tool_content .= "
 
 $tool_content .= "
 <div class='col-sm-12 mt-3'>
-    <div class='panel panel-success rounded-0'>
-    <div class='panel-heading rounded-0'>
+    <div class='panel panel-success'>
+    <div class='panel-heading'>
         <h3 class='panel-title'>$lcolles3</h3>
     </div>
-    <div class='panel-body rounded-0'>";
+    <div class='panel-body'>";
 
     $this_chart_data['question'][] = "$scolles9";
     $this_chart_data['question'][] = "$scolles10";
@@ -366,11 +366,11 @@ $this_chart_data = array();
 
 $tool_content .= "
 <div class='col-sm-12 mt-3'>
-    <div class='panel panel-success rounded-0'>
-    <div class='panel-heading rounded-0'>
+    <div class='panel panel-success'>
+    <div class='panel-heading'>
         <h3 class='panel-title'>$lcolles4</h3>
     </div>
-    <div class='panel-body rounded-0'>";
+    <div class='panel-body'>";
     $this_chart_data['question'][] = "$scolles13";
     $this_chart_data['question'][] = "$scolles14";
     $this_chart_data['question'][] = "$scolles15";
@@ -396,11 +396,11 @@ $tool_content .= "
     $tool_content .= "
 
 <div class='col-sm-12 mt-3'>
-    <div class='panel panel-success rounded-0'>
-    <div class='panel-heading rounded-0'>
+    <div class='panel panel-success'>
+    <div class='panel-heading'>
         <h3 class='panel-title'>$lcolles5</h3>
     </div>
-    <div class='panel-body rounded-0'>";
+    <div class='panel-body'>";
 
     $this_chart_data['question'][] = "$scolles17";
     $this_chart_data['question'][] = "$scolles18";
@@ -427,11 +427,11 @@ $tool_content .= "
     $tool_content .= "
 
 <div class='col-sm-12 mt-3'>
-    <div class='panel panel-success rounded-0'>
-    <div class='panel-heading rounded-0'>
+    <div class='panel panel-success'>
+    <div class='panel-heading'>
         <h3 class='panel-title'>$lcolles6</h3>
     </div>
-    <div class='panel-body rounded-0'>";
+    <div class='panel-body'>";
 
     $this_chart_data['question'][] = "$scolles21";
     $this_chart_data['question'][] = "$scolles22";

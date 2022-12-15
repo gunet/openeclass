@@ -55,8 +55,8 @@ function display_certificates() {
         $tool_content .= "
 
                 <div class='col-12 mt-3'>
-                    <div class='panel panel-default rounded-0'>
-                        <div class='panel-heading rounded-0'>
+                    <div class='panel panel-default'>
+                        <div class='panel-heading'>
                             <div class='row'>
                                 <div class='col-md-7 col-6 text-start mt-1'>
                                     $langCertificates
@@ -66,7 +66,7 @@ function display_certificates() {
                                 </div>
                             </div>
                         </div>
-                        <div class='panel-body rounded-0'>
+                        <div class='panel-body'>
                             <div class='res-table-wrapper shadow-sm p-3 rounded'>";
     if (count($sql_cer) == 0) { // If no certificates
         $tool_content .= "<p class='text-center text-muted'>$langNoCertificates</p>";
@@ -162,8 +162,8 @@ function display_badges() {
     }
         $tool_content .= "
                 <div class='col-12 mt-3'>
-                    <div class='panel panel-default rounded-0'>
-                        <div class='panel-heading rounded-0'>
+                    <div class='panel panel-default'>
+                        <div class='panel-heading'>
                             <div class='row'>
                                 <div class='col-md-7 col-6 text-start mt-1'>
                                     $langBadges
@@ -173,7 +173,7 @@ function display_badges() {
                                 </div>
                             </div>
                         </div>
-                        <div class='panel-body rounded-0'>
+                        <div class='panel-body'>
                             <div class='res-table-wrapper shadow-sm p-3 rounded'>";
 
     if (count($sql_cer) == 0) { // no badges
@@ -253,15 +253,15 @@ function display_course_completion() {
     if ($data) {
         $tool_content .= "
                 <div class='col-12'>
-                    <div class='panel panel-success rounded-0'>
-                        <div class='panel-heading rounded-0'>
+                    <div class='panel panel-success'>
+                        <div class='panel-heading'>
                             <div class='row'>
                                 <div class='col-sm-7 text-md-start text-center'>
                                     $langCourseCompletion
                                 </div>
                             </div>
                         </div>
-                        <div class='panel-body rounded-0'>
+                        <div class='panel-body'>
                             <div class='res-table-wrapper shadow-sm p-3 rounded'>";
 
             $vis_status = $data->active ? "text-success" : "text-danger";
@@ -510,8 +510,8 @@ function display_activities($element, $id, $unit_id = 0) {
     if (!$unit_id) {
         $tool_content .= "
             <div class='col-12 mt-3'>
-                <div class='panel panel-default rounded-0'>
-                    <div class='panel-heading rounded-0'>
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
                         <div class='row'>
                             <div class='col-9 mt-1'>
                                 $langAttendanceActList
@@ -584,8 +584,8 @@ function display_activities($element, $id, $unit_id = 0) {
             $tool_content .= "<div class='main-content'>
                                 <div class='col-sm-12'>
 
-                                        <div class='panel panel-default rounded-0'>
-                                            <div class='panel-heading rounded-0'>
+                                        <div class='panel panel-default'>
+                                            <div class='panel-heading'>
                                                 <div class='row'>
                                                     <div class='col-md-7 col-9 mt-1'>
                                                         $langUnitCompletion
@@ -597,7 +597,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class='panel-body rounded-0'>
+                                            <div class='panel-body'>
                                                 <div class='res-table-wrapper'>
                                                     <div class='table-responsive'>
                                                         <table class='table-default'>
@@ -681,8 +681,8 @@ function display_activities($element, $id, $unit_id = 0) {
             ));
         $tool_content .= "
 
-                    <div class='panel panel-default mt-3 rounded-0'>
-                        <div class='panel-heading rounded-0'>
+                    <div class='panel panel-default mt-3'>
+                        <div class='panel-heading'>
                             <div class='row'>
                                 <div class='col-md-7 col-9 mt-1'>
                                     $langUnitPrerequisites
@@ -692,7 +692,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                 </div>
                             </div>
                         </div>
-                        <div class='panel-body rounded-0'>
+                        <div class='panel-body'>
                             <div class='res-table-wrapper'>";
 
 
@@ -2000,8 +2000,8 @@ function display_settings($element, $element_id, $unit_id = 0) {
         }
         $tool_content .= "
                 <div class='col-12'>
-                    <div class='panel panel-default rounded-0'>
-                        <div class='panel-heading rounded-0'>
+                    <div class='panel panel-default'>
+                        <div class='panel-heading'>
                             <div class='row'>
                                 <div class='col-7 mt-1'>
                                     $langProgressBasicInfo
@@ -2013,7 +2013,7 @@ function display_settings($element, $element_id, $unit_id = 0) {
                                 </div>
                             </div>
                         </div>
-                        <div class='panel-body rounded-0'>
+                        <div class='panel-body'>
                             <div class='row'>
                                 <div class='col-md-4 col-12'>
                                     <img style='box-shadow: 0 0 15px 1px #bbb' class='img-responsive center-block m-md-0 m-auto d-block' src='$icon_link'>
@@ -2063,8 +2063,8 @@ function display_settings($element, $element_id, $unit_id = 0) {
         if (!$unit_id) {
             $tool_content .= "
             <div class='col-12'>
-                <div class='panel panel-info rounded-0'>
-                    <div class='panel-body rounded-0 bg-light'>
+                <div class='panel panel-info'>
+                    <div class='panel-body bg-light'>
 
                         <h6 class='mb-0 text-center'><strong>$langCourseCompletion</strong></h6>
 
@@ -2261,11 +2261,11 @@ function student_view_progress() {
 
         $tool_content .= "
                 <div class='col-12'>
-                    <div class='panel panel-success rounded-0'>
-                        <div class='panel-heading rounded-0'>
+                    <div class='panel panel-success'>
+                        <div class='panel-heading'>
                             $langCourseCompletion
                         </div>
-                        <div class='panel-body rounded-0'>
+                        <div class='panel-body'>
                             <div class='res-table-wrapper'>
                                 <div class='row p-2 res-table-row border-0'>
                                     <div class='col-sm-2'>
@@ -2314,11 +2314,11 @@ function student_view_progress() {
 
             $tool_content .= "
                     <div class='col-12 mt-3'>
-                        <div class='panel panel-default rounded-0'>
-                            <div class='panel-heading rounded-0'>
+                        <div class='panel panel-default'>
+                            <div class='panel-heading'>
                                 $langBadges
                             </div>
-                            <div class='panel-body rounded-0'>";
+                            <div class='panel-body'>";
 
             foreach ($game_badge as $key => $badge) {
                 // badge icon
@@ -2355,11 +2355,11 @@ function student_view_progress() {
 
             $tool_content .= "
                     <div class='col-12 mt-3'>
-                        <div class='panel panel-default rounded-0'>
-                            <div class='panel-heading rounded-0'>
+                        <div class='panel panel-default'>
+                            <div class='panel-heading'>
                                $langCertificates
                             </div>
-                            <div class='panel-body rounded-0'>";
+                            <div class='panel-body'>";
 
 
             foreach ($game_certificate as $key => $certificate) {
@@ -2568,11 +2568,11 @@ function display_user_progress_details($element, $element_id, $user_id) {
 
 	$tool_content .= "
             <div class='col-12'>
-                <div class='panel panel-default rounded-0'>
-                    <div class='panel-heading rounded-0'>
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
                         $element_title
                     </div>
-                    <div class='panel-body rounded-0'>
+                    <div class='panel-body'>
 
                         <div class='row'>
                             <div class='col-sm-12'>
@@ -2614,11 +2614,11 @@ function display_user_progress_details($element, $element_id, $user_id) {
 
 	$tool_content .= "
             <div class='col-12 mt-3'>
-                <div class='panel panel-default rounded-0'>
-                    <div class='panel-heading rounded-0'>
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
                         $langAttendanceActivity
                     </div>
-                    <div class='panel-body rounded-0'>
+                    <div class='panel-body'>
                         <div class='res-table-wrapper'>
                             <div class='row p-2 res-table-header'>
                                 <div class='col-md-9 col-12 control-label-notes'>

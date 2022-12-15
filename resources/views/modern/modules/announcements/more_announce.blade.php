@@ -34,16 +34,16 @@
                         {!! $action_bar !!}
                     
                         <div class='col-12'>
-                            <div class='panel panel-default rounded-0'>
-                                <div class='panel-heading rounded-0'>
+                            <div class='panel panel-default'>
+                                <div class='panel-heading'>
                                     <div class='panel-title'>
                                        {!! $announcement->title !!}
                                     </div>
                                 </div>
-                                <div class='panel-body rounded-0'>
+                                <div class='panel-body'>
                                     {!! $announcement->content !!}
                                 </div>
-                                <div class='panel-footer rounded-0'>
+                                <div class='panel-footer'>
                                     <div class='row'>
                                         <div class='col-6'>
                                             @if($announcement->code)

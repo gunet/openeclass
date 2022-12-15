@@ -485,15 +485,15 @@ if(!isset($_POST['next'])){
 
             $tool_content .= " <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
-                <div class='panel panel-default rounded-0'>
-                    <div class='panel-heading rounded-0'>
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
                         <div class='panel-title'>
                             $langActSelect:
                         </div>
                     </div>
                
 
-                <div class='panel-body overflow-auto rounded-0'>
+                <div class='panel-body overflow-auto'>
                 <fieldset>
                     <div class='table-responsive'>
                         <table class='table table-bordered table-striped'>

@@ -276,15 +276,15 @@ if (isset($_GET['delete'])) {
                         ));
         $tool_content .= "
         <div class='col-sm-12 mb-3'>
-            <div class='panel panel-default rounded-0'>
-                <div class='panel-heading rounded-0'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
                     <h3 class='panel-title'>$langEBookInfo &nbsp;
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1'>
                             <i class='fa fa-edit' title='$langEdit' data-toggle='tooltip'></i>
                         </a>
                     </h3>
                 </div>
-                <div class='panel-body ps-1 pb-1 panel-body-electronicBook rounded-0'>
+                <div class='panel-body ps-1 pb-1 panel-body-electronicBook'>
                     <div class='row p-2 margin-bottom-fat'>
                         <div class='col-sm-2'>
                             <strong class='control-label-notes'>$langTitle:</strong>

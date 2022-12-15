@@ -38,8 +38,8 @@
                     @if ($rules)
                         @foreach ($rules as $key => $rule)
                         <div class='col-12 mb-3'>
-                            <div class='panel panel-default rounded-0'>
-                                <div class='panel-heading rounded-0'>
+                            <div class='panel panel-default'>
+                                <div class='panel-heading'>
                                     <div class='row'>
                                         <div class='col-6'><div class='panel-title'>{{ trans('langAutoEnrollRule') }} {{ $key + 1 }}</div></div>
                                         <div class='col-6'><div class='text-end'>
@@ -60,7 +60,7 @@
                                         </div></div>
                                     </div>
                                 </div>
-                                <div class='panel-body rounded-0'>
+                                <div class='panel-body'>
                                     <div>
                                         {{ trans('langApplyTo') }}: <b>{{ $rule['status'] == USER_STUDENT ? trans('langStudents'): trans('langTeachers') }}</b>
                                         @if ($rule['deps'])

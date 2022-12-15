@@ -380,11 +380,11 @@ $tool_content .= action_bar(array(
         ),false);
 
 $tool_content .= "<div class='col-sm-12'>
-                    <div class='panel panel-default rounded-0'>
-                    <div class='panel-heading list-header rounded-0'>
+                    <div class='panel panel-default'>
+                    <div class='panel-heading list-header'>
                         <h3 class='panel-title'>$langLearningPathData</h3>
                     </div>";
-$tool_content .= "<table class='table-default'>";
+$tool_content .= "<table class='table-default' style='border-radius:0px; border-bottom-left-radius:15px; border-bottom-right-radius:15px;'>";
 
 //############################ LEARNING PATH NAME BOX ################################\\
 $tool_content .="<tr><th width='70'>$langTitle:</th>";
@@ -487,11 +487,11 @@ $lp_action_button = action_button(array(
     )
 );
 $tool_content .= "<div class='col-sm-12 mt-3'>
-                    <div class='panel panel-default panel-action-btn-default rounded-0' style='overflow-y:auto;'>
-                        <div class='float-end'>
+                    <div class='panel panel-default panel-action-btn-default' style='overflow-y:auto;'>
+                        <div class='float-end me-3 mt-1'>
                             $lp_action_button
                         </div>
-                        <div class='panel-heading list-header rounded-0'>
+                        <div class='panel-heading list-header'>
                             <h3 class='panel-title'>$langLearningPathStructure</h3>
                         </div>";
 
@@ -510,7 +510,7 @@ $result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 if (count($result) == 0) {
     // handle exceptional requirement to add label before exiting early
     if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
-        $tool_content .= "<div class='panel-body'><div class='table-responsive'><table class='table-default'>" . $createLabelHTML . "</table></div></div></div></div>";
+        $tool_content .= "<div class='panel-body'><div class='table-responsive'><table class='table-default' style='border-radius:0px; border-bottom-left-radius:15px; border-bottom-right-radius:15px;'>" . $createLabelHTML . "</table></div></div></div></div>";
     } else {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoModule</div></div></div>";
     }
@@ -561,7 +561,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 }
 
 // -------------------------- learning path list header ----------------------------
-$tool_content .= "<table class='table-default'>";
+$tool_content .= "<table class='table-default' style='border-radius:0px; border-bottom-left-radius:15px; border-bottom-right-radius:15px;'>";
 // -------------------- create label -------------------
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
     $tool_content .= $createLabelHTML;

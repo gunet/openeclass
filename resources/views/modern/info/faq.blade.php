@@ -30,7 +30,7 @@
                                     </div>
                                 @else
                                     @foreach ($faqs as $key => $faq)
-                                        <div class='panel panel-admin p-md-3 bg-white rounded-0 overflow-auto'>
+                                        <div class='panel panel-admin p-md-3 bg-white overflow-auto'>
                                             <div class='panel-heading bg-body'>
                                                 <div class='col-12'>
                                                     <a role='button' data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
@@ -42,7 +42,7 @@
                                                 </div>
                                             </div>
                                             <div id='faq-{{ $faq->id }}' class='panel-collapse accordion-collapse collapse' role='tabpanel' aria-labelledby='heading{{ $faq->id }}' data-bs-parent='#accordion'>
-                                                <div class='panel-body ps-3 rounded-0'>
+                                                <div class='panel-body ps-3'>
                                                     {!! $faq->body !!}
                                                 </div>
                                             </div>

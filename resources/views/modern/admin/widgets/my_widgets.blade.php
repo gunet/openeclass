@@ -42,7 +42,7 @@
                                 @foreach ($installed_widgets as $key => $installed_widget)
                                         <div class="panel panel-success widget mt-3" data-widget-id="{{ $installed_widget->id }}">
                                             <div class="panel-heading Borders">
-                                                <a data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}"
+                                                <a class='text-white' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}"
                                                 href="#widget_desc_{{ $key }}" class="ps-2">
                                                     {{ $installed_widget->getName() }} <span class='fa fa-arrow-down fs-6 ps-2'></span>
                                                 </a>

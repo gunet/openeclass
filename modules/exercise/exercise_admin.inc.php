@@ -705,11 +705,11 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
 
     $tool_content .= "
     <div class='col-12 mb-3'>
-        <div class='panel panel-default rounded-0'>
-            <div class='panel-heading rounded-0' data-bs-toggle='collapse' href='#exerciseInfoPanel' aria-expanded='false' aria-controls='#exerciseInfoPanel' style='cursor: pointer'>
-                <span class='fa fa-chevron-right fa-fw control-label-notes' id='exerciseInfoPanelIndicator'></span> " . q($exerciseTitle) . "
+        <div class='panel panel-default'>
+            <div class='panel-heading collapsed' data-bs-toggle='collapse' href='#exerciseInfoPanel' aria-expanded='false' aria-controls='#exerciseInfoPanel' style='cursor: pointer'>
+                <span class='fa fa-chevron-right fa-fw' id='exerciseInfoPanelIndicator'></span> " . q($exerciseTitle) . "
             </div>
-            <div class='panel-body collapse rounded-0' id='exerciseInfoPanel'>
+            <div class='panel-body collapse' id='exerciseInfoPanel'>
                 <div class='row p-2'>
                     $exerciseDescription
                     $period

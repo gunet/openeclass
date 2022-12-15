@@ -119,8 +119,8 @@ if ($total_categories > 0) {
             $link_notify = toggle_link($action_notify);
         }
 
-        $tool_content .= "<div class='col-sm-12 mt-3'><caption>";
-        $tool_content .= "<div class='col-sm-12 shadow-lg p-3 rounded'>
+        $tool_content .= "<div class='col-12 mt-3'><caption>";
+        $tool_content .= "<div class='col-12 basicBorderSolid p-3 Borders mb-2'>
                           <div class='row'>
                           <div class='col-sm-6 text-md-start text-center mt-1'><strong>$langCategory :</strong> $cat_title</div>";
         $tool_content .= "<div class='col-sm-6 text-md-end text-center mt-md-0 mt-3'>";

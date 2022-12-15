@@ -222,8 +222,8 @@ $(function() {
             $heading = q($heading);
             $indirectId = getIndirectReference($item->id);
             $tool_content .= "
-      <div class='panel panel-default mt-3 rounded-0' data-id='$indirectId'>
-        <div class='panel-heading rounded-0'>
+      <div class='panel panel-default mt-3' data-id='$indirectId'>
+        <div class='panel-heading'>
           <div class='row'>
             <div class='col-md-6 col-12'>
                 <span class='control-label-notes'>$heading</span>

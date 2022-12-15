@@ -64,8 +64,8 @@ function display_learning_analytics() {
     $tool_content .= "
 
             <div class='col-12'>
-                <div class='panel panel-default rounded-0'>
-                    <div class='panel-heading rounded-0'>
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
                         <div class='row'>
                             <div class='col-xl-7 col-lg-7 col-md-7 col-sm-9 col-9 mt-1'>
                                 $langLearningAnalytics
@@ -75,7 +75,7 @@ function display_learning_analytics() {
                             </div>
                         </div>
                     </div>
-                    <div class='panel-body rounded-0'>
+                    <div class='panel-body'>
                         <div class='res-table-wrapper'>
                             $results
                         </div>  
@@ -171,8 +171,8 @@ function display_general_lists($analytics_id) {
 
         $tool_content .= "
                 <div class='col-12 mt-3'>
-                    <div class='panel panel-default rounded-0'>
-                        <div class='panel-heading rounded-0'>
+                    <div class='panel panel-default'>
+                        <div class='panel-heading'>
                             <div class='row'>
                                 <div class='col-sm-12'>
                                     <strong>
@@ -182,7 +182,7 @@ function display_general_lists($analytics_id) {
                                 </div>
                             </div>
                         </div>          
-                        <div class='panel-body rounded-0'>         
+                        <div class='panel-body'>         
                             <div class='col-sm-12 collapse' id='LearnAnalyticsResource$module_id'>
                                 <h6 class='text-success'>$message_advanced</h6>
                                 <div class='res-table-wrapper'>
@@ -297,8 +297,8 @@ function display_analytics_elements($analytics_id) {
 
     $tool_content .= "
         <div class='col-12'>
-            <div class='panel panel-default rounded-0'>
-                <div class='panel-heading rounded-0'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
                     <div class='row'>
                         <div class='col-xl-7 col-lg-7 col-md-7 col-sm-9 col-9 mt-1'>
                             $langAnalyticsParameters
@@ -308,7 +308,7 @@ function display_analytics_elements($analytics_id) {
                         </div>
                     </div>
                 </div>
-                <div class='panel-body rounded-0'>
+                <div class='panel-body'>
                     <div class='table-responsive mt-0'>
                         $results
                     </div>  
@@ -338,8 +338,8 @@ function display_analytics_information($analytics_id) {
 
     $tool_content .= "
         <div class='col-12'>
-            <div class='panel panel-default rounded-0'>
-                <div class='panel-heading rounded-0'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
                     <div class='row'>
                         <div class='col-xl-7 col-lg-7 col-md-7 col-sm-9 col-9 mt-md-1 mt-0'>
                             $title<span class='$active_vis'>($active_msg)</span>
@@ -512,11 +512,11 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
 
     $tool_content .= "
         <div class='col-12 mt-3'>                 
-            <div class='panel panel-default rounded-0'>
-                <div class='panel-heading rounded-0'>             
+            <div class='panel panel-default'>
+                <div class='panel-heading'>             
                     <div class='control-label-notes text-center'>$analytics_title->title</div>
                 </div>
-                <div class='panel-body rounded-0'>
+                <div class='panel-body'>
                      $results
                 </div>
             </div>
@@ -651,11 +651,11 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
 
     $tool_content .= "
                 <div class='col-12 mt-3'>
-                    <div class='panel panel-default rounded-0'>
-                        <div class='panel-heading rounded-0'>
+                    <div class='panel panel-default'>
+                        <div class='panel-heading'>
                             $analytics_title->title
                         </div>
-                        <div class='panel-body rounded-0'>
+                        <div class='panel-body'>
                             $results
                         </div>
                     </div>
@@ -684,11 +684,11 @@ function display_user_info($user_id) {
     
     $tool_content .= "
         <div class='col-12'>
-            <div class='panel panel-default rounded-0'>
-                <div class='panel-heading rounded-0'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
                     $givenname $surname
                 </div>
-                <div class='panel-body rounded-0'>
+                <div class='panel-body'>
                     <div class='panel-body'>
                         <div class='row'>
                             <div class='col-md-5 col-12'>

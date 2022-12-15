@@ -51,7 +51,7 @@ if (get_config('personal_blog_commenting')) {
                                 </a>
                                 ".$post_actions."
                             </div>
-                            <div class='media-body bubble panel-body rounded-0 overflow-auto'>
+                            <div class='media-body bubble panel-body overflow-auto'>
                                 <button class='btn btn-success btn-sm mt-2 media-heading'>".format_locale_date(strtotime($comment->getTime())).'</button>'.
                                     "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>
                                     

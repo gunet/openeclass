@@ -152,11 +152,11 @@ $tool_content .= action_bar(array(
         ))."
 $export_box
 <div class='col-12'>
-<div class='panel panel-primary rounded-0'>
-    <div class='panel-heading rounded-0'>
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
         <h3 class='panel-title'>$langInfoPoll</h3>
     </div>
-    <div class='panel-body rounded-0'>
+    <div class='panel-body'>
         <div class='row p-2 margin-bottom-fat'>
             <div class='col-md-5 col-12'>
                 <strong class='control-label-notes'>$langTitle:</strong>
@@ -213,11 +213,11 @@ if ($PollType == POLL_NORMAL) {
         } else {
             $tool_content .= "
             <div class='col-sm-12 mt-3'>
-            <div class='panel panel-success rounded-0'>
-                <div class='panel-heading rounded-0'>
+            <div class='panel panel-success'>
+                <div class='panel-heading'>
                     <h3 class='panel-title'>$langQuestion $j</h3>
                 </div>
-                <div class='panel-body rounded-0'>
+                <div class='panel-body'>
                     <!--h4>".q_math($theQuestion->question_text)."</h4-->";
 
             $j++;

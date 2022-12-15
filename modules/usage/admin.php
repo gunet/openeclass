@@ -23,6 +23,7 @@
 
 /**** Summary info    ****/
 
+
 $tool_content .= action_bar(array(
                 array('title' => $langSystemActions,
                     'url' => "../usage/displaylog.php?from_other=TRUE",
