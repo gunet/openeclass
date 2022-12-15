@@ -50,9 +50,9 @@ function getUserLessonInfo($uid) {
                              course_user.status status,
                              course_user.favorite favorite
                         FROM course JOIN course_user
-                            ON course.id = course_user.course_id 
-                            AND course_user.user_id = ?d 
-                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ") 
+                            ON course.id = course_user.course_id
+                            AND course_user.user_id = ?d
+                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . " OR course_user.editor = 1)
                         ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
 
     $courses = [];
@@ -86,16 +86,16 @@ function getUserLessonInfo($uid) {
             }
             $lesson_content .= "<tr class='$visclass'>
 			  <td class='text-left'>
-			  <strong><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></strong>&nbsp;(" . q($data->public_code) . ")
+			  <strong><a href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></strong>&nbsp;(" . q($data->public_code) . ")
 			  <div><small>" . q($data->professor) . "</small></div></td>";
             $lesson_content .= "<td class='text-center'>";
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
             $lesson_content .= "&nbsp;&nbsp;";
             if ($data->status == USER_STUDENT) {
-                $lesson_content .= icon('fa-minus-circle', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
+                $lesson_content .= icon('fa-minus-circle', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
                 $student_courses_count++;
             } elseif ($data->status == USER_TEACHER) {
-                $lesson_content .= icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $data->code, '', true, true);
+                $lesson_content .= icon('fa-wrench', $langAdm, "{$urlServer}modules/course_info/?from_home=true&amp;course=" . $data->code, '', true, true);
                 $teacher_courses_count++;
             }
             $lesson_content .= "</td></tr>";

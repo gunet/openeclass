@@ -176,7 +176,7 @@ else if (isset($_GET['list'])) {
         }
         $code = course_id_to_code($data->course_id);
         $tool_content .= "<tr>";
-        $tool_content .= "<td><a href='${urlServer}courses/$code/' target='_blank'>" . course_id_to_title($data->course_id) . "</a>
+        $tool_content .= "<td><a href='{$urlServer}courses/$code/' target='_blank'>" . course_id_to_title($data->course_id) . "</a>
                                     &nbsp;<small>(" . course_id_to_code($data->course_id). ")</small>
                                     <div style='margin-top: 5px;'><small>". course_id_to_prof($data->course_id) . "</small></div>
                           </td>";
@@ -828,7 +828,9 @@ else {
                 foreach ($meetings as $meeting) {
                     $meeting_id = $meeting['meetingId'];
                     if ($meeting_id != null) {
-                        $course = Database::get()->querySingle("SELECT code,course.title,tc_session.title as mtitle FROM course LEFT JOIN tc_session on course.id=tc_session.course_id WHERE tc_session.meeting_id='${meeting_id}'");
+                        $course = Database::get()->querySingle("SELECT code, course.title, tc_session.title AS mtitle
+                            FROM course LEFT JOIN tc_session ON course.id = tc_session.course_id
+                            WHERE tc_session.meeting_id = ?s", $meeting_id);
                         // don't list meetings from other APIs
                         if (!$course) {
                             continue;

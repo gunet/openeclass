@@ -45,8 +45,8 @@ if ($row) {
     $videoData->module = MODULE_ID_VIDEO;
     $videoData->resource = intval($_GET['id']);
     ViewingEvent::trigger(ViewingEvent::NEWVIEW, $videoData);
-    
+
     $vObj = MediaResourceFactory::initFromVideoLink($row);
     echo MultimediaHelper::medialinkIframeObject($vObj);
 } else
-    header("Location: ${urlServer}modules/video/index.php?course=$course_code");
+    header("Location: {$urlServer}modules/video/index.php?course=$course_code");

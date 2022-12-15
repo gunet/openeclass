@@ -42,9 +42,9 @@ $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                      course_user.status status,
                      course_user.favorite favorite
                FROM course JOIN course_user
-                    ON course.id = course_user.course_id 
-                    AND course_user.user_id = ?d 
-                    AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ") 
+                    ON course.id = course_user.course_id
+                    AND course_user.user_id = ?d
+                    AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
                 ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
 
 $tool_content .= action_bar([
@@ -86,9 +86,9 @@ if ($myCourses) {
         }
         $favorite_button = icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $course->code . "&amp;fav=" . $fav_status. "&amp;from_ext_view=1");
         if ($course->status == USER_STUDENT) {
-            $action_button = icon('fa-minus-circle', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid");
+            $action_button = icon('fa-minus-circle', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid");
         } elseif ($course->status == USER_TEACHER) {
-            $action_button = icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $course->code);
+            $action_button = icon('fa-wrench', $langAdm, "{$urlServer}modules/course_info/?from_home=true&amp;course=" . $course->code);
         }
         $visclass = '';
         if ($course->visible == COURSE_INACTIVE) {

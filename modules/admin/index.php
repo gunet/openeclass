@@ -52,7 +52,7 @@ if ($release_info and version_compare($release_info->release, ECLASS_VERSION) > 
 // Construct a table with platform identification info
 $tool_content .= action_bar([
         [ 'title' => $langBack,
-          'url' => "${urlAppend}main/portfolio.php",
+          'url' => "{$urlAppend}main/portfolio.php",
           'icon' => 'fa-reply',
           'level' => 'primary-label' ],
         [ 'title' => $langUnlockPlatform,

@@ -78,7 +78,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
             $tool_content .= rich_text_editor('choice['.$questionId.']', 14, 90, $text);
     }
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER ||$answerType == TRUE_FALSE) {
-         $tool_content .= "<input type='hidden' name='choice[${questionId}]' value='0' />";
+         $tool_content .= "<input type='hidden' name='choice[$questionId]' value='0' />";
     }
     // only used for the answer type "Matching"
     if ($answerType == MATCHING && $nbrAnswers>0) {
@@ -139,7 +139,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
             $tool_content .= "
                         <div class='radio'>
                           <label>
-                            <input type='radio' name='choice[${questionId}]' value='${answerId}' $checked onClick='updateQuestionNavButton(". $question_number . ");'>
+                            <input type='radio' name='choice[$questionId]' value='$answerId' $checked onClick='updateQuestionNavButton($question_number);'>
                             " . standard_text_escape($answer) . "
                           </label>
                         </div>";
@@ -150,7 +150,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
             $tool_content .= "
                         <div class='checkbox'>
                           <label>
-                            <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' $checked onClick='updateQuestionNavButton(". $question_number . ");'>
+                            <input type='checkbox' name='choice[$questionId][$answerId]' value='1' $checked onClick='updateQuestionNavButton($question_number);'>
                             " . standard_text_escape($answer) . "
                           </label>
                         </div>";
@@ -164,15 +164,15 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
                 $Select[$answerId]['Reponse'] = $answer;
             } else {
                 $tool_content .= "<tr>
-                                  <td><strong>${cpt2}.</strong> " . q($answer) . "</td>
+                                  <td><strong>$cpt2.</strong> " . q($answer) . "</td>
                                   <td><div class='text-left'>
-                                   <select name='choice[${questionId}][${answerId}]' onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>
+                                   <select name='choice[$questionId][$answerId]' onChange='questionUpdateListener($question_number, $questionId);'>
                                      <option value='0'>--</option>";
 
                 // fills the list-box
                 foreach ($Select as $key => $val) {
                     $selected = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == $key) ? 'selected="selected"' : '';
-                    $tool_content .= "<option value=\"" . q($key) . "\" $selected>${val['Lettre']}</option>";
+                    $tool_content .= "<option value=\"" . q($key) . "\" $selected>$val[Lettre]</option>";
                 }
                 $tool_content .= "</select></div></td><td width='200'>";
                 if (isset($Select[$cpt2])) {
@@ -200,7 +200,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
             $tool_content .= "
                         <div class='radio'>
                           <label>
-                            <input type='radio' name='choice[${questionId}]' value='${answerId}' $checked onClick='updateQuestionNavButton(". $question_number . ");'>
+                            <input type='radio' name='choice[$questionId]' value='$answerId' $checked onClick='updateQuestionNavButton($question_number);'>
                             " . standard_text_escape($answer) . "
                           </label>
                         </div>";

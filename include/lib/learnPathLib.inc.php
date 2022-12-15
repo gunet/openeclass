@@ -559,17 +559,17 @@ function display_my_exercises($dialogBox, $style) {
     if (!empty($exercises)) {
         $output .= '<form method="POST" name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">';
         $output .= "<div class='table-responsive'><table class='table-default'>
-                    <tr class='list-header'> 
+                    <tr class='list-header'>
                         <th class='text-left'>
                             $langExercise
-                        </th> 
+                        </th>
                         <th class='text-center'>
                             $langSelection
-                        </th> 
+                        </th>
                     </tr>";
             foreach ($exercises as $exercise) {
                 $output .= "<tr><td class='text-left'>
-                            <a href='${urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$exercise->id&amp;preview=1'>" . q($exercise->title) . "</a>";
+                            <a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$exercise->id&amp;preview=1'>" . q($exercise->title) . "</a>";
                 if (!empty($exercise->description)) {
                     $output .= "<span class='comments'>" . standard_text_escape($exercise->description) . "</span></td>";
                 } else {
@@ -1298,7 +1298,7 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 
         if (!$is_editor) {
             // check for blocked learning path
-            $rank0 = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath 
+            $rank0 = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath
                                 WHERE learnPath_id = ?d AND `course_id` = ?d ORDER BY `rank` LIMIT 1", $_SESSION['path_id'], $course_id)->rank;
             $lps = Database::get()->queryArray("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = ?d AND `rank` < ?d", $course_id, $rank0);
             foreach ($lps as $lp) {
@@ -1322,15 +1322,15 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
     }
 
     if (!$is_editor) { // check if we try to overwrite a blocked module
-        $lpm_id = Database::get()->querySingle("SELECT `lock`, `rank` FROM lp_rel_learnPath_module 
+        $lpm_id = Database::get()->querySingle("SELECT `lock`, `rank` FROM lp_rel_learnPath_module
                                 WHERE `learnPath_id` = ?d AND module_id = ?d", $_SESSION['path_id'], $_SESSION['lp_module_id']);
-        $q = Database::get()->queryArray("SELECT learnPath_module_id 
-                                            FROM lp_rel_learnPath_module 
-                                           WHERE learnPath_id = ?d 
+        $q = Database::get()->queryArray("SELECT learnPath_module_id
+                                            FROM lp_rel_learnPath_module
+                                           WHERE learnPath_id = ?d
                                              AND `rank` < ?d", $_SESSION['path_id'], $lpm_id->rank);
         foreach ($q as $m) {
-            $progress = Database::get()->querySingle("SELECT credit, lesson_status 
-                                                        FROM lp_user_module_progress 
+            $progress = Database::get()->querySingle("SELECT credit, lesson_status
+                                                        FROM lp_user_module_progress
                                                        WHERE learnPath_module_id = ?d
                                                          AND learnPath_id = ?d
                                                          AND user_id = ?d", $m->learnPath_module_id, $_SESSION['path_id'], $_SESSION['uid']);
@@ -1396,10 +1396,10 @@ function deleteLearningPath($pathId) {
     Database::get()->query("DELETE FROM `lp_rel_learnPath_module` WHERE `learnPath_id` = ?d", $pathId);
 
     // delete the learning path
-    $lp_name = Database::get()->querySingle("SELECT name FROM `lp_learnPath` 
+    $lp_name = Database::get()->querySingle("SELECT name FROM `lp_learnPath`
                                                                 WHERE `learnPath_id` = ?d
                                                                 AND `course_id` = ?d", $pathId, $course_id)->name;
-    Database::get()->query("DELETE FROM `lp_learnPath` 
+    Database::get()->query("DELETE FROM `lp_learnPath`
                                                 WHERE `learnPath_id` = ?d
                                                 AND `course_id` = ?d", $pathId, $course_id);
 

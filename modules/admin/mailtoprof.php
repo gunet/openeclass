@@ -147,7 +147,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         <div id='mail-footer'>
             <br>
             <div>
-                <small>" . sprintf($langLinkUnsubscribeFromPlatform, $siteName) ." <a href='${urlServer}main/profile/emailunsubscribe.php'>$langHere</a></small>
+                <small>" . sprintf($langLinkUnsubscribeFromPlatform, $siteName) ." <a href='{$urlServer}main/profile/emailunsubscribe.php'>$langHere</a></small>
             </div>
         </div>
         ";

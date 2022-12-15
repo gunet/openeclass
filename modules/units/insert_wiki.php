@@ -44,7 +44,7 @@ function list_wikis() {
                 <table class='table-default'>
                     <tr class='list-header'>
                         <th style='width: 80px;'>$langChoice</th>
-                        <th class='text-left'>&nbsp;$langWikis</th>                        
+                        <th class='text-left'>&nbsp;$langWikis</th>
                     </tr>";
         foreach ($wikiinfo as $entry) {
             if (!empty($entry['description'])) {
@@ -54,7 +54,7 @@ function list_wikis() {
             }
             $tool_content .= "<tr>
                                 <td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>
-                                <td><a href='${urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a>
+                                <td><a href='{$urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a>
                                 $description_text</td>
                             </tr>";
         }

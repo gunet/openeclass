@@ -48,7 +48,7 @@ function list_chats() {
             }
             $tool_content .= "<tr class='$vis'>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='chat[]' value='$entry[id]' $disabled></td>";
-            $tool_content .= "<td>&nbsp;<a href='${urlServer}modules/chat/chat.php?course=$course_code&amp;conference_id=$entry[id]'>" . q($entry['name']) . "</a>$description_text</td>";
+            $tool_content .= "<td>&nbsp;<a href='{$urlServer}modules/chat/chat.php?course=$course_code&amp;conference_id=$entry[id]'>" . q($entry['name']) . "</a>$description_text</td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
