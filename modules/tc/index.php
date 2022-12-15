@@ -305,9 +305,9 @@ elseif(isset($_GET['choice']))
                 $mod_pw = $sess->mod_pw;
                 $record = $sess->record;
                 if (bbb_session_running($_GET['meeting_id']) == false) { // create meeting
-                    $title_meeting = "${_GET['title']} - $course_code";
+                    $title_meeting = "$_GET[title] - $course_code";
                     if (!empty($public_code)) {
-                        $title_meeting = "${_GET['title']} - $public_code";
+                        $title_meeting = "$_GET[title] - $public_code";
                     }
                     if (!empty($sess->options)) {
                         $options = unserialize($sess->options);
