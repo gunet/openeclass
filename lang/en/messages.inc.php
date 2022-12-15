@@ -5523,3 +5523,6 @@ $langUserEmailNotification = "You are receiving $langsOfCourse notifications via
 $langConfEnableMailNotification = "Do you want to activate email notifications in $langsOfCourse?";
 $langConfDisableMailNotification = "Do you want to deactivate email notifications in $langsOfCourse?";
 $langOfNotifications = "notifications";
+$langAPITokenExists = "A token has already been created. To create a new one, please click on 'Create New Token'";
+$langAPITokenShortDesc = "Create a new eClass API access token";
+$langCreateAPIToken = 'Create New Token';
