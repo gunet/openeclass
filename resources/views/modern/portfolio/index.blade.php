@@ -12,7 +12,7 @@
                     <div class='col-12 Help-panel-heading'>
                         <div class="row">
                             <div class="col-xl-8 col-md-5 col-10">
-                                <span class='fw-bold mt-2 Help-text-panel-heading'>{{ trans('langSummaryProfile') }}</span>
+                                <span class='mt-2 Help-text-panel-heading'>{{ trans('langSummaryProfile') }}</span>
                             </div>
                             <div class="col-xl-4 col-md-7 col-2">
                                 <div class="collapse-details-button" data-bs-toggle="collapse" data-bs-target=".user-details-collapse" aria-expanded="false" onclick="switch_user_details_toggle()" >

@@ -86,7 +86,7 @@ function getUserLessonInfo($uid) {
             $lesson_content .= "<tr class='$visclass'>
 			  <td class='border-top-0 border-start-0 border-end-0 ps-0'>
 			  <div class='d-inline-flex'>
-                    <div class='TextSemiBold'><a class='fs-6' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></div>
+                    <a class='TextSemiBold fs-6' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a>
                     <div class='TextSemiBold text-md-end text-start'> <span class='blackBlueText'>(" . q($data->public_code) . ")</span></div>
               </div>
 			  <div><small>" . q($data->professor) . "</small></div></td>";

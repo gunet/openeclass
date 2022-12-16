@@ -36,7 +36,7 @@
     background-color: #e8e8e8 !important;
     color: #001146;
     font-size: 14px;
-    font-family: 'Manrope-SemiBold', sans-serif;
+    font-family: 'Manrope' , sans-serif; font-weight: 600;
     margin-top: 5px;
   }
   .dataTables_wrapper .form-control:focus ,  .dataTables_wrapper input[type="search"]:focus{
@@ -45,7 +45,7 @@
     outline: 0 none !important;
     background-color: #e8e8e8;
     color:#001146;
-    font-family: 'Manrope-SemiBold';
+    font-family: 'Manrope' , sans-serif; font-weight: 600;
   }
 
   /********************************************************* form-select **********************************************************************/
@@ -53,7 +53,7 @@
     background-color: #e8e8e8;
     border-radius: 35px;
     font-size: 14px;
-    font-family: 'Manrope-SemiBold';
+    font-family: 'Manrope' , sans-serif; font-weight: 600;
     height:30px;
     border:0px;
     color:#001146;
@@ -65,7 +65,7 @@
     outline: 0 none;
     background-color: #e8e8e8;
   }
-  .dataTables_wrapper select option{color: #9d9d9c; font-family: 'Manrope-SemiBold';}
+  .dataTables_wrapper select option{color: #9d9d9c; font-family: 'Manrope' , sans-serif; font-weight: 600;}
 
 
   /************************************************ pagination buttons next-prev ***************************************************************/

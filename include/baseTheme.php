@@ -311,7 +311,7 @@ function view($view_file, $view_data = array()) {
                 font-size: 12px;
                 text-transform: uppercase;
                 height:30px;
-                font-family: 'Manrope-SemiBold',sans-serif;
+                font-family: 'Manrope' , sans-serif; font-weight: 600;
                 border-radius: 35px;
               }
             
@@ -333,7 +333,7 @@ function view($view_file, $view_data = array()) {
                 font-size: 12px;
                 text-transform: uppercase;
                 height:30px;
-                font-family: 'Manrope-SemiBold',sans-serif;
+                font-family: 'Manrope' , sans-serif; font-weight: 600;
                 border-radius: 35px;
                 margin-bottom: 10px;
                 display:flex;

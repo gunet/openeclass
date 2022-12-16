@@ -7,7 +7,7 @@
     background-color: #e8e8e8;
     color: #001146;
     font-size: 14px;
-    font-family: 'Manrope-SemiBold', sans-serif;
+    font-family: 'Manrope' , sans-serif; font-weight: 600;
 }
 
 .select2-selection--multiple:before { content: ""; position: absolute; right: 15px; top: 53%; border-top: 5px solid #005ad9;

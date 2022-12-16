@@ -30,7 +30,7 @@ foreach ($q as $l) {
         }
         $authLink[] = array(false, "
             <div class='col-12 d-flex justify-content-center align-items-center'>
-                <a class='btn login-form-submit rounded-pill btn-block w-50' href='$authUrl'>$langEnter</a>
+                <a class='btn login-form-submit TextBold rounded-pill btn-block w-50' href='$authUrl'>$langEnter</a>
             </div>", $authTitle);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/modern/css/bootstrap-social.css'>";
@@ -56,16 +56,16 @@ foreach ($q as $l) {
             $next
             <div class='row'>
               <div class='col-12 login-form-spacing m-auto d-block'>
-                <input class='login-input w-75 rounded-pill TextSemiBold' name='uname' aria-describedby='usernameIcon' placeholder='$langUsername &#xf007;'$userValue>
+                <input class='login-input w-75 rounded-pill TextSemiBold' name='uname' aria-describedby='usernameIcon' placeholder='$langUsername'$userValue>
               </div>
               <div class='col-12 login-form-spacing m-auto d-block'>
-                  <input class='login-input w-75 rounded-pill mt-2' name='pass' type='password' aria-describedby='passwordIcon' placeholder='$langPass &#xf023;' style='height:40px;'>
+                  <input class='login-input w-75 rounded-pill mt-2' name='pass' type='password' aria-describedby='passwordIcon' placeholder='$langPass' style='height:40px;'>
               </div>
             </div>
             <div class='form-group mt-3'>
               <div class='row'>
                 <div class='col-12 text-center'>
-                  <button class='btn login-form-submit w-75 rounded-pill mt-2' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+                  <button class='btn login-form-submit w-75 TextBold rounded-pill mt-2' type='submit' name='submit' value='$langEnter'>$langEnter</button>
                 </div>
                 <div class='col-12 text-center mt-4'>
                   <a class='orangeText btnlostpass' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
