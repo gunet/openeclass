@@ -1,7 +1,7 @@
 <?php namespace Widgets;
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,14 +17,17 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 
 class WidgetArea {
     public $id;
+    public $is_user_widget;
+    public $is_course_admin_widget;
+    public $user_id;
     public $widgets = array();
-     
+
     public function __construct($id) {
         $this->id = $id;
     }
@@ -37,7 +40,7 @@ class WidgetArea {
             $widget_obj->is_user_widget = false;
             $widget_obj->is_course_admin_widget = false;
             $this->widgets[$widget->widget_widget_area_id] = $widget_obj;
-        }, $this->id);        
+        }, $this->id);
         return $this->widgets;
     }
     public function getUserAndAdminWidgets($uid)
@@ -47,8 +50,8 @@ class WidgetArea {
                 . "WHERE a.widget_area_id = ?d AND (a.user_id = ?d OR a.user_id IS NULL) AND b.id = a.widget_id ORDER BY a.position", function($widget) use ($uid){
             $widget_obj = new $widget->class;
             $widget_obj->is_user_widget = $widget->user_id == $uid;
-            $this->widgets[$widget->widget_widget_area_id] = $widget_obj;          
-        }, $this->id, $uid); 
+            $this->widgets[$widget->widget_widget_area_id] = $widget_obj;
+        }, $this->id, $uid);
 
         return $this->widgets;
     }
@@ -59,9 +62,9 @@ class WidgetArea {
                 . "WHERE a.widget_area_id = ?d AND (a.course_id = ?d OR a.course_id IS NULL) AND b.id = a.widget_id ORDER BY a.position", function($widget) use ($course_id){
             $widget_obj = new $widget->class;
             $widget_obj->is_course_admin_widget = $widget->course_id == $course_id;
-            $this->widgets[$widget->widget_widget_area_id] = $widget_obj;          
-        }, $this->id, $course_id); 
+            $this->widgets[$widget->widget_widget_area_id] = $widget_obj;
+        }, $this->id, $course_id);
 
         return $this->widgets;
-    }     
+    }
 }
