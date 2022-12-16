@@ -16,14 +16,14 @@
             var valueMessage = varUrlName[2]; /* value of url parameter 'email_un' */
 
             if (valueMessage == 1) {
-                info_message = "{{ trans('langUserEmailNotification') }}" + "<br><br>" + "{{ trans('langConfDisableMailNotification') }}"
-                action_message = " {{ trans('langDeactivate') }} ";
+                info_message = "{{ js_escape(trans('langUserEmailNotification')) }}" + "<br><br>" + "{{ js_escape(trans('langConfDisableMailNotification')) }}"
+                action_message = " {{ js_escape(trans('langDeactivate')) }} ";
             } else {
-                info_message = "{{ trans('langNoUserEmailNotification') }}" + "<br><br>" + "{{ trans('langConfEnableMailNotification') }}";
-                action_message = " {{ trans('langActivate') }} ";
+                info_message = "{{ js_escape(trans('langNoUserEmailNotification')) }}" + "<br><br>" + "{{ js_escape(trans('langConfEnableMailNotification')) }}";
+                action_message = " {{ js_escape(trans('langActivate')) }} ";
             }
             bootbox.confirm({
-                title: "{{ trans('langEmailUnsubscribe') }}",
+                title: "{{ js_escape(trans('langEmailUnsubscribe')) }}",
                 message: info_message,
                 buttons: {
                     confirm: {
@@ -31,7 +31,7 @@
                         className: 'submitAdminBtn'
                     },
                     cancel: {
-                        label: "{{ trans('langCancel') }}",
+                        label: "{{ js_escape(trans('langCancel')) }}",
                     }
                 },
                 callback: function(result) {
@@ -72,6 +72,36 @@
     </script>
   @endpush
 @endif
+
+@push('head_scripts')
+    <script>
+        $(function() {
+            $('body').keydown(function(e) {
+                if(e.keyCode == 37 || e.keyCode == 39) {
+                    if ($('.modal.in').length) {
+                        var visible_modal_id = $('.modal.in').attr('id').match(/\d+/);
+                        if (e.keyCode == 37) {
+                            var new_modal_id = parseInt(visible_modal_id) - 1;
+                        } else {
+                            var new_modal_id = parseInt(visible_modal_id) + 1;
+                        }
+                        var new_modal = $('#hidden_'+new_modal_id);
+                        if (new_modal.length) {
+                            hideVisibleModal();
+                            new_modal.modal('show');
+                        }
+                    }
+                }
+            });
+        });
+        function hideVisibleModal(){
+            var visible_modal = $('.modal.in');
+            if (visible_modal) { // modal is active
+                visible_modal.modal('hide'); // close modal
+            }
+        };
+    </script>
+@endpush
 
 
 @section('content')
@@ -172,9 +202,9 @@
                                             <figure>
                                                 <picture>
                                                     @if($course_info->course_image)
-                                                    <img class='uploadImageCourse' src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_info->course_image}}' alt='Course Banner'/>
+                                                        <img class='uploadImageCourse' src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_info->course_image}}' alt='Course Banner'/>
                                                     @else
-                                                    <img class='uploadImageCourse' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
+                                                        <img class='uploadImageCourse' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
                                                     @endif
                                                 </picture>
                                             </figure>
@@ -383,12 +413,10 @@
                         @endif
 
 
-
-
                         @if($course_info->view_type == 'activity')
                             @if($is_editor)
                                 <div class='col-12 d-flex justify-content-center mb-3'>
-                                    <a class='btn submitAdminBtn w-100 mt-0 mb-0' href="{{$urlAppend}}modules/course_info/activity_edit.php?course{{$course_code}}"><span class='fa fa-edit me-2'></span>{{trans('langActivityEdit')}}</a>
+                                    <a class='btn submitAdminBtn w-100 mt-0 mb-0' href="{{ $urlServer }}modules/course_info/activity_edit.php?course{{$course_code}}"><span class='fa fa-edit me-2'></span>{{trans('langActivityEdit')}}</a>
                                 </div>
                             @endif
                             <div class='col-12'>
@@ -464,15 +492,10 @@
                                         {!! course_announcements() !!}
                                     </ul>
                                 </div>
-                                {!! $course_home_sidebar_widgets !!}
                             </div>
                         @endif
 
-                        @if (!$alter_layout)
-                           {!! $course_home_main_area_widgets !!}
-                        @endif
-
-
+                        {!! $course_home_main_area_widgets !!}
 
                     </div><!-- end col units -->
 
@@ -534,9 +557,10 @@
                                         {!! course_announcements() !!}
                                     </ul>
                                 </div>
-                                {!! $course_home_sidebar_widgets !!}
                             </div>
                         @endif
+
+                        {!! $course_home_sidebar_widgets !!}
 
                         @if(isset($course_completion_id) and $course_completion_id > 0)
                             <div class="panel panel-admin px-lg-4 py-lg-3 bg-white mt-4">
@@ -582,23 +606,15 @@
                         @endif
 
 
-
-
                     </div><!-- end col calendar-announcements-progress -->
-
 
                 </div> <!-- end row -->
 
-
             </div><!-- end col-10 maincontent active-->
-
 
         </div>
     </div>
 </div>
-
-
-
 
 
 <div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
@@ -669,7 +685,6 @@
         });
 
     </script>
-
 
 @endif
 

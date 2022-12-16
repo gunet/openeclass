@@ -23,6 +23,9 @@
  * @file: course_home.php
  * @brief: course home page
  */
+
+use Widgets\WidgetArea;
+
 $require_current_course = true;
 $guest_allowed = true;
 
@@ -165,30 +168,6 @@ $head_content .= "
             $(this).find('.fa-chevron-right').toggleClass('fa-rotate-90');
     });";
 
-// Units sorting
-// if ($is_editor and $course_info->view_type == 'units') {
-//     $head_content .= '
-//         Sortable.create(boxlistSort, {
-//             animation: 350,
-//             handle: \'.fa-arrows\',
-//             animation: 150,
-//             onUpdate: function (evt) {
-//                 var itemEl = $(evt.item);
-//                 var idReorder = itemEl.attr(\'data-id\');
-//                 var prevIdReorder = itemEl.prev().attr(\'data-id\');
-
-//                 $.ajax({
-//                   type: \'post\',
-//                   dataType: \'text\',
-//                   data: {
-//                       toReorder: idReorder,
-//                       prevReorder: prevIdReorder,
-//                   }
-//                 });
-//             }
-//         });';
-// }
-
 // Calendar stuff
 $head_content .= 'var calendar = $("#bootstrapcalendar").calendar({
     tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
@@ -203,21 +182,22 @@ $head_content .= 'var calendar = $("#bootstrapcalendar").calendar({
 });
 
 $(".btn-group button[data-calendar-nav]").each(function() {
-var $this = $(this);
-$this.click(function() {
-calendar.navigate($this.data("calendar-nav"));
-});
+    var $this = $(this);
+    $this.click(function() {
+        calendar.navigate($this.data("calendar-nav"));
+    });
 });
 
 $(".btn-group button[data-calendar-view]").each(function() {
-var $this = $(this);
-$this.click(function() {
-calendar.view($this.data("calendar-view"));
+    var $this = $(this);
+    $this.click(function() {
+        calendar.view($this.data("calendar-view"));
+    });
 });
-});'
-
+'
 ."})
 </script>";
+
 $registerUrl = js_escape($urlAppend . 'modules/course_home/register.php?course=' . $course_code);
 
 // course email notification
@@ -241,9 +221,9 @@ if (isset($uid) and isset($_SESSION['status']) and $_SESSION['status'] != USER_G
             }
         }
         if (get_user_email_notification($uid, $course_id)) {
-            $email_notify_icon = "<a id='email_notification' href='/modules/course_home/course_home.php?course=$course_code&amp;email_un=1' class='float-end ps-2 mt-2'><span class='fa fa-envelope fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langUserEmailNotification) . "'></span></a>";
+            $email_notify_icon = "<a id='email_notification' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;email_un=1' class='float-end ps-2 mt-2'><span class='fa fa-envelope fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langUserEmailNotification) . "'></span></a>";
         } else {
-            $email_notify_icon = "<a id='email_notification' href='/modules/course_home/course_home.php?course=$course_code&amp;email_un=0' class='float-end ps-2 mt-2'><span class='fa fa-envelope-o fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langNoUserEmailNotification) . "'></span></a>";
+            $email_notify_icon = "<a id='email_notification' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;email_un=0' class='float-end ps-2 mt-2'><span class='fa fa-envelope-o fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langNoUserEmailNotification) . "'></span></a>";
         }
     }
 }
@@ -287,36 +267,6 @@ $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type
                                     LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
                                     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 $course_descriptions_modals = "";
-
-
-$head_content .= "
-<script>
-    $(function() {
-        $('body').keydown(function(e) {
-            if(e.keyCode == 37 || e.keyCode == 39) {
-                if ($('.modal.in').length) {
-                    var visible_modal_id = $('.modal.in').attr('id').match(/\d+/);
-                    if (e.keyCode == 37) {
-                        var new_modal_id = parseInt(visible_modal_id) - 1;
-                    } else {
-                        var new_modal_id = parseInt(visible_modal_id) + 1;
-                    }
-                    var new_modal = $('#hidden_'+new_modal_id);
-                    if (new_modal.length) {
-                        hideVisibleModal();
-                        new_modal.modal('show');
-                    }
-                }
-            }
-        });
-    });
-    function hideVisibleModal(){
-        var visible_modal = $('.modal.in');
-        if (visible_modal) { // modal is active
-            visible_modal.modal('hide'); // close modal
-        }
-    };
-</script>";
 
 if (count($res) > 0) {
     foreach ($res as $key => $row) {
@@ -804,12 +754,11 @@ if (($total_cunits > 0 or $is_editor) and ($course_info->view_type != 'simple'))
 }
 
 $data['course_home_main_area_widgets'] = '';
-if (!$alter_layout) {
-    $course_home_page_main = new \Widgets\WidgetArea(COURSE_HOME_PAGE_MAIN);
-    foreach ($course_home_page_main->getCourseAndAdminWidgets($course_id) as $key => $widget) {
-        $data['course_home_main_area_widgets'] .= $widget->run($key);
-    }
+$course_home_page_main = new WidgetArea(COURSE_HOME_PAGE_MAIN);
+foreach ($course_home_page_main->getCourseAndAdminWidgets($course_id) as $key => $widget) {
+    $data['course_home_main_area_widgets'] .= $widget->run($key);
 }
+
 
 //BEGIN - Get user personal calendar
 $today = getdate();
@@ -823,7 +772,7 @@ $data['user_personal_calendar'] = Calendar_Events::small_month_calendar($day, $m
 //END - Get personal calendar
 
 $data['course_home_sidebar_widgets'] = '';
-$course_home_page_sidebar = new \Widgets\WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
+$course_home_page_sidebar = new WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
 foreach ($course_home_page_sidebar->getCourseAndAdminWidgets($course_id) as $key => $widget) {
     $data['course_home_sidebar_widgets'] .= $widget->run($key);
 }

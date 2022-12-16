@@ -3,7 +3,7 @@ use Widgets\Widget;
 use Widgets\WidgetWidgetArea;
 use Widgets\WidgetInterface;
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -19,7 +19,7 @@ use Widgets\WidgetInterface;
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 /**
@@ -28,33 +28,33 @@ use Widgets\WidgetInterface;
  * @author nikos
  */
 class TextWidget extends Widget implements WidgetInterface {
-   
-    public function __construct() {  
+
+    public function __construct() {
         parent::__construct();
-           
+
         $this->name = array(
             'en' => 'Text / HTML',
-            'el' => 'Text / HTML'     
+            'el' => 'Text / HTML'
         );
         $this->description = array(
             'en' => 'This is a widget that simply displays some text or html',
-            'el' => 'Ένα widget με το οποίο μπορείτε να εμφανίσετε απλό κείμενο ή html'     
-        );               
+            'el' => 'Ένα widget με το οποίο μπορείτε να εμφανίσετε απλό κείμενο ή html'
+        );
     }
-    
+
     public static function install()
     {
 
         return self::register_widget();
     }
-    
+
     public static function uninstall()
     {
-        
+
         return self::unregister_widget();
     }
     public function run($widget_widget_area_id)
-    {       
+    {
         $this->initialize_widget_data($widget_widget_area_id);
 
         global $language;
