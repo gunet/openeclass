@@ -60,7 +60,13 @@ if (isset($_POST['ump_id'])) {
     // $scaled_value = (float) $_POST['scoreScaled'];
 
     // next visit of the sco will not be the first so entry must be setted to RESUME
-    $entry_value = "RESUME";
+    $exit_value = $_POST['exit'];
+    $entry_value = "";
+    if ($exit_value == 'time-out' || $exit_value == 'normal') {
+        $entry_value = 'AB-INITIO';
+    } else if ($exit_value == 'suspend' || $exit_value == 'logout') {
+        $entry_value = "RESUME";
+    }
 
     // Set lesson status to COMPLETED if the SCO didn't change it itself.
     if ($lesson_status_value == "NOT ATTEMPTED") {
@@ -145,6 +151,7 @@ if (isset($_POST['ump_id'])) {
             <input type="hidden" name="scoreMin" />
             <input type="hidden" name="scoreMax" />
             <input type="hidden" name="scoreScaled" />
+            <input type="hidden" name="exit" />
         </form>
     </body>
 </html>

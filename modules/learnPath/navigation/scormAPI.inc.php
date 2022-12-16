@@ -280,6 +280,7 @@ $sco['session_time'] = "0000:00:00.00";
                     case 'cmi.core.exit':
                     case 'cmi.core.session_time':
                     case 'cmi.session_time':
+                    case 'cmi.exit':
                         APIError("404"); // write only
                         return "";
                     case 'cmi.objectives._count':
@@ -465,7 +466,7 @@ $sco['session_time'] = "0000:00:00.00";
                         values[i] = val;
                         APIError("0");
                         return "true";
-                        //-------------------------------
+                    //-------------------------------
                     case 'cmi.core.score.raw':
                         if (isNaN(parseInt(val)) || (val < 0) || (val > 100)) {
                             APIError("405");
@@ -526,21 +527,19 @@ $sco['session_time'] = "0000:00:00.00";
                         APIError("0");
                         return "true";
                     case 'cmi.core.exit':
-
-                    /*
-                        upperCaseVal = val.toUpperCase();
-                        if (upperCaseVal != "TIME-OUT" && upperCaseVal != "SUSPEND"
-                                && upperCaseVal != "LOGOUT" && upperCaseVal != "")
-                        {
-                            APIError("405");
-                            return "false";
-                       }*/
-
                         if (!checkDataType(val, 'CMIVocabulary', 'Exit')) {
                             APIError("405");
                             return "false";
                         }
-
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
+                    case 'cmi.exit':
+                        if (!checkDataType(val, 'CMIVocabulary', 'Exit')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[10] = val; // SCORM 2004, use together with the old element
                         values[i] = val;
                         APIError("0");
                         return "true";
@@ -883,6 +882,7 @@ $sco['session_time'] = "0000:00:00.00";
     elements[44] = "cmi.learner_preference.audio_captioning";
 
     elements[45] = 'cmi.score.scaled';
+    elements[46] = 'cmi.exit';
 
     let values = [];
     values[0] = "<?php echo js_escape($sco['_children']); ?>";
@@ -915,7 +915,6 @@ $sco['session_time'] = "0000:00:00.00";
     values[27] = "id,time,type,correct_responses,weighting,student_response,result,latency";
     values[28] = interactions.length;
 
-
     // SCORM2004
     values[37] = "<?php echo js_escape($sco['lesson_location']); ?>";
     values[38] = "<?php echo js_escape($sco['student_id']); ?>";
@@ -925,7 +924,7 @@ $sco['session_time'] = "0000:00:00.00";
     values[44] = 0;
 
     values[45] = "<?php echo js_escape($sco['scoreScaled']); ?>";
-
+    values[46] = "<?php echo js_escape($sco['exit']); ?>";
 
 
     // ====================================================
@@ -949,6 +948,7 @@ $sco['session_time'] = "0000:00:00.00";
         cmiform.entry.value = values[6];
         cmiform.raw.value = values[8];
         cmiform.total_time.value = values[9];
+        cmiform.exit.value = values[10];
         cmiform.session_time.value = values[11];
         cmiform.suspend_data.value = values[12];
         cmiform.scoreMin.value = values[14];
@@ -1003,7 +1003,7 @@ $sco['session_time'] = "0000:00:00.00";
         'CMIVocabulary': {
             'Mode': '^(normal|review|browse)$',
             'Status': '^(passed|completed|failed|incomplete|browsed|not attempted)$',
-            'Exit': '^(time-out|suspend|logout|^)$',
+            'Exit': '^(time-out|suspend|logout|normal|^)$',
             'Credit': '^(credit|no-credit)$',
             'Entry': '^(ab-initio|resume|^)$',
             'Interaction': '^(true-false|choice|fill-in|matching|performance|likert|sequencing|numeric)$',
