@@ -301,24 +301,15 @@ $sco['session_time'] = "0000:00:00.00";
                         return "";
                     case 'cmi.learner_preference.audio_level':
                     case 'cmi.student_preference.audio':
-                        APIError("0");
-                        return values[i];
                     case 'cmi.learner_preference.language':
                     case 'cmi.student_preference.language':
-                        APIError("0");
-                        return values[i];
                     case 'cmi.learner_preference.delivery_speed':
                     case 'cmi.student_preference.speed':
-                        APIError("0");
-                        return values[i];
                     case 'cmi.learner_preference.audio_captioning':
                     case 'cmi.student_preference.text':
-                        APIError("0");
-                        return values[i];
                     case 'cmi.comments':
-                        APIError("0");
-                        return values[i];
                     case 'cmi.comments_from_lms':
+                    case 'adl.nav.request':
                         APIError("0");
                         return values[i];
                 }
@@ -651,6 +642,14 @@ $sco['session_time'] = "0000:00:00.00";
                     case 'cmi.comments_from_lms':
                         APIError("403");
                         return "false";
+                    case 'adl.nav.request':
+                        if (!checkDataType(val, 'NAVEvent')) {
+                            APIError("405");
+                            return "false";
+                        }
+                        values[i] = val;
+                        APIError("0");
+                        return "true";
                 }
             } else {
                 if (ele.substring(0, 17) === 'cmi.interactions.') {
@@ -883,6 +882,7 @@ $sco['session_time'] = "0000:00:00.00";
 
     elements[45] = 'cmi.score.scaled';
     elements[46] = 'cmi.exit';
+    elements[47] = 'adl.nav.request';
 
     let values = [];
     values[0] = "<?php echo js_escape($sco['_children']); ?>";
@@ -925,6 +925,7 @@ $sco['session_time'] = "0000:00:00.00";
 
     values[45] = "<?php echo js_escape($sco['scoreScaled']); ?>";
     values[46] = "<?php echo js_escape($sco['exit']); ?>";
+    values[47] = "";
 
 
     // ====================================================
@@ -955,7 +956,21 @@ $sco['session_time'] = "0000:00:00.00";
         cmiform.scoreMax.value = values[15];
         cmiform.scoreScaled.value = values[45];
 
-        cmiform.submit();
+        let cmiformVars = $(cmiform).serialize();
+        let closelocation = tocFrame.document.getElementById('close-btn').getElementsByTagName('a')[0].href;
+        $.ajax({
+            type: 'POST',
+            url: cmiform.action,
+            data: cmiformVars
+        }).always(function() {
+            tocFrame.document.location.reload();
+            // adl.nav.request
+            if (values[47].length > 0) {
+                setTimeout(function() {
+                    window.location.href = closelocation;
+                }, 300);
+            }
+        });
     }
 
     function array_indexOf (arr, val) {
@@ -1011,7 +1026,8 @@ $sco['session_time'] = "0000:00:00.00";
             'TimeLimitAction': '^(exit,message|exit,no message|continue,message|continue,no message)$'
         },
         'CMIString255': '^.{0,255}$',
-        'CMIString4096': '^.{0,4096}$'
+        'CMIString4096': '^.{0,4096}$',
+        'NAVEvent': '^previous$|^continue$|^exit$|^exitAll$|^abandon$|^abandonAll$|^suspendAll$|^\{target=\\S{0,200}[a-zA-Z0-9]\}choice|jump$'
     };
 
     function checkDataType(value, data_type, sub_type) {
