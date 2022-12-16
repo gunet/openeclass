@@ -312,9 +312,9 @@ function generate_infinite_container_html($posts, $next_page) {
             $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
                               <span class="fa fa-fw fa-edit float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
             if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
-                if ($next_page == 2) { //needed only for the first page and not for dynamically added content
+                //if ($next_page == 2) { //needed only for the first page and not for dynamically added content
                     $head_content .= abuse_report_add_js(".infinite-container");
-                }
+                //}
                 $post_actions .= abuse_report_icon_flag ('wallpost', $id, $course_id);
             }
             $post_actions .= '</div>';
@@ -324,9 +324,9 @@ function generate_infinite_container_html($posts, $next_page) {
                 $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
             }
             if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
-                if ($next_page == 2) { //needed only for the first page and not for dynamically added content
+                //if ($next_page == 2) { //needed only for the first page and not for dynamically added content
                     $head_content .= abuse_report_add_js(".infinite-container");
-                }
+                //}
                 $post_actions .= abuse_report_icon_flag ('wallpost', $id, $course_id);
             }
             $post_actions .= '</div>';

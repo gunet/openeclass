@@ -780,7 +780,7 @@ function lessonToolsMenu($rich=true) {
                     $new_msgs = $mbox->unreadMsgsNumber();
                     if ($new_msgs != 0) {
                         array_push($sideMenuText, '<b class="pe-2">' . q($modules[$mid]['title']) .
-                            " $mail_status<span class='badge btn btn-success btn-sm pe-none float-end'>$new_msgs</span></b>");
+                            " $mail_status<span class='badge rounded-pill bgLightBlue text-white float-end' style='padding:5px;'>$new_msgs</span></b>");
                     } else {
                         array_push($sideMenuText, q($modules[$mid]['title']).' '.$mail_status);
                     }
@@ -789,7 +789,7 @@ function lessonToolsMenu($rich=true) {
                 }
             } elseif ($rich and $mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
                 array_push($sideMenuText, '<b class="pe-2">' . q($modules[$mid]['title']) .
-                    "<button class='badge btn btn-success btn-sm pe-none float-end'>$new_docs</button></b>");
+                    "<button class='badge rounded-pill bgLightBlue text-white float-end' style='padding:5px;'>$new_docs</button></b>");
             } else {
                 array_push($sideMenuText, q($modules[$mid]['title']));
             }

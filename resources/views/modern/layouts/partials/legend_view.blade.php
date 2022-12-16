@@ -76,7 +76,7 @@
                     </div>
                 @else
                     <div class='row'>
-                        <div class='col-12'>
+                        <div class='col-12 ps-0'>
                             @if($toolName)
                                 <div class='col-12 mb-2'>
                                     <span class='courseInfoText TextExtraBold blackBlueText me-1'>{{$currentCourseName}}</span> 

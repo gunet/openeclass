@@ -325,10 +325,10 @@ if (count($exercise_question_ids) > 0) {
         $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
         $question_graded = is_null($question_weight) ? FALSE : TRUE;
 
-        $tool_content .= "<div class='panel'>";
-        $tool_content .= "<div class='panel-body'>";
+        $tool_content .= "<div class='panel panel-admin mt-3'>";
+        $tool_content .= "<div class='panel-body Borders'>";
         $tool_content .= "
-            <table class='table ".(($question_graded)? 'graded' : 'ungraded')."'>
+            <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default'>
             <tr class='active'>
               <td colspan='2'>
                 <strong><u>$langQuestion</u>: $i</strong>";

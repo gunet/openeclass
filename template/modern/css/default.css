@@ -132,19 +132,19 @@ a{ text-decoration: none; font-size: 15px; color:#005ad9; font-family: 'Manrope-
 
 .vsmall-text { font-size: 12px; }
 
-.TextBold { font-family: 'Manrope-Bold', sans-serif;}
+.TextBold { font-family: 'Manrope-Bold', 'Fontawesome', sans-serif;}
 
-.TextExtraBold { font-family: 'Manrope-ExtraBold', sans-serif;}
+.TextExtraBold { font-family: 'Manrope-ExtraBold','Fontawesome', sans-serif;}
 
-.TextExtraLight { font-family: 'Manrope-ExtraLight', sans-serif;}
+.TextExtraLight { font-family: 'Manrope-ExtraLight','Fontawesome', sans-serif;}
 
-.TextLight { font-family: 'Manrope-Light', sans-serif;}
+.TextLight { font-family: 'Manrope-Light','Fontawesome', sans-serif;}
 
-.TextMedium { font-family: 'Manrope-Medium', sans-serif;}
+.TextMedium { font-family: 'Manrope-Medium','Fontawesome', sans-serif;}
 
-.TextRegular { font-family: 'Manrope-Regular', sans-serif;}
+.TextRegular { font-family: 'Manrope-Regular','Fontawesome', sans-serif;}
 
-.TextSemiBold { font-family: 'Manrope-SemiBold', sans-serif;}
+.TextSemiBold { font-family: 'Manrope-SemiBold','Fontawesome', sans-serif;}
 
 .TextButton { font-size: 12px; }
 
@@ -158,7 +158,7 @@ table p, .panel p, .margin-bottom-fat.form-wrapper.form-edit.p-2.mb-3.rounded p 
 
 .h-30px{ height:30px; }
 
-.h-40px{ height:30px; }
+.h-40px{ height:40px; }
 
 .lh-25px{ line-height: 25px; }
 
@@ -172,13 +172,13 @@ table p, .panel p, .margin-bottom-fat.form-wrapper.form-edit.p-2.mb-3.rounded p 
 
 .bgBlackBlue { background-color: #001146;}
 
-.normalBlueText { color: #003e87; }
+.normalBlueText { color: #003e85; }
 
-.bgNormalBlueText { background-color: #003e87; }
+.bgNormalBlueText { background-color: #003e85; }
 
-.lightBlueText { color:#005ad9; }
+.lightBlueText { color:#005ad7; }
 
-.bgLightBlue { background-color: #005ad9;}
+.bgLightBlue { background-color: #005ad7;}
 
 .panel-phpinfo{ overflow-y: auto; }
 
@@ -204,7 +204,7 @@ img { max-width: 100%; height: auto; }
 
 @media (max-width:1023px){ .textFileUpload{ font-size: 16px; } }
 
-.help-block{ color:#9d9d9c; font-size: 12px; font-family: 'Manrope-SemiBold',sans-serif; }
+.help-block{ color:#9d9d9c; font-size: 12px; font-family: 'Manrope-SemiBold','Fontawesome',sans-serif; }
 
 .pen-hierarchy{margin-left:-5px;}
 
@@ -253,7 +253,7 @@ textarea {width:100%;}
 /* this is d-inline-flex between inputs-radio and texts */
 .radio label{ 
   display:inline-flex; justify-content: center; align-items:center ; 
-  color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold',sans-serif;
+  color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
   position: relative;
   transition: 0.5s;
 } 
@@ -273,7 +273,7 @@ textarea {width:100%;}
 
 .radio:has(input[type='radio']:checked) .help-block{
   font-size: 12px;
-  font-family: 'Manrope-SemiBold',sans-serif;
+  font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
   color:#001146;
 }
 
@@ -316,7 +316,7 @@ label:has(input[type="radio"]:disabled){
 /* panels and form-wrapper where contains checkbox checked then change checked label color*/
 .form-wrapper.form-edit label:has(input[type="radio"]:checked){
   font-size: 14px;
-  font-family: 'Manrope-SemiBold',sans-serif;
+  font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
   color:#001146;
 }
 
@@ -327,7 +327,7 @@ label:has(input[type="radio"]:disabled){
 /* this is d-inline-flex between inputs-checkbox and texts */
 .checkbox label{ 
   display:inline-flex; justify-content: top; align-items:top; 
-  color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold',sans-serif;
+  color:#9d9d9c; font-size: 14px; font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
 } 
 
 .checkbox label p{ margin-top:0px; } 
@@ -342,7 +342,7 @@ input[type="checkbox"]{
 }
 .form-wrapper.form-edit label:has(input[type="checkbox"]:checked), .panel .panel-body label:has(input[type="checkbox"]:checked){
   font-size: 14px;
-  font-family: 'Manrope-SemiBold',sans-serif;
+  font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
   color:#001146;
 }
 
@@ -391,7 +391,7 @@ input:-webkit-autofill:active {
   background-color: #e8e8e8;
   color: #001146;
   font-size: 14px;
-  font-family: 'Manrope-SemiBold', sans-serif;
+  font-family: 'Manrope-SemiBold', 'Fontawesome', sans-serif;
 }
 .form-wrapper textarea, .forms-panels-admin textarea{
    min-height:106px;
@@ -422,7 +422,7 @@ input:-webkit-autofill:active {
   outline: 0 none;
   background-color: #e8e8e8;
   color:#001146;
-  font-family: 'Manrope-SemiBold';
+  font-family: 'Manrope-SemiBold','Fontawesome', sans-serif;
 }
 
 .form-wrapper .form-control:disabled, .table-default .form-control:disabled, .panel .form-control:disabled{
@@ -439,7 +439,7 @@ select.form-select {
   background-color: #e8e8e8;
   border-radius: 35px;
   font-size: 14px;
-  font-family: 'Manrope-SemiBold';
+  font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
   height:30px;
   border:0px;
   color:#001146;
@@ -464,7 +464,7 @@ select.form-select:focus {
   outline: 0 none;
   background-color: #e8e8e8;
 }
-select.form-select option{color: #9d9d9c; font-family: 'Manrope-SemiBold';}
+select.form-select option{color: #9d9d9c; font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;}
 
 .form-wrapper .form-select:disabled, .table-default .form-select:disabled, .panel .form-select:disabled{
   opacity: 0.4;
@@ -1034,7 +1034,7 @@ label:has(input[type="checkbox"]:disabled){
   .login-form-spacing2 { padding-top: 17px; margin-top:-12px; text-align: center; }
   
   .login-input { 
-    text-align: center; background-color: #e8e8e8; border: none; 
+    text-align: center; background-color: #e8e8e8; border: none;
     height:40px;}
 
   .login-input:focus {
@@ -1043,7 +1043,6 @@ label:has(input[type="checkbox"]:disabled){
     outline: 0 none;
     background: #e8e8e8;
   }
-
 
   .login-form-submit, .opencourses_btn {
     border: solid thin;
@@ -1180,10 +1179,10 @@ label:has(input[type="checkbox"]:disabled){
 
   .notes_thead{ background:rgba(0, 62, 135, 0.9) ;  }
 
-  .control-label-notes{ font-size:15px; color:#001146; font-family:'Manrope-SemiBold', sans-serif; }
+  .control-label-notes{ font-size:15px; color:#001146; font-family:'Manrope-SemiBold', 'Fontawesome',sans-serif; }
 
   /* first choice of inputs forms */
-  .form-wrapper.form-edit .control-label-notes{ font-family:'Manrope-ExtraBold', sans-serif; font-size: 16px; color:#001146; text-transform:capitalize;} 
+  .form-wrapper.form-edit .control-label-notes{ font-family:'Manrope-ExtraBold', 'Fontawesome',sans-serif; font-size: 16px; color:#001146; text-transform:capitalize;} 
   
   @media (max-width:1023px){ .control-label-notes{ font-size: 16px; } }
 
@@ -1194,7 +1193,7 @@ label:has(input[type="checkbox"]:disabled){
     font-size: 12px;
     text-transform: uppercase;
     height:30px;
-    font-family: 'Manrope-SemiBold',sans-serif;
+    font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
     border-radius: 35px;
   }
 
@@ -1212,7 +1211,7 @@ label:has(input[type="checkbox"]:disabled){
     font-size: 12px;
     text-transform: uppercase;
     height:30px;
-    font-family: 'Manrope-SemiBold',sans-serif;
+    font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
     border-radius: 35px;
   }
 
@@ -1228,7 +1227,7 @@ label:has(input[type="checkbox"]:disabled){
     color: #001146;
     text-transform: uppercase;
     height:30px;
-    font-family: 'Manrope-SemiBold',sans-serif;
+    font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
     border-radius: 35px;
   }
 
@@ -1261,7 +1260,7 @@ label:has(input[type="checkbox"]:disabled){
     font-size: 12px;
     text-transform: uppercase;
     height:30px;
-    font-family: 'Manrope-SemiBold',sans-serif;
+    font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
     border-radius: 35px;
     margin-bottom: 10px;
     display:flex;
@@ -1280,7 +1279,7 @@ label:has(input[type="checkbox"]:disabled){
     font-size: 12px;
     text-transform: uppercase;
     height:30px;
-    font-family: 'Manrope-SemiBold',sans-serif;
+    font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
     border-radius: 35px;
     margin-bottom: 10px;
     display:flex;
@@ -1304,7 +1303,7 @@ label:has(input[type="checkbox"]:disabled){
     font-size: 12px;
     text-transform: uppercase;
     min-height:30px;
-    font-family: 'Manrope-SemiBold',sans-serif;
+    font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
     border-radius: 35px;
     display: inline-block;
     margin: 0 auto;
@@ -1326,7 +1325,7 @@ label:has(input[type="checkbox"]:disabled){
     color: #ffa023;
     font-size: 12px;
     text-transform: uppercase;
-    font-family: 'Manrope-SemiBold',sans-serif;
+    font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
     border-radius: 35px;
     min-height:30px;
     display: inline-block;
@@ -1442,17 +1441,17 @@ label:has(input[type="checkbox"]:disabled){
     border:solid 1px #e8e8e8;
   }
   .panel-admin>.panel-heading{
-    background: #003e87;
+    background: #003e85;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
-    font-family: 'Manrope-SemiBold' , sans-serif;
+    font-family: 'Manrope-SemiBold' ,'Fontawesome', sans-serif;
   }
   .panel-admin>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
-    font-family: 'Manrope-SemiBold' , sans-serif;
+    font-family: 'Manrope-SemiBold' ,'Fontawesome', sans-serif;
   }
   .panel-admin:has(.panel-footer) .panel-body{ border:0px; }
 
@@ -1485,13 +1484,13 @@ label:has(input[type="checkbox"]:disabled){
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
-    font-family: 'Manrope-SemiBold' , sans-serif;
+    font-family: 'Manrope-SemiBold' ,'Fontawesome', sans-serif;
   }
   .panel-primary>.panel-heading>.panel-title, .panel-action-btn-primary>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
-    font-family: 'Manrope-SemiBold' , sans-serif;
+    font-family: 'Manrope-SemiBold','Fontawesome' , sans-serif;
   }
   .panel-primary:has(.panel-footer) .panel-body{
     border:0px;
@@ -1532,14 +1531,14 @@ label:has(input[type="checkbox"]:disabled){
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
-    font-family: 'Manrope-SemiBold' , sans-serif;
+    font-family: 'Manrope-SemiBold' ,'Fontawesome', sans-serif;
     font-size: 15px;
   }
   .panel-success>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
-    font-family: 'Manrope-SemiBold' , sans-serif;
+    font-family: 'Manrope-SemiBold','Fontawesome' , sans-serif;
     font-size: 15px;
   }
   /* for widgets */
@@ -1596,7 +1595,7 @@ label:has(input[type="checkbox"]:disabled){
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
-    font-family: 'Manrope-SemiBold' , sans-serif;
+    font-family: 'Manrope-SemiBold', 'Fontawesome' , sans-serif;
     border-bottom: solid 1px #eee7e7;
     font-size: 15px;
   }
@@ -1604,7 +1603,7 @@ label:has(input[type="checkbox"]:disabled){
     color: #333;
     margin-bottom:0px;
     padding:0px;
-    font-family: 'Manrope-SemiBold' , sans-serif;
+    font-family: 'Manrope-SemiBold' ,'Fontawesome', sans-serif;
     font-size: 15px;
   }
   .panel-default:has(.panel-footer) .panel-body{
@@ -1655,13 +1654,13 @@ label:has(input[type="checkbox"]:disabled){
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
-    font-family: 'Manrope-SemiBold' , sans-serif;
+    font-family: 'Manrope-SemiBold' ,'Fontawesome', sans-serif;
   }
   .panel-info>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
-    font-family: 'Manrope-SemiBold' , sans-serif;
+    font-family: 'Manrope-SemiBold' ,'Fontawesome', sans-serif;
   }
   .panel-info:has(.panel-footer) .panel-body{
     border:0px;
@@ -1695,13 +1694,13 @@ label:has(input[type="checkbox"]:disabled){
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
-    font-family: 'Manrope-SemiBold' , sans-serif;
+    font-family: 'Manrope-SemiBold','Fontawesome' , sans-serif;
   }
   .panel-danger>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
-    font-family: 'Manrope-SemiBold' , sans-serif;
+    font-family: 'Manrope-SemiBold','Fontawesome' , sans-serif;
   }
   .panel-danger:has(.panel-footer) .panel-body{
     border:0px;
@@ -1746,7 +1745,7 @@ label:has(input[type="checkbox"]:disabled){
 
   @media(max-width:991px){.panel-body{overflow-y: auto;}}
 
-  .panel-title{ font-family: 'Manrope-SemiBold' , sans-serif; font-size: 15px; }
+  .panel-title{ font-family: 'Manrope-SemiBold' ,'Fontawesome', sans-serif; font-size: 15px; }
 
   .panel-footer{ padding:10px; }
 
@@ -1829,7 +1828,7 @@ label:has(input[type="checkbox"]:disabled){
   .table-default .list-header th,
   .announcements_table .list-header th, 
   .announcements_table .notes_thead th{ 
-    color:#ffffff; font-size: 15px; font-family: 'Manrope-SemiBold',sans-serif;
+    color:#ffffff; font-size: 15px; font-family: 'Manrope-SemiBold','Fontawesome',sans-serif;
   }
 
 

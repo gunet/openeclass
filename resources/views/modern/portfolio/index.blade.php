@@ -299,9 +299,9 @@
                     </div>
                 </div>
 
-                <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                {{--<div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                     {!! $portfolio_page_main_widgets !!}
-                </div>
+                </div>--}}
 
             </div>
         </div>
@@ -343,9 +343,18 @@
                 </div>
             </div>
 
-            <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
-                {!! $portfolio_page_sidebar_widgets !!}
-            </div>
+            @if($portfolio_page_main_widgets)
+                <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                    <div class='panel-heading bg-body p-0'>
+                        <div class='col-12 Help-panel-heading'>
+                            <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyWidgets') }}</span>
+                        </div>
+                    </div>
+                    <div class='panel-body'>
+                        {!! $portfolio_page_main_widgets !!}
+                    </div>
+                </div>
+            @endif
 
         </div>
     </div>

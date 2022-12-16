@@ -30,8 +30,8 @@
                                     </div>
                                     <form class='mt-0' action="{{ $urlAppend }}" method="post">
                                         <div class="login-form-spacing mt-3">
-                                            <input id='username_id' class="rounded-pill login-input w-75" placeholder="{{ trans('langUsername') }}" type="text" id="uname" name="uname" autocomplete="on">
-                                            <input id='password_id' class="rounded-pill login-input w-75 mt-2" placeholder="{{ trans('langPassword') }}" type="password" id="pass" name="pass" autocomplete="on">
+                                            <input id='username_id' class="rounded-pill login-input w-75 TextSemiBold" placeholder="{{ trans('langUsername') }} &#xf007;" type="text" id="uname" name="uname" autocomplete="on">
+                                            <input id='password_id' class="rounded-pill login-input w-75 mt-2 TextSemiBold" placeholder="{{ trans('langPassword') }} &#xf023;" type="password" id="pass" name="pass" autocomplete="on">
                                             <input class="rounded-pill btn w-75 login-form-submit TextBold mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
                                         </div>
                                     </form>

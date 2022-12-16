@@ -28,10 +28,11 @@
                 buttons: {
                     confirm: {
                         label: action_message,
-                        className: 'submitAdminBtn'
+                        className: 'deleteAdminBtn'
                     },
                     cancel: {
                         label: "{{ js_escape(trans('langCancel')) }}",
+                        className: 'cancelAdminBtn'
                     }
                 },
                 callback: function(result) {
@@ -495,7 +496,6 @@
                             </div>
                         @endif
 
-                        {!! $course_home_main_area_widgets !!}
 
                     </div><!-- end col units -->
 
@@ -560,8 +560,6 @@
                             </div>
                         @endif
 
-                        {!! $course_home_sidebar_widgets !!}
-
                         @if(isset($course_completion_id) and $course_completion_id > 0)
                             <div class="panel panel-admin px-lg-4 py-lg-3 bg-white mt-4">
                                 <div class='panel-heading bg-body'>
@@ -601,6 +599,19 @@
                                     <div class='mt-3 text-center'>
                                         {!! $opencourses_level_footer !!}
                                     </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if($course_home_main_area_widgets)
+                            <div class='panel panel-admin px-lg-4 py-lg-3 bg-white mt-4'>
+                                <div class='panel-heading bg-body'>
+                                    <div class='col-12 Help-panel-heading'>
+                                        <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langWidgets') }}</span>
+                                    </div>
+                                </div>
+                                <div class='panel-body'>
+                                    {!! $course_home_main_area_widgets !!}
                                 </div>
                             </div>
                         @endif

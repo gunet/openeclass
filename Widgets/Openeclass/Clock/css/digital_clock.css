@@ -15,9 +15,9 @@
 
 .digital_clock ul li {
     display: inline;
-    font-size: 3em;
+    font-size: 2em;
     text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Manrope-SemiBold', sans-serif;
 }
 
 .digital_clock .point {

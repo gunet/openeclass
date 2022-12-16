@@ -40,7 +40,7 @@
                             @if (count($installed_widgets))
                             <div id="widgets">
                                 @foreach ($installed_widgets as $key => $installed_widget)
-                                        <div class="panel panel-success widget mt-2" data-widget-id="{{ $installed_widget->id }}">
+                                        <div class="panel panel-success widget mt-3" data-widget-id="{{ $installed_widget->id }}">
                                             <div class="panel-heading">                   
                                                 <a class='text-white collapsed' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
                                                 href="#widget_desc_{{ $key }}" class="widget_title">
@@ -58,8 +58,8 @@
                                                             <input type="hidden" name='widgetClassName' value='{{ get_class($installed_widget) }}'>
                                                             <input type="hidden" name='widgetAction' value='uninstall'>
                                                         </form>
-                                                        <a class='text-danger fs-6' href="#" onclick="$('#uninstallForm{{ $key }}').submit();">
-                                                            <small>{{ trans('langWidgetUninstall') }}</small>
+                                                        <a class='btn deleteAdminBtn' href="#" onclick="$('#uninstallForm{{ $key }}').submit();">
+                                                            {{ trans('langWidgetUninstall') }}
                                                         </a>                               
                                                     </div>                      
                                                 </div>                        
@@ -111,8 +111,8 @@
                                                     <input type="hidden" name='widgetClassName' value='{{ get_class($uninstalled_widget) }}'>
                                                     <input type="hidden" name='widgetAction' value='install'>
                                                 </form>
-                                                <a class='text-success' href="#" onclick="$('#installForm{{ $key }}').submit();">
-                                                    <small>{{ trans('langWidgetInstall') }}</small>
+                                                <a class='btn submitAdminBtn' href="#" onclick="$('#installForm{{ $key }}').submit();">
+                                                    {{ trans('langWidgetInstall') }}
                                                 </a>                               
                                             </div>
                                         </div>

@@ -11,7 +11,13 @@
 
                 <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active">
                     <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
-                        @include('layouts.partials.sidebar',['is_editor' => $is_editor])
+                        @php $dont_display_array_in_sidebar = ''; @endphp
+
+                        @if($count_home_sidebar_widgets >= 0)
+                            @php $dont_display_array_in_sidebar = 1; @endphp
+                        @endif
+                          
+                        @include('layouts.partials.sidebar',['is_editor' => $is_editor, 'dont_display_array_in_sidebar' => $dont_display_array_in_sidebar])
                     </div>
                 </div>
 
@@ -73,8 +79,8 @@
                                                                 <input type="hidden" name='widgetClassName' value='{{ get_class($installed_widget) }}'>
                                                                 <input type="hidden" name='widgetAction' value='uninstall'>
                                                             </form>
-                                                            <a class='text-danger' href="#" onclick="$('#uninstallForm{{ $key }}').submit();">
-                                                                <small>{{ trans('langWidgetUninstall') }}</small>
+                                                            <a class='btn deleteAdminBtn' href="#" onclick="$('#uninstallForm{{ $key }}').submit();">
+                                                                {{ trans('langWidgetUninstall') }}
                                                             </a>
                                                         </div>
                                                     </div>

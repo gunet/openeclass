@@ -107,7 +107,7 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    {{ trans('langConfirmUnregCours') }}<strong class="lightBlueText"> {{$course->title}}</strong>;
+                                                    {{ trans('langConfirmUnregCours') }}<strong class="text-capitalize orangeText"> {{$course->title}}</strong>;
                                                     <input type='hidden' name='fromMyCoursesPage' value="1">
                                                 </div>
                                                 <div class="modal-footer">

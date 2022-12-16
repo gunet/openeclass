@@ -57,8 +57,8 @@
                                                             <input type="hidden" name='widgetClassName' value='{{ get_class($installed_widget) }}'>
                                                             <input type="hidden" name='widgetAction' value='uninstall'>
                                                         </form>
-                                                        <a href="#" onclick="$('#uninstallForm{{ $key }}').submit();">
-                                                            <small>{{ trans('langWidgetUninstall') }}</small>
+                                                        <a class='btn deleteAdminBtn' href="#" onclick="$('#uninstallForm{{ $key }}').submit();">
+                                                            {{ trans('langWidgetUninstall') }}
                                                         </a>
                                                     </div>
                                                 </div>

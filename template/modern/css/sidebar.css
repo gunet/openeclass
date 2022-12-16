@@ -300,21 +300,23 @@
 /************************************** THIS IS SECOND CHOICE OF VIEW-STUDENT-TEACHER TOOGLE BUTTON **************************************/
 /* ************************************************************************************************************************************* */
 /* ************************************************************************************************************************************* */
-.switch-sidebar { position: relative; display: inline-block; height: 34px;  width:165px; }
+.switch-sidebar { position: relative; display: inline-block; height: 30px;  width:165px; }
 
 .slider-btn-on{ width:165px; }
 
 .switch-sidebar input {display:none;}
 
 .slider-round { position: absolute;  cursor: pointer; top: 0; left: 0; right: 0;
-  bottom: 0; background-color: #4682B4; -webkit-transition: .4s; transition: .4s; }
+  bottom: 0; background-color: #005ad7; -webkit-transition: .4s; transition: .4s; }
 
-.slider-round:before { position: absolute; content: ""; height: 26px; width: 26px;
-  left: 4px; bottom: 4px; background-color: white; -webkit-transition: .4s; transition: .4s; }
+.slider-round:before { position: absolute; content: ""; height: 23px; width: 23px;
+  left: 6px; bottom: 3.6px; background-color: white; -webkit-transition: .4s; transition: .4s; 
+  background-repeat: no-repeat; background-size: cover; background-image: url(../img/change.svg);
+}
 
-input:checked + .slider-round { background-color: #2E8B57; }
+input:checked + .slider-round { background-color: #4682B4; }
 
-input:focus + .slider-round { box-shadow: 0 0 1px #4682B4; }
+input:focus + .slider-round { box-shadow: 0 0 1px #005ad7; }
 
 input:checked + .slider-round:before { -webkit-transform: translateX(130px); -ms-transform: translateX(130px); transform: translateX(130px); }
 

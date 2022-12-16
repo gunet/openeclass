@@ -56,10 +56,10 @@ foreach ($q as $l) {
             $next
             <div class='row'>
               <div class='col-12 login-form-spacing m-auto d-block'>
-                <input class='login-input w-75 rounded-pill' name='uname' aria-describedby='usernameIcon' placeholder='$langUsername &#xf007;'$userValue>
+                <input class='login-input w-75 rounded-pill TextSemiBold' name='uname' aria-describedby='usernameIcon' placeholder='$langUsername &#xf007;'$userValue>
               </div>
               <div class='col-12 login-form-spacing m-auto d-block'>
-                  <input class='login-input  w-75 rounded-pill mt-2' name='pass' type='password' aria-describedby='passwordIcon' placeholder='$langPass &#xf023;'>
+                  <input class='login-input w-75 rounded-pill mt-2' name='pass' type='password' aria-describedby='passwordIcon' placeholder='$langPass &#xf023;' style='height:40px;'>
               </div>
             </div>
             <div class='form-group mt-3'>
@@ -96,9 +96,9 @@ foreach ($authLink as $authInfo) {
     $tool_content .= "
    
       <div class='col-lg-$columns col-12'>
-        <div class='panel panel-default mt-lg-0 mb-lg-0 mb-3' style='min-height:280px;'>
-          <div class='panel-heading'><div class='panel-title p-0 text-dark text-center'>
-          <img src='{$urlServer}template/modern/img/user_login.svg' class='user-icon2 me-2'>" . q($authInfo[2]) . "</div></div>
+        <div class='panel panel-admin mt-lg-0 mb-lg-0 mb-3' style='min-height:280px;'>
+          <div class='panel-heading'><div class='panel-title p-0 text-white text-center'>
+          <img src='{$urlServer}template/modern/img/user.svg' class='user-icon2 me-2'>" . q($authInfo[2]) . "</div></div>
             <div class='panel-body login-page-option bg-white'>" .
               $authInfo[1];
     if (Session::has('login_error') and $authInfo[0]) {

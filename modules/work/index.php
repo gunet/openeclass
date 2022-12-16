@@ -5489,7 +5489,7 @@ function show_student_assignments() {
                 $link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'$class>$title_temp</a>$exclamation_icon";
             }
 
-            $tool_content .= "<tr style='background:red;' class='$class_not_started'>
+            $tool_content .= "<tr class='$class_not_started'>
                                 <td>$link</td>
                                 <td class='text-center' data-sort='$sort_id'>" . $deadline ;
 

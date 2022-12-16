@@ -1,19 +1,20 @@
                 .clock {
                         position: relative;
-                        width: 300px;
-                        height: 300px;
+                        width: 150px;
+                        height: 150px;
                         margin: 20px auto 0 auto;
                         background: url(../images/clockface.jpg);
                         background-size: 100% 100%;
                         list-style: none;
+                        border-radius: 50px;
                         }
 
                 .sec, .min, .hour {
                         position: absolute;
                         width: 15px;
-                        height: 300px;
+                        height: 150px;
                         top: 0px;
-                        left: 142px;
+                        left: 67px;
                         }
 
                 .sec {

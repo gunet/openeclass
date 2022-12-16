@@ -328,6 +328,7 @@ $view_data['course_home_main_area'] = new Widgets\WidgetArea(COURSE_HOME_PAGE_MA
 $view_data['course_home_main_area_widgets'] = $view_data['course_home_main_area']->getCourseAndAdminWidgets($course_id);
 $view_data['course_home_sidebar_area'] = new Widgets\WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
 $view_data['course_home_sidebar_widgets'] = $view_data['course_home_sidebar_area']->getCourseAndAdminWidgets($course_id);
+$view_data['count_home_sidebar_widgets'] = count($view_data['course_home_sidebar_widgets']);
 
 $view_data = recursiveWidgetIterator('Widgets', $view_data);
 

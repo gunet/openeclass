@@ -64,7 +64,7 @@
 
 
                     <div class='col-12 mt-4'>
-                        <ul class='list-group'>
+                        <ul class='list-group Borders'>
                             <li class='list-group-item bg-light'>{!! trans('langFaculty') !!}: <strong class='orangeText'>{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</strong>
                             {!! $childHTML !!}
                         </ul>
