@@ -126,14 +126,14 @@ if (isset($_POST['ump_id'])) {
         <title>update progression</title>
         <?php
         if (isset($_POST['ump_id'])) {
-            ?>
+        ?>
             <script type="text/javascript">
                 <!--//
-              parent.tocFrame.location.href = "<?php echo $TOCurl; ?>";
+                parent.tocFrame.location.href = "<?php echo $TOCurl; ?>";
                 parent.tocleftFrame.location.href = "<?php echo $TOCleft; ?>";
-    //-->
+                //-->
             </script>
-            <?php
+        <?php
         }
         ?>
     </head>
