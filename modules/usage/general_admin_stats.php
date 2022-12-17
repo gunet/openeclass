@@ -94,6 +94,6 @@ $tschema = "<thead><tr class='list-header'>"
     . "</tr>"
     . "</thead>"
     . "<tbody></tbody>";
-$tool_content .= table_placeholder("adetails2", "table table-striped table-bordered", $tschema, $langNbLogin);
+$tool_content .= table_placeholder("adetails2", "table-default table-striped table-bordered", $tschema, $langNbLogin);
 $tool_content .= "</div></div>";
 

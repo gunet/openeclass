@@ -112,7 +112,7 @@
                                     <div class='panel-heading rounded-0 bg-white ps-md-3 pe-md-1 px-0'>
                                         <div class='panel-heading bg-white ps-md-3 pe-md-0'>
                                             <div class='col-12 Help-panel-heading'>
-                                                <span class='text-uppercase Help-text-panel-heading-Portfolio'>{{ trans('langPersInfo') }}</span>
+                                                <span class='text-uppercase Help-text-panel-heading'>{{ trans('langPersInfo') }}</span>
                                             </div>
                                         </div>
 
@@ -174,7 +174,7 @@
                                     <div class='panel-heading rounded-0 bg-white ps-md-3 pe-md-1 px-0'>
                                         <div class='panel-heading bg-body ps-md-3 pe-md-0'>
                                             <div class='col-12 Help-panel-heading'>
-                                                <span class='text-uppercase Help-text-panel-heading-Portfolio'>{{ trans('langAboutMe') }}</span>
+                                                <span class='text-uppercase Help-text-panel-heading'>{{ trans('langAboutMe') }}</span>
                                             </div>
                                         </div>
                                     </div>

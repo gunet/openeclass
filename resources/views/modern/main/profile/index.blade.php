@@ -24,7 +24,7 @@
                         <div class="panel panel-admin px-lg-4 py-lg-3 bg-white">
                             <div class='panel-heading bg-body'>
                                 <div class='col-12 Help-panel-heading'>
-                                    <span class='text-uppercase fw-bold Help-text-panel-heading-Portfolio'>{{trans('langAnalyticsEditElements')}}</span>
+                                    <span class='text-uppercase fw-bold Help-text-panel-heading'>{{trans('langAnalyticsEditElements')}}</span>
                                 </div>
                             </div>
                             <div class="panel-body">
@@ -255,7 +255,7 @@
                                 <div class="panel panel-admin px-lg-4 py-lg-3 bg-white">
                                     <div class='panel-heading bg-body'>
                                         <div class='col-12 Help-panel-heading'>
-                                            <span class='text-uppercase fw-bold Help-text-panel-heading-Portfolio'>{{trans('langUnregUser')}}</span>
+                                            <span class='text-uppercase fw-bold Help-text-panel-heading'>{{trans('langUnregUser')}}</span>
                                         </div>
                                     </div>
                                     <div class="panel-body">

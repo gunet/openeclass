@@ -121,29 +121,20 @@
                     @if ($is_admin)
                         <li class="list-group-item border-0 admin-list-group Borders">
                             <a href="{{$urlAppend}}modules/admin/addadmin.php" class='list-group-item'>
-                                <div class='d-inline-flex'>
-                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                    <span class='toolAdminText'>{!!  $GLOBALS['langAdmins'] !!}</span>   
-                                 </div>  
+                                <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdmins'] !!}</span>   
                             </a>
                         </li>
                     @endif
                     @if (isset($is_admin) and $is_admin)
                         <li class="list-group-item border-0 admin-list-group Borders">
                             <a href="{{$urlAppend}}modules/admin/adminannouncements.php" class='list-group-item'>
-                                <div class='d-inline-flex'>
-                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                    <span class='toolAdminText'>{!!  $GLOBALS['langAdminAn'] !!}</span>
-                                </div>    
+                                <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdminAn'] !!}</span>
                             </a>
                         </li>
                         @php $manual_language = ($language == 'el')? $language: 'en'; @endphp
                         <li class="list-group-item border-0 admin-list-group Borders">
                             <a href="http://docs.openeclass.org/{{$manual_language}}/admin" class='list-group-item'>
-                                <div class='d-inline-flex'>
-                                    <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                    <span class='toolAdminText'>{!!  $GLOBALS['langAdminManual'] !!}</span>      
-                                </div>
+                                <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdminManual'] !!}</span>      
                             </a>
                         </li>
                     @endif
@@ -164,11 +155,7 @@
                 @foreach ($tool_group[1] as $key2 => $tool)
                     <li class="list-group-item border-0 admin-list-group Borders">
                         <a href="{!! $tool_group[2][$key2] !!}" class='list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
-                            <div class='d-inline-flex'>
-                                <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                <span class='toolAdminText'>{!! $tool !!}</span>
-                            </div>
-                               
+                            <span class='msmall-text toolAdminText'>{!! $tool !!}</span>  
                         </a>
                     </li>
                 @endforeach
@@ -189,18 +176,12 @@
                         <ul class="list-group list-group-flush Borders">
                             <li class="list-group-item border-0 admin-list-group Borders">
                                 <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='list-group-item'>
-                                    <div class='d-inline-flex'>
-                                        <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                        <span class='toolAdminText'>{!!  $GLOBALS['langHierarchy'] !!}</span>   
-                                    </div>   
+                                    <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langHierarchy'] !!}</span>     
                                 </a>
                             </li>
                             <li class="list-group-item border-0 admin-list-group Borders">
                                 <a href="{{$urlAppend}}modules/admin/coursecategory.php" class='list-group-item'>
-                                        <div class='d-inline-flex'>
-                                            <span class='fa fa-caret-right fa-fw mt-1 orangeText'></span>
-                                            <span class='toolAdminText'>{!!  $GLOBALS['langCourseCategoryActions'] !!}</span>
-                                        </div>      
+                                    <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langCourseCategoryActions'] !!}</span>   
                                 </a>
                             </li>
                         </ul>

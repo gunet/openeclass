@@ -18,6 +18,7 @@
                     <a type="button" class='btn btn-transparent text-white' href="{{ $urlAppend }}modules/search/{{ $search_action }}"><i class="fa fa-search"></i></button>
                 @endif
 
+                
                 {!! lang_selections_Mobile() !!}
 
 

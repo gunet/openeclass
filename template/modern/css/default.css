@@ -137,6 +137,8 @@ a{
 
 @media(max-width:1023px){ a{ font-size: 15px; } }
 
+.msmall-text { font-size: 14px; }
+
 .small-text { font-size: 13px; }
 
 .vsmall-text { font-size: 12px; }
@@ -788,11 +790,9 @@ label:has(input[type="checkbox"]:disabled){
 
   .nav-link-portfolio.nav-link{ color:#000000;} 
 
-  .nav-link-portfolio.nav-link.active{ border-top: solid 1px #f8f9fa ; border-left:solid 1px #f8f9fa ; border-right: solid 1px #f8f9fa; border-bottom: solid 2px #4682B4 ; background-color:#f8f9fa; color:#4682B4;  }
+  .nav-link-portfolio.nav-link.active{ border-top: solid 1px #f8f9fa ; border-left:solid 1px #f8f9fa ; border-right: solid 1px #f8f9fa; border-bottom: solid 2px #003e87 ; background-color:#f8f9fa; color:#003e87;  }
 
   .nav-link-portfolio.nav-link:hover{ border-top: solid 1px #f8f9fa ; border-left:solid 1px #f8f9fa ; border-right: solid 1px #f8f9fa;}
-
-  .Help-text-panel-heading-Portfolio {color: #4682B4; font-size:13.5px;}
 
   @media(min-width:426px) and (max-width:768px){
     .lesson {min-height: 314px;}
@@ -826,7 +826,7 @@ label:has(input[type="checkbox"]:disabled){
   
   .user-detals-photo { min-width: 120px; height: 120px; border-radius: 50%; }
   
-  .block-title-2 { font-weight: bold; color: #0d6efd; border-bottom: thin solid #4682B4; margin-bottom: 25px; }
+  .block-title-2 { font-weight: bold; color: #0d6efd; border-bottom: thin solid #003e87; margin-bottom: 25px; }
 
   .custom-font { font-size: 1.6em; }
   
@@ -1186,7 +1186,7 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
-  .notes_thead{ background:rgba(0, 62, 135, 0.9) ;  }
+  .notes_thead{ background:#003e85;  }
 
   .control-label-notes{ font-size:15px; color:#001146; font-family: 'Manrope' , sans-serif; font-weight: 800; font-style: normal; }
 
@@ -1244,6 +1244,8 @@ label:has(input[type="checkbox"]:disabled){
     background-color: #001146;
     color: #ffffff;
   }
+
+  .submitAdminBtn span, .cancelAdminBtn span, .deleteAdminBtn span{ font-size: 12px; }
 
   
 /* -------------------------------------------- Forum ---------------------------------------------------------------------------------------*/
@@ -1744,10 +1746,6 @@ label:has(input[type="checkbox"]:disabled){
 
   .panel-heading:has(.btn-group) .panel-title{ padding-bottom: 6px; padding-top: 5px; }
 
-  .Help-panel-heading {border-bottom:solid 1px #4682B4;}
-
-  .Help-text-panel-heading {color: #4682B4; }
-
   .panel-body,.media-body{ padding:15px; background-color:white; height:auto; overflow-y: auto;}
 
   .panel-body-calendar { padding: 0px 15px 0px 15px; background-color:white; height:auto;}
@@ -1761,6 +1759,10 @@ label:has(input[type="checkbox"]:disabled){
   .inner-heading{ height: auto; }
 
   .detailscontainer .panel-body{ border-radius: 15px; }
+
+  .Help-panel-heading {border-bottom:solid 1px #003e87;}
+
+  .Help-text-panel-heading {color: #003e87; font-family: 'Manrope' , sans-serif; font-weight: 800; font-style: normal;}
 
 /* -------------------------------------------- TEMP BORDERS --------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1832,7 +1834,7 @@ label:has(input[type="checkbox"]:disabled){
     border: solid 1px #e8e8e8;
   }
 
-  .list-header{ background:rgba(0, 62, 135, 0.9) ; }
+  .list-header{ background:#003e85; }
 
   .table-default .list-header th,
   .announcements_table .list-header th, 
@@ -2072,7 +2074,12 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
 
-  .admin-list-group .list-group-item:hover{ background: #4682B4; color: #fafafa; }
+  .admin-list-group .list-group-item{color: #005ad9; font-family: 'Manrope' , sans-serif; font-weight: 700; font-style: normal;}
+
+  .admin-list-group .list-group-item:hover {
+    background-color: #005ad9;
+    color: #ffffff;
+  }
 
 /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/

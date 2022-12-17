@@ -373,7 +373,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="col-12 text-center mt-2">
-                                                                <a class='lightBlueText TextSemiBold text-capitalize' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
+                                                                <a class='lightBlueText TextSemiBold text-capitalize fs-6' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
                                                                     {{$pop_course->title}} ({{$pop_course->public_code}})<br>
                                                                     <p class='textgreyColor small-text text-capitalize TextMedium'>{{$pop_course->prof_names}}</p>
                                                                 </a>
@@ -758,7 +758,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="col-12 text-center mt-2">
-                                                                <a class='lightBlueText TextSemiBold text-capitalize' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
+                                                                <a class='lightBlueText TextSemiBold text-capitalize fs-6' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
                                                                     {{$pop_course->title}} ({{$pop_course->public_code}})<br>
                                                                     <p class='textgreyColor small-text text-capitalize TextMedium'>{{$pop_course->prof_names}}</p>
                                                                 </a>

@@ -7,7 +7,7 @@ $.extend( true, DataTables.Buttons.defaults, {
 			className: 'dt-buttons btn-group'
 		},
 		button: {
-			className: 'btn btn-default'
+			className: 'btn submitAdminBtn'
 		},
 		collection: {
 			tag: 'ul',

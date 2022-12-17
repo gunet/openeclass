@@ -13,14 +13,14 @@
 
 .leftMenuToolCourse.active span{ color: #003F87; }
 
-.leftMenuToolCourse:hover{ background-color: #4682B4; }
+.leftMenuToolCourse:hover{ background-color: #005ad7; }
 
 .leftMenuToolCourse.active:hover{ background-color:  #ccc; border: 0; }
 
-#background-cheat-leftnav,#bgr-cheat-header{background:rgba(0, 62, 135, 0.9) ;}
+#background-cheat-leftnav,#bgr-cheat-header{background:#003e85;}
 #leftnav{background:transparent;}
 #bgr-cheat-footer{background: #001146;} a{color:#005ad9;}
-#leftnav .panel a.list-group-item:hover{background: #4682B4;}
+#leftnav .panel a.list-group-item:hover{background: #005ad7;}
 #leftnav .panel a.list-group-item.active:hover{background: #ccc;}
 
 
