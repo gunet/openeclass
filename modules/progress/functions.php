@@ -61,7 +61,7 @@ function display_certificates() {
                                 <div class='col-md-7 col-6 text-start mt-1'>
                                     $langCertificates
                                 </div>
-                                <div class='col-md-5 col-6 text-md-end text-end'>
+                                <div class='col-md-5 col-6 d-flex justify-content-end'>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span> <span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate</span></a>
                                 </div>
                             </div>
@@ -168,7 +168,7 @@ function display_badges() {
                                 <div class='col-md-7 col-6 text-start mt-1'>
                                     $langBadges
                                 </div>
-                                <div class='col-md-5 col-6 text-end'>
+                                <div class='col-md-5 col-6 d-flex justify-content-end'>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
                                 </div>
                             </div>

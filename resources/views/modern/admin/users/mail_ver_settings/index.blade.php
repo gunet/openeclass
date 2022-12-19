@@ -39,8 +39,8 @@
                         <div class='table-responsive'>
                     <table class='table-default'>
                         <tr class='list-header'>
-                                    <td class='text-start' colspan='3'>
-                                        <b>{{ trans('langMailVerificationSettings') }}</b>
+                                    <td class='text-start text-white' colspan='3'>
+                                        {{ trans('langMailVerificationSettings') }}
                                     </td>
                                 </tr>
                         <tr>

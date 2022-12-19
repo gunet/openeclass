@@ -137,7 +137,7 @@ $tool_content .= "
                             </div>
                         </div>
                         <div class='form-group mt-3'>
-                            <div class='col-sm-offset-2 col-sm-10'>" .
+                            <div class='col-sm-offset-2 col-sm-10 d-inline-flex'>" .
                                 form_buttons([[ 'class' => 'submitAdminBtn',
                                                 'name' => 'new_assign',
                                                 'value' => $langUpload,

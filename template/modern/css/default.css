@@ -42,13 +42,13 @@
 
 .dropdown_menu_user{ background: #ffffff; font-size:14px; width:255px;}
 
-.dropdown_menu_user .list-group-item:hover{ background-color: #1d4e89; color:white; }
+.dropdown_menu_user .list-group-item:hover{ background-color: #003e85; color:white; }
 
 .user-language-menu{ background: #ffffff; width:200px; }
 
 @media(min-width:768px) and (max-width:991px){.user-language-menuOn{ margin-right: 200px !important;}}
 
-.user-language-menu .list-group-item:hover{ background-color: #1d4e89; color:white; }
+.user-language-menu .list-group-item:hover{ background-color: #003e85; color:white; }
 
 
 /********************************************* FOOTER ****************************************************************************************/
@@ -130,7 +130,7 @@ a{
   text-decoration: none; 
   font-size: 15px; 
   color:#005ad9; 
-  font-family: 'Manrope',sans-serif; 
+  /* font-family: 'Manrope',sans-serif;  */
   font-weight: 400;
   font-style: normal;
 }
@@ -143,19 +143,33 @@ a{
 
 .vsmall-text { font-size: 12px; }
 
-.TextBold, b, strong, strong a , b a { font-family: 'Manrope' , sans-serif; font-weight: 700; font-style: normal;}
+.TextBold, b, strong, strong a , b a { 
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 700; font-style: normal;}
 
-.TextExtraBold { font-family: 'Manrope' , sans-serif; font-weight: 800; font-style: normal;}
+.TextExtraBold { 
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 800; font-style: normal;}
 
-.TextExtraLight { font-family: 'Manrope' , sans-serif; font-weight: 200; font-style: normal;}
+.TextExtraLight { 
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 200; font-style: normal;}
 
-.TextLight { font-family: 'Manrope' , sans-serif; font-weight: 300; font-style: normal;}
+.TextLight { 
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 300; font-style: normal;}
 
-.TextMedium { font-family: 'Manrope' , sans-serif; font-weight: 500; font-style: normal;}
+.TextMedium { 
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 500; font-style: normal;}
 
-.TextRegular { font-family: 'Manrope' , sans-serif; font-weight: 400; font-style: normal;}
+.TextRegular { 
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 400; font-style: normal;}
 
-.TextSemiBold { font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;}
+.TextSemiBold { 
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 600; font-style: normal;}
 
 .TextButton { font-size: 12px; }
 
@@ -173,33 +187,7 @@ table p, .panel p, .margin-bottom-fat.form-wrapper.form-edit.p-2.mb-3.rounded p 
 
 .lh-25px{ line-height: 25px; }
 
-.orangeText{ color: #ffa023; }
-
-.greyText { color: #f5f5f5; }
-
-.bgOrange { background-color: #ffa023;}
-
-.blackBlueText { color:#001146; }
-
-.bgBlackBlue { background-color: #001146;}
-
-.normalBlueText { color: #003e85; }
-
-.bgNormalBlueText { background-color: #003e85; }
-
-.lightBlueText { color:#005ad7; }
-
-.bgLightBlue { background-color: #005ad7;}
-
 .panel-phpinfo{ overflow-y: auto; }
-
-.bgEclass { background-color: #e8e8e8;}
-
-.lightColor{ background-color: #f5f5f5; }
-
-.greyColor { background-color: #D3D3D3;}
-
-.textgreyColor { color: #bdbdbd;}
 
 img { max-width: 100%; height: auto; }
 
@@ -207,7 +195,10 @@ img { max-width: 100%; height: auto; }
 
 .btn:focus, .btn:active, #menu-btn:focus, #menu-btn:active{ outline: none !important; box-shadow: none; }
 
-.info-date{ color:#001146; font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal; }
+.info-date{ 
+  color:#001146; 
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 600; font-style: normal; }
 
 .jstree-disabled{ opacity: 0.3; }
 
@@ -264,7 +255,9 @@ textarea {width:100%;}
 /* this is d-inline-flex between inputs-radio and texts */
 .radio label{ 
   display:inline-flex; justify-content: center; align-items:center ; 
-  color:#9d9d9c; font-size: 14px; font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+  color:#9d9d9c; font-size: 14px; 
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 600; font-style: normal;
   position: relative;
   transition: 0.5s;
 } 
@@ -284,7 +277,8 @@ textarea {width:100%;}
 
 .radio:has(input[type='radio']:checked) .help-block{
   font-size: 12px;
-  font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 600; font-style: normal;
   color:#001146;
 }
 
@@ -327,7 +321,8 @@ label:has(input[type="radio"]:disabled){
 /* panels and form-wrapper where contains checkbox checked then change checked label color*/
 .form-wrapper.form-edit label:has(input[type="radio"]:checked){
   font-size: 14px;
-  font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 600; font-style: normal;
   color:#001146;
 }
 
@@ -338,7 +333,9 @@ label:has(input[type="radio"]:disabled){
 /* this is d-inline-flex between inputs-checkbox and texts */
 .checkbox label{ 
   display:inline-flex; justify-content: top; align-items:top; 
-  color:#9d9d9c; font-size: 14px; font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+  color:#9d9d9c; font-size: 14px; 
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 600; font-style: normal;
 } 
 
 .checkbox label p{ margin-top:0px; } 
@@ -353,7 +350,8 @@ input[type="checkbox"]{
 }
 .form-wrapper.form-edit label:has(input[type="checkbox"]:checked), .panel .panel-body label:has(input[type="checkbox"]:checked){
   font-size: 14px;
-  font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 600; font-style: normal;
   color:#001146;
 }
 
@@ -402,11 +400,12 @@ input:-webkit-autofill:active {
   background-color: #e8e8e8;
   color: #001146;
   font-size: 14px;
-  font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 600; font-style: normal;
 }
 .form-wrapper textarea, .forms-panels-admin textarea{
    min-height:106px;
-   border-radius: 0px;
+   border-radius: 15px;
    margin-top: 5px;
    border: solid 1px #e8e8e8;
    background-color: white;
@@ -433,7 +432,11 @@ input:-webkit-autofill:active {
   outline: 0 none;
   background-color: #e8e8e8;
   color:#001146;
-  font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+  /* font-family: 'Manrope' , sans-serif;  */
+  font-weight: 600; font-style: normal;
+}
+.form-wrapper textarea:focus{
+  background-color: #ffffff !important;
 }
 
 .form-wrapper .form-control:disabled, .table-default .form-control:disabled, .panel .form-control:disabled{
@@ -471,11 +474,15 @@ select.form-select {
   background-repeat: no-repeat;
 }
 select.form-select:focus {
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(12, 103, 222, 0.6);
-  outline: 0 none;
+  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.075) inset, 0 0 8px rgb(255, 255, 255);
+  outline: none;
   background-color: #e8e8e8;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
-select.form-select option{color: #9d9d9c; font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;}
+select.form-select option{color: #9d9d9c; font-weight: 600; font-style: normal;}
 
 .form-wrapper .form-select:disabled, .table-default .form-select:disabled, .panel .form-select:disabled{
   opacity: 0.4;
@@ -497,13 +504,13 @@ label:has(input[type="checkbox"]:disabled){
 
 .alert-warning, .alert-info, .alert-danger, .alert-success{ margin-top:14px; }
 
-.alert-success { border: 1px solid rgb(214,233,198); background-color: rgb(223,240,216); color: rgb(70,136,71); }
+.alert-success { border: 1px solid rgb(214,233,198); background-color: rgb(223,240,216); color: rgb(70,136,71); border-radius: 15px; font-weight: 500; font-style: normal; }
 
-.alert-info { border: 1px solid rgb(188,232,241); background-color: rgb(217,237,247); color: rgb(58,135,173);}
+.alert-info { border: 1px solid rgb(188,232,241); background-color: rgb(217,237,247); color: rgb(58,135,173); border-radius: 15px; font-weight: 500; font-style: normal; }
 
-.alert-warning { border: 1px solid rgb(251,238,213); background-color: rgb(252,248,227); color: rgb(192,152,83); }
+.alert-warning { border: 1px solid rgb(251,238,213); background-color: rgb(252,248,227); color: rgb(192,152,83); border-radius: 15px; font-weight: 500; font-style: normal; }
 
-.alert-danger { border: 1px solid rgb(238,211,215); background-color: rgb(242,222,222); color: rgb(185,74,72);}
+.alert-danger { border: 1px solid rgb(238,211,215); background-color: rgb(242,222,222); color: rgb(185,74,72); border-radius: 15px; font-weight: 500; font-style: normal; }
 
 /* -------------------------------- testimonials-OWL_CAROUSEL ------------------------------------------------------------------------------ */
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1131,7 +1138,7 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
-  .copyright{ float:right; text-decoration: none; line-height: 30px; font-size:12px; color:#ffffff}
+  /* .copyright{ float:right; text-decoration: none; line-height: 30px; font-size:12px; color:#ffffff}
   
   .social_meadia_ul li{ display: inline; float:right; padding: 5px; }
 
@@ -1177,7 +1184,7 @@ label:has(input[type="checkbox"]:disabled){
     background: #005ed7;
     border-radius: 50%;
     border-radius: 50%;
-  }
+  } */
   
   
 /* -------------------------------------------- Notes ---------------------------------------------------------------------------------------*/
@@ -1188,10 +1195,16 @@ label:has(input[type="checkbox"]:disabled){
 
   .notes_thead{ background:#003e85;  }
 
-  .control-label-notes{ font-size:15px; color:#001146; font-family: 'Manrope' , sans-serif; font-weight: 800; font-style: normal; }
+  .control-label-notes{ 
+    font-size:15px; color:#001146; 
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 800; font-style: normal; }
 
   /* first choice of inputs forms */
-  .form-wrapper.form-edit .control-label-notes{ font-family: 'Manrope' , sans-serif; font-weight: 800; font-style: normal; font-size: 16px; color:#001146; text-transform:capitalize;} 
+  .form-wrapper.form-edit .control-label-notes{ 
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 800; font-style: normal; font-size: 16px; 
+    color:#001146; text-transform:capitalize;} 
   
   @media (max-width:1023px){ .control-label-notes{ font-size: 16px; } }
 
@@ -1202,8 +1215,12 @@ label:has(input[type="checkbox"]:disabled){
     font-size: 12px;
     text-transform: uppercase;
     height:30px;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
     border-radius: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .submitAdminBtn:hover {
@@ -1220,8 +1237,12 @@ label:has(input[type="checkbox"]:disabled){
     font-size: 12px;
     text-transform: uppercase;
     height:30px;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
     border-radius: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .deleteAdminBtn:hover {
@@ -1236,8 +1257,12 @@ label:has(input[type="checkbox"]:disabled){
     color: #001146;
     text-transform: uppercase;
     height:30px;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
     border-radius: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .cancelAdminBtn:hover {
@@ -1246,6 +1271,7 @@ label:has(input[type="checkbox"]:disabled){
   }
 
   .submitAdminBtn span, .cancelAdminBtn span, .deleteAdminBtn span{ font-size: 12px; }
+  .submitAdminBtn .fa, .cancelAdminBtn .fs, .deleteAdminBtn .fa{height:12px; width:12px;}
 
   
 /* -------------------------------------------- Forum ---------------------------------------------------------------------------------------*/
@@ -1271,7 +1297,8 @@ label:has(input[type="checkbox"]:disabled){
     font-size: 12px;
     text-transform: uppercase;
     height:30px;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
     border-radius: 35px;
     margin-bottom: 10px;
     display:flex;
@@ -1290,7 +1317,8 @@ label:has(input[type="checkbox"]:disabled){
     font-size: 12px;
     text-transform: uppercase;
     height:30px;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
     border-radius: 35px;
     margin-bottom: 10px;
     display:flex;
@@ -1301,6 +1329,7 @@ label:has(input[type="checkbox"]:disabled){
     background: #001146 !important;
     color: #ffffff;
   }
+
 
 
   .menu-popover{ background: #FFFFFF; border-radius: 5px; text-align: center;}
@@ -1314,7 +1343,8 @@ label:has(input[type="checkbox"]:disabled){
     font-size: 12px;
     text-transform: uppercase;
     min-height:30px;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
     border-radius: 35px;
     display: inline-block;
     margin: 0 auto;
@@ -1336,7 +1366,8 @@ label:has(input[type="checkbox"]:disabled){
     color: #ffa023;
     font-size: 12px;
     text-transform: uppercase;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    font-family: 'Manrope' , sans-serif; 
+    font-weight: 600; font-style: normal;
     border-radius: 35px;
     min-height:30px;
     display: inline-block;
@@ -1456,13 +1487,15 @@ label:has(input[type="checkbox"]:disabled){
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
   }
   .panel-admin>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
   }
   .panel-admin:has(.panel-footer) .panel-body{ border:0px; }
 
@@ -1495,13 +1528,15 @@ label:has(input[type="checkbox"]:disabled){
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
   }
   .panel-primary>.panel-heading>.panel-title, .panel-action-btn-primary>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
   }
   .panel-primary:has(.panel-footer) .panel-body{
     border:0px;
@@ -1542,14 +1577,16 @@ label:has(input[type="checkbox"]:disabled){
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
     font-size: 15px;
   }
   .panel-success>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif; */
+    font-weight: 600; font-style: normal;
     font-size: 15px;
   }
   /* for widgets */
@@ -1606,7 +1643,8 @@ label:has(input[type="checkbox"]:disabled){
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
     border-bottom: solid 1px #eee7e7;
     font-size: 15px;
   }
@@ -1614,7 +1652,8 @@ label:has(input[type="checkbox"]:disabled){
     color: #333;
     margin-bottom:0px;
     padding:0px;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
     font-size: 15px;
   }
   .panel-default:has(.panel-footer) .panel-body{
@@ -1665,13 +1704,15 @@ label:has(input[type="checkbox"]:disabled){
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
   }
   .panel-info>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
   }
   .panel-info:has(.panel-footer) .panel-body{
     border:0px;
@@ -1705,13 +1746,15 @@ label:has(input[type="checkbox"]:disabled){
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#fafafa;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif; */
+    font-weight: 600; font-style: normal;
   }
   .panel-danger>.panel-heading>.panel-title{
     color:#fafafa;
     margin-bottom:0px;
     padding:0px;
-    font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
   }
   .panel-danger:has(.panel-footer) .panel-body{
     border:0px;
@@ -1752,7 +1795,9 @@ label:has(input[type="checkbox"]:disabled){
 
   @media(max-width:991px){.panel-body{overflow-y: auto;}}
 
-  .panel-title{ font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal; font-size: 15px; }
+  .panel-title{ 
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal; font-size: 15px; }
 
   .panel-footer{ padding:10px; }
 
@@ -1762,7 +1807,10 @@ label:has(input[type="checkbox"]:disabled){
 
   .Help-panel-heading {border-bottom:solid 1px #003e87;}
 
-  .Help-text-panel-heading {color: #003e87; font-family: 'Manrope' , sans-serif; font-weight: 800; font-style: normal;}
+  .Help-text-panel-heading {
+    color: #003e87; 
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 800; font-style: normal;}
 
 /* -------------------------------------------- TEMP BORDERS --------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1794,7 +1842,11 @@ label:has(input[type="checkbox"]:disabled){
   
   .BordersLeftInput { border-bottom-left-radius: 35px; border-top-left-radius: 35px;}
 
+  .NoBordersLeftInput { border-bottom-left-radius: 0px; border-top-left-radius: 0px;}
+
   .BordersRightInput { border-bottom-right-radius: 35px; border-top-right-radius: 35px;}
+
+  .NoBordersRightInput { border-bottom-right-radius: 0px; border-top-right-radius: 0px;}
 
 /* -------------------------------------------- Links ---------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1839,7 +1891,9 @@ label:has(input[type="checkbox"]:disabled){
   .table-default .list-header th,
   .announcements_table .list-header th, 
   .announcements_table .notes_thead th{ 
-    color:#ffffff; font-size: 15px; font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
+    color:#ffffff; font-size: 15px; 
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
   }
 
 
@@ -2074,12 +2128,47 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
 
-  .admin-list-group .list-group-item{color: #005ad9; font-family: 'Manrope' , sans-serif; font-weight: 700; font-style: normal;}
+  .admin-list-group .list-group-item{
+    color: #005ad9; 
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 700; font-style: normal;}
 
   .admin-list-group .list-group-item:hover {
     background-color: #005ad9;
     color: #ffffff;
   }
+
+/* -------------------------------------------- BASIC COLOR ----------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+
+.orangeText{ color: #ffa023; }
+
+.greyText { color: #f5f5f5; }
+
+.bgOrange { background-color: #ffa023;}
+
+.blackBlueText { color:#001146; }
+
+.bgBlackBlue { background-color: #001146;}
+
+.normalBlueText { color: #003e85; }
+
+.bgNormalBlueText { background-color: #003e85; }
+
+.lightBlueText { color:#005ad7; }
+
+.bgLightBlue { background-color: #005ad7;}
+
+.bgEclass { background-color: #e8e8e8;}
+
+.lightColor{ background-color: #f5f5f5; }
+
+.greyColor { background-color: #D3D3D3;}
+
+.textgreyColor { color: #bdbdbd;}
 
 /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/

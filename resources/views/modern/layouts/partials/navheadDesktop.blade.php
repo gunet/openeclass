@@ -79,12 +79,12 @@
             <div class="col-lg-3 ps-0">
 
                 <div class='row mt-0'>
-                    <form class='d-flex justify-content-end d-inline-flex ps-0' action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
+                    <form class="d-flex justify-content-end d-inline-flex ps-0  @if(isset($_SESSION['uid'])) pe-0 @endif" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
                         @if(get_config('enable_search'))
                             <button id="btn-search" class="rounded-0 inputSearch d-flex justify-content-center align-items-center btn btn-transparent p-0" type="submit" name="quickSearch">
                                  <img class='search-icon' src="{{$urlAppend}}template/modern/img/search.svg">
                             </button>
-                            <input id="search_terms" type="text" class="inputSearch inputSearchbtn text-white me-3" name="search_terms" aria-describedby="basic-inputSearch">
+                            <input id="search_terms" type="text" class="inputSearch inputSearchbtn text-white  @if(!isset($_SESSION['uid'])) me-3 @endif" name="search_terms" aria-describedby="basic-inputSearch">
                         @endif
                         {!! lang_selections_Desktop() !!}
                     </form>
@@ -107,7 +107,7 @@
                                 <div class="btn-group" role="group">
                                     <button id="btnGroupDrop1" type="button" class="d-flex justify-content-center align-items-center btn submitAdminBtn dropdown-toggle user-menu-btn text-white text-capitalize"
                                             data-bs-toggle="dropdown" aria-expanded="false">
-                                        <span><img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}"
+                                        <span><img class="user-icon-filename mt-0" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}"
                                                 alt="{{ $uname }}">{{ $_SESSION['uname'] }}</span>
                                     </button>
                                     <ul class="m-0 p-0 dropdown-menu dropdown-menu-end dropdown_menu_user shadow-lg bg-body border-0" aria-labelledby="btnGroupDrop1">

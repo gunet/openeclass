@@ -28,7 +28,7 @@ if (isset($_GET['update']) and $_GET['update']) {
     $tool_content .= "
         <div class='col-sm-12'>
         <div class='alert alert-info'>$langH5pInfoUpdate</div>
-            <div class='text-center'>            
+            <div class='d-flex justify-content-center'>            
                 <a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?update=true' data-bs-placement='bottom' data-bs-toggle='tooltip' title='$langMaj'>
                     <span class='fa fa-refresh space-after-icon'></span>
                     <span class='hidden-xs'>$langMaj</span>                    

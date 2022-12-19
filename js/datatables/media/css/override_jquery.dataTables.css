@@ -171,6 +171,10 @@
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
   }
+  .active-cont .dataTables_scrollHeadInner{
+    width: 100% !important;
+  }
+
   .dataTables_scrollBody .announcements_table{
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
@@ -190,4 +194,11 @@
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     margin-bottom: 15px;
+  }
+
+  .dataTables_scrollFootInner{
+     margin-top: 14px;
+  }
+  .active-cont .dataTables_scrollFootInner{
+    width: 100% !important;
   }

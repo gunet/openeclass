@@ -125,7 +125,7 @@ $tool_content = action_bar(array(
                     </div>
                     <div id='image_field' class='row form-group".(($layout == 1)?"":" hidden")." mt-4'>
                         <label for='course_image' class='col-md-3 col-12 control-label-notes'>$langCourseImage:</label>
-                        <div class='col-md-9 col-12'>
+                        <div class='col-md-9 col-12 d-inline-flex align-items-center'>
                             $course_image
                         </div>
                     </div>                  

@@ -322,11 +322,11 @@ if (isset($_GET['action'])) {
     $sql1 = Database::get()->queryArray("SELECT * FROM certificate_template");
     $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
-                        <tr class='bg-light'><th class='text-center text-uppercase' colspan='5'>$langAvailableCertTemplates</th></tr>
-                        <tr class='list-header'>
-                            <th>$langTitle</th>
-                            <th>$langDescription</th>                            
-                            <th class='text-center'><i class='fa fa-cogs'></i></th>
+                        <tr class='bgNormalBlueText'><th class='text-center text-uppercase text-white' colspan='5'>$langAvailableCertTemplates</th></tr>
+                        <tr class='lightColor list-header'>
+                            <th class='text-dark'>$langTitle</th>
+                            <th class='text-dark'>$langDescription</th>                            
+                            <th class='text-center text-dark'><i class='fa fa-cogs'></i></th>
                         </tr>";
                 foreach ($sql1 as $cert_data) {
                     //$template_link = $urlServer . CERT_TEMPLATE_PATH ."$cert_data->filename";
@@ -353,12 +353,12 @@ if (isset($_GET['action'])) {
     
     $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
-                        <tr class='bg-light'><th class='text-center text-uppercase' colspan='5'>$langAvailableBadges</th></tr>
-                        <tr class='list-header'>
-                            <th>$langTitle</th>
-                            <th>$langDescription</th>
-                            <th width='70' class='text-center'>$langIcon</th>
-                            <th class='text-center'><i class='fa fa-cogs'></i></th>
+                        <tr class='bgNormalBlueText'><th class='text-center text-uppercase text-white' colspan='5'>$langAvailableBadges</th></tr>
+                        <tr class='lightColor list-header'>
+                            <th class='text-dark'>$langTitle</th>
+                            <th class='text-dark'>$langDescription</th>
+                            <th width='70' class='text-center text-dark'>$langIcon</th>
+                            <th class='text-center text-dark'><i class='fa fa-cogs'></i></th>
                         </tr>";
                 foreach ($sql2 as $badge_data) {
                     $icon_link = $urlServer . BADGE_TEMPLATE_PATH ."$badge_data->filename";

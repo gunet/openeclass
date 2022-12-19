@@ -73,6 +73,7 @@ $tool_content .= "
         <h3 class='panel-title text-center'><span class='fas fa-tools orangeText pe-2'></span>" . $langCourseCategoryActions . "</h3>
 
     </div>
+    <div class='panel-body'>
     <form name='courseCategories' action='" . $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "' method='post' enctype='multipart/form-data'>
         <div class='table-responsive mt-0'>
             <table class='table-default'>
@@ -131,14 +132,14 @@ foreach ($categories as $category) {
         $tool_content .= "
                 <tr>
                     <td class='text-center'>
-                        <select class='form-select' name='" . $selectInactive . "' id='" . $idInactive . "' size='17' multiple>" . $inactiveOpts . "</select>
+                        <select class='form-select h-100' name='" . $selectInactive . "' id='" . $idInactive . "' size='17' multiple>" . $inactiveOpts . "</select>
                     </td>
-                    <td class='text-center' style='vertical-align: middle;'>
-                        <button type='button' class='btn btn-default' onClick=\"move('" . $idInactive . "','" . $idActive . "')\"><span class='fa fa-arrow-right'></span></button><br><br>
-                        <button type='button' class='btn btn-default' onClick=\"move('" . $idActive . "','" . $idInactive . "')\"><span class='fa fa-arrow-left'></span></button>
+                    <td class='ps-4' style='vertical-align: middle;'>
+                        <button type='button' class='btn submitAdminBtn rounded-pill' onClick=\"move('" . $idInactive . "','" . $idActive . "')\"><span class='fa fa-arrow-right'></span></button><br><br>
+                        <button type='button' class='btn submitAdminBtn rounded-pill' onClick=\"move('" . $idActive . "','" . $idInactive . "')\"><span class='fa fa-arrow-left'></span></button>
                     </td>
                     <td class='text-center'>
-                        <select class='form-select' name='" . $selectActive . "' id='" . $idActive . "' size='17' multiple>" . $activeOpts . "</select>
+                        <select class='form-select h-100' name='" . $selectActive . "' id='" . $idActive . "' size='17' multiple>" . $activeOpts . "</select>
                     </td>
                 </tr>";
 
@@ -177,13 +178,13 @@ foreach ($categories as $category) {
 
 $tool_content .= "
                 <tr>
-                    <td colspan='3' class='text-center'>
+                    <td colspan='3'>
                         <input type='submit' class='btn submitAdminBtn' value='$langSubmit' name='submit' onClick=\"" . $submitOnClick . "\" />
                     </td>
                 </tr>
             </table>
         </div>" . generate_csrf_token_form_field() . "
-    </form>
+    </form></div>
 </div></div>";
 
 draw($tool_content, 2, null, $head_content);

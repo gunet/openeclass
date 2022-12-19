@@ -357,13 +357,13 @@ if (isset($_POST['optionsSave'])) {
     }
     initialize_settings();
     $activate_class = isset($preview_theme) ? '' : ' hidden';
-    $activate_btn = "<a href='#' class='theme_enable btn submitAdminBtn $activate_class' id='theme_enable'>$langActivate</a>";
+    $activate_btn = "<a href='#' class='theme_enable btn submitAdminBtn $activate_class me-1' id='theme_enable'>$langActivate</a>";
     $preview_class = ' hidden';
-    $preview_btn = "<a href='#' class='btn submitAdminBtn $preview_class' id='theme_preview'>$langSee</a>";
+    $preview_btn = "<a href='#' class='btn submitAdminBtn $preview_class me-1' id='theme_preview'>$langSee</a>";
     $del_class = ($theme_id != 0) ? "" : " hidden";
     $delete_btn = "
-                    <form class='form-inline' style='display:inline;' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=$theme_id'>
-                        <a class='confirmAction mt-md-0 mt-1 btn deleteAdminBtn $del_class' id='theme_delete' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='deleteAdminBtn'>$langDelete</a>
+                    <form class='form-inline mt-0' style='display:inline;' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=$theme_id'>
+                        <a class='confirmAction mt-md-0 btn deleteAdminBtn $del_class' id='theme_delete' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='deleteAdminBtn'>$langDelete</a>
                     </form>";
     $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
     if (isset($theme_options_styles['imageUpload'])) {
@@ -446,7 +446,7 @@ if (isset($_POST['optionsSave'])) {
             ". generate_csrf_token_form_field() ."
         </form>
         <div class='form-group mt-3 margin-bottom-fat mt-3'>
-            <div class='col-sm-12 col-sm-offset-3'>
+            <div class='col-12 d-inline-flex'>
                 $activate_btn
                 $preview_btn
                 $delete_btn

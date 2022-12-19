@@ -4919,7 +4919,7 @@ function show_assignment($id, $display_graph_results = false) {
             $tool_content .= "<form action='{$urlServer}modules/work/index.php?course=$course_code' method='post' class='form-inline'>
                 <input type='hidden' name='grades_id' value='$id' />
                 <br>
-                <div class='margin-bottom-thin bg-light p-2 text-center'>
+                <div class='margin-bottom-thin lightColor rounded-pill p-2 text-center'>
                     <strong class='fw-bold'>$langSubmissions:</strong>&nbsp; $count_of_assignments";
                 // button for transferring student peer review grades to teacher grades
                 if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && ($count_of_ass > 0)) {
@@ -4928,8 +4928,8 @@ function show_assignment($id, $display_graph_results = false) {
                 $tool_content .= "</div>";
 
             $tool_content .= "
-                <div class='table-responsive mt-0'>
-                <table class='table'>
+                <div class='table-responsive mt-3'>
+                <table class='table table-default'>
                 <tbody>
                 <tr class='list-header'>
                 <th class='count-col'>&nbsp;</th>";

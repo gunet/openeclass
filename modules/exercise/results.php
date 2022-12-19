@@ -192,7 +192,7 @@ foreach ($result as $row) {
 
     if (count($result2) > 0) { // if users found
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<tr><td class='text-center' style='background:#f2f2f2' colspan='".($is_editor ? 5 : 4)."'>";
+        $tool_content .= "<tr><td class='text-center' style='background:#f5f5f5' colspan='".($is_editor ? 5 : 4)."'>";
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";
         } else {
@@ -209,12 +209,12 @@ foreach ($result as $row) {
         }
         $tool_content .= "</td>
                 </tr>
-                <tr class='list-header'>
-                  <th class='text-center'>" . $langStart . "</th>
-                  <th class='text-center'>" . $langExerciseDuration . "</th>
-                  <th class='text-center'>" . $langTotalScore . "</th>
-                  <th class='text-center'>" . $langCurrentStatus. "</th>
-                  ". ($is_editor ? "<th class='text-center'>" . icon('fa-gears'). "</th>" : "") ."
+                <tr class='list-header lightColor'>
+                  <th class='text-center text-dark'>" . $langStart . "</th>
+                  <th class='text-center text-dark'>" . $langExerciseDuration . "</th>
+                  <th class='text-center text-dark'>" . $langTotalScore . "</th>
+                  <th class='text-center text-dark'>" . $langCurrentStatus. "</th>
+                  ". ($is_editor ? "<th class='text-center text-dark'>" . icon('fa-gears'). "</th>" : "") ."
                 </tr>";
 
         $k = 0;

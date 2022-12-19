@@ -16,15 +16,15 @@
                     <div class="panel-body">
                         {!! $course_home_sidebar_widget->getOptionsForm($key) !!}
                     </div>
-                    <div class="panel-footer clearfix">
+                    <div class="panel-footer clearfix d-flex justify-content-center align-items-center">
                         <a href="#" class="remove btn deleteAdminBtn">
                            {{ trans('langDelete') }}
                         </a>
-                        <div class="float-end">
-                            <a href="#" class="btn submitAdminBtn submitOptions">
-                                {{ trans('langSubmit') }}
-                            </a>
-                        </div>
+                       
+                        <a href="#" class="btn submitAdminBtn submitOptions ms-1">
+                            {{ trans('langSubmit') }}
+                        </a>
+                        
                     </div>
                 </div>
             </div>

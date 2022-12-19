@@ -70,7 +70,7 @@ function display_learning_analytics() {
                             <div class='col-xl-7 col-lg-7 col-md-7 col-sm-9 col-9 mt-1'>
                                 $langLearningAnalytics
                             </div>
-                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-3 col-3 text-end'>
+                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-3 col-3 d-flex justify-content-end'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>$langAdd</span></a>
                             </div>
                         </div>
@@ -344,15 +344,15 @@ function display_analytics_information($analytics_id) {
                         <div class='col-xl-7 col-lg-7 col-md-7 col-sm-9 col-9 mt-md-1 mt-0'>
                             $title<span class='$active_vis'>($active_msg)</span>
                         </div>
-                        <div class='col-xl-5 col-lg-5 col-md-5 col-sm-3 col-3 text-end'>
+                        <div class='col-xl-5 col-lg-5 col-md-5 col-sm-3 col-3 d-flex justify-content-end'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn submitAdminBtn'>"
                                     . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langModify</span>
                             </a>
                         </div>
                     </div>
                 </div>
-                <div class='panel-body rounded-'>
-                    <div class='panel-body'>
+                <div class='panel-body'>
+                    
                         <div class='row'>
                             <div class='col-md-4 col-12'>
                                 <div class='control-label-notes pn-info-title-sct'>$langDescription</div>
@@ -367,7 +367,7 @@ function display_analytics_information($analytics_id) {
                                 <div class='pn-info-text-sct'>$periodType</div>
                             </div>
                         </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>";
@@ -429,20 +429,20 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                 <tr class='list-header'>
                     
                     <th>
-                        <h6 class='mb-0'>$langSurnameName <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=surname&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionName fa-fw' aria-hidden='true'></i></a></h6>
+                        $langSurnameName <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=surname&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionName fa-fw' aria-hidden='true'></i></a>
                     </th>
                     <th>
-                        <h6 class='mb-0'>$langPercentage <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=percentage&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionPercentage fa-fw' aria-hidden='true'></i></a></h6>
+                        $langPercentage <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=percentage&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionPercentage fa-fw' aria-hidden='true'></i></a>
                     </th>
                     <th>
-                        <h6 class='mb-0'>$langAnalyticsStatus</h6> 
+                        $langAnalyticsStatus
                     </th>
                     <th>
-                        <h6 class='mb-0 text-center'>
+                        <div class='text-center'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
                             " . format_locale_date(strtotime($startdate), 'short', false) . " &mdash; " . format_locale_date(strtotime($enddate), 'short', false)  . "
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$next&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
-                        </h6>
+                        </div>
                     </th>
                    
                 </tr>";
@@ -689,7 +689,7 @@ function display_user_info($user_id) {
                     $givenname $surname
                 </div>
                 <div class='panel-body'>
-                    <div class='panel-body'>
+                    
                         <div class='row'>
                             <div class='col-md-5 col-12'>
                                 <div class='pn-info-title-sct control-label-notes'>$langEmail</div>
@@ -704,7 +704,7 @@ function display_user_info($user_id) {
                                 $phone
                             </div>
                         </div>
-                    </div>
+                   
                 </div>
             </div>
         </div>";

@@ -716,10 +716,10 @@ if (isset($_GET['modifyAnswers'])) {
      $back_button = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && isset($setWeighting) ? "<input class='btn submitAdminBtn' type='submit' name='buttonBack' value='&lt; $langBack'' />" : "";
      $tool_content .= "
                      <div class='row'>
-                         <div class='col-sm-10 col-sm-offset-2 ps-3'>
+                         <div class='col-sm-10 col-sm-offset-2 ps-3 d-inline-flex'>
                              $back_button
                              <input class='btn submitAdminBtn' type='submit' name='submitAnswers' value='$submit_text'>
-                             <a class='btn cancelAdminBtn' href='$cancel_link'>$langCancel</a>
+                             <a class='btn cancelAdminBtn ms-1' href='$cancel_link'>$langCancel</a>
                          </div>
                      </div>
                 </fieldset>

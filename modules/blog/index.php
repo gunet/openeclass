@@ -853,10 +853,10 @@ if ($action == "showBlog") {
                                     <p class='blackBlueText TextSemiBold mb-2'>" . format_locale_date(strtotime($post->getTime())) . "</p><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     $comment_content
                                 </div>
-                                <div class='panel-footer panel-footer-blog'>
+                                <div class='panel-footer panel-footer-blog p-3' style='border-top: solid 1px #e8e8e8;'>
                                     <div class='row'>
-                                        <div class='col-sm-6'>$rating_content</div>
-                                        <div class='col-sm-6 text-end'>$sharing_content</div>
+                                        <div class='col-6'>$rating_content</div>
+                                        <div class='col-6 text-end'>$sharing_content</div>
                                     </div>
                                 </div>
                              </div>";

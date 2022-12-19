@@ -83,11 +83,11 @@
                                     </p>
                                 </div>
                                 <div class="row justify-content-md-start justify-content-center text-center mt-3">
-                                    <div class="py-1" >
-                                        <a href="{{ $urlAppend }}main/profile/profile.php" class="btn submitAdminBtn"><i class="fas fa-pen me-1"></i>{{ trans('langModProfile') }}</a>
+                                    <div class="py-1 d-flex justify-content-center align-items-center" >
+                                        <a href="{{ $urlAppend }}main/profile/profile.php" class="btn submitAdminBtn"><span class="fa fa-pencil me-1"></span>{{ trans('langModProfile') }}</a>
                                     </div>
-                                    <div class="py-1">
-                                        <a href="{{$urlAppend}}main/unreguser.php" class="btn deleteAdminBtn"><i class="fa fa-trash-o me-1"></i>{{ trans('langUnregUser') }} </a>
+                                    <div class="py-1 d-flex justify-content-center align-items-center">
+                                        <a href="{{$urlAppend}}main/unreguser.php" class="btn deleteAdminBtn"><span class="fa fa-trash-o me-1"></span>{{ trans('langUnregUser') }} </a>
                                     </div>
                                     <div class="py-1">
                                         {{ trans('langExplain') }}

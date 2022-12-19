@@ -118,7 +118,7 @@ $tool_content .=
 
 
     <div class='form-group mt-3'>
-        <div class='col-sm-10 col-sm-offset-2'>
+        <div class='col-sm-10 col-sm-offset-2 d-inline-flex'>
             <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
             <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn ms-1'>$langCancel</a>
         </div>

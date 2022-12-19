@@ -744,8 +744,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='form-group'>
                        
                             
-                            <div class='col-9 control-label-notes'>
-                               <span>$langPollAddAnswer: </span><input class='btn submitAdminBtn' type='submit' name='MoreAnswers' value='+'>
+                            <div class='col-9 control-label-notes d-inline-flex'>
+                               <span class='mt-1 me-1'>$langPollAddAnswer: </span><input class='btn submitAdminBtn' type='submit' name='MoreAnswers' value='+'>
                             </div>
                        
                     </div><hr><br>";
@@ -756,7 +756,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
                   <div class='form-group input-group mt-3'>
                         
-                        <input style='background-color:#e8e8e8;' type='text' class='form-control border-0 mt-0 h-30px BordersLeftInput' name='answers[]' value='$answer->answer_text'>
+                        <input type='text' class='form-control mt-0' name='answers[]' value='$answer->answer_text'>
                         
                         <div class='form-control-static input-group-text h-30px border-0 BordersRightInput bgEclass'>
                             " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
@@ -768,7 +768,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     
                     <div class='form-group input-group mt-3'>
                        
-                            <input style='background-color:#e8e8e8;' class='form-control border-0 mt-0 h-30px BordersLeftInput' type='text' name='answers[]' value=''>
+                            <input class='form-control mt-0' type='text' name='answers[]' value=''>
                      
                             <div class='form-control-static input-group-text h-30px border-0 BordersRightInput bgEclass'>
                                 " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
@@ -779,7 +779,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               
                   <div class='form-group input-group mt-3'>
                        
-                        <input style='background-color:#e8e8e8;' class='form-control border-0 mt-0 h-30px BordersLeftInput' type='text' name='answers[]' value=''>
+                        <input class='form-control mt-0' type='text' name='answers[]' value=''>
                       
                         <div class='form-control-static input-group-text h-30px border-0 BordersRightInput bgEclass'>
                             " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "

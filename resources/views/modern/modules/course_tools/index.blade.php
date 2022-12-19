@@ -114,7 +114,7 @@
                                     <div class='col-md-6 col-10 text-start pt-md-1 pt-0'>
                                         <span class='panel-title'> {{ trans('langOperations') }}</span>
                                     </div>
-                                    <div class='col-md-6 col-2 text-end'>
+                                    <div class='col-md-6 col-2 d-flex justify-content-end'>
                                         <a class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> <span class='hidden-xs'>{{ trans('langAddExtLink') }}</span></a>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@
                                     <div class='col-md-6 col-10 text-start pt-md-1 pt-0'>
                                         <span class='panel-title'>{{ trans('langLtiConsumer') }}</span>
                                     </div>
-                                    <div class='col-md-6 col-2 text-end'>
+                                    <div class='col-md-6 col-2 d-flex justify-content-end'>
                                         <a class='btn submitAdminBtn' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
                                             <span class='fa fa-plus-circle pe-1'></span><span class='hidden-xs'>{{ trans('langNewLTITool') }}</span>
                                         </a>

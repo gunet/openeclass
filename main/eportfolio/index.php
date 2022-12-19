@@ -86,7 +86,7 @@ if ($userdata) {
                                 <div class='panel-heading'>$langPageLink</div>
                                 <div class='panel-body'>
                                     <input class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?id=$id&token=$token'>
-                                    <div class='input-group-btn text-end mt-2'>
+                                    <div class='input-group-btn float-end mt-2'>
                                         <button class='btn submitAdminBtn' id='copy-btn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-clipboard-target='#page-link'>
                                             <span class='fa fa-clipboard'></span>&nbsp;&nbsp;&nbsp;$langCopy
                                         </button>

@@ -783,7 +783,7 @@ function plot_placeholder($plot_id, $title = null){
     //$p = "<ul class='list-group'>";
     $p = "<div class='panel panel-default'><div class='panel-body'>";
     if(!is_null($title)){
-        $p .= "<div class='inner-heading'><span id='{$plot_id}_title'>"
+        $p .= "<div class='inner-heading'><span id='{$plot_id}_title' class='TextBold text-uppercase'>"
             . $title
             . "</span>"
             . "</div>";
@@ -805,7 +805,7 @@ function table_placeholder($table_id, $table_class, $table_schema, $title = null
     $t = "<div class='panel-body'>";
     if(!is_null($title)){
         $t .= "<div class='inner-heading'>"
-            . "<span id='".$table_id."_title'>"
+            . "<span id='".$table_id."_title' class='TextBold text-uppercase'>"
             . $title
             . "</span>"
             ."<div class='float-end' id='{$table_id}_buttons'></div><div style='clear:both;'></div>"

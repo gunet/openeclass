@@ -57,13 +57,13 @@
                     </div>
 
                     <div class="col-12">
-                        <div class='form-wrapper form-edit p-3 mt-5 rounded'>
+                        <div class='form-wrapper form-edit rounded'>
                             {!! $action_bar !!}
                             <form class='form-horizontal' role='form' method='post' action=' {{ $form_url }}'>
                                 {{ showSecondFactorChallenge() }}
                                 <div class='form-group'>
-                                    <div class='col-sm-10 col-sm-offset-5'>
-                                        <input class='btn submitAdminBtn' type='submit' name='delete' value='{{ trans('langDelete') }}'>
+                                    <div class='col-10 offset-5'>
+                                        <input class='btn deleteAdminBtn' type='submit' name='delete' value='{{ trans('langDelete') }}'>
                                     </div>
                                 </div>
                                 <div class='pt-3 help-block'>

@@ -27,7 +27,7 @@
             </div>
             @endif
 
-            <div class='col-12 mt-4'>
+            <div class='col-12 mt-4 d-flex justify-content-start'>
                 <a class='btn submitAdminBtn' href="{{ $urlAppend }}modules/auth/courses.php">
                     <span class='fa fa-check'></span>{{ trans('langRegCourses') }}
                 </a>
@@ -89,7 +89,7 @@
                                             </span><span class="sr-only">{{trans('langAdm')}}</span>
                                         </a>
                                         @else
-                                        <button class='btn deleteAdminBtn' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
+                                        <button class='btn deleteAdminBtn m-auto d-block' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
                                             <i class="fa fa-times"></i>
                                         </button>
                                         @endif

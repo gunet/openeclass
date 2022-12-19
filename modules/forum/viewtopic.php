@@ -711,7 +711,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         </div>";
     if ($rate_str or $parent_post_link or $reply_button) {
         $content .= "
-        <div class='panel-footer'>
+        <div class='panel-footer' style='border-top: solid 1px #e8e8e8;'>
             <div class='row'>
                 <div class='col-12'>
                     <small>
