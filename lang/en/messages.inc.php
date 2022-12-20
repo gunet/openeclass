@@ -4168,7 +4168,6 @@ Are you sure you want to proceed with the deletion?';
 $langCPFConfirmFieldDelete = 'Deleting this field will result in the deletion of the respective users profile data. Are you sure you want to proceed with the deletion?';
 $langCPFCatDelSuccess = 'The profile fields category was successfully deleted';
 $langCPFCatModSuccess = 'The profile fields category was successfully modified';
-$langCPFFieldDescr = 'Description';
 $langCPFShortName = 'Short name';
 $langCPFText = 'Text field';
 $langCPFTextarea = 'Textarea';

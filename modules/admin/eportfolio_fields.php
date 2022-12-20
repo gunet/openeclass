@@ -154,7 +154,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<label for='shortname' class='col-sm-2 control-label'>$langCPFShortName <small>($langEPFUniqueShortname)</small></label>
                       <div class='col-sm-10'><input id='shortname' type='text' name='field_shortname'></div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'><label for='fielddescr' class='col-sm-2 control-label'>$langCPFFieldDescr</label>
+    $tool_content .= "<div class='form-group'><label for='fielddescr' class='col-sm-2 control-label'>$langDescription</label>
                       <div class='col-sm-10'>".rich_text_editor('fielddescr', 8, 20, '')."</div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
@@ -272,7 +272,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
 
     $fieldid = intval(getDirectReference($_GET['edit_field']));
     $result = Database::get()->querySingle("SELECT * FROM eportfolio_fields WHERE id = ?d", $fieldid);
-    if (count($result) != 0) {
+    if ($result) {
 
         $name = q($result->name);
         $shortname = q($result->shortname);
@@ -308,7 +308,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= "<label for='shortname' class='col-sm-2 control-label'>$langCPFShortName <small>($langEPFUniqueShortname)</small></label>
                           <div class='col-sm-10'><input id='shortname' type='text' name='field_shortname' value='$shortname'></div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group'><label for='fielddescr' class='col-sm-2 control-label'>$langCPFFieldDescr</label>
+        $tool_content .= "<div class='form-group'><label for='fielddescr' class='col-sm-2 control-label'>$langDescription</label>
                           <div class='col-sm-10'>".rich_text_editor('fielddescr', 8, 20, $description)."</div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
