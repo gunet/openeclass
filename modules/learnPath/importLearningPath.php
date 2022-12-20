@@ -234,10 +234,10 @@ function elementData($parser, $data) {
 // when eclass is full utf 8 restore this
 // -----------------------------------------
 
-    $data = trim(($data));
-
     if (!isset($data)) {
         $data = "";
+    } else {
+        $data = trim($data);
     }
 
     switch ($elementsPile[count($elementsPile) - 1]) {
@@ -332,80 +332,81 @@ function elementData($parser, $data) {
             break;
 
         case "LANGSTRING" :
-            switch ($flagTag['type']) {
-                case "item" :
-                    // DESCRIPTION
-                    // if the langstring tag is a children of a description tag
-                    if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                        if (!isset($manifestData['items'][$flagTag['value']]['description'])) {
-                            $manifestData['items'][$flagTag['value']]['description'] = "";
+            if (isset($flagTag['type'])) {
+                switch ($flagTag['type']) {
+                    case "item" :
+                        // DESCRIPTION
+                        // if the langstring tag is a children of a description tag
+                        if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
+                            if (!isset($manifestData['items'][$flagTag['value']]['description'])) {
+                                $manifestData['items'][$flagTag['value']]['description'] = "";
+                            }
+                            $manifestData['items'][$flagTag['value']]['description'] .= $data;
                         }
-                        $manifestData['items'][$flagTag['value']]['description'] .= $data;
-                    }
-                    // title found in metadata of an item (only if we haven't already one title for this sco)
-                    if ($manifestData['items'][$flagTag['value']]['title'] == '' || !isset($manifestData['items'][$flagTag['value']]['title'])) {
-                        if ($elementsPile[sizeof($elementsPile) - 2] == "TITLE" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                            $manifestData['items'][$flagTag['value']]['title'] .= $data;
-                        }
-                    }
-                    break;
-                case "sco" :
-                    // DESCRIPTION
-                    // if the langstring tag is a children of a description tag
-                    if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                        if (isset($manifestData['scos'][$flagTag['value']]['description'])) {
-                            $manifestData['scos'][$flagTag['value']]['description'] .= $data;
-                        } else {
-                            $manifestData['scos'][$flagTag['value']]['description'] = $data;
-                        }
-                    }
-                    // title found in metadata of an item (only if we haven't already one title for this sco)
-                    if (!isset($manifestData['scos'][$flagTag['value']]['title']) || $manifestData['scos'][$flagTag['value']]['title'] == '') {
-                        if ($elementsPile[sizeof($elementsPile) - 2] == "TITLE" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                            $manifestData['scos'][$flagTag['value']]['title'] = $data;
-                        }
-                    }
-                    break;
-                case "asset" :
-                    // DESCRIPTION
-                    // if the langstring tag is a children of a description tag
-                    if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                        if (isset($manifestData['assets'][$flagTag['value']]['description'])) {
-                            $manifestData['assets'][$flagTag['value']]['description'] .= $data;
-                        } else {
-                            $manifestData['assets'][$flagTag['value']]['description'] = $data;
-                        }
-                    }
-                    // title found in metadata of an item (only if we haven't already one title for this sco)
-                    if (!isset($manifestData['assets'][$flagTag['value']]['title']) || $manifestData['assets'][$flagTag['value']]['title'] == '') {
-                        if ($elementsPile[sizeof($elementsPile) - 2] == "TITLE" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                            if (isset($manifestData['assets'][$flagTag['value']]['title'])) {
-                                $manifestData['assets'][$flagTag['value']]['title'] .= $data;
-                            } else {
-                                $manifestData['assets'][$flagTag['value']]['title'] = $data;
+                        // title found in metadata of an item (only if we haven't already one title for this sco)
+                        if ($manifestData['items'][$flagTag['value']]['title'] == '' || !isset($manifestData['items'][$flagTag['value']]['title'])) {
+                            if ($elementsPile[sizeof($elementsPile) - 2] == "TITLE" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
+                                $manifestData['items'][$flagTag['value']]['title'] .= $data;
                             }
                         }
-                    }
-                    break;
-                default :
-                    // DESCRIPTION
-                    $posPackageDesc = array("MANIFEST", "METADATA", "LOM", "GENERAL", "DESCRIPTION");
-                    if (compareArrays($posPackageDesc, $elementsPile)) {
-                        if (!isset($manifestData['packageDesc'])) {
-                            $manifestData['packageDesc'] = "";
+                        break;
+                    case "sco" :
+                        // DESCRIPTION
+                        // if the langstring tag is a children of a description tag
+                        if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
+                            if (isset($manifestData['scos'][$flagTag['value']]['description'])) {
+                                $manifestData['scos'][$flagTag['value']]['description'] .= $data;
+                            } else {
+                                $manifestData['scos'][$flagTag['value']]['description'] = $data;
+                            }
                         }
-                        $manifestData['packageDesc'] .= $data;
-                    }
-
-                    if (!isset($manifestData['packageTitle']) || $manifestData['packageTitle'] == '') {
-                        $posPackageTitle = array("MANIFEST", "METADATA", "LOM", "GENERAL", "TITLE");
-                        if (compareArrays($posPackageTitle, $elementsPile)) {
-                            $manifestData['packageTitle'] = $data;
+                        // title found in metadata of an item (only if we haven't already one title for this sco)
+                        if (!isset($manifestData['scos'][$flagTag['value']]['title']) || $manifestData['scos'][$flagTag['value']]['title'] == '') {
+                            if ($elementsPile[sizeof($elementsPile) - 2] == "TITLE" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
+                                $manifestData['scos'][$flagTag['value']]['title'] = $data;
+                            }
                         }
-                    }
-                    break;
-            } // end switch ( $flagTag['type'] )
+                        break;
+                    case "asset" :
+                        // DESCRIPTION
+                        // if the langstring tag is a children of a description tag
+                        if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
+                            if (isset($manifestData['assets'][$flagTag['value']]['description'])) {
+                                $manifestData['assets'][$flagTag['value']]['description'] .= $data;
+                            } else {
+                                $manifestData['assets'][$flagTag['value']]['description'] = $data;
+                            }
+                        }
+                        // title found in metadata of an item (only if we haven't already one title for this sco)
+                        if (!isset($manifestData['assets'][$flagTag['value']]['title']) || $manifestData['assets'][$flagTag['value']]['title'] == '') {
+                            if ($elementsPile[sizeof($elementsPile) - 2] == "TITLE" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
+                                if (isset($manifestData['assets'][$flagTag['value']]['title'])) {
+                                    $manifestData['assets'][$flagTag['value']]['title'] .= $data;
+                                } else {
+                                    $manifestData['assets'][$flagTag['value']]['title'] = $data;
+                                }
+                            }
+                        }
+                        break;
+                    default :
+                        // DESCRIPTION
+                        $posPackageDesc = array("MANIFEST", "METADATA", "LOM", "GENERAL", "DESCRIPTION");
+                        if (compareArrays($posPackageDesc, $elementsPile)) {
+                            if (!isset($manifestData['packageDesc'])) {
+                                $manifestData['packageDesc'] = "";
+                            }
+                            $manifestData['packageDesc'] .= $data;
+                        }
 
+                        if (!isset($manifestData['packageTitle']) || $manifestData['packageTitle'] == '') {
+                            $posPackageTitle = array("MANIFEST", "METADATA", "LOM", "GENERAL", "TITLE");
+                            if (compareArrays($posPackageTitle, $elementsPile)) {
+                                $manifestData['packageTitle'] = $data;
+                            }
+                        }
+                        break;
+                } // end switch ( $flagTag['type'] )
+            }
             break;
 
         default :
