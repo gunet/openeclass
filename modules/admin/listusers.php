@@ -482,7 +482,11 @@ $head_content .= "<script>
                 .search($('select#select_role').val())
                 .draw();
         });
-        $('.dataTables_filter input ms-0 mb-3').attr('placeholder', '$langName, $langSurname, $langUsername');
+        $('.dataTables_filter input')
+            .attr({
+                    'style': 'width: 250px',
+                    'placeholder': '$langName, $langSurname, Username, $langEmail'
+                 });
     });
     </script>";
 
