@@ -119,7 +119,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $extra_terms = array();
     }
 
-    $sql = Database::get()->queryArray("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id
+    $sql = Database::get()->queryArray("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id, course.popular_course
                                FROM course, course_department, hierarchy
                               WHERE course.id = course_department.course
                                 AND hierarchy.id = course_department.department
@@ -139,8 +139,16 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['aaData'] = array();
 
     foreach ($sql as $logs) {
+        $popular_icon = '';
+        $popular_course_message = "$langPopular $langsCourse";
+        $popular_course_action = "pop=1";
+        if ($logs->popular_course) {
+            $popular_icon = icon('fa-star');
+            $popular_course_message = $langRemovePopular;
+            $popular_course_action = "pop=0";
+        }
         $course_title = "<a href='{$urlServer}courses/" . $logs->code . "/'><b>" . q($logs->title) . "</b>
-                        </a> (" . q($logs->code) . ")<br /><i>" . q($logs->prof_names) . "";
+                        </a> (" . q($logs->code) . ") " . $popular_icon . "<br /><i>" . q($logs->prof_names) . "";
 
         $departments = $course->getDepartmentIds($logs->id);
         $i = 1;
@@ -172,7 +180,13 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'title' => $langDelete,
                 'icon' => 'fa-times',
                 'url' => "delcours.php?c=$logs->id"
-            )
+            ),
+            array(
+                'title' => $popular_course_message,
+                'icon' => 'fa-star',
+                'url' => "$_SERVER[SCRIPT_NAME]?c=$logs->id&$popular_course_action"
+            ),
+
         ));
         $data['aaData'][] = array(
             '0' => $course_title,
@@ -181,56 +195,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             '3' => $icon_content
         );
     }
-    echo json_encode($data);
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit();
+}
+
+// change course popularity
+if (isset($_GET['pop'])) {
+    Database::get()->querySingle("UPDATE course SET popular_course = ?d WHERE id = ?d", $_GET['pop'], $_GET['c']);
+    Session::flash('message', $langFaqEditSuccess);
+    Session::flash('alert-class', 'alert-success');
 }
 
 load_js('tools.js');
 load_js('datatables');
-$head_content .= "<script type='text/javascript'>
-        $(document).ready(function() {
-            $('#course_results_table').DataTable ({
-                ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell text-center', 'aTargets':[-1]}],":"")."
-                'bProcessing': true,
-                'bServerSide': true,
-                'sAjaxSource': '$_SERVER[REQUEST_URI]',
-                'aLengthMenu': [
-                   [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
-                ],
-                'sPaginationType': 'full_numbers',
-                'bAutoWidth': false,
-                'searchDelay': 1000,
-                'aoColumns': [
-                    {'bSortable' : true, 'sWidth': '50%' },
-                    {'bSortable' : false, 'sClass': 'text-center' },
-                    {'bSortable' : false, 'sWidth': '25%' },
-                    {'bSortable' : false },
-                ],
-                'fnDrawCallback': function( oSettings ) {
-                    popover_init();
-                },
-                'oLanguage': {
-                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                   'sZeroRecords':  '" . $langNoResult . "',
-                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
-                   'sInfoFiltered': '',
-                   'sInfoPostFix':  '',
-                   'sSearch':       '" . $langSearch . "',
-                   'sUrl':          '',
-                   'oPaginate': {
-                       'sFirst':    '&laquo;',
-                       'sPrevious': '&lsaquo;',
-                       'sNext':     '&rsaquo;',
-                       'sLast':     '&raquo;'
-                   }
-               }
-            });
-            $('.dataTables_filter input ms-0 mb-3').attr('placeholder', '$langTitle, $langTeacher');
-        });
-        </script>";
-
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourses);

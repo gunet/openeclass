@@ -573,10 +573,6 @@ function adminMenu() {
             array_push($sideMenuLink, '../admin/activity.php');
             array_push($sideMenuImg, 'fa-caret-right');
 
-            array_push($sideMenuText, $GLOBALS['langPopularCourse']);
-            array_push($sideMenuLink, '../admin/popularcourse.php');
-            array_push($sideMenuImg, 'fa-caret-right');
-
             // array_push($sideMenuText, $GLOBALS['langCourseCategoryActions']);
             // array_push($sideMenuLink, '../admin/coursecategory.php');
             // array_push($sideMenuImg, 'arrow.png');

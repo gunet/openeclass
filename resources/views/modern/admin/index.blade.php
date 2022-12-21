@@ -47,7 +47,7 @@
                                 @if ($is_admin)
                                     <div class='col-lg-6 col-12 mt-3'>
                                         <div class='row'>
-                                            
+
                                             <div class='col-12'>
                                                 <div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
                                                     <div class='panel-heading bg-body'>
@@ -140,7 +140,7 @@
                                 <div class='col-12'>
                                     <div class='col-12 d-flex justify-content-start border-primary border-bottom mt-5'>
                                         <a class="d-flex justify-content-center align-items-center" data-bs-toggle="collapse" href="#collapseMoreInfoAdmin" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                            <span class='text-uppercase'>{{trans('langMore')}}</span> 
+                                            <span class='text-uppercase'>{{trans('langMore')}}</span>
                                             <span class='fa fa-arrow-down'></span>
                                         </a>
                                     </div>
@@ -149,9 +149,9 @@
                                 <div class="collapse" id="collapseMoreInfoAdmin">
                                     <div class='col-12 mt-5'>
 
-                                        
+
                                         <p class='text-center text-uppercase TextBold fs-5'>{{ trans('langOnlineUsers') }} :{{ getOnlineUsers() }}</p>
-                                           
+
 
                                         <div class='panel panel-admin px-lg-4 py-lg-3 mt-3'>
                                             <div class='panel-heading bg-body'>
@@ -230,7 +230,7 @@
 
                                         @if (count($cronParams) > 0)
                                         <div class='panel panel-admin px-lg-4 py-lg-3 mt-3'>
-                                           
+
                                             <div class='panel-heading bg-body'>
                                                 <div class='col-12 Help-panel-heading'>
                                                     <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langCronInfo') }}</span>
