@@ -1,11 +1,11 @@
 
 <div id="leftnav" class="sidebar float-menu pt-3">
 
-   
-    @if(!$dont_display_array_in_sidebar or $dont_display_array_in_sidebar != 1)
+
+    @if(!isset($dont_display_array_in_sidebar) or $dont_display_array_in_sidebar != 1)
         {!! $course_home_sidebar_widgets !!}
-    @endif 
-  
+    @endif
+
 
     @php $is_course_teacher = check_editor($uid,$course_id); @endphp
 
@@ -23,7 +23,7 @@
         </form>--}}
 
          <!-- THIS IS SECOND CHOICE OF VIEW-STUDENT-TEACHER TOOGLE-BUTTON -->
-        <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center mb-5'> 
+        <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center mb-5'>
             <label class="switch-sidebar">
                 <input class="form-check-input slider-btn-on btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}" type="checkbox" id="flexSwitchCheckChecked" {{ !$is_editor ? "checked" : "" }}>
                 <div class="slider-round">
