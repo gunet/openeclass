@@ -621,8 +621,9 @@ if (isset($timeleft)) { // time remaining
 }
 
 if (!empty($exerciseDescription)) { // description
-    $tool_content .= "<div class='col-sm-12'><div class='margin-bottom-fat form-wrapper form-edit p-2 mb-3 rounded'>";
-    $tool_content .= "<div class='col-sm-12 p-3'><em>" . standard_text_escape($exerciseDescription) . "</em></div>";
+    $tool_content .= "<div class='col-sm-12 mb-3'><div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
+    <div class='panel-heading bg-body'><div class='col-12 Help-panel-heading'><span class='panel-title text-uppercase Help-text-panel-heading'>$langDescription</span></div></div>";
+    $tool_content .= "<div class='panel-body'><em>" . standard_text_escape($exerciseDescription) . "</em></div>";
     $tool_content .= "</div></div>";
 }
 
@@ -782,7 +783,7 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
             .exercise-action-buttons { float: left; }
         </style>";
 
-    $tool_content .= '<div class="exercise-nav-buttons">';
+    $tool_content .= '<div class="exercise-nav-buttons d-inline-flex">';
     $prevLabel = '&lt; ' . $langPrevious;
     $nextLabel = $langNext . ' &gt';
     if ($exerciseType == MULTIPLE_PAGE_TYPE and $questionId != $questionList[1]) { // `prev` button
@@ -806,13 +807,13 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
         </style>";
 }
 
-$tool_content .= "<div class='exercise-action-buttons'>";
+$tool_content .= "<div class='exercise-action-buttons d-inline-flex'>";
 
 // "Cancel" button
 $tool_content .= "<input class='btn cancelAdminBtn' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
 
 // "Submit" button
-$tool_content .= "<input class='btn submitAdminBtn blockUI' type='submit' name='buttonFinish' value='$langExerciseFinalSubmit'>";
+$tool_content .= "<input class='btn successAdminBtn blockUI' type='submit' name='buttonFinish' value='$langExerciseFinalSubmit'>";
 if ($exerciseType != SINGLE_PAGE_TYPE) {
     $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
 }

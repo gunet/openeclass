@@ -56,12 +56,12 @@ function display_certificates() {
 
                 <div class='col-12 mt-3'>
                     <div class='panel panel-default'>
-                        <div class='panel-heading'>
+                        <div class='panel-heading pt-1 pb-1'>
                             <div class='row'>
-                                <div class='col-md-7 col-6 text-start mt-1'>
+                                <div class='col-md-7 col-6 d-flex justify-content-start align-items-center'>
                                     $langCertificates
                                 </div>
-                                <div class='col-md-5 col-6 d-flex justify-content-end'>
+                                <div class='col-md-5 col-6 d-flex justify-content-end align-items-center'>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span> <span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate</span></a>
                                 </div>
                             </div>
@@ -163,12 +163,12 @@ function display_badges() {
         $tool_content .= "
                 <div class='col-12 mt-3'>
                     <div class='panel panel-default'>
-                        <div class='panel-heading'>
+                        <div class='panel-heading pt-1 pb-1'>
                             <div class='row'>
-                                <div class='col-md-7 col-6 text-start mt-1'>
+                                <div class='col-md-7 col-6 d-flex justify-content-start align-items-center'>
                                     $langBadges
                                 </div>
-                                <div class='col-md-5 col-6 d-flex justify-content-end'>
+                                <div class='col-md-5 col-6 d-flex justify-content-end align-items-center'>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
                                 </div>
                             </div>
@@ -511,12 +511,12 @@ function display_activities($element, $id, $unit_id = 0) {
         $tool_content .= "
             <div class='col-12 mt-3'>
                 <div class='panel panel-default'>
-                    <div class='panel-heading'>
+                    <div class='panel-heading pt-1 pb-1'>
                         <div class='row'>
-                            <div class='col-9 mt-1'>
+                            <div class='col-9 d-flex justify-content-start align-items-center'>
                                 $langAttendanceActList
                             </div>
-                            <div class='col-3 text-end'>
+                            <div class='col-3 d-flex justify-content-end align-items-center'>
                                 $addActivityBtn
                             </div>
                         </div>
@@ -2001,12 +2001,12 @@ function display_settings($element, $element_id, $unit_id = 0) {
         $tool_content .= "
                 <div class='col-12'>
                     <div class='panel panel-default'>
-                        <div class='panel-heading'>
+                        <div class='panel-heading pt-1 pb-1'>
                             <div class='row'>
-                                <div class='col-7 mt-1'>
+                                <div class='col-9 d-flex justify-content-start align-items-center'>
                                     $langProgressBasicInfo
                                 </div>
-                                <div class='col-5 text-end'>
+                                <div class='col-3 d-flex justify-content-end align-items-center'>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn'>"
                                             . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
                                     </a>
@@ -2257,7 +2257,7 @@ function student_view_progress() {
     $course_completion_id = is_course_completion_active(); // is course completion active?
     if (isset($course_completion_id) and $course_completion_id > 0) {
         $found = true;
-        $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
+        $percentage = get_cert_percentage_completion('badge', $course_completion_id);
 
         $tool_content .= "
                 <div class='col-12'>
@@ -2268,17 +2268,15 @@ function student_view_progress() {
                         <div class='panel-body'>
                             <div class='res-table-wrapper'>
                                 <div class='row p-2 res-table-row border-0'>
-                                    <div class='col-sm-2'>
+                                    <div class='col-4 d-flex justify-content-center align-items-center'>
                                         <i class='fa fa-trophy fa-4x' aria-hidden='true'></i>
                                     </div>
-                                    <div class='col-sm-9'>
+                                    <div class='col-4 d-flex justify-content-center align-items-center'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&badge_id=$course_completion_id&u=$uid'>$langCourseCompletion</a>
-                                        <div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
-                                            <p class='progress-bar active from-control-static pt-2' role='progressbar'
-                                                    aria-valuenow='\".str_replace('%','',$percentage).\"'
-                                                    aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage;'>$percentage
-                                            </p>
-                                        </div>
+                                      
+                                    </div>
+                                    <div class='col-4 d-flex justify-content-center align-items-center'>
+                                      <div role='progressbar' aria-valuenow='$percentage' aria-valuemin='0' aria-valuemax='100' style='--value: $percentage; --size: 5rem;'></div>
                                     </div>
                                 </div>
                             </div>
@@ -2326,22 +2324,32 @@ function student_view_progress() {
                                                          (SELECT icon FROM badge WHERE id = ?d)", $badge->id)->filename;
 
                 $faded = ($badge->completed != 1) ? "faded" : '';
-                $badge_percentage = round($badge->completed_criteria / $badge->total_criteria * 100, 0) . "%";
+                // $badge_percentage = round($badge->completed_criteria / $badge->total_criteria * 100, 0) . "%";
+                $badge_percentage = round($badge->completed_criteria / $badge->total_criteria * 100, 0);
 
                 $tool_content .= "<div class='res-table-wrapper'>
                                     <div class='row res-table-row border-0 p-3'>
-                                        <div class='col-sm-2'>
+                                        <div class='col-4 d-flex justify-content-center align-items-center'>
                                             <img class = '$faded center-block' style='max-height: 60px;' class='img-responsive block-center' src='$urlServer" . BADGE_TEMPLATE_PATH . "$badge_filename'>
                                         </div>";
-                                    $tool_content .= "
-                                        <div class='col-sm-9'>
-                                        <a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>" . ellipsize($badge->title, 40) . "</a>
-                                            <div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
-                                                <p class='progress-bar active from-control-static pt-2' role='progressbar'
-                                                        aria-valuenow='" . str_replace('%','',$badge_percentage) . "'
-                                                        aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $badge_percentage;'>$badge_percentage
-                                                </p>
-                                            </div>
+                                //     $tool_content .= "
+                                //         <div class='col-sm-9'>
+                                //         <a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>" . ellipsize($badge->title, 40) . "</a>
+                                //             <div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
+                                //                 <p class='progress-bar active from-control-static pt-2' role='progressbar'
+                                //                         aria-valuenow='" . str_replace('%','',$badge_percentage) . "'
+                                //                         aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $badge_percentage;'>$badge_percentage
+                                //                 </p>
+                                //             </div>
+                                //         </div>
+                                //     </div>
+                                // </div>";
+                                $tool_content .= "
+                                        <div class='col-4 d-flex justify-content-center align-items-center'>
+                                            <a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user'>" . ellipsize($badge->title, 40) . "</a>
+                                        </div>
+                                        <div class='col-4 d-flex justify-content-center align-items-center'>
+                                            <div role='progressbar' aria-valuenow='" .$badge_percentage. "' aria-valuemin='0' aria-valuemax='100' style='--value: ".$badge_percentage."; --size: 6rem;'></div>
                                         </div>
                                     </div>
                                 </div>";

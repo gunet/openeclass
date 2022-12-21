@@ -380,9 +380,9 @@ $tool_content .= action_bar(array(
         ),false);
 
 $tool_content .= "<div class='col-sm-12'>
-                    <div class='panel panel-default'>
-                    <div class='panel-heading list-header'>
-                        <h3 class='panel-title'>$langLearningPathData</h3>
+                    <div class='panel panel-admin'>
+                    <div class='panel-heading'>
+                        <span class='panel-title'>$langLearningPathData</span>
                     </div>";
 $tool_content .= "<table class='table-default' style='border-radius:0px; border-bottom-left-radius:15px; border-bottom-right-radius:15px;'>";
 
@@ -488,11 +488,17 @@ $lp_action_button = action_button(array(
 );
 $tool_content .= "<div class='col-sm-12 mt-3'>
                     <div class='panel panel-default panel-action-btn-default' style='overflow-y:auto;'>
-                        <div class='float-end me-3 mt-1'>
-                            $lp_action_button
-                        </div>
-                        <div class='panel-heading list-header'>
-                            <h3 class='panel-title'>$langLearningPathStructure</h3>
+                     
+                        <div class='panel-heading'>
+                            <div class='row'>
+                               <div class='col-9 d-flex justify-content-start align-items-center'>
+                                   <span class='panel-title'>$langLearningPathStructure</span>
+                               </div> 
+                               <div class='col-3 d-flex justify-content-end align-items-center'>
+                                    $lp_action_button
+                               </div>
+                            </div>
+                           
                         </div>";
 
 //  -------------------------- learning path list content ----------------------------

@@ -27,6 +27,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
+
 define('ECLASS_VERSION', '4.0-dev');
 
 // mPDF library temporary file path and font path

@@ -4387,7 +4387,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         </div>
                         $extra
                         <div class='form-group mt-3'>
-                            <div class='col-sm-10 col-sm-offset-2'>".
+                            <div class='col-12 d-flex justify-content-center align-items-center'>".
                     form_buttons(array(
                         array(
                             'class'         => 'submitAdminBtn',

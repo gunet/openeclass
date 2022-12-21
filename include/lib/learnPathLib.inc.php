@@ -611,7 +611,7 @@ function display_my_documents($dialogBox, $style)
         $colspan = 4;
     }
     $content = "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>" .
-        "<table class='table-default'>";
+        "<div class='table-responsive'><table class='table-default'>";
     if (!empty($path)) {
         $content .=
             "<tr>" .
@@ -677,7 +677,7 @@ function display_my_documents($dialogBox, $style)
             $counter++;
         }
     }
-    $content .= "</table>";
+    $content .= "</table></div>";
     $content .= "<div class='text-end mt-3'>";
     $content .= "<input class='btn submitAdminBtn' type='submit' name='submitInsertedDocument' value='$langAddModulesButton'>";
     $content .= "</div>";
@@ -1195,12 +1195,17 @@ function disp_progress_bar($progress, $factor) {
 
     // display progress bar
     // origin of the bar
+
+    // $progressBar = "
+    // <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
+    //     <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em;'>
+    //         $progress%
+    //     </div>
+    // </div>";
+
     $progressBar = "
-    <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
-        <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em;'>
-            $progress%
-        </div>
-    </div>";
+    <div role='progressbar' aria-valuenow=$progress aria-valuemin='0' aria-valuemax='100' style='--value: $progress; --size: 6rem;'></div>";
+    
     return $progressBar;
 }
 

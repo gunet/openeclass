@@ -89,15 +89,22 @@ foreach($questionList as $id) {
     $objQuestionTmp = new Question();
     $objQuestionTmp->read($id);
     if ($objQuestionTmp->selectType() == FREE_TEXT) {
+        // $tool_content .= "
+        // <tr>
+        //     <td>".q_math($objQuestionTmp->selectTitle())."</th>
+        //     <td>
+        //         <div class='progress'>
+        //             <div class='progress-bar progress-bar-success progress-bar-striped' role='progressbar' aria-valuenow='".$objQuestionTmp->successRateInQuestion($exerciseId)."' aria-valuemin='0' aria-valuemax='100' style='width: ".$objQuestionTmp->successRateInQuestion($exerciseId)."%;'>
+        //               ".$objQuestionTmp->successRateInQuestion()."%
+        //             </div>
+        //         </div>
+        //     </td>
+        // </tr>";
         $tool_content .= "
         <tr>
             <td>".q_math($objQuestionTmp->selectTitle())."</th>
             <td>
-                <div class='progress'>
-                    <div class='progress-bar progress-bar-success progress-bar-striped' role='progressbar' aria-valuenow='".$objQuestionTmp->successRateInQuestion($exerciseId)."' aria-valuemin='0' aria-valuemax='100' style='width: ".$objQuestionTmp->successRateInQuestion($exerciseId)."%;'>
-                      ".$objQuestionTmp->successRateInQuestion()."%
-                    </div>
-                </div>
+                <div role='progressbar' aria-valuenow='".$objQuestionTmp->successRateInQuestion($exerciseId)."' aria-valuemin='0' aria-valuemax='100' style='--value: ".$objQuestionTmp->successRateInQuestion($exerciseId)."; --size: 6rem;'></div>
             </td>
         </tr>";
     }
@@ -108,7 +115,7 @@ $tool_content .= "
         </table>
     </div>";
 
-$tool_content .= "<div class='panel panel-primary'>
+$tool_content .= "<div class='panel panel-primary mt-3'>
   <div class='panel-heading'>
     <h3 class='panel-title'>" . $langOpenQuestionPageTitle . "</h3>
   </div>
@@ -137,7 +144,7 @@ $action_url = "exercise_result_by_question.php?exerciseId={$exerciseIdIndirect}"
 $tool_content .= "<form id='grade_form' method='POST' action='$action_url'>$questions_table </form></div></div>";
 
 //creating buttons at the end of page
-$tool_content .= "<br><div align='center'>";
+$tool_content .= "<br><div class='col-12 d-flex justify-content-center align-items-center'>";
 //submit button
 $tool_content .= "<input type='submit' value='$langSubmit' form='grade_form' class='btn submitAdminBtn' id='submitButton'>"
         . "<a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>

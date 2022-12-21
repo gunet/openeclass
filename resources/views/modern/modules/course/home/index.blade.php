@@ -199,7 +199,7 @@
                             <div class='panel-body'>
                                 <div class='row'>
                                     @if($course_info->home_layout == 1)
-                                        <div class='col-md-6 col-12'>
+                                        <div class='col-12'>
                                             <figure>
                                                 <picture>
                                                     @if($course_info->course_image)
@@ -210,7 +210,7 @@
                                                 </picture>
                                             </figure>
                                         </div>
-                                        <div class='col-md-6 col-12'>
+                                        <div class='col-12 mt-3 mb-3'>
                                             <div class='course_info'>
                                                 @if ($course_info->description)
                                                         {!! $course_info->description !!}
@@ -575,9 +575,10 @@
                                             @if ($percentage == '100%')
                                                 <i class='fa fa-check-circle fa-5x state_success'></i>
                                             @else
-                                                <div class='course_completion_panel_percentage'>
+                                                {{--<div class='course_completion_panel_percentage'>
                                                     {{ $percentage }}
-                                                </div>
+                                                </div>--}}
+                                                <div role="progressbar" aria-valuenow=" {{ $percentage }}" aria-valuemin="0" aria-valuemax="100" style="--value: {{ $percentage }}"></div>
                                             @endif
                                             </a>
                                             </div>

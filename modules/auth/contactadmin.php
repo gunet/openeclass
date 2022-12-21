@@ -100,31 +100,31 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?userid=$userid&amp;h=$_GET[h]' method='post'>
             <fieldset>
                 <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langName:</label>
-                    <div class='col-sm-10'>
+                    <label class='col-md-3 col-12 control-label-notes'>$langName:</label>
+                    <div class='col-md-9 col-12'>
                         <input class='form-control' type='text' name='$langName' value='" . q($firstname) . "' disabled  />
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langSurname:</label>
-                    <div class='col-sm-10'>
+                <div class='form-group mt-4'>
+                    <label class='col-md-3 col-12 control-label-notes'>$langSurname:</label>
+                    <div class='col-md-9 col-12'>
                         <input class='form-control' type='text' name='$langSurname' value='" . q($lastname) . "' disabled  />
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>Email:</label>
-                    <div class='col-sm-10'>
+                <div class='form-group mt-4'>
+                    <label class='col-md-3 col-12 control-label-notes'>Email:</label>
+                    <div class='col-md-9 col-12'>
                         <input class='form-control' type='text' name='email' value='" . q($email) . "' disabled  />
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label for='$langComments' class='col-sm-2 control-label'>$langComments:</label>
-                    <div class='col-sm-10'>
+                <div class='form-group mt-4'>
+                    <label for='$langComments' class='col-md-3 col-12 control-label-notes'>$langComments:</label>
+                    <div class='col-md-9 col-12'>
                         <textarea class='form-control' rows='6' name='body'>$langActivateAccount</textarea>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-2'>".
+                <div class='form-group mt-5'>
+                    <div class='col-12 d-flex justify-content-center align-items-center'>".
                         form_buttons(array(
                             array(
                                 'text'  => $langSend,

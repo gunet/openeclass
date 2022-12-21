@@ -303,7 +303,7 @@ function printPollForm() {
                 $i++;
             }
         }
-        $tool_content .= "<div class='text-center mt-3'>";
+        $tool_content .= "<div class='d-flex justify-content-center mt-3'>";
         if ($is_editor) {
             $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack). "</a>";
         } else {

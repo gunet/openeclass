@@ -1,10 +1,10 @@
 
-<div id="leftnav" class="sidebar float-menu pt-3">
+<div id="leftnav" class="col-12 sidebar float-menu pt-3">
 
 
-    @if(!isset($dont_display_array_in_sidebar) or $dont_display_array_in_sidebar != 1)
+    {{-- @if(!isset($dont_display_array_in_sidebar) or $dont_display_array_in_sidebar != 1)
         {!! $course_home_sidebar_widgets !!}
-    @endif
+    @endif --}}
 
 
     @php $is_course_teacher = check_editor($uid,$course_id); @endphp

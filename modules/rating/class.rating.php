@@ -416,7 +416,7 @@ Class Rating {
             $out .= "<span id=\"rate_".$this->rid."_up\">".$this->getUpRating()."</span>&nbsp;&nbsp;";
             $out .= "<img id=\"rate_".$this->rid."_img_down\" src=\"".$urlServer."modules/rating/".$img_down."\" ".$onclick_down."/>&nbsp;";
             $out .= "<span id=\"rate_".$this->rid."_down\">".$this->getDownRating()."</span>";
-            $out .= "<div class=\"smaller\" id=\"rate_msg_".$this->rid."\">";
+            $out .= "<div class=\"smaller hidden-xs\" id=\"rate_msg_".$this->rid."\">";
             
             if ($has_rated) {
                 $out .= $langUserHasRated;

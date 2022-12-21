@@ -71,7 +71,7 @@
                                 <div class="row mt-3">
                                     <div class="col-md-6 col-sm-12">
                                         <div class="panel panel-default">
-                                            <div class="panel-heading text-dark text-center">
+                                            <div class="panel-heading text-center">
                                                 {{ trans('langProfilePersInfo') }}
                                             </div>
                                             <div class='panel-body'>
@@ -134,7 +134,7 @@
                                     </div>
                                     <div class="col-md-6 col-sm-12 mt-md-0 mt-3">
                                         <div class="panel panel-default">
-                                            <div class="panel-heading text-center text-dark">
+                                            <div class="panel-heading text-center">
                                                 {{ trans('langProfileAboutMe') }}
                                             </div>
                                             <div class='panel-body'>

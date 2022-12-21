@@ -375,18 +375,24 @@ if ($userdata) {
             }
             $tool_content .= "<div class='panel panel-action-btn-default mb-3'>
                                     <div class='panel-heading'>
-                                        <div class='float-end'>
-                                            ". action_button(array(
-                                                                array(
-                                                                        'title' => $langePortfolioRemoveResource,
-                                                                        'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
-                                                                        'icon' => 'fa-times',
-                                                                        'class' => 'delete',
-                                                                        'confirm' => $langePortfolioSureToRemoveResource,
-                                                                        'show' => ($post->user_id == $uid)
-                                                                )))."
-                                         </div>
-                                            <h3 class='panel-title'>".q($data['title'])."</h3>
+                                        <div class='row'>
+                                           <div class='col-9 d-flex justify-content-start align-items-center'>
+                                              <span class='panel-title'>".q($data['title'])."</span>
+                                           </div>
+                                           <div class='col-3 d-flex justify-content-end align-items-center'>
+                                                <div>
+                                                    ". action_button(array(
+                                                                        array(
+                                                                                'title' => $langePortfolioRemoveResource,
+                                                                                'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
+                                                                                'icon' => 'fa-times',
+                                                                                'class' => 'delete',
+                                                                                'confirm' => $langePortfolioSureToRemoveResource,
+                                                                                'show' => ($post->user_id == $uid)
+                                                                        )))."
+                                                </div>
+                                           </div>
+                                        </div>   
                                     </div>
                                     <div class='panel-body'>
                                         <p class='blackBlueText TextSemiBold'>" . format_locale_date(strtotime($data['timestamp'])) . "</p><br><br>".standard_text_escape($data['content'])."
@@ -476,19 +482,25 @@ if ($userdata) {
                     $post->course_title = $langUserBlog;
                 }
                 $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
-                                    <div class='panel-heading'>
-                                        <div class='float-end'>
-                                            ". action_button(array(
-                                                    array(
-                                                        'title' => $langePortfolioRemoveResource,
-                                                        'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
-                                                        'icon' => 'fa-times',
-                                                        'class' => 'delete',
-                                                        'confirm' => $langePortfolioSureToRemoveResource,
-                                                        'show' => ($post->user_id == $uid)
-                                                    )))."
-                                         </div>
-                                            <h3 class='panel-title'>".q($data['title'])."</h3>
+                                    <div class='panel-heading pt-1 pb-1'>
+                                        <div class='row'>
+                                            <div class='col-9 d-flex justify-content-start align-items-center'>
+                                                <span class='panel-title'>".q($data['title'])."</span>
+                                            </div>
+                                            <div class='col-3 d-flex justify-content-end align-items-center'>
+                                                <div>
+                                                    ". action_button(array(
+                                                        array(
+                                                            'title' => $langePortfolioRemoveResource,
+                                                            'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
+                                                            'icon' => 'fa-times',
+                                                            'class' => 'delete',
+                                                            'confirm' => $langePortfolioSureToRemoveResource,
+                                                            'show' => ($post->user_id == $uid)
+                                                        )))."
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class='panel-body'>
                                         <button class='rounded-pill bg-info ps-2 pe-2 text-white border-0'>" . format_locale_date(strtotime($data['timestamp'])) . "</button><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."

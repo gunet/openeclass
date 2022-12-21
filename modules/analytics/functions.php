@@ -226,7 +226,7 @@ function display_analytics_elements($analytics_id) {
         array(
             'secondary_title' => $langAdd,
             'secondary_icon' => 'fa-plus',
-            'secondary_btn_class' => 'btn-success btn-sm'
+            'secondary_btn_class' => 'submitAdminBtn'
         
     ));
 
@@ -468,16 +468,14 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                 }
                 */
                 //foreach ($peruserarray as $peruser) {
+                    
             $results .="<tr>
                             <td>
                                 <div>". display_user($userid). "</div>
                             </td>
                             <td>
-                                <div class='progress mt-md-0 mt-2' style='display: inline-block; width: 120px; margin-bottom:0px;'>
-                                    <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: " .$percentage ."%; min-width: 2em;'>
-                                    " .$percentage ."%
-                                    </div>
-                                </div>
+                                
+                                <div role='progressbar' aria-valuenow='$percentage' aria-valuemin='0' aria-valuemax='100' style='--value: $percentage; --size: 6rem;'></div>
                             </td>
                             <td>
                                 <div>
@@ -514,7 +512,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
         <div class='col-12 mt-3'>                 
             <div class='panel panel-default'>
                 <div class='panel-heading'>             
-                    <div class='control-label-notes text-center'>$analytics_title->title</div>
+                    <div class='text-center'>$analytics_title->title</div>
                 </div>
                 <div class='panel-body'>
                      $results

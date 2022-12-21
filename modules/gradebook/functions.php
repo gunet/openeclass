@@ -819,16 +819,16 @@ function display_gradebook($gradebook) {
                             <div class='col-sm-12'>
                                 <div class='table-responsive'>
                                     <table class='table-default'>
-                                        <tr class='bg-light'>
-                                            <th colspan='7' class='text-center text-secondary'>$langGradebookActList</th>
-                                        </tr>
                                         <tr class='list-header'>
-                                            <th>$langTitle</th>
-                                            <th>$langGradebookActivityDate2</th>
-                                            <th>$langType</th><th>$langGradebookWeight</th>
-                                            <th class='text-center'>$langViewShow</th>
-                                            <th class='text-center'>$langScore</th>
-                                            <th class='text-center'>".icon('fa-cogs')."</i></th>
+                                            <th colspan='7' class='text-center text-white'>$langGradebookActList</th>
+                                        </tr>
+                                        <tr class='list-header lightColor'>
+                                            <th class='text-dark'>$langTitle</th>
+                                            <th class='text-dark'>$langGradebookActivityDate2</th>
+                                            <th class='text-dark'>$langType</th><th class='text-dark'>$langGradebookWeight</th>
+                                            <th class='text-center text-dark'>$langViewShow</th>
+                                            <th class='text-center text-dark'>$langScore</th>
+                                            <th class='text-center text-dark'>".icon('fa-cogs')."</i></th>
                                         </tr>";
 
         foreach ($result as $details) {

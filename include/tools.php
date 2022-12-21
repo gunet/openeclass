@@ -785,7 +785,7 @@ function lessonToolsMenu($rich=true) {
                 }
             } elseif ($rich and $mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
                 array_push($sideMenuText, '<b class="pe-2">' . q($modules[$mid]['title']) .
-                    "<button class='badge rounded-pill bgLightBlue text-white TextExtraBold float-end' style='height:25px width:25px; font-size:12px;'>$new_docs</button></b>");
+                    "<button class='badge rounded-pill bgLightBlue text-white TextExtraBold float-end border-0' style='height:25px width:25px; font-size:12px;'>$new_docs</button></b>");
             } else {
                 array_push($sideMenuText, q($modules[$mid]['title']));
             }

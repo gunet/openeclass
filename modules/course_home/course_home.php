@@ -382,6 +382,7 @@ switch ($visible) {
 }
 
 
+$data['percentage'] = '';
 if ($uid) {
     $data['course_completion_id'] = $course_completion_id = is_course_completion_active(); // is course completion active?
     if ($course_completion_id) {
@@ -395,7 +396,8 @@ if ($uid) {
                                                                     AND badge = ?d", $course_id, $course_completion_id)->t;
         } else {
             $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
-            $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
+            // $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
+            $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id);
         }
     }
 }

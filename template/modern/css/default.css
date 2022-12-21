@@ -412,6 +412,8 @@ input:-webkit-autofill:active {
 }
 
 
+
+
 .form-wrapper input[type="text"]:focus, .forms-panels-admin input[type="text"]:focus,.table-default input[type="text"]:focus, .panel input[type="text"]:focus,
 .form-wrapper input[type="datetime"]:focus, .forms-panels-admin input[type="datetime"]:focus, .table-default input[type="datetime"]:focus, .panel input[type="datetime"]:focus,
 .form-wrapper input[type="datetime-local"]:focus, .forms-panels-admin input[type="datetime-local"]:focus, .table-default input[type="datetime-local"]:focus, .panel input[type="datetime-local"]:focus,
@@ -435,7 +437,7 @@ input:-webkit-autofill:active {
   /* font-family: 'Manrope' , sans-serif;  */
   font-weight: 600; font-style: normal;
 }
-.form-wrapper textarea:focus{
+.form-wrapper textarea:focus, .panel textarea:focus, .table-default textarea:focus{
   background-color: #ffffff !important;
 }
 
@@ -477,10 +479,10 @@ select.form-select:focus {
   box-shadow: 0 1px 1px rgba(255, 255, 255, 0.075) inset, 0 0 8px rgb(255, 255, 255);
   outline: none;
   background-color: #e8e8e8;
-  border-top-left-radius: 15px;
+  /* border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
+  border-bottom-right-radius: 0px; */
 }
 select.form-select option{color: #9d9d9c; font-weight: 600; font-style: normal;}
 
@@ -683,20 +685,62 @@ label:has(input[type="checkbox"]:disabled){
   
   #collapseDescription > div { padding: 5px 20px; }
   
-  .course_completion_panel_percentage{
+  /* .course_completion_panel_percentage{
       bottom:15px;
       right:15px;
       font-size:20px;
       padding: 10px 10px;
-      width: 72px; /* original was width: 40px; */
-      height: 72px; /* original was height: 40px;*/
-      border: 6px solid #AAAAAA;
-      border-radius: 40px;
+      width:120px; 
+      height: 120px; 
+      border: 6px solid #005ad7;
+      border-radius: 70px;
       background: #FFFFFF;
-      color: #AAAAAA;
+      color: #005ad7;
       line-height: 38px;
-      font-weight: 600;
+      font-weight: 800;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  } */
+
+  @keyframes growProgressBar {
+    0%, 33% { --pgPercentage: 0; }
+    100% { --pgPercentage: var(--value); }
   }
+  
+  @property --pgPercentage {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 0;
+  }
+  
+  div[role="progressbar"] {
+    --size: 9rem;
+    --fg: #003e85;
+    --bg: #e8e8e8;
+    --pgPercentage: var(--value);
+    animation: growProgressBar 3s 1 forwards;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: 
+      radial-gradient(closest-side, white 80%, transparent 0 99.9%, white 0),
+      conic-gradient(var(--fg) calc(var(--pgPercentage) * 1%), var(--bg) 0)
+      ;
+    font-weight: 700; font-style: normal;
+    font-size: calc(var(--size) / 5);
+    color: var(--fg);
+  }
+  
+  div[role="progressbar"]::before {
+    counter-reset: percentage var(--value);
+    content: counter(percentage) '%';
+  }
+
+  
   
   .state_success { color: #11D888; }
 
@@ -1250,6 +1294,27 @@ label:has(input[type="checkbox"]:disabled){
     color: #ffffff;
   }
 
+  .successAdminBtn {
+    border: solid thin;
+    border-color: #009900	;
+    color: #009900	;
+    font-size: 12px;
+    text-transform: uppercase;
+    height:30px;
+    /* font-family: 'Manrope' , sans-serif;  */
+    font-weight: 600; font-style: normal;
+    border-radius: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .successAdminBtn:hover {
+    background-color: #009900	;
+    color: #ffffff;
+  }
+
+
   .cancelAdminBtn {
     border: solid thin;
     font-size: 12px;
@@ -1486,12 +1551,14 @@ label:has(input[type="checkbox"]:disabled){
     background: #003e85;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    color:#fafafa;
+    color:#ffffff;
+    text-transform: capitalize;
     /* font-family: 'Manrope' , sans-serif;  */
     font-weight: 600; font-style: normal;
   }
   .panel-admin>.panel-heading>.panel-title{
-    color:#fafafa;
+    color:#ffffff;
+    text-transform: capitalize;
     margin-bottom:0px;
     padding:0px;
     /* font-family: 'Manrope' , sans-serif;  */
@@ -1524,17 +1591,19 @@ label:has(input[type="checkbox"]:disabled){
     border:solid 1px #e8e8e8;
   }
   .panel-primary>.panel-heading, .panel-action-btn-primary>.panel-heading{
-    background: #337ab7;
+    background: #3d80d0;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    color:#fafafa;
+    color:#ffffff;
+    text-transform: capitalize;
     /* font-family: 'Manrope' , sans-serif;  */
     font-weight: 600; font-style: normal;
   }
   .panel-primary>.panel-heading>.panel-title, .panel-action-btn-primary>.panel-heading>.panel-title{
-    color:#fafafa;
     margin-bottom:0px;
     padding:0px;
+    color:#ffffff;
+    text-transform: capitalize;
     /* font-family: 'Manrope' , sans-serif;  */
     font-weight: 600; font-style: normal;
   }
@@ -1573,10 +1642,11 @@ label:has(input[type="checkbox"]:disabled){
     border:solid 1px #e8e8e8;
   }
   .panel-success>.panel-heading{
-    background: #7dcfb6;
+    background: #22b473;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    color:#fafafa;
+    color:#ffffff;
+    text-transform: capitalize;
     /* font-family: 'Manrope' , sans-serif;  */
     font-weight: 600; font-style: normal;
     font-size: 15px;
@@ -1637,19 +1707,23 @@ label:has(input[type="checkbox"]:disabled){
     border:solid 1px #e8e8e8;
   }
   .panel-default>.panel-heading, .panel-action-btn-default>.panel-heading {
-    color: #333;
-    background: #f2f2f2;
+    /* color: #333; */
+    background: #63717c;
     border-color: #f2f2f2;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
+    /* background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%); */
     /* font-family: 'Manrope' , sans-serif;  */
+    color:#ffffff;
+    text-transform: capitalize;
     font-weight: 600; font-style: normal;
     border-bottom: solid 1px #eee7e7;
     font-size: 15px;
   }
   .panel-default>.panel-heading>.panel-title, .panel-action-btn-default>.panel-heading>.panel-title{
-    color: #333;
+    /* color: #333; */
+    color:#ffffff;
+    text-transform: capitalize;
     margin-bottom:0px;
     padding:0px;
     /* font-family: 'Manrope' , sans-serif;  */
@@ -1745,12 +1819,14 @@ label:has(input[type="checkbox"]:disabled){
     background: #dc3545;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    color:#fafafa;
+    color:#ffffff;
+    text-transform: capitalize;
     /* font-family: 'Manrope' , sans-serif; */
     font-weight: 600; font-style: normal;
   }
   .panel-danger>.panel-heading>.panel-title{
-    color:#fafafa;
+    color:#ffffff;
+    text-transform: capitalize;
     margin-bottom:0px;
     padding:0px;
     /* font-family: 'Manrope' , sans-serif;  */
@@ -1812,6 +1888,35 @@ label:has(input[type="checkbox"]:disabled){
     /* font-family: 'Manrope' , sans-serif;  */
     font-weight: 800; font-style: normal;}
 
+  .panel-default .panel-heading .submitAdminBtn,
+  .panel-admin .panel-heading .submitAdminBtn,
+  .panel-action-btn-default .panel-heading .submitAdminBtn,
+  .panel-primary .panel-heading .submitAdminBtn,
+  .panel-info .panel-heading .submitAdminBtn,
+  .panel-success .panel-heading .submitAdminBtn{
+    background-color: #ffffff;
+    color: #005ad7;
+  }
+  .panel-default .panel-heading .fa-edit,
+  .panel-admin .panel-heading .fa-edit,
+  .panel-action-btn-default .panel-heading .fa-edit,
+  .panel-primary .panel-heading .fa-edit,
+  .panel-info .panel-heading .fa-edit,
+  .panel-success .panel-heading .fa-edit{
+    color: #ffffff;
+  }
+
+  .panel-default .panel-heading .submitAdminBtn:hover
+  .panel-admin .panel-heading .submitAdminBtn:hover
+  .panel-action-btn-default .panel-heading .submitAdminBtn:hover
+  .panel-primary .panel-heading .submitAdminBtn:hover
+  .panel-info .panel-heading .submitAdminBtn:hover,
+  .panel-success .panel-heading .submitAdminBtn:hover{
+    color: #ffffff;
+    background-color: #005ad7;
+  }
+
+  
 /* -------------------------------------------- TEMP BORDERS --------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -2344,6 +2449,8 @@ label:has(input[type="checkbox"]:disabled){
 
     .user-icon-filename{ width:23px; height:23px; margin-top: -3px; border-radius:50%; margin-right:10px; }
 
+    .uploadImageCourse{ height: 250px;  width: 100%; object-fit: fill ; }
+
   }
   
 /* ------------------------------------------------------- small laptop ---------------------------------------------------------------------*/
@@ -2357,7 +2464,7 @@ label:has(input[type="checkbox"]:disabled){
     /* modal frame */
     .modal-dialog.modal-lg .modal-content{ width:800px ; }
 
-    .uploadImageCourse{ height: 350px;  width: 100%; object-fit: fill ; }
+    .uploadImageCourse{ height: 300px;  width: 100%; object-fit: fill ; }
     
     .user-icon-filename{ width:23px; height:23px; margin-top: -3px; border-radius:50%; margin-right:10px; }
   }

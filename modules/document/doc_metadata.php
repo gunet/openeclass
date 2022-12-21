@@ -85,7 +85,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
       <div class='table-responsive pt-0'>
 	  <table class='table-default'>
 	  <tr>
-	    <th class='bg-light ps-2 text-secondary'>$langWorkFile:</th>
+	    <th class='lightColor ps-2 text-secondary'>$langWorkFile:</th>
 	    <td>$oldFilename</td>
 	  </tr>";
 
@@ -120,11 +120,11 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
     $output .= metaCheckBoxRow($langIntentedEndUserRole, "meta_intendedenduserrole", $userRoles, $checkMap, $langIntentedEndUserRoleHelp);
 
     $output .= "<tr>
-	    <th class='bg-light ps-2 text-secondary'>&nbsp;</th>
+	    <th class='lightColor ps-2 text-secondary'>&nbsp;</th>
 	    <td class='right'><input class='btn submitAdminBtn' type='submit' value='$langOkComment' /></td>
 	  </tr>
 	  <tr>
-	    <th class='bg-light ps-2 text-secondary'>&nbsp;</th>
+	    <th class='lightColor ps-2 text-secondary'>&nbsp;</th>
 	    <td class='right'>$langNotRequired</td>
 	  </tr>
 	  </table>
@@ -156,7 +156,7 @@ function metaBuildCheckMap($values, $group) {
 
 function metaFormRow($title, $cell, $help) {
     return "<tr>
-	    <th class='bg-light ps-2 text-secondary' rowspan='2'>$title:</th>
+	    <th class='lightColor ps-2 text-secondary' rowspan='2'>$title:</th>
 	    <td>$cell</td>
 	  </tr><tr><td>$help</td></tr>";
 }

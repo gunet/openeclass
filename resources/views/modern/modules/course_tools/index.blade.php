@@ -62,17 +62,17 @@
 
                     <div class='col-12'>
                         <div class="panel panel-default">
-                            <div class='panel-heading bg-white'>
+                            <div class='panel-heading'>
                                 <h3 class='panel-title text-center'>{{ trans('langActivateCourseTools') }}</h3>
                             </div>
                             <div class='panel-body'>
                                 <form name="courseTools" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method="post" enctype="multipart/form-data">
                                     <div class="table-responsive mt-0">
                                         <table class="table-default">
-                                            <tr class='list-header'>
-                                            <th width="45%" class="text-center">{{ trans('langInactiveTools') }}</th>
-                                            <th width="10%" class="text-center">{{ trans('langMove') }}</th>
-                                            <th width="45%" class="text-center">{{ trans('langActiveTools') }}</th>
+                                            <tr class='list-header bg-light'>
+                                            <th width="45%" class="text-center text-dark">{{ trans('langInactiveTools') }}</th>
+                                            <th width="10%" class="text-center text-dark">{{ trans('langMove') }}</th>
+                                            <th width="45%" class="text-center text-dark">{{ trans('langActiveTools') }}</th>
                                             </tr>
                                             <tr>
                                                 <td class="text-center">
@@ -82,9 +82,9 @@
                                                         @endforeach
                                                     </select>
                                                 </td>
-                                                <td class="text-center" style="vertical-align: middle;">
-                                                    <button type="button" class="btn submitAdminBtn" onClick="move('inactive_box','active_box')"><span class="fa fa-arrow-right"></span></button><br><br>
-                                                    <button type="button" class="btn submitAdminBtn" onClick="move('active_box','inactive_box')"><span class="fa fa-arrow-left"></span></button>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn submitAdminBtn m-auto d-block" onClick="move('inactive_box','active_box')"><span class="fa fa-arrow-right"></span></button><br><br>
+                                                    <button type="button" class="btn submitAdminBtn m-auto d-block" onClick="move('active_box','inactive_box')"><span class="fa fa-arrow-left"></span></button>
                                                 </td>
                                                 <td class="text-center">
                                                     <select class="form-select h-100" name="toolStatActive[]" id='active_box' size='17' multiple>
@@ -95,8 +95,8 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3" class="text-center">
-                                                    <input type="submit" class="btn submitAdminBtn" value="{{ trans('langSubmit') }}" name="toolStatus" onClick="selectAll('active_box',true)" />
+                                                <td colspan="3">
+                                                    <input type="submit" class="btn submitAdminBtn m-auto d-block" value="{{ trans('langSubmit') }}" name="toolStatus" onClick="selectAll('active_box',true)" />
                                                 </td>
                                             </tr>
                                         </table>
@@ -171,8 +171,8 @@
                                             <table class='table-default'>
                                                 <tr class='bg-light'>
                                                     <th style='width:30%'>{{ trans('langTitle') }}</th>
-                                                    <th class='text-center'>{{ trans('langUnitDescr') }}</th>
-                                                    <th class='text-center'>{{ trans('langLTIAppActions') }}</th>
+                                                    <th class='text-start'>{{ trans('langUnitDescr') }}</th>
+                                                    <th class='text-start'>{{ trans('langLTIAppActions') }}</th>
                                                     @if ($is_editor)
                                                         <th class='text-center'>{!! icon('fa-gears') !!}</th>
                                                     @endif

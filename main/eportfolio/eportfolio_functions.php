@@ -153,7 +153,7 @@ function render_eportfolio_fields_form() {
     $return_string = array();
     $return_string['panels'] = "";
     $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav' style='margin-top:-8px;'>
-    <nav id='navbar-examplePortfolioEdit' class='navbar navbar-light mt-4 bg-white flex-column align-items-stretch p-3 sticky-top ShadowHelp' style='z-index:2;'>
+    <nav id='navbar-examplePortfolioEdit' class='navbar navbar-light mt-4 bg-white flex-column align-items-stretch p-3 sticky-top Borders basicBorderSolid' style='z-index:2;'>
         <nav class='nav nav-pills flex-column'>";
 
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");
@@ -173,7 +173,7 @@ function render_eportfolio_fields_form() {
                                        <div class="panel-heading">
                                            <h2 class="panel-title">'.$c->name.'</h2>
                                        </div>
-                                       <div class="panel-body ps-3 pe-3 pb-3 pt-2 panel-body-eportfolio-edit">
+                                       <div class="panel-body">
                                            <fieldset>';
             if ($j == 0) {
                 $active = " class='active'";
@@ -195,7 +195,7 @@ function render_eportfolio_fields_form() {
                     $form_class = 'form-group has-error';
                     $help_block = '<span class="help-block">' . Session::getError('epf_'.$f->shortname) . '</span>';
                 } else {
-                    $form_class = 'form-group';
+                    $form_class = 'form-group mb-4';
                     $help_block = '';
                 }
                 

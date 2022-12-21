@@ -276,13 +276,13 @@ function display_attendance_activities($attendance_id) {
     if (count($result) > 0) {
         $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
-                        <tr style='background:#f5f5f5;'><th class='control-label-notes text-center' colspan='5'>$langAttendanceActList</th></tr>
-                        <tr class='list-header'>
-                            <th>$langTitle</th>
-                            <th>$langDate</th>
-                            <th>$langType</th>
-                            <th>$langStudents</th>
-                            <th class='text-center'><i class='fa fa-cogs'></i></th>
+                        <tr class='list-header'><th class='control-label-notes text-center' colspan='5'>$langAttendanceActList</th></tr>
+                        <tr class='list-header lightColor'>
+                            <th class='text-dark'>$langTitle</th>
+                            <th class='text-dark'>$langDate</th>
+                            <th class='text-dark'>$langType</th>
+                            <th class='text-dark'>$langStudents</th>
+                            <th class='text-center text-dark'><i class='fa fa-cogs'></i></th>
 
                         </tr>";
         foreach ($result as $details) {

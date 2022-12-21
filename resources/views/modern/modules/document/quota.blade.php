@@ -72,9 +72,7 @@
                                     <div class='form-group mt-4'>
                                         <label class='col-sm-12 control-label-notes'>{{ trans('langQuotaPercentage') }}</label>
                                         <div class='col-sm-9'>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" style="min-width: 2em; width: {{$diskUsedPercentage}}%;" aria-valuenow="{{$diskUsedPercentage}}" aria-valuemin="0" aria-valuemax="100">{{$diskUsedPercentage}}%</div>
-                                            </div>
+                                            <div role='progressbar' aria-valuenow={{$diskUsedPercentage}} aria-valuemin='0' aria-valuemax='100' style='--value: {{$diskUsedPercentage}}; --size: 6rem;'></div>
                                         </div>
                                     </div>
 

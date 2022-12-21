@@ -171,20 +171,20 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                            success = save_grade(this);
                         });
                         if (success) {
-                            $('a#submitButton').removeClass('btn-primary').addClass('btn-success');
+                            $('a#submitButton').removeClass('submitAdminBtn').addClass('successAdminBtn pe-none');
                             $('#text_submit').text('".js_escape($langGradebookLimit)."');
                         }
                     });
                     $('a#ungraded').click(function(e){
                         e.preventDefault();
-                        $('a#all').removeClass('btn-primary').addClass('btn-default');
-                        $(this).removeClass('btn-default').addClass('btn-primary');
+                        $('a#all').removeClass('submitAdminBtn').addClass('cancelAdminBtn');
+                        $(this).removeClass('cancelAdminBtn').addClass('submitAdminBtn');
                         $('table.graded').hide('slow');
                     });
                     $('a#all').click(function(e){
                         e.preventDefault();
-                        $('a#ungraded').removeClass('btn-primary').addClass('btn-default');
-                        $(this).removeClass('btn-default').addClass('btn-primary');
+                        $('a#ungraded').removeClass('submitAdminBtn').addClass('cancelAdminBtn');
+                        $(this).removeClass('cancelAdminBtn').addClass('submitAdminBtn');
                         $('table.graded').show('slow');
                     });
                 });
@@ -275,13 +275,13 @@ if (!empty($exerciseDescription)) {
 
 $tool_content .= "</div></div>";
 
-$tool_content .= "<div class='row margin-bottom-fat'>
-    <div class='col-md-5 col-md-offset-7'>";
+$tool_content .= "<div class='row margin-bottom-fat mt-3'>
+    <div class='col-12 d-flex justify-content-center align-items-center'>";
 if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
     $tool_content .= "
             <div class='btn-group btn-group-sm' style='float:right;'>
-                <a class='btn submitAdminBtn' id='all'>$langAllExercises</a>
-                <a class='btn cancelAdminBtn ms-1' id='ungraded'>$langAttemptPending</a>
+                <a class='btn submitAdminBtn rounded-pill' id='all'>$langAllExercises</a>
+                <a class='btn cancelAdminBtn rounded-pill ms-1' id='ungraded'>$langAttemptPending</a>
             </div>";
 }
 $tool_content .= "
@@ -326,9 +326,9 @@ if (count($exercise_question_ids) > 0) {
         $question_graded = is_null($question_weight) ? FALSE : TRUE;
 
         $tool_content .= "<div class='panel panel-admin mt-3'>";
-        $tool_content .= "<div class='panel-body Borders'>";
+        $tool_content .= "<div class='panel-body Borders p-0'>";
         $tool_content .= "
-            <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default'>
+            <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default mb-0'>
             <tr class='active'>
               <td colspan='2'>
                 <strong><u>$langQuestion</u>: $i</strong>";
@@ -741,7 +741,7 @@ if ($checking) {
 }
 
 if ($is_editor) {
-    $tool_content .= "<div class='text-center'><a class='btn submitAdminBtn' href='index.php' id='submitButton'><span id='text_submit'>$langSubmit</span></a></div>";
+    $tool_content .= "<div class='col-12 d-flex justify-content-center align-items-center mt-5'><a class='btn submitAdminBtn' href='index.php' id='submitButton'><span id='text_submit' class='vsmall-text'>$langSubmit</span></a></div>";
 }
 
 draw($tool_content, 2, null, $head_content);
