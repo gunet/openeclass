@@ -3028,6 +3028,7 @@ function token_validate($info, $token, $ts_valid_time = 0) {
  * http://code.google.com/p/cut-html-string/
  */
 class HtmlCutString {
+    private $tempDiv, $charCount, $postfix, $postfix_text, $encoding, $limit, $newDiv;
 
     function __construct($string, $limit, $postfix) {
         // create dom element using the html string
