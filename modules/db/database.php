@@ -286,7 +286,9 @@ final class Database {
 
         /* flatten parameter array */
         $flatten = array();
-        $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($variables));
+        $arrayit = new RecursiveArrayIterator($variables);
+        $arrayit->setFlags(RecursiveArrayIterator::CHILD_ARRAYS_ONLY);
+        $it = new RecursiveIteratorIterator($arrayit);
         foreach ($it as $v) {
             $flatten[] = $v;
         }
