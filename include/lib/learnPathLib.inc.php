@@ -899,22 +899,22 @@ function seconds_to_scorm_time($time) {
  * This function allows to see if a time string is the SCORM 2004 requested format:
  * timeinterval(second,10,2): PThHmMsS
  *
- * @param string $time a suspected SCORM 2004 time value, returned by the javascript API
+ * @param ?string $time a suspected SCORM 2004 time value, returned by the javascript API
  */
-function isScorm2004Time(string $time): bool {
+function isScorm2004Time(?string $time): bool {
     return preg_match(SCORM_2004_TIME_MASK, $time);
 }
 
 /**
  * This function allow to see if a time string is the SCORM requested format : hhhh:mm:ss.cc
  *
- * @param string $time a suspected SCORM time value, returned by the javascript API
+ * @param ?string $time a suspected SCORM time value, returned by the javascript API
  */
-function isScormTime(string $time): bool {
+function isScormTime(?string $time): bool {
     return preg_match(SCORM_TIME_MASK, $time);
 }
 
-function extractScormTime(string $time): array {
+function extractScormTime(?string $time): array {
     preg_match(SCORM_TIME_MASK, $time, $matches);
     $hours = intval($matches[1] ?? 0);
     $minutes = intval($matches[2] ?? 0);
@@ -923,7 +923,7 @@ function extractScormTime(string $time): array {
     return array($hours, $minutes, $seconds, $primes);
 }
 
-function extractScorm2004Time(string $time): array {
+function extractScorm2004Time(?string $time): array {
     preg_match(SCORM_2004_TIME_MASK, $time, $matches);
     $hours = intval($matches[2] ?? 0);
     $minutes = intval($matches[4] ?? 0);
@@ -1005,33 +1005,25 @@ function calculateScormTime(int $hours1, int $minutes1, int $seconds1, int $prim
  * This function allow to add times saved in the SCORM 2004 requested format:
  * timeinterval(second,10,2): PThHmMsS
  *
- * @param string $time1 a suspected SCORM 1.2 time value, total_time,  in the API
- * @param string $time2 a suspected SCORM 2004 time value, session_time to add, in the API
+ * @param ?string $time1 a suspected SCORM 1.2 time value, total_time, in the API
+ * @param ?string $time2 a suspected SCORM 2004 time value, session_time to add, in the API
  */
-function addScorm2004Time(string $time1, string $time2): string {
-    if (isScorm2004Time($time2)) {
-        list($hours1, $minutes1, $seconds1, $primes1) = extractScormTime($time1);
-        list($hours2, $minutes2, $seconds2, $primes2) = extractScorm2004Time($time2);
-        return calculateScormTime($hours1, $minutes1, $seconds1, $primes1, $hours2, $minutes2, $seconds2, $primes2);
-    } else {
-        return $time1;
-    }
+function addScorm2004Time(?string $time1, ?string $time2): string {
+    list($hours1, $minutes1, $seconds1, $primes1) = extractScormTime($time1);
+    list($hours2, $minutes2, $seconds2, $primes2) = extractScorm2004Time($time2);
+    return calculateScormTime($hours1, $minutes1, $seconds1, $primes1, $hours2, $minutes2, $seconds2, $primes2);
 }
 
 /**
  * This function allow to add times saved in the SCORM requested format: hhhh:mm:ss.cc
  *
- * @param string $time1 a suspected SCORM time value, total_time,  in the API
- * @param string $time2 a suspected SCORM time value, session_time to add, in the API
+ * @param ?string $time1 a suspected SCORM time value, total_time, in the API
+ * @param ?string $time2 a suspected SCORM time value, session_time to add, in the API
  */
-function addScormTime(string $time1, string $time2): string {
-    if (isScormTime($time2)) {
-        list($hours1, $minutes1, $seconds1, $primes1) = extractScormTime($time1);
-        list($hours2, $minutes2, $seconds2, $primes2) = extractScormTime($time2);
-        return calculateScormTime($hours1, $minutes1, $seconds1, $primes1, $hours2, $minutes2, $seconds2, $primes2);
-    } else {
-        return $time1;
-    }
+function addScormTime(?string $time1, ?string $time2): string {
+    list($hours1, $minutes1, $seconds1, $primes1) = extractScormTime($time1);
+    list($hours2, $minutes2, $seconds2, $primes2) = extractScormTime($time2);
+    return calculateScormTime($hours1, $minutes1, $seconds1, $primes1, $hours2, $minutes2, $seconds2, $primes2);
 }
 
 /*
