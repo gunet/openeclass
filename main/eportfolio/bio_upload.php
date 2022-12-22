@@ -108,16 +108,14 @@ if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
 }
 $tool_content .= 
     "<div class='col-12'><div class='alert alert-info'>$langBioPermFileType ".sprintf($langBioMaxSize, get_config('bio_quota'))."</div></div>
-     <div class='input-group'>
-        <label for='bio' class='input-group-text ps-2 pe-2 pt-0 pb-0 fs-6 textFileUpload'>$label</label>
-        
-            $bio" . fileSizeHidenInput() . "
-            <input type='file' name='bio' class='form-control'>
-        
-    </div>
+        <div class='row'>
+            <label for='bio' class='control-label-notes text-uppercase'>$label</label>
+            <div class='d-inline-flex'>$bio" . fileSizeHidenInput() . "</div>
+            <div class='col-12 mt-3'><input type='file' name='bio' class='form-control'></div>
+        </div>
 
 
-    <div class='form-group mt-3'>
+    <div class='form-group mt-5'>
         <div class='col-12 d-flex justify-content-center align-items-center'>
             <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
             <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn ms-1'>$langCancel</a>

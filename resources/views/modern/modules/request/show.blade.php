@@ -154,9 +154,11 @@
                                     <button class='btn submitAdminBtn' type='submit' name='assignToSelf'>{{ trans('langTakeRequest') }}</button>
                                 @endif
                                 @if ($can_modify)
-                                    <button class='btn submitAdminBtn' type='button' data-bs-toggle='modal' data-bs-target='#assigneesModal'>{{ trans("m['WorkAssignTo']") }}...</button>
-                                    <button class='btn submitAdminBtn' type='button' data-bs-toggle='modal' data-bs-target='#watchersModal'>{{ trans("langWatchers") }}...</button>
+                                <div class='d-flex'>
+                                    <button class='btn submitAdminBtn me-1' type='button' data-bs-toggle='modal' data-bs-target='#assigneesModal'>{{ trans("m['WorkAssignTo']") }}...</button>
+                                    <button class='btn submitAdminBtn me-1' type='button' data-bs-toggle='modal' data-bs-target='#watchersModal'>{{ trans("langWatchers") }}...</button>
                                     <a class='btn submitAdminBtn' href='{{ $editUrl }}'>{{ trans("langElaboration") }}...</a>
+                                </div>
                                 @endif
                                 </p>
                             </form>

@@ -56,18 +56,18 @@ function display_certificates() {
 
                 <div class='col-12 mt-3'>
                     <div class='panel panel-default'>
-                        <div class='panel-heading pt-1 pb-1'>
-                            <div class='row'>
-                                <div class='col-md-7 col-6 d-flex justify-content-start align-items-center'>
+                        <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                            <div class='row w-100'>
+                                <div class='col-md-7 col-6 d-flex justify-content-start align-items-center ps-0'>
                                     $langCertificates
                                 </div>
-                                <div class='col-md-5 col-6 d-flex justify-content-end align-items-center'>
+                                <div class='col-md-5 col-6 d-flex justify-content-end align-items-center pe-0'>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span> <span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate</span></a>
                                 </div>
                             </div>
                         </div>
-                        <div class='panel-body'>
-                            <div class='res-table-wrapper shadow-sm p-3 rounded'>";
+                        <div class='panel-body pt-0'>
+                            <div class='res-table-wrapper'>";
     if (count($sql_cer) == 0) { // If no certificates
         $tool_content .= "<p class='text-center text-muted'>$langNoCertificates</p>";
     } else { // If there are certificates
@@ -81,7 +81,7 @@ function display_certificates() {
             $thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
             $template_thumbnail = $urlServer . CERT_TEMPLATE_PATH . $thumbnail_filename;
             $tool_content .= "
-            <div class='row res-table-row border-0 lightColor p-3 mt-2'>
+            <div class='row res-table-row border-0 p-3 mt-2'>
                 <div class='col-2 text-md-start text-center'>
                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1' target=_blank>
                     <img class='mt-md-0 mt-4' src='$template_thumbnail' title='$template_name'>
@@ -163,18 +163,18 @@ function display_badges() {
         $tool_content .= "
                 <div class='col-12 mt-3'>
                     <div class='panel panel-default'>
-                        <div class='panel-heading pt-1 pb-1'>
-                            <div class='row'>
-                                <div class='col-md-7 col-6 d-flex justify-content-start align-items-center'>
+                        <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                            <div class='row w-100'>
+                                <div class='col-md-7 col-6 d-flex justify-content-start align-items-center ps-0'>
                                     $langBadges
                                 </div>
-                                <div class='col-md-5 col-6 d-flex justify-content-end align-items-center'>
+                                <div class='col-md-5 col-6 d-flex justify-content-end align-items-center pe-0'>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
                                 </div>
                             </div>
                         </div>
-                        <div class='panel-body'>
-                            <div class='res-table-wrapper shadow-sm p-3 rounded'>";
+                        <div class='panel-body pt-0'>
+                            <div class='res-table-wrapper'>";
 
     if (count($sql_cer) == 0) { // no badges
         $tool_content .= "<p class='text-center text-muted'>$langNoBadges</p>";
@@ -188,7 +188,7 @@ function display_badges() {
             $badge_icon = $badge_details[$badge_name];
             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_icon";
             $tool_content .= "
-                                <div class='row res-table-row border-0 lightColor p-3 mt-2'>
+                                <div class='row res-table-row border-0 p-3 mt-2'>
                                     <div class='col-3 text-md-start text-center'>
                                         <img class='' src='$icon_link'>
                                     </div>
@@ -261,8 +261,8 @@ function display_course_completion() {
                                 </div>
                             </div>
                         </div>
-                        <div class='panel-body'>
-                            <div class='res-table-wrapper shadow-sm p-3 rounded'>";
+                        <div class='panel-body pt-2'>
+                            <div class='res-table-wrapper'>";
 
             $vis_status = $data->active ? "text-success" : "text-danger";
             $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
@@ -511,12 +511,12 @@ function display_activities($element, $id, $unit_id = 0) {
         $tool_content .= "
             <div class='col-12 mt-3'>
                 <div class='panel panel-default'>
-                    <div class='panel-heading pt-1 pb-1'>
-                        <div class='row'>
-                            <div class='col-9 d-flex justify-content-start align-items-center'>
+                    <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                        <div class='row w-100'>
+                            <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
                                 $langAttendanceActList
                             </div>
-                            <div class='col-3 d-flex justify-content-end align-items-center'>
+                            <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
                                 $addActivityBtn
                             </div>
                         </div>
@@ -585,15 +585,15 @@ function display_activities($element, $id, $unit_id = 0) {
                                 <div class='col-sm-12'>
 
                                         <div class='panel panel-default'>
-                                            <div class='panel-heading'>
-                                                <div class='row'>
-                                                    <div class='col-md-7 col-9 mt-1'>
+                                            <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                                                <div class='row w-100'>
+                                                    <div class='col-md-7 col-9 d-flex justify-content-start align-items-center ps-0'>
                                                         $langUnitCompletion
                                                     </div>
-                                                    <div class='col-md-5 col-3 text-end'>
-                                                        <div class='text-end'>
+                                                    <div class='col-md-5 col-3 d-flex justify-content-end align-items-center pe-0'>
+                                                       
                                                             $addActivityBtn
-                                                        </div>
+                                                      
                                                     </div>
                                                 </div>
                                             </div>
@@ -682,12 +682,12 @@ function display_activities($element, $id, $unit_id = 0) {
         $tool_content .= "
 
                     <div class='panel panel-default mt-3'>
-                        <div class='panel-heading'>
-                            <div class='row'>
-                                <div class='col-md-7 col-9 mt-1'>
+                        <div class='panel-heading pb-1 pt-1 d-flex justify-content-center align-items-center'>
+                            <div class='row w-100'>
+                                <div class='col-md-7 col-9 d-flex justify-content-start align-items-center ps-0'>
                                     $langUnitPrerequisites
                                 </div>
-                                <div class='col-md-5 col-3 text-end'>
+                                <div class='col-md-5 col-3 d-flex justify-content-end align-items-center pe-0'>
                                 $addPrereqBtn
                                 </div>
                             </div>
@@ -2001,12 +2001,12 @@ function display_settings($element, $element_id, $unit_id = 0) {
         $tool_content .= "
                 <div class='col-12'>
                     <div class='panel panel-default'>
-                        <div class='panel-heading pt-1 pb-1'>
-                            <div class='row'>
-                                <div class='col-9 d-flex justify-content-start align-items-center'>
+                        <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                            <div class='row w-100'>
+                                <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
                                     $langProgressBasicInfo
                                 </div>
-                                <div class='col-3 d-flex justify-content-end align-items-center'>
+                                <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn'>"
                                             . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
                                     </a>

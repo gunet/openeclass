@@ -153,7 +153,7 @@ function mail_settings_form() {
         $tool_content .= "
             <div class='panel panel-primary' id='five'>
                 <div class='panel-heading'>
-                    <h2 class='panel-title'>$langEmailSettings</h2>
+                    <div class='panel-title'>$langEmailSettings</div>
                 </div>
                 <div class='panel-body'>
                     <fieldset>";

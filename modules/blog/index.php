@@ -695,16 +695,16 @@ if ($action == "showPost") {
         $tool_content .= "
         <div class='col-sm-12'>
                         <div class='panel panel-action-btn-default'>
-                            <div class='panel-heading pt-1 pb-1'>
+                            <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
 
 
-                                    <div class='row'>
-                                        <div class='col-9 d-flex justify-content-start align-items-center'>
+                                    <div class='row w-100'>
+                                        <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
                                             <span class='panel-title'>
                                                 ".q($post->getTitle())."
                                             </span>
                                         </div>
-                                        <div class='col-3 d-flex justify-content-end align-items-center'>
+                                        <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
                                             <div>
                                                 ". action_button(array(
                                                     array(
@@ -832,14 +832,14 @@ if ($action == "showBlog") {
                 $comment_content = "<div class=\"blog_post_empty_space\"></div>";
             }
             $tool_content .= "<div class='panel panel-action-btn-default mb-3'>
-                                <div class='panel-heading pt-1 pb-1'>
-                                    <div class='row'>
-                                        <div class='col-9 d-flex justify-content-start align-items-center'>
+                                <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                                    <div class='row w-100'>
+                                        <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
                                             <span class='panel-title'>
                                                 <a class='text-white' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
                                             </span>
                                         </div>
-                                        <div class='col-3 d-flex justify-content-end align-items-center'>
+                                        <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
                                             <div>
                                                 ". action_button(array(
                                                     array(

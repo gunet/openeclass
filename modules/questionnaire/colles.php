@@ -164,7 +164,7 @@ $tool_content .= action_bar(array(
 $export_box
 <div class='panel panel-primary'>
     <div class='panel-heading'>
-        <h3 class='panel-title'>$langInfoPoll</h3>
+        <div class='panel-title'>$langInfoPoll</div>
     </div>
     <div class='panel-body'>
         <div class='row  margin-bottom-fat p-2'>
@@ -278,7 +278,7 @@ $tool_content .= "
 <div class='col-sm-12 mt-3'>
     <div class='panel panel-success'>
     <div class='panel-heading'>
-        <h3 class='panel-title'>$lcolles1</h3>
+        <div class='panel-title'>$lcolles1</div>
     </div>
     <div class='panel-body'>";
 
@@ -308,7 +308,7 @@ $tool_content .= "
 <div class='col-sm-12 mt-3'>
     <div class='panel panel-success'>
     <div class='panel-heading'>
-        <h3 class='panel-title'>$lcolles2</h3>
+        <div class='panel-title'>$lcolles2</div>
     </div>
     <div class='panel-body'>";
 
@@ -338,7 +338,7 @@ $tool_content .= "
 <div class='col-sm-12 mt-3'>
     <div class='panel panel-success'>
     <div class='panel-heading'>
-        <h3 class='panel-title'>$lcolles3</h3>
+        <div class='panel-title'>$lcolles3</div>
     </div>
     <div class='panel-body'>";
 
@@ -368,7 +368,7 @@ $tool_content .= "
 <div class='col-sm-12 mt-3'>
     <div class='panel panel-success'>
     <div class='panel-heading'>
-        <h3 class='panel-title'>$lcolles4</h3>
+        <div class='panel-title'>$lcolles4</div>
     </div>
     <div class='panel-body'>";
     $this_chart_data['question'][] = "$scolles13";
@@ -398,7 +398,7 @@ $tool_content .= "
 <div class='col-sm-12 mt-3'>
     <div class='panel panel-success'>
     <div class='panel-heading'>
-        <h3 class='panel-title'>$lcolles5</h3>
+        <div class='panel-title'>$lcolles5</div>
     </div>
     <div class='panel-body'>";
 
@@ -429,7 +429,7 @@ $tool_content .= "
 <div class='col-sm-12 mt-3'>
     <div class='panel panel-success'>
     <div class='panel-heading'>
-        <h3 class='panel-title'>$lcolles6</h3>
+        <div class='panel-title'>$lcolles6</div>
     </div>
     <div class='panel-body'>";
 

@@ -415,8 +415,8 @@ if (isset($_GET['modifyAnswers'])) {
     }
     $tool_content .= "<div class='col-sm-12'><div class='panel panel-primary'>
                       <div class='panel-heading'>
-                        <h3 class='panel-title'>$langQuestion &nbsp;" .
-                            icon('fa-edit text-white', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code".(isset($exerciseId) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . $questionId)."</h3>
+                        <div class='panel-title'>$langQuestion &nbsp;" .
+                            icon('fa-edit text-white', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code".(isset($exerciseId) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . $questionId)."</div>
                       </div>
                       <div class='panel-body'>
                             <h6><small class='fw-bold'>$questionTypeWord</small><br>" . nl2br(q_math($questionName)) . "</h6>

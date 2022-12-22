@@ -105,10 +105,9 @@
                                 @endif
 
                                 <div class="btn-group" role="group">
-                                    <button id="btnGroupDrop1" type="button" class="d-flex justify-content-center align-items-center btn submitAdminBtn dropdown-toggle user-menu-btn text-white text-capitalize"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                        <span><img class="user-icon-filename mt-0" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}"
-                                                alt="{{ $uname }}">{{ $_SESSION['uname'] }}</span>
+                                    <button id="btnGroupDrop1" type="button" class="btn submitAdminBtn dropdown-toggle user-menu-btn text-white text-capitalize" data-bs-toggle="dropdown" aria-expanded="false">
+                                           <img class="user-icon-filename mt-0" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
+                                            {{ $_SESSION['uname'] }}
                                     </button>
                                     <ul class="m-0 p-0 dropdown-menu dropdown-menu-end dropdown_menu_user shadow-lg bg-body border-0" aria-labelledby="btnGroupDrop1">
 

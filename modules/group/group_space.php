@@ -251,7 +251,7 @@ if (isset($_GET['group_as'])) {
     <div class='col-sm-12'>
         <div class='panel panel-action-btn-primary'>
             <div class='panel-heading'>
-                <h3 class='panel-title'>$langGroupInfo</h3>
+                <div class='panel-title'>$langGroupInfo</div>
             </div>
             <div class='panel-body'>
                 <div class='row'>

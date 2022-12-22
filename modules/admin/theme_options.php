@@ -504,13 +504,13 @@ $tool_content .= "
             <legend class='theme_options_legend'>$langLogoConfig</legend>
             <div class='form-group mt-3'>
                 <label for='imageUpload' class='col-sm-6 control-label-notes'>$langLogo <small>$langLogoNormal</small>:</label>
-                <div class='col-sm-12'>
+                <div class='col-sm-12 d-inline-flex'>
                    $logo_field
                 </div>
             </div>
             <div class='form-group mt-3'>
                 <label for='imageUploadSmall' class='col-sm-6 control-label-notes'>$langLogo <small>$langLogoSmall</small>:</label>
-                <div class='col-sm-12'>
+                <div class='col-sm-12 d-inline-flex'>
                    $small_logo_field
                 </div>
             </div>
@@ -526,7 +526,7 @@ $tool_content .= "
             </div>
             <div class='form-group mt-3'>
                 <label for='imageBg' class='col-sm-6 control-label-notes'>$langBgImg:</label>
-                <div class='col-sm-12'>
+                <div class='col-sm-12 d-inline-flex'>
                    $bg_field
                 </div>
                 <div class='form-inline col-sm-9 col-sm-offset-3 mt-2'>
@@ -587,7 +587,7 @@ $tool_content .= "
             </div>
             <div class='form-group mt-3'>
                 <label for='loginImg' class='col-sm-6 control-label-notes'>$langLoginImg:</label>
-                <div class='col-sm-12'>
+                <div class='col-sm-12 d-inline-flex'>
                    $login_image_field
                 </div>
             </div>
@@ -685,10 +685,10 @@ $tool_content .= "
     <div role='tabpanel' class='tab-pane' id='messages'>...</div>
     <div role='tabpanel' class='tab-pane' id='settings'>...</div>
   </div>
-    <div class='form-group mt-3'>
-        <div class='col-sm-9 col-sm-offset-3'>
-            ".($theme_id ? "<input class='btn submitAdminBtn' name='optionsSave' type='submit' value='$langSave'>" : "")."
-            <input class='btn submitAdminBtn mb-md-0 mb-2' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
+    <div class='form-group mt-5'>
+        <div class='col-12 d-flex justify-content-center align-items-center'>
+            ".($theme_id ? "<input class='btn submitAdminBtn me-1' name='optionsSave' type='submit' value='$langSave'>" : "")."
+            <input class='btn submitAdminBtn mb-md-0 mb-2 me-1' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
             ".($theme_id ? "<a class='btn submitAdminBtn' href='theme_options.php?export=true'>$langExport</a>" : "")."
         </div>
     </div>

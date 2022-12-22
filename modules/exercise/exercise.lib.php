@@ -56,10 +56,10 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
     $tool_content .= "
             <div class='panel panel-default qPanel mt-3' id='qPanel$questionId'>
               <div class='panel-heading'>
-                <h6 class='panel-title'>$langQuestion $qNumber
+                <div class='panel-title'>$langQuestion $qNumber
                     <small>($questionTypeWord &mdash; $questionWeight $message)</small>&nbsp;
                     <span title='$langHasAnswered' id='qCheck$question_number'></span>
-                </h6>
+                </div>
             </div>
             <div class='panel-body'>
                 <h6 class='mb-2'>" . q_math($questionName) . "</h6>
@@ -319,11 +319,11 @@ function display_exercise($exercise_id) {
     $tool_content .= "
     <div class='col-12'><div class='panel panel-primary'>
             <div class='panel-heading'>
-              <h3 class='panel-title'>" . q_math($exercise->selectTitle()) . "
+              <div class='panel-title'>" . q_math($exercise->selectTitle()) . "
                 <a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes'>
                   <span class='fa fa-edit text-white' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
                 </a>
-              </h3>
+              </div>
             </div>
             <div class='panel-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>
         </div>

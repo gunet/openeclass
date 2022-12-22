@@ -397,7 +397,7 @@ function show_submission_details($id) {
     <div class='col-12 mt-3'>
         <div class='panel panel-default'>
             <div class='panel-heading'>
-                <h4 class='panel-title'>$m[SubmissionWorkInfo]</h4>
+                <div class='panel-title'>$m[SubmissionWorkInfo]</div>
             </div>
             <div class='panel-body'>
                 <div class='row p-2 margin-bottom-fat'>

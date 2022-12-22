@@ -70,7 +70,7 @@ $tool_content .= "
 <div class='col-sm-12'>
 <div class='panel panel-default panel-action-btn-default mt-3'>
     <div class='panel-heading'>
-        <h3 class='panel-title text-center'><span class='fas fa-tools orangeText pe-2'></span>" . $langCourseCategoryActions . "</h3>
+        <div class='panel-title text-center'><span class='fas fa-tools pe-2'></span>" . $langCourseCategoryActions . "</div>
 
     </div>
     <div class='panel-body'>

@@ -229,7 +229,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
 
 echo "<div class='panel panel-primary'>
     <div class='panel-heading'>
-        <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>
+        <div class='panel-title'>" . q_math($exerciseTitle) . "</div>
     </div>";
 if (!empty($exerciseDescription_temp)) {
     echo "<div class='panel-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";

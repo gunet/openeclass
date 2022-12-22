@@ -104,7 +104,7 @@ $navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langQuesti
 $tool_content .= "
     <div class='panel panel-action-btn-primary'>
         <div class='panel-heading'>
-            <h3 class='panel-title'>$langSurvey</h3>
+            <div class='panel-title'>$langSurvey</div>
         </div>
         <div class='panel-body'>
             <div class='row margin-bottom-thin p-2'>

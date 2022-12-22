@@ -63,7 +63,7 @@
                     <div class='col-12'>
                         <div class="panel panel-default">
                             <div class='panel-heading'>
-                                <h3 class='panel-title text-center'>{{ trans('langActivateCourseTools') }}</h3>
+                                <div class='panel-title text-center'>{{ trans('langActivateCourseTools') }}</div>
                             </div>
                             <div class='panel-body'>
                                 <form name="courseTools" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method="post" enctype="multipart/form-data">

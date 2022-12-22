@@ -149,7 +149,7 @@ $tool_content .= action_bar(array(
 $export_box
 <div class='panel panel-primary'>
     <div class='panel-heading'>
-        <h3 class='panel-title'>$langInfoPoll</h3>
+        <div class='panel-title'>$langInfoPoll</div>
     </div>
     <div class='panel-body'>
         <div class='row  margin-bottom-fat p-2'>
@@ -330,7 +330,7 @@ $tool_content .= "
 <div class='col-sm-12 mt-3'>
 <div class='panel panel-success'>
     <div class='panel-heading'>
-        <h3 class='panel-title'>$lang_result_summary</h3>
+        <div class='panel-title'>$lang_result_summary</div>
     </div>
     <div class='panel-body'>
         <h6>$lang_ckw_skw_chart</h6>";

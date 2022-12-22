@@ -1,8 +1,8 @@
                 <div class="panel panel-primary mt-3">
                     <div class="panel-heading">
-                        <h4 class="panel-title">                
+                        <div class="panel-title">                
                             {{ trans('langHomePageSidebarContent') }}
-                        </h4>
+                        </div>
                     </div>
                     <div class="panel-body Borders" id="home_widget_sidebar" data-widget-area-id="2">
                         @foreach ($home_sidebar_widgets as $key => $home_sidebar_widget)

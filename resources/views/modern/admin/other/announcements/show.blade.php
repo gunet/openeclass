@@ -23,7 +23,7 @@
                         <div class='col-sm-12'>
                             <div class="panel panel-default">
                                 <div class="panel-heading">                   
-                                    <div class='panel-title text-dark fw-bold'>{{$announcementsID->title}}</div>
+                                    <div class='panel-title'>{{$announcementsID->title}}</div>
                                 </div>
                                 <div class="panel-body">
                                     <span class="text-secondary">

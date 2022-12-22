@@ -23,7 +23,7 @@
                     <div class="col-12">
                         <div class="panel panel-default">
                             <div class='panel-heading'>
-                                <div class='panel-title text-dark fw-bold'>{!! $title !!}</div>
+                                <div class='panel-title'>{!! $title !!}</div>
                             </div>
                         
                             <div class="panel-body">

@@ -144,7 +144,7 @@ $TotalExercisesUngraded = Database::get()->querySingle("SELECT COUNT(eurid) AS u
 
 $tool_content .= "<div class='panel panel-primary'>
                 <div class='panel-heading'>
-                  <h3 class='panel-title'>" .$langQuestionCorrectionTitle . "</h3>
+                  <div class='panel-title'>" .$langQuestionCorrectionTitle . "</div>
                   <h5>" . $langQuestionCorrectionTitle2 . $TotalExercisesUngraded->ungraded_answers . $langUngradedAnswers . "</h5>
                 </div>
                 <div class='panel-body'>";

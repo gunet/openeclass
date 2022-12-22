@@ -36,17 +36,17 @@
 
                     @if ($u_account && $c)
                     <div class='col-12'>
-                        <div class='shadow-sm p-3 bg-body rounded'>
+                        
                             <div class='alert alert-warning'>
                                 {{ trans('langConfirmDeleteQuestion1') }} 
                                 <em>{{ $u_realname }} ({{ $u_account }})</em>
                                 {{ trans('langConfirmDeleteQuestion2') }} 
                                 <em>{{ course_id_to_title($c) }}</em>
                             </div>
-                            <div class='col-sm-offset-5'>
+                            <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                 <a class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?u={{ $u }}&amp;c={{ $c }}&amp;doit=yes'>{{ trans('langDelete') }}</a>
                             </div>
-                        </div>
+                       
                     </div>
                     @else
                     <div class='col-12'>

@@ -61,7 +61,7 @@ function render_eportfolio_fields_content($uid) {
             <div class="col-sm-12 mt-3">
             <div class="panel panel-default" id="IndexPortfolio'.$c->id.'">
                                                 <div class="panel-heading">
-                                                        <span class="panel-title">'.$c->name.'</span>
+                                                        <div class="panel-title">'.$c->name.'</div>
                                                     </div>
                                                  <div class="panel-body">
                                                      
@@ -171,7 +171,7 @@ function render_eportfolio_fields_form() {
             <div class="row p-2"></div>
             <div class="panel panel-default" id="EditPortfolio'.$c->id.'">
                                        <div class="panel-heading">
-                                           <h2 class="panel-title">'.$c->name.'</h2>
+                                           <div class="panel-title">'.$c->name.'</div>
                                        </div>
                                        <div class="panel-body">
                                            <fieldset>';

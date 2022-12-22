@@ -958,45 +958,53 @@ switch ($action) {
 }
 $print_button = icon('fa-print', $langWikiPagePrintable, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=show&amp;printable=yes&amp;versionId=$versionId&amp;title=". rawurlencode($wiki_title));
 if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes")) {
-        $tool_content .= "<div class='col-sm-12'><div class='panel panel-action-btn-default'>
-                                <div class='panel-heading'>
-                                    <div class='float-end'>
-                                        ".action_button(array(
-                                          array(
-                                              'title' => $langWikiEditPage,
-                                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=".$wiki->getWikiId()."&amp;action=edit&amp;title=". rawurlencode($wiki_title). "&amp;versionId=$versionId",
-                                              'icon' => 'fa-edit',
-                                              'show' => ($is_allowedToEdit || $is_allowedToCreate),
-                                              'level' => 'primary-label',
-                                          ),
-                                          array(
-                                              'title' => $langWikiPageHistory,
-                                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=history&amp;title=". rawurlencode($wiki_title),
-                                              'icon' => 'fa-history'
-                                          ),
-                                          array(
-                                              'title' => $langWikiPagePrintable,
-                                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=show&amp;printable=yes&amp;versionId=$versionId&amp;title=". rawurlencode($wiki_title),
-                                              'icon' => 'fa-print'
-                                          )    ,
-                                          array(
-                                              'title' => $langWikiDeletePage,
-                                              'class' => 'delete',
-                                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=".$wiki->getWikiId()."&amp;action=delete&amp;title=".rawurlencode($wiki_title),
-                                              'icon' => 'fa-times',
-                                              'confirm' => $langWikiDeletePageWarning,
-                                              'show' => ($is_allowedToEdit || $is_allowedToCreate) && $wiki_title != "__MainPage__" && $is_editor
-                                          )
-                                        ))."
+        $tool_content .= "<div class='col-12'>
+                            <div class='panel panel-action-btn-default'>
+                                <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                                    <div class='row w-100'>
+                                        <div class='col-7 d-flex justify-content-start align-items-center ps-0'>
+                                            <div class='panel-title'>
+                                                ". ( $wiki_title != "__MainPage__" ? $wiki_title : $langWikiMainPage) ."
+                                            </div>
+                                        </div>
+                                        <div class='col-5 d-flex justify-content-end align-items-center pe-0'>
+                                            <div>
+                                                ".action_button(array(
+                                                    array(
+                                                        'title' => $langWikiEditPage,
+                                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=".$wiki->getWikiId()."&amp;action=edit&amp;title=". rawurlencode($wiki_title). "&amp;versionId=$versionId",
+                                                        'icon' => 'fa-edit',
+                                                        'show' => ($is_allowedToEdit || $is_allowedToCreate),
+                                                        'level' => 'primary-label',
+                                                    ),
+                                                    array(
+                                                        'title' => $langWikiPageHistory,
+                                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=history&amp;title=". rawurlencode($wiki_title),
+                                                        'icon' => 'fa-history'
+                                                    ),
+                                                    array(
+                                                        'title' => $langWikiPagePrintable,
+                                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=show&amp;printable=yes&amp;versionId=$versionId&amp;title=". rawurlencode($wiki_title),
+                                                        'icon' => 'fa-print'
+                                                    )    ,
+                                                    array(
+                                                        'title' => $langWikiDeletePage,
+                                                        'class' => 'delete',
+                                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=".$wiki->getWikiId()."&amp;action=delete&amp;title=".rawurlencode($wiki_title),
+                                                        'icon' => 'fa-times',
+                                                        'confirm' => $langWikiDeletePageWarning,
+                                                        'show' => ($is_allowedToEdit || $is_allowedToCreate) && $wiki_title != "__MainPage__" && $is_editor
+                                                    )
+                                                  ))."
+                                            </div>
+                                        </div>
                                     </div>
-                                    <h3 class='panel-title'>
-                                        ". ( $wiki_title != "__MainPage__" ? $wiki_title : $langWikiMainPage) ."
-                                     </h3>
                                 </div>
                                 <div class='panel-body'>
                                     ". (isset($wiki_content) ? $wiki_content : "") ."
                                 </div>
-                          </div></div>";
+                            </div>
+                        </div>";
 }
 add_units_navigation(TRUE);
 if (isset($_GET['printable']) and $_GET['printable']=="yes") {

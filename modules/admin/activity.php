@@ -226,12 +226,12 @@ $(function() {
         <div class='panel-heading'>
           <div class='row'>
             <div class='col-md-6 col-12'>
-                <span class='control-label-notes'>$heading</span>
+                <span class='panel-title'>$heading</span>
             </div>
             <div class='col-md-6 col-12'>
-                <div class='text-end text-secondary'>$type " .
-                    icon('fa-edit', $langEdit, 'activity.php?edit=' . $indirectId) . "
-                    <a class='confirm-delete' href='activity.php?delete=$indirectId' title='$langDelete' data-bs-toggle='tooltip'>
+                <div class='d-flex justify-content-end align-items-center'>$type " .
+                    icon('fa-edit pe-2', $langEdit, 'activity.php?edit=' . $indirectId) . "
+                    <a class='confirm-delete pe-2' href='activity.php?delete=$indirectId' title='$langDelete' data-bs-toggle='tooltip'>
                         <span class='fa fa-times delete_btn text-danger'></span><span class='sr-only'>$langDelete</span></a>
                     <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
                 </div>

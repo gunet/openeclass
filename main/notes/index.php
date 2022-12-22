@@ -216,20 +216,29 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     $tool_content .= "
     <div class='col-sm-12'>
         <div class='panel panel-action-btn-default'>
-            <div class='panel-heading'>
-                <div class='float-end'>".
-                    action_button(array(
-                        array('title' => $langEditChange,
-                            'url' => "$_SERVER[SCRIPT_NAME]?modify=".getIndirectReference($note->id),
-                            'icon' => 'fa-edit'),
-                        array('title' => $langDelete,
-                            'url' => "$_SERVER[SCRIPT_NAME]?delete=".getIndirectReference($note->id),
-                            'confirm' => $langSureToDelNote,
-                            'class' => 'delete',
-                            'icon' => 'fa-times')
-                    ))
-               ."</div>
-                <h3 class='panel-title'>".q($note->title)."</h3>
+            <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+
+                <div class='row w-100'>
+                    <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
+                        <div class='panel-title'>".q($note->title)."</div>
+                    </div>
+                    <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
+                        <div>
+                        ".
+                        action_button(array(
+                            array('title' => $langEditChange,
+                                'url' => "$_SERVER[SCRIPT_NAME]?modify=".getIndirectReference($note->id),
+                                'icon' => 'fa-edit'),
+                            array('title' => $langDelete,
+                                'url' => "$_SERVER[SCRIPT_NAME]?delete=".getIndirectReference($note->id),
+                                'confirm' => $langSureToDelNote,
+                                'class' => 'delete',
+                                'icon' => 'fa-times')
+                        ))
+                   ."
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class='panel-body'>
                 <div class='btn btn-info btn-sm rounded-pill text-white pe-none'>". format_locale_date(strtotime($note->date_time)). "</div><br><br>

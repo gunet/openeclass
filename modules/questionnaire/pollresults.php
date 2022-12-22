@@ -154,7 +154,7 @@ $export_box
 <div class='col-12'>
 <div class='panel panel-primary'>
     <div class='panel-heading'>
-        <h3 class='panel-title'>$langInfoPoll</h3>
+        <div class='panel-title'>$langInfoPoll</div>
     </div>
     <div class='panel-body'>
         <div class='row p-2 margin-bottom-fat'>
@@ -215,7 +215,7 @@ if ($PollType == POLL_NORMAL) {
             <div class='col-sm-12 mt-3'>
             <div class='panel panel-success'>
                 <div class='panel-heading'>
-                    <h3 class='panel-title'>$langQuestion $j</h3>
+                    <div class='panel-title'>$langQuestion $j</div>
                 </div>
                 <div class='panel-body'>
                     <!--h4>".q_math($theQuestion->question_text)."</h4-->";

@@ -65,12 +65,12 @@ function display_learning_analytics() {
 
             <div class='col-12'>
                 <div class='panel panel-default'>
-                    <div class='panel-heading'>
-                        <div class='row'>
-                            <div class='col-xl-7 col-lg-7 col-md-7 col-sm-9 col-9 mt-1'>
-                                $langLearningAnalytics
+                    <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                        <div class='row w-100'>
+                            <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
+                                <div class='panel-title'>$langLearningAnalytics</div>
                             </div>
-                            <div class='col-xl-5 col-lg-5 col-md-5 col-sm-3 col-3 d-flex justify-content-end'>
+                            <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>$langAdd</span></a>
                             </div>
                         </div>
@@ -172,9 +172,9 @@ function display_general_lists($analytics_id) {
         $tool_content .= "
                 <div class='col-12 mt-3'>
                     <div class='panel panel-default'>
-                        <div class='panel-heading'>
-                            <div class='row'>
-                                <div class='col-sm-12'>
+                        <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                            <div class='row w-100'>
+                                <div class='col-12 d-flex justify-content-start align-items-center ps-0'>
                                     <strong>
                                         <a data-bs-toggle='collapse' href='#LearnAnalyticsResource$module_id' aria-expanded='false' aria-controls='LearnAnalyticsResource$module_id'>
                                         <i class='fa fa-arrow-down'>" . get_resource_info($resource, $module_id) . "</a></i>
@@ -298,12 +298,12 @@ function display_analytics_elements($analytics_id) {
     $tool_content .= "
         <div class='col-12'>
             <div class='panel panel-default'>
-                <div class='panel-heading'>
-                    <div class='row'>
-                        <div class='col-xl-7 col-lg-7 col-md-7 col-sm-9 col-9 mt-1'>
-                            $langAnalyticsParameters
+                <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                    <div class='row w-100'>
+                        <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
+                            <div class='panel-title'>$langAnalyticsParameters</div>
                         </div>
-                        <div class='col-xl-5 col-lg-5 col-md-5 col-sm-9 col-3 text-end'>
+                        <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
                             $addParametersBtn
                         </div>
                     </div>
@@ -330,7 +330,7 @@ function display_analytics_information($analytics_id) {
     
     $title = $sql_data->title;
     $description = $sql_data->description;
-    $active_vis = $sql_data->active ? "text-success" : "text-danger";
+    $active_vis = $sql_data->active ? "text-success TextExtraBold text-uppercase" : "text-danger TextExtraBold text-uppercase";
     $active_msg = $sql_data->active ? $langActive : $langInactive;
     $start_date = format_locale_date(strtotime($sql_data->start_date), 'short', false);
     $end_date = format_locale_date(strtotime($sql_data->end_date), 'short', false);
@@ -339,12 +339,12 @@ function display_analytics_information($analytics_id) {
     $tool_content .= "
         <div class='col-12'>
             <div class='panel panel-default'>
-                <div class='panel-heading'>
-                    <div class='row'>
-                        <div class='col-xl-7 col-lg-7 col-md-7 col-sm-9 col-9 mt-md-1 mt-0'>
+                <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                    <div class='row w-100'>
+                        <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
                             $title<span class='$active_vis'>($active_msg)</span>
                         </div>
-                        <div class='col-xl-5 col-lg-5 col-md-5 col-sm-3 col-3 d-flex justify-content-end'>
+                        <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn submitAdminBtn'>"
                                     . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langModify</span>
                             </a>
@@ -512,7 +512,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
         <div class='col-12 mt-3'>                 
             <div class='panel panel-default'>
                 <div class='panel-heading'>             
-                    <div class='text-center'>$analytics_title->title</div>
+                    <div class='panel-title text-center'>$analytics_title->title</div>
                 </div>
                 <div class='panel-body'>
                      $results
@@ -651,7 +651,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
                 <div class='col-12 mt-3'>
                     <div class='panel panel-default'>
                         <div class='panel-heading'>
-                            $analytics_title->title
+                            <div class='panel-title'>$analytics_title->title</div>
                         </div>
                         <div class='panel-body'>
                             $results

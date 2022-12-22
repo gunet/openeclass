@@ -639,10 +639,10 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
 
     if ($count > 1) { // for all posts except first
         $content .= "<div id='$myrow->id' class='post-message panel panel-default col-sm-offset-$offset mt-3'>";
-        $content .= "<div class='panel-heading'><h5 class='panel-title'>$langMsgRe " . q($topic_subject);
+        $content .= "<div class='panel-heading'><div class='panel-title'>$langMsgRe " . q($topic_subject);
     } else {
         $content .= "<div id='$myrow->id' class='parent-post-message panel panel-primary mt-3'>";
-        $content .= "<div class='panel-heading'><h5 class='panel-title'>". q($topic_subject);
+        $content .= "<div class='panel-heading'><div class='panel-title'>". q($topic_subject);
     }
 
     if ($is_editor) {
@@ -650,11 +650,11 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
                 <span class='float-end'>
                     <a href='../forum/editpost.php?course=$course_code&amp;post_id=" . $myrow->id .
                         "&amp;topic=$topic&amp;forum=$forum'>" .
-                            "<span class='fa fa-edit' title='$langModify' data-bs-toggle='tooltip' " .
+                            "<span class='fa fa-edit pe-1' title='$langModify' data-bs-toggle='tooltip' " .
                                 "data-bs-original-title='$langModify' data-bs-placement='bottom'></span></a>&nbsp;" .
                     "<a class='delete-btn' href='../forum/viewtopic.php?course=$course_code&amp;post_id=" . $myrow->id .
                         "&amp;topic=$topic&amp;forum=$forum&amp;delete=on'>" .
-                            "<span class='fa fa-times text-danger' title='$langDelete' data-bs-toggle='tooltip' " .
+                            "<span class='fa fa-times text-white' title='$langDelete' data-bs-toggle='tooltip' " .
                             "data-bs-original-title='$langDelete' data-bs-placement='bottom'></span></a>
                 </span>";
     }
@@ -668,7 +668,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
     }
 
     $content .= "
-            </h5>
+            </div>
         </div>";
         if ($rate_str or $parent_post_link or $reply_button) {
             $content .= "<div class='panel-body'>";

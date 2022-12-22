@@ -4636,13 +4636,13 @@ function assignment_details($id, $row, $x =false) {
     <div class='col-sm-12'>
     <div class='panel panel-action-btn-primary'>
         <div class='panel-heading'>
-            <h4 class='panel-title'>
+            <div class='panel-title'>
                 $m[WorkInfo] &nbsp;
                 ". (($is_editor) ?
                 "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit'>
                     <span class='fa fa-edit text-white' title='' data-bs-toggle='tooltip' data-original-title='$langEditChange'></span>
                 </a>" : "")."
-            </h4>
+            </div>
         </div>
         <div class='panel-body ps-3 pb-3 pt-3 pe-3'>
             <div class='row p-2 margin-bottom-fat'>
@@ -5254,7 +5254,7 @@ function show_assignment($id, $display_graph_results = false) {
                 }
             }
     } else { // no submissions
-        $tool_content .= "<div class='col-12 mt-3 bg-light'><p class='sub_title1 text-center fw-bold mb-0 pt-2'>$langSubmissions:</p><div class='alert alert-warning'>$langNoSubmissions</div></div>";
+        $tool_content .= "<div class='col-12 mt-3 bg-transparent'><p class='sub_title1 text-center TextBold text-uppercase mb-0 pt-2'>$langSubmissions:</p><div class='alert alert-warning'>$langNoSubmissions</div></div>";
     }
 }
 

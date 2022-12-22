@@ -117,7 +117,7 @@ $tool_content .= "
 
 $tool_content .= "<div class='panel panel-primary mt-3'>
   <div class='panel-heading'>
-    <h3 class='panel-title'>" . $langOpenQuestionPageTitle . "</h3>
+    <div class='panel-title'>" . $langOpenQuestionPageTitle . "</div>
   </div>
     <div class='panel-body'>";
     $question_types = Database::get()->queryArray("SELECT exq.question, exwq.q_position, exq.id, eur.eid, eur.eurid AS eurid, ear.weight "

@@ -1,8 +1,8 @@
 <div class="panel panel-primary margin-top-fat mt-3">
     <div class="panel-heading">
-        <h4 class="panel-title">
+        <div class="panel-title">
             {{ trans('langPortfolioMainContent') }}
-        </h4>
+        </div>
     </div>
     <div class="panel-body Borders" id="portfolio_widget_main" data-widget-area-id="3">
         @foreach ($portfolio_main_area_widgets as $key => $portfolio_main_area_widget)

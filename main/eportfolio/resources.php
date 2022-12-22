@@ -374,12 +374,12 @@ if ($userdata) {
                 $post->course_title = $langUserBlog;
             }
             $tool_content .= "<div class='panel panel-action-btn-default mb-3'>
-                                    <div class='panel-heading'>
-                                        <div class='row'>
-                                           <div class='col-9 d-flex justify-content-start align-items-center'>
-                                              <span class='panel-title'>".q($data['title'])."</span>
+                                    <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                                        <div class='row w-100'>
+                                           <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
+                                              <div class='panel-title'>".q($data['title'])."</div>
                                            </div>
-                                           <div class='col-3 d-flex justify-content-end align-items-center'>
+                                           <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
                                                 <div>
                                                     ". action_button(array(
                                                                         array(
@@ -482,12 +482,12 @@ if ($userdata) {
                     $post->course_title = $langUserBlog;
                 }
                 $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
-                                    <div class='panel-heading pt-1 pb-1'>
-                                        <div class='row'>
-                                            <div class='col-9 d-flex justify-content-start align-items-center'>
-                                                <span class='panel-title'>".q($data['title'])."</span>
+                                    <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                                        <div class='row w-100'>
+                                            <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
+                                                <div class='panel-title'>".q($data['title'])."</div>
                                             </div>
-                                            <div class='col-3 d-flex justify-content-end align-items-center'>
+                                            <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
                                                 <div>
                                                     ". action_button(array(
                                                         array(
@@ -533,7 +533,7 @@ if ($userdata) {
                 } else {
                     $assignment_type = $m['group_work'];
                 }
-                $submission_header_content = "<h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3>";
+                $submission_header_content = "<div class='panel-title'>".$langTitle.": ".q($data['title'])."</div>";
                 $submission->course_title = $langCourse.': '.$submission->course_title;
                 $submission_content = "<div class='well'>";
                 $submission_content .= "<div><button type='button' class='btn submitAdminBtn' data-bs-toggle='collapse' data-bs-target='#header_more_$submission->id'>$langMore</button></div>
@@ -559,19 +559,25 @@ if ($userdata) {
                                           </div>
                                       </div>";
                 $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
-                                    <div class='panel-heading'>
-                                        <div class='float-end'>
-                                            ". action_button(array(
-                                                        array(
-                                                                'title' => $langePortfolioRemoveResource,
-                                                                'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=work_submission&amp;er_id=".$submission->id,
-                                                                'icon' => 'fa-times',
-                                                                'class' => 'delete',
-                                                                'confirm' => $langePortfolioSureToRemoveResource,
-                                                                'show' => ($submission->user_id == $uid)
-                                                        )))."
-                                         </div>
-                                            $submission_header_content
+                                    <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                                        <div class='row w-100'>
+                                           <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
+                                                $submission_header_content
+                                           </div>
+                                           <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
+                                              <div>
+                                                ". action_button(array(
+                                                    array(
+                                                            'title' => $langePortfolioRemoveResource,
+                                                            'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=work_submission&amp;er_id=".$submission->id,
+                                                            'icon' => 'fa-times',
+                                                            'class' => 'delete',
+                                                            'confirm' => $langePortfolioSureToRemoveResource,
+                                                            'show' => ($submission->user_id == $uid)
+                                                    )))."
+                                              </div>
+                                           </div>
+                                        </div>
                                     </div>
                                     <div class='panel-body'>
                                     $submission_content    

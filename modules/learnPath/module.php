@@ -191,7 +191,7 @@ $tool_content .=
                 'level' => 'primary-label')),false) . "
     <div class='panel panel-default'>
         <div class='panel-heading'>
-            <h3 class='panel-title'>$langLearningObjectData</h3>
+            <div class='panel-title'>$langLearningObjectData</div>
         </div>
         <div class='panel-body'>
             <div class='row margin-bottom-fat p-2'>

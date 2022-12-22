@@ -266,7 +266,7 @@ $tool_content .= "
 
 $tool_content .= "<div class='col-sm-12'><div class='panel panel-default'>
                       <div class='panel-heading'>
-                            <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>
+                            <div class='panel-title'>" . q_math($exerciseTitle) . "</div>
                       </div>";
 
 if (!empty($exerciseDescription)) {

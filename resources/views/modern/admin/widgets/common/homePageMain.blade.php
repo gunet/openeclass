@@ -1,8 +1,8 @@
                 <div class="panel panel-primary margin-top-fat mt-3">
                     <div class="panel-heading">
-                        <h4 class="panel-title">                
+                        <div class="panel-title">                
                             {{ trans('langHomePageMainContent') }}
-                        </h4>
+                        </div>
                     </div>
                     <div class="panel-body Borders" id="home_widget_main" data-widget-area-id="1">
                         @foreach ($home_main_area_widgets as $key => $home_main_area_widget)
