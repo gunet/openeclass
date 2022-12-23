@@ -1,4 +1,3 @@
-
 @extends('layouts.default')
 
 @if ($isInOpenCoursesMode)
@@ -90,28 +89,90 @@
                                         @foreach($courses as $mycourse)
                                             <tr>
                                                 <td>
-                                                @if ($mycourse->visible == COURSE_OPEN)
-                                                    <a href="../../courses/{!! urlencode($mycourse->k) !!}/">{!! $mycourse->i !!}</a>&nbsp;<small>({!! $mycourse->c !!})</small>
-                                                @else
-                                                    {!! $mycourse->i !!}&nbsp;<small>({!! $mycourse->c !!})</small>
-                                                @endif
-                                                @if ($displayGuestLoginLinks)
-                                                    @if ($course_data[$mycourse->id]['userguest'])
-                                                        <div class='float-end'>
-                                                        @if ($course_data[$mycourse->id]['userguest']->password === '')
-                                                                <form method='post' action='{{ $urlAppend }}'>
-                                                                    <input type='hidden' name='uname' value='{{ $course_data[$mycourse->id]['userguest']->username }}'>
-                                                                    <input type='hidden' name='pass' value=''>
-                                                                    <input type='hidden' name='next' value='/courses/{{ $mycourse->k }}/'>
-                                                                    <button class='btn btn-default' type='submit' title='{!! trans('langGuestLogin') !!}' name='submit' data-toggle='tooltip'><span class='fa fa-plane'></span></button>
-                                                                </form>
-                                                        @else
-                                                                <a class='btn btn-default' role='button' href='{{ $urlAppend }}main/login_form.php?user={!! urlencode($course_data[$mycourse->id]['userguest']->username) !!}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F' title='{!! trans('langGuestLogin') !!}' data-toggle='tooltip'>
-                                                                <span class='fa fa-plane'></span></a>
-                                                        @endif
-                                                        </div>
+                                                    @if ($mycourse->visible == COURSE_OPEN)
+                                                        <a href="../../courses/{!! urlencode($mycourse->k) !!}/">{!! $mycourse->i !!}</a>&nbsp;<small>({!! $mycourse->c !!})</small>
+                                                    @else
+                                                        {!! $mycourse->i !!}&nbsp;<small>({!! $mycourse->c !!})</small>
                                                     @endif
-                                                @endif
+                                                    @if ($displayGuestLoginLinks)
+                                                        @if ($course_data[$mycourse->id]['userguest'])
+                                                            <div class='float-end'>
+                                                            @if ($course_data[$mycourse->id]['userguest']->password === '')
+                                                                    <form method='post' action='{{ $urlAppend }}'>
+                                                                        <input type='hidden' name='uname' value='{{ $course_data[$mycourse->id]['userguest']->username }}'>
+                                                                        <input type='hidden' name='pass' value=''>
+                                                                        <input type='hidden' name='next' value='/courses/{{ $mycourse->k }}/'>
+                                                                        <button class='btn submitAdminBtn' type='submit' title='{!! trans('langGuestLogin') !!}' name='submit' data-toggle='tooltip'><span class='fa fa-plane'></span></button>
+                                                                    </form>
+                                                            @else
+                                                                    <a class='btn submitAdminBtn' role='button' href='{{ $urlAppend }}main/login_form.php?user={!! urlencode($course_data[$mycourse->id]['userguest']->username) !!}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F' title='{!! trans('langGuestLogin') !!}' data-toggle='tooltip'>
+                                                                    <span class='fa fa-plane'></span></a>
+                                                            @endif
+                                                            </div>
+                                                        @endif
+                                                    @endif
+
+
+                                                    <button class="ClickCourse border-0 rounded-pill" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
+                                                       <i class='fa fa-eye'></i>
+                                                    </button>
+
+                                                    <!-- The Modal -->
+                                                    <div id="myModal{{$mycourse->k}}" class="modal">
+
+                                                    <!-- Modal content -->
+                                                    <div class="modal-content modal-content-opencourses overflow-auto px-lg-4 py-lg-3">
+                                                        <div class='row'>
+                                                            <div class='col-10'>
+                                                                <span class="courseInfoText TextExtraBold text-white">{{$mycourse->i}}</span>
+                                                                <span class='courseInfoText TextSemiBold textgreyColor ms-1'>({{$mycourse->c}})</span>
+                                                            </div>
+                                                            <div class='col-2'>
+                                                                <button type='button' class="close bg-transparent text-uppercase d-flex justify-content-center align-items-center float-end" style='font-size:40px;'>&times;</button>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <hr class='hr-OpenCourses'>
+
+                                                        <div class='row mb-3'>
+                                                            <div class='col-9 d-flex justify-content-start align-items-start ps-4'>
+                                                                <p class='small-text TextRegular blackBlueText d-inline-flex align-items-center'>
+                                                                    <span class='fa fa-user lightBlueText pe-2 pt-0'></span>
+                                                                    <span class='text-white'>{{$mycourse->t}}</span>
+                                                                </p>
+                                                            </div>
+                                                            <div class='col-3 d-flex justify-content-end align-items-center pe-4 text-white'>
+                                                                {!! course_access_icon($mycourse->visible) !!}
+                                                                @if($mycourse->p == 1)
+                                                                    <span class="fa fa-star ps-3" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="{{trans('langPopular')}} {{trans('langCourse')}}" aria-label="{{trans('langPopular')}} {{trans('langCourse')}}"></span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                       
+                                                        
+                                                        <div class='col-12 d-flex justify-content-center align-items-start'>
+                                                            @if($mycourse->img == NULL)
+                                                                <img class='openCourseImg' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $mycourse->img }}" /></a>
+                                                            @else
+                                                                <img class='openCourseImg' src="{{ $urlAppend }}courses/{{$mycourse->k}}/image/{{$mycourse->img}}" alt="{{ $mycourse->img }}" /></a>
+                                                            @endif
+                                                        </div>
+
+                                                        <div class='col-12 openCourseDes mt-3 ps-md-5 pe-md-5 text-white pb-3'>
+                                                            @if(empty($mycourse->de))
+                                                                <p class='text-center'>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
+                                                            @else
+                                                                {!! $mycourse->de !!}
+                                                            @endif
+                                                        </div>
+                                                        
+                                                        
+                                                        
+                                                        
+                                                    </div>
+
+                                                    </div>
+                                                
                                                 </td>
                                                 <td>
                                                     {!! $mycourse->t !!}
@@ -137,7 +198,39 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    var idCourse = '';
+    var btn = '';
+    var modal = '';
+    $(".ClickCourse").click(function() {
+        // Get the btn id
+        idCourse = this.id;
 
+        // Get the modal
+        modal = document.getElementById("myModal"+idCourse);
+
+        // Get the button that opens the modal
+        btn = document.getElementById(idCourse);
+
+        // When the user clicks the button, open the modal 
+        modal.style.display = "block";
+
+        $('[data-bs-toggle="tooltip"]').tooltip("hide");
+    });
+
+    $(".close").click(function() {
+        modal.style.display = "none";
+    });
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+        $('[data-bs-toggle="tooltip"]').tooltip("hide");
+    }
+
+</script>
 
 @endsection
 

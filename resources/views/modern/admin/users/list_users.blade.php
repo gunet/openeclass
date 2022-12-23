@@ -71,7 +71,7 @@
                         @if (isset($_GET['department']) && $_GET['department'] && is_numeric($_GET['department'])) {
                             <input class='btn submitAdminBtn me-1' type='submit' name='move_submit' value='{{ trans('langChangeDepartment') }}'>
                         @endif
-                        <input class='btn submitAdminBtn me-1' type='submit' name='dellall_submit' value='{{ trans('langDelList') }}'>
+                        <input class='btn deleteAdminBtn me-1' type='submit' name='dellall_submit' value='{{ trans('langDelList') }}'>
                         <input class='btn submitAdminBtn' type='submit' name='activate_submit' value='{{ trans('langAddSixMonths') }}'>
                         {!! generate_csrf_token_form_field() !!}
                         </form>

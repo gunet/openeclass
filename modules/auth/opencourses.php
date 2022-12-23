@@ -132,6 +132,9 @@ if ($runQuery) {
                                course.title i,
                                course.visible visible,
                                course.prof_names t,
+                               course.description de,
+                               course.course_image img,
+                               course.popular_course p,
                                course.id id
                                $queryExtraSelect
                           FROM course, course_department $queryExtraJoin

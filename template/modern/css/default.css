@@ -946,6 +946,7 @@ label:has(input[type="checkbox"]:disabled){
     margin-top:-30px; 
   }
 
+
 /* --------------------------------------------- Portfolio ----------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1627,6 +1628,83 @@ label:has(input[type="checkbox"]:disabled){
   }
 
   .rating{ margin-bottom: 0px !important; }
+
+  .hr-OpenCourses{
+    border:solid 1px white;
+  }
+
+  .openCourseImg{
+    width:70%;
+    height:200px;
+    border-radius: 5px;
+  }
+  @media(max-width:767px){
+    .openCourseImg{
+      width:100%;
+    }
+  }
+
+  .openCourseDes{
+    text-align: justify;
+  }
+
+  .modal-content-opencourses{
+    position: absolute;
+    float: left;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background:#001146 ;
+    border-radius: 15px;
+    max-height:80vh;
+    border:solid 8px #005ad7;
+    padding: 20px;
+  }
+  @media(max-width:767px){
+    .modal-content-opencourses{
+      width:90vw;
+    }
+  }
+  @media(min-width:768px) and (max-width:991px){
+    .modal-content-opencourses{
+      width:80vw;
+    }
+  }
+  @media(min-width:992px) and (max-width:1023px){
+    .modal-content-opencourses{
+      width:80vw;
+    }
+  }
+  @media(min-width:1024px) and (max-width:1199px){
+    .modal-content-opencourses{
+      width:750px;
+    }
+  }
+  @media(min-width:1200px){
+    .modal-content-opencourses{
+      width:850px;
+    }
+  }
+  .modal-content-opencourses::-webkit-scrollbar {
+    width: 20px;
+  }
+  .modal-content-opencourses::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  .modal-content-opencourses::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+  }
+  .modal-content-opencourses::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+  }
+  .modal-content-opencourses::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+
 
 /* -------------------------------------------- BUTTONS  ------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/

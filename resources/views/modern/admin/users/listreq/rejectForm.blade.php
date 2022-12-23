@@ -44,19 +44,19 @@
                             <div class='table-responsive'>
                                 <table class='table-default'>
                                     <tr>
-                                        <th class='text-start'>{{trans('langName')}}</th>
+                                        <th class='text-start'>{{trans('langName')}}:</th>
                                         <td>{!!  q($user_request->givenname) !!}</td>
                                     </tr>
                                     <tr>
-                                        <th class='text-start'>{{ trans('langSurname') }}</th>
+                                        <th class='text-start'>{{ trans('langSurname') }}:</th>
                                         <td>{!! q($user_request->surname) !!}</td>
                                     </tr>
                                     <tr>
-                                        <th class='text-start'>{{ trans('langEmail') }}</th>
+                                        <th class='text-start'>{{ trans('langEmail') }}:</th>
                                         <td>{!! q($user_request->email) !!}</td>
                                     </tr>
                                     <tr>
-                                        <th class='text-start'>{{ trans('langComments') }}</th>
+                                        <th class='text-start'>{{ trans('langComments') }}:</th>
                                         <td>
                                             <input type='hidden' name='id' value='{{$id}}'>
                                             <input type='hidden' name='close' value='2'>
@@ -68,8 +68,8 @@
                                     <tr>
                                         <th class='text-start'>{{ trans('langRequestSendMessage') }}</th>
                                         <td>
-                                            &nbsp;<input type='text' class='auth_input' name='prof_email' value='{!! q($user_request->email) !!}'>
-                                            <input type='checkbox' name='sendmail' value='1' checked='yes'> <small>{{ trans('langGroupValidate') }}</small>
+                                            &nbsp;<input type='text' class='auth_input form-control' name='prof_email' value='{!! q($user_request->email) !!}'>
+                                            <input class='mt-2' type='checkbox' name='sendmail' value='1' checked='yes'> <small>{{ trans('langGroupValidate') }}</small>
                                         </td>
                                     </tr>
                                     <tr>

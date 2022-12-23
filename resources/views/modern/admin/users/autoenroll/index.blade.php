@@ -38,26 +38,30 @@
                     @if ($rules)
                         @foreach ($rules as $key => $rule)
                         <div class='col-12 mb-3'>
-                            <div class='panel panel-default'>
-                                <div class='panel-heading'>
-                                    <div class='row'>
-                                        <div class='col-6'><div class='panel-title'>{{ trans('langAutoEnrollRule') }} {{ $key + 1 }}</div></div>
-                                        <div class='col-6'><div class='text-end'>
-                                        {!! action_button([
-                                            [
-                                                'title' => trans('langEditChange'),
-                                                'icon' => 'fa-edit',
-                                                'url' => "autoenroll.php?edit=" . getIndirectReference($rule['id'])
-                                            ],
-                                            [
-                                                'title' => trans('langDelete'),
-                                                'icon' => 'fa-times',
-                                                'url' => "autoenroll.php?delete=" . getIndirectReference($rule['id']),
-                                                'confirm' => trans('langSureToDelRule'),
-                                                'btn-class' => 'delete_btn btn-default'
-                                            ],
-                                        ]) !!}
-                                        </div></div>
+                            <div class='panel panel-action-btn-default'>
+                                <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                                    <div class='row w-100'>
+                                        <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
+                                            <div class='panel-title'>{{ trans('langAutoEnrollRule') }} {{ $key + 1 }}</div>
+                                        </div>
+                                        <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
+                                            <div>
+                                                {!! action_button([
+                                                    [
+                                                        'title' => trans('langEditChange'),
+                                                        'icon' => 'fa-edit',
+                                                        'url' => "autoenroll.php?edit=" . getIndirectReference($rule['id'])
+                                                    ],
+                                                    [
+                                                        'title' => trans('langDelete'),
+                                                        'icon' => 'fa-times',
+                                                        'url' => "autoenroll.php?delete=" . getIndirectReference($rule['id']),
+                                                        'confirm' => trans('langSureToDelRule'),
+                                                        'btn-class' => 'delete_btn btn-default'
+                                                    ],
+                                                ]) !!}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class='panel-body'>

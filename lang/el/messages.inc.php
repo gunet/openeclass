@@ -184,6 +184,7 @@ $langDefaultModulesHelp = "Τα παρακάτω υποσυστήματα είν
 $langAutoEnroll = 'Αυτόματη εγγραφή';
 $langAutoEnrollNew = 'Προσθήκη κανόνα';
 $langAutoEnrollAdded = 'Ο κανόνας προστέθηκε';
+$langAutoEnrollRule = 'Κανόνας';
 $langAutoEnrollCourse = "Αυτόματη εγγραφή στα $langsCourses";
 $langAutoEnrollDepartment = "Αυτόματη εγγραφή σε όλα τα $langsCourses των τμημάτων";
 $langAutoEnrollDeleted = 'Ο κανόνας διαγράφτηκε';
