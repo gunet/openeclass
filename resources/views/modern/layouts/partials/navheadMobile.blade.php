@@ -1,21 +1,21 @@
-<nav id="bgr-cheat-header" class="navbar h-auto navbar-eclass">
+<nav id="bgr-cheat-header" class="navbar h-auto navbar-eclass pt-0 pb-0">
 
         <div class='col-12 d-flex justify-content-center'>
 
-            <div class="btn-group w-100" role="group" aria-label="Basic example">
+            @if(!get_config('hide_login_link'))
+                <a class='d-flex justify-content-center align-items-center' type="button" href="{{ $urlServer }}"><img class="eclass-nav-icon ps-2 pe-1" src="{{$logo_img_small}}"></a>
+            @endif
 
-                @if(!get_config('hide_login_link'))
-                    <a class='d-flex justify-content-center align-items-center' type="button" href="{{ $urlServer }}"><img class="eclass-nav-icon ps-2 pe-1" src="{{$logo_img_small}}"></a>
-                @endif
+            <div class="btn-group w-100" role="group" aria-label="Basic example">
                 @if (!isset($_SESSION['uid']))
-                    <a type="button" class="btn btn-transparent text-white @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlAppend }}modules/auth/registration.php"><i class="fas fa-pen-nib pen-nib-navhead"></i></a>
+                    <a type="button" class="btn btn-transparent text-white @if(get_config('registration_link')=='hide') d-none @endif d-flex justify-content-center align-items-center" href="{{ $urlAppend }}modules/auth/registration.php"><i class="fas fa-pen-nib pen-nib-navhead"></i></a>
                 @endif
-                <a type='button' class="btn btn-transparent text-white" href="{{ $urlAppend }}modules/auth/listfaculte.php"><i class="fas fa-book"></i></a>
+                <a type='button' class="btn btn-transparent text-white d-flex justify-content-center align-items-center" href="{{ $urlAppend }}modules/auth/listfaculte.php"><i class="fas fa-book"></i></a>
                 @if (!isset($_SESSION['uid']))
-                    <a type='button' class="btn btn-transparent text-white" href="{{ $urlAppend }}info/faq.php"><i class="fa fa-question-circle fa-fw text-white"></i></a>
+                    <a type='button' class="btn btn-transparent text-white d-flex justify-content-center align-items-center" href="{{ $urlAppend }}info/faq.php"><i class="fa fa-question-circle fa-fw text-white"></i></a>
                 @endif
                 @if(get_config('enable_search'))
-                    <a type="button" class='btn btn-transparent text-white' href="{{ $urlAppend }}modules/search/{{ $search_action }}"><i class="fa fa-search"></i></button>
+                    <a type="button" class='btn btn-transparent text-white d-flex justify-content-center align-items-center' href="{{ $urlAppend }}modules/search/{{ $search_action }}"><i class="fa fa-search"></i></button>
                 @endif
 
                 
@@ -24,9 +24,9 @@
 
                 @if(isset($_SESSION['uid']))
 
-                        <button class="btn btn-transparent dropdown-toogle text-warning" type="button"
+                        <button class="btn btn-transparent dropdown-toogle d-flex justify-content-center align-items-center" type="button"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-user"></i>
+                                <i class="fa fa-user orangeText"></i>
                         </button>
 
                         <ul class="m-0 p-0 dropdown-menu dropdown-menu-end dropdown_menu_user bg-body border-0 shadow-lg" aria-labelledby="dropdownMenuButton1">

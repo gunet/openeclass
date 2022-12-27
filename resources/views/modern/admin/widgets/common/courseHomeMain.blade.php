@@ -1,6 +1,6 @@
-<div class="panel panel-primary margin-top-fat mt-3">
+<div class="panel panel-admin margin-top-fat mt-3">
     <div class="panel-heading">
-        <div class="panel-title">
+        <div class="panel-title text-white TextMedium">
             {{ trans('langCourseHomeMainContent') }}
         </div>
     </div>
@@ -9,7 +9,9 @@
         <div class="panel{{!isset($courseWidgets) || isset($courseWidgets) && $course_home_main_area_widget->is_course_admin_widget ? ' panel-success widget' : ' panel-default'}} mt-3" data-widget-id="{{ $course_home_main_area_widget->id }}" data-widget-widget-area-id="{{ $key }}">
             <div class="panel-heading">
                 <a data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" href="#widget_desc_{{ $key }}" class="text-white widget_title">
-                    {{ $course_home_main_area_widget->getName() }} <span></span> <small class="float-end">{{ $course_home_main_area_widget->is_course_admin_widget ? trans('langWidgetCourse') : trans('langWidgetAdmin') }}</small>
+                    {{ $course_home_main_area_widget->getName() }} 
+                    <span class='fa fa-arrow-down ms-1'></span>
+                    <small class="float-end">{{ $course_home_main_area_widget->is_course_admin_widget ? trans('langWidgetCourse') : trans('langWidgetAdmin') }}</small>
                 </a>
             </div>
             @if (!isset($courseWidgets) || isset($courseWidgets) && $course_home_main_area_widget->is_course_admin_widget)

@@ -299,7 +299,7 @@ function view($view_file, $view_data = array()) {
         }
         if (!empty($theme_options_styles['leftNavBgColor'])) {
             $rgba_no_alpha = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
-            $rgba_no_alpha[3] = '0.85';
+            $rgba_no_alpha[3] = '1';
             $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
 
             $styles_str .= "
@@ -630,8 +630,8 @@ function lang_selections_Mobile() {
         $langDropdown = "user-language-menuOn";
     }
     $lang_select = "
-      <a class='d-block d-sm-block d-md-block d-lg-none btn btn-transparent text-white pt-2' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
-          <span class='fa fa-globe'></span>
+      <a class='btn btn-transparent text-white d-flex justify-content-center align-items-center' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
+          <i class='fa fa-globe'></i>
       </a>
       <ul class='m-0 p-0 border-0 dropdown-menu dropdown-menu-end $langDropdown user-language-menu me-lg-0 me-md-5 me-0' role='menu' aria-labelledby='dropdownMenuLang'>";
     foreach ($session->active_ui_languages as $code) {

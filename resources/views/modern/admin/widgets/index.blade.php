@@ -42,7 +42,7 @@
                                 @foreach ($installed_widgets as $key => $installed_widget)
                                         <div class="panel panel-success widget mt-3" data-widget-id="{{ $installed_widget->id }}">
                                             <div class="panel-heading">                   
-                                                <a class='text-white collapsed' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
+                                                <a class='text-white TextMedium collapsed' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
                                                 href="#widget_desc_{{ $key }}" class="widget_title">
                                                     {{ $installed_widget->getName() }} <span></span> <span class="float-end"></span>
                                                     <span class='fa fa-arrow-down ps-2 fs-6'></span>
@@ -95,13 +95,13 @@
                                 @foreach ($uninstalled_widgets as $key => $uninstalled_widget)
                                     <div class="panel panel-default panel-default-admin mt-3">
                                         <div class="panel-heading">                   
-                                            <span class="text-secondary">
+                                            <span class="text-white TextMedium">
                                                 {{ $uninstalled_widget->getName() }}
                                             </span>
 
                                         </div>
                                         <div class="panel-body">
-                                            <span class="text-secondary">
+                                            <span class="blackBlueText">
                                             {{ $uninstalled_widget->getDesc() }}
                                             </span>
                                         </div>

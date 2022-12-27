@@ -265,7 +265,7 @@
                                 <div class="row rowMedium cources-pics-page px-lg-2" id="cources-pics-page-1">
                                     @php $i=0; @endphp
                                     @foreach($cources as $cource)
-                                    <div class="col-md-6 col-12 @if($i==0 or $i==2) ps-lg-1 ps-md-0 pe-md-2 @else pe-lg-1 ps-md-2 pe-md-0 @endif ps-0 pe-0">
+                                    <div class="col-md-6 col-12 @if($i==0 or $i==2) ps-lg-1 ps-md-0 pe-md-2 @else pe-lg-1 ps-md-2 pe-md-0 @endif ps-0 pe-0 portfolioCourseColBar">
                                         <div class="lesson border-bottom pb-1 pt-3">
                                             <figure class="lesson-image">
                                                 <a href="{{$urlServer}}courses/{{$cource->code}}/index.php">
@@ -279,9 +279,9 @@
                                             </figure>
                                             <div class="lesson-title">
                                                 <a class='TextSemiBold fs-6' href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
-                                                <span class="lesson-id blackBlueText">({{ $cource->public_code }})</span>
+                                                <span class="TextSemiBold blackBlueText lesson-id">({{ $cource->public_code }})</span>
                                             </div>
-                                            <div class="small-text text-secondary lesson-professor mt-0">{{ $cource->professor }}</div>
+                                            <div class="small-text textgreyColor TextSemiBold mt-0">{{ $cource->professor }}</div>
                                         </div>
 
                                     </div>
@@ -299,9 +299,11 @@
                     </div>
                 </div>
 
-                {{--<div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
-                    {!! $portfolio_page_main_widgets !!}
-                </div>--}}
+                @if($portfolio_page_main_widgets)
+                    <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                        {!! $portfolio_page_main_widgets !!}
+                    </div>
+                @endif
 
             </div>
         </div>
@@ -315,13 +317,13 @@
                 </div>
                 <div class='panel-body p-0'>
                     @if(empty($user_announcements))
-                        <div class='text-start mt-3 mb-2'><span class='text-title not_visible'>{{ trans('langNoRecentAnnounce') }}</span></div>
+                        <div class='text-start mb-3'><span class='text-title not_visible'>{{ trans('langNoRecentAnnounce') }}</span></div>
                     @else
                         {!! $user_announcements !!}
                     @endif
                 </div>
-                <div class='panel-footer d-flex justify-content-end p-0'>
-                    <a class='TextMedium' href="{{$urlAppend}}modules/announcements/myannouncements.php" class='mt-1'>
+                <div class='panel-footer d-flex justify-content-start p-0'>
+                    <a class='TextMedium' href="{{$urlAppend}}modules/announcements/myannouncements.php">
                         {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
                     </a>
                 </div>
@@ -334,24 +336,28 @@
                     </div>
                 </div>
                 <div class='panel-body p-0'>
-                    {!! $user_messages !!}
+                    @if(empty($user_messages))
+                        <div class='text-start mb-3'><span class='text-title not_visible'>{{ trans('langDropboxNoMessage') }}</span></div>
+                    @else
+                        {!! $user_messages !!}
+                    @endif
                 </div>
-                <div class='panel-footer d-flex justify-content-end p-0'>
+                <div class='panel-footer d-flex justify-content-start p-0'>
                     <a class='TextMedium' href="{{$urlAppend}}modules/message/index.php">
                         {{ trans('langAllMessages') }} <span class='fa fa-chevron-right'></span>
                     </a>
                 </div>
             </div>
 
-            @if($portfolio_page_main_widgets)
+            @if($portfolio_page_sidebar_widgets)
                 <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                     <div class='panel-heading bg-body p-0'>
                         <div class='col-12 Help-panel-heading'>
                             <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyWidgets') }}</span>
                         </div>
                     </div>
-                    <div class='panel-body'>
-                        {!! $portfolio_page_main_widgets !!}
+                    <div class='panel-body p-0'>
+                        {!! $portfolio_page_sidebar_widgets !!}
                     </div>
                 </div>
             @endif

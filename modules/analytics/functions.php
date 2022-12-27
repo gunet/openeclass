@@ -341,10 +341,10 @@ function display_analytics_information($analytics_id) {
             <div class='panel panel-default'>
                 <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
                     <div class='row w-100'>
-                        <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
+                        <div class='col-10 d-flex justify-content-start align-items-center ps-0'>
                             $title<span class='$active_vis'>($active_msg)</span>
                         </div>
-                        <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
+                        <div class='col-2 d-flex justify-content-end align-items-center pe-0'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn submitAdminBtn'>"
                                     . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langModify</span>
                             </a>

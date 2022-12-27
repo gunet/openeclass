@@ -89,7 +89,7 @@ function getUserLessonInfo($uid) {
                     <a class='TextSemiBold fs-6' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a>
                     <div class='TextSemiBold text-md-end text-start'> <span class='blackBlueText'>(" . q($data->public_code) . ")</span></div>
               </div>
-			  <div><small>" . q($data->professor) . "</small></div></td>";
+			  <div><small class='small-text textgreyColor TextSemiBold'>" . q($data->professor) . "</small></div></td>";
             $lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-end align-top pe-0'><div class='col-12'><div class='d-inline-flex'>";
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
             if ($data->status == USER_STUDENT) {
@@ -197,7 +197,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
         $counterAn = 0;
         $ann_content = '';
         if($q){
-           $ann_content .= "<ul class='list-group list-group-flush'>";
+           $ann_content .= "<ul class='list-group list-group-flush mb-4'>";
         }
         foreach ($q as $ann) {
             if ($counterAn <= 1){
@@ -206,11 +206,10 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_url = $urlAppend . 'modules/announcements/index.php?course=' . $ann->code . '&amp;an_id=' . $ann->id;
                     $ann_date = format_locale_date(strtotime($ann->an_date));
                     $ann_content .= "
-                        <li class='list-group-item pt-3 pb-3 ps-0 pe-0'>
+                        <li class='list-group-item ps-0 pe-0'>
                             <div class='item-wholeline text-center'>
-                                    <div class='text-title TextSemiBold fs-6'>
-                                        <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
-                                    </div><br>
+                                <a class='TextSemiBold fs-6' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                                    
                                 <div class='blackBlueText TextBold'>$course_title</div>
                                 <div class='blackBlueText TextRegular'>$ann_date</div>
                             </div>
@@ -219,14 +218,11 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_url = $urlAppend . 'main/system_announcements.php?an_id=' . $ann->id;
                     $ann_date = format_locale_date(strtotime($ann->an_date));
                     $ann_content .= "
-                    <li class='list-group-item pt-3 pb-3 ps-0 pe-0'>
+                    <li class='list-group-item ps-0 pe-0'>
                         <div class='item-wholeline text-center'>
-                                <div class='text-title'>
-                                    <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
-                                </div><br><br>
-
+                            <a class='TextSemiBold fs-6' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                            
                             <div class='blackBlueText TextBold'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></div>
-
                             <div class='blackBlueText TextRegular'>$ann_date</div>
                         </div>
                     </li>";
@@ -254,7 +250,10 @@ function getUserMessages() {
     $mbox = new Mailbox($uid, 0);
     $msgs = $mbox->getInboxMsgs('', 5);
     $counterMs = 0;
-    $message_content .= "<ul class='list-group list-group-flush'>";
+    if($msgs){
+         $message_content .= "<ul class='list-group list-group-flush mb-4'>";
+    }
+   
     foreach ($msgs as $message) {
         if($counterMs <= 1){
             if ($message->course_id > 0) {
@@ -263,28 +262,22 @@ function getUserMessages() {
                 $course_title = '';
             }
             $message_date = format_locale_date($message->timestamp);
-            $message_content .= "<li class='list-group-item pt-3 pb-3 ps-0 pe-0'>
+            $message_content .= "<li class='list-group-item ps-0 pe-0'>
                                     <div class='item-wholeline text-center'>
-                                        <div class='text-title TextSemiBold'><span>$langFrom: ".display_user($message->author_id, false, false)."<br><br>
-                                            <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
-                                        </div>
-                                        <div class='blackBlueText TextBold'>$course_title</div><br>
+                                        <div class='text-title TextSemiBold'><span>$langFrom:</span>".display_user($message->author_id, false, false)."</div>
+                                        
+                                        <a class='TextSemiBold fs-6 mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
+                                        
+                                        <div class='blackBlueText TextBold'>$course_title</div>
                                         <div class='blackBlueText TextRegular'>$message_date</div>
                                     </div>
                                 </li>";
         }
         $counterMs++;
     }
-    if(!$msgs){
-        $message_content .= "<li class='list-group-item pt-3 pb-3 ps-0 pb-0'>
-            <div class='item-wholeline text-center'>
-                <div class='text-title'>
-                    $langDropboxNoMessage
-                </div>
-            </div>
-        </li>";
+    if($msgs){
+        $message_content .= "</ul>";
     }
-    $message_content .= "</ul'>";
     return $message_content;
 }
 

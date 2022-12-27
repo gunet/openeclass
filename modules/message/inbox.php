@@ -46,6 +46,7 @@ if (isset($_GET['mid'])) {
 
     $mid = intval($_GET['mid']);
     $msg = new Msg($mid, $uid, 'msg_view');
+
     if (!$msg->error) {
 
         $urlstr = '';

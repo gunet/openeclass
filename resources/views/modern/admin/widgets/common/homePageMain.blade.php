@@ -1,6 +1,6 @@
-                <div class="panel panel-primary margin-top-fat mt-3">
+                <div class="panel panel-admin margin-top-fat mt-3">
                     <div class="panel-heading">
-                        <div class="panel-title">                
+                        <div class="panel-title text-white TextMedium">                
                             {{ trans('langHomePageMainContent') }}
                         </div>
                     </div>
@@ -10,7 +10,8 @@
                             <div class="panel-heading">                   
                                 <a class='text-white' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
                                    href="#widget_desc_{{ $key }}" class="widget_title">
-                                    {{ $home_main_area_widget->getName() }} <span></span>
+                                    {{ $home_main_area_widget->getName() }}
+                                    <span class='fa fa-arrow-down ms-1'></span>
                                 </a>                     
                             </div>
                             <div id="widget_desc_{{ $key }}" class="panel-collapse collapse in collapsed">

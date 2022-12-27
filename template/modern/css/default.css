@@ -19,7 +19,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
   
-.navbar-eclass { overflow: visible; background:rgba(0, 62, 135, 0.9) ; border: 0 none; height:147px; border-bottom-left-radius: 15px; border-bottom-right-radius:15px ;}
+.navbar-eclass { overflow: visible; background-color: #003e85; border: 0 none; height:147px; border-bottom-left-radius: 15px; border-bottom-right-radius:15px ;}
 
 .eclass-nav-icon{ width:110px; height:100px; }
 @media(min-width:992px){.eclass-nav-icon{ margin-left:25px; margin-right:30px;}}
@@ -953,26 +953,29 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
-  @media(min-width:426px) and (max-width:768px){
+  @media(min-width:426px) and (max-width:767px){
     .lesson {min-height: 314px;}
   }
+  @media(min-width:768px) and (max-width:991px){
+    .lesson {min-height: 320px;}
+  }
   @media(min-width:992px) and (max-width:1199px){
-    .lesson {min-height: 267px;}
+    .lesson {min-height: 280px;}
   }
   @media(min-width:1200px) and (max-width:1399px){
-    .lesson {min-height: 230px;}
+    .lesson {min-height: 290px;}
   }
   @media(min-width:1400px){
-    .lesson {min-height: 290px;}
+    .lesson {min-height: 300px;}
   }
 
   @media(max-width:991px){
     .lesson-image img{ width:100%; height:208px; }
   }
   @media(min-width:992px){
-    .lesson-image img{ width:100%; height:140px; }
+    .lesson-image img{ width:100%; height:170px; }
   }
-  
+
   .lesson-image:hover{ opacity:0.5; }
 
   .user-details-collapse-more{ cursor: pointer; }
@@ -2538,7 +2541,7 @@ label:has(input[type="checkbox"]:disabled){
     }
 
     .eclass-nav-icon{
-      width:46px; height:34px; 
+      width:62px; height:44px; 
     }
 
     .container-fluid{ 
@@ -2597,15 +2600,11 @@ label:has(input[type="checkbox"]:disabled){
       background-color: white;
     }
 
-    .panel-courses-portfolio{
-      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1) !important;
-    }
-
     /************** of canvas settings *******************/
-    .offcanvas.offcanvas-start{
+    /* .offcanvas.offcanvas-start{
       height: calc(100vh - 56px - 54px);
       margin-top: 56px;
-    }
+    } */
     .modal-backdrop.fade.show{background-color: transparent ;}
     .offcanvas-header{display: none;}
     /*****************************************************/
@@ -2622,7 +2621,7 @@ label:has(input[type="checkbox"]:disabled){
   /*******************************************************************/
 
 
-/* ------------------------------------------------------- ADMIN-----------------------------------------------------------------------------*/
+/* ------------------------------------------------------- ADMIN ----------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -2636,6 +2635,20 @@ label:has(input[type="checkbox"]:disabled){
     background-color: #005ad9;
     color: #ffffff;
   }
+
+
+/* ------------------------------------------------------- WIDGETS ----------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
+
+.nav-link-widgets.active{
+  border-radius: 15px;
+  /* background-color: #ffffff !important;
+  color:#005ed7 !important; */
+  border: solid 1px #005ed7;
+}
 
 /* -------------------------------------------- BASIC COLOR ----------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -2838,6 +2851,8 @@ label:has(input[type="checkbox"]:disabled){
 
     .user-icon-filename{ width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px; }
 
+    .uploadImageCourse{ height: 250px;  width: 100%; object-fit: fill ; }
+
   }
 
   @media(min-width: 992px) and (max-width: 1023px){
@@ -2847,6 +2862,8 @@ label:has(input[type="checkbox"]:disabled){
     .course-units{ -moz-box-shadow: none;  -webkit-box-shadow: none; box-shadow: none; border-radius: 25px; padding:25px; }
 
     .user-icon-filename{ width:20px; height:20px; border-radius:50%; margin-right:10px; }
+
+    .uploadImageCourse{ height: 200px;  width: 100%; object-fit: fill ; }
   }
 
 /* ------------------------------------------------------- L tablet -------------------------------------------------------------------------*/

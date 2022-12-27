@@ -203,7 +203,7 @@
                                     <div class='d-inline-flex align-items-top'>
                                         {{ trans('langActivities')}} 
                                         <a href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}">
-                                            <span class="fa fa-pencil ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $langEdit }}"></span>
+                                            <span class="fa fa-pencil ms-2 text-white" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $langEdit }}"></span>
                                         </a>
                                     </div>
                                 </div>
