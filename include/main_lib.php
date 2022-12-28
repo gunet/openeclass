@@ -2732,9 +2732,9 @@ function profile_image($uid, $size, $class=null) {
     $size_width = ($size != IMAGESIZE_SMALL || $size != IMAGESIZE_LARGE)? "style='width:$size'":'';
     $size = ($size != IMAGESIZE_SMALL && $size != IMAGESIZE_LARGE)? IMAGESIZE_LARGE:$size;
     if ($uid > 0 and file_exists("courses/userimg/{$uid}_$size.jpg")) {
-        return "<img style='border-radius:50%;' src='{$urlServer}courses/userimg/{$uid}_$size.jpg' $class_attr title='$name' alt='$name' $size_width>";
+        return "<img style='border-radius:50%; border:solid 2px #e8e8e8;' src='{$urlServer}courses/userimg/{$uid}_$size.jpg' $class_attr title='$name' alt='$name' $size_width>";
     } else {
-        return "<img style='border-radius:50%;' src='$themeimg/user_$size.png' $class_attr title='$name' alt='$name' $size_width>";
+        return "<img style='border-radius:50%; border:solid 2px #e8e8e8;' src='$themeimg/user_$size.png' $class_attr title='$name' alt='$name' $size_width>";
        
     }
 }

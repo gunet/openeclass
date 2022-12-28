@@ -320,6 +320,11 @@ function view($view_file, $view_data = array()) {
                 color: #ffffff;
               }
 
+              .themeId .submitAdminBtn{ border: solid 1px #ffffff; }
+              .themeId .submitAdminBtn:hover {
+                background-color: $theme_options_styles[leftSubMenuHoverBgColor];;
+              }
+
             .offcanvas-header,.offcanvas-body,#background-cheat-leftnav, #bgr-cheat-footer, #collapseTools, .panel-admin>.panel-heading, .descCoursePanel, #cal-header,
             .admin-list-group .list-group-item:hover{background:$theme_options_styles[leftNavBgColor];}
             .tool-sidebar{color:#ffffff;}
@@ -356,8 +361,8 @@ function view($view_file, $view_data = array()) {
             #bgr-cheat-header{background:$rgba_no_alpha};
             @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
         }
-        if (!empty($theme_options_styles['linkColor'])) $styles_str .= "a {color: $theme_options_styles[linkColor];}";
-        if (!empty($theme_options_styles['linkHoverColor'])) $styles_str .= "a:hover, a:focus {color: $theme_options_styles[linkHoverColor];}";
+        if (!empty($theme_options_styles['linkColor'])) $styles_str .= "a, .toolAdminText {color: $theme_options_styles[linkColor];}";
+        if (!empty($theme_options_styles['linkHoverColor'])) $styles_str .= "a:hover, a:focus {color: $theme_options_styles[linkHoverColor];} .admin-list-group:hover .toolAdminText{color:#ffffff;}";
         if (!empty($theme_options_styles['leftSubMenuFontColor'])) $styles_str .= "#leftnav .panel a {color: $theme_options_styles[leftSubMenuFontColor];}";
         if (!empty($theme_options_styles['leftSubMenuHoverBgColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover, .menu-popover .list-group-item:hover{background: $theme_options_styles[leftSubMenuHoverBgColor];} #leftnav .panel a.list-group-item.active:hover{background:#ccc;}";
         if (!empty($theme_options_styles['leftSubMenuHoverFontColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{color: $theme_options_styles[leftSubMenuHoverFontColor];}";

@@ -23,46 +23,14 @@
 #leftnav .panel a.list-group-item:hover{background: #005ad7;}
 #leftnav .panel a.list-group-item.active:hover{background: #ccc;}
 
-
-/* ************************************************************************************************************************************* */
-/* ************************************************************************************************************************************* */
-/************************************** THIS IS FIRST CHOICE OF VIEW-STUDENT-TEACHER TOOGLE BUTTON **************************************/
-/* ************************************************************************************************************************************* */
-/* ************************************************************************************************************************************* */
-
-/* .on2{ margin-right:-95px; font-size: 12px; color:white; padding-top:14px; }
-
-.off2{ margin-top:-34px; color:white; font-size: 12px; margin-left:-95px; }
-
-.btn-toggle{ position: relative; height: 3rem; border-radius: 5rem; overflow: hidden; outline: none; border: 2px solid blue; background-color: transparent; } 
-
-.btn-toggle span.on, .btn-toggle.btn-toggle-on span.off { display: none; }
-
-.btn-toggle .on { right: 0; left: auto; padding-left:20px; }
-
-.btn-toggle>span {
-  border-radius: 5rem;
-  text-align: center;
-  vertical-align: middle;
-  line-height: 3rem;
-  display: inline-block;
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  left: 0px;
-  top: 0px;
-  background-color: blue;
-  color: white;
-  font-size:12px;
-  justify-content: center;
+@media(min-width:992px) and (max-width:1199px){
+  #background-cheat-leftnav{
+    width:180px;
+  }
+  .col_maincontent_active{
+    width:calc(100% - 180px - 0px);
+  }
 }
-
-.btn-toggle span.off, .btn-toggle.btn-toggle-on span.on { display: inline-block; } */
-
-/* ************************************************************************************************************************************* */
-/* ************************************************************************************************************************************* */
-/* ************************************************************************************************************************************* */
-
 
 
 /* --------------------------------------- Basic classes ------------------------------- */
@@ -71,18 +39,25 @@
 
 .nav-item:active{  border:0; }
 
-.col_maincontent_active{ transition: 0.4s;  min-height: calc(100vh - 147px - 188.56px - 32px); background-color: white; 
-  /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);  */
-  border-bottom-right-radius: 15px; border-top-right-radius: 15px; 
+.col_maincontent_active{ 
+  transition: 0.4s;  
+  min-height: calc(100vh - 147px - 188.56px - 32px); 
+  background-color: white; 
+  border-bottom-right-radius: 15px; 
+  border-top-right-radius: 15px; 
 }
 
-.col_maincontent_active_Homepage{ transition: 0.4s;  min-height: calc(100vh - 147px - 188.56px - 32px);
-  /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);   */
-  background-color: white;  border-radius:15px;
+.col_maincontent_active_Homepage{ 
+  transition: 0.4s;  
+  min-height: calc(100vh - 147px - 188.56px - 32px);
+  background-color: white;  
+  border-radius:15px;
  }
 
-.col_maincontent_active_HomepageStart{ transition: 0.4s;  background-color: white;  border-radius:15px; 
-  /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); */
+.col_maincontent_active_HomepageStart{ 
+  transition: 0.4s;  
+  background-color: white;  
+  border-radius:15px; 
 }
 @media(min-width:992px){
   /* +147px is the padding 147px of jumbotron */
@@ -92,19 +67,44 @@
   }
 }
 
-.col_maincontent_active_unit{ transition: 0.4s;  height:auto; background-color: white;  
-  /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);  */
-  border-radius:15px; -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc; box-shadow: 0 0 3px #ccc; }
+.col_maincontent_active_unit{ 
+  transition: 0.4s;  
+  height:auto; 
+  background-color: white;  
+  border-radius:15px; 
+  -moz-box-shadow: 0 0 3px #ccc; 
+  -webkit-box-shadow: 0 0 3px #ccc; 
+  box-shadow: 0 0 3px #ccc; 
+}
 
-.col_maincontent_coursePage{ height:auto; background-color: white;  
-  /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);  */
-  border-radius:15px; -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc; box-shadow: 0 0 3px #ccc ;}
+.col_maincontent_coursePage{ 
+  height:auto; 
+  background-color: white;  
+  border-radius:15px; 
+  -moz-box-shadow: 0 0 3px #ccc; 
+  -webkit-box-shadow: 0 0 3px #ccc; 
+  box-shadow: 0 0 3px #ccc ;
+}
 
-.col_sidebar_active{ transition: 0.4s;  border-top-left-radius: 15px;  border-bottom-left-radius: 15px;  background-color: #1d4e89 ;}
+.col_sidebar_active{ 
+  transition: 0.4s;  
+  border-top-left-radius: 15px;  
+  border-bottom-left-radius: 15px;  
+  background-color: #003e85 ;
+}
 
-.navrbar_menu_btn{ width:auto; margin-left:-10px; margin-top:-20px; }
+.navrbar_menu_btn{ 
+  width:auto; 
+  margin-left:-10px; 
+  margin-top:-20px; 
+}
 
-.navbar_breadcrumb{ margin-left:60px; margin-top:-35px; height:auto; width:95%; }
+.navbar_breadcrumb{ 
+  margin-left:60px; 
+  margin-top:-35px; 
+  height:auto; 
+  width:95%; 
+}
 
 .breadcrumb li{ white-space:nowrap; }
 
@@ -190,109 +190,6 @@
      margin: 0px 0px 0px auto;  background-color: white;  border-radius:15px; }
 
 }
-
-
-/* ************************************************************************************************************************************* */
-/* ************************************************************************************************************************************* */
-/************************************** THIS IS FIRST CHOICE OF VIEW-STUDENT-TEACHER TOOGLE BUTTON **************************************/
-/* ************************************************************************************************************************************* */
-/* ************************************************************************************************************************************* */
-
-
-/* @media (min-width:1751px){
-
-  .btn-toggle> .off {width: 50%; padding-left: 0px;}
-
-  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
-
-  .btn-toggle> .off2{ margin-left:-90px; padding-left:0px; padding-right:0px; padding-top: 1px;}
-
-  .btn-toggle> .on2{ margin-left:15px; padding-top: 15px; padding-left:0px; padding-right:0px;}
-}
-
-@media (min-width:1551px) and (max-width:1750px){
-
-  .btn-toggle> .off {width: 50%; padding-left: 0px;}
-
-  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
-
-  .btn-toggle> .off2{ margin-left:-90px; padding-left:0px; padding-right:0px; padding-top: 1px;}
-
-  .btn-toggle> .on2{ margin-left:15px; padding-top: 15px; padding-left:0px; padding-right:0px;}
-}
-
-@media (min-width:1400px) and (max-width:1550px){
-
-  .btn-toggle> .off {width: 50%; padding-left: 0px;}
-
-  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
-
-  .btn-toggle> .off2{ padding-left:0px; padding-right:0px; padding-top: 2px;}
-
-  .btn-toggle> .on2{ padding-top: 14px; padding-left:0px; padding-right:0px;}
-}
-
-@media (min-width: 1200px) and (max-width: 1399px){ 
-
-  .btn-toggle> .off { width: 57%; }
-
-  .btn-toggle> .on { right: 0; left: auto; padding: 0px 0px 0px 5px; width:42%; }
-
-  .btn-toggle> .off2{  padding-left: 30px;  padding-top: 1px; }
-
-  .btn-toggle> .on2{  padding-top: 15px; padding-left:0px;}
-}
-
-@media (min-width: 1024px) and (max-width: 1199px){ 
- 
-  .btn-toggle> .off {width: 50%; padding-left: 0px;}
-
-  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
-
-  .btn-toggle> .off2{ padding-left:0px; padding-top: 1px; }
-
-  .btn-toggle> .on2{ padding-top: 15px; padding-left: 20px;}
-
-}
-
-@media (min-width: 992px) and (max-width:1023px){ 
-
-  .btn-toggle> .off {width: 50%; padding-left: 0px;}
-
-  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
-
-  .btn-toggle> .off2{ padding-left:0px; padding-top: 0px; }
-
-  .btn-toggle> .on2{ padding-top: 15px; padding-left: 20px;}
-}
-
-@media (min-width: 768px) and (max-width:991px){ 
-
-  .btn-toggle> .off {width: 50%; padding-left: 0px;}
-
-  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
-
-  .btn-toggle> .off2{ padding-right:15px; padding-top: 0px; }
-
-  .btn-toggle> .on2{ padding-top: 14px; padding-left: 25px;}
-}
-
-@media (max-width: 767px){ 
-
-  .btn-toggle> .off {width: 50%; padding-left: 0px;}
-
-  .btn-toggle> .on { right: 0; left: auto; width:50%; padding-right: 15px;}
-
-  .btn-toggle> .off2{ padding-left: 0px; padding-top: 1px}
-
-  .btn-toggle> .on2{ padding-top: 14px; padding-left: 25px;}
-} */
-
-
-
-/* ************************************************************************************************************************************* */
-/* ************************************************************************************************************************************* */
-/* ************************************************************************************************************************************* */
 
 
 /* ************************************************************************************************************************************* */

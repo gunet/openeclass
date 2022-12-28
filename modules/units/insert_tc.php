@@ -52,7 +52,7 @@ function list_tcs() {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='text-end mt-3'>";
+        $tool_content .= "<div class='d-flex justify-content-center mt-3'>";
         $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_tc' value='$langAddModulesButton'></div></form>";
     }
 }

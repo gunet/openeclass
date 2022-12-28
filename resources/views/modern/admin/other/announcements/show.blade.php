@@ -31,7 +31,7 @@
                                     </span>
                                 </div>
                                 <div class='panel-footer'>
-                                    <div class='text-dark fw-bold text-end'>{{trans('langDate')}}: <span class='info-date fw-normal'>{{ $announcementsID->date }}</span></div>
+                                    <div class='text-dark fw-bold text-center'>{{trans('langDate')}}: <span class='info-date fw-normal'>{{ $announcementsID->date }}</span></div>
                                 </div>
                             </div>
                         </div>

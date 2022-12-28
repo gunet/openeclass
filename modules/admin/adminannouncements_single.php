@@ -55,7 +55,7 @@ if(isset($ann_id)){
                                     </div>
                                 </div>
                                 <div class='panel-footer'>
-                                    <div class='text-end info-date'>
+                                    <div class='text-center info-date'>
                                         " . format_locale_date(strtotime($announcement->date)) . "
                                     </div>
                                 </div>

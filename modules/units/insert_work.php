@@ -61,6 +61,6 @@ function list_assignments() {
         }
         $tool_content .=
                 "</table></div>" .
-                "<div class='text-end mt-3'><input class='btn submitAdminBtn' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
+                "<div class='d-flex justify-content-center mt-3'><input class='btn submitAdminBtn' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
     }
 }

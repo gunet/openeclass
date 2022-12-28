@@ -553,13 +553,13 @@ label:has(input[type="checkbox"]:disabled){
 
 .alert-warning, .alert-info, .alert-danger, .alert-success{ margin-top:14px; }
 
-.alert-success { border: 1px solid rgb(214,233,198); background-color: rgb(223,240,216); color: rgb(70,136,71); border-radius: 15px; font-weight: 500; font-style: normal; }
+.alert-success { border: 1px solid #22B473; background-color: rgb(223,240,216); color: #22B473; border-radius: 15px; font-weight: 500; font-style: normal; }
 
-.alert-info { border: 1px solid rgb(188,232,241); background-color: rgb(217,237,247); color: rgb(58,135,173); border-radius: 15px; font-weight: 500; font-style: normal; }
+.alert-info { border: 1px solid #3D80D0; background-color: rgb(217,237,247); color: #3D80D0; border-radius: 15px; font-weight: 500; font-style: normal; }
 
-.alert-warning { border: 1px solid rgb(251,238,213); background-color: rgb(252,248,227); color: rgb(192,152,83); border-radius: 15px; font-weight: 500; font-style: normal; }
+.alert-warning { border: 1px solid #FFA023; background-color: rgb(252,248,227); color: #FFA023; border-radius: 15px; font-weight: 500; font-style: normal; }
 
-.alert-danger { border: 1px solid rgb(238,211,215); background-color: rgb(242,222,222); color: rgb(185,74,72); border-radius: 15px; font-weight: 500; font-style: normal; }
+.alert-danger { border: 1px solid rgb(244,17,14); background-color: rgb(242,222,222); color: rgb(244, 17, 14); border-radius: 15px; font-weight: 500; font-style: normal; }
 
 /* -------------------------------- testimonials-OWL_CAROUSEL ------------------------------------------------------------------------------ */
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -982,7 +982,7 @@ label:has(input[type="checkbox"]:disabled){
   
   .user-details-collapse-less{ display: none; cursor: pointer; float:right; }
   
-  .user-detals-photo { min-width: 120px; height: 120px; border-radius: 50%; }
+  .user-detals-photo { min-width: 120px; height: 120px; border-radius: 50%; border:solid 2px #e8e8e8;}
   
   .btn_left_rigth{ height:30px; width:30px; border-radius:50%; border:solid 1px blue; }
 
@@ -2510,6 +2510,7 @@ label:has(input[type="checkbox"]:disabled){
 
   .iframeLti{ height: 500px !important; }
 
+ 
   /*******************************************************************/
   /*******************************************************************/
   /*******************************************************************/
@@ -2541,7 +2542,7 @@ label:has(input[type="checkbox"]:disabled){
     }
 
     .eclass-nav-icon{
-      width:62px; height:44px; 
+      width:62px; height:40px; 
     }
 
     .container-fluid{ 

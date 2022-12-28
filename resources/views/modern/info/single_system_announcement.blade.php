@@ -34,7 +34,7 @@
                                 </div>
                             </div>
                             <div class='panel-footer d-flex justify-content-end'>
-                                <div class="text-end info-date">
+                                <div class="text-center info-date">
                                      {!! $date !!} 
                                 </div>
                             </div>

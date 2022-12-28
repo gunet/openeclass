@@ -402,9 +402,9 @@ function lti_app_details() {
                     $headingsSent = true;
                 }
                 $tool_content .= '<tr' . ($row->enabled? '': " class='not_visible'") . ">
-                    <td class='text-left'>$title</td>
-                    <td>$desc</td>
-                    <td class='text-center'>$joinLink</td>
+                    <td class='text-start'>$title</td>
+                    <td class='text-center'>$desc</td>
+                    <td class='d-flex justify-content-center'>$joinLink</td>
                     <td class='option-btn-cell text-center'>".
                         action_button(array(
                             array(  'title' => $langEditChange,

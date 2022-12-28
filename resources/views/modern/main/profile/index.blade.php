@@ -47,29 +47,29 @@
                                     @endif
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6 col-sm-12">
+                                    <div class="col-12">
                                         <div class="row">
-                                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 d-flex justify-content-center">
+                                            <div class="col-md-2 col-6 offset-3 offset-md-0 d-flex justify-content-center">
                                                 <div id='profile-avatar'>{!! $profile_img !!}</div>
                                             </div>
-                                            <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 text-md-start text-center">
+                                            <div class="col-md-10 col-12 text-md-start text-center">
                                                 <div class="profile-name TextBold">{{ $userdata->givenname }} {{ $userdata->surname }}</div>
                                                 <div class='not_visible'><strong>{{ $userdata->username }}</strong></div>
                                             </div>
 
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-sm-12">
+                                    <div class="col-12 mt-4">
                                         {!! $action_bar_blog_portfolio !!}
                                     </div>
-                                    <div class='col-sm-12'>
+                                    <div class='col-12'>
                                         <div class='row'>
                                            {!! render_profile_fields_content(array('user_id' => $id)) !!}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-md-6 col-sm-12">
+                                    <div class="col-md-6 col-12">
                                         <div class="panel panel-default">
                                             <div class="panel-heading text-center">
                                                 {{ trans('langProfilePersInfo') }}
@@ -132,7 +132,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-sm-12 mt-md-0 mt-3">
+                                    <div class="col-md-6 col-12 mt-md-0 mt-3">
                                         <div class="panel panel-default">
                                             <div class="panel-heading text-center">
                                                 {{ trans('langProfileAboutMe') }}

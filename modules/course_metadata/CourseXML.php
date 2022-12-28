@@ -82,16 +82,16 @@ class CourseXMLElement extends SimpleXMLElement {
             'url' => "../course_info/index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')),false);
-        $out .= "<div class='right smaller'>$langRequiredFields</div>";
+        $out .= "<div class='right smaller mb-3'>$langRequiredFields</div>";
         $out .= "
-                <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
+                <form class='form-horizontal form-wrapper' role='form' method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
                 <ul class='nav nav-tabs' role='tablist'>
                    <li class='nav-item'><a class='nav-link active' href='#tabs-1' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['courseGroup'] . "</a></li>
                    <li class='nav-item'><a class='nav-link' href='#tabs-2' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['instructorGroup'] . "</a></li>
                    <li class='nav-item'><a class='nav-link' href='#tabs-3' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['curriculumGroup'] . "</a></li>
                    <li class='nav-item'><a class='nav-link' href='#tabs-4' role='tab' data-bs-toggle='tab'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
                 </ul>
-                <div class='tab-content courseMetadataContentTab shadow-lg p-3 rounded'>
+                <div class='tab-content courseMetadataContentTab'>
                     <div class='tab-pane fade show active' id='tabs-1' style='padding-top:20px'>";
         if ($data != null) {
             $this->populate($data);
@@ -204,18 +204,21 @@ class CourseXMLElement extends SimpleXMLElement {
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='panel-group mt-5'>
-                <div class='panel panel-admin'>
-                    <div class='panel-heading'>
-                        <div class='panel-title h3 d-flex justify-content-center'>
-                            <a class='metadataCourseCollapseBtn text-white text-uppercase' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
-                            <span class='fas fa-arrow-down'></span></a>
+                <div class='panel panel-admin BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                    <div class='panel-heading bg-body p-0'>
+                        
+                        <div class='col-12 Help-panel-heading'>
+                            <div class='panel-title text-uppercase Help-text-panel-heading'>
+                                <a class='metadataCourseCollapseBtn text-uppercase collapsed' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
+                                <span class='fas fa-arrow-down'></span></a>
+                            </div>
                         </div>
                     </div>
                     <div id='metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "' class='panel-collapse collapse'>
-                        <div class='panel-body ps-3 pb-3 pt-3 pe-3'>";
+                        <div class='panel-body'>";
         }
         $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0 || in_array($fullKey, CourseXMLConfig::$overrideClass)) ? 'cmetalabel' : 'cmetalabelinaccordion';
-        $fieldStart .= "<div class='form-group mt-3'><label $helptitle class='control-label-notes col-sm-6'>";
+        $fieldStart .= "<div class='form-group mt-4'><label $helptitle class='control-label-notes col-12'>";
         if (in_array($fullKeyNoLang, CourseXMLConfig::$linkedFields) && (!$this->getAttribute('lang') || $sameAsCourseLang)) {
             $fieldStart .= "<a href='" . CourseXMLConfig::getLinkedValue($fullKey) . "' target='_blank'>" . q($keyLbl . $lang) . "</a>";
         } else {
@@ -406,14 +409,20 @@ class CourseXMLElement extends SimpleXMLElement {
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='panel-group mb-3 mt-3'>
-                <div class='panel panel-admin'>
-                    <div class='panel-heading'>
-                        <div class='panel-title h3 d-flex justify-content-center'>
-                            <a class='metadataCourseCollapseBtn text-white text-uppercase' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "</a>
+                <div class='panel panel-admin BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                    <div class='panel-heading bg-body p-0'>
+                        
+                        <div class='col-12 Help-panel-heading'>
+                            <div class='panel-title text-uppercase Help-text-panel-heading'>
+                                <a class='metadataCourseCollapseBtn text-uppercase' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
+                                   <span class='fa fa-arrow-down'></span>
+                                </a>
+                            </div>
                         </div>
+
                     </div>
                     <div id='metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "' class='panel-collapse collapse'>
-                        <div class='panel-body ps-3 pt-3 pb-3 pe-3'>";
+                        <div class='panel-body'>";
         }
         $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel cmetalabel-wd' : 'cmetalabelinaccordion cmetalabelinaccordion-wd';
         $fieldStart .= "<div class='row p-2 margin-top-thin margin-bottom-thin'><div class='col-sm-6'><strong>" . q($keyLbl . $lang) . ":</strong></div><div class='col-sm-6'>";

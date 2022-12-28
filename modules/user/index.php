@@ -200,7 +200,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
         $nameColumn = "
                         <div class='pull-left' style='width: 32px ; margin-right: 10px;'>
-                            <img class='img-circle' src='".user_icon($myrow->id) . "' />
+                            <img style='border-radius:50%; border:solid 2px #e8e8e8; 'class='img-circle' src='".user_icon($myrow->id) . "' />
                             <div style='padding-left:8px; padding-top: 5px;'>$stats_icon</div>
                         </div>
                         <div class='pull-left'>

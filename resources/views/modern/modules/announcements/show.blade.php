@@ -50,7 +50,7 @@
                                 </div>
                                 <div class='panel-footer'>
                                     
-                                    <div class='text-end info-date'>
+                                    <div class='text-center info-date'>
                                         {!! $date !!}
                                     </div>
                                 </div>

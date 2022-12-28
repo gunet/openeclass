@@ -92,7 +92,7 @@
 
                 @if (isset($_SESSION['uid']))
                     <div class="row mt-5 pe-0">
-                        <div class='col-12 d-flex justify-content-end p-0 mt-xl-3 mt-lg-2'>
+                        <div class='col-12 d-flex justify-content-end p-0 mt-xl-3 mt-lg-2 themeId'>
                             <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                                 @if ((isset($is_admin) and $is_admin) or
                                     (isset($is_power_user) and $is_power_user) or
@@ -419,6 +419,6 @@
         if(!current_url.includes('/info/faq.php')){
             $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/faq_1.svg");
         }
-    }
+    }    
 
 </script>

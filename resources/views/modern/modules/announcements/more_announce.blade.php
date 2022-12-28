@@ -52,7 +52,7 @@
                                             @endif
                                         </div>
                                         <div class='col-6'>
-                                            <div class='text-end info-date'>{!! $announcement->an_date !!}</div>
+                                            <div class='text-center info-date'>{!! $announcement->an_date !!}</div>
                                         </div>
                                     </div>
                                 </div>

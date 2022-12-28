@@ -138,7 +138,7 @@
                             </div>
 
                             <div class='panel-footer'>
-                                <div class='announcement-date text-end info-date'>
+                                <div class='announcement-date text-center info-date'>
                                     {{ format_locale_date(strtotime($request->open_date)) }}
                                 </div>
                             </div>

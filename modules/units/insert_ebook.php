@@ -49,7 +49,7 @@ function list_ebooks() {
         }
         $tool_content .=
                 "</table></div>
-                <div class='text-end mt-3'>
+                <div class='d-flex justify-content-center mt-3'>
                 <input class='btn submitAdminBtn' type='submit' name='submit_ebook' value='$langAddModulesButton' /></div></form>";
     }
 }

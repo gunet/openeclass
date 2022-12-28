@@ -1450,22 +1450,22 @@ class Calendar_Events {
        global $langNextMonth, $langPreviousMonth, $course_code;
 
        if($course_code){
-            $calendar = "<div class='panel-heading p-0'>
-                            <div id='cal-header' class='cal-header-course d-flex justify-content-center'>
+            $calendar = "<div class='panel-heading p-0 d-flex justify-content-center align-items-center'>
+                            <div id='cal-header' class='cal-header-course d-flex justify-content-center align-items-center w-100'>
                                 <div class='btn-group w-100' role='group'>
-                                    <button type='button' class='btn btn-transparent d-flex justify-content-start' data-calendar-nav='prev'><div style='height:40px; width:40px; border-radius:50%; border:solid 1px #005ad9;'><i class='fas fa-chevron-left' style='margin-top:12px;'></i></div><span class='sr-only'>$langPreviousMonth</span></button>
-                                    <button id='current-month' type='button' class='btn btn-transparent' disabled='disabled'>&nbsp;</button>
-                                    <button type='button' class='btn btn-transparent d-flex justify-content-end' data-calendar-nav='next'><div style='height:40px; width:40px; border-radius:50%; border:solid 1px #005ad9;'><i class='fas fa-chevron-right' style='margin-top:12px;'></i></div><span class='sr-only'>$langNextMonth</span></button>
+                                    <button type='button' class='btn btn-transparent d-flex justify-content-center align-items-center' data-calendar-nav='prev'><div class='btn-calendar-prev d-flex justify-content-center align-items-center'><i class='fa fa-chevron-left'></i></div><span class='sr-only'>$langPreviousMonth</span></button>
+                                    <button id='current-month' type='button' class='btn btn-transparent pe-none'></button>
+                                    <button type='button' class='btn btn-transparent d-flex justify-content-center align-items-center' data-calendar-nav='next'><div class='btn-calendar-next d-flex justify-content-center align-items-center'><i class='fa fa-chevron-right'></i></div><span class='sr-only'>$langNextMonth</span></button>
                                 </div>
                             </div>
                         </div>";
        }else{
-            $calendar = "<div class='panel-heading p-0'>
-                            <div id='cal-header' class='cal-header-Portfolio d-flex justify-content-center'>
+            $calendar = "<div class='panel-heading p-0 d-flex justify-content-center align-items-center'>
+                            <div id='cal-header' class='cal-header-Portfolio d-flex justify-content-center align-items-center w-100'>
                                 <div class='btn-group w-100' role='group'>
-                                    <button type='button' class='btn btn-transparent d-flex justify-content-start' data-calendar-nav='prev'><div style='height:40px; width:40px; border-radius:50%; border:solid 1px #005ad9;'><i class='fas fa-chevron-left' style='margin-top:12px;'></i></div><span class='sr-only'>$langPreviousMonth</span></button>
-                                    <button id='current-month' type='button' class='btn btn-transparent' disabled='disabled'>&nbsp;</button>
-                                    <button type='button' class='btn btn-transparent d-flex justify-content-end' data-calendar-nav='next'><div style='height:40px; width:40px; border-radius:50%; border:solid 1px #005ad9;'><i class='fas fa-chevron-right' style='margin-top:12px;'></i></div><span class='sr-only'>$langNextMonth</span></button>
+                                    <button type='button' class='btn btn-transparent d-flex justify-content-center align-items-center' data-calendar-nav='prev'><div class='btn-calendar-prev d-flex justify-content-center align-items-center'><i class='fa fa-chevron-left'></i></div><span class='sr-only'>$langPreviousMonth</span></button>
+                                    <button id='current-month' type='button' class='btn btn-transparent pe-none'></button>
+                                    <button type='button' class='btn btn-transparent d-flex justify-content-center align-items-center' data-calendar-nav='next'><div class='btn-calendar-next d-flex justify-content-center align-items-center'><i class='fa fa-chevron-right'></i></div><span class='sr-only'>$langNextMonth</span></button>
                                 </div>
                             </div>
                         </div>";

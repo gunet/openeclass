@@ -99,7 +99,7 @@
                                 <table class='table-default nocategory-links'>
                                     <tr class='list-header'>
                                         <th>{!! headlink($GLOBALS['langVideoDirectory'], 'title') !!}</th>
-                                        <th>{!! headlink($GLOBALS['langDate'], 'date') !!}</th>
+                                        <th class='text-center'>{!! headlink($GLOBALS['langDate'], 'date') !!}</th>
                                         @if (!$is_in_tinymce)
                                             <th class='text-center'>{!! icon('fa-cogs') !!}</th>
                                         @endif

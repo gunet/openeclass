@@ -19,7 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
+ 
 $require_login = true;
 $require_valid_uid = TRUE;
 include '../../include/baseTheme.php';
@@ -124,7 +124,7 @@ if ($data['userdata']) {
             WHERE auth.auth_id = user_ext_uid.auth_id AND user_ext_uid.user_id = ?d", $data['id']);
     }
 
-    $data['profile_img'] = profile_image($data['id'], IMAGESIZE_LARGE, 'img-responsive img-circle');
+    $data['profile_img'] = profile_image($data['id'], IMAGESIZE_LARGE, 'img-responsive img-circle img-profile');
     
 
     $data['cert_completed'] = Database::get()->queryArray("SELECT cert_title,identifier,template_id,cert_issuer,assigned "

@@ -64,7 +64,7 @@ function list_exercises() {
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>
-                    <div class='text-end mt-3'>";
+                    <div class='d-flex justify-content-center mt-3'>";
         $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_exercise' value='$langAddModulesButton'></div>
                 </form>";
     }

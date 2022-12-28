@@ -7,8 +7,6 @@
     .eclass-nav-icon{margin-left:30px; margin-right:30px;}
     
     .fa-question::before{width:30px; height:28px;}
-    
-    /* .eclass-nav-icon{} */
 }
 
 @media(max-width:991px){

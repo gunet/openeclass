@@ -477,21 +477,18 @@
                             <div class="panel panel-admin px-lg-4 py-lg-3 bg-white @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif">
                                 <div class='panel-heading bg-body'>
                                     <div class='col-12 d-inline-flex Help-panel-heading'>
-                                        <div class='col-6'>
-                                            <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langAnnouncements') }}</span>
-                                        </div>
-                                        <div class='col-6 text-end'>
-                                            <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}'
-                                            class='mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllAnnouncements') }}">
-                                                <span class='fa fa-arrow-right'></span>
-                                            </a>
-                                        </div>
+                                        <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langAnnouncements') }}</span>
                                     </div>
                                 </div>
                                 <div class='panel-body bg-white ps-0 pe-0 pt-1 pb-1'>
                                     <ul class='list-group list-group-flush Borders ps-3 pe-3'>
                                         {!! course_announcements() !!}
                                     </ul>
+                                </div>
+                                <div class='panel-footer'>
+                                    <a class='TextMedium ps-2' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">
+                                        {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
+                                    </a>
                                 </div>
                             </div>
                         @endif
@@ -541,21 +538,18 @@
                             <div class="panel panel-admin px-lg-4 py-lg-3 bg-white mt-4">
                                 <div class='panel-heading bg-body'>
                                     <div class='col-12 d-inline-flex Help-panel-heading'>
-                                        <div class='col-6'>
-                                            <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langAnnouncements') }}</span>
-                                        </div>
-                                        <div class='col-6 text-end'>
-                                            <a href='{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}'
-                                            class='mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAllAnnouncements') }}">
-                                                <span class='fa fa-arrow-right'></span>
-                                            </a>
-                                        </div>
+                                        <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langAnnouncements') }}</span>
                                     </div>
                                 </div>
                                 <div class='panel-body bg-white ps-0 pe-0 pt-1 pb-1'>
                                     <ul class='list-group list-group-flush Borders ps-3 pe-3'>
                                         {!! course_announcements() !!}
                                     </ul>
+                                </div>
+                                <div class='panel-footer'>
+                                    <a class='TextMedium ps-2' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">
+                                        {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
+                                    </a>
                                 </div>
                             </div>
                         @endif
