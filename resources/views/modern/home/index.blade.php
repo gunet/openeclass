@@ -396,17 +396,16 @@
                                     <div class='panel panel-admin panel-announcements border-0 shadow-none'>
                                         <div class='panel-body rounded-Home px-5 py-4'>
                                             <div class="news">
-                                                <div class='row'>
-                                                    <div class='col-lg-1 pe-0'>
-                                                        <img class='announcement-image' src="{{$urlAppend}}template/modern/img/announcement.svg">
-                                                    </div>
-                                                    <div class='col-lg-11'>
-                                                        <h4 class="block-title TextExtraBold text-uppercase pb-0 mt-2">{{ trans('langAnnouncements') }}
+                                                <div class='d-flex'>
+                                                    
+                                                        <img class='announcement-image me-2' src="{{$urlAppend}}template/modern/img/announcement.svg">
+                                                   
+                                                        <h4 class="block-title w-100 TextExtraBold text-uppercase pb-0 mt-2">{{ trans('langAnnouncements') }}
                                                             <a href='{{ $urlServer }}rss.php'>
                                                                 <span class='fa fa-rss-square'></span>
                                                             </a>
                                                         </h4>
-                                                    </div>
+                                                   
                                                 </div>
                                                 <div class="row news-list m-auto">
                                                     @php $counterAn = 0; @endphp
@@ -782,17 +781,16 @@
                                         <div class='panel panel-admin border-0 shadow-none'>
                                             <div class='panel-body'>
                                                 <div class="news">
-                                                    <div class='row'>
-                                                        <div class='col-2 pe-0'>
-                                                            <img class='announcement-image' src="{{$urlAppend}}template/modern/img/announcement.svg">
-                                                        </div>
-                                                        <div class='col-10'>
-                                                            <h4 class="block-title TextExtraBold text-uppercase pb-0 mt-2">{{ trans('langAnnouncements') }}
+                                                    <div class='d-flex'>
+                                                      
+                                                            <img class='announcement-image me-2' src="{{$urlAppend}}template/modern/img/announcement.svg">
+                                                      
+                                                            <h4 class="block-title w-100 TextExtraBold text-uppercase pb-0 mt-2">{{ trans('langAnnouncements') }}
                                                                 <a href='{{ $urlServer }}rss.php'>
                                                                     <span class='fa fa-rss-square'></span>
                                                                 </a>
                                                             </h4>
-                                                        </div>
+                                                        
                                                     </div>
                                                     <div class="row news-list m-auto">
                                                         @php $counterAn = 0; @endphp

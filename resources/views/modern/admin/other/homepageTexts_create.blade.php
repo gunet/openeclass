@@ -161,7 +161,7 @@
                                                         </div>
                                                         <div class='col-2 text-end'>
                                                             <a href='{{$urlAppend}}modules/admin/homepageTexts_create.php?homepageText=modify&id={{$text->id}}'>
-                                                                <span class='fa fa-edit text-primary pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{trans('langEdit')}}'></span>
+                                                                <span class='fa fa-edit pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{trans('langEdit')}}'></span>
                                                             </a>
                                                             <a href='javascript:void(0);'><span class='fa fa-arrows text-dark pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></span></a>
                                                             <a class='forDelete' href='javascript:void(0);' data-id='{{ $text->id }}' data-order='{{ $text->order }}'><span class='fa fa-times text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langDelete') }}'></span></a>

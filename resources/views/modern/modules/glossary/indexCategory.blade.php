@@ -68,7 +68,7 @@
                                             <tr>
                                                 <td>
                                                     <a href='{{ $base_url }}&amp;cat={{ getIndirectReference($category->id) }}'>
-                                                        <strong class='text-primary'> {{ $category->name }}</strong>
+                                                        <strong> {{ $category->name }}</strong>
                                                     </a>
                                                 </td>
                                                 <td>

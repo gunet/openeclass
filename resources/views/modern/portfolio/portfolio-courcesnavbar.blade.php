@@ -13,7 +13,7 @@
                 
                 
                 <div type="button" onclick="cources_paging_goto('{{$paging_type}}',{{$i+1}})" 
-                    class="cources-paging-num @if( $i==0 ) text-primary @endif "
+                    class="cources-paging-num @if( $i==0 ) lightBlueText @endif "
                     @if( $i>2 && $i!=$cource_pages-1 )
                         style="display:none"
                     @endif 
@@ -42,7 +42,7 @@
 
     @if($cources)
     <div class='col-md-6 col-12 text-end text-uppercase TextMedium mt-md-0 mt-4'>
-        <a class='' href='{{$urlAppend}}main/my_courses.php'>{{ trans('langMyCoursesSide') }} 
+        <a class='all_courses' href='{{$urlAppend}}main/my_courses.php'>{{ trans('langMyCoursesSide') }} 
             <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span>
         </a>
     </div>
@@ -105,8 +105,8 @@
         $(new_active_id).show();
         old_active_num = '#cources-'+type+'-num-'+old_active_index;
         new_active_num = '#cources-'+type+'-num-'+new_active_index;
-        $(old_active_num).removeClass('text-primary');
-        $(new_active_num).addClass('text-primary');
+        $(old_active_num).removeClass('lightBlueText');
+        $(new_active_num).addClass('lightBlueText');
 
         cources_paging_fix_selection_bar(type,new_active_index-1);
     }

@@ -943,7 +943,7 @@ if ($can_upload or $user_upload) {
                 'filename' => $result->filename,
                 'curDirPath' => $curDirPath,
                 'replacePath' => $_GET['replace'],
-                'replaceMessage' => sprintf($langReplaceFile, '<span class="text-primary">' . q($result->filename) . '</span>'));
+                'replaceMessage' => sprintf($langReplaceFile, '<span class="lightBlueText">' . q($result->filename) . '</span>'));
         }
     }
 

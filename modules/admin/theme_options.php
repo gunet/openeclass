@@ -428,16 +428,15 @@ if (isset($_POST['optionsSave'])) {
     @$tool_content .= "
     <div class='col-sm-12 mb-4'>
     <div class='form-wrapper form-edit rounded'>
-        <div class='row p-2 margin-bottom-fat'>
-            <div class='col-sm-4'>
+        <div class='d-flex justify-content-center'>
+            
                 <strong class='control-label-notes'>$langActiveTheme:</strong>
-            </div>
-            <div class='col-sm-8'>
-            ".$themes_arr[$active_theme]."
-            </div>
+          
+                ".$themes_arr[$active_theme]."
+            
         </div>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' id='theme_selection'>
-            <div class='form-group mt-3'>
+            <div class='form-group mt-4'>
                 <label for='bgColor' class='col-sm-6 control-label-notes ps-2'>$langAvailableThemes:</label>
                 <div class='col-sm-12'>
                     ".  selection($themes_arr, 'active_theme_options', $theme_id, 'class="form-control form-submit" id="theme_selection"')."
@@ -445,7 +444,7 @@ if (isset($_POST['optionsSave'])) {
             </div>
             ". generate_csrf_token_form_field() ."
         </form>
-        <div class='form-group mt-3 margin-bottom-fat mt-3'>
+        <div class='form-group mt-4 margin-bottom-fat'>
             <div class='col-12 d-inline-flex'>
                 $activate_btn
                 $preview_btn
@@ -454,7 +453,7 @@ if (isset($_POST['optionsSave'])) {
         </div>
     </div></div>";
 $tool_content .= "
-<div role='tabpanel mt-3'>
+<div role='tabpanel mt-4'>
 
   <!-- Nav tabs -->
   <ul class='nav nav-tabs' role='tablist'>
@@ -467,9 +466,9 @@ $tool_content .= "
   <div class='tab-content'>
     <div role='tabpanel' class='tab-pane fade show active' id='generalsetting'>
         <div class='form-wrapper form-edit rounded'>
-            <legend class='theme_options_legend'>$langLayoutConfig</legend>
+            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-4'>$langLayoutConfig</legend>
             <div class='form-group'>
-                <label class='col-sm-6 control-label-notes'>$langLayout:</label>
+                <label class='col-sm-6 control-label-notes mb-2'>$langLayout:</label>
                 <div class='form-inline col-sm-12'>
                     <div class='row'>
                         <div class='col-sm-3'>
@@ -491,8 +490,8 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-            <div class='form-group".(($theme_options_styles['containerType'] == 'boxed')? ' hidden' : '')." mt-3'>
-                <label for='fluidContainerWidth' class='col-sm-6 control-label-notes'>$langFluidContainerWidth:</label>
+            <div class='form-group".(($theme_options_styles['containerType'] == 'boxed')? ' hidden' : '')." mt-4'>
+                <label for='fluidContainerWidth' class='col-sm-6 control-label-notes mb-2'>$langFluidContainerWidth:</label>
                 <div class='col-sm-12'>
                     <input id='fluidContainerWidth' name='fluidContainerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1340' data-slider-max='1920' data-slider-step='10' data-slider-value='$theme_options_styles[fluidContainerWidth]' ".(($theme_options_styles['containerType'] == 'boxed')? ' disabled' : '').">
                     <span style='margin-left:10px;' id='pixelCounter'></span>
@@ -501,32 +500,30 @@ $tool_content .= "
 
             <hr>
 
-            <legend class='theme_options_legend'>$langLogoConfig</legend>
-            <div class='form-group mt-3'>
-                <label for='imageUpload' class='col-sm-6 control-label-notes'>$langLogo <small>$langLogoNormal</small>:</label>
-                <div class='col-sm-12 d-inline-flex'>
+            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-2'>$langLogoConfig</legend>
+            <div class='form-group'>
+                <label for='imageUpload' class='col-sm-6 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</label>
+                <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                    $logo_field
                 </div>
             </div>
-            <div class='form-group mt-3'>
-                <label for='imageUploadSmall' class='col-sm-6 control-label-notes'>$langLogo <small>$langLogoSmall</small>:</label>
-                <div class='col-sm-12 d-inline-flex'>
+            <div class='form-group mt-4'>
+                <label for='imageUploadSmall' class='col-sm-6 control-label-notes mb-2'>$langLogo <small>$langLogoSmall</small>:</label>
+                <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                    $small_logo_field
                 </div>
             </div>
 
             <hr>
 
-            <legend class='theme_options_legend'>$langBgColorConfig</legend>
-            <div class='form-group mt-3'>
-              <label for='bgColor' class='col-sm-6 control-label-notes'>$langBgColor:</label>
-              <div class='col-sm-12'>
-                <input name='bgColor' type='text' class='form-control colorpicker' id='bgColor' value='$theme_options_styles[bgColor]'>
-              </div>
+            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-2'>$langBgColorConfig</legend>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='bgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+              <input name='bgColor' type='text' class='form-control colorpicker' id='bgColor' value='$theme_options_styles[bgColor]'>
             </div>
-            <div class='form-group mt-3'>
-                <label for='imageBg' class='col-sm-6 control-label-notes'>$langBgImg:</label>
-                <div class='col-sm-12 d-inline-flex'>
+            <div class='form-group mt-4'>
+                <label for='imageBg' class='col-sm-6 control-label-notes mb-2'>$langBgImg:</label>
+                <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                    $bg_field
                 </div>
                 <div class='form-inline col-sm-9 col-sm-offset-3 mt-2'>
@@ -553,45 +550,34 @@ $tool_content .= "
 
             <hr>
 
-            <legend class='theme_options_legend'>$langLinksCongiguration</legend>
-            <div class='form-group mt-3'>
-              <label for='linkColor' class='col-sm-6 control-label-notes'>$langLinkColor:</label>
-              <div class='col-sm-12'>
-                <input name='linkColor' type='text' class='form-control colorpicker' id='linkColor' value='$theme_options_styles[linkColor]'>
-              </div>
+            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-2'>$langLinksCongiguration</legend>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='linkColor' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
+              <input name='linkColor' type='text' class='form-control colorpicker' id='linkColor' value='$theme_options_styles[linkColor]'>
+              
             </div>
-            <div class='form-group mt-3'>
-              <label for='linkHoverColor' class='col-sm-6 control-label-notes'>$langLinkHoverColor:</label>
-              <div class='col-sm-12'>
-                <input name='linkHoverColor' type='text' class='form-control colorpicker' id='linkHoverColor' value='$theme_options_styles[linkHoverColor]'>
-              </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='linkHoverColor' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
+              <input name='linkHoverColor' type='text' class='form-control colorpicker' id='linkHoverColor' value='$theme_options_styles[linkHoverColor]'>
             </div>
 
             <hr>
 
 
-            <legend class='theme_options_legend'>$langLoginConfiguration</legend>
-            <div class='form-group mt-3'>
-                <div class='row'>
-                    <label for='loginJumbotronBgColor' class='col-sm-6 control-label-notes'>$langLoginBgGradient:</label>
-                    <div class='col-4 col-sm-1'>
-                        <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
-                    </div>
-                    <div class='col-1 text-center' style='padding-top: 7px;'>
-                        <i class='fa fa-arrow-right'></i>
-                    </div>
-                    <div class='col-4 col-sm-1'>
-                        <input name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
-                    </div>
-                </div>
+            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-2'>$langLoginConfiguration</legend>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                    <label for='loginJumbotronBgColor' class='control-label-notes mb-2 me-2'>$langLoginBgGradient:</label>
+                    <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
+                    <i class='fa fa-arrow-right ms-3 me-3'></i>
+                    <input name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
             </div>
-            <div class='form-group mt-3'>
-                <label for='loginImg' class='col-sm-6 control-label-notes'>$langLoginImg:</label>
-                <div class='col-sm-12 d-inline-flex'>
+            <div class='form-group mt-4'>
+                <label for='loginImg' class='col-sm-6 control-label-notes mb-2'>$langLoginImg:</label>
+                <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                    $login_image_field
                 </div>
             </div>
-            <div class='form-group mt-3'>
+            <div class='form-group mt-4'>
                 <div class='form-inline col-sm-9 col-sm-offset-3'>
                       <div class='radio'>
                         <label>
@@ -607,8 +593,8 @@ $tool_content .= "
                       </div>
                 </div>
             </div>
-            <div class='form-group mt-3'>
-                <label for='loginImg' class='col-sm-12 control-label-notes'>$langLoginBanner:</label>
+            <div class='form-group mt-4'>
+                <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langLoginBanner:</label>
                 <div class='col-sm-12'>
                       <div class='checkbox'>
                         <label>
@@ -622,63 +608,48 @@ $tool_content .= "
     </div>
     <div role='tabpanel' class='tab-pane fade' id='navsettings'>
         <div class='form-wrapper form-edit rounded'>
-            <legend class='theme_options_legend'>$langBgColorConfig</legend>
-            <div class='form-group mt-3'>
-              <label for='leftNavBgColor' class='col-sm-6 control-label-notes'>$langBgColor:</label>
-              <div class='col-sm-12'>
-                <input name='leftNavBgColor' type='text' class='form-control colorpicker' id='leftNavBgColor' value='$theme_options_styles[leftNavBgColor]'>
-              </div>
+            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-4'>$langBgColorConfig</legend>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='leftNavBgColor' class='control-label-notes me-2 mb-2'>$langBgColor:</label>
+              <input name='leftNavBgColor' type='text' class='form-control colorpicker' id='leftNavBgColor' value='$theme_options_styles[leftNavBgColor]'>
+             
             </div>
 
             <hr>
 
-            <legend class='theme_options_legend'>$langMainMenuConfiguration</legend>
-            <div class='form-group mt-3'>
-              <label for='leftMenuBgColor' class='col-sm-6 control-label-notes'>$langMainMenuBgColor:</label>
-              <div class='col-sm-12'>
-                <input name='leftMenuBgColor' type='text' class='form-control colorpicker' id='leftMenuBgColor' value='$theme_options_styles[leftMenuBgColor]'>
-              </div>
+            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-2'>$langMainMenuConfiguration</legend>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='leftMenuBgColor' class='control-label-notes me-2 mb-2'>$langMainMenuBgColor:</label>
+              <input name='leftMenuBgColor' type='text' class='form-control colorpicker' id='leftMenuBgColor' value='$theme_options_styles[leftMenuBgColor]'>
             </div>
-            <div class='form-group mt-3'>
-              <label for='leftMenuFontColor' class='col-sm-6 control-label-notes'>$langMainMenuLinkColor:</label>
-              <div class='col-sm-12'>
-                <input name='leftMenuFontColor' type='text' class='form-control colorpicker' id='leftMenuFontColor' value='$theme_options_styles[leftMenuFontColor]'>
-              </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='leftMenuFontColor' class='control-label-notes mb-2 me-2'>$langMainMenuLinkColor:</label>
+              <input name='leftMenuFontColor' type='text' class='form-control colorpicker' id='leftMenuFontColor' value='$theme_options_styles[leftMenuFontColor]'>
             </div>
-            <div class='form-group mt-3'>
-              <label for='leftMenuHoverFontColor' class='col-sm-6 control-label-notes'>$langMainMenuLinkHoverColor:</label>
-              <div class='col-sm-12'>
-                <input name='leftMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftMenuHoverFontColor' value='$theme_options_styles[leftMenuHoverFontColor]'>
-              </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='leftMenuHoverFontColor' class='control-label-notes mb-2 me-2'>$langMainMenuLinkHoverColor:</label>
+              <input name='leftMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftMenuHoverFontColor' value='$theme_options_styles[leftMenuHoverFontColor]'>
             </div>
-            <div class='form-group mt-3'>
-              <label for='leftMenuSelectedFontColor' class='col-sm-6 control-label-notes'>$langMainMenuActiveLinkColor:</label>
-              <div class='col-sm-12'>
-                <input name='leftMenuSelectedFontColor' type='text' class='form-control colorpicker' id='leftMenuSelectedFontColor' value='$theme_options_styles[leftMenuSelectedFontColor]'>
-              </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='leftMenuSelectedFontColor' class='control-label-notes mb-2 me-2'>$langMainMenuActiveLinkColor:</label>
+              <input name='leftMenuSelectedFontColor' type='text' class='form-control colorpicker' id='leftMenuSelectedFontColor' value='$theme_options_styles[leftMenuSelectedFontColor]'>
             </div>
 
             <hr>
 
 
-            <legend class='theme_options_legend'>Ρυθμίσεις Επιλογών</legend>
-            <div class='form-group mt-3'>
-              <label for='leftSubMenuFontColor' class='col-sm-6 control-label-notes'>$langSubMenuLinkColor:</label>
-              <div class='col-sm-12'>
-                <input name='leftSubMenuFontColor' type='text' class='form-control colorpicker' id='leftSubMenuFontColor' value='$theme_options_styles[leftSubMenuFontColor]'>
-              </div>
+            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-2'>$langSubMenuConfig</legend>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='leftSubMenuFontColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkColor:</label>
+              <input name='leftSubMenuFontColor' type='text' class='form-control colorpicker' id='leftSubMenuFontColor' value='$theme_options_styles[leftSubMenuFontColor]'>
             </div>
-            <div class='form-group mt-3'>
-              <label for='leftSubMenuHoverFontColor' class='col-sm-6 control-label-notes'>$langSubMenuLinkHoverColor:</label>
-              <div class='col-sm-12'>
-                <input name='leftSubMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverFontColor' value='$theme_options_styles[leftSubMenuHoverFontColor]'>
-              </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='leftSubMenuHoverFontColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkHoverColor:</label>
+              <input name='leftSubMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverFontColor' value='$theme_options_styles[leftSubMenuHoverFontColor]'>
             </div>
-            <div class='form-group mt-3'>
-              <label for='leftSubMenuHoverBgColor' class='col-sm-6 control-label-notes'>$langSubMenuLinkBgHoverColor:</label>
-              <div class='col-sm-12'>
-                <input name='leftSubMenuHoverBgColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverBgColor' value='$theme_options_styles[leftSubMenuHoverBgColor]'>
-              </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='leftSubMenuHoverBgColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkBgHoverColor:</label>
+              <input name='leftSubMenuHoverBgColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverBgColor' value='$theme_options_styles[leftSubMenuHoverBgColor]'>
             </div>
         </div>
     </div>

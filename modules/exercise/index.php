@@ -379,9 +379,9 @@ if (!$nbrExercises) {
                     "$countNumOfResults $langExercisesSubmissions");
                 $tool_content .= "<td class='text-center'>"
                         . "<div><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></div>
-                           <span class='btn rounded-pill bg-info ps-2 pe-2 pt-0 pb-0 text-white mt-2'>
+                           <button class='d-flex justify-content-center align-items-center m-auto d-block border-0 rounded-pill bgLightBlue pe-none text-white mt-2'>
                                 <small>$submissionCount</small>
-                           </span>"
+                           </button>"
                         . "</td>";
             } else {
                 $tool_content .= "<td class='text-center'>  &mdash; </td>";

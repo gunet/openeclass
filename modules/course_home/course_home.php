@@ -568,7 +568,7 @@ if ($total_cunits > 0) {
             $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
                 <div class='item-content'>
                     <div class='item-header clearfix'>
-                        <div class='item-title h4 $class_vis text-primary TextMedium'>";
+                        <div class='item-title h4 $class_vis lightBlueText TextMedium'>";
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
@@ -619,11 +619,11 @@ if ($total_cunits > 0) {
                         <div class='col-sm-12 bg-transparent'>
 
                             <button class='carousel-prev-btn' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='prev'>
-                                <span class='d-flex justify-content-center align-items-center fa fa-arrow-left text-primary'></span>
+                                <span class='d-flex justify-content-center align-items-center fa fa-arrow-left lightBlueText'></span>
                             </button>";
 
             $cunits_content .=  "<button class='carousel-next-btn float-end' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='next'>
-                                    <span class='d-flex justify-content-center align-items-center fa fa-arrow-right text-primary'></span>
+                                    <span class='d-flex justify-content-center align-items-center fa fa-arrow-right lightBlueText'></span>
                             </button>
 
                         </div>";
@@ -685,7 +685,7 @@ if ($total_cunits > 0) {
             $cunits_content .= "<div id='unit_$cu_indirect' class='col-12 $legendViewContent ps-0 pe-0 pt-0 pb-3 mb-3' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
                 <div class='item-content'>
                     <div class='item-header clearfix'>
-                        <div class='item-title h4 $class_vis text-primary'>";
+                        <div class='item-title h4 $class_vis lightBlueText'>";
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {

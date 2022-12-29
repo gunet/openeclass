@@ -30,7 +30,7 @@ foreach ($q as $l) {
         }
         $authLink[] = array(false, "
             <div class='col-12 d-flex justify-content-center align-items-center'>
-                <a class='btn login-form-submit TextBold rounded-pill btn-block w-50' href='$authUrl'>$langEnter</a>
+                <a class='btn login-form-submit TextBold rounded-pill btn-block w-50 d-flex justify-content-center align-items-center' href='$authUrl'>$langEnter</a>
             </div>", $authTitle);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/modern/css/bootstrap-social.css'>";

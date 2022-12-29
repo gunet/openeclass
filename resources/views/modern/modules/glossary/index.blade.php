@@ -95,7 +95,7 @@
                                                     <tr>
                                                         <td>
                                                             <a href='{{ $base_url."&amp;id=" . getIndirectReference($glossary_term->id) }}'>
-                                                                <strong class='text-primary'>{{$glossary_term->term}}</strong>
+                                                                <strong>{{$glossary_term->term}}</strong>
                                                             </a>
                                                         </td>
                                                         <td>
@@ -105,7 +105,7 @@
                                                         </td>
                                                         <td>
                                                             @if ($glossary_term->category_id)
-                                                                <a class='text-primary' href='{{ $base_url }}&amp;cat={{ getIndirectReference($glossary_term->category_id) }}'>
+                                                                <a href='{{ $base_url }}&amp;cat={{ getIndirectReference($glossary_term->category_id) }}'>
                                                                     {{ $categories[$glossary_term->category_id] }}
                                                                 </a>
                                                             @endif
@@ -113,7 +113,7 @@
                                                         <td>
                                                             @if ($glossary_term->url)
                                                                 <a class="content-truncate-announcement" data-bs-toggle="modal" role="button" aria-expanded="false" data-bs-target="#ModalUrl{{$i}}">
-                                                                    <span class="d-inline-block text-truncate text-primary" style="max-width: 180px;"><i class="fas fa-arrow-down"></i>{{ $glossary_term->url }}</span>
+                                                                    <span class="d-inline-block text-truncate lightBlueText" style="max-width: 180px;"><i class="fas fa-arrow-down"></i>{{ $glossary_term->url }}</span>
                                                                 </a>
                                                                 <div class="modal fade modalAnnouncement" id="ModalUrl{{$i}}" tabindex="-1" aria-labelledby="ModalUrl{{$i}}" aria-hidden="true">
                                                                     <div class="modal-dialog modal-xl">

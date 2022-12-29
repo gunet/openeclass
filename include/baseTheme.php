@@ -262,7 +262,7 @@ function view($view_file, $view_data = array()) {
         $theme_options_styles = unserialize($theme_options->styles);
 
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
-        $styles_str .= ".colorPalette{color:#ffffff;} .menu-popover .delete.confirmAction{background: red;}";
+        $styles_str .= ".menu-popover .delete.confirmAction{background: red;}";
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
             $background_type = "";
             if (isset($theme_options_styles['bgType']) && $theme_options_styles['bgType'] == 'stretch') {
@@ -277,12 +277,6 @@ function view($view_file, $view_data = array()) {
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
         if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; border:0px; }";
-        // if (isset($theme_options_styles['loginImgPlacement']) && $theme_options_styles['loginImgPlacement']=='full-width') {
-        //     $styles_str .= ".jumbotron.jumbotron-login {background-repeat: no-repeat; background-size: cover;}";
-        // }else{
-        //     $leftsideImg = "1";
-        //     $styles_str .= ".jumbotron.jumbotron-login{border-top-right-radius:0px;}";
-        // }
         if (isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement']=='center-position') {
             $PositionFormLogin = 1;
         }else{
@@ -303,113 +297,339 @@ function view($view_file, $view_data = array()) {
             $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
 
             $styles_str .= "
+                .breadcrumb-item::before{margin-top:0px;}
 
-            .submitAdminBtn {
-                border: solid thin;
-                border-color: $theme_options_styles[leftNavBgColor];
-                color: $theme_options_styles[leftNavBgColor];
-                font-size: 12px;
-                text-transform: uppercase;
-                height:30px;
-                font-family: 'Manrope' , sans-serif; font-weight: 600;
-                border-radius: 35px;
-              }
+                .submitAdminBtn {
+                    border: solid thin;
+                    border-color: $theme_options_styles[leftNavBgColor];
+                    color: $theme_options_styles[leftNavBgColor];
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    height:30px;
+                    font-family: 'Manrope' , sans-serif; font-weight: 600;
+                    border-radius: 35px;
+                }
             
-              .submitAdminBtn:hover {
-                background-color: $theme_options_styles[leftNavBgColor];
-                color: #ffffff;
-              }
+                .submitAdminBtn:hover {
+                    background-color: $theme_options_styles[leftNavBgColor];
+                    color: #ffffff;
+                }
 
-              .themeId .submitAdminBtn{ border: solid 1px #ffffff; }
-              .themeId .submitAdminBtn:hover {
-                background-color: $theme_options_styles[leftSubMenuHoverBgColor];;
-              }
+                .submitAdminBtn.active{
+                    background-color: $theme_options_styles[leftNavBgColor];
+                }
 
-            .offcanvas-header,.offcanvas-body,#background-cheat-leftnav, #bgr-cheat-footer, #collapseTools, .panel-admin>.panel-heading, .descCoursePanel, #cal-header,
-            .admin-list-group .list-group-item:hover{background:$theme_options_styles[leftNavBgColor];}
-            .tool-sidebar{color:#ffffff;}
-            .statistics:before{background: $theme_options_styles[leftNavBgColor];}
-            .notes_thead, .list-header{background: $theme_options_styles[leftNavBgColor];}
+                .offcanvas-header,.offcanvas-body,#background-cheat-leftnav, #bgr-cheat-footer, #collapseTools, .panel-admin>.panel-heading, .descCoursePanel, #cal-header,
+                .admin-list-group .list-group-item:hover{
+                    background:$theme_options_styles[leftNavBgColor];
+                }
 
-            .menu-popover .list-group-item{
-                border: solid thin;
-                border-color: $theme_options_styles[leftNavBgColor];
-                color: $theme_options_styles[leftNavBgColor];
-                font-size: 12px;
-                text-transform: uppercase;
-                height:30px;
-                font-family: 'Manrope' , sans-serif; font-weight: 600;
-                border-radius: 35px;
-                margin-bottom: 10px;
-                display:flex;
-                justify-content:center;
-                align-items:center;
-            }
+                .tool-sidebar{
+                    color:#ffffff;
+                }
+
+                .statistics:before{
+                    background: $theme_options_styles[leftNavBgColor];
+                }
+
+                .notes_thead, .list-header, .bgNormalBlueText{
+                    background: $theme_options_styles[leftNavBgColor];
+                }
+                .lightColor{ 
+                    background-color: #f5f5f5; 
+                }
+                  
+                .greyColor { 
+                    background-color: #D3D3D3;
+                }
+                  
+                .textgreyColor { 
+                    color: #bdbdbd;
+                }
+
+                .openCoursesPanel{
+                    background:$theme_options_styles[leftNavBgColor];
+                }
+
+                #bgr-cheat-header{
+                    background:$rgba_no_alpha
+                };
+
+                @media(max-width: 992px){
+                    #leftnav{
+                        background:$rgba_no_alpha;
+                    }
+                }
             
-            .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{
-                background:#ffffff;
-                border: solid thin;
-                border-color: #ffa023;
-                color: #ffa023;
-            }
-            .menu-popover .delete.confirmAction .fa-times, .menu-popover .delete.delete_btn .fa-times{
-                color: #ffa023;
-            }
+                .modal-content-opencourses{
+                    background:$theme_options_styles[leftNavBgColor];
+                }
 
-            .openCoursesPanel{background:$theme_options_styles[leftNavBgColor];}
+                .block-title {
+                    color: $theme_options_styles[leftNavBgColor];
+                    border-bottom: 1px solid $theme_options_styles[leftNavBgColor];
+                }
 
-            #bgr-cheat-header{background:$rgba_no_alpha};
-            @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
+                .openCoursesTextHome{
+                    color: $theme_options_styles[leftNavBgColor];
+                }
+
+                .testimonial.slick-slide.slick-current.slick-active.slick-center{
+                    background-color: $theme_options_styles[leftNavBgColor];
+                    color: #ffffff;
+                }
+
+                .Help-panel-heading {
+                    border-bottom:solid 1px $theme_options_styles[leftNavBgColor];
+                }
+                
+                input[type='radio']:checked{ 
+                    background-color: $theme_options_styles[leftNavBgColor];
+                }
+
+                .input-StatusCourse:checked{
+                    background-color: $theme_options_styles[leftNavBgColor];
+                }
+
+                input[type='checkbox']{
+                    accent-color: $theme_options_styles[leftNavBgColor];
+                }
+                
+                .cal-day-today > .number-day-cal{ 
+                    background-color: $theme_options_styles[leftNavBgColor];
+                }
+
+                .manage-course-li-active{
+                    background-color:$theme_options_styles[leftNavBgColor];
+                }
+
+                div[role='progressbar'] {
+                    --fg: $theme_options_styles[leftNavBgColor];
+                    --bg: #e8e8e8;
+                }
+                
+            ";
         }
-        if (!empty($theme_options_styles['linkColor'])) $styles_str .= "a, .toolAdminText {color: $theme_options_styles[linkColor];}";
-        if (!empty($theme_options_styles['linkHoverColor'])) $styles_str .= "a:hover, a:focus {color: $theme_options_styles[linkHoverColor];} .admin-list-group:hover .toolAdminText{color:#ffffff;}";
-        if (!empty($theme_options_styles['leftSubMenuFontColor'])) $styles_str .= "#leftnav .panel a {color: $theme_options_styles[leftSubMenuFontColor];}";
-        if (!empty($theme_options_styles['leftSubMenuHoverBgColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover, .menu-popover .list-group-item:hover{background: $theme_options_styles[leftSubMenuHoverBgColor];} #leftnav .panel a.list-group-item.active:hover{background:#ccc;}";
-        if (!empty($theme_options_styles['leftSubMenuHoverFontColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{color: $theme_options_styles[leftSubMenuHoverFontColor];}";
-        if (!empty($theme_options_styles['leftMenuFontColor'])) $styles_str .= "#leftnav .panel a.parent-menu{color: $theme_options_styles[leftMenuFontColor];}";
-        if (!empty($theme_options_styles['leftMenuBgColor'])) $styles_str .= "#leftnav .panel a.parent-menu{background: $theme_options_styles[leftMenuBgColor];}";
-        if (!empty($theme_options_styles['leftMenuHoverFontColor'])) $styles_str .= "#leftnav .panel .panel-sidebar-heading:hover {color: $theme_options_styles[leftMenuHoverFontColor];}";
-        if (!empty($theme_options_styles['leftMenuSelectedFontColor'])) $styles_str .= "#leftnav .panel a.parent-menu:not(.collapsed){color: $theme_options_styles[leftMenuSelectedFontColor];}";
-        if (isset($theme_options_styles['imageUpload'])) $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
-        if (isset($theme_options_styles['imageUploadSmall'])) $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
+        if (!empty($theme_options_styles['linkColor'])){
+           $styles_str .= "
+                a, .toolAdminText{
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .themeId .submitAdminBtn{ border: solid 1px #ffffff; }
+                .themeId .submitAdminBtn:hover {
+                    background-color: $theme_options_styles[linkColor];
+                }
+
+                .login-form-submit, .opencourses_btn {
+                    border-color: $theme_options_styles[linkColor];
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .lightBlueText { 
+                    color:$theme_options_styles[linkColor];
+                }
+                  
+                .bgLightBlue { 
+                    background-color: $theme_options_styles[linkColor];
+                }
+
+                .all_announcements, .all_courses, .all_messages{
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .modal-content-opencourses{
+                    border:solid 8px $theme_options_styles[linkColor];
+                }
+
+                .Help-text-panel-heading {
+                    color:  $theme_options_styles[linkColor];
+                }
+
+                .slider-round { 
+                    background-color: $theme_options_styles[linkColor];
+                }
+
+                input:focus + .slider-round { 
+                    box-shadow: 0 0 1px $theme_options_styles[linkColor]; 
+                }
+
+                .div_social{
+                    background-color:$theme_options_styles[linkColor];
+                }
+
+                .circle-img-contant { 
+                    background-color: $theme_options_styles[linkColor];
+                }
+            "; 
+        }
+        
+        if (!empty($theme_options_styles['linkHoverColor'])){
+            $styles_str .= "
+                a:hover, a:focus {
+                    color: $theme_options_styles[linkHoverColor];
+                } 
+                
+                .admin-list-group .list-group-item:hover .toolAdminText{
+                    color:#ffffff;
+                }
+
+                .login-form-submit:hover, .opencourses_btn:hover {
+                    background-color: $theme_options_styles[linkColor];
+                    color: #ffffff;
+                }
+            ";
+        } 
+        
+        if (!empty($theme_options_styles['leftSubMenuFontColor'])){
+            $styles_str .= "
+                #leftnav .panel a{
+                    color: $theme_options_styles[leftSubMenuFontColor];
+                }
+                .toolSidebarTxt{
+                    color: $theme_options_styles[leftSubMenuFontColor];
+                }
+            ";
+        }
+        
+
+        if (!empty($theme_options_styles['leftSubMenuHoverBgColor'])){
+            $styles_str .= "
+                #leftnav .panel a.list-group-item:hover{
+                    background: $theme_options_styles[leftSubMenuHoverBgColor];
+                } 
+                
+                #leftnav .panel a.list-group-item.active:hover{
+                    background:#ccc;
+                }
+
+                .dropdown_menu_user .list-group-item:hover, .mydropdowns .list-group-item:hover, .user-language-menu .list-group-item:hover{
+                    background-color:$theme_options_styles[leftSubMenuHoverBgColor];
+                }
+
+                .manage-course-ul .manage-course-li a:hover{ 
+                    background: $theme_options_styles[leftSubMenuHoverBgColor];
+                }
+
+                .manage-course-ul .manage-course-li a:hover span{ 
+                    color: #ffffff;
+                }
+
+                .mydropdowns .confirmAction:hover{
+                    background-color:#ffa023;
+                }
+
+                .menu-popover .list-group-item{
+                    border-color: $theme_options_styles[leftSubMenuHoverBgColor];
+                    color:$theme_options_styles[leftSubMenuHoverBgColor];
+                }
+
+                .menu-popover .list-group-item:hover{
+                    background-color: $theme_options_styles[leftSubMenuHoverBgColor];
+                    color:#ffffff;
+                }
+            
+                .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{
+                    background:#ffffff;
+                    border: solid thin;
+                    border-color: #ffa023;
+                    color: #ffa023;
+                }
+
+                .menu-popover .delete.confirmAction .fa-times, .menu-popover .delete.delete_btn .fa-times{
+                    color: #ffa023;
+                }
+
+                .admin-list-group .list-group-item:hover{
+                    background-color:$theme_options_styles[leftSubMenuHoverBgColor];
+                }
+            ";
+        }
+        
+        if (!empty($theme_options_styles['leftSubMenuHoverFontColor'])){
+            $styles_str .= "
+                #leftnav .panel a.list-group-item:hover{
+                    color: $theme_options_styles[leftSubMenuHoverFontColor];
+                }
+                #leftnav .panel .leftMenuToolCourse:hover .toolSidebarTxt{
+                    color: $theme_options_styles[leftSubMenuHoverFontColor];
+                }
+
+            ";
+        } 
+        
+        if (!empty($theme_options_styles['leftMenuFontColor'])){
+            $styles_str .= "
+                #leftnav .panel a.parent-menu{
+                    color: $theme_options_styles[leftMenuFontColor];
+                }
+
+                #leftnav .panel a.parent-menu span{
+                    color: $theme_options_styles[leftMenuFontColor];
+                }
+                
+            ";
+        }
+        
+        if (!empty($theme_options_styles['leftMenuBgColor'])){
+            $styles_str .= "
+                #leftnav .panel a.parent-menu{
+                    background: $theme_options_styles[leftMenuBgColor];
+                }
+
+                #leftnav .panel a.parent-menu .panel-title{
+                    background: $theme_options_styles[leftMenuBgColor];
+                }
+                
+            ";
+        }
+        
+        if (!empty($theme_options_styles['leftMenuHoverFontColor'])){
+            $styles_str .= "
+                #leftnav .panel .panel-sidebar-heading:hover{
+                    color: $theme_options_styles[leftMenuHoverFontColor];
+                }
+
+                #leftnav .panel .panel-sidebar-heading:hover span{
+                    color: $theme_options_styles[leftMenuHoverFontColor];
+                }
+            ";
+        }
+        
+        if (!empty($theme_options_styles['leftMenuSelectedFontColor'])){
+            $styles_str .= "
+                #leftnav .panel a.parent-menu:not(.collapsed){
+                    color: $theme_options_styles[leftMenuSelectedFontColor];
+                }
+
+                #leftnav .panel:has(.show.Borders.Collapse0) #Tool0 span{
+                    color: $theme_options_styles[leftMenuSelectedFontColor];
+                }
+
+                #leftnav .panel:has(.show.Borders.Collapse1) #Tool1 span{
+                    color: $theme_options_styles[leftMenuSelectedFontColor];
+                }
+
+                
+            ";
+        }
+        
+        if (isset($theme_options_styles['imageUpload'])){
+            $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
+        }
+        
+        if (isset($theme_options_styles['imageUploadSmall'])){
+            $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
+            $styles_str .= "
+                @media(max-width:991px){
+                    .eclass-nav-icon{
+                        background-color: #ffffff; 
+                        border-radius:0%;
+                    }
+                }";
+        }
+        
     }else{
-        // $styles_str .= "#background-cheat-leftnav,#bgr-cheat-header{background:rgba(0, 62, 135, 0.9) ;}
-        // #leftnav{background:transparent;}
-        // #bgr-cheat-footer{background: #001146;} a{color:#005ad9;}
-        // #leftnav .panel a.list-group-item:hover{background: #4682B4;}
-        // #leftnav .panel a.list-group-item.active:hover{background: #ccc;}
-        // .offcanvas{background:#1d4e89;}
-        // .statistics:before{background: #001146;}
-        // .notes_thead, .list-header{background: #003e87;}
-        // .menu-popover .list-group-item{
-        //     border: solid thin;
-        //     border-color: #005ad9;
-        //     color: #005ad9;
-        //     font-size: 12px;
-        //     text-transform: uppercase;
-        //     height:30px;
-        //     font-family: 'Manrope-SemiBold',sans-serif;
-        //     border-radius: 35px;
-        //     margin-bottom: 10px;
-        //     display:flex;
-        //     justify-content:center;
-        //     align-items:center;
-        // }
-        // .menu-popover .list-group-item:hover{
-        //     background-color: #005ad9;
-        //     color: #ffffff;
-        // }
-        // .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{
-        //     background:#ffffff;
-        //     border: solid thin;
-        //     border-color: #ffa023;
-        //     color: #ffa023;
-        // }
-        // .menu-popover .delete.confirmAction .fa-times, .menu-popover .delete.delete_btn .fa-times{
-        //     color: #ffa023;
-        // }
-        // .openCoursesPanel{background:#003e87;}
-        // #cal-header{background:#001146;}";
 
         $head_content .= "
             <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/slick.css'/>
@@ -675,7 +895,7 @@ function lang_selections_Desktop() {
     <a class="dropdown-toggle text-white TextSemiBold text-capitalize small-text" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
        '. $Selected_Language .' 
    </a>
-    <ul class="m-0 p-0 border-0 dropdown-menu dropdown-menu-end $langDropdown user-language-menu me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="dropdownMenuLang">';
+    <ul class="m-0 p-0 border-0 dropdown-menu dropdown-menu-end user-language-menu me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="dropdownMenuLang">';
     foreach ($session->active_ui_languages as $code) {
         $class = ($code == $session->language)? ' class="active"': '';
         $lang_select .=

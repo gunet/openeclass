@@ -55,13 +55,13 @@
                                                     @if ($eclass_stud_reg == 2) <!--  allow student registration via eclass -->
                                                         <tr>
                                                             <td>
-                                                                <a class="text-primary fs-6" href='newuser.php{{ $provider }}{{$provider_user_data}}'>{{ trans('langUserAccountInfo2') }}</a>
+                                                                <a class="lightBlueText fs-6" href='newuser.php{{ $provider }}{{$provider_user_data}}'>{{ trans('langUserAccountInfo2') }}</a>
                                                             </td>
                                                         </tr>
                                                     @else ($eclass_stud_reg == 1) <!-- allow student registration via request -->
                                                         <tr>
                                                             <td>
-                                                                <a class="text-primary fs-6"  href='formuser.php{{ $provider }}{{ $provider_user_data }}'>{{ trans('langUserAccountInfo1') }}</a>
+                                                                <a class="lightBlueText fs-6"  href='formuser.php{{ $provider }}{{ $provider_user_data }}'>{{ trans('langUserAccountInfo1') }}</a>
                                                             </td>
                                                         </tr>
                                                     @endif
@@ -78,12 +78,12 @@
                                                             @if ($v != 1)  <!--  bypass the eclass auth method -->
                                                                 <!-- hybridauth registration is performed in newuser.php of formuser.php rather than altnewuser.php -->
                                                                 @if ($v < 8) 
-                                                                    <br><a class="text-primary fs-6"  href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
+                                                                    <br><a class="lightBlueText fs-6"  href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
                                                                 @else
                                                                     @if($eclass_stud_reg == 1) 
-                                                                        <a class="text-primary fs-6" href='formuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
+                                                                        <a class="lightBlueText fs-6" href='formuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
                                                                     @else
-                                                                        <a class="text-primary fs-6" href='newuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
+                                                                        <a class="lightBlueText fs-6" href='newuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
                                                                     @endif
                                                                 @endif
                                                             @endif
@@ -116,13 +116,13 @@
                                                         @if (empty($provider)) 
                                                             <tr>
                                                                 <td>
-                                                                    <a class="text-primary fs-6"  href='formuser.php?p=1'>{{ trans('langUserAccountInfo1') }} </a>
+                                                                    <a class="lightBlueText fs-6"  href='formuser.php?p=1'>{{ trans('langUserAccountInfo1') }} </a>
                                                                 </td>
                                                             </tr>
                                                         @else 
                                                             <tr>
                                                                 <td>
-                                                                    <a class="text-primary fs-6"  href='formuser.php{{ $provider }}{{ $provider_user_data}}&p=1'>{{ trans('langUserAccountInfo1') }}</a>
+                                                                    <a class="lightBlueText fs-6"  href='formuser.php{{ $provider }}{{ $provider_user_data}}&p=1'>{{ trans('langUserAccountInfo1') }}</a>
                                                                 </td>
                                                             </tr>
                                                         @endif    
@@ -135,15 +135,15 @@
                                                                     <!-- hybridauth registration is performed in newuser.php rather than altnewuser -->
                                                                     @if ($v < 8) 
                                                                         @if ($alt_auth_prof_reg) 
-                                                                        <br><a class="text-primary fs-6"  href='altnewuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a>
+                                                                        <br><a class="lightBlueText fs-6"  href='altnewuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a>
                                                                         @else 
-                                                                        <br><a class="text-primary fs-6"  href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
+                                                                        <br><a class="lightBlueText fs-6"  href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a>
                                                                         @endif
                                                                     @else 
                                                                         @if ($alt_auth_prof_reg) 
-                                                                            <a class="text-primary fs-6"  href='formuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a>
+                                                                            <a class="lightBlueText fs-6"  href='formuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a>
                                                                         @else 
-                                                                            <a class="text-primary fs-6"  href='newuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a>
+                                                                            <a class="lightBlueText fs-6"  href='newuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a>
                                                                         @endif    
                                                                     @endif
                                                                 @endif

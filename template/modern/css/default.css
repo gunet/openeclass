@@ -42,13 +42,13 @@
 
 .dropdown_menu_user{ background: #ffffff; font-size:14px; width:255px;}
 
-.dropdown_menu_user .list-group-item:hover{ background-color: #003e85; color:white; }
+.dropdown_menu_user .list-group-item:hover{ background-color: #005ad9; color:white; }
 
 .user-language-menu{ background: #ffffff; width:200px; }
 
 @media(min-width:768px) and (max-width:991px){.user-language-menuOn{ margin-right: 200px !important;}}
 
-.user-language-menu .list-group-item:hover{ background-color: #003e85; color:white; }
+.user-language-menu .list-group-item:hover{ background-color: #005ad9; color:white; }
 
 
 /********************************************* FOOTER ****************************************************************************************/
@@ -416,6 +416,7 @@ input:-webkit-autofill:active {
   background-repeat: no-repeat; 
   background-size: cover; 
   background-image: url(../images/form-wrapper-bg.jpg); 
+  /* min-height:calc(100vh - 147px - 188.55px - 32px - 96px - 60px - 40px - 60px) !important; */
 }
 
 /* dates checkboxes inside form-wrapper */
@@ -732,7 +733,11 @@ label:has(input[type="checkbox"]:disabled){
   }
 
   .manage-course-ul .manage-course-li a:hover{ 
-    background: #e6e6e6; 
+    background: #005ad9; 
+  }
+
+  .manage-course-ul .manage-course-li a:hover span{ 
+    color: #ffffff;
   }
 
   /* --------------------------------------------- CourseHome -------------------------------------------------------------------------------*/
@@ -834,7 +839,7 @@ label:has(input[type="checkbox"]:disabled){
   }  
 
   .mydropdowns .list-group-item:hover{ 
-    background-color: #1d4e89; 
+    background-color: #005ad9; 
     color:white; 
   }
 
@@ -1219,7 +1224,7 @@ label:has(input[type="checkbox"]:disabled){
     height:50px;
   }
   
-  .all_announcements, .all_courses{
+  .all_announcements, .all_courses, .all_messages{
       font-size: 14px;
       font-weight: 600;
       display: inline-block;
@@ -1275,7 +1280,8 @@ label:has(input[type="checkbox"]:disabled){
   }
 
   .block-title {
-    font-weight: bold;
+    font-weight: 700;
+    font-style: normal;
     color: #003e87;
     border-bottom: 1px solid #003e87;
     padding-bottom: 15px;

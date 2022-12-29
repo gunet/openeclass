@@ -16,7 +16,7 @@
                             </div>
                             <div class="col-xl-4 col-md-7 col-2">
                                 <div class="collapse-details-button" data-bs-toggle="collapse" data-bs-target=".user-details-collapse" aria-expanded="false" onclick="switch_user_details_toggle()" >
-                                    <span class="user-details-collapse-less float-end"><span class='hidden-xs TextMedium text-uppercase small-text text-primary'>{{ trans('langMyProfile') }}</span> <i class="fas fa-chevron-up text-primary"></i></span>
+                                    <span class="user-details-collapse-less float-end"><span class='hidden-xs TextMedium text-uppercase small-text lightBlueText'>{{ trans('langMyProfile') }}</span> <i class="fas fa-chevron-up lightBlueText"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -54,8 +54,8 @@
                             <div class='col-12 d-flex justify-content-md-end justify-content-center pe-0 mt-lg-0 mt-5'>
                                 <button class='bg-transparent border-0 text-end'data-bs-toggle="collapse" data-bs-target=".user-details-collapse" aria-expanded="false" onclick="switch_user_details_toggle()" >
                                     <span class="user-details-collapse-more">
-                                        <span class='text-primary text-uppercase mt-2 small-text'>{{ trans('langMoreInfo') }}</span>
-                                        <i class="fas fa-chevron-down text-primary"></i>
+                                        <span class='lightBlueText text-uppercase mt-2 small-text'>{{ trans('langMoreInfo') }}</span>
+                                        <i class="fas fa-chevron-down lightBlueText"></i>
                                     </span>
                                 </button>
                             </div>
@@ -220,7 +220,7 @@
                             </div>
                             <div class="col-4">
                                 <div id="bars-active" type='button' class='float-end mt-0' style="display:flex;">
-                                    <div id="cources-bars-button" class="collapse-cources-button text-primary">
+                                    <div id="cources-bars-button" class="collapse-cources-button lightBlueText">
                                         <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars custom-font" style='font-size:15px;'></i></span>
                                     </div>
                                     <div id="cources-pics-button" class="collapse-cources-button text-secondary collapse-cources-button-deactivated" onclick="switch_cources_toggle()">
@@ -231,7 +231,7 @@
                                     <div id="cources-bars-button" class="collapse-cources-button text-secondary collapse-cources-button-deactivated" onclick="switch_cources_toggle()">
                                         <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars custom-font" style='font-size:15px;'></i></span>
                                     </div>
-                                    <div id="cources-pics-button" class="collapse-cources-button text-primary">
+                                    <div id="cources-pics-button" class="collapse-cources-button lightBlueText">
                                         <span class="grid-style"><i class="fas fa-custom-size fa-th-large custom-font" style='font-size:15px;'></i></span>
                                     </div>
                                 </div>
@@ -323,7 +323,7 @@
                     @endif
                 </div>
                 <div class='panel-footer d-flex justify-content-start p-0'>
-                    <a class='TextMedium' href="{{$urlAppend}}modules/announcements/myannouncements.php">
+                    <a class='all_announcements' href="{{$urlAppend}}modules/announcements/myannouncements.php">
                         {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
                     </a>
                 </div>
@@ -343,7 +343,7 @@
                     @endif
                 </div>
                 <div class='panel-footer d-flex justify-content-start p-0'>
-                    <a class='TextMedium' href="{{$urlAppend}}modules/message/index.php">
+                    <a class='all_messages' href="{{$urlAppend}}modules/message/index.php">
                         {{ trans('langAllMessages') }} <span class='fa fa-chevron-right'></span>
                     </a>
                 </div>

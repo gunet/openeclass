@@ -452,7 +452,7 @@
 
                                             @if (count($resources))
                                                 <div class='table-responsive'>
-                                                    <table class='table table-striped table-hover'>
+                                                    <table class='table-default table-striped table-hover'>
                                                         <tbody>
                                                             @foreach ($resources as $info)
                                                                 @php $info->comments = standard_text_escape($info->comments); @endphp
@@ -486,7 +486,7 @@
                                     </ul>
                                 </div>
                                 <div class='panel-footer'>
-                                    <a class='TextMedium ps-2' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">
+                                    <a class='all_announcements ps-2' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">
                                         {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
                                     </a>
                                 </div>
@@ -547,7 +547,7 @@
                                     </ul>
                                 </div>
                                 <div class='panel-footer'>
-                                    <a class='TextMedium ps-2' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">
+                                    <a class='all_announcements ps-2' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">
                                         {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
                                     </a>
                                 </div>

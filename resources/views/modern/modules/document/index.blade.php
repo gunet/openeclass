@@ -91,7 +91,7 @@
                             <div class='panel Borders'>
                                 <div class='panel-body docPanel Borders'>
                                     <div class='row'>
-                                        <div class='col-9 d-flex justidy-content-center align-items-center'>
+                                        <div class='col-9 d-flex justify-content-start align-items-center'>
                                             {!! make_clickable_path($curDirPath) !!}
                                             @if ($downloadPath)
                                                 &nbsp;&nbsp;{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
@@ -100,7 +100,7 @@
                                                 {{ $dirComment }}
                                             @endif
                                         </div>
-                                        <div class='col-3 text-end'>
+                                        <div class='col-3 d-flex justify-content-end align-items-center'>
                                             @if ($curDirName)
                                                 <a href='{{$parentLink}}' type='button' class='btn submitAdminBtn'>
                                                     <span class='fa fa-level-up'></span>&nbsp;{{ trans('langUp') }}

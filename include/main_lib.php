@@ -3843,7 +3843,7 @@ function setOpenCoursesExtraHTML() {
                 <div class='col-lg-7 col-12'>
                     <div class='row'>
                         <div class='col-12 ps-0' style='background-color:#ffffff; border-bottom:solid 1px #003e87;'>
-                            <span class='text-uppercase TextBold normalBlueText'>$langOpenCoursesShort</span>
+                            <span class='text-uppercase TextBold normalBlueText openCoursesTextHome'>$langOpenCoursesShort</span>
                         </div>
                         <div class='col-12 ps-0 mt-3'>
                             <a target='_blank' href='$openFacultiesUrl'>

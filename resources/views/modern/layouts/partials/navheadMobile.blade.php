@@ -3,7 +3,7 @@
         <div class='col-12 d-flex justify-content-center'>
 
             @if(!get_config('hide_login_link'))
-                <a class='d-flex justify-content-center align-items-center' type="button" href="{{ $urlServer }}"><img class="eclass-nav-icon ps-2 pe-1" src="{{$logo_img_small}}"></a>
+                <a class='d-flex justify-content-center align-items-center' type="button" href="{{ $urlServer }}"><img class="eclass-nav-icon ms-2 ps-2 pe-2" src="{{$logo_img_small}}"></a>
             @endif
 
             <div class="btn-group w-100" role="group" aria-label="Basic example">
@@ -95,7 +95,7 @@
                             <li>
                                 <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:14px;'>
                                     <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
-                                    <button type='submit' class='w-100 list-group-item border border-top-0 border-bottom-0 bg-light text-end bg-light' name='submit'><i class="fas fa-sign-out-alt fw-bold text-primary"></i>
+                                    <button type='submit' class='w-100 list-group-item border border-top-0 border-bottom-0 bg-light text-end bg-light' name='submit'><i class="fas fa-sign-out-alt fw-bold lightBlueText"></i>
                                     <span class='fs-6 fw-bold text-dark'>{{ trans('langLogout') }}</span></button>
                                 </form>
                             </li>
