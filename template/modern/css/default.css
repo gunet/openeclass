@@ -1003,7 +1003,7 @@ label:has(input[type="checkbox"]:disabled){
 
   .viewAllCourseBtn {height:15px; width:30px; margin-top:2px;}
 
-  .btn-slide { 
+  /* .btn-slide { 
     position: relative;
     display: inline-block; 
     height: 50px;
@@ -1060,7 +1060,7 @@ label:has(input[type="checkbox"]:disabled){
   @media (min-width:992px){
     .btn-slide:hover span.title { opacity: 0; }
     .btn-slide:hover span.title-hover { opacity: 1; left: 60px; } 
-  }
+  } */
 
   @media(max-width:991px){
     .BorderSolid{border: solid 1px #e8e8e8 !important; }
@@ -2506,15 +2506,43 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
 
-  .embed-responsive-item{ height:300px; }
 
+  .embed-responsive-item{ height:500px; width:100%;}
+
+  .bodyChat::-webkit-scrollbar {
+    width: 20px;
+  }
+
+  .bodyChat::-webkit-scrollbar-track {
+    background-color: #e8e8e8;
+  }
+
+  .bodyChat::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+  }
+
+  .bodyChat::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+  }
+
+  .bodyChat::-webkit-scrollbar-thumb {
+    background-color: #003e87;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+
+  .bodyChat::-webkit-scrollbar-thumb:hover {
+    background-color: #005ad7;
+  }
 /* -------------------------------------     LTI COURSE     ---------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
 
-  .iframeLti{ height: 500px !important; }
+  .iframeLti{ height: 500px !important; border-radius:15px !important;}
 
  
   /*******************************************************************/

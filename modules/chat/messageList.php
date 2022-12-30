@@ -155,13 +155,9 @@ if (isset($_GET['store']) && $is_editor) {
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="<?php echo $urlServer;?>template/modern/css/bootstrap.min.css">
 
-    <style type="text/css">
-        span { color: #727266; font-size: 11px; }
-        div { font-size: 12px; }
-        body { font-family: Verdana, Arial, Helvetica, sans-serif; }
-    </style>
+    <link rel="stylesheet" href="<?php echo $urlServer;?>template/modern/css/default.css">
 </head>
-<body style='background: white;'>
+<body class='bgEclass bodyChat pb-3'>
 <?php
     // display message list
     $fileContent = file($fileChatName);
@@ -185,13 +181,12 @@ if (isset($_GET['store']) && $is_editor) {
                 } else {
                     $class = 'alert-info';
                 }
-                echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
-                            <div class='col-12 mt-3 p-3'>
+                echo "
+                            <div class='col-12 mt-3 mb-3 ps-3 pe-3'>
                                 <div class='alert $class text-center'>
                                     $str_1[0]
                                 </div>
-                            </div>
-                      </div>\n";
+                            </div>\n";
             } else {
                 $user_id = intval(trim($str_1[1]));
                 $str_2 = explode(' - ', $str_1[0], 2);
@@ -204,31 +199,38 @@ if (isset($_GET['store']) && $is_editor) {
                     $usertext = '';
                 }
                 $token = token_generate($user_id, true);
-                echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
-                            <div class='col-12 mt-3 p-3'>
-                                <div class='media p-3' style='background:#f2f2f2;'>
-                                    <a class='media-left' href='{$urlServer}main/profile/display_profile.php?id=$user_id&amp;token=$token'>
-                                        ". profile_image($user_id, IMAGESIZE_SMALL) ."
-                                    </a>
-                                    <div class='media-body bubble'>
-                                        <div class='label label-success media-heading'>$datetime</div>
+                echo "
+                    <div class='col-12 ps-3 pe-3'>
+                        <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                            <div class='panel-heading bg-body p-0'>
+                                <div class='col-12 Help-panel-heading pb-1'>
+                                    <span class='panel-title text-capitalize Help-text-panel-heading'>
+                                        <a class='text-start' href='{$urlServer}main/profile/display_profile.php?id=$user_id&amp;token=$token'>
+                                            ". profile_image($user_id, IMAGESIZE_SMALL) ."
+                                        </a>
                                         <small>$langBlogPostUser ". display_user($user_id, false, false) ."</small>
-                                        <div class='margin-top-thin'>
-                                            " . $usertext . "
-                                        </div>
-                                    </div>
+                                    </span>
                                 </div>
                             </div>
-                      </div>\n";
+                            <div class='panel-body'>
+                                
+                                <div class='margin-top-thin'>
+                                    " . $usertext . "
+                                </div>
+                            </div>
+                            <div class='panel-footer d-flex justify-content-end'>
+                                <p class='bgEclass rounded-pill ps-2 pe-2 TextSemiBold'>$datetime</p>
+                            </div>
+                        </div>
+                    </div>\n";
             }
         } else { //prior to version 3.0 generated conferences
-                echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
-                            <div class='col-12 mt-3 p-3'>
+                echo "
+                            <div class='col-12 mt-3 mb-3 ps-3 pe-3'>
                                 <div class='alert alert-default'>
                                     $str_1[0]
                                 </div>
-                            </div>
-                      </div>\n";
+                            </div>\n";
         }
     }
     echo "</body></html>\n";

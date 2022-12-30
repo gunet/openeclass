@@ -153,7 +153,7 @@ if (!$conference_activity) {
         $action_form = "messageList.php";
         $iframe_file = "messageList.php?course=$course_code&amp;conference_id=$conference_id";
     }
-    $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langTypeMessage</div></div>
+    $tool_content .= "
        <div class='col-12'><div class='form-wrapper form-edit rounded'>
        <form name='chatForm' action='$action_form' method='POST' target='messageList' onSubmit='return prepare_message();'>
        <input type='hidden' name='course' value='$course_code'>
@@ -164,11 +164,11 @@ if (!$conference_activity) {
               <input class='form-control mt-0' type='text' placeholder='$typeyourmessage...' name='msg' size='80' class='form-control'>
               <input type='hidden' name='chatLine'>
               <span class='input-group-text h-30px border-0 BordersRightInput bgEclass pe-0'>
-                <input class='btn submitAdminBtn' type='submit' value='&raquo;'>
+                <input class='btn submitAdminBtn' type='submit' value='$langSend'>
               </span>
             </div>
             <div class='embed-responsive embed-responsive-4by3 margin-top-fat mt-3'>
-              <iframe class='embed-responsive-item' id='iframe' src='$iframe_file' name='messageList' style='border: 1px solid #CAC3B5;width:100%;overflow-x: hidden;'></iframe>
+              <iframe class='embed-responsive-item basicBorderSolid Borders overflow-auto' id='iframe' src='$iframe_file' name='messageList'></iframe>
             </div>       
         </div>   
        </fieldset>
