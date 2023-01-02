@@ -212,7 +212,7 @@
                                                             @php $headingsSent = true; @endphp
                                                             @endif
                                                             <tr {!!($row->enabled? '': " class='not_visible'")!!}>
-                                                                <td class='text-left'>{!! $title !!}</td>
+                                                                <td class='text-start'>{!! $title !!}</td>
                                                                 <td>{!! $desc !!}</td>
                                                                 <td class='text-center'>{!! $joinLink !!}</td>
                                                                 <td class='option-btn-cell text-center'>

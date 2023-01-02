@@ -8,8 +8,8 @@
     <div class='table-responsive glossary-categories'>
         <table class='table-default'>
             <tr class='list-header'>
-                <th class='text-left'>{{ trans('langGlossaryTerm') }}</th>
-                <th class='text-left'>{{ trans('langGlossaryDefinition') }}</th>
+                <th class='text-start'>{{ trans('langGlossaryTerm') }}</th>
+                <th class='text-start'>{{ trans('langGlossaryDefinition') }}</th>
             </tr>
             @foreach ($glossary as $data)
                 <tr>

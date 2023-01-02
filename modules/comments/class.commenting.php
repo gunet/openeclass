@@ -83,7 +83,7 @@ Class Commenting {
         if (!$always_open) {
             $comments_title = "<span class='fa fa-comments'></span>&nbsp;&nbsp;<a class='course_commenting' data-bs-toggle='modal' data-bs-target='#commentArea-$this->rid'><span id='commentsNum-$this->rid'>$commentsNum</span> $langComments</a>";
             $out = "$comments_title
-                    <div class='modal fade text-left' id='commentArea-$this->rid' role='dialog'>
+                    <div class='modal fade text-start' id='commentArea-$this->rid' role='dialog'>
                       <div class='modal-dialog'>
                         <div class='modal-content' style='padding:1%'>
                           <div class='modal-header'>

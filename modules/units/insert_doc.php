@@ -106,7 +106,7 @@ function list_docs() {
         $tool_content .=
                 "<tr class='list-header'>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "<th class='text-left'>$langName</th>" .
+                "<th class='text-start'>$langName</th>" .
                 "<th class='text-center'>$langSize</th>" .
                 "<th class='text-center'>$langDate</th>" .
                 "</tr>";

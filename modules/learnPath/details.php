@@ -92,7 +92,7 @@ if ($learnPathName) {
                     <table id='lpu_progress' class='table-default'>
                     <thead>
                         <tr class='list-header'>
-                            <th class='text-left'>$langStudent</th>
+                            <th class='text-start'>$langStudent</th>
                             <th width='5px;'>$langProgress</th>
                         </tr>
                     </thead>";

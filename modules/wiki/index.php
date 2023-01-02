@@ -360,7 +360,7 @@ switch ($action) {
                                   <div class='table-responsive'>
                                   <table class='table-default'>";
                 $tool_content .= "<tr class='list-header'>
-                                    <th class='text-left ps-3' style='width: 30%;'>$langTitle</th>
+                                    <th class='text-start ps-3' style='width: 30%;'>$langTitle</th>
                                     <th class='text-center'>$langDescription</th>
                                     <th class='text-center'>$langPages</th>";
                 if ($is_editor) {

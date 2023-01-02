@@ -560,7 +560,7 @@ function display_my_exercises($dialogBox, $style) {
         $output .= '<form method="POST" name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">';
         $output .= "<div class='table-responsive'><table class='table-default'>
                     <tr class='list-header'>
-                        <th class='text-left'>
+                        <th class='text-start'>
                             $langExercise
                         </th>
                         <th class='text-center'>
@@ -568,7 +568,7 @@ function display_my_exercises($dialogBox, $style) {
                         </th>
                     </tr>";
             foreach ($exercises as $exercise) {
-                $output .= "<tr><td class='text-left'>
+                $output .= "<tr><td class='text-start'>
                             <a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$exercise->id&amp;preview=1'>" . q($exercise->title) . "</a>";
                 if (!empty($exercise->description)) {
                     $output .= "<span class='comments'>" . standard_text_escape($exercise->description) . "</span></td>";
@@ -615,12 +615,12 @@ function display_my_documents($dialogBox, $style)
     if (!empty($path)) {
         $content .=
             "<tr>" .
-            "<th colspan='$colspan'><div class='text-left'>$langDirectory: $dirname$parenthtml</div></th>" .
+            "<th colspan='$colspan'><div class='text-start'>$langDirectory: $dirname$parenthtml</div></th>" .
             "</tr>";
     }
     $content .=
         "<tr class='list-header'>" .
-        "<th class='text-left'>$langName</th>" .
+        "<th class='text-start'>$langName</th>" .
         "<th class='text-center'>$langSize</th>" .
         "<th class='text-center'>$langDate</th>" .
         "<th style='width:20px;' class='text-center'>$langChoice</th>" .

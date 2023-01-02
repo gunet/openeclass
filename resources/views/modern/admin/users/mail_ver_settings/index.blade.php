@@ -44,15 +44,15 @@
                                     </td>
                                 </tr>
                         <tr>
-                                    <td class='text-left' colspan='2'>{{ trans('lang_email_required') }}:</td>
+                                    <td class='text-start' colspan='2'>{{ trans('lang_email_required') }}:</td>
                                     <td class='text-center'>{{ $mr }}</td>
                                 </tr>
                         <tr>
-                                    <td class='text-left' colspan='2'>{{ trans('lang_email_verification_required') }}:</td>
+                                    <td class='text-start' colspan='2'>{{ trans('lang_email_verification_required') }}:</td>
                                     <td class='text-center'>{{ $mv }}</td>
                                 </tr>
                         <tr>
-                                    <td class='text-left' colspan='2'>{{ trans('lang_dont_mail_unverified_mails') }}:</td>
+                                    <td class='text-start' colspan='2'>{{ trans('lang_dont_mail_unverified_mails') }}:</td>
                                     <td class='text-center'>{{ $mm }}</td>
                                 </tr>
                         <tr>

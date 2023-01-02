@@ -31,7 +31,7 @@ function list_chats() {
             "<div class='table-responsive'><table class='table-default'>" .
             "<tr class='list-header'>" .
             "<th style='width: 80px;'>$langChoice</th>" .
-            "<th><div class='text-left'>&nbsp;$langChat</div></th>" .
+            "<th><div class='text-start'>&nbsp;$langChat</div></th>" .
             "</tr>";
         foreach ($chatinfo as $entry) {
             if ($entry['visible'] == 'inactive') {

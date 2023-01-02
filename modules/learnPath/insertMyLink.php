@@ -187,7 +187,7 @@ function showlinks() {
         foreach ($result as $myrow) {
             $output .= "
             <tr>                
-            <td class='text-left'>";
+            <td class='text-start'>";
             if (empty($myrow->title)) {
                 $output .= "<a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->url) . "</a>";
             } else {

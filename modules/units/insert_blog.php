@@ -24,8 +24,8 @@ function list_blogs() {
             "<div class='table-responsive'><table class='table-default'>" .
             "<tr class='list-header'>" .
             "<th width='80'>$langChoice</th>" .
-            "<th><div class='text-left'>&nbsp;$langBlogPosts</div></th>" .
-            "<th><div class='text-left'>$langBlogPostTitle</div></th>" .
+            "<th><div class='text-start'>&nbsp;$langBlogPosts</div></th>" .
+            "<th><div class='text-start'>$langBlogPostTitle</div></th>" .
             "</tr>";
 
         foreach ($bloginfo as $entry) {

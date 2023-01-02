@@ -569,7 +569,7 @@ function show_document($title, $resource_id, $doc_id) {
     return "
     <tr>
     <td width='1'>" . icon($image, '') . "</td>
-    <td class='text-left' style='font-size:12px'>$link</td></tr>";
+    <td class='text-start' style='font-size:12px'>$link</td></tr>";
 }
 
 function show_video($table, $title, $resource_id, $video_id) {

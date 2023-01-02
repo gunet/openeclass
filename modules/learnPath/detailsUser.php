@@ -107,7 +107,7 @@ $tool_content .= action_bar(array(
                       'level' => 'primary-label')));
 // table header
 $tool_content .= '<div class="table-responsive"><table class="table-default">' . "\n"
-        . '      <tr class="list-header text-left">' . "\n"
+        . '      <tr class="list-header text-start">' . "\n"
         . '        <th>' . $langLearnPath . '</th>' . "\n"
         . '        <th>' . $langProgress . '</th>' . "\n"
         . '      </tr>' . "\n";

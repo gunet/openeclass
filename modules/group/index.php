@@ -501,7 +501,7 @@ if ($is_editor) {
                 <div class='col-sm-12'>
                 <div class='table-responsive'>
                 <table class='table-default nocategory-links'>
-                <tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>
+                <tr class='list-header'><th class='text-start list-header'>$langGroupTeam</th>
                 <th class=' option-btn-cell text-center'>" . icon('fa-gears') . "</th>
                 </tr>
                 <tr><td class='not_visible nocategory-link'> - $langNoGroupInCategory - </td>
@@ -605,7 +605,7 @@ if ($is_editor) {
                 <div class='col-sm-12'>
                 <div class='table-responsive'>
                 <table class='table-default nocategory-links'>
-                <tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>
+                <tr class='list-header'><th class='text-start list-header'>$langGroupTeam</th>
                 </tr>
                 <tr><td class='not_visible nocategory-link'> - $langNoGroupInCategory - </td>
                 </tr></table></div></div></div>";
@@ -613,7 +613,7 @@ if ($is_editor) {
         $tool_content .= "<div class='table-responsive'>
             <table class='table-default'>
                 <tr class='list-header'>
-                  <th class='text-left'>$langGroupTeam</th>
+                  <th class='text-start'>$langGroupTeam</th>
                   <th width='250'>$langGroupTutor</th>
                   <th width='50'>$langGroupMembersNum</th>
                   <th width='50'>$langMax</th>
@@ -629,7 +629,7 @@ if ($is_editor) {
             }
 
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-left'>";
+            $tool_content .= "<td class='text-start'>";
             // Allow student to enter group only if he's a member
             if ($is_member or $is_tutor) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
@@ -649,7 +649,7 @@ if ($is_editor) {
                             icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
                 } elseif ($is_member) {
                     $tool_content .= "<br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
-                }
+                } 
             }
             $tool_content .= "</td>";
             $tool_content .= "<td class='text-center'>";
@@ -727,7 +727,7 @@ if ($is_editor) {
                 $newurlview = $urlview;
                 $newurlview[$i] = '0';
                 $tool_content .= "<tr class='link-subcategory-title'>
-                                    <th class = 'text-left category-link' colspan='4'>
+                                    <th class = 'text-start category-link' colspan='4'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>".icon('fa-minus-square-o', $langViewHide)."&nbsp;&nbsp;". q($myrow->name) . "</a>";
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description ps-4 pt-4'>$description</span></th>";
@@ -749,7 +749,7 @@ if ($is_editor) {
             } else {
                 $tool_content .= "
                         <tr class='link-subcategory-title'>
-                            <th class = 'text-left category-link' colspan='4'>&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
+                            <th class = 'text-start category-link' colspan='4'>&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
                 $tool_content .= is_array($view) ? implode('', $view) : $view;
                 $tool_content .= "' class='open-category'>".icon('fa-plus-square', $langViewShow)
                     . "&nbsp;&nbsp;" . q($myrow->name) . "</a>";

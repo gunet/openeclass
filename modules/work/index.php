@@ -4139,7 +4139,7 @@ function show_assignment_review($id, $display_graph_results = false) {
             }
             // ---------------------------------
             $tool_content .= "
-                <td class='text-left'>
+                <td class='text-start'>
                   $filelink <br> $plagiarismlink
                 </td>
                 <td width='5' class='text-center'>

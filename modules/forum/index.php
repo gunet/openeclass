@@ -243,9 +243,9 @@ if ($total_categories > 0) {
                         }
                         $tool_content .= "<div class='smaller'>$desc</div>" .
                             "</td>" .
-                            "<td class='text-left'>$total_topics</td>" .
-                            "<td class='text-left'>$total_posts</td>" .
-                            "<td class='text-left'>";
+                            "<td class='text-start'>$total_topics</td>" .
+                            "<td class='text-start'>$total_posts</td>" .
+                            "<td class='text-start'>";
                         if ($total_topics > 0 && $total_posts > 0) {
                             $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;";
                             if ($is_editor or ! $group_id or ($has_forum and $is_member)) {

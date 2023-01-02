@@ -495,7 +495,7 @@ if (isset($_GET['modifyAnswers'])) {
                 $tool_content .= "<td class='text-center'><input class='form-control' type='text' name='weighting[$i]' value='$thisWeighting'></td></tr>";
             }
             $tool_content .= "<tr>
-                    <td class='text-left' colspan='3'><strong>$langSurveyAddAnswer :</strong>&nbsp;
+                    <td class='text-start' colspan='3'><strong>$langSurveyAddAnswer :</strong>&nbsp;
                         <input type='submit' name='moreAnswers' value='$langMoreAnswers' />&nbsp;
                       <input type='submit' name='lessAnswers' value='$langLessAnswers' />
                     </td>

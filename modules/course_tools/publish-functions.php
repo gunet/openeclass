@@ -295,7 +295,7 @@ function lti_provider_details() {
                 }
                 $showUrl = "editpublish.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=show";
                 $tool_content .= '<tr' . ($row->enabled? '': " class='not_visible'") . ">
-                    <td class='text-left'><a href='$showUrl'>$title</</td>
+                    <td class='text-start'><a href='$showUrl'>$title</</td>
                     <td>$desc</td>
                     <td class='option-btn-cell text-center'>".
                     action_button(array(

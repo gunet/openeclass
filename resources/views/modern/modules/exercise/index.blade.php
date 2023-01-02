@@ -108,8 +108,8 @@
                                                                 @endif
                                                             </td>
                                                             <td>
-                                                                <p class="text-left text-success">Έναρξη: {!! $array_exercises_editor[$row->id][3] !!}</p>
-                                                                <p class="text-left text-danger">Ληξη: {!! $array_exercises_editor[$row->id][4] !!}</p>
+                                                                <p class="text-start text-success">Έναρξη: {!! $array_exercises_editor[$row->id][3] !!}</p>
+                                                                <p class="text-start text-danger">Ληξη: {!! $array_exercises_editor[$row->id][4] !!}</p>
                                                             </td>
                                                             <td>
                                                                 @if($array_exercises_editor[$row->id][6]>0)

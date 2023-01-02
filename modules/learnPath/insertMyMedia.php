@@ -204,7 +204,7 @@ function showmedia() {
         $vObj = MediaResourceFactory::initFromVideo($myrow);
 
         $output .= "<tr>
-                    <td align='text-left'>" . MultimediaHelper::chooseMediaAhref($vObj) . "
+                    <td align='text-start'>" . MultimediaHelper::chooseMediaAhref($vObj) . "
                     <br />
                     <small class='comments'>" . q($myrow->description) . "</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_" . $i . "' id='insertMedia_" . $i . "' value='" . $myrow->id . "' /></div></td></tr>";

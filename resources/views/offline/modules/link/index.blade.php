@@ -7,15 +7,15 @@
                 <table class='table-default nocategory-links'>
                     @if ($numberofzerocategory !== 0)
                         <tr class='list-header'>
-                            <th class='text-left'>{{ trans('langNoCategory') }}</th>
+                            <th class='text-start'>{{ trans('langNoCategory') }}</th>
                         </tr>
                         @include('modules.link.common.linkList', ['category' => $result_zero_category])
                     @else
                         <tr class='list-header'>
-                            <th class='text-left list-header'> {{ trans('langNoCategory') }}</th>
+                            <th class='text-start list-header'> {{ trans('langNoCategory') }}</th>
                         </tr>
                         <tr>
-                            <td class='text-left not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
+                            <td class='text-start not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
                         </tr>
                     @endif
                 </table>
@@ -30,15 +30,15 @@
                     <table class='table-default nocategory-links'>
                         @if ($numberofsocialcategory !== 0)
                             <tr class='list-header'>
-                                <th class='text-left'>{{ trans('langSocialCategory') }}</th>
+                                <th class='text-start'>{{ trans('langSocialCategory') }}</th>
                             </tr>
                             @include('modules.link.common.linkList', ['category' => $result_social_category])
                         @else
                             <tr class='list-header'>
-                                <th class='text-left list-header'>{{ trans('langSocialCategory') }}</th>
+                                <th class='text-start list-header'>{{ trans('langSocialCategory') }}</th>
                             </tr>
                             <tr>
-                                <td class='text-left not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
+                                <td class='text-start not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
                             </tr>
                         @endif
                     </table>
@@ -58,13 +58,13 @@
                             <th>{{ trans('langCategorisedLinks') }} </th>
                         </tr>
                         <tr>
-                            <td class='text-left not_visible nocategory-link'> - {{ trans('langNoLinkCategories') }} - </td>
+                            <td class='text-start not_visible nocategory-link'> - {{ trans('langNoLinkCategories') }} - </td>
                         <tr>
                     @endif
 
                     @foreach ($resultcategories as $data)
                         <tr class='link-subcategory-title'>
-                            <th class = 'text-left category-link'>
+                            <th class = 'text-start category-link'>
                                 <span class='fa fa-folder-open'></span>
                                 {{ $data->name }}
                                 @if (!empty($data->description))

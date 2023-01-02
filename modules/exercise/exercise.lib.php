@@ -165,7 +165,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
             } else {
                 $tool_content .= "<tr>
                                   <td><strong>$cpt2.</strong> " . q($answer) . "</td>
-                                  <td><div class='text-left'>
+                                  <td><div class='text-start'>
                                    <select name='choice[$questionId][$answerId]' onChange='questionUpdateListener($question_number, $questionId);'>
                                      <option value='0'>--</option>";
 

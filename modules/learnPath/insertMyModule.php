@@ -108,7 +108,7 @@ $result = Database::get()->queryArray(buildRequestModules());
 $tool_content .= '<form name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">' . "\n\n";
 $tool_content .= '<table class="table-default">'
         . '<tr>'
-        . '<th class="text-left">'.$langLearningModule.'</th>'
+        . '<th class="text-start">'.$langLearningModule.'</th>'
         . '<th width="10"><div align="center">'
         . $langSelection
         . '</div></th>'
