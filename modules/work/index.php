@@ -4724,7 +4724,8 @@ function show_assignment($id, $display_graph_results = false) {
     $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer, $langTransferGrades,
     $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress, $langFileName,
     $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent, $autojudge,
-    $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution;
+    $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution,
+    $langQuestionCorrectionTitle2, $langFrom2;
 
     // transfer grades in peer review assignment
     $head_content .= "<script type='text/javascript'>
@@ -4895,9 +4896,9 @@ function show_assignment($id, $display_graph_results = false) {
                                 }
                             }
                             if ($counter == 0) {
-                                $mess = "<span style='color: green;'><h6>$langPeerReviewCompletedByStudent</h6></span>";
+                                $mess = "<span style='color: green;'><h6>$langPeerReviewCompletedByStudent</h6>&nbsp;</span>";
                             } elseif ($counter < $r_count){
-                                $mess = "<span style='color: darkorange;'><h6>$langPeerReviewPendingByStudent</h6></span>";
+                                $mess = "<span style='color: darkorange;'><h6>$langPeerReviewPendingByStudent<br>($langQuestionCorrectionTitle2 $counter $langFrom2 $r_count)</h6></span>";
                             } else {
                                 $mess = "<span style='color: red;'><h6>$langPeerReviewMissingByStudent</h6></span>";
                             }
