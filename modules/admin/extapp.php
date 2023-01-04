@@ -20,8 +20,6 @@
  * ========================================================================
  */
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'extconfig/externals.php';
@@ -40,17 +38,17 @@ if (isset($_POST['state'])) {
     $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
     $appNameAjax = $appName;
 
-    if (($appNameAjax == 'openmeetings') and $newState == 1) {
+    /*if (($appNameAjax == 'openmeetings') and $newState == 1) {
         $app_tc = ExtAppManager::getApp('bigbluebutton');
         $app_tc->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled
         $app_tc = ExtAppManager::getApp('webconf');
         $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
         $app_tc->update_tc_sessions('om'); // update tc sessions
-    }
+    }*/
 
     if (($appNameAjax == 'bigbluebutton') and $newState == 1) {
-        $app_tc = ExtAppManager::getApp('openmeetings');
-        $app_tc->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled
+        //$app_tc = ExtAppManager::getApp('openmeetings');
+        //$app_tc->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled
         $app_tc = ExtAppManager::getApp('webconf');
         $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
         $app_tc->update_tc_sessions('bbb'); // update tc sessions
@@ -59,8 +57,8 @@ if (isset($_POST['state'])) {
     if (($appNameAjax == 'webconf') and $newState == 1) {
         $app_tc = ExtAppManager::getApp('bigbluebutton');
         $app_tc->setEnabled(!$newState);  // disable bigbluebutton if bigbluebutton has been enabled
-        $app_tc = ExtAppManager::getApp('openmeetings');
-        $app_tc->setEnabled(!$newState); // disable openmeetings if openmeetings has been enabled
+        //$app_tc = ExtAppManager::getApp('openmeetings');
+        //$app_tc->setEnabled(!$newState); // disable openmeetings if openmeetings has been enabled
         $app_tc->update_tc_sessions('webconf'); // update tc sessions
     }
 
