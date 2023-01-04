@@ -296,7 +296,7 @@ function view($view_file, $view_data = array()) {
             $rgba_no_alpha[3] = '1';
             $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
 
-            $styles_str .= "
+            $styles_str .= " 
                 .breadcrumb-item::before{margin-top:0px;}
 
                 .submitAdminBtn {
