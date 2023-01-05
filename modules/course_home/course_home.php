@@ -212,6 +212,7 @@ if ($course_info->password !== '') {
 
 // course email notification
 if (isset($uid) and isset($_SESSION['status']) and $_SESSION['status'] != USER_GUEST) {
+    $modal_info_message = $modal_action_message = '';
     $email_notification_state = get_user_email_notification($uid, $course_id)? 1: 0;
     if (get_mail_ver_status($uid) == EMAIL_VERIFIED) {
         if (isset($_POST['email_set_state'])) {
