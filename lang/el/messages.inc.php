@@ -5737,8 +5737,6 @@ $langAntivirusDescription = "<p>Σύνδεση με εγκατεστημένο �
 $langWafDescription = "<p>Ενεργοποίηση τείχους προστασίας εφαρμογής ιστού</p>";
 $langOpenMeetingsDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://openmeetings.apache.org/\" target=\"_blank\">Apache OpenMeetings</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
 <p>Το OpenMeetings ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα OpenMeetings επιλέξτε <a href=\"openmeetingsconf.php\">Ρυθμίσεις</a>.</p>";
-$langWebConfDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://webconf.gunet.gr/\" target=\"_blank\">WebConf</a> το οποίο αποτελεί ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
-<p>Το WebConf ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα WebConf επιλέξτε <a href=\"webconf.php\">Ρυθμίσεις</a>.</p>";
 $langUnplagShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism). Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Unicheck (πρώην Unplag). Δείτε περισσότερες πληροφορίες στο <a href=\"https://unicheck.com\">https://unicheck.com</a>";
 $langUnplagLongDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής.";
 $langTurnitinShortDescription = "Σύνδεση με υπηρεσία λογοκλοπής (plagiarism).
@@ -5754,6 +5752,11 @@ $langH5PLongDescription = "Διαδραστικό περιεχόμενου τύ�
 $langLtiPublishShortDescription = "Δημοσίευση $langsOfCourses μεσω πρωτοκόλλου LTI.";
 $langLtiPublishLongDescription = "Δημοσίευση $langsOfCourses μεσω πρωτοκόλλου LTI.";
 $langLtiPublishFrameAncestorsTooltip = "Λίστα urls χωριζομενη με κόμματα πχ https://url1, https://url2";
+$langGoogleMeetShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet";
+$langGoogleMeetLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet";
+$langJitsiShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Jitsi";
+$langJitsiLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Jitsi";
+$langJitsiUrl = "Μπορείτε να το αλλάξετε αν θέλετε να χρησιμοποιήσετε κάποιον διαφορετικό Jitsi server.";
 
 // Messages for OpenMeetings
 $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";
@@ -5766,14 +5769,6 @@ $langOpenMeetingsAdminUser ="Username διαχειριστή OpenMeetings";
 $langOpenMeetingsAdminPass ="Password διαχειριστή OpenMeetings";
 $langOpenMeetingsModuleKey = "Module key";
 $langOpenMeetingsWebApp = "Όνομα WebApp";
-
-// Messages for WebConf
-$langWebConf = "Ρυθμίσεις \"Wowza\" του $siteName";
-$langAddWebConfServerInfo = "Στοιχεία νέου εξυπηρετητή Wowza";
-$langUpdateWebConfServer = "Στοιχεία εξυπηρετητή Wowza";
-$langAvailableWebConfServers = "Διαθέσιμοι εξυπηρετητές Wowza";
-$langWebConfServer = "Wowza server";
-$langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της εγκατάστασης Wowza";
 
 // Mindmap
 $langMindmap = "Εννοιολογικός χάρτης";
@@ -5913,6 +5908,8 @@ $langTiiExcludeValue = "Τιμή εξαίρεσης";
 $langLTIOptions = "Επιλογές Turnitin";
 $langUseOfApp = "Χρήση της εφαρμογής";
 $langUseOfAppInfo = "Επιλέξτε σε ποια $langsCourses θα χρησιμοποιείται η εφαρμογή";
+$langUseOfService = "Χρήση της υπηρεσίας";
+$langUseOfServiceInfo = "Επιλέξτε σε ποια $langsCourses θα χρησιμοποιείται η υπηρεσία";
 $langLimesurveyConf = "Ρυθμίσεις \"LimeSurvey\" του $siteName";
 $langLimesurveyAppAddSuccessful = "Η καταχώριση της LimeSurvey Εφαρμογής ολοκληρώθηκε με επιτυχία.";
 $langLimesurveyAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
