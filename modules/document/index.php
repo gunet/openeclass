@@ -546,11 +546,11 @@ if ($can_upload or $user_upload) {
                                 SET section_id = ?s, title = ?s WHERE file_id = ?d",
                                 $_POST['section_id'], $ebookSectionTitle, $id);
                         } else {
-                            $subsectionOrder = Database::get()->querySingle("SELECT COALESCE(MAX(public_id), 0) + 1
+                            $subsectionOrder = Database::get()->querySingle("SELECT COALESCE(MAX(public_id), 0) + 1 AS subsection_order
                                 FROM ebook_subsection WHERE section_id = ?d", $_POST['section_id']);
                             Database::get()->query("INSERT INTO ebook_subsection
                                 SET section_id = ?s, file_id = ?d, title = ?s, public_id = ?s",
-                                $_POST['section_id'], $id, $ebookSectionTitle, $subsectionOrder);
+                                $_POST['section_id'], $id, $ebookSectionTitle, $subsectionOrder->subsection_order);
                         }
                     }
                     Log::record($course_id, MODULE_ID_DOCS, $log_action,
