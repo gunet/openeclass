@@ -49,30 +49,6 @@ if (isset($_POST['state'])) {
     $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
     $appNameAjax = getDirectReference($appName);
 
-    if (($appNameAjax == 'openmeetings') and $newState == 1) {
-        $app_tc = ExtAppManager::getApp('bigbluebutton');
-        $app_tc->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled
-        $app_tc = ExtAppManager::getApp('webconf');
-        $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
-        $app_tc->update_tc_sessions('om'); // update tc sessions
-    }
-
-    if (($appNameAjax == 'bigbluebutton') and $newState == 1) {
-        $app_tc = ExtAppManager::getApp('openmeetings');
-        $app_tc->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled
-        $app_tc = ExtAppManager::getApp('webconf');
-        $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
-        $app_tc->update_tc_sessions('bbb'); // update tc sessions
-    }
-
-    if (($appNameAjax == 'webconf') and $newState == 1) {
-        $app_tc = ExtAppManager::getApp('bigbluebutton');
-        $app_tc->setEnabled(!$newState);  // disable bigbluebutton if bigbluebutton has been enabled
-        $app_tc = ExtAppManager::getApp('openmeetings');
-        $app_tc->setEnabled(!$newState); // disable openmeetings if openmeetings has been enabled
-        $app_tc->update_tc_sessions('webconf'); // update tc sessions
-    }
-
     ExtAppManager::getApp($appNameAjax)->setEnabled($newState);
     echo $newState;
     exit;
@@ -88,21 +64,18 @@ if ($appName) {
                 $param->setValue('');
                 $param->persistValue();
             }
-            //Session::Messages($langFileUpdatedSuccess, 'alert-info');
-            Session::flash('message',$langFileUpdatedSuccess); 
+            Session::flash('message',$langFileUpdatedSuccess);
             Session::flash('alert-class', 'alert-info');
         } else {
-        $result = $app->storeParams();
-        if ($result) {
-            //Session::Messages($result, 'alert-danger');
-            Session::flash('message',$result); 
-            Session::flash('alert-class', 'alert-danger');
-        } else {
-            //Session::Messages($langFileUpdatedSuccess, 'alert-success');
-            Session::flash('message',$langFileUpdatedSuccess); 
-            Session::flash('alert-class', 'alert-success');
+            $result = $app->storeParams();
+            if ($result) {
+                Session::flash('message',$result);
+                Session::flash('alert-class', 'alert-danger');
+            } else {
+                Session::flash('message',$langFileUpdatedSuccess);
+                Session::flash('alert-class', 'alert-success');
+            }
         }
-    }
         redirect_to_home_page($app->getConfigUrl());
     }
 

@@ -34,7 +34,6 @@ require_once 'include/log.class.php';
 // For creating bbb urls & params
 require_once 'bbb-api.php';
 require_once 'om-api.php';
-require_once 'webconf-api.php';
 require_once 'functions.php';
 
 require_once 'include/lib/modalboxhelper.class.php';
@@ -354,11 +353,6 @@ elseif(isset($_GET['choice']))
                 } else { // join user
                     header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0));
                 }
-            } elseif ($tc_type == 'webconf') { // if tc server is `webconf`
-                create_webconf_jnlp_file($_GET['meeting_id']);
-                $webconf_server = $serv->hostname;
-                $screenshare_server = $serv->screenshare;
-                header('Location: ' . get_config('base_url') . '/modules/tc/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server) .'&course='.$course_code);
             }
             break;
         case 'import_video':

@@ -1546,8 +1546,6 @@ function is_configured_tc_server() {
         $tc_type = 'bbb';
     } elseif (get_config('ext_openmeetings_enabled')) {
         $tc_type = 'om';
-    } elseif (get_config('ext_webconf_enabled')) {
-        $tc_type = 'webconf';
     } else {
         return false;
     }

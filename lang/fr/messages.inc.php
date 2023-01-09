@@ -4732,8 +4732,6 @@ $langSiteTitle = 'Platform title';
 $langSiteDescr = 'Home page description';
 $langOpenMeetingsDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href=\"http://openmeetings.apache.org/\" target=\"_blank\">Apache OpenMeetings</a> platform which is a complete system of direct web-based communication and collaboration between $langsTeachers and $langsStudents.</p>
 <p>OpenMeetings does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with an OpenMeetings installation plase select <a href='openmeetingsconf.php'>Settings</a>.</p>";
-$langWebConfDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href=\"http://webconf.gunet.gr/\" target=\"_blank\">WebConf</a> platform which is a complete system of direct web-based communication and collaboration between $langsOfTeachers and $langsOfStudents.</p>
-<p>WebConf does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with a WebConf installation plase select <a href='webconf.php'>Settings</a>.</p>";
 $langOpenMeetingsConf = "OpenMeetings settings";
 $langAddOpenMeetingsServerInfo = "New OpenMeetings server info";
 $langUpdateOpenMeetingsServer = "OpenMeetings server info";
@@ -4744,12 +4742,6 @@ $langOpenMeetingsAdminUser = "OpenMeetings admin username";
 $langOpenMeetingsAdminPass = "OpenMeetings admin password";
 $langOpenMeetingsModuleKey = "Module key";
 $langOpenMeetingsWebApp = "WebApp Name";
-$langWebConf = "Wowza settings";
-$langAddWebConfServerInfo = "New Wowza server info";
-$langUpdateWebConfServer = "Wowza server info";
-$langAvailableWebConfServers = "Available Wowza servers";
-$langWebConfServer = "Wowza server";
-$langWebConfServerAlertHostname = "Please enter the hostname where Wowza is installed";
 $langLearnPathDeleted = 'The Learning Path was deleted';
 $langAdminPinnedOff = "Unpin announcement";
 $langAdminPinnedOn = "Pin announcement";
