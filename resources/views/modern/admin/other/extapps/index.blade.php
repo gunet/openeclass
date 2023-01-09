@@ -9,7 +9,7 @@
         <div class="row rowMedium">
 
             <div class="col-12 justify-content-center col_maincontent_active_Homepage">
-                    
+
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -63,31 +63,31 @@
                                                 <div class="btn-group btn-group-sm">
                                                     @if ($app->isConfigured())
                                                         @if (showSecondFactorChallenge() != "")
-                                                            <button onclick="var totp=prompt('Type 2FA:','');this.setAttribute('data-app', this.getAttribute('data-app')+','+escape(totp));"  type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
+                                                            <button onclick="var totp=prompt('Type 2FA:','');this.setAttribute('data-app', this.getAttribute('data-app')+','+escape(totp));"  type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}">
                                                         @elseif ($app->getName() == 'bigbluebutton')
-                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} bbb-status" data-app="{{ getIndirectReference($app->getName()) }}">     
+                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} bbb-status" data-app="{{ getIndirectReference($app->getName()) }}">
                                                         @elseif ($app->getName() == 'openmeetings')
-                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} om-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
+                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} om-status" data-app="{{ getIndirectReference($app->getName()) }}">
                                                         @elseif ($app->getName() == 'webconf')
-                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} webconf-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
+                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} webconf-status" data-app="{{ getIndirectReference($app->getName()) }}">
                                                         @else
-                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
+                                                            <button type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}">
                                                         @endif
-                                                            {!! $app->isEnabled() ? '<i class="fa fa-toggle-on"></i>' : '<i class="fa fa-toggle-off"></i>' !!} 
-                                                        </button>  
+                                                            {!! $app->isEnabled() ? '<i class="fa fa-toggle-on"></i>' : '<i class="fa fa-toggle-off"></i>' !!}
+                                                        </button>
                                                     @else
-                                                        <button type="button" class="btn cancelAdminBtn" data-app="{{ getIndirectReference($app->getName()) }}"  data-bs-toggle='modal' data-bs-target='#noSettings'> 
-                                                            <i class="fa fa-warning"></i> 
+                                                        <button type="button" class="btn cancelAdminBtn" data-app="{{ getIndirectReference($app->getName()) }}"  data-bs-toggle='modal' data-bs-target='#noSettings'>
+                                                            <i class="fa fa-warning"></i>
                                                         </button>
                                                     @endif
-                                                    <a href="{{ $urlAppend . $app->getConfigUrl() }}" class="btn submitAdminBtn"> 
-                                                        <i class="fa fa-sliders fw"></i> 
+                                                    <a href="{{ $urlAppend . $app->getConfigUrl() }}" class="btn submitAdminBtn">
+                                                        <i class="fa fa-sliders fw"></i>
                                                     </a>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach            
+                                @endforeach
                             </table>
                         </div>
                     </div>
@@ -120,13 +120,13 @@
         var button = $(this).children('i');
         var state = button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var appName = button.parent('button').attr('data-app');
-        
+
         button.removeClass(state).addClass('fa-spinner fa-spin');
-        
+
         $.post( url,
                 {state: state,
                  appName: appName},
-                function (data) {           
+                function (data) {
                     var newState = (data === "0")? "fa-toggle-off":"fa-toggle-on";
                     button.removeClass('fa-spinner fa-spin').addClass(newState);
                     btnColorState = button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';
@@ -134,7 +134,7 @@
                     button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);
                 });
     });
-    
+
     // deactivate om + webconf button when bbb button is enabled
     $('.bbb-status').on('click', function () {
         var url = window.location.href;
@@ -145,15 +145,15 @@
         var om_state = om_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var webconf_state = webconf_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var appName = button.parent('button').attr('data-app');
-        
+
         button.removeClass(state).addClass('fa-spinner fa-spin');
-        
+
         $.post( url,
                 {state: state,
                  appName: appName},
-                function (data) {                    
+                function (data) {
                     if (data === "0") {
-                        newState = "fa-toggle-off";                        
+                        newState = "fa-toggle-off";
                     } else {
                         newState = "fa-toggle-on";
                         if (om_state === 'fa-toggle-on') {
@@ -171,13 +171,13 @@
                            webconf_button.parent('button').removeClass(webconf_btnColorState).addClass(webconf_newBtnColorState);
                         }
                     }
-                    button.removeClass('fa-spinner fa-spin').addClass(newState);                    
-                    btnColorState = button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';                    
-                    newBtnColorState = button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';                    
-                    button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);                    
+                    button.removeClass('fa-spinner fa-spin').addClass(newState);
+                    btnColorState = button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';
+                    newBtnColorState = button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';
+                    button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);
                 });
     });
-    
+
     // deactivate bbb + webconf button when om button is enabled
     $('.om-status').on('click', function () {
         var url = window.location.href;
@@ -188,15 +188,15 @@
         var bbb_state = bbb_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var webconf_state = webconf_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var appName = button.parent('button').attr('data-app');
-        
+
         button.removeClass(state).addClass('fa-spinner fa-spin');
-        
+
         $.post( url,
                 {state: state,
                  appName: appName},
-                function (data) {                    
+                function (data) {
                     if (data === "0") {
-                        newState = "fa-toggle-off";                        
+                        newState = "fa-toggle-off";
                     } else {
                         newState = "fa-toggle-on";
                         if (bbb_state === 'fa-toggle-on') {
@@ -213,14 +213,14 @@
                            webconf_newBtnColorState = webconf_button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';
                            webconf_button.parent('button').removeClass(webconf_btnColorState).addClass(webconf_newBtnColorState);
                         }
-                    }                    
-                    button.removeClass('fa-spinner fa-spin').addClass(newState);                    
-                    btnColorState = button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';                    
-                    newBtnColorState = button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';                    
-                    button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);                    
+                    }
+                    button.removeClass('fa-spinner fa-spin').addClass(newState);
+                    btnColorState = button.parent('button').hasClass('submitAdminBtn')?'submitAdminBtn':'deleteAdminBtn';
+                    newBtnColorState = button.parent('button').hasClass('submitAdminBtn')?'deleteAdminBtn':'submitAdminBtn';
+                    button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);
                 });
     });
-    
+
     // deactivate bbb + om button when webconf button is enabled
     $('.webconf-status').on('click', function () {
         var url = window.location.href;
@@ -231,15 +231,15 @@
         var bbb_state = bbb_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var om_state = om_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var appName = button.parent('button').attr('data-app');
-        
+
         button.removeClass(state).addClass('fa-spinner fa-spin');
-        
+
         $.post( url,
                 {state: state,
                  appName: appName},
-                function (data) {                    
+                function (data) {
                     if (data === "0") {
-                        newState = "fa-toggle-off";                        
+                        newState = "fa-toggle-off";
                     } else {
                         newState = "fa-toggle-on";
                         if (bbb_state === 'fa-toggle-on') {
