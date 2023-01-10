@@ -160,7 +160,7 @@ if (isset($_POST['submitPoll'])) {
 if (isset($_POST['submitQuestion'])) {
     $v = new Valitron\Validator($_POST);
     $v->rule('required', 'questionName');
-    if (isset($_POST['questionScale'])) {
+    if (isset($_POST['questionScale']) and $_POST['questionScale']) {
         $v->rule('required', 'questionScale');
         $v->rule('integer', 'questionScale');
         $v->rule('min', 'questionScale', 1);
@@ -211,7 +211,7 @@ if (isset($_POST['submitQuestion'])) {
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         if(isset($_GET['modifyQuestion'])) {
-            redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&modifyQuestion=$pqid");
+            redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
         } else {
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&newQuestion=yes");
         }
