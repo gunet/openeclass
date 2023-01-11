@@ -678,8 +678,8 @@ function lessonToolsMenu($rich=true) {
                 continue;
             }
 
-            // hide teleconference when no BBB or OM servers are enabled
-            if ($mid == MODULE_ID_TC and !is_configured_tc_server()) {
+            // hide teleconference when no tc servers are enabled
+            if ($mid == MODULE_ID_TC and count(is_configured_tc_server()) == 0) {
                 continue;
             }
 

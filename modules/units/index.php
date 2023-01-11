@@ -198,7 +198,7 @@ if($q->flipped_flag ==2){
                     'url' => $base_url . 'tc',
                     'icon' => 'fa fa-exchange',
                     'level' => 'secondary',
-                    'show' => (!is_module_disable(MODULE_ID_TC) && is_configured_tc_server()))
+                    'show' => (!is_module_disable(MODULE_ID_TC) && is_enabled_tc_server($course_id)))
                 )) .
         "
         </div>
@@ -479,7 +479,7 @@ if ($is_editor && $q->flipped_flag ==2) {
                     'url' => $base_url . 'tc&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
                     'icon' => 'fa fa-exchange',
                     'level' => 'secondary',
-                    'show' => !is_module_disable_FC(MODULE_ID_TC, $course_code, $id, $in_home->activity_id) && is_configured_tc_server()),
+                    'show' => !is_module_disable_FC(MODULE_ID_TC, $course_code, $id, $in_home->activity_id) && is_enabled_tc_server($course_id)),
                 array('title' => $langAdd . ' ' . $langGlossary,
                     'url' => $base_url . 'glossary&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
                     'icon' => 'fa fa-list',
@@ -606,7 +606,7 @@ if ($is_editor && $q->flipped_flag ==2) {
                             'url' => $base_url . 'tc&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
                             'icon' => 'fa fa-exchange',
                             'level' => 'secondary',
-                            'show' => !is_module_disable_FC(MODULE_ID_TC,$course_code,$id,$in_class->activity_id) && is_configured_tc_server()),
+                            'show' => !is_module_disable_FC(MODULE_ID_TC,$course_code,$id,$in_class->activity_id) && is_enabled_tc_server($course_id)),
                         array('title' => $langAdd.' '.$langGlossary,
                             'url' => $base_url . 'glossary&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
                             'icon' => 'fa fa-list',
@@ -741,7 +741,7 @@ if ($is_editor && $q->flipped_flag ==2) {
                         'url' => $base_url . 'tc&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
                         'icon' => 'fa fa-exchange',
                         'level' => 'secondary',
-                        'show' => !is_module_disable_FC(MODULE_ID_TC,$course_code,$id,$after_class->activity_id) && is_configured_tc_server()),
+                        'show' => !is_module_disable_FC(MODULE_ID_TC,$course_code,$id,$after_class->activity_id) && is_enabled_tc_server($course_id)),
                     array('title' => $langAdd.' '.$langGlossary,
                         'url' => $base_url . 'glossary&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
                         'icon' => 'fa fa-list',

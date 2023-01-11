@@ -28,7 +28,7 @@ require_once 'bbb-api.php';
  */
 function bbb_session_form($session_id = 0) {
 
-    global $course_id, $uid, $tc_type;
+    global $course_id, $uid;
     global $tool_content, $langAdd, $course_code;
     global $langUnitDescr, $langStart;
     global $langVisible, $langInvisible;
@@ -146,7 +146,7 @@ function bbb_session_form($session_id = 0) {
         }
     }
 
-    $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = '$tc_type'
+    $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'bbb'
                                                 AND enabled = 'true' ORDER BY FIELD(enable_recordings, 'true', 'false'), weight ASC LIMIT 1")->id;
 
     $tool_content .= "
@@ -443,13 +443,6 @@ function bbb_session_form($session_id = 0) {
 
 /**
  * @brief insert scheduled session data into database
- * @global type $langBBBAddSuccessful
- * @global type $langBBBScheduledSession
- * @global type $langBBBScheduleSessionInfo
- * @global type $langBBBScheduleSessionInfoJoin
- * @global type $course_code
- * @global type $course_id
- * @global type $tc_type
  * @param type $title
  * @param type $desc
  * @param type $start_session
@@ -470,7 +463,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
 {
     global $langBBBScheduledSession, $langBBBScheduleSessionInfo ,
         $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
-        $langDescription, $course_code, $course_id, $urlServer, $tc_type;
+        $langDescription, $course_code, $course_id, $urlServer;
 
     // Groups of participants per session
     $r_group = '';
@@ -502,9 +495,9 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
         // check if course uses specific tc_server
         $t = Database::get()->querySingle("SELECT external_server FROM course_external_server WHERE course_id = ?d", $course_id);
         if ($t) {
-            $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE id = $t->external_server AND `type` = '$tc_type' AND enabled = 'true' ORDER BY weight ASC")->id;
+            $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE id = $t->external_server AND `type` = 'bbb' AND enabled = 'true' ORDER BY weight ASC")->id;
         } else { // else course will use default tc_server
-            $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = '$tc_type' and enabled = 'true' ORDER BY weight ASC")->id;
+            $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'bbb' and enabled = 'true' ORDER BY weight ASC")->id;
         }
         $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
@@ -532,7 +525,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
         Log::record($course_id, MODULE_ID_TC, LOG_INSERT, array('id' => $q->lastInsertID,
                                                                 'title' => $_POST['title'],
                                                                 'desc' => html2text($_POST['desc']),
-                                                                'tc_type' => $tc_type));
+                                                                'tc_type' => 'bbb'));
 
         $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM tc_session WHERE id = ?d", $q->lastInsertID);
     }
@@ -659,20 +652,19 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
  */
 function bbb_session_details() {
 
-    global $course_id, $tool_content, $is_editor, $course_code, $uid, $tc_type,
+    global $course_id, $tool_content, $is_editor, $course_code, $uid,
         $langParticipants,$langConfirmDelete, $langHasExpiredS,
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
         $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent,
-        $langBBBNotServerAvailableTeacherCovid, $langBBBNotServerAvailableTeacher,
+        $langBBBNotServerAvailableTeacher,
         $langBBBImportRecordings, $langAllUsers, $langDuration, $langBBBNoServerForRecording,
         $langFrom, $langTill, $langBBBHideParticipants;
 
     $options = [];
-    if (!is_active_tc_server($tc_type, $course_id)) { // check availability
+    if (!is_enabled_tc_server($course_id)) { // check availability
         if ($is_editor) {
             $tool_content .= "<div class='alert alert-danger'>$langBBBNotServerAvailableTeacher</div>";
-            $tool_content .= "<div class='alert alert-info'>$langBBBNotServerAvailableTeacherCovid</div>";
         } else {
             $tool_content .= "<div class='alert alert-danger'>$langBBBNotServerAvailableStudent</div>";
         }
@@ -685,7 +677,7 @@ function bbb_session_details() {
     $result = Database::get()->queryArray("SELECT * FROM tc_session WHERE course_id = ?s $activeClause
                                                 ORDER BY start_date DESC", $course_id);
     if ($result) {
-        if ((!$is_editor) and is_active_tc_server($tc_type, $course_id)) {
+        if ((!$is_editor) and (!is_enabled_tc_server($course_id))) {
             $tool_content .= "<div class='alert alert-info'><label>$langNote</label>: $langBBBNoteEnableJoin</div>";
         }
         $headingsSent = false;
@@ -760,7 +752,7 @@ function bbb_session_details() {
             $record = $row->record;
             $server_id = $row->running_at;
             $desc = isset($row->description)? $row->description: '';
-
+            $tc_type = Database::get()->querySingle("SELECT `type` FROM tc_servers WHERE id = ?d", $server_id)->type;
             $canJoin = FALSE;
             if (($row->active == '1') and (date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < $row->unlock_interval)
                     and is_active_tc_server($tc_type, $course_id)) {
@@ -864,7 +856,7 @@ function bbb_session_details() {
                     $tool_content .= "<tr>
                         <td>
                         <div class='table_td'>
-                            <div class='table_td_header clearfix'>$joinLink</div> $warning_message_record
+                            <div class='table_td_header clearfix'>$joinLink $warning_message_record</div> 
                             <div class='table_td_body'>
                                 $desc
                             </div>
@@ -904,8 +896,6 @@ function bbb_session_details() {
 
 /**
  * @brief disable bbb session
- * @global type $langBBBUpdateSuccessful
- * @global type $tool_content
  * @param type $id
  * @return type
  */
@@ -920,8 +910,6 @@ function disable_bbb_session($id)
 
 /**
  * @brief enable bbb session
- * @global type $langBBBUpdateSuccessful
- * @global type $tool_content
  * @param type $id
  * @return type
  */
@@ -937,9 +925,6 @@ function enable_bbb_session($id)
 
 /**
  * @brief delete bbb sessions
- * @global type $langBBBDeleteSuccessful
- * @global type $tool_content
- * @global type $course_id
  * @param type $id
  * @return type
  */
@@ -957,12 +942,7 @@ function delete_bbb_session($id)
 }
 
 /**
- *
- * @global type $course_code
- * @global type $langBBBCreationRoomError
- * @global type $langBBBConnectionError
- * @global type $langBBBConnectionErrorOverload
- * @global type $langBBBWelcomeMsg
+ * @brief create bbb meeting
  * @param type $title
  * @param type $meeting_id
  * @param type $mod_pw
@@ -1235,7 +1215,7 @@ function bbb_session_running($meeting_id)
  * @brief function to calculate date diff in minutes in order to enable join link
  * @param type $start_date
  * @param type $current_date
- * @return type
+ * @return integer
  */
 function date_diff_in_minutes($start_date, $current_date) {
 
@@ -1328,9 +1308,6 @@ function get_active_rooms_details($salt, $bbb_url)
 
 /**
  * @brief display video recordings in multimedia
- * @global type $langBBBImportRecordingsOK
- * @global type $langBBBImportRecordingsNo
- * @global type $tool_content;
  * @param type $course_id
  * @param type $id
  * @return boolean
@@ -1430,9 +1407,6 @@ function publish_video_recordings($course_id, $id)
 
 /**
  * @brief get number of meeting users
- * @global type $langBBBGetUsersError
- * @global type $langBBBConnectionError
- * @global type $course_code
  * @param type $salt
  * @param type $bbb_url
  * @param type $meeting_id
@@ -1492,7 +1466,7 @@ function is_tc_server_enabled_for_all($tc_type) {
     }
 }
 /**
- * @brief find enabled tc server
+ * @brief find active tc server for a course
  * @param type $course_id
  * @param type $tc_type
  * @return boolean
@@ -1521,24 +1495,46 @@ function is_active_tc_server($tc_type, $course_id) {
 }
 
 /**
- * @brief checks if tc server is configured
- * @return string|boolean
+ * @brief find if there is enabled tc server for a course
+ * @param $course_id
+ * @return bool
  */
-function is_configured_tc_server() {
+function is_enabled_tc_server($course_id) {
 
-    if (get_config('ext_bigbluebutton_enabled')) {
-        $tc_type = 'bbb';
-    } elseif (get_config('ext_openmeetings_enabled')) {
-        $tc_type = 'om';
+    if (is_active_tc_server('bbb', $course_id) or
+        is_active_tc_server('jitsi', $course_id) or
+        is_active_tc_server('googlemeet', $course_id)) {
+        return true;
     } else {
         return false;
     }
-    return $tc_type;
+}
+
+
+/**
+ * @brief find out which tc servers are configured
+ * @return array of tc_servers
+ */
+function is_configured_tc_server() {
+
+    $tc_servers = [];
+    if (get_config('ext_bigbluebutton_enabled')) {
+        $tc_servers[] = 'bbb';
+    }
+    if (get_config('ext_googlemeet_enabled')) {
+        $tc_servers[] = 'googlemeet';
+    }
+    if (get_config('ext_jitsi_enabled')) {
+        $tc_servers[] = 'jitsi';
+    }
+    /*if (get_config('ext_openmeetings_enabled')) {
+        $tc_type = 'om';
+    }*/
+    return $tc_servers;
 }
 
 /**
  * @brief check if bbb server is available
- * @global type $course_id
  * @param type $server_id
  * @param type $participants
  * @return boolean

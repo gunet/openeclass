@@ -86,13 +86,35 @@ if (isset($_POST['submit'])) {
         Session::Messages($langFileUpdatedSuccess, 'alert-info');
     } else {
         $result = $app->storeParams();
+        if (isset($_POST['enabled'])) {
+            $enabled = 'true';
+        } else {
+            $enabled = 'false';
+        }
+        if ($_POST['enabledcourses'] == 0) {
+            $all_courses = 1;
+        } else {
+            $all_courses = 0;
+        }
+        Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses) 
+                                            VALUES('jitsi', ?s, ?s, ?s, ?s)
+                                        ON DUPLICATE KEY UPDATE enabled = ?s, all_courses = ?s",
+                                $_POST['url'], $_POST['url'], $enabled, $all_courses, $enabled, $all_courses);
+
+        $tc_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'jitsi'")->id;
+        Database::get()->query("DELETE FROM course_external_server WHERE external_server = ?d", $tc_id);
+        if (($all_courses == 0) and count($_POST['tc_courses']) > 0) {
+            foreach ($_POST['tc_courses'] as $tc_courses) {
+                Database::get()->query("INSERT INTO course_external_server (course_id, external_server) 
+                                              VALUES (?d, ?d)", $tc_courses, $tc_id);
+            }
+        }
         if ($result) {
             Session::Messages($result, 'alert-danger');
         } else {
             Session::Messages($langFileUpdatedSuccess, 'alert-success');
         }
     }
-
     redirect_to_home_page($app->getConfigUrl());
 }
 
@@ -129,7 +151,7 @@ foreach ($app->getParams() as $param) {
         $tool_content .= "<div class='form-group' id='courses-list'>";
         $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>$langUseOfService&nbsp;&nbsp;";
         $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfServiceInfo'></span></label>";
-        $tool_content .= "<div class='col-sm-10'><select id='select-courses' class='form-control' name='lti_courses[]' multiple>";
+        $tool_content .= "<div class='col-sm-10'><select id='select-courses' class='form-control' name='tc_courses[]' multiple>";
         $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";
         foreach ($courses_list as $c) {
             $selected = in_array($c->id, $selections) ? "selected" : "";
