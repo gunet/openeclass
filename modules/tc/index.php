@@ -47,8 +47,6 @@ $action->record(MODULE_ID_TC);
 
 $toolName = $langBBB;
 
-$tc_type = is_configured_tc_server();
-
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
 load_js('validation.js');
@@ -176,13 +174,13 @@ if ($is_editor) {
                       'icon' => 'fa-plus-circle',
                       'button-class' => 'btn-success',
                       'level' => 'primary-label',
-                      'show' => is_active_tc_server($tc_type, $course_id)),
+                      'show' => is_enabled_tc_server($course_id)),
                 array('title' => $langBBBRecordUserParticipation,
                           'url' => "tc_attendance.php?course=$course_code",
                           'icon' => 'fa-group',
                           'level' => 'primary-label',
                           'link-attrs' => "id=popupattendance1",
-                          'show' => is_active_tc_server($tc_type, $course_id)),
+                          'show' => is_active_tc_server('bbb', $course_id)),
                 array('title' => $langParticipate,
                           'url' => "tcuserduration.php?course=$course_code",
                           'icon' => 'fa-clock-o',
@@ -301,7 +299,7 @@ elseif(isset($_GET['choice']))
             //get info
             $sess = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s", $_GET['meeting_id']);
             $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
-            if ($tc_type == 'bbb') { // if tc server is `bbb`
+            if ($serv->type == 'bbb') { // if tc server is `bbb`
                 $mod_pw = $sess->mod_pw;
                 $record = $sess->record;
                 if (bbb_session_running($_GET['meeting_id']) == false) { // create meeting
@@ -344,7 +342,7 @@ elseif(isset($_GET['choice']))
                         header('Location: ' . bbb_join_user($_GET['meeting_id'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
                     }
                 }
-            } elseif ($tc_type == 'om') { // if tc server is `om`
+            } /* elseif ($tc_type == 'om') { // if tc server is `om`
                 if (om_session_running($_GET['meeting_id']) == false) { // create meeting
                     create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
                 }
@@ -353,7 +351,7 @@ elseif(isset($_GET['choice']))
                 } else { // join user
                     header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0));
                 }
-            }
+            } */
             break;
         case 'import_video':
             publish_video_recordings($course_code,getDirectReference($_GET['id']));

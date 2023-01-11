@@ -113,7 +113,7 @@
                                         'url' => $insertBaseUrl . 'tc',
                                         'icon' => 'fa fa-exchange',
                                         'level' => 'secondary',
-                                        'show' => (!is_module_disable(MODULE_ID_TC) && is_configured_tc_server()))
+                                        'show' => (!is_module_disable(MODULE_ID_TC) && is_enabled_tc_server($course_id)))
                                     )) !!}
 
                     @endif
@@ -125,7 +125,7 @@
                                 'level' => 'primary-label',
                                 'button-class' => 'btn-success')
                         )) !!}
- 
+
                     @endif
 
                     @if(Session::has('message'))
@@ -187,7 +187,7 @@
                                         <small><span class='text-muted'>{{ trans('langTags') }}:</span> {!! $tags_list !!}</small>
                                     </div>
                                 @endif
-                               
+
                                 <div class='unit-resources mt-3'>
                                     {!! $tool_content_units !!}
                                 </div>
@@ -201,7 +201,7 @@
                             <div class='panel panel-default'>
                                 <div class='panel-heading'>
                                     <div class='d-inline-flex align-items-top'>
-                                        {{ trans('langActivities')}} 
+                                        {{ trans('langActivities')}}
                                         <a href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}">
                                             <span class="fa fa-pencil ms-2 text-white" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $langEdit }}"></span>
                                         </a>
@@ -213,7 +213,7 @@
                                         @if ($q_in_home)
                                             </tr><tr><th scope='row'><label class='col-12 control-label'>{{ trans('langActInHome') }}</label></th>
                                             @foreach ($q_in_home as $in_home)
-                                                @php 
+                                                @php
                                                     $act_title = q($activities[$in_home->activity_id]['title']);
                                                     $vis = $in_home->visible;
                                                     $class_vis = $vis == 0 ? 'not_visible not_visible_unit' : '';
@@ -221,7 +221,7 @@
                                                 @endphp
 
                                                 <td><span class='col-sm-12 {{$class_vis}} text-secondary fs-6'>{!! $act_title !!}</span></td>
-                                                <td class='text-center'> 
+                                                <td class='text-center'>
                                                     {!! action_button(array(
                                                         array('title' => trans('langAdd') . ' ' . trans('langInsertExercise'),
                                                             'url' => $base_url . 'exercise&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
@@ -293,7 +293,7 @@
                                                             'url' => $base_url . 'tc&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
                                                             'icon' => 'fa fa-exchange',
                                                             'level' => 'secondary',
-                                                            'show' => !is_module_disable_FC(MODULE_ID_TC, $course_code, $id, $in_home->activity_id) && is_configured_tc_server()),
+                                                            'show' => !is_module_disable_FC(MODULE_ID_TC, $course_code, $id, $in_home->activity_id) && is_enabled_tc_server($course_id)),
 
                                                         array('title' => trans('langAdd') . ' ' . trans('langGlossary'),
                                                             'url' => $base_url . 'glossary&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
@@ -336,12 +336,12 @@
                                                             'icon' => 'fa fa-trophy',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_PROGRESS, $course_code, $id, $in_home->activity_id))
-                                                            
+
                                                         ),'',true)
                                                     !!}
                                                 </td>
-                                                <td class='text-center'>   
-                                                    {!! 
+                                                <td class='text-center'>
+                                                    {!!
                                                         action_button(array(
                                                             array('title' => $vis == 1 ? trans('langViewHide') : trans('langViewShow'),
                                                                 'url' => "$_SERVER[REQUEST_URI]&vis_act=$in_home->ID",
@@ -350,7 +350,7 @@
                                                                 'url' => "$_SERVER[REQUEST_URI]&del_act=$in_home->ID&actid=" . $in_home->activity_id,
                                                                 'icon' => 'fa-times',
                                                                 'class' => 'delete',
-                                                                'confirm' => trans('langUnitActivityDeleteConfirm')))) 
+                                                                'confirm' => trans('langUnitActivityDeleteConfirm'))))
                                                     !!}
                                                 </td>
                                             </tr><tr><td></td>
@@ -372,7 +372,7 @@
 
                                                 <td><span class='col-sm-12  {!! $class_vis !!} text-secondary fs-6'>{!! $act_title !!}</span></td>
                                                 @if($is_editor)
-                                                    <td class='text-center'> 
+                                                    <td class='text-center'>
                                                     {!! action_button(array(
                                                             array('title' => trans('langAdd').' '.trans('langInsertExercise'),
                                                                 'url' => $base_url . 'exercise&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
@@ -444,7 +444,7 @@
                                                                 'url' => $base_url . 'tc&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
                                                                 'icon' => 'fa fa-exchange',
                                                                 'level' => 'secondary',
-                                                                'show' => !is_module_disable_FC(MODULE_ID_TC,$course_code,$id,$in_class->activity_id) && is_configured_tc_server()),
+                                                                'show' => !is_module_disable_FC(MODULE_ID_TC,$course_code,$id,$in_class->activity_id) && is_enabled_tc_server($course_id)),
 
                                                             array('title' => trans('langAdd').' '.trans('langGlossary'),
                                                                 'url' => $base_url . 'glossary&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
@@ -498,17 +498,17 @@
                                                     </td>
                                                     <td class='text-center'>
 
-                                                    {!! 
+                                                    {!!
                                                         action_button(array(
                                                             array('title' => $vis == 1? trans('langViewHide') : trans('langViewShow'),
                                                             'url' => "$_SERVER[REQUEST_URI]&vis_act=$in_class->ID",
                                                             'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
-                                                            
+
                                                             array('title' => trans('langDelete'),
                                                                 'url' => "$_SERVER[REQUEST_URI]&del_act=$in_class->ID&actid=".$in_class->activity_id,
                                                                 'icon' => 'fa-times',
                                                                 'class' => 'delete',
-                                                                'confirm' => trans('langUnitActivityDeleteConfirm')))) 
+                                                                'confirm' => trans('langUnitActivityDeleteConfirm'))))
                                                     !!}
 
 
@@ -604,7 +604,7 @@
                                                         'url' => $base_url . 'tc&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
                                                         'icon' => 'fa fa-exchange',
                                                         'level' => 'secondary',
-                                                        'show' => !is_module_disable_FC(MODULE_ID_TC,$course_code,$id,$after_class->activity_id) && is_configured_tc_server()),
+                                                        'show' => !is_module_disable_FC(MODULE_ID_TC,$course_code,$id,$after_class->activity_id) && is_enabled_tc_server($course_id)),
 
                                                     array('title' => trans('langAdd').' '.trans('langGlossary'),
                                                         'url' => $base_url . 'glossary&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
@@ -672,7 +672,7 @@
                                             @endforeach
                                             </tr>
                                         @endif
-                                        
+
                                         </tbody>
                                     </table>
                                 </div>

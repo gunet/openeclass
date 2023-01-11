@@ -94,247 +94,232 @@ if(!isset($_POST['final_submit'])){
 
         $toolName = $langCourseCreate;
 
-                $validationFailed = false;
+            $validationFailed = false;
 
-                if (empty($_SESSION['goals']) or $_SESSION['goals'][0] == "") {
-                    //Session::Messages($langEmptyGoal);
-                    Session::flash('message', $langEmptyGoal);
-                    Session::flash('alert-class', 'alert-warning');
-                    $validationFailed = true;
+            if (empty($_SESSION['goals']) or $_SESSION['goals'][0] == "") {
+                Session::Messages($langEmptyGoal);
+                $validationFailed = true;
+            }
+
+            if (empty($_SESSION['units']) or $_SESSION['goals'][0] == "") {
+                Session::Messages($langEmptyUnit);
+                $validationFailed = true;
+            }
+
+
+            if (empty($_SESSION['stunum'])||empty($_SESSION['lectnum'])||empty($_SESSION['lecthours'])||empty($_SESSION['homehours'])) {
+                Session::Messages($langFieldsMissing);
+                $validationFailed = true;
+
+            }
+
+
+            if ($validationFailed) {
+                redirect_to_home_page('modules/create_course/flipped_classroom.php');
+            }
+
+            $mtitles_in_home = $mtitles_in_class = $mtitles_after_class = $mids_in_home = $mids_in_class = $mids_after_class = array();
+
+            $maxUnitId = Database::get()->querySingle("SELECT MAX(id) as muid FROM course_units");
+
+            $act_list_in_home = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_IN_HOME."'");
+
+            $act_list_after_class = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_AFTER_CLASS."'");
+
+            $act_list_in_class = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_IN_CLASS."'");
+
+
+            foreach ($act_list_in_home as $item_in_home) {
+                if ($item_in_home->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
+                    continue;
                 }
 
-                if (empty($_SESSION['units']) or $_SESSION['goals'][0] == "") {
-                    //Session::Messages($langEmptyUnit);
-                    Session::flash('message', $langEmptyUnit);
-                    Session::flash('alert-class', 'alert-warning');
-                    $validationFailed = true;
+                $mid = getIndirectReference($item_in_home->activity_ID);
+                $mtitle = q($activities[$item_in_home->activity_ID]['title']);
+
+                $mtitles_in_home[$item_in_home->activity_ID] =$mtitle;
+            }
+
+            foreach ($act_list_after_class as $item_after_class) {
+                if ($item_after_class->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
+                    continue;
                 }
+                $mid = getIndirectReference($item_after_class->activity_ID);
+                $mtitle = q($activities[$item_after_class->activity_ID]['title']);
 
+                $mtitles_after_class[$item_after_class->activity_ID]=$mtitle;
 
-                if (empty($_SESSION['stunum'])||empty($_SESSION['lectnum'])||empty($_SESSION['lecthours'])||empty($_SESSION['homehours'])) {
-                    //Session::Messages($langFieldsMissing);
-                    Session::flash('message', $langFieldsMissing);
-                    Session::flash('alert-class', 'alert-warning');
-                    $validationFailed = true;
+            }
 
+            foreach ($act_list_in_class as $item_in_class) {
+                if ($item_in_class->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
+                    continue;
                 }
+                $mid = getIndirectReference($item_in_class->activity_ID);
+                $mtitle = q($activities[$item_in_class->activity_ID]['title']);
+
+                $mtitles_in_class[$item_in_class->activity_ID]=$mtitle;
+
+            }
+
+            $tool_content .= action_bar(array(
+                array(
+                    'title' => $langBack,
+                    'url' => $urlServer.'modules/create_course/flipped_classroom.php',
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-default'
+                )
+            ), false);
 
 
-                if ($validationFailed) {
-                    redirect_to_home_page('modules/create_course/flipped_classroom.php');
-                }
+            $tool_content .= "
 
-                $mtitles_in_home = $mtitles_in_class = $mtitles_after_class = $mids_in_home = $mids_in_class = $mids_after_class = array();
+                <div class='form-wrapper '>
+                    <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
+                    <div class='panel panel-default'>
+                        <div class='panel-heading'>
+                            <div class='paenel-title h4'>
+                                $langActSelect
 
-                $maxUnitId = Database::get()->querySingle("SELECT MAX(id) as muid FROM course_units");
-
-                $act_list_in_home = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_IN_HOME."'");
-
-                $act_list_after_class = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_AFTER_CLASS."'");
-
-                $act_list_in_class = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_IN_CLASS."'");
-
-
-                foreach ($act_list_in_home as $item_in_home) {
-                    if ($item_in_home->activity_ID == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
-                        continue;
-                    }
-
-                    $mid = getIndirectReference($item_in_home->activity_ID);
-                    $mtitle = q($activities[$item_in_home->activity_ID]['title']);
-
-                    $mtitles_in_home[$item_in_home->activity_ID] =$mtitle;
-
-                }
-
-                foreach ($act_list_after_class as $item_after_class) {
-                    if ($item_after_class->activity_ID == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
-                        continue;
-                    }
-                    $mid = getIndirectReference($item_after_class->activity_ID);
-                    $mtitle = q($activities[$item_after_class->activity_ID]['title']);
-
-                    $mtitles_after_class[$item_after_class->activity_ID]=$mtitle;
-
-                }
-
-                foreach ($act_list_in_class as $item_in_class) {
-                    if ($item_in_class->activity_ID == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
-                        continue;
-                    }
-                    $mid = getIndirectReference($item_in_class->activity_ID);
-                    $mtitle = q($activities[$item_in_class->activity_ID]['title']);
-
-                    $mtitles_in_class[$item_in_class->activity_ID]=$mtitle;
-
-                }
-
-                $tool_content .= action_bar(array(
-                    array(
-                        'title' => $langBack,
-                        'url' => $urlServer.'modules/create_course/flipped_classroom.php',
-                        'icon' => 'fa-reply',
-                        'level' => 'primary-label',
-                        'button-class' => 'btn-secondary'
-                    )
-                ), false);
-
-
-                $tool_content .= "
-
-                    <div class='form-wrapper '>
-                        <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
-                        <div class='panel panel-default'>
-                            <div class='panel-heading'>
-                                <div class='panel-title text-center text-uppercase'>
-                                    $langActSelect
-
-                                </div>
                             </div>
                         </div>
+                    </div>
 
 
-                        <fieldset>
-                            <div class='table-responsive'>
-                                <table class='table table-bordered table-striped'>
+                    <fieldset>
+                        <div class='table-responsive'>
+                            <table class='table table-bordered table-striped'>
+                            <tr>
+                                <td style='background-color:#d1d9e5;' ></td><th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-sm-2 '>$langActivities</th>
+                ";
+            $i=1;
+            foreach ($_SESSION['units'] as $utitle) {
+                $tool_content .= "<th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-md-10 ' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>";
+                $i++;
+            }
+                $tool_content .= "
+                                </tr>
                                 <tr>
-                                    <td style='background-color:#d1d9e5;' ></td><th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-sm-2 '>$langActivities</th>
-                    ";
-                $i=1;
-                foreach ($_SESSION['units'] as $utitle) {
-                    $tool_content .= "<th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-md-12 ' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>";
-                    $i++;
+                                    <th scope='row' style='color:#31708f; '>$langActInHome:</th>";
+
+                $end=end($mtitles_in_home);
+
+                foreach($mtitles_in_home as $title_home) {
+                    $j=1;
+                    $tool_content .= "<td>$title_home</td>";
+                    $newUnitId =$maxUnitId->muid +1;
+                    foreach ($_SESSION['units'] as $utitle) {
+                        $tool_content .= "<td><input type='checkbox' name='in_home[]' id='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."' value='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."'></input></td>";
+                        $newUnitId ++;
+                        $j++;
+
+                    }
+                    if ($title_home == $end) {
+                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                    } else {
+                        $tool_content .= "</tr><tr><td></td>";
+                    }
+
                 }
-                    $tool_content .= "
-                                    </tr>
-                                    <tr>
-                                        <th scope='row' style='color:#31708f; '>$langActInHome:</th>";
 
-                    $end=end($mtitles_in_home);
+                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
 
-                    foreach($mtitles_in_home as $title_home) {
-                        $j=1;
-                        $tool_content .= "<td>$title_home</td>";
-                        $newUnitId =$maxUnitId->muid +1;
-                        foreach ($_SESSION['units'] as $utitle) {
-                            $tool_content .= "<td><input type='checkbox' name='in_home[]' id='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."' value='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."'></input></td>";
-                            $newUnitId ++;
-                            $j++;
-
-                        }
-                        if ($title_home == $end) {
-                            $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
-                        } else {
-                            $tool_content .= "</tr><tr><td></td>";
-                        }
-
-                    }
-
+                foreach ($_SESSION['units'] as $utitle) {
                     $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                }
 
-                    foreach ($_SESSION['units'] as $utitle) {
-                        $tool_content .="<td style='background-color:#d1d9e5;'></td>";
-                    }
-
-                    $tool_content .= "
-                        </tr>
-                        <tr>
-                            <th scope='row' style='color:#31708f;'>$langActInClass:</th>
-                            ";
-
-                    $end=end($mtitles_in_class);
-                    foreach($mtitles_in_class as $title_class) {
-                        $k=1;
-                        $tool_content .= "<td>$title_class</td>";
-                        $newUnitId =$maxUnitId->muid +1;
-                        foreach ($_SESSION['units'] as $utitle) {
-
-                            $tool_content .= "
-                                <td><input type='checkbox' name='in_class[]' id='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."' value='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."'></input></td>";
-                            $newUnitId ++;
-                            $k++;
-                        }
-
-                        ;
-                        if($title_class == $end){
-                            $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
-                        }else{
-                            $tool_content .= "</tr><tr><td></td>";
-                        }
-                    }
-
-                    $tool_content .="<td style='background-color:#d1d9e5;'></td>
-                    ";
-
-                    foreach ($_SESSION['units'] as $utitle) {
-                        $tool_content .="<td style='background-color:#d1d9e5;'></td>";
-                    }
-
-
-                    $tool_content .= "</tr>
+                $tool_content .= "
+                    </tr>
                     <tr>
-                        <th scope='row' style='color:#31708f;'>$langActAfterClass:</th>";
+                        <th scope='row' style='color:#31708f;'>$langActInClass:</th>
+                        ";
 
-                    $end=end($mtitles_after_class);
-                    foreach($mtitles_after_class as $title_after_class) {
-                        $z=1;
-                        $tool_content .= "<td>$title_after_class</td>";
-                        $newUnitId =$maxUnitId->muid +1;
-                        foreach($_SESSION['units'] as $utitle) {
-
-                            $tool_content .= "
-                                <td><input type='checkbox' name='after_class[]' id='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."' value='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."'></input></td>";
-                            $newUnitId++;
-                            $z++;
-                        }
-                        if ($title_after_class == $end){
-                            $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
-                        } else {
-                            $tool_content .= "</tr><tr><td></td>";
-                        }
-
-                    }
-
-                    $tool_content .="<td style='background-color:#d1d9e5;'></td>";
-
+                $end=end($mtitles_in_class);
+                foreach($mtitles_in_class as $title_class) {
+                    $k=1;
+                    $tool_content .= "<td>$title_class</td>";
+                    $newUnitId =$maxUnitId->muid +1;
                     foreach ($_SESSION['units'] as $utitle) {
-                        $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+
+                        $tool_content .= "
+                            <td><input type='checkbox' name='in_class[]' id='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."' value='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."'></input></td>";
+                        $newUnitId ++;
+                        $k++;
                     }
 
-                    $tool_content .= "</tr>
-                            </table>
+                    ;
+                    if($title_class == $end){
+                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                    }else{
+                        $tool_content .= "</tr><tr><td></td>";
+                    }
+                }
+
+                $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                ";
+
+                foreach ($_SESSION['units'] as $utitle) {
+                    $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                }
+
+
+                $tool_content .= "</tr>
+                <tr>
+                    <th scope='row' style='color:#31708f;'>$langActAfterClass:</th>";
+
+                $end=end($mtitles_after_class);
+                foreach($mtitles_after_class as $title_after_class) {
+                    $z=1;
+                    $tool_content .= "<td>$title_after_class</td>";
+                    $newUnitId =$maxUnitId->muid +1;
+                    foreach($_SESSION['units'] as $utitle) {
+
+                        $tool_content .= "
+                            <td><input type='checkbox' name='after_class[]' id='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."' value='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."'></input></td>";
+                        $newUnitId++;
+                        $z++;
+                    }
+                    if ($title_after_class == $end){
+                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                    } else {
+                        $tool_content .= "</tr><tr><td></td>";
+                    }
+
+                }
+
+                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+
+                foreach ($_SESSION['units'] as $utitle) {
+                    $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                }
+
+                $tool_content .= "</tr>
+                        </table>
+                    </div>
+
+
+                    <div class='form-group'>
+                        <div class='col-sm-10 col-sm-offset-2'>
+                            <input id='final_sub' class='btn btn-primary' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
+                            <a href='{$urlServer}main/portfolio.php' class='btn btn-default'>$langCancel</a>
                         </div>
+                    </div>
+                    <input type='hidden' name='next'>
+                    <input name='checked_in_class' type='hidden' value='1'></input>
+                    <input name='checked_in_home' type='hidden' value='2'></input>
+                    <input name='checked_after_class' type='hidden' value='3'></input>
 
+                </fieldset>". generate_csrf_token_form_field() ."
+            </form>
+        </div>
+        ";
 
-                        <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
-
-
-
-                                    <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
-
-
-                                        <a href='{$urlServer}main/portfolio.php' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-
-
-
-
-
-                        </div>
-                        <input type='hidden' name='next'>
-                        <input name='checked_in_class' type='hidden' value='1'></input>
-                        <input name='checked_in_home' type='hidden' value='2'></input>
-                        <input name='checked_after_class' type='hidden' value='3'></input>
-
-                    </fieldset>". generate_csrf_token_form_field() ."
-                </form>
-            </div>
-            ";
-
-    }else{ //show activities selection when it is edit
+    } else { //show activities selection when it is edit
         $toolName = $langCourseEdit;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "{$urlServer}modules/units/index.php?course=$course_code&id=$unit_id",
+                'url' => "{$urlServer}modules/units/?course=$course_code&id=$unit_id",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')),false);
 
@@ -353,7 +338,7 @@ if(!isset($_POST['final_submit'])){
 
 
             foreach ($act_list_in_home as $item_in_home) {
-                if ($item_in_home->activity_ID == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
+                if ($item_in_home->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
                     continue;
                 }
 
@@ -364,7 +349,7 @@ if(!isset($_POST['final_submit'])){
             }
 
             foreach ($act_list_after_class as $item_after_class) {
-                if ($item_after_class->activity_ID == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
+                if ($item_after_class->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
                     continue;
                 }
                 $mid = getIndirectReference($item_after_class->activity_ID);
@@ -375,7 +360,7 @@ if(!isset($_POST['final_submit'])){
             }
 
             foreach ($act_list_in_class as $item_in_class) {
-                if ($item_in_class->activity_ID == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
+                if ($item_in_class->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
                     continue;
                 }
                 $mid = getIndirectReference($item_in_class->activity_ID);
@@ -389,9 +374,9 @@ if(!isset($_POST['final_submit'])){
 
             $tool_content .= "<div class='form-wrapper'><fieldset>
                 <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code&edit_act=$unit_id' onsubmit=\"return validateNodePickerForm();\">
-                    <div class='panel panel-default rounded-pill'>
-                        <div class='panel-heading rounded-pill'>
-                            <div class='panel-title h4'>
+                    <div class='panel panel-default'>
+                        <div class='panel-heading'>
+                            <div class='paenel-title h4'>
                                 $langActSelect:
                             </div>
                         </div>
@@ -503,19 +488,11 @@ if(!isset($_POST['final_submit'])){
                 $tool_content .= "</tr>
                         </table>
                     </div>
-                    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
-
-
-
-                                    <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
-
-
-                                    <a href='{$urlServer}modules/units/index.php?course=".$course_code."&id=".$unit_id."' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-
-
-
-
-
+                    <div class='form-group'>
+                        <div class='col-sm-10 col-sm-offset-2'>
+                            <a href='{$urlServer}modules/units/?course=".$course_code."&id=".$unit_id."' class='btn btn-default'>$langCancel</a>
+                            <input id='final_sub' class='btn btn-primary' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
+                        </div>
                     </div>
                     <input type='hidden' name='next'>
                     <input name='checked_in_class' type='hidden' value='1'></input>
@@ -565,16 +542,12 @@ if(!isset($_POST['final_submit'])){
 
 
             if (count($_SESSION['code']) < 1 || empty($_SESSION['code'][0])) {
-                //Session::Messages($langEmptyAddNode);
-                Session::flash('message', $langEmptyAddNode);
-                Session::flash('alert-class', 'alert-warning');
+                Session::Messages($langEmptyAddNode);
                 $validationFailed = true;
             }
 
             if (empty($_SESSION['title'])) {
-                //Session::Messages($langFieldsMissing);
-                Session::flash('message', $langFieldsMissing);
-                Session::flash('alert-class', 'alert-warning');
+                Session::Messages($langFieldsMissing);
                 $validationFailed = true;
             }
 
@@ -601,9 +574,7 @@ if(!isset($_POST['final_submit'])){
 
             // create course directories
             if (!create_course_dirs($code)) {
-                //Session::Messages($langGeneralError, 'alert-danger');
-                Session::flash('message', $langGeneralError);
-                Session::flash('alert-class', 'alert-danger');
+                Session::Messages($langGeneralError, 'alert-danger');
                 redirect_to_home_page('modules/create_course/create_course.php');
             }
 
@@ -695,9 +666,7 @@ if(!isset($_POST['final_submit'])){
 
             $new_course_id = $result->lastInsertID;
             if (!$new_course_id) {
-            //Session::Messages($langGeneralError);
-            Session::flash('message', $langGeneralError);
-            Session::flash('alert-class', 'alert-warning');
+            Session::Messages($langGeneralError);
             redirect_to_home_page('modules/create_course/create_course.php');
             }
 
@@ -1082,7 +1051,7 @@ if(!isset($_POST['final_submit'])){
         $tool_content .= action_bar(array(
             array(
                 'title' => $langEnter,
-                'url' => $urlAppend . "modules/units/index.php?course=$course_code&id=$unit_id",
+                'url' => $urlAppend . "modules/units/?course=$course_code&id=$unit_id",
                 'icon' => 'fa-arrow-right',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
