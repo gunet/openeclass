@@ -333,7 +333,7 @@ else if (isset($_POST['submit'])) {
         if ($allcourses == 0) {
             foreach ($tc_courses as $tc_data) {
                 Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d", $tc_data, $id);
-                update_tc_session($tc_data, $id); // update existing tc_sessions
+                update_bbb_session($tc_data, $id); // update existing tc_sessions
             }
         }
     } else {
@@ -343,7 +343,7 @@ else if (isset($_POST['submit'])) {
         if ($allcourses == 0) {
             foreach ($tc_courses as $tc_data) {
                 Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d", $tc_data, $tc_id);
-                update_tc_session($tc_data, $tc_id); // update existing tc_sessions
+                update_bbb_session($tc_data, $tc_id); // update existing tc_sessions
             }
         }
     }
@@ -872,14 +872,19 @@ draw($tool_content, 3, null, $head_content);
 
 
 /**
- * @brief update existing tc_session with new tc_server
+ * @brief update existing bbb session with new bbb server
  * @param type $course_id
- * @param type $tc_server_id
+ * @param type $bbb_server_id
  */
-function update_tc_session($course_id, $tc_server_id) {
+function update_bbb_session($course_id, $bbb_server_id) {
 
-    $q = Database::get()->querySingle("SELECT * FROM tc_session WHERE course_id = ?d", $course_id);
+    $q = Database::get()->queryArray("SELECT id FROM tc_session JOIN tc_servers 
+            ON running_at = tc_servers.id 
+               WHERE tc_servers.type = 'bbb'
+            AND course_id = ?d", $course_id);
     if ($q) {
-        Database::get()->query("UPDATE tc_session SET running_at = ?d WHERE course_id = ?d", $tc_server_id, $course_id);
+        foreach ($q as $data) {
+            Database::get()->query("UPDATE tc_session SET running_at = ?d WHERE id = ?d", $bbb_server_id, $data->id);
+        }
     }
 }
