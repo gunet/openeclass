@@ -24,27 +24,81 @@
 require_once 'bbb-api.php';
 
 /**
- * @brief create form for new session scheduling
+ * @brief choose tc server for session
+ * @return string
  */
-function bbb_session_form($session_id = 0) {
+function select_tc_server($course_id) {
+    global $tool_content, $urlAppend, $course_code, $langNewBBBSession,
+           $langBBBLongDescription, $langJitsiLongDescription, $langGoogleMeetLongDescription;
 
-    global $course_id, $uid;
-    global $tool_content, $langAdd, $course_code;
-    global $langUnitDescr, $langStart;
-    global $langVisible, $langInvisible;
-    global $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore;
-    global $start_session, $BBBEndDate, $langAnnouncements, $langBBBAnnDisplay;
-    global $langTitle, $langBBBNotifyExternalUsersHelpBlock, $langBBBRecordFalse;
-    global $langBBBNotifyUsers, $langBBBNotifyExternalUsers, $langBBBSessionMaxUsers;
-    global $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue;
-    global $langBBBSessionSuggestedUsers, $langBBBSessionSuggestedUsers2;
-    global $langBBBAlertTitle, $langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll;
-    global $langEnd, $langBBBEndHelpBlock, $langModify, $langBBBExternalUsers;
-    global $langReadMore, $langBBBmuteOnStart, $langBBBlockSettingsDisableCam;
-    global $langBBBlockSettingsDisableMic, $langBBBlockSettingsDisablePrivateChat;
-    global $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote;
-    global $langBBBlockSettingsHideUserList, $langBBBwebcamsOnlyForModerator;
-    global $langBBBMaxPartPerRoom, $langBBBHideParticipants;
+    $tool_content .= "<div class='row extapp'><div class='col-sm-12'>";
+
+    if (is_active_tc_server('bbb', $course_id)) {
+        $tool_content .= "<table class='table-default dataTable no-footer extapp-table'>";
+        $tool_content .= "<tr><td style='width:90px; padding:0px;'>";
+        $tool_content .= "<div class='text-center' style='padding:10px;'>";
+        $tool_content .= "<img height='50' width='89' src='{$urlAppend}template/icons/bigbluebutton.png'>";
+        $tool_content .= "BigBlueButton";
+        $tool_content .= "</div></td>";
+        $tool_content .= "<td class='text-muted clearfix'><span style='padding-right: 170px;'>$langBBBLongDescription</span>";
+        $tool_content .= "<span class='pull-right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=bbb' class='btn btn-success'>$langNewBBBSession</a></span>";
+        $tool_content .= "</td></tr>";
+        $tool_content .= "</table>";
+    }
+
+    if (is_active_tc_server('jitsi', $course_id)) {
+        $tool_content .= "<table class='table-default dataTable no-footer extapp-table'>";
+        $tool_content .= "<tr><td style='width:90px; padding:0px;'>";
+        $tool_content .= "<div class='text-center' style='padding:10px;'>";
+        $tool_content .= "<img height='50' width='89' src='{$urlAppend}template/icons/jitsi.png'>";
+        $tool_content .= "Jitsi";
+        $tool_content .= "</div></td>";
+        $tool_content .= "<td class='text-muted clearfix'><span style='padding-right: 170px;'>$langJitsiLongDescription</span>";
+        $tool_content .= "<span class='pull-right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=jitsi' class='btn btn-success'>$langNewBBBSession</a></span>";
+        $tool_content .= "</td></tr>";
+        $tool_content .= "</table>";
+    }
+
+    if (is_active_tc_server('googlemmet', $course_id)) {
+        $tool_content .= "<table class='table-default dataTable no-footer extapp-table'>";
+        $tool_content .= "<tr><td style='width:90px; padding:0px;'>";
+        $tool_content .= "<div class='text-center' style='padding:10px;'>";
+        $tool_content .= "<img height='50' width='89' src='{$urlAppend}template/icons/googlemeet.png'>";
+        $tool_content .= "Google Meet";
+        $tool_content .= "</div></td>";
+        $tool_content .= "<td class='text-muted clearfix'><span style='padding-right: 170px;'>$langGoogleMeetLongDescription</span>";
+        $tool_content .= "<span class='pull-right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=googlemeet' class='btn btn-success'>$langNewBBBSession</a></span>";
+        $tool_content .= "</td></tr>";
+        $tool_content .= "</table>";
+    }
+
+    $tool_content .= "</div></div>";
+
+    return $tool_content;
+}
+
+
+
+/**
+ * @brief form for new / edit tc session
+ */
+function tc_session_form($session_id = 0, $tc_type = 'bbb') {
+
+    global $course_id, $uid, $tool_content, $langAdd, $course_code,
+        $langUnitDescr, $langStart, $langVisible, $langInvisible,
+        $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore,
+        $start_session, $BBBEndDate, $langAnnouncements, $langBBBAnnDisplay,
+        $langTitle, $langBBBNotifyExternalUsersHelpBlock, $langBBBRecordFalse,
+        $langBBBNotifyUsers, $langBBBNotifyExternalUsers, $langBBBSessionMaxUsers,
+        $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue,
+        $langBBBSessionSuggestedUsers, $langBBBSessionSuggestedUsers2,
+        $langBBBAlertTitle, $langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll,
+        $langEnd, $langBBBEndHelpBlock, $langModify, $langBBBExternalUsers,
+        $langReadMore, $langBBBmuteOnStart, $langBBBlockSettingsDisableCam,
+        $langBBBlockSettingsDisableMic, $langBBBlockSettingsDisablePrivateChat,
+        $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote,
+        $langBBBlockSettingsHideUserList, $langBBBwebcamsOnlyForModerator,
+        $langBBBMaxPartPerRoom, $langBBBHideParticipants;
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
@@ -60,7 +114,7 @@ function bbb_session_form($session_id = 0) {
     }
     $found_selected = false;
 
-    if ($session_id > 0 ) { // edit existing BBB session
+    if ($session_id > 0 ) { // edit existing TC session
         $row = Database::get()->querySingle("SELECT * FROM tc_session WHERE id = ?d", $session_id);
         $status = ($row->active == 1 ? 1 : 0);
         $record = ($row->record == "true" ? true : false);
@@ -106,10 +160,10 @@ function bbb_session_form($session_id = 0) {
         $checked_lockSettingsHideUserList = isset($options['lockSettingsHideUserList']) ? 'checked' : '';
         $checked_hideParticipants = isset($options['hideParticipants']) ? 'checked' : '';
 
-        $submit_name = 'update_bbb_session';
+        $submit_name = 'update_tc_session';
         $submit_id = "<input type=hidden name = 'id' value=" . getIndirectReference($session_id) . ">";
         $value_message = $langModify;
-    } else { // new BBB meeting
+    } else { // new TC meeting
         $status = 1;
         $unlock_interval = '10';
         $r_group = array();
@@ -120,11 +174,14 @@ function bbb_session_form($session_id = 0) {
         $textarea = rich_text_editor('desc', 4, 20, '');
         $value_title = '';
         $init_external_users = '';
-        $value_session_users = $c;
-        $submit_name = 'new_bbb_session';
+        if ($tc_type == 'jitsi') {
+            $value_session_users = 30; // jitsi recommended value
+        } else {
+            $value_session_users = $c;
+        }
+        $submit_name = 'new_tc_session';
         $submit_id = '';
         $value_message = $langAdd;
-        $options = NULL;
         $record = get_config('bbb_recording', 1);
         $checked_muteOnStart = get_config('bbb_muteOnStart', 0) ? 'checked' : '';
         $checked_lockSettingsDisableMic = get_config('bbb_DisableMic', 0) ? 'checked' : '';
@@ -146,12 +203,19 @@ function bbb_session_form($session_id = 0) {
         }
     }
 
-    $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'bbb'
+    if ($tc_type == 'jitsi') {
+        $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'jitsi' AND enabled = 'true'")->id;
+    } elseif ($tc_type == 'googlemeet') {
+        $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'googlemeet' AND enabled = 'true'")->id;
+    } else {
+        $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'bbb'
                                                 AND enabled = 'true' ORDER BY FIELD(enable_recordings, 'true', 'false'), weight ASC LIMIT 1")->id;
+    }
 
     $tool_content .= "
         <div class='col-12'><div class='form-wrapper form-edit rounded'>
-        <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
+        <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code&tc_type=$tc_type' method='post' >
+
         <fieldset>
         <div class='form-group'>
             <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
@@ -238,11 +302,17 @@ function bbb_session_form($session_id = 0) {
             <label for='sessionUsers' class='col-sm-6 control-label-notes'>$langBBBSessionMaxUsers</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='number' min='1' pattern='\d+' name='sessionUsers' id='sessionUsers' value='$value_session_users'>";
-        if (isset($bbb_max_part_per_room_limit)) {
-            $tool_content .= " $langBBBMaxPartPerRoom: <strong>$bbb_max_part_per_room</strong>";
-        } else {
-            $tool_content .= " $langBBBSessionSuggestedUsers: <strong>$c</strong> ($langBBBSessionSuggestedUsers2)";
+        if ($tc_type == 'bbb') {
+            if (isset($bbb_max_part_per_room_limit)) {
+                $tool_content .= " $langBBBMaxPartPerRoom: <strong>$bbb_max_part_per_room</strong>";
+            } else {
+                $tool_content .= " $langBBBSessionSuggestedUsers: <strong>$c</strong> ($langBBBSessionSuggestedUsers2)";
+            }
+        } elseif ($tc_type == 'jitsi') {
+            $tool_content .= " $langBBBMaxPartPerRoom: <strong>30</strong>";
         }
+
+
         $tool_content .= "
             </div>
         </div>";
@@ -324,6 +394,8 @@ function bbb_session_form($session_id = 0) {
                     </div>
             </div>
         </div>";
+    // bbb specific additional options
+    if ($tc_type != 'jitsi' and $tc_type != 'googlemeet') {
         $tool_content .= "<div class='clearfix mt-4'>
                             <a role='button' data-bs-toggle='collapse' href='#MoreInfo' aria-expanded='false' aria-controls='MoreInfo'>
                                  <h5 class='panel-heading' style='margin-bottom: 0px;'>
@@ -338,6 +410,7 @@ function bbb_session_form($session_id = 0) {
                       <label>
                         <input type='checkbox' name='muteOnStart' $checked_muteOnStart value='1'>$langBBBmuteOnStart
                       </label>
+
                     </div>
             </div>
         </div>
@@ -410,11 +483,12 @@ function bbb_session_form($session_id = 0) {
                       <label>
                         <input type='checkbox' name='hideParticipants' $checked_hideParticipants value='1'>$langBBBHideParticipants
                       </label>
-                    </div>
-            </div>
-        </div> ";
 
-        $tool_content .= "</div>
+                    </div>
+                </div>
+            </div>";
+        }
+        $tool_content .= "
         $submit_id
         <div class='form-group mt-5'>
             <div class='col-12 d-flex justify-content-center align-items-center'>
@@ -424,7 +498,7 @@ function bbb_session_form($session_id = 0) {
         </fieldset>
          ". generate_csrf_token_form_field() ."
         </form></div></div>";
-        $tool_content .= "<script language='javaScript' type='text/javascript'>
+        $tool_content .= "<script type='text/javascript'>
         //<![CDATA[
             var chkValidator  = new Validator('sessionForm');
             chkValidator.addValidation('title', 'req', '".js_escape($langBBBAlertTitle)."');
@@ -443,6 +517,7 @@ function bbb_session_form($session_id = 0) {
 
 /**
  * @brief insert scheduled session data into database
+ * @param string $tc_type
  * @param type $title
  * @param type $desc
  * @param type $start_session
@@ -459,7 +534,7 @@ function bbb_session_form($session_id = 0) {
  * @param type $update // true == add, false == update
  * @param type $session
  */
-function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $status, $notifyUsers, $notifyExternalUsers, $addAnnouncement, $minutes_before, $external_users, $record, $sessionUsers, $options, $update, $session_id = '')
+function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndDate, $status, $notifyUsers, $notifyExternalUsers, $addAnnouncement, $minutes_before, $external_users, $record, $sessionUsers, $options, $update, $session_id = '')
 {
     global $langBBBScheduledSession, $langBBBScheduleSessionInfo ,
         $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
@@ -491,15 +566,22 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                                                                 'desc' => html2text($desc)));
 
         $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM tc_session WHERE id = ?d", $session_id);
-    } else { // new BBB session
+    } else { // new TC session
         // check if course uses specific tc_server
-        $t = Database::get()->querySingle("SELECT external_server FROM course_external_server WHERE course_id = ?d", $course_id);
+        $t = Database::get()->querySingle("SELECT tc_servers.id FROM tc_servers JOIN course_external_server 
+                            ON tc_servers.id = external_server 
+                            WHERE course_id = ?d
+                                AND`type` = ?s
+                                AND enabled = 'true' 
+                            ORDER BY weight
+                                ASC", $course_id, $tc_type);
         if ($t) {
-            $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE id = $t->external_server AND `type` = 'bbb' AND enabled = 'true' ORDER BY weight ASC")->id;
+            $server_id = $t->id;
         } else { // else course will use default tc_server
-            $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'bbb' and enabled = 'true' ORDER BY weight ASC")->id;
+            $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = ?s and enabled = 'true' ORDER BY weight ASC", $tc_type)->id;
         }
-        $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
+        if ($tc_type == 'bbb') {
+            $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
                                                             description = ?s,
                                                             start_date = ?t,
@@ -516,16 +598,39 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                                                             record = ?s,
                                                             sessionUsers = ?s,
                                                             options = ?s",
-                                                        $course_id, $title, $desc, $start_session, $BBBEndDate,
-                                                        $status, $server_id,
-                                                        generateRandomString(), generateRandomString() , generateRandomString() ,
-                                                        $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options);
+                $course_id, $title, $desc, $start_session, $BBBEndDate,
+                $status, $server_id,
+                generateRandomString(), generateRandomString() , generateRandomString() ,
+                $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options);
+        } elseif($tc_type == 'jitsi') {
+            $random_string = $course_code . "_" . generateRandomString();
+            $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
+                                                            title = ?s,
+                                                            description = ?s,
+                                                            start_date = ?t,
+                                                            end_date = ?t,
+                                                            public = 1,
+                                                            active = ?s,
+                                                            running_at = ?d,
+                                                            meeting_id = ?s,
+                                                            mod_pw = ?s,
+                                                            att_pw = ?s,
+                                                            unlock_interval = ?s,
+                                                            external_users = ?s,
+                                                            participants = ?s,
+                                                            record = 'false',
+                                                            sessionUsers = ?s",
+                $course_id, $title, $desc, $start_session, $BBBEndDate,
+                $status, $server_id,
+                $random_string, '' , '' ,
+                $minutes_before, $external_users, $r_group, $sessionUsers);
+        }
 
         // logging
         Log::record($course_id, MODULE_ID_TC, LOG_INSERT, array('id' => $q->lastInsertID,
                                                                 'title' => $_POST['title'],
                                                                 'desc' => html2text($_POST['desc']),
-                                                                'tc_type' => 'bbb'));
+                                                                'tc_type' => $tc_type));
 
         $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM tc_session WHERE id = ?d", $q->lastInsertID);
     }
@@ -577,11 +682,15 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
             }
             if (count($recipients) > 0) {
                 $emailsubject = $langBBBScheduledSession;
-                $bbblink = $urlServer . "modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=$new_meeting_id&amp;title=" . urlencode($new_title) . "&amp;att_pw=$new_att_pw";
+                if ($tc_type == 'jitsi') {
+                    $bbblink = $urlServer . "modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=$new_meeting_id";
+                } else {
+                    $bbblink = $urlServer . "modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=$new_meeting_id&amp;title=" . urlencode($new_title) . "&amp;att_pw=$new_att_pw";
+                }
                 $emailheader = "
                     <div id='mail-header'>
                         <div>
-                            <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  " $langBBBScheduleSessionInfo2" . q($start_session). "</div>
+                            <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  " $langBBBScheduleSessionInfo2" . q(format_locale_date(strtotime($start_session), 'short')) . "</div>
                         </div>
                     </div>
                 ";
@@ -598,13 +707,13 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
 
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
-                // Notify course users for new bbb session
+                // Notify course users for new tc session
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $recipients, $emailsubject, $emailbody, $emailcontent);
             }
         }
     }
 
-    // Notify external users for new bbb session
+    // Notify external users for new tc session
     if ($notifyExternalUsers == "1") {
         if (isset($external_users)) {
             $recipients = explode(',', $external_users);
@@ -612,7 +721,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
             $emailheader = "
                     <div id='mail-header'>
                         <div>
-                            <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  " $langBBBScheduleSessionInfo2" . q($start_session)."</div>
+                            <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  " $langBBBScheduleSessionInfo2" . q(format_locale_date(strtotime($start_session), 'short')) ."</div>
                         </div>
                     </div>
                 ";
@@ -628,6 +737,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                     </div>
                 </div>
                 ";
+
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $row, $emailsubject, $emailbody, $emailcontent);
@@ -648,9 +758,9 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
 
 
 /**
- ** @brief Print a box with the details of a bbb session
+ ** @brief Initial display. List of all tc sessions
  */
-function bbb_session_details() {
+function tc_session_details() {
 
     global $course_id, $tool_content, $is_editor, $course_code, $uid,
         $langParticipants,$langConfirmDelete, $langHasExpiredS,
@@ -692,7 +802,6 @@ function bbb_session_details() {
                                <th class='text-center'>$langParticipants</th>
                                <th class='text-center'>".icon('fa-gears')."</th>
                              </tr>";
-        $i = 0;
 
         foreach ($result as $row) {
             if (!is_null($row->options)) {
@@ -765,10 +874,17 @@ function bbb_session_details() {
 
             if ($canJoin) {
                 if($is_editor) {
-                    $i++;
-                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($title) . "</a>";
+                    if ($tc_type == 'jitsi') {
+                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank'>" . q($title) . "</a>";
+                    } else {
+                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($title) . "</a>";
+                    }
                 } else {
-                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
+                    if ($tc_type == 'jitsi') {
+                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank'>" . q($title) . "</a>";
+                    } else {
+                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
+                    }
                 }
             } else {
                 $joinLink = q($title);
@@ -807,7 +923,7 @@ function bbb_session_details() {
                     <td class='option-btn-cell text-center'>".
                         action_button(array(
                             array(  'title' => $langEditChange,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit&amp;tc_type=$tc_type",
                                     'icon' => 'fa-edit'),
                             array(  'title' => $langBBBImportRecordings,
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=import_video",
@@ -875,7 +991,12 @@ function bbb_session_details() {
                         <td class='text-center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
                     if ($canJoin) {
-                        $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=" . urlencode($meeting_id) . "&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank");
+                        if ($tc_type == 'jitsi') {
+                            $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank'");
+                        } else {
+                            $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=" . urlencode($meeting_id) . "&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'");
+                        }
+
                     } else {
                         $tool_content .= "-</td>";
                     }

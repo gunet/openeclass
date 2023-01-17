@@ -5739,8 +5739,9 @@ $langUserWayShortDescription = "<p>Επιλογές προσβασιμότητα
 $langUserWayLongDescription = "<p>Επιλογές προσβασιμότητας μέσω της υπηρεσίας UserWay. Δείτε περισσότερες πληροφορίες στο <a href='https://userway.org/'>https://userway.org/</a></p>";
 $langOpenDelosDescription = "<p>Το OpenDelos είναι η πλατφόρμα ανοικτού λογισμικού που σχεδιάζει το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>
 <p>Η πλατφόρμα υποστηρίζει τη δράση <a href='http://ocw-project.gunet.gr/'>Ανοικτών Ακαδημαϊκών $langOfCourses</a> σε συνδυασμό με την <a href='http://openeclass.org/'>πλατφόρμα Open eClass</a> και την εθνική πύλη αναζήτησης $langsOfCourses που επίσης αναπτύσσει το GUNET.</p>";
-$langBBBDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
-<p>Το BigBlueButton ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα BigBlueButton επιλέξτε <a href=\"bbbmoduleconf.php\">Ρυθμίσεις</a>.</p>";
+$langBBBDescription = "Το ανοικτό λογισμικό <a href=\"https://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
+<p>Δεν απαιτείται εγκατάσταση πρόσθετου υλικού (Software ή Hardware) και εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α)r. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα BigBlueButton επιλέξτε <a href=\"bbbmoduleconf.php\">Ρυθμίσεις</a>.</p>";
+$langBBBLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης BigBlueButton.";
 $langAutojudgeDescription = "<p>Ο αυτόματος κριτής είναι ένα εργαλείο που επιτρέπει την αυτόματη διόρθωση προγραμματιστικών εργασιών. Πιο συγκεκριμένα, μέσω του εργαλείου ο καθηγητής μπορεί να ορίσει σενάρια που περιλαμβάνουν input και output βάσει των οποίων οι αναρτώμενες εργασίες βαθμολογούνται αυτόματα.</p><p>Το συγκεκριμένο υποσύστημα συνδέεται με τρίτες υπηρεσίες μεταγλώττισης οι οποίες μπορούν να επιλεχθούν στις <a href=\"autojudgemoduleconf.php\">Ρυθμίσεις</a>.</p>";
 $langFtpShortDescription = "Σύνδεση με υπηρεσία FTP";
 $langFtpLongDescription = "Πληκτρολογήστε το σύνδεσμο FTP";
@@ -5773,11 +5774,12 @@ $langH5PLongDescription = "Διαδραστικό περιεχόμενου τύ�
 $langLtiPublishShortDescription = "Δημοσίευση $langsOfCourses μεσω πρωτοκόλλου LTI.";
 $langLtiPublishLongDescription = "Δημοσίευση $langsOfCourses μεσω πρωτοκόλλου LTI.";
 $langLtiPublishFrameAncestorsTooltip = "Λίστα urls χωριζομενη με κόμματα πχ https://url1, https://url2";
-$langGoogleMeetShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet";
-$langGoogleMeetLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet";
-$langJitsiShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Jitsi";
-$langJitsiLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Jitsi";
+$langGoogleMeetShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet.";
+$langGoogleMeetLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet.";
+$langJitsiShortDescription = "Το ανοικτό λογισμικό <a href=\"https://jitsi.org/\" target=\"_blank\">Jitsi</a> αποτελεί μια υπηρεσία τηλεδιάσκεψης. Κάντε κλικ στις <a href=\"jitsiconf.php\">Ρυθμίσεις</a> για να την ενεργοποιήσετε. Σημειώστε ότι η υπηρεσία προτείνεται για τηλεδιασκέψεις μέχρι 30 άτομα.";
+$langJitsiLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης <em>Jitsi</em> (μέχρι <strong>30</strong> άτομα).";
 $langJitsiUrl = "Μπορείτε να το αλλάξετε αν θέλετε να χρησιμοποιήσετε κάποιον διαφορετικό Jitsi server.";
+$langChooseTCServer = "Επιλογή υπηρεσίας Τηλεσυνεργασίας";
 
 // Messages for OpenMeetings
 $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";

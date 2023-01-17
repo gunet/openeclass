@@ -33,7 +33,7 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/log.class.php';
 // For creating bbb urls & params
 require_once 'bbb-api.php';
-require_once 'om-api.php';
+//require_once 'om-api.php';
 require_once 'functions.php';
 
 require_once 'include/lib/modalboxhelper.class.php';
@@ -149,7 +149,14 @@ $head_content .= "<script type='text/javascript'>
 ";
 
 if ($is_editor) {
-    if (isset($_GET['add']) or isset($_GET['choice'])) {
+    if (isset($_GET['new'])) {
+        $pageName = $langChooseTCServer;
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')));
+    } elseif (isset($_GET['add']) or isset($_GET['choice'])) {
         if (isset($_GET['add'])) {
             $pageName = $langNewBBBSession;
         } elseif ((isset($_GET['choice'])) and $_GET['choice'] == 'edit') {
@@ -168,23 +175,41 @@ if ($is_editor) {
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
         } else {
+            /* find enabled tc servers */
+            foreach (is_configured_tc_server() as $name) {
+                if (is_active_tc_server($name, $course_id)) {
+                   $servers[] = $name;
+                }
+            }
+            if (count($servers) == 1) {
+                $tc_server_type = $servers[0];
+            } else {
+                $tc_server_type = '';
+            }
+
             $tool_content .= action_bar(array(
                 array('title' => $langNewBBBSession,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;new=1",
+                    'icon' => 'fa-plus-circle',
+                    'button-class' => 'btn-success',
+                    'level' => 'primary-label',
+                    'show' => count($servers) > 1),
+                array('title' => $langNewBBBSession,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=$tc_server_type",
                       'icon' => 'fa-plus-circle',
                       'button-class' => 'btn-success',
                       'level' => 'primary-label',
-                      'show' => is_enabled_tc_server($course_id)),
-                array('title' => $langBBBRecordUserParticipation,
-                          'url' => "tc_attendance.php?course=$course_code",
-                          'icon' => 'fa-group',
-                          'level' => 'primary-label',
-                          'link-attrs' => "id=popupattendance1",
-                          'show' => is_active_tc_server('bbb', $course_id)),
+                      'show' => !empty($tc_server_type)),
+                array('title' => $langAttendance,
+                      'url' => "tc_attendance.php?course=$course_code",
+                      'icon' => 'fa-group',
+                      'level' => 'primary-label',
+                      'link-attrs' => "id=popupattendance1",
+                      'show' => is_active_tc_server('bbb', $course_id)),
                 array('title' => $langParticipate,
-                          'url' => "tcuserduration.php?course=$course_code",
-                          'icon' => 'fa-clock-o',
-                          'level' => 'primary-label')
+                      'url' => "tcuserduration.php?course=$course_code",
+                      'icon' => 'fa-clock-o',
+                      'level' => 'primary-label')
                 ));
         }
     }
@@ -199,10 +224,11 @@ if ($is_editor) {
 
 if (isset($_GET['add'])) {
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);
-    bbb_session_form();
+    tc_session_form(0, $_GET['tc_type']);
 }
-elseif(isset($_POST['update_bbb_session'])) { // update existing BBB session
+elseif(isset($_POST['update_tc_session'])) { // update existing BBB session
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    $tc_type = $_GET['tc_type'];
     if (isset($_POST['enableEndDate']) and ($_POST['enableEndDate'])) {
         $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['BBBEndDate']);
         $end = $endDate_obj->format('Y-m-d H:i:s');
@@ -273,7 +299,7 @@ elseif(isset($_POST['update_bbb_session'])) { // update existing BBB session
     }
 
     // update existing BBB session
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $ext_users, $record, $sessionUsers, $options, true, getDirectReference($_POST['id']));
+    add_update_tc_session($tc_type, $_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $ext_users, $record, $sessionUsers, $options, true, getDirectReference($_POST['id']));
     Session::flash('message',$langBBBAddSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect("index.php?course=$course_code");
@@ -284,7 +310,7 @@ elseif(isset($_GET['choice']))
     switch($_GET['choice'])
     {
         case 'edit':
-            bbb_session_form(getDirectReference($_GET['id']));
+            tc_session_form(getDirectReference($_GET['id']), $_GET['tc_type']);
             break;
         case 'do_delete':
             delete_bbb_session(getDirectReference($_GET['id']));
@@ -342,24 +368,27 @@ elseif(isset($_GET['choice']))
                         header('Location: ' . bbb_join_user($_GET['meeting_id'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
                     }
                 }
-            } /* elseif ($tc_type == 'om') { // if tc server is `om`
-                if (om_session_running($_GET['meeting_id']) == false) { // create meeting
-                    create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
-                }
-                if(isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
-                    header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1));
-                } else { // join user
-                    header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0));
-                }
-            } */
+            } elseif ($serv->type == 'jitsi') { // if tc server is `jitsi`
+                header("Location: " . $serv->hostname . $sess->meeting_id);
+            }/* elseif ($tc_type == 'om') { // if tc server is `om`
+                               if (om_session_running($_GET['meeting_id']) == false) { // create meeting
+                                   create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
+                               }
+                               if(isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
+                                   header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1));
+                               } else { // join user
+                                   header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0));
+                               }
+                           } */
             break;
         case 'import_video':
             publish_video_recordings($course_code,getDirectReference($_GET['id']));
             break;
     }
 
-} elseif (isset($_POST['new_bbb_session'])) { // new BBB session
+} elseif (isset($_POST['new_tc_session'])) { // new TC session
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    $tc_type = $_GET['tc_type'];
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
     $start = $startDate_obj->format('Y-m-d H:i:s');
     if (isset($_POST['enableEndDate']) and ($_POST['enableEndDate']) and !empty($_POST['BBBEndDate'])) {
@@ -428,14 +457,15 @@ elseif(isset($_GET['choice']))
         $sessionUsers = $bbb_max_part_per_room;
     }
 
-    // new BBB session
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $record, $sessionUsers, $options, false);
+    // new TC session
+    add_update_tc_session($tc_type, $_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $record, $sessionUsers, $options, false);
     Session::flash('message',$langBBBAddSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
-}
-else { // display list of conferences
-    bbb_session_details();
+}elseif (isset($_GET['new'])) {
+    select_tc_server($course_id);
+} else { // display list of conferences
+    tc_session_details();
 }
 
 add_units_navigation(TRUE);
