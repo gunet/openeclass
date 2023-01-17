@@ -6,7 +6,7 @@ class JitsiApp extends ExtApp
 {
     const JITSIURL = "url";
     const ENABLEDCOURSES = "enabledcourses";
-    const JITSIDEFAULTURL = "https://meeet.jit.si/";
+    const JITSIDEFAULTURL = "https://meet.jit.si/";
 
     public function __construct() {
         parent::__construct();
