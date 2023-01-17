@@ -5,6 +5,7 @@ require_once 'genericrequiredparam.php';
 class GoogleMeetApp extends ExtApp
 {
     const ENABLEDCOURSES = "enabledcourses";
+    const GOOGLEMEETURL = "https://meet.google.com/";
 
     public function __construct() {
         parent::__construct();
