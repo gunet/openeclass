@@ -59,7 +59,7 @@ function select_tc_server($course_id) {
         $tool_content .= "</table>";
     }
 
-    if (is_active_tc_server('googlemmet', $course_id)) {
+    if (is_active_tc_server('googlemeet', $course_id)) {
         $tool_content .= "<table class='table-default dataTable no-footer extapp-table'>";
         $tool_content .= "<tr><td style='width:90px; padding:0px;'>";
         $tool_content .= "<div class='text-center' style='padding:10px;'>";
@@ -98,7 +98,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langBBBlockSettingsDisableMic, $langBBBlockSettingsDisablePrivateChat,
         $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote,
         $langBBBlockSettingsHideUserList, $langBBBwebcamsOnlyForModerator,
-        $langBBBMaxPartPerRoom, $langBBBHideParticipants;
+        $langBBBMaxPartPerRoom, $langBBBHideParticipants,
+        $langGoToGoogleMeetLinkText, $langLink, $langGoToGoogleMeetLink;
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
@@ -150,6 +151,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $options = NULL;
             $options_show = "";
         }
+        $google_meet_link = ($tc_type == 'googlemeet') ? "https://meet.google.com/" . $row->meeting_id : '';
+
         $checked_muteOnStart = isset($options['muteOnStart']) ? 'checked' : '';
         $checked_lockSettingsDisableMic = isset($options['lockSettingsDisableMic']) ? 'checked' : '';
         $checked_lockSettingsDisableCam = isset($options['lockSettingsDisableCam']) ? 'checked' : '';
@@ -181,6 +184,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
         $submit_name = 'new_tc_session';
         $submit_id = '';
+        $google_meet_link = '';
         $value_message = $langAdd;
         $record = get_config('bbb_recording', 1);
         $checked_muteOnStart = get_config('bbb_muteOnStart', 0) ? 'checked' : '';
@@ -215,11 +219,22 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
     $tool_content .= "
         <div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code&tc_type=$tc_type' method='post' >
+        <fieldset>";
 
-        <fieldset>
-        <div class='form-group'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
-            <div class='col-sm-12'>
+        if ($tc_type == 'googlemeet') {
+            $tool_content .= "<div class='alert alert-info'>$langGoToGoogleMeetLink</div>";
+            $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='https://meet.google.com/' target='_blank'>$langGoToGoogleMeetLinkText</a></div>";
+
+            $tool_content .= "<div class='form-group'>
+                <label for='title' class='col-sm-2 control-label'>$langLink:</label>
+                <div class='col-sm-10'>
+                    <input class='form-control' type='text' name='google_meet_link' value='$google_meet_link' placeholder='Google Meet $langLink' size='50'>
+                </div>
+            </div>";
+        }
+        $tool_content .= "<div class='form-group'>
+            <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
+            <div class='col-sm-10'>
                 <input class='form-control' type='text' name='title' id='title' value='$value_title' placeholder='$langTitle' size='50'>
             </div>
         </div>
@@ -600,9 +615,9 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                                                             options = ?s",
                 $course_id, $title, $desc, $start_session, $BBBEndDate,
                 $status, $server_id,
-                generateRandomString(), generateRandomString() , generateRandomString() ,
+                generateRandomString(), generateRandomString(), generateRandomString(),
                 $minutes_before, $external_users, $r_group, $record, $sessionUsers, $options);
-        } elseif($tc_type == 'jitsi') {
+        } elseif ($tc_type == 'jitsi') {
             $random_string = $course_code . "_" . generateRandomString();
             $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
@@ -623,6 +638,28 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $course_id, $title, $desc, $start_session, $BBBEndDate,
                 $status, $server_id,
                 $random_string, '' , '' ,
+                $minutes_before, $external_users, $r_group, $sessionUsers);
+        } elseif ($tc_type == 'googlemeet') {
+            $meeting_id = $options;
+            $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
+                                                            title = ?s,
+                                                            description = ?s,
+                                                            start_date = ?t,
+                                                            end_date = ?t,
+                                                            public = 1,
+                                                            active = ?s,
+                                                            running_at = ?d,
+                                                            meeting_id = ?s,
+                                                            mod_pw = ?s,
+                                                            att_pw = ?s,
+                                                            unlock_interval = ?s,
+                                                            external_users = ?s,
+                                                            participants = ?s,
+                                                            record = 'false',
+                                                            sessionUsers = ?s",
+                $course_id, $title, $desc, $start_session, $BBBEndDate,
+                $status, $server_id,
+                $meeting_id, '' , '' ,
                 $minutes_before, $external_users, $r_group, $sessionUsers);
         }
 
@@ -874,13 +911,13 @@ function tc_session_details() {
 
             if ($canJoin) {
                 if($is_editor) {
-                    if ($tc_type == 'jitsi') {
+                    if ($tc_type == 'jitsi' or $tc_type == 'googlemeet') {
                         $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank'>" . q($title) . "</a>";
                     } else {
                         $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($title) . "</a>";
                     }
                 } else {
-                    if ($tc_type == 'jitsi') {
+                    if ($tc_type == 'jitsi' or $tc_type == 'googlemeet') {
                         $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank'>" . q($title) . "</a>";
                     } else {
                         $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
@@ -1017,11 +1054,11 @@ function tc_session_details() {
 }
 
 /**
- * @brief disable bbb session
+ * @brief disable tc session
  * @param type $id
  * @return type
  */
-function disable_bbb_session($id)
+function disable_tc_session($id)
 {
     global $langBBBUpdateSuccessful, $course_code;
 
@@ -1033,11 +1070,11 @@ function disable_bbb_session($id)
 }
 
 /**
- * @brief enable bbb session
+ * @brief enable tc session
  * @param type $id
  * @return type
  */
-function enable_bbb_session($id)
+function enable_tc_session($id)
 {
     global $langBBBUpdateSuccessful, $course_code;
 
@@ -1050,11 +1087,11 @@ function enable_bbb_session($id)
 
 
 /**
- * @brief delete bbb sessions
+ * @brief delete tc session
  * @param type $id
  * @return type
  */
-function delete_bbb_session($id)
+function delete_tc_session($id)
 {
     global $langBBBDeleteSuccessful, $course_code, $course_id;
 

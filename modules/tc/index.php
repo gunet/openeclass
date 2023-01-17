@@ -314,13 +314,13 @@ elseif(isset($_GET['choice']))
             tc_session_form(getDirectReference($_GET['id']), $_GET['tc_type']);
             break;
         case 'do_delete':
-            delete_bbb_session(getDirectReference($_GET['id']));
+            delete_tc_session(getDirectReference($_GET['id']));
             break;
         case 'do_disable':
-            disable_bbb_session(getDirectReference($_GET['id']));
+            disable_tc_session(getDirectReference($_GET['id']));
             break;
         case 'do_enable':
-            enable_bbb_session(getDirectReference($_GET['id']));
+            enable_tc_session(getDirectReference($_GET['id']));
             break;
         case 'do_join':
             //get info
@@ -369,21 +369,21 @@ elseif(isset($_GET['choice']))
                         header('Location: ' . bbb_join_user($_GET['meeting_id'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
                     }
                 }
-            } elseif ($serv->type == 'jitsi') { // if tc server is `jitsi`
+            } elseif ($serv->type == 'jitsi' or $serv->type == 'googlemeet') { // if tc server is `jitsi` or 'googlemeet'
                 header("Location: " . $serv->hostname . $sess->meeting_id);
             }/* elseif ($tc_type == 'om') { // if tc server is `om`
-                               if (om_session_running($_GET['meeting_id']) == false) { // create meeting
-                                   create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
-                               }
-                               if(isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
-                                   header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1));
-                               } else { // join user
-                                   header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0));
-                               }
-                           } */
+               if (om_session_running($_GET['meeting_id']) == false) { // create meeting
+                   create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
+               }
+               if(isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
+                   header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1));
+               } else { // join user
+                   header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0));
+               }
+           } */
             break;
         case 'import_video':
-            publish_video_recordings($course_code,getDirectReference($_GET['id']));
+            publish_video_recordings($course_code, getDirectReference($_GET['id']));
             break;
     }
 
@@ -450,6 +450,10 @@ elseif(isset($_GET['choice']))
         $options = serialize($options_arr);
     } else {
         $options = NULL;
+    }
+
+    if ($tc_type == 'googlemeet') {
+        $options = preg_replace('/http(s|):\/\/meet.google.com\//', '', $_POST['google_meet_link']);
     }
 
     $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
