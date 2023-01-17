@@ -176,6 +176,7 @@ if ($is_editor) {
                       'level' => 'primary-label')));
         } else {
             /* find enabled tc servers */
+            $servers = [];
             foreach (is_configured_tc_server() as $name) {
                 if (is_active_tc_server($name, $course_id)) {
                    $servers[] = $name;
