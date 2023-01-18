@@ -1,6 +1,6 @@
 
 <div class='col-12 breadcrumbs-container @if(!$course_code) d-flex justify-content-md-start justify-content-center @endif'>
-   
+
     <div class='d-inline-flex align-items-top overflow-auto'>
         <!-- this is toggle-button in breadcrumb -->
         @if($course_code and !$is_in_tinymce and $currentCourseName)
@@ -44,5 +44,5 @@
         @endif
 
     </div>
-    
+
 </div>

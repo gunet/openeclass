@@ -4,13 +4,25 @@
 
     {{-- @if(!isset($dont_display_array_in_sidebar) or $dont_display_array_in_sidebar != 1)
         {!! $course_home_sidebar_widgets !!}
-    @endif --}}
+    @endif
+     --}}
 
 
     @php $is_course_teacher = check_editor($uid,$course_id); @endphp
 
     @if(($is_editor or $is_power_user or $is_departmentmanage_user or $is_usermanage_user or $is_course_teacher) && $course_code)
-        <p class="text-center text-light @if($course_home_sidebar_widgets) mt-4 @else mt-3 @endif viewPageAs">{{ trans('langViewAs') }}:</p>
+        <p class="text-center text-light mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
+
+        {{--
+        temporary commented due to php notices
+        <p class="text-center text-light
+         @if($course_home_sidebar_widgets)
+            @if(true)
+                mt-4
+            @else
+                mt-3
+            @endif
+        --}}
 
         <!-- THIS IS FIRST CHOICE OF VIEW-STUDENT-TEACHER TOOGLE-BUTTON -->
         {{--<form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center'>
