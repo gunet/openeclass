@@ -244,8 +244,8 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     </div>
                 </div>
                 <div class='row form-group mt-4'>
-                    <label for='questionFeedback' class='col-sm-2 control-label'>$langQuestionFeedback:</label>
-                    <div class='col-sm-10'>
+                    <label for='questionFeedback' class='col-md-3 col-12 control-label-notes mb-1'>$langQuestionFeedback:</label>
+                    <div class='col-md-9 col-12'>
                       ". rich_text_editor('questionFeedback', 4, 50, $questionFeedback) ."
                     </div>
                 </div>

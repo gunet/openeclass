@@ -1997,6 +1997,7 @@ $langAddPicture = "Προσθήκη εικόνας";
 $langReplacePicture = "Αντικατάσταση της εικόνας";
 $langDeletePicture = "Διαγραφή της εικόνας";
 $langQuestionDescription = "Προαιρετικό σχόλιο";
+$langQuestionFeedback = "Σχόλιο ανατροφοδότησης";
 $langGiveQuestion = "Δώστε την ερώτηση";
 $langInvalidPicture = "Μη υποστηριζόμενος τύπος εικόνας";
 $langQuestionDiffGrade = "Βαθμός δυσκολίας";

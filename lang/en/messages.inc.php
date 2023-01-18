@@ -716,6 +716,7 @@ $langAddPicture = "Add Picture";
 $langReplacePicture = "Replace Picture";
 $langDeletePicture = "Delete Picture";
 $langQuestionDescription = "Optional description";
+$langQuestionFeedback = "Feedback";
 $langGiveQuestion = "Enter your question";
 $langWeightingForEachBlank = "Enter weight for each blank";
 $langUseTagForBlank = "Use tags [...] to define one or more blanks";
