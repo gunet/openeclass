@@ -1166,8 +1166,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `course_id` INT(11) NOT NULL,
-    `question` TEXT,
+    `question` TEXT,    
     `description` TEXT,
+    `feedback` TEXT,
     `weight` FLOAT(11,2) DEFAULT NULL,
     `type` INT(11) DEFAULT 1,
     `difficulty` INT(1) DEFAULT 0,
@@ -1643,8 +1644,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
 // tc_servers table
 $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `type` varchar(255) NOT NULL DEFAULT 'bbb',
-    `hostname` varchar(255) DEFAULT NULL,
+    `type` varchar(255) NOT NULL,
+    `hostname` varchar(255) NOT NULL,
     `ip` varchar(255) DEFAULT NULL,
     `port` varchar(255) DEFAULT NULL,
     `enabled` enum('true','false') DEFAULT NULL,
@@ -1660,6 +1661,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
     `screenshare` varchar(255) DEFAULT NULL,
     `all_courses` tinyint(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`),
+    UNIQUE KEY `hostname` (`hostname`),
     KEY `idx_tc_servers` (`hostname`)) $tbl_options");
 
 

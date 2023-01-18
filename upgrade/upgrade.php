@@ -293,6 +293,9 @@ if ($command_line or $ajax_call) {
                     convert_db_encoding_to_utf8mb4();
                     steps_finished();
                 }
+            }  elseif ($version === '3.14') {
+                upgrade_to_3_14($tbl_options);
+                steps_finished();
             } elseif ($version === '4.0') {
                 upgrade_to_4_0($tbl_options);
                 steps_finished();
