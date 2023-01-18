@@ -1157,6 +1157,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `course_id` INT(11) NOT NULL,
     `question` TEXT,
+    `feedback` TEXT,
     `description` TEXT,
     `weight` FLOAT(11,2) DEFAULT NULL,
     `type` INT(11) DEFAULT 1,

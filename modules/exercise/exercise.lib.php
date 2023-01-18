@@ -254,7 +254,7 @@ function display_exercise($exercise_id) {
     global $tool_content, $head_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
            $langAnswer, $langComment, $langQuestionScore, $langYourTotalScore, $langQuestionsManagement,
            $langScore, $course_code, $langBack, $langModify, $langExerciseExecute, $langFrom2,
-           $langFromRandomCategoryQuestions, $langFromRandomDifficultyQuestions,
+           $langFromRandomCategoryQuestions, $langFromRandomDifficultyQuestions, $langQuestionFeedback,
            $langUsedInSeveralExercises, $langModifyInAllExercises, $langModifyInThisExercise;
 
     $head_content .= "
@@ -336,6 +336,7 @@ function display_exercise($exercise_id) {
         }
         $questionName = $question->selectTitle();
         $questionDescription = $question->selectDescription();
+        $questionFeedback = $question->selectFeedback();
         $questionWeighting = $question->selectWeighting();
         $answerType = $question->selectType();
 
@@ -488,6 +489,12 @@ function display_exercise($exercise_id) {
                     }
                 }
             }
+            if (!is_null($questionFeedback)) {
+                $tool_content .= "<tr><td colspan='$colspan'>";
+                $tool_content .= "<div style='margin-top: 10px;'><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
+                $tool_content .= "</td></tr>";
+            }
+
             $tool_content .= "<tr class='active'><th colspan='$colspan'>";
             $tool_content .= "<span style='float:right;'>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>";
             $tool_content .= "</th></tr>";

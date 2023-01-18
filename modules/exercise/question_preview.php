@@ -38,6 +38,7 @@ $question = new Question();
 $question->read($qid);
 $questionName = $question->selectTitle();
 $questionDescription = $question->selectDescription();
+$questionFeedback = $question->selectFeedback();
 $questionWeighting = $question->selectWeighting();
 $answerType = $question->selectType();
 
@@ -115,16 +116,16 @@ if ($answerType != FREE_TEXT) {
                     $icon_choice = icon("fa-square-o");
                 }
                 $tool_content .= "
-      <tr>
-        <td style='width: 70px;' class='text-center'>$icon_choice</td>
-        <td style='width: 500px;'>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
-        <td style='width: 250px;'>" . $answerComment . "</td>
-      </tr>";
+                  <tr>
+                    <td style='width: 70px;' class='text-center'>$icon_choice</td>
+                    <td style='width: 500px;'>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
+                    <td style='width: 250px;'>" . $answerComment . "</td>
+                  </tr>";
             } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                 $tool_content .= "
-      <tr>
-        <td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small>($langScore: " . preg_replace('/,/', ' : ', "$answerWeighting") . ")</small></strong></td>
-      </tr>";
+                  <tr>
+                    <td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small>($langScore: " . preg_replace('/,/', ' : ', "$answerWeighting") . ")</small></strong></td>
+                  </tr>";
             } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                 $possible_answers = [];
                 // fetch all possible answers
@@ -145,20 +146,26 @@ if ($answerType != FREE_TEXT) {
                     standard_text_escape(nl2br($answer_text)));
                 // format correct answers
                 $tool_content .= "
-      <tr>
-        <td>$formatted_answer_text&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answer_weight)</small></strong>
-        </td>
-      </tr>";
+                  <tr>
+                    <td>$formatted_answer_text&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answer_weight)</small></strong>
+                    </td>
+                  </tr>";
             } else {
                 $tool_content .= "
-      <tr>
-        <td style='width: 450px;'>" . standard_text_escape($answerTitle) . "</td>
-        <td>{$answer->answer[$answerCorrect]}&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answerWeighting)</small></strong></td>
-      </tr>";
+                  <tr>
+                    <td style='width: 450px;'>" . standard_text_escape($answerTitle) . "</td>
+                    <td>{$answer->answer[$answerCorrect]}&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answerWeighting)</small></strong></td>
+                  </tr>";
             }
         }
     }
 }
+
+if (!is_null($questionFeedback)) {
+    $tool_content .= "<tr class='active'><td colspan='$colspan'><strong>$langQuestionFeedback:</strong></tr>
+                      <tr><td colspan='$colspan'>" . standard_text_escape($questionFeedback) . "</td></tr>";
+}
+
 $tool_content .= "
       <tr class='active'>
         <th colspan='$colspan'>
