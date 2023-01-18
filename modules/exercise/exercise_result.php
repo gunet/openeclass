@@ -315,6 +315,7 @@ if (count($exercise_question_ids) > 0) {
         $choice = $objQuestionTmp->get_answers_record($eurid);
         $questionName = $objQuestionTmp->selectTitle();
         $questionDescription = $objQuestionTmp->selectDescription();
+        $questionFeedback = $objQuestionTmp->selectFeedback();
         $questionWeighting = $objQuestionTmp->selectWeighting();
         $answerType = $objQuestionTmp->selectType();
         $questionType = $objQuestionTmp->selectTypeLegend($answerType);
@@ -618,7 +619,13 @@ if (count($exercise_question_ids) > 0) {
             } // end for()
         } else { // If FREE TEXT type
             $questionScore = $question_weight;
-            $tool_content .= "<tr class='even'><td>" . purify($choice) . "</td></tr>";
+            $tool_content .= "<tr><td>" . purify($choice) . "</td></tr>";
+        }
+
+        if (!is_null($questionFeedback)) {
+            $tool_content .= "<tr><td colspan='2'>";
+            $tool_content .= "<div style='margin-top: 10px;'><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
+            $tool_content .= "</td></tr>";
         }
 
         if ($showScore) {

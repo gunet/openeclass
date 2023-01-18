@@ -85,6 +85,7 @@ if (isset($_POST['submitQuestion'])) {
     if ($v->validate()) {
         $questionName = canonicalize_whitespace($_POST['questionName']);
         $questionDescription = purify($_POST['questionDescription']);
+        $questionFeedback = purify($_POST['questionFeedback']);
         $answerType = intval($_POST['answerType']);
         // no name given
         if (empty($questionName)) {
@@ -95,6 +96,7 @@ if (isset($_POST['submitQuestion'])) {
         }
         $objQuestion->updateTitle($questionName);
         $objQuestion->updateDescription($questionDescription);
+        $objQuestion->updateFeedback($questionFeedback);
         $objQuestion->updateType($answerType);
         $objQuestion->updateDifficulty($_POST['difficulty']);
         $objQuestion->updateCategory($_POST['category']);
@@ -154,6 +156,7 @@ if (isset($_POST['submitQuestion'])) {
     if (!isset($buttonBack)) {
         $questionName = $objQuestion->selectTitle();
         $questionDescription = $objQuestion->selectDescription();
+        $questionFeedback = $objQuestion->selectFeedback();
         $answerType = $objQuestion->selectType();
         $difficulty = $objQuestion->selectDifficulty();
         $category = $objQuestion->selectCategory();
@@ -241,6 +244,12 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     </div>
                 </div>
                 <div class='row form-group mt-4'>
+                    <label for='questionFeedback' class='col-sm-2 control-label'>$langQuestionFeedback:</label>
+                    <div class='col-sm-10'>
+                      ". rich_text_editor('questionFeedback', 4, 50, $questionFeedback) ."
+                    </div>
+                </div>
+                <div class='row form-group mt-4'>
                     <label for='questionDifficulty' class='col-md-3 col-12 control-label-notes mb-1'>$langQuestionDiffGrade:</label>
                     <div class='col-md-9 col-12'>
                         <div class='col-sm-2'>
@@ -249,8 +258,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                         <div class='col-sm-10'>
                             <span id='questionDifficultyValue' class='label label-default'></span>
                         </div>
-                    </div>
-                    
+                    </div>                    
                 </div>
             ";
         $tool_content .= "<div class='row form-group mt-4'>
