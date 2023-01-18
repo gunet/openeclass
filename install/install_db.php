@@ -1630,8 +1630,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
 // tc_servers table
 $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `type` varchar(255) NOT NULL DEFAULT 'bbb',
-    `hostname` varchar(255) DEFAULT NULL,
+    `type` varchar(255) NOT NULL,
+    `hostname` varchar(255) NOT NULL,
     `ip` varchar(255) DEFAULT NULL,
     `port` varchar(255) DEFAULT NULL,
     `enabled` enum('true','false') DEFAULT NULL,
@@ -1647,6 +1647,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
     `screenshare` varchar(255) DEFAULT NULL,
     `all_courses` tinyint(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`),
+    UNIQUE KEY `hostname` (`hostname`),
     KEY `idx_tc_servers` (`hostname`)) $tbl_options");
 
 
