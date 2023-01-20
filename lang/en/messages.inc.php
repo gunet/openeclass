@@ -1481,7 +1481,7 @@ $langPollUnknown = "Don't know / No answer";
 $langIndividuals = "Results per user";
 $langCollectiveCharts = "Aggregate results";
 $langHasNotParticipated = "Have not participated";
-$langThereAreParticipants = "<p class='caution'>There are already participants. <br />Editing is not allowed!</p>";
+$langThereAreParticipants = "Some participants have already responded. Changing the questionnaire might make the results invalid!";
 $langPollEmpty = "<p class='caution'>Please add more Questionnaire questions!</p>";
 $langSee = "Preview";
 $langNoSee = "Registration required";
