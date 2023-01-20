@@ -458,32 +458,8 @@ function display_path_content() {
     return $output;
 }
 
-/**
- * Compute the progression into the $lpid learning path in pourcent
- *
- * @param $lpid id of the learning path
- * @param $lpUid user id
- *
- * @return integer percentage of progression os user $mpUid in the learning path $lpid
- */
-function get_learnPath_progress($lpid, $lpUid) {
+function calculate_learnPath_progress($lpid, $modules) {
     global $course_id;
-
-    // find progression for this user in each module of the path
-    $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS
-             FROM `lp_learnPath` AS LP,
-                  `lp_rel_learnPath_module` AS LPM,
-                  `lp_user_module_progress` AS UMP,
-                  `lp_module` AS M
-            WHERE LP.`learnPath_id` = LPM.`learnPath_id`
-              AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
-              AND UMP.`user_id` = ?d
-              AND LP.`learnPath_id` = ?d
-              AND LP.`course_id` = ?d
-              AND LPM.`visible` = 1
-              AND M.`module_id` = LPM.`module_id`
-              AND M.`contentType` != ?s";
-    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
 
     $progress = 0;
     if (!is_array($modules) || empty($modules)) {
@@ -525,6 +501,71 @@ function get_learnPath_progress($lpid, $lpUid) {
         }
     }
     return $progression;
+}
+
+function calculate_learnPath_totaltime(?array $modules): string {
+    if (!is_array($modules) || empty($modules)) {
+        return "";
+    } else {
+        $tt = "0000:00:00";
+        foreach ($modules as $module) {
+            $mtt = preg_replace("/\.[0-9]{0,2}/", "", $module->total_time);
+            $tt = addScormTime($tt, $mtt);
+        }
+    }
+    return $tt;
+}
+
+/**
+ * Compute the progression into the $lpid learning path in pourcent
+ *
+ * @param $lpid id of the learning path
+ * @param $lpUid user id
+ *
+ * @return integer percentage of progression os user $mpUid in the learning path $lpid
+ */
+function get_learnPath_progress($lpid, $lpUid) {
+    global $course_id;
+
+    // find progression for this user in each module of the path
+    $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS
+             FROM `lp_learnPath` AS LP,
+                  `lp_rel_learnPath_module` AS LPM,
+                  `lp_user_module_progress` AS UMP,
+                  `lp_module` AS M
+            WHERE LP.`learnPath_id` = LPM.`learnPath_id`
+              AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
+              AND UMP.`user_id` = ?d
+              AND LP.`learnPath_id` = ?d
+              AND LP.`course_id` = ?d
+              AND LPM.`visible` = 1
+              AND M.`module_id` = LPM.`module_id`
+              AND M.`contentType` != ?s";
+    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
+    return calculate_learnPath_progress($lpid, $modules);
+}
+
+function get_learnPath_progress_details($lpid, $lpUid) {
+    global $course_id;
+
+    // find progression for this user in each module of the path
+    $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS, UMP.`total_time`
+             FROM `lp_learnPath` AS LP,
+                  `lp_rel_learnPath_module` AS LPM,
+                  `lp_user_module_progress` AS UMP,
+                  `lp_module` AS M
+            WHERE LP.`learnPath_id` = LPM.`learnPath_id`
+              AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
+              AND UMP.`user_id` = ?d
+              AND LP.`learnPath_id` = ?d
+              AND LP.`course_id` = ?d
+              AND LPM.`visible` = 1
+              AND M.`module_id` = LPM.`module_id`
+              AND M.`contentType` != ?s";
+    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
+    $progression = calculate_learnPath_progress($lpid, $modules);
+    $totalTime = calculate_learnPath_totaltime($modules);
+    return array($progression, $totalTime);
 }
 
 /**
@@ -1199,6 +1240,30 @@ function disp_progress_bar($progress, $factor) {
     <div role='progressbar' aria-valuenow=$progress aria-valuemin='0' aria-valuemax='100' style='--value: $progress; --size: 6rem;'></div>";
     
     return $progressBar;
+}
+
+/**
+ * Function used to draw the lesson status of a learning path module
+ *
+ * @param string $lessonStatus The learning path module lesson status
+ * @return string The lesson status formatted for displaying
+ */
+function disp_lesson_status(string $lessonStatus): string {
+    if ($lessonStatus == "NOT ATTEMPTED") {
+        return $GLOBALS['langNotAttempted'];
+    } else if ($lessonStatus == "PASSED") {
+        return $GLOBALS['langPassed'];
+    } else if ($lessonStatus == "FAILED") {
+        return $GLOBALS['langFailed'];
+    } else if ($lessonStatus == "COMPLETED") {
+        return $GLOBALS['langAlreadyBrowsed'];
+    } else if ($lessonStatus == "BROWSED") {
+        return $GLOBALS['langAlreadyBrowsed'];
+    } else if ($lessonStatus == "INCOMPLETE") {
+        return $GLOBALS['langNeverBrowsed'];
+    } else {
+        return strtolower($lessonStatus);
+    }
 }
 
 /*
