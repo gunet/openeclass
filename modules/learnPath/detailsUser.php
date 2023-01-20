@@ -105,6 +105,21 @@ $tool_content .= action_bar(array(
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
+
+// get infos about the user
+$uDetails = Database::get()->querySingle("SELECT surname, givenname, email 
+    FROM `user`
+    WHERE id = ?d", $_REQUEST['uInfo']);
+
+$tool_content .= "
+        <div class='row margin-bottom-thin'>
+            <div class='col-xs-12'>
+                <div class='alert alert-info'>
+                    <strong>$langStudent:</strong> <span class='text-muted'>".q($uDetails->surname) . "&nbsp;" . q($uDetails->givenname) . " (" . q($uDetails->email).")</span>
+                </div>
+            </div>
+        </div>";
+
 // table header
 $tool_content .= '<div class="table-responsive"><table class="table-default">' . "\n"
         . '      <tr class="list-header text-left">' . "\n"

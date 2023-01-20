@@ -27,31 +27,44 @@ require_once 'include/lib/learnPathLib.inc.php';
 require_once 'modules/group/group_functions.php';
 require_once 'include/lib/csv.class.php';
 
+if (empty($_REQUEST['path_id'])) { // path id can not be empty
+    header("Location: ./index.php?course=$course_code");
+    exit();
+} else {
+    $path_id = intval($_REQUEST['path_id']);
+}
+
+// get infos about the learningPath
+$learnPathName = Database::get()->querySingle("SELECT `name` FROM `lp_learnPath` WHERE `learnPath_id` = ?d AND `course_id` = ?d", $path_id, $course_id);
+
+if (!$learnPathName) {
+    header("Location: ./index.php?course=$course_code");
+    exit();
+}
+
 $csv = new CSV();
 if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
     $csv->setEncoding('UTF-8');
 }
-$csv->filename = $course_code . "_learning_path_user_stats.csv";
-$csv->outputRecord('Id', $langStudent, $langEmail, $langAm, $langGroup, $langProgress);
+$csv->filename = $course_code . " - " . htmlspecialchars($learnPathName->name) . "_user_stats.csv";
+$csv->outputRecord('Id', $langStudent, $langEmail, $langAm, $langGroup, $langTotalTimeSpent, $langProgress);
 
 $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`
-		FROM `user` AS U, `course_user` AS CU
-		WHERE U.`id`= CU.`user_id`
-		AND CU.`course_id` = ?d
-		ORDER BY U.`surname` ASC, U.`givenname` ASC", $course_id);
-foreach ($usersList as $user) {
-    $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d", $course_id);
-    $iterator = 1;
-    $globalprog = 0;
+        FROM `user` AS U, `course_user` AS CU
+        WHERE U.`id`= CU.`user_id`
+        AND CU.`course_id` = ?d
+        ORDER BY U.`surname` ASC, U.`givenname` ASC", $course_id);
 
-    foreach ($learningPathList as $learningPath) {
-        // % progress
-        $prog = get_learnPath_progress($learningPath->learnPath_id, $user->id);
-        if ($prog >= 0) {
-            $globalprog += $prog;
-        }
-        $iterator++;
-    }
-    $total = round($globalprog / ($iterator - 1));
-    $csv->outputRecord($user->id, uid_to_name($user->id), $user->email, uid_to_am($user->id), user_groups($course_id, $user->id, 'csv'), $total . '%');
+foreach ($usersList as $user) {
+    list($lpProgress, $lpTotalTime) = get_learnPath_progress_details($path_id, $user->id);
+
+    $csv->outputRecord(
+        $user->id,
+        uid_to_name($user->id),
+        $user->email,
+        uid_to_am($user->id),
+        user_groups($course_id,$user->id, 'csv'),
+        $lpTotalTime,
+        $lpProgress . '%'
+    );
 }

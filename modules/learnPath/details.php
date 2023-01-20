@@ -50,7 +50,7 @@ $head_content .= "<script type='text/javascript'>
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
-                'order' : [[1, 'desc']],
+                'order' : [[2, 'desc']],
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -88,29 +88,42 @@ if ($learnPathName) {
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
 
+    $tool_content .= "<div class='alert alert-info'>
+          $langSave <a href='dumpuserlearnpathmoduledetails.php?course=$course_code&amp;path_id=$path_id'>$langDumpUserDurationToFile</a>
+                (<a href='dumpuserlearnpathmoduledetails.php?course=$course_code&amp;path_id=$path_id&amp;enc=UTF-8'>$langcsvenc2</a>)
+          </div>";
+
     $tool_content .= "<div class='table-responsive'>
                     <table id='lpu_progress' class='table-default'>
                     <thead>
                         <tr class='list-header'>
                             <th class='text-left'>$langStudent</th>
-                            <th width='5px;'>$langProgress</th>
+                            <th class='text-left'>$langEmail</th>
+                            <th width='120'>$langAm</th>
+                            <th>$langGroup</th>
+                            <th>$langTotalTimeSpent</th>
+                            <th>$langProgress</th>
                         </tr>
                     </thead>";
 
-    $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`
-		FROM `user` AS U,
-		     `course_user` AS CU
-		WHERE U.`id` = CU.`user_id`
-		AND CU.`course_id` = ?d
-		ORDER BY U.`surname` ASC, U.`givenname` ASC", $course_id);
+    $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`
+        FROM `user` AS U,
+             `course_user` AS CU
+        WHERE U.`id` = CU.`user_id`
+        AND CU.`course_id` = ?d
+        ORDER BY U.`surname` ASC, U.`givenname` ASC", $course_id);
 
     $tool_content .= "<tbody>";
     foreach ($usersList as $user) {
-        $lpProgress = get_learnPath_progress($path_id, $user->id);
+        list($lpProgress, $lpTotalTime) = get_learnPath_progress_details($path_id, $user->id);
         $tool_content .= "<tr>";
         $tool_content .= "<td>
                             <a href='detailsUserPath.php?course=$course_code&amp;uInfo=$user->id&amp;path_id=$path_id'>" . q($user->surname) . " " . q($user->givenname) . "</a>
                         </td>
+                        <td class='text-left'>" . q($user->email) . "</td>
+                        <td class='text-center'>" . q(uid_to_am($user->id)) . "</td>
+                        <td class='text-left'>" . user_groups($course_id, $user->id) . "</td>
+                        <td>" . $lpTotalTime . "</td>
                         <td align='right'>"
                             . disp_progress_bar($lpProgress, 1) .
                         "</td>";
