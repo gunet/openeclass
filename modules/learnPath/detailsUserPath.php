@@ -60,24 +60,25 @@ $LPname = Database::get()->querySingle("SELECT `name`
 
 //### PREPARE LIST OF ELEMENTS TO DISPLAY #################################
 $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
-	LPM.`lock`, M.`module_id`,
-	M.`contentType`, M.`name`,
-	UMP.`lesson_status`, UMP.`raw`,
-	UMP.`scoreMax`, UMP.`credit`,
-	UMP.`session_time`, UMP.`total_time`, A.`path`
-	FROM (`lp_rel_learnPath_module` AS LPM, `lp_module` AS M)
-	LEFT JOIN `lp_user_module_progress` AS UMP
-		ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
-		AND UMP.`user_id` = ?d
-	LEFT JOIN `lp_asset` AS A
-		ON M.`startAsset_id` = A.`asset_id`
-	WHERE LPM.`module_id` = M.`module_id`
-		AND LPM.`learnPath_id` = ?d
-		AND LPM.`visible` = 1
-		AND LPM.`module_id` = M.`module_id`
-		AND M.`course_id` = ?d                
-        ORDER BY LPM.`rank`";	
-	
+    LPM.`lock`, M.`module_id`,
+    M.`contentType`, M.`name`,
+    UMP.`lesson_status`, UMP.`raw`,
+    UMP.`scoreMax`, UMP.`credit`,
+    UMP.`session_time`, UMP.`total_time`, UMP.`attempt`,
+    UMP.`started`, UMP.`accessed`, A.`path`
+    FROM (`lp_rel_learnPath_module` AS LPM, `lp_module` AS M)
+    LEFT JOIN `lp_user_module_progress` AS UMP
+        ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
+        AND UMP.`user_id` = ?d
+    LEFT JOIN `lp_asset` AS A
+        ON M.`startAsset_id` = A.`asset_id`
+    WHERE LPM.`module_id` = M.`module_id`
+        AND LPM.`learnPath_id` = ?d
+        AND LPM.`visible` = 1
+        AND LPM.`module_id` = M.`module_id`
+        AND M.`course_id` = ?d                
+        ORDER BY LPM.`rank`";
+
 $moduleList = Database::get()->queryArray($sql, $_REQUEST['uInfo'], $_REQUEST['path_id'], $course_id);
 
 $extendedList = array();
@@ -95,6 +96,9 @@ foreach ($moduleList as $module) {
     $modar['credit'] = $module->credit;
     $modar['session_time'] = $module->session_time;
     $modar['total_time'] = $module->total_time;
+    $modar['attempt'] = $module->attempt;
+    $modar['started'] = $module->started;
+    $modar['accessed'] = $module->accessed;
     $modar['path'] = $module->path;
     $extendedList[] = $modar;
 }
@@ -130,6 +134,9 @@ $tool_content .= "<div class='table-responsive'>
     <table class='table-default'>
         <tr class='list-header'>
             <th colspan=" . ($maxDeep + 1) . ">$langLearningObjects</th>
+            <th>$langAttempt</th>
+            <th>$langAttemptStarted</th>
+            <th>$langAttemptAccessed</th>
             <th>$langLastSessionTimeSpent</th>
             <th>$langTotalTimeSpent</th>
             <th>$langLessonStatus</th>
@@ -159,7 +166,7 @@ foreach ($flatElementList as $module) {
     }
     $colspan = $maxDeep - $module['children'] + 1;
 
-    $tool_content .= '    <tr>' . "\n" . $spacingString . '      <td colspan="' . $colspan . '" align="left">';
+    $tool_content .= '    <tr>' . "\n" . $spacingString . '      <td colspan="' . $colspan . '">';
     //-- if chapter head
     if ($module['contentType'] == CTLABEL_) {
         $tool_content .= '      <b>' . q($module['name']) . '</b>';
@@ -183,6 +190,13 @@ foreach ($flatElementList as $module) {
 
     $tool_content .= "</td>";
 
+    //-- attempt
+    $tool_content .= "<td>" . q($module['attempt']) . "</td>";
+    //-- started
+    $tool_content .= "<td>" . q($module['started']) . "</td>";
+    //-- accessed
+    $tool_content .= "<td>" . q($module['accessed']) . "</td>";
+
     if ($module['contentType'] == CTSCORM_) {
         $session_time = preg_replace("/\.[0-9]{0,2}/", "", $module['session_time']);
         $total_time = preg_replace("/\.[0-9]{0,2}/", "", $module['total_time']);
@@ -190,6 +204,7 @@ foreach ($flatElementList as $module) {
     } elseif ($module['contentType'] == CTLABEL_ || $module['contentType'] == CTEXERCISE_) {
         $session_time = $module['session_time'];
         $total_time = $module['total_time'];
+        $global_time = addScormTime($global_time, $total_time);
     } else {
         // if no progression has been recorded for this module
         // leave
@@ -212,7 +227,7 @@ foreach ($flatElementList as $module) {
     //-- progression
     if ($module['contentType'] != CTLABEL_) {
         // display the progress value for current module
-        $tool_content .= "<td align='right' width='120'>" . disp_progress_bar($progress, 1) . "</td>";
+        $tool_content .= "<td>" . disp_progress_bar($progress, 1) . "</td>";
     } else { // label
         $tool_content .= "<td>&nbsp;</td>";
     }
@@ -228,15 +243,15 @@ foreach ($flatElementList as $module) {
 }
 
 if ($moduleNb == 0) {
-    $tool_content .= "<tr><td class='text-center' colspan='5'>$langNoModule</td></tr>";
+    $tool_content .= "<tr><td class='text-center' colspan='9'>$langNoModule</td></tr>";
 } elseif ($moduleNb > 0) {
     // display global stats
     $tool_content .= "<tr>
-            <th colspan=" . ($maxDeep + 1) . ">&nbsp;</th>
-            <th align='right'>" . (($global_time != "0000:00:00") ? $langTimeInLearnPath : '&nbsp;') . "</th>
-            <th align='center'>" . (($global_time != "0000:00:00") ? preg_replace("/\.[0-9]{0,2}/", "", $global_time) : '&nbsp;') . "</th>
-            <th align='right'><small>" . $langGlobalProgress . "</small></th>
-            <th align='right'>"
+            <th colspan='" . ($maxDeep + 4) . "'>&nbsp;</th>
+            <th><small>" . (($global_time != "0000:00:00") ? $langTimeInLearnPath : '&nbsp;') . "</small></th>
+            <th><small>" . (($global_time != "0000:00:00") ? preg_replace("/\.[0-9]{0,2}/", "", $global_time) : '&nbsp;') . "</small></th>
+            <th><small>" . $langGlobalProgress . "</small></th>
+            <th>"
             . disp_progress_bar(round($globalProg / ($moduleNb)), 1)
             . "</th></tr>";
 }

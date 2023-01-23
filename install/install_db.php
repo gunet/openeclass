@@ -716,7 +716,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `lp_user_module_progress` (
     `total_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
     `session_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
     `suspend_data` TEXT NOT NULL,
-    `credit` enum('CREDIT','NO-CREDIT') NOT NULL DEFAULT 'NO-CREDIT') $tbl_options");
+    `credit` enum('CREDIT','NO-CREDIT') NOT NULL DEFAULT 'NO-CREDIT',
+    `attempt` int(11) NOT NULL DEFAULT 1,
+    `started` datetime DEFAULT NULL,
+    `accessed` datetime DEFAULT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `wiki_properties` (
     `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,

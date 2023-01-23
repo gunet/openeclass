@@ -101,7 +101,10 @@ if ($learnPathName) {
                             <th class='text-left'>$langEmail</th>
                             <th width='120'>$langAm</th>
                             <th>$langGroup</th>
+                            <th>$langAttemptStarted</th>
+                            <th>$langAttemptAccessed</th>
                             <th>$langTotalTimeSpent</th>
+                            <th>$langLessonStatus</th>
                             <th>$langProgress</th>
                         </tr>
                     </thead>";
@@ -115,7 +118,7 @@ if ($learnPathName) {
 
     $tool_content .= "<tbody>";
     foreach ($usersList as $user) {
-        list($lpProgress, $lpTotalTime) = get_learnPath_progress_details($path_id, $user->id);
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus) = get_learnPath_progress_details($path_id, $user->id);
         $tool_content .= "<tr>";
         $tool_content .= "<td>
                             <a href='detailsUserPath.php?course=$course_code&amp;uInfo=$user->id&amp;path_id=$path_id'>" . q($user->surname) . " " . q($user->givenname) . "</a>
@@ -123,7 +126,10 @@ if ($learnPathName) {
                         <td class='text-left'>" . q($user->email) . "</td>
                         <td class='text-center'>" . q(uid_to_am($user->id)) . "</td>
                         <td class='text-left'>" . user_groups($course_id, $user->id) . "</td>
-                        <td>" . $lpTotalTime . "</td>
+                        <td>" . q($lpTotalStarted) . "</td>
+                        <td>" . q($lpTotalAccessed) . "</td>
+                        <td>" . q($lpTotalTime) . "</td>
+                        <td>" . disp_lesson_status($lpTotalStatus) . "</td>
                         <td align='right'>"
                             . disp_progress_bar($lpProgress, 1) .
                         "</td>";

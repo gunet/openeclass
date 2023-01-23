@@ -2466,6 +2466,19 @@ function upgrade_to_3_14($tbl_options) : void {
         Database::get()->query("ALTER TABLE exercise_question ADD `feedback` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci AFTER description");
     }
 
+    // learnPath user progress
+    if (!DBHelper::fieldExists('lp_user_module_progress', 'attempt')) {
+        Database::get()->query("ALTER TABLE lp_user_module_progress ADD `attempt` int(11) NOT NULL DEFAULT 1 AFTER credit");
+    }
+
+    if (!DBHelper::fieldExists('lp_user_module_progress', 'started')) {
+        Database::get()->query("ALTER TABLE lp_user_module_progress ADD `started` datetime DEFAULT NULL AFTER attempt");
+    }
+
+    if (!DBHelper::fieldExists('lp_user_module_progress', 'accessed')) {
+        Database::get()->query("ALTER TABLE lp_user_module_progress ADD `accessed` datetime DEFAULT NULL AFTER started");
+    }
+
 }
 
 /**

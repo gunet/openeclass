@@ -503,19 +503,6 @@ function calculate_learnPath_progress($lpid, $modules) {
     return $progression;
 }
 
-function calculate_learnPath_totaltime(?array $modules): string {
-    if (!is_array($modules) || empty($modules)) {
-        return "";
-    } else {
-        $tt = "0000:00:00";
-        foreach ($modules as $module) {
-            $mtt = preg_replace("/\.[0-9]{0,2}/", "", $module->total_time);
-            $tt = addScormTime($tt, $mtt);
-        }
-    }
-    return $tt;
-}
-
 /**
  * Compute the progression into the $lpid learning path in pourcent
  *
@@ -549,7 +536,8 @@ function get_learnPath_progress_details($lpid, $lpUid) {
     global $course_id;
 
     // find progression for this user in each module of the path
-    $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS, UMP.`total_time`
+    $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS, UMP.`total_time`, 
+                   UMP.`started`, UMP.`accessed`
              FROM `lp_learnPath` AS LP,
                   `lp_rel_learnPath_module` AS LPM,
                   `lp_user_module_progress` AS UMP,
@@ -564,8 +552,42 @@ function get_learnPath_progress_details($lpid, $lpUid) {
               AND M.`contentType` != ?s";
     $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
     $progression = calculate_learnPath_progress($lpid, $modules);
-    $totalTime = calculate_learnPath_totaltime($modules);
-    return array($progression, $totalTime);
+    $totalTime = $totalStarted = $totalAccessed = $totalStatus = "";
+
+    if (is_array($modules) && !empty($modules)) {
+        $totalTime = "0000:00:00";
+
+        foreach ($modules as $module) {
+            // total time calculation
+            $mtt = preg_replace("/\.[0-9]{0,2}/", "", $module->total_time);
+            $totalTime = addScormTime($totalTime, $mtt);
+
+            // total started and accessed calculations
+            $mst = strtotime($module->started);
+            $mat = strtotime($module->accessed);
+            if ($mst) {
+                if ($totalStarted === "") {
+                    $totalStarted = $module->started;
+                } else if (strtotime($totalStarted) > $mst) {
+                    $totalStarted = $module->started;
+                }
+            }
+            if ($mat) {
+                if ($totalAccessed === "") {
+                    $totalAccessed = $module->accessed;
+                } else if (strtotime($totalAccessed) < $mat) {
+                    $totalAccessed = $module->accessed;
+                }
+            }
+
+            // total status calculation
+            if ($totalStatus === "" || (enum_lesson_status($module->STATUS) < enum_lesson_status($totalStatus))) {
+                $totalStatus = $module->STATUS;
+            }
+        }
+    }
+
+    return array($progression, $totalTime, $totalStarted, $totalAccessed, $totalStatus);
 }
 
 /**
@@ -1229,7 +1251,7 @@ function disp_progress_bar($progress, $factor) {
     // display progress bar
     // origin of the bar
     $progressBar = "
-    <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
+    <div class='progress' style='display: inline-block; width: 120px; margin-bottom:0px;'>
         <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em;'>
             $progress%
         </div>
@@ -1258,6 +1280,24 @@ function disp_lesson_status(string $lessonStatus): string {
         return $GLOBALS['langNeverBrowsed'];
     } else {
         return strtolower($lessonStatus);
+    }
+}
+
+function enum_lesson_status(string $lessonStatus): int {
+    if ($lessonStatus == "NOT ATTEMPTED") {
+        return 1;
+    } else if ($lessonStatus == "INCOMPLETE") {
+        return 2;
+    } else if ($lessonStatus == "FAILED") {
+        return 3;
+    } else if ($lessonStatus == "COMPLETED") {
+        return 4;
+    } else if ($lessonStatus == "BROWSED") {
+        return 4;
+    } else if ($lessonStatus == "PASSED") {
+        return 5;
+    } else {
+        return 0;
     }
 }
 

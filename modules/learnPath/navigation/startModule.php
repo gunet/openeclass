@@ -61,6 +61,7 @@ function directly_pass_lp_module($table, $userid, $lpmid) {
                    `lesson_status` = 'COMPLETED',
                    `scoreMin` = 0,
                    `scoreMax` = 100
+                   `accessed` = " . DBHelper::timeAfter() . "
              WHERE `user_id` = ?d
                AND `learnPath_module_id` = ?d";
     Database::get()->query($sql, $userid, $lpmid);
@@ -78,22 +79,22 @@ check_LPM_validity($is_editor, $course_code, true, true);
 if ($uid) { // if not anonymous
     // check if we have already a record for this user in this module
     $num = Database::get()->querySingle("SELECT COUNT(LPM.`learnPath_module_id`) AS count
-	        FROM `lp_user_module_progress` AS UMP, `lp_rel_learnPath_module` AS LPM
-	       WHERE UMP.`user_id` = ?d
-	         AND UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
-	         AND LPM.`learnPath_id` = ?d
-	         AND LPM.`module_id` = ?d", $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'])->count;
+            FROM `lp_user_module_progress` AS UMP, `lp_rel_learnPath_module` AS LPM
+           WHERE UMP.`user_id` = ?d
+             AND UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
+             AND LPM.`learnPath_id` = ?d
+             AND LPM.`module_id` = ?d", $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'])->count;
 
     $learnPathModuleId = Database::get()->querySingle("SELECT `learnPath_module_id`
-	      FROM `lp_rel_learnPath_module`
-	     WHERE `learnPath_id` = ?d
-	       AND `module_id` = ?d", $_SESSION['path_id'], $_SESSION['lp_module_id'])->learnPath_module_id;
+          FROM `lp_rel_learnPath_module`
+         WHERE `learnPath_id` = ?d
+           AND `module_id` = ?d", $_SESSION['path_id'], $_SESSION['lp_module_id'])->learnPath_module_id;
 
     // if never intialised : create an empty user_module_progress line
     if ($num == 0) {
         Database::get()->query("INSERT INTO `lp_user_module_progress`
-	            ( `user_id` , `learnPath_id` , `learnPath_module_id`, `lesson_location`, `suspend_data` )
-	            VALUES (?d , ?d, ?d, '', '')", $uid, $_SESSION['path_id'], $learnPathModuleId);
+                ( `user_id` , `learnPath_id` , `learnPath_module_id`, `lesson_location`, `suspend_data`, `started`, `accessed` )
+                VALUES (?d , ?d, ?d, '', '', " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter() . ")", $uid, $_SESSION['path_id'], $learnPathModuleId);
         triggerLPGame($course_id, $uid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
         triggerLPAnalytics($course_id, $uid, $_SESSION['path_id']);
     }
