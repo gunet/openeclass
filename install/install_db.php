@@ -1727,7 +1727,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
     `gradebook_activity_id` MEDIUMINT(11) NOT NULL,
     `uid` int(11) NOT NULL DEFAULT 0,
     `grade` FLOAT NOT NULL DEFAULT -1,
-    `comments` TEXT NOT NULL) $tbl_options");
+    `comments` TEXT NOT NULL,
+    UNIQUE KEY activity_uid (gradebook_activity_id, uid)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `gradebook_users` (
     `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

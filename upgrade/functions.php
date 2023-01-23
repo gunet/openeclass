@@ -2466,6 +2466,18 @@ function upgrade_to_3_14($tbl_options) : void {
         Database::get()->query("ALTER TABLE exercise_question ADD `feedback` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci AFTER description");
     }
 
+    // clean up gradebook -- delete multiple tuples (gradebook_activity_id, uid) in `gradebook_book` table (if any)
+    $q = Database::get()->queryArray("SELECT MIN(id) AS id, uid, gradebook_activity_id, COUNT(*) AS cnt 
+            FROM gradebook_book GROUP BY gradebook_activity_id, uid HAVING cnt>=2 ORDER BY cnt");
+    foreach ($q as $data) {
+        Database::get()->query("DELETE FROM gradebook_book 
+            WHERE uid = ?d 
+            AND gradebook_activity_id = ?d 
+            AND id != ?d",
+            $data->uid, $data->gradebook_activity_id, $data->id);
+    }
+    Database::get()->query("ALTER TABLE gradebook_book ADD UNIQUE activity_uid (gradebook_activity_id, uid)");
+
     // learnPath user progress
     if (!DBHelper::fieldExists('lp_user_module_progress', 'attempt')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `attempt` int(11) NOT NULL DEFAULT 1 AFTER credit");

@@ -1563,14 +1563,10 @@ function insert_grades($gradebook_id, $actID) {
             if ($userInp == '') {
                 Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, $uid);
             } else {
-                // //check if there is record for the user for this activity
-                $checkForBook = Database::get()->querySingle("SELECT id FROM gradebook_book
-                                            WHERE gradebook_activity_id = ?d AND uid = ?d LIMIT 1", $actID, $uid);
-                if ($checkForBook) { // update
-                    Database::get()->query("UPDATE gradebook_book SET grade = ?f WHERE id = ?d", $userInp/$gradebook->range, $checkForBook->id);
-                } else { // insert
-                    Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $uid, $actID, $userInp/$gradebook->range, '');
-                }
+                Database::get()->query("INSERT INTO gradebook_book (uid, gradebook_activity_id, grade, comments)
+                                            VALUES (?d, ?d, ?f, ?s)
+                                        ON DUPLICATE KEY UPDATE grade = ?f",
+                            $uid, $actID, $userInp/$gradebook->range, '', $userInp/$gradebook->range);
             }
             triggerGameGradebook($course_id, $uid, $gradebook_id);
         }
@@ -1638,9 +1634,10 @@ function update_gradebook_book($uid, $id, $grade, $activity, $gradebook_id = 0)
                         $grade, $gradebookActivity->id, $uid);
                 }
             } elseif (!is_null($grade)) {
-                Database::get()->query("INSERT INTO gradebook_book
-                            SET gradebook_activity_id = ?d, uid = ?d, grade = ?f, comments = ''",
-                    $gradebookActivity->id, $uid, $grade);
+                Database::get()->query("INSERT INTO gradebook_book (uid, gradebook_activity_id, grade, comments)
+                                            VALUES (?d, ?d, ?f, ?s)
+                                        ON DUPLICATE KEY UPDATE grade = ?f",
+                    $uid, $gradebookActivity->id, $grade, '', $grade);
             }
             triggerGameGradebook($course_id, $uid, $gradebook_id);
         }
