@@ -3725,10 +3725,6 @@ function show_edit_assignment($id) {
 
 /**
  * @brief delete assignment
- * @global string $workPath
- * @global type $course_code
- * @global type $webDir
- * @global type $course_id
  * @param type $id
  */
 function delete_assignment($id) {
@@ -3740,17 +3736,22 @@ function delete_assignment($id) {
                                         AND id = ?d", $course_id, $id);
     if ($row != null) {
         $uids = Database::get()->queryArray("SELECT uid FROM assignment_submit WHERE assignment_id = ?d", $id);
+        foreach ($uids as $user_id) {
+            triggerGame($course_id, $user_id->uid, $id);
+            triggerAssignmentAnalytics($course_id, $user_id->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+            triggerAssignmentAnalytics($course_id, $user_id->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
+        }
         if (Database::get()->query("DELETE FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id)->affectedRows > 0){
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id);
             Database::get()->query("DELETE FROM assignment_grading_review WHERE assignment_id = ?d", $id);
-            foreach ($uids as $user_id) {
-                triggerGame($course_id, $user_id, $id);
-                triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
-                triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
-            }
+
             if ($row->assign_to_specific) {
                 Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
             }
+
+            $admin_files_directory = $webDir . "/courses/" . $course_code . "/work/admin_files/" . $secret;
+            removeDir($admin_files_directory);
+
             move_dir("$workPath/$secret", "$webDir/courses/garbage/{$course_code}_work_{$id}_$secret");
 
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
@@ -3763,10 +3764,6 @@ function delete_assignment($id) {
 }
 /**
  * @brief delete assignment's submissions
- * @global string $workPath
- * @global type $course_code
- * @global type $webDir
- * @global type $course_id
  * @param type $id
  */
 function purge_assignment_subs($id) {
@@ -3777,27 +3774,23 @@ function purge_assignment_subs($id) {
     $row = Database::get()->querySingle("SELECT title, assign_to_specific FROM assignment WHERE course_id = ?d
                                     AND id = ?d", $course_id, $id);
     $uids = Database::get()->queryArray("SELECT uid FROM assignment_submit WHERE assignment_id = ?d", $id);
+
+    foreach ($uids as $user_id) {
+        triggerGame($course_id, $user_id->uid, $id);
+        triggerAssignmentAnalytics($course_id, $user_id->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+        triggerAssignmentAnalytics($course_id, $user_id->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
+    }
     if (Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id)->affectedRows > 0) {
-        foreach ($uids as $user_id) {
-            triggerGame($course_id, $user_id, $id);
-            triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
-            triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
-        }
         if ($row->assign_to_specific) {
             Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
         }
-        move_dir("$workPath/$secret",
-        "$webDir/courses/garbage/{$course_code}_work_{$id}_$secret");
+        move_dir("$workPath/$secret", "$webDir/courses/garbage/{$course_code}_work_{$id}_$secret");
         return true;
     }
     return false;
 }
 /**
  * @brief delete user assignment
- * @global type $course_id
- * @global type $course_code
- * @global type $webDir
- * @global type $uid
  * @param type $id
  */
 function delete_user_assignment($id) {
@@ -3838,9 +3831,6 @@ function delete_user_assignment($id) {
 }
 /**
  * @brief delete teacher assignment file
- * @global type $course_id
- * @global type $course_code
- * @global type $webDir
  * @param type $id
  */
 function delete_teacher_assignment_file($id) {
@@ -3857,14 +3847,6 @@ function delete_teacher_assignment_file($id) {
 }
 /**
  * @brief display user assignment
- * @global type $tool_content
- * @global type $m
- * @global type $uid
- * @global type $langUserOnly
- * @global type $langBack
- * @global type $course_code
- * @global type $course_id
- * @global type $course_code
  * @param type $id
  */
 function show_student_assignment($id) {
