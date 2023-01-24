@@ -149,21 +149,25 @@ function delete_submissions_by_uid($uid, $gid, $id, $files_to_keep = []) {
     return $return;
 }
 
-// function delete gia pinaka assignment_grade_review, to delete ginetai apo ton kathhghth
+/**
+ * @param $id
+ * @brief function delete gia pinaka assignment_grade_review, to delete ginetai apo ton kathhghth
+ * @return string
+ */
 function delete_submissions($id) {
 
-    $return = '';
+    global $langPeerReviewAssignmentInfo1, $langPeerReviewAssignmentInfo2;
+
     $res = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
-    if ($res){
-        $return = "Οι εργασίες ανατέθηκαν σε χρήστες. Διαγράφτηκαν οι παλιές αναθέσεις.";
-    }
-    else{
-        $return = "Οι εργασίες ανατέθηκαν.";
+    if ($res) {
+        $msg = $langPeerReviewAssignmentInfo1;
+    } else {
+        $msg = $langPeerReviewAssignmentInfo2;
     }
     foreach ($res as $row) {
         Database::get()->query("DELETE FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
     }
-    return $return;
+    return $msg;
 }
 
 
