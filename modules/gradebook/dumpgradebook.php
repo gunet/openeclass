@@ -70,7 +70,7 @@ if ($t == 1) { // display gradebook activities results
     // mapping of activity id's to output columns
     $actId = array();
     $actCounter = 0;
-    array_push($data_header, $langSurname, $langName, $langAm, $langUsername, $langEmail);
+    array_push($data_header, $langSurname, $langName, $langUsername, $langAm, $langEmail);
     array_push($data_header, $langGradebookTotalGrade);
     $activities = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE visible = 1 AND gradebook_id = ?d", $gid);
     foreach ($activities as $act) {
