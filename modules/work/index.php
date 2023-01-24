@@ -88,10 +88,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $sid = $_POST['sid'];
         $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
     } elseif (($_POST['assign_type']) or ($_POST['assign_g_type'] == 2)) {
-        $data = Database::get()->queryArray("SELECT name,id FROM `group`
-                                                        WHERE course_id = ?d
-                                                        AND visible = 1
-                                                      ORDER BY name", $course_id);
+        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     } else {
         $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                 FROM user, course_user
@@ -1435,8 +1432,8 @@ function submit_work($id, $on_behalf_of = null) {
                 $group_id = Database::get()->querySingle("SELECT group_id FROM assignment_submit WHERE id = ?d", $sid)->group_id;
                 $user_ids = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $group_id);
                 foreach ($user_ids as $user_id) {
-                    update_attendance_book($user_id, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
-                    update_gradebook_book($user_id, $row->id, $grade/$row->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                    update_attendance_book($user_id->user_id, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                    update_gradebook_book($user_id->user_id, $row->id, $grade/$row->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                 }
             } else {
                 $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
@@ -2962,8 +2959,7 @@ function show_edit_assignment($id) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                                    FROM assignment_to_specific, `group`
                                     WHERE course_id = ?d
-                                    AND `group`.id = assignment_to_specific.group_id
-                                    AND `group`.visible = 1
+                                    AND `group`.id = assignment_to_specific.group_id                                    
                                     AND assignment_to_specific.assignment_id = ?d", $course_id, $id);
             $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d AND visible = 1", $course_id);
             foreach ($assignees as $assignee_row) {
@@ -5407,9 +5403,7 @@ function show_student_assignments() {
             if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids)) {
                 foreach ($submission as $sub) {
                     if (isset($sub->group_id)) { // if is a group assignment
-                        $tool_content .= "<div style='padding: 5px 0; font-size:9px;'>($m[groupsubmit] " .
-                                "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
-                                "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)</div>";
+                        $tool_content .= "<small><div>($m[groupsubmit] $m[ofgroup] <em>" . gid_to_name($sub->group_id) . "</em>)</div></small>";
 
                         $eportfolio_action_title = sprintf($langAddGroupWorkSubePortfolio, gid_to_name($sub->group_id));
                     } else {
