@@ -282,17 +282,6 @@ function was_graded($uid, $id, $ret_val = FALSE) {
 
 /**
  * @brief Show details of a submission
- * @global type $uid
- * @global type $m
- * @global type $langSubmittedAndGraded
- * @global type $tool_content
- * @global type $course_code
- * @global type $langAutoJudgeEnable
- * @global type $langAutoJudgeShowWorkResultRpt
- * @global type $langGradebookGrade
- * @global type $langFileName
- * @global type $langWorkOnlineText
- * @global type $langCriteria
  * @param type $id
  */
 function show_submission_details($id) {
@@ -360,9 +349,7 @@ function show_submission_details($id) {
                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
                 "$m[your_group] " . gid_to_name($sub->group_id) . "</a> (" . display_user($sub->uid) . ")";
     } elseif ($sub->group_id) {
-        $notice .= "<br>$m[groupsubmit] " .
-                "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
-                "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>";
+        $notice .= "<br>$m[groupsubmit] $m[ofgroup] <em>" . gid_to_name($sub->group_id) . "</em>.";
     }
     $sel_criteria = unserialize($sub->grade_rubric);
     $assignment_id = $sub->assignment_id;

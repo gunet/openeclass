@@ -29,10 +29,7 @@ require_once 'modules/tags/moduleElement.class.php';
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['assign_type'])) {
         if ($_POST['assign_type'] == 2) {
-            $data = Database::get()->queryArray("SELECT name,id FROM `group`
-                                          WHERE course_id = ?d
-                                          AND visible = 1
-                                      ORDER BY name", $course_id);
+            $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
         } elseif ($_POST['assign_type'] == 1) {
             $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                     FROM user, course_user
@@ -171,8 +168,7 @@ if (isset($_POST['submitExercise'])) {
         if ($objExercise->selectAssignToSpecific() == 2) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                 FROM exercise_to_specific, `group`
-                WHERE `group`.id = exercise_to_specific.group_id
-                    AND `group`.visible = 1
+                WHERE `group`.id = exercise_to_specific.group_id                    
                     AND exercise_to_specific.exercise_id = ?d", $exerciseId);
             $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d AND visible = 1", $course_id);
             foreach ($assignees as $assignee_row) {
