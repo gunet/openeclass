@@ -4524,13 +4524,15 @@ $langTransferGrades = "Μεταφορά βαθμών";
 $langPeerReviewCompletedByStudent = "Ολοκλήρωσε τις αξιολογήσεις του";
 $langPeerReviewPendingByStudent = "Οι αξιολογήσεις του δεν έχουν ολοκληρωθεί";
 $langPeerReviewMissingByStudent = "Δεν έχει εκτελέσει τις αξιολογήσεις του";
-$langPeerReviewPerUserCompulsory = "Το πεδίο Aξιολογήσεις ανά χρήστη";
+$langPeerReviewPerUserCompulsory = "Το πεδίο Αξιολογήσεις ανά χρήστη";
 $langPeerReviewStartDateCompulsory = "Το πεδίο Έναρξη αξιολόγησης";
 $langPeerReviewEndDateCompulsory = "Το πεδίο Λήξη αξιολόγησης";
 $langPeerReviewDeadlineCompulsory = "Το πεδίο Προθεσμία υποβολής";
 $langPeerReviewStartDateError = "Η ημερομηνία Έναρξης αξιολόγησης ";
 $langPeerReviewStartDateError2 = "μεγαλύτερη από την υποβολή";
 $langPeerReviewNoAssignments = "Δεν έχουν ανατεθεί ακόμα εργασίες";
+$langPeerReviewAssignmentInfo1 = "Οι εργασίες ανατέθηκαν στους χρήστες. Διαγράφτηκαν οι παλιές αναθέσεις.";
+$langPeerReviewAssignmentInfo2 = "Οι εργασίες ανατέθηκαν.";
 $langNotGraded = "(Δεν βαθμολόγησε)";
 $langDeletePeerReview = "Διαγραφή αξιολόγησης";
 $langNoAssignmentsForReview = "Δεν υπάρχουν αναθέσεις";
@@ -4541,6 +4543,7 @@ $langAssignmentDistribution = 'Ανάθεση εργασιών';
 $langNoPeerReview = 'Δεν θα γίνει αξιολόγηση.';
 $langPendingPeerSubmissions = 'Αναμένονται εργασίες για αξιολόγηση.';
 $langPeerSubmissions = 'Εργασίες που έχουν ανατεθεί';
+
 
 /* * ***********************************************************
  * listerqusers.php
