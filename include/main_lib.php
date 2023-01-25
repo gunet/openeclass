@@ -464,7 +464,6 @@ function user_icon($uid, $size = null) {
                 return "{$urlAppend}courses/userimg/{$uid}_$size.jpg";
             } else {
                 return "$themeimg/user_$size.png";
-               
             }
         }
     }
@@ -557,7 +556,7 @@ function group_secret($gid) {
 
 /**
  * displays a selection box
- * @param type $entries an array of (value => label)
+ * @param array $entries an array of (value => label)
  * @param type $name the name of the selection element
  * @param type $default if it matches one of the values, specifies the default entry
  * @param type $extra
@@ -1427,7 +1426,6 @@ function course_access_icon($visibility) {
             break;
         }
     }
-    // return "<div class='course_status_container'>$access_icon</div>";
     return $access_icon;
 }
 
