@@ -47,7 +47,7 @@ if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
     $csv->setEncoding('UTF-8');
 }
 $csv->filename = $course_code . " - " . htmlspecialchars($learnPathName->name) . "_user_stats.csv";
-$csv->outputRecord('Id', $langStudent, $langEmail, $langAm, $langGroup, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress);
+$csv->outputRecord('Id', $langStudent, $langEmail, $langAm, $langGroup, $langAttemptsNb, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress);
 
 $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`
         FROM `user` AS U, `course_user` AS CU
@@ -56,8 +56,7 @@ $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`
         ORDER BY U.`surname` ASC, U.`givenname` ASC", $course_id);
 
 foreach ($usersList as $user) {
-    list($lpProgress, $lpTotalTime) = get_learnPath_progress_details($path_id, $user->id);
-    list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus) = get_learnPath_progress_details($path_id, $user->id);
+    list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($path_id, $user->id);
 
     $csv->outputRecord(
         $user->id,
@@ -65,6 +64,7 @@ foreach ($usersList as $user) {
         $user->email,
         uid_to_am($user->id),
         user_groups($course_id,$user->id, 'csv'),
+        $lpAttemptsNb,
         $lpTotalStarted,
         $lpTotalAccessed,
         $lpTotalTime,
