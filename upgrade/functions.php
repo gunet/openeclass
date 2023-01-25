@@ -2457,9 +2457,11 @@ function upgrade_to_3_13($tbl_options): void
  */
 function upgrade_to_3_14($tbl_options) : void {
 
-    Database::get()->query("ALTER TABLE `tc_servers` ADD UNIQUE `hostname` (`hostname`)");
-    Database::get()->query("ALTER TABLE `tc_servers` CHANGE `hostname` `hostname` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `type`");
-    Database::get()->query("ALTER TABLE `tc_servers` CHANGE `type` `type` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `id`");
+    if (!DBHelper::indexExists('tc_servers', 'hostname')) {
+        Database::get()->query("ALTER TABLE `tc_servers` ADD UNIQUE `hostname` (`hostname`)");
+        Database::get()->query("ALTER TABLE `tc_servers` CHANGE `hostname` `hostname` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `type`");
+        Database::get()->query("ALTER TABLE `tc_servers` CHANGE `type` `type` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `id`");
+    }
 
     // question feedback
     if (!DBHelper::fieldExists('exercise_question', 'feedback')) {
@@ -2467,16 +2469,18 @@ function upgrade_to_3_14($tbl_options) : void {
     }
 
     // clean up gradebook -- delete multiple tuples (gradebook_activity_id, uid) in `gradebook_book` table (if any)
-    $q = Database::get()->queryArray("SELECT MIN(id) AS id, uid, gradebook_activity_id, COUNT(*) AS cnt 
+    $q = Database::get()->queryArray("SELECT MIN(id) AS id, uid, gradebook_activity_id, COUNT(*) AS cnt
             FROM gradebook_book GROUP BY gradebook_activity_id, uid HAVING cnt>=2 ORDER BY cnt");
     foreach ($q as $data) {
-        Database::get()->query("DELETE FROM gradebook_book 
-            WHERE uid = ?d 
-            AND gradebook_activity_id = ?d 
+        Database::get()->query("DELETE FROM gradebook_book
+            WHERE uid = ?d
+            AND gradebook_activity_id = ?d
             AND id != ?d",
             $data->uid, $data->gradebook_activity_id, $data->id);
     }
-    Database::get()->query("ALTER TABLE gradebook_book ADD UNIQUE activity_uid (gradebook_activity_id, uid)");
+    if (!DBHelper::indexExists('gradebook_book', 'activity_uid')) {
+        Database::get()->query("ALTER TABLE gradebook_book ADD UNIQUE activity_uid (gradebook_activity_id, uid)");
+    }
 
     // learnPath user progress
     if (!DBHelper::fieldExists('lp_user_module_progress', 'attempt')) {
