@@ -3983,6 +3983,7 @@ $langAnswersDispEndDate = "Display correct answers after the exercisei end date"
 $langAttempt = "Attempt";
 $langAttemptStarted = "First Attempt";
 $langAttemptAccessed = "Last Access";
+$langAttemptsNb = "Number of attempts";
 $langIPUnlock = "Unlock specific IP(s) or IP CIDR(s)";
 $langPasswordUnlock = "Unlock with password";
 $langPasswordModalTitle = "Enter the exercise password";
