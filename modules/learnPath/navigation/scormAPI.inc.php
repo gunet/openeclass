@@ -62,8 +62,9 @@ if ($uid) {
                AND M.`module_id` = LPM.`module_id`
                AND LPM.`learnPath_id` = ?d
                AND LPM.`module_id` = ?d
-               AND M.`course_id` = ?d";
-    $userProgressionDetails = Database::get()->querySingle($sql, $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'], $course_id);
+               AND M.`course_id` = ?d
+               AND UMP.`attempt` = ?d";
+    $userProgressionDetails = Database::get()->querySingle($sql, $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'], $course_id, $_SESSION['lp_attempt']);
 }
 
 if (!$uid || !$userProgressionDetails) {

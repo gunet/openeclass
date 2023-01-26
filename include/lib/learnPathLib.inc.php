@@ -458,11 +458,9 @@ function display_path_content() {
     return $output;
 }
 
-function calculate_learnPath_progress($lpid, $modules) {
-    global $course_id;
-
+function calculate_learnPath_bestAttempt_progress($modules): array {
     if (!is_array($modules) || empty($modules)) {
-        $progression = 0;
+        return array(0, 0);
     } else {
         $maxAttempt = 1; // discover number of attempts
         foreach ($modules as $module) {
@@ -470,18 +468,6 @@ function calculate_learnPath_progress($lpid, $modules) {
                 $maxAttempt = $module->attempt;
             }
         }
-
-        // find number of visible modules in this path
-        $sqlnum = "SELECT COUNT(M.`module_id`) AS count
-                    FROM `lp_rel_learnPath_module` AS LPM,
-                         `lp_module` AS M
-                    WHERE LPM.`learnPath_id` = ?d
-                    AND LPM.`visible` = 1
-                    AND M.`contentType` != ?s
-                    AND M.`module_id` = LPM.`module_id`
-                    AND M.`course_id` = ?d";
-        $result = Database::get()->querySingle($sqlnum, $lpid, CTLABEL_, $course_id);
-        $nbrOfVisibleModules = ($result && !empty($result->count)) ? $result->count : false;
 
         // init progress per attempt
         $progress = array();
@@ -514,14 +500,45 @@ function calculate_learnPath_progress($lpid, $modules) {
             }
         }
 
-        if (is_numeric($nbrOfVisibleModules)) {
-            $progression = @round($progress[$bestAttempt] / $nbrOfVisibleModules);
-        } else {
-            $progression = 0;
-        }
+        return array($bestAttempt, $progress[$bestAttempt]);
+    }
+}
+
+function calculate_number_of_visible_modules($lpid) {
+    global $course_id;
+
+    // find number of visible modules in this path
+    $sqlnum = "SELECT COUNT(M.`module_id`) AS count
+                    FROM `lp_rel_learnPath_module` AS LPM,
+                         `lp_module` AS M
+                    WHERE LPM.`learnPath_id` = ?d
+                    AND LPM.`visible` = 1
+                    AND M.`contentType` != ?s
+                    AND M.`module_id` = LPM.`module_id`
+                    AND M.`course_id` = ?d";
+    $result = Database::get()->querySingle($sqlnum, $lpid, CTLABEL_, $course_id);
+    return ($result && !empty($result->count)) ? $result->count : false;
+}
+
+function calculate_learnPath_progress($lpid, $modules) {
+    global $course_id;
+
+    if (!is_array($modules) || empty($modules)) {
+        return 0;
     }
 
-    return $progression;
+    list($bestAttempt, $bestProgress) = calculate_learnPath_bestAttempt_progress($modules);
+    if ($bestAttempt <= 0) {
+        return 0;
+    }
+
+    $nbrOfVisibleModules = calculate_number_of_visible_modules($lpid);
+
+    if (is_numeric($nbrOfVisibleModules)) {
+        return @round($bestProgress / $nbrOfVisibleModules);
+    } else {
+        return 0;
+    }
 }
 
 /**
@@ -638,9 +655,34 @@ function get_learnPath_progress_details($lpid, $lpUid): array {
         $totalStarted = $global_started[$bestAttempt];
         $totalAccessed = $global_accessed[$bestAttempt];
         $totalStatus = $global_status[$bestAttempt];
+        if ($totalStatus === "PASSED" && $totalProgress < 100) {
+            $totalStatus = "INCOMPLETE";
+        }
     }
 
     return array($totalProgress, $totalTime, $totalStarted, $totalAccessed, $totalStatus, $maxAttempt);
+}
+
+function get_learnPath_bestAttempt_progress($lpid, $lpUid): array {
+    global $course_id;
+
+    // find progression for this user in each module of the path
+    $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS, UMP.`attempt`
+             FROM `lp_learnPath` AS LP,
+                  `lp_rel_learnPath_module` AS LPM,
+                  `lp_user_module_progress` AS UMP,
+                  `lp_module` AS M
+            WHERE LP.`learnPath_id` = LPM.`learnPath_id`
+              AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
+              AND UMP.`user_id` = ?d
+              AND LP.`learnPath_id` = ?d
+              AND LP.`course_id` = ?d
+              AND LPM.`visible` = 1
+              AND M.`module_id` = LPM.`module_id`
+              AND M.`contentType` != ?s
+            ORDER BY UMP.`attempt`, LPM.`rank`";
+    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
+    return calculate_learnPath_bestAttempt_progress($modules);
 }
 
 /**

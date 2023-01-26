@@ -59,6 +59,13 @@ if (isset($_GET['module_id']) && !empty($_GET['module_id'])) {
 
 check_LPM_validity($is_editor, $course_code, true);
 
+// detect attempt
+$maxAttempt = intval(Database::get()->querySingle("SELECT MAX(attempt) AS maxatt
+            FROM `lp_user_module_progress` AS UMP
+           WHERE UMP.`user_id` = ?d
+             AND UMP.`learnPath_id` = ?d", $uid, $_SESSION['path_id'])->maxatt);
+$_SESSION['lp_attempt'] = $maxAttempt + 1;
+
 $nameTools = $langPreview;
 if (!add_units_navigation()) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPaths);

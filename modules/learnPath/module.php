@@ -139,7 +139,8 @@ $sql = "SELECT `contentType`,
           AND LPM.`learnPath_id` = ?d
           AND LPM.`module_id` = ?d
           AND LPM.`module_id` = M.`module_id`
-          AND M.`course_id` = ?d";
+          AND M.`course_id` = ?d
+        ORDER BY UMP.`raw` DESC, UMP.`attempt` DESC LIMIT 1";
 $resultBrowsed = Database::get()->querySingle($sql, $_SESSION['path_id'], $_SESSION['lp_module_id'] , $course_id);
 
 $toolName = $langLearningPaths;
