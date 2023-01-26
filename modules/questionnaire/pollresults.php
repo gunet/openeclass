@@ -212,8 +212,7 @@ if ($PollType == POLL_NORMAL) {
                 <div class='panel-heading'>
                     <h3 class='panel-title'>$langQuestion $j</h3>
                 </div>
-                <div class='panel-body'>
-                    <!--h4>".q_math($theQuestion->question_text)."</h4-->";
+                <div class='panel-body'>";
 
             $j++;
 
@@ -224,10 +223,7 @@ if ($PollType == POLL_NORMAL) {
                     $this_chart_data['answer'][] = q($row->answer_text);
                     $this_chart_data['percentage'][] = 0;
                 }
-                if ($theQuestion->qtype == QTYPE_SINGLE && $default_answer) {
-                    $this_chart_data['answer'][] = $langPollUnknown;
-                    $this_chart_data['percentage'][] = 0;
-                }
+                $set_default_answer = false;
                 $answers = Database::get()->queryArray("SELECT a.aid AS aid, MAX(b.answer_text) AS answer_text, count(a.aid) AS count
                             FROM poll_user_record c, poll_answer_record a
                             LEFT JOIN poll_question_answer b
@@ -254,6 +250,10 @@ if ($PollType == POLL_NORMAL) {
                     } else {
                         $q_answer = $langPollUnknown;
                         $aid = -1;
+                    }
+                    if (!$set_default_answer and (($theQuestion->qtype == QTYPE_SINGLE && $default_answer) or $aid == -1)) {
+                        $this_chart_data['answer'][] = $langPollUnknown;
+                        $this_chart_data['percentage'][] = 0;
                     }
 
                     if (isset($this_chart_data['answer'])) { // skip answers that don't exist
