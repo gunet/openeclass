@@ -101,24 +101,26 @@ if ($is_editor) {
 // main page
 if ($uid) {
     $uidCheckString = "AND UMP.`user_id` = " . intval($uid);
+    list($bestAttempt, $bestProgress) = get_learnPath_bestAttempt_progress($_SESSION['path_id'], $uid);
+    $uidCheckString .= " AND UMP.`attempt` = " . intval($bestAttempt);
 } else { // anonymous
     $uidCheckString = "AND UMP.`user_id` IS NULL ";
 }
 
 $sql = "SELECT 
-    MIN(LPM.`learnPath_module_id`) as learnPath_module_id,
-    MIN(LPM.`parent`) as parent,
-	MIN(LPM.`lock`) as `lock`, 
-	MIN(M.`module_id`) as module_id,
-	MIN(M.`contentType`) as contentType,
-	MIN(M.`name`) as name,
-	MIN(UMP.`lesson_status`) as lesson_status,
-	MIN(UMP.`raw`) as raw,
-	MIN(UMP.`scoreMax`) as scoreMax,
-	MIN(UMP.`credit`) as credit,
-	MIN(A.`path`) as path
+    MAX(LPM.`learnPath_module_id`) as learnPath_module_id,
+    MAX(LPM.`parent`) as parent,
+    MAX(LPM.`lock`) as `lock`,
+    MAX(M.`module_id`) as module_id,
+    MAX(M.`contentType`) as contentType,
+    MAX(M.`name`) as name,
+    MAX(UMP.`lesson_status`) as lesson_status,
+    MAX(UMP.`raw`) as raw,
+    MAX(UMP.`scoreMax`) as scoreMax,
+    MAX(UMP.`credit`) as credit,
+    MAX(A.`path`) as path
         FROM (`lp_module` AS M,
-	`lp_rel_learnPath_module` AS LPM)
+    `lp_rel_learnPath_module` AS LPM)
      LEFT JOIN `lp_user_module_progress` AS UMP
              ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
              " . $uidCheckString . "

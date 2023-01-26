@@ -47,15 +47,14 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'modules/document/doc_init.php';
 
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 $clarolineRepositoryWeb = $urlServer . "courses/" . $course_code;
 doc_init();
 
-function directly_pass_lp_module($table, $userid, $lpmid) {
+function directly_pass_lp_module($userid, $lpmid): void {
     global $course_id;
 
     // if credit was already set this query changes nothing else it update the query made at the beginning of this script
-    $sql = "UPDATE `" . $table . "`
+    $sql = "UPDATE `lp_user_module_progress`
                SET `credit` = 1,
                    `raw` = 100,
                    `lesson_status` = 'COMPLETED',
@@ -63,8 +62,9 @@ function directly_pass_lp_module($table, $userid, $lpmid) {
                    `scoreMax` = 100
                    `accessed` = " . DBHelper::timeAfter() . "
              WHERE `user_id` = ?d
-               AND `learnPath_module_id` = ?d";
-    Database::get()->query($sql, $userid, $lpmid);
+               AND `learnPath_module_id` = ?d
+               AND `attempt` = ?d";
+    Database::get()->query($sql, $userid, $lpmid, $_SESSION['lp_attempt']);
     triggerLPGame($course_id, $userid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
     triggerLPAnalytics($course_id, $userid, $_SESSION['path_id']);
 }
@@ -83,7 +83,8 @@ if ($uid) { // if not anonymous
            WHERE UMP.`user_id` = ?d
              AND UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
              AND LPM.`learnPath_id` = ?d
-             AND LPM.`module_id` = ?d", $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'])->count;
+             AND LPM.`module_id` = ?d
+             AND UMP.`attempt` = ?d", $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'], $_SESSION['lp_attempt'])->count;
 
     $learnPathModuleId = Database::get()->querySingle("SELECT `learnPath_module_id`
           FROM `lp_rel_learnPath_module`
@@ -93,8 +94,8 @@ if ($uid) { // if not anonymous
     // if never intialised : create an empty user_module_progress line
     if ($num == 0) {
         Database::get()->query("INSERT INTO `lp_user_module_progress`
-                ( `user_id` , `learnPath_id` , `learnPath_module_id`, `lesson_location`, `suspend_data`, `started`, `accessed` )
-                VALUES (?d , ?d, ?d, '', '', " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter() . ")", $uid, $_SESSION['path_id'], $learnPathModuleId);
+                ( `user_id` , `learnPath_id` , `learnPath_module_id`, `lesson_location`, `suspend_data`, `attempt`, `started`, `accessed` )
+                VALUES (?d , ?d, ?d, '', '', ?d, " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter() . ")", $uid, $_SESSION['path_id'], $learnPathModuleId, $_SESSION['lp_attempt']);
         triggerLPGame($course_id, $uid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
         triggerLPAnalytics($course_id, $uid, $_SESSION['path_id']);
     }
@@ -111,7 +112,7 @@ $assetPath = Database::get()->querySingle("SELECT `path` FROM `lp_asset` WHERE `
 switch ($module->contentType) {
     case CTDOCUMENT_ :
         if ($uid) { // Directly pass this module
-            directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int) $uid, (int) $learnPathModuleId);
+            directly_pass_lp_module((int) $uid, (int) $learnPathModuleId);
         } // else anonymous : record nothing
         $file_url = file_url($assetPath);
         $play_url = file_playurl($assetPath);
@@ -138,7 +139,7 @@ switch ($module->contentType) {
         break;
     case CTSCORMASSET_ :
         if ($uid) { // Directly pass this module
-            directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int) $uid, (int) $learnPathModuleId);
+            directly_pass_lp_module((int) $uid, (int) $learnPathModuleId);
         } // else anonymous : record nothing
     // Don't break, we need to execute the following SCORM code
     case CTSCORM_ :
@@ -151,21 +152,21 @@ switch ($module->contentType) {
         break;
     case CTCOURSE_DESCRIPTION_ :
         if ($uid) { // Directly pass this module
-            directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int) $uid, (int) $learnPathModuleId);
+            directly_pass_lp_module((int) $uid, (int) $learnPathModuleId);
         } // else anonymous : record nothing
 
         $moduleStartAssetPage = "showCourseDescription.php?course=$course_code";
         break;
     case CTLINK_ :
         if ($uid) { // Directly pass this module
-            directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int) $uid, (int) $learnPathModuleId);
+            directly_pass_lp_module((int) $uid, (int) $learnPathModuleId);
         } // else anonymous : record nothing
 
         $moduleStartAssetPage = $assetPath;
         break;
     case CTMEDIA_ :
         if ($uid) {
-            directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int) $uid, (int) $learnPathModuleId);
+            directly_pass_lp_module((int) $uid, (int) $learnPathModuleId);
         }
 
         if (MultimediaHelper::isSupportedFile($assetPath)) {
@@ -178,7 +179,7 @@ switch ($module->contentType) {
         break;
     case CTMEDIALINK_ :
         if ($uid) {
-            directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int) $uid, (int) $learnPathModuleId);
+            directly_pass_lp_module((int) $uid, (int) $learnPathModuleId);
         }
 
         if (MultimediaHelper::isEmbeddableMedialink($assetPath)) {

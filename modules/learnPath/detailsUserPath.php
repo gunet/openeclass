@@ -114,9 +114,8 @@ foreach ($moduleList as $module) {
 $flatElementList = build_display_element_list(build_element_list($extendedList, 'parent', 'identity'));
 
 $moduleNbT = 0;
-$moduleNb = $globalProg = $global_time = array();
+$globalProg = $global_time = array();
 for ($i = 1; $i <= $maxAttempt; $i++) {
-    $moduleNb[$i] = 0;
     $globalProg[$i] = 0;
     $global_time[$i] = "0000:00:00";
 }
@@ -246,7 +245,6 @@ foreach ($flatElementList as $module) {
     }
     if ($module['contentType'] != CTLABEL_) {
         $moduleNbT++;
-        $moduleNb[$module['attempt']]++; // increment number of modules used to compute global progression except if the module is a title
     }
 
     $tool_content .= "</tr>";
@@ -262,6 +260,12 @@ if ($moduleNbT == 0) {
         }
     }
 
+    $nbrOfVisibleModules = calculate_number_of_visible_modules($_REQUEST['path_id']);
+    $bestProgress = 0;
+    if (is_numeric($nbrOfVisibleModules)) {
+        $bestProgress = @round($globalProg[$bestAttempt] / $nbrOfVisibleModules);
+    }
+
     // display global stats
     $tool_content .= "<tr>
             <th colspan='" . ($maxDeep + 4) . "'>&nbsp;</th>
@@ -269,7 +273,7 @@ if ($moduleNbT == 0) {
             <th><small>" . (($global_time[$bestAttempt] != "0000:00:00") ? preg_replace("/\.[0-9]{0,2}/", "", $global_time[$bestAttempt]) : '&nbsp;') . "</small></th>
             <th><small>" . $langGlobalProgress . "</small></th>
             <th>"
-            . disp_progress_bar(round($globalProg[$bestAttempt] / ($moduleNb[$bestAttempt])), 1)
+            . disp_progress_bar($bestProgress, 1)
             . "</th></tr>";
 }
 $tool_content .= "</table></div>";

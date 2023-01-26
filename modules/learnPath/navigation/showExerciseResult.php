@@ -404,12 +404,13 @@ if ($uid) {
     $scoreMax = $totalWeighting;
     // need learningPath_module_id and raw_to_pass value
     $sql = "SELECT LPM.`raw_to_pass`, LPM.`learnPath_module_id`, UMP.`total_time`, UMP.`raw`
-			FROM `lp_rel_learnPath_module` AS LPM, `lp_user_module_progress` AS UMP
-			WHERE LPM.`learnPath_id` = ?d
-			AND LPM.`module_id` = ?d
-			AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
-			AND UMP.`user_id` = ?d";
-    $row = Database::get()->querySingle($sql, $_SESSION['path_id'], $_SESSION['lp_module_id'], $uid);
+              FROM `lp_rel_learnPath_module` AS LPM, `lp_user_module_progress` AS UMP
+             WHERE LPM.`learnPath_id` = ?d
+               AND LPM.`module_id` = ?d
+               AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
+               AND UMP.`user_id` = ?d
+               AND UMP.`attempt` = ?d";
+    $row = Database::get()->querySingle($sql, $_SESSION['path_id'], $_SESSION['lp_module_id'], $uid, $_SESSION['lp_attempt']);
 
     $scormSessionTime = seconds_to_scorm_time($timeToCompleteExe);
 
@@ -433,8 +434,9 @@ if ($uid) {
                  `total_time`	= ?s,
                  `session_time`	= ?s
            WHERE `learnPath_module_id` = ?d
-             AND `user_id` = ?d";
-    Database::get()->query($sqlupd, $scoreMin, $scoreMax, addScormTime($row->total_time, $scormSessionTime), $scormSessionTime, $row->learnPath_module_id, $uid);
+             AND `user_id` = ?d
+             AND `attempt` = ?d";
+    Database::get()->query($sqlupd, $scoreMin, $scoreMax, addScormTime($row->total_time, $scormSessionTime), $scormSessionTime, $row->learnPath_module_id, $uid, $_SESSION['lp_attempt']);
     triggerLPGame($course_id, $uid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
     triggerLPAnalytics($course_id, $uid, $_SESSION['path_id']);
 }
