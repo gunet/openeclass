@@ -54,10 +54,26 @@ if (isset($_GET['delete']) && $course_id) {
       $_POST['sfaanswer'] = $_GET['sfaanswer'];
       checkSecondFactorChallenge();
     }
+
+    $course_code = course_id_to_code($course_id);
+    $course_title = course_id_to_title($course_id);
+    // first archive course
+    $zipfile = doArchive($course_id, $course_code);
+
+    $garbage = "$webDir/courses/garbage";
+    $target = "$garbage/$course_code.$_SESSION[csrf_token]";
+    is_dir($target) or make_dir($target);
+    touch("$garbage/index.html");
+    rename($zipfile, "$target/$course_code.zip");
+    // delete course
     delete_course($course_id);
-    // Display confirmatiom message for course deletion
-    //Session::Messages($langCourseDelSuccess, "alert-success");
-    Session::flash('message',$langCourseDelSuccess); 
+    // logging
+    Log::record(0, 0, LOG_DELETE_COURSE, array('id' => $course_id,
+        'code' => $course_code,
+        'title' => $course_title));
+
+    // Display confirmation message for course deletion
+    Session::flash('message',$langCourseDelSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/listcours.php');
 }
@@ -75,7 +91,7 @@ if (isset($_GET['c']) && !isset($_GET['delete'])) {
                         'icon' => 'fa-reply',
                         'level' => 'primary-label'
                     ]
-                ]);   
+                ]);
 } else {
     $data['action_bar'] = action_bar([
                     [
