@@ -24,10 +24,15 @@
  * @brief delete course
  */
 
-
 $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/course.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
+require_once 'include/log.class.php';
+require_once 'modules/course_info/archive_functions.php';
 
 if (isset($_GET['c'])) {
     $course_id = intval($_GET['c']);
@@ -35,10 +40,6 @@ if (isset($_GET['c'])) {
     $course_id = 0;
 }
 
-require_once 'include/lib/hierarchy.class.php';
-require_once 'include/lib/course.class.php';
-require_once 'include/lib/user.class.php';
-require_once 'hierarchy_validations.php';
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -57,7 +58,7 @@ if (isset($_GET['c']) && !isset($_GET['delete'])) {
      array('title' => $langBack,
            'url' => "listcours.php",
            'icon' => 'fa-reply',
-           'level' => 'primary-label')));   
+           'level' => 'primary-label')));
 } else {
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -68,10 +69,26 @@ if (isset($_GET['c']) && !isset($_GET['delete'])) {
 
 // Delete course
 if (isset($_GET['delete']) && $course_id) {
+    $course_code = course_id_to_code($course_id);
+    $course_title = course_id_to_title($course_id);
+    // first archive course
+    $zipfile = doArchive($course_id, $course_code);
+
+    $garbage = "$webDir/courses/garbage";
+    $target = "$garbage/$course_code.$_SESSION[csrf_token]";
+    is_dir($target) or make_dir($target);
+    touch("$garbage/index.html");
+    rename($zipfile, "$target/$course_code.zip");
+    // delete course
     delete_course($course_id);
+    // logging
+    Log::record(0, 0, LOG_DELETE_COURSE, array('id' => $course_id,
+                                               'code' => $course_code,
+                                               'title' => $course_title));
+
     $tool_content .= "<div class='alert alert-success'>" . $langCourseDelSuccess . "</div>";
 }
-// Display confirmatiom message for course deletion
+// Display confirmation message for course deletion
 else {
     if (!Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $course_id)) {
         $tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
