@@ -31,27 +31,77 @@ $csv = new CSV();
 if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
     $csv->setEncoding('UTF-8');
 }
-$csv->filename = $course_code . "_learning_path_user_stats.csv";
-$csv->outputRecord('Id', $langStudent, $langEmail, $langAm, $langGroup, $langProgress);
+$csv->filename = $course_code . "_learning_path_user_stats_analysis.csv";
+$csv->outputRecord('Id', $langStudent, $langEmail, $langAm, $langGroup, $langLearnPath, $langAttemptsNb, $langTotalTimeSpent, $langProgress);
 
 $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`
         FROM `user` AS U, `course_user` AS CU
         WHERE U.`id`= CU.`user_id`
         AND CU.`course_id` = ?d
         ORDER BY U.`surname` ASC, U.`givenname` ASC", $course_id);
+
 foreach ($usersList as $user) {
-    $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d", $course_id);
+    $learningPathList = Database::get()->queryArray("SELECT learnPath_id, name FROM lp_learnPath WHERE course_id = ?d", $course_id);
     $iterator = 1;
     $globalprog = 0;
+    $globaltime = "00:00:00";
+    $lpaths = array();
 
     foreach ($learningPathList as $learningPath) {
         // % progress
-        $prog = get_learnPath_progress($learningPath->learnPath_id, $user->id);
+        list($prog, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($learningPath->learnPath_id, $user->id);
+
         if ($prog >= 0) {
             $globalprog += $prog;
         }
+
+        if (!empty($lpTotalTime)) {
+            $globaltime = addScormTime($globaltime, $lpTotalTime);
+        }
+
+        $lpContent = array(
+            '',
+            '',
+            '',
+            '',
+            '',
+            $learningPath->name,
+            $lpAttemptsNb,
+            $lpTotalTime,
+            $prog
+        );
+        $lpaths[] = $lpContent;
+
         $iterator++;
     }
+
     $total = round($globalprog / ($iterator - 1));
-    $csv->outputRecord($user->id, uid_to_name($user->id), $user->email, uid_to_am($user->id), user_groups($course_id, $user->id, 'csv'), $total . '%');
+
+    if ($globaltime === "00:00:00") {
+        $globaltime = "";
+    }
+
+    $csv->outputRecord(
+        $user->id,
+        uid_to_name($user->id),
+        $user->email, uid_to_am($user->id),
+        user_groups($course_id, $user->id, 'csv'),
+        '',
+        '',
+        $globaltime,
+        $total . '%'
+    );
+
+    foreach ($lpaths as $lpContent) {
+        $csv->outputRecord(
+            $lpContent[0],
+            $lpContent[1],
+            $lpContent[2],
+            $lpContent[3],
+            $lpContent[4],
+            $lpContent[5],
+            $lpContent[6],
+            $lpContent[7]
+        );
+    }
 }

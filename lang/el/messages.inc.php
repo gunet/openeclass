@@ -2767,6 +2767,7 @@ $langTimeInLearnPath = "Χρόνος στη γραμμή μάθησης";
 $langTo = "στο";
 $langTotalTimeSpent = "Σύνολο χρόνου";
 $langTrackAllPathExplanation = "Πρόοδος " . $langsOfStudents;
+$langTrackAllPathExplanationAnalysis = "Αναλυτική πρόοδος " . $langsOfStudents;
 $langTrackUser = "Πρόοδος " . $langOfStudent;
 $langTracking = "Παρακολούθηση Προόδου";
 $langTypeOfModule = "Τύπος ενότητας";

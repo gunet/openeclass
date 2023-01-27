@@ -68,16 +68,12 @@ $rescnt = Database::get()->querySingle("SELECT COUNT(*) AS count
             AND `cu`.`course_id` = ?d
             AND `u`.`id` = ?d", $course_id, $_REQUEST['uInfo'])->count;
 
-
-
-
 if ($rescnt == 0) {
     header("Location: ./detailsAll.php?course=$course_code");
     exit();
 }
 
 //$trackedUser = $results[0];
-
 //$nameTools = $trackedUser['surname'] . " " . $trackedUser['givenname'];
 /*
   $tool_content .= ucfirst(strtolower($langUser)).': <br />'."\n"
@@ -96,52 +92,72 @@ if ($rescnt == 0) {
 // get list of learning paths of this course
 // list available learning paths
 $lpList = Database::get()->queryArray("SELECT name, learnPath_id
-			 FROM lp_learnPath 
-                        WHERE course_id = ?d
-		     ORDER BY `rank`", $course_id);
-
-$tool_content .= action_bar(array(
-                array('title' => $langBack,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary-label')));
+            FROM lp_learnPath
+            WHERE course_id = ?d
+            ORDER BY `rank`", $course_id);
 
 // get infos about the user
 $uDetails = Database::get()->querySingle("SELECT surname, givenname, email 
     FROM `user`
     WHERE id = ?d", $_REQUEST['uInfo']);
 
-$tool_content .= "
-        <div class='row margin-bottom-thin'>
-            <div class='col-xs-12'>
-                <div class='alert alert-info'>
-                    <strong>$langStudent:</strong> <span class='text-muted'>".q($uDetails->surname) . "&nbsp;" . q($uDetails->givenname) . " (" . q($uDetails->email).")</span>
-                </div>
-            </div>
-        </div>";
+$pageName = $langStudent . ": " . q($uDetails->surname) . " " . q($uDetails->givenname) . " (" . q($uDetails->email) . ")";
+
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
+
+$tool_content .= "<div class='alert alert-info'>
+    $langSave <a href='dumpuserdetails.php?course=$course_code&amp;uInfo=" . $_GET['uInfo'] . "'>$langDumpUserDurationToFile</a>
+        (<a href='dumpuserdetails.php?course=$course_code&amp;uInfo=" . $_GET['uInfo'] . "&amp;enc=UTF-8'>$langcsvenc2</a>)
+    </div>";
 
 // table header
-$tool_content .= '<div class="table-responsive"><table class="table-default">' . "\n"
-        . '      <tr class="list-header text-start">' . "\n"
-        . '        <th>' . $langLearnPath . '</th>' . "\n"
-        . '        <th>' . $langProgress . '</th>' . "\n"
-        . '      </tr>' . "\n";
+$tool_content .= "<div class='table-responsive'><table class='table-default'>
+                    <tr class='list-header text-left'>
+                        <th>$langLearnPath</th>
+                        <th>$langAttemptsNb</th>
+                        <th>$langAttemptStarted</th>
+                        <th>$langAttemptAccessed</th>
+                        <th>$langTotalTimeSpent</th>
+                        <th>$langLessonStatus</th>
+                        <th>$langProgress</th>
+                    </tr>";
+
 if (count($lpList) == 0) {
-    $tool_content .= '    <tr>' . "\n"
-            . '        <td colspan="2" class="text-center">' . $langNoLearningPath . '</td>' . "\n"
-            . '      </tr>' . "\n";
+    $tool_content .= "<tr>
+                        <td colspan='7' class='text-center'>$langNoLearningPath</td>
+                      </tr>";
 } else {
+    $totalProgress = 0;
+    $totalTimeSpent = "0000:00:00";
     // display each learning path with the corresponding progression of the user
     foreach ($lpList as $lpDetails) {
-        $tool_content .= "<tr>";
-        $lpProgress = get_learnPath_progress($lpDetails->learnPath_id, $_GET['uInfo']);
-        $tool_content .= '' . "\n"
-                . '        <td><a href="detailsUserPath.php?course=' . $course_code . '&amp;uInfo=' . $_GET['uInfo'] . '&amp;path_id=' . $lpDetails->learnPath_id . '">' . htmlspecialchars($lpDetails->name) . '</a></td>' . "\n"
-                . '        <td align="right" width="120">' . ""
-                . disp_progress_bar($lpProgress, 1)
-                . '</td>' . "\n"
-                . '      </tr>' . "\n";
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($lpDetails->learnPath_id, $_GET['uInfo']);
+        $totalProgress += $lpProgress;
+        if (!empty($lpTotalTime)) {
+            $totalTimeSpent = addScormTime($totalTimeSpent, $lpTotalTime);
+        }
+        $tool_content .= "<tr><td>
+                            <a href='detailsUserPath.php?course=$course_code&amp;uInfo=" . $_GET['uInfo'] . "&amp;path_id=" . $lpDetails->learnPath_id . "'>" . htmlspecialchars($lpDetails->name) . "</a>
+                         </td>
+                         <td>" . q($lpAttemptsNb) ."</td>
+                         <td>" . q($lpTotalStarted) . "</td>
+                         <td>" . q($lpTotalAccessed) . "</td>
+                         <td>" . q($lpTotalTime) . "</td>
+                         <td>" . disp_lesson_status($lpTotalStatus) . "</td>
+                         <td>"
+                            . disp_progress_bar($lpProgress, 1) .
+                        "</td></tr>";
     }
+    $tool_content .= "<tr><td colspan='4'>$langTotal</td>
+        <td>" . q($totalTimeSpent) . "</td>
+        <td></td>
+        <td>"
+        . disp_progress_bar(round($totalProgress/count($lpList)), 1) .
+        "</td></tr>";
 }
 $tool_content .= '      </table></div>' . "\n";
 
