@@ -59,7 +59,7 @@ function directly_pass_lp_module($userid, $lpmid): void {
                    `raw` = 100,
                    `lesson_status` = 'COMPLETED',
                    `scoreMin` = 0,
-                   `scoreMax` = 100
+                   `scoreMax` = 100,
                    `accessed` = " . DBHelper::timeAfter() . "
              WHERE `user_id` = ?d
                AND `learnPath_module_id` = ?d
