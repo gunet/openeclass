@@ -1222,6 +1222,7 @@ $langTimeInLearnPath = "Time in learning path";
 $langTo = "to";
 $langTotalTimeSpent = "Total time";
 $langTrackAllPathExplanation = "Progress of  ".$langsOfStudents;
+$langTrackAllPathExplanationAnalysis = "Detailed progress of  ".$langsOfStudents;
 $langTrackUser = "User Tracking";
 $langTracking = "Tracking";
 $langTypeOfModule = "Module type";

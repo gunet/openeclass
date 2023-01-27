@@ -43,7 +43,8 @@ $head_content .= "<script type='text/javascript'>
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
-                'order' : [[2, 'desc']],
+                'order' : [],
+                'columns': [ { orderable: false }, { orderable: false }, { orderable: false }, { orderable: false }, { orderable: false } ],
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -62,9 +63,9 @@ $head_content .= "<script type='text/javascript'>
                }
             });
             $('.dataTables_filter input').attr({
-                          class : 'form-control input-sm',
-                          placeholder : '$langSearch...'
-                        });
+                class : 'form-control input-sm',
+                placeholder : '$langSearch...'
+            });
         });
         </script>";
 
@@ -82,8 +83,8 @@ if ($lcnt == 0) {
     exit;
 } else {
     $tool_content .= "<div class='alert alert-info'>
-          $langSave <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langDumpUserDurationToFile</a>
-                (<a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=UTF-8'>$langcsvenc2</a>)
+          $langSave <a href='dumpuserlearnpathdetailsanalysis.php?course=$course_code'>$langDumpUserDurationToFile</a>
+                (<a href='dumpuserlearnpathdetailsanalysis.php?course=$course_code&amp;enc=UTF-8'>$langcsvenc2</a>)
           </div>";
 }
 
@@ -92,9 +93,8 @@ $tool_content .= "<div class='table-responsive'>
         <thead>
             <tr class='list-header'>
                 <th>$langStudent</th>
-                <th>$langEmail</th>
-                <th width='120'>$langAm</th>
-                <th>$langGroup</th>
+                <th>$langLearnPath</th>
+                <th>$langAttemptsNb</th>
                 <th>$langTotalTimeSpent</th>
                 <th>$langProgress</th>
             </tr>
@@ -109,36 +109,50 @@ $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`
 $tool_content .= "<tbody>";
 foreach ($usersList as $user) {
     // list available learning paths
-    $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d", $course_id);
+    $learningPathList = Database::get()->queryArray("SELECT learnPath_id, name FROM lp_learnPath WHERE course_id = ?d", $course_id);
     $iterator = 1;
     $globalprog = 0;
     $globaltime = "00:00:00";
+    $lp_content = "";
     
     foreach ($learningPathList as $learningPath) {
         // % progress
         list($prog, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($learningPath->learnPath_id, $user->id);
+
         if ($prog >= 0) {
             $globalprog += $prog;
         }
+
         if (!empty($lpTotalTime)) {
             $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
+
+        $lp_content .= "<tr>";
+        $lp_content .= "<td></td>";
+        $lp_content .= "<td class='text-left'>" . q($learningPath->name) . "</td>";
+        $lp_content .= "<td class='text-right'>" . q($lpAttemptsNb) . "</td>";
+        $lp_content .= "<td class='text-right'>" . q($lpTotalTime) . "</td>";
+        $lp_content .= "<td class='text-right'>" . disp_progress_bar($prog, 1) . "</td>";
+        $lp_content .= "</tr>";
+
         $iterator++;
     }
+
     $total = round($globalprog / ($iterator - 1));
     if ($globaltime === "00:00:00") {
         $globaltime = "";
     }
+
     $tool_content .= "<tr>";
-    $tool_content .= "<td><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . uid_to_name($user->id) . "</a></td>
-            <td class='text-left'>" . q($user->email). "</td>
-            <td class='text-center'>" . q(uid_to_am($user->id)) . "</td>
-            <td class='text-left'>" . user_groups($course_id, $user->id) . "</td>
+    $tool_content .= "<td><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . uid_to_name($user->id) . " (" . q($user->email) .")</a></td>
+            <td class='text-left'></td>
+            <td class='text-right'></td>
             <td class='text-right'>" . q($globaltime) . "</td>
-            <td class='text-right' width='120'>"
+            <td class='text-right'>"
             . disp_progress_bar($total, 1) . "
             </td>";
     $tool_content .= "</tr>";
+    $tool_content .= $lp_content;
 }
 $tool_content .= "</tbody></table></div>";
 
