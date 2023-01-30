@@ -31,74 +31,110 @@ if (isset($_GET['t'])) {
     $t = 1;
 }
 
+$gid = getDirectReference($_GET['gradebook_id']);
+$gradebook_title = get_gradebook_title($gid);
+$range = get_gradebook_range($gid);
+
 $csv = new CSV();
 if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
     $csv->setEncoding('UTF-8');
 }
 $csv->filename = $course_code . "_users_gradebook.csv";
-
-$gid = getDirectReference($_GET['gradebook_id']);
-
-$gradebook_title = get_gradebook_title($gid);
 $csv->outputRecord($gradebook_title);
 $csv->outputRecord();
 
 if ($t == 1) { // display gradebook activities results
-    $range = Database::get()->querySingle('SELECT `range` FROM gradebook
-        WHERE course_id = ?d AND id = ?d', $course_id, $gid)->range;
-
-    $activities = Database::get()->queryArray("SELECT id, title FROM gradebook_activities
-        WHERE gradebook_id = ?d", $gid);
+    $activities = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE gradebook_id = ?d", $gid);
     foreach ($activities as $act) {
         $title = !empty($act->title) ? $act->title : $langGradebookNoTitle;
         $csv->outputRecord($title)
             ->outputRecord($langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade);
-        $entries = Database::get()->queryArray('SELECT surname, givenname, username, am, email, grade
-            FROM gradebook_book, user
-            WHERE gradebook_book.uid = user.id AND gradebook_activity_id = ?d',
-            $act->id);
+
+        $entries = Database::get()->queryArray("SELECT surname, givenname, username, am, email, gradebook_users.uid, grade 
+                    FROM gradebook_users
+                    LEFT JOIN gradebook_book 
+                        ON gradebook_book.uid = gradebook_users.uid
+                        AND gradebook_activity_id = ?d
+                    JOIN user
+                        ON user.id = gradebook_users.uid
+                    WHERE gradebook_id = ?d
+                    ORDER BY surname", $act->id, $gid);
         foreach ($entries as $item) {
-            $csv->outputRecord($item->surname, $item->givenname, $item->am,
-                $item->username, $item->email, round($item->grade * $range, 2));
+            if (!is_null($item->grade)) {
+                $csv->outputRecord($item->surname, $item->givenname, $item->am, $item->username, $item->email, round($item->grade * $range, 2));
+            } else {
+                $csv->outputRecord($item->surname, $item->givenname, $item->am, $item->username, $item->email, $item->grade);
+            }
         }
         $csv->outputRecord();
     }
-} else { // display gradebook users results
-
+} elseif ($t == 2) { // display gradebook users results
     // data header
     $data_header = array();
     // mapping of activity id's to output columns
     $actId = array();
     $actCounter = 0;
     array_push($data_header, $langSurname, $langName, $langUsername, $langAm, $langEmail);
-    array_push($data_header, $langGradebookTotalGrade);
-    $activities = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE visible = 1 AND gradebook_id = ?d", $gid);
+    $activities = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE gradebook_id = ?d", $gid);
     foreach ($activities as $act) {
         $actId[$act->id] = $actCounter++;
-        array_push($data_header, $act->title);
+        $data_header[] = $act->title;
     }
+    $data_header[] = $langGradebookTotalGrade;
     $csv->outputRecord($data_header);
 
     // user grades
     $range = get_gradebook_range($gid);
-    $sql_users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gid);
+    $sql_users = Database::get()->queryArray("SELECT uid, givenname, surname, username, am, email 
+                                            FROM gradebook_users 
+                                            JOIN user
+                                            ON user.id = gradebook_users.uid
+                                            WHERE gradebook_id = ?d
+                                            ORDER BY surname", $gid);
     foreach ($sql_users as $data) {
         $data_user_intro = array();
-        array_push($data_user_intro, uid_to_name($data->uid, 'surname'),
-                                      uid_to_name($data->uid, 'givenname'),
-                                      uid_to_name($data->uid, 'username'),
-                                      uid_to_am($data->uid),
-                                      uid_to_email($data->uid));
-        array_push($data_user_intro, userGradeTotal($gid, $data->uid, true)); // total grade
+        array_push($data_user_intro, $data->surname,
+                                     $data->givenname,
+                                     $data->username,
+                                     $data->am,
+                                     $data->email);
+
         $sql_grades = Database::get()->queryArray("SELECT gradebook_activity_id, grade FROM gradebook_book
-                                            WHERE gradebook_activity_id IN
-                                        (SELECT id FROM gradebook_activities WHERE gradebook_activities.visible = 1 AND gradebook_id = ?d)
+                                        JOIN gradebook_activities 
+                                            ON gradebook_activity_id = gradebook_activities.id
+                                            AND gradebook_id = ?d
                                             AND uid = ?d", $gid, $data->uid);
         $data_user_grades = array_fill(0, $actCounter, '-');
         foreach ($sql_grades as $g) {
             $position = $actId[$g->gradebook_activity_id];
             $data_user_grades[$position] = round($g->grade * $range, 2); // activities grade
         }
+        $data_user_grades[] = userGradeTotal($gid, $data->uid, true); // total grade
         $csv->outputRecord($data_user_intro, $data_user_grades);
     }
+} elseif ($t == 3) { // display gradebook activity results
+    $activity_id = $_GET['activity_id'];
+
+    $activity_title = get_gradebook_activity_title($gid, $activity_id);
+
+    $csv->outputRecord($activity_title)
+        ->outputRecord($langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade);
+    $entries = Database::get()->queryArray("SELECT surname, givenname, username, am, email, gradebook_users.uid, grade 
+                    FROM gradebook_users
+                    LEFT JOIN gradebook_book 
+                        ON gradebook_book.uid = gradebook_users.uid
+                        AND gradebook_activity_id = ?d
+                    JOIN user
+                        ON user.id = gradebook_users.uid
+                    WHERE gradebook_id = ?d
+                    ORDER BY surname",
+            $activity_id, $gid);
+    foreach ($entries as $item) {
+        if (!is_null($item->grade)) {
+            $csv->outputRecord($item->surname, $item->givenname, $item->am, $item->username, $item->email, round($item->grade * $range, 2));
+        } else {
+            $csv->outputRecord($item->surname, $item->givenname, $item->am, $item->username, $item->email, $item->grade);
+        }
+    }
+    $csv->outputRecord();
 }
