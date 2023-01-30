@@ -604,6 +604,16 @@ if ($can_upload or $user_upload) {
             $r = Database::get()->querySingle("SELECT filename, extra_path FROM document WHERE $group_sql AND path = ?s", $source);
             $filename = $r->filename;
             $extra_path = $r->extra_path;
+            // Check if target filename already exists
+            $curDirPath = $moveTo;
+            $fileExists = Database::get()->querySingle("SELECT id FROM document
+                    WHERE $group_sql AND path REGEXP ?s AND filename = ?s LIMIT 1",
+                    "^$curDirPath/[^/]+$", $filename);
+            if ($fileExists) {
+                $curDirPath = my_dirname($source);
+                Session::Messages($langFileExists, 'alert-danger');
+                redirect_to_current_dir();
+            }
             if (empty($extra_path)) {
                 if (move($basedir . $source, $basedir . $moveTo)) {
                     if (hasMetaData($source, $basedir, $group_sql)) {
