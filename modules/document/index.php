@@ -691,8 +691,8 @@ if ($can_upload or $user_upload) {
             // Check if target filename already exists
             $curDirPath = my_dirname($_POST['sourceFile']);
             $fileExists = Database::get()->querySingle("SELECT id FROM document
-                    WHERE $group_sql AND path REGEXP ?s AND filename = ?s LIMIT 1",
-                    "^$curDirPath/[^/]+$", $renameTo);
+                    WHERE $group_sql AND path REGEXP ?s AND path <> ?s AND filename = ?s LIMIT 1",
+                    "^$curDirPath/[^/]+$", $_POST['sourceFile'], $renameTo);
             if ($fileExists) {
                 Session::Messages($langFileExists, 'alert-danger');
                 redirect_to_current_dir();
