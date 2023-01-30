@@ -127,14 +127,15 @@ function xml2sql($room_xml, $bbb) {
 
         if($currentDate > $tcDateBegin && ($currentDate < $tcDateEnd || empty($tcDateEnd))) {
             $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM tc_attendance
-                                            WHERE bbbuserid = ?s AND meetingid = ?s", $bbbuserid, $meetingid)->cnt;
+                                            WHERE bbbuserid = ?s AND meetingid = ?s AND
+                                                  TIMESTAMPDIFF(HOUR, `date`, NOW()) < 24",
+                                            $bbbuserid, $meetingid)->cnt;
             if ($cnt > 0) {
                 Database::get()->querySingle("UPDATE tc_attendance
                                                 SET totaltime = totaltime + 1,
                                                     `date` = NOW()
                                             WHERE bbbuserid = ?s AND meetingid = ?s AND
-                                                  TIMESTAMPDIFF(SECOND, `date`, NOW()) >= 60 AND
-                                                  TIMESTAMPDIFF(HOUR, `date`, NOW()) < 24",
+                                                  TIMESTAMPDIFF(SECOND, `date`, NOW()) >= 60",
                                             $bbbuserid, $meetingid);
             } else {
                 $nextid = Database::get()->querySingle("SELECT MAX(id) AS id FROM tc_attendance")->id;
