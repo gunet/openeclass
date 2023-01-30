@@ -29,7 +29,6 @@ require_once 'functions.php';
 require_once 'include/log.class.php';
 //Module name
 $toolName = $langGradebook;
-
 // needed for updating users lists
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['assign_type'])) {
@@ -395,15 +394,39 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
-    } elseif (isset($_GET['ins'])) {
+    } elseif (isset($_GET['imp'])) {
+        $actID = intval($_GET['imp']);
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
-        $pageName = $langGradebookBook;
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($actID) . "", "name" => get_gradebook_activity_title($gradebook_id, $actID));
+        $pageName =  get_gradebook_activity_title($gradebook_id, $actID) . " (" . $langImportGrades . ")";
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
-                  'icon' => 'fa fa-reply ',
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($actID),
+                  'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
-            ));
+        ));
+
+    } elseif (isset($_GET['ins'])) {
+        $actID = intval(getDirectReference($_GET['ins']));
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
+        $pageName =  get_gradebook_activity_title($gradebook_id, $actID) . " (" . $langGradebookBook .")";
+        $tool_content .= action_bar(array(
+            array('title' => $langImportGrades,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;imp=$actID",
+                  'level' => 'primary-label',
+                  'button-class' => 'btn btn-success',
+                  'icon' => 'fa-upload'),
+            array('title' => $langExportGrades,
+                  'url' => "dumpgradebook.php?course=$course_code&amp;t=3&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;activity_id=$actID",
+                  'level' => 'primary-label',
+                  'button-class' => 'btn btn-success',
+                  'icon' => 'fa-file-excel-o'),
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label'),
+        ));
+
     } elseif (isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         if (isset($_GET['addActivityAs'])) {
@@ -638,9 +661,7 @@ if ($is_editor) {
     } elseif (isset($_GET['addActivityLp'])) { // display available lps
         display_available_lps($gradebook_id);
         $display = FALSE;
-    }
-    //DISPLAY - EDIT DB: insert grades for each activity
-    elseif (isset($_GET['ins'])) {
+    } elseif (isset($_GET['ins'])) { //DISPLAY - EDIT DB: insert grades for each activity
         $actID = intval(getDirectReference($_GET['ins']));
         $error = false;
         if (isset($_POST['bookUsersToAct'])) {
@@ -649,6 +670,13 @@ if ($is_editor) {
         }
         register_user_grades($gradebook_id, $actID);
         $display = FALSE;
+    } elseif (isset($_GET['imp'])) {
+        if (isset($_GET['import_grades'])) {
+            import_grades($gradebook_id, $_GET['imp'], true);
+        } else {
+            import_grades($gradebook_id, $_GET['imp']);
+            $display = FALSE;
+        }
     }
 }
 
