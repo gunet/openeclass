@@ -18,6 +18,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 require_once 'modules/progress/GradebookEvent.php';
@@ -1650,40 +1651,45 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
         $file = IOFactory::load($_FILES['userfile']['tmp_name']);
         $sheet = $file->getActiveSheet();
         $userGrades = $errorLines = $invalidUsers = $extraUsers = [];
-        foreach ($sheet->getRowIterator() as $row) {
-            $data = [];
-            $cellIterator = $row->getCellIterator();
-            foreach ($cellIterator as $cell) {
-                $value = trim($cell->getValue());
-                if ($value !== '') {
+
+        $highestRow = $sheet->getHighestRow();
+        $highestColumn = $sheet->getHighestColumn();
+        $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
+
+        for ($row = 1; $row <= $highestRow; ++$row) {
+            if ($row <= 4) { // first 4 rows are headers
+                continue;
+            } else {
+                for ($col = 4; $col <= $highestColumnIndex; $col = $col + 2) {
+                    $value = trim($sheet->getCellByColumnAndRow($col, $row)->getValue());
                     $data[] = $value;
                 }
-            }
-
-            if (!in_array(count($data), [2, 3]) or !is_numeric($data[1]) or $data[1] < 0 or $data[1] > $gradebook_range) {
-                $errorLines[] = $data;
-            }
-
-            if (preg_match('/\(([^)]+)\)/', $data[0], $matches)) {
-                $username = $matches[1];
-            } else {
-                $username = $data[0];
-            }
-            $uname_where = (get_config('case_insensitive_usernames')) ? "COLLATE utf8mb4_general_ci = " : "COLLATE utf8mb4_bin = ";
-            $user = Database::get()->querySingle("SELECT * FROM user WHERE username $uname_where ?s", $username);
-
-            if (!$user) {
-                $invalidUsers[] = $username;
-            } else {
-                $submission = Database::get()->querySingle("SELECT id FROM gradebook_users WHERE uid = ?d AND gradebook_id = ?d",
-                                                                $user->id, $gradebook_id);
-                if (!$submission) {
-                    $extraUsers[] = $username;
-                } else {
-                    $userGrades[$user->id] = $data[1];
+                if (!is_numeric($data[1]) or $data[1] < 0 or $data[1] > $gradebook_range) {
+                    $errorLines[] = $data;
                 }
+                if (preg_match('/\(([^)]+)\)/', $data[0], $matches)) {
+                    $username = $matches[1];
+                } else {
+                    $username = $data[0];
+                }
+                $uname_where = (get_config('case_insensitive_usernames')) ? "COLLATE utf8mb4_general_ci = " : "COLLATE utf8mb4_bin = ";
+                $user = Database::get()->querySingle("SELECT * FROM user WHERE username $uname_where ?s", $username);
+
+                if (!$user) {
+                    $invalidUsers[] = $username;
+                } else {
+                    $submission = Database::get()->querySingle("SELECT id FROM gradebook_users WHERE uid = ?d AND gradebook_id = ?d",
+                        $user->id, $gradebook_id);
+                    if (!$submission) {
+                        $extraUsers[] = $username;
+                    } else {
+                        $userGrades[$user->id] = $data[1];
+                    }
+                }
+                $data = [];
             }
         }
+
         if (!($errorLines or $invalidUsers or $extraUsers)) {
             foreach ($userGrades as $user_id => $grade) {
                 Database::get()->query("INSERT INTO gradebook_book (uid, gradebook_activity_id, grade, comments)
@@ -1732,6 +1738,7 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
                                 <div class='form-group'>
                                     <div class='col-sm-12'>
                                         <p class='form-control-static'>$langImportGradesGradebookHelp</p>
+                                        <a href='dumpgradebook.php?course=$course_code&t=3&gradebook_id=" . getIndirectReference($gradebook_id) . "&activity_id=$activity_id'>Χρήστες του βαθμολογίου</a>
                                     </div>
                                 </div>
                                 <div class='form-group'>
