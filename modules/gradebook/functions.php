@@ -699,12 +699,12 @@ function display_gradebook($gradebook) {
 
     global $course_code, $urlServer, $tool_content, $langGradebookGradeAlert, $langGradebookNoActMessage1,
            $langTitle, $langViewShow, $langScore, $langGradebookActList, $langAdd, $langHere,
-           $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langType, $langExercise,
+           $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langType,
            $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity, $langDelete, $langConfirmDelete,
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
            $langGradebookAddActivity, $langInsertWorkCap, $langExercise, $langLearnPath,
-           $langExport, $langcsvenc2, $langBack, $langNoRegStudent, $langStudents, $langRefreshGrade,
+           $langBack, $langNoRegStudent, $langStudents, $langRefreshGrade,
            $langExportGradebook, $langExportGradebookWithUsers;
 
     $gradebook_id = getIndirectReference($gradebook->id);
@@ -747,9 +747,6 @@ function display_gradebook($gradebook) {
                   'icon' => 'fa-file-excel-o'),
             array('title' => $langExportGradebookWithUsers,
                   'url' => "dumpgradebook.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id",
-                  'icon' => 'fa-file-excel-o'),
-            array('title' => "$langExport ($langcsvenc2)",
-                  'url' => "dumpgradebook.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id&amp;enc=UTF-8",
                   'icon' => 'fa-file-excel-o'),
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -1591,7 +1588,7 @@ function insert_grades($gradebook_id, $actID) {
  */
 function import_grades($gradebook_id, $activity_id, $import = false) {
 
-    global $tool_content, $course_code,
+    global $tool_content, $course_code, $langExportGrades,
            $langImportGradesGradebookHelp, $langWorkFile, $langUpload,
            $langImportInvalidUsers, $langImportGradesError, $langImportErrorLines,
            $langImportExtraGradebookUsers, $langGradesImported;
@@ -1604,14 +1601,12 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
         $userGrades = $errorLines = $invalidUsers = $extraUsers = [];
 
         $highestRow = $sheet->getHighestRow();
-        $highestColumn = $sheet->getHighestColumn();
-        $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
 
         for ($row = 1; $row <= $highestRow; ++$row) {
-            if ($row <= 4) { // first 4 rows are headers
+            if ($row <= 2) { // first 2 rows are headers
                 continue;
             } else {
-                for ($col = 4; $col <= $highestColumnIndex; $col = $col + 2) {
+                for ($col = 4; $col <= 6; $col = $col + 2) {
                     $value = trim($sheet->getCellByColumnAndRow($col, $row)->getValue());
                     $data[] = $value;
                 }
@@ -1688,8 +1683,8 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
                             <fieldset>
                                 <div class='form-group'>
                                     <div class='col-sm-12'>
-                                        <p class='form-control-static'>$langImportGradesGradebookHelp</p>
-                                        <a href='dumpgradebook.php?course=$course_code&t=3&gradebook_id=" . getIndirectReference($gradebook_id) . "&activity_id=$activity_id'>Χρήστες του βαθμολογίου</a>
+                                        <p class='alert alert-info form-control-static'>$langImportGradesGradebookHelp</p>
+                                        <div class='text-center'><a href='dumpgradebook.php?course=$course_code&t=3&gradebook_id=" . getIndirectReference($gradebook_id) . "&activity_id=$activity_id'>$langExportGrades</a></div>
                                     </div>
                                 </div>
                                 <div class='form-group'>

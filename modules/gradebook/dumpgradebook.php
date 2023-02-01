@@ -19,6 +19,8 @@
  * ======================================================================== */
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $require_current_course = true;
@@ -40,16 +42,16 @@ $filename = $course_code . "_users_gradebook.xlsx";
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 $sheet->setTitle($langResults);
+$sheet->getDefaultColumnDimension()->setWidth(20);
 $data = [];
 
 if ($t == 1) { // download gradebook activities results
-
+    $data[] = [ $langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade ];
+    $data[] = []; // blank line
     $activities = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE gradebook_id = ?d", $gid);
     foreach ($activities as $act) {
         $title = !empty($act->title) ? $act->title : $langGradebookNoTitle;
         $data[] = [ $title ];
-        $data[] = [ $langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade ];
-
         $entries = Database::get()->queryArray("SELECT surname, givenname, username, am, email, gradebook_users.uid, grade
                     FROM gradebook_users
                     LEFT JOIN gradebook_book
@@ -66,7 +68,29 @@ if ($t == 1) { // download gradebook activities results
                 $data[] = [ $item->surname, $item->givenname, $item->am, $item->username, $item->email, $item->grade ];
             }
         }
+        $data[] = []; // blank line
     }
+
+    // format first row
+    for ($i=1; $i<=6; $i++) {
+        $sheet->getCellByColumnAndRow($i, 1)->getStyle()->getFont()->setBold(true);
+    }
+
+    $header_style = [
+        'font' => ['italic' => true],
+        'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+        'color' => [Color::COLOR_DARKBLUE]
+    ];
+
+    if (isset($entries)) {
+        $step = count($entries)+2;
+        $total_entries = count($activities)*(count($entries)+2)+1;
+        for ($i = 3; $i < $total_entries; $i+=$step) {
+            $sheet->getStyle("A$i")->applyFromArray($header_style);
+            $sheet->mergeCells("A$i:F$i");
+        }
+    }
+
 
 } elseif ($t == 2) { // download gradebook users results
     // data header
@@ -82,6 +106,7 @@ if ($t == 1) { // download gradebook activities results
     }
     $header2 = [ $langGradebookTotalGrade ];
     $data_header = array_merge($header1, $activities_header, $header2);
+    $columns = count($data_header);
     $data[] = $data_header;
     // user grades
     $range = get_gradebook_range($gid);
@@ -114,6 +139,14 @@ if ($t == 1) { // download gradebook activities results
         $data[] = $data_user;
     }
 
+
+    // format first row
+    for ($i=1; $i < $columns; $i++) {
+        $sheet->getCellByColumnAndRow($i, 1)->getStyle()->getFont()->setBold(true);
+    }
+    // format `total grade` column
+    $sheet->getCellByColumnAndRow($columns, 1)->getStyle()->getFont()->setBold(true)->getColor()->setARGB(Color::COLOR_RED);
+
 } elseif ($t == 3) { // download gradebook activity results
     $activity_id = $_GET['activity_id'];
 
@@ -138,9 +171,26 @@ if ($t == 1) { // download gradebook activities results
             $data[] = [ $item->surname, $item->givenname, $item->am, $item->username, $item->email, $item->grade ];
         }
     }
+
+    $header_style = [
+        'font' => ['italic' => true],
+        'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+        'color' => [Color::COLOR_DARKBLUE]
+    ];
+    // format first row
+    for ($i=1; $i <= 6; $i++) {
+        $sheet->getCellByColumnAndRow($i, 1)->getStyle()->applyFromArray($header_style);
+    }
+    $sheet->mergeCells("A1:F1");
+    // format second row
+    for ($i=1; $i <= 6; $i++) {
+        $sheet->getCellByColumnAndRow($i, 2)->getStyle()->getFont()->setBold(true);
+    }
 }
 
+// create spreadsheet
 $sheet->fromArray($data, NULL);
+// file output
 $writer = new Xlsx($spreadsheet);
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 header("Content-Disposition: attachment;filename=$filename");
