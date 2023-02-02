@@ -4465,7 +4465,7 @@ $langImportGradesHelp = 'Μπορείτε να αποστείλετε ένα α�
     Η πρώτη στήλη πρέπει να περιέχει τα ονόματα χρήστη των χρηστών που έχουν υποβάλλει εργασία.
     Η δεύτερη στήλη πρέπει να περιέχει έναν αριθμητικό βαθμό. Η τρίτη στήλη είναι προαιρετική και μπορεί
     να περιέχει ένα σχόλιο για τη βαθμολόγηση.';
-$langImportGradesGradebookHelp = "Μπορείτε να αποστείλετε ένα αρχείο τύπου Excel (π.χ. xls, xlsx) με τη βαθμολογία των χρηστών.    
+$langImportGradesGradebookHelp = "Μπορείτε να αποστείλετε ένα αρχείο τύπου Excel (π.χ. xls, xlsx) με τη βαθμολογία των χρηστών.
     Η βαθμολογία των χρηστών πρέπει να συμπληρωθεί στην τελευταία στήλη του αρχείου που θα κατεβάσετε από το παρακάτω σύνδεσμο.<br><br>
     <strong>MHN</strong> αλλάξετε τη δομή του αρχείου (π.χ. αριθμό στηλών) γιατί η εισαγωγή των βαθμών θα αποτύχει. <br><br>
     Σημειώστε επίσης, ότι αν θέλετε να εισάγετε δεκαδικό βαθμό, χρησιμοποιήσετε το σύμβολο ´τελεία' π.χ. 9.5";
@@ -5765,15 +5765,15 @@ $langH5PLongDescription = "Διαδραστικό περιεχόμενου τύ�
 $langLtiPublishShortDescription = "Δημοσίευση $langsOfCourses μεσω πρωτοκόλλου LTI.";
 $langLtiPublishLongDescription = "Δημοσίευση $langsOfCourses μεσω πρωτοκόλλου LTI.";
 $langLtiPublishFrameAncestorsTooltip = "Λίστα urls χωριζομενη με κόμματα πχ https://url1, https://url2";
-$langGoogleMeetShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης GoogleMeet.";
-$langGoogleMeetLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης GoogleMeet.";
+$langGoogleMeetShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet.";
+$langGoogleMeetLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet.";
 $langJitsiShortDescription = "Το ανοικτό λογισμικό <a href=\"https://jitsi.org/\" target=\"_blank\">Jitsi</a> αποτελεί μια υπηρεσία τηλεδιάσκεψης. Κάντε κλικ στις <a href=\"jitsiconf.php\">Ρυθμίσεις</a> για να την ενεργοποιήσετε. Σημειώστε ότι η υπηρεσία προτείνεται για τηλεδιασκέψεις μέχρι 30 άτομα.";
 $langJitsiLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης <em>Jitsi</em> (μέχρι <strong>30</strong> άτομα).";
 $langJitsiUrl = "Μπορείτε να το αλλάξετε αν θέλετε να χρησιμοποιήσετε κάποιον διαφορετικό Jitsi server.";
 $langChooseTCServer = "Επιλογή υπηρεσίας Τηλεσυνεργασίας";
-$langGoToGoogleMeetLink = "Κάντε κλικ στο 'Μετάβαση στο GoogleMeet' παρακάτω, για να μεταφερθείτε στο περιβάλλον της Google έτσι ώστε να δημιουργήσετε το σύνδεσμο της τηλεσυνεργασίας.
+$langGoToGoogleMeetLink = "Κάντε κλικ στο 'Μετάβαση στο Google Meet' παρακάτω, για να μεταφερθείτε στο περιβάλλον της Google έτσι ώστε να δημιουργήσετε το σύνδεσμο της τηλεσυνεργασίας.
     Αφού τον δημιουργήσετε, αντιγράψτε τον και επικολλήστε τον στο πεδίο 'Σύνδεσμος'";
-$langGoToGoogleMeetLinkText = "Μετάβαση στο GoogleMeet";
+$langGoToGoogleMeetLinkText = "Μετάβαση στο Google Meet";
 
 // Messages for OpenMeetings
 $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";

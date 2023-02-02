@@ -13,7 +13,7 @@ class GoogleMeetApp extends ExtApp
     }
 
     public function getDisplayName() {
-        return "GoogleMeet";
+        return "Google Meet";
     }
 
     public function getShortDescription() {
