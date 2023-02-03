@@ -201,7 +201,7 @@ if ($is_editor) {
                       'button-class' => 'btn-success',
                       'level' => 'primary-label',
                       'show' => !empty($tc_server_type)),
-                array('title' => $langAttendance,
+                array('title' => $langActivateParticipation,
                       'url' => "tc_attendance.php?course=$course_code",
                       'icon' => 'fa-group',
                       'level' => 'primary-label',

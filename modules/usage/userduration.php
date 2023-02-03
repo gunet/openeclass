@@ -22,8 +22,12 @@
 /**
  * @file userduration.php
  * @brief Shows logins made by a user or all users of a course, during a specific period.
- * Takes data from table 'logins'
+ * Data from table 'logins'
  */
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 $require_current_course = true;
 $require_course_admin = true;
 $require_help = true;
@@ -33,7 +37,6 @@ $require_login = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
-require_once 'include/lib/csv.class.php';
 require_once 'modules/usage/usage.lib.php';
 
 if (isset($_GET['u'])) { //  stats per user
@@ -56,20 +59,42 @@ if (isset($_GET['u'])) { //  stats per user
                             FROM actions_daily
                             WHERE course_id = ?d
                               AND user_id = ?d
+                             AND module_id != " . MODULE_ID_TC . "
+                             AND module_id != " . MODULE_ID_LP . "
                             GROUP BY module_id", $course_id, $_GET['u']);
 
 
-    if (isset($_GET['format']) and $_GET['format'] == 'csv') { // csv output
-        $csv = new CSV();
-        if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
-            $csv->setEncoding('UTF-8');
-        }
-        $csv->filename = $course_code . '_user_duration.csv';
-        $csv->outputRecord(uid_to_name($_GET['u']), "$csv_am_legend $csv_grp_legend");
-        $csv->outputRecord($langModule, $langDuration);
+    if (isset($_GET['format']) and $_GET['format'] == 'xls') { // xls output
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle($langParticipate);
+        $sheet->getDefaultColumnDimension()->setWidth(25);
+        $filename = $course_code . "_user_duration.xlsx";
+
+        $user_details = uid_to_name($_GET['u']) . " $csv_am_legend $csv_grp_legend";
+        $data[] = [ $user_details ];
+
+        $data[] = [ $langModule, $langDuration ];
+
         foreach ($user_actions as $ua) {
-            $csv->outputRecord(which_module($ua->module_id), format_time_duration(0 + $ua->duration));
+            $mod = which_module($ua->module_id);
+            $dur = format_time_duration(0 + $ua->duration);
+            $data[] = [ $mod, $dur ];
         }
+
+        $sheet->mergeCells("A1:B1");
+        $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+        $sheet->getCell('A2')->getStyle()->getFont()->setBold(true);
+        $sheet->getCell('B2')->getStyle()->getFont()->setBold(true);
+        // create spreadsheet
+        $sheet->fromArray($data, NULL);
+        // file output
+        $writer = new Xlsx($spreadsheet);
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename=$filename");
+        $writer->save("php://output");
+        exit;
+
     } else { // html output
         $toolName = "$langParticipate $langOfUser";
         $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
@@ -77,7 +102,7 @@ if (isset($_GET['u'])) { //  stats per user
 
         $tool_content .= action_bar(array(
             array('title' => $langDumpUser,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=csv&amp;enc=UTF-8",
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=xls",
                 'icon' => 'fa-download',
                 'level' => 'primary-label'),
             array('title' => $langBack,
@@ -139,19 +164,37 @@ if (isset($_GET['u'])) { //  stats per user
                             GROUP BY user_id", $course_id, $module);
 
 
-    if (isset($_GET['format']) and $_GET['format'] == 'csv') { // csv output
-        $csv = new CSV();
-        if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
-            $csv->setEncoding('UTF-8');
-        }
-        $csv->filename = $course_code . '_user_duration.csv';
-        $csv->outputRecord("$langModule: " . which_module($module));
+    if (isset($_GET['format']) and $_GET['format'] == 'xls') { // csv output
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle($langParticipate);
+        $sheet->getDefaultColumnDimension()->setWidth(40);
+        $filename = $course_code . "_user_duration.xlsx";
+        $mod = which_module($module);
+
+        $data[] = [ "$langModule: $mod" ];
+        $data[] = [ $langUser, $langGroup, $langAm, $langDuration ];
+
         foreach ($user_actions as $um) {
             $grp_name = user_groups($course_id, $um->user_id, false);
             $user_am = uid_to_am($um->user_id);
-            $csv->outputRecord($langUser, $langGroup, $langAm, $langDuration);
-            $csv->outputRecord(uid_to_name($um->user_id), $grp_name, $user_am, format_time_duration(0 + $um->duration));
+            $user_details = uid_to_name($um->user_id);
+            $data[] = [ $user_details, $grp_name, $user_am, format_time_duration(0 + $um->duration) ];
         }
+
+        $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+        for ($i=1; $i<=4; $i++) {
+            $sheet->getCellByColumnAndRow($i, 2)->getStyle()->getFont()->setBold(true);
+        }
+
+        // create spreadsheet
+        $sheet->fromArray($data, NULL);
+        // file output
+        $writer = new Xlsx($spreadsheet);
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename=$filename");
+        $writer->save("php://output");
+        exit;
     } else { // html output
         $toolName = "$langParticipate $langOfUser";
         $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
@@ -159,7 +202,7 @@ if (isset($_GET['u'])) { //  stats per user
 
         $tool_content .= action_bar(array(
             array('title' => $langDumpUser,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=csv&amp;enc=UTF-8",
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=xls",
                 'icon' => 'fa-download',
                 'level' => 'primary-label'),
             array('title' => $langBack,
@@ -180,7 +223,7 @@ if (isset($_GET['u'])) { //  stats per user
                 <th class='ps-3'>$langUser</th>
                 <th>$langAm</th>
                 <th>$langGroup</th>
-                <th>$langDuration</th>            
+                <th>$langDuration</th>
             </tr>";
         foreach ($user_actions as $um) {
             $grp_name = user_groups($course_id, $um->user_id);
@@ -197,14 +240,19 @@ if (isset($_GET['u'])) { //  stats per user
 
     }
 } else {
-    if (isset($_GET['format']) and $_GET['format'] == 'csv') {
-        $format = 'csv';
-        $csv = new CSV();
-        if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
-            $csv->setEncoding('UTF-8');
+    if (isset($_GET['format']) and $_GET['format'] == 'xls') {
+        $format = 'xls';
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle($langParticipate);
+        $sheet->getDefaultColumnDimension()->setWidth(20);
+        $filename = $course_code . "_users_duration.xlsx";
+        $data[] = [ $langSurname, $langName, $langAm, $langGroup, $langDuration ];
+
+        for ($i=1; $i<=5; $i++) { // format first row
+            $sheet->getCellByColumnAndRow($i, 1)->getStyle()->getFont()->setBold(true);
         }
-        $csv->filename = $course_code . '_user_duration.csv';
-        $csv->outputRecord($langSurname, $langName, $langAm, $langGroup, $langDuration);
+
     } else {
         $format = 'html';
         $toolName = $langUserDuration;
@@ -213,7 +261,7 @@ if (isset($_GET['u'])) { //  stats per user
 
         $tool_content .= action_bar(array(
             array('title' => $langDumpUser,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=csv&amp;enc=UTF-8",
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=xls",
                 'icon' => 'fa-download',
                 'level' => 'primary-label'),
             array('title' => $langBack,
@@ -246,17 +294,10 @@ if (isset($_GET['u'])) { //  stats per user
                                 <td class='center'>$row->am</td>
                                 <td class='center'>$grp_name</td>
                                 <td class='center'>" . format_time_duration(0 + $row->duration) . "</td>
-                                <td class='option-btn-cell'>" . action_button(array(
-                        array('title' => $langDetails,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$row->id",
-                            'icon' => 'fa-line-chart',
-                            'show' => $row->id > 0)
-                    )) .
-                    "</td>
+                                <td class='center'>" . icon('fa-line-chart', $langDetails, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$row->id") ."</td>
                             </tr>";
-            } else {
-                $csv->outputRecord($row->surname, $row->givenname,
-                    $row->am, $grp_name, format_time_duration(0 + $row->duration));
+            } elseif ($format == 'xls') {
+                $data[] = [ $row->surname, $row->givenname, $row->am, $grp_name, format_time_duration(0 + $row->duration) ];
             }
         }
         if ($format == 'html') {
@@ -265,6 +306,14 @@ if (isset($_GET['u'])) { //  stats per user
     }
     if ($format == 'html') {
         draw($tool_content, 2);
+    } elseif ($format == 'xls') {
+        // create spreadsheet
+        $sheet->fromArray($data, NULL);
+        // file output
+        $writer = new Xlsx($spreadsheet);
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename=$filename");
+        $writer->save("php://output");
     }
 }
 
@@ -328,17 +377,19 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
     }
 
     return Database::get()->queryArray("SELECT SUM(actions_daily.duration) AS duration,
-                                   user.surname AS surname,
-                                   user.givenname AS givenname,
-                                   user.id AS id,
-                                   user.am AS am
-                            FROM $from
-                            LEFT JOIN actions_daily ON user.id = actions_daily.user_id
-                            WHERE (actions_daily.course_id = ?d)
-                            $and
-                            $date_where
-                            GROUP BY user.id, surname, givenname, am                          
-                            ORDER BY surname, givenname",  $course_id, $terms);
+                                       user.surname AS surname,
+                                       user.givenname AS givenname,
+                                       user.id AS id,
+                                       user.am AS am
+                                FROM $from
+                                LEFT JOIN actions_daily ON user.id = actions_daily.user_id
+                                WHERE (actions_daily.course_id = ?d 
+                                    AND actions_daily.module_id != " . MODULE_ID_TC . "
+                                    AND actions_daily.module_id != " . MODULE_ID_LP . ")                                
+                                $and
+                                $date_where
+                                GROUP BY user.id, surname, givenname, am                          
+                                ORDER BY surname, givenname",  $course_id, $terms);
 }
 
 
@@ -351,7 +402,10 @@ function selection_course_modules() {
     global $langAllModules, $langModule, $course_id, $modules, $course_code, $module;
 
     $mod_opts = "<option value='-1'>$langAllModules</option>";
-    $result = Database::get()->queryArray("SELECT module_id FROM course_module WHERE course_id = ?d", $course_id);
+    $result = Database::get()->queryArray("SELECT module_id FROM course_module 
+                    WHERE course_id = ?d 
+                    AND module_id != " . MODULE_ID_TC . " 
+                    AND module_id != " . MODULE_ID_LP . "", $course_id);
     foreach ($result as $row) {
         $mid = $row->module_id;
         $extra = '';
@@ -368,7 +422,7 @@ function selection_course_modules() {
                 <input type='hidden' name='course' value='$course_code'>
                     <div class='form-group'>
                         <label class='col-sm-6 control-label-notes'>$langModule</label>
-                        <div class='col-sm-12'>                            
+                        <div class='col-sm-4'>                            
                             <select name='m' id='m' class='form-select' onChange='document.module_select.submit();'>
                                 $mod_opts
                             </select>

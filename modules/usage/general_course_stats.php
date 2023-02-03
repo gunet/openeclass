@@ -15,6 +15,10 @@ $pageName = $langPlatformGenStats;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langUsage);
 
 $tool_content .= action_bar(array(
+        array('title' => $langOldStats,
+            'url' => "old_stats.php",
+            'icon' => 'fa-bar-chart',
+            'level' => 'primary-label'),
         array('title' => $langBack,
             'url' => "{$urlServer}modules/usage/index.php?course=$course_code",
             'icon' => 'fa-reply',
