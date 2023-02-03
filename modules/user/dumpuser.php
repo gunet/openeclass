@@ -19,27 +19,45 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 $require_current_course = true;
 $require_course_admin = true;
 
 include '../../include/init.php';
-require_once 'include/lib/csv.class.php';
 
-$csv = new CSV();
-if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
-    $csv->setEncoding('UTF-8');
-}
-$csv->filename = $course_code . '_users.csv';
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+$sheet->setTitle($langUsers);
+$sheet->getDefaultColumnDimension()->setWidth(30);
+$filename = $course_code . '_users.xlsx';
+$course_title = course_id_to_title($course_id);
 
-$csv->outputRecord($langSurname, $langName, $langEmail, $langAm, $langUsername, $langGroups);
+$data[] = [ $course_title ];
+$data[] = [];
+$data[] = [ $langSurname, $langName, $langEmail, $langAm, $langUsername, $langGroups ];
 
 $sql = Database::get()->queryFunc("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.username
                         FROM course_user, user
                         WHERE `user`.`id` = `course_user`.`user_id` AND
                               `course_user`.`course_id` = ?d
                         ORDER BY user.surname, user.givenname",
-            function ($item) use ($csv, $course_id) {
-                $csv->outputRecord($item->surname, $item->givenname,
-                    $item->email, $item->am, $item->username,
-                    user_groups($course_id, $item->id, 'txt'));
+            function ($item) use (&$data, $course_id) {
+                    $ug = user_groups($course_id, $item->id, 'txt');
+                    $data[] =  [ $item->surname, $item->givenname, $item->email, $item->am, $item->username, $ug ];
             }, $course_id);
+
+$sheet->mergeCells("A1:F1");
+$sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+for ($i = 1; $i <= 6; $i++) {
+    $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+}
+// create spreadsheet
+$sheet->fromArray($data, NULL);
+// file output
+$writer = new Xlsx($spreadsheet);
+header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header("Content-Disposition: attachment;filename=$filename");
+$writer->save("php://output");
+exit;
