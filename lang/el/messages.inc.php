@@ -122,7 +122,9 @@ $langPlatformStats = "Στατιστικά Πλατφόρμας";
 $langPlatformGenStats = "Γενικά στατιστικά";
 $langVisitsStats = "Στατιστικά επισκέψεων";
 $langMonthlyReport = "Μηνιαίες αναφορές";
-$langStatsReports = "Στατιστικές αναφορές";
+$langStatsReports = "Αναφορές συμμετοχής";
+$langStatsReportsLP = "Αναφορές συμμετοχής στις γραμμές μάθησης";
+$langStatsReportsTC = "Αναφορές συμμετοχής στη τηλεσυνεργασία";
 $langReport = "Αναφορά για το μήνα";
 $langNoReport = "Δεν υπάρχουν διαθέσιμα στοιχεία για το μήνα";
 $langEmailNotSend = "Σφάλμα κατά την αποστολή e-mail στη διεύθυνση";
@@ -3122,6 +3124,7 @@ $langCollesSurvey = "COLLES";
 $langATTLSSurvey = "A.T.T.L.S.";
 $langLimeSurvey = "Lime Survey";
 $langPollNoQuestions = "Στο ερωτηματολόγιο δεν έχουν οριστεί ερωτήσεις!";
+$langActivateParticipation = "Ενεργοποίηση Παρουσιολογίου";
 
 //COLLES survey
 $qcolles1 = "Σε αυτή την ενότητα εστιάζω μόνο σε ό,τι με ενδιαφέρει";
@@ -4035,7 +4038,7 @@ $langFavourite = "Προτίμηση Υποσυστημάτων";
 $langFavouriteCourse = "Προτίμηση $langOfCourses";
 $langFavouriteCourses = "Δημοφιλέστερα $langCourses";
 $langFavouriteExpl = "Παρουσιάζεται η προτίμηση ενός χρήστη ή όλων των χρηστών στα υποσυστήματα μέσα σε ένα χρονικό διάστημα.";
-$langOldStats = "Παλιά στατιστικά";
+$langOldStats = "Συγκεντρωτικά";
 $langOldStatsExpl = "Συγκεντρωτικά μηνιαία στατιστικά στοιχεία <u>παλιότερα των %s μηνών</u>.";
 $langOldStatsLoginsExpl = "Συγκεντρωτικά μηνιαία στατιστικά σχετικά με τις εισόδους στην πλατφόρμα παλιότερα των %s μηνών.";
 $langOldStatsExpireConfirm = "Επιβεβαίωση εμφάνισης παλιότερων στατιστικών (θα ξεκινήσει διαδικασία συγκέντρωσης στατιστικών παλιότερων των δεκατεσσάρων μηνών). Επιθυμείτε να συνεχίσετε;";

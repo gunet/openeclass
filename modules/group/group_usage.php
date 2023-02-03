@@ -94,32 +94,32 @@ $tool_content .= action_bar(array(
                 'level' => 'primary'),
             array('title' => "$langDumpUserDurationToFile ($langCodeWin)",
                 'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id$append_url_link",
-                'icon' => 'fa-file-archive-o',                
+                'icon' => 'fa-file-archive-o',
                 'level' => 'primary')));
 
 if ($type == 'duration') {
-    $label = $langDuration;    
-    
+    $label = $langDuration;
+
     $min_date = Database::get()->querySingle("SELECT MIN(day) AS minday FROM actions_daily WHERE course_id = ?d", $course_id)->minday;
-    
+
     if (isset($_POST['user_date_start'])) {
         $uds = DateTime::createFromFormat('d-m-Y', $_POST['user_date_start']);
         $u_date_start = $uds->format('Y-m-d');
         $user_date_start = $uds->format('d-m-Y');
-    } else {        
+    } else {
         $date_start = DateTime::createFromFormat('Y-m-d', $min_date);
         $u_date_start = $date_start->format('Y-m-d');
-        $user_date_start = $date_start->format('d-m-Y');       
+        $user_date_start = $date_start->format('d-m-Y');
     }
     if (isset($_POST['user_date_end'])) {
-        $ude = DateTime::createFromFormat('d-m-Y', $_POST['user_date_end']);    
+        $ude = DateTime::createFromFormat('d-m-Y', $_POST['user_date_end']);
         $u_date_end = $ude->format('Y-m-d');
-        $user_date_end = $ude->format('d-m-Y');        
+        $user_date_end = $ude->format('d-m-Y');
     } else {
         $date_end = new DateTime();
         $u_date_end = $date_end->format('Y-m-d');
-        $user_date_end = $date_end->format('d-m-Y');        
-    }    
+        $user_date_end = $date_end->format('d-m-Y');
+    }
     $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$base&amp;type=$type'>
             <div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
@@ -131,7 +131,7 @@ if ($type == 'duration') {
                     <span class='add-on'><i class='fa fa-times'></i></span>
                     <span class='add-on'><i class='fa fa-calendar'></i></span>
                 </div>
-                </div>";        
+                </div>";
     $tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
         <label class='col-sm-2 control-label'>$langEndDate:</label>
             <div class='col-xs-10 col-sm-9'>
@@ -162,14 +162,14 @@ $tool_content .= "<div class='table-responsive'><table class='table-default'>
 	<th>$label</th>
 	</tr>";
 
-if ($type == 'duration') {    
+if ($type == 'duration') {
     $result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);
 } else {
     $result = Database::get()->queryArray("SELECT user_id AS id FROM group_members WHERE group_id = ?d", $group_id);
 }
 if (count($result) > 0) {
     foreach ($result as $row) {
-        $user_id = $row->id;        
+        $user_id = $row->id;
         if ($type == 'duration') {
             $value = format_time_duration(0 + $row->duration);
             $sortkey = $row->duration;

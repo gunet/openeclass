@@ -52,18 +52,19 @@ if (isset($_GET['id'])) {
             'url' => "index.php?course=$course_code&gc_stats=true",
             'icon' => 'fa-bar-chart',
             'level' => 'primary-label'),
-        array('title' => $langStatsReports,
-            'url' => "userduration.php?course=$course_code",
-            'icon' => 'fa-vcard-o',
-            'level' => 'primary-label'),
-        array('title' => $langOldStats,
-            'url' => "old_stats.php",
-            'icon' => 'fa-bar-chart',
-            'level' => 'primary-label'),
         array('title' => $langBack,
             'url' => "{$urlServer}courses/{$course_code}",
             'icon' => 'fa-reply',
-            'level' => 'primary')
+            'level' => 'primary'),
+        array('title' => $langStatsReports,
+            'url' => "userduration.php?course=$course_code",
+            'icon' => 'fa-vcard-o'),
+        array('title' => $langStatsReportsLP,
+            'url' => "../learnPath/detailsAll.php?course=$course_code",
+            'icon' => 'fa-vcard-o'),
+        array('title' => $langStatsReportsTC,
+            'url' => "../tc/tcuserduration.php?course=$course_code",
+            'icon' => 'fa-vcard-o')
     ),false);
 }
 /**** Summary info    ****/
