@@ -28,7 +28,7 @@ require_once 'bbb-api.php';
  * @return string
  */
 function select_tc_server($course_id) {
-    global $tool_content, $urlAppend, $course_code, $langNewBBBSession,
+    global $tool_content, $urlAppend, $course_code, $langNewBBBSession, $langZoomLongDescription,
            $langBBBLongDescription, $langJitsiLongDescription, $langGoogleMeetLongDescription;
 
     $tool_content .= "<div class='row extapp'><div class='col-sm-12'>";
@@ -213,7 +213,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code&tc_type=$tc_type' method='post' >
         <fieldset>";
 
-        if ($tc_type == 'googlemeet') {
+        if ($tc_type == 'googlemeet') { // google meet
             $tool_content .= "<div class='alert alert-info'>$langGoToGoogleMeetLink</div>";
             $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://meet.google.com/' target='_blank'>$langGoToGoogleMeetLinkText</a></div>";
 
@@ -236,7 +236,6 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                     </div>
                 </div>";
         }
-
         $tool_content .= "<div class='form-group mt-4'>
             <label for='title' class='col-12 control-label-notes'>$langTitle:</label>
             <div class='col-12'>
@@ -430,7 +429,6 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                       <label>
                         <input type='checkbox' name='muteOnStart' $checked_muteOnStart value='1'>$langBBBmuteOnStart
                       </label>
-
                     </div>
             </div>
         </div>
@@ -666,7 +664,31 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $status, $server_id,
                 $meeting_id, '' , '' ,
                 $minutes_before, $external_users, $r_group, $sessionUsers);
+        } elseif ($tc_type == 'zoom') {
+            $meeting_id = preg_replace('/\/j\//','', $options['path']);
+            $mod_pw = preg_replace('/pwd=/','', $options['query']);
+            $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
+                                                            title = ?s,
+                                                            description = ?s,
+                                                            start_date = ?t,
+                                                            end_date = ?t,
+                                                            public = 1,
+                                                            active = ?s,
+                                                            running_at = ?d,
+                                                            meeting_id = ?s,
+                                                            mod_pw = ?s,
+                                                            att_pw = ?s,
+                                                            unlock_interval = ?s,
+                                                            external_users = ?s,
+                                                            participants = ?s,
+                                                            record = 'false',
+                                                            sessionUsers = ?s",
+                $course_id, $title, $desc, $start_session, $BBBEndDate,
+                $status, $server_id,
+                $meeting_id, $mod_pw , '' ,
+                $minutes_before, $external_users, $r_group, $sessionUsers);
         }
+
 
         // logging
         Log::record($course_id, MODULE_ID_TC, LOG_INSERT, array('id' => $q->lastInsertID,
@@ -916,13 +938,13 @@ function tc_session_details() {
 
             if ($canJoin) {
                 if($is_editor) {
-                    if ($tc_type == 'jitsi' or $tc_type == 'googlemeet') {
+                    if ($tc_type == 'jitsi' or $tc_type == 'googlemeet' or $tc_type == 'zoom') {
                         $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank'>" . q($title) . "</a>";
                     } else {
                         $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($title) . "</a>";
                     }
                 } else {
-                    if ($tc_type == 'jitsi' or $tc_type == 'googlemeet') {
+                    if ($tc_type == 'jitsi' or $tc_type == 'googlemeet' or $tc_type == 'zoom') {
                         $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank'>" . q($title) . "</a>";
                     } else {
                         $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
@@ -1033,7 +1055,7 @@ function tc_session_details() {
                         <td class='text-center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
                     if ($canJoin) {
-                        if ($tc_type == 'jitsi') {
+                        if ($tc_type == 'jitsi' or $tc_type == 'googlemeet' or $tc_type == 'zoom') {
                             $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank'");
                         } else {
                             $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=" . urlencode($meeting_id) . "&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'");
