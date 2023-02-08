@@ -364,7 +364,9 @@ elseif(isset($_GET['choice']))
                 }
             } elseif ($serv->type == 'jitsi' or $serv->type == 'googlemeet') { // if tc server is `jitsi` or 'googlemeet'
                 header("Location: " . $serv->hostname . $sess->meeting_id);
-            }/* elseif ($tc_type == 'om') { // if tc server is `om`
+            } elseif ($serv->type == 'zoom') { // zoom
+                header("Location: " . $serv->hostname . 'j/'. $sess->meeting_id . '/?pwd=' . $sess->mod_pw);
+            }  /* elseif ($tc_type == 'om') { // if tc server is `om`
                if (om_session_running($_GET['meeting_id']) == false) { // create meeting
                    create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
                }
@@ -447,6 +449,9 @@ elseif(isset($_GET['choice']))
 
     if ($tc_type == 'googlemeet') {
         $options = preg_replace('/http(s|):\/\/meet.google.com\//', '', $_POST['google_meet_link']);
+    }
+    if ($tc_type == 'zoom') {
+        $options = parse_url("$_POST[zoom_link]");
     }
 
     $bbb_max_part_per_room = get_config('bbb_max_part_per_room', 0);
