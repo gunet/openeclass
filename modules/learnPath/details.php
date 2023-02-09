@@ -88,10 +88,7 @@ if ($learnPathName) {
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
 
-    $tool_content .= "<div class='alert alert-info'>
-          $langSave <a href='dumpuserlearnpathmoduledetails.php?course=$course_code&amp;path_id=$path_id'>$langDumpUserDurationToFile</a>
-                (<a href='dumpuserlearnpathmoduledetails.php?course=$course_code&amp;path_id=$path_id&amp;enc=UTF-8'>$langcsvenc2</a>)
-          </div>";
+    $tool_content .= "<div class='alert alert-info'>$langSave <a href='dumpuserlearnpathmoduledetails.php?course=$course_code&amp;path_id=$path_id'>$langDumpUserDurationToFile</a></div>";
 
     $tool_content .= "<div class='table-responsive'>
                     <table id='lpu_progress' class='table-default'>
@@ -99,7 +96,7 @@ if ($learnPathName) {
                         <tr class='list-header'>
                             <th class='text-start'>$langStudent</th>
                             <th class='text-left'>$langEmail</th>
-                            <th>$langAttemptsNb</th>
+                            <th>$langAttempts</th>
                             <th>$langAttemptStarted</th>
                             <th>$langAttemptAccessed</th>
                             <th>$langTotalTimeSpent</th>
@@ -123,14 +120,12 @@ if ($learnPathName) {
                             <a href='detailsUserPath.php?course=$course_code&amp;uInfo=$user->id&amp;path_id=$path_id'>" . q($user->surname) . " " . q($user->givenname) . "</a>
                         </td>
                         <td class='text-left'>" . q($user->email) . "</td>
-                        <td>" . q($lpAttemptsNb) ."</td>
+                        <td class='text-center'>" . q($lpAttemptsNb) ."</td>
                         <td>" . q($lpTotalStarted) . "</td>
                         <td>" . q($lpTotalAccessed) . "</td>
                         <td>" . q($lpTotalTime) . "</td>
                         <td>" . disp_lesson_status($lpTotalStatus) . "</td>
-                        <td align='right'>"
-                            . disp_progress_bar($lpProgress, 1) .
-                        "</td>";
+                        <td>" . disp_progress_bar($lpProgress, 1) . "</td>";
         $tool_content .= "</tr>";
     }
     $tool_content .= "</tbody></table></div>";

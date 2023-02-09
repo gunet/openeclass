@@ -82,10 +82,7 @@ if ($lcnt == 0) {
     draw($tool_content, 2, null, $head_content);
     exit;
 } else {
-    $tool_content .= "<div class='alert alert-info'>
-          $langSave <a href='dumpuserlearnpathdetailsanalysis.php?course=$course_code'>$langDumpUserDurationToFile</a>
-                (<a href='dumpuserlearnpathdetailsanalysis.php?course=$course_code&amp;enc=UTF-8'>$langcsvenc2</a>)
-          </div>";
+    $tool_content .= "<div class='alert alert-info'>$langSave <a href='dumpuserlearnpathdetailsanalysis.php?course=$course_code'>$langDumpUserDurationToFile</a></div>";
 }
 
 $tool_content .= "<div class='table-responsive'>
@@ -94,7 +91,7 @@ $tool_content .= "<div class='table-responsive'>
             <tr class='list-header'>
                 <th>$langStudent</th>
                 <th>$langLearnPath</th>
-                <th>$langAttemptsNb</th>
+                <th>$langAttempts</th>
                 <th>$langTotalTimeSpent</th>
                 <th>$langProgress</th>
             </tr>
@@ -114,7 +111,7 @@ foreach ($usersList as $user) {
     $globalprog = 0;
     $globaltime = "00:00:00";
     $lp_content = "";
-    
+
     foreach ($learningPathList as $learningPath) {
         // % progress
         list($prog, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($learningPath->learnPath_id, $user->id);

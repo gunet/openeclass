@@ -109,16 +109,13 @@ $tool_content .= action_bar(array(
         'icon' => 'fa-reply',
         'level' => 'primary-label')));
 
-$tool_content .= "<div class='alert alert-info'>
-    $langSave <a href='dumpuserdetails.php?course=$course_code&amp;uInfo=" . $_GET['uInfo'] . "'>$langDumpUserDurationToFile</a>
-        (<a href='dumpuserdetails.php?course=$course_code&amp;uInfo=" . $_GET['uInfo'] . "&amp;enc=UTF-8'>$langcsvenc2</a>)
-    </div>";
+$tool_content .= "<div class='alert alert-info'>$langSave <a href='dumpuserdetails.php?course=$course_code&amp;uInfo=" . $_GET['uInfo'] . "'>$langDumpUserDurationToFile</a></div>";
 
 // table header
 $tool_content .= "<div class='table-responsive'><table class='table-default'>
                     <tr class='list-header text-left'>
                         <th>$langLearnPath</th>
-                        <th>$langAttemptsNb</th>
+                        <th>$langAttempts</th>
                         <th>$langAttemptStarted</th>
                         <th>$langAttemptAccessed</th>
                         <th>$langTotalTimeSpent</th>
@@ -127,9 +124,7 @@ $tool_content .= "<div class='table-responsive'><table class='table-default'>
                     </tr>";
 
 if (count($lpList) == 0) {
-    $tool_content .= "<tr>
-                        <td colspan='7' class='text-center'>$langNoLearningPath</td>
-                      </tr>";
+    $tool_content .= "<tr><td colspan='7' class='text-center'>$langNoLearningPath</td></tr>";
 } else {
     $totalProgress = 0;
     $totalTimeSpent = "0000:00:00";
