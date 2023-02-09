@@ -19,13 +19,14 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
 include '../../include/init.php';
 require_once 'include/lib/learnPathLib.inc.php';
-require_once 'modules/group/group_functions.php';
-require_once 'include/lib/csv.class.php';
 
 if (empty($_REQUEST['uInfo'])) { // user info can not be empty
     header("Location: ./index.php?course=$course_code");
@@ -47,23 +48,22 @@ if ($rescnt == 0) {
 }
 
 // get list of learning paths of this course
-// list available learning paths
-$lpList = Database::get()->queryArray("SELECT name, learnPath_id
-            FROM lp_learnPath
-            WHERE course_id = ?d
-            ORDER BY `rank`", $course_id);
+$lpList = Database::get()->queryArray("SELECT name, learnPath_id FROM lp_learnPath WHERE course_id = ?d ORDER BY `rank`", $course_id);
 
-// get infos about the user
-$uDetails = Database::get()->querySingle("SELECT surname, givenname, email 
-    FROM `user`
-    WHERE id = ?d", $_REQUEST['uInfo']);
+// get info about the user
+$uDetails = Database::get()->querySingle("SELECT surname, givenname, email FROM `user` WHERE id = ?d", $_REQUEST['uInfo']);
 
-$csv = new CSV();
-if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
-    $csv->setEncoding('UTF-8');
-}
-$csv->filename = $course_code . " - " . htmlspecialchars($uDetails->surname . " " . $uDetails->givenname) . "_user_stats.csv";
-$csv->outputRecord($langLearnPath, $langAttemptsNb, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress);
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+$sheet->setTitle($langTracking);
+$sheet->getDefaultColumnDimension()->setWidth(30);
+$filename = $course_code . " - " . htmlspecialchars($uDetails->surname . " " . $uDetails->givenname) . "_user_stats.xlsx";
+
+$course_title = course_code_to_title($_GET['course']);
+$user_details = htmlspecialchars($uDetails->surname . " " . $uDetails->givenname);
+$data[] = [ $user_details . ' (' . $course_title . ')' ];
+$data[] = [];
+$data[] = [ $langLearnPath, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress ];
 
 $totalProgress = 0;
 $totalTimeSpent = "0000:00:00";
@@ -73,26 +73,26 @@ foreach ($lpList as $lpDetails) {
     if (!empty($lpTotalTime)) {
         $totalTimeSpent = addScormTime($totalTimeSpent, $lpTotalTime);
     }
-
-    $csv->outputRecord(
-        htmlspecialchars($lpDetails->name),
-        $lpAttemptsNb,
-        $lpTotalStarted,
-        $lpTotalAccessed,
-        $lpTotalTime,
-        disp_lesson_status($lpTotalStatus),
-        $lpProgress . '%'
-    );
+    $lp_total_status = disp_lesson_status($lpTotalStatus);
+    $data[] = [ $lpDetails->name, $lpAttemptsNb, $lpTotalStarted, $lpTotalAccessed, $lpTotalTime, $lp_total_status, $lpProgress . '%'];
 }
 
 if (count($lpList) > 0) {
-    $csv->outputRecord(
-        $langTotal,
-        '',
-        '',
-        '',
-        $totalTimeSpent,
-        '',
-        round($totalProgress/count($lpList)) . '%'
-    );
+    $total_progress = round($totalProgress/count($lpList));
+    $data[] = [];
+    $data[] = [ $langTotal, '', '', '', $totalTimeSpent, '', $total_progress . '%' ];
 }
+
+$sheet->mergeCells("A1:F1");
+$sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+for ($i = 1; $i <= 7; $i++) {
+    $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+}
+// create spreadsheet
+$sheet->fromArray($data, NULL);
+// file output
+$writer = new Xlsx($spreadsheet);
+header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header("Content-Disposition: attachment;filename=$filename");
+$writer->save("php://output");
+exit;

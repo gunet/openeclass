@@ -19,13 +19,15 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
 include '../../include/init.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'modules/group/group_functions.php';
-require_once 'include/lib/csv.class.php';
 
 if (empty($_REQUEST['path_id'])) { // path id can not be empty
     header("Location: ./index.php?course=$course_code");
@@ -41,34 +43,45 @@ if (!$learnPathName) {
     header("Location: ./index.php?course=$course_code");
     exit();
 }
+$course_title = course_code_to_title($_GET['course']);
 
-$csv = new CSV();
-if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
-    $csv->setEncoding('UTF-8');
-}
-$csv->filename = $course_code . " - " . htmlspecialchars($learnPathName->name) . "_user_stats.csv";
-$csv->outputRecord('Id', $langStudent, $langEmail, $langAm, $langGroup, $langAttemptsNb, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress);
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+$sheet->setTitle($course_title);
+$sheet->getDefaultColumnDimension()->setWidth(30);
+$filename = $course_code . " - " . htmlspecialchars($learnPathName->name) . "_user_stats.xlsx";
 
-$usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`
-        FROM `user` AS U, `course_user` AS CU
-        WHERE U.`id`= CU.`user_id`
-        AND CU.`course_id` = ?d
-        ORDER BY U.`surname` ASC, U.`givenname` ASC", $course_id);
+$data[] = [ $learnPathName->name ];
+$data[] = [];
+$data[] = [ $langSurnameName, $langEmail, $langAm, $langGroup, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress ];
+
+$usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`, U.`am`
+            FROM `user` AS U, `course_user` AS CU
+            WHERE U.`id`= CU.`user_id`
+            AND CU.`course_id` = ?d
+            ORDER BY U.`surname` ASC, U.`givenname` ASC", $course_id);
 
 foreach ($usersList as $user) {
     list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($path_id, $user->id);
 
-    $csv->outputRecord(
-        $user->id,
-        uid_to_name($user->id),
-        $user->email,
-        uid_to_am($user->id),
-        user_groups($course_id,$user->id, 'csv'),
-        $lpAttemptsNb,
-        $lpTotalStarted,
-        $lpTotalAccessed,
-        $lpTotalTime,
-        disp_lesson_status($lpTotalStatus),
-        $lpProgress . '%'
-    );
+    $ug = user_groups($course_id, $user->id, 'csv');
+    $lp_total_status = disp_lesson_status($lpTotalStatus);
+    $lp_total_started = format_locale_date(strtotime($lpTotalStarted), 'short');
+    $lp_total_accessed = format_locale_date(strtotime($lpTotalAccessed), 'short');
+
+    $data[] = [ "$user->surname $user->givenname", $user->email, $user->am, $ug, $lpAttemptsNb, $lp_total_started, $lp_total_accessed, $lpTotalTime, $lp_total_status, $lpProgress . '%' ];
 }
+
+$sheet->mergeCells("A1:J1");
+$sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+for ($i = 1; $i <= 10; $i++) {
+    $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+}
+// create spreadsheet
+$sheet->fromArray($data, NULL);
+// file output
+$writer = new Xlsx($spreadsheet);
+header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header("Content-Disposition: attachment;filename=$filename");
+$writer->save("php://output");
+exit;
