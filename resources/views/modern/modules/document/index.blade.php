@@ -121,10 +121,10 @@
                                         <tr class="list-header">
                                             <th>{!! headlink(trans('langType'), 'type') !!}</th>
                                             <th>{!! headlink(trans('langName'), 'name') !!}</th>
-                                            <th>{{trans('langCurrentStatus')}}</th>
+                                            
                                             <th>{{ trans('langSize') }}</th>
                                             <th>{!! headlink(trans('langDate'), 'date') !!}</th>
-                                            <th>{{trans('langShow')}}</th>
+
                                             @unless ($is_in_tinymce)
                                                 <th class='text-center'>{!! icon('fa-cogs', trans('langCommands')) !!}</th>
                                             @endif
@@ -135,125 +135,109 @@
 
                                     @forelse ($fileInfo as $file)
 
-                                        <tr class="{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}">
+                                        @if($file->visible == 1 or $can_upload)
+                                            <tr class="{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}">
 
 
-                                            <td class='text-start'>
-                                                @if($file->visible == 1)
-                                                    <span class='visibleFile fa {{ $file->icon }}'></span>
-                                                @else
-                                                    <span class='invisibleFile fa {{ $file->icon }}'></span>
-                                                @endif
-                                            </td>
-
-
-                                            <td>
-                                                @php $downloadfile = $base_url . "download=" . getIndirectReference($file->path); @endphp
-                                                <input type='hidden' value={!!$downloadfile!!}>
-
-                                                @if ($file->is_dir)
+                                                <td class='text-start'>
                                                     @if($file->visible == 1)
-                                                        <a href='{!! $file->url !!}'>{{ $file->filename }}</a>
+                                                        <span class='visibleFile fa {{ $file->icon }}'></span>
                                                     @else
-                                                        <a class="opacity-50 text-secondary pe-none" href='{!! $file->url !!}'>{{ $file->filename }}</a>
+                                                        <span class='invisibleFile fa {{ $file->icon }}'></span>
                                                     @endif
-                                                @else
-                                                    {!! $file->link !!}
-                                                @endif
-                                                @if ($can_upload)
-                                                    @if ($file->extra_path)
-                                                        @if ($file->common_doc_path)
-                                                            @if ($file->common_doc_visible)
-                                                                {!! icon('common', trans('langCommonDocLink')) !!}
-                                                            @else
-                                                                {!! icon('common-invisible', trans('langCommonDocLinkInvisible')) !!}
-                                                            @endif
+                                                </td>
+
+
+                                                <td>
+                                                    @php $downloadfile = $base_url . "download=" . getIndirectReference($file->path); @endphp
+                                                    <input type='hidden' value={!!$downloadfile!!}>
+
+                                                    @if ($file->is_dir)
+                                                        @if($file->visible == 1)
+                                                            <a href='{!! $file->url !!}'>{{ $file->filename }}</a>
                                                         @else
-                                                            {!! icon('fa-external-link', trans('langExternalFile')) !!}
+                                                            <a class="opacity-50 text-secondary pe-none" href='{!! $file->url !!}'>{{ $file->filename }}</a>
+                                                        @endif
+                                                    @else
+                                                        {!! $file->link !!}
+                                                    @endif
+                                                    @if ($can_upload)
+                                                        @if ($file->extra_path)
+                                                            @if ($file->common_doc_path)
+                                                                @if ($file->common_doc_visible)
+                                                                    {!! icon('common', trans('langCommonDocLink')) !!}
+                                                                @else
+                                                                    {!! icon('common-invisible', trans('langCommonDocLinkInvisible')) !!}
+                                                                @endif
+                                                            @else
+                                                                {!! icon('fa-external-link', trans('langExternalFile')) !!}
+                                                            @endif
+                                                        @endif
+                                                        @if (!$file->public)
+                                                            {!! icon('fa-lock', trans('langNonPublicFile')) !!}
+                                                        @endif
+                                                        @if ($file->editable)
+                                                            {!! icon('fa-edit', trans('langEdit'), $file->edit_url) !!}
                                                         @endif
                                                     @endif
-                                                    @if (!$file->public)
-                                                        {!! icon('fa-lock', trans('langNonPublicFile')) !!}
+                                                    @if ($file->copyrighted)
+                                                        {!! icon($file->copyright_icon, $file->copyright_title, $file->copyright_link,
+                                                            'target="_blank" style="color:#555555;"') !!}
                                                     @endif
-                                                    @if ($file->editable)
-                                                        {!! icon('fa-edit', trans('langEdit'), $file->edit_url) !!}
+                                                    @if ($file->comment)
+                                                        <br>
+                                                        <span class='comment text-muted'>
+                                                            <small>
+                                                                {!! nl2br(e($file->comment)) !!}
+                                                            </small>
+                                                        </span>
                                                     @endif
-                                                @endif
-                                                @if ($file->copyrighted)
-                                                    {!! icon($file->copyright_icon, $file->copyright_title, $file->copyright_link,
-                                                        'target="_blank" style="color:#555555;"') !!}
-                                                @endif
-                                                @if ($file->comment)
-                                                    <br>
-                                                    <span class='comment text-muted'>
-                                                        <small>
-                                                            {!! nl2br(e($file->comment)) !!}
-                                                        </small>
-                                                    </span>
-                                                @endif
-                                            </td>
 
-
-
-                                            <td>
-                                                @if($file->updated_message)
-                                                    @if($file->visible == 1)
-                                                        <button class="btn btn-success btn-sm UpdateMessage">{{ $file->updated_message }}</button>
-                                                    @else
-                                                        <button class="btn btn-secondary btn-sm UpdatedMessage">{{ $file->updated_message }}</button>
+                                                    @if($file->updated_message)
+                                                        @if($file->visible == 1)
+                                                            <span class="badge bg-success">{{ $file->updated_message }}</span>
+                                                        @else
+                                                            <span class="badge bg-secondary">{{ $file->updated_message }}</span>
+                                                        @endif
                                                     @endif
-                                                @else
-                                                    @if($file->visible == 1)
-                                                        <button class="btn btn-secondary btn-sm DocVisible">{{trans('langDocument')}}</button>
-                                                    @else
-                                                        <button class="btn btn-secondary btn-sm DocInvisible">{{trans('langDocument')}}</button>
-                                                    @endif
-                                                @endif
-                                            </td>
-
-
-
-                                            @if ($file->is_dir)
-                                                <td>&nbsp;</td>
-                                                @if($file->visible == 1)
-                                                    <td class='center'>{{ $file->date }}</td>
-                                                @else
-                                                    <td class='center'><span class="opacity-50 text-secondary">{{ $file->date }}</span></td>
-                                                @endif
-
-                                            @elseif ($file->format == '.meta')
-                                                @if($file->visible == 1)
-                                                    <td>{{ $file->size }}</td>
-                                                    <td class='center'>{{ $file->date }}</td>
-                                                @else
-                                                    <td><span class="opacity-50">{{ $file->size }}</span></td>
-                                                    <td class='center'><span class="opacity-50">{{ $file->date }}</span></td>
-                                                @endif
-
-                                            @else
-                                                @if($file->visible == 1)
-                                                    <td>{{ $file->size }}</td>
-                                                    <td title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'>{{ format_locale_date(strtotime($file->date), 'short') }}</td>
-                                                @else
-                                                    <td><span style="opacity-50">{{ $file->size }}</span></td>
-                                                    <td title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short') }}</span></td>
-                                                @endif
-
-
-                                            @endif
-                                            <td>
-                                                @if($file->visible == 1)
-                                                    <span class="text-success"><i class="fas fa-eye"></i> {{trans('langVisible')}}</span>
-                                                @else
-                                                    <span class="text-danger"><i class="fas fa-eye"></i> {{trans('langInvisible ')}}</span>
-                                                @endif
-                                            </td>
-                                            @unless ($is_in_tinymce)
-                                                <td class='text-center {{ $can_upload? 'option-btn-cell': 'text-end'}}'>
-                                                    {!! $file->action_button !!}
                                                 </td>
-                                            @endif
-                                        </tr>
+
+                                                @if ($file->is_dir)
+                                                    <td>&nbsp;</td>
+                                                    @if($file->visible == 1)
+                                                        <td class='center'>{{ $file->date }}</td>
+                                                    @else
+                                                        <td class='center'><span class="opacity-50 text-secondary">{{ $file->date }}</span></td>
+                                                    @endif
+
+                                                @elseif ($file->format == '.meta')
+                                                    @if($file->visible == 1)
+                                                        <td>{{ $file->size }}</td>
+                                                        <td class='center'>{{ $file->date }}</td>
+                                                    @else
+                                                        <td><span class="opacity-50">{{ $file->size }}</span></td>
+                                                        <td class='center'><span class="opacity-50">{{ $file->date }}</span></td>
+                                                    @endif
+
+                                                @else
+                                                    @if($file->visible == 1)
+                                                        <td>{{ $file->size }}</td>
+                                                        <td title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'>{{ format_locale_date(strtotime($file->date), 'short') }}</td>
+                                                    @else
+                                                        <td><span style="opacity-50">{{ $file->size }}</span></td>
+                                                        <td title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short') }}</span></td>
+                                                    @endif
+
+
+                                                @endif
+                                                
+                                                @unless ($is_in_tinymce)
+                                                    <td class='text-center {{ $can_upload? 'option-btn-cell': 'text-end'}}'>
+                                                        {!! $file->action_button !!}
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        @endif
 
 
 

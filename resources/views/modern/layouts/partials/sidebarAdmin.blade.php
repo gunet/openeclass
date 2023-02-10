@@ -26,79 +26,60 @@
             </div>
         </div>
         <div class='panel-body'>
+            <div class='d-flex flex-wrap'>
+                <a class='btn btn-outline-primary btn-sm small-text me-2 mb-2' href="search_user.php">
+                    {{ trans('langSearchUser') }}
+                </a>
             
-            <div class='row p-2'>
-                <div class='col-lg-4 col-12 d-flex justify-content-center'>
-                    <a class='btn submitAdminBtn w-100 border-0' href="search_user.php">
-                        {{ trans('langSearchUser') }}
+                @if($is_admin or $is_departmentmanage_user or $is_power_user)
+                    <a  href="searchcours.php" class='btn btn-outline-primary btn-sm small-text me-2 mb-2'>
+                        {{ trans('langSearchCourse') }} 
                     </a>
-                </div>
-                <div class='col-lg-4 col-12 mt-lg-0 mt-3 d-flex justify-content-center'>
-                    @if($is_admin or $is_departmentmanage_user or $is_power_user)
-                        <a  href="searchcours.php" class='btn submitAdminBtn w-100 border-0'>
-                            {{ trans('langSearchCourse') }} 
-                        </a>
-                    @else
-                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn submitAdminBtn w-100 opacity-help'>
-                          {{ trans('langSearchCourse') }}
-                        </a>
-                    @endif
-                </div>
-                <div class='col-lg-4 col-12 mt-lg-0 mt-3 d-flex justify-content-center'>
-                    @if($is_admin)
-                        <a href="hierarchy.php" class='btn submitAdminBtn w-100 border-0'>
-                           {{ trans('langHierarchy') }}
-                        </a>
-                    @else
-                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn submitAdminBtn w-100 opacity-help'>
-                           {{ trans('langHierarchy') }}  
-                        </a>
-                    @endif
-                </div>
-            </div>
+                @else
+                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-outline-secondary btn-sm small-text opacity-help me-2 mb-2'>
+                        {{ trans('langSearchCourse') }}
+                    </a>
+                @endif
+            
+                @if($is_admin)
+                    <a href="hierarchy.php" class='btn btn-outline-primary btn-sm small-text me-2 mb-2'>
+                    {{ trans('langHierarchy') }}
+                    </a>
+                @else
+                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-outline-secondary btn-sm small-text opacity-help me-2 mb-2'>
+                    {{ trans('langHierarchy') }}  
+                    </a>
+                @endif
 
-            <div class='row p-2'>
-                
-                <div class='col-lg-4 col-12 d-flex justify-content-center'>
-                    
-                    @if($is_admin)
-                        <a href="eclassconf.php" class='btn submitAdminBtn w-100 border-0'>
-                            {{ trans('langConfig') }}
-                        </a>
-                    @else
-                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn submitAdminBtn w-100 opacity-help'>
+                @if($is_admin)
+                    <a href="eclassconf.php" class='btn btn-outline-primary btn-sm small-text me-2 mb-2'>
                         {{ trans('langConfig') }}
                     </a>
-                    @endif
-                    
-                </div>
-                <div class='col-lg-4 col-12 mt-lg-0 mt-3 d-flex justify-content-center'>
-                    
-                        @if($is_admin)
-                        <a href="theme_options.php" class='btn submitAdminBtn w-100 border-0'>
-                           {{ trans('langThemeSettings') }}   
-                        </a>
-                        @else
-                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn submitAdminBtn w-100 opacity-help'>
-                            {{ trans('langThemeSettings') }} 
-                        </a>
-                        @endif
-                   
-                </div>
-                <div class='col-lg-4 col-12 mt-lg-0 mt-3 d-flex justify-content-center'>
-                    
-                        @if($is_admin)
-                        <a href="extapp.php" class='btn submitAdminBtn w-100 border-0'>
-                          {{ trans('langExternalTools') }}  
-                        </a>
-                        @else
-                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn submitAdminBtn w-100 opacity-help'>
-                           {{ trans('langExternalTools') }} 
-                        </a>
-                        @endif
-                    
-                </div>
+                @else
+                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-outline-secondary btn-sm small-text opacity-help me-2 mb-2'>
+                        {{ trans('langConfig') }}
+                    </a>
+                @endif
 
+                @if($is_admin)
+                    <a href="theme_options.php" class='btn btn-outline-primary btn-sm small-text me-2 mb-2'>
+                    {{ trans('langThemeSettings') }}   
+                    </a>
+                @else
+                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-outline-secondary btn-sm small-text opacity-help me-2 mb-2'>
+                        {{ trans('langThemeSettings') }} 
+                    </a>
+                @endif
+
+                @if($is_admin)
+                    <a href="extapp.php" class='btn btn-outline-primary btn-sm small-text me-2 mb-2'>
+                    {{ trans('langExternalTools') }}  
+                    </a>
+                @else
+                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-outline-secondary btn-sm small-text opacity-help me-2 mb-2'>
+                    {{ trans('langExternalTools') }} 
+                    </a>
+                @endif
             </div>
         </div>
     </div>
@@ -116,24 +97,24 @@
             </div>
         </div>
         <div class='panel-body'>
-            <ul class="list-group list-group-flush Borders">
+            <ul>
                 @if ($is_power_user or $is_departmentmanage_user)
                     @if ($is_admin)
-                        <li class="list-group-item border-0 admin-list-group Borders">
-                            <a href="{{$urlAppend}}modules/admin/addadmin.php" class='list-group-item'>
+                        <li class="p-1">
+                            <a class='fs-6 TextSemiBold link_admin_tool' href="{{$urlAppend}}modules/admin/addadmin.php">
                                 <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdmins'] !!}</span>   
                             </a>
                         </li>
                     @endif
                     @if (isset($is_admin) and $is_admin)
-                        <li class="list-group-item border-0 admin-list-group Borders">
-                            <a href="{{$urlAppend}}modules/admin/adminannouncements.php" class='list-group-item'>
+                        <li class="p-1">
+                            <a class='fs-6 TextSemiBold link_admin_tool' href="{{$urlAppend}}modules/admin/adminannouncements.php">
                                 <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdminAn'] !!}</span>
                             </a>
                         </li>
                         @php $manual_language = ($language == 'el')? $language: 'en'; @endphp
-                        <li class="list-group-item border-0 admin-list-group Borders">
-                            <a href="http://docs.openeclass.org/{{$manual_language}}/admin" class='list-group-item'>
+                        <li class="p-1">
+                            <a class='fs-6 TextSemiBold link_admin_tool' href="http://docs.openeclass.org/{{$manual_language}}/admin">
                                 <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdminManual'] !!}</span>      
                             </a>
                         </li>
@@ -151,10 +132,10 @@
             </div>
         </div>
         <div class='panel-body'>
-            <ul class="list-group list-group-flush Borders">
+            <ul>
                 @foreach ($tool_group[1] as $key2 => $tool)
-                    <li class="list-group-item border-0 admin-list-group Borders">
-                        <a href="{!! $tool_group[2][$key2] !!}" class='list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
+                    <li class="p-1">
+                        <a href="{!! $tool_group[2][$key2] !!}" class='link_admin_tool fs-6 TextSemiBold {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                             <span class='msmall-text toolAdminText'>{!! $tool !!}</span>  
                         </a>
                     </li>
@@ -173,14 +154,14 @@
                         </div>
                     </div>
                     <div class='panel-body'>
-                        <ul class="list-group list-group-flush Borders">
-                            <li class="list-group-item border-0 admin-list-group Borders">
-                                <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='list-group-item'>
+                        <ul>
+                            <li class="p-1">
+                                <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='fs-6 TextSemiBold link_admin_tool'>
                                     <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langHierarchy'] !!}</span>     
                                 </a>
                             </li>
-                            <li class="list-group-item border-0 admin-list-group Borders">
-                                <a href="{{$urlAppend}}modules/admin/coursecategory.php" class='list-group-item'>
+                            <li class="p-1">
+                                <a href="{{$urlAppend}}modules/admin/coursecategory.php" class='fs-6 TextSemiBold link_admin_tool'>
                                     <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langCourseCategoryActions'] !!}</span>   
                                 </a>
                             </li>

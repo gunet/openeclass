@@ -113,63 +113,59 @@
                                                     @endif
 
 
-                                                    <button class="ClickCourse border-0 rounded-pill" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
-                                                       <i class='fa fa-eye'></i>
+                                                    <button class="ClickCourse border-0 rounded-pill bg-transparent" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
+                                                       <img class='ClickCourseModalImg' src='{{ $urlAppend }}template/modern/img/info_a.svg'>
                                                     </button>
 
                                                     <!-- The Modal -->
                                                     <div id="myModal{{$mycourse->k}}" class="modal">
 
-                                                    <!-- Modal content -->
-                                                    <div class="modal-content modal-content-opencourses overflow-auto px-lg-4 py-lg-3">
-                                                        <div class='row'>
-                                                            <div class='col-10'>
-                                                                <span class="courseInfoText TextExtraBold text-white">{{$mycourse->i}}</span>
-                                                                <span class='courseInfoText TextSemiBold textgreyColor ms-1'>({{$mycourse->c}})</span>
+                                                        <!-- Modal content -->
+                                                        <div class="modal-content modal-content-opencourses overflow-auto px-lg-4 py-lg-3">
+                                                            <div class='row'>
+                                                                <div class='col-10'>
+                                                                    <span class="courseInfoText TextExtraBold blackBlueText">{{$mycourse->i}}</span>
+                                                                    <span class='courseInfoText TextMedium blackBlueText ms-1'>({{$mycourse->c}})</span>
+                                                                </div>
+                                                                <div class='col-2'>
+                                                                    <button type='button' class="close btn-sm text-uppercase d-flex justify-content-center align-items-center float-end" style='font-size:30px;'>&times;</button>
+                                                                </div>
                                                             </div>
-                                                            <div class='col-2'>
-                                                                <button type='button' class="close bg-transparent text-uppercase d-flex justify-content-center align-items-center float-end" style='font-size:40px;'>&times;</button>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <hr class='hr-OpenCourses'>
+                                                            
+                                                            <hr class='hr-OpenCourses'>
 
-                                                        <div class='row mb-3'>
-                                                            <div class='col-9 d-flex justify-content-start align-items-start ps-4'>
-                                                                <p class='small-text TextRegular blackBlueText d-inline-flex align-items-center'>
-                                                                    <span class='fa fa-user lightBlueText pe-2 pt-0'></span>
-                                                                    <span class='text-white'>{{$mycourse->t}}</span>
-                                                                </p>
+                                                            <div class='row mb-3'>
+                                                                <div class='col-9 d-flex justify-content-start align-items-start ps-4'>
+                                                                    <p class='small-text TextRegular blackBlueText d-inline-flex align-items-center'>
+                                                                        <span class='fa fa-user lightBlueText pe-2 pt-0'></span>
+                                                                        <span class='blackBlueText'>{{$mycourse->t}}</span>
+                                                                    </p>
+                                                                </div>
+                                                                <div class='col-3 d-flex justify-content-end align-items-center pe-4 blackBlueText'>
+                                                                    {!! course_access_icon($mycourse->visible) !!}
+                                                                    @if($mycourse->p == 1)
+                                                                        <span class="fa fa-star textgreyColor ps-3" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="{{trans('langPopular')}} {{trans('langCourse')}}" aria-label="{{trans('langPopular')}} {{trans('langCourse')}}"></span>
+                                                                    @endif
+                                                                </div>
                                                             </div>
-                                                            <div class='col-3 d-flex justify-content-end align-items-center pe-4 text-white'>
-                                                                {!! course_access_icon($mycourse->visible) !!}
-                                                                @if($mycourse->p == 1)
-                                                                    <span class="fa fa-star ps-3" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="{{trans('langPopular')}} {{trans('langCourse')}}" aria-label="{{trans('langPopular')}} {{trans('langCourse')}}"></span>
+                                                        
+                                                            
+                                                            <div class='col-12 d-flex justify-content-center align-items-start ps-md-5 pe-md-5'>
+                                                                @if($mycourse->img == NULL)
+                                                                    <img class='openCourseImg' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $mycourse->img }}" /></a>
+                                                                @else
+                                                                    <img class='openCourseImg' src="{{ $urlAppend }}courses/{{$mycourse->k}}/image/{{$mycourse->img}}" alt="{{ $mycourse->img }}" /></a>
+                                                                @endif
+                                                            </div>
+
+                                                            <div class='col-12 openCourseDes mt-3 ps-md-5 pe-md-5 blackBlueText pb-3'>
+                                                                @if(empty($mycourse->de))
+                                                                    <p class='text-center'>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
+                                                                @else
+                                                                    {!! $mycourse->de !!}
                                                                 @endif
                                                             </div>
                                                         </div>
-                                                       
-                                                        
-                                                        <div class='col-12 d-flex justify-content-center align-items-start'>
-                                                            @if($mycourse->img == NULL)
-                                                                <img class='openCourseImg' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $mycourse->img }}" /></a>
-                                                            @else
-                                                                <img class='openCourseImg' src="{{ $urlAppend }}courses/{{$mycourse->k}}/image/{{$mycourse->img}}" alt="{{ $mycourse->img }}" /></a>
-                                                            @endif
-                                                        </div>
-
-                                                        <div class='col-12 openCourseDes mt-3 ps-md-5 pe-md-5 text-white pb-3'>
-                                                            @if(empty($mycourse->de))
-                                                                <p class='text-center'>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
-                                                            @else
-                                                                {!! $mycourse->de !!}
-                                                            @endif
-                                                        </div>
-                                                        
-                                                        
-                                                        
-                                                        
-                                                    </div>
 
                                                     </div>
                                                 

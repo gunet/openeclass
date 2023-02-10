@@ -126,7 +126,7 @@ $tool_content .= "
 foreach ($app->getParams() as $param) {
     if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
         $checked = $param->value() == 1 ? "checked" : "";
-        $boolean_field .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><div class='checkbox'>";
+        $boolean_field .= "<div class='form-group mt-4'><div class='col-sm-offset-3 col-sm-9'><div class='checkbox'>";
         $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
     } else if ($param->name() == GoogleMeetApp::ENABLEDCOURSES) {
@@ -141,10 +141,10 @@ foreach ($app->getParams() as $param) {
         } else {
             $selected = "selected";
         }
-        $tool_content .= "<div class='form-group' id='courses-list'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-3 control-label'>$langUseOfService&nbsp;&nbsp;";
-        $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfServiceInfo'></span></label>";
-        $tool_content .= "<div class='col-sm-9'><select id='select-courses' class='form-control' name='tc_courses[]' multiple>";
+        $tool_content .= "<div class='form-group mt-4' id='courses-list'>";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-12 control-label-notes'>$langUseOfService&nbsp;&nbsp;";
+        $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='top' title='$langUseOfServiceInfo'></span></label>";
+        $tool_content .= "<div class='col-12'><select id='select-courses' class='form-control' name='tc_courses[]' multiple>";
         $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";
         foreach ($courses_list as $c) {
             $selected = in_array($c->id, $selections) ? "selected" : "";
@@ -153,8 +153,8 @@ foreach ($app->getParams() as $param) {
         $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></div></div>";
         $tool_content .= "<input type='hidden' id='enabled-courses' name='" . $param->name() . "'>";
     } else {
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-3 control-label'>" . $param->display() . "</label>";
+        $tool_content .= "<div class='form-group mt-4'>";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-12 control-label-notes'>" . $param->display() . "</label>";
         $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
         $tool_content .= "</div>";
     }
@@ -162,11 +162,11 @@ foreach ($app->getParams() as $param) {
 
 $tool_content .= $boolean_field;
 $tool_content .= "
-            <div class='form-group'>
-              <div class='col-sm-offset-2 col-sm-10'>
-                <button class='btn btn-primary' type='submit' name='submit'>$langSubmit</button>
-                <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>
-                <a href='extapp.php' class='btn btn-default'>$langCancel</a>
+            <div class='form-group mt-5'>
+              <div class='col-12 d-flex justify-content-center'>
+                <button class='btn submitAdminBtn me-2' type='submit' name='submit'>$langSubmit</button>
+                <button class='btn deleteAdminBtn me-2' type='submit' name='submit' value='clear'>$langClearSettings</button>
+                <a href='extapp.php' class='btn cancelAdminBtn'>$langCancel</a>
               </div>
             </div>" .
     generate_csrf_token_form_field() . "

@@ -66,7 +66,8 @@ if ($appName) {
             }
             Session::Messages($langFileUpdatedSuccess, 'alert-info');
         } else {
-        $result = $app->storeParams();
+            $result = $app->storeParams();
+        }
         if ($result) {
             Session::Messages($result, 'alert-danger');
         } else {

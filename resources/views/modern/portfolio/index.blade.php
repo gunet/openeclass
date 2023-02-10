@@ -2,6 +2,12 @@
 
 @section('content')
 
+@if($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
+    <style>#btn_create_course{display:block;}</style>
+@else
+    <style>#btn_create_course{display:none;}</style>
+@endif
+
 <div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
 
 <div class="container-fluid details-section">
@@ -51,143 +57,8 @@
                                 <p class='small-text TextSemiBold text-center text-secondary mt-3 mb-0 pe-1 '>{{ trans('langProfileLastVisit') }}:</p>
                                 <p class='blackBlueText text-center small-text TextSemiBold mt-xl-3 mt-1'>{{ format_locale_date(strtotime($lastVisit->when)) }}</p>
                             </div>
-                            <div class='col-12 d-flex justify-content-md-end justify-content-center pe-0 mt-lg-0 mt-5'>
-                                <button class='bg-transparent border-0 text-end'data-bs-toggle="collapse" data-bs-target=".user-details-collapse" aria-expanded="false" onclick="switch_user_details_toggle()" >
-                                    <span class="user-details-collapse-more">
-                                        <span class='lightBlueText text-uppercase mt-2 small-text'>{{ trans('langMoreInfo') }}</span>
-                                        <i class="fas fa-chevron-down lightBlueText"></i>
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="container-fluid collapse user-details-collapse p-0 mt-2">
-                        <div class="row px-2">
-                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-                                <div class="row">
-                                    <div class="col-12 d-flex justify-content-md-start justify-content-center">
-                                        <img class='user-detals-photo m-auto d-block' src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
-                                    </div>
-                                </div>
-                                <div class="row justify-content-md-start justify-content-center text-center mt-2" >
-                                    <h5 class='text-center blackBlueText TextSemiBold'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h5>
-                                    <p class='text-center'>
-                                        @if(($session->status == USER_TEACHER))
-                                        {{ trans('langMetaTeacher') }}
-                                        @elseif(($session->status == USER_STUDENT))
-                                        {{ trans('langCStudent') }}
-                                        @else
-                                        {{ trans('langAdministrator')}}
-                                        @endif
-                                    </p>
-                                </div>
-                                <div class="row justify-content-md-start justify-content-center text-center mt-3">
-                                    <div class="py-1 d-flex justify-content-center align-items-center" >
-                                        <a href="{{ $urlAppend }}main/profile/profile.php" class="btn submitAdminBtn"><span class="fa fa-pencil me-1"></span>{{ trans('langModProfile') }}</a>
-                                    </div>
-                                    <div class="py-1 d-flex justify-content-center align-items-center">
-                                        <a href="{{$urlAppend}}main/unreguser.php" class="btn deleteAdminBtn"><span class="fa fa-trash-o me-1"></span>{{ trans('langUnregUser') }} </a>
-                                    </div>
-                                    <div class="py-1">
-                                        {{ trans('langExplain') }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 ps-md-3 pe-md-0 ps-0 pe-0">
-
-                                <div class='panel panel-admin border-0 shadow-none mt-md-2 mt-3 bg-white rounded-0 px-0 shadow-none'>
-                                    <div class='panel-heading rounded-0 bg-white ps-md-3 pe-md-1 px-0'>
-                                        <div class='panel-heading bg-white ps-md-3 pe-md-0'>
-                                            <div class='col-12 Help-panel-heading border-0'>
-                                                <p class='TextMedium text-md-start text-center blackBlueText mb-2'>{{ trans('langSumCoursesEnrolled') }}&nbsp;&nbsp;{{ $student_courses_count }}</p>
-                                                <p class='TextMedium text-md-start text-center blackBlueText'>{{ trans('langSumCoursesSupport') }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $teacher_courses_count }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class='panel panel-admin border-0 shadow-none mt-md-2 mt-3 bg-white rounded-0 shadow-none'>
-                                    <div class='panel-heading rounded-0 bg-white ps-md-3 pe-md-1 px-0'>
-                                        <div class='panel-heading bg-white ps-md-3 pe-md-0'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='text-uppercase Help-text-panel-heading'>{{ trans('langPersInfo') }}</span>
-                                            </div>
-                                        </div>
-
-                                        <div class='panel-body rounded-0'>
-                                            <div class="row mt-0">
-                                                <div class="col-xl-4 col-lg-6 col-12 mb-2">
-                                                    <p class='text-secondary TextMedium small-text'>E-mail:
-                                                    <p class='blackBlueText'>{{ $userdata->email }}</p>
-                                                </div>
-
-                                                <div class="col-xl-4 col-lg-6 col-12 mb-2">
-                                                    <p class='text-secondary TextMedium small-text'>{{ trans('langStatus') }}:</p>
-                                                    <p class='blackBlueText'>
-                                                        @if(($session->status == USER_TEACHER))
-                                                        {{ trans('langMetaTeacher') }}
-                                                        @elseif(($session->status == USER_STUDENT))
-                                                        {{ trans('langCStudent') }}
-                                                        @else
-                                                        {{ trans('langAdministrator')}}
-                                                        @endif
-
-                                                    </p>
-                                                </div>
-
-                                                <div class="col-xl-4 col-lg-6 col-12 mb-lg-3 mt-lg-3 mt-xl-0 mb-2">
-                                                    <p class='text-secondary TextMedium small-text'>{{trans('langPhone')}}: </p>
-                                                    <p class='blackBlueText'>{{ $userdata->phone }}</p>
-                                                </div>
-
-
-                                                <div class="col-xl-4 col-lg-6 col-12 mt-xl-0 mt-lg-3 mb-lg-3 mb-2">
-                                                    <p class='text-secondary TextMedium small-text'>{{ trans('langAm') }}:</p>
-                                                    <p class='blackBlueText'>{{ $userdata->am }}</p>
-                                                </div>
-
-                                                <div class="col-xl-4 col-lg-6 col-12 mb-lg-3 mb-2">
-                                                    <p class='text-secondary TextMedium small-text'>{{ trans('langProfileMemberSince') }}:</p>
-                                                    <p class='blackBlueText'>{{ $userdata->registered_at }}</p>
-                                                </div>
-
-                                                <div class="col-xl-4 col-lg-6 col-12">
-                                                    <p class='text-secondary TextMedium small-text'>{{ trans('langFaculty') }}:</p>
-                                                    <p class='blackBlueText'>
-                                                        @php
-                                                            $user = new User();
-                                                            $departments = $user->getDepartmentIds($uid);
-                                                        @endphp
-                                                        @foreach ($departments as $dep)
-                                                            {!! $tree->getFullPath($dep) !!}
-                                                        @endforeach
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class='panel panel-admin border-0 bg-white rounded-0 px-0'>
-                                    <div class='panel-heading rounded-0 bg-white ps-md-3 pe-md-1 px-0'>
-                                        <div class='panel-heading bg-body ps-md-3 pe-md-0'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='text-uppercase Help-text-panel-heading'>{{ trans('langAboutMe') }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class='panel-body rounded-0 ps-md-3 pt-0 px-0'>
-                                        <div class='col-12 ps-3'>
-                                            @if (!empty($userdata->description))
-                                                {!! standard_text_escape($userdata->description) !!}
-                                            @else
-                                                <p class='text-center mb-0'>{{ trans('langNoInfoAvailable') }}</p>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class='col-12 d-flex justify-content-md-end justify-content-center pe-0 mt-lg-0 mt-3'>
+                                <a class='btn submitAdminBtn small-text' href='{{ $urlAppend }}main/profile/display_profile.php'>{{ trans('langMyProfile') }}</a>
                             </div>
                         </div>
                     </div>
@@ -213,10 +84,6 @@
                         <div class='row'>
                             <div class='col-8 d-inline-flex align-items-top'>
                                 <span class="text-uppercase TextSemiBold mb-0 Help-text-panel-heading">{{ trans('langMyCoursesSide') }}</span>
-                                <a href="{{$urlAppend}}modules/auth/courses.php" class='viewAllCourseBtn btn btn-outline-primary d-flex justify-content-center align-items-center ms-2' data-bs-toggle='tooltip'
-                                    data-bs-placement='bottom' title data-bs-original-title="{{ trans('langRegCourses') }}">
-                                    <span class='fa fa-check'></span>
-                                </a>
                             </div>
                             <div class="col-4">
                                 <div id="bars-active" type='button' class='float-end mt-0' style="display:flex;">
@@ -371,5 +238,39 @@
 <script>
     var user_cources = <?php echo json_encode($cources); ?>;
     var user_cource_pages = <?php echo $cource_pages; ?>;
+</script>
+
+<script type="text/javascript">
+    var idCoursePortfolio = '';
+    var btnPortfolio = '';
+    var modal_portfolio = '';
+    $(".ClickCoursePortfolio").click(function() {
+        // Get the btn id
+        idCoursePortfolio = this.id;
+
+        // Get the modal
+        modal_portfolio = document.getElementById("PortfolioModal"+idCoursePortfolio);
+
+        // Get the button that opens the modal
+        btnPortfolio = document.getElementById(idCoursePortfolio);
+
+        // When the user clicks the button, open the modal 
+        modal_portfolio.style.display = "block";
+
+        $('[data-bs-toggle="tooltip"]').tooltip("hide");
+    });
+
+    $(".close").click(function() {
+        modal_portfolio.style.display = "none";
+    });
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal_portfolio) {
+            modal_portfolio.style.display = "none";
+        }
+        $('[data-bs-toggle="tooltip"]').tooltip("hide");
+    }
+
 </script>
 @endsection

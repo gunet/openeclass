@@ -46,7 +46,7 @@ function select_tc_server($course_id) {
         $description = $descriptions[$name][1];
         if (is_active_tc_server($name, $course_id)) {
             $tool_content .= "
-                <table class='table-default dataTable no-footer extapp-table'>
+                <table class='table-default dataTable no-footer extapp-table mb-3 border-0'>
                   <tr>
                     <td style='width:90px; padding:0px;'>
                       <div class='text-center' style='padding:10px;'>
@@ -56,7 +56,7 @@ function select_tc_server($course_id) {
                     </td>
                     <td class='text-muted clearfix'>
                       <span style='padding-right: 170px;'>$description</span>
-                      <span class='pull-right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=$name' class='btn btn-success'>$langNewBBBSession</a></span>
+                      <span class='float-end'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=$name' class='btn submitAdminBtn'>$langNewBBBSession</a></span>
                     </td>
                   </tr>
                 </table>";
@@ -215,11 +215,11 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
         if ($tc_type == 'googlemeet') {
             $tool_content .= "<div class='alert alert-info'>$langGoToGoogleMeetLink</div>";
-            $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='https://meet.google.com/' target='_blank'>$langGoToGoogleMeetLinkText</a></div>";
+            $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://meet.google.com/' target='_blank'>$langGoToGoogleMeetLinkText</a></div>";
 
             $tool_content .= "<div class='form-group'>
-                <label for='title' class='col-sm-2 control-label'>$langLink:</label>
-                <div class='col-sm-10'>
+                <label for='title' class='col-12 control-label-notes'>$langLink:</label>
+                <div class='col-12'>
                     <input class='form-control' type='text' name='google_meet_link' value='$google_meet_link' placeholder='Google Meet $langLink' size='50'>
                 </div>
             </div>";
@@ -227,19 +227,19 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
         if ($tc_type == 'zoom') { // zoom
             $tool_content .= "<div class='alert alert-info'>$langGoToZoomLink</div>";
-            $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='https://zoom.us/' target='_blank'>$langGoToZoomLinkText</a></div>";
+            $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://zoom.us/' target='_blank'>$langGoToZoomLinkText</a></div>";
 
             $tool_content .= "<div class='form-group'>
-                    <label for='title' class='col-sm-2 control-label'>$langLink:</label>
-                    <div class='col-sm-10'>
+                    <label for='title' class='col-12 control-label-notes'>$langLink:</label>
+                    <div class='col-12'>
                         <input class='form-control' type='text' name='zoom_link' value='$zoom_link' placeholder='Zoom $langLink' size='50'>
                     </div>
                 </div>";
         }
 
-        $tool_content .= "<div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
-            <div class='col-sm-10'>
+        $tool_content .= "<div class='form-group mt-4'>
+            <label for='title' class='col-12 control-label-notes'>$langTitle:</label>
+            <div class='col-12'>
                 <input class='form-control' type='text' name='title' id='title' value='$value_title' placeholder='$langTitle' size='50'>
             </div>
         </div>

@@ -202,26 +202,12 @@ view($view, $data);
  * @param type $course_id
  * @param type $bbb_server_id
  */
-<<<<<<< local
 function update_tc_session($course_id, $tc_server_id) {
     
     $q = Database::get()->querySingle("SELECT * FROM tc_session WHERE course_id = ?d", $course_id);
-=======
-function update_bbb_session($course_id, $bbb_server_id) {
-
-    $q = Database::get()->queryArray("SELECT id FROM tc_session JOIN tc_servers 
-            ON running_at = tc_servers.id 
-               WHERE tc_servers.type = 'bbb'
-            AND course_id = ?d", $course_id);
->>>>>>> graft
     if ($q) {
-<<<<<<< local
-        Database::get()->query("UPDATE tc_session SET running_at = ?d WHERE course_id = ?d", $tc_server_id, $course_id);        
-    }    
-=======
         foreach ($q as $data) {
             Database::get()->query("UPDATE tc_session SET running_at = ?d WHERE id = ?d", $bbb_server_id, $data->id);
         }
     }
->>>>>>> graft
 }

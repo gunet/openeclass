@@ -2505,6 +2505,11 @@ function upgrade_to_3_14($tbl_options) : void {
  */
 function upgrade_to_4_0($tbl_options): void {
 
+    // question feedback
+    if (!DBHelper::fieldExists('exercise_question', 'feedback')) {
+        Database::get()->query("ALTER TABLE exercise_question ADD `feedback` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci AFTER description");
+    }
+
     // widgets
     if (!DBHelper::tableExists('widget')) {
         Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (

@@ -361,13 +361,19 @@ function render_profile_fields_content($context) {
         }
 
         if (count($res) > 0) { //category start
-            $return_str .= "<div class='col-sm-6'>
-                            <div class='panel panel-default mt-3'>
-                                    <div class='panel-heading text-center'>".$cat->name."</div>";
+            $return_str .= "<div class='col-md-6 col-12 mt-3'>
+                            <div class='panel panel-admin border-0 bg-white rounded-0 px-0'>
+                                     <div class='panel-heading rounded-0 bg-white ps-md-0 pe-md-1 px-0'>
+                                        <div class='panel-heading bg-body ps-0 pe-0'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='text-uppercase Help-text-panel-heading'>".$cat->name."</span>
+                                            </div>
+                                        </div>
+                                    </div>";
         }
 
         foreach ($res as $f) { //get user data for each field
-            $return_str .= "<div class='panel-body'><div class='profile-pers-info-data'>";
+            $return_str .= "<div class='panel-body rounded-0 ps-md-0 pt-0 px-0'><div class='profile-pers-info-data'>";
 
             $fdata_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields_data
                                                        WHERE user_id = ?d AND field_id = ?d", $context['user_id'], $f->id);

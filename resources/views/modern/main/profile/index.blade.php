@@ -28,9 +28,8 @@
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <div class="inner-heading clearfix">
-                                    {!! $action_bar !!}
-                                    @if(Session::has('message'))
+                            
+                                @if(Session::has('message'))
                                     <div class='col-12 all-alerts'>
                                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                                             @if(is_array(Session::get('message')))
@@ -44,43 +43,147 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                         </div>
                                     </div>
-                                    @endif
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
+                                @endif
+
+                                <div class="row px-2">
+                                    <div class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-12">
                                         <div class="row">
-                                            <div class="col-md-2 col-6 offset-3 offset-md-0 d-flex justify-content-center">
+                                            <div class="col-12 d-flex justify-content-center">
                                                 <div id='profile-avatar'>{!! $profile_img !!}</div>
                                             </div>
-                                            <div class="col-md-10 col-12 text-md-start text-center">
-                                                <div class="profile-name TextBold">{{ $userdata->givenname }} {{ $userdata->surname }}</div>
-                                                <div class='not_visible'><strong>{{ $userdata->username }}</strong></div>
+                                        </div>
+                                        <div class="row justify-content-md-start justify-content-center text-center mt-2" >
+                                            <h5 class='text-center blackBlueText TextSemiBold'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h5>
+                                            <p class='text-center'>
+                                                @if(($session->status == USER_TEACHER))
+                                                    {{ trans('langMetaTeacher') }}
+                                                @elseif(($session->status == USER_STUDENT))
+                                                    {{ trans('langCStudent') }}
+                                                @else
+                                                    {{ trans('langAdministrator')}}
+                                                @endif
+                                            </p>
+                                        </div>
+                                        <div class="row justify-content-md-start justify-content-center text-center mt-3">
+                                            <div class="py-1 d-flex justify-content-center align-items-center" >
+                                                {!! $action_bar !!}
                                             </div>
+                                            <div class="py-1">
+                                                {{ trans('langExplain') }}
+                                            </div>
+                                        </div>
+                                    </div>
 
+                                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12 col-12 ps-md-3 pe-md-0 ps-0 pe-0">
+
+                                        <div class='panel panel-admin border-0 shadow-none mt-md-2 mt-3 bg-white rounded-0 shadow-none'>
+                                            <div class='panel-heading rounded-0 bg-white ps-md-3 pe-md-1 px-0'>
+                                                <div class='panel-heading bg-white ps-md-3 pe-md-0'>
+                                                    <div class='col-12 Help-panel-heading'>
+                                                        <span class='text-uppercase Help-text-panel-heading'>{{ trans('langPersInfo') }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class='panel-body rounded-0'>
+                                                    <div class="row mt-0">
+                                                        <div class="col-xl-4 col-lg-6 col-12 mb-2">
+                                                            <p class='text-secondary TextMedium small-text'>E-mail:</p>
+                                                            <p class='blackBlueText small-text'>{{ $userdata->email }}</p>
+                                                        </div>
+
+                                                        <div class="col-xl-4 col-lg-6 col-12 mb-2">
+                                                            <p class='text-secondary TextMedium small-text'>{{ trans('langStatus') }}:</p>
+                                                            <p class='blackBlueText small-text'>
+                                                                @if(($session->status == USER_TEACHER))
+                                                                    {{ trans('langMetaTeacher') }}
+                                                                @elseif(($session->status == USER_STUDENT))
+                                                                    {{ trans('langCStudent') }}
+                                                                @else
+                                                                    {{ trans('langAdministrator')}}
+                                                                @endif
+
+                                                            </p>
+                                                        </div>
+
+                                                        <div class="col-xl-4 col-lg-6 col-12 mb-lg-3 mt-lg-3 mt-xl-0 mb-2">
+                                                            <p class='text-secondary TextMedium small-text'>{{trans('langPhone')}}: </p>
+                                                            <p class='blackBlueText small-text'>{{ $userdata->phone }}</p>
+                                                        </div>
+
+
+                                                        <div class="col-xl-4 col-lg-6 col-12 mt-xl-0 mt-lg-3 mb-lg-3 mb-2">
+                                                            <p class='text-secondary TextMedium small-text'>{{ trans('langAm') }}:</p>
+                                                            <p class='blackBlueText small-text'>{{ $userdata->am }}</p>
+                                                        </div>
+
+                                                        <div class="col-xl-4 col-lg-6 col-12 mb-lg-3 mb-2">
+                                                            <p class='text-secondary TextMedium small-text'>{{ trans('langProfileMemberSince') }}:</p>
+                                                            <p class='blackBlueText small-text'>{{ $userdata->registered_at }}</p>
+                                                        </div>
+
+                                                        <div class="col-xl-4 col-lg-6 col-12">
+                                                            <p class='text-secondary TextMedium small-text'>{{ trans('langFaculty') }}:</p>
+                                                            <p class='blackBlueText small-text'>
+                                                                @php
+                                                                    $user = new User();
+                                                                    $departments = $user->getDepartmentIds($uid);
+                                                                @endphp
+                                                                @foreach ($departments as $dep)
+                                                                    {!! $tree->getFullPath($dep) !!}
+                                                                @endforeach
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-12 mt-4">
-                                        {!! $action_bar_blog_portfolio !!}
-                                    </div>
-                                    <div class='col-12'>
-                                        <div class='row'>
-                                           {!! render_profile_fields_content(array('user_id' => $id)) !!}
+
+                                        <div class='panel panel-admin border-0 bg-white rounded-0 px-0'>
+                                            <div class='panel-heading rounded-0 bg-white ps-md-3 pe-md-1 px-0'>
+                                                <div class='panel-heading bg-body ps-md-3 pe-md-0'>
+                                                    <div class='col-12 Help-panel-heading'>
+                                                        <span class='text-uppercase Help-text-panel-heading'>{{ trans('langAboutMe') }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class='panel-body rounded-0 ps-md-3 pt-0 px-0'>
+                                                <div class='col-12 ps-3'>
+                                                    @if (!empty($userdata->description))
+                                                        {!! standard_text_escape($userdata->description) !!}
+                                                    @else
+                                                        <p class='text-center mb-0'>{{ trans('langNoInfoAvailable') }}</p>
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </div>
+
+                                        
                                     </div>
                                 </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-6 col-12">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading text-center">
-                                                {{ trans('langProfilePersInfo') }}
+
+                                <div class="row px-2 mb-3">
+                                    {!! render_profile_fields_content(array('user_id' => $id)) !!}
+                                </div>
+
+                                <div class="row px-2">
+                                    <div class="col-12">
+                                        <div class="panel panel-admin border-0 bg-white rounded-0 px-0">
+                                            <div class='panel-heading rounded-0 bg-white ps-md-0 pe-md-1 px-0'>
+                                                <div class='panel-heading bg-body ps-0 pe-0'>
+                                                    <div class='col-12 Help-panel-heading'>
+                                                        <span class='text-uppercase Help-text-panel-heading'>{{ trans('langProfilePersInfo') }}</span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class='panel-body'>
+                                            <div class='panel-body rounded-0 ps-md-0 pt-0 px-0'>
+                                                
                                                 <div class="profile-content-panel-text">
                                                     @if (!empty($userdata->email) and allow_access($userdata->email_public))
                                                         <span class='text-secondary fw-bold'>{{ trans('langEmail') }}:</span>
                                                         {!! mailto($userdata->email) !!}
                                                     @endif
                                                 </div>
+                                            
 
                                                 @if (!empty($userdata->phone) and allow_access($userdata->phone_public))
                                                     <div class='lh-25px'>
@@ -90,14 +193,14 @@
                                                         {{ q($userdata->phone) }}
                                                     </div>
                                                 @endif
-                                                <div  class='lh-25px'>
+                                                <div class='lh-25px'>
                                                         <span class='text-secondary fw-bold'>
                                                             {{ trans('langStatus') }}:
                                                         </span>{{ $userdata->status==1 ? trans('langTeacher'): trans('langStudent') }}
                                                 </div>
 
                                                 @if (!empty($userdata->am) and allow_access($userdata->am_public))
-                                                    <div  class='lh-25px'>
+                                                    <div class='lh-25px'>
                                                         <span class='text-secondary fw-bold'>
                                                             {{ trans('langAm') }}:
                                                         </span>
@@ -113,7 +216,7 @@
                                                         @endforeach
                                                     </div>
                                                 @endif
-                                                <div  class='lh-25px'>
+                                                <div class='lh-25px'>
                                                     <span class='text-secondary fw-bold'>
                                                         {{ trans('langFaculty') }}:
                                                     </span>
@@ -124,20 +227,25 @@
                                                         @endif
                                                     @endforeach
                                                 </div>
-                                                <div  class='lh-25px'>
+                                                <div class='lh-25px'>
                                                     <span class='text-secondary fw-bold'>
                                                         {{ trans('langProfileMemberSince') }}:
                                                     </span>{{ $userdata->registered_at }}
                                                 </div>
+                                               
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-12 mt-md-0 mt-3">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading text-center">
-                                                {{ trans('langProfileAboutMe') }}
+                                    {{--<div class="col-12 mt-3">
+                                        <div class="panel panel-admin border-0 bg-white rounded-0 px-0">
+                                            <div class='panel-heading rounded-0 bg-white ps-md-0 pe-md-1 px-0'>
+                                                <div class='panel-heading bg-body ps-0 pe-0'>
+                                                    <div class='col-12 Help-panel-heading'>
+                                                        <span class='text-uppercase Help-text-panel-heading'> {{ trans('langProfileAboutMe') }}</span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class='panel-body'>
+                                            <div class='panel-body rounded-0 ps-md-0 pt-0 px-0'>
                                                 <div class="profile-content-panel-text">
                                                     <p>
                                                     @if (!empty($userdata->description))
@@ -147,7 +255,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>--}}
                                 </div>
                             </div>
                         </div>
@@ -156,11 +264,13 @@
                     @if(count($cert_completed) > 0 or count($badge_completed) > 0)
 
                         @if (count($cert_completed) > 0)
-                        <div class='col-sm-6 mt-3'>
-                            <div class="panel panel-success">
-                                <div class='panel-heading'>
-                                    <div class='panel-title text-center p-0'>
-                                         {{ trans('langMyCertificates') }}
+                        <div class='col-12 mt-3'>
+                            <div class="panel panel-admin px-lg-4 py-lg-3 bg-white">
+                                <div class='panel-heading bg-body'>
+                                    <div class='panel-heading bg-body ps-0 pe-0'>
+                                        <div class='col-12 Help-panel-heading'>
+                                            <span class='text-uppercase fw-bold Help-text-panel-heading'>{{ trans('langMyCertificates') }}</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="panel-body">
@@ -207,11 +317,13 @@
                         @endif
 
                         @if (count($badge_completed) > 0)
-                        <div class='col-sm-6 mt-3'>
-                            <div class="panel panel-success">
-                                <div class='panel-heading'>
-                                    <div class='panel-title text-center p-0'>
-                                        {{ trans('langBadges') }}
+                        <div class='col-12 mt-3'>
+                            <div class="panel panel-admin px-lg-4 py-lg-3 bg-white">
+                                <div class='panel-heading bg-body'>
+                                    <div class='panel-heading bg-body ps-0 pe-0'>
+                                        <div class='col-12 Help-panel-heading'>
+                                            <span class='text-uppercase fw-bold Help-text-panel-heading'>{{ trans('langBadges') }}</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="panel-body">

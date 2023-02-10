@@ -1414,7 +1414,17 @@ label:has(input[type="checkbox"]:disabled){
     width:12px;
   }
 
+/* -------------------------------------------- Public Profile ------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
   
+  .img-public-profile{ 
+    width:150px;
+    height:150px;
+  }
+
 /* -------------------------------------------- Forum ---------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1584,7 +1594,7 @@ label:has(input[type="checkbox"]:disabled){
   }
 
   .openCourseImg{
-    width:70%;
+    width:100%;
     height:200px;
     border-radius: 5px;
   }
@@ -1604,12 +1614,16 @@ label:has(input[type="checkbox"]:disabled){
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background:#001146 ;
+    background:#ffffff ;
     border-radius: 15px;
     max-height:80vh;
-    border:solid 8px #005ad7;
+    border:solid 2px #e8e8e8;
     padding: 20px;
   }
+  .ClickCourseModalImg{
+    width:16px; height:16px;
+  }
+
   @media(max-width:767px){
     .modal-content-opencourses{
       width:90vw;
@@ -1738,17 +1752,17 @@ label:has(input[type="checkbox"]:disabled){
     border-radius:15px;
     border:solid 1px #e8e8e8;
   }
-  .panel-admin>.panel-heading{
+  .panel-admin .panel-heading{
     background: #003e85;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#ffffff;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
     font-weight: 600; font-style: normal;
   }
-  .panel-admin>.panel-heading>.panel-title{
+  .panel-admin .panel-heading .panel-title{
     color:#ffffff;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
     margin-bottom:0px;
     padding:0px;
     font-weight: 600; font-style: normal;
@@ -1783,19 +1797,19 @@ label:has(input[type="checkbox"]:disabled){
     border-radius:15px;
     border:solid 1px #e8e8e8;
   }
-  .panel-primary>.panel-heading, .panel-action-btn-primary>.panel-heading{
+  .panel-primary .panel-heading, .panel-action-btn-primary .panel-heading{
     background: #3d80d0;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#ffffff;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
     font-weight: 600; font-style: normal;
   }
-  .panel-primary>.panel-heading>.panel-title, .panel-action-btn-primary>.panel-heading>.panel-title{
+  .panel-primary .panel-heading .panel-title, .panel-action-btn-primary .panel-heading .panel-title{
     margin-bottom:0px;
     padding:0px;
     color:#ffffff;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
     font-weight: 600; font-style: normal;
   }
   .panel-primary:has(.panel-footer) .panel-body{
@@ -1838,12 +1852,12 @@ label:has(input[type="checkbox"]:disabled){
     border-radius:15px;
     border:solid 1px #e8e8e8;
   }
-  .panel-success>.panel-heading{
+  .panel-success .panel-heading{
     background: #22b473;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#ffffff;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
     font-weight: 600; font-style: normal;
     font-size: 15px;
   }
@@ -1901,19 +1915,19 @@ label:has(input[type="checkbox"]:disabled){
   .panel-action-btn-default:has(.panel-heading){
     border:solid 1px #e8e8e8;
   }
-  .panel-default>.panel-heading, .panel-action-btn-default>.panel-heading {
+  .panel-default .panel-heading, .panel-action-btn-default .panel-heading {
     background: #63717c;
     border-color: #f2f2f2;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#ffffff;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
     font-weight: 600; font-style: normal;
     border-bottom: solid 1px #eee7e7;
   }
-  .panel-default>.panel-heading>.panel-title, .panel-action-btn-default>.panel-heading>.panel-title{
+  .panel-default .panel-heading .panel-title, .panel-action-btn-default .panel-heading .panel-title{
     color:#ffffff;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
     margin-bottom:0px;
     padding:0px;
     font-weight: 600; font-style: normal;
@@ -2001,17 +2015,17 @@ label:has(input[type="checkbox"]:disabled){
     border-radius:15px;
     border:solid 1px #e8e8e8;
   }
-  .panel-danger>.panel-heading{
+  .panel-danger .panel-heading{
     background: #dc3545;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     color:#ffffff;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
     font-weight: 600; font-style: normal;
   }
-  .panel-danger>.panel-heading>.panel-title{
+  .panel-danger .panel-heading .panel-title{
     color:#ffffff;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
     margin-bottom:0px;
     padding:0px;
     font-weight: 600; font-style: normal;
@@ -2099,7 +2113,7 @@ label:has(input[type="checkbox"]:disabled){
   }
 
   .Help-text-panel-heading {
-    color: #003e87; 
+    color: #003e87 !important; 
     font-weight: 800; 
     font-style: normal;
   }
@@ -2612,6 +2626,10 @@ label:has(input[type="checkbox"]:disabled){
     color: #ffffff;
   }
 
+  .link_admin_tool:hover{
+    opacity: 0.5;
+    color:#001146;
+  }
 
 /* ------------------------------------------------------- WIDGETS ----------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/

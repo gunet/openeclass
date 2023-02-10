@@ -443,7 +443,7 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .Help-text-panel-heading {
-                    color:  $theme_options_styles[linkColor];
+                    color:  $theme_options_styles[linkColor] !important;
                 }
 
                 .slider-round { 
