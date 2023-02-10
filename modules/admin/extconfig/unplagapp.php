@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,10 +17,10 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
-require_once 'genericparam.php';
+require_once 'genericrequiredparam.php';
 
 class UnplagApp extends ExtApp {
 
@@ -29,8 +29,8 @@ class UnplagApp extends ExtApp {
 
     public function __construct() {
         parent::__construct();
-        $this->registerParam(new GenericParam($this->getName(), "API Key", UnplagApp::APIKEY));
-        $this->registerParam(new GenericParam($this->getName(), "API Secret", UnplagApp::APISECRET));
+        $this->registerParam(new GenericRequiredParam($this->getName(), "API Key", UnplagApp::APIKEY));
+        $this->registerParam(new GenericRequiredParam($this->getName(), "API Secret", UnplagApp::APISECRET));
     }
 
     public function getDisplayName() {
