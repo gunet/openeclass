@@ -679,7 +679,7 @@ function lessonToolsMenu($rich=true) {
             }
 
             // hide teleconference when no tc servers are enabled
-            if ($mid == MODULE_ID_TC and count(is_configured_tc_server()) == 0) {
+            if ($mid == MODULE_ID_TC and count(get_enabled_tc_services()) == 0) {
                 continue;
             }
 

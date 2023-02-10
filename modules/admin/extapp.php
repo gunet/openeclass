@@ -34,7 +34,7 @@ $appName = isset($_GET['edit'])? $_GET['edit']: null;
 
 // Code to be executed with Ajax call when clicking the activate/deactivate button from External App list page
 if (isset($_POST['state'])) {
-    $appName= $_POST['appName'];
+    $appName = $_POST['appName'];
     $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
     $appNameAjax = $appName;
 

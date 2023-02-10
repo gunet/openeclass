@@ -154,7 +154,7 @@ $module_list = Database::get()->queryArray('SELECT module_id, visible
                                 AND module_id NOT IN (SELECT module_id FROM module_disable)', $course_id);
 
 foreach ($module_list as $item) {
-    if ($item->module_id == MODULE_ID_TC and count(is_configured_tc_server()) == 0) {
+    if ($item->module_id == MODULE_ID_TC and count(get_enabled_tc_services()) == 0) {
         // hide teleconference when no tc servers are enabled
         continue;
     }
