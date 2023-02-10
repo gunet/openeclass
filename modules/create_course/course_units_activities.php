@@ -128,9 +128,9 @@ if(!isset($_POST['final_submit'])){
 
             $act_list_in_class = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_IN_CLASS."'");
 
-
+            $tc_disabled = (count(get_enabled_tc_services()) == 0);
             foreach ($act_list_in_home as $item_in_home) {
-                if ($item_in_home->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
+                if ($item_in_home->activity_ID == MODULE_ID_TC and $tc_disabled) { // hide teleconference when no tc servers are enabled
                     continue;
                 }
 
@@ -141,7 +141,7 @@ if(!isset($_POST['final_submit'])){
             }
 
             foreach ($act_list_after_class as $item_after_class) {
-                if ($item_after_class->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
+                if ($item_after_class->activity_ID == MODULE_ID_TC and $tc_disabled) { // hide teleconference when no tc servers are enabled
                     continue;
                 }
                 $mid = getIndirectReference($item_after_class->activity_ID);
@@ -152,7 +152,7 @@ if(!isset($_POST['final_submit'])){
             }
 
             foreach ($act_list_in_class as $item_in_class) {
-                if ($item_in_class->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
+                if ($item_in_class->activity_ID == MODULE_ID_TC and $tc_disabled) { // hide teleconference when no tc servers are enabled
                     continue;
                 }
                 $mid = getIndirectReference($item_in_class->activity_ID);

@@ -36,12 +36,12 @@ $data['appName'] = $appName = isset($_GET['edit'])? $_GET['edit']: null;
 // Code to be executed with Ajax call when clicking the activate/deactivate button from External App list page
 if (isset($_POST['state'])) {
     $appName = $_POST['appName'];
-    if(showSecondFactorChallenge()!=""){
-        $parts = explode(",",$appName);
-        if(count($parts)>1){
+    if (showSecondFactorChallenge()) {
+        $parts = explode(',' ,$appName);
+        if (count($parts) > 1){
             $appName = $parts[0];
             $_POST['sfaanswer'] = $parts[count($parts)-1];
-        }else{
+        } else {
             $_POST['sfaanswer'] = '';
         }
         checkSecondFactorChallenge();
@@ -64,17 +64,13 @@ if ($appName) {
                 $param->setValue('');
                 $param->persistValue();
             }
-            Session::flash('message',$langFileUpdatedSuccess);
-            Session::flash('alert-class', 'alert-info');
+            Session::Messages($langFileUpdatedSuccess, 'alert-info');
         } else {
-            $result = $app->storeParams();
-            if ($result) {
-                Session::flash('message',$result);
-                Session::flash('alert-class', 'alert-danger');
-            } else {
-                Session::flash('message',$langFileUpdatedSuccess);
-                Session::flash('alert-class', 'alert-success');
-            }
+        $result = $app->storeParams();
+        if ($result) {
+            Session::Messages($result, 'alert-danger');
+        } else {
+            Session::Messages($langFileUpdatedSuccess, 'alert-success');
         }
         redirect_to_home_page($app->getConfigUrl());
     }

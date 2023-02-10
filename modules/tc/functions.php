@@ -33,50 +33,39 @@ function select_tc_server($course_id) {
 
     $tool_content .= "<div class='row extapp'><div class='col-sm-12'>";
 
-    if (is_active_tc_server('bbb', $course_id)) {
-        $tool_content .= "<table class='table-default dataTable no-footer extapp-table'>";
-        $tool_content .= "<tr><td style='width:90px; padding:0px;'>";
-        $tool_content .= "<div class='text-center' style='padding:10px;'>";
-        $tool_content .= "<img height='50' width='89' src='{$urlAppend}template/icons/bigbluebutton.png'>";
-        $tool_content .= "BigBlueButton";
-        $tool_content .= "</div></td>";
-        $tool_content .= "<td class='text-muted clearfix'><span style='padding-right: 170px;'>$langBBBLongDescription</span>";
-        $tool_content .= "<span class='pull-right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=bbb' class='btn btn-success'>$langNewBBBSession</a></span>";
-        $tool_content .= "</td></tr>";
-        $tool_content .= "</table>";
+    $descriptions = [
+        'bbb' => ['BigBlueButton', $langBBBLongDescription],
+        'jitsi' => ['Jitsi', $langJitsiLongDescription],
+        'googlemeet' => ['Google Meet', $langGoogleMeetLongDescription],
+        'zoom' => ['Zoom', $langZoomLongDescription],
+        'webex' => ['Webex', 'Webex...'],
+    ];
+    foreach (get_enabled_tc_services() as $name) {
+        $icon = $name == 'bbb'? 'bigbluebutton': $name;
+        $title = q($descriptions[$name][0]);
+        $description = $descriptions[$name][1];
+        if (is_active_tc_server($name, $course_id)) {
+            $tool_content .= "
+                <table class='table-default dataTable no-footer extapp-table'>
+                  <tr>
+                    <td style='width:90px; padding:0px;'>
+                      <div class='text-center' style='padding:10px;'>
+                        <img height='50' width='89' src='{$urlAppend}template/icons/$icon.png' alt=''>
+                        $title
+                      </div>
+                    </td>
+                    <td class='text-muted clearfix'>
+                      <span style='padding-right: 170px;'>$description</span>
+                      <span class='pull-right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=$name' class='btn btn-success'>$langNewBBBSession</a></span>
+                    </td>
+                  </tr>
+                </table>";
+        }
     }
-
-    if (is_active_tc_server('jitsi', $course_id)) {
-        $tool_content .= "<table class='table-default dataTable no-footer extapp-table'>";
-        $tool_content .= "<tr><td style='width:90px; padding:0px;'>";
-        $tool_content .= "<div class='text-center' style='padding:10px;'>";
-        $tool_content .= "<img height='50' width='89' src='{$urlAppend}template/icons/jitsi.png'>";
-        $tool_content .= "Jitsi";
-        $tool_content .= "</div></td>";
-        $tool_content .= "<td class='text-muted clearfix'><span style='padding-right: 170px;'>$langJitsiLongDescription</span>";
-        $tool_content .= "<span class='pull-right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=jitsi' class='btn btn-success'>$langNewBBBSession</a></span>";
-        $tool_content .= "</td></tr>";
-        $tool_content .= "</table>";
-    }
-
-    if (is_active_tc_server('googlemeet', $course_id)) {
-        $tool_content .= "<table class='table-default dataTable no-footer extapp-table'>";
-        $tool_content .= "<tr><td style='width:90px; padding:0px;'>";
-        $tool_content .= "<div class='text-center' style='padding:10px;'>";
-        $tool_content .= "<img height='50' width='89' src='{$urlAppend}template/icons/googlemeet.png'>";
-        $tool_content .= "Google Meet";
-        $tool_content .= "</div></td>";
-        $tool_content .= "<td class='text-muted clearfix'><span style='padding-right: 170px;'>$langGoogleMeetLongDescription</span>";
-        $tool_content .= "<span class='pull-right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=googlemeet' class='btn btn-success'>$langNewBBBSession</a></span>";
-        $tool_content .= "</td></tr>";
-        $tool_content .= "</table>";
-    }
-
     $tool_content .= "</div></div>";
 
     return $tool_content;
 }
-
 
 
 /**
@@ -99,7 +88,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote,
         $langBBBlockSettingsHideUserList, $langBBBwebcamsOnlyForModerator,
         $langBBBMaxPartPerRoom, $langBBBHideParticipants,
-        $langGoToGoogleMeetLinkText, $langLink, $langGoToGoogleMeetLink;
+        $langGoToGoogleMeetLinkText, $langLink, $langGoToGoogleMeetLink,
+        $langGoToZoomLink, $langGoToZoomLinkText;
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
@@ -152,6 +142,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $options_show = "";
         }
         $google_meet_link = ($tc_type == 'googlemeet') ? "https://meet.google.com/" . $row->meeting_id : '';
+        $zoom_link = ($tc_type == 'zoom') ? "https://zoom.us/" . $row->meeting_id : '';
 
         $checked_muteOnStart = isset($options['muteOnStart']) ? 'checked' : '';
         $checked_lockSettingsDisableMic = isset($options['lockSettingsDisableMic']) ? 'checked' : '';
@@ -185,6 +176,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $submit_name = 'new_tc_session';
         $submit_id = '';
         $google_meet_link = '';
+        $zoom_link = '';
         $value_message = $langAdd;
         $record = get_config('bbb_recording', 1);
         $checked_muteOnStart = get_config('bbb_muteOnStart', 0) ? 'checked' : '';
@@ -232,6 +224,19 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                 </div>
             </div>";
         }
+
+        if ($tc_type == 'zoom') { // zoom
+            $tool_content .= "<div class='alert alert-info'>$langGoToZoomLink</div>";
+            $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='https://zoom.us/' target='_blank'>$langGoToZoomLinkText</a></div>";
+
+            $tool_content .= "<div class='form-group'>
+                    <label for='title' class='col-sm-2 control-label'>$langLink:</label>
+                    <div class='col-sm-10'>
+                        <input class='form-control' type='text' name='zoom_link' value='$zoom_link' placeholder='Zoom $langLink' size='50'>
+                    </div>
+                </div>";
+        }
+
         $tool_content .= "<div class='form-group'>
             <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
             <div class='col-sm-10'>
@@ -583,11 +588,11 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
         $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM tc_session WHERE id = ?d", $session_id);
     } else { // new TC session
         // check if course uses specific tc_server
-        $t = Database::get()->querySingle("SELECT tc_servers.id FROM tc_servers JOIN course_external_server 
-                            ON tc_servers.id = external_server 
+        $t = Database::get()->querySingle("SELECT tc_servers.id FROM tc_servers JOIN course_external_server
+                            ON tc_servers.id = external_server
                             WHERE course_id = ?d
                                 AND`type` = ?s
-                                AND enabled = 'true' 
+                                AND enabled = 'true'
                             ORDER BY weight
                                 ASC", $course_id, $tc_type);
         if ($t) {
@@ -1010,7 +1015,7 @@ function tc_session_details() {
                     $tool_content .= "<tr>
                         <td>
                         <div class='table_td'>
-                            <div class='table_td_header clearfix'>$joinLink $warning_message_record</div> 
+                            <div class='table_td_header clearfix'>$joinLink $warning_message_record</div>
                             <div class='table_td_body'>
                                 $desc
                             </div>
@@ -1676,36 +1681,40 @@ function is_active_tc_server($tc_type, $course_id) {
  */
 function is_enabled_tc_server($course_id) {
 
-    if (is_active_tc_server('bbb', $course_id) or
-        is_active_tc_server('jitsi', $course_id) or
-        is_active_tc_server('googlemeet', $course_id)) {
-        return true;
-    } else {
-        return false;
-    }
+    return (get_config('ext_bigbluebutton_enabled') && is_active_tc_server('bbb', $course_id)) ||
+           (get_config('ext_googlemeet_enabled') && is_active_tc_server('googlemeet', $course_id)) ||
+           (get_config('ext_jitsi_enabled') && is_active_tc_server('jitsi', $course_id)) ||
+           (get_config('ext_zoom_enabled') && is_active_tc_server('zoom', $course_id)) ||
+           (get_config('ext_webex_enabled') && is_active_tc_server('webex', $course_id));
 }
 
 
 /**
- * @brief find out which tc servers are configured
- * @return array of tc_servers
+ * @brief find out which tc services are enabled
+ * @return array of tc_services
  */
-function is_configured_tc_server() {
+function get_enabled_tc_services() {
 
-    $tc_servers = [];
+    $tc_services = [];
     if (get_config('ext_bigbluebutton_enabled')) {
-        $tc_servers[] = 'bbb';
+        $tc_services[] = 'bbb';
     }
     if (get_config('ext_googlemeet_enabled')) {
-        $tc_servers[] = 'googlemeet';
+        $tc_services[] = 'googlemeet';
     }
     if (get_config('ext_jitsi_enabled')) {
-        $tc_servers[] = 'jitsi';
+        $tc_services[] = 'jitsi';
     }
-    /*if (get_config('ext_openmeetings_enabled')) {
-        $tc_type = 'om';
-    }*/
-    return $tc_servers;
+    if (get_config('ext_zoom_enabled')) {
+        $tc_services[] = 'zoom';
+    }
+    if (get_config('ext_webex_enabled')) {
+        $tc_services[] = 'webex';
+    }
+    /* if (get_config('ext_openmeetings_enabled')) {
+        $tc_services = 'om';
+    } */
+    return $tc_services;
 }
 
 /**
@@ -1716,7 +1725,6 @@ function is_configured_tc_server() {
  */
 function is_bbb_server_available($server_id, $participants)
 {
-
     global $course_id;
 
     //Get all course participants
