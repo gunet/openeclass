@@ -55,6 +55,7 @@ for ($i = 1; $i <= 6; $i++) {
 }
 // create spreadsheet
 $sheet->fromArray($data, NULL);
+
 // file output
 $writer = new Xlsx($spreadsheet);
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
