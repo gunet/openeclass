@@ -2463,6 +2463,9 @@ function upgrade_to_3_14($tbl_options) : void {
         Database::get()->query("ALTER TABLE `tc_servers` CHANGE `hostname` `hostname` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `type`");
         Database::get()->query("ALTER TABLE `tc_servers` CHANGE `type` `type` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `id`");
     }
+    if (DBHelper::fieldExists('tc_session', 'meeting_id')) {
+        Database::get()->query("ALTER TABLE `tc_session` CHANGE `meeting_id` `meeting_id` varchar(255) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL");
+    }
 
     // question feedback
     if (!DBHelper::fieldExists('exercise_question', 'feedback')) {

@@ -1633,7 +1633,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
     `public` enum('0','1') DEFAULT NULL,
     `active` enum('0','1') DEFAULT NULL,
     `running_at` int(11) DEFAULT NULL,
-    `meeting_id` varchar(42) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+    `meeting_id` varchar(255) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
     `mod_pw` varchar(255) DEFAULT NULL,
     `att_pw` varchar(255) DEFAULT NULL,
     `unlock_interval` int(11) DEFAULT NULL,

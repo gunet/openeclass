@@ -96,9 +96,14 @@ if ($server_type == 'bbb') { // bbb server
     } else {
         header('Location: ' . bbb_join_user($meeting_id,$att_pw,$_GET['username'],""));
     }
-} elseif ($server_type == 'jitsi') { // jitsi server
-    $jitsi_host = Database::get()->querySingle("SELECT hostname FROM tc_servers WHERE id = ?s", $server_id)->hostname;
-    header("Location: " . $jitsi_host . $meeting_id);
+} elseif ($server_type == 'jitsi' or $server_type == 'googlemeet') { // jitsi server
+    $host = Database::get()->querySingle("SELECT hostname FROM tc_servers WHERE id = ?s", $server_id)->hostname;
+    header("Location: " . $host . $meeting_id);
+} elseif ($server_type == 'zoom') { // zoom
+    $host = Database::get()->querySingle("SELECT hostname FROM tc_servers WHERE id = ?s", $server_id)->hostname;
+    header("Location: " . $host . 'j/'. $meeting_id . '/?pwd=' . $mod_pw);
+    } elseif ($server_type == 'webex') { // webex
+    header("Location: " . $meeting_id);
 }
 /*
 if ($server_type == 'om') { // OM server
