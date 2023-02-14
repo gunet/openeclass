@@ -83,12 +83,15 @@ if ($learnPathName) {
     $pageName = $langLearnPath.": ".disp_tool_title($titleTab);
 
     $tool_content .= action_bar(array(
+                array('title' => $langDumpUser,
+                    'url' => "dumpuserlearnpathmoduledetails.php?course=$course_code&path_id=$path_id",
+                    'icon' => 'fa-download',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success'),
                 array('title' => $langBack,
                       'url' => "index.php",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
-
-    $tool_content .= "<div class='alert alert-info'>$langSave <a href='dumpuserlearnpathmoduledetails.php?course=$course_code&amp;path_id=$path_id'>$langDumpUserDurationToFile</a></div>";
 
     $tool_content .= "<div class='table-responsive'>
                     <table id='lpu_progress' class='table-default'>

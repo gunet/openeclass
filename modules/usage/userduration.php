@@ -260,10 +260,21 @@ if (isset($_GET['u'])) { //  stats per user
         $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 
         $tool_content .= action_bar(array(
+            array('title' => $langStatsReportsLP,
+                'url' => "../learnPath/detailsAll.php?course=$course_code",
+                'icon' => 'fa-vcard-o',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'),
+            array('title' => $langStatsReportsTC,
+                'url' => "../tc/tcuserduration.php?course=$course_code",
+                'icon' => 'fa-vcard-o',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'),
             array('title' => $langDumpUser,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=xls",
                 'icon' => 'fa-download',
-                'level' => 'primary-label'),
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'),
             array('title' => $langBack,
                 'url' => "index.php?course=$course_code",
                 'icon' => 'fa-reply',
