@@ -69,10 +69,16 @@ $head_content .= "<script type='text/javascript'>
         </script>";
 
 $tool_content .= action_bar(array(
-                array('title' => $langBack,
+                    array('title' => $langDumpUser,
+                        'url' => "dumpuserlearnpathdetails.php?course=$course_code",
+                        'icon' => 'fa-download',
+                        'level' => 'primary-label',
+                        'button-class' => 'btn-success'),
+                    array('title' => $langBack,
                       'url' => "index.php",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')),false);
+                      'level' => 'primary-label')),
+                false);
 
 // check if there are learning paths available
 $lcnt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM lp_learnPath WHERE course_id = ?d", $course_id)->count;
@@ -80,8 +86,6 @@ if ($lcnt == 0) {
     $tool_content .= "<div class='alert alert-warning'>$langNoLearningPath</div>";
     draw($tool_content, 2, null, $head_content);
     exit;
-} else {
-    $tool_content .= "<div class='alert alert-info'>$langSave <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langDumpUserDurationToFile</a></div>";
 }
 
 $tool_content .= "<div class='table-responsive'>
