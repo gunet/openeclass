@@ -104,12 +104,14 @@ $uDetails = Database::get()->querySingle("SELECT surname, givenname, email
 $pageName = $langStudent . ": " . q($uDetails->surname) . " " . q($uDetails->givenname) . " (" . q($uDetails->email) . ")";
 
 $tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
-
-$tool_content .= "<div class='alert alert-info'>$langSave <a href='dumpuserdetails.php?course=$course_code&amp;uInfo=" . $_GET['uInfo'] . "'>$langDumpUserDurationToFile</a></div>";
+        array('title' => $langDumpUser,
+            'url' => "dumpuserdetails.php?course=$course_code&amp;uInfo=$_GET[uInfo]",
+            'icon' => 'fa-download',
+            'level' => 'primary-label'),
+        array('title' => $langBack,
+            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
 
 // table header
 $tool_content .= "<div class='table-responsive'><table class='table-default'>
