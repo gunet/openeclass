@@ -69,11 +69,13 @@ $tool_content .= "
                         <li class='list-group-item'><strong>$langUsageUsers</strong><span class='badge'>".count_users()."</span></li>
                         <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge'>".count_users(USER_TEACHER)."</span></li>
                         <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge'>".count_users(USER_STUDENT)."</span></li>
-                        <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langGuest<span class='badge'>".count_users(USER_GUEST)."</span></li>
+                        <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langGuest<span class='badge'>".count_users(USER_GUEST)."</span></li> 
+                        <li class='list-group-item li-indented text-center'><a href='analytical_course_stats.php' class='btn btn-success' role='button'>$langDetails</a></li>
                     </ul>
                 </div>
                 <div class='col-sm-12'>
                     <ul class='list-group'>
+                        <li class='list-group-item'><a href='../admin/otheractions.php?stats=userslogin'>$langLoginUser $langUsersOf</a></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=failurelogin'>$langLoginFailures</a><small> ($langLast15Days)</small></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=musers'>$langMultipleUsers</a></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=memail'>$langMultipleAddr e-mail</a></li>
