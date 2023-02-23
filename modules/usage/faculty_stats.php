@@ -203,16 +203,10 @@ if (isset($_GET['stats_submit'])) {
             <td class='ps-3'>$data->prof_names</td>
             <td class='ps-3'>" . format_locale_date(strtotime($data->creation_time), 'short') . "</td>
             <td class='text-center'>". action_button(array(
-                    array('title' => $langCsv,
-                        'url' => "faculty_stats_csv.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end",
-                        'icon' => 'fa-file-excel-o'),
-                    array('title' => "$langCsv ($langcsvenc2)",
-                        'url' => "faculty_stats_csv.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end&amp;enc=UTF-8",
-                        'icon' => 'fa-file-excel-o')
-                    ),
-
-                    array(
-                        'secondary_icon' => 'fa-download'))  ."
+                        array('title' => $langDumpUser,
+                            'url' => "dump_faculty_stats.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end",
+                            'icon' => 'fa-file-excel-o')),
+                        array('secondary_icon' => 'fa-download'))  ."
                             </td></tr>";
         }
         $tool_content .= "</table></div>";
