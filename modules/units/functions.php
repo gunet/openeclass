@@ -1245,6 +1245,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
 function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor, $langWasDeleted, $course_code;
 
+    $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $title = q($title);
     $r = Database::get()->querySingle("SELECT * FROM ebook WHERE id = ?d", $ebook_id);
     if (!$r) { // check if it was deleted
