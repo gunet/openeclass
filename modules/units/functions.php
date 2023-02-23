@@ -1269,6 +1269,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
     global $id, $urlServer, $is_editor,
     $langWasDeleted, $course_code, $langInactiveModule;
 
+    $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $title = q($title);
     $r = Database::get()->querySingle("SELECT * FROM ebook WHERE id = ?d", $ebook_id);
     if (!$r) { // check if it was deleted
