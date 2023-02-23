@@ -19,59 +19,48 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 $require_current_course = true;
 $require_editor = true;
 
 require_once '../../include/init.php';
 require_once 'group_functions.php';
-require_once 'include/lib/csv.class.php';
 
 $group_id = intval($_REQUEST['group_id']);
 initialize_group_info($group_id);
 
-$csv = new CSV();
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+$sheet->setTitle($langUsers);
+$sheet->getDefaultColumnDimension()->setWidth(30);
+$filename = $course_code . '_group_' . $group_name . '.xlsx';
 
-if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
-    $csv->setEncoding('UTF-8');
+$data[] = [ $group_name ];
+$data[] = [];
+$data[] = [ $langSurname, $langName, $langEmail, $langAm, $langUsername ];
+
+Database::get()->queryFunc("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.username, group_members.is_tutor
+                                FROM group_members, user
+                                WHERE group_members.group_id = ?d AND
+                                      group_members.user_id = user.id
+                                ORDER BY user.surname, user.givenname",
+    function ($item) use (&$data) {
+        $data[] = [ $item->surname, $item->givenname, $item->email, $item->am, $item->username ];
+    }, $group_id);
+
+$sheet->mergeCells("A1:E1");
+$sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+for ($i = 1; $i <= 6; $i++) {
+    $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
 }
-$csv->filename = $course_code . '_group_' . $group_name . '.csv';
+// create spreadsheet
+$sheet->fromArray($data, NULL);
 
-// dump group users
-if (isset($_GET['u']) and $_GET['u'] == 1) {
-    $csv->outputRecord($group_name);
-    $csv->outputRecord($langSurname, $langName, $langEmail, $langAm, $langUsername);
-    Database::get()->queryFunc("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.username, group_members.is_tutor
-                                    FROM group_members, user
-                                    WHERE group_members.group_id = ?d AND
-                                          group_members.user_id = user.id
-                                    ORDER BY user.surname, user.givenname",
-        function ($item) use ($csv) {
-            $csv->outputRecord($item->surname, $item->givenname, $item->email, $item->am, $item->username);
-        }, $group_id);
-} else {
-    // dump group users duration
-    if (isset($_REQUEST['u_date_start']) and isset($_REQUEST['u_date_end'])) {
-        $u_date_start = $_REQUEST['u_date_start'];
-        $u_date_end = $_REQUEST['u_date_end'];
-    } else {
-        $min_date = Database::get()->querySingle("SELECT MIN(day) AS minday FROM actions_daily WHERE course_id = ?d", $course_id)->minday;
-        $u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
-        $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
-    }
-    if (isset($u_date_start) and isset($u_date_end)) {
-        $first_line = "$langFrom $u_date_start $langAs $u_date_end";
-    } else {
-        $date_spec = '';
-    }
-    $csv->outputRecord($first_line)->outputRecord($langSurname, $langName, $langAm, $langGroup, $langDuration);
-    $totalDuration = 0;
-
-    $result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);
-
-    foreach ($result as $row) {
-        $csv->outputRecord($row->surname, $row->givenname, $row->am,
-            $group_name, format_time_duration(0 + $row->duration),
-            round($row->duration / 3600));
-    }
-}
-
+// file output
+$writer = new Xlsx($spreadsheet);
+header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header("Content-Disposition: attachment;filename=$filename");
+$writer->save("php://output");
+exit;

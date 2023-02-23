@@ -19,23 +19,43 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 $require_current_course = true;
 $require_editor = true;
 
 require_once '../../include/init.php';
-require_once 'include/lib/csv.class.php';
 
-$csv = new CSV();
-if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
-    $csv->setEncoding('UTF-8');
-}
-$csv->filename = $course_code . '_glossary.csv';
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+$sheet->setTitle($langGlossary);
+$sheet->getDefaultColumnDimension()->setWidth(30);
+$filename = $course_code . '_glossary.xlsx';
+$course_title = course_id_to_title($course_id);
 
-$csv->outputRecord($langGlossaryTerm, $langGlossaryDefinition, $langGlossaryUrl);
+$data[] = [ $course_title ];
+$data[] = [];
+$data[] = [ $langGlossaryTerm, $langGlossaryDefinition, $langGlossaryUrl ];
 
 $sql = Database::get()->queryFunc("SELECT term, definition, url FROM glossary
                             WHERE course_id = ?d
                             ORDER BY `order`",
-            function ($item) use ($csv) {
-                $csv->outputRecord($item->term, $item->definition, $item->url);
+            function ($item) use (&$data) {
+                $data[] = [ $item->term, $item->definition, $item->url ];
             }, $course_id);
+
+$sheet->mergeCells("A1:C1");
+$sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+for ($i = 1; $i <= 3; $i++) {
+    $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+}
+// create spreadsheet
+$sheet->fromArray($data, NULL);
+
+// file output
+$writer = new Xlsx($spreadsheet);
+header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header("Content-Disposition: attachment;filename=$filename");
+$writer->save("php://output");
+exit;

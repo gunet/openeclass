@@ -124,6 +124,7 @@ $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FRO
 if (!$total_participants) {
    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
+<<<<<<< local
 $export_box = "";
 if ($is_editor) {
     $export_box .= "
@@ -137,12 +138,17 @@ if ($is_editor) {
             </ul>
         </div></div>";
 }
+=======
+
+>>>>>>> graft
 if (isset($_REQUEST['unit_id'])) {
     $back_link = "../units/index.php?course=$course_code&amp;id=" . intval($_REQUEST['unit_id']);
 } else {
     $back_link = "index.php?course=$course_code";
 }
+
 $tool_content .= action_bar(array(
+<<<<<<< local
             array(
                 'title' => $langBack,
                 'url' => $back_link,
@@ -153,6 +159,27 @@ $tool_content .= action_bar(array(
 $export_box
 <div class='col-12'>
 <div class='panel panel-primary'>
+=======
+                    array('title' => $langPollPercentResults,
+                          'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid",
+                          'icon' => 'fa-download',
+                          'level' => 'primary-label',
+                          'show' => $is_editor),
+                    array('title' => $langPollFullResults,
+                          'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1",
+                          'icon' => 'fa-download',
+                          'level' => 'primary-label',
+                          'show' => $is_editor),
+                    array(
+                         'title' => $langBack,
+                         'url' => $back_link,
+                         'icon' => 'fa-reply',
+                         'level' => 'primary-label'
+                        )
+                ));
+
+$tool_content .= "<div class='panel panel-primary'>
+>>>>>>> graft
     <div class='panel-heading'>
         <div class='panel-title'>$langInfoPoll</div>
     </div>

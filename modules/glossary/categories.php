@@ -56,12 +56,12 @@ if ($is_editor) {
         if (isset($_GET['edit'])) {
             $pageName = $langCategoryMod;
         }
-        
+
         $data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                       'url' => "$cat_url",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')));        
+                      'level' => 'primary-label')));
     } else {
         $data['action_bar'] = action_bar(array(
                 array('title' => $langAddGlossaryTerm,
@@ -75,19 +75,16 @@ if ($is_editor) {
                       'level' => 'primary-label',
                       'button-class' => 'btn-success'),
                 array('title' => $langConfig,
-                      'url' => "$base_url&amp;config=1",                      
+                      'url' => "$base_url&amp;config=1",
                       'icon' => 'fa-gear'),
-                array('title' => "$langGlossaryToCsv",
+                array('title' => "$langDumpUser",
                       'url' => "dumpglossary.php?course=$course_code",
-                      'icon' => 'fa-file-excel-o'),
-                array('title' => "$langGlossaryToCsv (UTF-8)",
-                      'url' => "dumpglossary.php?course=$course_code&amp;enc=UTF-8",
                       'icon' => 'fa-file-excel-o'),
                 array('title' => $langGlossaryTerms,
                       'url' => "index.php?course=$course_code",
                       'icon' => 'fa-tasks',
                       'level' => 'primary-label')
-            ));        
+            ));
     }
 
     if (isset($_POST['submit_category'])) {
@@ -96,7 +93,7 @@ if ($is_editor) {
         $v->rule('required', array('name'));
         $v->labels(array(
             'name' => "$langTheField $langCategoryName"
-        ));        
+        ));
         if($v->validate()) {
             if (isset($_POST['category_id'])) {
                 $category_id = intval(getDirectReference($_POST['category_id']));
@@ -120,7 +117,7 @@ if ($is_editor) {
             }
             if ($q and $q->affectedRows) {
                 //Session::Messages($success_message, 'alert-success');
-                Session::flash('message',$success_message); 
+                Session::flash('message',$success_message);
                 Session::flash('alert-class', 'alert-success');
             }
             redirect_to_home_page("modules/glossary/categories.php?course=$course_code");
@@ -141,10 +138,10 @@ if ($is_editor) {
                                                   WHERE course_id = ?d AND
                                                         category_id = ?d", $course_id, $cat_id);
             //Session::Messages($langCategoryDeletedGlossary, 'alert-success');
-            Session::flash('message',$langCategoryDeletedGlossary); 
+            Session::flash('message',$langCategoryDeletedGlossary);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/glossary/categories.php?course=$course_code");
-        }        
+        }
     }
 
 
@@ -171,7 +168,7 @@ if ($is_editor) {
                                         'name' => 'submit_category'
                                     )
                                 ));
-        view('modules.glossary.createCategory', $data);                
+        view('modules.glossary.createCategory', $data);
     }
 }
 
@@ -181,6 +178,3 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
                           ORDER BY name", $course_id);
     view('modules.glossary.indexCategory', $data);
 }
-
-//draw($tool_content, 2, null, $head_content);
-

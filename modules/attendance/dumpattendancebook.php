@@ -19,30 +19,62 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 $require_current_course = true;
 $require_editor = true;
 
 include '../../include/init.php';
-require_once 'include/lib/csv.class.php';
 
-$csv = new CSV();
-if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
-    $csv->setEncoding('UTF-8');
-}
-$csv->filename = $course_code . "_list_attendance_users.csv";
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+$sheet->setTitle($langAttendanceAbsences);
+$sheet->getDefaultColumnDimension()->setWidth(30);
+$filename = $course_code . "_list_attendance_users.xlsx";
+$course_title = course_id_to_title($course_id);
+
+$data[] = [ $course_title ];
+$data[] = [];
+$data[] = [ $langSurname, $langName, $langAm, $langUsername, $langEmail, $langAttendanceAbsences ];
 
 $activities = Database::get()->queryArray("SELECT id, title
     FROM attendance_activities WHERE attendance_id = ?d",
     getDirectReference($_GET['attendance_id']));
 foreach ($activities as $act) {
     $title = !empty($act->title) ? $act->title : $langGradebookNoTitle;
-    $csv->outputRecord($title)
-        ->outputRecord($langSurname, $langName, $langAm, $langUsername, $langEmail, $langAttendanceAbsences);
+    $data[] = [ $title ];
     $entries = Database::get()->queryArray("SELECT surname, givenname, username, am, email, attend
         FROM attendance_book, user
         WHERE attendance_book.uid = user.id AND attendance_activity_id = ?d", $act->id);
     foreach ($entries as $item) {
-        $csv->outputRecord($item->surname, $item->givenname, $item->am, $item->username, $item->email, $item->attend);
+        $data[] = [ $item->surname, $item->givenname, $item->am, $item->username, $item->email, $item->attend ];
     }
-    $csv->outputRecord();
+    $data[] = [];
 }
+
+$header_style = [
+    'font' => ['italic' => true],
+    'color' => [ Color::COLOR_DARKBLUE ]
+];
+
+for ($j = 4; $j <= count($activities)*(count($entries)+1)+3; $j=$j+count($entries)+2) {
+    $sheet->mergeCells("A$j:F$j");
+    $sheet->getCellByColumnAndRow(1, $j)->getStyle()->applyFromArray($header_style);
+}
+
+$sheet->mergeCells("A1:F1");
+$sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+for ($i = 1; $i <= 6; $i++) {
+    $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+}
+// create spreadsheet
+$sheet->fromArray($data, NULL);
+
+// file output
+$writer = new Xlsx($spreadsheet);
+header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header("Content-Disposition: attachment;filename=$filename");
+$writer->save("php://output");
+exit;

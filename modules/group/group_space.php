@@ -210,13 +210,10 @@ if (isset($_GET['group_as'])) {
                       'icon' => 'fa-plus-circle',
                       'show' => $is_editor),
                 array('title' => $langDumpUser,
-                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1",
+                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id",
                       'icon' => 'fa-file-archive-o',
-                      'show' => $is_editor),
-                array('title' => "$langDumpUser ($langcsvenc2)",
-                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1&amp;enc=UTF-8",
-                      'icon' => 'fa-file-archive-o',
-                      'show' => $is_editor)));
+                      'show' => $is_editor)
+                ));
 
     $tutors = array();
     $members = array();
