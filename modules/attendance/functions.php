@@ -250,10 +250,7 @@ function display_attendance_activities($attendance_id) {
                       'icon' => 'fa-cog'),
                 array('title' => "$langExport",
                         'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id_ind",
-                    'icon' => 'fa-file-excel-o'),
-                array('title' => "$langExport ($langcsvenc2)",
-                        'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id_ind&amp;enc=UTF-8",
-                        'icon' => 'fa-file-excel-o'),
+                    'icon' => 'fa-file-excel-o')
             ),
             true
         );

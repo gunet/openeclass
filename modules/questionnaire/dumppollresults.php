@@ -18,12 +18,13 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $require_current_course = true;
 $require_editor = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/questionnaire/functions.php';
-require_once 'include/lib/csv.class.php';
 
 if (!isset($_GET['pid'])) {
     redirect_to_home_page();
@@ -33,18 +34,17 @@ if (!isset($_GET['pid'])) {
 
 $full = isset($_GET['full']) && $_GET['full'];
 
-$csv = new CSV();
-if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
-    $csv->setEncoding('UTF-8');
-}
-
-$p = Database::get()->querySingle("SELECT pid, name, anonymized FROM poll
-        WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
+$p = Database::get()->querySingle("SELECT pid, name, anonymized FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
 if (!$p) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 
-$csv->filename = $course_code . '_poll_results_' . ($full ? 'full_' : '') . $p->name . '.csv';
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+$sheet->setTitle($langResults);
+$sheet->getDefaultColumnDimension()->setWidth(30);
+$filename = $course_code . '_poll_results_' . ($full ? 'full_' : '') . $p->name . '.xlsx';
+$course_title = course_id_to_title($course_id);
 
 $qlist = [];
 $submit_date = [];
@@ -52,11 +52,12 @@ $anonymized = $p->anonymized;
 $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total
     FROM poll_user_record WHERE pid = ?d AND
          (email_verification = 1 OR email_verification IS NULL)", $p->pid)->total;
-$csv->outputRecord($langInfoPoll)
-    ->outputRecord($langTitle, $p->name)
-    ->outputRecord($langPollTotalAnswers, $total_participants)
-    ->outputRecord();
-if ($full) {
+
+$poll_title = $p->name . " (". $langPollTotalAnswers . ": " . $total_participants . ")";
+$data[] = [ $poll_title ];
+$data[] = [];
+
+if ($full) { // user questions results
     if ($anonymized) {
         $heading = array($langName);
     } else {
@@ -64,16 +65,16 @@ if ($full) {
     }
     $heading[] = $langDate;
     $questions = Database::get()->queryArray('SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position', $pid);
-
     $users = Database::get()->queryArray("SELECT uid AS user_identifier
-                        FROM poll_user_record
-                        WHERE pid = ?d
-                        AND uid != 0
-                        UNION
-                        SELECT email AS user_identifier
-                        FROM poll_user_record
-                        WHERE pid = ?d
-                        AND email_verification = 1", $pid, $pid);
+                                            FROM poll_user_record
+                                                WHERE pid = ?d
+                                                AND uid != 0
+                                            UNION
+                                                SELECT email AS user_identifier
+                                                FROM poll_user_record
+                                                WHERE pid = ?d
+                                                AND email_verification = 1",
+                                        $pid, $pid);
     foreach ($questions as $q) {
         if ($q->qtype == QTYPE_LABEL) {
             $q->question_text = strip_tags($q->question_text);
@@ -100,7 +101,7 @@ if ($full) {
                     $qlist[$user_identifier][$q->pqid] = $answer_text;
                 }
                 if (!isset($submit_date[$user_identifier])) {
-                    $submit_date[$user_identifier] = $a->submit_date;
+                    $submit_date[$user_identifier] = format_locale_date(strtotime($a->submit_date), 'short');
                 }
             }
         } else { // free text questions
@@ -114,13 +115,13 @@ if ($full) {
                 $user_identifier = $a->uid ?: $a->email;
                 $qlist[$user_identifier][$q->pqid] = $a->answer_text;
                 if (!isset($submit_date[$user_identifier])) {
-                    $submit_date[$user_identifier] = $a->submit_date;
+                    $submit_date[$user_identifier] = format_locale_date(strtotime($a->submit_date), 'short');
                 }
             }
         }
     }
     $k = 0;
-    $csv->outputRecord($heading);
+    $data[] = $heading;
     foreach ($qlist as $user_identifier => $answers) {
         $k++;
         if ($anonymized) {
@@ -128,16 +129,25 @@ if ($full) {
         } else {
             $user_info = get_user($user_identifier);
         }
-        $csv->outputRecord($user_info, $submit_date[$user_identifier], $answers);
+        $user_info[] = $submit_date[$user_identifier];
+        $data[] = array_merge($user_info, $answers);
     }
-} else {
-    $csv->outputRecord($langQuestions);
-    $questions = Database::get()->queryArray('SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position',$p->pid);
+
+    $sheet->mergeCells("A1:F1");
+    $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+    for ($i = 1; $i <= 6; $i++) {
+        $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+    }
+
+} else { // percentage results
+    $questions = Database::get()->queryArray('SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position', $p->pid);
     foreach ($questions as $q) {
         if ($q->qtype == QTYPE_LABEL) {
-            $csv->outputRecord(strip_tags($q->question_text));
+            $questions_text = strip_tags($q->question_text);
+            $data[] = [ $questions_text ];
         } else {
-            $csv->outputRecord($q->question_text);
+            $questions_text = $q->question_text;
+            $data[] = [ $questions_text ];
             if ($q->qtype == QTYPE_SINGLE or $q->qtype == QTYPE_MULTIPLE) {
                 $answers = Database::get()->queryArray("SELECT COUNT(b.aid) AS count, b.aid, c.answer_text AS answer
                                     FROM poll_user_record a, poll_answer_record b
@@ -171,16 +181,33 @@ if ($full) {
                     $answer_text[] = $a->answer_text;
                 }
             }
-            $csv->outputRecord($langAnswers, $langResults, $langResults . ' (%)');
+            $data[] = [ '', $langResults, $langResults . ' (%)' ];
             foreach ($answer_counts as $i => $count) {
                 $percentage = round(100 * ($count / $answer_total));
                 $label = $answer_text[$i];
-                $csv->outputRecord($label, $count, $percentage);
+                $data[] = [ $label, $count, $percentage ];
             }
-            $csv->outputRecord();
+            $data[] = [];
+        }
+    }
+    $sheet->mergeCells("A1:C1");
+    $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+    for ($j = 3; $j <= count($data); $j = $j+6) {
+        for ($i = 1; $i <= 3; $i++) {
+            $sheet->getCellByColumnAndRow($i, $j)->getStyle()->getFont()->setBold(true);
         }
     }
 }
+
+// create spreadsheet
+$sheet->fromArray($data, NULL);
+
+// file output
+$writer = new Xlsx($spreadsheet);
+header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header("Content-Disposition: attachment;filename=$filename");
+$writer->save("php://output");
+exit;
 
 function get_user($uid) {
     global $langAnonymous;

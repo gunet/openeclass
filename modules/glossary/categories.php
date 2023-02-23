@@ -56,12 +56,12 @@ if ($is_editor) {
         if (isset($_GET['edit'])) {
             $pageName = $langCategoryMod;
         }
-        
+
         $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "$cat_url",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')));        
+                      'level' => 'primary-label')));
     } else {
         $tool_content .= action_bar(array(
                 array('title' => $langAddGlossaryTerm,
@@ -75,19 +75,16 @@ if ($is_editor) {
                       'level' => 'primary-label',
                       'button-class' => 'btn-success'),
                 array('title' => $langConfig,
-                      'url' => "$base_url&amp;config=1",                      
+                      'url' => "$base_url&amp;config=1",
                       'icon' => 'fa-gear'),
-                array('title' => "$langGlossaryToCsv",
+                array('title' => "$langDumpUser",
                       'url' => "dumpglossary.php?course=$course_code",
-                      'icon' => 'fa-file-excel-o'),
-                array('title' => "$langGlossaryToCsv (UTF-8)",
-                      'url' => "dumpglossary.php?course=$course_code&amp;enc=UTF-8",
-                      'icon' => 'fa-file-excel-o'),
+                      'icon' => 'fa-download'),
                 array('title' => $langGlossaryTerms,
                       'url' => "index.php?course=$course_code",
                       'icon' => 'fa-tasks',
                       'level' => 'primary-label')
-            ));        
+            ));
     }
 
     if (isset($_POST['submit_category'])) {
@@ -96,7 +93,7 @@ if ($is_editor) {
         $v->rule('required', array('name'));
         $v->labels(array(
             'name' => "$langTheField $langCategoryName"
-        ));        
+        ));
         if($v->validate()) {
             if (isset($_POST['category_id'])) {
                 $category_id = intval(getDirectReference($_POST['category_id']));
@@ -140,7 +137,7 @@ if ($is_editor) {
                                                         category_id = ?d", $course_id, $cat_id);
             Session::Messages($langCategoryDeletedGlossary, 'alert-success');
             redirect_to_home_page("modules/glossary/categories.php?course=$course_code");
-        }        
+        }
     }
 
 
@@ -192,7 +189,7 @@ if ($is_editor) {
                     </div>
                 ". generate_csrf_token_form_field() ."                              
                 </form>
-            </div>";                       
+            </div>";
     }
 }
 
@@ -201,7 +198,7 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
                           FROM glossary_category WHERE course_id = ?d
                           ORDER BY name", $course_id);
 
-    if ($q and count($q)) {    
+    if ($q and count($q)) {
             $tool_content .= "
         <div class='table-responsive glossary-categories'>    
             <table class='table-default'>
@@ -209,13 +206,13 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
              ($is_editor ? "<th class='text-center'>" . icon('fa-gears') . "</th>" : '') . "
                 </tr>";
 
-        foreach ($q as $cat) {        
+        foreach ($q as $cat) {
             if ($cat->description) {
                 $desc = "<br>" . standard_text_escape($cat->description);
             } else {
                 $desc = '';
-            }        
-            $tool_content .= "<tr><td class='space-left'><a href='$base_url&amp;cat=" . getIndirectReference($cat->id) . "'><strong>" . q($cat->name) . "</strong></a><small><span class='text-muted'>$desc</span></small></td>";                       
+            }
+            $tool_content .= "<tr><td class='space-left'><a href='$base_url&amp;cat=" . getIndirectReference($cat->id) . "'><strong>" . q($cat->name) . "</strong></a><small><span class='text-muted'>$desc</span></small></td>";
             if ($is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
@@ -228,7 +225,7 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
                               'class' => 'delete',
                               'confirm' => $langConfirmDelete))
                     );
-               $tool_content .= "</td>";                        
+               $tool_content .= "</td>";
             }
             $tool_content .= "</tr>";
         }
@@ -239,4 +236,3 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
 }
 
 draw($tool_content, 2, null, $head_content);
-

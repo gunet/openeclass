@@ -19,6 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 /**
  * @brief Print a two-cell table row with that title, if the content is non-empty
@@ -577,44 +579,64 @@ function triggerAssignmentAnalytics($courseId, $uid, $assignmentId, $eventname) 
  */
 function export_grades_to_csv($id) {
 
-    global $course_code, $course_id, $m, $langNoDeadline,
-           $langSurname, $langName, $langAm, $langGroup,
-           $langUsername, $langEmail, $langGradebookGrade;
+    global $course_code, $course_id, $langNoDeadline, $langNotice2,
+           $langSurname, $langName, $langAm, $langGroup, $langScore,
+           $langUsername, $langEmail, $langStartDate, $langGradebookGrade,
+           $langGroupWorkDeadline_of_Submission;
 
-    $csv = new CSV();
-    $csv->filename = $course_code . "_" . $id . "_grades_list.csv";
-    $csv->outputHeaders();
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+    $sheet->setTitle($langScore);
+    $sheet->getDefaultColumnDimension()->setWidth(30);
+
+    $filename = $course_code . "_" . $id . "_grades_list.xlsx";
+
     // additional security
     $q = Database::get()->querySingle("SELECT id, title, submission_date, deadline FROM assignment
                             WHERE id = ?d AND course_id = ?d", $id, $course_id);
     if ($q) {
         $assignment_id = $q->id;
         if (!is_null($q->deadline)) {
-            $deadline_message = "$m[with_deadline]: ". format_locale_date(strtotime($q->deadline));
+            $deadline_message = "$langGroupWorkDeadline_of_Submission: " . format_locale_date(strtotime($q->deadline), 'full');
         } else {
             $deadline_message = $langNoDeadline;
         }
-        $csv->outputRecord($q->title);
-        $csv->outputRecord("$m[start_date]: $q->submission_date $deadline_message");
-        $csv->outputRecord($langSurname, $langName, $m['sub_date'], $langAm, $langGroup, $langUsername, $langEmail, $langGradebookGrade);
-            $sql = Database::get()->queryArray("SELECT MAX(uid) AS uid,
-                                                            CAST(MAX(grade) AS DECIMAL(10,2)) AS grade,
-                                                            MAX(submission_date) AS submission_date,
-                                                            MAX(surname) AS surname,
-                                                            MAX(givenname) AS givenname,
-                                                            username,
-                                                            MAX(am) AS am,
-                                                            MAX(email) AS email
-                                                           FROM assignment_submit JOIN user
-                                                               ON uid = user.id
-                                                           WHERE assignment_id = ?d
-                                                            GROUP BY username
-                                                            ORDER BY surname, givenname", $assignment_id);
-        foreach ($sql as $data) {
-            $ug = user_groups($course_id, $data->uid, 'txt');
-            $csv->outputRecord($data->surname, $data->givenname, format_locale_date(strtotime($data->submission_date)), $data->am, $ug, $data->username, $data->email, $data->grade);
-        }
+        $message = $q->title . " (" . $langStartDate .": ". format_locale_date(strtotime($q->submission_date), 'full') . "  ". $deadline_message .")";
+        $data[] = [ $message ];
+        $data[] = [];
+        $data[] = [ $langSurname, $langName, $langNotice2, $langAm, $langGroup, $langUsername, $langEmail, $langGradebookGrade ];
+        $data[] = [];
+        $sql = Database::get()->queryFunc("SELECT MAX(uid) AS uid,
+                                            CAST(MAX(grade) AS DECIMAL(10,2)) AS grade,
+                                            MAX(submission_date) AS submission_date,
+                                            MAX(surname) AS surname,
+                                            MAX(givenname) AS givenname,
+                                            username,
+                                            MAX(am) AS am,
+                                            MAX(email) AS email
+                                           FROM assignment_submit JOIN user
+                                               ON uid = user.id
+                                           WHERE assignment_id = ?d
+                                            GROUP BY username
+                                            ORDER BY surname, givenname",
+                function ($item)  use (&$data, $course_id) {
+                    $ug = user_groups($course_id, $item->uid, 'txt');
+                    $sub_date = format_locale_date(strtotime($item->submission_date));
+                    $data[] = [ $item->surname, $item->givenname, $sub_date, $item->am, $ug, $item->username, $item->email, $item->grade ];
+                }, $assignment_id);
     }
+    $sheet->mergeCells("A1:H1");
+    $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+    for ($i = 1; $i <= 8; $i++) {
+        $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+    }
+    // create spreadsheet
+    $sheet->fromArray($data, NULL);
+    // file output
+    $writer = new Xlsx($spreadsheet);
+    header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    header("Content-Disposition: attachment;filename=$filename");
+    $writer->save("php://output");
     exit;
 }
 
