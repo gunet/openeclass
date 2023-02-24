@@ -2351,6 +2351,8 @@ $langReturn = "Eπιστροφή";
  * ********************************************************** */
 $langAddPage = "Προσθήκη μιας σελίδας";
 $langPageAdded = "Η σελίδα προστέθηκε";
+$langPageUpdated = "Η σελίδα ενημερώθηκε";
+$langPageDeleted = "Η σελίδα διαγράφτηκε";
 $langPageTitleModified = "Ο τίτλος της σελίδας άλλαξε";
 $langSendPage = "Όνομα αρχείου της σελίδας";
 $langCouldNotSendPage = "Το αρχείο δεν είναι σε μορφή HTML και δεν ήταν δυνατόν να σταλεί. Αν θέλετε να στείλετε αρχεία που
@@ -3903,6 +3905,8 @@ $langPreviousVersion = 'Προηγούμενη έκδοση';
 $langTool = "Εργαλείο";
 $langUploadPage = "Ανέβασμα ιστοσελίδας";
 $langAddExtLink = "Προσθήκη εξωτερικού συνδέσμoυ";
+$langAddCoursePage = 'Προσθήκη σελίδας μαθήματος';
+$langCoursePages = 'Σελίδες μαθήματος';
 $langConfirmDeleteLink = "Επιβεβαίωση διαγραφής συνδέσμου";
 $langOperations = "Ενέργειες σε εξωτερικούς σύνδεσμους";
 $langInactiveTools = "Ανενεργά εργαλεία";

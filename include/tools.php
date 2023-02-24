@@ -124,23 +124,37 @@ function getToolsArray($cat) {
     });
 }
 
+/**
+ * @brief Get course pages
+ * @global type $course_id
+ * @return array
+ */
+function getCoursePages($course_id) {
+    $result = Database::get()->queryArray('SELECT id, title
+        FROM page WHERE course_id = ?d AND visible = 1',
+        $course_id);
+    if ($result) {
+        return $result;
+    } else {
+        return [];
+    }
+}
+
 
 /**
  * @brief get course external links
  * @global type $course_id
- * @return boolean
+ * @return array
  */
 function getExternalLinks() {
-
     global $course_id;
 
     $result = Database::get()->queryArray("SELECT url, title FROM link
-                                            WHERE category = -1 AND
-                                        course_id = ?d", $course_id);
+        WHERE category = -1 AND course_id = ?d", $course_id);
     if ($result) {
         return $result;
     } else {
-        return false;
+        return [];
     }
 }
 
@@ -712,26 +726,28 @@ function lessonToolsMenu($rich=true) {
         }
 
         if ($section['type'] == 'Public') {
-            $result2 = getExternalLinks();
-            if ($result2) { // display external links (if any)
-                foreach ($result2 as $ex_link) {
-                    array_push($sideMenuText, q($ex_link->title));
-                    array_push($sideMenuLink, q($ex_link->url));
-                    array_push($sideMenuImg, 'fa-external-link');
-                    array_push($sideMenuID, -1);
-                }
-            }
-        }
 
-        if ($section['type'] == 'Public') {
-            $result3 = getLTILinksForTools();
-            if ($result3) { // display lti apps as links (if any)
-                foreach ($result3 as $lti_link) {
-                    array_push($sideMenuText, q($lti_link->title));
-                    array_push($sideMenuLink, q($lti_link->url));
-                    array_push($sideMenuImg, q($lti_link->menulink));
-                    array_push($sideMenuID, -1);
-                }
+            // display course pages links (if any)
+            foreach (getCoursePages($course_id) as $page) {
+                array_push($sideMenuText, q($page->title));
+                array_push($sideMenuLink, $urlAppend . "modules/course_home/page.php?course=$course_code&amp;id=" . $page->id);
+                array_push($sideMenuImg, 'fa-caret-right');
+                array_push($sideMenuID, -1);
+            }
+
+            // display external links (if any)
+            foreach (getExternalLinks() as $ex_link) {
+                array_push($sideMenuText, q($ex_link->title));
+                array_push($sideMenuLink, q($ex_link->url));
+                array_push($sideMenuImg, 'fa-external-link');
+                array_push($sideMenuID, -1);
+            }
+
+            foreach (getLTILinksForTools() as $lti_link) {
+                array_push($sideMenuText, q($lti_link->title));
+                array_push($sideMenuLink, q($lti_link->url));
+                array_push($sideMenuImg, q($lti_link->menulink));
+                array_push($sideMenuID, -1);
             }
         }
 

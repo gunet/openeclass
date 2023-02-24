@@ -63,7 +63,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
             <div class='col-sm-10'>
                 $textarea
             </div>
-        </div>        
+        </div>
         <div class='form-group'>
             <label for='title' class='col-sm-2 control-label'>$langLTIProviderUrl:</label>
             <div class='col-sm-10'>
@@ -107,8 +107,8 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
             if (!isset($course_code)) {
                 $tool_content .= "<div class='form-group' id='courses-list'>
                     <label class='col-sm-3 control-label'>$langUseOfApp:&nbsp;&nbsp;
-                    <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfAppInfo'></span></label>                    
-                    <div class='col-sm-9'>                                
+                    <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfAppInfo'></span></label>
+                    <div class='col-sm-9'>
                         <select id='select-courses' class='form-control' name='lti_courses[]' multiple>";
                     $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                             WHERE id NOT IN (SELECT course_id FROM course_lti_app)
@@ -269,8 +269,8 @@ function edit_lti_app($session_id) {
                     if (!isset($course_id)) {
                         $tool_content .= "<div class='form-group' id='courses-list'>
                             <label class='col-sm-3 control-label'>$langUseOfApp:&nbsp;&nbsp;
-                            <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfAppInfo'></span></label>                    
-                            <div class='col-sm-9'>                                
+                            <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfAppInfo'></span></label>
+                            <div class='col-sm-9'>
                                 <select class='form-control' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
                                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                     WHERE id NOT IN (SELECT course_id FROM course_lti_app)
@@ -279,7 +279,7 @@ function edit_lti_app($session_id) {
                                 if ($row->all_courses == 1) {
                                     $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
                                 } else {
-                                    $lti_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
+                                    $lti_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id
                                                                                 IN (SELECT course_id FROM course_lti_app WHERE lti_app = ?d) ORDER BY title", $session_id);
                                     if (count($lti_courses_list) > 0) {
                                         foreach($lti_courses_list as $c) {
@@ -729,7 +729,7 @@ function getLTILinksForTools() {
         }
         return $result;
     } else {
-        return false;
+        return [];
     }
 }
 
