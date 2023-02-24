@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.14
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,38 +19,43 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-require_once 'exercise.class.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
 require_once '../../include/init.php';
-require_once 'include/lib/csv.class.php';
+require_once 'exercise.class.php';
 require_once 'modules/exercise/question.class.php';
 require_once 'modules/exercise/answer.class.php';
 
 $exerciseId = getDirectReference($_GET['exerciseId']);
 $objExercise = new Exercise();
 $objExercise->read($exerciseId);
-$csv = new CSV();
-$csv->filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv';
+
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+$sheet->setTitle($langResults);
+$sheet->getDefaultColumnDimension()->setWidth(30);
+$filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.xlsx';
+$course_title = course_id_to_title($course_id);
+
+$data[] = [ $course_title ];
 
 // exercise details
-$exercise_details[] = $objExercise->selectTitle();
-$exercise_details[] = "$langTotalScore: " . $objExercise->selectTotalWeighting();
+$exercise_details = $objExercise->selectTitle();
+$exercise_details .= " $langTotalScore: " . $objExercise->selectTotalWeighting();
 if (!empty($objExercise->selectStartDate())) {
-    $exercise_details[] = "$langStart: " . format_locale_date(strtotime($objExercise->selectStartDate()), 'short');
+    $exercise_details .= " $langStart: " . format_locale_date(strtotime($objExercise->selectStartDate()), 'short');
 }
 if (!empty($objExercise->selectEndDate())) {
-    $exercise_details[] = "$langPollEnd: " . format_locale_date(strtotime($objExercise->selectEndDate()), 'short');
+    $exercise_details .= " $langPollEnd: " . format_locale_date(strtotime($objExercise->selectEndDate()), 'short');
 }
 
-$csv->outputRecord($exercise_details);
-
-$headings = [];
-$csv->outputRecord($langSurname, $langName, $langAm, $langGroup, $langStart,
-                    $langExerciseDuration, $langTotalScore,
-                    $headings);
+$data[] = [ $exercise_details ];
+$data[] = [];
+$data[] = [ $langSurname, $langName, $langAm, $langGroup, $langStart, $langExerciseDuration, $langTotalScore ];
 
 $result = Database::get()->queryArray("(SELECT DISTINCT uid, surname, givenname, am 
                                                     FROM `exercise_user_record` 
@@ -72,7 +77,7 @@ foreach ($result as $row) {
     $am = $row->am;
     $ug = user_groups($course_id, $sid, 'txt');
 
-    $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date,
+    $result2 = Database::get()->queryArray("SELECT record_start_date,
         record_end_date, TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration,
         total_score, total_weighting, eurid, attempt_status
         FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d  
@@ -95,6 +100,23 @@ foreach ($result as $row) {
                 $total_score = $row2->total_score;
             }
         }
-        $csv->outputRecord($surname, $name, $am, $ug, $row2->record_start_date, $duration, $total_score);
+        $record_start_date = format_locale_date(strtotime($row2->record_start_date), 'short');
+        $data[] = [ $surname, $name, $am, $ug, $record_start_date, $duration, $total_score ];
     }
 }
+
+$sheet->mergeCells("A1:G1");
+$sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+$sheet->getCell('A2')->getStyle()->getFont()->setItalic(true);
+for ($i = 1; $i <= 7; $i++) {
+    $sheet->getCellByColumnAndRow($i, 4)->getStyle()->getFont()->setBold(true);
+}
+// create spreadsheet
+$sheet->fromArray($data, NULL);
+
+// file output
+$writer = new Xlsx($spreadsheet);
+header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header("Content-Disposition: attachment;filename=$filename");
+$writer->save("php://output");
+exit;

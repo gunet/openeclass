@@ -111,14 +111,14 @@ if ($is_editor) {
         ],
         [
             'title' => "$langResults ($langDumpUser)",
-            'url' => "csv.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
-            'icon' => 'fa-sort-numeric-desc',
+            'url' => "dump_results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
+            'icon' => 'fa fa-download',
             'button-class' => 'btn-success',
         ],
         [
             'title' => "$langPollFullResults ($langDumpUser)",
-            'url' => "csv_full.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
-            'icon' => 'fa-sort-numeric-desc',
+            'url' => "dump_results_full.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
+            'icon' => 'fa fa-download',
             'button-class' => 'btn-success',
         ]
     ]);
