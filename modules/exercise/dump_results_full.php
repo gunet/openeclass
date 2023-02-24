@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.10
+ * Open eClass 3.14
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2021  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,34 +19,43 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-require_once 'exercise.class.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
 require_once '../../include/init.php';
 require_once 'include/baseTheme.php';
-require_once 'include/lib/csv.class.php';
+require_once 'exercise.class.php';
 require_once 'modules/exercise/question.class.php';
 require_once 'modules/exercise/answer.class.php';
 
 $exerciseId = getDirectReference($_GET['exerciseId']);
 $objExercise = new Exercise();
 $objExercise->read($exerciseId);
-$csv = new CSV();
-$csv->filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv';
+
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+$sheet->setTitle($langResults);
+$sheet->getDefaultColumnDimension()->setWidth(30);
+$filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.xlsx';
+$course_title = course_id_to_title($course_id);
+
+$out[] = [ $course_title ];
 
 // exercise details
-$exercise_details[] = $objExercise->selectTitle();
-$exercise_details[] = "$langTotalScore: " . $objExercise->selectTotalWeighting();
+$exercise_details  = $objExercise->selectTitle();
+$exercise_details .= " $langTotalScore: " . $objExercise->selectTotalWeighting();
 if (!empty($objExercise->selectStartDate())) {
-    $exercise_details[] = "$langStart: " . format_locale_date(strtotime($objExercise->selectStartDate()), 'short');
+    $exercise_details .= " $langStart: " . format_locale_date(strtotime($objExercise->selectStartDate()), 'short');
 }
 if (!empty($objExercise->selectEndDate())) {
-    $exercise_details[] = "$langPollEnd: " . format_locale_date(strtotime($objExercise->selectEndDate()), 'short');
+    $exercise_details .= " $langPollEnd: " . format_locale_date(strtotime($objExercise->selectEndDate()), 'short');
 }
 
-$csv->outputRecord($exercise_details);
+$out[] = [ $exercise_details ];
+$out[] = [];
 
 $possible_qids = []; // possible questions
 $results = []; // output `grid`. Holds final results.
@@ -104,7 +113,7 @@ foreach ($possible_qids as $qid) {
     $headers[] = "$langGradebookGrade ($langMax: ". $question->selectWeighting() . ")";
 }
 $headers[] = $langTotalScore;
-$csv->outputRecord($headers);
+$out[] = $headers;
 
 // get exercise attempts (except `canceled` attempts)
 $q = Database::get()->queryArray("(SELECT uid, eurid, surname, givenname, am
@@ -174,10 +183,28 @@ foreach ($q as $d) { // for each attempt
             }
         }
         $output[] = user_total_score($eurid); // user total score
-        $csv->outputRecord($output);
+        $out[] = $output;
         $output = array();
     }
 }
+
+
+$sheet->mergeCells("A1:G1");
+$sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+$sheet->getCell('A2')->getStyle()->getFont()->setItalic(true);
+for ($i = 1; $i <= 5; $i++) {
+    $sheet->getCellByColumnAndRow($i, 4)->getStyle()->getFont()->setBold(true);
+}
+// create spreadsheet
+$sheet->fromArray($out, NULL);
+
+// file output
+$writer = new Xlsx($spreadsheet);
+header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header("Content-Disposition: attachment;filename=$filename");
+$writer->save("php://output");
+exit;
+
 
 /**
  * @brief question details
