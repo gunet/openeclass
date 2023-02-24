@@ -2134,8 +2134,18 @@ $db->query("CREATE TABLE `user_analytics` (
   `updated` datetime NOT NULL,
   PRIMARY KEY (`id`)) $tbl_options");
 
+// Course pages
 
-// h5p
+$db->query("CREATE TABLE `page` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `path` varchar(32) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `visible` tinyint(4) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `course_id_index` (`course_id`)) $tbl_options");
+
+// H5P
 
 $db->query("CREATE TABLE h5p_library (
     id INT(10) NOT NULL AUTO_INCREMENT,

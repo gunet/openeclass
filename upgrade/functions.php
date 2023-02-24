@@ -2497,6 +2497,16 @@ function upgrade_to_3_14($tbl_options) : void {
     if (!DBHelper::fieldExists('lp_user_module_progress', 'accessed')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `accessed` datetime DEFAULT NULL AFTER started");
     }
+    if (!DBHelper::tableExists('page')) {
+        Database::get()->query("CREATE TABLE `page` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `course_id` int(11) DEFAULT NULL,
+            `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+            `path` varchar(32) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `visible` tinyint(4) DEFAULT 0,
+            PRIMARY KEY (`id`),
+            KEY `course_id_index` (`course_id`)) $tbl_options");
+    }
 
 }
 
