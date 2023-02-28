@@ -5,7 +5,7 @@
         "ezyang/htmlpurifier": "dev-master",
         "phpids/phpids": "dev-master",
         "pragmarx/google2fa":"^8.0",
-        "swiftmailer/swiftmailer": "^5.4",
+        "swiftmailer/swiftmailer": "^6.3.0",
         "sabre/dav": "~3.2.0",
         "google/apiclient": "1.0.*@beta",
         "guzzlehttp/guzzle": "^6.2",
