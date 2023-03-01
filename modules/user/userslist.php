@@ -25,8 +25,10 @@ $require_current_course = TRUE;
 $require_user_registration = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 
-if (course_status($course_id) != COURSE_CLOSED and !$is_editor) {
+//if (course_status($course_id) != COURSE_CLOSED and !$is_editor) {
+if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 0) {
     Session::Messages($langForbidden, 'alert-danger');
     redirect_to_home_page("courses/$course_code/");
 }
@@ -52,9 +54,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     $all_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user, user
                                                 WHERE `user`.`id` = `course_user`.`user_id`
+                                                AND user.expires_at > " . DBHelper::timeAfter() . "
                                                 AND `course_user`.`course_id` = ?d", $course_id)->total;
     $filtered_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user, user
                                                 WHERE `user`.`id` = `course_user`.`user_id`
+                                                AND user.expires_at > " . DBHelper::timeAfter() . "
                                                 AND `course_user`.`course_id` = ?d $search_sql", $course_id, $search_values)->total;
     $result = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname,
                            user.has_icon, course_user.status,
@@ -62,6 +66,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     FROM course_user, user
                     WHERE `user`.`id` = `course_user`.`user_id`
                     AND `course_user`.`course_id` = ?d
+                    AND user.expires_at > " . DBHelper::timeAfter() . "
                     $search_sql $order_sql $limit_sql", $course_id, $search_values);
 
     $data['iTotalRecords'] = $all_users;
