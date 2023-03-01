@@ -948,26 +948,56 @@ function get_course_old_stats($cid, $mid, $start = null, $end = null)
 }
 
 /**
- * Get old statistics of logins/logouts to the platform.
- * @param date $start the start of period to retrieve statistics for
- * @param date $end the end of period to retrieve statistics for
+ * @brief Get old statistics of logins/logouts to the platform.
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
-function get_login_old_stats($start = null, $end = null)
+function get_login_old_stats(): array
 {
-    $formattedr = array('time'=> array(), 'hits'=> array(), 'duration'=> array());
-    if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){
-        $g = build_group_selector_cond('month', 'start_date');
-        $groupby = $g['groupby'];
-        $date_components = $g['select'];
 
-        $q = "SELECT $date_components, SUM(login_sum) visits FROM loginout_summary WHERE start_date BETWEEN ?t AND ?t $groupby";
-        $r = Database::get()->queryArray($q, $start, $end);
-
-        foreach($r as $record){
-           $formattedr['time'][] = $record->cat_title;
-           $formattedr['hits'][] = $record->visits;
-        }
+    $r = get_user_login_archives();
+    foreach($r as $data) {
+        $formattedr['time'][] = $data[0];
+        $formattedr['hits'][] = $data[1];
     }
     return $formattedr;
+}
+
+/**
+ * @brief get user logins. First we seek archived logins in `login_sum` table.
+ * Otherwise we seek `loginout` table and update the `login_sum`
+ * @return array
+ */
+function get_user_login_archives(): array
+{
+    $content = [];
+    $start = new DateTime('now');
+    $interval = DateInterval::createFromDateString('first day of last month');
+    $period = new DatePeriod($start, $interval, 12, DatePeriod::EXCLUDE_START_DATE); // last 12 months
+
+    foreach($period as $time) {
+        $year_month_val = $time->format("Y-m");
+        $data = Database::get()->querySingle("SELECT login_sum, 
+                                    DATE_FORMAT(start_date,'%Y-%m-%d') AS start_date  
+                            FROM loginout_summary 
+                            WHERE DATE_FORMAT(start_date,'%Y-%m') = ?s", $year_month_val);
+        if ($data) {
+            $data_month_year = $data->start_date;
+            $content[] = [ $data_month_year, $data->login_sum ];
+        } else {
+            $start_date = date_create($year_month_val);
+            $formatted_start_date = $start_date->format("Y-m-d H:i:s");
+            $end_date = date_add($start_date, date_interval_create_from_date_string("30 days"));
+            $formatted_end_date = $end_date->format("Y-m-d H:i:s");
+            $q_cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt 
+                            FROM loginout
+                            WHERE action='LOGIN' AND
+                        `when` BETWEEN DATE(?s) AND DATE_ADD(DATE(?s), INTERVAL 1 MONTH)",
+                $time->format("Y-m-d") , $time->format("Y-m-d"));
+            $content[] = [ $year_month_val."-01", $q_cnt->cnt ];
+
+            Database::get()->query("INSERT INTO loginout_summary (login_sum, start_date, end_date) VALUES (?s, ?s, ?s)",
+                                            $q_cnt->cnt, $formatted_start_date, $formatted_end_date);
+        }
+    }
+    return $content;
 }

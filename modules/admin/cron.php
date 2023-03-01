@@ -100,12 +100,6 @@ function summarizeLogins() {
                          " WHERE `when` >= ?t AND `when` < ?t AND action = 'LOGIN'";
                 $visits = Database::get()->querySingle($sql_1, $start_date, $end_date)->visits;
 
-                $sql_2 = "INSERT INTO loginout_summary SET " .
-                         " login_sum = ?d, " .
-                         " start_date = ?t, " .
-                         " end_date = ?t";
-                Database::get()->query($sql_2, $visits, $start_date, $end_date);
-
                 $sql_3 = "DELETE FROM loginout " .
                          " WHERE `when` >= ?t AND " .
                          " `when` < ?t ";

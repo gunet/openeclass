@@ -28,6 +28,7 @@
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
+require_once 'modules/usage/usage.lib.php';
 
 load_js('tools.js');
 load_js('datatables');
@@ -76,25 +77,6 @@ $tool_content .= action_bar(array(
 // ---------------------
 if (isset($_GET['stats'])) {
     switch ($_GET['stats']) {
-        case 'userslogin':
-            $tool_content .= "<div class='table-responsive'>
-                <table class='table-default'>
-                <tr>
-                    <th class='list-header' colspan='2'><strong>$langLoginUser $langUsersOf</strong></th>                    
-                </tr>";
-            $interval = [ $langToday => 1, $langLast7Days => 7, $langLast30Days => 30 ];
-            foreach ($interval as $legend => $data) {
-                $loginUsers = Database::get()->querySingle("SELECT COUNT(*) AS cnt 
-                        FROM loginout
-                        WHERE action='LOGIN'
-                        AND `when` >= DATE_SUB(DATE(NOW()), INTERVAL $data DAY)");
-                $tool_content .= "<tr>
-                        <td>$legend</td>
-                        <td class='text-center'>" . $loginUsers->cnt . "</td>
-                    </tr>";
-            }
-            $tool_content .= "</table></div>";
-            break;
         case 'failurelogin':
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
             $tool_content .= "<br>";

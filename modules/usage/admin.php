@@ -41,8 +41,8 @@ $tool_content .= action_bar(array(
                     'url' => "../admin/monthlyReport.php",
                     'icon' => 'fa-bar-chart',
                     'level' => 'primary-label'),
-                array('title' => $langOldStats,
-                    'url' => "../admin/old_stats.php",
+                array('title' => "$langLoginUser $langUsersOf",
+                    'url' => "../admin/login_stats.php",
                     'icon' => 'fa-bar-chart',
                     'level' => 'primary-label'),
                 array('title' => $langBack,
@@ -74,8 +74,7 @@ $tool_content .= "
                     </ul>
                 </div>
                 <div class='col-sm-12'>
-                    <ul class='list-group'>
-                        <li class='list-group-item'><a href='../admin/otheractions.php?stats=userslogin'>$langLoginUser $langUsersOf</a></li>
+                    <ul class='list-group'>                        
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=failurelogin'>$langLoginFailures</a><small> ($langLast15Days)</small></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=musers'>$langMultipleUsers</a></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=memail'>$langMultipleAddr e-mail</a></li>

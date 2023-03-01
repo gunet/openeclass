@@ -136,7 +136,7 @@ if(isset($_REQUEST['t'])){
             $result = get_course_old_stats($plotcourse, $plotmodule, $startdate, $enddate);
             break;
         case 'ols':
-            $result = get_login_old_stats($startdate, $enddate);
+            $result = get_login_old_stats();
             break;
     }
 
