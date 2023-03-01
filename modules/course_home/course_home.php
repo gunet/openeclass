@@ -21,6 +21,7 @@
 
 /**
  * @file: course_home.php
+ *
  * @brief: course home page
  */
 $require_current_course = true;
@@ -518,9 +519,6 @@ if ($is_editor) {
 
 }
 
-$numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
-                FROM course_user
-                WHERE course_id = ?d", $course_id)->numUsers;
 $studentUsers = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user
                                         WHERE status = " .USER_STUDENT . "
                                             AND editor = 0
@@ -717,12 +715,17 @@ $tool_content .= "<ul class='course-title-actions clearfix pull-right list-inlin
                         if ($uid) {
                             $tool_content .= "<li class='access pull-right'>";
                             if ($is_course_admin) {
+                                $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers FROM course_user WHERE course_id = ?d", $course_id)->numUsers;
                                 $tool_content .= "<a href='{$urlAppend}modules/user/index.php?course=$course_code'>
                                         <span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span>
                                         <span class='hidden'>.</span>
                                     </a>";
                             } else {
-                                if ($visible == COURSE_CLOSED) {
+                                if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1) {
+                                    $numUsers = Database::get()->querySingle("SELECT COUNT(*) AS numUsers FROM course_user, user
+                                                WHERE `user`.`id` = `course_user`.`user_id`
+                                                AND user.expires_at > " . DBHelper::timeAfter() . "
+                                                AND `course_user`.`course_id` = ?d", $course_id)->numUsers;
                                     $tool_content .= "<a href = '{$urlAppend}modules/user/userslist.php?course=$course_code'>
                                             <span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span>
                                             <span class='hidden'>.</span>

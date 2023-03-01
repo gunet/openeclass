@@ -253,6 +253,9 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['enable_docs_public_write'])) {
                 setting_set(SETTING_DOCUMENTS_PUBLIC_WRITE, $_POST['enable_docs_public_write'], $course_id);
             }
+            if (isset($_POST['enable_access_users_list'])) {
+                setting_set(SETTING_USERS_LIST_ACCESS, $_POST['enable_access_users_list'], $course_id);
+            }
             //-------------------------
             Session::Messages($langModifDone,'alert-success');
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
@@ -355,6 +358,14 @@ if (isset($_POST['submit'])) {
         $sharing_dis_label = '';
     }
 
+
+    if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1) {
+        $check_enable_access_users_list = 'checked';
+        $check_disable_access_users_list = '';
+    } else {
+        $check_enable_access_users_list = '';
+        $check_disable_access_users_list = 'checked';
+    }
 
     if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS, $course_id) == 1) {
         $checkForumDis = '';
@@ -637,6 +648,24 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
             </div>
+            
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langUsersListAccess:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='1' name='enable_access_users_list' $check_enable_access_users_list> $langActivate                           
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='0' name='enable_access_users_list' $check_disable_access_users_list> $langDeactivate
+                            <span class='help-block'><small>$langUsersListAccessInfo</small></span>
+                      </label>
+                    </div>
+                </div>
+            </div>
+                                                
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langCourseSharing:</label>
                 <div class='col-sm-10'>
