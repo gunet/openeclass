@@ -86,14 +86,14 @@
 
             <div class="row rowMedium">
 
-              <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active"> 
+              <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active">
                   <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
                       @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                   </div>
               </div>
 
                 <div class="col-xl-10 col-lg-9 col-12 col_maincontent_active">
-                    
+
                     <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
 
@@ -133,7 +133,7 @@
 
                           <div class='col-12'>
                             <div class='form-wrapper form-edit py-3 rounded'>
-                              
+
                               <form class='form-horizontal' role='form' method='post' action="{{ $form_url }}" onsubmit='return validateNodePickerForm();'>
                                 <fieldset>
                                     <div class='row'>
@@ -155,7 +155,7 @@
                                         </div>
                                     </div>
 
-                                  
+
 
                                     <div class='row'>
                                         <div class='col-md-6 col-12'>
@@ -256,7 +256,7 @@
                                         </div>
                                     </div>
 
- 
+
                                     <div class='form-group mt-4'>
                                         <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langConfidentiality') }}</label>
                                         <div class='col-sm-12'>
@@ -269,7 +269,7 @@
                                                 </label>
                                                 <div class='help-block ps-4 ms-3'>{{ trans('langPublic') }}</div>
                                             </div>
-                                         
+
 
                                             <div class='radio mb-3'>
                                                 <label>
@@ -279,7 +279,7 @@
                                                 </label>
                                                 <div class='help-block ps-4 ms-3'>{{ trans('langPrivOpen') }}</div>
                                             </div>
-                                            
+
 
                                             <div class='radio mb-3'>
                                                 <label>
@@ -289,17 +289,17 @@
                                                 </label>
                                                 <div class='help-block ps-4 ms-3'>{{ trans('langClosedCourseShort') }}</div>
                                             </div>
-                                            
 
-                                            <div class='radio'> 
-                                                <label>                                     
+
+                                            <div class='radio'>
+                                                <label>
                                                     <input class='input-StatusCourse' id='courseinactive' type='radio' name='formvisible' value='3' {{ $course_inactive }} {{ $disable_visibility }}>
                                                     <label for="courseinactive">{!! course_access_icon(COURSE_INACTIVE) !!}</label>
                                                     {!! trans('langInactiveCourse') !!}
                                                 </label>
                                                 <div class='help-block ps-4 ms-3'>{{ trans('langCourseInactive') }}</div>
                                             </div>
-                                            
+
                                         </div>
                                     </div>
 
@@ -328,14 +328,14 @@
                                         <div class="col-sm-12">
                                             <div class="radio mb-2">
                                                 <label>
-                                                    <input type='radio' value='1' name='enable_offline_course' {{ $log_offline_course_enable }} {{ $log_offline_course_inactive }}> 
+                                                    <input type='radio' value='1' name='enable_offline_course' {{ $log_offline_course_enable }} {{ $log_offline_course_inactive }}>
                                                     <span class='ps-2'>{{ trans('langActivate') }}</span>
                                                 </label>
                                                 <div class='help-block ps-5'>{{ trans('langCourseOfflineLegend') }}</div>
                                             </div>
                                             <div class="radio">
                                                 <label>
-                                                    <input type='radio' value='0' name='enable_offline_course' {{ $log_offline_course_disable }} {{ $log_offline_course_inactive }}> 
+                                                    <input type='radio' value='0' name='enable_offline_course' {{ $log_offline_course_disable }} {{ $log_offline_course_inactive }}>
                                                     <span class='ps-2'>{{ trans('langDeactivate') }}</span>
                                                 </label>
                                             </div>
@@ -348,43 +348,60 @@
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                                 <label>
-                                                        <input type='radio' value='0' name='disable_log_course_user_requests' {{ $log_course_user_requests_enable }} {{ $log_course_user_requests_inactive }}> 
+                                                        <input type='radio' value='0' name='disable_log_course_user_requests' {{ $log_course_user_requests_enable }} {{ $log_course_user_requests_inactive }}>
                                                         <span class='ps-2'>{{ trans('langActivate') }}</span>
                                                 </label>
                                                 <div class='help-block ps-5'>{{ $log_course_user_requests_disable }}</div>
                                             </div>
                                             <div class='radio'>
                                                 <label>
-                                                        <input type='radio' value='1' name='disable_log_course_user_requests' {{ $log_course_user_requests_disable }} {{ $log_course_user_requests_inactive }}> 
+                                                        <input type='radio' value='1' name='disable_log_course_user_requests' {{ $log_course_user_requests_disable }} {{ $log_course_user_requests_inactive }}>
                                                         <span class='ps-2'>{{ trans('langDeactivate') }}</span>
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
 
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langUsersListAccess') }}</label>
+                                        <span class='help-block ps-5'><small>{{ trans('langUsersListAccessInfo') }}</small></span>
+                                        <div class='col-sm-12'>
+                                            <div class='radio mb-2'>
+                                                <label>
+                                                    <input type='radio' value='1' name='enable_access_users_list' {{ $check_enable_access_users_list }} >
+                                                    <span class='ps-s'> {{ trans('langActivate') }}</span>
+                                                </label>
+                                            </div>
+                                            <div class='radio'>
+                                                <label>
+                                                    <input type='radio' value='0' name='enable_access_users_list' {{ $check_disable_access_users_list}} >
+                                                    <span class='ps-s'>{{ trans('langDeactivate') }}</span>
 
-
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class='form-group mt-4'>
                                         <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseSharing') }}</label>
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='s_radio' {{ $checkSharingEn }} {{ $sharing_radio_dis }}> 
+                                                    <input type='radio' value='1' name='s_radio' {{ $checkSharingEn }} {{ $sharing_radio_dis }}>
                                                     <span class='ps-2'>{{ trans('langSharingEn') }}</span>
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='s_radio' {{ $checkSharingDis }} {{ $sharing_radio_dis }}> 
+                                                    <input type='radio' value='0' name='s_radio' {{ $checkSharingDis }} {{ $sharing_radio_dis }}>
                                                     <span class='ps-2'>{{ trans('langSharingDis') }}</span>
-                                                    
+
                                               </label><div class='help-block ps-5'>{{ $sharing_dis_label }}</div>
                                             </div>
                                         </div>
                                     </div>
 
-                       
+
 
 
                                     <div class='form-group mt-4'>
@@ -392,20 +409,20 @@
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='f_radio' {{ $checkForumEn }}> 
+                                                    <input type='radio' value='1' name='f_radio' {{ $checkForumEn }}>
                                                     <span class='ps-2'>{{ trans('langDisableForumNotifications') }}</span>
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='f_radio' {{ $checkForumDis }}> 
+                                                    <input type='radio' value='0' name='f_radio' {{ $checkForumDis }}>
                                                     <span class='ps-2'>{{ trans('langActivateForumNotifications') }}</span>
                                               </label>
                                             </div>
                                         </div>
                                     </div>
 
-               
+
 
 
                                     <div class='form-group mt-4'>
@@ -415,41 +432,41 @@
                                         <div class='col-sm-12'>
                                                 <div class='radio mb-2'>
                                                   <label>
-                                                        <input type='radio' value='1' name='r_radio' {{ $checkRatingEn }}> 
+                                                        <input type='radio' value='1' name='r_radio' {{ $checkRatingEn }}>
                                                         <span class='ps-2'>{{ trans('langRatingEn') }}</span>
                                                   </label>
                                                 </div>
                                                 <div class='radio'>
                                                   <label>
-                                                        <input type='radio' value='0' name='r_radio' {{ $checkRatingDis }}> 
+                                                        <input type='radio' value='0' name='r_radio' {{ $checkRatingDis }}>
                                                         <span class='ps-2'>{{ trans('langRatingDis') }}</span>
                                                   </label>
                                                 </div>
                                             </div>
                                     </div>
 
-                     
+
 
                                     <div class='form-group mt-4'>
                                         <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseAnonymousRating') }}</label>
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='ran_radio' {{ $checkAnonRatingEn }} {{ $anon_rating_radio_dis }}> 
+                                                    <input type='radio' value='1' name='ran_radio' {{ $checkAnonRatingEn }} {{ $anon_rating_radio_dis }}>
                                                     <span class='ps-2'>{{ trans('langRatingAnonEn') }}</span>
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='ran_radio' {{ $checkAnonRatingDis }} {{ $anon_rating_radio_dis }}> 
+                                                    <input type='radio' value='0' name='ran_radio' {{ $checkAnonRatingDis }} {{ $anon_rating_radio_dis }}>
                                                     <span class='ps-2'>{{ trans('langRatingAnonDis') }}</span>
-                                                    
+
                                               </label><div class='help-block ps-5'>{{ $anon_rating_dis_label }}</div>
                                             </div>
                                         </div>
                                     </div>
 
-                             
+
 
 
                                     <div class='form-group mt-4'>
@@ -457,20 +474,20 @@
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='c_radio' {{ $checkCommentEn }}> 
+                                                    <input type='radio' value='1' name='c_radio' {{ $checkCommentEn }}>
                                                     <span class='ps-2'>{{ trans('langCommentsEn') }}</span>
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='c_radio' {{ $checkCommentDis }}> 
+                                                    <input type='radio' value='0' name='c_radio' {{ $checkCommentDis }}>
                                                     <span class='ps-2'>{{ trans('langCommentsDis') }}</span>
                                               </label>
                                             </div>
                                         </div>
                                     </div>
 
-                         
+
 
 
                                     <div class='form-group mt-4'>
@@ -478,13 +495,13 @@
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                               <label>
-                                                    <input type='radio' value='1' name='ar_radio' {{ $checkAbuseReportEn }}> 
+                                                    <input type='radio' value='1' name='ar_radio' {{ $checkAbuseReportEn }}>
                                                     <span class='ps-2'>{{ trans('langAbuseReportEn') }}</span>
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
-                                                    <input type='radio' value='0' name='ar_radio' {{ $checkAbuseReportDis }}> 
+                                                    <input type='radio' value='0' name='ar_radio' {{ $checkAbuseReportDis }}>
                                                     <span class='ps-2'>{{ trans('langAbuseReportDis') }}</span>
                                               </label>
                                             </div>
@@ -492,8 +509,8 @@
                                     </div>
                                     {!! showSecondFactorChallenge() !!}
 
-                                 
-                                    
+
+
                                     <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
                                         <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                                     </div>

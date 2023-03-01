@@ -89,7 +89,6 @@ if (isset($_POST['submit'])) {
         $_POST['finish_date'] = null;
     }
     if (empty($_POST['title'])) {
-        //Session::Messages($langNoCourseTitle, 'alert-danger');
         Session::flash('message',$langNoCourseTitle);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/course_info/index.php?course=$course_code");
@@ -201,8 +200,9 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['enable_docs_public_write'])) {
                 setting_set(SETTING_DOCUMENTS_PUBLIC_WRITE, $_POST['enable_docs_public_write'], $course_id);
             }
-            //-------------------------
-            //Session::Messages($langModifDone,'alert-success');
+            if (isset($_POST['enable_access_users_list'])) {
+                setting_set(SETTING_USERS_LIST_ACCESS, $_POST['enable_access_users_list'], $course_id);
+            }
             Session::flash('message',$langModifDone);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
@@ -332,6 +332,16 @@ if (isset($_POST['submit'])) {
     }
     $data['sharing_radio_dis'] = $sharing_radio_dis;
     $data['sharing_dis_label'] = $sharing_dis_label;
+
+    if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1) {
+        $check_enable_access_users_list = 'checked';
+        $check_disable_access_users_list = '';
+    } else {
+        $check_enable_access_users_list = '';
+        $check_disable_access_users_list = 'checked';
+    }
+    $data['check_enable_access_users_list'] = $check_enable_access_users_list;
+    $data['check_disable_access_users_list'] = $check_disable_access_users_list;
 
     if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS, $course_id) == 1) {
         $checkForumDis = '';

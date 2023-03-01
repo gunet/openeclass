@@ -179,7 +179,7 @@
                                                         <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
                                                     </a>
                                                 @else
-                                                    @if ($visible == COURSE_CLOSED)
+                                                    @if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1)
                                                         <a href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}" class='float-end me-2 mt-2'>
                                                             <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
                                                         </a>

@@ -220,7 +220,7 @@ if (isset($uid) and isset($_SESSION['status']) and $_SESSION['status'] != USER_G
                 ));
             }
         }
-        
+
         if (get_user_email_notification($uid, $course_id)) {
             $email_notify_icon = "<a id='email_notification' href='{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=1' class='float-end ps-2 mt-2'><span class='fa fa-envelope fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langUserEmailNotification) . "'></span></a>";
         } else {
@@ -351,11 +351,17 @@ if ($is_editor) {
 }
 
 $data['departments'] = $course->getDepartmentIds($course_id);
-
-$data['numUsers'] = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
+if ($is_course_admin) {
+    $data['numUsers'] = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
                 WHERE course_id = ?d", $course_id)->numUsers;
 
+} else if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1) {
+    $data['numUsers'] = Database::get()->querySingle("SELECT COUNT(*) AS numUsers FROM course_user, user
+                WHERE `user`.`id` = `course_user`.`user_id`
+                AND user.expires_at > " . DBHelper::timeAfter() . "
+                AND `course_user`.`course_id` = ?d", $course_id)->numUsers;
+}
 
 //set the lang var for lessons visibility status
 switch ($visible) {

@@ -1107,6 +1107,8 @@ $langNoCourseTitle = "Δεν πληκτρολογήσατε τον τίτλο τ
 $langCourseWeeklyFormatNotice = "Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστον την ημερομηνία έναρξης $langsOfCourse";
 $langCourseUserRequests = "Αιτήσεις εγγραφής χρηστών στο $langsCourse";
 $langCourseUserRequestsDisabled = "Αιτήσεις εγγραφής χρηστών δεν υπάρχουν για τα μη κλειστά $langsCourses.";
+$langUsersListAccess = "Εμφάνιση χρηστών του $langsOfCourse";
+$langUsersListAccessInfo = "αφορά μόνο τους εγγεγραμμένους χρήστες του $langsOfCourse";
 
 // delete_course.php
 $langModifGroups = "Ομάδες Εργασίας";
