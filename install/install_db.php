@@ -307,6 +307,7 @@ $db->query("CREATE TABLE `user` (
     email_public TINYINT(1) NOT NULL DEFAULT 0,
     phone_public TINYINT(1) NOT NULL DEFAULT 0,
     am_public TINYINT(1) NOT NULL DEFAULT 0,
+    pic_public TINYINT(1) NOT NULL DEFAULT 0,
     whitelist TEXT,
     eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0,
     last_passreminder DATETIME DEFAULT NULL) $tbl_options");

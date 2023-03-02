@@ -434,17 +434,16 @@ function get_course_users($cid) {
 function user_icon($uid, $size = null) {
     global $themeimg, $urlAppend;
 
-    if (DBHelper::fieldExists("user", "id")) {
-        $user = Database::get()->querySingle("SELECT has_icon FROM user WHERE id = ?d", $uid);
-        if ($user) {
-            if (!$size) {
-                $size = IMAGESIZE_SMALL;
-            }
-            if ($user->has_icon) {
-                return "{$urlAppend}courses/userimg/{$uid}_$size.jpg";
-            } else {
-                return "$themeimg/default_$size.png";
-            }
+
+    $user = Database::get()->querySingle("SELECT has_icon FROM user WHERE id = ?d", $uid);
+    if ($user) {
+        if (!$size) {
+            $size = IMAGESIZE_SMALL;
+        }
+        if ($user->has_icon) {
+            return "{$urlAppend}courses/userimg/{$uid}_$size.jpg";
+        } else {
+            return "$themeimg/default_$size.png";
         }
     }
     return '';
@@ -2712,7 +2711,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
  * @return type
  */
 function profile_image($uid, $size, $class=null) {
-    global $urlServer, $themeimg, $langStudent;
+    global $urlServer, $themeimg;
 
     // makes $class argument optional
     $class_attr = ($class == null)?'':"class='".q($class)."'";
@@ -2720,8 +2719,13 @@ function profile_image($uid, $size, $class=null) {
     $name = ($uid > 0) ? q(trim(uid_to_name($uid))) : '';
     $size_width = ($size != IMAGESIZE_SMALL || $size != IMAGESIZE_LARGE)? "style='width:$size'":'';
     $size = ($size != IMAGESIZE_SMALL && $size != IMAGESIZE_LARGE)? IMAGESIZE_LARGE:$size;
-    if ($uid > 0 and file_exists("courses/userimg/{$uid}_$size.jpg")) {
-        return "<img src='{$urlServer}courses/userimg/{$uid}_$size.jpg' $class_attr title='$name' alt='$name' $size_width>";
+    if ($uid > 0) {
+        $q = Database::get()->querySingle("SELECT pic_public FROM user WHERE id = ?d", $uid);
+        if (file_exists("courses/userimg/{$uid}_$size.jpg") and ($q->pic_public == 1 or $_SESSION['status'] == USER_TEACHER)) {
+            return "<img src='{$urlServer}courses/userimg/{$uid}_$size.jpg' $class_attr title='$name' alt='$name' $size_width>";
+        } else {
+            return "<img src='$themeimg/default_$size.png' $class_attr title='$name' alt='$name' $size_width>";
+        }
     } else {
         return "<img src='$themeimg/default_$size.png' $class_attr title='$name' alt='$name' $size_width>";
     }

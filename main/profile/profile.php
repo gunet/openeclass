@@ -19,6 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+use Hybridauth\Exception\Exception;
+use Hybridauth\Hybridauth;
+
 $require_login = true;
 $require_valid_uid = true;
 $require_help = true;
@@ -57,7 +60,7 @@ $(profile_init);</script>";
 
 $myrow = Database::get()->querySingle("SELECT surname, givenname, username, email, am, phone,
                                             lang, status, has_icon, description,
-                                            email_public, phone_public, am_public, password
+                                            email_public, phone_public, am_public, pic_public, password
                                         FROM user WHERE id = ?d", $uid);
 
 
@@ -118,7 +121,8 @@ if (isset($_POST['submit'])) {
                     'username_form' => $allow_username_change,
                     'email_public' => false,
                     'phone_public' => false,
-                    'am_public' => false);
+                    'am_public' => false,
+                    'pic_public' => false);
 
     //add custom profile fields required variables
     augment_registered_posted_variables_arr($var_arr);
@@ -132,9 +136,6 @@ if (isset($_POST['submit'])) {
             $departments = $_POST['department'];
         }
     }
-    $email_public = valid_access($email_public);
-    $phone_public = valid_access($phone_public);
-    $am_public = valid_access($am_public);
 
     // upload user picture
     if (isset($_FILES['userimage']) && is_uploaded_file($_FILES['userimage']['tmp_name'])) {
@@ -219,13 +220,14 @@ if (isset($_POST['submit'])) {
                              am = ?s,
                              phone = ?s,
                              description = ?s,
-                             email_public = ?s,
-                             phone_public = ?s,
+                             email_public = ?d,
+                             phone_public = ?d,
                              receive_mail = ?d,
-                             am_public = ?d
+                             am_public = ?d,
+                             pic_public = ?d
                              $verified_mail_sql
                          WHERE id = ?d",
-                            $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $uid);
+                            $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $pic_public, $uid);
 
     //fill custom profile fields
     process_profile_fields_data(array('uid' => $uid, 'origin' => 'edit_profile'));
@@ -260,9 +262,6 @@ if (isset($_POST['submit'])) {
         redirect_to_home_page("main/profile/display_profile.php");
     }
 }
-
-use Hybridauth\Exception\Exception;
-use Hybridauth\Hybridauth;
 
 // HybridAuth actions
 if (isset($_GET['provider'])) {
@@ -486,9 +485,6 @@ if ($allow_username_change) {
 }
 $tool_content .= "</div></div>";
 
-$access_options = array(ACCESS_PROFS => $langProfileInfoProfs,
-                        ACCESS_USERS => $langProfileInfoUsers);
-
 $email_field = "<input class='form-control' type='text' name='email_form' id='email_form' value='$email_form'>";
 $am_field = "<input type='text' class='form-control' name='am_form' id='am_form' value='$am_form'>";
 if (isset($_SESSION['auth_user_info'])) {
@@ -506,28 +502,19 @@ $tool_content .= "<div class='form-group'>
                     <label for='email_form' class='col-sm-2 control-label'>$langEmail:</label>
                     <div class='col-sm-5'>
                         $email_field
-                    </div>
-                    <div class='col-sm-5'>
-                        " . selection($access_options, 'email_public', $myrow->email_public, "class='form-control'") . "
-                    </div>
+                    </div>                    
                 </div>
                 <div class='form-group'>
                     <label for='am_form' class='col-sm-2 control-label'>$langAm:</label>
                     <div class='col-sm-5'>
                         $am_field
-                    </div>
-                    <div class='col-sm-5'>
-                        " . selection($access_options, 'am_public', $myrow->am_public, "class='form-control'") . "
-                    </div>
+                    </div>                    
                 </div>
                 <div class='form-group'>
                     <label for='phone_form' class='col-sm-2 control-label'>$langPhone</label>
                     <div class='col-sm-5'>
                         <input type='text' class='form-control' name='phone_form' id='phone_form' value='$phone_form'>
-                    </div>
-                    <div class='col-sm-5'>
-                        " . selection($access_options, 'phone_public', $myrow->phone_public, "class='form-control'") . "
-                    </div>
+                    </div>                    
                 </div>";
 
 if (get_user_email_notification_from_courses($uid)) {
@@ -552,6 +539,41 @@ $tool_content .= "<div class='form-group'>
                    </div>
                   </div>
                 </div>";
+
+$email_public_selected = $am_public_selected = $phone_public_selected = $pic_public_selected = '';
+if ($myrow->email_public) {
+    $email_public_selected = 'checked';
+}
+if ($myrow->am_public) {
+    $am_public_selected = 'checked';
+}
+if ($myrow->phone_public) {
+    $phone_public_selected = 'checked';
+}
+if ($myrow->pic_public) {
+    $pic_public_selected = 'checked';
+}
+$tool_content .= "<div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langShow</label>
+                    <div class='col-sm-10'>
+                        <div class='checkbox'>
+                            <label class='col-sm-2'>
+                                <input type='checkbox' name='email_public' value='1' $email_public_selected>$langEmail
+                            </label>
+                            <label class='col-sm-2'>
+                                <input type='checkbox' name='am_public' value='1' $am_public_selected>$langAm
+                            </label>
+                            <label class='col-sm-2'>
+                                <input type='checkbox' name='phone_public' value='1' $phone_public_selected>$langPhone
+                            </label>
+                            <label class='col-sm-2'>
+                                <input type='checkbox' name='pic_public' value='1' $pic_public_selected>$langProfileImage
+                            </label>
+                        </div>
+                    </div>
+                    <div class='help-block col-sm-offset-2 col-sm-10'>$langShowSettingsInfo</div>
+                </div>";
+
 
 if (get_config('email_verification_required')) {
     $user_email_status = get_mail_ver_status($uid);
@@ -673,18 +695,3 @@ $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
       </div>";
 
 draw($tool_content, 1, null, $head_content);
-
-
-/**
- *
- * @param type $val
- * @return int
- */
-function valid_access($val) {
-    $val = intval($val);
-    if (in_array($val, array(ACCESS_PRIVATE, ACCESS_PROFS, ACCESS_USERS))) {
-        return $val;
-    } else {
-        return 0;
-    }
-}

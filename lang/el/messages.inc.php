@@ -3365,7 +3365,7 @@ $langSumCoursesEnrolled = "$langCourses που παρακολουθώ";
 $langSumCoursesSupport = "$langCourses που υποστηρίζω";
 $langProfileLastVisit = "Τελευταία επίσκεψη";
 $langProfileQuickPassword = "Αλλαγή Συνθηματικού";
-
+$langShowSettingsInfo = "αφορά την εμφάνιση στους υπόλοιπους χρήστες (εκτός των $langsOfTeachers)";
 $langProviderIdAlreadyExists = 'Η ρύθμιση δεν είναι αποθηκεύτηκε γιατί υπάρχει ήδη λογαριασμός στο σύστημα που συνδεμένος με αυτόν τον πάροχο';
 $langAuthSettingsSaved = "Οι ρυθμίσεις σας έχουν αποθηκευτεί";
 $langProviderConnectWithAlternativeProviders = 'Σύνδεση ή εγγραφή με εναλλακτικούς παρόχους';

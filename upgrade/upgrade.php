@@ -52,7 +52,7 @@ if ($ajax_call and (!isset($_POST['token']) or !validate_csrf_token($_POST['toke
 stop_output_buffering();
 $error_message = null;
 set_time_limit(0);
-$tbl_options = 'DEFAULT CHARACTER SET=utf8mb4 COLLATE utf8mb4_unicode_520_ci ENGINE=InnoDB';
+    $tbl_options = 'DEFAULT CHARACTER SET=utf8mb4 COLLATE utf8mb4_unicode_520_ci ENGINE=InnoDB';
 
 load_global_messages();
 

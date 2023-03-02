@@ -2508,6 +2508,10 @@ function upgrade_to_3_14($tbl_options) : void {
             KEY `course_id_index` (`course_id`)) $tbl_options");
     }
 
+    if (!DBHelper::fieldExists('user','pic_public')) {
+        Database::get()->query("ALTER TABLE user ADD pic_public TINYINT(1) NOT NULL DEFAULT 0 AFTER am_public");
+    }
+
 }
 
 /**
