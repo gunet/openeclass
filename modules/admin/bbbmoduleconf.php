@@ -726,7 +726,7 @@ else {
             $servers = get_bbb_servers_load_by_id();
             foreach ($q as $srv) {
                 $enabled_bbb_server = ($srv->enabled == 'true')? $langYes : $langNo;
-                $mess = $connected_users = $active_rooms = $server_load = $mics = $cameras = '';
+                $courses_note = $connected_users = $active_rooms = $server_load = $mics = $cameras = '';
                 if ($srv->enabled == "true") {
                     $server_load = $servers[$srv->id]['load'];
                     $connected_users = $servers[$srv->id]['participants'];
@@ -741,20 +741,21 @@ else {
                     $t_active_rooms += $active_rooms;
                     $t_max_users += $srv->max_users;
                     $t_max_rooms += $srv->max_rooms;
-                    $q = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_external_server WHERE external_server = ?d", $srv->id);
-                    $num_of_tc_courses = $q->cnt;
-                    if ($srv->all_courses === "1") {
-                        $mess = " <small>($langToAllCourses)</small>";
-                    } else if ($srv->all_courses === "0") {
-                        if ($num_of_tc_courses > 0) {
-                            $mess = " <small>(<a href='$_SERVER[SCRIPT_NAME]?list=$srv->id'>$langIn $num_of_tc_courses $langsCourses)</a></small>";
-                        } else {
-                            $mess = "<small>($langToNoCourses)</small>";
-                        }
+                    if ($srv->all_courses) {
+                        $courses_note = $langToAllCourses;
+                    } else {
+                        $num_of_tc_courses = Database::get()->querySingle("SELECT COUNT(*) AS cnt
+                            FROM course_external_server WHERE external_server = ?d", $srv->id)->cnt;
+                        $courses_note = "<a href='$_SERVER[SCRIPT_NAME]?list=$srv->id'>" .
+                            ($num_of_tc_courses == 0? $langToNoCourses: "$langIn $num_of_tc_courses $langsCourses") .
+                            "</a>";
+                    }
+                    if ($courses_note) {
+                        $courses_note = " <small>($courses_note)</small>";
                     }
                     $tool_content .= "<tr>" .
                         "<td class = 'text-center'>$srv->hostname</td>" .
-                        "<td class = 'text-center'>$enabled_bbb_server $mess</td>" .
+                        "<td class = 'text-center'>$enabled_bbb_server$courses_note</td>" .
                         "<td class = 'text-center'>$connected_users / $srv->max_users</td>" .
                         "<td class = 'text-center'>$active_rooms / $srv->max_rooms</td>" .
                         "<td class = 'text-center'>$mics / $cameras</td>" .
@@ -878,8 +879,8 @@ draw($tool_content, 3, null, $head_content);
  */
 function update_bbb_session($course_id, $bbb_server_id) {
 
-    $q = Database::get()->queryArray("SELECT id FROM tc_session JOIN tc_servers 
-            ON running_at = tc_servers.id 
+    $q = Database::get()->queryArray("SELECT id FROM tc_session JOIN tc_servers
+            ON running_at = tc_servers.id
                WHERE tc_servers.type = 'bbb'
             AND course_id = ?d", $course_id);
     if ($q) {
