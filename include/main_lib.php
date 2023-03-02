@@ -2417,11 +2417,13 @@ function handle_unit_info_edit() {
                                     WHERE id = ?d AND course_id = ?d",
                             $title, $descr, $unitdurationfrom, $unitdurationto, $unit_id, $course_id);
         // tags
-        if (isset($_POST['tags'])) {
+        if (!isset($_POST['tags'])) {
+            $tagsArray = [];
+        } else {
             $tagsArray = $_POST['tags'];
-            $moduleTag = new ModuleElement($unit_id);
-            $moduleTag->syncTags($tagsArray);
         }
+        $moduleTag = new ModuleElement($unit_id);
+        $moduleTag->syncTags($tagsArray);
         $successmsg = trans('langCourseUnitModified');
     } else { // add new course unit
         $order = units_get_maxorder()+1;
@@ -2733,7 +2735,7 @@ function profile_image($uid, $size, $class=null) {
         return "<img style='border-radius:50%; border:solid 2px #e8e8e8;' src='{$urlServer}courses/userimg/{$uid}_$size.jpg' $class_attr title='$name' alt='$name' $size_width>";
     } else {
         return "<img style='border-radius:50%; border:solid 2px #e8e8e8;' src='$themeimg/user_$size.png' $class_attr title='$name' alt='$name' $size_width>";
-       
+
     }
 }
 
