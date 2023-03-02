@@ -1065,6 +1065,7 @@ $langCitation = "Βιβλιογραφική αναφορά $langsOfCourse";
 $langAccessed = "Ανακτήθηκε την ";
 $langUserEmailNotification = "Λαμβάνετε ειδοποιήσεις του $langsOfCourse μέσω email.";
 $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του $langsOfCourse μέσω email.";
+$langNoUserEmailLegend = "Ο χρήστης δεν λαμβάνει ειδοποιήσεις του $langsOfCourse μέσω email.";
 $langCourseInvalidDepartment = "Το $langsCourse βρίσκεται σε τμήμα όπου δεν
     επιτρέπεται πλέον η δημιουργία $langsOfCourses.";
 $langCourseInvalidDepartmentPrompt = "Παρακαλούμε %s μεταφέρετέ το
