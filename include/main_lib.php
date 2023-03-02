@@ -2406,11 +2406,13 @@ function handle_unit_info_edit() {
                                     WHERE id = ?d AND course_id = ?d",
                             $title, $descr, $unitdurationfrom, $unitdurationto, $unit_id, $course_id);
         // tags
-        if (isset($_POST['tags'])) {
+        if (!isset($_POST['tags'])) {
+            $tagsArray = [];
+        } else {
             $tagsArray = $_POST['tags'];
-            $moduleTag = new ModuleElement($unit_id);
-            $moduleTag->syncTags($tagsArray);
         }
+        $moduleTag = new ModuleElement($unit_id);
+        $moduleTag->syncTags($tagsArray);
         $successmsg = $langCourseUnitModified;
     } else { // add new course unit
         $order = units_get_maxorder()+1;
