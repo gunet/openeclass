@@ -176,9 +176,9 @@ if (isset($_POST['submit'])) {
             chdir($cwd);
         }
         $msgURL = $urlServer . 'modules/message/index.php?mid=' . $msg->id;
-        $errormail = FALSE;
         if (isset($_POST['mailing']) and $_POST['mailing']) { // send mail to recipients
             if ($course_id != 0 || isset($_POST['course'])) {// message in course context
+                $invalid = 0;
                 $list_of_recipients = array();
                 $c = course_id_to_title($cid);
                 $subject_dropbox = "$c (".course_id_to_public_code($cid).") - $langNewDropboxFile";
@@ -186,6 +186,8 @@ if (isset($_POST['submit'])) {
                     $emailaddr = uid_to_email($userid);
                     if (get_user_email_notification($userid, $cid) and valid_email($emailaddr)) {
                         array_push($list_of_recipients, $emailaddr);
+                    } else {
+                        $invalid++;
                     }
                 }
                 array_push($list_of_recipients, $_SESSION['email']); // add sender email address
@@ -297,13 +299,9 @@ if (isset($_POST['submit'])) {
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], '', $list_of_recipients, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
             }
         }
-        if (!$errormail) {
-            //Session::Messages($langdocAdd, 'alert-success');
-            Session::flash('message',$langdocAdd);
-            Session::flash('alert-class', 'alert-success');
-        } else {
-            //Session::Messages($langUsersEmailWrong, 'alert-warning');
-            Session::flash('message',$langUsersEmailWrong);
+        Session::Messages($langdocAdd, 'alert-success');
+        if ($invalid > 0) { // info about invalid emails (if exist)
+            Session::flash('message', "$langInvalidMail: $invalid");
             Session::flash('alert-class', 'alert-warning');
         }
     } else { //end if(!$error)
