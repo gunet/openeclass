@@ -358,7 +358,7 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
         $from = " (SELECT
                             id, surname, givenname, username, password, email, parent_email, status, phone, am,
                             registered_at, expires_at, lang, description, has_icon, verified_mail, receive_mail, email_public,
-                            phone_public, am_public, whitelist, last_passreminder
+                            phone_public, am_public, pic_public, whitelist, last_passreminder
                           FROM user UNION (SELECT 0 as id,
                             '' as surname,
                             'Anonymous' as givenname,
@@ -379,6 +379,7 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                             null as email_public,
                             null as phone_public,
                             null as am_public,
+                            null as pic_public,
                             null as whitelist,
                             null as last_passreminder)) as user ";
         $and = '';

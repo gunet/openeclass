@@ -451,6 +451,7 @@ function get_course_users($cid) {
  * @param int $size optional image size in pixels (IMAGESIZE_SMALL or IMAGESIZE_LARGE)
  * @return string
  */
+
 function user_icon($user_id, $size = IMAGESIZE_SMALL) {
     global $webDir, $themeimg, $urlAppend, $course_id, $is_editor, $uid;
 
@@ -2723,10 +2724,12 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
  * @param string $class
  * @return string
  */
+
 function profile_image($user_id, $size, $class=null) {
     global $urlServer, $themeimg, $uid, $course_id, $is_editor;
 
     // makes $class argument optional
+
     $class_attr = ($class == null)? '': (" class='" . q($class) . "'");
     $size_width = ($size != IMAGESIZE_SMALL || $size != IMAGESIZE_LARGE)? "style='width:{$size}px'":'';
     $size = ($size == IMAGESIZE_SMALL or $size == IMAGESIZE_LARGE)? $size: IMAGESIZE_LARGE;

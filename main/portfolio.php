@@ -193,6 +193,7 @@ $data['user_announcements'] = $user_announcements;
 $data['portfolio_page_main_widgets'] = '';
 $portfolio_page_main = new WidgetArea(PORTFOLIO_PAGE_MAIN);
 
+
 foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {
     $data['portfolio_page_main_widgets'] .= $widget->run($key);
 }

@@ -96,6 +96,7 @@ if (isset($_POST['delimage'])) {
 }
 
 if (isset($_POST['submit'])) {
+    print_a($_POST);
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
         csrf_token_error();
     }
@@ -135,10 +136,6 @@ if (isset($_POST['submit'])) {
             $departments = $_POST['department'];
         }
     }
-    $email_public = valid_access($email_public);
-    $phone_public = valid_access($phone_public);
-    $am_public = valid_access($am_public);
-    $pic_public = valid_access($pic_public);
 
     // upload user picture
     if (isset($_FILES['userimage']) && is_uploaded_file($_FILES['userimage']['tmp_name'])) {
@@ -224,8 +221,8 @@ if (isset($_POST['submit'])) {
                              am = ?s,
                              phone = ?s,
                              description = ?s,
-                             email_public = ?s,
-                             phone_public = ?s,
+                             email_public = ?d,
+                             phone_public = ?d,
                              receive_mail = ?d,
                              am_public = ?d,
                              pic_public = ?d
@@ -435,15 +432,13 @@ if (isset($_GET['msg'])) {
         default:
             exit;
     }
-    $tool_content .= "<table width='100%'><tbody><tr><td class='alert alert-danger'>$message$urlText</td></tr></tbody></table><br /><br />";
+    Session::Messages($message, 'alert-warning');
+    redirect_to_home_page('main/profile/profile.php');
 }
 
 $data['surname_form'] = q($myrow->surname);
 $data['givenname_form'] = q($myrow->givenname);
 $data['username_form'] = q($myrow->username);
-$data['email_public'] = q($myrow->email_public);
-$data['am_public'] = q($myrow->am_public);
-$data['pic_public'] = q($myrow->pic_public);
 $data['email_form'] = q($myrow->email);
 $data['am_form'] = q($myrow->am);
 $data['phone_form'] = q($myrow->phone);
@@ -451,6 +446,20 @@ $data['phone_public'] = q($myrow->phone_public);
 $data['desc_form'] = $myrow->description;
 $data['userLang'] = $myrow->lang;
 $data['icon'] = $myrow->has_icon;
+$data['email_public_selected'] = $data['am_public_selected'] = $data['phone_public_selected'] = $data['pic_public_selected'] = '';
+
+if ($myrow->email_public) {
+    $data['email_public_selected'] = 'checked';
+}
+if ($myrow->am_public) {
+    $data['am_public_selected'] = 'checked';
+}
+if ($myrow->phone_public) {
+    $data['phone_public_selected'] = 'checked';
+}
+if ($myrow->pic_public) {
+    $data['pic_public_selected'] = 'checked';
+}
 
 $data['sec'] = $urlServer . 'main/profile/profile.php';
 $passurl = $urlServer . 'main/profile/password.php';
@@ -465,10 +474,6 @@ $data['action_bar'] =
             ]
         ]);
 
-$data['access_options'] = array(ACCESS_PROFS => $langProfileInfoProfs,
-                                ACCESS_USERS => $langProfileInfoUsers);
-
-
 if (get_user_email_notification_from_courses($uid)) {
     $data['selectedyes'] = 'checked';
     $data['selectedno'] = '';
@@ -476,6 +481,7 @@ if (get_user_email_notification_from_courses($uid)) {
     $data['selectedyes'] = '';
     $data['selectedno'] = 'checked';
 }
+
 
 if (get_config('email_verification_required')) {
     $user_email_status = get_mail_ver_status($uid);
@@ -550,18 +556,3 @@ $data['allProviders'] = $allProviders;
 
 $data['menuTypeID'] = 1;
 view('main.profile.edit', $data);
-
-
-/**
- *
- * @param type $val
- * @return int
- */
-function valid_access($val) {
-    $val = intval($val);
-    if (in_array($val, array(ACCESS_PRIVATE, ACCESS_PROFS, ACCESS_USERS))) {
-        return $val;
-    } else {
-        return 0;
-    }
-}

@@ -91,11 +91,8 @@
                                 <div class='form-group mt-4'>
                                     <label for='email_form' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
                                     <div class='row'>
-                                        <div class='col-sm-6'>
+                                        <div class='col-sm-12'>
                                             <input class='form-control' type='text' name='email_form' id='email_form' value='{{ $email_form }}'>
-                                        </div>
-                                        <div class='col-sm-6 mt-md-0 mt-2'>
-                                            {!! selection($access_options, 'email_public', $email_public, "class='form-control'") !!}
                                         </div>
                                     </div>
                                 </div>
@@ -106,9 +103,6 @@
                                         <div class='col-sm-6'>
                                             <input type='text' class='form-control' name='am_form' id='am_form' value='{{ $am_form }}'>
                                         </div>
-                                        <div class='col-sm-6 mt-md-0 mt-2'>
-                                            {!! selection($access_options, 'am_public', $am_public, "class='form-control'") !!}
-                                        </div>
                                     </div>
                                 </div>
 
@@ -117,9 +111,6 @@
                                     <div class='row'>
                                         <div class='col-sm-6'>
                                             <input type='text' class='form-control' name='phone_form' id='phone_form' value='{{$phone_form }}'>
-                                        </div>
-                                        <div class='col-sm-6 mt-md-0 mt-2'>
-                                            {!! selection($access_options, 'phone_public', $phone_public, "class='form-control'") !!}
                                         </div>
                                     </div>
                                 </div>
@@ -139,15 +130,36 @@
                                         </div>
                                     </div>
                                 </div>
-                            @if (get_config('email_verification_required'))
 
+                                <div class='form-group mt-4'>
+                                    <label class='col-sm-2 control-label-notes mb-1'>{{ trans('langShow') }}</label>
+                                    <div class='col-sm-12 d-inline-flex'>
+                                        <div class='checkbox'>
+                                            <label class='col-sm-3 control-label-notes'>
+                                                <input type='checkbox' name='email_public' value='1' {{ $email_public_selected }}>{{ trans('langEmail') }}
+                                            </label>
+                                            <label class='col-sm-3 control-label-notes'>
+                                                <input type='checkbox' name='am_public' value='1' {{ $am_public_selected }}>{{ trans('langAm') }}
+                                            </label>
+                                            <label class='col-sm-3 control-label-notes'>
+                                                <input type='checkbox' name='phone_public' value='1' {{ $phone_public_selected }}>{{ trans('langPhone') }}
+                                            </label>
+                                            <label class='col-sm-2 control-label-notes'>
+                                                <input type='checkbox' name='pic_public' value='1' {{ $pic_public_selected }}>{{ trans('langProfileImage') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class='help-block col-sm-offset-2 col-sm-10'>{{ trans('langShowSettingsInfo') }}</div>
+                                </div>
+
+                            @if (get_config('email_verification_required'))
                                 <div class='form-group {{ $messageClass }} mt-4'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langVerifiedMail') }}</label>
                                     <div class='col-sm-12 form-control-static'>{!! $message !!}</div>
                                 </div>
                             @endif
-                            @if (!get_config('restrict_owndep'))
 
+                            @if (!get_config('restrict_owndep'))
                                 <div class='form-group mt-4'>
                                     <label for='faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                     <div class='col-sm-12 form-control-static'>
@@ -157,12 +169,10 @@
                             @endif
 
 
-
                             <div class='form-group mt-4'>
                                 <label for='language' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
                                 <div class='col-sm-12'>{!! lang_select_options('userLanguage', "class='form-control'") !!}</div>
                             </div>
-
 
 
                             <div class='form-group mt-4'>
@@ -207,14 +217,8 @@
                                 <div class="mt-3"></div>
                                 {{ $SecFactorChallenge }}
                                 <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
-                                   
-                                     
-                                            <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
-                                       
-                                        
-                                            <a href='display_profile.php' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
-                                        
-
+                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                    <a href='display_profile.php' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
                                 </div>
                         </fieldset>
                             {!! generate_csrf_token_form_field() !!}

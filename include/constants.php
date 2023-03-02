@@ -33,9 +33,8 @@ define('IMAGESIZE_MEDIUM', 155);
 define('IMAGESIZE_SMALL', 32);
 
 // profile info access
-define('ACCESS_PRIVATE', 0);
-define('ACCESS_PROFS', 1);
-define('ACCESS_USERS', 2);
+define('ACCESS_PROFS', 0);
+define('ACCESS_USERS', 1);
 
 /* module type */
 define('MODULE_IN_HOME', 0);

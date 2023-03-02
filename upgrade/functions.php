@@ -2521,6 +2521,7 @@ function upgrade_to_3_14($tbl_options) : void {
         // remove `login` field (`login` field is in table `loginout_summary`)
         delete_field('monthly_summary', 'logins');
     }
+
 }
 
 /**
