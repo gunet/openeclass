@@ -431,22 +431,24 @@ function get_course_users($cid) {
  * @param int $size optional image size in pixels (IMAGESIZE_SMALL or IMAGESIZE_LARGE)
  * @return string
  */
-function user_icon($uid, $size = null) {
-    global $themeimg, $urlAppend;
+function user_icon($user_id, $size = IMAGESIZE_SMALL) {
+    global $webDir, $themeimg, $urlAppend, $course_id, $is_editor, $uid;
 
-
-    $user = Database::get()->querySingle("SELECT has_icon FROM user WHERE id = ?d", $uid);
-    if ($user) {
-        if (!$size) {
-            $size = IMAGESIZE_SMALL;
-        }
-        if ($user->has_icon) {
-            return "{$urlAppend}courses/userimg/{$uid}_$size.jpg";
-        } else {
-            return "$themeimg/default_$size.png";
+    $user = Database::get()->querySingle("SELECT has_icon, pic_public
+        FROM user WHERE id = ?d", $user_id);
+    if ($user and
+        ($user->pic_public or $uid == $user_id or
+         $_SESSION['status'] == USER_TEACHER or
+         (isset($course_id) and $course_id and $is_editor))) {
+        $hash = profile_image_hash($user_id);
+        $hashed_file = "courses/userimg/{$user_id}_{$hash}_$size.jpg";
+        if (file_exists($hashed_file)) {
+           return $urlAppend . $hashed_file;
+        } elseif (file_exists("courses/userimg/{$user_id}_$size.jpg")) {
+           return "{$urlAppend}courses/userimg/{$user_id}_$size.jpg";
         }
     }
-    return '';
+    return "$themeimg/default_$size.png";
 }
 
 /**
@@ -2706,31 +2708,58 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
 }
 
 /**
- * Link for displaying user profile
- * @param type $uid
- * @param type $size
- * @param type $class
- * @return type
+ * Link / img tag for displaying user profile
+ * @param int $uid
+ * @param int $size
+ * @param string $class
+ * @return string
  */
-function profile_image($uid, $size, $class=null) {
-    global $urlServer, $themeimg;
+function profile_image($user_id, $size, $class=null) {
+    global $urlServer, $themeimg, $uid, $course_id, $is_editor;
 
     // makes $class argument optional
-    $class_attr = ($class == null)?'':"class='".q($class)."'";
+    $class_attr = ($class == null)? '': (" class='" . q($class) . "'");
+    $size_width = ($size != IMAGESIZE_SMALL || $size != IMAGESIZE_LARGE)? "style='width:{$size}px'":'';
+    $size = ($size == IMAGESIZE_SMALL or $size == IMAGESIZE_LARGE)? $size: IMAGESIZE_LARGE;
+    $imageurl = $username = '';
 
-    $name = ($uid > 0) ? q(trim(uid_to_name($uid))) : '';
-    $size_width = ($size != IMAGESIZE_SMALL || $size != IMAGESIZE_LARGE)? "style='width:$size'":'';
-    $size = ($size != IMAGESIZE_SMALL && $size != IMAGESIZE_LARGE)? IMAGESIZE_LARGE:$size;
-    if ($uid > 0) {
-        $q = Database::get()->querySingle("SELECT pic_public FROM user WHERE id = ?d", $uid);
-        if (file_exists("courses/userimg/{$uid}_$size.jpg") and ($q->pic_public == 1 or $_SESSION['status'] == USER_TEACHER)) {
-            return "<img src='{$urlServer}courses/userimg/{$uid}_$size.jpg' $class_attr title='$name' alt='$name' $size_width>";
-        } else {
-            return "<img src='$themeimg/default_$size.png' $class_attr title='$name' alt='$name' $size_width>";
+    if ($user_id) {
+        $user = Database::get()->querySingle("SELECT has_icon, pic_public,
+            CONCAT(surname, ' ', givenname) AS fullname
+            FROM user WHERE id = ?d", $user_id);
+        $username = q(trim($user->fullname));
+        if ($user->pic_public or $_SESSION['status'] == USER_TEACHER or
+            $uid == $user_id or
+            (isset($course_id) and $course_id and $is_editor)) {
+                $hash = profile_image_hash($user_id);
+                $hashed_file = "courses/userimg/{$user_id}_{$hash}_$size.jpg";
+                if (file_exists($hashed_file)) {
+                    $imageurl = $urlServer . $hashed_file;
+                } elseif (file_exists("courses/userimg/{$user_id}_$size.jpg")) {
+                    $imageurl = "{$urlServer}courses/userimg/{$user_id}_$size.jpg";
+                }
         }
-    } else {
-        return "<img src='$themeimg/default_$size.png' $class_attr title='$name' alt='$name' $size_width>";
     }
+
+    if (!$imageurl) {
+        $imageurl = "$themeimg/default_$size.png";
+    }
+    return "<img src='$imageurl' $class_attr title='$username' alt='$username' $size_width>";
+}
+
+/**
+ * Profile image hash to make image files unpredictable
+ * @param int $uid
+ * @return string
+ */
+function profile_image_hash($uid) {
+    static $secret_key;
+
+    if (!isset($secret_key)) {
+        $secret_key = get_config('secret_key');
+    }
+    return str_replace(['/', '+', '='], ['-', '.', ''],
+        base64_encode(substr(hash_hmac('ripemd128', $uid, $secret_key, true), 0, 10)));
 }
 
 function canonicalize_url($url) {

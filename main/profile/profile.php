@@ -88,8 +88,15 @@ if (in_array($password, array('shibboleth', 'cas', 'ldap'))) {
 
 // Handle AJAX profile image delete
 if (isset($_POST['delimage'])) {
-    @unlink($image_path . '_' . IMAGESIZE_LARGE . '.jpg');
-    @unlink($image_path . '_' . IMAGESIZE_SMALL . '.jpg');
+    $hash = profile_image_hash($uid);
+    $images = [
+        $image_path . '_' . IMAGESIZE_LARGE . '.jpg',
+        $image_path . '_' . IMAGESIZE_SMALL . '.jpg',
+        "{$image_path}_{$hash}_" . IMAGESIZE_LARGE . '.jpg',
+        "{$image_path}_{$hash}_" . IMAGESIZE_SMALL . '.jpg'];
+    foreach ($images as $image) {
+        @unlink($image);
+    }
     Database::get()->query("UPDATE user SET has_icon = 0 WHERE id = ?d", $uid);
     Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
                                          'deleteimage' => 1));
@@ -144,12 +151,13 @@ if (isset($_POST['submit'])) {
 
         $type = $_FILES['userimage']['type'];
         $image_file = $_FILES['userimage']['tmp_name'];
+        $image_base = $image_path . '_' . profile_image_hash($uid) . '_';
 
-        if (!copy_resized_image($image_file, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $image_path . '_' . IMAGESIZE_LARGE . '.jpg')) {
+        if (!copy_resized_image($image_file, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $image_base . IMAGESIZE_LARGE . '.jpg')) {
             Session::Messages($langInvalidPicture);
             redirect_to_home_page("main/profile/profile.php");
         }
-        if (!copy_resized_image($image_file, $type, IMAGESIZE_SMALL, IMAGESIZE_SMALL, $image_path . '_' . IMAGESIZE_SMALL . '.jpg')) {
+        if (!copy_resized_image($image_file, $type, IMAGESIZE_SMALL, IMAGESIZE_SMALL, $image_base . IMAGESIZE_SMALL . '.jpg')) {
             Session::Messages($langInvalidPicture);
             redirect_to_home_page("main/profile/profile.php");
         }
@@ -502,19 +510,19 @@ $tool_content .= "<div class='form-group'>
                     <label for='email_form' class='col-sm-2 control-label'>$langEmail:</label>
                     <div class='col-sm-5'>
                         $email_field
-                    </div>                    
+                    </div>
                 </div>
                 <div class='form-group'>
                     <label for='am_form' class='col-sm-2 control-label'>$langAm:</label>
                     <div class='col-sm-5'>
                         $am_field
-                    </div>                    
+                    </div>
                 </div>
                 <div class='form-group'>
                     <label for='phone_form' class='col-sm-2 control-label'>$langPhone</label>
                     <div class='col-sm-5'>
                         <input type='text' class='form-control' name='phone_form' id='phone_form' value='$phone_form'>
-                    </div>                    
+                    </div>
                 </div>";
 
 if (get_user_email_notification_from_courses($uid)) {

@@ -3901,6 +3901,7 @@ $langUpgradeDBInfoMessage = "Η αναβάθμιση της βάσης δεδο�
 $langUpgradePopUpCloseWarning = "Προσοχή! Μην κλείσετε αυτό το παράθυρο γιατί θα διακοπεί η αναβάθμιση!";
 $langUpgFinished = 'Ολοκληρώθηκε';
 $langUpgUTF8MB4 = 'Μετατροπή πινάκων σε πλήρες εύρος Unicode';
+$langEncodeUserProfilePics = 'Κωδικοποίηση εικόνων προφίλ χρηστών';
 $langPreviousVersion = 'Προηγούμενη έκδοση';
 
 /* * *****************************************************************

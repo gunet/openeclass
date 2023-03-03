@@ -307,8 +307,16 @@ if ($command_line or $ajax_call) {
                     steps_finished();
                 }
             } elseif ($version === '3.14') {
-                upgrade_to_3_14($tbl_options);
-                steps_finished();
+                if ($step == 1) {
+                    upgrade_to_3_14($tbl_options);
+                    break_on_step();
+                }
+
+                if ($step == 2) {
+                    message($langEncodeUserProfilePics, "$version-encode");
+                    encode_user_profile_pics();
+                    steps_finished();
+                }
             }
         }
         if ($command_line) {

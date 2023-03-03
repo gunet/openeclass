@@ -3037,6 +3037,23 @@ function finalize_upgrade(): void
 
 
 /**
+  * @brief Rename user profile image files to unpredictable names
+  */
+function encode_user_profile_pics(): void
+{
+    Database::get()->queryFunc('SELECT id FROM user WHERE has_icon = 1',
+        function ($user) {
+            $base = "courses/userimg/{$user->id}_";
+            if (file_exists($base . IMAGESIZE_LARGE . '.jpg')) {
+                $hash = profile_image_hash($user->id);
+                rename($base . IMAGESIZE_LARGE . '.jpg', $base . $hash . '_' . IMAGESIZE_LARGE . '.jpg');
+                rename($base . IMAGESIZE_SMALL . '.jpg', $base . $hash . '_' . IMAGESIZE_SMALL . '.jpg');
+            }
+        });
+}
+
+
+/**
  * @brief change db encoding to utf8mb4
  */
 function convert_db_encoding_to_utf8mb4(): void
