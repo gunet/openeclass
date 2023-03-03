@@ -2499,6 +2499,13 @@ function upgrade_to_3_14($tbl_options) : void {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `accessed` datetime DEFAULT NULL AFTER started");
     }
 
+    if (DBHelper::fieldExists('monthly_summary', 'logins')) {
+        // convert `month` field from `varchar` to `date`
+        Database::get()->query("UPDATE monthly_summary SET month = STR_TO_DATE(CONCAT('01 ', month),'%d %m %Y')");
+        Database::get()->query("ALTER TABLE `monthly_summary` CHANGE `month` `month` DATE NOT NULL AFTER `id`");
+        // remove `login` field (`login` field is in table `loginout_summary`)
+        delete_field('monthly_summary', 'logins');
+    }
 }
 
 /**

@@ -884,7 +884,7 @@ function user_duration_per_course($u) {
  */
 function user_last_logins($u) {
 
-    global $langLastVisits, $dateFormatLong, $tool_content;
+    global $langLastVisits, $tool_content;
 
     $result = Database::get()->queryArray("SELECT * FROM loginout
                                         WHERE id_user = ?d ORDER by idLog DESC LIMIT 5", $u);
@@ -997,6 +997,42 @@ function get_user_login_archives(): array
 
             Database::get()->query("INSERT INTO loginout_summary (login_sum, start_date, end_date) VALUES (?s, ?s, ?s)",
                                             $q_cnt->cnt, $formatted_start_date, $formatted_end_date);
+        }
+    }
+    return $content;
+}
+
+/**
+ * @brief get monthly statistics (e.g. courses, users).  First we seek archived statistics in `monthly_summary` table.
+ * Otherwise we seek `courses` and `users` table and update the `monthly_summary`.
+ * @return array
+ */
+function get_monthly_archives(): array
+{
+    $content = [];
+    $start = new DateTime('now');
+    $interval = DateInterval::createFromDateString('first day of last month');
+    $period = new DatePeriod($start, $interval, 12, DatePeriod::EXCLUDE_START_DATE); // last 12 months
+
+    foreach ($period as $time) {
+        $year_month_val = $time->format("Y-m");
+        $data = Database::get()->querySingle("SELECT profesNum, studNum, visitorsNum, coursNum, 
+                                    DATE_FORMAT(month,'%Y-%m') AS month  
+                            FROM monthly_summary 
+                            WHERE DATE_FORMAT(month,'%Y-%m') = ?s", $year_month_val);
+        if ($data) {
+            $data_month_year = $data->month;
+            $content[] = [ $data_month_year."-01", $data->profesNum, $data->studNum, $data->visitorsNum, $data->coursNum ];
+        } else {
+            $year_month_day = $time->format("Y-m-d");
+            $cnt_courses = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course WHERE created <= ?t", $year_month_day)->cnt;
+            $cnt_prof = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_TEACHER . " AND registered_at <= ?t", $year_month_day)->cnt;
+            $cnt_students = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_STUDENT . " AND registered_at <= ?t", $year_month_day)->cnt;
+            $cnt_guest = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_GUEST . " AND registered_at <= ?t", $year_month_day)->cnt;
+            $content[] = [ $year_month_day, $cnt_prof, $cnt_students, $cnt_guest, $cnt_courses ];
+
+            Database::get()->query("INSERT INTO monthly_summary (month, profesNum, studNum, visitorsNum, coursNum) VALUES (?t, ?s, ?s, ?s, ?s)",
+                                        $year_month_day, $cnt_prof, $cnt_students, $cnt_guest, $cnt_courses);
         }
     }
     return $content;

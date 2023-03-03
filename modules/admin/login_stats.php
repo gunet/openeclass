@@ -89,48 +89,25 @@ $toolName = "$langLoginUser $langUsersOf";
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
-$tool_content .= action_bar(array(
+$data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                     'url' => "../usage/index.php?t=a",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
             ),false);
 
-/****   C3 plot   ****/
-$tool_content .= "<div class='row plotscontainer'>";
-$tool_content .= "<div id='userlogins_container' class='col-lg-12'>";
-$tool_content .= plot_placeholder("old_stats", $langLoginUser);
-$tool_content .= "</div></div>";
 
-$tool_content .= "<div class='table-responsive'>
-                <table class='table-default'>
-                <tr>
-                    <th class='list-header' colspan='2'><strong>$langLoginUser $langUsersOf</strong></th>                    
-                </tr>";
 // recent logins
 $interval = [ $langToday => 1, $langLast7Days => 7, $langLast30Days => 30 ];
-foreach ($interval as $legend => $data) {
+foreach ($interval as $legend => $value) {
     $loginUsers = Database::get()->querySingle("SELECT COUNT(*) AS cnt 
                         FROM loginout
                         WHERE action='LOGIN'
-                        AND `when` >= DATE_SUB(DATE(NOW()), INTERVAL $data DAY)");
-    $tool_content .= "<tr>
-                        <td>$legend</td>
-                        <td class='text-center'>" . $loginUsers->cnt . "</td>
-                    </tr>";
+                        AND `when` >= DATE_SUB(DATE(NOW()), INTERVAL $value DAY)");
+    $data['recent_logins'][] = [ $legend, $loginUsers->cnt ];
 }
 
 // old logins
-$user_logins_data = get_user_login_archives();
+$data['user_logins_data'] = $user_logins_data = get_user_login_archives();
 
-foreach ($user_logins_data as $data) {
-    $formatted_data = date_format(date_create($data[0]), "m-Y");
-    $tool_content .= "<tr>";
-    $tool_content .= "<td>$formatted_data</td>";
-    $tool_content .= "<td class='text-center'>$data[1]</td>";
-    $tool_content .= "</tr>";
-}
-
-$tool_content .= "</table></div>";
-
-draw($tool_content, 3, null, $head_content);
+view('admin.other.stats.login_stats', $data);

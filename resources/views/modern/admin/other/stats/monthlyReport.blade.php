@@ -10,28 +10,12 @@
         <div class="row rowMedium">
 
             <div class="col-12 justify-content-center col_maincontent_active_Homepage">
-                    
+
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-
-                    @if(Session::has('message'))
-                    <div class='col-12 all-alerts'>
-                        <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @if(is_array(Session::get('message')))
-                                @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
-                                @foreach($messageArray as $message)
-                                    {!! $message !!}
-                                @endforeach
-                            @else
-                                {!! Session::get('message') !!}
-                            @endif
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    </div>
-                    @endif
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
@@ -39,64 +23,31 @@
                         <div class='col-12 h-100 left-form'></div>
                     </div>
 
-                    <div class='col-lg-6 col-12'>
-                        <div class="form-wrapper form-edit rounded">
-                            
-                            <form class="form-horizontal" role="form" method="post">
-                                <div class="form-group">
-                                    <div class="col-sm-12">
-                                        <select name="selectedMonth" class="form-select">{!! $months !!}</select>
-                                    </div>
-                                    <input class="btn mt-5 m-auto d-block submitAdminBtn" type="submit" name="btnUsage" value="{{ trans('langSubmit') }}">
-                                </div>
-                            </form>
-                        </div>
+                    <div class='alert alert-info'>
+                        {{ trans('langMonthlyReportInfo') }}
                     </div>
-                    @if (isset($_POST['selectedMonth']))
-                        @if (isset($monthly_data))
-                            <div class='col-12'>
-                                <div class='table-responsive mt-3'>
-                                    <table class="table-default">
-                                        <tbody>		
-                                            <tr class='list-header'>
-                                                <th colspan="2" class="text-center">{{ trans('langReport') }}: {{ $msg_of_month }} {{ $y }}</th>
-                                            </tr>
-                                            <tr>
-                                                <th class="left">{{ trans('langNbProf') }}: </th>
-                                                <td>{{ $monthly_data->profesNum }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="left">{{ trans('langNbStudents') }}: </th>
-                                                <td>{{ $monthly_data->studNum }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="left">{{ trans('langNbVisitors') }}: </th>
-                                                <td>{{ $monthly_data->visitorsNum }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="left">{{ trans('langNbCourses') }}:  </th>
-                                                <td>{{ $monthly_data->coursNum }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="left">{{ trans('langNbLogin') }}: </th>
-                                                <td>{{ $monthly_data->logins }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>{!! $monthly_data->details !!}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        @else
-                            <div class='col-12'>
-                                <div class="alert alert-warning">
-                                    {{ trans('langNoReport') }}: {{ $msg_of_month }} {{ $y }}
-                                </div>
-                            </div>
-                        @endif
-                    @endif
+                    <table class='table-default'>
+                        <tbody>
+                            <th class='list-header'>{{ trans('langMonth') }}</th>
+                            <th class='list-header text-center'>{{ trans('langTeachers') }}</th>
+                            <th class='list-header text-center'>{{ trans('langStudents') }}</th>
+                            <th class='list-header text-center'>{{ trans('langGuests') }}</th>
+                            <th class='list-header text-center'>{{ trans('langCourses') }}</th>
 
+                            @foreach ($monthly_data as $data)
+                                @php
+                                    $formatted_data = date_format(date_create($data[0]), "n / Y")
+                                @endphp
+                                <tr>
+                                    <td>{{ $formatted_data }}</td>
+                                    <td class='text-center'>{{ $data[1] }}</td>
+                                    <td class='text-center'>{{ $data[2] }}</td>
+                                    <td class='text-center'>{{ $data[3] }}</td>
+                                    <td class='text-center'>{{ $data[4] }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
