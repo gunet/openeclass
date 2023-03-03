@@ -41,7 +41,7 @@ if (isset($toolContent_ErrorExists)) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
         header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
     } else {
-        header("Location:" . $urlServer . "index.php");
+        redirect_to_home_page("main/portfolio.php");
     }
     exit();
 }
@@ -461,9 +461,9 @@ function view($view_file, $view_data = array()) {
                 .circle-img-contant { 
                     background-color: $theme_options_styles[linkColor];
                 }
-            "; 
+            ";
         }
-        
+
         if (!empty($theme_options_styles['linkHoverColor'])){
             $styles_str .= "
                 a:hover, a:focus {
@@ -479,8 +479,8 @@ function view($view_file, $view_data = array()) {
                     color: #ffffff;
                 }
             ";
-        } 
-        
+        }
+
         if (!empty($theme_options_styles['leftSubMenuFontColor'])){
             $styles_str .= "
                 #leftnav .panel a{
@@ -491,7 +491,7 @@ function view($view_file, $view_data = array()) {
                 }
             ";
         }
-        
+
 
         if (!empty($theme_options_styles['leftSubMenuHoverBgColor'])){
             $styles_str .= "
@@ -545,7 +545,7 @@ function view($view_file, $view_data = array()) {
                 }
             ";
         }
-        
+
         if (!empty($theme_options_styles['leftSubMenuHoverFontColor'])){
             $styles_str .= "
                 #leftnav .panel a.list-group-item:hover{
@@ -556,8 +556,8 @@ function view($view_file, $view_data = array()) {
                 }
 
             ";
-        } 
-        
+        }
+
         if (!empty($theme_options_styles['leftMenuFontColor'])){
             $styles_str .= "
                 #leftnav .panel a.parent-menu{
@@ -570,7 +570,7 @@ function view($view_file, $view_data = array()) {
                 
             ";
         }
-        
+
         if (!empty($theme_options_styles['leftMenuBgColor'])){
             $styles_str .= "
                 #leftnav .panel a.parent-menu{
@@ -583,7 +583,7 @@ function view($view_file, $view_data = array()) {
                 
             ";
         }
-        
+
         if (!empty($theme_options_styles['leftMenuHoverFontColor'])){
             $styles_str .= "
                 #leftnav .panel .panel-sidebar-heading:hover{
@@ -595,7 +595,7 @@ function view($view_file, $view_data = array()) {
                 }
             ";
         }
-        
+
         if (!empty($theme_options_styles['leftMenuSelectedFontColor'])){
             $styles_str .= "
                 #leftnav .panel a.parent-menu:not(.collapsed){
@@ -613,11 +613,11 @@ function view($view_file, $view_data = array()) {
                 
             ";
         }
-        
+
         if (isset($theme_options_styles['imageUpload'])){
             $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
         }
-        
+
         if (isset($theme_options_styles['imageUploadSmall'])){
             $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
             $styles_str .= "
@@ -628,7 +628,7 @@ function view($view_file, $view_data = array()) {
                     }
                 }";
         }
-        
+
     }else{
 
         $head_content .= "
