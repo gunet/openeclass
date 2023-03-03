@@ -124,7 +124,7 @@ foreach ($interval as $legend => $data) {
 $user_logins_data = get_user_login_archives();
 
 foreach ($user_logins_data as $data) {
-    $formatted_data = date_format(date_create($data[0]), "m-Y");
+    $formatted_data = date_format(date_create($data[0]), "n / Y");
     $tool_content .= "<tr>";
     $tool_content .= "<td>$formatted_data</td>";
     $tool_content .= "<td class='text-center'>$data[1]</td>";

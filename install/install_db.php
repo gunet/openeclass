@@ -375,8 +375,7 @@ $db->query("CREATE TABLE `admin_calendar` (
     KEY `user_events` (`user_id`),
     KEY `admin_events_dates` (`start`)) $tbl_options");
 
-// table for loginout rollups
-// only contains LOGIN events summed up by a period (typically weekly)
+//  loginout rollups
 $db->query("CREATE TABLE `loginout_summary` (
     id int(11) NOT NULL auto_increment,
     login_sum int(11) unsigned  NOT NULL default 0,
@@ -384,16 +383,14 @@ $db->query("CREATE TABLE `loginout_summary` (
     end_date datetime NOT NULL,
     PRIMARY KEY (id)) $tbl_options");
 
-// table keeping data for monthly reports
+// monthly reports
 $db->query("CREATE TABLE monthly_summary (
     id int(11) NOT NULL auto_increment,
-    `month` varchar(20)  NOT NULL default 0,
+    `month` DATE NOT NULL,
     profesNum int(11) NOT NULL default 0,
     studNum int(11) NOT NULL default 0,
     visitorsNum int(11) NOT NULL default 0,
-    coursNum int(11) NOT NULL default 0,
-    logins int(11) NOT NULL default 0,
-    details MEDIUMTEXT,
+    coursNum int(11) NOT NULL default 0,    
     PRIMARY KEY (id)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `document` (

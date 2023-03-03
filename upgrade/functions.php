@@ -2512,6 +2512,13 @@ function upgrade_to_3_14($tbl_options) : void {
         Database::get()->query("ALTER TABLE user ADD pic_public TINYINT(1) NOT NULL DEFAULT 0 AFTER am_public");
     }
 
+    if (DBHelper::fieldExists('monthly_summary', 'logins')) {
+        // convert `month` field from `varchar` to `date`
+        Database::get()->query("UPDATE monthly_summary SET month = STR_TO_DATE(CONCAT('01 ', month),'%d %m %Y')");
+        Database::get()->query("ALTER TABLE `monthly_summary` CHANGE `month` `month` DATE NOT NULL AFTER `id`");
+        // remove `login` field (`login` field is in table `loginout_summary`)
+        delete_field('monthly_summary', 'logins');
+    }
 }
 
 /**
