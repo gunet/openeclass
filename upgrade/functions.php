@@ -2499,6 +2499,21 @@ function upgrade_to_3_14($tbl_options) : void {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `accessed` datetime DEFAULT NULL AFTER started");
     }
 
+    if (!DBHelper::tableExists('page')) {
+        Database::get()->query("CREATE TABLE `page` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `course_id` int(11) DEFAULT NULL,
+            `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+            `path` varchar(32) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `visible` tinyint(4) DEFAULT 0,
+            PRIMARY KEY (`id`),
+            KEY `course_id_index` (`course_id`)) $tbl_options");
+    }
+
+    if (!DBHelper::fieldExists('user','pic_public')) {
+        Database::get()->query("ALTER TABLE user ADD pic_public TINYINT(1) NOT NULL DEFAULT 0 AFTER am_public");
+    }
+
     if (DBHelper::fieldExists('monthly_summary', 'logins')) {
         // convert `month` field from `varchar` to `date`
         Database::get()->query("UPDATE monthly_summary SET month = STR_TO_DATE(CONCAT('01 ', month),'%d %m %Y')");

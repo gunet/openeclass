@@ -52,7 +52,7 @@ load_js('tools.js');
 
 $myrow = Database::get()->querySingle("SELECT surname, givenname, username, email, am, phone,
                                             lang, status, has_icon, description,
-                                            email_public, phone_public, am_public, password
+                                            email_public, phone_public, am_public, pic_public, password
                                         FROM user WHERE id = ?d", $uid);
 
 
@@ -138,6 +138,7 @@ if (isset($_POST['submit'])) {
     $email_public = valid_access($email_public);
     $phone_public = valid_access($phone_public);
     $am_public = valid_access($am_public);
+    $pic_public = valid_access($pic_public);
 
     // upload user picture
     if (isset($_FILES['userimage']) && is_uploaded_file($_FILES['userimage']['tmp_name'])) {
@@ -230,7 +231,7 @@ if (isset($_POST['submit'])) {
                              pic_public = ?d
                              $verified_mail_sql
                          WHERE id = ?d",
-                            $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $uid);
+                            $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $pic_public, $uid);
 
     //fill custom profile fields
     process_profile_fields_data(array('uid' => $uid, 'origin' => 'edit_profile'));
