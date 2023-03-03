@@ -339,11 +339,12 @@ if (isset($require_current_course) and $require_current_course) {
         if ($is_admin or $is_power_user) {
             $status = USER_TEACHER;
         } elseif ($uid) {
-            $stat = Database::get()->querySingle("SELECT status FROM course_user
+            $stat = Database::get()->querySingle("SELECT status, editor FROM course_user
                                                            WHERE user_id = ?d AND
                                                            course_id = ?d", $uid, $course_id);
             if ($stat) {
                 $status = $stat->status;
+                $is_editor = $stat->editor;
             }
             if ($is_departmentmanage_user and isset($course_code)) {
                 // the department manager has rights to the courses of his department(s)
@@ -372,14 +373,13 @@ if (isset($require_current_course) and $require_current_course) {
                 }
             }
         }
-
         if ($visible != COURSE_OPEN) {
             if (!$uid) {
                 $toolContent_ErrorExists = $langNoAdminAccess;
             } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED) and !@$course_guest_allowed) {
                 Session::Messages($langLoginRequired, 'alert-info');
                 redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
-            } elseif ($status != USER_TEACHER and $visible == COURSE_INACTIVE) {
+            } elseif ($status != USER_TEACHER and !$is_editor and $visible == COURSE_INACTIVE) {
                 $toolContent_ErrorExists = $langCheckProf;
             }
         }
