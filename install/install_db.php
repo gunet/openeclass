@@ -191,7 +191,7 @@ $db->query("CREATE TABLE `course` (
   `glossary_index` BOOL NOT NULL DEFAULT 1,
   `view_type` VARCHAR(255) NOT NULL DEFAULT 'units',
   `start_date` DATE DEFAULT NULL,
-  `finish_date` DATE DEFAULT NULL,
+  `end_date` DATE DEFAULT NULL,
   `description` MEDIUMTEXT DEFAULT NULL,
   `home_layout` TINYINT(1) NOT NULL DEFAULT 1,
   `course_image` VARCHAR(400) NULL,
