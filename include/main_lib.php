@@ -2765,13 +2765,13 @@ function profile_image($user_id, $size, $class=null) {
  * @return string
  */
 function profile_image_hash($uid) {
-    static $secret_key;
+    static $code_key;
 
     if (!isset($secret_key)) {
-        $secret_key = get_config('secret_key');
+        $code_key = get_config('code_key');
     }
     return str_replace(['/', '+', '='], ['-', '.', ''],
-        base64_encode(substr(hash_hmac('ripemd128', $uid, $secret_key, true), 0, 10)));
+        base64_encode(substr(hash_hmac('ripemd128', $uid, $code_key, true), 0, 10)));
 }
 
 function canonicalize_url($url) {
