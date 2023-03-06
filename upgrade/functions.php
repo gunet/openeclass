@@ -2522,6 +2522,10 @@ function upgrade_to_3_14($tbl_options) : void {
         delete_field('monthly_summary', 'logins');
     }
 
+    if (DBHelper::fieldExists('course', 'finish_date')) {
+        Database::get()->query("UPDATE course SET finish_date=NULL");
+        Database::get()->query("ALTER TABLE course CHANGE finish_date end_date DATE DEFAULT NULL");
+    }
 }
 
 /**
