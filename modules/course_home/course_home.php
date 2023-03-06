@@ -62,14 +62,14 @@ add_units_navigation(TRUE);
 
 load_js('tools.js');
 
-<<<<<<< local
 $data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license, finish_date,
                                                view_type, start_date, finish_date, description, home_layout, course_image, password
-=======
-$course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license,
-                                               view_type, start_date, end_date, description, home_layout, course_image, password
->>>>>>> graft
                                           FROM course WHERE id = ?d", $course_id);
+
+// INCOMING CHANGE AFTER install_db
+// $data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license,
+//                                                view_type, start_date, end_date, description, home_layout, course_image, password
+//                                           FROM course WHERE id = ?d", $course_id);
 
 // Handle unit reordering
 if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
