@@ -511,18 +511,18 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 $weekly_view = false;
             }
             // handle course weekly if exists
-            if (isset($course_data['view_type']) && isset($course_data['start_date']) && isset($course_data['finish_date'])) {
+            if (isset($course_data['view_type']) && isset($course_data['start_date']) && isset($course_data['end_date'])) {
                 if ($course_data['start_date'] == '0000-00-00') {
                     $course_data['start_date'] = null;
                 }
-                if ($course_data['finish_date'] == '0000-00-00') {
-                    $course_data['finish_date'] = null;
+                if ($course_data['end_date'] == '0000-00-00') {
+                    $course_data['end_date'] = null;
                 }
-                $upd_course_sql .= " , view_type = ?s, start_date = ?t, finish_date = ?t ";
+                $upd_course_sql .= " , view_type = ?s, start_date = ?t, end_date = ?t ";
                 array_push($upd_course_args,
                     $course_data['view_type'],
                     $course_data['start_date'],
-                    $course_data['finish_date']
+                    $course_data['end_date']
                 );
             } else {
                 $upd_course_sql .= " , view_type = ?s ";
