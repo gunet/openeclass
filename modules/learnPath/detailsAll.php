@@ -43,7 +43,7 @@ $head_content .= "<script type='text/javascript'>
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
-                'order' : [[1, 'desc']],
+                'order' : [[2, 'desc']],
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -69,10 +69,15 @@ $head_content .= "<script type='text/javascript'>
         </script>";
 
 $tool_content .= action_bar(array(
-                array('title' => $langBack,
+                    array('title' => $langDumpUser,
+                        'url' => "dumpuserlearnpathdetails.php?course=$course_code",
+                        'icon' => 'fa-download',
+                        'level' => 'primary-label'),
+                    array('title' => $langBack,
                       'url' => "index.php",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')),false);
+                      'level' => 'primary-label')),
+                false);
 
 // check if there are learning paths available
 $lcnt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM lp_learnPath WHERE course_id = ?d", $course_id)->count;
@@ -80,11 +85,6 @@ if ($lcnt == 0) {
     $tool_content .= "<div class='alert alert-warning'>$langNoLearningPath</div>";
     draw($tool_content, 2, null, $head_content);
     exit;
-} else {
-    $tool_content .= "<div class='alert alert-info'>
-          $langSave <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langDumpUserDurationToFile</a>
-                (<a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=UTF-8'>$langcsvenc2</a>)
-          </div>";
 }
 
 $tool_content .= "<div class='table-responsive'>
@@ -92,13 +92,15 @@ $tool_content .= "<div class='table-responsive'>
         <thead>
             <tr class='list-header'>
                 <th>$langStudent</th>
+                <th>$langEmail</th>
                 <th width='120'>$langAm</th>
                 <th>$langGroup</th>
+                <th>$langTotalTimeSpent</th>
                 <th>$langProgress</th>
             </tr>
         </thead>";
 
-$usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`
+$usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`
                 FROM `user` AS U, `course_user` AS CU
                     WHERE U.`id`= CU.`user_id`
                     AND CU.`course_id` = ?d
@@ -109,21 +111,30 @@ foreach ($usersList as $user) {
     // list available learning paths
     $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d", $course_id);
     $iterator = 1;
-    $globalprog = 0;    
-    
+    $globalprog = 0;
+    $globaltime = "00:00:00";
+
     foreach ($learningPathList as $learningPath) {
         // % progress
-        $prog = get_learnPath_progress($learningPath->learnPath_id, $user->id);
+        list($prog, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($learningPath->learnPath_id, $user->id);
         if ($prog >= 0) {
             $globalprog += $prog;
+        }
+        if (!empty($lpTotalTime)) {
+            $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
         $iterator++;
     }
     $total = round($globalprog / ($iterator - 1));
+    if ($globaltime === "00:00:00") {
+        $globaltime = "";
+    }
     $tool_content .= "<tr>";
     $tool_content .= "<td><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . uid_to_name($user->id) . "</a></td>
+            <td class='text-left'>" . q($user->email). "</td>
             <td class='text-center'>" . q(uid_to_am($user->id)) . "</td>
             <td class='text-left'>" . user_groups($course_id, $user->id) . "</td>
+            <td class='text-right'>" . q($globaltime) . "</td>
             <td class='text-right' width='120'>"
             . disp_progress_bar($total, 1) . "
             </td>";

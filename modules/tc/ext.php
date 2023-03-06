@@ -23,7 +23,7 @@
 // For creating bbb urls & params
 $guest_allow = true;
 require_once 'bbb-api.php';
-require_once 'om-api.php';
+//require_once 'om-api.php';
 require_once 'functions.php';
 require_once '../../include/init.php';
 
@@ -82,7 +82,7 @@ if (!empty($end_date) and date_diff_in_minutes($now, $end_date) > 0) {
 }
 
 if ($server_type == 'bbb') { // bbb server
-    if (bbb_session_running($meeting_id) == false) {
+    if (!bbb_session_running($meeting_id)) {
         create_bbb_meeting($title, $meeting_id, $mod_pw, $att_pw, $record, $options);
     }
     # Get session capacity
@@ -96,8 +96,16 @@ if ($server_type == 'bbb') { // bbb server
     } else {
         header('Location: ' . bbb_join_user($meeting_id,$att_pw,$_GET['username'],""));
     }
+} elseif ($server_type == 'jitsi' or $server_type == 'googlemeet') { // jitsi server
+    $host = Database::get()->querySingle("SELECT hostname FROM tc_servers WHERE id = ?s", $server_id)->hostname;
+    header("Location: " . $host . $meeting_id);
+} elseif ($server_type == 'zoom') { // zoom
+    $host = Database::get()->querySingle("SELECT hostname FROM tc_servers WHERE id = ?s", $server_id)->hostname;
+    header("Location: " . $host . 'j/'. $meeting_id . '/?pwd=' . $mod_pw);
+    } elseif ($server_type == 'webex') { // webex
+    header("Location: " . $meeting_id);
 }
-
+/*
 if ($server_type == 'om') { // OM server
     if (om_session_running($meeting_id) == false) {
         create_om_meeting($title, $meeting_id, $record);
@@ -114,13 +122,13 @@ if ($server_type == 'om') { // OM server
         header('Location: ' . om_join_user($meeting_id, $_GET['username'], -1, "", $_GET['username'], "", 0));
     }
 }
-
+*/
 /**
  * @brief display message
  * @param message
  */
 function display_message($message) {
-    
+
     global $urlServer, $langBBBWelcomeMsg;
 
     echo "

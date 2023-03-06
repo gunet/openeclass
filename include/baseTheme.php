@@ -46,7 +46,7 @@ if (isset($toolContent_ErrorExists)) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
         redirect_to_home_page("main/login_form.php?next=" . urlencode($next));
     } else {
-        redirect_to_home_page('');
+        redirect_to_home_page("main/portfolio.php");
     }
 }
 
@@ -889,6 +889,8 @@ function module_path($path) {
         return '/auth/opencourses.php';
     } elseif (preg_match('+/auth/(registration|newuser|altnewuser|formuser|altsearch)\.php+', $path)) {
         return '/auth/registration.php';
+    } elseif (preg_match('|/course_home/page.php.*id=(\d+)|', $original_path, $matches)) {
+        return 'page:id=' . $matches[1];
     } elseif (isset($GLOBALS['course_code']) and
               strpos($path, '/courses/' . $GLOBALS['course_code']) !== false) {
         return 'course_home';

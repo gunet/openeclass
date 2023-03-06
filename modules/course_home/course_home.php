@@ -21,6 +21,7 @@
 
 /**
  * @file: course_home.php
+ *
  * @brief: course home page
  */
 $require_current_course = true;
@@ -210,59 +211,21 @@ if ($course_info->password !== '') {
         </script>";
 }
 
-/* email notifications pop up*/
-$head_content .= "
-    <script type='text/javascript'>
-        $(document).on('click', '#email_notification', function(e) {
-            e.preventDefault();
-            var info_message = '';
-            var action_message = '';
-            var url = $(this).attr('href');
-            var varUrl = url.split('?'); /* split url parameters */
-            for (i = 0; i < varUrl.length; i++) {
-                varUrlName = varUrl[i].split('=');
-            }
-            var valueMessage = varUrlName[2]; /* value of url parameter 'email_un' */            
-            if (valueMessage == 1) {
-                info_message = '". js_escape($langUserEmailNotification) . "' + '<br><br>' + '" . js_escape($langConfDisableMailNotification) . "';
-                action_message = '" .js_escape($langDeactivate) ."';
-            } else {
-                info_message = '".js_escape($langNoUserEmailNotification) . "' + '<br><br>' + '" . js_escape($langConfEnableMailNotification) . "';
-                action_message = '" .js_escape($langActivate) ."';
-            }            
-            bootbox.confirm({
-                title: '". js_escape($langEmailUnsubscribe) . "',
-                message: info_message,
-                buttons: {
-                    confirm: {
-                        label: action_message,
-                        className: 'btn-success'
-                    },
-                    cancel: {
-                        label: '". js_escape($langCancel) . "',                        
-                    }
-                },
-                callback: function(result) {
-                    if (result) {            
-                        window.location.href = url;
-                    }
-                }
-            });
-          });        
-    </script>";
-
 // course email notification
 if (isset($uid) and isset($_SESSION['status']) and $_SESSION['status'] != USER_GUEST) {
+    $modal_info_message = $modal_action_message = '';
+    $email_notification_state = get_user_email_notification($uid, $course_id)? 1: 0;
     if (get_mail_ver_status($uid) == EMAIL_VERIFIED) {
-        if (isset($_GET['email_un'])) {
-            if ($_GET['email_un'] == 1) {
+        if (isset($_POST['email_set_state'])) {
+            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+            if ($_POST['email_set_state'] == 1) {
                 Database::get()->query("UPDATE course_user SET receive_mail = " . EMAIL_NOTIFICATIONS_DISABLED . " WHERE user_id = ?d AND course_id = ?d", $uid, $course_id);
                 Log::record(0, 0, LOG_PROFILE, array(
                     'uid' => $uid,
                     'email_notifications' => 0,
                     'course_title' => $course_info->title
                 ));
-            } else if ($_GET['email_un'] == 0) {
+            } else if ($_POST['email_set_state'] == 0) {
                 Database::get()->query("UPDATE course_user SET receive_mail = " . EMAIL_NOTIFICATIONS_ENABLED . " WHERE user_id = ?d AND course_id = ?d", $uid, $course_id);
                 Log::record(0, 0, LOG_PROFILE, array(
                     'uid' => $uid,
@@ -270,13 +233,50 @@ if (isset($uid) and isset($_SESSION['status']) and $_SESSION['status'] != USER_G
                     'course_title' => $course_info->title
                 ));
             }
+            redirect_to_home_page("courses/$course_code/");
         }
-        if (get_user_email_notification($uid, $course_id)) {
-            $email_notify_icon = "<a id='email_notification' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;email_un=1' style='color: #23527C;'><span class='fa fa-envelope fa-fw' data-toggle='tooltip' data-placement='bottom' title='" . q($langUserEmailNotification) . "'></span></a>";
+        if ($email_notification_state) {
+            $email_notify_icon = "<a id='email_notification' style='color: #23527C;'><span class='fa fa-envelope fa-fw' data-toggle='tooltip' data-placement='top' title='" . q($langUserEmailNotification) . "'></span></a>";
+            $modal_info_message = js_escape($langUserEmailNotification) . '<br><br>' . js_escape($langConfDisableMailNotification);
+            $modal_action_message = js_escape($langDeactivate);
         } else {
-            $email_notify_icon = "<a id='email_notification' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;email_un=0' style='color: #23527C;'><span class='fa fa-envelope-o fa-fw' data-toggle='tooltip' data-placement='bottom' title='" . q($langNoUserEmailNotification) . "'></span></a>";
+            $email_notify_icon = "<a id='email_notification' style='color: #23527C;'><span class='fa fa-envelope-o fa-fw' data-toggle='tooltip' data-placement='top' title='" . q($langNoUserEmailNotification) . "'></span></a>";
+            $modal_info_message = js_escape($langNoUserEmailNotification). '<br><br>' . js_escape($langConfEnableMailNotification);
+            $modal_action_message = js_escape($langActivate);
         }
     }
+
+    /* email notifications pop up*/
+    $tool_content .= "
+        <form id='email-toggle' action='{$urlAppend}courses/$course_code/' method='post'>
+            <input type='hidden' name='email_set_state' value='$email_notification_state'>" .
+            generate_csrf_token_form_field() . "
+        </form>
+        <script type='text/javascript'>
+          $(function () {
+            $('#email_notification').click(function(e) {
+              e.preventDefault();
+              bootbox.confirm({
+                title: '". js_escape($langEmailUnsubscribe) . "',
+                message: '$modal_info_message',
+                buttons: {
+                  confirm: {
+                    label: '$modal_action_message',
+                    className: 'btn-success',
+                  },
+                  cancel: {
+                     label: '". js_escape($langCancel) . "',
+                  },
+                },
+                callback: function(result) {
+                  if (result) {
+                    $('#email-toggle').submit();
+                  }
+                }
+              });
+            });
+          });
+        </script>";
 }
 
 // For statistics: record login
@@ -519,9 +519,6 @@ if ($is_editor) {
 
 }
 
-$numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
-                FROM course_user
-                WHERE course_id = ?d", $course_id)->numUsers;
 $studentUsers = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user
                                         WHERE status = " .USER_STUDENT . "
                                             AND editor = 0
@@ -718,12 +715,17 @@ $tool_content .= "<ul class='course-title-actions clearfix pull-right list-inlin
                         if ($uid) {
                             $tool_content .= "<li class='access pull-right'>";
                             if ($is_course_admin) {
+                                $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers FROM course_user WHERE course_id = ?d", $course_id)->numUsers;
                                 $tool_content .= "<a href='{$urlAppend}modules/user/index.php?course=$course_code'>
                                         <span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span>
                                         <span class='hidden'>.</span>
                                     </a>";
                             } else {
-                                if ($visible == COURSE_CLOSED) {
+                                if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1) {
+                                    $numUsers = Database::get()->querySingle("SELECT COUNT(*) AS numUsers FROM course_user, user
+                                                WHERE `user`.`id` = `course_user`.`user_id`
+                                                AND user.expires_at > " . DBHelper::timeAfter() . "
+                                                AND `course_user`.`course_id` = ?d", $course_id)->numUsers;
                                     $tool_content .= "<a href = '{$urlAppend}modules/user/userslist.php?course=$course_code'>
                                             <span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span>
                                             <span class='hidden'>.</span>

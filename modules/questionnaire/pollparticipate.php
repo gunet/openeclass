@@ -242,13 +242,20 @@ function printPollForm() {
                 </div>";
         }
         $pollType = Database::get()->querySingle("SELECT `type` FROM poll WHERE pid = ?d", $pid)->type;
-        $i=1;
+        $incomplete_resubmission = isset($_SESSION["poll_answers_$pid"]);
+        $incomplete_answers = $_SESSION["poll_answers_$pid"];
+        unset($_SESSION["poll_answers_$pid"]);
+        $i = 1;
         foreach ($questions as $theQuestion) {
             if ($temp_IsLime) {
                 break;
             }
             $pqid = $theQuestion->pqid;
             $qtype = $theQuestion->qtype;
+            if ($incomplete_resubmission and !isset($incomplete_answers[$pqid])) {
+                $incomplete_answers[$pqid] = [];
+            }
+            $user_answers = null;
             if ($qtype == QTYPE_LABEL) {
                 $tool_content .= "
                     <div class='alert alert-info' role='alert'>
@@ -272,6 +279,8 @@ function printPollForm() {
                                 WHERE a.poll_user_record_id = b.id
                                     AND a.qid = ?d
                                     AND b.uid = ?d", $pqid, $uid);
+                    } elseif ($incomplete_resubmission) {
+                        $user_answers = $incomplete_answers[$pqid];
                     }
                     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
                                 WHERE pqid = ?d ORDER BY pqaid", $pqid);
@@ -282,7 +291,7 @@ function printPollForm() {
                     }
                     foreach ($answers as $theAnswer) {
                             $checked = '';
-                        if ($multiple_submissions) {
+                        if ($user_answers) {
                             if (count($user_answers) > 1) { // multiple answers
                                 foreach ($user_answers as $ua) {
                                     if ($ua->aid == $theAnswer->pqaid) {
@@ -331,6 +340,8 @@ function printPollForm() {
                         if ($user_answers) {
                             $slider_value = $user_answers->answer_text;
                         }
+                    } elseif ($incomplete_resubmission and $incomplete_answers[$pqid]) {
+                        $slider_value = $incomplete_answers[$pqid][0]->answer_text;
                     }
 
                     if (($pollType == POLL_COLLES) or ($pollType == POLL_ATTLS)) {
@@ -352,6 +363,8 @@ function printPollForm() {
                         if ($user_answers) {
                             $text = $user_answers->answer_text;
                         }
+                    } elseif ($incomplete_resubmission and $incomplete_answers[$pqid]) {
+                        $text = $incomplete_answers[$pqid][0]->answer_text;
                     }
                     $tool_content .= "
                         <div class='form-group margin-bottom-fat'>
@@ -441,6 +454,8 @@ function submitPoll() {
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
+    $default_answer = $poll->default_answer;
+    $is_complete = true;
     $v = new Valitron\Validator($_POST);
     if (!$uid) {
         $v->addRule('unique', function($field, $value, array $params) use ($pid){
@@ -451,7 +466,7 @@ function submitPoll() {
         $v->rule('unique', array('participantEmail'));
         $v->labels(array('participantEmail' => "$langTheField Email"));
     }
-    if($v->validate()) {
+    if ($v->validate()) {
         // first populate poll_answer
         $CreationDate = date("Y-m-d H:i");
         $answer = isset($_POST['answer'])? $_POST['answer']: array();
@@ -498,7 +513,7 @@ function submitPoll() {
         foreach ($question as $pqid => $qtype) {
             $pqid = intval($pqid);
             if ($qtype == QTYPE_MULTIPLE) {
-                if(is_array($answer[$pqid])){
+                if (is_array($answer[$pqid])){
                     foreach ($answer[$pqid] as $aid) {
                         $aid = intval($aid);
                         Database::get()->query("INSERT INTO poll_answer_record (poll_user_record_id, qid, aid, answer_text, submit_date)
@@ -517,11 +532,17 @@ function submitPoll() {
                 if (isset($answer[$pqid])) {
                     $aid = intval($answer[$pqid]);
                 } else {
+                    if (!$default_answer) {
+                        $is_complete = false;
+                    }
                     $aid = -1;
                 }
                 $answer_text = '';
             } elseif ($qtype == QTYPE_FILL) {
-                $answer_text = $answer[$pqid];
+                $answer_text = trim($answer[$pqid]);
+                if ($answer_text === '' and !$default_answer) {
+                    $is_complete = false;
+                }
                 $aid = 0;
             } else {
                 continue;
@@ -530,15 +551,32 @@ function submitPoll() {
                             VALUES (?d, ?d, ?d, ?s, ?t)", $user_record_id, $pqid, $aid, $answer_text, $CreationDate);
         }
 
+        if (!$is_complete) {
+            $user_answers = Database::get()->queryArray('SELECT * FROM poll_answer_record
+                WHERE poll_user_record_id = ?d', $user_record_id);
+            $session_answers = [];
+            foreach ($user_answers as $answer) {
+                if (isset($session_answers[$answer->qid])) {
+                    $session_answers[$answer->qid][] = $answer;
+                } else {
+                    $session_answers[$answer->qid] = [$answer];
+                }
+            }
+            $_SESSION["poll_answers_$pid"] = $session_answers;
+            Database::get()->query('DELETE FROM poll_answer_record WHERE poll_user_record_id = ?d', $user_record_id);
+            Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
+            Session::Messages($GLOBALS['langQFillInAllQs'], 'alert-warning');
+            redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
+        }
+
         Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_INSERT,
                 array('legend' => 'submit_answers',
                       'title' => $poll->name
                      )
         );
-        $end_message = Database::get()->querySingle("SELECT end_message FROM poll WHERE pid = ?d", $pid)->end_message;
         $tool_content .= "<div class='alert alert-success'>$langPollSubmitted</div>";
-        if (!empty($end_message)) {
-            $tool_content .=  $end_message;
+        if ($poll->end_message) {
+            $tool_content .= $poll->end_message;
         }
         $tool_content .= "<br><div class='text-center'>";
         if ($unit_id) {

@@ -175,8 +175,8 @@ if ($is_editor) {
                 }
                 break;
             // CREATE COMMAND
-            case "create" :                
-                // create form sent                
+            case "create" :
+                // create form sent
                 if (isset($_POST["newPathName"]) && $_POST["newPathName"] != "") {
                     // check if name already exists
                     $num = Database::get()->querySingle("SELECT COUNT(`name`) AS count FROM `lp_learnPath`
@@ -332,6 +332,11 @@ if ($is_editor) {
                         'button-class' => 'btn-success'),
                     array('title' => $langTrackAllPathExplanation,
                         'url' => "detailsAll.php?course=$course_code",
+                        'icon' => 'fa-line-chart',
+                        'level' => 'primary-label',
+                        'button-class' => 'btn-success'),
+                    array('title' => $langTrackAllPathExplanationAnalysis,
+                        'url' => "detailsAllAnalysis.php?course=$course_code",
                         'icon' => 'fa-line-chart',
                         'level' => 'secondary'),
                     array('title' => $langLearningObjectsInUse_sort,

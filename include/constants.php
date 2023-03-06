@@ -33,9 +33,8 @@ define('IMAGESIZE_MEDIUM', 155);
 define('IMAGESIZE_SMALL', 32);
 
 // profile info access
-define('ACCESS_PRIVATE', 0);
-define('ACCESS_PROFS', 1);
-define('ACCESS_USERS', 2);
+define('ACCESS_PROFS', 0);
+define('ACCESS_USERS', 1);
 
 /* module type */
 define('MODULE_IN_HOME', 0);
@@ -138,6 +137,7 @@ define('SETTING_COURSE_USER_REQUESTS_DISABLE', 20);
 define('SETTING_COURSE_FORUM_NOTIFICATIONS', 21);
 define('SETTING_DOCUMENTS_PUBLIC_WRITE', 22);
 define('SETTING_OFFLINE_COURSE', 23);
+define('SETTING_USERS_LIST_ACCESS', 24);
 
 // Available user settings
 define('SETTING_FORUM_POST_VIEW', 1);

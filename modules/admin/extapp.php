@@ -20,8 +20,6 @@
  * ========================================================================
  */
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'extconfig/externals.php';
@@ -36,33 +34,9 @@ $appName = isset($_GET['edit'])? $_GET['edit']: null;
 
 // Code to be executed with Ajax call when clicking the activate/deactivate button from External App list page
 if (isset($_POST['state'])) {
-    $appName= $_POST['appName'];
+    $appName = $_POST['appName'];
     $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
     $appNameAjax = $appName;
-
-    if (($appNameAjax == 'openmeetings') and $newState == 1) {
-        $app_tc = ExtAppManager::getApp('bigbluebutton');
-        $app_tc->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled
-        $app_tc = ExtAppManager::getApp('webconf');
-        $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
-        $app_tc->update_tc_sessions('om'); // update tc sessions
-    }
-
-    if (($appNameAjax == 'bigbluebutton') and $newState == 1) {
-        $app_tc = ExtAppManager::getApp('openmeetings');
-        $app_tc->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled
-        $app_tc = ExtAppManager::getApp('webconf');
-        $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
-        $app_tc->update_tc_sessions('bbb'); // update tc sessions
-    }
-
-    if (($appNameAjax == 'webconf') and $newState == 1) {
-        $app_tc = ExtAppManager::getApp('bigbluebutton');
-        $app_tc->setEnabled(!$newState);  // disable bigbluebutton if bigbluebutton has been enabled
-        $app_tc = ExtAppManager::getApp('openmeetings');
-        $app_tc->setEnabled(!$newState); // disable openmeetings if openmeetings has been enabled
-        $app_tc->update_tc_sessions('webconf'); // update tc sessions
-    }
 
     ExtAppManager::getApp($appNameAjax)->setEnabled($newState);
     echo $newState;
@@ -151,13 +125,7 @@ if ($appName) {
             $tool_content .= "<img height='50' width='89' src='" . $app->getAppIcon() . "'/>";
         }
         if ($app->isConfigured()) {
-            if ($app->getName() == 'bigbluebutton') {
-                $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success bbb-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger bbb-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
-            } elseif ($app->getName() == 'openmeetings') {
-                $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success om-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger om-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
-            } elseif ($app->getName() == 'webconf') {
-                $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success webconf-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger webconf-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
-            } elseif ($app->getName() == 'h5p') { // h5p is enabled
+            if ($app->getName() == 'h5p') { // h5p is enabled
                 $app_active = "<button type='button' class='btn btn-success' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>";
             } else {
                 $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
@@ -166,9 +134,6 @@ if ($appName) {
             $app_active = "<button type='button' class='btn btn-default' data-app='" . $app->getName() . "'  data-toggle='modal' data-target='#noSettings'> <i class='fa fa-warning'></i> </button>";
         }
         $tool_content .= $app->getDisplayName() . "</a>";
-        if ($app->getName() == 'webconf') {
-            $tool_content .= "<p class='text-danger'>(Beta)</p>";
-        }
         $tool_content .= "</div></td>";
         $tool_content .= "<td class='text-muted clearfix'><div class='extapp-dscr-wrapper'>" . $app->getShortDescription() . "</div><div class='extapp-controls'><div class='btn-group btn-group-sm'>" . $app_active . "<a href='$urlAppend" . $app->getConfigUrl() . "' class='btn btn-primary'> <i class='fa fa-sliders fw'></i> </a></div></div></td>";
         $tool_content .="</tr>";

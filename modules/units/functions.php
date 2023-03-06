@@ -1235,12 +1235,6 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
 
 /**
  * @brief display resource ebook
- * @global type $id
- * @global type $urlServer
- * @global type $is_editor
- * @global type $langWasDeleted
- * @global type $course_code
- * @global type $langInactiveModule
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -1249,17 +1243,9 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
  * @return string
  */
 function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $act_name) {
-    global $id, $urlServer, $is_editor,
-    $langWasDeleted, $course_code, $langInactiveModule;
+    global $id, $urlServer, $is_editor, $langWasDeleted, $course_code;
 
-    $module_visible = visible_module(MODULE_ID_EBOOK); // checks module visibility
-
-    if (!$module_visible and ! $is_editor) {
-        return '';
-    }
-
-    $class_vis = ($visibility == 0 or ! $module_visible) ?
-            ' class="not_visible"' : ' ';
+    $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $title = q($title);
     $r = Database::get()->querySingle("SELECT * FROM ebook WHERE id = ?d", $ebook_id);
     if (!$r) { // check if it was deleted
@@ -1272,9 +1258,6 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
     } else {
         $link = "<a href='{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/unit=$id'>";
         $exlink = $link . "$title</a>";
-        if (!$module_visible) {
-            $exlink .= " <i>($langInactiveModule)</i>";
-        }
         $imagelink = $link . "</a>" .icon('fa-book') . "";
     }
 

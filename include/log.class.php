@@ -909,11 +909,14 @@ class Log {
      * @return string
      */
     private function external_link_action_details($details) {
-        global $langLinkName, $langActivate, $langDeactivate;
+        global $course_code, $urlAppend, $langLinkName, $langActivate, $langDeactivate, $langCoursePages;
 
         $details = unserialize($details);
         $content = '';
 
+        if (isset($details['page_path'])) {
+            return "$langCoursePages: <a target='_blank' href='{$urlAppend}modules/course_home/page.php?course={$course_code}&amp;id=$details[id]'>" . q($details['title']) . '</a>';
+        }
         $parts = [];
         if (isset($details['activate'])) {
             $parts[] = "$langActivate: " .

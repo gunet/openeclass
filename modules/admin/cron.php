@@ -55,7 +55,6 @@ function monthlycronjob() {
     if ($lastmonth > $lastrunmonthly) {
         // do monthly work here
         summarizeLogins();
-        summarizeMonthlyData();
         summarizeMonthlyActions();
         Log::rotate();
         Log::purge();
@@ -100,12 +99,6 @@ function summarizeLogins() {
                          " WHERE `when` >= ?t AND `when` < ?t AND action = 'LOGIN'";
                 $visits = Database::get()->querySingle($sql_1, $start_date, $end_date)->visits;
 
-                $sql_2 = "INSERT INTO loginout_summary SET " .
-                         " login_sum = ?d, " .
-                         " start_date = ?t, " .
-                         " end_date = ?t";
-                Database::get()->query($sql_2, $visits, $start_date, $end_date);
-
                 $sql_3 = "DELETE FROM loginout " .
                          " WHERE `when` >= ?t AND " .
                          " `when` < ?t ";
@@ -121,79 +114,6 @@ function summarizeLogins() {
         }
     }
     error_log("cron summarizeLogins END");
-}
-
-/**
- * @brief store summarized monthly statistics
- * @global type $langCourse
- * @global type $langCoursVisible
- * @global type $langFaculty
- * @global type $langTeacher
- * @global type $langNbUsers
- * @global type $langTypeClosed
- * @global type $langTypeRegistration
- * @global type $langTypeOpen
- */
-function summarizeMonthlyData() {
-    error_log("cron summarizeMonthlyData START");
-    global $langCourse, $langCoursVisible, $langFaculty, $langTeacher,
-    $langNbUsers, $langTypeClosed, $langTypeRegistration, $langTypeOpen,
-    $langInactiveCourse;
-
-    // Check if data for last month have already been inserted in 'monthly_summary'...
-    $lmon = mktime(0, 0, 0, date('m') - 1, date('d'), date('Y'));
-    $last_month = date('m Y', $lmon);
-    $res = Database::get()->querySingle("SELECT id FROM monthly_summary WHERE `month` = ?s", $last_month);
-
-    if (empty($res)) {
-        $current_month = date('Y-m-01 00:00:00');
-        $prev_month = date('Y-m-01 00:00:00', $lmon);
-
-        $login_sum = Database::get()->querySingle("SELECT COUNT(idLog) as sum_id FROM loginout WHERE `when` >= ?t AND `when`< ?t AND action = 'LOGIN'", $prev_month, $current_month)->sum_id;
-        $cours_sum = Database::get()->querySingle("SELECT COUNT(id) as cours_sum FROM course")->cours_sum;
-        $prof_sum = Database::get()->querySingle("SELECT COUNT(id) as prof_sum FROM user WHERE status = 1")->prof_sum;
-        $stud_sum = Database::get()->querySingle("SELECT COUNT(id) as stud_sum FROM user WHERE status = 5")->stud_sum;
-        $vis_sum = Database::get()->querySingle("SELECT COUNT(id) as vis_sum FROM user WHERE status = 10")->vis_sum;
-
-        $mtext = "<table class='table-default'>
-                <tbody>
-                <tr><th>" . $langCourse . "</th>
-                <th>" . $langCoursVisible . "</th>
-                <th>" . $langFaculty . "</th>
-                <th>" . $langTeacher . "</th>
-                <th>" . $langNbUsers . "</th></tr>";
-
-        $sql = "SELECT course.title AS name,
-                       course.visible AS visible,
-                       hierarchy.name AS dept,
-                       course.prof_names AS proff,
-                       COUNT(user_id) AS cnt
-                FROM course JOIN course_department ON course.id = course_department.course
-                            JOIN hierarchy ON hierarchy.id = course_department.department
-                            LEFT JOIN course_user ON course.id = course_user.course_id
-                GROUP BY course.id";
-        Database::get()->queryFunc($sql, function($row) use (&$mtext, $langTypeClosed, $langTypeRegistration, $langTypeOpen, $langInactiveCourse) {
-            //declare course visibility
-            if ($row->visible == COURSE_CLOSED) {
-                $cvisible = $langTypeClosed;
-            } else if ($row->visible == COURSE_REGISTRATION) {
-                $cvisible = $langTypeRegistration;
-            } else if ($row->visible == COURSE_OPEN) {
-                $cvisible = $langTypeOpen;
-            } else {
-                $cvisible = $langInactiveCourse;
-            }
-            $mtext .= "<tr><td>" . $row->name . "</td><td> " . $cvisible . "</td>
-                <td class='text-center'>" . getSerializedMessage($row->dept) . "</td>
-                <td>" . $row->proff . "</td><td class='text-center'>" . $row->cnt . "</td></tr>";
-        });
-
-        $mtext .= '</tbody></table>';
-        $sql = "INSERT INTO monthly_summary SET month = ?s, profesNum = ?d, studNum = ?d,
-            visitorsNum = ?d, coursNum = ?d, logins = ?d, details = ?s";
-        Database::get()->query($sql, $last_month, $prof_sum, $stud_sum, $vis_sum, $cours_sum, $login_sum, $mtext);
-    }
-    error_log("cron summarizeMonthlyData END");
 }
 
 /**

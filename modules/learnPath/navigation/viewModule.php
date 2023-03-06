@@ -46,16 +46,6 @@
 
 $require_current_course = true;
 require_once '../../../include/init.php';
-
-$TABLELEARNPATH = "lp_learnPath";
-$TABLEMODULE = "lp_module";
-$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
-$TABLEASSET = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
-$clarolineRepositoryWeb = $urlServer . "courses/" . $course_code;
-
-// lib of this tool
 require_once 'include/lib/learnPathLib.inc.php';
 
 $unitParam = isset($_GET['unit']) ? ('&unit=' . intval($_GET['unit'])) : '';

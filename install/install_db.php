@@ -307,6 +307,7 @@ $db->query("CREATE TABLE `user` (
     email_public TINYINT(1) NOT NULL DEFAULT 0,
     phone_public TINYINT(1) NOT NULL DEFAULT 0,
     am_public TINYINT(1) NOT NULL DEFAULT 0,
+    pic_public TINYINT(1) NOT NULL DEFAULT 0,
     whitelist TEXT,
     eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0,
     last_passreminder DATETIME DEFAULT NULL) $tbl_options");
@@ -374,8 +375,7 @@ $db->query("CREATE TABLE `admin_calendar` (
     KEY `user_events` (`user_id`),
     KEY `admin_events_dates` (`start`)) $tbl_options");
 
-// table for loginout rollups
-// only contains LOGIN events summed up by a period (typically weekly)
+//  loginout rollups
 $db->query("CREATE TABLE `loginout_summary` (
     id int(11) NOT NULL auto_increment,
     login_sum int(11) unsigned  NOT NULL default 0,
@@ -383,16 +383,14 @@ $db->query("CREATE TABLE `loginout_summary` (
     end_date datetime NOT NULL,
     PRIMARY KEY (id)) $tbl_options");
 
-// table keeping data for monthly reports
+// monthly reports
 $db->query("CREATE TABLE monthly_summary (
     id int(11) NOT NULL auto_increment,
-    `month` varchar(20)  NOT NULL default 0,
+    `month` DATE NOT NULL,
     profesNum int(11) NOT NULL default 0,
     studNum int(11) NOT NULL default 0,
     visitorsNum int(11) NOT NULL default 0,
-    coursNum int(11) NOT NULL default 0,
-    logins int(11) NOT NULL default 0,
-    details MEDIUMTEXT,
+    coursNum int(11) NOT NULL default 0,    
     PRIMARY KEY (id)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `document` (
@@ -716,7 +714,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `lp_user_module_progress` (
     `total_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
     `session_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
     `suspend_data` TEXT NOT NULL,
-    `credit` enum('CREDIT','NO-CREDIT') NOT NULL DEFAULT 'NO-CREDIT') $tbl_options");
+    `credit` enum('CREDIT','NO-CREDIT') NOT NULL DEFAULT 'NO-CREDIT',
+    `attempt` int(11) NOT NULL DEFAULT 1,
+    `started` datetime DEFAULT NULL,
+    `accessed` datetime DEFAULT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `wiki_properties` (
     `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1157,6 +1158,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `course_id` INT(11) NOT NULL,
     `question` TEXT,
+    `feedback` TEXT,
     `description` TEXT,
     `weight` FLOAT(11,2) DEFAULT NULL,
     `type` INT(11) DEFAULT 1,
@@ -1616,7 +1618,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
     `public` enum('0','1') DEFAULT NULL,
     `active` enum('0','1') DEFAULT NULL,
     `running_at` int(11) DEFAULT NULL,
-    `meeting_id` varchar(42) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+    `meeting_id` varchar(255) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
     `mod_pw` varchar(255) DEFAULT NULL,
     `att_pw` varchar(255) DEFAULT NULL,
     `unlock_interval` int(11) DEFAULT NULL,
@@ -1630,8 +1632,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
 // tc_servers table
 $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `type` varchar(255) NOT NULL DEFAULT 'bbb',
-    `hostname` varchar(255) DEFAULT NULL,
+    `type` varchar(255) NOT NULL,
+    `hostname` varchar(255) NOT NULL,
     `ip` varchar(255) DEFAULT NULL,
     `port` varchar(255) DEFAULT NULL,
     `enabled` enum('true','false') DEFAULT NULL,
@@ -1647,6 +1649,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
     `screenshare` varchar(255) DEFAULT NULL,
     `all_courses` tinyint(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`),
+    UNIQUE KEY `hostname` (`hostname`),
     KEY `idx_tc_servers` (`hostname`)) $tbl_options");
 
 
@@ -1722,7 +1725,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
     `gradebook_activity_id` MEDIUMINT(11) NOT NULL,
     `uid` int(11) NOT NULL DEFAULT 0,
     `grade` FLOAT NOT NULL DEFAULT -1,
-    `comments` TEXT NOT NULL) $tbl_options");
+    `comments` TEXT NOT NULL,
+    UNIQUE KEY activity_uid (gradebook_activity_id, uid)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `gradebook_users` (
     `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -2128,8 +2132,18 @@ $db->query("CREATE TABLE `user_analytics` (
   `updated` datetime NOT NULL,
   PRIMARY KEY (`id`)) $tbl_options");
 
+// Course pages
 
-// h5p
+$db->query("CREATE TABLE `page` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `path` varchar(32) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `visible` tinyint(4) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `course_id_index` (`course_id`)) $tbl_options");
+
+// H5P
 
 $db->query("CREATE TABLE h5p_library (
     id INT(10) NOT NULL AUTO_INCREMENT,

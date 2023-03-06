@@ -441,7 +441,7 @@ if(!isset($_POST['next'])){
 
 
             foreach ($act_list_in_home as $item_in_home) {
-                if ($item_in_home->activity_ID == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
+                if ($item_in_home->activity_ID == MODULE_ID_TC and !is_enabled_tc_server($course_id)) { // hide teleconference when no tc servers are enabled
                     continue;
                 }
 
@@ -452,7 +452,7 @@ if(!isset($_POST['next'])){
             }
 
             foreach ($act_list_after_class as $item_after_class) {
-                if ($item_after_class->activity_ID == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
+                if ($item_after_class->activity_ID == MODULE_ID_TC and !is_enabled_tc_server($course_id)) { // hide teleconference when no tc servers are enabled
                     continue;
                 }
                 $mid = getIndirectReference($item_after_class->activity_ID);
@@ -463,7 +463,7 @@ if(!isset($_POST['next'])){
             }
 
             foreach ($act_list_in_class as $item_in_class) {
-                if ($item_in_class->activity_ID == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
+                if ($item_in_class->activity_ID == MODULE_ID_TC and !is_enabled_tc_server($course_id)) { // hide teleconference when no tc servers are enabled
                     continue;
                 }
                 $mid = getIndirectReference($item_in_class->activity_ID);

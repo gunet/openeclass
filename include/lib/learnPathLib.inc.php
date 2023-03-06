@@ -458,38 +458,24 @@ function display_path_content() {
     return $output;
 }
 
-/**
- * Compute the progression into the $lpid learning path in pourcent
- *
- * @param $lpid id of the learning path
- * @param $lpUid user id
- *
- * @return integer percentage of progression os user $mpUid in the learning path $lpid
- */
-function get_learnPath_progress($lpid, $lpUid) {
-    global $course_id;
-
-    // find progression for this user in each module of the path
-    $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS
-             FROM `lp_learnPath` AS LP,
-                  `lp_rel_learnPath_module` AS LPM,
-                  `lp_user_module_progress` AS UMP,
-                  `lp_module` AS M
-            WHERE LP.`learnPath_id` = LPM.`learnPath_id`
-              AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
-              AND UMP.`user_id` = ?d
-              AND LP.`learnPath_id` = ?d
-              AND LP.`course_id` = ?d
-              AND LPM.`visible` = 1
-              AND M.`module_id` = LPM.`module_id`
-              AND M.`contentType` != ?s";
-    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
-
-    $progress = 0;
+function calculate_learnPath_bestAttempt_progress($modules): array {
     if (!is_array($modules) || empty($modules)) {
-        $progression = 0;
+        return array(0, 0);
     } else {
-        // progression is calculated in pourcents
+        $maxAttempt = 1; // discover number of attempts
+        foreach ($modules as $module) {
+            if ($module->attempt > $maxAttempt) {
+                $maxAttempt = $module->attempt;
+            }
+        }
+
+        // init progress per attempt
+        $progress = array();
+        for ($i = 1; $i <= $maxAttempt; $i++) {
+            $progress[$i] = 0;
+        }
+
+        // progression is calculated in percents
         foreach ($modules as $module) {
             if ($module->SMax <= 0) {
                 $modProgress = 0;
@@ -503,11 +489,26 @@ function get_learnPath_progress($lpid, $lpUid) {
             }
 
             if ($modProgress >= 0) {
-                $progress += $modProgress;
+                $progress[$module->attempt] += $modProgress;
             }
         }
-        // find number of visible modules in this path
-        $sqlnum = "SELECT COUNT(M.`module_id`) AS count
+
+        $bestAttempt = 1; // discover best attempt
+        for ($i = 1; $i <= $maxAttempt; $i++) {
+            if ($progress[$i] > $progress[$bestAttempt]) {
+                $bestAttempt = $i;
+            }
+        }
+
+        return array($bestAttempt, $progress[$bestAttempt]);
+    }
+}
+
+function calculate_number_of_visible_modules($lpid) {
+    global $course_id;
+
+    // find number of visible modules in this path
+    $sqlnum = "SELECT COUNT(M.`module_id`) AS count
                     FROM `lp_rel_learnPath_module` AS LPM,
                          `lp_module` AS M
                     WHERE LPM.`learnPath_id` = ?d
@@ -515,16 +516,173 @@ function get_learnPath_progress($lpid, $lpUid) {
                     AND M.`contentType` != ?s
                     AND M.`module_id` = LPM.`module_id`
                     AND M.`course_id` = ?d";
-        $result = Database::get()->querySingle($sqlnum, $lpid, CTLABEL_, $course_id);
-        $nbrOfVisibleModules = ($result && !empty($result->count)) ? $result->count : false;
+    $result = Database::get()->querySingle($sqlnum, $lpid, CTLABEL_, $course_id);
+    return ($result && !empty($result->count)) ? $result->count : false;
+}
 
-        if (is_numeric($nbrOfVisibleModules)) {
-            $progression = @round($progress / $nbrOfVisibleModules);
-        } else {
-            $progression = 0;
+function calculate_learnPath_progress($lpid, $modules) {
+    global $course_id;
+
+    if (!is_array($modules) || empty($modules)) {
+        return 0;
+    }
+
+    list($bestAttempt, $bestProgress) = calculate_learnPath_bestAttempt_progress($modules);
+    if ($bestAttempt <= 0) {
+        return 0;
+    }
+
+    $nbrOfVisibleModules = calculate_number_of_visible_modules($lpid);
+
+    if (is_numeric($nbrOfVisibleModules)) {
+        return @round($bestProgress / $nbrOfVisibleModules);
+    } else {
+        return 0;
+    }
+}
+
+/**
+ * Compute the progression into the $lpid learning path in pourcent
+ *
+ * @param $lpid id of the learning path
+ * @param $lpUid user id
+ *
+ * @return integer percentage of progression os user $mpUid in the learning path $lpid
+ */
+function get_learnPath_progress($lpid, $lpUid) {
+    global $course_id;
+
+    // find progression for this user in each module of the path
+    $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS, UMP.`attempt`
+             FROM `lp_learnPath` AS LP,
+                  `lp_rel_learnPath_module` AS LPM,
+                  `lp_user_module_progress` AS UMP,
+                  `lp_module` AS M
+            WHERE LP.`learnPath_id` = LPM.`learnPath_id`
+              AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
+              AND UMP.`user_id` = ?d
+              AND LP.`learnPath_id` = ?d
+              AND LP.`course_id` = ?d
+              AND LPM.`visible` = 1
+              AND M.`module_id` = LPM.`module_id`
+              AND M.`contentType` != ?s
+            ORDER BY UMP.`attempt`, LPM.`rank`";
+    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
+    return calculate_learnPath_progress($lpid, $modules);
+}
+
+function get_learnPath_progress_details($lpid, $lpUid): array {
+    global $course_id;
+
+    // find progression for this user in each module of the path
+    $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS, UMP.`total_time`, 
+                   UMP.`started`, UMP.`accessed`, UMP.`attempt`
+             FROM `lp_learnPath` AS LP,
+                  `lp_rel_learnPath_module` AS LPM,
+                  `lp_user_module_progress` AS UMP,
+                  `lp_module` AS M
+            WHERE LP.`learnPath_id` = LPM.`learnPath_id`
+              AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
+              AND UMP.`user_id` = ?d
+              AND LP.`learnPath_id` = ?d
+              AND LP.`course_id` = ?d
+              AND LPM.`visible` = 1
+              AND M.`module_id` = LPM.`module_id`
+              AND M.`contentType` != ?s
+            ORDER BY UMP.`attempt`, LPM.`rank`";
+    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
+    $totalProgress = 0;
+    $totalTime = $totalStarted = $totalAccessed = $totalStatus = $maxAttempt = "";
+
+    if (is_array($modules) && !empty($modules)) {
+        $maxAttempt = 1; // discover number of attempts
+        $modsForProg = array(); // prepare sub-arrays for progression calculation
+        foreach ($modules as $module) {
+            if ($module->attempt > $maxAttempt) {
+                $maxAttempt = $module->attempt;
+            }
+            $modsForProg[$module->attempt][] = $module;
+        }
+
+        $global_progress = $global_started = $global_accessed = $global_status = $global_time = array();
+        for ($i = 1; $i <= $maxAttempt; $i++) {
+            $global_started[$i] = "";
+            $global_accessed[$i] = "";
+            $global_status[$i] = "";
+            $global_time[$i] = "0000:00:00";
+            // total progress calculation
+            $global_progress[$i] = calculate_learnPath_progress($lpid, $modsForProg[$i]);
+        }
+
+        foreach ($modules as $module) {
+            // total time calculation
+            $mtt = preg_replace("/\.[0-9]{0,2}/", "", $module->total_time);
+            $global_time[$module->attempt] = addScormTime($global_time[$module->attempt], $mtt);
+
+            // total started and accessed calculations
+            $mst = strtotime($module->started);
+            $mat = strtotime($module->accessed);
+            if ($mst) {
+                if ($global_started[$module->attempt] === "") {
+                    $global_started[$module->attempt] = $module->started;
+                } else if (strtotime($global_started[$module->attempt]) > $mst) {
+                    $global_started[$module->attempt] = $module->started;
+                }
+            }
+            if ($mat) {
+                if ($global_accessed[$module->attempt] === "") {
+                    $global_accessed[$module->attempt] = $module->accessed;
+                } else if (strtotime($global_accessed[$module->attempt]) < $mat) {
+                    $global_accessed[$module->attempt] = $module->accessed;
+                }
+            }
+
+            // total status calculation
+            if ($global_status[$module->attempt] === "" || (enum_lesson_status($module->STATUS) < enum_lesson_status($global_status[$module->attempt]))) {
+                $global_status[$module->attempt] = $module->STATUS;
+            }
+        }
+
+        $bestAttempt = 1; // discover best attempt
+        for ($i = 1; $i <= $maxAttempt; $i++) {
+            if ($global_progress[$i] > $global_progress[$bestAttempt]) {
+                $bestAttempt = $i;
+            }
+        }
+
+        $totalProgress = $global_progress[$bestAttempt];
+        $totalTime = $global_time[$bestAttempt];
+        $totalStarted = $global_started[$bestAttempt];
+        $totalAccessed = $global_accessed[$bestAttempt];
+        $totalStatus = $global_status[$bestAttempt];
+        if ($totalStatus === "PASSED" && $totalProgress < 100) {
+            $totalStatus = "INCOMPLETE";
         }
     }
-    return $progression;
+
+    return array($totalProgress, $totalTime, $totalStarted, $totalAccessed, $totalStatus, $maxAttempt);
+}
+
+function get_learnPath_bestAttempt_progress($lpid, $lpUid): array {
+    global $course_id;
+
+    // find progression for this user in each module of the path
+    $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS, UMP.`attempt`
+             FROM `lp_learnPath` AS LP,
+                  `lp_rel_learnPath_module` AS LPM,
+                  `lp_user_module_progress` AS UMP,
+                  `lp_module` AS M
+            WHERE LP.`learnPath_id` = LPM.`learnPath_id`
+              AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
+              AND UMP.`user_id` = ?d
+              AND LP.`learnPath_id` = ?d
+              AND LP.`course_id` = ?d
+              AND LPM.`visible` = 1
+              AND M.`module_id` = LPM.`module_id`
+              AND M.`contentType` != ?s
+            ORDER BY UMP.`attempt`, LPM.`rank`";
+    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
+    return calculate_learnPath_bestAttempt_progress($modules);
 }
 
 /**
@@ -899,22 +1057,22 @@ function seconds_to_scorm_time($time) {
  * This function allows to see if a time string is the SCORM 2004 requested format:
  * timeinterval(second,10,2): PThHmMsS
  *
- * @param string $time a suspected SCORM 2004 time value, returned by the javascript API
+ * @param ?string $time a suspected SCORM 2004 time value, returned by the javascript API
  */
-function isScorm2004Time(string $time): bool {
+function isScorm2004Time(?string $time): bool {
     return preg_match(SCORM_2004_TIME_MASK, $time);
 }
 
 /**
  * This function allow to see if a time string is the SCORM requested format : hhhh:mm:ss.cc
  *
- * @param string $time a suspected SCORM time value, returned by the javascript API
+ * @param ?string $time a suspected SCORM time value, returned by the javascript API
  */
-function isScormTime(string $time): bool {
+function isScormTime(?string $time): bool {
     return preg_match(SCORM_TIME_MASK, $time);
 }
 
-function extractScormTime(string $time): array {
+function extractScormTime(?string $time): array {
     preg_match(SCORM_TIME_MASK, $time, $matches);
     $hours = intval($matches[1] ?? 0);
     $minutes = intval($matches[2] ?? 0);
@@ -923,7 +1081,7 @@ function extractScormTime(string $time): array {
     return array($hours, $minutes, $seconds, $primes);
 }
 
-function extractScorm2004Time(string $time): array {
+function extractScorm2004Time(?string $time): array {
     preg_match(SCORM_2004_TIME_MASK, $time, $matches);
     $hours = intval($matches[2] ?? 0);
     $minutes = intval($matches[4] ?? 0);
@@ -1005,33 +1163,25 @@ function calculateScormTime(int $hours1, int $minutes1, int $seconds1, int $prim
  * This function allow to add times saved in the SCORM 2004 requested format:
  * timeinterval(second,10,2): PThHmMsS
  *
- * @param string $time1 a suspected SCORM 1.2 time value, total_time,  in the API
- * @param string $time2 a suspected SCORM 2004 time value, session_time to add, in the API
+ * @param ?string $time1 a suspected SCORM 1.2 time value, total_time, in the API
+ * @param ?string $time2 a suspected SCORM 2004 time value, session_time to add, in the API
  */
-function addScorm2004Time(string $time1, string $time2): string {
-    if (isScorm2004Time($time2)) {
-        list($hours1, $minutes1, $seconds1, $primes1) = extractScormTime($time1);
-        list($hours2, $minutes2, $seconds2, $primes2) = extractScorm2004Time($time2);
-        return calculateScormTime($hours1, $minutes1, $seconds1, $primes1, $hours2, $minutes2, $seconds2, $primes2);
-    } else {
-        return $time1;
-    }
+function addScorm2004Time(?string $time1, ?string $time2): string {
+    list($hours1, $minutes1, $seconds1, $primes1) = extractScormTime($time1);
+    list($hours2, $minutes2, $seconds2, $primes2) = extractScorm2004Time($time2);
+    return calculateScormTime($hours1, $minutes1, $seconds1, $primes1, $hours2, $minutes2, $seconds2, $primes2);
 }
 
 /**
  * This function allow to add times saved in the SCORM requested format: hhhh:mm:ss.cc
  *
- * @param string $time1 a suspected SCORM time value, total_time,  in the API
- * @param string $time2 a suspected SCORM time value, session_time to add, in the API
+ * @param ?string $time1 a suspected SCORM time value, total_time, in the API
+ * @param ?string $time2 a suspected SCORM time value, session_time to add, in the API
  */
-function addScormTime(string $time1, string $time2): string {
-    if (isScormTime($time2)) {
-        list($hours1, $minutes1, $seconds1, $primes1) = extractScormTime($time1);
-        list($hours2, $minutes2, $seconds2, $primes2) = extractScormTime($time2);
-        return calculateScormTime($hours1, $minutes1, $seconds1, $primes1, $hours2, $minutes2, $seconds2, $primes2);
-    } else {
-        return $time1;
-    }
+function addScormTime(?string $time1, ?string $time2): string {
+    list($hours1, $minutes1, $seconds1, $primes1) = extractScormTime($time1);
+    list($hours2, $minutes2, $seconds2, $primes2) = extractScormTime($time2);
+    return calculateScormTime($hours1, $minutes1, $seconds1, $primes1, $hours2, $minutes2, $seconds2, $primes2);
 }
 
 /*
@@ -1196,12 +1346,54 @@ function disp_progress_bar($progress, $factor) {
     // display progress bar
     // origin of the bar
     $progressBar = "
-    <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
+    <div class='progress' style='display: inline-block; width: 120px; margin-bottom:0px;'>
         <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em;'>
             $progress%
         </div>
     </div>";
     return $progressBar;
+}
+
+/**
+ * Function used to draw the lesson status of a learning path module
+ *
+ * @param string $lessonStatus The learning path module lesson status
+ * @return string The lesson status formatted for displaying
+ */
+function disp_lesson_status(string $lessonStatus): string {
+    if ($lessonStatus == "NOT ATTEMPTED") {
+        return $GLOBALS['langNotAttempted'];
+    } else if ($lessonStatus == "PASSED") {
+        return $GLOBALS['langPassed'];
+    } else if ($lessonStatus == "FAILED") {
+        return $GLOBALS['langFailed'];
+    } else if ($lessonStatus == "COMPLETED") {
+        return $GLOBALS['langAlreadyBrowsed'];
+    } else if ($lessonStatus == "BROWSED") {
+        return $GLOBALS['langAlreadyBrowsed'];
+    } else if ($lessonStatus == "INCOMPLETE") {
+        return $GLOBALS['langNeverBrowsed'];
+    } else {
+        return strtolower($lessonStatus);
+    }
+}
+
+function enum_lesson_status(string $lessonStatus): int {
+    if ($lessonStatus == "NOT ATTEMPTED") {
+        return 1;
+    } else if ($lessonStatus == "INCOMPLETE") {
+        return 2;
+    } else if ($lessonStatus == "FAILED") {
+        return 3;
+    } else if ($lessonStatus == "COMPLETED") {
+        return 4;
+    } else if ($lessonStatus == "BROWSED") {
+        return 4;
+    } else if ($lessonStatus == "PASSED") {
+        return 5;
+    } else {
+        return 0;
+    }
 }
 
 /*

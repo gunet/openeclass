@@ -52,7 +52,7 @@ if ($ajax_call and (!isset($_POST['token']) or !validate_csrf_token($_POST['toke
 stop_output_buffering();
 $error_message = null;
 set_time_limit(0);
-$tbl_options = 'DEFAULT CHARACTER SET=utf8mb4 COLLATE utf8mb4_unicode_520_ci ENGINE=InnoDB';
+    $tbl_options = 'DEFAULT CHARACTER SET=utf8mb4 COLLATE utf8mb4_unicode_520_ci ENGINE=InnoDB';
 
 load_global_messages();
 
@@ -185,7 +185,7 @@ if ($command_line or $ajax_call) {
     }
 
     $oldversion = get_config('version');
-    $versions = ['3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13'];
+    $versions = ['3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13', '3.14'];
     if (isset($_SESSION['upgrade_step'])) {
         $step = $_SESSION['upgrade_step'];
     }
@@ -304,6 +304,17 @@ if ($command_line or $ajax_call) {
 
                 if ($step > 2) {
                     convert_db_encoding_to_utf8mb4();
+                    steps_finished();
+                }
+            } elseif ($version === '3.14') {
+                if ($step == 1) {
+                    upgrade_to_3_14($tbl_options);
+                    break_on_step();
+                }
+
+                if ($step == 2) {
+                    message($langEncodeUserProfilePics, "$version-encode");
+                    encode_user_profile_pics();
                     steps_finished();
                 }
             }

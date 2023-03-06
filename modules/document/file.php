@@ -32,8 +32,8 @@ if (defined('FILE_PHP__PLAY_MODE')) {
 session_start();
 
 // save current course and student_view status
-if (isset($_SESSION['course_code'])) {
-    define('old_course_code', $_SESSION['course_code']);
+if (isset($_SESSION['dbname'])) {
+    define('old_dbname', $_SESSION['dbname']);
 }
 
 if (isset($_SESSION['student_view'])) {

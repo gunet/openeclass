@@ -37,11 +37,12 @@ require_once 'modules/usage/usage.lib.php';
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
-$head_content .= "
-<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
-load_js('d3/d3.min.js');
-load_js('c3-0.4.10/c3.min.js');
 load_js('bootstrap-datepicker');
+load_js('d3/d3.min.js');
+
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+load_js('c3-0.4.10/c3.min.js');
+
 
 $head_content .= "<script type='text/javascript'>
         var xMinVal = null;
@@ -182,7 +183,7 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 
 $tool_content .= action_bar(array(
                 array('title' => $langBack,
-                    'url' => "index.php?course=$course_code",
+                    'url' => "index.php?course=$course_code&gc_stats=true",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
             ),false);
@@ -268,8 +269,8 @@ $tool_content .= '<div class="form-wrapper">';
 $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
 $tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
     <label class='col-sm-2 control-label'>$langStartDate:</label>
-        <div class='col-xs-10 col-sm-9'>
-            <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+        <div class='col-xs-5 col-sm-4'>
+            <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
         </div>
         <div class='col-xs-2 col-sm-1'>
             <span class='add-on'><i class='fa fa-times'></i></span>
@@ -278,7 +279,7 @@ $tool_content .= "<div class='input-append date form-group' id='user_date_start'
         </div>";
 $tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
         <label class='col-sm-2 control-label'>$langEndDate:</label>
-            <div class='col-xs-10 col-sm-9'>
+            <div class='col-xs-5 col-sm-4'>
                 <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
             </div>
         <div class='col-xs-2 col-sm-1'>
@@ -288,7 +289,7 @@ $tool_content .= "<div class='input-append date form-group' id='user_date_end' d
         </div>";
 $tool_content .= '<div class="form-group">
         <label class="col-sm-2 control-label">' . $langModule . ':</label>
-        <div class="col-sm-10"><select name="u_module_id" id="u_module_id" class="form-control">' . $mod_opts . '</select></div>
+        <div class="col-sm-4"><select name="u_module_id" id="u_module_id" class="form-control">' . $mod_opts . '</select></div>
   </div>
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">

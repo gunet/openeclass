@@ -2450,6 +2450,76 @@ function upgrade_to_3_13($tbl_options): void
 
 }
 
+/**
+ * @brief upgrade queries to 3.14
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_to_3_14($tbl_options) : void {
+
+    if (!DBHelper::indexExists('tc_servers', 'hostname')) {
+        Database::get()->query("ALTER TABLE `tc_servers` ADD UNIQUE `hostname` (`hostname`)");
+        Database::get()->query("ALTER TABLE `tc_servers` CHANGE `hostname` `hostname` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `type`");
+        Database::get()->query("ALTER TABLE `tc_servers` CHANGE `type` `type` varchar(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL AFTER `id`");
+    }
+    if (DBHelper::fieldExists('tc_session', 'meeting_id')) {
+        Database::get()->query("ALTER TABLE `tc_session` CHANGE `meeting_id` `meeting_id` varchar(255) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL");
+    }
+
+    // question feedback
+    if (!DBHelper::fieldExists('exercise_question', 'feedback')) {
+        Database::get()->query("ALTER TABLE exercise_question ADD `feedback` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci AFTER description");
+    }
+
+    // clean up gradebook -- delete multiple tuples (gradebook_activity_id, uid) in `gradebook_book` table (if any)
+    $q = Database::get()->queryArray("SELECT MIN(id) AS id, uid, gradebook_activity_id, COUNT(*) AS cnt
+            FROM gradebook_book GROUP BY gradebook_activity_id, uid HAVING cnt>=2 ORDER BY cnt");
+    foreach ($q as $data) {
+        Database::get()->query("DELETE FROM gradebook_book
+            WHERE uid = ?d
+            AND gradebook_activity_id = ?d
+            AND id != ?d",
+            $data->uid, $data->gradebook_activity_id, $data->id);
+    }
+    if (!DBHelper::indexExists('gradebook_book', 'activity_uid')) {
+        Database::get()->query("ALTER TABLE gradebook_book ADD UNIQUE activity_uid (gradebook_activity_id, uid)");
+    }
+
+    // learnPath user progress
+    if (!DBHelper::fieldExists('lp_user_module_progress', 'attempt')) {
+        Database::get()->query("ALTER TABLE lp_user_module_progress ADD `attempt` int(11) NOT NULL DEFAULT 1 AFTER credit");
+    }
+
+    if (!DBHelper::fieldExists('lp_user_module_progress', 'started')) {
+        Database::get()->query("ALTER TABLE lp_user_module_progress ADD `started` datetime DEFAULT NULL AFTER attempt");
+    }
+
+    if (!DBHelper::fieldExists('lp_user_module_progress', 'accessed')) {
+        Database::get()->query("ALTER TABLE lp_user_module_progress ADD `accessed` datetime DEFAULT NULL AFTER started");
+    }
+    if (!DBHelper::tableExists('page')) {
+        Database::get()->query("CREATE TABLE `page` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `course_id` int(11) DEFAULT NULL,
+            `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+            `path` varchar(32) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `visible` tinyint(4) DEFAULT 0,
+            PRIMARY KEY (`id`),
+            KEY `course_id_index` (`course_id`)) $tbl_options");
+    }
+
+    if (!DBHelper::fieldExists('user','pic_public')) {
+        Database::get()->query("ALTER TABLE user ADD pic_public TINYINT(1) NOT NULL DEFAULT 0 AFTER am_public");
+    }
+
+    if (DBHelper::fieldExists('monthly_summary', 'logins')) {
+        // convert `month` field from `varchar` to `date`
+        Database::get()->query("UPDATE monthly_summary SET month = STR_TO_DATE(CONCAT('01 ', month),'%d %m %Y')");
+        Database::get()->query("ALTER TABLE `monthly_summary` CHANGE `month` `month` DATE NOT NULL AFTER `id`");
+        // remove `login` field (`login` field is in table `loginout_summary`)
+        delete_field('monthly_summary', 'logins');
+    }
+}
 
 /**
  * @brief Create Indexes
@@ -2963,6 +3033,23 @@ function finalize_upgrade(): void
 
     set_config('version', ECLASS_VERSION);
     set_config('upgrade_begin', '');
+}
+
+
+/**
+  * @brief Rename user profile image files to unpredictable names
+  */
+function encode_user_profile_pics(): void
+{
+    Database::get()->queryFunc('SELECT id FROM user WHERE has_icon = 1',
+        function ($user) {
+            $base = "courses/userimg/{$user->id}_";
+            if (file_exists($base . IMAGESIZE_LARGE . '.jpg')) {
+                $hash = profile_image_hash($user->id);
+                rename($base . IMAGESIZE_LARGE . '.jpg', $base . $hash . '_' . IMAGESIZE_LARGE . '.jpg');
+                rename($base . IMAGESIZE_SMALL . '.jpg', $base . $hash . '_' . IMAGESIZE_SMALL . '.jpg');
+            }
+        });
 }
 
 

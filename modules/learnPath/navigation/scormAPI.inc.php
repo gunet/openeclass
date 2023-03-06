@@ -62,8 +62,9 @@ if ($uid) {
                AND M.`module_id` = LPM.`module_id`
                AND LPM.`learnPath_id` = ?d
                AND LPM.`module_id` = ?d
-               AND M.`course_id` = ?d";
-    $userProgressionDetails = Database::get()->querySingle($sql, $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'], $course_id);
+               AND M.`course_id` = ?d
+               AND UMP.`attempt` = ?d";
+    $userProgressionDetails = Database::get()->querySingle($sql, $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'], $course_id, $_SESSION['lp_attempt']);
 }
 
 if (!$uid || !$userProgressionDetails) {
@@ -201,8 +202,9 @@ $sco['session_time'] = "0000:00:00.00";
     //    - arg must be "" (empty string)
     //    - return value : "true" or "false"
     function LMSFinish(arg) {
-        if (debug_)
+        if (debug_) {
             console.debug("LMSfinish");
+        }
         if (APIInitialized) {
             if (arg !== "") {
                 this.APIError("201");
@@ -225,9 +227,10 @@ $sco['session_time'] = "0000:00:00.00";
     // Data Transfer
     //
     function LMSGetValue(ele) {
-        if (debug_)
+        if (debug_) {
             console.debug("LMSGetValue: " + ele);
-            if (APIInitialized) {
+        }
+        if (APIInitialized) {
 
             // SCORM2004
             if (ele === "" && isSCORM2004) {
@@ -932,6 +935,12 @@ $sco['session_time'] = "0000:00:00.00";
     //
     //
     function do_commit() {
+        let cdbg = function (val) {
+            if (debug_) {
+                console.debug(val);
+            }
+        };
+
         // target form is in a hidden frame
         let cmiform = upFrame.document.forms[0];
         // user module progress id
@@ -958,11 +967,34 @@ $sco['session_time'] = "0000:00:00.00";
 
         let cmiformVars = $(cmiform).serialize();
         let closelocation = tocFrame.document.getElementById('close-btn').getElementsByTagName('a')[0].href;
+        cdbg('doCommit cmiform submit');
+
         $.ajax({
             type: 'POST',
             url: cmiform.action,
             data: cmiformVars
+        }).done(function() {
+            cdbg('doCommit ajax XHR OK');
+        }).fail(function() {
+            cdbg('doCommit ajax XHR failed, falling back to navigator.sendBeacon API');
+            if (navigator && navigator.sendBeacon) {
+                let beaconVars = cmiformVars.split('&');
+                let pair, key, value;
+                let cmiformData = new FormData();
+                for (let i = 0; i < beaconVars.length; i++) {
+                    pair = beaconVars[i].split('=');
+                    key = decodeURIComponent(pair[0]);
+                    value = decodeURIComponent(pair[1]);
+                    cmiformData.append(key, value);
+                }
+                let result = navigator.sendBeacon(cmiform.action, cmiformData);
+                let resultMsg = (result) ? 'doCommit navigator.sendBeacon OK' : 'doCommit Failed to utilize navigator.sendBeacon API';
+                cdbg(resultMsg);
+            } else {
+                cdbg('doCommit navigator.sendBeacon not available');
+            }
         }).always(function() {
+            cdbg('doCommit exiting...');
             tocFrame.document.location.reload();
             // adl.nav.request
             if (values[47].length > 0) {

@@ -46,8 +46,7 @@ if (isset($_GET['id'])) {
         array('title' => $langUsersLog,
             'url' => "displaylog.php?course=$course_code",
             'icon' => 'fa-user',
-            'level' => 'primary-label',
-            'button-class' => 'btn-success'),
+            'level' => 'primary-label'),
         array('title' => $langPlatformGenStats,
             'url' => "index.php?course=$course_code&gc_stats=true",
             'icon' => 'fa-bar-chart',
@@ -56,14 +55,10 @@ if (isset($_GET['id'])) {
             'url' => "userduration.php?course=$course_code",
             'icon' => 'fa-vcard-o',
             'level' => 'primary-label'),
-        array('title' => $langOldStats,
-            'url' => "old_stats.php",
-            'icon' => 'fa-bar-chart',
-            'level' => 'primary-label'),
         array('title' => $langBack,
             'url' => "{$urlServer}courses/{$course_code}",
             'icon' => 'fa-reply',
-            'level' => 'primary')
+            'level' => 'primary-label'),
     ),false);
 }
 /**** Summary info    ****/

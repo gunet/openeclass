@@ -106,7 +106,8 @@ if (isset($_POST['ump_id'])) {
                 `total_time` = ?s,
                 `session_time` = ?s,
                 `suspend_data` = ?s,
-                `credit` = ?s
+                `credit` = ?s,
+                `accessed` = " . DBHelper::timeAfter() . "
           WHERE `user_module_progress_id` = ?d";
     Database::get()->query($sql, $_POST['lesson_location'], $lesson_status_value, $entry_value, $raw_value, $scoreMin_value, $scoreMax_value, $total_time_value, $session_time_formatted, $_POST['suspend_data'], $credit_value, $_POST['ump_id']);
     $lp = Database::get()->querySingle("SELECT lp.* "

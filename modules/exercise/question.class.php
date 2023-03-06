@@ -23,12 +23,14 @@ if (!class_exists('Question')) {
 
     /**
      * @brief This class allows to instantiate an object of type Question
+     * @authors Olivier Brouckaert - Open eClass Team
      */
     class Question {
 
         private $id;
         private $question;
         private $description;
+        private $feedback;
         private $weighting;
         private $type;
         private $difficulty;
@@ -38,13 +40,12 @@ if (!class_exists('Question')) {
 
         /**
          * constructor of the class
-         *
-         * @author - Olivier Brouckaert
          */
         public function __construct() {
             $this->id = 0;
             $this->question = '';
             $this->description = '';
+            $this->feedback = '';
             $this->weighting = 0;
             $this->type = 1;
             $this->difficulty = 0;
@@ -54,22 +55,22 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * reads question information from the database
+         * @brief reads question information from the database
          *
-         * @author - Olivier Brouckaert
          * @param - integer $id - question ID
          * @return - boolean - true if question exists, otherwise false
          */
         function read($id) {
             global $course_id;
 
-            $object = Database::get()->querySingle("SELECT question, description, weight, `type`, difficulty, category, copy_of_qid 
+            $object = Database::get()->querySingle("SELECT question, description, feedback, weight, `type`, difficulty, category, copy_of_qid 
                         FROM `exercise_question` WHERE course_id = ?d AND id = ?d", $course_id, $id);
             // if the question has been found
             if ($object) {
                 $this->id = $id;
                 $this->question = $object->question;
                 $this->description = $object->description;
+                $this->feedback = $object->feedback;
                 $this->weighting = $object->weight;
                 $this->type = $object->type;
                 $this->difficulty = $object->difficulty;
@@ -113,6 +114,13 @@ if (!class_exists('Question')) {
             return $this->description;
         }
 
+        /**
+         * @brief returns the question feedback
+         * @return string
+         */
+        function selectFeedback() {
+            return $this->feedback;
+        }
         /**
          * @brief returns the question weighting
          * @return float
@@ -187,7 +195,7 @@ if (!class_exists('Question')) {
             return $this->copy_of_qid;
         }
 
-        /*
+        /**
          * @brief get category name
          */
         function selectCategoryName($cat_id) {
@@ -205,7 +213,7 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * returns the relative verbal answer type
+         * @brief returns the relative verbal answer type
          */
         function selectTypeLegend($answerTypeId) {
             global $langUniqueSelect, $langMultipleSelect, $langFillBlanks,
@@ -232,9 +240,7 @@ if (!class_exists('Question')) {
             }
         }
         /**
-         * returns the array with the exercise ID list
-         *
-         * @author - Olivier Brouckaert
+         * @brief returns the array with the exercise ID list
          * @return - array - list of exercise ID which the question is in
          */
         function selectExerciseList() {
@@ -242,9 +248,7 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * returns the number of exercises which this question is in
-         *
-         * @author - Olivier Brouckaert
+         * @brief returns the number of exercises which this question is in
          * @return - integer - number of exercises
          */
         function selectNbrExercises() {
@@ -261,18 +265,23 @@ if (!class_exists('Question')) {
             $this->question = $title;
         }
         /**
-         * changes the question description
-         *
-         * @author - Olivier Brouckaert
+         * @brief changes the question description
          * @param - string $description - question description
          */
         function updateDescription($description) {
             $this->description = $description;
         }
+
         /**
-         * changes the question weighting
-         *
-         * @author - Olivier Brouckaert
+         * @brief update question feedback
+         * @param $feedback
+         * @return void
+         */
+        function updateFeedback($feedback) {
+            $this->feedback = $feedback;
+        }
+        /**
+         * @brief changes the question weighting
          * @param - float $weighting - question weighting
          */
         function updateWeighting($weighting) {
@@ -280,10 +289,8 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * changes the answer type. If the user changes the type from "unique answer" to "multiple answers"
+         * @brief changes the answer type. If the user changes the type from "unique answer" to "multiple answers"
          * (or conversely) answers are not deleted, otherwise yes
-         *
-         * @author - Olivier Brouckaert
          * @param - integer $type - answer type
          */
         function updateType($type) {
@@ -299,7 +306,7 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * changes the question difficulty
+         * @brief changes the question difficulty
          */
         function updateDifficulty($difficulty) {
             $this->difficulty = $difficulty;
@@ -316,9 +323,7 @@ if (!class_exists('Question')) {
             $this->copy_of_qid = $copy_of_qid;
         }
         /**
-         * adds a picture to the question
-         *
-         * @author - Olivier Brouckaert
+         * @brief adds a picture to the question
          * @param - string $Picture - temporary path of the picture to upload
          * @return - boolean - true if uploaded, otherwise false
          */
@@ -337,9 +342,7 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * deletes the picture
-         *
-         * @author - Olivier Brouckaert
+         * @brief deletes the picture
          * @return - boolean - true if removed, otherwise false
          */
         function removePicture() {
@@ -354,9 +357,7 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * imports a picture from another question
-         *
-         * @author - Olivier Brouckaert
+         * @brief imports a picture from another question
          * @param - integer $questionId - ID of the original question
          * @return - boolean - true if copied, otherwise false
          */
@@ -372,9 +373,8 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * exports a picture to another question
+         * @brief exports a picture to another question
          *
-         * @author - Olivier Brouckaert
          * @param - integer $questionId - ID of the target question
          * @return - boolean - true if copied, otherwise false
          */
@@ -390,10 +390,8 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * updates the question in the data base
+         * @brief updates the question in the data base
          * if an exercise ID is provided, we add that exercise ID into the exercise list
-         *
-         * @author - Olivier Brouckaert
          * @param - integer $exerciseId - exercise ID if saving in an exercise
          */
         function save($exerciseId = null) {
@@ -402,6 +400,7 @@ if (!class_exists('Question')) {
             $id = $this->id;
             $question = $this->question;
             $description = $this->description;
+            $feedback = $this->feedback;
             $weighting = $this->weighting;
             $type = $this->type;
             $difficulty = $this->difficulty;
@@ -410,14 +409,15 @@ if (!class_exists('Question')) {
 
             // question already exists
             if ($id) {
-                Database::get()->query("UPDATE `exercise_question` SET question = ?s, description = ?s,
-                    weight = ?f, type = ?d, difficulty = ?d, category = ?d, copy_of_qid = ?d
-                    WHERE course_id = $course_id AND id='$id'", $question, $description, $weighting, $type, $difficulty, $category, $copy_of_qid);
+                Database::get()->query("UPDATE `exercise_question` SET question = ?s, description = ?s, feedback = ?s,
+                                            weight = ?f, type = ?d, difficulty = ?d, category = ?d, copy_of_qid = ?d
+                                        WHERE course_id = $course_id AND id='$id'",
+                                    $question, $description, $feedback, $weighting, $type, $difficulty, $category, $copy_of_qid);
             }
             // creates a new question
             else {
-                $this->id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, type, difficulty, category)
-                VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $type, $difficulty, $category)->lastInsertID;
+                $this->id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, feedback, weight, type, difficulty, category)
+                VALUES (?d, ?s, ?s, ?s, ?f, ?d, ?d, ?d)", $course_id, $question, $description, $feedback, $weighting, $type, $difficulty, $category)->lastInsertID;
             }
 
             // if the question is created in an exercise
@@ -431,9 +431,7 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * removes an exercise from the exercise list
-         *
-         * @author - Olivier Brouckaert
+         * @brief removes an exercise from the exercise list
          * @param - integer $exerciseId - exercise ID
          * @return - boolean - true if removed, otherwise false
          */
@@ -467,11 +465,10 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * deletes a question from the database
+         * @brief deletes a question from the database
          * the parameter tells if the question is removed from all exercises (value = 0),
          * or just from one exercise (value = exercise ID)
          *
-         * @author - Olivier Brouckaert
          * @param - integer $deleteFromEx - exercise ID if the question is only removed from one exercise
          */
         function delete($deleteFromEx = 0) {
@@ -493,8 +490,9 @@ if (!class_exists('Question')) {
                 $this->removeFromList($deleteFromEx);
             }
         }
+
         /**
-         * Getting exercise answers
+         * @brief Getting exercise answers
          */
         function get_answers_record($eurid) {
             $type = $this->type;
@@ -522,7 +520,7 @@ if (!class_exists('Question')) {
         }
 
         /**
-         * duplicates the question                  \
+         * @brief duplicates the question                  \
          * @return integer
          */
         function duplicate() {
@@ -530,14 +528,15 @@ if (!class_exists('Question')) {
 
             $question = $this->question . " $langCopyDuplicate";
             $description = $this->description;
+            $feedback = $this->feedback;
             $weighting = $this->weighting;
             $type = $this->type;
             $difficulty = $this->difficulty;
             $category = $this->category;
             $copy_of_qid = $this->id;
 
-            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, `type`, difficulty, category, copy_of_qid)
-                        VALUES (?d, ?s, ?s, ?f, ?d, ?d, ?d, ?d)", $course_id, $question, $description, $weighting, $type, $difficulty, $category, $copy_of_qid)->lastInsertID;
+            $id = Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, feedback, weight, `type`, difficulty, category, copy_of_qid)
+                        VALUES (?d, ?s, ?s, ?s, ?f, ?d, ?d, ?d, ?d)", $course_id, $question, $description, $feedback, $weighting, $type, $difficulty, $category, $copy_of_qid)->lastInsertID;
 
             // duplicates the picture
             $this->exportPicture($id);
@@ -572,7 +571,7 @@ if (!class_exists('Question')) {
 
         /**
          *
-         * Calculate Question success rate
+         * @brief Calculate Question success rate
          */
         function successRate($exerciseId = NULL) {
             $id = $this->id;

@@ -1,5 +1,28 @@
 <?php
 
+/* ========================================================================
+ * Open eClass 3.14
+ * E-learning and Course Management System
+ * ========================================================================
+ * Copyright 2003-2023  Greek Universities Network - GUnet
+ * A full copyright notice can be read in "/info/copyright.txt".
+ * For a full list of contributors, see "credits.txt".
+ *
+ * Open eClass is an open platform distributed in the hope that it will
+ * be useful (without any warranty), under the terms of the GNU (General
+ * Public License) as published by the Free Software Foundation.
+ * The full license can be read in "/info/license/license_gpl.txt".
+ *
+ * Contact address: GUnet Asynchronous eLearning Group,
+ *                  Network Operations Center, University of Athens,
+ *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *                  e-mail: info@openeclass.org
+ * ======================================================================== */
+
+/**
+  @file file.php
+  @brief serve files for subsystem documents
+ */
 // playmode is used in order to re-use this script's logic via play.php
 $is_in_playmode = false;
 if (defined('SHOW_PHP__PLAY_MODE'))
@@ -21,15 +44,25 @@ if (isset($_SESSION['student_view'])) {
     define('old_student_view', $_SESSION['student_view']);
 }
 
-$unit = false;
+$unit = null;
 $file_path = false;
 $full_url_found = false;
 $show_orphan_file = false;
+
+$uri = preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI']);
+
+// If URI contains backslashes, redirect to forward slashes
+if (stripos($uri, '%5c') !== false) {
+    header('HTTP/1.1 301 Moved Permanently');
+    header('Location: ' . str_ireplace('%5c', '/', $uri));
+    exit;
+}
+
 $uri = (!$is_in_playmode) ? preg_replace('/\?[^?]*$/', '', strstr($_SERVER['REQUEST_URI'], 'ebook/show.php')) :
         preg_replace('/\?[^?]*$/', '', strstr($_SERVER['REQUEST_URI'], 'ebook/play.php'));
 $path_components = explode('/', $uri);
 if (count($path_components) >= 4) {
-    $_SESSION['dbname'] = $path_components[2];
+    $course_code = $_SESSION['dbname'] = $path_components[2];
     $ebook_id = intval($path_components[3]);
     if (!empty($path_components[4])) {
         if ($path_components[4] == '_') {
@@ -61,15 +94,16 @@ if (count($path_components) >= 4) {
     $ebook_id = 0;
 }
 
+define('EBOOK_DOCUMENTS', true);
 $require_current_course = true;
 $guest_allowed = true;
-define('EBOOK_DOCUMENTS', true);
-
-require_once '../../include/baseTheme.php';
-require_once 'include/lib/forcedownload.php';
+require_once '../../include/init.php';
+require_once 'template/template.inc.php';
+require_once 'include/action.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
-require_once 'modules/document/doc_init.php';
+require_once 'include/lib/forcedownload.php';
 require_once 'modules/progress/ViewingEvent.php';
+require_once 'modules/document/doc_init.php';
 
 if (defined('old_student_view')) {
     $_SESSION['student_view'] = old_student_view;
@@ -111,7 +145,7 @@ $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
 $logoUrl = isset($theme_options_styles['imageUploadSmall']) ? $urlThemeData."/".$theme_options_styles['imageUploadSmall'] : $themeimg."/eclass-new-logo-small.png" ;
 
 $pageName = $langEBook;
-if ($unit !== false) {
+if ($unit) {
     $exit_fullscreen_link = $urlAppend . "modules/units/index.php?course=$course_code&amp;id=$unit";
     $unit_parameter = 'unit=' . $unit;
 } else {
@@ -202,17 +236,24 @@ $theme_options_styles = unserialize($theme_options->styles);
 $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
 $logoUrl = isset($theme_options_styles['imageUploadSmall']) ? $urlThemeData."/".$theme_options_styles['imageUploadSmall'] : $themeimg."/eclass-new-logo-small.png" ;
 
+if ($unit) {
+    $navigation_label = Database::get()->querySingle('SELECT title FROM course_units
+        WHERE course_id = ?d AND id = ?d', $course_id, $unit)->title;
+} else {
+    $navigation_label = $langEBook;
+}
+
 $t = new Template();
 $t->set_root($webDir . '/template/' . $theme);
 $t->set_file('page', 'ebook_fullscreen.html');
 $t->set_var('URL_PATH', $urlAppend);
-$t->set_var('langBack', $langLogout);
+$t->set_var('langBack', $langClose);
 $t->set_var('page_title', q($currentCourseName . ': ' . $pageName));
 $t->set_var('course_title', q($currentCourseName));
 $t->set_var('course_title_short', q(ellipsize($currentCourseName, 35)));
 $t->set_var('course_home_link', $urlAppend . 'courses/' . $course_code . '/');
-$t->set_var('course_ebook', $langEBook);
-$t->set_var('course_ebook_link', $urlAppend . 'modules/ebook/index.php?course=' . $course_code);
+$t->set_var('course_ebook', q($navigation_label));
+$t->set_var('course_ebook_link', $exit_fullscreen_link);
 $t->set_var('exit_fullscreen_link', $exit_fullscreen_link);
 $t->set_var('unit_parameter', $unit_parameter);
 $t->set_var('template_base', $urlAppend . 'template/' . $theme . '/');

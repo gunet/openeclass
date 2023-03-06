@@ -73,12 +73,13 @@ $sql = "SELECT M.*, LPM.*, A.`path`, UMP.`lesson_status`, UMP.`credit`
         LEFT JOIN `lp_asset` AS A ON M.`startAsset_id` = A.`asset_id`
         LEFT JOIN `lp_user_module_progress` AS UMP
            ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
+           AND UMP.`attempt` = ?d
            " . $uidCheckString . "
         WHERE M.`module_id` = LPM.`module_id`
           AND LPM.`learnPath_id` = ?d
           AND M.`course_id` = ?d
         ORDER BY LPM.`rank` ASC";
-$result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
+$result = Database::get()->queryArray($sql, $_SESSION['lp_attempt'], $_SESSION['path_id'], $course_id);
 
 if (count($result) == 0) {
     echo "<div class='alert alert-warning'>$langNoModule</div>";

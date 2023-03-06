@@ -186,21 +186,12 @@ function getdepnumcourses($fac) {
 
 /**
  * @brief display courses list
- * @global type $m
- * @global type $langTutor
- * @global type $langRegistration
- * @global type $langCourseCode
- * @global type $langTeacher
- * @global type $langType
- * @global type $langFaculty
- * @global type $themeimg
- * @global Hierarchy $tree
  * @param type $facid
  * @param type $uid
  * @return string
  */
 function expanded_faculte($facid, $uid) {
-    global $m, $langTutor, $langRegistration, $langCourseCode,
+    global $m, $langTutor, $langRegistration, $langCourseCode, $langLabelCourseUserRequest,
     $langTeacher, $langType, $themeimg, $tree, $is_power_user, $is_departmentmanage_user;
 
     $retString = '';
@@ -245,22 +236,24 @@ function expanded_faculte($facid, $uid) {
                       WHERE course.id = course_department.course
                         AND course_department.department = ?d
                         AND course.visible != ?d
-                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $unlock_all_courses) {
+                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $langLabelCourseUserRequest, $unlock_all_courses) {
         global $urlAppend, $courses_list;
         $cid = $mycours->cid;
         $course_title = q($mycours->i);
         $password = q($mycours->password);
         $courses_list[$cid] = array($mycours->k, $mycours->visible);
+        $course_request_access_link = '';
         // link creation
         if ($mycours->visible == COURSE_OPEN or $unlock_all_courses or isset($myCourses[$cid])) {
             // open course, registered to course, or power user who can see all
             $codelink = "<a href='{$urlAppend}courses/" . $mycours->k . "/'>$course_title</a>";
         } elseif ($mycours->visible == COURSE_CLOSED) { // closed course
+            $codelink = $course_title;
             $disable_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $cid);
             if ($disable_course_user_requests) {
-                $codelink = $course_title;
+                $course_request_access_link = '';
             } else {
-                $codelink = "<a href='{$urlAppend}modules/contact/index.php?course_id=$cid'>$course_title</a>";
+                $course_request_access_link = "<br><small><em><a href='../contact/index.php?course_id=" . $cid . "'>$langLabelCourseUserRequest</a></em></small>";
             }
         } else {
             $codelink = $course_title;
@@ -311,7 +304,7 @@ function expanded_faculte($facid, $uid) {
             $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class />";
         }
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>
-                   <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$requirepassword $coursePrerequisites</td>
+                   <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$course_request_access_link $requirepassword $coursePrerequisites</td>
                    <td>" . q($mycours->t) . "</td>
                    <td class='text-center'>" . course_access_icon($mycours->visible) . "</td></tr>";
     }, intval($facid), COURSE_INACTIVE);

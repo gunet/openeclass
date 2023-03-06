@@ -212,8 +212,8 @@ $head_content .= "
     </style>
     <script type='text/javascript'>
         $(document).ready(function() {
-            $('#createpicker').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-                window.location.href = '{$urlAppend}modules/h5p/create.php?course=$course_code&amp;library=' + $('#createpicker').val();
+            $('#createpicker').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {                                
+                window.location.href = '{$urlAppend}modules/h5p/create.php?course=$course_code&library=' + $('#createpicker').val();
             });
         });
     </script>";

@@ -122,34 +122,33 @@ $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FRO
 if (!$total_participants) {
    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
-$export_box = "";
-if ($is_editor) {
-    $export_box .= "
-        <div class='alert alert-info'>
-            <b>$langDumpUserDurationToFile:</b>
-            <ul>
-              <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langPollPercentResults</a>
-                  (<a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;enc=UTF-8'>$langcsvenc2</a>)</li>
-              <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langPollFullResults</a>
-                  (<a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;enc=UTF-8'>$langcsvenc2</a>)</li>
-            </ul>
-        </div>";
-}
+
 if (isset($_REQUEST['unit_id'])) {
     $back_link = "../units/index.php?course=$course_code&amp;id=" . intval($_REQUEST['unit_id']);
 } else {
     $back_link = "index.php?course=$course_code";
 }
+
 $tool_content .= action_bar(array(
-            array(
-                'title' => $langBack,
-                'url' => $back_link,
-                'icon' => 'fa-reply',
-                'level' => 'primary-label'
-            )
-        ))."
-$export_box
-<div class='panel panel-primary'>
+                    array('title' => $langPollPercentResults,
+                          'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid",
+                          'icon' => 'fa-download',
+                          'level' => 'primary-label',
+                          'show' => $is_editor),
+                    array('title' => $langPollFullResults,
+                          'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1",
+                          'icon' => 'fa-download',
+                          'level' => 'primary-label',
+                          'show' => $is_editor),
+                    array(
+                         'title' => $langBack,
+                         'url' => $back_link,
+                         'icon' => 'fa-reply',
+                         'level' => 'primary-label'
+                        )
+                ));
+
+$tool_content .= "<div class='panel panel-primary'>
     <div class='panel-heading'>
         <h3 class='panel-title'>$langInfoPoll</h3>
     </div>
@@ -212,8 +211,7 @@ if ($PollType == POLL_NORMAL) {
                 <div class='panel-heading'>
                     <h3 class='panel-title'>$langQuestion $j</h3>
                 </div>
-                <div class='panel-body'>
-                    <!--h4>".q_math($theQuestion->question_text)."</h4-->";
+                <div class='panel-body'>";
 
             $j++;
 
@@ -224,10 +222,7 @@ if ($PollType == POLL_NORMAL) {
                     $this_chart_data['answer'][] = q($row->answer_text);
                     $this_chart_data['percentage'][] = 0;
                 }
-                if ($theQuestion->qtype == QTYPE_SINGLE && $default_answer) {
-                    $this_chart_data['answer'][] = $langPollUnknown;
-                    $this_chart_data['percentage'][] = 0;
-                }
+                $set_default_answer = false;
                 $answers = Database::get()->queryArray("SELECT a.aid AS aid, MAX(b.answer_text) AS answer_text, count(a.aid) AS count
                             FROM poll_user_record c, poll_answer_record a
                             LEFT JOIN poll_question_answer b
@@ -254,6 +249,10 @@ if ($PollType == POLL_NORMAL) {
                     } else {
                         $q_answer = $langPollUnknown;
                         $aid = -1;
+                    }
+                    if (!$set_default_answer and (($theQuestion->qtype == QTYPE_SINGLE && $default_answer) or $aid == -1)) {
+                        $this_chart_data['answer'][] = $langPollUnknown;
+                        $this_chart_data['percentage'][] = 0;
                     }
 
                     if (isset($this_chart_data['answer'])) { // skip answers that don't exist

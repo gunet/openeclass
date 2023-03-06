@@ -122,7 +122,10 @@ $langPlatformStats = "Στατιστικά Πλατφόρμας";
 $langPlatformGenStats = "Γενικά στατιστικά";
 $langVisitsStats = "Στατιστικά επισκέψεων";
 $langMonthlyReport = "Μηνιαίες αναφορές";
-$langStatsReports = "Στατιστικές αναφορές";
+$langMonthlyReportInfo = "Παρουσιάζονται συγκεντρωτικά στοιχεία (μαθήματα, χρήστες) των τελευταίων 12 μηνών.";
+$langStatsReports = "Αναφορές συμμετοχής";
+$langStatsReportsLP = "Αναφορές συμμετοχής στις γραμμές μάθησης";
+$langStatsReportsTC = "Αναφορές συμμετοχής στη τηλεσυνεργασία";
 $langReport = "Αναφορά για το μήνα";
 $langNoReport = "Δεν υπάρχουν διαθέσιμα στοιχεία για το μήνα";
 $langEmailNotSend = "Σφάλμα κατά την αποστολή e-mail στη διεύθυνση";
@@ -1063,6 +1066,7 @@ $langCitation = "Βιβλιογραφική αναφορά $langsOfCourse";
 $langAccessed = "Ανακτήθηκε την ";
 $langUserEmailNotification = "Λαμβάνετε ειδοποιήσεις του $langsOfCourse μέσω email.";
 $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του $langsOfCourse μέσω email.";
+$langNoUserEmailLegend = "Ο χρήστης δεν λαμβάνει ειδοποιήσεις του $langsOfCourse μέσω email.";
 $langCourseInvalidDepartment = "Το $langsCourse βρίσκεται σε τμήμα όπου δεν
     επιτρέπεται πλέον η δημιουργία $langsOfCourses.";
 $langCourseInvalidDepartmentPrompt = "Παρακαλούμε %s μεταφέρετέ το
@@ -1099,6 +1103,8 @@ $langNoCourseTitle = "Δεν πληκτρολογήσατε τον τίτλο τ
 $langCourseWeeklyFormatNotice = "Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστον την ημερομηνία έναρξης $langsOfCourse";
 $langCourseUserRequests = "Αιτήσεις εγγραφής χρηστών στο $langsCourse";
 $langCourseUserRequestsDisabled = "Αιτήσεις εγγραφής χρηστών δεν υπάρχουν για τα μη κλειστά $langsCourses.";
+$langUsersListAccess = "Εμφάνιση χρηστών του $langsOfCourse";
+$langUsersListAccessInfo = "αφορά μόνο τους εγγεγραμμένους χρήστες του $langsOfCourse";
 
 // delete_course.php
 $langModifGroups = "Ομάδες Εργασίας";
@@ -1890,6 +1896,9 @@ $langConfirmModifyAttemptText = "Η παρακάτω ενέργεια θα αλ�
 $langAnswerUngraded = "Η απάντηση δεν έχει ακόμα βαθμολογηθεί";
 $langAttempts = "Προσπάθειες";
 $langAttempt = "Προσπάθεια";
+$langAttemptStarted = "Πρώτη φορά";
+$langAttemptAccessed = "Τελευταία ενημέρωση";
+$langAttemptsNb = "Αριθμός προσπαθειών";
 $langOfAttempt = "προσπάθειας";
 $langAttemptActive = "Μη ολοκληρωμένη";
 $langAttemptActiveButDeadMsg = "Ο χρόνος ολοκλήρωσης της συγκεκριμένης προσπάθειας έχει παρέλθει. Μπορεί να διαγραφεί με ασφάλεια.";
@@ -2346,6 +2355,8 @@ $langReturn = "Eπιστροφή";
  * ********************************************************** */
 $langAddPage = "Προσθήκη μιας σελίδας";
 $langPageAdded = "Η σελίδα προστέθηκε";
+$langPageUpdated = "Η σελίδα ενημερώθηκε";
+$langPageDeleted = "Η σελίδα διαγράφτηκε";
 $langPageTitleModified = "Ο τίτλος της σελίδας άλλαξε";
 $langSendPage = "Όνομα αρχείου της σελίδας";
 $langCouldNotSendPage = "Το αρχείο δεν είναι σε μορφή HTML και δεν ήταν δυνατόν να σταλεί. Αν θέλετε να στείλετε αρχεία που
@@ -2751,9 +2762,10 @@ $langTextEditorEnable = "Ενεργοποίηση επεξεργαστή κει�
 $langTimeInLearnPath = "Χρόνος στη γραμμή μάθησης";
 $langTo = "στο";
 $langTotalTimeSpent = "Σύνολο χρόνου";
-$langTrackAllPathExplanation = "Πρόοδος " . $langsOfStudents;
+$langTrackAllPathExplanation = "Αναφορές προόδου";
+$langTrackAllPathExplanationAnalysis = "Αναλυτική πρόοδος " . $langsOfStudents;
 $langTrackUser = "Πρόοδος " . $langOfStudent;
-$langTracking = "Παρακολούθηση Προόδου";
+$langTracking = "Αναφορά Προόδου";
 $langTypeOfModule = "Τύπος ενότητας";
 $langUnamedModule = "Ενότητα χωρίς όνομα";
 $langUnamedPath = "Γραμμή χωρίς όνομα";
@@ -3118,6 +3130,7 @@ $langCollesSurvey = "COLLES";
 $langATTLSSurvey = "A.T.T.L.S.";
 $langLimeSurvey = "Lime Survey";
 $langPollNoQuestions = "Στο ερωτηματολόγιο δεν έχουν οριστεί ερωτήσεις!";
+$langActivateParticipation = "Ενεργοποίηση Παρουσιολογίου";
 
 //COLLES survey
 $qcolles1 = "Σε αυτή την ενότητα εστιάζω μόνο σε ό,τι με ενδιαφέρει";
@@ -3354,7 +3367,7 @@ $langSumCoursesEnrolled = "$langCourses που παρακολουθώ";
 $langSumCoursesSupport = "$langCourses που υποστηρίζω";
 $langProfileLastVisit = "Τελευταία επίσκεψη";
 $langProfileQuickPassword = "Αλλαγή Συνθηματικού";
-
+$langShowSettingsInfo = "αφορά την εμφάνιση στους υπόλοιπους χρήστες (εκτός των $langsOfTeachers)";
 $langProviderIdAlreadyExists = 'Η ρύθμιση δεν είναι αποθηκεύτηκε γιατί υπάρχει ήδη λογαριασμός στο σύστημα που συνδεμένος με αυτόν τον πάροχο';
 $langAuthSettingsSaved = "Οι ρυθμίσεις σας έχουν αποθηκευτεί";
 $langProviderConnectWithAlternativeProviders = 'Σύνδεση ή εγγραφή με εναλλακτικούς παρόχους';
@@ -3474,7 +3487,7 @@ $langNoCoursesRegistered = "<p>Δεν επιλέξατε $langsCourse για ε�
 $langIfYouWantToAddManyUsers = "Αν θέλετε να προσθέσετε ένα κατάλογο με χρήστες στο μάθημά σας, παρακαλώ συμβουλευτείτε τον διαχειριστή συστήματος.";
 $langLastVisits = "Οι τελευταίες μου επισκέψεις";
 $langLastUserVisits = "Τελευταίες επισκέψεις στο $langsCourse";
-$langDumpUser = "Εξαγωγή σε Excel";
+$langDumpUser = "Excel";
 $langCsv = "αρχείο csv";
 $langcsvenc1 = "κωδικοποίηση windows-1253";
 $langcsvenc2 = "κωδικοποίηση UTF-8";
@@ -3888,6 +3901,7 @@ $langUpgradeDBInfoMessage = "Η αναβάθμιση της βάσης δεδο�
 $langUpgradePopUpCloseWarning = "Προσοχή! Μην κλείσετε αυτό το παράθυρο γιατί θα διακοπεί η αναβάθμιση!";
 $langUpgFinished = 'Ολοκληρώθηκε';
 $langUpgUTF8MB4 = 'Μετατροπή πινάκων σε πλήρες εύρος Unicode';
+$langEncodeUserProfilePics = 'Κωδικοποίηση εικόνων προφίλ χρηστών';
 $langPreviousVersion = 'Προηγούμενη έκδοση';
 
 /* * *****************************************************************
@@ -3896,6 +3910,8 @@ $langPreviousVersion = 'Προηγούμενη έκδοση';
 $langTool = "Εργαλείο";
 $langUploadPage = "Ανέβασμα ιστοσελίδας";
 $langAddExtLink = "Προσθήκη εξωτερικού συνδέσμoυ";
+$langAddCoursePage = 'Προσθήκη σελίδας μαθήματος';
+$langCoursePages = 'Σελίδες μαθήματος';
 $langConfirmDeleteLink = "Επιβεβαίωση διαγραφής συνδέσμου";
 $langOperations = "Ενέργειες σε εξωτερικούς σύνδεσμους";
 $langInactiveTools = "Ανενεργά εργαλεία";
@@ -4031,7 +4047,7 @@ $langFavourite = "Προτίμηση Υποσυστημάτων";
 $langFavouriteCourse = "Προτίμηση $langOfCourses";
 $langFavouriteCourses = "Δημοφιλέστερα $langCourses";
 $langFavouriteExpl = "Παρουσιάζεται η προτίμηση ενός χρήστη ή όλων των χρηστών στα υποσυστήματα μέσα σε ένα χρονικό διάστημα.";
-$langOldStats = "Παλιά στατιστικά";
+$langOldStats = "Συγκεντρωτικά";
 $langOldStatsExpl = "Συγκεντρωτικά μηνιαία στατιστικά στοιχεία <u>παλιότερα των %s μηνών</u>.";
 $langOldStatsLoginsExpl = "Συγκεντρωτικά μηνιαία στατιστικά σχετικά με τις εισόδους στην πλατφόρμα παλιότερα των %s μηνών.";
 $langOldStatsExpireConfirm = "Επιβεβαίωση εμφάνισης παλιότερων στατιστικών (θα ξεκινήσει διαδικασία συγκέντρωσης στατιστικών παλιότερων των δεκατεσσάρων μηνών). Επιθυμείτε να συνεχίσετε;";
@@ -4102,7 +4118,7 @@ $langVisitsCourseStats = "Επισκέψεις σε σελίδες $langsOfCours
 $langUserStats = "Στατιστικά Χρήστη";
 $langTotalVisitsCourses = "Συνολικές επισκέψεις σε σελίδες $langsOfCourses";
 $langDumpUserDuration = "Στατιστικά χρήσης";
-$langDumpUserDurationToFile = "σε αρχείο τύπου csv";
+$langDumpUserDurationToFile = "σε αρχείο τύπου Excel";
 $langCodeUTF = "κωδικοποίηση UTF-8";
 $langCodeWin = "κωδικοποίηση Windows-1253";
 $langNoUserSelected = "Δεν επιλέξατε χρήστη";
@@ -4452,14 +4468,19 @@ $langImportInvalidUsers = 'Τα παρακάτω ονόματα χρηστών �
 $langImportExtraUsers = 'Οι παρακάτω χρήστες βρέθηκαν, αλλά δεν είχαν υποβάλει συμμετοχή στην παρούσα εργασία:';
 $langImportErrorLines = 'Οι παρακάτω εγγραφές είχαν κάποιο συντακτικό λάθος:<br>
  (π.χ. πάνω από δύο πεδία, το δεύτερο πεδίο δεν ήταν αριθμητικό ή υπερέβαινε το μέγιστο βαθμό)';
+$langImportExtraGradebookUsers = "Οι παρακάτω χρήστες δεν συμμετείχαν στο βαθμολόγιο";
 $langGradesImported = 'Οι βαθμοί καταχωρήθηκαν με επιτυχία!';
 $langImportGrades = 'Εισαγωγή βαθμών από αρχείο';
 $langImportGradesError = 'Δεν έγινε εισαγωγή των βαθμών λόγω των παρακάτω σφαλμάτων.
     Παρακαλούμε διορθώστε τα και ξαναδοκιμάστε.';
 $langImportGradesHelp = 'Μπορείτε να αποστείλετε ένα αρχείο λογιστικού φύλλου (π.χ. xls, xlsx, csv) με δύο ή τρείς στήλες.
-    Η πρώτη στήλη πρέπει να περιέχει τα ονόματα χρήστη των φοιτητών που έχουν υποβάλλει εργασία.
+    Η πρώτη στήλη πρέπει να περιέχει τα ονόματα χρήστη των χρηστών που έχουν υποβάλλει εργασία.
     Η δεύτερη στήλη πρέπει να περιέχει έναν αριθμητικό βαθμό. Η τρίτη στήλη είναι προαιρετική και μπορεί
     να περιέχει ένα σχόλιο για τη βαθμολόγηση.';
+$langImportGradesGradebookHelp = "Μπορείτε να αποστείλετε ένα αρχείο τύπου Excel (π.χ. xls, xlsx) με τη βαθμολογία των χρηστών.
+    Η βαθμολογία των χρηστών πρέπει να συμπληρωθεί στην τελευταία στήλη του αρχείου που θα κατεβάσετε από το παρακάτω σύνδεσμο.<br><br>
+    <strong>MHN</strong> αλλάξετε τη δομή του αρχείου (π.χ. αριθμό στηλών) γιατί η εισαγωγή των βαθμών θα αποτύχει. <br><br>
+    Σημειώστε επίσης, ότι αν θέλετε να εισάγετε δεκαδικό βαθμό, χρησιμοποιήσετε το σύμβολο ´τελεία' π.χ. 9.5";
 $langNoSubmissions = "Δεν έχουν υποβληθεί εργασίες";
 $langNoAssign = "Δεν υπάρχουν εργασίες";
 $langWorkWrongInput = 'Ο βαθμός πρέπει να είναι νούμερο. Παρακαλώ επιστρέψτε και ξανασυμπληρώστε το πεδίο.';
@@ -4522,13 +4543,15 @@ $langTransferGrades = "Μεταφορά βαθμών";
 $langPeerReviewCompletedByStudent = "Ολοκλήρωσε τις αξιολογήσεις του";
 $langPeerReviewPendingByStudent = "Οι αξιολογήσεις του δεν έχουν ολοκληρωθεί";
 $langPeerReviewMissingByStudent = "Δεν έχει εκτελέσει τις αξιολογήσεις του";
-$langPeerReviewPerUserCompulsory = "Το πεδίο Aξιολογήσεις ανά χρήστη";
+$langPeerReviewPerUserCompulsory = "Το πεδίο Αξιολογήσεις ανά χρήστη";
 $langPeerReviewStartDateCompulsory = "Το πεδίο Έναρξη αξιολόγησης";
 $langPeerReviewEndDateCompulsory = "Το πεδίο Λήξη αξιολόγησης";
 $langPeerReviewDeadlineCompulsory = "Το πεδίο Προθεσμία υποβολής";
 $langPeerReviewStartDateError = "Η ημερομηνία Έναρξης αξιολόγησης ";
 $langPeerReviewStartDateError2 = "μεγαλύτερη από την υποβολή";
 $langPeerReviewNoAssignments = "Δεν έχουν ανατεθεί ακόμα εργασίες";
+$langPeerReviewAssignmentInfo1 = "Οι εργασίες ανατέθηκαν στους χρήστες. Διαγράφτηκαν οι παλιές αναθέσεις.";
+$langPeerReviewAssignmentInfo2 = "Οι εργασίες ανατέθηκαν.";
 $langNotGraded = "(Δεν βαθμολόγησε)";
 $langDeletePeerReview = "Διαγραφή αξιολόγησης";
 $langNoAssignmentsForReview = "Δεν υπάρχουν αναθέσεις";
@@ -4539,6 +4562,7 @@ $langAssignmentDistribution = 'Ανάθεση εργασιών';
 $langNoPeerReview = 'Δεν θα γίνει αξιολόγηση.';
 $langPendingPeerSubmissions = 'Αναμένονται εργασίες για αξιολόγηση.';
 $langPeerSubmissions = 'Εργασίες που έχουν ανατεθεί';
+
 
 /* * ***********************************************************
  * listerqusers.php
@@ -5718,8 +5742,9 @@ $langUserWayShortDescription = "<p>Επιλογές προσβασιμότητα
 $langUserWayLongDescription = "<p>Επιλογές προσβασιμότητας μέσω της υπηρεσίας UserWay. Δείτε περισσότερες πληροφορίες στο <a href='https://userway.org/'>https://userway.org/</a></p>";
 $langOpenDelosDescription = "<p>Το OpenDelos είναι η πλατφόρμα ανοικτού λογισμικού που σχεδιάζει το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>
 <p>Η πλατφόρμα υποστηρίζει τη δράση <a href='http://ocw-project.gunet.gr/'>Ανοικτών Ακαδημαϊκών $langOfCourses</a> σε συνδυασμό με την <a href='http://openeclass.org/'>πλατφόρμα Open eClass</a> και την εθνική πύλη αναζήτησης $langsOfCourses που επίσης αναπτύσσει το GUNET.</p>";
-$langBBBDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
-<p>Το BigBlueButton ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα BigBlueButton επιλέξτε <a href=\"bbbmoduleconf.php\">Ρυθμίσεις</a>.</p>";
+$langBBBDescription = "Το ανοικτό λογισμικό <a href=\"https://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
+<p>Δεν απαιτείται εγκατάσταση πρόσθετου υλικού (Software ή Hardware) και εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α)r. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα BigBlueButton επιλέξτε <a href=\"bbbmoduleconf.php\">Ρυθμίσεις</a>.</p>";
+$langBBBLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης BigBlueButton.";
 $langAutojudgeDescription = "<p>Ο αυτόματος κριτής είναι ένα εργαλείο που επιτρέπει την αυτόματη διόρθωση προγραμματιστικών εργασιών. Πιο συγκεκριμένα, μέσω του εργαλείου ο καθηγητής μπορεί να ορίσει σενάρια που περιλαμβάνουν input και output βάσει των οποίων οι αναρτώμενες εργασίες βαθμολογούνται αυτόματα.</p><p>Το συγκεκριμένο υποσύστημα συνδέεται με τρίτες υπηρεσίες μεταγλώττισης οι οποίες μπορούν να επιλεχθούν στις <a href=\"autojudgemoduleconf.php\">Ρυθμίσεις</a>.</p>";
 $langFtpShortDescription = "Σύνδεση με υπηρεσία FTP";
 $langFtpLongDescription = "Πληκτρολογήστε το σύνδεσμο FTP";
@@ -5737,8 +5762,6 @@ $langAntivirusDescription = "<p>Σύνδεση με εγκατεστημένο �
 $langWafDescription = "<p>Ενεργοποίηση τείχους προστασίας εφαρμογής ιστού</p>";
 $langOpenMeetingsDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://openmeetings.apache.org/\" target=\"_blank\">Apache OpenMeetings</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
 <p>Το OpenMeetings ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα OpenMeetings επιλέξτε <a href=\"openmeetingsconf.php\">Ρυθμίσεις</a>.</p>";
-$langWebConfDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://webconf.gunet.gr/\" target=\"_blank\">WebConf</a> το οποίο αποτελεί ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
-<p>Το WebConf ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα WebConf επιλέξτε <a href=\"webconf.php\">Ρυθμίσεις</a>.</p>";
 $langUnplagShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism). Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Unicheck (πρώην Unplag). Δείτε περισσότερες πληροφορίες στο <a href=\"https://unicheck.com\">https://unicheck.com</a>";
 $langUnplagLongDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής.";
 $langTurnitinShortDescription = "Σύνδεση με υπηρεσία λογοκλοπής (plagiarism).
@@ -5754,6 +5777,25 @@ $langH5PLongDescription = "Διαδραστικό περιεχόμενου τύ�
 $langLtiPublishShortDescription = "Δημοσίευση $langsOfCourses μεσω πρωτοκόλλου LTI.";
 $langLtiPublishLongDescription = "Δημοσίευση $langsOfCourses μεσω πρωτοκόλλου LTI.";
 $langLtiPublishFrameAncestorsTooltip = "Λίστα urls χωριζομενη με κόμματα πχ https://url1, https://url2";
+$langGoogleMeetShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet.";
+$langGoogleMeetLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet.";
+$langZoomShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
+$langZoomLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
+$langWebexShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Webex.";
+$langWebexLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Webex.";
+$langJitsiShortDescription = "Το ανοικτό λογισμικό <a href=\"https://jitsi.org/\" target=\"_blank\">Jitsi</a> αποτελεί μια υπηρεσία τηλεδιάσκεψης. Κάντε κλικ στις <a href=\"jitsiconf.php\">Ρυθμίσεις</a> για να την ενεργοποιήσετε. Σημειώστε ότι η υπηρεσία προτείνεται για τηλεδιασκέψεις μέχρι 30 άτομα.";
+$langJitsiLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης <em>Jitsi</em> (μέχρι <strong>30</strong> άτομα).";
+$langJitsiUrl = "Μπορείτε να το αλλάξετε αν θέλετε να χρησιμοποιήσετε κάποιον διαφορετικό Jitsi server.";
+$langChooseTCServer = "Επιλογή υπηρεσίας Τηλεσυνεργασίας";
+$langGoToGoogleMeetLink = "Κάντε κλικ στο 'Μετάβαση στο Google Meet' παρακάτω, για να μεταφερθείτε στο περιβάλλον της Google έτσι ώστε να δημιουργήσετε το σύνδεσμο της τηλεσυνεργασίας.
+    Αφού τον δημιουργήσετε, αντιγράψτε τον και επικολλήστε τον στο πεδίο 'Σύνδεσμος'";
+$langGoToGoogleMeetLinkText = "Μετάβαση στο Google Meet";
+$langGoToZoomLink = "Κάντε κλικ στο 'Μετάβαση στο Zoom' παρακάτω, για να μεταφερθείτε στο περιβάλλον του Zoom έτσι ώστε να δημιουργήσετε το σύνδεσμο της τηλεσυνεργασίας.
+    Αφού τον δημιουργήσετε, αντιγράψτε τον και επικολλήστε τον στο πεδίο 'Σύνδεσμος'";
+$langGoToWebexLink = "Κάντε κλικ στο 'Μετάβαση στο Webex' παρακάτω, για να μεταφερθείτε στο περιβάλλον του Webex έτσι ώστε να δημιουργήσετε το σύνδεσμο της τηλεσυνεργασίας.
+    Αφού τον δημιουργήσετε, αντιγράψτε τον και επικολλήστε τον στο πεδίο 'Σύνδεσμος'";
+$langGoToZoomLinkText = "Μετάβαση στο Zoom";
+$langGoToWebexLinkText = "Μετάβαση στο Webex";
 
 // Messages for OpenMeetings
 $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";
@@ -5766,14 +5808,6 @@ $langOpenMeetingsAdminUser ="Username διαχειριστή OpenMeetings";
 $langOpenMeetingsAdminPass ="Password διαχειριστή OpenMeetings";
 $langOpenMeetingsModuleKey = "Module key";
 $langOpenMeetingsWebApp = "Όνομα WebApp";
-
-// Messages for WebConf
-$langWebConf = "Ρυθμίσεις \"Wowza\" του $siteName";
-$langAddWebConfServerInfo = "Στοιχεία νέου εξυπηρετητή Wowza";
-$langUpdateWebConfServer = "Στοιχεία εξυπηρετητή Wowza";
-$langAvailableWebConfServers = "Διαθέσιμοι εξυπηρετητές Wowza";
-$langWebConfServer = "Wowza server";
-$langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της εγκατάστασης Wowza";
 
 // Mindmap
 $langMindmap = "Εννοιολογικός χάρτης";
@@ -5913,6 +5947,8 @@ $langTiiExcludeValue = "Τιμή εξαίρεσης";
 $langLTIOptions = "Επιλογές Turnitin";
 $langUseOfApp = "Χρήση της εφαρμογής";
 $langUseOfAppInfo = "Επιλέξτε σε ποια $langsCourses θα χρησιμοποιείται η εφαρμογή";
+$langUseOfService = "Χρήση της υπηρεσίας";
+$langUseOfServiceInfo = "Επιλέξτε σε ποια $langsCourses θα χρησιμοποιείται η υπηρεσία";
 $langLimesurveyConf = "Ρυθμίσεις \"LimeSurvey\" του $siteName";
 $langLimesurveyAppAddSuccessful = "Η καταχώριση της LimeSurvey Εφαρμογής ολοκληρώθηκε με επιτυχία.";
 $langLimesurveyAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";

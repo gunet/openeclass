@@ -298,10 +298,10 @@ if (isset($require_current_course) and $require_current_course) {
         Database::get()->queryFunc("SELECT course.id as cid, course.code as code, course.public_code as public_code,
                 course.title as title, course.prof_names as prof_names, course.lang as lang, view_type,
                 course.visible as visible, hierarchy.name AS faculte
-                                           FROM course, course_department, hierarchy
-                                           WHERE course.id = course_department.course AND
-                                                 hierarchy.id = course_department.department AND
-                                                 course.code=?s",
+            FROM course
+                LEFT JOIN course_department ON course.id = course_department.course
+                LEFT JOIN hierarchy ON hierarchy.id = course_department.department
+            WHERE course.code = ?s",
             function ($course_info) {
                 global $course_id, $public_code, $course_code, $fac, $course_prof_names, $course_view_type,
                     $languageInterface, $visible, $currentCourseName, $currentCourseLanguage;
@@ -339,11 +339,12 @@ if (isset($require_current_course) and $require_current_course) {
         if ($is_admin or $is_power_user) {
             $status = USER_TEACHER;
         } elseif ($uid) {
-            $stat = Database::get()->querySingle("SELECT status FROM course_user
+            $stat = Database::get()->querySingle("SELECT status, editor FROM course_user
                                                            WHERE user_id = ?d AND
                                                            course_id = ?d", $uid, $course_id);
             if ($stat) {
                 $status = $stat->status;
+                $is_editor = $stat->editor;
             }
             if ($is_departmentmanage_user and isset($course_code)) {
                 // the department manager has rights to the courses of his department(s)
@@ -372,14 +373,13 @@ if (isset($require_current_course) and $require_current_course) {
                 }
             }
         }
-
         if ($visible != COURSE_OPEN) {
             if (!$uid) {
                 $toolContent_ErrorExists = $langNoAdminAccess;
             } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED) and !@$course_guest_allowed) {
                 Session::Messages($langLoginRequired, 'alert-info');
                 redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
-            } elseif ($status != USER_TEACHER and $visible == COURSE_INACTIVE) {
+            } elseif ($status != USER_TEACHER and !$is_editor and $visible == COURSE_INACTIVE) {
                 $toolContent_ErrorExists = $langCheckProf;
             }
         }

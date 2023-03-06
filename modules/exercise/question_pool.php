@@ -119,7 +119,7 @@ $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title
                                   AND a.status = " .USER_TEACHER . "", $course_id, $uid);
 $courses_options = "";
 foreach ($my_courses as $row) {
-    $courses_options .= "'<option value=\"$row->Course_id\">".q($row->Title)."</option>'+";
+    $courses_options .= "'<option value=\"$row->Course_id\">".js_escape($row->Title)."</option>'+";
 }
 
 $head_content .= "<script>

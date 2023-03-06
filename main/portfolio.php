@@ -270,11 +270,6 @@ $tool_content .= "
             </div>
     </div>";
 
-$userdata = Database::get()->querySingle("SELECT surname, givenname, username, email, status, phone, am, registered_at,
-                has_icon, description, password,
-                email_public, phone_public, am_public
-            FROM user
-            WHERE id = ?d", $uid);
 $lastVisit = Database::get()->querySingle("SELECT * FROM loginout
                         WHERE id_user = ?d ORDER by idLog DESC LIMIT 1", $uid);
 if ($lastVisit) {

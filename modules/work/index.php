@@ -42,7 +42,6 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/log.class.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'modules/admin/extconfig/externals.php';
-require_once 'include/lib/csv.class.php';
 require_once 'modules/plagiarism/plagiarism.php';
 require_once 'modules/progress/AssignmentEvent.php';
 require_once 'modules/analytics/AssignmentAnalyticsEvent.php';
@@ -88,10 +87,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $sid = $_POST['sid'];
         $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
     } elseif (($_POST['assign_type']) or ($_POST['assign_g_type'] == 2)) {
-        $data = Database::get()->queryArray("SELECT name,id FROM `group`
-                                                        WHERE course_id = ?d
-                                                        AND visible = 1
-                                                      ORDER BY name", $course_id);
+        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     } else {
         $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                 FROM user, course_user
@@ -1435,8 +1431,8 @@ function submit_work($id, $on_behalf_of = null) {
                 $group_id = Database::get()->querySingle("SELECT group_id FROM assignment_submit WHERE id = ?d", $sid)->group_id;
                 $user_ids = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $group_id);
                 foreach ($user_ids as $user_id) {
-                    update_attendance_book($user_id, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
-                    update_gradebook_book($user_id, $row->id, $grade/$row->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                    update_attendance_book($user_id->user_id, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                    update_gradebook_book($user_id->user_id, $row->id, $grade/$row->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                 }
             } else {
                 $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
@@ -2962,8 +2958,7 @@ function show_edit_assignment($id) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                                    FROM assignment_to_specific, `group`
                                     WHERE course_id = ?d
-                                    AND `group`.id = assignment_to_specific.group_id
-                                    AND `group`.visible = 1
+                                    AND `group`.id = assignment_to_specific.group_id                                    
                                     AND assignment_to_specific.assignment_id = ?d", $course_id, $id);
             $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d AND visible = 1", $course_id);
             foreach ($assignees as $assignee_row) {
@@ -3649,10 +3644,6 @@ function show_edit_assignment($id) {
 
 /**
  * @brief delete assignment
- * @global string $workPath
- * @global type $course_code
- * @global type $webDir
- * @global type $course_id
  * @param type $id
  */
 function delete_assignment($id) {
@@ -3664,17 +3655,22 @@ function delete_assignment($id) {
                                         AND id = ?d", $course_id, $id);
     if ($row != null) {
         $uids = Database::get()->queryArray("SELECT uid FROM assignment_submit WHERE assignment_id = ?d", $id);
+        foreach ($uids as $user_id) {
+            triggerGame($course_id, $user_id->uid, $id);
+            triggerAssignmentAnalytics($course_id, $user_id->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+            triggerAssignmentAnalytics($course_id, $user_id->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
+        }
         if (Database::get()->query("DELETE FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id)->affectedRows > 0){
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id);
             Database::get()->query("DELETE FROM assignment_grading_review WHERE assignment_id = ?d", $id);
-            foreach ($uids as $user_id) {
-                triggerGame($course_id, $user_id, $id);
-                triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
-                triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
-            }
+
             if ($row->assign_to_specific) {
                 Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
             }
+
+            $admin_files_directory = $webDir . "/courses/" . $course_code . "/work/admin_files/" . $secret;
+            removeDir($admin_files_directory);
+
             move_dir("$workPath/$secret", "$webDir/courses/garbage/{$course_code}_work_{$id}_$secret");
 
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
@@ -3687,10 +3683,6 @@ function delete_assignment($id) {
 }
 /**
  * @brief delete assignment's submissions
- * @global string $workPath
- * @global type $course_code
- * @global type $webDir
- * @global type $course_id
  * @param type $id
  */
 function purge_assignment_subs($id) {
@@ -3701,27 +3693,23 @@ function purge_assignment_subs($id) {
     $row = Database::get()->querySingle("SELECT title, assign_to_specific FROM assignment WHERE course_id = ?d
                                     AND id = ?d", $course_id, $id);
     $uids = Database::get()->queryArray("SELECT uid FROM assignment_submit WHERE assignment_id = ?d", $id);
+
+    foreach ($uids as $user_id) {
+        triggerGame($course_id, $user_id->uid, $id);
+        triggerAssignmentAnalytics($course_id, $user_id->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
+        triggerAssignmentAnalytics($course_id, $user_id->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
+    }
     if (Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id)->affectedRows > 0) {
-        foreach ($uids as $user_id) {
-            triggerGame($course_id, $user_id, $id);
-            triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
-            triggerAssignmentAnalytics($course_id, $user_id, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
-        }
         if ($row->assign_to_specific) {
             Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
         }
-        move_dir("$workPath/$secret",
-        "$webDir/courses/garbage/{$course_code}_work_{$id}_$secret");
+        move_dir("$workPath/$secret", "$webDir/courses/garbage/{$course_code}_work_{$id}_$secret");
         return true;
     }
     return false;
 }
 /**
  * @brief delete user assignment
- * @global type $course_id
- * @global type $course_code
- * @global type $webDir
- * @global type $uid
  * @param type $id
  */
 function delete_user_assignment($id) {
@@ -3762,9 +3750,6 @@ function delete_user_assignment($id) {
 }
 /**
  * @brief delete teacher assignment file
- * @global type $course_id
- * @global type $course_code
- * @global type $webDir
  * @param type $id
  */
 function delete_teacher_assignment_file($id) {
@@ -3781,14 +3766,6 @@ function delete_teacher_assignment_file($id) {
 }
 /**
  * @brief display user assignment
- * @global type $tool_content
- * @global type $m
- * @global type $uid
- * @global type $langUserOnly
- * @global type $langBack
- * @global type $course_code
- * @global type $course_id
- * @global type $course_code
  * @param type $id
  */
 function show_student_assignment($id) {
@@ -4724,7 +4701,8 @@ function show_assignment($id, $display_graph_results = false) {
     $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer, $langTransferGrades,
     $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress, $langFileName,
     $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent, $autojudge,
-    $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution;
+    $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution,
+    $langQuestionCorrectionTitle2, $langFrom2;
 
     // transfer grades in peer review assignment
     $head_content .= "<script type='text/javascript'>
@@ -4895,9 +4873,9 @@ function show_assignment($id, $display_graph_results = false) {
                                 }
                             }
                             if ($counter == 0) {
-                                $mess = "<span style='color: green;'><h6>$langPeerReviewCompletedByStudent</h6></span>";
+                                $mess = "<span style='color: green;'><h6>$langPeerReviewCompletedByStudent</h6>&nbsp;</span>";
                             } elseif ($counter < $r_count){
-                                $mess = "<span style='color: darkorange;'><h6>$langPeerReviewPendingByStudent</h6></span>";
+                                $mess = "<span style='color: darkorange;'><h6>$langPeerReviewPendingByStudent<br>($langQuestionCorrectionTitle2 $counter $langFrom2 $r_count)</h6></span>";
                             } else {
                                 $mess = "<span style='color: red;'><h6>$langPeerReviewMissingByStudent</h6></span>";
                             }
@@ -5424,9 +5402,7 @@ function show_student_assignments() {
             if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids)) {
                 foreach ($submission as $sub) {
                     if (isset($sub->group_id)) { // if is a group assignment
-                        $tool_content .= "<div style='padding: 5px 0; font-size:9px;'>($m[groupsubmit] " .
-                                "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
-                                "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)</div>";
+                        $tool_content .= "<small><div>($m[groupsubmit] $m[ofgroup] <em>" . gid_to_name($sub->group_id) . "</em>)</div></small>";
 
                         $eportfolio_action_title = sprintf($langAddGroupWorkSubePortfolio, gid_to_name($sub->group_id));
                     } else {

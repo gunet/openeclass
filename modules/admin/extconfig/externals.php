@@ -27,10 +27,10 @@ require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
 
 class ExtAppManager {
 
-    public static $AppNames = ['H5PApp', 'BBBApp', 'TurnitinApp', 'LtiPublishApp',
-        'APITokenApp', 'UnPlagApp', 'OpenDelosApp', 'GoogleDriveApp', 'OneDriveApp',
-        'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp', 'OpenMeetings',
-        'WebConfApp', 'AutojudgeApp', 'AntivirusApp', 'WafApp', 'secondfaApp',
+    public static $AppNames = ['H5PApp', 'BBBApp', 'GoogleMeetApp', 'JitsiApp', 'ZoomApp',
+        'APITokenApp', 'WebexApp', 'TurnitinApp', 'LtiPublishApp', 'UnPlagApp', 'OpenDelosApp', 'GoogleDriveApp',
+        'OneDriveApp', 'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp',
+        'AutojudgeApp', 'AntivirusApp', 'WafApp', 'secondfaApp',
         'AnalyticsApp', 'UserWayApp', 'LimesurveyApp', 'ColmoocApp'];
     private static $APPS = null;
 

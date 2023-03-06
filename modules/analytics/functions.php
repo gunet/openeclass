@@ -1,5 +1,8 @@
 <?php
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 require_once 'PeriodType.php';
 require_once 'ElementTypes.php';
 
@@ -472,7 +475,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
     $analytics_title = Database::get()->querySingle("SELECT title FROM analytics WHERE id=?d", $analytics_id);
 
     if ($download) {
-        generate_analytics_csv($peruserarray, $analytics_title->title);
+        dump_analytics($peruserarray, $analytics_title->title);
     }
 
     $tool_content .= "
@@ -495,23 +498,40 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
  * @param $peruserarray
  * @param $title
  */
-function generate_analytics_csv($peruserarray, $title) {
+function dump_analytics($peruserarray, $title) {
 
-    require_once 'include/lib/csv.class.php';
+    global $langSurname, $langName, $langPercentage, $langLearningAnalytics, $course_id,
+           $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel;
 
-    global $langSurname, $langName, $langPercentage, $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel;
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+    $sheet->setTitle($langLearningAnalytics);
+    $sheet->getDefaultColumnDimension()->setWidth(30);
+    $filename =   $title . '_learning_analytics.xlsx';
+    $course_title = course_id_to_title($course_id);
 
-    $csv = new CSV();
-    $csv->setEncoding('UTF-8');
-
-    $csv->filename =   $title . '_learning_analytics.csv';
-
-    $csv->outputRecord($langSurname, $langName, $langPercentage, $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel);
+    $data[] = [ $course_title ];
+    $data[] = [];
+    $data[] = [ $langSurname, $langName, $langPercentage, $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel ];
 
     foreach($peruserarray as $array) {
-        $csv->outputRecord($array['surname'], $array['givenname'], $array['percentage'], $array['values']['text-success'], $array['values']['text-warning'], $array['values']['text-danger']);
+        $data[] = [ $array['surname'], $array['givenname'], $array['percentage'], $array['values']['text-success'], $array['values']['text-warning'], $array['values']['text-danger'] ];
     }
+    $sheet->mergeCells("A1:F1");
+    $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+    for ($i = 1; $i <= 6; $i++) {
+        $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+    }
+
+    // create spreadsheet
+    $sheet->fromArray($data, NULL);
+    // file output
+    $writer = new Xlsx($spreadsheet);
+    header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    header("Content-Disposition: attachment;filename=$filename");
+    $writer->save("php://output");
     exit;
+
 }
 
 
