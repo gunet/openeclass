@@ -54,7 +54,6 @@ $pageName = $group_name;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 
 $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
-
 if ((!$is_editor) and ($status != USER_GUEST)) {
     if (!$is_member and !$self_reg) { // check if we are group member
         Session::Messages($langForbidden, 'alert-danger');
@@ -249,54 +248,53 @@ if (isset($_GET['group_as'])) {
             </div>
         </div>";
 
-    // members
-    if (count($members) > 0) {
-        $tool_content .= "<div class='row'>
-                        <div class='col-xs-12'>
+    if ($is_editor or $public_users_list) {
+        // members
+        if (count($members) > 0) {
+            $tool_content .= "<div class='row'><div class='col-xs-12'>
                           <ul class='list-group'>
                               <li class='list-group-item list-header'>
                                   <div class='row'>";
-        if ($is_editor or $is_tutor) {
-            $tool_content .= "        <div class='col-xs-6'>$langSurnameName</div>
-                                      <div class='col-xs-3'>$langAm</div>
-                                      <div class='col-xs-3'>$langEmail</div>";
-        } else {
-            $tool_content .= "        <div class='col-xs-12'>$langSurnameName</div>";
-        }
-        $tool_content .= "
-                                  </div>
-                              </li>";
-
-        foreach ($members as $member) {
-            $user_group_description = q($member->description);
-            $tool_content .= "<li class='list-group-item'>
-                                  <div class='row'>";
             if ($is_editor or $is_tutor) {
-                $email = q($member->email);
-                $tool_content .= "    <div class='col-xs-6'>" .
-                                           display_user($member->id, false, true) .
-                                           ($user_group_description?
-                                            ("<br>" . $user_group_description): '') . "
+                $tool_content .= "<div class='col-xs-6'>$langSurnameName</div>
+                                  <div class='col-xs-3'>$langAm</div>
+                                   <div class='col-xs-3'>$langEmail</div>";
+            } else {
+                $tool_content .= "<div class='col-xs-12'>$langSurnameName</div>";
+            }
+            $tool_content .= "</div></li>";
+
+            foreach ($members as $member) {
+                $user_group_description = q($member->description);
+                $tool_content .= "<li class='list-group-item'>
+                                  <div class='row'>";
+                if ($is_editor or $is_tutor) {
+                    $email = q($member->email);
+                    $tool_content .= "    <div class='col-xs-6'>" .
+                        display_user($member->id, false, true) .
+                        ($user_group_description ?
+                            ("<br>" . $user_group_description) : '') . "
                                       </div>
                                       <div class='col-xs-3'>" .
-                                           ($member->am? q($member->am): '-') . "
+                        ($member->am ? q($member->am) : '-') . "
                                       </div>
                                       <div class='col-xs-3'>" .
-                                           ($email? "<a href='mailto:$email'>$email</a>": '-') . "
+                        ($email ? "<a href='mailto:$email'>$email</a>" : '-') . "
                                       </div>
                                  </div>
                               </li>";
-            } else {
-                $tool_content .= "    <div class='col-xs-12'>" .
-                                           display_user($member->id, false, true) .
-                                           ($user_group_description?
-                                            ("<br>" . $user_group_description): '') . "
+                } else {
+                    $tool_content .= "<div class='col-xs-12'>" .
+                        display_user($member->id, false, true) .
+                        ($user_group_description ?
+                            ("<br>" . $user_group_description) : '') . "
                                       </div>";
+                }
             }
+            $tool_content .= "</ul></div></div>";
+        } else {
+            $tool_content .= "<div class='alert alert-warning'>$langGroupNoneMasc</div>";
         }
-        $tool_content .= "</ul></div></div>";
-    } else {
-        $tool_content .= "<div class='alert alert-warning'>$langGroupNoneMasc</div>";
     }
 }
 draw($tool_content, 2);
