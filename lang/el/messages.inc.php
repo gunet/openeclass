@@ -1658,6 +1658,7 @@ $langCloudFileError = 'Αδυναμία λήψης απομακρυσμένου 
 $langGroupSpace = "Περιοχή ομάδας χρηστών";
 $langGroupSpaceLink = "Ομάδα χρηστών";
 $langGroupForumLink = "Περιοχή συζητήσεων ομάδας χρηστών";
+$langGroupPublicUserList = "Εμφάνιση των χρηστών στα μέλη της ομάδας";
 $langZipNoPhp = "Το αρχείο zip δεν πρέπει να περιέχει αρχεία .php";
 $langUncompress = "Αποσυμπίεση του αρχείου (.zip) στον εξυπηρετητή";
 $langReplaceSameName = "Αντικατάσταση αρχείων με το ίδιο όνομα";

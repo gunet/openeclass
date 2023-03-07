@@ -42,7 +42,7 @@ if ((isset($_GET['selfReg']) or isset($_GET['selfUnReg'])) and isset($_GET['grou
 
 if (!is_group_visible($group_id, $course_id) and !$is_editor) {
     //Session::Messages($langForbidden, 'alert-danger');
-    Session::flash('message',$langForbidden); 
+    Session::flash('message',$langForbidden);
     Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page("modules/group/index.php?course=$course_code");
 }
@@ -60,7 +60,7 @@ $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 if ((!$is_editor) and ($status != USER_GUEST)) {
     if (!$is_member and !$self_reg) { // check if we are group member
         //Session::Messages($langForbidden, 'alert-danger');
-        Session::flash('message',$langForbidden); 
+        Session::flash('message',$langForbidden);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/group/index.php?course=$course_code");
     }
@@ -81,12 +81,12 @@ if ((!$is_editor) and ($status != USER_GUEST)) {
             Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array( 'uid' => $uid, 'name' => $group));
 
             //Session::Messages($langGroupNowMember, 'alert-success');
-            Session::flash('message',$langGroupNowMember); 
+            Session::flash('message',$langGroupNowMember);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/group/group_space.php?course=$course_code&group_id=$group_id");
         } else {
             //Session::Messages($langForbidden, 'alert-danger');
-            Session::flash('message',$langForbidden); 
+            Session::flash('message',$langForbidden);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         }
@@ -100,12 +100,12 @@ if ((!$is_editor) and ($status != USER_GUEST)) {
             Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('uid' => $uid, 'name' => $group));
 
             //Session::Messages($langGroupNowNotMember, 'alert-success');
-            Session::flash('message',$langGroupNowNotMember); 
+            Session::flash('message',$langGroupNowNotMember);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         } else {
            // Session::Messages($langForbidden, 'alert-danger');
-            Session::flash('message',$langForbidden); 
+            Session::flash('message',$langForbidden);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         }
@@ -263,54 +263,54 @@ if (isset($_GET['group_as'])) {
         </div>
     </div>";
 
-    // members
-    if (count($members) > 0) {
-        $tool_content .= "
+    if ($is_editor or $public_users_list) {
+        // members
+        if (count($members) > 0) {
+            $tool_content .= "
                         <div class='col-sm-12 mt-3' style='overflow-y:auto;'>
                           <ul class='list-group'>
                               <li class='list-group-item list-header'>
                                   <div class='row'>";
-        if ($is_editor or $is_tutor) {
-            $tool_content .= "        <div class='col-4'>$langSurnameName</div>
+            if ($is_editor or $is_tutor) {
+                $tool_content .= "<div class='col-4'>$langSurnameName</div>
                                       <div class='col-4'>$langAm</div>
                                       <div class='col-4'>$langEmail</div>";
-        } else {
-            $tool_content .= "        <div class='col-12'>$langSurnameName</div>";
-        }
-        $tool_content .= "
-                                  </div>
-                              </li>";
+            } else {
+                $tool_content .= "<div class='col-12'>$langSurnameName</div>";
+            }
+            $tool_content .= "</div></li>";
 
-        foreach ($members as $member) {
-            $user_group_description = q($member->description);
-            $tool_content .= "<li class='list-group-item'>
+            foreach ($members as $member) {
+                $user_group_description = q($member->description);
+                $tool_content .= "<li class='list-group-item'>
                                   <div class='row'>";
-            if ($is_editor or $is_tutor) {
-                $email = q($member->email);
-                $tool_content .= "    <div class='col-4'>" .
-                                           display_user($member->id, false, true) .
-                                           ($user_group_description?
-                                            ("<br>" . $user_group_description): '') . "
+                if ($is_editor or $is_tutor) {
+                    $email = q($member->email);
+                    $tool_content .= "<div class='col-4'>" .
+                        display_user($member->id, false, true) .
+                        ($user_group_description ?
+                            ("<br>" . $user_group_description) : '') . "
                                       </div>
                                       <div class='col-4'>" .
-                                           ($member->am? q($member->am): '-') . "
+                        ($member->am ? q($member->am) : '-') . "
                                       </div>
                                       <div class='col-4'>" .
-                                           ($email? "<a href='mailto:$email'>$email</a>": '-') . "
+                        ($email ? "<a href='mailto:$email'>$email</a>" : '-') . "
                                       </div>
                                  </div>
                               </li>";
-            } else {
-                $tool_content .= "    <div class='col-12'>" .
-                                           display_user($member->id, false, true) .
-                                           ($user_group_description?
-                                            ("<br>" . $user_group_description): '') . "
+                } else {
+                    $tool_content .= "<div class='col-12'>" .
+                        display_user($member->id, false, true) .
+                        ($user_group_description ?
+                            ("<br>" . $user_group_description) : '') . "
                                       </div>";
+                }
             }
+            $tool_content .= "</ul></div>";
+        } else {
+            $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-warning'>$langGroupNoneMasc</div></div>";
         }
-        $tool_content .= "</ul></div>";
-    } else {
-        $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-warning'>$langGroupNoneMasc</div></div>";
     }
 }
 draw($tool_content, 2);

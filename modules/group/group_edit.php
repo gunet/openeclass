@@ -70,7 +70,7 @@ if (isset($_POST['modify'])) {
         'maxStudent' => "$langTheField $langMax $langGroupPlacesThis"
     ));
     if($v->validate()) {
-        $self_reg = $allow_unreg = $has_forum = $documents = $wiki = 0;
+        $self_reg = $allow_unreg = $has_forum = $documents = $wiki = $public_users_list = 0;
 
         if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on') {
             $self_reg = 1;
@@ -81,11 +81,14 @@ if (isset($_POST['modify'])) {
         if (isset($_POST['forum']) and $_POST['forum'] == 'on') {
             $has_forum = 1;
         }
-        if (isset($_POST['documents']) and $_POST['documents'] == 'on'){
+        if (isset($_POST['documents']) and $_POST['documents'] == 'on') {
             $documents = 1;
         }
-        if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
+        if (isset($_POST['wiki']) and $_POST['wiki'] == 'on') {
             $wiki = 1;
+        }
+        if (isset($_POST['public_users_list']) and $_POST['public_users_list'] == 'on') {
+            $public_users_list = 1;
         }
         $private_forum = $_POST['private_forum'];
         $group_id = $_POST['group_id'];
@@ -96,8 +99,10 @@ if (isset($_POST['modify'])) {
                                 forum = ?d,
                                 private_forum = ?d,
                                 documents = ?d,
-                                wiki = ?d WHERE course_id = ?d AND group_id = ?d",
-            $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki, $course_id, $group_id);
+                                wiki = ?d,
+                                public_users_list = ?d
+                        WHERE course_id = ?d AND group_id = ?d",
+            $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki, $public_users_list, $course_id, $group_id);
 
         // Update main group settings
         register_posted_variables(array('name' => true, 'description' => true), 'all');
@@ -151,7 +156,7 @@ if (isset($_POST['modify'])) {
                 $ids_to_be_inserted = array_diff($_POST['ingroup'], $cur_member_ids);
                 $ids_to_be_deleted = implode(', ', array_diff($cur_member_ids, $_POST['ingroup']));
                 if ($ids_to_be_deleted) {
-                Database::get()->query("DELETE FROM group_members
+                    Database::get()->query("DELETE FROM group_members
                                             WHERE group_id = ?d AND is_tutor = 0 AND user_id IN ($ids_to_be_deleted)", $group_id);
                 }
                 foreach ($ids_to_be_inserted as $user_id) {
@@ -163,10 +168,11 @@ if (isset($_POST['modify'])) {
                                             WHERE group_id = ?d AND is_tutor = 0",$group_id);
             }
             //Session::Messages($langGroupSettingsModified,'alert-success');
-            Session::flash('message',$langGroupSettingsModified); 
+            Session::flash('message',$langGroupSettingsModified);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         }
+
         initialize_group_info($group_id);
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -187,6 +193,7 @@ if ($is_editor) {
     $checked['has_forum'] = ($group->forum?'checked':'');
     $checked['documents'] = ($group->documents?'checked':'');
     $checked['wiki'] = ($group->wiki?'checked':'');
+    $checked['public_users_list'] = ($group->public_users_list? 'checked':'');
 
     $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-select'>\n";
     $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
@@ -400,6 +407,18 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
                     </div>
                 </div>
             </div>
+            
+            <div class='form-group mt-4'>
+                <label class='col-sm-12 control-label-notes mb-2'>$langGroupPublicUserList:</label>
+                <div class='col-sm-12'>
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='public_users_list' $checked[public_users_list]>
+                      </label>
+                    </div>
+                </div>
+            </div>
+            
             <div class='form-group mt-4 d-inline-flex'>
                 <label class='col-auto control-label-notes'>$langGroupForum:</label>
                 <div class='col-auto ms-2'>
@@ -410,6 +429,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
                     </div>
                 </div>
             </div>
+            
             <div class='form-group mt-4 d-inline-flex'>
                 <label class='col-auto control-label-notes'>$langDoc:</label>
                 <div class='col-auto ms-2'>

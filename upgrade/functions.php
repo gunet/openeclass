@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.14
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -24,65 +24,6 @@
  */
 
 
-/**
- * @brief function to update a field in a table
- * @param $table
- * @param $field
- * @param $field_name
- * @param $id_col
- * @param $id
- */
-function update_field($table, $field, $field_name, $id_col, $id) {
-    $id = quote($id);
-    $sql = "UPDATE `$table` SET `$field` = '$field_name' WHERE `$id_col` = $id;";
-    Database::get()->query($sql);
-}
-
-/**
- * @brief add field $field to table $table of current database, if it doesn't already exist
- * @param $table
- * @param $field
- * @param $type
- */
-function add_field($table, $field, $type) {
-    global $langToTable, $langAddField, $BAD;
-
-    $fields = Database::get()->queryArray("SHOW COLUMNS FROM $table LIKE '$field'");
-    if (count($fields) == 0) {
-        if (!Database::get()->query("ALTER TABLE `$table` ADD `$field` $type")) {
-            $retString = "$langAddField <b>$field</b> $langToTable <b>$table</b>: ";
-            $retString .= " $BAD<br>";
-            Debug::message($retString, Debug::ERROR);
-        }
-    }
-}
-
-function add_field_after_field($table, $field, $after_field, $type) {
-    global $langToTable, $langAddField, $langAfterField, $BAD;
-
-    $fields = Database::get()->queryArray("SHOW COLUMNS FROM $table LIKE '$field'");
-    if (count($fields) == 0) {
-        if (!Database::get()->query("ALTER TABLE `$table` ADD COLUMN `$field` $type AFTER `$after_field`")) {
-            $retString = "$langAddField <b>$field</b> $langAfterField <b>$after_field</b> $langToTable <b>$table</b>: ";
-            $retString .= " $BAD<br>";
-            Debug::message($retString, Debug::ERROR);
-        }
-    }
-}
-
-function rename_field($table, $field, $new_field, $type) {
-    global $langToA, $langRenameField, $langToTable, $BAD;
-
-    $fields = Database::get()->queryArray("SHOW COLUMNS FROM $table LIKE '$new_field'");
-    if (count($fields) == 0) {
-        if (!Database::get()->query("ALTER TABLE `$table` CHANGE  `$field` `$new_field` $type")) {
-            $retString = "$langRenameField <b>$field</b> $langToA <b>$new_field</b> $langToTable <b>$table</b>: ";
-            $retString .= " $BAD<br>";
-            Debug::message($retString, Debug::ERROR);
-        }
-    }
-}
-
 function delete_field($table, $field) {
     global $langOfTable, $langDeleteField, $BAD;
 
@@ -99,25 +40,6 @@ function delete_table($table) {
 
     if (!Database::get()->query("DROP TABLE IF EXISTS $table")) {
         $retString = "$langDeleteTable <b>$table</b>: ";
-        $retString .= " $BAD<br>";
-        Debug::message($retString, Debug::ERROR);
-    }
-}
-
-function merge_tables($table_destination, $table_source, $fields_destination, $fields_source) {
-    global $langMergeTables, $BAD;
-
-    $query = "INSERT INTO $table_destination (";
-    foreach ($fields_destination as $val) {
-        $query.=$val . ",";
-    }
-    $query = substr($query, 0, -1) . ") SELECT ";
-    foreach ($fields_source as $val) {
-        $query.=$val . ",";
-    }
-    $query = substr($query, 0, -1) . " FROM " . $table_source;
-    if (!Database::get()->query($query)) {
-        $retString = " $langMergeTables <b>$table_destination</b>,<b>$table_source</b>";
         $retString .= " $BAD<br>";
         Debug::message($retString, Debug::ERROR);
     }
@@ -2525,6 +2447,10 @@ function upgrade_to_3_14($tbl_options) : void {
     if (DBHelper::fieldExists('course', 'finish_date')) {
         Database::get()->query("UPDATE course SET finish_date=NULL");
         Database::get()->query("ALTER TABLE course CHANGE finish_date end_date DATE DEFAULT NULL");
+    }
+
+    if (!DBHelper::fieldExists('group_properties', 'public_users_list')) {
+        Database::get()->query("ALTER TABLE `group_properties`ADD `public_users_list` tinyint NOT NULL DEFAULT '1'");
     }
 }
 
