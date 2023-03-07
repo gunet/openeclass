@@ -150,7 +150,7 @@ require_once 'include/lib/references.class.php';
                 $q .= " UNION ";
             }
             $dc = str_replace('start','ex.end_date',$datecond);
-            $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + '00:00', '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
+            $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + '00:00', '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',ex.end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
                     . "FROM exercise ex "
                     . "WHERE ex.course_id =?d "
                     . $dc;
@@ -772,7 +772,7 @@ require_once 'include/lib/references.class.php';
             $q_extra = "AND ex.active = 1";
         }
         $dc = str_replace('start','ex.end_date',$datecond);
-        $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
+        $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',ex.end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
                 . "FROM exercise ex JOIN course c ON ex.course_id=c.id "
                 . "WHERE ex.course_id =?d $q_extra"
                 . $dc;
