@@ -504,6 +504,7 @@ if (isset($_POST['formSent'])) {
         }
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $totalScore = $objExercise->calculate_total_score($eurid);
+        $exerciseFeedback = $objExercise->selectFeedback();
 
         if ($objExercise->isRandom() or $objExercise->hasQuestionListWithRandomCriteria()) {
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
@@ -541,7 +542,11 @@ if (isset($_POST['formSent'])) {
         if ($time_expired) {
             Session::Messages($langExerciseExpiredTime);
         } else {
-            Session::Messages($langExerciseCompleted, 'alert-success');
+            if (!empty($exerciseFeedback)) {
+                Session::Messages($exerciseFeedback, 'alert-success');
+            } else{
+                Session::Messages($langExerciseCompleted, 'alert-success');
+            }
         }
         if (isset($_REQUEST['unit'])) {
             redirect_to_home_page('modules/units/view.php?course='.$course_code.'&eurId='.$eurid.'&res_type=exercise_results&unit='.$_REQUEST['unit']);

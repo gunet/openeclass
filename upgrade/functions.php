@@ -2450,6 +2450,10 @@ function upgrade_to_3_14($tbl_options) : void {
     if (!DBHelper::fieldExists('group_properties', 'public_users_list')) {
         Database::get()->query("ALTER TABLE `group_properties`ADD `public_users_list` tinyint NOT NULL DEFAULT '1'");
     }
+
+    if (!DBHelper::fieldExists('exercise', 'general_feedback')) {
+        Database::get()->query("ALTER TABLE `exercise` ADD `general_feedback` TEXT CHARACTER SET utf8mb4 COLLATE 'utf8mb4_unicode_520_ci' NULL");
+    }
 }
 
 /**
