@@ -1020,8 +1020,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         if (isset($manifestData['packageDesc'])) {
             $lpComment = $manifestData['packageDesc'];
         } else {
-            $lpComment = $langDefaultLearningPathComment;
             array_push($okMsgs, $langOkDefaultCommentUsed);
+            $lpComment = '';
         }
 
         Database::get()->query("UPDATE `lp_learnPath`
