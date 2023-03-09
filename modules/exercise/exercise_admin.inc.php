@@ -72,6 +72,7 @@ if (isset($_POST['submitExercise'])) {
         $exerciseTitle = trim($_POST['exerciseTitle']);
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($_POST['exerciseDescription']);
+        $objExercise->updateFeedback($_POST['exerciseFeedback']);
         $objExercise->updateType($_POST['exerciseType']);
         $objExercise->updateRange($_POST['exerciseRange']);
         if (isset($_POST['exerciseIPLock'])) {
@@ -121,6 +122,7 @@ if (isset($_POST['submitExercise'])) {
     $exerciseId = $objExercise->selectId();
     $exerciseTitle = Session::has('exerciseTitle') ? Session::get('exerciseTitle') : $objExercise->selectTitle();
     $exerciseDescription = Session::has('exerciseDescription') ? Session::get('exerciseDescription') : $objExercise->selectDescription();
+    $exerciseFeedback = Session::has('exerciseFeedback') ? Session::get('exerciseFeedback') : $objExercise->selectFeedback();
     $exerciseType = Session::has('exerciseType') ? Session::get('exerciseType') : $objExercise->selectType();
     $exerciseRange = Session::has('exerciseRange') ? Session::get('exerciseRange') : $objExercise->selectRange();
     //more population need to be done
@@ -332,6 +334,15 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                    " . rich_text_editor('exerciseDescription', 4, 30, $exerciseDescription) . "
                    </div>
                  </div>
+
+                 <div class='row form-group mt-4'>
+                   <label for='exerciseFeedback' class='col-md-3 col-12 control-label-notes mb-1'>$langExerciseFeedback:</label>
+                   <div class='col-md-9 col-12'>
+                       " . rich_text_editor('exerciseFeedback', 4, 30, $exerciseFeedback) . "
+                       <span class='help-block col-sm-offset-2 col-sm-10'>$langExerciseFeedbackInfo</span>
+                       </div>
+                 </div>
+                 
                  <div class='row form-group mt-4'>
                      <label for='exerciseDescription' class='col-md-3 col-12 control-label-notes mb-1'>$langViewShow:</label>
                      <div class='col-md-9 col-12'>

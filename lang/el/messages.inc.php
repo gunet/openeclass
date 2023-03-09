@@ -1953,8 +1953,9 @@ $langQuestionPoolPurge = "Διαγραφή αχρησιμοποίητων ερω
 $langConfirmQuestionPoolPurge = "Οι ερωτήσεις που δεν χρησιμοποιούνται σε καμμία άσκηση θα διαγραφούν.";
 $langQuestionPoolPurgeSuccess = "Η διαγραφή των αχρησιμοποίητων ερωτήσεων από την τράπεζα ερωτήσεων πραγματοποιήθηκε.";
 $langShuffleQuestions = "Ανακάτεμα όλων των ερωτήσεων";
-$langShuffleQuestions = "Ανακάτεμα όλων των ερωτήσεων";
 $langClear = 'Εκκαθάριση';
+$langExerciseFeedback = "Κείμενο Ολοκλήρωσης";
+$langExerciseFeedbackInfo = "εμφανίζεται μετά την ολοκλήρωση της άσκησης";
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
@@ -2728,8 +2729,8 @@ $langModulesPoolToolName = "Σύνολο ενοτήτων";
 $langMyCourses = "Τα $langsCourses μου";
 $langNeverBrowsed = "Δεν έχει ολοκληρωθεί";
 $langNewLabel = "Δημιουργία νέου κεφαλαίου";
-$langLabel = "Eτικέτα";
-$langLabel2 = "Eτικέτας";
+$langLabel = "Ετικέτα";
+$langLabel2 = "Ετικέτας";
 $langNext = "Επόμενο";
 $langNextPage = "Επόμενη Σελίδα";
 $langNoEmail = "Δεν έχει οριστεί email";
