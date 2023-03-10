@@ -504,6 +504,7 @@ if (isset($_POST['formSent'])) {
         }
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $totalScore = $objExercise->calculate_total_score($eurid);
+        $exerciseFeedback = $objExercise->selectFeedback();
 
         if ($objExercise->isRandom() or $objExercise->hasQuestionListWithRandomCriteria()) {
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
@@ -541,7 +542,11 @@ if (isset($_POST['formSent'])) {
         if ($time_expired) {
             Session::Messages($langExerciseExpiredTime);
         } else {
-            Session::Messages($langExerciseCompleted, 'alert-success');
+            if (!empty($exerciseFeedback)) {
+                Session::Messages($exerciseFeedback, 'alert-success');
+            } else{
+                Session::Messages($langExerciseCompleted, 'alert-success');
+            }
         }
         if (isset($_REQUEST['unit'])) {
             redirect_to_home_page('modules/units/view.php?course='.$course_code.'&eurId='.$eurid.'&res_type=exercise_results&unit='.$_REQUEST['unit']);
@@ -733,9 +738,7 @@ if ($questionList) {
 
 // "Temporary save" button
 if ($uid and $exerciseTempSave) {
-    $tempSaveButton = "<div class='exercise-action-buttons'>
-        <input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>
-        </div>";
+    $tempSaveButton = "<input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>";
 } else {
     $tempSaveButton = '';
 }
@@ -752,25 +755,23 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
                 .exercise-nav-buttons { text-align: center !important; }
                 .exercise-action-buttons { width: 100%; }
             }
-            .exercise-nav-buttons, .exercise-action-buttons { margin-top: 15px; }
-            .exercise-nav-buttons .btn, .exercise-action-buttons .btn { margin: 0 5px; }
-            .exercise-nav-buttons { float: right; text-align: right; }
-            .exercise-action-buttons { float: left; }
+            .exercise-action-buttons { margin-top: 60px; }
+            .exercise-action-buttons { float: right; }
+            .exercise-action-buttons .btn { margin: 0 5px; }
         </style>";
 
-    $tool_content .= '<div class="exercise-nav-buttons">';
+    $tool_content .= "<div class='exercise-nav-buttons col-md-12'>";
     $prevLabel = '&lt; ' . $langPrevious;
     $nextLabel = $langNext . ' &gt';
     if ($exerciseType == MULTIPLE_PAGE_TYPE and $questionId != $questionList[1]) { // `prev` button
-        $tool_content .= "<input class='btn btn-primary blockUI navbutton' style='margin-right: 10px;' type='submit' name='prev' value='$prevLabel'>";
+        $tool_content .= "<input class='btn btn-primary blockUI navbutton' style='float: left;' type='submit' name='prev' value='$prevLabel'>";
     }
     if ($questionId != end($questionList)) { // `next` button
-        $tool_content .= "<input class='btn btn-primary blockUI navbutton' type='submit' value='$nextLabel'>";
+        $tool_content .= "<input class='btn btn-primary blockUI navbutton' style='float: right;' type='submit' value='$nextLabel'>";
     } else {
         $isFinalQuestion = 'true';
     }
-    $tool_content .= '</div>' . $tempSaveButton;
-    $tempSaveButton = '';
+    $tool_content .= "</div>";
 } else {
     $head_content .= "<style>
             @media only screen and (max-width: 460px) {
@@ -781,7 +782,6 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
             .exercise-action-buttons { float: right; }
         </style>";
 }
-
 $tool_content .= "<div class='exercise-action-buttons'>";
 
 // "Cancel" button
@@ -793,7 +793,7 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
     $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
 }
 
-$tool_content .= "</div>" . $tempSaveButton;
+$tool_content .= $tempSaveButton . "</div>";
 
 $tool_content .= "</form>";
 

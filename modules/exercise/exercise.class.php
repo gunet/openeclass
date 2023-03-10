@@ -36,9 +36,7 @@ if (file_exists('include/log.class.php')) {
 if (!class_exists('Exercise')) {
 
     /**
-     * This class allows to instantiate an object of type Exercise
-     *
-     * @author - Olivier Brouckaert
+     * @brief This class allows to instantiate an object of type Exercise
      */
     class Exercise
     {
@@ -46,6 +44,7 @@ if (!class_exists('Exercise')) {
         private $id;
         private $exercise;
         private $description;
+        private $general_feedback;
         private $type;
         private $range;
         private $startDate;
@@ -74,6 +73,7 @@ if (!class_exists('Exercise')) {
             $this->id = 0;
             $this->exercise = '';
             $this->description = '';
+            $this->general_feedback = '';
             $this->type = MULTIPLE_PAGE_TYPE;
             $this->range = 0;
             $this->startDate = date("Y-m-d H:i:s");
@@ -102,19 +102,21 @@ if (!class_exists('Exercise')) {
          * @return - boolean - true if exercise exists, otherwise false
          * @author - Olivier Brouckaert
          */
-        function read($id)
+        public function read($id)
         {
             global $course_id;
 
-            $object = Database::get()->querySingle("SELECT title, description, type, `range`, start_date, end_date, temp_save, time_constraint,
-            attempts_allowed, random, shuffle, active, public, results, score, ip_lock, password_lock, assign_to_specific, calc_grade_method, continue_time_limit
-            FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
+            $object = Database::get()->querySingle("SELECT title, description, general_feedback, type, `range`, start_date, end_date, temp_save, time_constraint,
+                                                    attempts_allowed, random, shuffle, active, public, results, score, ip_lock, password_lock, 
+                                                    assign_to_specific, calc_grade_method, continue_time_limit
+                                                FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
             // if the exercise has been found
             if ($object) {
                 $this->id = $id;
                 $this->exercise = $object->title;
                 $this->description = $object->description;
+                $this->general_feedback = $object->general_feedback;
                 $this->type = $object->type;
                 $this->range = $object->range;
                 $this->startDate = $object->start_date;
@@ -167,7 +169,7 @@ if (!class_exists('Exercise')) {
          * @return - integer - exercise ID
          * @author - Olivier Brouckaert
          */
-        function selectId()
+        public function selectId()
         {
             return $this->id;
         }
@@ -178,7 +180,7 @@ if (!class_exists('Exercise')) {
          * @return - string - exercise title
          * @author - Olivier Brouckaert
          */
-        function selectTitle()
+        public function selectTitle()
         {
             return $this->exercise;
         }
@@ -189,20 +191,27 @@ if (!class_exists('Exercise')) {
          * @param string $value
          * @author Sebastien Piraux <pir@cerdecam.be>
          */
-        function setTitle($value)
+        public function setTitle($value)
         {
             $this->exercise = trim($value);
         }
 
         /**
-         * returns the exercise description
-         *
-         * @return - string - exercise description
+         * @brief returns the exercise description
          * @author - Olivier Brouckaert
          */
-        function selectDescription()
+        public function selectDescription()
         {
             return $this->description;
+        }
+
+        /**
+         * @brief returns exercise feedback
+         * @return mixed
+         */
+        public function selectFeedback()
+        {
+            return $this->general_feedback;
         }
 
         /**
@@ -211,7 +220,7 @@ if (!class_exists('Exercise')) {
          * @param string $value
          * @author Sebastien Piraux <pir@cerdecam.be>
          */
-        function setDescription($value)
+        public function setDescription($value)
         {
             $this->description = trim($value);
         }
@@ -220,7 +229,7 @@ if (!class_exists('Exercise')) {
          *
          * @return total weighting of an exercise
          */
-        function selectTotalWeighting()
+        public function selectTotalWeighting()
         {
             return $this->totalweight;
         }
@@ -231,81 +240,81 @@ if (!class_exists('Exercise')) {
          * @return - integer - exercise type
          * @author - Olivier Brouckaert
          */
-        function selectType()
+        public function selectType()
         {
             return $this->type;
         }
 
-        function selectRange()
+        public function selectRange()
         {
             return $this->range;
         }
 
-        function selectStartDate()
+        public function selectStartDate()
         {
             return $this->startDate;
         }
 
-        function selectEndDate()
+        public function selectEndDate()
         {
             return $this->endDate;
         }
 
-        function selectTempSave()
+        public function selectTempSave()
         {
             return $this->tempSave;
         }
 
-        function selectTimeConstraint()
+        public function selectTimeConstraint()
         {
             return $this->timeConstraint;
         }
 
-        function selectAttemptsAllowed()
+        public function selectAttemptsAllowed()
         {
             return $this->attemptsAllowed;
         }
 
-        function selectResults()
+        public function selectResults()
         {
             return $this->results;
         }
 
-        function selectScore()
+        public function selectScore()
         {
             return $this->score;
         }
 
-        function selectIPLock()
+        public function selectIPLock()
         {
             return $this->ip_lock;
         }
 
-        function selectPasswordLock()
+        public function selectPasswordLock()
         {
             return $this->password_lock;
         }
 
-        function selectAssignToSpecific()
+        public function selectAssignToSpecific()
         {
             return $this->assign_to_specific;
         }
 
-        function getCalcGradeMethod()
+        public function getCalcGradeMethod()
         {
             return $this->calc_grade_method;
         }
-        function continueTimeLimit()
+        public function continueTimeLimit()
         {
             return $this->continueTimeLimit;
         }
 
-        function isRandom()
+        public function isRandom()
         {
             return $this->random;
         }
 
-        function selectShuffle()
+        public function selectShuffle()
         {
             return $this->shuffle;
         }
@@ -316,7 +325,7 @@ if (!class_exists('Exercise')) {
          * @return - boolean - true if enabled, otherwise false
          * @author - Olivier Brouckaert
          */
-        function selectStatus()
+        public function selectStatus()
         {
             return $this->active;
         }
@@ -327,9 +336,8 @@ if (!class_exists('Exercise')) {
          * @return - array - question ID list
          * @author - Olivier Brouckaert
          */
-        function selectQuestionList()
+        public function selectQuestionList()
         {
-
             return $this->questionList;
         }
 
@@ -338,7 +346,7 @@ if (!class_exists('Exercise')) {
          * @brief get questions (with dynamic criteria or not)
          * @return - array with question is
          */
-        function selectQuestions()
+        public function selectQuestions()
         {
 
             $q = array(); // temp array
@@ -389,7 +397,7 @@ if (!class_exists('Exercise')) {
          * @param $difficulty
          * @return array
          */
-        function selectQuestionListWithDifficulty($number, $difficulty)
+        public function selectQuestionListWithDifficulty($number, $difficulty)
         {
 
             global $course_id;
@@ -417,7 +425,7 @@ if (!class_exists('Exercise')) {
          * @param $category
          * @return array
          */
-        function selectQuestionListWithCategory($number, $category)
+        public function selectQuestionListWithCategory($number, $category)
         {
 
             global $course_id;
@@ -447,7 +455,7 @@ if (!class_exists('Exercise')) {
          * @param $category
          * @return array
          */
-        function selectQuestionListWithDifficultyAndCategory($number, $difficulty, $category)
+        public function selectQuestionListWithDifficultyAndCategory($number, $difficulty, $category)
         {
 
             global $course_id;
@@ -477,7 +485,7 @@ if (!class_exists('Exercise')) {
          * @return - integer - number of questions
          * @author - Olivier Brouckaert
          */
-        function selectNbrQuestions()
+        public function selectNbrQuestions()
         {
             return sizeof($this->questionList);
         }
@@ -486,7 +494,7 @@ if (!class_exists('Exercise')) {
          * @brief shuffle questions
          * @return array
          */
-        function selectShuffleQuestions()
+        public function selectShuffleQuestions()
         {
 
             $questions = $this->questionList;
@@ -506,7 +514,7 @@ if (!class_exists('Exercise')) {
          * @brief checks if exercise has questions with random criteria
          * @return bool
          */
-        function hasQuestionListWithRandomCriteria()
+        public function hasQuestionListWithRandomCriteria()
         {
             $result = Database::get()->queryArray("SELECT random_criteria FROM exercise_with_questions
                                             WHERE exercise_id = ?d", $this->id);
@@ -526,7 +534,7 @@ if (!class_exists('Exercise')) {
          * @return - boolean - true if in the list, otherwise false
          * @author - Olivier Brouckaert
          */
-        function isInList($questionId)
+        public function isInList($questionId)
         {
             return in_array($questionId, $this->questionList);
         }
@@ -537,7 +545,7 @@ if (!class_exists('Exercise')) {
          * @param - string $title - exercise title
          * @author - Olivier Brouckaert
          */
-        function updateTitle($title)
+        public function updateTitle($title)
         {
             $this->exercise = $title;
         }
@@ -548,63 +556,67 @@ if (!class_exists('Exercise')) {
          * @param - string $description - exercise description
          * @author - Olivier Brouckaert
          */
-        function updateDescription($description)
+        public function updateDescription($description)
         {
             $this->description = $description;
         }
 
+        public function updateFeedback($feedback)
+        {
+            $this->general_feedback = $feedback;
+        }
         /**
          * changes the exercise type
          *
          * @param - integer $type - exercise type
          * @author - Olivier Brouckaert
          */
-        function updateType($type)
+        public function updateType($type)
         {
             $this->type = $type;
         }
 
-        function updateRange($range)
+        public function updateRange($range)
         {
             $this->range = $range;
         }
 
-        function updateStartDate($startDate)
+        public function updateStartDate($startDate)
         {
             $this->startDate = $startDate;
         }
 
-        function updateEndDate($endDate)
+        public function updateEndDate($endDate)
         {
             $this->endDate = $endDate;
         }
 
-        function updateTempSave($tempSave)
+        public function updateTempSave($tempSave)
         {
             $this->tempSave = $tempSave;
         }
 
-        function updateTimeConstraint($timeConstraint)
+        public function updateTimeConstraint($timeConstraint)
         {
             $this->timeConstraint = $timeConstraint;
         }
 
-        function updateAttemptsAllowed($attemptsAllowed)
+        public function updateAttemptsAllowed($attemptsAllowed)
         {
             $this->attemptsAllowed = $attemptsAllowed;
         }
 
-        function updateResults($results)
+        public function updateResults($results)
         {
             $this->results = $results;
         }
 
-        function updateScore($score)
+        public function updateScore($score)
         {
             $this->score = $score;
         }
 
-        function updateContinueTimeLimit($minutes)
+        public function updateContinueTimeLimit($minutes)
         {
             $this->continueTimeLimit = intval($minutes);
             if ($this->continueTimeLimit < 0) {
@@ -612,27 +624,27 @@ if (!class_exists('Exercise')) {
             }
         }
 
-        function updateIPLock($ips)
+        public function updateIPLock($ips)
         {
             $this->ip_lock = (empty($ips)) ? null : $ips;
         }
 
-        function updatePasswordLock($password)
+        public function updatePasswordLock($password)
         {
             $this->password_lock = (empty($password)) ? null : $password;
         }
 
-        function setCalcGradeMethod()
+        public function setCalcGradeMethod()
         {
             $this->calc_grade_method = 1;
         }
 
-        function updateAssignToSpecific($assign_to_specific)
+        public function updateAssignToSpecific($assign_to_specific)
         {
             $this->assign_to_specific = $assign_to_specific;
         }
 
-        function assignTo($assignees)
+        public function assignTo($assignees)
         {
             Database::get()->query("DELETE FROM exercise_to_specific WHERE exercise_id = ?d", $this->id);
             if ($this->assign_to_specific && !empty($assignees)) {
@@ -649,32 +661,30 @@ if (!class_exists('Exercise')) {
         }
 
 
-        function setRandom($random)
+        public function setRandom($random)
         {
             $this->random = $random;
         }
 
-        function setShuffle($shuffle)
+        public function setShuffle($shuffle)
         {
             $this->shuffle = $shuffle;
         }
 
         /**
-         * enables the exercise
-         *
+         * @brief enables the exercise
          * @author - Olivier Brouckaert
          */
-        function enable()
+        public function enable()
         {
             $this->active = 1;
         }
 
         /**
-         * disables the exercise
-         *
+         * @brief disables the exercise
          * @author - Olivier Brouckaert
          */
-        function disable()
+        public function disable()
         {
             $this->active = 0;
         }
@@ -682,7 +692,7 @@ if (!class_exists('Exercise')) {
         /**
          * make exercise public
          */
-        function makepublic()
+        public function makepublic()
         {
             $this->public = 1;
         }
@@ -690,23 +700,24 @@ if (!class_exists('Exercise')) {
         /**
          * make exercise limited
          */
-        function makelimited()
+        public function makelimited()
         {
             $this->public = 0;
         }
 
         /**
-         * updates the exercise in the data base
+         * @brief updates the exercise in the database
          *
          * @author - Olivier Brouckaert
          */
-        function save()
+        public function save()
         {
             global $course_id;
 
             $id = $this->id;
             $exercise = $this->exercise;
             $description = purify($this->description);
+            $general_feedback = purify($this->general_feedback);
             $type = $this->type;
             $range = $this->range;
             $startDate = $this->startDate;
@@ -731,34 +742,35 @@ if (!class_exists('Exercise')) {
                         start_date = ?t, end_date = ?t, temp_save = ?d, time_constraint = ?d,
                         attempts_allowed = ?d, random = ?d, shuffle = ?d, active = ?d, public = ?d,
                         results = ?d, score = ?d, ip_lock = ?s, password_lock = ?s,
-                        assign_to_specific = ?d, continue_time_limit = ?d, calc_grade_method = ?d 
+                        assign_to_specific = ?d, continue_time_limit = ?d, calc_grade_method = ?d,
+                        general_feedback = ?s
                     WHERE course_id = ?d AND id = ?d",
                     $exercise, $description, $type, $range,
                     $startDate, $endDate, $tempSave, $timeConstraint,
                     $attemptsAllowed, $random, $shuffle, $active, $public,
                     $results, $score, $ip_lock, $password_lock,
-                    $assign_to_specific, $this->continueTimeLimit, $calc_grade_method,
+                    $assign_to_specific, $this->continueTimeLimit,
+                    $calc_grade_method, $general_feedback,
                     $course_id, $id)->affectedRows;
                     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
                         array('id' => $id,
                               'title' => $exercise,
                               'description' => $description));
-            } // creates a new exercise
-            else {
+            } else { // creates a new exercise
                 $this->id = Database::get()->query("INSERT INTO `exercise`
                     (course_id, title, description, type, `range`, start_date, end_date,
                      temp_save, time_constraint, attempts_allowed,
                      random, shuffle, active, results, score, ip_lock, password_lock,
-                     assign_to_specific, continue_time_limit, calc_grade_method)
-                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d, ?d)",
+                     assign_to_specific, continue_time_limit, calc_grade_method, general_feedback)
+                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d, ?d, ?s)",
                     $course_id, $exercise, $description, $type, $range, $startDate, $endDate,
                     $tempSave, $timeConstraint, $attemptsAllowed,
                     $random, $shuffle, $active, $results, $score, $ip_lock, $password_lock,
-                    $assign_to_specific, $this->continueTimeLimit, $this->calc_grade_method)->lastInsertID;
+                    $assign_to_specific, $this->continueTimeLimit, $calc_grade_method, $general_feedback)->lastInsertID;
 
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,
-                                                                                            'title' => $exercise,
-                                                                                            'description' => $description));
+                                                                              'title' => $exercise,
+                                                                              'description' => $description));
             }
 
             // updates question list
@@ -779,13 +791,12 @@ if (!class_exists('Exercise')) {
 
 
         /**
-         * adds a question into the question list
-         *
+         * @brief adds a question into the question list
          * @param - integer $questionId - question ID
          * @return - boolean - true if the question has been added, otherwise false
          * @author - Olivier Brouckaert
          */
-        function addToList($questionId)
+        public function addToList($questionId)
         {
             // checks if the question ID is not in the list
             if (!$this->isInList($questionId)) {
@@ -803,13 +814,12 @@ if (!class_exists('Exercise')) {
         }
 
         /**
-         * removes a question from the question list
-         *
+         * @brief removes a question from the question list
          * @param - integer $questionId - question ID
          * @return - boolean - true if the question has been removed, otherwise false
          * @author - Olivier Brouckaert
          */
-        function removeFromList($questionId)
+        public function removeFromList($questionId)
         {
             // searches the position of the question ID in the list
             $pos = array_search($questionId, $this->questionList);
@@ -826,12 +836,12 @@ if (!class_exists('Exercise')) {
         }
 
         /**
-         * deletes the exercise from the database
-         * Notice : leaves the question in the data base
+         * @brief  deletes the exercise from the database
+         * Notice: leaves the question in the database
          *
          * @author - Olivier Brouckaert
          */
-        function delete()
+        public function delete()
         {
             global $course_id;
 
@@ -849,7 +859,7 @@ if (!class_exists('Exercise')) {
         /**
          * @brief keeps record of user answers
          */
-        function record_answers($choice, $exerciseResult, $record_type = 'insert')
+        public function record_answers($choice, $exerciseResult, $record_type = 'insert')
         {
 
             $action = $record_type . '_answer_records';
@@ -887,7 +897,7 @@ if (!class_exists('Exercise')) {
          *
          * @param integer $question_id
          */
-        function getAnswerPosition($question_id)
+        private function getAnswerPosition($question_id)
         {
             $attempt_value = $_POST['attempt_value'];
             return 1 + array_search($question_id,
@@ -899,7 +909,7 @@ if (!class_exists('Exercise')) {
          * @param $eurid
          * @return array
          */
-        function get_attempt_results_array($eurid)
+        public function get_attempt_results_array($eurid)
         {
             $exerciseResult = array();
             $results = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND is_answered <> 0 ORDER BY q_position", $eurid);
@@ -929,7 +939,7 @@ if (!class_exists('Exercise')) {
          * (Used for sequential exercises on time expiration
          * and when student wants to temporary save his answers)
          */
-        function save_unanswered($as_answered = 0)
+        public function save_unanswered($as_answered = 0)
         {
             $id = $this->id;
             $attempt_value = $_POST['attempt_value'];
@@ -1176,9 +1186,9 @@ if (!class_exists('Exercise')) {
         }
 
         /**
-         * Purge exercise user results
+         * @brief Purge exercise user results
          */
-        function purge()
+        public function purge()
         {
             global $course_id;
             $id = $this->id;
@@ -1195,9 +1205,12 @@ if (!class_exists('Exercise')) {
         }
 
         /**
-         * Purge exercise user attempt
+         * @brief Purge exercise user attempt
+         * @param $id
+         * @param $eurid
+         * @return void
          */
-        function purgeAttempt($id, $eurid)
+        public function purgeAttempt($id, $eurid)
         {
             global $course_id;
 
@@ -1215,7 +1228,7 @@ if (!class_exists('Exercise')) {
          * @brief modify attempt status
          * @param $eurid
          */
-        function modifyAttempt($eurid, $status)
+        public function modifyAttempt($eurid, $status)
         {
             global $course_id;
 
@@ -1233,7 +1246,7 @@ if (!class_exists('Exercise')) {
         /**
          * Clone an Exercise
          */
-        function duplicate()
+        public function duplicate()
         {
             global $langCopy2, $course_id, $course_code;
 
@@ -1312,7 +1325,7 @@ if (!class_exists('Exercise')) {
          * @brief run UPDATE queries for each item of the output
          * @param type $correction_output
          */
-        function distribution($correction_output)
+        public function distribution($correction_output)
         {
 
             $id = $this->id;
@@ -1336,7 +1349,7 @@ if (!class_exists('Exercise')) {
         /**
          * @brief run UPDATE queries for each eurid
          */
-        function cancelDistribution()
+        public function cancelDistribution()
         {
 
             $TotalExercises = Database::get()->queryArray("SELECT eurid
@@ -1352,7 +1365,7 @@ if (!class_exists('Exercise')) {
          * @param $total_score
          * @return float
          */
-        function canonicalize_exercise_score($user_score, $total_score)
+        public function canonicalize_exercise_score($user_score, $total_score)
         {
             if ($this->range > 0 && $total_score > 0) {
                 $score = round(($user_score / $total_score) * $this->range, 2);
@@ -1367,7 +1380,7 @@ if (!class_exists('Exercise')) {
          * @param $eurid
          * @return float|int
          */
-        function calculate_total_score($eurid)
+        public function calculate_total_score($eurid)
         {
 
             $total_score1 = $total_score2 = 0;

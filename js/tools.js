@@ -445,7 +445,7 @@ function exercise_init_countdown(params) {
                 buttons: {
                     goBack: {
                         label: params.goBack,
-                        className: 'btn-success',
+                        className: 'btn-default',
                         callback: function () {
                             finishClicked = false;
                             var moveTo = $('#qPanel' + firstUnanswered);
@@ -458,7 +458,7 @@ function exercise_init_countdown(params) {
                     },
                     submit: {
                         label: finishClicked? params.finalSubmit: params.submit,
-                        className: (params.checkSinglePage && !params.isFinalQuestion && !finishClicked)? 'btn-primary': 'btn-warning',
+                        className: (params.checkSinglePage && !params.isFinalQuestion && !finishClicked)? 'btn-primary': 'btn-success',
                         callback: function () {
                             if (finishClicked || !params.checkSinglePage || params.isFinalQuestion) {
                                 $('<input type="hidden" name="buttonFinish" value="true">').appendTo('.exercise');
