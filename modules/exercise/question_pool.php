@@ -414,7 +414,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
             $editUrl = "{$urlAppend}modules/exercise/admin.php?course=$course_code&amp;modifyAnswers={$row->id}";
             $tool_content .= "
                 <td>
-                  <div class='float-end small not_visible'>{$row->id}</div>
+                  <div class='float-end small not_visible'>id: {$row->id}</div>
                   <a class='$class' data-qid='{$row->id}' data-nbr='$nbr' data-editurl='$editUrl' href='admin.php?course=$course_code&amp;modifyAnswers={$row->id}&amp;fromExercise=$fromExercise'>$question_title</a>
                   <br>
                   <small>$question_type_legend $question_difficulty_legend $question_category_legend $exercises_used_in</small>

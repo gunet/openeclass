@@ -109,7 +109,7 @@ foreach ($possible_qids as $qid) {
     $question = new Question();
     $question->read($qid);
     $question_id = $question->selectId();
-    $headers[] = $question->selectTitle();
+    $headers[] = $question->selectTitle() . " (id: " . $question_id . ")";
     $headers[] = "$langGradebookGrade ($langMax: ". $question->selectWeighting() . ")";
 }
 $headers[] = $langTotalScore;
