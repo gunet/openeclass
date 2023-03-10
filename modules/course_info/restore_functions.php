@@ -824,8 +824,11 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         // Blog
         if (file_exists("$restoreThis/blog_post")) {
-            $blog_map = restore_table($restoreThis, 'blog_post', array('set' => array('course_id' => $new_course_id),
-            'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+            $blog_map = restore_table($restoreThis, 'blog_post', [
+                'set' => ['course_id' => $new_course_id],
+                'map' => ['user_id' => $userid_map],
+                'return_mapping' => 'id',
+            ], $url_prefix_map, $backupData, $restoreHelper);
         } else {
             $blog_map = array();
         }
@@ -1707,6 +1710,9 @@ function document_map_function(&$data, $maps) {
     }
     if (!isset($data['extra_path'])) {
         $data['extra_path'] = '';
+    }
+    if (!$data['author']) {
+        $data['author'] = '';
     }
     return true;
 }
