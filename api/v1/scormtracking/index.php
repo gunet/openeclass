@@ -28,6 +28,8 @@ function get_scorm_details($path) {
 }
 
 function api_method($access) {
+    global $course_id;
+
     $scorms = [];
     $users = [];
     if (!$access->isValid) {
@@ -70,7 +72,9 @@ function api_method($access) {
     if (!isset($course) and isset($course_code)) {
         $course = Database::get()->querySingle('SELECT id FROM course WHERE code = ?s', $course_code);
     }
-    if (isset($_GET['group_id'])) {
+    if (isset($_GET['user_id'])) {
+        $users = [$_GET['user_id']];
+    } elseif (isset($_GET['group_id'])) {
         $group_members = Database::get()->queryArray('SELECT user_id FROM group_members
             WHERE group_id = ?d AND is_tutor = 0', $_GET['group_id']);
         if (!$group_members) {

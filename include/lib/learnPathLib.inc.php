@@ -575,7 +575,7 @@ function get_learnPath_progress_details($lpid, $lpUid): array {
     global $course_id;
 
     // find progression for this user in each module of the path
-    $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS, UMP.`total_time`, 
+    $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS, UMP.`total_time`,
                    UMP.`started`, UMP.`accessed`, UMP.`attempt`
              FROM `lp_learnPath` AS LP,
                   `lp_rel_learnPath_module` AS LPM,
