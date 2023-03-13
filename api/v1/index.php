@@ -19,7 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-require_once '../../include/baseTheme.php';
+if (!defined('COURSE_OPEN')) {
+    require_once '../../include/baseTheme.php';
+}
 require_once 'api/v1/access.class.php';
 require_once 'include/log.class.php';
 
