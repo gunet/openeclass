@@ -1013,7 +1013,7 @@ if ($course_info->view_type == 'activity') {
         $tool_content .= "<a href='$link' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langAddUnit'>
               <span class='fa fa-plus-circle'></span><span class='hidden'>.</span></a>";
     }
-	if($q->flipped_flag==2 and $is_editor){
+    if ($q->flipped_flag==2 and $is_editor) {
         $edit_flipped = $urlAppend . "modules/create_course/edit_flipped_classroom.php?course=$course_code";
         $tool_content .= "<a href='$edit_flipped' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langFlippedEdit'>
         <span class='fa fa-pencil'></span><span class='hidden'>.</span></a>";

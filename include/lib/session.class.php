@@ -242,7 +242,15 @@ class Session {
         $item_messages = $_SESSION['messages'];
         $msg_boxes = '';
         foreach($item_messages as $class => $value){
-            $msg_boxes .= "<div class='alert $class'><ul><li>".(is_array($value) ? implode('</li><li>', $value) : $value)."</li></ul></div>";
+            if ($class == 'alert-success') {
+                $icon = 'fa-check-circle';
+            } elseif ($class == 'alert-danger') {
+                $icon = 'fa-exclamation-triangle';
+            } else {
+                $icon = 'fa-info-circle';
+            }
+            $msg_boxes .= "<div class='alert $class' style='display: flex; align-items: center;'><div style='margin-right: 15px'><span class='fa $icon fa-2x'></span></div><div>" .
+                (is_array($value) ? (count($value) > 1? ('<ul><li>' . implode('</li><li>', $value) . '</li></ul>'): $value[0]) : $value)."</div></div>";
         }
         unset($_SESSION['messages']);
         if (isset($_SESSION['flash_new'])) {
