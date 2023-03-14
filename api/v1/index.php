@@ -25,6 +25,10 @@ if (!defined('COURSE_OPEN')) {
 require_once 'api/v1/access.class.php';
 require_once 'include/log.class.php';
 
+if (!get_config('ext_apitoken_enabled')) {
+    Access::error(999, 'The Open eClass API is disabled');
+}
+
 $token = Access::getToken();
 
 if ($token) {
