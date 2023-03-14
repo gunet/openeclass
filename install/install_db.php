@@ -182,6 +182,7 @@ $db->query("CREATE TABLE `course` (
   `prof_names` VARCHAR(255) NOT NULL DEFAULT '',
   `public_code` VARCHAR(100) NOT NULL DEFAULT '',
   `created` DATETIME NOT NULL,
+  `updated` DATETIME NULL,
   `doc_quota` FLOAT NOT NULL default '104857600',
   `video_quota` FLOAT NOT NULL default '104857600',
   `group_quota` FLOAT NOT NULL default '104857600',
