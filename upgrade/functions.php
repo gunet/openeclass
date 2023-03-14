@@ -2449,6 +2449,10 @@ function upgrade_to_3_14($tbl_options) : void {
         Database::get()->query("ALTER TABLE course CHANGE finish_date end_date DATE DEFAULT NULL");
     }
 
+    if (!DBHelper::fieldExists('course', 'updated')) {
+        Database::get()->querySingle("ALTER TABLE `course`ADD `updated` datetime NULL AFTER `created`");
+    }
+
     if (!DBHelper::fieldExists('group_properties', 'public_users_list')) {
         Database::get()->query("ALTER TABLE `group_properties`ADD `public_users_list` tinyint NOT NULL DEFAULT '1'");
     }
