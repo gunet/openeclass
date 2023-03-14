@@ -63,7 +63,7 @@ if (isset($_GET['eurId'])) {
     $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id, q_position FROM exercise_answer_record WHERE eurid = ?d ORDER BY q_position", $eurid);
     if (!$exercise_user_record) {
         // No record matches with this exercise user record id
-        Session::flash('message',$langExerciseNotFound); 
+        Session::flash('message',$langExerciseNotFound);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
@@ -242,12 +242,14 @@ if (isset($_REQUEST['unit'])) {
     ]);
 }
 
-$tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>";
+$tool_content .= "<div class='col-sm-12'><div class='alert alert-info text-center'>";
+
 if ($user) { // user details
-    $tool_content .= q($user->surname) . " " . q($user->givenname);
+    $tool_content .= "<span class='panel-title'>" . q($user->surname) . " " . q($user->givenname);
     if ($user->am) {
-        $tool_content .= " ($langAm: " . q($user->am) . ")";
+        $tool_content .= " ($langAmShort: " . q($user->am) . ")";
     }
+    $tool_content .= "</span>";
 }
 
 $message_range = '';
@@ -258,12 +260,12 @@ if ($exerciseRange > 0) { // exercise grade range (if any)
 }
 
 if ($showScore) {
-    $tool_content .= "<h6>$langYourTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</h6>";
+    $tool_content .= "<h4 class='panel-title' style='margin-top: 10px;'>$langYourTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</h4>";
 }
 $tool_content .= "
-    <h6>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em></h6>
-    <h6>$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h6>" .
-    ($user && $exerciseAttemptsAllowed ? "<h6>$langAttempt: <em>{$exercise_user_record->attempt}</em></h6>" : '') . "
+    <h5 style='margin-top: 20px;'>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em>
+    $langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>" .
+    ($user && $exerciseAttemptsAllowed ? "<h5>$langAttempt: <em>{$exercise_user_record->attempt}</em></h5>" : '') . "
   </div></div>";
 
 $tool_content .= "<div class='col-sm-12'><div class='panel panel-default'>
@@ -626,7 +628,7 @@ if (count($exercise_question_ids) > 0) {
 
         if (!is_null($questionFeedback)) {
             $tool_content .= "<tr><td colspan='2'>";
-            $tool_content .= "<div style='margin-top: 10px;'><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
+            $tool_content .= "<div style='margin-top: 10px; background-color:lightyellow;'><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
             $tool_content .= "</td></tr>";
         }
 
@@ -707,7 +709,7 @@ if ($regrade) {
         $max_arid = Database::get()->querySingle("SELECT MAX(answer_record_id) AS max_arid FROM exercise_answer_record WHERE eurid=?d AND question_id=?d", $eurid, $d)->max_arid;
         Database::get()->querySingle("DELETE FROM exercise_answer_record WHERE eurid=?d AND question_id=?d AND answer_record_id != ?d", $eurid, $d, $max_arid);
     }
-    Session::flash('message',$langNewScoreRecorded); 
+    Session::flash('message',$langNewScoreRecorded);
     Session::flash('alert-class', 'alert-success');
     if ($ajax_regrade) {
         echo json_encode(['result' => 'ok']);
@@ -739,7 +741,7 @@ if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting
              Session::flash('message',$langScoreDiffers .
              "<form action='exercise_result.php?course=$course_code&amp;eurId=$eurid' method='post'>
                  <button class='btn submitAdminBtn' type='submit' name='regrade' value='true'>$langRegrade</button>
-              </form>"); 
+              </form>");
             Session::flash('alert-class', 'alert-warning');
     }
 }
