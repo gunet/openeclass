@@ -239,12 +239,13 @@ if (isset($_REQUEST['unit'])) {
     ]);
 }
 
-$tool_content .= "<div class='alert alert-info'>";
+$tool_content .= "<div class='alert alert-info text-center'>";
 if ($user) { // user details
-    $tool_content .= q($user->surname) . " " . q($user->givenname);
+    $tool_content .= "<span class='panel-title'>" . q($user->surname) . " " . q($user->givenname);
     if ($user->am) {
-        $tool_content .= " ($langAm: " . q($user->am) . ")";
+        $tool_content .= " ($langAmShort: " . q($user->am) . ")";
     }
+    $tool_content .= "</span>";
 }
 
 $message_range = '';
@@ -255,11 +256,11 @@ if ($exerciseRange > 0) { // exercise grade range (if any)
 }
 
 if ($showScore) {
-    $tool_content .= "<h5>$langYourTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</h5>";
+    $tool_content .= "<h4 class='panel-title' style='margin-top: 10px;'>$langYourTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</h4>";
 }
 $tool_content .= "
-    <h5>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em></h5>
-    <h5>$langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>" .
+    <h5 style='margin-top: 20px;'>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em>
+    $langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>" .
     ($user && $exerciseAttemptsAllowed ? "<h5>$langAttempt: <em>{$exercise_user_record->attempt}</em></h5>" : '') . "
   </div>";
 
@@ -623,7 +624,7 @@ if (count($exercise_question_ids) > 0) {
 
         if (!is_null($questionFeedback)) {
             $tool_content .= "<tr><td colspan='2'>";
-            $tool_content .= "<div style='margin-top: 10px;'><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
+            $tool_content .= "<div style='margin-top: 10px; background-color:lightyellow;'><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
             $tool_content .= "</td></tr>";
         }
 
