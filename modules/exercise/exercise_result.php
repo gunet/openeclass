@@ -623,8 +623,8 @@ if (count($exercise_question_ids) > 0) {
         }
 
         if (!is_null($questionFeedback)) {
-            $tool_content .= "<tr><td colspan='2'>";
-            $tool_content .= "<div style='margin-top: 10px; background-color:lightyellow;'><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
+            $tool_content .= "<tr style='background-color:#fffbe3'><td colspan='2'>";
+            $tool_content .= "<div style='margin-top: 10px;'><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
             $tool_content .= "</td></tr>";
         }
 
