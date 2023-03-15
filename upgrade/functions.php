@@ -2458,6 +2458,17 @@ function upgrade_to_3_14($tbl_options) : void {
     if (!DBHelper::fieldExists('exercise', 'general_feedback')) {
         Database::get()->query("ALTER TABLE `exercise` ADD `general_feedback` TEXT CHARACTER SET utf8mb4 COLLATE 'utf8mb4_unicode_520_ci' NULL");
     }
+
+    // api token specific fields
+    if (!DBHelper::fieldExists('api_token', 'created')) {
+        Database::get()->query("ALTER TABLE `api_token` ADD `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP");
+    }
+    if (!DBHelper::fieldExists('api_token', 'updated')) {
+        Database::get()->query("ALTER TABLE `api_token` ADD `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP");
+    }
+    if (!DBHelper::fieldExists('api_token', 'expired')) {
+        Database::get()->query("ALTER TABLE `api_token` ADD `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP");
+    }
 }
 
 /**

@@ -13,7 +13,7 @@ class APITokenApp extends ExtApp
         parent::__construct();
 
         $this->registerParam(new GenericParam($this->getName(), "Remote IP", APITokenApp::REMOTE_IP));
-        $this->registerParam(new GenericParam($this->getName(), "Όνομα", APITokenApp::NAME));
+        $this->registerParam(new GenericParam($this->getName(), "Εφαρμογή", APITokenApp::NAME));
         $this->registerParam(new GenericParam($this->getName(), "Σχόλια", APITokenApp::COMMENTS, '', ExtParam::TYPE_MULTILINE));
     }
 

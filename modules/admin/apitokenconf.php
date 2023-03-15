@@ -16,7 +16,7 @@ $tool_content .= action_bar(array(
           'level' => 'primary-label',
           'button-class' => 'btn-success'),
         array('title' => $langBack,
-            'url' => 'extapp.php',
+            'url' => 'apitokenconf.php',
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
 
@@ -30,34 +30,43 @@ if (isset($_GET['delete'])) {
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_GET['edit'])) {
+        $duration_time = 365*24*60*60; // one year (in seconds)
         if ($_POST['submit'] == 'create_token') { // generate api token
             $token = "eclass_".bin2hex(random_bytes(32));
-            $result = Database::get()->query("UPDATE api_token SET token = ?s WHERE id = ?d", $token, $_GET['edit']);
+            $result_update_new = Database::get()->query("UPDATE api_token SET token = ?s,
+                                                        updated = " . DBHelper::timeAfter() . ", 
+                                                        expired = " . DBHelper::timeAfter($duration_time) . " 
+                                                    WHERE id = ?d",
+                                            $token, $_GET['edit']);
         } else {
             if (isset($_POST['enabled'])) {
                 $enabled = 1;
             } else {
                 $enabled = 0;
             }
-            $result = Database::get()->query("UPDATE api_token SET 
+            $result_update = Database::get()->query("UPDATE api_token SET 
                                 name = ?s, 
                                 comments = ?s, 
                                 ip = ?s,
-                                enabled = ?d
+                                enabled = ?d                                 
                             WHERE id = ?d", $_POST['name'], $_POST['comments'], $_POST['remote_url'], $enabled, $_GET['edit']);
         }
     } else {
         $token = "eclass_".bin2hex(random_bytes(32));
-        $result = Database::get()->query("INSERT INTO api_token SET 
+        $result_insert = Database::get()->query("INSERT INTO api_token SET 
                                 token = ?s, 
                                 name = ?s, 
                                 comments = ?s, 
                                 ip = ?s, 
-                                enabled = 1",
-            $token, $_POST['name'], $_POST['comments'], $_POST['remote_url']);
+                                enabled = 1,
+                                created = " . DBHelper::timeAfter() . ",
+                                expired = " . DBHelper::timeAfter(31536000) . "",
+                            $token, $_POST['name'], $_POST['comments'], $_POST['remote_url']);
     }
-    if ($result) {
-        Session::Messages($langFileUpdatedSuccess, 'alert-success');
+    if (isset($result_insert) or isset($result_update_new)) {
+        Session::Messages("$langAPITokenCreated <div style='margin-top: 15px;'><strong>$token</strong></div>", 'alert-success');
+    } else if (isset($result_update)) {
+        Session::Messages("$langFaqEditSuccess", 'alert-success');
     } else {
         Session::Messages($result, 'alert-danger');
     }
@@ -65,17 +74,16 @@ if (isset($_POST['submit'])) {
 }
 
 
-$q = Database::get()->queryArray("SELECT id, token, name, comments, ip, enabled FROM api_token");
+$q = Database::get()->queryArray("SELECT id, token, name, comments, ip, expired, enabled FROM api_token");
 
 if (count($q) > 0) {
     $tool_content .= "<div class='table-responsive'>";
     $tool_content .= "<table class='table-default'>
                 <thead>
                     <tr>
-                        <th class = 'text-center'>$langName</th>
-                        <th class = 'text-center'>Remote IP</th>                                        
-                        <th class = 'text-center'>$langComments</th>                    
-                        <th class = 'text-center'>".icon('fa-gears')."</th>
+                        <th class='text-left'>$langExtAppName</th>
+                        <th class='text-center'>Remote IP</th>
+                        <th class='text-center'>" . icon('fa-gears') . "</th>
                     </tr>
                 </thead>";
 
@@ -84,10 +92,14 @@ if (count($q) > 0) {
         if ($data->enabled == 0) {
             $class = 'not_visible';
         }
+        if ($data->expired < date('Y-m-d H:i:s')) {
+            $expired_message = "<span class='text-danger'>($langHasExpiredS)</span>";
+        } else {
+            $expired_message = '';
+        }
         $tool_content .= "<tr class='$class'>";
-        $tool_content .= "<td>$data->name</td>";
+        $tool_content .= "<td>$data->name $expired_message<div class='help-block'>$data->comments</div></td>";
         $tool_content .= "<td>$data->ip</td>";
-        $tool_content .= "<td>$data->comments</td>";
         $tool_content .= "<td class='option-btn-cell'>" .
                 action_button(array(
                     array('title' => $langEditChange,
@@ -114,7 +126,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
           <div class='form-wrapper'>
             <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?edit=$_GET[edit]' method='post'>";
                 $tool_content .= "<div class='form-group'>";
-                $tool_content .= "<label for='$langName' class='col-sm-2 control-label'>$langName</label>";
+                $tool_content .= "<label for='$langExtAppName' class='col-sm-2 control-label'>$langExtAppName</label>";
                 $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='name' value='$data->name'></div>";
                 $tool_content .= "</div>";
                 $tool_content .= "<div class='form-group'>";
