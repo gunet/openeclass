@@ -36,7 +36,7 @@
                             @foreach ($recent_logins as $data)
                                 <tr>
                                     <td>{{ $data[0] }}</td>
-                                    <td class='text-center'>{{ $data[1] }}</td>
+                                    <td class='text-right col-sm-1'>{{ $data[1] }}</td>
                                 </tr>
                             @endforeach
                             @foreach ($user_logins_data as $data)
@@ -45,7 +45,7 @@
                                 @endphp
                                 <tr>
                                     <td>{{ $formatted_data }}</td>
-                                    <td class='text-center'>{{ $data[1] }}</td>
+                                    <td class='text-right'>{{ $data[1] }}</td>
                                 </tr>
                             @endforeach
                         </table>
