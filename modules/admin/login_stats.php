@@ -85,7 +85,7 @@ function refresh_oldstats_plot(startdate, enddate) {
 }
 </script>";
 
-$toolName = "$langLoginUser $langUsersOf";
+$toolName = $langUsageVisits;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
@@ -116,7 +116,7 @@ foreach ($interval as $legend => $data) {
                         AND `when` >= DATE_SUB(DATE(NOW()), INTERVAL $data DAY)");
     $tool_content .= "<tr>
                         <td>$legend</td>
-                        <td class='text-center'>" . $loginUsers->cnt . "</td>
+                        <td class='text-right col-sm-1'>" . $loginUsers->cnt . "</td>
                     </tr>";
 }
 
@@ -127,7 +127,7 @@ foreach ($user_logins_data as $data) {
     $formatted_data = date_format(date_create($data[0]), "n / Y");
     $tool_content .= "<tr>";
     $tool_content .= "<td>$formatted_data</td>";
-    $tool_content .= "<td class='text-center'>$data[1]</td>";
+    $tool_content .= "<td class='text-right'>$data[1]</td>";
     $tool_content .= "</tr>";
 }
 
