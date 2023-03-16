@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 3.14
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,7 +20,7 @@
  * ========================================================================
 
   ============================================================================
-  @Description: Main script for the work tool
+  @Description: Wait for response of questionnaire launched via LTI and record outcome
   ============================================================================
  */
 
@@ -30,6 +30,46 @@ require_once 'modules/progress/ViewingEvent.php';
 
 $course_id = null;
 $course_code = null;
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $data = (file_get_contents('php://input'));
+    $xml = simplexml_load_string($data);
+    if (!$xml) {
+        error_log('Invalid XML content');
+        die();
+    }
+    $body = $xml->imsx_POXBody;
+    foreach ($body->children() as $child) {
+        $messagetype = $child->getName();
+    }
+    if ($messagetype != 'replaceResultRequest') {
+        error_log('Invalid message type');
+        die();
+    }
+    $sourcedid = $xml->imsx_POXBody->replaceResultRequest->resultRecord->sourcedGUID->sourcedId;
+    list($course_id, $poll_id, $user_id) = lti_verify_extract_poll_sourcedid($sourcedid);
+    // check if already participated
+    $has_participated = Database::get()->querySingle("SELECT COUNT(*) as counter
+        FROM poll_user_record WHERE uid = ?d AND pid = ?d", $user_id, $poll_id)->counter;
+    if ($has_participated == 0) {
+        Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $poll_id, $user_id);
+    }
+    unset($_SESSION['POLL_POST_LAUNCH_'.$user_id.'_'.$poll_id.'_COURSE_ID']);
+    unset($_SESSION['POLL_POST_LAUNCH_'.$user_id.'_'.$poll_id.'_COURSE_CODE']);
+    $eventData = new stdClass();
+    $eventData->courseId = $course_id;
+    $eventData->uid = $user_id;
+    $eventData->activityType = ViewingEvent::QUESTIONNAIRE_ACTIVITY;
+    $eventData->module = MODULE_ID_QUESTIONNAIRE;
+    $eventData->resource = intval($poll_id);
+    ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
+
+    echo '<?xml version="1.0" encoding="UTF-8"?>
+        <statusinfo>
+        <codemajor>Success</codemajor>
+        </statusinfo>';
+    exit;
+}
 
 // Handle return from LimeSurvey when questionnaire id is not passed in URL
 // Will not work correctly if user opens two questionnaires simultaneously
@@ -75,4 +115,36 @@ if (isset($_GET['id']) && intval($_GET['id']) > 0 && $uid) {
     unset($_SESSION['POLL_POST_LAUNCH_'.$uid.'_'.$pid.'_COURSE_CODE']);
 }
 
-die();
+exit;
+
+function lti_verify_extract_poll_sourcedid($sourcedid) {
+    // extract sourcedid info
+    $sourcediddata = explode('-', $sourcedid);
+    if (count($sourcediddata) != 4) {
+        error_log("Invalid lis_result_sourcedid, exiting ($sourcedid)...");
+        die();
+    }
+    $token = $sourcediddata[0] . "-" . $sourcediddata[1];
+    $poll_id = intval($sourcediddata[2]);
+    $uid = intval($sourcediddata[3]);
+
+    // locate/validate poll, lti, user and token
+    $poll = Database::get()->querySingle("SELECT pid, course_id FROM poll WHERE pid = ?d", $poll_id);
+    if (!$poll) {
+        error_log("No questionnaire found, exiting ($sourcedid)...");
+        die();
+    }
+    $ts_valid_time = 24 * 60 * 60; // wait 24 hours for response
+    if (!token_validate("$poll_id-$uid", $token, $ts_valid_time)) {
+        error_log("Invalid token, exiting ($sourcedid)...");
+        die();
+    }
+    $user = Database::get()->querySingle("SELECT id FROM user WHERE id  = ?d", $uid);
+    if (!$user) {
+        error_log("No user found, exiting ($sourcedid)...");
+        die();
+    }
+
+    return array($poll->course_id, $poll->pid, $user->id);
+}
+
