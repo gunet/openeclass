@@ -579,9 +579,11 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
         }
     }
 
-    /*if ($resource_link_type == RESOURCE_LINK_TYPE_POLL) {
+    if ($resource_link_type == RESOURCE_LINK_TYPE_POLL) {
+        $token = token_generate($resource_link_id . "-" . $uid, true);
+        $launch_data['lis_result_sourcedid'] = $token . "-" . $resource_link_id . "-" . $uid;
         $launch_data['lis_outcome_service_url'] = $urlServer . "modules/questionnaire/poll_outcome.php";
-    }*/
+    }
 
     return $launch_data;
 }
