@@ -113,7 +113,7 @@ $res_type = isset($_GET['res_type']);
 if (isset($_GET['get'])) {
     if (!send_forum_post_file($_GET['get'])) {
         //Session::Messages($langFileNotFound, 'alert-danger');
-        Session::flash('message',$langFileNotFound); 
+        Session::flash('message',$langFileNotFound);
         Session::flash('alert-class', 'alert-danger');
     }
 }
@@ -192,7 +192,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
     Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $post_id, 'forum_post');
     // remove forum post attachment (if any)
     $fp = Database::get()->querySingle("SELECT topic_filepath FROM forum_post WHERE id = ?d", $post_id);
-    if ($fp) {
+    if (!empty($fp->topic_filepath)) {
         unlink("$webDir/courses/$course_code/forum/$fp->topic_filepath");
     }
     // remove forum post entries
@@ -675,11 +675,10 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         }else{
             $content .= "<div class='panel-body'>";
         }
-        $content .= "
-        
+        $content .= "        
             <div class='row'>
                 <div class='col-sm-1 col-2'>" .
-                    profile_image($myrow->poster_id, '40px', 'img-rounded-corners margin-bottom-thin') . "
+                    profile_image($myrow->poster_id, IMAGESIZE_SMALL, 'img-rounded-corners margin-bottom-thin') . "
                 </div>
                 <div class='col-sm-11 col-10'>
                     <div class='forum-post-header'>
