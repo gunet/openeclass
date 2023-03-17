@@ -226,10 +226,14 @@ if (($is_editor) and isset($_GET['topicdel'])) {
     }
     Database::get()->query("DELETE FROM forum_topic WHERE id = ?d AND forum_id = ?d", $topic_id, $forum_id);
     Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMTOPIC, $topic_id);
+
+    $last_post = Database::get()->querySingle("SELECT MAX(last_post_id) AS last_post FROM forum_topic WHERE forum_id = ?d", $forum_id)->last_post;
+
     Database::get()->query("UPDATE forum SET num_topics = ?d,
-                                num_posts = num_posts-$number_of_posts
+                                num_posts = num_posts-$number_of_posts,
+                                last_post_id = ?d
                             WHERE id = ?d
-                                AND course_id = ?d", $num_topics, $forum_id, $course_id);
+                                AND course_id = ?d", $num_topics, $last_post, $forum_id, $course_id);
     Database::get()->query("DELETE FROM forum_notify WHERE topic_id = ?d AND course_id = ?d", $topic_id, $course_id);
     Session::Messages($langTopicDeleted, 'alert-success');
     redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");
