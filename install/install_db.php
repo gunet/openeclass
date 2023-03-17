@@ -2294,6 +2294,18 @@ $db->query("CREATE TABLE h5p_content_dependency (
     dependency_type VARCHAR(10) NOT NULL,
   PRIMARY KEY(id)) $tbl_options");
 
+$db->query("CREATE TABLE api_token (
+    `id` smallint NOT NULL AUTO_INCREMENT,
+    `token` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+    `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+    `ip` varchar(45) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `enabled` tinyint NOT NULL,
+    `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)) $tbl_options");
+
 $_SESSION['theme'] = 'modern';
 
 importThemes();
