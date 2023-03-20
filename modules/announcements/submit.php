@@ -111,25 +111,9 @@ if (isset($_POST['submitAnnouncement'])) {
         // send email
         if ($send_mail) {
             $title = course_id_to_title($course_id);
-            $recipients_emaillist = "";
-            if ($_POST['recipients'][0] == -1) { // all users
-                $cu = Database::get()->queryArray("SELECT cu.user_id FROM course_user cu
-                                                            JOIN user u ON cu.user_id=u.id
-                                                        WHERE cu.course_id = ?d
-                                                        AND u.email <> ''
-                                                        AND u.email IS NOT NULL", $course_id);
-                if (count($cu) > 0) {
-                    foreach ($cu as $re) {
-                        $recipients_emaillist .= (empty($recipients_emaillist)) ? "'$re->user_id'" : ",'$re->user_id'";
-                    }
-                }
-            } else { // selected users
-                foreach ($_POST['recipients'] as $re) {
-                    $recipients_emaillist .= (empty($recipients_emaillist)) ? "'$re'" : ",'$re'";
-                }
-            }
-            if (!empty($recipients_emaillist)) {
-                $emailHeaderContent = "
+            $recipients_emaillist = '';
+            if ($_POST['recipients']) { // Sending mail to users
+                $emailContent = "
                     <!-- Header Section -->
                     <div id='mail-header'>
                         <br>
@@ -137,12 +121,10 @@ if (isset($_POST['submitAnnouncement'])) {
                             <div id='header-title'>$langAnnHasPublished <a href='{$urlServer}courses/$course_code/'>" . q($title) . "</a>.</div>
                             <ul id='forum-category'>
                                 <li><span><b>$langSender:</b></span> <span class='left-space'>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "</span></li>
-                                <li><span><b>$langdate:</b></span> <span class='left-space'>$datetime</span></li>
+                                <li><span><b>$langDate:</b></span> <span class='left-space'>$datetime</span></li>
                             </ul>
                         </div>
-                    </div>";
-
-                $emailBodyContent = "
+                    </div>
                     <!-- Body Section -->
                     <div id='mail-body'>
                         <br>
@@ -151,9 +133,7 @@ if (isset($_POST['submitAnnouncement'])) {
                         <div id='mail-body-inner'>
                             $newContent
                         </div>
-                    </div>";
-
-                $emailFooterContent = "
+                    </div>
                     <!-- Footer Section -->
                     <div id='mail-footer'>
                         <br>
@@ -162,52 +142,55 @@ if (isset($_POST['submitAnnouncement'])) {
                         </div>
                     </div>";
 
-                $emailContent = $emailHeaderContent . $emailBodyContent . $emailFooterContent;
-
                 $emailSubject = "$professorMessage ($public_code - " . q($title) . " - $langAnnouncement)";
-                // select students email list
-                $countEmail = 0;
-                $invalid = 0;
-                $recipients = array();
                 $emailBody = html2text($emailContent);
                 $general_to = 'Members of course ' . $course_code;
-                Database::get()->queryFunc("SELECT course_user.user_id as id, user.email as email
-                                                       FROM course_user, user
-                                                       WHERE course_id = ?d AND user.id IN ($recipients_emaillist) AND
-                                                             course_user.user_id = user.id", function ($person)
-                use (&$countEmail, &$recipients, &$invalid, $course_id, $general_to, $emailSubject, $emailBody, $emailContent, $charset) {
-                    $countEmail++;
-                    $emailTo = $person->email;
-                    $user_id = $person->id;
-                    // check email syntax validity
-                    if (!valid_email($emailTo)) {
+                // select students email list
+                $total = $invalid = $disabled = 0;
+                $recipients = [];
+                if (in_array('-1', $_POST['recipients'])) { // All users in course
+                    $course_users = Database::get()->queryArray('SELECT course_user.user_id as id, user.email as email
+                       FROM course_user, user WHERE course_id = ?d AND course_user.user_id = user.id', $course_id);
+                } else {
+                    $placeholders = implode(', ', array_fill(0, count($_POST['recipients']), '?d'));
+                    $course_users = Database::get()->queryArray("SELECT course_user.user_id as id, user.email as email
+                        FROM course_user, user
+                        WHERE course_id = ?d AND course_user.user_id = user.id AND user.id IN ($placeholders)",
+                        $course_id, $_POST['recipients']);
+                }
+                foreach ($course_users as $user) {
+                    $total++;
+                    if (!valid_email($user->email)) {
+                        // email is unset or email syntax is invalid
                         $invalid++;
-                    } elseif (get_user_email_notification($user_id, $course_id)) {
-                        // checks if user is notified by email
-                        array_push($recipients, $emailTo);
+                    } elseif (get_user_email_notification($user->id, $course_id)) {
+                        // email notifications are enabled so add to recipients
+                        array_push($recipients, $user->email);
+                    } else {
+                        // email notifications are disabled for this user
+                        $disabled++;
                     }
                     // send mail message per 50 recipients
                     if (count($recipients) >= 50) {
                         send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
-                        $recipients = array();
+                        $recipients = [];
                     }
-                }, $course_id);
+                };
                 if (count($recipients) > 0) {
                     send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
                 }
-               // Session::Messages("$langAnnAddWithEmail $countEmail $langRegUser", 'alert-success');
-                Session::flash('message',"$langAnnAddWithEmail $countEmail $langRegUser");
-                Session::flash('alert-class', 'alert-success');
+                Session::Messages("$langAnnAddWithEmail $total $langRegUser", 'alert-success');
+                $notices = [];
                 if ($invalid > 0) { // info about invalid emails (if exist)
-                    //Session::Messages("$langInvalidMail $invalid", 'alert-warning');
-                    Session::flash('message',"$langInvalidMail $invalid");
-                    Session::flash('alert-class', 'alert-warning');
+                    $notices[] = "$langInvalidEmailRecipients: $invalid";
                 }
+                if ($disabled > 0) { // info about users with disabled emails
+                    $notices[] = "$langDisabledEmailRecipients: $disabled";
+                }
+                Session::Messages($notices, 'alert-warning');
             }
         } else {
-            //Session::Messages($message, 'alert-success');
-            Session::flash('message',$message);
-            Session::flash('alert-class', 'alert-success');
+            Session::Messages($message, 'alert-success');
         }
         redirect_to_home_page("modules/announcements/index.php?course=$course_code");
     } else {

@@ -4308,6 +4308,11 @@ function user_hook($user_id) {
 function valid_email($email) {
     static $validator, $validation;
 
+    // Non-ASCII characters in email are considered invalid
+    if (!ctype_print($email)) {
+        return false;
+    }
+
     if (!isset($validator)) {
         $validator = new Egulias\EmailValidator\EmailValidator();
         $validation = new Egulias\EmailValidator\Validation\RFCValidation();
