@@ -666,7 +666,6 @@ $langYouHaveRejectedPrivacyPolicy = 'Απορρίψατε την {Πολιτικ
 $langYouHaveNotConsentedToPrivacyPolicy = 'Δεν έχετε συναινέσει στην {Πολιτική Απορρήτου}.';
 $langInvalidEmail = 'Μη έγκυρο e-mail';
 
-
 $langFlippedClassroom = "Mοντέλο Ανεστραμμένης Τάξης";
 $langCΕnabled = "Ενεργό";
 $langGoals = "Μαθησιακοί στόχοι";
@@ -879,6 +878,8 @@ $langDisplayed = "Εμφανίζονται";
 $langTill = "έως";
 $langAnnouncementActivePeriod = "Διάστημα εμφάνισης";
 $langAnnHasPublished = "Έχει δημοσιευθεί ανακοίνωση στο $langsCourse";
+$langInvalidEmailRecipients = 'Παραλήπτες με μη έγκυρη διεύθυνση e-mail';
+$langDisabledEmailRecipients = 'Παραλήπτες με απενεργοποιημένη λήψη e-mail';
 
 /* * *****************************************
  * archive_course.php
