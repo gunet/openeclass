@@ -513,8 +513,10 @@ if ($nbrQuestions) {
         $question_difficulty_legend = $objQuestionTmp->selectDifficultyIcon($objQuestionTmp->selectDifficulty());
         $question_category_legend = $objQuestionTmp->selectCategoryName($objQuestionTmp->selectCategory());
         $addon = "&amp;htopic=" . $aType;
-        $editUrl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=$id$addon";
-        $deleteUrl = "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id";
+        if (!is_array($id)) {
+            $editUrl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyAnswers=$id$addon";
+            $deleteUrl = "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id";
+        }
 
         if (is_array($id)) {
             if ($id['criteria'] == 'difficulty') {
