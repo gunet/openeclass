@@ -188,7 +188,6 @@ foreach ($q as $d) { // for each attempt
     }
 }
 
-
 $sheet->mergeCells("A1:G1");
 $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
 $sheet->getCell('A2')->getStyle()->getFont()->setItalic(true);
@@ -260,7 +259,7 @@ function question_answer_details($eurid, $qid) {
                     $a = Database::get()->querySingle("SELECT answer FROM exercise_answer 
                                         WHERE question_id = ?d 
                                         AND r_position = ?d",
-                        $data->question_id, $data->answer_id);
+                                    $data->question_id, $data->answer_id);
                     if ($a) {
                         $temp_content .= html2text($a->answer) . " -- ";
                     } else {
@@ -323,7 +322,7 @@ function user_question_score($qid, $eurid) {
                                 WHERE eurid = ?d AND question_id = ?d", $eurid, $qid);
         $content = $uq->weight; // /question weight
     }
-    return $content;
+    return "$content";
 }
 
 
