@@ -4565,6 +4565,7 @@ $langAssignmentDistribution = 'Ανάθεση εργασιών';
 $langNoPeerReview = 'Δεν θα γίνει αξιολόγηση.';
 $langPendingPeerSubmissions = 'Αναμένονται εργασίες για αξιολόγηση.';
 $langPeerSubmissions = 'Εργασίες που έχουν ανατεθεί';
+$langPeerSubmissions = 'Εργασίες που έχουν ανατεθεί';
 
 
 /* * ***********************************************************
