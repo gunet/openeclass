@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2022-11-30 15:18:47
+// Generated 2023-03-24 12:20:02
 
 $langYes = "Yes";
 $langNo = "No";
@@ -715,7 +715,6 @@ $langAddPicture = "Add Picture";
 $langReplacePicture = "Replace Picture";
 $langDeletePicture = "Delete Picture";
 $langQuestionDescription = "Optional description";
-$langQuestionFeedback = "Feedback";
 $langGiveQuestion = "Enter your question";
 $langWeightingForEachBlank = "Enter weight for each blank";
 $langUseTagForBlank = "Use tags [...] to define one or more blanks";
@@ -1222,7 +1221,6 @@ $langTimeInLearnPath = "Time in learning path";
 $langTo = "to";
 $langTotalTimeSpent = "Total time";
 $langTrackAllPathExplanation = "Progress of  ".$langsOfStudents;
-$langTrackAllPathExplanationAnalysis = "Detailed progress of  ".$langsOfStudents;
 $langTrackUser = "User Tracking";
 $langTracking = "Tracking";
 $langTypeOfModule = "Module type";
@@ -2045,7 +2043,7 @@ $langWikiDiffDeletedLine = "Deleted line";
 $langWikiDiffMovedLine = "Moved line";
 $langWikiDiffUnchangedLine = "Unchanged line";
 $langWikiDifferenceKeys = "Keys:";
-$langWikiDifferencePattern = "differences between version %1\$s modified by %2\$s and version %3\$s modified by %4\$s";
+$langWikiDifferencePattern = "Differences between version %1\$s (modified by %2\$s) and version %3\$s (modified by %4\$s)";
 $langWikiDifferenceTitle = "Differences:";
 $langWikiEditLastVersion = "Edit last version";
 $langWikiEditPage = "Edit this page";
@@ -3975,9 +3973,6 @@ $langSpecificUsers = "specific $langsStudents";
 $langAnswersDispLastAttempt = "Display correct answers after last attempt by $langsStudent";
 $langAnswersDispEndDate = "Display correct answers after the exercisei end date";
 $langAttempt = "Attempt";
-$langAttemptStarted = "First Attempt";
-$langAttemptAccessed = "Last Access";
-$langAttemptsNb = "Number of attempts";
 $langIPUnlock = "Unlock specific IP(s) or IP CIDR(s)";
 $langPasswordUnlock = "Unlock with password";
 $langPasswordModalTitle = "Enter the exercise password";
@@ -4172,6 +4167,7 @@ Are you sure you want to proceed with the deletion?';
 $langCPFConfirmFieldDelete = 'Deleting this field will result in the deletion of the respective users profile data. Are you sure you want to proceed with the deletion?';
 $langCPFCatDelSuccess = 'The profile fields category was successfully deleted';
 $langCPFCatModSuccess = 'The profile fields category was successfully modified';
+$langCPFFieldDescr = 'Description';
 $langCPFShortName = 'Short name';
 $langCPFText = 'Text field';
 $langCPFTextarea = 'Textarea';
@@ -4546,6 +4542,8 @@ $langSiteTitle = 'Platform title';
 $langSiteDescr = 'Home page description';
 $langOpenMeetingsDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href=\"http://openmeetings.apache.org/\" target=\"_blank\">Apache OpenMeetings</a> platform which is a complete system of direct web-based communication and collaboration between $langsTeachers and $langsStudents.</p>
 <p>OpenMeetings does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with an OpenMeetings installation plase select <a href='openmeetingsconf.php'>Settings</a>.</p>";
+$langWebConfDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href=\"http://webconf.gunet.gr/\" target=\"_blank\">WebConf</a> platform which is a complete system of direct web-based communication and collaboration between $langsOfTeachers and $langsOfStudents.</p>
+<p>WebConf does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with a WebConf installation plase select <a href='webconf.php'>Settings</a>.</p>";
 $langOpenMeetingsConf = "OpenMeetings settings";
 $langAddOpenMeetingsServerInfo = "New OpenMeetings server info";
 $langUpdateOpenMeetingsServer = "OpenMeetings server info";
@@ -4556,6 +4554,12 @@ $langOpenMeetingsAdminUser = "OpenMeetings admin username";
 $langOpenMeetingsAdminPass = "OpenMeetings admin password";
 $langOpenMeetingsModuleKey = "Module key";
 $langOpenMeetingsWebApp = "WebApp Name";
+$langWebConf = "Wowza settings";
+$langAddWebConfServerInfo = "New Wowza server info";
+$langUpdateWebConfServer = "Wowza server info";
+$langAvailableWebConfServers = "Available Wowza servers";
+$langWebConfServer = "Wowza server";
+$langWebConfServerAlertHostname = "Please enter the hostname where Wowza is installed";
 $langLearnPathDeleted = 'The Learning Path was deleted';
 $langAdminPinnedOff = "Unpin announcement";
 $langAdminPinnedOn = "Pin announcement";
@@ -5150,8 +5154,6 @@ $langPeerReviewDeadlineCompulsory = "Field Review Deadline";
 $langPeerReviewStartDateError = "Start Date Review ";
 $langPeerReviewStartDateError2 = "ends after submission date";
 $langPeerReviewNoAssignments = "Assignments haven't been distributed yet";
-$langPeerReviewAssignmentInfo1 = "Assignments assigned to users. Old assignments have been deleted.";
-$langPeerReviewAssignmentInfo2 = "Assignments assigned.";
 $langNotGraded = "(Didn't grade)";
 $langDeletePeerReview = "Delete review";
 $langNoAssignmentsForReview = "There are no assignments for reviewing";
@@ -5520,3 +5522,61 @@ $langUserEmailNotification = "You are receiving $langsOfCourse notifications via
 $langConfEnableMailNotification = "Do you want to activate email notifications in $langsOfCourse?";
 $langConfDisableMailNotification = "Do you want to deactivate email notifications in $langsOfCourse?";
 $langOfNotifications = "notifications";
+$langMonthlyReportInfo = "Summarized statistics (courses, users) in last 12 months.";
+$langStatsReportsLP = "Participation Reports in Learning Paths";
+$langStatsReportsTC = "Participation reports in Teleconference";
+$langNoUserEmailLegend = "The user is not receiving $langsCourse notifications via email.";
+$langUsersListAccess = "Display list of $langsCourse users";
+$langUsersListAccessInfo = "concerns only users registered to $langsCourse";
+$langGroupPublicUserList = "Display users in group members";
+$langAttemptStarted = "First Attempt";
+$langAttemptAccessed = "Last Access";
+$langAttemptsNb = "Number of attempts";
+$langExerciseFeedback = "End Message";
+$langExerciseFeedbackInfo = "appears after exercise is complete";
+$langQuestionFeedback = "Feedback";
+$langPageUpdated = "Page updated";
+$langPageDeleted = "Η σελίδα διαγράφηκε";
+$langTrackAllPathExplanationAnalysis = "Detailed progress of  ".$langsOfStudents;
+$langActivateParticipation = "Activate Attendance Tracking";
+$langShowSettingsInfo = "concerns display to other users (excluding $langsTeachers)";
+$langNoApiToken = "No API tokens have been created";
+$langApiTokenDeleted = "Token successfully deleted";
+$langEncodeUserProfilePics = 'Encoding user profile images';
+$langAddCoursePage = 'Add course page';
+$langCoursePages = 'Course Pages';
+$langImportExtraGradebookUsers = "The following users didn't participate in the gradebook";
+$langImportGradesGradebookHelp = "You can upload an Excel file (e.g. xls, xlsx) with the user grades.
+    The grades must be entered in the last column of the file you can download from the following link.<br><br>
+    <strong>DO NOT</strong> change the file structure (e.g. the number of columns), otherwise the import might fail.<br><br>
+    Please note that the decimal point should be entered as a 'full stop', for instance '9.5'.";
+$langPeerReviewAssignmentInfo1 = "Assignments assigned to users. Old assignments have been deleted.";
+$langPeerReviewAssignmentInfo2 = "Assignments assigned.";
+$langAPITokenExists = "A token already exists. To create a new one, please click on 'Create New Token'";
+$langAPITokenShortDesc = "Create Open eClass API access token";
+$langCreateAPIToken = 'Create new Token';
+$langBBBLongDescription = "Connect with the BigBlueButton teleconference service.";
+$langGoogleMeetShortDescription = "Connect with the Google Meet video conference service.";
+$langGoogleMeetLongDescription = "Connect with the Google Meet video conference service.";
+$langZoomShortDescription = "Connect with the Zoom video conference service.";
+$langZoomLongDescription = "Connect with the Zoom video conference service.";
+$langWebexShortDescription = "Connect with the Webex video conference service.";
+$langWebexLongDescription = "Connect with the Webex video conference service.";
+$langJitsiShortDescription = "The open source software <a href=\"https://jitsi.org/\" target=\"_blank\">Jitsi</a> is a teleconference service. Visit the <a href=\"jitsiconf.php\">tool setings</a> to enable it. Please not that the service is recommended for meetings with up to 30 participants.";
+$langJitsiLongDescription = "Connect with the <em>Jitsi</em> teleconference service (for up to <strong>30</strong> participants).";
+$langJitsiUrl = "You can change this setting to use an alternate Jitsi server.";
+$langChooseTCServer = "Select teleconference service";
+$langGoToGoogleMeetLink = "Click on 'Go to Google Meet' below in order to visit Google's user interface and create the meeting link.
+    Afterwards, please copy and paste it in the 'Link' field.";
+$langGoToGoogleMeetLinkText = "Go to Google Meet";
+$langGoToZoomLink = "Click on 'Go to Zoom' below in order to visit Zoom's interface and create the meeting link.
+    Afterwards, please copy and paste it in the 'Link' field.";
+$langGoToWebexLink = "Click on 'Go to Webex' below in order to visit Webex's interface and create the meeting link.
+    Afterwards, please copy and paste it in the 'Link' field.";
+$langGoToZoomLinkText = "Go to Zoom";
+$langGoToWebexLinkText = "Go to Webex";
+$langUseOfService = "Use service in";
+$langUseOfServiceInfo = "Select in which $langsCourses the service will be available";
+$langInvalidEmailRecipients = 'Recipients without a valid e-mail address';
+$langDisabledEmailRecipients = 'Recipients with disabled e-mail reception';
+$langSubjectArea = "Subject Area";
