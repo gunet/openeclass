@@ -249,7 +249,8 @@ if ($PollType == POLL_NORMAL) {
                     <table class='table-default'>
                         <tr class='list-header'>
                             <th>$langAnswer</th>
-                            <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized) ? '' : '<th>' . $langStudents . '</th>')."</tr>";
+                            <th>$langSurveyTotalAnswers</th>
+                            <th>$langPercentage</th>".(($thePoll->anonymized) ? '' : '<th>' . $langStudents . '</th>')."</tr>";
                 foreach ($answers as $answer) {
                     $percentage = round(100 * ($answer->count / $answer_total),2);
                     if (isset($answer->answer_text)) {
@@ -297,8 +298,14 @@ if ($PollType == POLL_NORMAL) {
                     }
                     $answers_table .= "
                         <tr>
-                                <td>".$q_answer."</td>
-                                <td>$answer->count</td>".(($thePoll->anonymized == 1)?'':'<td>'.$ellipsized_names_str.(($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').'</td><td class="hidden_names" style="display:none;">'.q($names_str).' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$langViewHide.'</a></td>')."</tr>";
+                                <td>$q_answer</td>
+                                <td>$answer->count</td>
+                                <td>$percentage%</td>" .
+                                (($thePoll->anonymized == 1) ? '' :
+                                '<td>' . $ellipsized_names_str .
+                                (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '') .
+                                '</td>
+                                <td class="hidden_names" style="display:none;">'.q($names_str).' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$langViewHide.'</a></td>')."</tr>";
                     unset($names_array);
                 }
                 $answers_table .= "</table><br>";
@@ -332,7 +339,8 @@ if ($PollType == POLL_NORMAL) {
                     <table class='table-default'>
                         <tr class='list-header'>
                             <th>$langAnswer</th>
-                            <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";
+                            <th>$langSurveyTotalAnswers</th>
+                            <th>$langPercentage</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";
                 foreach ($answers as $answer) {
                     $percentage = round(100 * ($answer->count / $answer_total),2);
                     $this_chart_data['percentage'][array_search($answer->answer_text,$this_chart_data['answer'])] = $percentage;
@@ -368,7 +376,8 @@ if ($PollType == POLL_NORMAL) {
                     $answers_table .= "
                         <tr>
                             <td>".q($answer->answer_text)."</td>
-                            <td>$answer->count</td>"
+                            <td>$answer->count</td>
+                            <td>$percentage%</td>"
                             . (($thePoll->anonymized == 1) ?
                             '' :
                             '<td>'.$ellipsized_names_str.
