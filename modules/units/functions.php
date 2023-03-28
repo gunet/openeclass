@@ -1695,7 +1695,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @return string
  */
 function edit_res($resource_id) {
-    global $id, $urlServer, $langTitle, $langDescription, $langContents, $langModify, $course_code;
+    global $id, $urlServer, $langTitle, $langDescription, $langContents, $langSubmit, $course_code;
 
     $ru = Database::get()->querySingle("SELECT id, title, comments, type FROM unit_resources WHERE id = ?d", $resource_id);
     $restitle = " value='" . htmlspecialchars($ru->title, ENT_QUOTES) . "'";
@@ -1721,7 +1721,8 @@ function edit_res($resource_id) {
                     <div class='col-sm-12'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
                 </div>
                 <div class='col-12 mt-5 d-flex justify-content-center'>
-                    <input class='btn submitAdminBtn' type='submit' name='edit_res_submit' value='$langModify'>
+                    <input class='btn submitAdminBtn' type='submit' name='edit_res_submit' value='$langSubmit'>
+
                 </div>
             </form></div>
         </div>";
