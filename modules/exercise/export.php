@@ -51,8 +51,6 @@ if ($fromExercise) {
     $result = Database::get()->queryArray("SELECT id, title FROM `exercise` WHERE course_id = ?d ORDER BY id", $course_id);
 }
 
-$q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d ORDER BY question_cat_name", $course_id);
-
 $extraSql = '';
 if ($exerciseId) { // Export questions from specific exercise
     $result_query_vars = [$course_id, $exerciseId];
@@ -216,14 +214,6 @@ function question_html($question, $qid) {
     $answerType = $question->selectType();
     if ($answerType == FREE_TEXT) {
         return '';
-    }
-
-    if (in_array($answerType, [UNIQUE_ANSWER, MULTIPLE_ANSWER, TRUE_FALSE])) {
-        $colspan = 3;
-    } elseif ($answerType == MATCHING) {
-        $colspan = 2;
-    } else {
-        $colspan = 1;
     }
 
     $html = "<table class='answers'>";

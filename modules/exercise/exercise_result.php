@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.10
+ * Open eClass 3.14
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2021  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -219,24 +219,33 @@ $showScore = $displayScore == 1
 
 $toolName = $langExercicesResult;
 
-if (isset($_REQUEST['unit'])) {
-    $tool_content .= action_bar([
-        [
-            'title' => $langBack,
-            'url' => "../units/index.php?course=$course_code&id=$_REQUEST[unit]",
-            'icon' => 'fa fa-reply',
-            'level' => 'primary-label'
-        ]
-    ]);
-} else {
-    $tool_content .= action_bar([
-        [
-            'title' => $langBack,
-            'url' => "results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "'",
-            'icon' => 'fa fa-reply',
-            'level' => 'primary-label'
-        ]
-    ]);
+if (!isset($_GET['pdf'])) {
+    if (isset($_REQUEST['unit'])) {
+        $tool_content .= action_bar([
+            [
+                'title' => $langBack,
+                'url' => "../units/index.php?course=$course_code&id=$_REQUEST[unit]",
+                'icon' => 'fa fa-reply',
+                'level' => 'primary-label'
+            ]
+        ]);
+    } else {
+        $tool_content .= action_bar([
+            [
+                'title' => $langDumpPDF,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&eurId=$eurid&pdf=true",
+                'icon' => 'fa-file-pdf-o',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'
+            ],
+            [
+                'title' => $langBack,
+                'url' => "results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "'",
+                'icon' => 'fa fa-reply',
+                'level' => 'primary-label'
+            ]
+        ]);
+    }
 }
 
 $tool_content .= "<div class='alert alert-info text-center'>";
@@ -451,7 +460,11 @@ if (count($exercise_question_ids) > 0) {
                                 // increments total score
                                 // adds the word in green at the end of the string
                                 $answer .= '<strong>' . q($choice[$j]) . '</strong>';
-                                $icon = "<span class='fa fa-check text-success'></span>";
+                                if (isset($_GET['pdf'])) {
+                                    $icon = "<input type='checkbox' checked='checked'>";
+                                } else {
+                                    $icon = "<span class='fa fa-check text-success'></span>";
+                                }
                             }
                             // else if the word entered is not the same as the one defined by the professor
                             elseif ($choice[$j] !== '') {
@@ -516,7 +529,11 @@ if (count($exercise_question_ids) > 0) {
                                 }
                                 // adds the word in green at the end of the string
                                 $answer .= '<strong>' . q($possible_answer[$choice[$j]]) . '</strong>';
-                                $icon = "<span class='fa fa-check text-success'></span>";
+                                if (isset($_GET['pdf'])) {
+                                    $icon = "<input type='checkbox' checked='checked'>";
+                                } else {
+                                    $icon = "<span class='fa fa-check text-success'></span>";
+                                }
                             }  else { // wrong answer
                                 if (isset($possible_answer[$choice[$j]])) { // if we have chosen something
                                     // adds the word in red at the end of the string, and strikes it
@@ -542,13 +559,16 @@ if (count($exercise_question_ids) > 0) {
                                 $grade = $answerWeighting;
                                 $choice[$answerId] = q($matching[$choice[$answerId]]);
                                 $icon = "<span class='fa fa-check text-success'></span>";
+                                $pdf_icon = "✓";
                             } elseif (!$thisChoice) {
                                 $choice[$answerId] = '<del class="text-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</del>';
                                 $icon = "<span class='fa fa-times text-danger'></span>";
+                                $pdf_icon = "✓";
                             } else {
                                 $choice[$answerId] = "<span class='text-danger'><del>" .
                                     q($matching[$choice[$answerId]]) . "</del></span>";
                                 $icon = "<span class='fa fa-times text-danger'></span>";
+                                $pdf_icon = "✓";
                             }
                         } else {
                             $icon = '';
@@ -583,6 +603,7 @@ if (count($exercise_question_ids) > 0) {
                         $answer_icon  = '';
                         if ($studentChoice) {
                             $student_choice_icon = "fa fa-fw fa-check-square-o help-block";
+                            $pdf_student_choice_icon = "<input type='checkbox' checked='checked'>";
                             $style = '';
                             if ($answerCorrect) {
                                 $answer_icon = "fa fa-check text-success";
@@ -591,10 +612,16 @@ if (count($exercise_question_ids) > 0) {
                             }
                         } else {
                             $student_choice_icon = "fa fa-fw fa-square-o help-block";
+                            $pdf_student_choice_icon = "<input type='checkbox'>";
                             $style = "visibility: hidden;";
                         }
-                        $tool_content .= "<span class='$student_choice_icon'></span>&nbsp;&nbsp;";
-                        $tool_content .= "<span style='$style' class='$answer_icon'></span>";
+                        if (isset($_GET['pdf'])) {
+                            $tool_content .= "<span>$pdf_student_choice_icon</span>";
+                        } else {
+                            $tool_content .= "<span class='$student_choice_icon'></span>&nbsp;&nbsp;";
+                            $tool_content .= "<span style='$style' class='$answer_icon'></span>";
+                        }
+
                         $tool_content .= "</td>";
                         $tool_content .= "<td>" . standard_text_escape($answer);
                         if ($answerCorrect) {
@@ -739,8 +766,65 @@ if ($checking) {
     exit;
 }
 
-if ($is_editor) {
+if (!isset($_GET['pdf']) and $is_editor) {
     $tool_content .= "<div class='text-center'><a class='btn btn-primary' href='index.php' id='submitButton'><span id='text_submit'>$langSubmit</span></a></div>";
 }
 
-draw($tool_content, 2, null, $head_content);
+if (isset($_GET['pdf'])) {
+    $pdf_content = "
+        <!DOCTYPE html>
+        <html lang='el'>
+        <head>
+          <meta charset='utf-8'>
+          <title>" . q("$currentCourseName - $langQuesList") . "</title>
+          <style>
+            * { font-family: 'opensans'; }
+            body { font-family: 'opensans'; font-size: 10pt; }
+            small, .small { font-size: 8pt; }
+            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+            h1 { font-size: 16pt; }
+            h2 { font-size: 12pt; border-bottom: 1px solid black; }
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
+            table.answers { border: 1px solid #999; margin: 4px 0; }
+            .img-responsive { max-width: 100%; }
+            .label { color: #158; }
+            th { text-align: left; border-bottom: 1px solid #999; }
+            td { text-align: left; }
+          </style>
+        </head>
+        <body>
+        <h2> " . q($langExercicesResult) . "</h2>";
+
+    $pdf_content .= $tool_content;
+    $pdf_content .= "</body></html>";
+
+    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    $fontDirs = $defaultConfig['fontDir'];
+    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    $fontData = $defaultFontConfig['fontdata'];
+
+    $mpdf = new Mpdf\Mpdf([
+        'tempDir' => _MPDF_TEMP_PATH,
+        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/default/fonts' ]),
+        'fontdata' => $fontData + [
+                'opensans' => [
+                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+                ],
+                'roboto' => [
+                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+                ]
+            ]
+    ]);
+
+    $mpdf->setFooter('||{PAGENO} / {nb}');
+    $mpdf->SetCreator(course_id_to_prof($course_id));
+    $mpdf->SetAuthor(course_id_to_prof($course_id));
+    $mpdf->WriteHTML($pdf_content);
+    $mpdf->Output("$course_code exercise_results.pdf", 'I'); // 'D' or 'I' for download / inline display
+} else {
+    draw($tool_content, 2, null, $head_content);
+}
