@@ -28,6 +28,15 @@ function api_method($access) {
         WHERE allow_course = 1
         ORDER BY name');
     header('Content-Type: application/json');
+    $categories = array_map(function ($item) {
+        return [
+            'id' => $item->id,
+            'name' => getSerializedMessage($item->name, 'el'),
+            'description' => getSerializedMessage($item->description, 'el'),
+            'timemodified' => $item->timemodified,
+            'sortorder' => $item->sortorder,
+        ];
+    }, $categories);
     echo json_encode($categories, JSON_UNESCAPED_UNICODE);
     exit();
 }
