@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2022-11-30 15:18:50
+// Generated 2023-03-24 12:20:06
 
 $langYes = "Oui";
 $langNo = "Non";
@@ -1075,9 +1075,9 @@ $langDBSetting = "Paramètres de MySQL";
 $langMainLang = "Langue Principale de l'installation";
 $langLastCheck = "Dernière vérification avant l'installation";
 $langRequirements = "Exigences du système";
-$langInstallEnd = "Installation terminée"
+$langInstallEnd = "Installation terminée" 
 ;
-$langModuleNotInstalled = "Non installé"
+$langModuleNotInstalled = "Non installé" 
 ;
 $langReadHelp = "Lire plus";
 $langWarnConfig = "Warning !! File <b>config.php</b> exists !! Installation cannot proceed. If you want to rerun installation, first delete config.php file!";
@@ -1109,7 +1109,7 @@ $langLDAPBaseDn = "Base DN du Serveur LDAP";
 $langChooseLang = "Choisissez la langue";
 $langBeforeInstall1 = "Avant de procéder à l'installation, veuillez imprimer et lire attentivement les";
 $langBeforeInstall2 = "De plus, vous trouverez des informations générales concernant la plateforme";
-$langInstallInstr = "Instructions d'installation"
+$langInstallInstr = "Instructions d'installation" 
 ;
 $langAddComment = "Ajouter / Modifier un commentaire";
 $langLearningModule = "Section";
@@ -1170,7 +1170,7 @@ $langDocumentAsModule = "Utiliser un document";
 $langDocumentAsModuleLabel = "de Document";
 $langDocumentInModule = "Document dans un module";
 $langEXERCISETypeDesc = "Exercice de la plateforme";
-$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape."
+$langEndOfSteps = "Cliquez Sortir après la fin de cette dernière étape." 
 ;
 $langErrorAssetNotFound = "Élément introuvable :";
 $langErrorCopyAttachedFile = "Impossible de copier le fichier : ";
@@ -1895,9 +1895,9 @@ $langNewId = "Nouveau identifiant"
 $langUsersWillAdd = "Les utilisateurs du cours seront ajoutés";
 $langErrorLang = "Erreur ! Aucune langue trouvée !"
 ;
-$langDoSearch = "Poursuivre la recherche"
+$langDoSearch = "Poursuivre la recherche" 
 ;
-$langSearch_terms = "Critères de recherche :"
+$langSearch_terms = "Critères de recherche :" 
 ;
 $langSearchIn = "Recherche dans :";
 $langSearchWith = "Recherche selon des critères :";
@@ -4725,6 +4725,8 @@ $langSiteTitle = 'Platform title';
 $langSiteDescr = 'Home page description';
 $langOpenMeetingsDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href=\"http://openmeetings.apache.org/\" target=\"_blank\">Apache OpenMeetings</a> platform which is a complete system of direct web-based communication and collaboration between $langsTeachers and $langsStudents.</p>
 <p>OpenMeetings does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with an OpenMeetings installation plase select <a href='openmeetingsconf.php'>Settings</a>.</p>";
+$langWebConfDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href=\"http://webconf.gunet.gr/\" target=\"_blank\">WebConf</a> platform which is a complete system of direct web-based communication and collaboration between $langsOfTeachers and $langsOfStudents.</p>
+<p>WebConf does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with a WebConf installation plase select <a href='webconf.php'>Settings</a>.</p>";
 $langOpenMeetingsConf = "OpenMeetings settings";
 $langAddOpenMeetingsServerInfo = "New OpenMeetings server info";
 $langUpdateOpenMeetingsServer = "OpenMeetings server info";
@@ -4735,6 +4737,12 @@ $langOpenMeetingsAdminUser = "OpenMeetings admin username";
 $langOpenMeetingsAdminPass = "OpenMeetings admin password";
 $langOpenMeetingsModuleKey = "Module key";
 $langOpenMeetingsWebApp = "WebApp Name";
+$langWebConf = "Wowza settings";
+$langAddWebConfServerInfo = "New Wowza server info";
+$langUpdateWebConfServer = "Wowza server info";
+$langAvailableWebConfServers = "Available Wowza servers";
+$langWebConfServer = "Wowza server";
+$langWebConfServerAlertHostname = "Please enter the hostname where Wowza is installed";
 $langLearnPathDeleted = 'The Learning Path was deleted';
 $langAdminPinnedOff = "Unpin announcement";
 $langAdminPinnedOn = "Pin announcement";
@@ -5697,3 +5705,61 @@ $langUserEmailNotification = "You are receiving $langsOfCourse notifications via
 $langConfEnableMailNotification = "Do you want to activate email notifications in $langsOfCourse?";
 $langConfDisableMailNotification = "Do you want to deactivate email notifications in $langsOfCourse?";
 $langOfNotifications = "notifications";
+$langMonthlyReportInfo = "Summarized statistics (courses, users) in last 12 months.";
+$langStatsReportsLP = "Participation Reports in Learning Paths";
+$langStatsReportsTC = "Participation reports in Teleconference";
+$langNoUserEmailLegend = "The user is not receiving $langsCourse notifications via email.";
+$langUsersListAccess = "Display list of $langsCourse users";
+$langUsersListAccessInfo = "concerns only users registered to $langsCourse";
+$langGroupPublicUserList = "Display users in group members";
+$langAttemptStarted = "First Attempt";
+$langAttemptAccessed = "Last Access";
+$langAttemptsNb = "Number of attempts";
+$langExerciseFeedback = "End Message";
+$langExerciseFeedbackInfo = "appears after exercise is complete";
+$langQuestionFeedback = "Feedback";
+$langPageUpdated = "Page updated";
+$langPageDeleted = "Η σελίδα διαγράφηκε";
+$langTrackAllPathExplanationAnalysis = "Detailed progress of  ".$langsOfStudents;
+$langActivateParticipation = "Activate Attendance Tracking";
+$langShowSettingsInfo = "concerns display to other users (excluding $langsTeachers)";
+$langNoApiToken = "No API tokens have been created";
+$langApiTokenDeleted = "Token successfully deleted";
+$langEncodeUserProfilePics = 'Encoding user profile images';
+$langAddCoursePage = 'Add course page';
+$langCoursePages = 'Course Pages';
+$langImportExtraGradebookUsers = "The following users didn't participate in the gradebook";
+$langImportGradesGradebookHelp = "You can upload an Excel file (e.g. xls, xlsx) with the user grades.
+    The grades must be entered in the last column of the file you can download from the following link.<br><br>
+    <strong>DO NOT</strong> change the file structure (e.g. the number of columns), otherwise the import might fail.<br><br>
+    Please note that the decimal point should be entered as a 'full stop', for instance '9.5'.";
+$langPeerReviewAssignmentInfo1 = "Assignments assigned to users. Old assignments have been deleted.";
+$langPeerReviewAssignmentInfo2 = "Assignments assigned.";
+$langAPITokenExists = "A token already exists. To create a new one, please click on 'Create New Token'";
+$langAPITokenShortDesc = "Create Open eClass API access token";
+$langCreateAPIToken = 'Create new Token';
+$langBBBLongDescription = "Connect with the BigBlueButton teleconference service.";
+$langGoogleMeetShortDescription = "Connect with the Google Meet video conference service.";
+$langGoogleMeetLongDescription = "Connect with the Google Meet video conference service.";
+$langZoomShortDescription = "Connect with the Zoom video conference service.";
+$langZoomLongDescription = "Connect with the Zoom video conference service.";
+$langWebexShortDescription = "Connect with the Webex video conference service.";
+$langWebexLongDescription = "Connect with the Webex video conference service.";
+$langJitsiShortDescription = "The open source software <a href=\"https://jitsi.org/\" target=\"_blank\">Jitsi</a> is a teleconference service. Visit the <a href=\"jitsiconf.php\">tool setings</a> to enable it. Please not that the service is recommended for meetings with up to 30 participants.";
+$langJitsiLongDescription = "Connect with the <em>Jitsi</em> teleconference service (for up to <strong>30</strong> participants).";
+$langJitsiUrl = "You can change this setting to use an alternate Jitsi server.";
+$langChooseTCServer = "Select teleconference service";
+$langGoToGoogleMeetLink = "Click on 'Go to Google Meet' below in order to visit Google's user interface and create the meeting link.
+    Afterwards, please copy and paste it in the 'Link' field.";
+$langGoToGoogleMeetLinkText = "Go to Google Meet";
+$langGoToZoomLink = "Click on 'Go to Zoom' below in order to visit Zoom's interface and create the meeting link.
+    Afterwards, please copy and paste it in the 'Link' field.";
+$langGoToWebexLink = "Click on 'Go to Webex' below in order to visit Webex's interface and create the meeting link.
+    Afterwards, please copy and paste it in the 'Link' field.";
+$langGoToZoomLinkText = "Go to Zoom";
+$langGoToWebexLinkText = "Go to Webex";
+$langUseOfService = "Use service in";
+$langUseOfServiceInfo = "Select in which $langsCourses the service will be available";
+$langInvalidEmailRecipients = 'Recipients without a valid e-mail address';
+$langDisabledEmailRecipients = 'Recipients with disabled e-mail reception';
+$langSubjectArea = "Subject Area";

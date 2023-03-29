@@ -46,13 +46,13 @@ $sheet->getDefaultColumnDimension()->setWidth(20);
 $data = [];
 
 if ($t == 1) { // download gradebook activities results
-    $data[] = [ $langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade ];
+    $data[] = [ $langSurname, $langName, $langAm, $langUsername, $langGroups, $langEmail, $langGradebookGrade ];
     $data[] = []; // blank line
     $activities = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE gradebook_id = ?d", $gid);
     foreach ($activities as $act) {
         $title = !empty($act->title) ? $act->title : $langGradebookNoTitle;
         $data[] = [ $title ];
-        $entries = Database::get()->queryArray("SELECT surname, givenname, username, am, email, gradebook_users.uid, grade
+        $entries = Database::get()->queryArray("SELECT surname, givenname, username, am, email, gradebook_users.uid AS uid, grade
                     FROM gradebook_users
                     LEFT JOIN gradebook_book
                         ON gradebook_book.uid = gradebook_users.uid
@@ -62,10 +62,11 @@ if ($t == 1) { // download gradebook activities results
                     WHERE gradebook_id = ?d
                     ORDER BY surname", $act->id, $gid);
         foreach ($entries as $item) {
+            $user_group = user_groups($course_id, $item->uid, 'txt');
             if (!is_null($item->grade)) {
-                $data[] = [$item->surname, $item->givenname, $item->am, $item->username, $item->email, round($item->grade * $range, 2)];
+                $data[] = [$item->surname, $item->givenname, $item->am, $item->username, $user_group, $item->email, round($item->grade * $range, 2)];
             } else {
-                $data[] = [ $item->surname, $item->givenname, $item->am, $item->username, $item->email, $item->grade ];
+                $data[] = [ $item->surname, $item->givenname, $item->am, $item->username, $user_group, $item->email, $item->grade ];
             }
         }
         $data[] = []; // blank line
@@ -98,7 +99,7 @@ if ($t == 1) { // download gradebook activities results
     // mapping of activity id's to output columns
     $actId = array();
     $actCounter = 0;
-    $header1 = [ $langSurname, $langName, $langAm, $langUsername, $langEmail ];
+    $header1 = [ $langSurname, $langName, $langAm, $langUsername, $langGroups, $langEmail ];
     $activities = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE gradebook_id = ?d", $gid);
     foreach ($activities as $act) {
         $actId[$act->id] = $actCounter++;
@@ -118,10 +119,12 @@ if ($t == 1) { // download gradebook activities results
                                             ORDER BY surname", $gid);
     foreach ($sql_users as $item) {
         $data_user_details = $data_user_grades = $data_user_grade_total = [];
+        $user_group = user_groups($course_id, $item->uid, 'txt');
         array_push($data_user_details, $item->surname,
                                      $item->givenname,
                                      $item->am,
                                      $item->username,
+                                     $user_group,
                                      $item->email);
 
         $sql_grades = Database::get()->queryArray("SELECT gradebook_activity_id, grade FROM gradebook_book

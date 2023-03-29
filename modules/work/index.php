@@ -4702,7 +4702,7 @@ function show_assignment($id, $display_graph_results = false) {
     $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress, $langFileName,
     $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent, $autojudge,
     $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution,
-    $langQuestionCorrectionTitle2, $langFrom2;
+    $langQuestionCorrectionTitle2, $langFrom2, $langOpenCoursesFiles;
 
     // transfer grades in peer review assignment
     $head_content .= "<script type='text/javascript'>
@@ -4826,11 +4826,14 @@ function show_assignment($id, $display_graph_results = false) {
                 <tr class='list-header'>
                 <th class='count-col'>&nbsp;</th>";
                 sort_link($langSurnameName, 'username', 'class="user-col"');
-                if ($assign->submission_type)  {
+                if ($assign->submission_type == 1)  {
                     $tool_content .= "<th class='text-center'>$langWorkOnlineText</th>";
+                } elseif ($assign->submission_type == 2) {
+                    $tool_content .= "<th class='text-center'>$langOpenCoursesFiles</th>";
                 } else {
                     $tool_content .= "<th class='text-center'>$langFileName</th>";
                 }
+
                 sort_link($m['sub_date'], 'date', 'class="date-col"');
                 if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) { //neo pedio vathmos aksiologhshs mono gia peer review
                     sort_link($langPeerReviewGrade, '');

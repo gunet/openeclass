@@ -666,7 +666,6 @@ $langYouHaveRejectedPrivacyPolicy = 'Απορρίψατε την {Πολιτικ
 $langYouHaveNotConsentedToPrivacyPolicy = 'Δεν έχετε συναινέσει στην {Πολιτική Απορρήτου}.';
 $langInvalidEmail = 'Μη έγκυρο e-mail';
 
-
 $langFlippedClassroom = "Mοντέλο Ανεστραμμένης Τάξης";
 $langCΕnabled = "Ενεργό";
 $langGoals = "Μαθησιακοί στόχοι";
@@ -879,6 +878,8 @@ $langDisplayed = "Εμφανίζονται";
 $langTill = "έως";
 $langAnnouncementActivePeriod = "Διάστημα εμφάνισης";
 $langAnnHasPublished = "Έχει δημοσιευθεί ανακοίνωση στο $langsCourse";
+$langInvalidEmailRecipients = 'Παραλήπτες με μη έγκυρη διεύθυνση e-mail';
+$langDisabledEmailRecipients = 'Παραλήπτες με απενεργοποιημένη λήψη e-mail';
 
 /* * *****************************************
  * archive_course.php
@@ -1701,7 +1702,7 @@ $langAddMetadata = "Προσθήκη / αλλαγή μεταδεδομένων";
 $langMetadata = "Μεταδεδομένα";
 $langMetadataMod = "Τα μεταδεδομένα τροποποιήθηκαν";
 $langLearningResourceType = "Είδος Μαθησιακού Αντικειμένου";
-$langTopic = "Γνωστικό Αντικείμενο";
+$langSubjectArea = "Γνωστικό Αντικείμενο";
 $langSubTopic = "Γνωστικό Υποαντικείμενο";
 $langLevel = "Επίπεδο";
 $langTypicalAgeRange = "Ηλικία μαθητών στην οποία απευθύνεται";
@@ -2010,7 +2011,7 @@ $langNumQuestions = "Αρ. ερωτήσεων";
 $langQuestionAllDiffs = "Όλοι οι βαθμοί δυσκολίας";
 $langQuestionNotDefined = "Μη προσδιορισμένη";
 $langQuestionVeryEasy = "Πολύ εύκολη";
-$langQuestionEasy = "Eύκολη";
+$langQuestionEasy = "Εύκολη";
 $langQuestionModerate = "Μέτρια";
 $langQuestionDifficult = "Δύσκολη";
 $langQuestionVeryDifficult = "Πολύ δύσκολη";
@@ -3623,7 +3624,6 @@ $langRegistrationError = "Λάθος Ενέργεια. Επιστρέψτε στ
 $langUserNoRequests = "Δεν υπάρχουν ανοικτές αιτήσεις.";
 $langCharactersNotAllowed = "Δεν επιτρέπονται στο password και στο username, οι χαρακτήρες: ',\" ή \\";
 $langStar2 = "Στα πεδία με (**) ";
-$langEditUser = "Επεξεργασία στοιχείων χρήστη";
 $langUserMerge = 'Συγχώνευση χρηστών';
 $langUserMergeLegend = 'Συγχώνευση του χρήστη %s με...';
 $langUserMergeTarget = 'Όνομα χρήστη με το οποίο θα γίνει συγχώνευση';
@@ -4044,7 +4044,7 @@ $langHitsShort = "Αρ. Προβολών";
 $langFirstLetterUser = "Πρώτο Γράμμα Επωνύμου";
 $langFirstLetterCourse = "Πρώτο Γράμμα Τίτλου";
 $langAndTotalCourseVisits = "και συνολικών επισκέψεων σε $langsCourses";
-$langUsageVisits = "Στατιστικά Επισκεψιμότητας";
+$langUsageVisits = "Επισκεψιμότητα";
 $langFavourite = "Προτίμηση Υποσυστημάτων";
 $langFavouriteCourse = "Προτίμηση $langOfCourses";
 $langFavouriteCourses = "Δημοφιλέστερα $langCourses";
@@ -4563,6 +4563,7 @@ $langEndPeerReview = "Η περίδος βαθμολόγησης έληξε, δ�
 $langAssignmentDistribution = 'Ανάθεση εργασιών';
 $langNoPeerReview = 'Δεν θα γίνει αξιολόγηση.';
 $langPendingPeerSubmissions = 'Αναμένονται εργασίες για αξιολόγηση.';
+$langPeerSubmissions = 'Εργασίες που έχουν ανατεθεί';
 $langPeerSubmissions = 'Εργασίες που έχουν ανατεθεί';
 
 

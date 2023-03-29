@@ -190,7 +190,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
     Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $post_id, 'forum_post');
     // remove forum post attachment (if any)
     $fp = Database::get()->querySingle("SELECT topic_filepath FROM forum_post WHERE id = ?d", $post_id);
-    if ($fp) {
+    if (!empty($fp->topic_filepath)) {
         unlink("$webDir/courses/$course_code/forum/$fp->topic_filepath");
     }
     // remove forum post entries
@@ -671,7 +671,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         <div class='panel-body'>
             <div class='row'>
                 <div class='col-sm-1 col-xs-2'>" .
-                    profile_image($myrow->poster_id, '40px', 'img-rounded-corners margin-bottom-thin') . "
+                    profile_image($myrow->poster_id, IMAGESIZE_SMALL, 'img-rounded-corners margin-bottom-thin') . "
                 </div>
                 <div class='col-sm-11 col-xs-10'>
                     <div class='forum-post-header'>

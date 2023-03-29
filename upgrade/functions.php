@@ -2392,6 +2392,10 @@ function upgrade_to_3_14($tbl_options) : void {
     if (!DBHelper::fieldExists('exercise_question', 'feedback')) {
         Database::get()->query("ALTER TABLE exercise_question ADD `feedback` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci AFTER description");
     }
+    // exercise end message (aka feedback)
+    if (!DBHelper::fieldExists('exercise', 'general_feedback')) {
+        Database::get()->query("ALTER TABLE `exercise` ADD `general_feedback` TEXT CHARACTER SET utf8mb4 COLLATE 'utf8mb4_unicode_520_ci' NULL");
+    }
 
     // clean up gradebook -- delete multiple tuples (gradebook_activity_id, uid) in `gradebook_book` table (if any)
     $q = Database::get()->queryArray("SELECT MIN(id) AS id, uid, gradebook_activity_id, COUNT(*) AS cnt
@@ -2457,6 +2461,21 @@ function upgrade_to_3_14($tbl_options) : void {
 
     if (!DBHelper::fieldExists('exercise', 'general_feedback')) {
         Database::get()->query("ALTER TABLE `exercise` ADD `general_feedback` TEXT CHARACTER SET utf8mb4 COLLATE 'utf8mb4_unicode_520_ci' NULL");
+    }
+
+    // api token
+    if (!DBHelper::tableExists('api_token')) {
+        Database::get()->querySingle("CREATE TABLE `api_token` (
+            `id` smallint NOT NULL AUTO_INCREMENT,
+            `token` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+            `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+            `ip` varchar(45) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `enabled` tinyint NOT NULL,
+            `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`)) $tbl_options");
     }
 
     // api token specific fields

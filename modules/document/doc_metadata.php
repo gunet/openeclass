@@ -28,7 +28,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
     $langDescription, $langDescriptionHelp, $langAuthor, $langAuthorHelp,
     $langLanguage, $langGreek, $langEnglish, $langFrench, $langGerman,
     $langItalian, $langSpanish, $langLanguageHelp, $langLearningResourceType,
-    $langLearningResourceTypeHelp, $langKeywords, $langKeywordsHelp, $langTopic,
+    $langLearningResourceTypeHelp, $langKeywords, $langKeywordsHelp, $langSubjectArea,
     $langTopicHelp, $langSubTopic, $langSubTopicHelp, $langLevel, $langLevelHelp,
     $langTypicalAgeRange, $langTypicalAgeRangeHelp, $langComment, $langCommentHelp,
     $langCopyright, $langCopyrightHelp, $langIntentedEndUserRole, $langIntentedEndUserRoleHelp,
@@ -105,7 +105,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
         "3danimation", "quiz", "slide", "exam", "presentation", "exercise", "lecture", "learningscenario", "textbook",);
     $output .= metaCheckBoxRow($langLearningResourceType, "meta_learningresourcetype", $resourceTypes, $checkMap, $langLearningResourceTypeHelp, true)
             . metaCommaTextAreaRow($langKeywords, "meta_keywords", $metaKeywords, $langKeywordsHelp, 2, "string")
-            . metaInputTextRow($langTopic, "meta_topic", $metaTopic, $langTopicHelp)
+            . metaInputTextRow($langSubjectArea, "meta_topic", $metaTopic, $langTopicHelp)
             . metaInputTextRow($langSubTopic, "meta_subtopic", $metaSubTopic, $langSubTopicHelp);
 
     $levels = array("nursery", "primary", "secondary", "highschool", "technical", "training", "higher education", "other");

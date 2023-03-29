@@ -362,17 +362,18 @@ $tool_content .= "
     <table class='table-default'>
     <thead>
     <tr class='list-header'>
-      <th><div align='left'>$langLearningPaths</div></th>\n";
+      <th><div class='text-left'>$langLearningPaths</div></th>";
 
 if ($is_editor) {
     // Titles for teachers
-    $tool_content .= "      <th><div align='center'>" . icon('fa-gears') . "</div></th>\n";
+    $tool_content .= "<th><div class='text-center'>" . icon('fa-gears') . "</div></th>";
 } elseif ($uid) {
     // display progression only if user is not teacher && not anonymous
-    $tool_content .= "      <th colspan='2' width='50'><div align='center'>$langProgress</div></th>\n";
+    $tool_content .= "<th class='text-center'>$langTotalTimeSpent</th>
+                      <th class='text-center'>$langProgress</></th>";
 }
 // close title line
-$tool_content .= "    </tr></thead><tbody id='tosort'>\n";
+$tool_content .= "</tr></thead><tbody id='tosort'>";
 
 // display invisible learning paths only if user is courseAdmin
 if ($is_editor) {
@@ -388,7 +389,8 @@ if ($uid) {
 }
 
 // list available learning paths
-$sql = "SELECT MIN(LP.name) AS name, MIN(LP.comment) AS lp_comment, MIN(UMP.`raw`) AS minRaw,
+$sql = "SELECT MIN(LP.name) AS name, MIN(LP.comment) AS lp_comment, 
+               MIN(UMP.`raw`) AS minRaw,
                MIN(LP.`lock`) AS `lock`, MIN(LP.visible) AS visible,
                MIN(LP.learnPath_id) AS learnPath_id
            FROM `lp_learnPath` AS LP
@@ -413,6 +415,7 @@ $iterator = 1;
 $is_blocked = false;
 $allow = false;
 $ind = 0;
+$globaltime = "00:00:00";
 foreach ($result as $list) { // while ... learning path list
     if ($list->visible == 0) {
         if ($is_editor) {
@@ -423,8 +426,6 @@ foreach ($result as $list) { // while ... learning path list
     } else {
         $style = '';
     }
-
-    //$is_blocked = $list->lock == 'CLOSE'? true : false;
 
     $tool_content .= "<tr " . $style . " data-id='$list->learnPath_id'>";
     //Display current learning path name
@@ -443,46 +444,28 @@ foreach ($result as $list) { // while ... learning path list
         $play_img = "<span class='fa fa-line-chart' style='font-size:15px;'></span>";
 
         if(!$is_editor){ // If is student
-//            if ($list->lock == 'CLOSE'){ // If is student and LP is closed
-//                $play_url = "<a href='javascript:void(0)' class='restrict_learn_path' data-toggle='modal' data-target='#restrictlp'>".htmlspecialchars($list->name)."</a>".intval($is_blocked);
-//                if (count($resultmodules) > 0) { // If there are modules
-//                    $play_button = "<i class='fa fa-minus-circle' style='font-size:20px';></i>";
-//                } else {
-//                    $play_button = $play_img;
-//                }
-//            } else { // If is student and LP is open
-                $play_button = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>$play_img</a>";
-                if (count($resultmodules) > 0) { // If there are modules
-                    $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
+            $play_button = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>$play_img</a>";
+            if (count($resultmodules) > 0) { // If there are modules
+                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
 
-                } else { // If there are no modules
-                    $play_url = htmlspecialchars($list->name);
-                }
-            //}
+            } else { // If there are no modules
+                $play_url = htmlspecialchars($list->name);
+            }
         } else { // If is admin
-//            if ($list->lock == 'CLOSE'){ // If is admin and LP is closed
-//                $play_url = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a>";
-//                if (count($resultmodules) > 0) { // If there are modules
-//                    $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'><i class='fa fa-minus-circle text-danger' style='font-size:20px';></i>&nbsp;&nbsp;$play_img</a>";
-//                } else {
-//                    $play_button = $play_img;
-//                }
-//            } else { // If is admin and LP is open
             $play_button = "";
-                if (count($resultmodules) > 0) { // If there are modules
-                    $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
+            if (count($resultmodules) > 0) { // If there are modules
+                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
 
-                } else {
-                    $play_url = htmlspecialchars($list->name);
-                }
-            //}
+            } else {
+                $play_url = htmlspecialchars($list->name);
+            }
         }
 
         $tool_content .= "
             <td>
-                <div><strong>$play_url</strong><span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathData'>$play_button</span></div>
+                <div><strong>$play_url</strong><span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathData'>$play_button</span></div>                
                 <div style='padding: 15px; 8px; 10px;'>$list->lp_comment</div>
-            </td>\n";
+            </td>";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
@@ -536,10 +519,10 @@ foreach ($result as $list) { // while ... learning path list
             }
 
     } else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
-        if(!$is_editor){
+        if(!$is_editor) {
             $tool_content .= "<td><a href='javascript:void(0)' class='restrict_learn_path' data-toggle='modal' data-target='#restrictlp'>".htmlspecialchars($list->name)."</a>"/* .$list['minRaw'] */ . "<span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i></span></td>\n";
         } else { // if is editor he can access the learning path even if it is restricted
-            $tool_content .=  "<td><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i>&nbsp;&nbsp;$play_button</span></td>\n";
+            $tool_content .= "<td><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i>&nbsp;&nbsp;$play_button</span></td>\n";
         }
     }
 
@@ -554,7 +537,6 @@ foreach ($result as $list) { // while ... learning path list
             array('title' => $langEditChange,
                 'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
                 'icon' => 'fa-edit'),
-            // VISIBILITY link
             array('title' => !$list->visible == 0 ? $langViewHide : $langViewShow,
                 'url' => !$list->visible == 0 ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;visibility_path_id=" . $list->learnPath_id : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;visibility_path_id=" . $list->learnPath_id,
                 'icon' => !$list->visible == 0 ? 'fa-eye-slash' : 'fa-eye'),
@@ -597,33 +579,38 @@ foreach ($result as $list) { // while ... learning path list
         $tool_content .= "<td class='option-btn-cell' style='width: 90px;'><div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer;
                 vertical-align: bottom;'><span class='fa fa-arrows' style='cursor: pointer;'></span></div><div class='pull-left'>" .
                 action_button($lp_menu) .
-                "</div></td>\n";
+                "</div></td>";
     } elseif ($uid) {
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($list->learnPath_id, $uid);
+        // time
+        if (!empty($lpTotalTime)) {
+            $globaltime = addScormTime($globaltime, $lpTotalTime);
+        }
         // % progress
         $prog = get_learnPath_progress($list->learnPath_id, $uid);
-        if (!isset($globalprog)) {
-            $globalprog = 0;
-        }
-        if ($prog >= 0) {
-            $globalprog += $prog;
-        }
-        $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($prog, 1) . "</td>";
+        $tool_content .= "<td>$lpTotalTime</td>";
+        $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($lpProgress, 1) . "</td>";
     }
-    $tool_content .= "</tr>\n";
+
+    $tool_content .= "</tr>";
     $iterator++;
     $ind++;
 } // end while
 
 if (!$is_editor && $iterator != 1 && $uid) {
+    if ($globaltime === "00:00:00") {
+        $globaltime = "";
+    }
     // add a blank line between module progression and global progression
-    $total = round($globalprog / ($iterator - 1));
+    $total = round($lpProgress / ($iterator - 1));
     $tool_content .= "
     <tr>
-      <th><div align='right'><b>$langPathsInCourseProg</b>:</div></th>
-      <th><div align='right'>" . disp_progress_bar($total, 1) . "</div></th>
-    </tr>\n";
+      <td class='text-left'><strong>$langTotal</strong>:</td>
+      <td class='text-left'><strong>$globaltime</strong:</td>
+      <td class='text-right'>" . disp_progress_bar($total, 1) . "</td>
+    </tr>";
 }
-$tool_content .= "\n     </tbody></table></div>\n";
+$tool_content .= "</tbody></table></div>";
 $tool_content .= "<div class='modal fade' id='restrictlp' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
   <div class='modal-dialog'>
     <div class='modal-content'>
