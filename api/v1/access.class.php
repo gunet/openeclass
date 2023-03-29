@@ -38,6 +38,13 @@ class Access {
             $header = trim($_SERVER['Authorization']);
         } elseif (isset($_SERVER['HTTP_AUTHORIZATION'])) {
             $header = trim($_SERVER['HTTP_AUTHORIZATION']);
+        } else {
+            foreach (getallheaders() as $name => $value) {
+                if (strtolower($name) == 'authorization') {
+                    $header = trim($value);
+                    break;
+                }
+            }
         }
         if (isset($header) and preg_match('/Bearer\s+(\S+)/', $header, $m)) {
             return $m[1];
