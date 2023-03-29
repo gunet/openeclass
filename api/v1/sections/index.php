@@ -30,7 +30,7 @@ function api_method($access) {
     if (!$course) {
         Access::error(3, "Course with id '$course_id' not found");
     }
-    if (!($course->visible == COURSE_OPEN or $access->isValid)) {
+    if (!($access->isValid or $course->visible == COURSE_OPEN)) {
         Access::error(100, "Authentication required");
     }
     $units = Database::get()->queryArray('SELECT id, title AS name, comments AS summary
