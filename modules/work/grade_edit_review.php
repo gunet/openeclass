@@ -30,13 +30,13 @@ if (isset($_REQUEST['assignment']) && isset($_REQUEST['submission'])) {
  * @global type $course_id
  * @param type $id
  * @return type
- */ 
+ */
 function get_assignment_details($id) {
     global $course_id;
     return Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
 }
 /**
- *            
+ *
  * @global type $m
  * @global type $langGradeOk
  * @global string $tool_content
@@ -97,25 +97,29 @@ function show_form($id, $sid, $assign) {
 		//dialekse thn roubrika opou o kwdikos mathhmatos isoutai me ton kwdiko tou mathhmatos pou eimai twra kai to id=grading_scale_id pou exei topotheththei sthn vash apo prin
 		$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
 		$criteria = unserialize($rubric->scales);
-		//$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a JOIN assignment as b WHERE course_id = ?d AND a.assignment_id = b.id AND b.id = ?d AND a.id = ?d", $course_id, $id, $sid);
-		$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_grading_review WHERE id = ?d ", $sub->id);
-		$sel_criteria = unserialize($submitted_grade->rubric_scales);
+		$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_grading_review WHERE id = ?d", $sub->id);
+        if (!is_null($submitted_grade->rubric_scales)) {
+            $sel_criteria = unserialize($submitted_grade->rubric_scales);
+        } else {
+            $sel_criteria = [];
+        }
+
 		$criteria_list = "";
 		foreach ($criteria as $ci => $criterio ) {
 			$criteria_list .= "<li class='list-group-item'>$criterio[title_name] <b>($criterio[crit_weight]%)</b></li>";
 			if(is_array($criterio['crit_scales'])){
 				$criteria_list .= "<li><ul class='list-unstyled'>";
 				foreach ($criterio['crit_scales'] as $si=>$scale) {
-					$selectedrb = ($sel_criteria[$ci]==$si?"checked=\"checked\"":"");
+					$selectedrb = ((count($sel_criteria) > 0) && $sel_criteria[$ci]==$si?"checked=\"checked\"":"");
 					$criteria_list .= "<li class='list-group-item'>
-					<input type='radio' name='grade_rubric[$ci]' value='$si' $selectedrb>
-					$scale[scale_item_name] ( $scale[scale_item_value] )
-					</li>";
+                                        <input type='radio' name='grade_rubric[$ci]' value='$si' $selectedrb> $scale[scale_item_name] ( $scale[scale_item_value] )
+                                    </li>";
 				}
 				$criteria_list .= "</ul></li>";
 
 			}
 		}
+
 		$grade_field = "<div class='col-sm-9' id='myModalLabel'><h5>$rubric->name</h5>
             <table class='table-default'>
                 <tr>

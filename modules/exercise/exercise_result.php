@@ -265,7 +265,7 @@ if ($exerciseRange > 0) { // exercise grade range (if any)
 }
 
 if ($showScore) {
-    $tool_content .= "<h4 class='panel-title' style='margin-top: 10px;'>$langYourTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</h4>";
+    $tool_content .= "<h4 class='panel-title' style='margin-top: 10px;'>$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</h4>";
 }
 $tool_content .= "
     <h5 style='margin-top: 20px;'>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em>
@@ -776,7 +776,7 @@ if (isset($_GET['pdf'])) {
         <html lang='el'>
         <head>
           <meta charset='utf-8'>
-          <title>" . q("$currentCourseName - $langQuesList") . "</title>
+          <title>" . q("$currentCourseName - $langExercicesResult") . "</title>
           <style>
             * { font-family: 'opensans'; }
             body { font-family: 'opensans'; font-size: 10pt; }
@@ -784,15 +784,13 @@ if (isset($_GET['pdf'])) {
             h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
             h1 { font-size: 16pt; }
             h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
-            table.answers { border: 1px solid #999; margin: 4px 0; }
-            .img-responsive { max-width: 100%; }
-            .label { color: #158; }
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
             th { text-align: left; border-bottom: 1px solid #999; }
             td { text-align: left; }
           </style>
         </head>
         <body>
+        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($langExercicesResult) . "</h2>";
 
     $pdf_content .= $tool_content;
@@ -820,7 +818,7 @@ if (isset($_GET['pdf'])) {
             ]
     ]);
 
-    $mpdf->setFooter('||{PAGENO} / {nb}');
+    $mpdf->setFooter('{DATE j-m-Y} || {PAGENO} / {nb}');
     $mpdf->SetCreator(course_id_to_prof($course_id));
     $mpdf->SetAuthor(course_id_to_prof($course_id));
     $mpdf->WriteHTML($pdf_content);
