@@ -30,7 +30,11 @@ $helpTopic = 'tc';
 
 require_once '../../include/baseTheme.php';
 
-$toolName = $langUserDuration;
+if (isset($_GET['per_user'])) {
+    $toolName = $langUserDuration;
+} else{
+    $toolName = $langParticipate;
+}
 
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langBBB);
 
@@ -41,6 +45,12 @@ if (isset($_GET['id'])) {
             array('title' => "$langExport",
                 'url' => "dumptcuserduration.php?course=$course_code&amp;meeting_id=$meetingid",
                 'icon' => 'fa-file-archive-o',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success',
+                'show' => $is_editor),
+            array('title' => $langDumpPDF,
+                'url' => "tcuserduration.php?course=$course_code&amp;id=$_GET[id]&amp;pdf=true",
+                'icon' => 'fa-file-pdf-o',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success',
                 'show' => $is_editor),
@@ -130,6 +140,9 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
             }
         }
     }
+    if ($first) {
+        $tool_content .= "<div class='alert alert-warning text-center'>$langBBBNoParticipation</div>";
+    }
     $tool_content .= "</table>";
 } else {
     $result = [];
@@ -181,7 +194,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
         }
         $tool_content .= "</table>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langBBBNoParticipation</div>";
+        $tool_content .= "<div class='alert alert-warning text-center'>$langBBBNoParticipation</div>";
     }
 }
 
