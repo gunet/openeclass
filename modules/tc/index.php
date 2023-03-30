@@ -211,13 +211,17 @@ if ($is_editor) {
                   'url' => "tcuserduration.php?course=$course_code",
                   'icon' => 'fa-clock-o',
                   'level' => 'primary-label' ],
+                [ 'title' => $langUserDuration,
+                    'url' => "tcuserduration.php?course=$course_code&amp;per_user=true",
+                    'icon' => 'fa-clock-o',
+                    'level' => 'primary-label' ],
             ]);
         }
     }
 } else {
     $tool_content .= action_bar(array(
                 array('title' => $langParticipate,
-                          'url' => "tcuserduration.php?course=$course_code&amp;u=true",
+                          'url' => "tcuserduration.php?course=$course_code&amp;u=$_SESSION[uid]",
                           'icon' => 'fa-clock-o',
                           'level' => 'primary-label')
                 ));

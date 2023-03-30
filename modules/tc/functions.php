@@ -78,9 +78,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langUnitDescr, $langStart, $langVisible, $langInvisible,
         $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore,
         $start_session, $BBBEndDate, $langAnnouncements, $langBBBAnnDisplay,
-        $langTitle, $langBBBNotifyExternalUsersHelpBlock, $langBBBRecordFalse,
+        $langTitle, $langBBBNotifyExternalUsersHelpBlock, $langNo,
         $langBBBNotifyUsers, $langBBBNotifyExternalUsers, $langBBBSessionMaxUsers,
-        $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue,
+        $langAllUsers, $langParticipants, $langBBBRecord, $langYes,
         $langBBBSessionSuggestedUsers, $langBBBSessionSuggestedUsers2,
         $langBBBAlertTitle, $langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll,
         $langEnd, $langBBBEndHelpBlock, $langModify, $langBBBExternalUsers,
@@ -293,13 +293,13 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                     <div class='radio mb-2'>
                       <label>
                         <input type='radio' id='user_button' name='record' value='true' " . (($record == true) ? 'checked' : '') . ">
-                        $langBBBRecordTrue
+                        $langYes
                       </label>
                     </div>
                     <div class='radio mb-2'>
                       <label>
                         <input type='radio' id='group_button' name='record' value='false' " . (($record == false) ? 'checked' : '') . ">
-                       $langBBBRecordFalse
+                       $langNo
                       </label>
                     </div>
                 </div>
