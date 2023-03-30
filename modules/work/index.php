@@ -3891,16 +3891,13 @@ function show_student_assignment($id) {
                 if ($row->reviews_per_assignment < $count_of_assign && $rows) {
                     show_assignment_review($id);
                 } elseif ($row->reviews_per_assignment < $count_of_assign && empty($rows)) {
-                    $tool_content .= "<div class='alert alert-warning'>$langNoPeerReview</div>";
+                    Session::Messages($langPendingPeerSubmissions);
                 } elseif ($row->reviews_per_assignment > $count_of_assign) {
-                    $tool_content .= "<div class='alert alert-warning'>$langNoPeerReview</div>";
+                    Session::Messages($langNoPeerReview);
                 }
-            }
-            else
-            {
+            } else {
                 //auto to mnm emfanizetai mexri kai thn hmeromhnia kai wra tou start_date_review
-                $start_date_review = format_locale_date(strtotime($row->start_date_review), 'short'); //hmeromhnia enarkshs aksiologhshs
-                $tool_content .= "<div class='alert alert-warning'>$langPendingPeerSubmissions</div>";
+                Session::Messages($langPendingPeerSubmissions);
             }
         }
     } else {
@@ -4700,8 +4697,8 @@ function show_assignment($id, $display_graph_results = false) {
     $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF, $langGradedAt,
     $langQuestionView, $langAmShort, $langSGradebookBook, $langDeleteSubmission, $urlServer, $langTransferGrades,
     $langAutoJudgeShowWorkResultRpt, $langSurnameName, $langPlagiarismCheck, $langProgress, $langFileName,
-    $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent, $autojudge,
-    $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution,
+    $langPeerReviewImpossible, $langPeerReviewGrade, $langPeerReviewCompletedByStudent,
+    $autojudge, $langPeerReviewPendingByStudent, $langPeerReviewMissingByStudent, $langAssignmentDistribution,
     $langQuestionCorrectionTitle2, $langFrom2, $langOpenCoursesFiles;
 
     // transfer grades in peer review assignment
@@ -4744,21 +4741,22 @@ function show_assignment($id, $display_graph_results = false) {
 
 	$cdate = date('Y-m-d H:i:s');
     $count_of_ass = countSubmissions($id);
-	//to button anathesh tha emfanizetai sto xroniko diasthma apo deadline - start_date_review
-        if (($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline && $cdate < $assign->start_date_review)) {
-            if ($assign->reviews_per_assignment < $count_of_ass) {
-                $tool_content .= " <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
-                               <input type='hidden' name='assign' value='$id'>
-                               <div class='form-group'>
-                                    <div class='pull-right'>
-                                        <input class='btn btn-primary' type='submit' name='ass_review' value='$langAssignmentDistribution'>
-                                    </div>
-                               </div>
-                               </form>";
-            } else {
-                Session::Messages($langPeerReviewImpossible, 'alert-warning');
-            }
+
+    //to button anathesh tha emfanizetai sto xroniko diasthma apo deadline assignment
+    if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate > $assign->deadline) {
+        if ($assign->reviews_per_assignment < $count_of_ass) {
+            $tool_content .= " <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
+                           <input type='hidden' name='assign' value='$id'>
+                           <div class='form-group'>
+                                <div class='text-center'>
+                                    <input class='btn btn-success' type='submit' name='ass_review' value='$langAssignmentDistribution'>
+                                </div>
+                           </div>
+                           </form>";
+        } else {
+            Session::Messages($langPeerReviewImpossible);
         }
+    }
 
 
     $rev = (@($_REQUEST['rev'] == 1)) ? 'DESC' : 'ASC';
@@ -4862,8 +4860,7 @@ function show_assignment($id, $display_graph_results = false) {
                 if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
                     $grade_review_field = "<input class='form-control' type='text' value='' name='grade_review' maxlength='4' size='3' disabled>";
                     $condition ='';
-                    $rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review
-                        WHERE assignment_id = ?d ", $id);
+                    $rows = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
                     if ($count_of_assignments > $assign->reviews_per_assignment && $rows) {
                         //status aksiologhshs kathe foithth
                         if ( $cdate > $assign->start_date_review){
@@ -5755,13 +5752,6 @@ function submit_grade_comments($args) {
 
 /**
  * @brief submit grade and comment for student submission
- * @global type $langGrades
- * @global type $course_id
- * @global type $langTheField
- * @global type $langGradebookGrade
- * @global type $course_code
- * @global type $langFormErrors
- * @global type $workPath
  * @param type $args
  */
 function submit_grade_reviews($args) {
@@ -5795,8 +5785,6 @@ function submit_grade_reviews($args) {
                                   ", $grade, $comment, $grade_rubric, $sid);
 
 
-		//edw tha valoume ena if mexri thn hmeromhnia lhkshs review .otan perasei h hmera tha kanoume update ton vathmo pou vghke apo to ms sto pedio bathmos
-		$cdate = date('Y-m-d H:i:s');
         Session::Messages($langGrades, 'alert-success');
         if (isset($_REQUEST['unit'])) {
             redirect_to_home_page("modules/units/index.php?course=$course_code&id=$_REQUEST[unit]");
@@ -5814,45 +5802,48 @@ function submit_grade_reviews($args) {
  * @brief submit reviews per assignment
  */
 function submit_review_per_ass($id) {
-	global $course_code;
+	global $course_code, $langNoPeerReviewMultipleFiles;
 
 	$assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d ",$id);
 	$assign = Database::get()->queryArray("SELECT * FROM assignment_submit WHERE assignment_id = ?d ",$id);
 
 	$del_submission_msg = delete_submissions($id);
-    //if (!empty($del_submission_msg)) {
     $success_msgs[] = $del_submission_msg;
 	$value = 1;
 	$value1 = 0;
-	foreach ($assign as $row1){
-		$ass = Database::get()->queryArray("SELECT * FROM assignment_submit WHERE assignment_id = ?d LIMIT $assignment->reviews_per_assignment OFFSET  $value ",$id);
+	foreach ($assign as $row1) {
+		$ass = Database::get()->queryArray("SELECT * FROM assignment_submit WHERE assignment_id = ?d LIMIT $assignment->reviews_per_assignment OFFSET $value", $id);
 
-		$rowcount = COUNT($ass);
+		$rowcount = count($ass);
 
 		$count = $assignment->reviews_per_assignment - $rowcount;//oi ergasies pou leipoun
-		foreach($ass as $row2){
-			if ($assignment->submission_type) {
+		foreach($ass as $row2) {
+			if ($assignment->submission_type == 1) { // online text
 				Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, submission_text, submission_date, gid, users_id)
 				VALUES (?d, ?d, ?d, ?s, ?t, ?d, ?d)", $id, $row1->id, $row1->uid, $row1->submission_text, $row1->submission_date, $row1->group_id, $row2->uid)->lastInsertID;
-			}
-			else{
+			} else if ($assignment->submission_type == 0) { // single file submission
 				Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, file_path, file_name, submission_date, gid, users_id)
 				VALUES (?d, ?d, ?d, ?s, ?s, ?t, ?d, ?d)", $id, $row1->id, $row1->uid, $row1->file_path, $row1->file_name, $row1->submission_date, $row1->group_id, $row2->uid)->lastInsertID;
-			}
+			} else if ($assignment->submission_type == 2) { // multiple file submission
+                Session::Messages($langNoPeerReviewMultipleFiles);
+                redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+            }
 		}
-		if ( $count != 0 )
+		if ($count != 0)
 		{
-			$assign1 = Database::get()->queryArray("SELECT * FROM assignment_submit WHERE assignment_id = ?d LIMIT $count OFFSET $value1 ",$id);
+			$assign1 = Database::get()->queryArray("SELECT * FROM assignment_submit WHERE assignment_id = ?d LIMIT $count OFFSET $value1", $id);
 			foreach ($assign1 as $row3)
 			{
-				if ($assignment->submission_type) {
+				if ($assignment->submission_type == 1) { // online text
 					Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, submission_text, submission_date, gid, users_id)
 					VALUES (?d, ?d, ?d, ?s, ?t, ?d, ?d)", $id, $row1->id, $row1->uid, $row1->submission_text, $row1->submission_date, $row1->group_id, $row3->uid)->lastInsertID;
-				}
-				else{
+				} else if ($assignment->submission_type == 0) { // single file submission
 					Database::get()->query("INSERT INTO assignment_grading_review ( assignment_id, user_submit_id, user_id, file_path, file_name, submission_date, gid, users_id)
 					VALUES (?d, ?d, ?d, ?s, ?s, ?t, ?d, ?d)", $id, $row1->id, $row1->uid, $row1->file_path, $row1->file_name, $row1->submission_date, $row1->group_id, $row3->uid)->lastInsertID;
-				}
+				} else if ($assignment->submission_type == 2) { // multiple file submission
+                    Session::Messages($langNoPeerReviewMultipleFiles);
+                    redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                }
 			}
 		}
 		$value++;
