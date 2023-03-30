@@ -261,7 +261,7 @@ if (isset($_GET['u'])) { //  stats per user
                 'icon' => 'fa-vcard-o',
                 'level' => 'primary-label'),
             array('title' => $langBBB,
-                'url' => "../tc/tcuserduration.php?course=$course_code",
+                'url' => "../tc/tcuserduration.php?course=$course_code&amp;per_user=true",
                 'icon' => 'fa-vcard-o',
                 'level' => 'primary-label'),
             array('title' => $langDumpUser,
