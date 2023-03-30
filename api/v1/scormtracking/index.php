@@ -30,10 +30,37 @@ function get_scorm_details($path) {
 function api_method($access) {
     global $course_id;
 
+    $course = null;
     $scorms = [];
     $users = [];
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
+    }
+    if (isset($_GET['user_id'])) {
+        $users = [$_GET['user_id']];
+    } elseif (isset($_GET['group_id'])) {
+        $group = Database::get()->querySingle('SELECT * FROM `group` WHERE id = ?d', $_GET['group_id']);
+        if (!$group) {
+            Access::error(3, "Group with id '$_GET[group_id]' not found");
+        }
+        $course = Database::get()->querySingle('SELECT id, code, visible FROM course
+            WHERE id = ?d', $group->course_id);
+        $group_members = Database::get()->queryArray('SELECT user_id FROM group_members
+            WHERE group_id = ?d AND is_tutor = 0', $_GET['group_id']);
+        if (!$group_members) {
+            Access::error(3, "No members found for group with id '$_GET[group_id]'");
+        }
+        $users = array_map(function ($member) {
+            return $member->user_id;
+        }, $group_members);
+    }
+    if (isset($_GET['course_id'])) {
+        $course_id = $_GET['course_id'];
+        $course = Database::get()->querySingle('SELECT id, code, visible FROM course
+            WHERE code = ?s', $course_id);
+        if (!$course) {
+            Access::error(3, "Course with id '$course_id' not found");
+        }
     }
     if (isset($_GET['scorm_id'])) {
         $lp = Database::get()->querySingle('SELECT learnPath_id, name, comment, course_id
@@ -48,20 +75,13 @@ function api_method($access) {
             Access::error(3, "Unable to read SCORM with id '$_GET[scorm_id]' in course '$course_code'");
         }
         $scorms = [[$lp->learnPath_id, $scorm_details['identifier']]];
-    } elseif (isset($_GET['course_id'])) {
-        $course_id = $_GET['course_id'];
-        $course = Database::get()->querySingle('SELECT id, code, visible FROM course
-            WHERE code = ?s AND visible <> ?d',
-            $course_id, COURSE_INACTIVE);
-        if (!$course) {
-            Access::error(3, "Course with id '$course_id' not found");
-        }
+    } elseif ($course) {
         $lps = Database::get()->queryArray("SELECT lp_learnPath.learnPath_id
             FROM lp_learnPath
                 JOIN lp_rel_learnPath_module ON lp_learnPath.learnPath_id = lp_rel_learnPath_module.learnPath_id
                 JOIN lp_module ON lp_module.module_id = lp_rel_learnPath_module.learnPath_module_id
             WHERE lp_learnPath.course_id = ?d AND lp_module.contentType = 'SCORM'",
-            $_GET['course_id']);
+            $course->id);
         $course_code = $course->code;
         foreach ($lps as $lp) {
             $path = "courses/$course_code/scormPackages/path_{$lp->learnPath_id}";
@@ -69,24 +89,14 @@ function api_method($access) {
             $scorms[] = [$lp->learnPath_id, $scorm_details['identifier']];
         }
     }
-    if (!isset($course) and isset($course_code)) {
-        $course = Database::get()->querySingle('SELECT id FROM course WHERE code = ?s', $course_code);
+    if (!$course) {
+       if (isset($course_code)) {
+           $course = Database::get()->querySingle('SELECT id FROM course WHERE code = ?s', $course_code);
+       } else {
+           Access::error(2, 'Required parameter missing - group_id, course_id or scorm_id is required');
+       }
     }
-    if (isset($_GET['user_id'])) {
-        $users = [$_GET['user_id']];
-    } elseif (isset($_GET['group_id'])) {
-        $group_members = Database::get()->queryArray('SELECT user_id FROM group_members
-            WHERE group_id = ?d AND is_tutor = 0', $_GET['group_id']);
-        if (!$group_members) {
-            Access::error(3, "No members found for group with id '$_GET[group_id]'");
-        }
-        $users = array_map(function ($member) {
-            return $member->user_id;
-        }, $group_members);
-    } else {
-        if (!$course) {
-            Access::error(2, 'Required parameter missing - group_id, course_id or scorm_id is required');
-        }
+    if (!$users) {
         $course_users = Database::get()->queryArray('SELECT user_id FROM course_user
             WHERE course_id = ?d AND status = ?d AND editor = 0', USER_STUDENT, $course->id);
         $users = array_map(function ($user) {

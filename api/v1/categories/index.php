@@ -20,23 +20,43 @@
  * ======================================================================== */
 
 function api_method($access) {
-    $categories = Database::get()->queryArray('SELECT hierarchy.id, hierarchy.name, hierarchy.description,
-            MIN(course.created) AS timemodified, 0 AS sortorder
-        FROM hierarchy
-            JOIN course_department ON hierarchy.id = course_department.department
-            JOIN course ON course_department.course = course.id
-        WHERE allow_course = 1
-        ORDER BY name');
+    if (isset($_GET['id'])) {
+        $category = Database::get()->querySingle('SELECT hierarchy.id, hierarchy.name, hierarchy.description,
+                MIN(course.created) AS timemodified, 0 AS sortorder
+            FROM hierarchy
+                JOIN course_department ON hierarchy.id = course_department.department
+                JOIN course ON course_department.course = course.id
+            WHERE hierarchy.id = ?d', $_GET['id']);
+        if (!$category) {
+            Access::error(3, "Category with id '$_GET[id]' not found");
+        } else {
+            $categories = [
+                'id' => $category->id,
+                'name' => getSerializedMessage($category->name, 'el'),
+                'description' => getSerializedMessage($category->description, 'el'),
+                'timemodified' => $category->timemodified,
+                'sortorder' => $category->sortorder,
+            ];
+        }
+    } else {
+        $categories = Database::get()->queryArray('SELECT hierarchy.id, hierarchy.name, hierarchy.description,
+                MIN(course.created) AS timemodified, 0 AS sortorder
+            FROM hierarchy
+                JOIN course_department ON hierarchy.id = course_department.department
+                JOIN course ON course_department.course = course.id
+            WHERE allow_course = 1
+            ORDER BY name');
+        $categories = array_map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => getSerializedMessage($item->name, 'el'),
+                'description' => getSerializedMessage($item->description, 'el'),
+                'timemodified' => $item->timemodified,
+                'sortorder' => $item->sortorder,
+            ];
+        }, $categories);
+    }
     header('Content-Type: application/json');
-    $categories = array_map(function ($item) {
-        return [
-            'id' => $item->id,
-            'name' => getSerializedMessage($item->name, 'el'),
-            'description' => getSerializedMessage($item->description, 'el'),
-            'timemodified' => $item->timemodified,
-            'sortorder' => $item->sortorder,
-        ];
-    }, $categories);
     echo json_encode($categories, JSON_UNESCAPED_UNICODE);
     exit();
 }

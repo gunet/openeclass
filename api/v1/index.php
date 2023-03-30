@@ -44,5 +44,39 @@ if ($token) {
 if (function_exists('api_method')) {
     api_method($access);
 } else {
-    Access::error(0, 'No error');
+    $base = $urlServer . 'api/v1/';
+    $api_methods = [
+        [
+            'url' => $base . 'categories/',
+            'method' => 'GET',
+            'auth_required' => false,
+            'description' => 'Get platform categories',
+        ],
+        [
+            'url' => $base . 'categories/?id={N}',
+            'method' => 'GET',
+            'auth_required' => false,
+            'description' => 'Get info about category with id {N}',
+        ],
+        [
+            'url' => $base . 'courses/',
+            'method' => 'GET',
+            'auth_required' => false,
+            'description' => 'Get platform courses',
+        ],
+        [
+            'url' => $base . 'users/?id={N}',
+            'method' => 'GET',
+            'auth_required' => false,
+            'description' => 'Get info of user with id {N}',
+        ],
+        [
+            'url' => $base . 'users/?username={S}',
+            'method' => 'GET',
+            'auth_required' => false,
+            'description' => 'Get info of user with username {S}',
+        ],
+    ];
+    header('Content-Type: application/json');
+    echo json_encode($api_methods, JSON_UNESCAPED_UNICODE);
 }
