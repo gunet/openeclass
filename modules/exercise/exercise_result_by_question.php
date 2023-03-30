@@ -81,11 +81,11 @@ if ($_POST && isset($_POST['questionScore'])) {
                     SET total_score = total_score + ?f WHERE eurid = ?d",
                     $data['questionScore'], $data['eurId']);
             }
-            Session::flash('message',$langUpdateSuccess); 
+            Session::flash('message',$langUpdateSuccess);
             Session::flash('alert-class', 'alert-success');
         }
     } else {
-        Session::flash('message',$langUpdateFailure); 
+        Session::flash('message',$langUpdateFailure);
         Session::flash('alert-class', 'alert-warning');
     }
 }
@@ -120,7 +120,7 @@ if (isset($_GET['exerciseId'])) {
     }
     else {
          redirect_to_home_page('modules/exercise/results_by_question.php?course='.$course_code.'&exerciseId='.$exerciseIdIndirect);
-         Session::flash('message',$langUpdateFailure); 
+         Session::flash('message',$langUpdateFailure);
          Session::flash('alert-class', 'alert-warning');
     }
 }
@@ -183,7 +183,7 @@ if (count($exercise_question_ids) > 0) {
         $tool_content .= "<br>
             <table class='table-default'>
             <tr>
-                <td class='text-end'><b>$langYourTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b></td>
+                <td class='text-end'><b>$langTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b></td>
             </tr>
             </table>";
 

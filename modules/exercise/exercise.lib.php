@@ -252,7 +252,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
 function display_exercise($exercise_id) {
 
     global $tool_content, $head_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
-           $langAnswer, $langComment, $langQuestionScore, $langYourTotalScore, $langQuestionsManagement,
+           $langAnswer, $langComment, $langQuestionScore, $langTotalScore, $langQuestionsManagement,
            $langScore, $course_code, $langBack, $langModify, $langExerciseExecute, $langFrom2,
            $langFromRandomCategoryQuestions, $langFromRandomDifficultyQuestions, $langQuestionFeedback,
            $langUsedInSeveralExercises, $langModifyInAllExercises, $langModifyInThisExercise;
@@ -513,6 +513,6 @@ function display_exercise($exercise_id) {
         }
     }
     if (!$hasRandomQuestions) {
-        $tool_content .= "<div class='col-sm-12 mt-2'><span class='float-end'><strong class='text-success'>$langYourTotalScore: $totalWeighting</strong></span></div>";
+        $tool_content .= "<div class='col-sm-12 mt-2'><span class='float-end'><strong class='text-success'>$langTotalScore: $totalWeighting</strong></span></div>";
     }
 }

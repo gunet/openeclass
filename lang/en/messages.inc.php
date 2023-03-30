@@ -752,7 +752,6 @@ $langScore = "Score";
 $langQuestionScore = "Question Score";
 $langCorrespondsTo = "Corresponds to";
 $langExpectedChoice = "Expected Choice";
-$langYourTotalScore = "Your total score is";
 $langDoAnEx = "Do an exercise";
 $langCorrect = "Correct";
 $langExerciseNotFound = "The answer was not found";

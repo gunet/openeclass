@@ -378,7 +378,7 @@ if ($displayScore == 1) {
     echo "<br>
         <table class='table-default'>
             <tr>
-                <td class='right'>$langYourTotalScore: <strong>" . round($totalScore, 2) . "/$totalWeighting</strong></td>
+                <td class='right'>$langTotalScore: <strong>" . round($totalScore, 2) . "/$totalWeighting</strong></td>
             </tr>
         </table>";
 }

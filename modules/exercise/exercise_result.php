@@ -269,7 +269,7 @@ if ($exerciseRange > 0) { // exercise grade range (if any)
 }
 
 if ($showScore) {
-    $tool_content .= "<h4 class='panel-title' style='margin-top: 10px;'>$langYourTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</h4>";
+    $tool_content .= "<h4 class='panel-title' style='margin-top: 10px;'>$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</h4>";
 }
 $tool_content .= "
     <h5 style='margin-top: 20px;'>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em>
