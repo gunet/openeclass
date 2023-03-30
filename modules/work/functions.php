@@ -172,31 +172,6 @@ function delete_submissions($id) {
     return $msg;
 }
 
-
-//$del_submission_msg = delete_submissions_by_quserid($quserid, -1, $sid, $grade);
-/*function delete_submissions_by_quserid($uid, $sid, $gid) {
-
-	global $m;
-	$res = Database::get()->queryArray("SELECT id, grade,id_assignment_submit, assignment_id, user_id,gid FROM assignment_grading_review WHERE id_assignment_submit = ?d AND user_id = ?d ", $sid, $uid);
-	foreach ($res as $row) {
-		Database::get()->query("DELETE FROM assignment_grading_review WHERE id = ?d", $row->id);
-        /*if ($row->grade != $grade) {
-            @unlink("$GLOBALS[workPath]/$row->file_path");
-        }*/
-        //$ass_cid = Database::get()->querySingle("SELECT id FROM assignment_submit WHERE id = ?d", $sid)->id;
-      //  Database::get()->query("DELETE FROM assignment_grading_review WHERE id = ?d", $row->id)
-		//triggerGame($row->assignment_id, $row->uid, $id);
-		//if ($GLOBALS['uid'] == $row->user_id) {
-		/*if (gid != 1 ){
-			$return .= $m['deleted_work_by_user'];//den emfanizoun mnm na ta ksana dw
-		} else {
-			$return .= $m['deleted_work_by_group'];
-		}
-		//$return .= ' "<i>' . q($row->grade) . '</i>". ';
-	}
-    return $return;
-}*/
-
 // Find submissions by a user (or the user's groups)
 function find_submissions($is_group_assignment, $uid, $id, $gids) {
 
@@ -353,7 +328,12 @@ function show_submission_details($id) {
     } elseif ($sub->group_id) {
         $notice .= "<br>$m[groupsubmit] $m[ofgroup] <em>" . gid_to_name($sub->group_id) . "</em>.";
     }
-    $sel_criteria = unserialize($sub->grade_rubric);
+    if (!empty($sub->grade_rubric)) {
+        $sel_criteria = unserialize($sub->grade_rubric);
+    } else {
+        $sel_criteria = [];
+    }
+
     $assignment_id = $sub->assignment_id;
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $assignment_id);
 
