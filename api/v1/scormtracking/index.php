@@ -98,13 +98,29 @@ function api_method($access) {
     }
     if (!$users) {
         $course_users = Database::get()->queryArray('SELECT user_id FROM course_user
-            WHERE course_id = ?d AND status = ?d AND editor = 0', USER_STUDENT, $course->id);
+            WHERE course_id = ?d AND status = ?d AND editor = 0', $course->id, USER_STUDENT);
         $users = array_map(function ($user) {
             return $user->user_id;
         }, $course_users);
     }
-
     $course_id = $course->id;
+    if (!isset($_GET['group_id'])) {
+        $group_data = [];
+        $group_members = Database::get()->queryArray('SELECT user_id, group_id
+            FROM group_members, `group`
+            WHERE group_id = `group`.id AND course_id = ?d', $course_id);
+        foreach ($group_members as $item) {
+            if (isset($group_data[$item->user_id])) {
+                if (is_array($group_data[$item->user_id])) {
+                    $group_data[$item->user_id][] = $item->group_id;
+                } else {
+                    $group_data[$item->user_id] = [$group_data[$item->user_id], $item->group_id];
+                }
+            } else {
+                $group_data[$item->user_id] = $item->group_id;
+            }
+        }
+    }
     $tracking_data = [];
     foreach ($scorms as $scorm) {
         $path_id = $scorm[0];
@@ -124,6 +140,8 @@ function api_method($access) {
             ];
             if (isset($_GET['group_id'])) {
                 $data['groupid'] = $_GET['group_id'];
+            } elseif (isset($group_data[$user_id])) {
+                $data['groupid'] = $group_data[$user_id];
             }
             $tracking_data[] = $data;
         }
