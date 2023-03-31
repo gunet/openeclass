@@ -111,8 +111,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
                     <div class='col-sm-9'>
                         <select id='select-courses' class='form-control' name='lti_courses[]' multiple>";
                     $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
-                                                            WHERE id NOT IN (SELECT course_id FROM course_lti_app)
-                                                            AND visible != " . COURSE_INACTIVE . "
+                                                            WHERE visible <> " . COURSE_INACTIVE . "
                                                             ORDER BY title");
                     $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
                     foreach($courses_list as $c) {
@@ -199,7 +198,7 @@ function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer
  * @param $session_id
  */
 function edit_lti_app($session_id) {
-    global $tool_content, $langModify, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
+    global $tool_content, $langSubmit, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
            $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive, $langTitle, $langLTIAPPlertTitle, $langLTIAPPlertURL,
            $langLTILaunchContainer, $langUseOfApp, $course_id,
            $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses;
@@ -273,9 +272,9 @@ function edit_lti_app($session_id) {
                             <div class='col-sm-9'>
                                 <select class='form-control' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
                                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
-                                                                    WHERE id NOT IN (SELECT course_id FROM course_lti_app)
+                                                                    WHERE id NOT IN (SELECT course_id FROM course_lti_app WHERE lti_app <> ?d)
                                                                     AND visible != " . COURSE_INACTIVE . "
-                                                                    ORDER BY title");
+                                                                    ORDER BY title", $session_id);
                                 if ($row->all_courses == 1) {
                                     $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
                                 } else {
@@ -301,7 +300,7 @@ function edit_lti_app($session_id) {
 
                     $tool_content .= "<div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>
-                            <input class='btn btn-primary' type='submit' name='update_lti_app' value='$langModify'>
+                            <input class='btn btn-primary' type='submit' name='update_lti_app' value='$langSubmit'>
                         </div>
                     </div>
                     </fieldset>
