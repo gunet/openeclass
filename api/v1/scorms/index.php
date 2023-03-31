@@ -19,12 +19,25 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+function get_scorm_sco_id($course_code, $lp_id) {
+    $path = "courses/$course_code/scormPackages/path_$lp_id";
+    if (is_dir($path)) {
+        $path .= "/imsmanifest.xml";
+        if (!($xml = simplexml_load_file($path))) {
+            return null;
+        }
+        return (string)$xml->organizations->organization->item['identifier'];
+    } else {
+        return null;
+    }
+}
+
 function api_method($access) {
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
     }
     if (isset($_GET['scorm_id'])) {
-        $lp = Database::get()->querySingle('SELECT learnPath_id, name, comment, rank
+        $lp = Database::get()->querySingle('SELECT learnPath_id, name, comment, rank, course_id
             FROM lp_learnPath WHERE learnPath_id = ?d', $_GET['scorm_id']);
         if (!$lp) {
             Access::error(3, "SCORM with id '$_GET[scorm_id]' not found");
@@ -35,6 +48,11 @@ function api_method($access) {
                 'summary' => $lp->comment,
                 'order' => $lp->rank,
         ];
+        $course_code = course_id_to_code($lp->course_id);
+        $sco_id = get_scorm_sco_id($course_code, $lp->learnPath_id);
+        if ($sco_id) {
+            $lp_data['sco_id'] = $sco_id;
+        }
         header('Content-Type: application/json');
         echo json_encode($lp_data, JSON_UNESCAPED_UNICODE);
         exit();
@@ -59,37 +77,51 @@ function api_method($access) {
             if (!$section) {
                 Access::error(3, "Section with id '$_GET[section_id]' not found for course '{$course->id}'");
             }
+            $course_code = $course_code;
         } else {
-            $section = Database::get()->querySingle('SELECT id FROM course_units WHERE id = ?d',
+            $section = Database::get()->querySingle('SELECT id, course_id FROM course_units WHERE id = ?d',
                 $_GET['section_id']);
             if (!$section) {
                 Access::error(3, "Section with id '$_GET[section_id]' not found");
             }
+            $course_id = $section->course_id;
+            $course_code = course_id_to_code($course_id);
         }
         $lps = Database::get()->queryArray('SELECT title, comments, res_id, `order`
             FROM unit_resources WHERE unit_id = ?d ORDER BY `order`',
             $section->id);
-        $lp_data = array_map(function ($lp) {
-            return [
+        $lp_data = array_map(function ($lp) use ($course_code) {
+            $sco_id = get_scorm_sco_id($course_code, $lp->res_id);
+            $lp_data = [
                 'id' => $lp->res_id,
                 'name' => $lp->title,
                 'summary' => $lp->comments,
                 'order' => $lp->order,
             ];
+            if ($sco_id) {
+                $lp_data['sco_id'] = $sco_id;
+            }
+            return $lp_data;
         }, $lps);
     } else {
         if (!$course) {
-            Access::error(2, 'Required parameter missing - course_id or section_id is required');
+            Access::error(2, 'Required parameter missing - scorm_id, course_id or section_id is required');
         }
         $lps = Database::get()->queryArray('SELECT learnPath_id, name, comment, rank
             FROM lp_learnPath WHERE course_id = ?d ORDER BY rank', $course->id);
-        $lp_data = array_map(function ($lp) {
-            return [
+        $course_code = $course->code;
+        $lp_data = array_map(function ($lp) use ($course_code) {
+            $sco_id = get_scorm_sco_id($course_code, $lp->learnPath_id);
+            $lp_data = [
                 'id' => $lp->learnPath_id,
                 'name' => $lp->name,
                 'summary' => $lp->comment,
                 'order' => $lp->rank,
             ];
+            if ($sco_id) {
+                $lp_data['sco_id'] = $sco_id;
+            }
+            return $lp_data;
         }, $lps);
     }
     header('Content-Type: application/json');
