@@ -223,6 +223,13 @@ if (!isset($_GET['pdf'])) {
     if (isset($_REQUEST['unit'])) {
         $tool_content .= action_bar([
             [
+                'title' => $langDumpPDF,
+                'url' => "../units/view.php?course=$course_code&res_type=exercise_results&eurId=$eurid&unit=$_REQUEST[unit]&pdf=true",
+                'icon' => 'fa-file-pdf-o',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'
+            ],
+            [
                 'title' => $langBack,
                 'url' => "../units/index.php?course=$course_code&id=$_REQUEST[unit]",
                 'icon' => 'fa fa-reply',
