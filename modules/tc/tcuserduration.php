@@ -219,8 +219,8 @@ if (isset($_GET['pdf']) and $is_editor) {
             td { text-align: left; }
           </style>
         </head>
-        <body>
-        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <body>" . get_platform_logo() .
+        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($langParticipate) . "</h2>";
 
     $pdf_content .= $tool_content;
@@ -248,7 +248,7 @@ if (isset($_GET['pdf']) and $is_editor) {
             ]
     ]);
 
-    $mpdf->setFooter('{DATE j-m-Y} || {PAGENO} / {nb}');
+    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
     $mpdf->SetCreator(course_id_to_prof($course_id));
     $mpdf->SetAuthor(course_id_to_prof($course_id));
     $mpdf->WriteHTML($pdf_content);

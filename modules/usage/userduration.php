@@ -41,16 +41,16 @@ require_once 'modules/usage/usage.lib.php';
 
 if (isset($_GET['u'])) { //  stats per user
 
-    $am_legend = $csv_am_legend = $grp_legend = $csv_grp_legend = '';
+    $am_legend = $xls_am_legend = $grp_legend = $xls_grp_legend = '';
     $am = uid_to_am($_GET['u']);
     if (!empty($am)) {
-        $am_legend = "<div><small>$langAmShort: " . $am . "</small></div>"; // user am
-        $csv_am_legend = "$langAmShort: $am";
+        $am_legend = " ($langAmShort: " . $am . ")"; // user am
+        $xls_am_legend = "$langAmShort: $am";
     }
     $grp_name = user_groups($course_id, $_GET['u'], false);
     if ($grp_name != '-') {
         $grp_legend = "<div><small>$langGroup: " . $grp_name . "</small></div>"; // user group
-        $csv_grp_legend = "$langGroup: $grp_name";
+        $xls_grp_legend = "$langGroup: $grp_name";
     }
 
     $user_actions = Database::get()->queryArray("SELECT 
@@ -71,7 +71,7 @@ if (isset($_GET['u'])) { //  stats per user
         $sheet->getDefaultColumnDimension()->setWidth(25);
         $filename = $course_code . "_user_duration.xlsx";
 
-        $user_details = uid_to_name($_GET['u']) . " $csv_am_legend $csv_grp_legend";
+        $user_details = uid_to_name($_GET['u']) . " $xls_am_legend $xls_grp_legend";
         $data[] = [ $user_details ];
 
         $data[] = [ $langModule, $langDuration ];
@@ -95,23 +95,30 @@ if (isset($_GET['u'])) { //  stats per user
         $writer->save("php://output");
         exit;
 
-    } else { // html output
-        $toolName = "$langParticipate $langOfUser";
-        $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-        $navigation[] = array('url' => 'userduration.php?course=' . $course_code, 'name' => $langUserDuration);
+    } else { // html + pdf output
 
-        $tool_content .= action_bar(array(
-            array('title' => $langDumpUser,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=xls",
-                'icon' => 'fa-download',
-                'level' => 'primary-label'),
-            array('title' => $langBack,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')
-        ), false);
-
-        $tool_content .= "<div class='alert alert-info'>" . uid_to_name($_GET['u']) . " $am_legend $grp_legend</div>";
+        if (!isset($_GET['format'])) {
+            $toolName = "$langParticipate $langOfUser";
+            $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
+            $navigation[] = array('url' => 'userduration.php?course=' . $course_code, 'name' => $langUserDuration);
+            $tool_content .= action_bar(array(
+                array('title' => $langDumpPDF,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=pdf",
+                    'icon' => 'fa-file-pdf-o',
+                    'level' => 'primary-label'),
+                array('title' => $langDumpUser,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=xls",
+                    'icon' => 'fa-download',
+                    'level' => 'primary-label'),
+                array('title' => $langBack,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+            ), false);
+            $tool_content .= "<div class='alert alert-info text-center'><span class='panel-title'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</span></div>";
+        } else {
+            $tool_content .= "<h3>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</h3>";
+        }
 
         $tool_content .= "
             <table class='table-default'>
@@ -149,8 +156,12 @@ if (isset($_GET['u'])) { //  stats per user
             $tool_content .= "</table>";
         }
     }
-    draw($tool_content, 2);
 
+    if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
+        pdf_output();
+    } else {
+        draw($tool_content, 2);
+    }
 } else if (isset($_GET['m']) and $_GET['m'] != -1) { // stats per module
     $module = $_GET['m'];
     $user_actions = Database::get()->queryArray("SELECT 
@@ -162,7 +173,7 @@ if (isset($_GET['u'])) { //  stats per user
                             GROUP BY user_id", $course_id, $module);
 
 
-    if (isset($_GET['format']) and $_GET['format'] == 'xls') { // csv output
+    if (isset($_GET['format']) and $_GET['format'] == 'xls') { // xls output
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle($langParticipate);
@@ -194,50 +205,66 @@ if (isset($_GET['u'])) { //  stats per user
         $writer->save("php://output");
         exit;
     } else { // html output
-        $toolName = "$langParticipate $langOfUser";
-        $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-        $navigation[] = array('url' => '$_SERVER[SCRIPT_NAME]?course=' . $course_code, 'name' => $langUserDuration);
+        if (!isset($_GET['format'])) {
+            $toolName = "$langParticipate $langOfUser";
+            $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
+            $navigation[] = array('url' => '$_SERVER[SCRIPT_NAME]?course=' . $course_code, 'name' => $langUserDuration);
 
-        $tool_content .= action_bar(array(
-            array('title' => $langDumpUser,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=xls",
-                'icon' => 'fa-download',
-                'level' => 'primary-label'),
-            array('title' => $langBack,
-                'url' => "index.php?course=$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')
-        ), false);
-
-        $tool_content .=  selection_course_modules();
-
-        $tool_content .= "<div class='alert alert-info'>" . which_module($module) . "</div>";
+            $tool_content .= action_bar(array(
+                array('title' => $langDumpPDF,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=pdf",
+                    'icon' => 'fa-file-pdf-o',
+                    'level' => 'primary-label'),
+                array('title' => $langDumpUser,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=xls",
+                    'icon' => 'fa-download',
+                    'level' => 'primary-label'),
+                array('title' => $langBack,
+                    'url' => "index.php?course=$course_code",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+            ), false);
+            $tool_content .= selection_course_modules();
+            $tool_content .= "<div class='alert alert-info'>" . which_module($module) . "</div>";
+        } else {
+            $tool_content .= "<h3>" . which_module($module) . "</h3>";
+        }
 
         $tool_content .= "
             <table class='table-default'>
             <tr>
                 <th>$langUser</th>
-                <th>$langAm</th>
                 <th>$langGroup</th>
+                <th>$langAm</th>
                 <th>$langDuration</th>
             </tr>";
         foreach ($user_actions as $um) {
-            $grp_name = user_groups($course_id, $um->user_id);
+            if (!isset($_GET['format'])) {
+                $grp_name = user_groups($course_id, $um->user_id);
+            } else {
+                $grp_name = user_groups($course_id, $um->user_id, false);
+            }
             $user_am = uid_to_am($um->user_id);
             $tool_content .= "<tr>";
-            $tool_content .= "<td>" . display_user($um->user_id) . "</td>";
+            if (!isset($_GET['format'])) {
+                $tool_content .= "<td>" . display_user($um->user_id) . "</td>";
+            } else {
+                $tool_content .= "<td>" . uid_to_name($um->user_id) . "</td>";
+            }
             $tool_content .= "<td>" . $grp_name . "</td>";
             $tool_content .= "<td>" . $user_am . "</td>";
             $tool_content .= "<td>" . format_time_duration(0 + $um->duration) . "</td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
-        draw($tool_content, 2);
-
+        if (isset($_GET['format']) and $_GET['format'] == 'pdf') {
+            pdf_output();
+        } else {
+            draw($tool_content, 2);
+        }
     }
 } else {
     if (isset($_GET['format']) and $_GET['format'] == 'xls') {
-        $format = 'xls';
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle($langParticipate);
@@ -250,32 +277,34 @@ if (isset($_GET['u'])) { //  stats per user
         }
 
     } else {
-        $format = 'html';
-        $toolName = $langUserDuration;
+        if (!isset($_GET['format'])) {
+            $toolName = $langUserDuration;
+            $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
+            $tool_content .= action_bar(array(
+                array('title' => $langLearningPaths,
+                    'url' => "../learnPath/detailsAll.php?course=$course_code",
+                    'icon' => 'fa-vcard-o',
+                    'level' => 'primary-label'),
+                array('title' => $langBBB,
+                    'url' => "../tc/tcuserduration.php?course=$course_code&amp;per_user=true",
+                    'icon' => 'fa-vcard-o',
+                    'level' => 'primary-label'),
+                array('title' => $langDumpPDF,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf",
+                    'icon' => 'fa-file-pdf-o',
+                    'level' => 'primary-label'),
+                array('title' => $langDumpUser,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=xls",
+                    'icon' => 'fa-download',
+                    'level' => 'primary-label'),
+                array('title' => $langBack,
+                    'url' => "index.php?course=$course_code",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+            ), false);
 
-        $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-
-        $tool_content .= action_bar(array(
-            array('title' => $langLearningPaths,
-                'url' => "../learnPath/detailsAll.php?course=$course_code",
-                'icon' => 'fa-vcard-o',
-                'level' => 'primary-label'),
-            array('title' => $langBBB,
-                'url' => "../tc/tcuserduration.php?course=$course_code&amp;per_user=true",
-                'icon' => 'fa-vcard-o',
-                'level' => 'primary-label'),
-            array('title' => $langDumpUser,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=xls",
-                'icon' => 'fa-download',
-                'level' => 'primary-label'),
-            array('title' => $langBack,
-                'url' => "index.php?course=$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')
-        ), false);
-
-        $tool_content .= selection_course_modules();
-
+            $tool_content .= selection_course_modules();
+        }
         $tool_content .= "
         <table class='table-default'>
         <tr>
@@ -290,25 +319,32 @@ if (isset($_GET['u'])) { //  stats per user
     $result = user_duration_query($course_id);
     if (count($result) > 0) {
         foreach ($result as $row) {
-            $grp_name = user_groups($course_id, $row->id, $format);
-            if ($format == 'html') {
-                $tool_content .= "<td class='bullet'>" . display_user($row->id) . "</td>
-                                <td class='center'>$row->am</td>
-                                <td class='center'>$grp_name</td>
-                                <td class='center'>" . format_time_duration(0 + $row->duration) . "</td>
-                                <td class='center'>" . icon('fa-line-chart', $langDetails, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$row->id") ."</td>
-                            </tr>";
-            } elseif ($format == 'xls') {
+            if (!isset($_GET['format'])) {
+                $grp_name = user_groups($course_id, $row->id);
+            } else {
+                $grp_name = user_groups($course_id, $row->id, false);
+            }
+            if (isset($_GET['format']) and $_GET['format'] == 'xls') {
                 $data[] = [ $row->surname, $row->givenname, $row->am, $grp_name, format_time_duration(0 + $row->duration) ];
+            } else {
+                $tool_content .= "<tr>";
+                if (!isset($_GET['format'])) {
+                    $tool_content .= "<td class='bullet'>" . display_user($row->id) . "</td>";
+                } else {
+                    $tool_content .= "<td>" . uid_to_name($row->id) . "</td>";
+                }
+                $tool_content .= "<td class='center'>$row->am</td>
+                                <td class='center'>$grp_name</td>
+                                <td class='center'>" . format_time_duration(0 + $row->duration) . "</td>";
+                if (!isset($_GET['format'])) {
+                    $tool_content .= "<td class='center'>" . icon('fa-line-chart', $langDetails, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$row->id") . "</td>";
+                }
+                $tool_content .= "</tr>";
             }
         }
-        if ($format == 'html') {
-            $tool_content .= "</table>";
-        }
+        $tool_content .= "</table>";
     }
-    if ($format == 'html') {
-        draw($tool_content, 2);
-    } elseif ($format == 'xls') {
+    if (isset($_GET['format']) and $_GET['format'] == 'xls') {
         // create spreadsheet
         $sheet->fromArray($data, NULL);
         // file output
@@ -316,7 +352,13 @@ if (isset($_GET['u'])) { //  stats per user
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         header("Content-Disposition: attachment;filename=$filename");
         $writer->save("php://output");
+
+    } elseif (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
+        pdf_output();
+    } else {
+        draw($tool_content, 2);
     }
+
 }
 
 /**
@@ -437,4 +479,68 @@ function selection_course_modules() {
     </div>";
 
     return $content;
+}
+
+/**
+ * @brief output to pdf file
+ * @return void
+ * @throws \Mpdf\MpdfException
+ */
+function pdf_output() {
+    global $tool_content, $langUserDuration, $currentCourseName,
+           $webDir, $course_id, $course_code;
+
+    $pdf_content = "
+        <!DOCTYPE html>
+        <html lang='el'>
+        <head>
+          <meta charset='utf-8'>
+          <title>" . q("$currentCourseName - $langUserDuration") . "</title>
+          <style>
+            * { font-family: 'opensans'; }
+            body { font-family: 'opensans'; font-size: 10pt; }
+            small, .small { font-size: 8pt; }
+            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+            h1 { font-size: 16pt; }
+            h2 { font-size: 12pt; border-bottom: 1px solid black; }
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
+            th { text-align: left; border-bottom: 1px solid #999; }
+            td { text-align: left; }
+          </style>
+        </head>
+        <body>" . get_platform_logo() .
+        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <h2> " . q($langUserDuration) . "</h2>";
+
+    $pdf_content .= $tool_content;
+    $pdf_content .= "</body></html>";
+
+    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    $fontDirs = $defaultConfig['fontDir'];
+    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    $fontData = $defaultFontConfig['fontdata'];
+
+    $mpdf = new Mpdf\Mpdf([
+        'tempDir' => _MPDF_TEMP_PATH,
+        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/default/fonts' ]),
+        'fontdata' => $fontData + [
+                'opensans' => [
+                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+                ],
+                'roboto' => [
+                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+                ]
+            ]
+    ]);
+
+    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+    $mpdf->SetCreator(course_id_to_prof($course_id));
+    $mpdf->SetAuthor(course_id_to_prof($course_id));
+    $mpdf->WriteHTML($pdf_content);
+    $mpdf->Output("$course_code user_report.pdf", 'I'); // 'D' or 'I' for download / inline display
+    exit;
 }
