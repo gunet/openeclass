@@ -358,7 +358,7 @@ if (count($exercise_question_ids) > 0) {
             $choice = purify($choice);
             if (!empty($choice)) {
                 if (!$question_graded) {
-                    $tool_content .= " <small>(<span class='text-danger'>$langAnswerUngraded</span>) </small";
+                    $tool_content .= " <small>(<span class='text-danger'>$langAnswerUngraded</span>) </small>";
                 } else {
                     $tool_content .= " <small>($langGradebookGrade: <strong>$question_weight</strong></span>)</small>";
                 }
@@ -808,8 +808,8 @@ if (isset($_GET['pdf'])) {
             td { text-align: left; }
           </style>
         </head>
-        <body>
-        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <body>" . get_platform_logo() .
+        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($langExercicesResult) . "</h2>";
 
     $pdf_content .= $tool_content;
@@ -837,7 +837,7 @@ if (isset($_GET['pdf'])) {
             ]
     ]);
 
-    $mpdf->setFooter('{DATE j-m-Y} || {PAGENO} / {nb}');
+    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
     $mpdf->SetCreator(course_id_to_prof($course_id));
     $mpdf->SetAuthor(course_id_to_prof($course_id));
     $mpdf->WriteHTML($pdf_content);
