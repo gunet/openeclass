@@ -4527,7 +4527,6 @@ function get_exercise_attempt_status_legend($status) {
     }
 }
 
-
 /**
  * @brief translate messages in blade views
  * @param $var_name
@@ -4553,4 +4552,37 @@ function trans($var_name, $var_array = []) {
             return ${$var_name};
         }
     }
+
+function get_platform_logo($size='normal') {
+    global $themeimg, $urlAppend;
+
+    if ($size == 'small') {
+        $logo_img = $themeimg . '/logo_eclass_small';
+    } else {
+        $logo_img = $themeimg . '/eclass-new-logo.png';
+    }
+
+    $theme_id = get_config('theme_options_id');
+    if ($theme_id) {
+        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+        $theme_options_styles = unserialize($theme_options->styles);
+        $bg_color = $theme_options_styles['leftNavBgColor'];
+
+        $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
+        if ($size == 'small') {
+            if (isset($theme_options_styles['imageUploadSmall'])) {
+                $logo_img = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
+            }
+        } else {
+            if (isset($theme_options_styles['imageUpload'])) {
+                $logo_img = "$urlThemeData/$theme_options_styles[imageUpload]";
+            }
+
+        }
+    }
+    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem;'>
+                <img style='float: left; height:6rem;' src='$logo_img'>
+            </div>";
+
+    return $logo;
 }
