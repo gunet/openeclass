@@ -69,17 +69,23 @@ $head_content .= "<script type='text/javascript'>
         });
         </script>";
 
-$tool_content .= action_bar(array(
-                    array('title' => $langDumpUser,
-                        'url' => "dumpuserlearnpathdetailsanalysis.php?course=$course_code",
-                        'icon' => 'fa-download',
-                        'level' => 'primary-label',
-                        'button-class' => 'btn-success'),
-                    array('title' => $langBack,
-                          'url' => "index.php",
-                          'icon' => 'fa-reply',
-                          'level' => 'primary-label')),
-                    false);
+if (!isset($_GET['pdf'])) {
+    $tool_content .= action_bar(array(
+        array('title' => $langDumpPDF,
+            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pdf=true",
+            'icon' => 'fa-file-pdf-o',
+            'level' => 'primary-label'),
+        array('title' => $langDumpUser,
+            'url' => "dumpuserlearnpathdetailsanalysis.php?course=$course_code",
+            'icon' => 'fa-download',
+            'level' => 'primary-label'),
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')),
+        false);
+}
+
 
 // check if there are learning paths available
 $lcnt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM lp_learnPath WHERE course_id = ?d", $course_id)->count;
@@ -119,15 +125,12 @@ foreach ($usersList as $user) {
     foreach ($learningPathList as $learningPath) {
         // % progress
         list($prog, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($learningPath->learnPath_id, $user->id);
-
         if ($prog >= 0) {
             $globalprog += $prog;
         }
-
         if (!empty($lpTotalTime)) {
             $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
-
         $lp_content .= "<tr>";
         $lp_content .= "<td></td>";
         $lp_content .= "<td class='text-left'>" . q($learningPath->name) . "</td>";
@@ -135,7 +138,6 @@ foreach ($usersList as $user) {
         $lp_content .= "<td class='text-right'>" . q($lpTotalTime) . "</td>";
         $lp_content .= "<td class='text-right'>" . disp_progress_bar($prog, 1) . "</td>";
         $lp_content .= "</tr>";
-
         $iterator++;
     }
 
@@ -145,8 +147,13 @@ foreach ($usersList as $user) {
     }
 
     $tool_content .= "<tr>";
-    $tool_content .= "<td><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . uid_to_name($user->id) . " (" . q($user->email) .")</a></td>
-            <td class='text-left'></td>
+    if (!isset($_GET['pdf'])) {
+        $tool_content .= "<td><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . uid_to_name($user->id) . " (" . q($user->email) .")</a></td>";
+    } else {
+        $tool_content .= "<td>" . uid_to_name($user->id) . "</td>";
+    }
+
+    $tool_content .= "<td class='text-left'></td>
             <td class='text-right'></td>
             <td class='text-right'>" . q($globaltime) . "</td>
             <td class='text-right'>"
@@ -157,4 +164,59 @@ foreach ($usersList as $user) {
 }
 $tool_content .= "</tbody></table></div>";
 
-draw($tool_content, 2, null, $head_content);
+if (isset($_GET['pdf'])) {
+    $pdf_content = "
+        <!DOCTYPE html>
+        <html lang='el'>
+        <head>
+          <meta charset='utf-8'>
+          <title>" . q("$currentCourseName - $langTrackAllPathExplanation") . "</title>
+          <style>
+            * { font-family: 'opensans'; }
+            body { font-family: 'opensans'; font-size: 10pt; }
+            small, .small { font-size: 8pt; }
+            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+            h1 { font-size: 16pt; }
+            h2 { font-size: 12pt; border-bottom: 1px solid black; }
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
+            th { text-align: left; border-bottom: 1px solid #999; }
+            td { text-align: left; }
+          </style>
+        </head>
+        <body>" . get_platform_logo() .
+        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <h2> " . q($langTrackAllPathExplanation) . "</h2>";
+
+    $pdf_content .= $tool_content;
+    $pdf_content .= "</body></html>";
+
+    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    $fontDirs = $defaultConfig['fontDir'];
+    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    $fontData = $defaultFontConfig['fontdata'];
+
+    $mpdf = new Mpdf\Mpdf([
+        'tempDir' => _MPDF_TEMP_PATH,
+        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/default/fonts' ]),
+        'fontdata' => $fontData + [
+                'opensans' => [
+                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+                ],
+                'roboto' => [
+                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+                ]
+            ]
+    ]);
+
+    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+    $mpdf->SetCreator(course_id_to_prof($course_id));
+    $mpdf->SetAuthor(course_id_to_prof($course_id));
+    $mpdf->WriteHTML($pdf_content);
+    $mpdf->Output("$course_code learning_path_results.pdf", 'I'); // 'D' or 'I' for download / inline display
+} else {
+    draw($tool_content, 2, null, $head_content);
+}
