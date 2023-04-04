@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 3.14
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -25,6 +25,9 @@
  * @author Piraux Sebastien <pir@cerdecam.be>
  * @brief Displays course user progress in LPs
  */
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
@@ -68,16 +71,29 @@ $head_content .= "<script type='text/javascript'>
         });
         </script>";
 
-$tool_content .= action_bar(array(
-                    array('title' => $langDumpUser,
-                        'url' => "dumpuserlearnpathdetails.php?course=$course_code",
-                        'icon' => 'fa-download',
-                        'level' => 'primary-label'),
-                    array('title' => $langBack,
-                      'url' => "index.php",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary-label')),
-                false);
+if (!isset($_GET['pdf'])) {
+    $tool_content .= action_bar(array(
+        array('title' => $langDumpPDF,
+            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&pdf=true",
+            'icon' => 'fa-file-pdf-o',
+            'level' => 'primary-label'),
+        array('title' => $langDumpUser,
+            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&xls=true",
+            'icon' => 'fa-download',
+            'level' => 'primary-label'),
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')),
+        false);
+}
+
+
+$course_title = course_code_to_title($_GET['course']);
+
+$data[] = [ $course_title ];
+$data[] = [];
+$data[] = [ $langSurnameName, $langEmail, $langAm, $langGroup, $langTotalTimeSpent, $langProgress ];
 
 // check if there are learning paths available
 $lcnt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM lp_learnPath WHERE course_id = ?d", $course_id)->count;
@@ -100,11 +116,11 @@ $tool_content .= "<div class='table-responsive'>
             </tr>
         </thead>";
 
-$usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`
+$usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`,  U.`am`
                 FROM `user` AS U, `course_user` AS CU
                     WHERE U.`id`= CU.`user_id`
                     AND CU.`course_id` = ?d
-                    ORDER BY U.`surname` ASC", $course_id);
+                    ORDER BY U.`surname` ASC, U.`givenname` ASC", $course_id);
 
 $tool_content .= "<tbody>";
 foreach ($usersList as $user) {
@@ -126,15 +142,28 @@ foreach ($usersList as $user) {
         $iterator++;
     }
     $total = round($globalprog / ($iterator - 1));
+    // ---- xls format ----
+    $ug = user_groups($course_id, $user->id, false);
+    $data[] = [ "$user->surname $user->givenname", $user->email, $user->am, $ug, $globaltime, $total . '%' ];
+    // --------------------
+
     if ($globaltime === "00:00:00") {
         $globaltime = "";
     }
     $tool_content .= "<tr>";
-    $tool_content .= "<td><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . uid_to_name($user->id) . "</a></td>
-            <td class='text-left'>" . q($user->email). "</td>
-            <td class='text-center'>" . q(uid_to_am($user->id)) . "</td>
-            <td class='text-start'>" . user_groups($course_id, $user->id) . "</td>
-            <td class='text-right'>" . q($globaltime) . "</td>
+    if (!isset($_GET['pdf'])) {
+        $tool_content .= "<td><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . uid_to_name($user->id) . "</a></td>";
+    } else {
+        $tool_content .= "<td>" . uid_to_name($user->id) . "</td>";
+    }
+    $tool_content .= "<td class='text-left'>" . q($user->email). "</td>
+                      <td class='text-center'>" . q($user->am) . "</td>";
+    if (!isset($_GET['pdf'])) {
+        $tool_content .= "<td class='text-start' > " . user_groups($course_id, $user->id) . "</td>";
+    } else {
+        $tool_content .= "<td class='text-left' > " . user_groups($course_id, $user->id, false) . "</td>";
+    }
+    $tool_content .= "<td class='text-right'>" . q($globaltime) . "</td>
             <td class='text-end' width='120'>"
             . disp_progress_bar($total, 1) . "
             </td>";
@@ -142,4 +171,80 @@ foreach ($usersList as $user) {
 }
 $tool_content .= "</tbody></table></div>";
 
-draw($tool_content, 2, null, $head_content);
+if (isset($_GET['xls'])) {
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+    $sheet->setTitle($langTrackAllPathExplanation);
+    $sheet->getDefaultColumnDimension()->setWidth(30);
+    $filename = $course_code . "_learning_path_user_stats.xlsx";
+
+    $sheet->mergeCells("A1:F1");
+    $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+    for ($i = 1; $i <= 6; $i++) {
+        $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+    }
+// create spreadsheet
+    $sheet->fromArray($data, NULL);
+// file output
+    $writer = new Xlsx($spreadsheet);
+    header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    header("Content-Disposition: attachment;filename=$filename");
+    $writer->save("php://output");
+    exit;
+
+} else if (isset($_GET['pdf'])) {
+    $pdf_content = "
+        <!DOCTYPE html>
+        <html lang='el'>
+        <head>
+          <meta charset='utf-8'>
+          <title>" . q("$currentCourseName - $langTrackAllPathExplanation") . "</title>
+          <style>
+            * { font-family: 'opensans'; }
+            body { font-family: 'opensans'; font-size: 10pt; }
+            small, .small { font-size: 8pt; }
+            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+            h1 { font-size: 16pt; }
+            h2 { font-size: 12pt; border-bottom: 1px solid black; }
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
+            th { text-align: left; border-bottom: 1px solid #999; }
+            td { text-align: left; }
+          </style>
+        </head>
+        <body>" . get_platform_logo() .
+        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        <h2> " . q($langTrackAllPathExplanation) . "</h2>";
+
+    $pdf_content .= $tool_content;
+    $pdf_content .= "</body></html>";
+
+    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    $fontDirs = $defaultConfig['fontDir'];
+    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    $fontData = $defaultFontConfig['fontdata'];
+
+    $mpdf = new Mpdf\Mpdf([
+        'tempDir' => _MPDF_TEMP_PATH,
+        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/default/fonts' ]),
+        'fontdata' => $fontData + [
+                'opensans' => [
+                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+                ],
+                'roboto' => [
+                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+                ]
+            ]
+    ]);
+
+    $mpdf->setFooter('{DATE j-n-Y} || {PAGENO} / {nb}');
+    $mpdf->SetCreator(course_id_to_prof($course_id));
+    $mpdf->SetAuthor(course_id_to_prof($course_id));
+    $mpdf->WriteHTML($pdf_content);
+    $mpdf->Output("$course_code learning_path_results.pdf", 'I'); // 'D' or 'I' for download / inline display
+} else {
+    draw($tool_content, 2, null, $head_content);
+}
