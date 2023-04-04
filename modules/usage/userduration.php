@@ -74,6 +74,10 @@ if (isset($_GET['u'])) { //  stats per user
         $user_details = uid_to_name($_GET['u']) . " $xls_am_legend $xls_grp_legend";
         $data[] = [ $user_details ];
 
+        $ud = user_duration_course($_GET['u']);
+        $data[] = [ $langTotalDuration, $ud];
+        $data[] = [];
+
         $data[] = [ $langModule, $langDuration ];
 
         foreach ($user_actions as $ua) {
@@ -85,7 +89,8 @@ if (isset($_GET['u'])) { //  stats per user
         $sheet->mergeCells("A1:B1");
         $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
         $sheet->getCell('A2')->getStyle()->getFont()->setBold(true);
-        $sheet->getCell('B2')->getStyle()->getFont()->setBold(true);
+        $sheet->getCell('A4')->getStyle()->getFont()->setBold(true);
+        $sheet->getCell('B4')->getStyle()->getFont()->setBold(true);
         // create spreadsheet
         $sheet->fromArray($data, NULL);
         // file output
@@ -96,7 +101,6 @@ if (isset($_GET['u'])) { //  stats per user
         exit;
 
     } else { // html + pdf output
-
         if (!isset($_GET['format'])) {
             $toolName = "$langParticipate $langOfUser";
             $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
@@ -115,16 +119,19 @@ if (isset($_GET['u'])) { //  stats per user
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
             ), false);
-            $tool_content .= "<div class='alert alert-info text-center'><span class='panel-title'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</span></div>";
+            $tool_content .= "<div class='alert alert-info text-center'><span class='panel-title'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</span>";
+            $tool_content .= "<h5><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h5>";
+            $tool_content .= "</div>";
         } else {
             $tool_content .= "<h3>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</h3>";
+            $tool_content .= "<h5><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h5>";
         }
 
         $tool_content .= "
             <table class='table-default'>
             <tr>
-              <th>$langModule</th>          
-              <th>$langDuration</th>          
+              <th>$langModule</th>
+              <th>$langDuration</th>
             </tr>";
         foreach ($user_actions as $ua) {
             $tool_content .= "<tr>";
@@ -139,8 +146,8 @@ if (isset($_GET['u'])) { //  stats per user
                       FROM actions_daily
                             WHERE course_id = ?d
                               AND user_id = ?d
-                    AND module_id = ". MODULE_ID_UNITS . " 
-                    ORDER BY last_update 
+                    AND module_id = ". MODULE_ID_UNITS . "
+                    ORDER BY last_update
                     DESC ", $course_id, $_GET['u']);
 
         if (count($user_logins) > 0) {
@@ -164,9 +171,9 @@ if (isset($_GET['u'])) { //  stats per user
     }
 } else if (isset($_GET['m']) and $_GET['m'] != -1) { // stats per module
     $module = $_GET['m'];
-    $user_actions = Database::get()->queryArray("SELECT 
-                            SUM(actions_daily.duration) AS duration, user_id, 
-                              module_id 
+    $user_actions = Database::get()->queryArray("SELECT
+                            SUM(actions_daily.duration) AS duration, user_id,
+                              module_id
                             FROM actions_daily
                             WHERE course_id = ?d
                               AND module_id = ?d
@@ -329,7 +336,7 @@ if (isset($_GET['u'])) { //  stats per user
             } else {
                 $tool_content .= "<tr>";
                 if (!isset($_GET['format'])) {
-                    $tool_content .= "<td class='bullet'>" . display_user($row->id) . "</td>";
+                    $tool_content .= "<td>" . display_user($row->id) . "</td>";
                 } else {
                     $tool_content .= "<td>" . uid_to_name($row->id) . "</td>";
                 }

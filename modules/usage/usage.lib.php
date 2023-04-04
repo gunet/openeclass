@@ -827,15 +827,17 @@ function table_placeholder($table_id, $table_class, $table_schema, $title = null
 */
 function user_duration_per_course($u) {
 
-    global $tool_content, $langDurationVisitsPerCourse, $langNotEnrolledToLessons;
+    global $tool_content, $langDurationVisitsPerCourse, $langNotEnrolledToLessons, $langTotalDuration;
 
     $totalDuration = 0;
     $result = Database::get()->queryArray("SELECT SUM(hits) AS cnt, SUM(duration) AS duration, course.code
                                         FROM course
-                                            LEFT JOIN course_user ON course.id = course_user.course_id
-                                            LEFT JOIN actions_daily
-                                                ON actions_daily.user_id = course_user.user_id AND
-                                                   actions_daily.course_id = course_user.course_id
+                                        LEFT JOIN course_user ON course.id = course_user.course_id
+                                        LEFT JOIN actions_daily
+                                        ON actions_daily.user_id = course_user.user_id 
+                                        AND actions_daily.course_id = course_user.course_id
+                                        AND actions_daily.module_id != " . MODULE_ID_TC . "
+                                        AND actions_daily.module_id != " . MODULE_ID_LP . "
                                         WHERE course_user.user_id = ?d
                                         AND course.visible != " . COURSE_INACTIVE . "
                                         GROUP BY course.id
@@ -847,13 +849,17 @@ function user_duration_per_course($u) {
         }
 
     $totalDuration = format_time_duration(0 + $totalDuration, 240);
+    $tool_content .= "<div class='row alert alert-info text-center'>
+                        <strong>$langTotalDuration:</strong> " . $totalDuration . "
+                    </div>";
+
     $tool_content .= "
                 <div class='row margin-bottom-fat margin-top-fat'>
                   <div class='col-xs-12'>
                     <ul class='list-group'>
                       <li class='list-group-item disabled'>
                         <div class='row'>
-                          <div class='col-sm-12'><b>$langDurationVisitsPerCourse</b></div>
+                          <div class='col-sm-12'><strong>$langDurationVisitsPerCourse</strong></div>
                         </div>
                       </li>";
     foreach ($duration as $code => $time) {
@@ -874,6 +880,31 @@ function user_duration_per_course($u) {
     }
 
 }
+
+/**
+ * @brief calculate user duration in course
+ * @param $u
+ * @return int|string
+ */
+function user_duration_course($u) {
+
+    global $course_id;
+
+    $totalDuration = 0;
+    $q = Database::get()->querySingle("SELECT SUM(duration) AS duration
+                                FROM actions_daily                                         
+                                WHERE course_id = ?d
+                                AND user_id = ?d
+                                AND actions_daily.module_id != " . MODULE_ID_TC . "
+                                AND actions_daily.module_id != " . MODULE_ID_LP . "",
+                            $course_id, $u);
+
+    if ($q) {
+        $totalDuration = format_time_duration(0 + $q->duration);
+    }
+    return $totalDuration;
+}
+
 
 /**
  * @brief get user 5 last logins
