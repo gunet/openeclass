@@ -74,6 +74,10 @@ if (isset($_GET['u'])) { //  stats per user
         $user_details = uid_to_name($_GET['u']) . " $xls_am_legend $xls_grp_legend";
         $data[] = [ $user_details ];
 
+        $ud = user_duration_course($_GET['u']);
+        $data[] = [ $langTotalDuration, $ud];
+        $data[] = [];
+
         $data[] = [ $langModule, $langDuration ];
 
         foreach ($user_actions as $ua) {
@@ -85,7 +89,8 @@ if (isset($_GET['u'])) { //  stats per user
         $sheet->mergeCells("A1:B1");
         $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
         $sheet->getCell('A2')->getStyle()->getFont()->setBold(true);
-        $sheet->getCell('B2')->getStyle()->getFont()->setBold(true);
+        $sheet->getCell('A4')->getStyle()->getFont()->setBold(true);
+        $sheet->getCell('B4')->getStyle()->getFont()->setBold(true);
         // create spreadsheet
         $sheet->fromArray($data, NULL);
         // file output
@@ -96,21 +101,6 @@ if (isset($_GET['u'])) { //  stats per user
         exit;
 
     } else { // html + pdf output
-
-<<<<<<< local
-        $tool_content .= action_bar(array(
-            array('title' => $langDumpUser,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=xls",
-                'icon' => 'fa-download',
-                'level' => 'primary-label'),
-            array('title' => $langBack,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')
-        ), false);
-
-        $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-info'>" . uid_to_name($_GET['u']) . " $am_legend $grp_legend</div></div>";
-=======
         if (!isset($_GET['format'])) {
             $toolName = "$langParticipate $langOfUser";
             $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
@@ -129,19 +119,21 @@ if (isset($_GET['u'])) { //  stats per user
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
             ), false);
-            $tool_content .= "<div class='alert alert-info text-center'><span class='panel-title'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</span></div>";
+            $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-info text-center'><span class='panel-title'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</span>";
+            $tool_content .= "<h5><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h5>";
+            $tool_content .= "</div></div>";
         } else {
             $tool_content .= "<h3>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</h3>";
+            $tool_content .= "<h5><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h5>";
         }
->>>>>>> graft
 
         $tool_content .= "
         <div class='col-sm-12'>
         <div class='table-responsive'>
             <table class='table-default'>
-            <tr class='list-header'>
-              <th>$langModule</th>          
-              <th>$langDuration</th>          
+            <tr>
+              <th>$langModule</th>
+              <th>$langDuration</th>
             </tr>";
         foreach ($user_actions as $ua) {
             $tool_content .= "<tr>";
@@ -156,8 +148,8 @@ if (isset($_GET['u'])) { //  stats per user
                       FROM actions_daily
                             WHERE course_id = ?d
                               AND user_id = ?d
-                    AND module_id = ". MODULE_ID_UNITS . " 
-                    ORDER BY last_update 
+                    AND module_id = ". MODULE_ID_UNITS . "
+                    ORDER BY last_update
                     DESC ", $course_id, $_GET['u']);
 
         if (count($user_logins) > 0) {
@@ -181,9 +173,9 @@ if (isset($_GET['u'])) { //  stats per user
     }
 } else if (isset($_GET['m']) and $_GET['m'] != -1) { // stats per module
     $module = $_GET['m'];
-    $user_actions = Database::get()->queryArray("SELECT 
-                            SUM(actions_daily.duration) AS duration, user_id, 
-                              module_id 
+    $user_actions = Database::get()->queryArray("SELECT
+                            SUM(actions_daily.duration) AS duration, user_id,
+                              module_id
                             FROM actions_daily
                             WHERE course_id = ?d
                               AND module_id = ?d
@@ -226,23 +218,6 @@ if (isset($_GET['u'])) { //  stats per user
             $toolName = "$langParticipate $langOfUser";
             $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
             $navigation[] = array('url' => '$_SERVER[SCRIPT_NAME]?course=' . $course_code, 'name' => $langUserDuration);
-
-<<<<<<< local
-        $tool_content .= action_bar(array(
-            array('title' => $langDumpUser,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=xls",
-                'icon' => 'fa-download',
-                'level' => 'primary-label'),
-            array('title' => $langBack,
-                'url' => "index.php?course=$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')
-        ), false);
-
-        $tool_content .=  selection_course_modules();
-
-        $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-info'>" . which_module($module) . "</div></div>";
-=======
             $tool_content .= action_bar(array(
                 array('title' => $langDumpPDF,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=pdf",
@@ -258,24 +233,18 @@ if (isset($_GET['u'])) { //  stats per user
                     'level' => 'primary-label')
             ), false);
             $tool_content .= selection_course_modules();
-            $tool_content .= "<div class='alert alert-info'>" . which_module($module) . "</div>";
+            $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-info'>" . which_module($module) . "</div></div>";
         } else {
             $tool_content .= "<h3>" . which_module($module) . "</h3>";
         }
->>>>>>> graft
-
         $tool_content .= "
         <div class='col-sm-12'>
         <div class='table-responsive'>
             <table class='table-default'>
-<<<<<<< local
             <tr class='list-header'>
-                <th class='ps-3'>$langUser</th>
-=======
-            <tr>
-                <th>$langUser</th>
+                <th classs='ps-3'>$langUser</th>
                 <th>$langGroup</th>
->>>>>>> graft
+
                 <th>$langAm</th>
                 <th>$langDuration</th>
             </tr>";
@@ -297,18 +266,12 @@ if (isset($_GET['u'])) { //  stats per user
             $tool_content .= "<td>" . format_time_duration(0 + $um->duration) . "</td>";
             $tool_content .= "</tr>";
         }
-<<<<<<< local
         $tool_content .= "</table></div></div>";
-        draw($tool_content, 2);
-
-=======
-        $tool_content .= "</table>";
         if (isset($_GET['format']) and $_GET['format'] == 'pdf') {
             pdf_output();
         } else {
             draw($tool_content, 2);
         }
->>>>>>> graft
     }
 } else {
     if (isset($_GET['format']) and $_GET['format'] == 'xls') {
@@ -378,7 +341,7 @@ if (isset($_GET['u'])) { //  stats per user
             } else {
                 $tool_content .= "<tr>";
                 if (!isset($_GET['format'])) {
-                    $tool_content .= "<td class='bullet'>" . display_user($row->id) . "</td>";
+                    $tool_content .= "<td>" . display_user($row->id) . "</td>";
                 } else {
                     $tool_content .= "<td>" . uid_to_name($row->id) . "</td>";
                 }
@@ -391,13 +354,7 @@ if (isset($_GET['u'])) { //  stats per user
                 $tool_content .= "</tr>";
             }
         }
-<<<<<<< local
-        if ($format == 'html') {
-            $tool_content .= "</table></div></div>";
-        }
-=======
-        $tool_content .= "</table>";
->>>>>>> graft
+        $tool_content .= "</table></div></div>";
     }
     if (isset($_GET['format']) and $_GET['format'] == 'xls') {
         // create spreadsheet
@@ -483,12 +440,12 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                                        user.am AS am
                                 FROM $from
                                 LEFT JOIN actions_daily ON user.id = actions_daily.user_id
-                                WHERE (actions_daily.course_id = ?d 
+                                WHERE (actions_daily.course_id = ?d
                                     AND actions_daily.module_id != " . MODULE_ID_TC . "
-                                    AND actions_daily.module_id != " . MODULE_ID_LP . ")                                
+                                    AND actions_daily.module_id != " . MODULE_ID_LP . ")
                                 $and
                                 $date_where
-                                GROUP BY user.id, surname, givenname, am                          
+                                GROUP BY user.id, surname, givenname, am
                                 ORDER BY surname, givenname",  $course_id, $terms);
 }
 
@@ -502,9 +459,9 @@ function selection_course_modules() {
     global $langAllModules, $langModule, $course_id, $modules, $course_code, $module;
 
     $mod_opts = "<option value='-1'>$langAllModules</option>";
-    $result = Database::get()->queryArray("SELECT module_id FROM course_module 
-                    WHERE course_id = ?d 
-                    AND module_id != " . MODULE_ID_TC . " 
+    $result = Database::get()->queryArray("SELECT module_id FROM course_module
+                    WHERE course_id = ?d
+                    AND module_id != " . MODULE_ID_TC . "
                     AND module_id != " . MODULE_ID_LP . "", $course_id);
     foreach ($result as $row) {
         $mid = $row->module_id;
@@ -522,7 +479,7 @@ function selection_course_modules() {
                 <input type='hidden' name='course' value='$course_code'>
                     <div class='form-group'>
                         <label class='col-sm-6 control-label-notes'>$langModule</label>
-                        <div class='col-sm-4'>                            
+                        <div class='col-sm-4'>
                             <select name='m' id='m' class='form-select' onChange='document.module_select.submit();'>
                                 $mod_opts
                             </select>
@@ -557,7 +514,7 @@ function pdf_output() {
             h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
             h1 { font-size: 16pt; }
             h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
             th { text-align: left; border-bottom: 1px solid #999; }
             td { text-align: left; }
           </style>
