@@ -830,7 +830,7 @@ function user_duration_per_course($u) {
     global $tool_content, $langDurationVisitsPerCourse, $langNotEnrolledToLessons, $langTotalDuration;
 
     $totalDuration = 0;
-    $result = Database::get()->queryArray("SELECT SUM(hits) AS cnt, SUM(duration) AS duration, course.code
+    $result = Database::get()->queryArray("SELECT SUM(hits) AS cnt, SUM(ABS(duration)) AS duration, course.code
                                         FROM course
                                         LEFT JOIN course_user ON course.id = course_user.course_id
                                         LEFT JOIN actions_daily
@@ -891,7 +891,7 @@ function user_duration_course($u) {
     global $course_id;
 
     $totalDuration = 0;
-    $q = Database::get()->querySingle("SELECT SUM(duration) AS duration
+    $q = Database::get()->querySingle("SELECT SUM(ABS(duration)) AS duration
                                 FROM actions_daily                                         
                                 WHERE course_id = ?d
                                 AND user_id = ?d

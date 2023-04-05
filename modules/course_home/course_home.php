@@ -407,11 +407,7 @@ if ($course_info->description) {
 } else {
     $main_content .= "<p class='not_visible'> - $langThisCourseDescriptionIsEmpty - </p>";
 }
-/* Disable keywords
-if (!empty($keywords)) {
-    $main_content .= "<p id='keywords'><strong>$langCourseKeywords</strong> $keywords</p>";
-}
-*/
+
 $main_content .= "</div>";
 
 if (!empty($addon)) {
@@ -703,9 +699,6 @@ $action_bar
 
 $q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE id = ?d", $course_id);
 
-
-
-
 $tool_content .= "<ul class='course-title-actions clearfix pull-right list-inline'>" .
 
                         ($is_course_admin? "<li class='access pull-right'><a href='{$urlAppend}modules/course_info/?course=$course_code' style='color: #23527C;'><span class='fa fa-wrench fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInfo'></span></a></li>": '') . "
@@ -730,6 +723,10 @@ $tool_content .= "<ul class='course-title-actions clearfix pull-right list-inlin
                                             <span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span>
                                             <span class='hidden'>.</span>
                                         </a>";
+                                }
+                                if (!$is_course_admin) {
+                                    $tool_content .= "&nbsp;<a href = '{$urlAppend}modules/usage/userduration.php?course=$course_code&u=$uid'>
+                                    <span class='fa fa-area-chart fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseParticipation'></span></a>";
                                 }
                             }
                             $tool_content .= "</li>";
