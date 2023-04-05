@@ -4552,6 +4552,7 @@ function trans($var_name, $var_array = []) {
             return ${$var_name};
         }
     }
+}
 
 function get_platform_logo($size='normal') {
     global $themeimg, $urlAppend;
