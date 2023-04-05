@@ -870,7 +870,7 @@ function tc_session_details() {
 
     global $course_id, $tool_content, $is_editor, $course_code, $uid,
         $langParticipants,$langConfirmDelete, $langHasExpiredS,
-        $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
+        $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
         $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent,
         $langBBBNotServerAvailableTeacher,
@@ -905,9 +905,11 @@ function tc_session_details() {
                              <tr class='list-header'>
                                <th class='ps-3' style='width: 50%'>$langTitle</th>
                                <th class='text-center'>$langDuration</th>
-                               <th class='text-center'>$langParticipants</th>
-                               <th class='text-center'>".icon('fa-gears')."</th>
-                             </tr>";
+                               <th class='text-center'>$langParticipants</th>";
+        if ($is_editor) {
+            $headings .= "<th class='text-center'>".icon('fa-gears')."</th>";
+        }
+        $headings .= "</tr>";
 
         foreach ($result as $row) {
             if (!is_null($row->options)) {
@@ -1093,18 +1095,7 @@ function tc_session_details() {
                             <span class='text-danger'>$langTill</span>: $timeLabel</br></br>
                         </div>
                     </td>
-                        <td style='width: 20%'>$participants</td>
-                        <td class='text-center'>";
-                    // Join url will be active only X minutes before scheduled time and if session is visible for users
-                    if ($canJoin) {
-                        if ($tc_type == 'jitsi' or $tc_type == 'googlemeet' or $tc_type == 'zoom' or $tc_type == 'webex') {
-                            $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank'");
-                        } else {
-                            $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=" . urlencode($meeting_id) . "&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'");
-                        }
-                    } else {
-                        $tool_content .= "-</td>";
-                    }
+                    <td style='width: 20%'>$participants</td>";
                     $tool_content .= "</tr>";
                 }
             }
