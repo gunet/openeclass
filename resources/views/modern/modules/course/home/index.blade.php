@@ -185,6 +185,15 @@
                                                         </a>
                                                     @endif
                                                 @endif
+                                                @if ($is_editor)
+                                                     <a href = "{{ $urlAppend  }}modules/usage/index.php?course={{ $course_code }}" class='float-end me-2 mt-2'>
+                                                        <span class="fa fa-area-chart fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langUsage') }}"></span>
+                                                    </a>
+                                                @else
+                                                    <a href = "{{ $urlAppend }}modules/usage/userduration.php?course={{ $course_code }}&u={{ $uid }}" class='float-end me-2 mt-2'>
+                                                        <span class="fa fa-area-chart fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langCourseParticipation') }}"></span>
+                                                    </a>
+                                                @endif
                                             @endif
                                             @if ($offline_course)
                                                 <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}" class='float-end me-2 mt-2'>
