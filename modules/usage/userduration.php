@@ -29,7 +29,6 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $require_current_course = true;
-$require_course_admin = true;
 $require_help = true;
 $helpTopic = 'course_stats';
 $helpSubTopic = 'users_participation';
@@ -40,6 +39,10 @@ require_once 'modules/group/group_functions.php';
 require_once 'modules/usage/usage.lib.php';
 
 if (isset($_GET['u'])) { //  stats per user
+    if ($_SESSION['uid'] != $_GET['u'] and !$is_course_admin) { // security check
+        Session::Messages($langCheckCourseAdmin, 'alert-danger');
+        redirect_to_home_page("courses/$course_code/");
+    }
 
     $am_legend = $xls_am_legend = $grp_legend = $xls_grp_legend = '';
     $am = uid_to_am($_GET['u']);
@@ -101,6 +104,11 @@ if (isset($_GET['u'])) { //  stats per user
         exit;
 
     } else { // html + pdf output
+        if ($is_course_admin) {
+            $back_url = "$_SERVER[SCRIPT_NAME]?course=$course_code";
+        } else {
+            $back_url = "{$urlAppend}courses/$course_code/";
+        }
         if (!isset($_GET['format'])) {
             $toolName = "$langParticipate $langOfUser";
             $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
@@ -115,7 +123,7 @@ if (isset($_GET['u'])) { //  stats per user
                     'icon' => 'fa-download',
                     'level' => 'primary-label'),
                 array('title' => $langBack,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                    'url' => "$back_url",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
             ), false);
@@ -169,7 +177,7 @@ if (isset($_GET['u'])) { //  stats per user
     } else {
         draw($tool_content, 2);
     }
-} else if (isset($_GET['m']) and $_GET['m'] != -1) { // stats per module
+} else if ($is_course_admin and isset($_GET['m']) and $_GET['m'] != -1) { // stats per module
     $module = $_GET['m'];
     $user_actions = Database::get()->queryArray("SELECT
                             SUM(actions_daily.duration) AS duration, user_id,
@@ -270,7 +278,7 @@ if (isset($_GET['u'])) { //  stats per user
             draw($tool_content, 2);
         }
     }
-} else {
+} else if ($is_course_admin) {
     if (isset($_GET['format']) and $_GET['format'] == 'xls') {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -366,6 +374,9 @@ if (isset($_GET['u'])) { //  stats per user
         draw($tool_content, 2);
     }
 
+} else {
+    Session::Messages($langCheckCourseAdmin, 'alert-danger');
+    redirect_to_home_page("courses/$course_code/");
 }
 
 /**
