@@ -33,7 +33,7 @@ if (isset($_GET['from_admin'])) {
     $require_login = true;
 }
 
-$require_course_admin = true;
+$require_editor = true;
 $require_help = true;
 $helpTopic = 'course_stats';
 $helpSubTopic = 'users_actions';

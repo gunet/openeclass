@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.14
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -24,17 +24,17 @@
  * @brief Main script for the usage statistics module
  */
 
-if (!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c') {
+if (!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c') { // course statistics
     $require_current_course = true;
-    $require_course_admin = true;
+    $require_editor = true;
     $helpTopic = 'course_stats';
     $stats_type = 'course';
-} elseif(isset($_REQUEST['t'])) {
+} elseif(isset($_REQUEST['t'])) { // admin statistics
     if ($_REQUEST['t'] == 'a') {
         $require_admin = true;
         $stats_type = 'admin';
         $helpTopic = 'course_stats';
-    } else if ($_REQUEST['t'] == 'u') {
+    } else if ($_REQUEST['t'] == 'u') { // user statistics
         $require_valid_uid = TRUE;
         $stats_type = 'user';
         $helpTopic = 'portfolio';
@@ -49,8 +49,7 @@ require_once 'modules/usage/usage.lib.php';
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
-$head_content .= "
-<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
 load_js('d3/d3.min.js');
 load_js('c3-0.4.10/c3.min.js');
 load_js('bootstrap-datepicker');

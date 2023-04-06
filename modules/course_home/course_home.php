@@ -707,6 +707,7 @@ $tool_content .= "<ul class='course-title-actions clearfix pull-right list-inlin
                         <li class='access pull-right'><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='$langCitation'></span><span class='hidden'>.</span></a></li>";
                         if ($uid) {
                             $tool_content .= "<li class='access pull-right'>";
+                            // course users
                             if ($is_course_admin) {
                                 $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers FROM course_user WHERE course_id = ?d", $course_id)->numUsers;
                                 $tool_content .= "<a href='{$urlAppend}modules/user/index.php?course=$course_code'>
@@ -724,13 +725,18 @@ $tool_content .= "<ul class='course-title-actions clearfix pull-right list-inlin
                                             <span class='hidden'>.</span>
                                         </a>";
                                 }
-                                if (!$is_course_admin) {
-                                    $tool_content .= "&nbsp;<a href = '{$urlAppend}modules/usage/userduration.php?course=$course_code&u=$uid'>
-                                    <span class='fa fa-area-chart fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseParticipation'></span></a>";
-                                }
+                            }
+                            // course statistics
+                            if ($is_editor) {
+                                $tool_content .= "&nbsp;<a href = '{$urlAppend}modules/usage/index.php?course=$course_code'>
+                                <span class='fa fa-area-chart fa-fw' data-toggle='tooltip' data-placement='top' title='$langUsage'></span></a>";
+                            } else {
+                                $tool_content .= "&nbsp;<a href = '{$urlAppend}modules/usage/userduration.php?course=$course_code&u=$uid'>
+                                <span class='fa fa-area-chart fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseParticipation'></span></a>";
                             }
                             $tool_content .= "</li>";
                         }
+                        // offline course
                         if ($offline_course) {
                             $tool_content .= "<li class='access pull-right'>
                                     <a href='{$urlAppend}modules/offline/index.php?course={$course_code}'>

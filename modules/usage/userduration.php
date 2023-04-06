@@ -39,7 +39,7 @@ require_once 'modules/group/group_functions.php';
 require_once 'modules/usage/usage.lib.php';
 
 if (isset($_GET['u'])) { //  stats per user
-    if ($_SESSION['uid'] != $_GET['u'] and !$is_course_admin) { // security check
+    if ($_SESSION['uid'] != $_GET['u'] and !$is_editor) { // security check
         Session::Messages($langCheckCourseAdmin, 'alert-danger');
         redirect_to_home_page("courses/$course_code/");
     }
@@ -104,15 +104,17 @@ if (isset($_GET['u'])) { //  stats per user
         exit;
 
     } else { // html + pdf output
-        if ($is_course_admin) {
+        if ($is_editor) {
             $back_url = "$_SERVER[SCRIPT_NAME]?course=$course_code";
         } else {
             $back_url = "{$urlAppend}courses/$course_code/";
         }
         if (!isset($_GET['format'])) {
             $toolName = "$langParticipate $langOfUser";
-            $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-            $navigation[] = array('url' => 'userduration.php?course=' . $course_code, 'name' => $langUserDuration);
+            if ($is_editor) {
+                $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
+                $navigation[] = array('url' => 'userduration.php?course=' . $course_code, 'name' => $langUserDuration);
+            }
             $tool_content .= action_bar(array(
                 array('title' => $langDumpPDF,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=pdf",
@@ -177,7 +179,7 @@ if (isset($_GET['u'])) { //  stats per user
     } else {
         draw($tool_content, 2);
     }
-} else if ($is_course_admin and isset($_GET['m']) and $_GET['m'] != -1) { // stats per module
+} else if ($is_editor and isset($_GET['m']) and $_GET['m'] != -1) { // stats per module
     $module = $_GET['m'];
     $user_actions = Database::get()->queryArray("SELECT
                             SUM(actions_daily.duration) AS duration, user_id,
@@ -278,7 +280,7 @@ if (isset($_GET['u'])) { //  stats per user
             draw($tool_content, 2);
         }
     }
-} else if ($is_course_admin) {
+} else if ($is_editor) {
     if (isset($_GET['format']) and $_GET['format'] == 'xls') {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -409,49 +411,33 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
         $and = "AND groups.group_id = ?d";
         $terms[] = $group;
     } else {
-        $from = " (SELECT
-                            id, surname, givenname, username, password, email, parent_email, status, phone, am,
-                            registered_at, expires_at, lang, description, has_icon, verified_mail, receive_mail, email_public,
-                            phone_public, am_public, pic_public, whitelist, last_passreminder
-                          FROM user UNION (SELECT 0 as id,
-                            '' as surname,
-                            'Anonymous' as givenname,
-                            null as username,
-                            null as password,
-                            null as email,
-                            null as parent_email,
-                            null as status,
-                            null as phone,
-                            null as am,
-                            null as registered_at,
-                            null as expires_at,
-                            null as lang,
-                            null as description,
-                            null as has_icon,
-                            null as verified_mail,
-                            null as receive_mail,
-                            null as email_public,
-                            null as phone_public,
-                            null as am_public,
-                            null as pic_public,
-                            null as whitelist,
-                            null as last_passreminder)) as user ";
+        $from = " (SELECT id, surname, givenname, username, email, status, am
+                      FROM user 
+                      UNION 
+                          (SELECT 0 AS id,
+                            '' AS surname,
+                            'Anonymous' AS givenname,
+                            null AS username,
+                            null AS email,
+                            null AS status,
+                            null AS am)
+                       ) AS user ";
         $and = '';
     }
 
-    return Database::get()->queryArray("SELECT SUM(actions_daily.duration) AS duration,
+    return Database::get()->queryArray("SELECT SUM(ABS(actions_daily.duration)) AS duration,
                                        user.surname AS surname,
                                        user.givenname AS givenname,
                                        user.id AS id,
                                        user.am AS am
                                 FROM $from
                                 LEFT JOIN actions_daily ON user.id = actions_daily.user_id
-                                WHERE (actions_daily.course_id = ?d 
+                                WHERE (actions_daily.course_id = ?d
                                     AND actions_daily.module_id != " . MODULE_ID_TC . "
-                                    AND actions_daily.module_id != " . MODULE_ID_LP . ")                                
+                                    AND actions_daily.module_id != " . MODULE_ID_LP . ")
                                 $and
                                 $date_where
-                                GROUP BY user.id, surname, givenname, am                          
+                                GROUP BY user.id, surname, givenname, am
                                 ORDER BY surname, givenname",  $course_id, $terms);
 }
 
@@ -462,12 +448,12 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
  */
 function selection_course_modules() {
 
-    global $langAllModules, $langModule, $course_id, $modules, $course_code, $module;
+    global $langAllModules, $langModule, $langInfoUserDuration, $langInfoUserDuration2, $course_id, $modules, $course_code, $module;
 
     $mod_opts = "<option value='-1'>$langAllModules</option>";
-    $result = Database::get()->queryArray("SELECT module_id FROM course_module 
-                    WHERE course_id = ?d 
-                    AND module_id != " . MODULE_ID_TC . " 
+    $result = Database::get()->queryArray("SELECT module_id FROM course_module
+                    WHERE course_id = ?d
+                    AND module_id != " . MODULE_ID_TC . "
                     AND module_id != " . MODULE_ID_LP . "", $course_id);
     foreach ($result as $row) {
         $mid = $row->module_id;
@@ -478,7 +464,8 @@ function selection_course_modules() {
         $mod_opts .= "<option value=" . $mid . " $extra>" . $modules[$mid]['title'] . "</option>";
     }
 
-    $content = "<div class='row'>
+    $content = "<div class='alert alert-info'>$langInfoUserDuration $langInfoUserDuration2</div>";
+    $content .= "<div class='row'>
         <div class='col-md-12'>
             <div class='form-wrapper'>
                 <form class='form-horizontal' name='module_select' action='$_SERVER[SCRIPT_NAME]' method='get'>
@@ -521,7 +508,7 @@ function pdf_output() {
             h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
             h1 { font-size: 16pt; }
             h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
             th { text-align: left; border-bottom: 1px solid #999; }
             td { text-align: left; }
           </style>
