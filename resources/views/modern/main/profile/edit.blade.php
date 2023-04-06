@@ -132,7 +132,7 @@
                                 </div>
 
                                 <div class='form-group mt-4'>
-                                    <label class='col-sm-2 control-label-notes mb-1'>{{ trans('langShow') }}</label>
+                                    <label class='col-sm-2 control-label-notes mb-1'>{{ trans('langViewShow') }}</label>
                                     <div class='col-sm-12 d-inline-flex'>
                                         <div class='checkbox'>
                                             <label class='col-sm-3 control-label-notes'>

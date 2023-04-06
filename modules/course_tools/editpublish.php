@@ -41,7 +41,7 @@ $pageName = $langNewLTITool;
 if (isset($_GET['choice'])) {
     $pageName = $langModify;
     if ($_GET['choice'] == 'show') {
-        $pageName = $langShow;
+        $pageName = $langViewShow;
     }
 }
 

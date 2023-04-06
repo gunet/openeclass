@@ -261,7 +261,7 @@ function update_publish_ltiapp($id, $title, $desc, $key, $secret, $status) {
 function lti_provider_details() {
     global $course_id, $tool_content, $is_editor, $course_code,
            $langConfirmDelete, $langNewLTIAppSessionDesc, $langTitle, $langActivate,
-           $langDeactivate, $langEditChange, $langDelete, $langNoPUBLTIApps, $langShow;
+           $langDeactivate, $langEditChange, $langDelete, $langNoPUBLTIApps, $langViewShow;
 
     load_js('trunk8');
 
@@ -302,7 +302,7 @@ function lti_provider_details() {
                         array('title' => $langEditChange,
                             'url' => "editpublish.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
                             'icon' => 'fa-edit'),
-                        array('title' => $langShow,
+                        array('title' => $langViewShow,
                             'url' => $showUrl,
                             'icon' => 'fa-archive'),
                         array('title' => $row->enabled? $langDeactivate : $langActivate,

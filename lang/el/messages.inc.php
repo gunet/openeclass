@@ -1890,7 +1890,6 @@ $langScoreDispLastAttempt = "Εμφάνιση βαθμολογίας μετά τ
 $langScoreDispEndDate = "Εμφάνιση βαθμολογίας μετά την Ημερομηνία Λήξης της άσκησης";
 $langInfoGrades = "βαθμοί";
 $langInfoGrade = "βαθμός";
-$langShow = "Εμφάνιση";
 $langChooseRandomQuestions = "Επιλογή τυχαίων ερωτήσεων από τις ερωτήσεις της άσκησης";
 $langFromRandomQuestions = "τυχαίες ερωτήσεις από το σύνολο των ερωτήσεων της άσκησης";
 $langFromRandomDifficultyQuestions = "ερωτήσεις με βαθμό δυσκολίας";
