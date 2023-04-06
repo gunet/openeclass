@@ -137,6 +137,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 }
 
 $toolName = uid_to_name($_REQUEST['uInfo']) . ": " . $LPname;
+
 $tool_content .= "<div class='table-responsive'>
     <table class='table-default'>
         <tr class='list-header'>

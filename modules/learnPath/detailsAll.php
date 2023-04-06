@@ -65,7 +65,7 @@ $head_content .= "<script type='text/javascript'>
                }
             });
             $('.dataTables_filter input').attr({
-                          class : 'form-control input-sm ms-0 mb-3',
+                          class : 'form-control input-sm',
                           placeholder : '$langSearch...'
                         });
         });
@@ -98,7 +98,7 @@ $data[] = [ $langSurnameName, $langEmail, $langAm, $langGroup, $langTotalTimeSpe
 // check if there are learning paths available
 $lcnt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM lp_learnPath WHERE course_id = ?d", $course_id)->count;
 if ($lcnt == 0) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoLearningPath</div></div>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoLearningPath</div>";
     draw($tool_content, 2, null, $head_content);
     exit;
 }
@@ -159,12 +159,12 @@ foreach ($usersList as $user) {
     $tool_content .= "<td class='text-left'>" . q($user->email). "</td>
                       <td class='text-center'>" . q($user->am) . "</td>";
     if (!isset($_GET['pdf'])) {
-        $tool_content .= "<td class='text-start' > " . user_groups($course_id, $user->id) . "</td>";
+        $tool_content .= "<td class='text-left' > " . user_groups($course_id, $user->id) . "</td>";
     } else {
         $tool_content .= "<td class='text-left' > " . user_groups($course_id, $user->id, false) . "</td>";
     }
     $tool_content .= "<td class='text-right'>" . q($globaltime) . "</td>
-            <td class='text-end' width='120'>"
+            <td class='text-right' width='120'>"
             . disp_progress_bar($total, 1) . "
             </td>";
     $tool_content .= "</tr>";
