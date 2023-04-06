@@ -4286,7 +4286,6 @@ $langUnits = "Units";
 $langRegistrationLink = 'User registration link';
 $langRegistrationShowText = 'Show instructions instead of links';
 $langRegistrationInfo = 'Registration instructions';
-$langShow = "Display";
 $langHide = 'Hide';
 $langQuestionAlreadyDeleted = "Question has been deleted!";
 $langUpgForVersion = 'Upgrades for version:';

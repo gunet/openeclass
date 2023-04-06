@@ -341,7 +341,7 @@ if (isset($_GET['delete'])) {
                       <th>$langFileName</th>
                       <th>$langTitle</th>
                       <th>$langSection</th>
-                      <th>$langSubsection</th>
+                      <th>$langReorder</th>
                     </tr>";
                    foreach ($q as $r) {
                        $file_id = $r->file_id;
