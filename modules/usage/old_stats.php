@@ -25,7 +25,7 @@
  * @brief Show old statistics for the course, taken from table "action_summary" of the course's database.
  */
 $require_current_course = true;
-$require_course_admin = true;
+$require_editor = true;
 $require_help = true;
 $helpTopic = 'course_stats';
 $helpSubTopic = 'old_statistics';

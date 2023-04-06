@@ -702,12 +702,6 @@ function lessonToolsMenu($rich=true) {
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
 
     $sideMenuGroup = array();
-    $sideMenuSubGroup = array();
-    $sideMenuText = array();
-    $sideMenuLink = array();
-    $sideMenuImg = array();
-    $sideMenuID = array();
-
     $arrMenuType = array();
     $arrMenuType['type'] = 'none';
 
@@ -863,7 +857,7 @@ function lessonToolsMenu($rich=true) {
 
 /**
  *
- * @brief Creates a multi-dimensional array of the user's tools/links
+ * @brief Creates a multidimensional array of the user's tools/links
  * for the menu presented for the embedded theme.
  * @return array
  */

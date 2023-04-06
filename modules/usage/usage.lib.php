@@ -721,7 +721,7 @@ function which_registration_action($registration_action_id) {
 
 /**
  * Count user groups of the course
- * @param int cid the course id
+ * @param int $cid cid the course id
  * @return int the number of user groups
 */
 function count_course_groups($cid){
@@ -731,8 +731,8 @@ function count_course_groups($cid){
 
 /**
  * Get the sum of hits with their duration for a course
- * @param int cid the course id
- * @param int userid the user id
+ * @param int $cid cid the course id
+ * @param int $userid userid the user id
  * @return array(int, string) an array with the number of visits and their duration formatted as h:mm:ss
 */
 function course_hits($cid, $userid = 0){
@@ -757,8 +757,8 @@ function course_visits($cid) {
 }
 
 /**
- * Transform seconds to h:mm:ss
- * @param int seconds the nu,ber of seconds to be shown properly
+ * @brief Transform seconds to h:mm:ss
+ * @param int $seconds the number of seconds to be shown properly
  * @return string a formated time string
 */
 function user_friendly_seconds($seconds){
@@ -780,7 +780,6 @@ function user_friendly_seconds($seconds){
  * @return string a formated element ready to display a plot
 */
 function plot_placeholder($plot_id, $title = null){
-    //$p = "<ul class='list-group'>";
     $p = "<div class='panel panel-default'><div class='panel-body'>";
     if(!is_null($title)){
         $p .= "<div class='inner-heading'><span id='{$plot_id}_title' class='TextBold text-uppercase'>"
@@ -795,10 +794,10 @@ function plot_placeholder($plot_id, $title = null){
 
 /**
  * Create the panel and the table structure of a table to be filled with AJAX with data
- * @param string table_id the id of the table in the DOM
- * @param string table_class the class of the table element
- * @param string table_schema the header and footer of the table which also specify the column number of the table
- * @param string title the caption of the table
+ * @param string $table_id table_id the id of the table in the DOM
+ * @param string $table_class table_class the class of the table element
+ * @param string $table_schema table_schema the header and footer of the table which also specify the column number of the table
+ * @param string $title title the caption of the table
  * @return string a formatted element containing the specified table
 */
 function table_placeholder($table_id, $table_class, $table_schema, $title = null){
@@ -827,7 +826,7 @@ function table_placeholder($table_id, $table_class, $table_schema, $title = null
 */
 function user_duration_per_course($u) {
 
-    global $tool_content, $langDurationVisitsPerCourse, $langNotEnrolledToLessons, $langTotalDuration;
+    global $tool_content, $langDurationVisitsPerCourse, $langNotEnrolledToLessons, $langInfoUserDuration, $langTotalDuration;
 
     $totalDuration = 0;
     $result = Database::get()->queryArray("SELECT SUM(hits) AS cnt, SUM(ABS(duration)) AS duration, course.code
@@ -849,7 +848,9 @@ function user_duration_per_course($u) {
         }
 
     $totalDuration = format_time_duration(0 + $totalDuration, 240);
+
     $tool_content .= "<div class='row alert alert-info text-center'>
+                        <div style='margin-bottom: 10px;'>$langInfoUserDuration</div>
                         <strong>$langTotalDuration:</strong> " . $totalDuration . "
                     </div>";
 
@@ -867,7 +868,7 @@ function user_duration_per_course($u) {
                       <li class='list-group-item'>
                         <div class='row'>
                           <div class='col-sm-8'><b>" . q(course_code_to_title($code)) . "</b></div>
-                          <div class='col-sm-4 text-muted'>" . format_time_duration(0 + $time, 240) . "</div>
+                          <div class='col-sm-4 text-muted'>" . format_time_duration(0 + $time) . "</div>
                         </div>
                       </li>";
     }
