@@ -562,7 +562,7 @@ if ($myrow->pic_public) {
     $pic_public_selected = 'checked';
 }
 $tool_content .= "<div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langShow</label>
+                    <label class='col-sm-2 control-label'>$langViewShow</label>
                     <div class='col-sm-10'>
                         <div class='checkbox'>
                             <label class='col-sm-2'>

@@ -443,7 +443,7 @@ $tool_content .= action_bar(array(
 if ($nbrQuestions) {
     $info_random_text = '';
     if ($randomQuestions > 0) {
-        $info_random_text = "<small><span class='help-block'>$langShow $randomQuestions $langFromRandomQuestions</span></small>";
+        $info_random_text = "<small><span class='help-block'>$langViewShow $randomQuestions $langFromRandomQuestions</span></small>";
     }
 
     $tool_content .= "<div id='RandomizationForm' class='form-wrapper'>

@@ -226,7 +226,7 @@ if ($is_editor) {
                 $message = $langCopySuccess;
                 if (isset($clone_course)) {
                     $clone_code = q($clone_course->code);
-                    $message .= "<br><a href='{$urlAppend}modules/questionnaire/?course=$clone_code'>$langShow</a>";
+                    $message .= "<br><a href='{$urlAppend}modules/questionnaire/?course=$clone_code'>$langViewShow</a>";
                 } else {
                     $show_link = '';
                 }
