@@ -213,7 +213,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                     $current_module_dir == 'course_home' or
                     $current_module_dir == 'units' or
                     $current_module_dir == 'weeks' or
-                    $current_module_dir == 'main/portfolio.php')) {
+                    $current_module_dir == 'main/portfolio.php' or
+                    ($current_module_dir == 'usage' and !$GLOBALS['is_course_admin']))) {
                     $t->set_var('GROUP_CLASS', get_theme_class('group_active'));
                     $group_opened = true;
                 }
