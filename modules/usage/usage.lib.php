@@ -850,8 +850,9 @@ function user_duration_per_course($u) {
     $totalDuration = format_time_duration(0 + $totalDuration, 240);
 
     $tool_content .= "<div class='row alert alert-info text-center'>
-                        <div style='margin-bottom: 10px;'>$langInfoUserDuration</div>
-                        <strong>$langTotalDuration:</strong> " . $totalDuration . "
+                        <span class='panel-title'>"  . uid_to_name($_SESSION['uid']) . "</span>
+                        <div style='margin-bottom: 10px;'><strong>$langTotalDuration:</strong> " . $totalDuration . "</div>
+                        <div>$langInfoUserDuration</div>
                     </div>";
 
     $tool_content .= "
@@ -893,7 +894,7 @@ function user_duration_course($u) {
 
     $totalDuration = 0;
     $q = Database::get()->querySingle("SELECT SUM(ABS(duration)) AS duration
-                                FROM actions_daily                                         
+                                FROM actions_daily
                                 WHERE course_id = ?d
                                 AND user_id = ?d
                                 AND actions_daily.module_id != " . MODULE_ID_TC . "
@@ -1008,9 +1009,9 @@ function get_user_login_archives(): array
 
     foreach($period as $time) {
         $year_month_val = $time->format("Y-m");
-        $data = Database::get()->querySingle("SELECT login_sum, 
-                                    DATE_FORMAT(start_date,'%Y-%m-%d') AS start_date  
-                            FROM loginout_summary 
+        $data = Database::get()->querySingle("SELECT login_sum,
+                                    DATE_FORMAT(start_date,'%Y-%m-%d') AS start_date
+                            FROM loginout_summary
                             WHERE DATE_FORMAT(start_date,'%Y-%m') = ?s", $year_month_val);
         if ($data) {
             $data_month_year = $data->start_date;
@@ -1020,7 +1021,7 @@ function get_user_login_archives(): array
             $formatted_start_date = $start_date->format("Y-m-d H:i:s");
             $end_date = date_add($start_date, date_interval_create_from_date_string("30 days"));
             $formatted_end_date = $end_date->format("Y-m-d H:i:s");
-            $q_cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt 
+            $q_cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt
                             FROM loginout
                             WHERE action='LOGIN' AND
                         `when` BETWEEN DATE(?s) AND DATE_ADD(DATE(?s), INTERVAL 1 MONTH)",
@@ -1048,9 +1049,9 @@ function get_monthly_archives(): array
 
     foreach ($period as $time) {
         $year_month_val = $time->format("Y-m");
-        $data = Database::get()->querySingle("SELECT profesNum, studNum, visitorsNum, coursNum, 
-                                    DATE_FORMAT(month,'%Y-%m') AS month  
-                            FROM monthly_summary 
+        $data = Database::get()->querySingle("SELECT profesNum, studNum, visitorsNum, coursNum,
+                                    DATE_FORMAT(month,'%Y-%m') AS month
+                            FROM monthly_summary
                             WHERE DATE_FORMAT(month,'%Y-%m') = ?s", $year_month_val);
         if ($data) {
             $data_month_year = $data->month;
