@@ -6,6 +6,7 @@
 
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/group/group_functions.php';
 
 /**
  * @brief  Process resource actions
@@ -815,12 +816,6 @@ function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visib
 
 /**
  * @brief display resource assignment (aka work)
- * @global type $id
- * @global type $urlServer
- * @global type $is_editor
- * @global type $langWasDeleted
- * @global type $course_id
- * @global type $course_code
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -829,11 +824,29 @@ function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visib
  * @return string
  */
 function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_name) {
-    global $id, $urlServer, $is_editor,
-    $langWasDeleted, $course_id, $course_code, $langPassCode;
+
+    global $id, $urlServer, $is_editor, $uid,
+            $langWasDeleted, $course_id, $course_code, $langPassCode;
 
     $title = q($title);
-    $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $work_id);
+    if ($is_editor) {
+        $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $work_id);
+    } else {
+        $gids = user_group_info($uid, $course_id);
+        if (!empty($gids)) {
+            $gids_sql_ready = implode(',',array_keys($gids));
+        } else {
+            $gids_sql_ready = "''";
+        }
+        $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d 
+                                 AND
+                                (assign_to_specific = 0 OR id IN
+                                    (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
+                                        UNION
+                                    SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
+                                )", $course_id, $work_id, $uid);
+    }
+
     if (!$work) { // check if it was deleted
         if (!$is_editor) {
             return '';
@@ -874,12 +887,6 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
 
 /**
  * @brief display resource exercise
- * @global type $id
- * @global type $urlServer
- * @global type $is_editor
- * @global type $langWasDeleted
- * @global type $course_id
- * @global type $course_code
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -892,7 +899,27 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         $langAttemptActive, $langAttemptPausedS;
 
     $title = q($title);
-    $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
+
+    if ($is_editor) {
+        $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
+    } else {
+        $gids_sql_ready = "''";
+        if ($uid > 0) {
+            $gids = user_group_info($uid, $course_id);
+            if (!empty($gids)) {
+                $gids_sql_ready = implode("','", array_keys($gids));
+            }
+        }
+        $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d 
+                       AND
+                          (assign_to_specific = '0' OR
+                           (assign_to_specific != '0' AND id IN (
+                              SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d
+                                UNION
+                               SELECT exercise_id FROM exercise_to_specific WHERE group_id IN ('$gids_sql_ready'))))",
+                    $course_id, $exercise_id, $uid);
+    }
+
     if (!$exercise) { // check if it was deleted
         if (!$is_editor) {
             return '';
