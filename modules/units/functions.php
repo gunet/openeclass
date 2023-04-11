@@ -825,7 +825,7 @@ function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visib
  */
 function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_name) {
 
-    global $id, $urlServer, $is_editor, $uid,
+    global $id, $urlServer, $is_editor, $uid, $m,
             $langWasDeleted, $course_id, $course_code, $langPassCode;
 
     $title = q($title);
@@ -855,6 +855,15 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
+        $assign_to_users_message = '';
+        if ($is_editor) {
+            if ($work->assign_to_specific == 1) {
+                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+            } else if ($work->assign_to_specific == 2) {
+                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+            }
+        }
+
         if ($work->password_lock) {
             $lock_description = "<ul>";
             $lock_description .= "<li>$langPassCode</li>";
@@ -880,7 +889,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         <tr data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td class='text-left' width='1'>$act_name</td>
-          <td>$exlink $comment_box</td>" .
+          <td>$exlink $comment_box $assign_to_users_message</td>" .
             actions('lp', $resource_id, $visibility) . '
         </tr>';
 }
@@ -896,7 +905,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
  */
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $langPassCode, $uid,
-        $langAttemptActive, $langAttemptPausedS;
+        $langAttemptActive, $langAttemptPausedS, $m;
 
     $title = q($title);
 
@@ -940,6 +949,15 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
             $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langPassCode'></span>";
         }
 
+        $assign_to_users_message = '';
+        if ($is_editor) {
+            if ($exercise->assign_to_specific == 1) {
+                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+            } else if ($exercise->assign_to_specific == 2) {
+                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+            }
+        }
+
         // check if exercise is in "paused" or "running" state
         $pending_label = $pending_class = '';
         if ($uid) {
@@ -973,7 +991,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         } else {
             $link = "<a class='ex_settings $link_class' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         }
-        $exlink = $link . "$title</a> $exclamation_icon $pending_label";
+        $exlink = $link . "$title</a> $exclamation_icon $assign_to_users_message $pending_label";
         $imagelink = $link . "</a>" . icon('fa-pencil-square-o'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';

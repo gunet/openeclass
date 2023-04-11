@@ -180,8 +180,8 @@ if ($is_editor) {
         unset($objExerciseTmp);
     }
     $result = Database::get()->queryArray('SELECT * FROM exercise
-        WHERE course_id = ?d
-        ORDER BY start_date DESC', $course_id);
+                                            WHERE course_id = ?d
+                                            ORDER BY start_date DESC', $course_id);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
 } else {
     $gids_sql_ready = "''";
@@ -319,6 +319,15 @@ if (!$nbrExercises) {
             } else {
                 $descr = '';
             }
+
+            if ($row->assign_to_specific == 1) {
+                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+            } else if ($row->assign_to_specific == 2) {
+                 $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+            } else {
+                $assign_to_users_message = '';
+            }
+
             if (isset($row->start_date)) {
                 $sort_date = date("Y-m-d H:i", strtotime($row->start_date));
             } else {
@@ -327,7 +336,10 @@ if (!$nbrExercises) {
             if ($temp_EndDate and $temp_EndDate < $currentDate) { // exercise has expired
                 $exclamation_icon .= "&nbsp;&nbsp;<span class='text-danger'>($langHasExpiredS)</span>";
             }
-            $tool_content .= "<td><a href='admin.php?course=$course_code&amp;exerciseId={$row->id}&amp;preview=1'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
+            $tool_content .= "<td><a href='admin.php?course=$course_code&amp;exerciseId={$row->id}&amp;preview=1'>" . q($row->title) . "</a>
+                        $lock_icon$exclamation_icon$descr
+                        $assign_to_users_message
+                        </td>";
             $tool_content .= "<td data-sort='$sort_date'><small>";
             if (isset($row->start_date)) {
                 $tool_content .= "<div style='color:green;'>$langStart: " . format_locale_date(strtotime($row->start_date), 'short') . "</div>";

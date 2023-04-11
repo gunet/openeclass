@@ -5523,7 +5523,6 @@ function show_assignments() {
                     </tr>
                     </thead>
                     <tbody>";
-        $index = 0;
         $sort_id = 0;
         foreach ($result as $key => $row) {
             $sort_id++;
@@ -5539,6 +5538,14 @@ function show_assignments() {
                 }
                 $lock_description .= "</ul>";
                 $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
+            }
+
+            if ($row->assign_to_specific == 1) {
+                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+            } else if ($row->assign_to_specific == 2) {
+                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+            } else {
+                $assign_to_users_message = '';
             }
 
             // Check if assignment contains submissions
@@ -5570,6 +5577,7 @@ function show_assignments() {
             $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
                                 $exclamation_icon
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
+                                $assign_to_users_message
                             <td class='text-center'>$num_submitted</td>
                             <td class='text-center'>$num_ungraded</td>
                             <td class='text-center' data-sort='$sort_id'>$deadline";
@@ -5587,11 +5595,9 @@ function show_assignments() {
                     array('title' => $langEditChange,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",
                           'icon' => 'fa-edit'),
-                    array(
-                        'title' => $m['WorkUserGroupNoSubmission'],
-                        'url' => "{$urlAppend}modules/work/?course=$course_code&amp;id=$row->id&amp;disp_non_submitted=true",
-                        'icon' => 'fa-minus-square'
-                    ),
+                    array('title' => $m['WorkUserGroupNoSubmission'],
+                          'url' => "{$urlAppend}modules/work/?course=$course_code&amp;id=$row->id&amp;disp_non_submitted=true",
+                          'icon' => 'fa-minus-square'),
                     array('title' => $row->active == 1 ? $langDeactivate: $langActivate,
                           'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
                           'icon' => $row->active == 1 ? 'fa-eye-slash': 'fa-eye'),
@@ -5601,12 +5607,11 @@ function show_assignments() {
                           'confirm' => "$langWarnForSubmissions $langDelSure",
                           'show' => $num_submitted > 0),
                     array('title' => $langDelete,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
-                            'icon' => 'fa-times',
-                            'class' => 'delete',
-                            'confirm' => $langWorksDelConfirm))).
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'confirm' => $langWorksDelConfirm))).
                    "</td></tr>";
-            $index++;
         }
         $tool_content .= '</tbody></table></div></div></div>';
     } else {
