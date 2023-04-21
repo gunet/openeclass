@@ -125,13 +125,14 @@ if ($full) { // user questions results
     foreach ($qlist as $user_identifier => $answers) {
         $k++;
         if ($anonymized) {
-            $user_info = "$langStudent $k";
+            $user_info = [ "$langStudent $k"];
         } else {
             $user_info = get_user($user_identifier);
         }
         $user_info[] = $submit_date[$user_identifier];
         $data[] = array_merge($user_info, $answers);
     }
+
 
     $sheet->mergeCells("A1:F1");
     $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
