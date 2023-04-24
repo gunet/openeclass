@@ -165,7 +165,8 @@ $tool_content .= '
         var options = {
             container:"jsmind_container",
             theme:"greensea",
-            editable:true
+            editable:true,
+            support_html:false
         }
         _jm = jsMind.show(options);
         // _jm = jsMind.show(options,mind);
