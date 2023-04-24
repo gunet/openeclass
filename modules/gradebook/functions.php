@@ -1063,11 +1063,18 @@ function display_available_assignments($gradebook_id) {
         $tool_content .= "</tr>";
         foreach ($checkForAss as $newAssToGradebook) {
             $content = ellipsize_html($newAssToGradebook->description, 50);
-            if ($newAssToGradebook->assign_to_specific) {
+            if ($newAssToGradebook->assign_to_specific == 1) { // assignment to specific users
                 $content .= "$m[WorkAssignTo]:<br>";
-                $checkForAssSpec = Database::get()->queryArray("SELECT user_id, user.surname , user.givenname FROM `assignment_to_specific`, user WHERE user_id = user.id AND assignment_id = ?d", $newAssToGradebook->id);
+                $checkForAssSpec = Database::get()->queryArray("SELECT user_id, user.surname, user.givenname FROM `assignment_to_specific`, user WHERE user_id = user.id AND assignment_id = ?d", $newAssToGradebook->id);
                 foreach ($checkForAssSpec as $checkForAssSpecR) {
                     $content .= q($checkForAssSpecR->surname). " " . q($checkForAssSpecR->givenname) . "<br>";
+                }
+            }
+            if ($newAssToGradebook->assign_to_specific == 2) { // assignment to specific groups
+                $content .= "$m[WorkAssignTo]:<br>";
+                $checkForAssSpec = Database::get()->queryArray("SELECT group_id, `group`.name FROM `assignment_to_specific`, `group` WHERE assignment_to_specific.group_id= `group`.id AND assignment_id = ?d", $newAssToGradebook->id);
+                foreach ($checkForAssSpec as $checkForAssSpecR) {
+                    $content .= q($checkForAssSpecR->name) . "<br>";
                 }
             }
             $tool_content .= "<tr>";
