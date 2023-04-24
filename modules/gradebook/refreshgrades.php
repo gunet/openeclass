@@ -72,15 +72,20 @@ foreach ($activities as $act) {
             }
         }
     } elseif ($act->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
-        $max_grade = Database::get()->querySingle('SELECT max_grade FROM assignment
-            WHERE id = ?d', $act->module_auto_id)->max_grade;
+        $g = Database::get()->querySingle('SELECT max_grade, group_submissions FROM assignment WHERE id = ?d', $act->module_auto_id);
         $grades = Database::get()->queryArray("SELECT grade, uid FROM assignment_submit
             WHERE assignment_id = ?d AND uid IN ($placeholders)", $act->module_auto_id, $users);
         foreach ($grades as $grade) {
             if ($grade->grade) {
-                update_gradebook_book($grade->uid, $act->module_auto_id,
-                    $grade->grade / $max_grade,
-                    GRADEBOOK_ACTIVITY_ASSIGNMENT, $gid);
+                if ($g->group_submissions) {
+                    $group_id = Database::get()->querySingle("SELECT group_id FROM assignment_submit WHERE assignment_id = ?d", $act->module_auto_id)->group_id;
+                    $user_ids = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $group_id);
+                    foreach ($user_ids as $user_id) {
+                        update_gradebook_book($user_id->user_id, $act->module_auto_id, $grade->grade / $g->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT, $gid);
+                    }
+                } else {
+                    update_gradebook_book($grade->uid, $act->module_auto_id, $grade->grade / $g->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT, $gid);
+                }
             }
         }
     } elseif ($act->module_auto_type == GRADEBOOK_ACTIVITY_LP) {
